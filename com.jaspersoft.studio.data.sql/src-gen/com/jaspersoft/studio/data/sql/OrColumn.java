@@ -4,6 +4,8 @@ package com.jaspersoft.studio.data.sql;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Or Column</b></em>'.
@@ -20,7 +22,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface OrColumn extends Columns
+public interface OrColumn extends EObject
 {
   /**
    * Returns the value of the '<em><b>Entries</b></em>' containment reference list.

@@ -16,9 +16,9 @@
 package com.jaspersoft.studio.data.sql.model.enums;
 
 public enum Operator {
-	LESS("<", 2), GREATER(">", 2), EQUALS("=", 2), LESSOREQUALS("<=", 2), GREATEROREQUALS(">=", 2), NOTEQUALS("<>", 2), LIKE("LIKE", 2), BETWEEN("BETWEEN", 3), IN("IN", Integer.MAX_VALUE), NOTIN(
-			"NOT IN",
-			Integer.MAX_VALUE), ISNULL("IS NULL", 1), ISNOTNULL("IS NOT NULL", 1);
+	LESS("<", 2), GREATER(">", 2), EQUALS("=", 2), LESSOREQUALS("<=", 2), GREATEROREQUALS(">=", 2), NOTEQUALS("<>", 2), LIKE("LIKE", 2), BETWEEN("BETWEEN", 3), NOTBETWEEN("NOT BETWEEN", 3), IN(
+			"IN",
+			Integer.MAX_VALUE), NOTIN("NOT IN", Integer.MAX_VALUE), ISNULL("IS NULL", 1), ISNOTNULL("IS NOT NULL", 1);
 
 	private final String sqlname;
 	private final int nrOperands;
@@ -32,7 +32,7 @@ public enum Operator {
 	public static Operator getOperator(String sqlname) {
 		for (int i = 0; i < values().length; ++i) {
 			Operator r = values()[i];
-			if (r.getSqlname().equals(sqlname))
+			if (r.getSqlname().equalsIgnoreCase(sqlname))
 				return r;
 		}
 		return EQUALS;

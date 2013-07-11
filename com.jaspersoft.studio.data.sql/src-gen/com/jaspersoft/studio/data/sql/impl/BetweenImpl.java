@@ -3,7 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.Between;
-import com.jaspersoft.studio.data.sql.Operand;
+import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -22,8 +22,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl#getOp1 <em>Op1</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl#getOpBetween <em>Op Between</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl#getOp2 <em>Op2</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl#getOp3 <em>Op3</em>}</li>
  * </ul>
  * </p>
  *
@@ -32,14 +33,24 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
 {
   /**
-   * The cached value of the '{@link #getOp1() <em>Op1</em>}' containment reference.
+   * The default value of the '{@link #getOpBetween() <em>Op Between</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getOp1()
+   * @see #getOpBetween()
    * @generated
    * @ordered
    */
-  protected Operand op1;
+  protected static final String OP_BETWEEN_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getOpBetween() <em>Op Between</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOpBetween()
+   * @generated
+   * @ordered
+   */
+  protected String opBetween = OP_BETWEEN_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getOp2() <em>Op2</em>}' containment reference.
@@ -49,7 +60,17 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * @generated
    * @ordered
    */
-  protected Operand op2;
+  protected Operands op2;
+
+  /**
+   * The cached value of the '{@link #getOp3() <em>Op3</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOp3()
+   * @generated
+   * @ordered
+   */
+  protected Operands op3;
 
   /**
    * <!-- begin-user-doc -->
@@ -77,9 +98,9 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * <!-- end-user-doc -->
    * @generated
    */
-  public Operand getOp1()
+  public String getOpBetween()
   {
-    return op1;
+    return opBetween;
   }
 
   /**
@@ -87,16 +108,12 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOp1(Operand newOp1, NotificationChain msgs)
+  public void setOpBetween(String newOpBetween)
   {
-    Operand oldOp1 = op1;
-    op1 = newOp1;
+    String oldOpBetween = opBetween;
+    opBetween = newOpBetween;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.BETWEEN__OP1, oldOp1, newOp1);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.BETWEEN__OP_BETWEEN, oldOpBetween, opBetween));
   }
 
   /**
@@ -104,28 +121,7 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOp1(Operand newOp1)
-  {
-    if (newOp1 != op1)
-    {
-      NotificationChain msgs = null;
-      if (op1 != null)
-        msgs = ((InternalEObject)op1).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.BETWEEN__OP1, null, msgs);
-      if (newOp1 != null)
-        msgs = ((InternalEObject)newOp1).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.BETWEEN__OP1, null, msgs);
-      msgs = basicSetOp1(newOp1, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.BETWEEN__OP1, newOp1, newOp1));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Operand getOp2()
+  public Operands getOp2()
   {
     return op2;
   }
@@ -135,9 +131,9 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOp2(Operand newOp2, NotificationChain msgs)
+  public NotificationChain basicSetOp2(Operands newOp2, NotificationChain msgs)
   {
-    Operand oldOp2 = op2;
+    Operands oldOp2 = op2;
     op2 = newOp2;
     if (eNotificationRequired())
     {
@@ -152,7 +148,7 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOp2(Operand newOp2)
+  public void setOp2(Operands newOp2)
   {
     if (newOp2 != op2)
     {
@@ -173,15 +169,63 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
    * <!-- end-user-doc -->
    * @generated
    */
+  public Operands getOp3()
+  {
+    return op3;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetOp3(Operands newOp3, NotificationChain msgs)
+  {
+    Operands oldOp3 = op3;
+    op3 = newOp3;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.BETWEEN__OP3, oldOp3, newOp3);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOp3(Operands newOp3)
+  {
+    if (newOp3 != op3)
+    {
+      NotificationChain msgs = null;
+      if (op3 != null)
+        msgs = ((InternalEObject)op3).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.BETWEEN__OP3, null, msgs);
+      if (newOp3 != null)
+        msgs = ((InternalEObject)newOp3).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.BETWEEN__OP3, null, msgs);
+      msgs = basicSetOp3(newOp3, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.BETWEEN__OP3, newOp3, newOp3));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
     {
-      case SqlPackage.BETWEEN__OP1:
-        return basicSetOp1(null, msgs);
       case SqlPackage.BETWEEN__OP2:
         return basicSetOp2(null, msgs);
+      case SqlPackage.BETWEEN__OP3:
+        return basicSetOp3(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -196,10 +240,12 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
   {
     switch (featureID)
     {
-      case SqlPackage.BETWEEN__OP1:
-        return getOp1();
+      case SqlPackage.BETWEEN__OP_BETWEEN:
+        return getOpBetween();
       case SqlPackage.BETWEEN__OP2:
         return getOp2();
+      case SqlPackage.BETWEEN__OP3:
+        return getOp3();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -214,11 +260,14 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
   {
     switch (featureID)
     {
-      case SqlPackage.BETWEEN__OP1:
-        setOp1((Operand)newValue);
+      case SqlPackage.BETWEEN__OP_BETWEEN:
+        setOpBetween((String)newValue);
         return;
       case SqlPackage.BETWEEN__OP2:
-        setOp2((Operand)newValue);
+        setOp2((Operands)newValue);
+        return;
+      case SqlPackage.BETWEEN__OP3:
+        setOp3((Operands)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -234,11 +283,14 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
   {
     switch (featureID)
     {
-      case SqlPackage.BETWEEN__OP1:
-        setOp1((Operand)null);
+      case SqlPackage.BETWEEN__OP_BETWEEN:
+        setOpBetween(OP_BETWEEN_EDEFAULT);
         return;
       case SqlPackage.BETWEEN__OP2:
-        setOp2((Operand)null);
+        setOp2((Operands)null);
+        return;
+      case SqlPackage.BETWEEN__OP3:
+        setOp3((Operands)null);
         return;
     }
     super.eUnset(featureID);
@@ -254,12 +306,31 @@ public class BetweenImpl extends MinimalEObjectImpl.Container implements Between
   {
     switch (featureID)
     {
-      case SqlPackage.BETWEEN__OP1:
-        return op1 != null;
+      case SqlPackage.BETWEEN__OP_BETWEEN:
+        return OP_BETWEEN_EDEFAULT == null ? opBetween != null : !OP_BETWEEN_EDEFAULT.equals(opBetween);
       case SqlPackage.BETWEEN__OP2:
         return op2 != null;
+      case SqlPackage.BETWEEN__OP3:
+        return op3 != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (opBetween: ");
+    result.append(opBetween);
+    result.append(')');
+    return result.toString();
   }
 
 } //BetweenImpl

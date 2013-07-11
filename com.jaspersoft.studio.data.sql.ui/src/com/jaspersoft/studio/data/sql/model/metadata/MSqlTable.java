@@ -24,18 +24,30 @@ import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 
-public class MSqlTable extends AMSQLObject implements IDragable {
+public class MSqlTable extends AMSQLObject implements IDragable, INotInMetadata {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	private boolean isNotInMetadata = false;
 
-	public MSqlTable(ANode parent, String value, String image) {
+	public MSqlTable(ANode parent, String value, boolean isNotInMetadata) {
+		super(parent, value, null);
+		this.isNotInMetadata = isNotInMetadata;
+	}
+
+	protected MSqlTable(ANode parent, String value, String image) {
 		super(parent, value, image);
 	}
 
 	public MSqlTable(ANode parent, String value, ResultSet rs) {
 		super(parent, value, "icons/table.png");
 		tooltip = "";
-		setType(rs);
-		setRemarks(rs);
+		if (rs != null) {
+			setType(rs);
+			setRemarks(rs);
+		}
+	}
+
+	public boolean isNotInMetadata() {
+		return isNotInMetadata;
 	}
 
 	protected void setType(ResultSet rs) {

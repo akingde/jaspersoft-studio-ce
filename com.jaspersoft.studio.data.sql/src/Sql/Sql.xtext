@@ -14,11 +14,11 @@ Select:
 	('GROUP BY' groupByEntry=GroupByColumns)?
 	('HAVING' havingEntry=FullExpression)?;
 
-Columns returns Columns:
+Columns returns OrColumn:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
 
 ColumnOrAlias:
-	(ColumnFull ('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
+	(cfull=ColumnFull alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
 
 ColumnFull returns ColumnFull:
 	DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
@@ -38,69 +38,84 @@ TableFull:
 DbObjectName:
 	dbname=ID;
 
-OrderByColumns returns OrderByColumns:
+OrderByColumns returns OrOrderByColumn:
 	OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?;
 
 OrderByColumnFull:
-	colOrder=ColumnFull ('ASC' | 'DESC')?;
+	colOrder=ColumnFull direction=('ASC' | 'DESC')?;
 
-GroupByColumns returns GroupByColumns:
+GroupByColumns returns OrGroupByColumn:
 	ColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?;
 
-FullExpression returns FullExpression:
-	ExpressionFragment ({fexpr.entries+=current} (('AND' | 'OR') entries+=ExpressionFragment)+)?;
+FullExpression returns OrExpr:
+	ExpressionFragment ({OrExpr.entries+=current} (entries+=ExpressionFragmentSecond)+)?;
+
+ExpressionFragmentSecond returns FullExpression:
+	c=('AND' | 'OR') efrag=ExpressionFragment;
 
 ExpressionFragment returns FullExpression:
-	ExpressionGroup | Expression | XExpression;
+	expgroup=ExpressionGroup | exp=Expression | xexp=XExpression;
 
-ExpressionGroup returns FullExpression:
-	{exprGroup} '(' expr=FullExpression ')';
+ExpressionGroup returns ExprGroup:
+	{ExprGroup} '(' expr=FullExpression ')';
 
-XExpression returns FullExpression:
-	{xexpr} '$X{' ID (',' ID)* '}';
+XExpression returns XExpr:
+	{XExpr} '$X{' xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? '}';
+
+XExpressionParams returns Prms:
+	JRParameter ({Prms.entries+=current} ("," entries+=JRParameter)+)?;
+
+JRParameter:
+	jrprm=ID;
+
+enum XFunction:
+	xin='IN' | xnotin='NOTIN' | xeq='EQUAL' | xnoteq='NOTEQUAL' | xls='LESS' | xgt='GREATER'
+	| xlsr='LESS]' | xgtl='[GREATER' | xbwn='BETWEEN' | xbwnc='[BETWEEN]' | xbwnl='[BETWEEN'
+	| xbwnr='BETWEEN]';
 
 Expression returns FullExpression:
-	op1=Operand (('IS NULL' | 'IS NOT NULL') | in=InOperator | between=Between | like=Like | comp=Comparison);
+	op1=Operand (isnull=('IS NULL' | 'IS NOT NULL') | in=InOperator | between=Between | like=Like | comp=Comparison);
 
 Comparison:
-	('>' | '>=' | '<' | '<=' | '=' | '<>') op2=Operand;
+	operator=('>' | '>=' | '<' | '<=' | '=' | '<>') op2=Operand;
 
 Like:
-	('LIKE' | 'NOT LIKE') StringOperand;
+	opLike=('LIKE' | 'NOT LIKE') op2=StringOperand;
 
 Between:
-	'BETWEEN' op1=Operand 'AND' op2=Operand;
+	opBetween=('BETWEEN' | 'NOT BETWEEN') op2=Operand 'AND' op3=Operand;
 
-InOperator:
-	{inop} ('NOT IN (' | 'IN (') (subquery=SubQueryOperand | ({xop.entries+=current} (',' entries+=XOperandFragment)+)?)
-	')';
+InOperator returns InOper:
+	{InOper} op=('NOT IN (' | 'IN (') (subquery=SubQueryOperand | opList=OperandList) ')';
 
-Operand returns Operand:
-	OperandFragment ({operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
+OperandList:
+	XOperandFragment ({OpList.entries+=current} ("," entries+=XOperandFragment)+)?;
+
+Operand returns Operands:
+	OperandFragment ({Operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
 
 OperandFragment returns Operand:
-/*OperandGroup |*/ ColumnOperand | XOperandFragment | SubQueryOperand;
+/*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand;
 
-OperandGroup returns Operand:
-	{opGroup} '(' op=Operand ')';
-
+//OperandGroup returns OpGroup:
+//	{OpGroup} '(' op=Operand ')';
 XOperandFragment returns Operand:
-	ParameterOperand | ExclamationParameterOperand | scalar=ScalarOperand;
+	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 
-ParameterOperand returns Operand:
-	{poperand} '$P{' ID '}';
+ParameterOperand returns POperand:
+	{POperand} '$P{' prm=ID '}';
 
-ExclamationParameterOperand returns Operand:
-	{expoperand} '$P!{' ID '}';
+ExclamationParameterOperand returns ExpPperand:
+	{ExpPperand} '$P!{' prm=ID '}';
 
-ColumnOperand returns Operand:
-	ColumnFull;
+ColumnOperand returns ColumnOperand:
+	cfull=ColumnFull;
 
 SubQueryOperand returns Operand:
 	{subquery} '(' sel=Select ')';
 
-ScalarOperand:
-	INT | StringOperand | SIGNED_DOUBLE | DATE | TIME | TIMESTAMP;
+ScalarOperand returns ScalarOperand:
+	soint=SIGNED_INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
 
 StringOperand:
 	STRING;
@@ -112,7 +127,7 @@ enum JoinType:
 terminal STAR:
 	"*";
 
-terminal INT returns ecore::EInt:
+terminal SIGNED_INT returns ecore::EIntegerObject:
 	'-'? ('0'..'9')+;
 
 terminal TIMESTAMP returns ecore::EDate:
@@ -124,7 +139,7 @@ terminal DATE returns ecore::EDate:
 terminal TIME returns ecore::EDate:
 	"'" '0'..'9' '0'..'9' ':' '0'..'9' '0'..'9' ':' '0'..'1' '0'..'9' '.' '0'..'9' '0'..'9' '0'..'9' "'";
 
-terminal SIGNED_DOUBLE returns ecore::EDouble:
+terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
 	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
 
 terminal SL_COMMENT:

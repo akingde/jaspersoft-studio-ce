@@ -31,7 +31,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     try
     {
-      SqlFactory theSqlFactory = (SqlFactory)EPackage.Registry.INSTANCE.getEFactory(SqlPackage.eNS_URI);
+      SqlFactory theSqlFactory = (SqlFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.com.jaspersoft.studio.data.Sql"); 
       if (theSqlFactory != null)
       {
         return theSqlFactory;
@@ -67,7 +67,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     {
       case SqlPackage.MODEL: return createModel();
       case SqlPackage.SELECT: return createSelect();
-      case SqlPackage.COLUMNS: return createColumns();
+      case SqlPackage.OR_COLUMN: return createOrColumn();
       case SqlPackage.COLUMN_OR_ALIAS: return createColumnOrAlias();
       case SqlPackage.COLUMN_FULL: return createColumnFull();
       case SqlPackage.OR_TABLE: return createOrTable();
@@ -75,29 +75,30 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
       case SqlPackage.TABLE_FULL: return createTableFull();
       case SqlPackage.DB_OBJECT_NAME: return createDbObjectName();
-      case SqlPackage.ORDER_BY_COLUMNS: return createOrderByColumns();
+      case SqlPackage.OR_ORDER_BY_COLUMN: return createOrOrderByColumn();
       case SqlPackage.ORDER_BY_COLUMN_FULL: return createOrderByColumnFull();
-      case SqlPackage.GROUP_BY_COLUMNS: return createGroupByColumns();
+      case SqlPackage.OR_GROUP_BY_COLUMN: return createOrGroupByColumn();
+      case SqlPackage.OR_EXPR: return createOrExpr();
       case SqlPackage.FULL_EXPRESSION: return createFullExpression();
+      case SqlPackage.EXPR_GROUP: return createExprGroup();
+      case SqlPackage.XEXPR: return createXExpr();
+      case SqlPackage.PRMS: return createPrms();
+      case SqlPackage.JR_PARAMETER: return createJRParameter();
       case SqlPackage.COMPARISON: return createComparison();
+      case SqlPackage.LIKE: return createLike();
       case SqlPackage.BETWEEN: return createBetween();
-      case SqlPackage.IN_OPERATOR: return createInOperator();
+      case SqlPackage.IN_OPER: return createInOper();
+      case SqlPackage.OPERAND_LIST: return createOperandList();
+      case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
+      case SqlPackage.POPERAND: return createPOperand();
+      case SqlPackage.EXP_PPERAND: return createExpPperand();
+      case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
+      case SqlPackage.SCALAR_OPERAND: return createScalarOperand();
       case SqlPackage.OR_SELECT: return createOrSelect();
-      case SqlPackage.OR_COLUMN: return createOrColumn();
       case SqlPackage.COL: return createCol();
       case SqlPackage.TBLS: return createtbls();
-      case SqlPackage.OR_ORDER_BY_COLUMN: return createOrOrderByColumn();
-      case SqlPackage.OR_GROUP_BY_COLUMN: return createOrGroupByColumn();
-      case SqlPackage.FEXPR: return createfexpr();
-      case SqlPackage.EXPR_GROUP: return createexprGroup();
-      case SqlPackage.XEXPR: return createxexpr();
-      case SqlPackage.INOP: return createinop();
-      case SqlPackage.XOP: return createxop();
-      case SqlPackage.OPERANDS: return createoperands();
-      case SqlPackage.OP_GROUP: return createopGroup();
-      case SqlPackage.POPERAND: return createpoperand();
-      case SqlPackage.EXPOPERAND: return createexpoperand();
+      case SqlPackage.OP_LIST: return createOpList();
       case SqlPackage.SUBQUERY: return createsubquery();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -114,6 +115,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case SqlPackage.XFUNCTION:
+        return createXFunctionFromString(eDataType, initialValue);
       case SqlPackage.JOIN_TYPE:
         return createJoinTypeFromString(eDataType, initialValue);
       default:
@@ -131,6 +134,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case SqlPackage.XFUNCTION:
+        return convertXFunctionToString(eDataType, instanceValue);
       case SqlPackage.JOIN_TYPE:
         return convertJoinTypeToString(eDataType, instanceValue);
       default:
@@ -165,10 +170,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Columns createColumns()
+  public OrColumn createOrColumn()
   {
-    ColumnsImpl columns = new ColumnsImpl();
-    return columns;
+    OrColumnImpl orColumn = new OrColumnImpl();
+    return orColumn;
   }
 
   /**
@@ -253,10 +258,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public OrderByColumns createOrderByColumns()
+  public OrOrderByColumn createOrOrderByColumn()
   {
-    OrderByColumnsImpl orderByColumns = new OrderByColumnsImpl();
-    return orderByColumns;
+    OrOrderByColumnImpl orOrderByColumn = new OrOrderByColumnImpl();
+    return orOrderByColumn;
   }
 
   /**
@@ -275,10 +280,21 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public GroupByColumns createGroupByColumns()
+  public OrGroupByColumn createOrGroupByColumn()
   {
-    GroupByColumnsImpl groupByColumns = new GroupByColumnsImpl();
-    return groupByColumns;
+    OrGroupByColumnImpl orGroupByColumn = new OrGroupByColumnImpl();
+    return orGroupByColumn;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrExpr createOrExpr()
+  {
+    OrExprImpl orExpr = new OrExprImpl();
+    return orExpr;
   }
 
   /**
@@ -297,10 +313,65 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public ExprGroup createExprGroup()
+  {
+    ExprGroupImpl exprGroup = new ExprGroupImpl();
+    return exprGroup;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public XExpr createXExpr()
+  {
+    XExprImpl xExpr = new XExprImpl();
+    return xExpr;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Prms createPrms()
+  {
+    PrmsImpl prms = new PrmsImpl();
+    return prms;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public JRParameter createJRParameter()
+  {
+    JRParameterImpl jrParameter = new JRParameterImpl();
+    return jrParameter;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Comparison createComparison()
   {
     ComparisonImpl comparison = new ComparisonImpl();
     return comparison;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Like createLike()
+  {
+    LikeImpl like = new LikeImpl();
+    return like;
   }
 
   /**
@@ -319,10 +390,32 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public InOperator createInOperator()
+  public InOper createInOper()
   {
-    InOperatorImpl inOperator = new InOperatorImpl();
-    return inOperator;
+    InOperImpl inOper = new InOperImpl();
+    return inOper;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OperandList createOperandList()
+  {
+    OperandListImpl operandList = new OperandListImpl();
+    return operandList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Operands createOperands()
+  {
+    OperandsImpl operands = new OperandsImpl();
+    return operands;
   }
 
   /**
@@ -341,10 +434,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public OrSelect createOrSelect()
+  public POperand createPOperand()
   {
-    OrSelectImpl orSelect = new OrSelectImpl();
-    return orSelect;
+    POperandImpl pOperand = new POperandImpl();
+    return pOperand;
   }
 
   /**
@@ -352,10 +445,43 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public OrColumn createOrColumn()
+  public ExpPperand createExpPperand()
   {
-    OrColumnImpl orColumn = new OrColumnImpl();
-    return orColumn;
+    ExpPperandImpl expPperand = new ExpPperandImpl();
+    return expPperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ColumnOperand createColumnOperand()
+  {
+    ColumnOperandImpl columnOperand = new ColumnOperandImpl();
+    return columnOperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ScalarOperand createScalarOperand()
+  {
+    ScalarOperandImpl scalarOperand = new ScalarOperandImpl();
+    return scalarOperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OrSelect createOrSelect()
+  {
+    OrSelectImpl orSelect = new OrSelectImpl();
+    return orSelect;
   }
 
   /**
@@ -385,120 +511,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public OrOrderByColumn createOrOrderByColumn()
+  public OpList createOpList()
   {
-    OrOrderByColumnImpl orOrderByColumn = new OrOrderByColumnImpl();
-    return orOrderByColumn;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public OrGroupByColumn createOrGroupByColumn()
-  {
-    OrGroupByColumnImpl orGroupByColumn = new OrGroupByColumnImpl();
-    return orGroupByColumn;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public fexpr createfexpr()
-  {
-    fexprImpl fexpr = new fexprImpl();
-    return fexpr;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public exprGroup createexprGroup()
-  {
-    exprGroupImpl exprGroup = new exprGroupImpl();
-    return exprGroup;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public xexpr createxexpr()
-  {
-    xexprImpl xexpr = new xexprImpl();
-    return xexpr;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public inop createinop()
-  {
-    inopImpl inop = new inopImpl();
-    return inop;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public xop createxop()
-  {
-    xopImpl xop = new xopImpl();
-    return xop;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public operands createoperands()
-  {
-    operandsImpl operands = new operandsImpl();
-    return operands;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public opGroup createopGroup()
-  {
-    opGroupImpl opGroup = new opGroupImpl();
-    return opGroup;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public poperand createpoperand()
-  {
-    poperandImpl poperand = new poperandImpl();
-    return poperand;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public expoperand createexpoperand()
-  {
-    expoperandImpl expoperand = new expoperandImpl();
-    return expoperand;
+    OpListImpl opList = new OpListImpl();
+    return opList;
   }
 
   /**
@@ -510,6 +526,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     subqueryImpl subquery = new subqueryImpl();
     return subquery;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public XFunction createXFunctionFromString(EDataType eDataType, String initialValue)
+  {
+    XFunction result = XFunction.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertXFunctionToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**

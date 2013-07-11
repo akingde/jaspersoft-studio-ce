@@ -26,10 +26,20 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 public class MSqlSchema extends AMSQLObject {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String tableCatalog;
+	private boolean isNotInMetadata = false;
+
+	public MSqlSchema(ANode parent, String value, String tableCatalog, boolean isNotInMetadata) {
+		this(parent, value, tableCatalog);
+		this.isNotInMetadata = isNotInMetadata;
+	}
 
 	public MSqlSchema(ANode parent, String value, String tableCatalog) {
 		super(parent, value, "icons/database.png");
 		this.tableCatalog = tableCatalog;
+	}
+
+	public boolean isNotInMetadata() {
+		return isNotInMetadata;
 	}
 
 	public String getTableCatalog() {
@@ -40,6 +50,10 @@ public class MSqlSchema extends AMSQLObject {
 
 	public void setCurrent(boolean isCurrent) {
 		this.isCurrent = isCurrent;
+	}
+
+	public boolean isCurrent() {
+		return isCurrent;
 	}
 
 	@Override

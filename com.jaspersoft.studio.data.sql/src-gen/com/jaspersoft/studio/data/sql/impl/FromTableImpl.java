@@ -3,8 +3,8 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.FromTable;
-import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.JoinType;
+import com.jaspersoft.studio.data.sql.OrExpr;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
 
@@ -82,7 +82,7 @@ public class FromTableImpl extends OrTableImpl implements FromTable
    * @generated
    * @ordered
    */
-  protected FullExpression joinExpr;
+  protected OrExpr joinExpr;
 
   /**
    * <!-- begin-user-doc -->
@@ -229,7 +229,7 @@ public class FromTableImpl extends OrTableImpl implements FromTable
    * <!-- end-user-doc -->
    * @generated
    */
-  public FullExpression getJoinExpr()
+  public OrExpr getJoinExpr()
   {
     return joinExpr;
   }
@@ -239,9 +239,9 @@ public class FromTableImpl extends OrTableImpl implements FromTable
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetJoinExpr(FullExpression newJoinExpr, NotificationChain msgs)
+  public NotificationChain basicSetJoinExpr(OrExpr newJoinExpr, NotificationChain msgs)
   {
-    FullExpression oldJoinExpr = joinExpr;
+    OrExpr oldJoinExpr = joinExpr;
     joinExpr = newJoinExpr;
     if (eNotificationRequired())
     {
@@ -256,7 +256,7 @@ public class FromTableImpl extends OrTableImpl implements FromTable
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setJoinExpr(FullExpression newJoinExpr)
+  public void setJoinExpr(OrExpr newJoinExpr)
   {
     if (newJoinExpr != joinExpr)
     {
@@ -334,7 +334,7 @@ public class FromTableImpl extends OrTableImpl implements FromTable
         setOnTable((TableOrAlias)newValue);
         return;
       case SqlPackage.FROM_TABLE__JOIN_EXPR:
-        setJoinExpr((FullExpression)newValue);
+        setJoinExpr((OrExpr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -360,7 +360,7 @@ public class FromTableImpl extends OrTableImpl implements FromTable
         setOnTable((TableOrAlias)null);
         return;
       case SqlPackage.FROM_TABLE__JOIN_EXPR:
-        setJoinExpr((FullExpression)null);
+        setJoinExpr((OrExpr)null);
         return;
     }
     super.eUnset(featureID);

@@ -41,13 +41,13 @@ public interface SqlFactory extends EFactory
   Select createSelect();
 
   /**
-   * Returns a new object of class '<em>Columns</em>'.
+   * Returns a new object of class '<em>Or Column</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Columns</em>'.
+   * @return a new object of class '<em>Or Column</em>'.
    * @generated
    */
-  Columns createColumns();
+  OrColumn createOrColumn();
 
   /**
    * Returns a new object of class '<em>Column Or Alias</em>'.
@@ -113,13 +113,13 @@ public interface SqlFactory extends EFactory
   DbObjectName createDbObjectName();
 
   /**
-   * Returns a new object of class '<em>Order By Columns</em>'.
+   * Returns a new object of class '<em>Or Order By Column</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Order By Columns</em>'.
+   * @return a new object of class '<em>Or Order By Column</em>'.
    * @generated
    */
-  OrderByColumns createOrderByColumns();
+  OrOrderByColumn createOrOrderByColumn();
 
   /**
    * Returns a new object of class '<em>Order By Column Full</em>'.
@@ -131,13 +131,22 @@ public interface SqlFactory extends EFactory
   OrderByColumnFull createOrderByColumnFull();
 
   /**
-   * Returns a new object of class '<em>Group By Columns</em>'.
+   * Returns a new object of class '<em>Or Group By Column</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Group By Columns</em>'.
+   * @return a new object of class '<em>Or Group By Column</em>'.
    * @generated
    */
-  GroupByColumns createGroupByColumns();
+  OrGroupByColumn createOrGroupByColumn();
+
+  /**
+   * Returns a new object of class '<em>Or Expr</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Or Expr</em>'.
+   * @generated
+   */
+  OrExpr createOrExpr();
 
   /**
    * Returns a new object of class '<em>Full Expression</em>'.
@@ -149,6 +158,42 @@ public interface SqlFactory extends EFactory
   FullExpression createFullExpression();
 
   /**
+   * Returns a new object of class '<em>Expr Group</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Expr Group</em>'.
+   * @generated
+   */
+  ExprGroup createExprGroup();
+
+  /**
+   * Returns a new object of class '<em>XExpr</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>XExpr</em>'.
+   * @generated
+   */
+  XExpr createXExpr();
+
+  /**
+   * Returns a new object of class '<em>Prms</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Prms</em>'.
+   * @generated
+   */
+  Prms createPrms();
+
+  /**
+   * Returns a new object of class '<em>JR Parameter</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>JR Parameter</em>'.
+   * @generated
+   */
+  JRParameter createJRParameter();
+
+  /**
    * Returns a new object of class '<em>Comparison</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -156,6 +201,15 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   Comparison createComparison();
+
+  /**
+   * Returns a new object of class '<em>Like</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Like</em>'.
+   * @generated
+   */
+  Like createLike();
 
   /**
    * Returns a new object of class '<em>Between</em>'.
@@ -167,13 +221,31 @@ public interface SqlFactory extends EFactory
   Between createBetween();
 
   /**
-   * Returns a new object of class '<em>In Operator</em>'.
+   * Returns a new object of class '<em>In Oper</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>In Operator</em>'.
+   * @return a new object of class '<em>In Oper</em>'.
    * @generated
    */
-  InOperator createInOperator();
+  InOper createInOper();
+
+  /**
+   * Returns a new object of class '<em>Operand List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Operand List</em>'.
+   * @generated
+   */
+  OperandList createOperandList();
+
+  /**
+   * Returns a new object of class '<em>Operands</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Operands</em>'.
+   * @generated
+   */
+  Operands createOperands();
 
   /**
    * Returns a new object of class '<em>Operand</em>'.
@@ -185,6 +257,42 @@ public interface SqlFactory extends EFactory
   Operand createOperand();
 
   /**
+   * Returns a new object of class '<em>POperand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>POperand</em>'.
+   * @generated
+   */
+  POperand createPOperand();
+
+  /**
+   * Returns a new object of class '<em>Exp Pperand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Exp Pperand</em>'.
+   * @generated
+   */
+  ExpPperand createExpPperand();
+
+  /**
+   * Returns a new object of class '<em>Column Operand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Column Operand</em>'.
+   * @generated
+   */
+  ColumnOperand createColumnOperand();
+
+  /**
+   * Returns a new object of class '<em>Scalar Operand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Scalar Operand</em>'.
+   * @generated
+   */
+  ScalarOperand createScalarOperand();
+
+  /**
    * Returns a new object of class '<em>Or Select</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -192,15 +300,6 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   OrSelect createOrSelect();
-
-  /**
-   * Returns a new object of class '<em>Or Column</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Or Column</em>'.
-   * @generated
-   */
-  OrColumn createOrColumn();
 
   /**
    * Returns a new object of class '<em>Col</em>'.
@@ -221,103 +320,13 @@ public interface SqlFactory extends EFactory
   tbls createtbls();
 
   /**
-   * Returns a new object of class '<em>Or Order By Column</em>'.
+   * Returns a new object of class '<em>Op List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Or Order By Column</em>'.
+   * @return a new object of class '<em>Op List</em>'.
    * @generated
    */
-  OrOrderByColumn createOrOrderByColumn();
-
-  /**
-   * Returns a new object of class '<em>Or Group By Column</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Or Group By Column</em>'.
-   * @generated
-   */
-  OrGroupByColumn createOrGroupByColumn();
-
-  /**
-   * Returns a new object of class '<em>fexpr</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>fexpr</em>'.
-   * @generated
-   */
-  fexpr createfexpr();
-
-  /**
-   * Returns a new object of class '<em>expr Group</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>expr Group</em>'.
-   * @generated
-   */
-  exprGroup createexprGroup();
-
-  /**
-   * Returns a new object of class '<em>xexpr</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>xexpr</em>'.
-   * @generated
-   */
-  xexpr createxexpr();
-
-  /**
-   * Returns a new object of class '<em>inop</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>inop</em>'.
-   * @generated
-   */
-  inop createinop();
-
-  /**
-   * Returns a new object of class '<em>xop</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>xop</em>'.
-   * @generated
-   */
-  xop createxop();
-
-  /**
-   * Returns a new object of class '<em>operands</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>operands</em>'.
-   * @generated
-   */
-  operands createoperands();
-
-  /**
-   * Returns a new object of class '<em>op Group</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>op Group</em>'.
-   * @generated
-   */
-  opGroup createopGroup();
-
-  /**
-   * Returns a new object of class '<em>poperand</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>poperand</em>'.
-   * @generated
-   */
-  poperand createpoperand();
-
-  /**
-   * Returns a new object of class '<em>expoperand</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>expoperand</em>'.
-   * @generated
-   */
-  expoperand createexpoperand();
+  OpList createOpList();
 
   /**
    * Returns a new object of class '<em>subquery</em>'.

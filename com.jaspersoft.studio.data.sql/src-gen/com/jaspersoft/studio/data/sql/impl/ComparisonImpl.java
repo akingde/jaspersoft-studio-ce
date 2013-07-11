@@ -3,7 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.Comparison;
-import com.jaspersoft.studio.data.sql.Operand;
+import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ComparisonImpl#getOperator <em>Operator</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ComparisonImpl#getOp2 <em>Op2</em>}</li>
  * </ul>
  * </p>
@@ -31,6 +32,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comparison
 {
   /**
+   * The default value of the '{@link #getOperator() <em>Operator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOperator()
+   * @generated
+   * @ordered
+   */
+  protected static final String OPERATOR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getOperator() <em>Operator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOperator()
+   * @generated
+   * @ordered
+   */
+  protected String operator = OPERATOR_EDEFAULT;
+
+  /**
    * The cached value of the '{@link #getOp2() <em>Op2</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -38,7 +59,7 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
    * @generated
    * @ordered
    */
-  protected Operand op2;
+  protected Operands op2;
 
   /**
    * <!-- begin-user-doc -->
@@ -66,7 +87,30 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
    * <!-- end-user-doc -->
    * @generated
    */
-  public Operand getOp2()
+  public String getOperator()
+  {
+    return operator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOperator(String newOperator)
+  {
+    String oldOperator = operator;
+    operator = newOperator;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COMPARISON__OPERATOR, oldOperator, operator));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Operands getOp2()
   {
     return op2;
   }
@@ -76,9 +120,9 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOp2(Operand newOp2, NotificationChain msgs)
+  public NotificationChain basicSetOp2(Operands newOp2, NotificationChain msgs)
   {
-    Operand oldOp2 = op2;
+    Operands oldOp2 = op2;
     op2 = newOp2;
     if (eNotificationRequired())
     {
@@ -93,7 +137,7 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOp2(Operand newOp2)
+  public void setOp2(Operands newOp2)
   {
     if (newOp2 != op2)
     {
@@ -135,6 +179,8 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
   {
     switch (featureID)
     {
+      case SqlPackage.COMPARISON__OPERATOR:
+        return getOperator();
       case SqlPackage.COMPARISON__OP2:
         return getOp2();
     }
@@ -151,8 +197,11 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
   {
     switch (featureID)
     {
+      case SqlPackage.COMPARISON__OPERATOR:
+        setOperator((String)newValue);
+        return;
       case SqlPackage.COMPARISON__OP2:
-        setOp2((Operand)newValue);
+        setOp2((Operands)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -168,8 +217,11 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
   {
     switch (featureID)
     {
+      case SqlPackage.COMPARISON__OPERATOR:
+        setOperator(OPERATOR_EDEFAULT);
+        return;
       case SqlPackage.COMPARISON__OP2:
-        setOp2((Operand)null);
+        setOp2((Operands)null);
         return;
     }
     super.eUnset(featureID);
@@ -185,10 +237,29 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
   {
     switch (featureID)
     {
+      case SqlPackage.COMPARISON__OPERATOR:
+        return OPERATOR_EDEFAULT == null ? operator != null : !OPERATOR_EDEFAULT.equals(operator);
       case SqlPackage.COMPARISON__OP2:
         return op2 != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (operator: ");
+    result.append(operator);
+    result.append(')');
+    return result.toString();
   }
 
 } //ComparisonImpl

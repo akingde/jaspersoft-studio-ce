@@ -2,7 +2,6 @@
  */
 package com.jaspersoft.studio.data.sql;
 
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -12,6 +11,11 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getColumn <em>Column</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getXop <em>Xop</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getSubq <em>Subq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getScalar <em>Scalar</em>}</li>
  * </ul>
  * </p>
@@ -20,32 +24,162 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Operand extends EObject
+public interface Operand extends OperandList, Operands
 {
   /**
-   * Returns the value of the '<em><b>Scalar</b></em>' attribute.
+   * Returns the value of the '<em><b>Column</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Scalar</em>' attribute isn't clear,
+   * If the meaning of the '<em>Column</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Scalar</em>' attribute.
-   * @see #setScalar(String)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Scalar()
-   * @model
+   * @return the value of the '<em>Column</em>' containment reference.
+   * @see #setColumn(ColumnOperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Column()
+   * @model containment="true"
    * @generated
    */
-  String getScalar();
+  ColumnOperand getColumn();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getScalar <em>Scalar</em>}' attribute.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getColumn <em>Column</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Scalar</em>' attribute.
+   * @param value the new value of the '<em>Column</em>' containment reference.
+   * @see #getColumn()
+   * @generated
+   */
+  void setColumn(ColumnOperand value);
+
+  /**
+   * Returns the value of the '<em><b>Xop</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Xop</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Xop</em>' containment reference.
+   * @see #setXop(Operand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Xop()
+   * @model containment="true"
+   * @generated
+   */
+  Operand getXop();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getXop <em>Xop</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Xop</em>' containment reference.
+   * @see #getXop()
+   * @generated
+   */
+  void setXop(Operand value);
+
+  /**
+   * Returns the value of the '<em><b>Subq</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Subq</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Subq</em>' containment reference.
+   * @see #setSubq(Operand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Subq()
+   * @model containment="true"
+   * @generated
+   */
+  Operand getSubq();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getSubq <em>Subq</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Subq</em>' containment reference.
+   * @see #getSubq()
+   * @generated
+   */
+  void setSubq(Operand value);
+
+  /**
+   * Returns the value of the '<em><b>Param</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Param</em>' containment reference.
+   * @see #setParam(POperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Param()
+   * @model containment="true"
+   * @generated
+   */
+  POperand getParam();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Param</em>' containment reference.
+   * @see #getParam()
+   * @generated
+   */
+  void setParam(POperand value);
+
+  /**
+   * Returns the value of the '<em><b>Eparam</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Eparam</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Eparam</em>' containment reference.
+   * @see #setEparam(ExpPperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Eparam()
+   * @model containment="true"
+   * @generated
+   */
+  ExpPperand getEparam();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getEparam <em>Eparam</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Eparam</em>' containment reference.
+   * @see #getEparam()
+   * @generated
+   */
+  void setEparam(ExpPperand value);
+
+  /**
+   * Returns the value of the '<em><b>Scalar</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Scalar</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Scalar</em>' containment reference.
+   * @see #setScalar(ScalarOperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Scalar()
+   * @model containment="true"
+   * @generated
+   */
+  ScalarOperand getScalar();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getScalar <em>Scalar</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Scalar</em>' containment reference.
    * @see #getScalar()
    * @generated
    */
-  void setScalar(String value);
+  void setScalar(ScalarOperand value);
 
 } // Operand

@@ -114,12 +114,12 @@ public interface FromTable extends OrTable
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Join Expr</em>' containment reference.
-   * @see #setJoinExpr(FullExpression)
+   * @see #setJoinExpr(OrExpr)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTable_JoinExpr()
    * @model containment="true"
    * @generated
    */
-  FullExpression getJoinExpr();
+  OrExpr getJoinExpr();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FromTable#getJoinExpr <em>Join Expr</em>}' containment reference.
@@ -129,6 +129,6 @@ public interface FromTable extends OrTable
    * @see #getJoinExpr()
    * @generated
    */
-  void setJoinExpr(FullExpression value);
+  void setJoinExpr(OrExpr value);
 
 } // FromTable

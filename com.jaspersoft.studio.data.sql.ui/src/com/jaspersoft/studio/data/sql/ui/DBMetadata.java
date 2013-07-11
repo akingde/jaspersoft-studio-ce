@@ -59,6 +59,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
+import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
 import com.jaspersoft.studio.data.sql.model.metadata.MFunction;
 import com.jaspersoft.studio.data.sql.model.metadata.MProcedure;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
@@ -110,7 +111,24 @@ public class DBMetadata {
 		});
 
 		treeViewer = new TreeViewer(composite, SWT.MULTI | SWT.BORDER);
-		treeViewer.setContentProvider(new ReportTreeContetProvider());
+		treeViewer.setContentProvider(new ReportTreeContetProvider() {
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof INode) {
+					INode node = (INode) parentElement;
+					List<INode> children = node.getChildren();
+					List<INode> newchildren = new ArrayList<INode>();
+					for (INode n : children) {
+						if (n instanceof INotInMetadata && ((INotInMetadata) n).isNotInMetadata())
+							continue;
+						newchildren.add(n);
+					}
+					if (!newchildren.isEmpty())
+						return newchildren.toArray();
+				}
+				return EMPTY_ARRAY;
+			}
+		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
@@ -432,8 +450,10 @@ public class DBMetadata {
 	protected void updateItermediateUI() {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				if (!treeViewer.getControl().isDisposed())
+				if (!treeViewer.getControl().isDisposed()) {
 					treeViewer.refresh(true);
+					designer.refreshedMetadata();
+				}
 			}
 		});
 	}

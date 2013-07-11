@@ -127,7 +127,8 @@ public class SQLQueryDiagram {
 				}
 			}
 			viewer.setSelection(new StructuredSelection(parts));
-			viewer.reveal(parts.get(0));
+			if (!parts.isEmpty())
+				viewer.reveal(parts.get(0));
 		}
 	}
 

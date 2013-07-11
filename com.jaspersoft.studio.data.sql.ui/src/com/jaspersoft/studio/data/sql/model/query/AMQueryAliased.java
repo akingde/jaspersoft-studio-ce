@@ -38,7 +38,7 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 	private String aliasKeyword = AMKeyword.ALIAS_KEYWORD;
 
 	public void setAliasKeyword(String aliasKeyword) {
-		this.aliasKeyword = aliasKeyword;
+		this.aliasKeyword = aliasKeyword.toUpperCase();
 	}
 
 	public void setAlias(String alias) {
@@ -56,10 +56,15 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 	}
 
 	public String addAlias() {
-		if (alias != null && !alias.trim().isEmpty()) {
-			return aliasKeyword + prepareAlias();
-		}
+		if (alias != null && !alias.trim().isEmpty())
+			return getAliasKeyString() + prepareAlias();
 		return "";
+	}
+
+	public String getAliasKeyString() {
+		if (aliasKeyword.equals(AMKeyword.ALIAS_KEYWORD))
+			return " " + AMKeyword.ALIAS_KEYWORD + " ";
+		return " ";
 	}
 
 	protected String prepareAlias() {
@@ -71,7 +76,7 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 
 	public void addAlias(StyledString dt) {
 		if (alias != null && !alias.trim().isEmpty()) {
-			dt.append(aliasKeyword, FontUtils.KEYWORDS_STYLER);
+			dt.append(getAliasKeyString(), FontUtils.KEYWORDS_STYLER);
 			dt.append(prepareAlias());
 		}
 	}

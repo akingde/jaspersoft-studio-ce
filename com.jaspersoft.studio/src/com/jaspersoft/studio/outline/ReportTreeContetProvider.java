@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.outline;
 
@@ -19,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -36,7 +32,7 @@ import com.jaspersoft.studio.model.INode;
 public class ReportTreeContetProvider implements ITreeContentProvider, PropertyChangeListener {
 
 	/** The EMPT y_ array. */
-	private static Object[] EMPTY_ARRAY = new Object[0];
+	protected static Object[] EMPTY_ARRAY = new Object[0];
 
 	/** The viewer. */
 	protected TreeViewer viewer;
@@ -52,8 +48,9 @@ public class ReportTreeContetProvider implements ITreeContentProvider, PropertyC
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof INode) {
 			INode node = (INode) parentElement;
-			if (node.getChildren() != null && node.getChildren().size() > 0)
-				return node.getChildren().toArray();
+			List<INode> children = node.getChildren();
+			if (!children.isEmpty())
+				return children.toArray();
 		}
 		return EMPTY_ARRAY;
 	}

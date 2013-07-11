@@ -87,10 +87,10 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.COLUMNS:
+      case SqlPackage.OR_COLUMN:
       {
-        Columns columns = (Columns)theEObject;
-        T result = caseColumns(columns);
+        OrColumn orColumn = (OrColumn)theEObject;
+        T result = caseOrColumn(orColumn);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -98,7 +98,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         ColumnOrAlias columnOrAlias = (ColumnOrAlias)theEObject;
         T result = caseColumnOrAlias(columnOrAlias);
-        if (result == null) result = caseColumns(columnOrAlias);
+        if (result == null) result = caseOrColumn(columnOrAlias);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -106,10 +106,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         ColumnFull columnFull = (ColumnFull)theEObject;
         T result = caseColumnFull(columnFull);
-        if (result == null) result = caseColumnOrAlias(columnFull);
-        if (result == null) result = caseGroupByColumns(columnFull);
-        if (result == null) result = caseOperand(columnFull);
-        if (result == null) result = caseColumns(columnFull);
+        if (result == null) result = caseOrGroupByColumn(columnFull);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -148,17 +145,14 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseDbObjectName(dbObjectName);
         if (result == null) result = caseColumnFull(dbObjectName);
         if (result == null) result = caseTableFull(dbObjectName);
-        if (result == null) result = caseColumnOrAlias(dbObjectName);
-        if (result == null) result = caseGroupByColumns(dbObjectName);
-        if (result == null) result = caseOperand(dbObjectName);
-        if (result == null) result = caseColumns(dbObjectName);
+        if (result == null) result = caseOrGroupByColumn(dbObjectName);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.ORDER_BY_COLUMNS:
+      case SqlPackage.OR_ORDER_BY_COLUMN:
       {
-        OrderByColumns orderByColumns = (OrderByColumns)theEObject;
-        T result = caseOrderByColumns(orderByColumns);
+        OrOrderByColumn orOrderByColumn = (OrOrderByColumn)theEObject;
+        T result = caseOrOrderByColumn(orOrderByColumn);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -166,14 +160,21 @@ public class SqlSwitch<T> extends Switch<T>
       {
         OrderByColumnFull orderByColumnFull = (OrderByColumnFull)theEObject;
         T result = caseOrderByColumnFull(orderByColumnFull);
-        if (result == null) result = caseOrderByColumns(orderByColumnFull);
+        if (result == null) result = caseOrOrderByColumn(orderByColumnFull);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.GROUP_BY_COLUMNS:
+      case SqlPackage.OR_GROUP_BY_COLUMN:
       {
-        GroupByColumns groupByColumns = (GroupByColumns)theEObject;
-        T result = caseGroupByColumns(groupByColumns);
+        OrGroupByColumn orGroupByColumn = (OrGroupByColumn)theEObject;
+        T result = caseOrGroupByColumn(orGroupByColumn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OR_EXPR:
+      {
+        OrExpr orExpr = (OrExpr)theEObject;
+        T result = caseOrExpr(orExpr);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -181,6 +182,36 @@ public class SqlSwitch<T> extends Switch<T>
       {
         FullExpression fullExpression = (FullExpression)theEObject;
         T result = caseFullExpression(fullExpression);
+        if (result == null) result = caseOrExpr(fullExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.EXPR_GROUP:
+      {
+        ExprGroup exprGroup = (ExprGroup)theEObject;
+        T result = caseExprGroup(exprGroup);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.XEXPR:
+      {
+        XExpr xExpr = (XExpr)theEObject;
+        T result = caseXExpr(xExpr);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PRMS:
+      {
+        Prms prms = (Prms)theEObject;
+        T result = casePrms(prms);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.JR_PARAMETER:
+      {
+        JRParameter jrParameter = (JRParameter)theEObject;
+        T result = caseJRParameter(jrParameter);
+        if (result == null) result = casePrms(jrParameter);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -191,6 +222,13 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.LIKE:
+      {
+        Like like = (Like)theEObject;
+        T result = caseLike(like);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.BETWEEN:
       {
         Between between = (Between)theEObject;
@@ -198,10 +236,24 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.IN_OPERATOR:
+      case SqlPackage.IN_OPER:
       {
-        InOperator inOperator = (InOperator)theEObject;
-        T result = caseInOperator(inOperator);
+        InOper inOper = (InOper)theEObject;
+        T result = caseInOper(inOper);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OPERAND_LIST:
+      {
+        OperandList operandList = (OperandList)theEObject;
+        T result = caseOperandList(operandList);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OPERANDS:
+      {
+        Operands operands = (Operands)theEObject;
+        T result = caseOperands(operands);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -209,6 +261,36 @@ public class SqlSwitch<T> extends Switch<T>
       {
         Operand operand = (Operand)theEObject;
         T result = caseOperand(operand);
+        if (result == null) result = caseOperandList(operand);
+        if (result == null) result = caseOperands(operand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.POPERAND:
+      {
+        POperand pOperand = (POperand)theEObject;
+        T result = casePOperand(pOperand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.EXP_PPERAND:
+      {
+        ExpPperand expPperand = (ExpPperand)theEObject;
+        T result = caseExpPperand(expPperand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.COLUMN_OPERAND:
+      {
+        ColumnOperand columnOperand = (ColumnOperand)theEObject;
+        T result = caseColumnOperand(columnOperand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.SCALAR_OPERAND:
+      {
+        ScalarOperand scalarOperand = (ScalarOperand)theEObject;
+        T result = caseScalarOperand(scalarOperand);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -220,23 +302,12 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OR_COLUMN:
-      {
-        OrColumn orColumn = (OrColumn)theEObject;
-        T result = caseOrColumn(orColumn);
-        if (result == null) result = caseColumns(orColumn);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SqlPackage.COL:
       {
         Col col = (Col)theEObject;
         T result = caseCol(col);
         if (result == null) result = caseColumnFull(col);
-        if (result == null) result = caseColumnOrAlias(col);
-        if (result == null) result = caseGroupByColumns(col);
-        if (result == null) result = caseOperand(col);
-        if (result == null) result = caseColumns(col);
+        if (result == null) result = caseOrGroupByColumn(col);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -248,91 +319,11 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OR_ORDER_BY_COLUMN:
+      case SqlPackage.OP_LIST:
       {
-        OrOrderByColumn orOrderByColumn = (OrOrderByColumn)theEObject;
-        T result = caseOrOrderByColumn(orOrderByColumn);
-        if (result == null) result = caseOrderByColumns(orOrderByColumn);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.OR_GROUP_BY_COLUMN:
-      {
-        OrGroupByColumn orGroupByColumn = (OrGroupByColumn)theEObject;
-        T result = caseOrGroupByColumn(orGroupByColumn);
-        if (result == null) result = caseGroupByColumns(orGroupByColumn);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.FEXPR:
-      {
-        fexpr fexpr = (fexpr)theEObject;
-        T result = casefexpr(fexpr);
-        if (result == null) result = caseFullExpression(fexpr);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.EXPR_GROUP:
-      {
-        exprGroup exprGroup = (exprGroup)theEObject;
-        T result = caseexprGroup(exprGroup);
-        if (result == null) result = caseFullExpression(exprGroup);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.XEXPR:
-      {
-        xexpr xexpr = (xexpr)theEObject;
-        T result = casexexpr(xexpr);
-        if (result == null) result = caseFullExpression(xexpr);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.INOP:
-      {
-        inop inop = (inop)theEObject;
-        T result = caseinop(inop);
-        if (result == null) result = caseInOperator(inop);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.XOP:
-      {
-        xop xop = (xop)theEObject;
-        T result = casexop(xop);
-        if (result == null) result = caseInOperator(xop);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.OPERANDS:
-      {
-        operands operands = (operands)theEObject;
-        T result = caseoperands(operands);
-        if (result == null) result = caseOperand(operands);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.OP_GROUP:
-      {
-        opGroup opGroup = (opGroup)theEObject;
-        T result = caseopGroup(opGroup);
-        if (result == null) result = caseOperand(opGroup);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.POPERAND:
-      {
-        poperand poperand = (poperand)theEObject;
-        T result = casepoperand(poperand);
-        if (result == null) result = caseOperand(poperand);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.EXPOPERAND:
-      {
-        expoperand expoperand = (expoperand)theEObject;
-        T result = caseexpoperand(expoperand);
-        if (result == null) result = caseOperand(expoperand);
+        OpList opList = (OpList)theEObject;
+        T result = caseOpList(opList);
+        if (result == null) result = caseOperandList(opList);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -341,6 +332,8 @@ public class SqlSwitch<T> extends Switch<T>
         subquery subquery = (subquery)theEObject;
         T result = casesubquery(subquery);
         if (result == null) result = caseOperand(subquery);
+        if (result == null) result = caseOperandList(subquery);
+        if (result == null) result = caseOperands(subquery);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -381,17 +374,17 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Columns</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Or Column</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Columns</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Or Column</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseColumns(Columns object)
+  public T caseOrColumn(OrColumn object)
   {
     return null;
   }
@@ -509,17 +502,17 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Order By Columns</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Order By Columns</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseOrderByColumns(OrderByColumns object)
+  public T caseOrOrderByColumn(OrOrderByColumn object)
   {
     return null;
   }
@@ -541,17 +534,33 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Group By Columns</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Or Group By Column</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Group By Columns</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Or Group By Column</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseGroupByColumns(GroupByColumns object)
+  public T caseOrGroupByColumn(OrGroupByColumn object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Or Expr</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Or Expr</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOrExpr(OrExpr object)
   {
     return null;
   }
@@ -573,6 +582,70 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Expr Group</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Expr Group</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseExprGroup(ExprGroup object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>XExpr</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>XExpr</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseXExpr(XExpr object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Prms</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Prms</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePrms(Prms object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>JR Parameter</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>JR Parameter</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseJRParameter(JRParameter object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Comparison</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -584,6 +657,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseComparison(Comparison object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Like</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Like</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseLike(Like object)
   {
     return null;
   }
@@ -605,17 +694,49 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>In Operator</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>In Oper</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>In Operator</em>'.
+   * @return the result of interpreting the object as an instance of '<em>In Oper</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseInOperator(InOperator object)
+  public T caseInOper(InOper object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Operand List</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Operand List</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOperandList(OperandList object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Operands</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Operands</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOperands(Operands object)
   {
     return null;
   }
@@ -637,6 +758,70 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>POperand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>POperand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePOperand(POperand object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Exp Pperand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Exp Pperand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseExpPperand(ExpPperand object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Column Operand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Column Operand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseColumnOperand(ColumnOperand object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Scalar Operand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Scalar Operand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseScalarOperand(ScalarOperand object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Or Select</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -648,22 +833,6 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOrSelect(OrSelect object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Or Column</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Or Column</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseOrColumn(OrColumn object)
   {
     return null;
   }
@@ -701,177 +870,17 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Op List</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Or Order By Column</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Op List</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseOrOrderByColumn(OrOrderByColumn object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Or Group By Column</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Or Group By Column</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseOrGroupByColumn(OrGroupByColumn object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>fexpr</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>fexpr</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casefexpr(fexpr object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>expr Group</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>expr Group</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseexprGroup(exprGroup object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>xexpr</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>xexpr</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casexexpr(xexpr object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>inop</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>inop</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseinop(inop object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>xop</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>xop</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casexop(xop object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>operands</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>operands</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseoperands(operands object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>op Group</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>op Group</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseopGroup(opGroup object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>poperand</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>poperand</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casepoperand(poperand object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>expoperand</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>expoperand</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseexpoperand(expoperand object)
+  public T caseOpList(OpList object)
   {
     return null;
   }

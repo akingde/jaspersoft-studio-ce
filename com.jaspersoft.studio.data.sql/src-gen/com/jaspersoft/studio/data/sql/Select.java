@@ -61,12 +61,12 @@ public interface Select extends Model
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Cols</em>' containment reference.
-   * @see #setCols(Columns)
+   * @see #setCols(OrColumn)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_Cols()
    * @model containment="true"
    * @generated
    */
-  Columns getCols();
+  OrColumn getCols();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getCols <em>Cols</em>}' containment reference.
@@ -76,7 +76,7 @@ public interface Select extends Model
    * @see #getCols()
    * @generated
    */
-  void setCols(Columns value);
+  void setCols(OrColumn value);
 
   /**
    * Returns the value of the '<em><b>Tbl</b></em>' containment reference.
@@ -113,12 +113,12 @@ public interface Select extends Model
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Where Expression</em>' containment reference.
-   * @see #setWhereExpression(FullExpression)
+   * @see #setWhereExpression(OrExpr)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_WhereExpression()
    * @model containment="true"
    * @generated
    */
-  FullExpression getWhereExpression();
+  OrExpr getWhereExpression();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getWhereExpression <em>Where Expression</em>}' containment reference.
@@ -128,7 +128,7 @@ public interface Select extends Model
    * @see #getWhereExpression()
    * @generated
    */
-  void setWhereExpression(FullExpression value);
+  void setWhereExpression(OrExpr value);
 
   /**
    * Returns the value of the '<em><b>Group By Entry</b></em>' containment reference.
@@ -139,12 +139,12 @@ public interface Select extends Model
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Group By Entry</em>' containment reference.
-   * @see #setGroupByEntry(GroupByColumns)
+   * @see #setGroupByEntry(OrGroupByColumn)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_GroupByEntry()
    * @model containment="true"
    * @generated
    */
-  GroupByColumns getGroupByEntry();
+  OrGroupByColumn getGroupByEntry();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getGroupByEntry <em>Group By Entry</em>}' containment reference.
@@ -154,7 +154,7 @@ public interface Select extends Model
    * @see #getGroupByEntry()
    * @generated
    */
-  void setGroupByEntry(GroupByColumns value);
+  void setGroupByEntry(OrGroupByColumn value);
 
   /**
    * Returns the value of the '<em><b>Having Entry</b></em>' containment reference.
@@ -165,12 +165,12 @@ public interface Select extends Model
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Having Entry</em>' containment reference.
-   * @see #setHavingEntry(FullExpression)
+   * @see #setHavingEntry(OrExpr)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_HavingEntry()
    * @model containment="true"
    * @generated
    */
-  FullExpression getHavingEntry();
+  OrExpr getHavingEntry();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Select#getHavingEntry <em>Having Entry</em>}' containment reference.
@@ -180,6 +180,6 @@ public interface Select extends Model
    * @see #getHavingEntry()
    * @generated
    */
-  void setHavingEntry(FullExpression value);
+  void setHavingEntry(OrExpr value);
 
 } // Select

@@ -12,8 +12,9 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOp1 <em>Op1</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOpBetween <em>Op Between</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOp2 <em>Op2</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Between#getOp3 <em>Op3</em>}</li>
  * </ul>
  * </p>
  *
@@ -24,30 +25,30 @@ import org.eclipse.emf.ecore.EObject;
 public interface Between extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Op1</b></em>' containment reference.
+   * Returns the value of the '<em><b>Op Between</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Op1</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Op Between</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Op1</em>' containment reference.
-   * @see #setOp1(Operand)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getBetween_Op1()
-   * @model containment="true"
+   * @return the value of the '<em>Op Between</em>' attribute.
+   * @see #setOpBetween(String)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getBetween_OpBetween()
+   * @model
    * @generated
    */
-  Operand getOp1();
+  String getOpBetween();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Between#getOp1 <em>Op1</em>}' containment reference.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Between#getOpBetween <em>Op Between</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Op1</em>' containment reference.
-   * @see #getOp1()
+   * @param value the new value of the '<em>Op Between</em>' attribute.
+   * @see #getOpBetween()
    * @generated
    */
-  void setOp1(Operand value);
+  void setOpBetween(String value);
 
   /**
    * Returns the value of the '<em><b>Op2</b></em>' containment reference.
@@ -58,12 +59,12 @@ public interface Between extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Op2</em>' containment reference.
-   * @see #setOp2(Operand)
+   * @see #setOp2(Operands)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getBetween_Op2()
    * @model containment="true"
    * @generated
    */
-  Operand getOp2();
+  Operands getOp2();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Between#getOp2 <em>Op2</em>}' containment reference.
@@ -73,6 +74,32 @@ public interface Between extends EObject
    * @see #getOp2()
    * @generated
    */
-  void setOp2(Operand value);
+  void setOp2(Operands value);
+
+  /**
+   * Returns the value of the '<em><b>Op3</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Op3</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Op3</em>' containment reference.
+   * @see #setOp3(Operands)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getBetween_Op3()
+   * @model containment="true"
+   * @generated
+   */
+  Operands getOp3();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Between#getOp3 <em>Op3</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Op3</em>' containment reference.
+   * @see #getOp3()
+   * @generated
+   */
+  void setOp3(Operands value);
 
 } // Between

@@ -33,9 +33,9 @@ public class MExpressionGroup extends AMKeyword {
 	@Override
 	public String getDisplayText() {
 		String str = "";
-		if (isFirst())
-			str += "(";
-		str += super.getDisplayText() + " (";
+		if (!isFirst())
+			str += super.getDisplayText();
+		str += " (";
 		if (getChildren().isEmpty())
 			str += ")";
 		return str;
@@ -53,5 +53,10 @@ public class MExpressionGroup extends AMKeyword {
 		if (getChildren().isEmpty())
 			ss.append(")");
 		return ss;
+	}
+
+	@Override
+	public String toSQLString() {
+		return "\n\t " + getDisplayText() + " ";
 	}
 }

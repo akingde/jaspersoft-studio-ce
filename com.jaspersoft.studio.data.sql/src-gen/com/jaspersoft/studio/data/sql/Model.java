@@ -31,12 +31,12 @@ public interface Model extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Order By Entry</em>' containment reference.
-   * @see #setOrderByEntry(OrderByColumns)
+   * @see #setOrderByEntry(OrOrderByColumn)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_OrderByEntry()
    * @model containment="true"
    * @generated
    */
-  OrderByColumns getOrderByEntry();
+  OrOrderByColumn getOrderByEntry();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}' containment reference.
@@ -46,6 +46,6 @@ public interface Model extends EObject
    * @see #getOrderByEntry()
    * @generated
    */
-  void setOrderByEntry(OrderByColumns value);
+  void setOrderByEntry(OrOrderByColumn value);
 
 } // Model

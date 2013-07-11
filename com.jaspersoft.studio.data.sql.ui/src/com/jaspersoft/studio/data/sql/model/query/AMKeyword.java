@@ -34,7 +34,7 @@ public class AMKeyword extends MDBObjects implements IQueryString {
 	public static final String OR_OPERATOR = "OR";
 	public static final String[] CONDITIONS = new String[] { AND_OPERATOR, OR_OPERATOR };
 
-	public static final String ALIAS_KEYWORD = " AS ";
+	public static final String ALIAS_KEYWORD = "AS";
 	public static final String ASCENDING_KEYWORD = " ASC";
 	public static final String DESCENDING_KEYWORD = " DESC";
 	public static final String[] ALIAS_KEYWORDS = new String[] { ALIAS_KEYWORD, " " };

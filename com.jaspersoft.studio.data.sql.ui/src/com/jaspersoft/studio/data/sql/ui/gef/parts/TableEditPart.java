@@ -56,8 +56,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		SqlTableFigure fig = new SqlTableFigure("");
-		return fig;
+		return new SqlTableFigure("");
 	}
 
 	public Map<String, MSelectColumn> getColumnMap() {
@@ -82,7 +81,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		MSqlTable table = fromTable.getValue();
 		String tblName = table.getValue();
 		if (fromTable.getAlias() != null)
-			tblName += fromTable.getAliasKeyword() + fromTable.getAlias();
+			tblName += fromTable.getAliasKeyString() + fromTable.getAlias();
 
 		f.setName(tblName);
 

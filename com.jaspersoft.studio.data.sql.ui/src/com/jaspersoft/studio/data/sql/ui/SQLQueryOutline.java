@@ -91,6 +91,10 @@ public class SQLQueryOutline {
 
 			@Override
 			public void refresh(boolean updateLabels) {
+				if (isRefresh) {
+					super.refresh(updateLabels);
+					return;
+				}
 				isRefresh = true;
 				super.refresh(updateLabels);
 				designer.refreshQuery();
@@ -299,9 +303,11 @@ public class SQLQueryOutline {
 	public void scheduleRefresh() {
 		if (isRefresh)
 			return;
+		isRefresh = true;
 		if (designer.getRoot() != null)
 			designer.getRoot().setValue(designer.getjDataset());
 		treeViewer.refresh(true);
+		isRefresh = false;
 	}
 
 	public TreeViewer getTreeViewer() {

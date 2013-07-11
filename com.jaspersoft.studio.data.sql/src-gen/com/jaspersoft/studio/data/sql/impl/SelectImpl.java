@@ -2,9 +2,9 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Columns;
-import com.jaspersoft.studio.data.sql.FullExpression;
-import com.jaspersoft.studio.data.sql.GroupByColumns;
+import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.OrExpr;
+import com.jaspersoft.studio.data.sql.OrGroupByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.Select;
 import com.jaspersoft.studio.data.sql.SqlPackage;
@@ -65,7 +65,7 @@ public class SelectImpl extends ModelImpl implements Select
    * @generated
    * @ordered
    */
-  protected Columns cols;
+  protected OrColumn cols;
 
   /**
    * The cached value of the '{@link #getTbl() <em>Tbl</em>}' containment reference.
@@ -85,7 +85,7 @@ public class SelectImpl extends ModelImpl implements Select
    * @generated
    * @ordered
    */
-  protected FullExpression whereExpression;
+  protected OrExpr whereExpression;
 
   /**
    * The cached value of the '{@link #getGroupByEntry() <em>Group By Entry</em>}' containment reference.
@@ -95,7 +95,7 @@ public class SelectImpl extends ModelImpl implements Select
    * @generated
    * @ordered
    */
-  protected GroupByColumns groupByEntry;
+  protected OrGroupByColumn groupByEntry;
 
   /**
    * The cached value of the '{@link #getHavingEntry() <em>Having Entry</em>}' containment reference.
@@ -105,7 +105,7 @@ public class SelectImpl extends ModelImpl implements Select
    * @generated
    * @ordered
    */
-  protected FullExpression havingEntry;
+  protected OrExpr havingEntry;
 
   /**
    * <!-- begin-user-doc -->
@@ -156,7 +156,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public Columns getCols()
+  public OrColumn getCols()
   {
     return cols;
   }
@@ -166,9 +166,9 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetCols(Columns newCols, NotificationChain msgs)
+  public NotificationChain basicSetCols(OrColumn newCols, NotificationChain msgs)
   {
-    Columns oldCols = cols;
+    OrColumn oldCols = cols;
     cols = newCols;
     if (eNotificationRequired())
     {
@@ -183,7 +183,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setCols(Columns newCols)
+  public void setCols(OrColumn newCols)
   {
     if (newCols != cols)
     {
@@ -252,7 +252,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public FullExpression getWhereExpression()
+  public OrExpr getWhereExpression()
   {
     return whereExpression;
   }
@@ -262,9 +262,9 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetWhereExpression(FullExpression newWhereExpression, NotificationChain msgs)
+  public NotificationChain basicSetWhereExpression(OrExpr newWhereExpression, NotificationChain msgs)
   {
-    FullExpression oldWhereExpression = whereExpression;
+    OrExpr oldWhereExpression = whereExpression;
     whereExpression = newWhereExpression;
     if (eNotificationRequired())
     {
@@ -279,7 +279,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setWhereExpression(FullExpression newWhereExpression)
+  public void setWhereExpression(OrExpr newWhereExpression)
   {
     if (newWhereExpression != whereExpression)
     {
@@ -300,7 +300,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public GroupByColumns getGroupByEntry()
+  public OrGroupByColumn getGroupByEntry()
   {
     return groupByEntry;
   }
@@ -310,9 +310,9 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetGroupByEntry(GroupByColumns newGroupByEntry, NotificationChain msgs)
+  public NotificationChain basicSetGroupByEntry(OrGroupByColumn newGroupByEntry, NotificationChain msgs)
   {
-    GroupByColumns oldGroupByEntry = groupByEntry;
+    OrGroupByColumn oldGroupByEntry = groupByEntry;
     groupByEntry = newGroupByEntry;
     if (eNotificationRequired())
     {
@@ -327,7 +327,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setGroupByEntry(GroupByColumns newGroupByEntry)
+  public void setGroupByEntry(OrGroupByColumn newGroupByEntry)
   {
     if (newGroupByEntry != groupByEntry)
     {
@@ -348,7 +348,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public FullExpression getHavingEntry()
+  public OrExpr getHavingEntry()
   {
     return havingEntry;
   }
@@ -358,9 +358,9 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetHavingEntry(FullExpression newHavingEntry, NotificationChain msgs)
+  public NotificationChain basicSetHavingEntry(OrExpr newHavingEntry, NotificationChain msgs)
   {
-    FullExpression oldHavingEntry = havingEntry;
+    OrExpr oldHavingEntry = havingEntry;
     havingEntry = newHavingEntry;
     if (eNotificationRequired())
     {
@@ -375,7 +375,7 @@ public class SelectImpl extends ModelImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setHavingEntry(FullExpression newHavingEntry)
+  public void setHavingEntry(OrExpr newHavingEntry)
   {
     if (newHavingEntry != havingEntry)
     {
@@ -455,19 +455,19 @@ public class SelectImpl extends ModelImpl implements Select
         setSelect((String)newValue);
         return;
       case SqlPackage.SELECT__COLS:
-        setCols((Columns)newValue);
+        setCols((OrColumn)newValue);
         return;
       case SqlPackage.SELECT__TBL:
         setTbl((OrTable)newValue);
         return;
       case SqlPackage.SELECT__WHERE_EXPRESSION:
-        setWhereExpression((FullExpression)newValue);
+        setWhereExpression((OrExpr)newValue);
         return;
       case SqlPackage.SELECT__GROUP_BY_ENTRY:
-        setGroupByEntry((GroupByColumns)newValue);
+        setGroupByEntry((OrGroupByColumn)newValue);
         return;
       case SqlPackage.SELECT__HAVING_ENTRY:
-        setHavingEntry((FullExpression)newValue);
+        setHavingEntry((OrExpr)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -487,19 +487,19 @@ public class SelectImpl extends ModelImpl implements Select
         setSelect(SELECT_EDEFAULT);
         return;
       case SqlPackage.SELECT__COLS:
-        setCols((Columns)null);
+        setCols((OrColumn)null);
         return;
       case SqlPackage.SELECT__TBL:
         setTbl((OrTable)null);
         return;
       case SqlPackage.SELECT__WHERE_EXPRESSION:
-        setWhereExpression((FullExpression)null);
+        setWhereExpression((OrExpr)null);
         return;
       case SqlPackage.SELECT__GROUP_BY_ENTRY:
-        setGroupByEntry((GroupByColumns)null);
+        setGroupByEntry((OrGroupByColumn)null);
         return;
       case SqlPackage.SELECT__HAVING_ENTRY:
-        setHavingEntry((FullExpression)null);
+        setHavingEntry((OrExpr)null);
         return;
     }
     super.eUnset(featureID);

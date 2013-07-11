@@ -27,7 +27,8 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 public class MExpressionX extends AMExpression<Object> {
 	public static final String[] FUNCTIONS = new String[] { JRJdbcQueryExecuter.CLAUSE_ID_EQUAL, JRJdbcQueryExecuter.CLAUSE_ID_NOTEQUAL, JRJdbcQueryExecuter.CLAUSE_ID_GREATER,
 			JRJdbcQueryExecuter.CLAUSE_ID_GREATER_OR_EQUAL, JRJdbcQueryExecuter.CLAUSE_ID_LESS, JRJdbcQueryExecuter.CLAUSE_ID_LESS_OR_EQUAL, JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN,
-			JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED, JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED, JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED, "IN", "NOTIN" };
+			JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED, JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED, JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED, JRJdbcQueryExecuter.CLAUSE_ID_IN,
+			JRJdbcQueryExecuter.CLAUSE_ID_NOTIN };
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 

@@ -55,7 +55,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	private ANode parent;
 
 	/** The children. */
-	private List<INode> children = new ArrayList<INode>();
+	private List<INode> children;
 
 	/** The value. */
 	private Object value;
@@ -286,7 +286,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 		// event
 		child.setJasperConfiguration(getJasperConfiguration());
 		child.setParent(null, -1);
-		children.remove(child);
+		getChildren().remove(child);
 	}
 
 	/**
@@ -373,6 +373,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 	 * @see com.jaspersoft.studio.model.INode#getChildren()
 	 */
 	public List<INode> getChildren() {
+		if (children == null)
+			children = new ArrayList<INode>();
 		return children;
 	}
 

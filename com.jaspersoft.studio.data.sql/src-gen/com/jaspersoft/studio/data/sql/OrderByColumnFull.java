@@ -12,6 +12,7 @@ package com.jaspersoft.studio.data.sql;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrder <em>Col Order</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getDirection <em>Direction</em>}</li>
  * </ul>
  * </p>
  *
@@ -19,7 +20,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface OrderByColumnFull extends OrderByColumns
+public interface OrderByColumnFull extends OrOrderByColumn
 {
   /**
    * Returns the value of the '<em><b>Col Order</b></em>' containment reference.
@@ -46,5 +47,31 @@ public interface OrderByColumnFull extends OrderByColumns
    * @generated
    */
   void setColOrder(ColumnFull value);
+
+  /**
+   * Returns the value of the '<em><b>Direction</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Direction</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Direction</em>' attribute.
+   * @see #setDirection(String)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOrderByColumnFull_Direction()
+   * @model
+   * @generated
+   */
+  String getDirection();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getDirection <em>Direction</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Direction</em>' attribute.
+   * @see #getDirection()
+   * @generated
+   */
+  void setDirection(String value);
 
 } // OrderByColumnFull

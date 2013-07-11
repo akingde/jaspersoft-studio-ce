@@ -44,9 +44,9 @@ public class ScalarOperand<T> extends AOperand {
 	@Override
 	public String toSQLString() {
 		if (value != null) {
-			if (value.getClass().isInstance(Number.class))
+			if (Number.class.isAssignableFrom(value.getClass()))
 				return NumberFormat.getInstance().format((Number) value);
-			if (value.getClass().isInstance(Date.class))
+			if (Date.class.isAssignableFrom(value.getClass()))
 				return SimpleDateFormat.getInstance().format((Date) value);
 			return "'" + value + "'";
 		}

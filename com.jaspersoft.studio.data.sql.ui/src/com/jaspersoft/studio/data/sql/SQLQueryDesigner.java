@@ -44,6 +44,7 @@ import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.text2model.Text2Model;
 import com.jaspersoft.studio.data.sql.ui.DBMetadata;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.data.sql.ui.SQLQuerySource;
@@ -92,14 +93,12 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (source.isDirty())
-					Text2Model.text2model(root, source.getXTextDocument());
+					Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument());
 				switch (tabFolder.getSelectionIndex()) {
 				case 1:
-					showWarning();
 					outline.scheduleRefresh();
 					break;
 				case 2:
-					showWarning();
 					diagram.scheduleRefresh();
 					break;
 				}
@@ -168,7 +167,18 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	protected void updateQueryText(String txt) {
 		source.setQuery(txt);
 		if (!isModelRefresh)
-			Text2Model.text2model(root, source.getXTextDocument());
+			Text2Model.text2model(this, source.getXTextDocument());
+	}
+
+	public void refreshedMetadata() {
+		if (tabFolder.getSelectionIndex() == 0)
+			source.setDirty(true);
+		if (tabFolder.getSelectionIndex() != 0)
+			Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument());
+		if (tabFolder.getSelectionIndex() == 1)
+			outline.scheduleRefresh();
+		if (tabFolder.getSelectionIndex() == 2)
+			diagram.scheduleRefresh();
 	}
 
 	public void refreshQuery() {
@@ -286,7 +296,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return root;
 	}
 
-	protected void refreshViewer() {
+	public void refreshViewer() {
 		if (root != null)
 			root.removeChildren();
 		else

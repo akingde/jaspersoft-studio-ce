@@ -41,6 +41,11 @@ public class ParameterPOperand extends AOperand {
 		this.jrParameter = jrParameter;
 	}
 
+	public void setJrParameter(String prm) {
+		if (jrDataset != null)
+			this.jrParameter = (JRDesignParameter) jrDataset.getParametersMap().get(prm);
+	}
+
 	public JRDesignDataset getJrDataset() {
 		return jrDataset;
 	}

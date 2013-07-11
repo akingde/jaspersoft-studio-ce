@@ -22,12 +22,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl#getColOrder <em>Col Order</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl#getDirection <em>Direction</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderByColumnFull
+public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderByColumnFull
 {
   /**
    * The cached value of the '{@link #getColOrder() <em>Col Order</em>}' containment reference.
@@ -38,6 +39,26 @@ public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderBy
    * @ordered
    */
   protected ColumnFull colOrder;
+
+  /**
+   * The default value of the '{@link #getDirection() <em>Direction</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDirection()
+   * @generated
+   * @ordered
+   */
+  protected static final String DIRECTION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDirection() <em>Direction</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDirection()
+   * @generated
+   * @ordered
+   */
+  protected String direction = DIRECTION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -113,6 +134,29 @@ public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderBy
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getDirection()
+  {
+    return direction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDirection(String newDirection)
+  {
+    String oldDirection = direction;
+    direction = newDirection;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION, oldDirection, direction));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -136,6 +180,8 @@ public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderBy
     {
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         return getColOrder();
+      case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
+        return getDirection();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -152,6 +198,9 @@ public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderBy
     {
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         setColOrder((ColumnFull)newValue);
+        return;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
+        setDirection((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,6 +219,9 @@ public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderBy
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         setColOrder((ColumnFull)null);
         return;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
+        setDirection(DIRECTION_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -186,8 +238,27 @@ public class OrderByColumnFullImpl extends OrderByColumnsImpl implements OrderBy
     {
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         return colOrder != null;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
+        return DIRECTION_EDEFAULT == null ? direction != null : !DIRECTION_EDEFAULT.equals(direction);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (direction: ");
+    result.append(direction);
+    result.append(')');
+    return result.toString();
   }
 
 } //OrderByColumnFullImpl

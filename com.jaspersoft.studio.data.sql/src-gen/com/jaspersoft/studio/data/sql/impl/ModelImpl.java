@@ -3,7 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.Model;
-import com.jaspersoft.studio.data.sql.OrderByColumns;
+import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -38,7 +38,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * @generated
    * @ordered
    */
-  protected OrderByColumns orderByEntry;
+  protected OrOrderByColumn orderByEntry;
 
   /**
    * <!-- begin-user-doc -->
@@ -66,7 +66,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public OrderByColumns getOrderByEntry()
+  public OrOrderByColumn getOrderByEntry()
   {
     return orderByEntry;
   }
@@ -76,9 +76,9 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOrderByEntry(OrderByColumns newOrderByEntry, NotificationChain msgs)
+  public NotificationChain basicSetOrderByEntry(OrOrderByColumn newOrderByEntry, NotificationChain msgs)
   {
-    OrderByColumns oldOrderByEntry = orderByEntry;
+    OrOrderByColumn oldOrderByEntry = orderByEntry;
     orderByEntry = newOrderByEntry;
     if (eNotificationRequired())
     {
@@ -93,7 +93,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOrderByEntry(OrderByColumns newOrderByEntry)
+  public void setOrderByEntry(OrOrderByColumn newOrderByEntry)
   {
     if (newOrderByEntry != orderByEntry)
     {
@@ -152,7 +152,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     switch (featureID)
     {
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        setOrderByEntry((OrderByColumns)newValue);
+        setOrderByEntry((OrOrderByColumn)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -169,7 +169,7 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
     switch (featureID)
     {
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
-        setOrderByEntry((OrderByColumns)null);
+        setOrderByEntry((OrOrderByColumn)null);
         return;
     }
     super.eUnset(featureID);
