@@ -86,7 +86,7 @@ public class SQLQuerySource {
 
 		Injector injector = getInjector();
 		EmbeddedEditorFactory factory = injector.getInstance(EmbeddedEditorFactory.class);
-		EmbeddedEditor embeddedEditor = factory.newEditor(resourceProvider).showErrorAndWarningAnnotations().withParent(cmp);
+		embeddedEditor = factory.newEditor(resourceProvider).showErrorAndWarningAnnotations().withParent(cmp);
 		EmbeddedEditorModelAccess partialEditorModelAccess = embeddedEditor.createPartialEditor();
 
 		viewer = embeddedEditor.getViewer();
@@ -153,8 +153,42 @@ public class SQLQuerySource {
 				}
 			}
 		});
+
 		return cmp;
 	}
+
+	// @Inject
+	// private ToggleSLCommentAction.Factory toggleSLCommentActionFactory;
+
+	// protected void createActions() {
+	// if
+	// (embeddedEditor.getConfiguration().getContentFormatter(embeddedEditor.getViewer())
+	// != null) {
+	//			Action action = new TextOperationAction(XtextUIMessages.getResourceBundle(), "Format.", embeddedEditor, ISourceViewer.FORMAT); //$NON-NLS-1$
+	// action.setActionDefinitionId(JasperReportsPlugin.PLUGIN_ID +
+	// ".FormatAction");
+	//			//		setAction("Format", action); //$NON-NLS-1$
+	//			//		markAsStateDependentAction("Format", true); //$NON-NLS-1$
+	//			//		markAsSelectionDependentAction("Format", true); //$NON-NLS-1$
+	// //
+	// }
+	//		ToggleSLCommentAction action = toggleSLCommentActionFactory.create(XtextUIMessages.getResourceBundle(), "ToggleComment.", this); //$NON-NLS-1$
+	// action.setActionDefinitionId(JasperReportsPlugin.PLUGIN_ID +
+	// ".ToggleCommentAction");
+	//		//		setAction("ToggleComment", action); //$NON-NLS-1$
+	//		//		markAsStateDependentAction("ToggleComment", true); //$NON-NLS-1$
+	// // markAsSelectionDependentAction("ToggleComment", true);
+	// configureToggleCommentAction(action);
+	// //
+	// // actioncontributor.contributeActions(this);
+	// }
+
+	// protected void configureToggleCommentAction(ToggleSLCommentAction action) {
+	// ISourceViewer sourceViewer = embeddedEditor.getViewer();
+	// SourceViewerConfiguration configuration =
+	// embeddedEditor.getConfiguration();
+	// action.configure(sourceViewer, configuration);
+	// }
 
 	public String getQuery() {
 		return viewer.getDocument().get();
@@ -170,6 +204,7 @@ public class SQLQuerySource {
 	}
 
 	private boolean isDirty = false;
+	private EmbeddedEditor embeddedEditor;
 
 	public void setDirty(boolean isDirty) {
 		this.isDirty = isDirty;
