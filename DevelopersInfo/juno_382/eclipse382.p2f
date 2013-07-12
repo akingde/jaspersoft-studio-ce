@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='23'>
+  <ius size='24'>
     <iu id='org.apache.commons.dbcp' name='Apache Commons DBCP' version='1.4.0.v201204271417'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
@@ -46,6 +46,12 @@
     <iu id='org.eclipse.egit.feature.group' name='Eclipse Git Team Provider' version='3.0.0.201306101825-r'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.platform.ide' name='Eclipse Platform' version='3.8.2.M20130131-0800'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
+        <repository location='http://download.eclipse.org/releases/juno'/>
       </repositories>
     </iu>
     <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='3.8.2.M20130131-0800'>
