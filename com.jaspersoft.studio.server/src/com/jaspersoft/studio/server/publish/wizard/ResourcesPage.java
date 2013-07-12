@@ -39,6 +39,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -79,16 +80,20 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
 
-		TableColumn[] col = new TableColumn[2];
+		TableColumn[] col = new TableColumn[3];
 		col[0] = new TableColumn(table, SWT.NONE);
 		col[0].setText(Messages.ResourcesPage_table_resource);
 
 		col[1] = new TableColumn(table, SWT.NONE);
 		col[1].setText(Messages.ResourcesPage_table_overwrite);
 
+		col[2] = new TableColumn(table, SWT.NONE);
+		col[2].setText("File Size");
+
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(80, false));
-		tlayout.addColumnData(new ColumnWeightData(20, false));
+		tlayout.addColumnData(new ColumnWeightData(70, false));
+		tlayout.addColumnData(new ColumnWeightData(15, false));
+		tlayout.addColumnData(new ColumnWeightData(15, false));
 		table.setLayout(tlayout);
 
 		for (TableColumn c : col)
@@ -115,8 +120,11 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				MResource prop = (MResource) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					return prop.getPublishOptions().isOverwrite();
-				if ("NAME".equals(property)) { //$NON-NLS-1$
+				if ("NAME".equals(property)) //$NON-NLS-1$
 					return prop.getDisplayText();
+				if ("FILESIZE".equals(property)) {
+					if (prop instanceof AFileResource)
+						return ((AFileResource) element).getHFFileSize();
 				}
 				return ""; //$NON-NLS-1$
 			}
@@ -124,16 +132,15 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
 				MResource data = (MResource) tableItem.getData();
-				if ("VALUE".equals(property)) { //$NON-NLS-1$
+				if ("VALUE".equals(property)) //$NON-NLS-1$
 					data.getPublishOptions().setOverwrite((Boolean) value);
-				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent), new TextCellEditor(parent, SWT.RIGHT) });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void fillData() {
@@ -162,6 +169,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				return fr.getDisplayText();
 			case 1:
 				return chLabelProvider.getText(fr.getPublishOptions().isOverwrite());
+			case 2:
+				if (element instanceof AFileResource)
+					return ((AFileResource) element).getHFFileSize();
 			}
 			return ""; //$NON-NLS-1$
 		}

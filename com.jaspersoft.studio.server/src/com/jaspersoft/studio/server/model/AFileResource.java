@@ -21,6 +21,8 @@ import java.io.IOException;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.apache.commons.io.FileUtils;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 
@@ -41,6 +43,12 @@ public abstract class AFileResource extends MResource {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	public String getHFFileSize() {
+		if (file != null && file.exists())
+			return FileUtils.byteCountToDisplaySize(file.length());
+		return "";
 	}
 
 	public String getFileName() {
