@@ -14,7 +14,6 @@
 	<packaging>eclipse-feature</packaging>
 	<version>1.7.0.u25</version>
 
-	<!--  
 	<build>
 		<plugins>
 			<plugin>
@@ -27,8 +26,8 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<target>
-								<gunzip src="${project.build.directory}/../jre-7u25-macosx-x64.tar.gz" />
-								<untar src="${project.build.directory}/../jre-7u25-macosx-x64.tar" dest="${project.build.directory}/../"/>
+								<gunzip src="${jre.packages.location}/jre-7u25-macosx-x64.tar.gz" />
+								<untar src="${jre.packages.location}/jre-7u25-macosx-x64.tar" dest="${project.build.directory}/../"/>
 							</target>
 						</configuration>
 						<goals>
@@ -39,5 +38,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	-->
 </project> 

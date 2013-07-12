@@ -14,4 +14,28 @@
 	<packaging>eclipse-feature</packaging>
 	<version>1.7.0.u25</version>
 	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>unpack-jre</id>
+						<phase>generate-resources</phase>
+						<configuration>
+							<target>
+								<gunzip src="${jre.packages.location}/jre-7u25-linux-x64.tar.gz" />
+								<untar src="${jre.packages.location}/jre-7u25-linux-x64.tar" dest="${project.build.directory}/../"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project> 
