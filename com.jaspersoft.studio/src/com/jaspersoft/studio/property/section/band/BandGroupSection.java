@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -59,5 +60,17 @@ public class BandGroupSection extends AbstractSection {
 			gd.horizontalSpan = 3;
 			createWidget4Property(parent, JRDesignGroup.PROPERTY_KEEP_TOGETHER, false).getControl().setLayoutData(gd);
 		}
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, Messages.MGroup_minHeightTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_FOOTER_POSITION, Messages.MGroup_footerPosTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_START_NEW_COLUMN, Messages.MGroup_newColTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_START_NEW_PAGE, Messages.MGroup_newPageTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Messages.MGroup_reprintPosition);
+		addProvidedProperties(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Messages.MGroup_pageNumberTitle);
+		addProvidedProperties(JRDesignGroup.PROPERTY_KEEP_TOGETHER, Messages.MGroup_keepTitle);
 	}
 }

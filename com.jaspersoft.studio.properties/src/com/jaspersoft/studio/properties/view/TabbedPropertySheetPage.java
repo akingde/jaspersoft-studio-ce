@@ -172,6 +172,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			return null;
 		}
 	}
+	
 
 	/**
 	 * SelectionChangedListener for the ListViewer.
@@ -212,8 +213,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 					tabToComposite.put(tab, tabComposite);
 				}
 
-				tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
-
 				// store tab selection
 				storeCurrentTabSelection(descriptor.getLabel());
 
@@ -231,38 +230,55 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 				handleTabSelection(descriptor);
 			}
 		}
+	}
+	
+	/**
+	 * Take a TabContents and search a TabDescriptor for that tab
+	 */
+	private ITabDescriptor getTabDescriptor(TabContents tab){
+		for(ITabDescriptor key : descriptorToTab.keySet()){
+			if (descriptorToTab.get(key) == tab) return key;
+		}
+		return null;
+	}
+	
 
-		/**
-		 * Shows the given tab.
-		 */
-		private void showTab(TabContents target) {
-			if (target != null) {
-				Composite tabComposite = tabToComposite.get(target);
-				if (tabComposite != null) {
-					/**
-					 * the following method call order is important - do not change it or
-					 * the widgets might be drawn incorrectly
-					 */
-					tabComposite.moveAbove(null);
-					target.aboutToBeShown();
-					tabComposite.setVisible(true);
-				}
+	/**
+	 * Shows the given tab.
+	 */
+	private void showTab(TabContents target) {
+		if (target != null) {
+			Composite tabComposite = tabToComposite.get(target);
+			if (tabComposite != null) {
+				/**
+				 * the following method call order is important - do not change it or
+				 * the widgets might be drawn incorrectly
+				 */
+				tabComposite.moveAbove(null);
+				target.aboutToBeShown();
+				tabComposite.setVisible(true);
 			}
 		}
-
-		/**
-		 * Hides the given tab.
-		 */
-		private void hideTab(TabContents target) {
-			if (target != null) {
-				Composite tabComposite = tabToComposite.get(target);
-				if (tabComposite != null) {
-					target.aboutToBeHidden();
-					tabComposite.setVisible(false);
-				}
+	}
+	
+	/**
+	 * Hides the given tab.
+	 */
+	private void hideTab(TabContents target) {
+		if (target != null) {
+			Composite tabComposite = tabToComposite.get(target);
+			if (tabComposite != null) {
+				target.aboutToBeHidden();
+				tabComposite.setVisible(false);
 			}
 		}
-
+	}
+	
+	/**
+	 * Change the selected tab with the one passed by parameter
+	 */
+	public void setSelection(TabContents tab){
+		tabbedPropertyViewer.forceChangeSelectionToWidget( getTabDescriptor(tab));
 	}
 
 	/**
@@ -1034,6 +1050,14 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			}
 		}
 	}
+	
+	/**
+	 * Return a list of all the available TabContents
+	 */
+	public List<TabContents> getTabs(){
+		return new ArrayList<TabContents>(descriptorToTab.values());
+	}
+	
 
 	/**
 	 * Returns text of the properties title for given selection. If selection is

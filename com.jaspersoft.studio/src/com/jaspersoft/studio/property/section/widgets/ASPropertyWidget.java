@@ -12,8 +12,12 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
@@ -29,11 +33,21 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public abstract class ASPropertyWidget {
+public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	protected IPropertyDescriptor pDescriptor;
 	protected AbstractSection section;
+	
+	protected ControlListener checkResize = new ControlAdapter() {
+		
+		@Override
+		public void controlResized(ControlEvent e) {
+			getControlToBorder().redraw();
+			
+		}
+	};
 
 	public ASPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		this.pDescriptor = pDescriptor;
@@ -62,8 +76,15 @@ public abstract class ASPropertyWidget {
 	protected abstract void createComponent(Composite parent);
 
 	public abstract void setData(APropertyNode pnode, Object value);
+	
+	public String getId(){
+		return pDescriptor.getId().toString();
+	}
+	
+	public String getName(){
+		return pDescriptor.getDisplayName();
+	}
 
-	public abstract Control getControl();
 
 	private CLabel label;
 
@@ -119,5 +140,64 @@ public abstract class ASPropertyWidget {
 		if (statusLineManager != null)
 			statusLineManager.setMessage(null);
 	}
-
+	
+	public abstract Control getControl();
+	
+	/**
+	 * Since a property widget can have many controls inside it, this method 
+	 * return the control to which a border will be added to highlight the 
+	 * widget 
+	 * 
+	 * @return control to border
+	 */
+	protected Control getControlToBorder(){
+		return getControl();
+	}
+	
+	/**
+	 * Get the paint listener to highlight the control returned from getControlToBorder().
+	 * By default the PaintListner is read from a container where are defined some listener 
+	 * for the highlight of the most common controls.
+	 * 
+	 * @return a not null paint listener
+	 */
+	protected PaintListener getPaintControlListener(){
+		return DefaultWidgetsHighlighters.getWidgetForType(getControlToBorder().getClass());
+	}
+	
+	/**
+	 * Default behavior for the highlight of a widget, it add a colored bored around one of the 
+	 * controls inside the ASPropertyWidget. This border is removed after a the specified time
+	 * 
+	 */
+	@Override
+	public void highLightWidget(long ms) {
+			//if there isn't a control defined where add the border then return
+			if (getControlToBorder() == null) return;
+			final PaintListener highlighter = getPaintControlListener();
+			getControlToBorder().addPaintListener(highlighter);
+			//getControlToBorder().addControlListener(checkResize);
+			getControlToBorder().redraw();
+			final long sleepTime = ms;
+			//Create a thread to remove the paint listener after specified time
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(sleepTime);
+						//It need two thread to avoid to freeze the UI during the sleep
+						getControlToBorder().getDisplay().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								getControlToBorder().removePaintListener(highlighter);
+								getControlToBorder().removeControlListener(checkResize);
+								getControlToBorder().redraw();
+							}
+						});
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+	}
 }

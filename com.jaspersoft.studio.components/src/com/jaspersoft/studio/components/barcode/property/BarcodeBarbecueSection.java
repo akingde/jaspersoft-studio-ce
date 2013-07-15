@@ -20,6 +20,7 @@ import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -61,5 +62,16 @@ public class BarcodeBarbecueSection extends AbstractSection {
 		createWidget4Property(group,
 				StandardBarbecueComponent.PROPERTY_ROTATION);
 
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(StandardBarbecueComponent.PROPERTY_BAR_WIDTH, Messages.MBarcodeBarbecue_bar_width);
+		addProvidedProperties(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH, Messages.MBarcodeBarbecue_bar_height);
+		addProvidedProperties(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION, Messages.MBarcodeBarbecue_application_identifier_expression);
+		addProvidedProperties(StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED, Messages.MBarcodeBarbecue_checksum_required);
+		addProvidedProperties(StandardBarbecueComponent.PROPERTY_DRAW_TEXT, Messages.MBarcodeBarbecue_draw_text);
+		addProvidedProperties(StandardBarbecueComponent.PROPERTY_ROTATION, Messages.MBarcodeBarbecue_rotation);
 	}
 }

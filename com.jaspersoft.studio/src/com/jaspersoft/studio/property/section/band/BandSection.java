@@ -46,4 +46,12 @@ public class BandSection extends AbstractSection {
 			createWidget4Property(parent, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
 		}
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignBand.PROPERTY_HEIGHT, Messages.common_height);
+		addProvidedProperties(JRDesignBand.PROPERTY_SPLIT_TYPE, Messages.common_split_type);
+		addProvidedProperties(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
+	}
 }

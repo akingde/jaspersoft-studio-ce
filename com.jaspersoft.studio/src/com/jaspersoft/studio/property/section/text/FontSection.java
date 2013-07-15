@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
@@ -30,6 +31,8 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  */
 public class FontSection extends AbstractRealValueSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -55,7 +58,8 @@ public class FontSection extends AbstractRealValueSection {
 		createWidget4Property(group, MFont.FONT_DECREMENT, false);
 
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData();
+		gd.horizontalAlignment = SWT.LEFT;
 		gd.horizontalSpan = 4;
 		toolBar.setLayoutData(gd);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD, false);
@@ -65,7 +69,26 @@ public class FontSection extends AbstractRealValueSection {
 	}
 
 	protected Composite createFontSection(Composite parent) {
-		return getWidgetFactory().createSection(parent, Messages.common_font, true, 4);
+		Composite cmp = getWidgetFactory().createSection(parent, Messages.common_font, true, 4);
+		section = (ExpandableComposite)cmp.getParent();
+		return cmp;
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
+	}
+	
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStyle.PROPERTY_FONT_NAME, Messages.common_font_name);
+		addProvidedProperties(JRBaseStyle.PROPERTY_FONT_SIZE, Messages.common_font_size);
+		addProvidedProperties(JRBaseStyle.PROPERTY_BOLD, Messages.common_bold);
+		addProvidedProperties(JRBaseStyle.PROPERTY_UNDERLINE, Messages.common_underline);
+		addProvidedProperties(JRBaseStyle.PROPERTY_STRIKE_THROUGH, Messages.common_strike_trough);
+		addProvidedProperties(JRBaseStyle.PROPERTY_ITALIC, Messages.common_italic);
 	}
 
 }

@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -30,6 +31,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPBooleanToggle extends ASPropertyWidget {
 	private ToolItem cmb3Bool;
+	
+	private Composite parent;
 
 	public SPBooleanToggle(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, Image image) {
 		super(parent, section, pDescriptor);
@@ -41,8 +44,19 @@ public class SPBooleanToggle extends ASPropertyWidget {
 	public Control getControl() {
 		return null;
 	}
+	
+	@Override
+	protected Control getControlToBorder() {
+		return parent;
+	}
+	
+	protected PaintListener getPaintControlListener(){
+		return DefaultWidgetsHighlighters.getWidgetForType(ToolItem.class);
+	}
+	
 
 	public void createComponent(Composite parent) {
+		this.parent = parent;
 		cmb3Bool = new ToolItem((ToolBar) parent, SWT.CHECK);
 		cmb3Bool.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

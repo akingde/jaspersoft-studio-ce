@@ -92,10 +92,21 @@ public class TabbedPropertyComposite extends Composite {
 	 * Create the contents in the main composite.
 	 */
 	protected void createMainContents() {
+		Composite parent =  new Composite(mainComposite, SWT.NONE);
+		GridLayout layout = new GridLayout(2,false);
+		layout.horizontalSpacing = 0;
+		layout.verticalSpacing = 0;
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		parent.setLayout(layout);
+		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if (displayTitle) {
-			title = new TabbedPropertyTitle(mainComposite, factory);
+			title = new TabbedPropertyTitle(parent, factory);
 			title.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
+		//Create the search bar for the properties
+		TabbedPropertySearch searchBar = new TabbedPropertySearch(parent, factory);
+		searchBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		listComposite = new TabbedPropertyList(mainComposite);
 		listComposite.getControl().setLayoutData(

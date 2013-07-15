@@ -54,7 +54,12 @@ public class SPExpression extends AHistorySPropertyWidget implements IExpression
 	protected Text getTextControl() {
 		return expr.getTextControl();
 	}
-
+	
+	@Override
+	protected Control getControlToBorder() {
+		return getTextControl();
+	}
+	
 	protected void createComponent(Composite parent) {
 		expr = new WTextExpression(parent, SWT.NONE, 1);
 		expr.addModifyListener(new ExpressionModifiedListener() {

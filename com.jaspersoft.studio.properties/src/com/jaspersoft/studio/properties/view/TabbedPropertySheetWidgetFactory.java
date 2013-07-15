@@ -373,4 +373,18 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 			super.dispose();
 		}
 	}
+	
+	/**
+	 * Return a list of the available tab contents
+	 */
+	public java.util.List<TabContents> getAvailableTabContents(){
+		return page.getTabs();
+	}
+	
+	/**
+	 * Set as visible the specified TabContents
+	 */
+	public void setSelection(TabContents tab){
+		page.setSelection(tab);
+	}
 }

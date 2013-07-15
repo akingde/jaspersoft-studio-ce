@@ -43,6 +43,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
+import com.jaspersoft.studio.properties.internal.IWidgetsProviderSection;
+import com.jaspersoft.studio.properties.internal.WidgetDescriptor;
 import com.jaspersoft.studio.properties.view.AbstractPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
@@ -53,13 +56,15 @@ import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
 /*
  * Abstract class for a section in a tab in the properties view.
  */
-public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener {
+public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener, IWidgetsProviderSection {
 	protected Map<Object, ASPropertyWidget> widgets = new HashMap<Object, ASPropertyWidget>();
 
 	protected JasperReportsContext jasperReportsContext;
 	private List<APropertyNode> elements;
 	private APropertyNode element;
 	private EditDomain editDomain;
+	
+	protected HashMap<Object, WidgetDescriptor> providedProperties = null;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
@@ -123,6 +128,11 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public Object getSelectedElement() {
+		return element;
 	}
 
 	/**
@@ -327,5 +337,37 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			lbl.setLayoutData(gd);
 		}
 		return lbl;
+	}
+	
+	/**
+	 * Create the map of the provided properties, empty
+	 */
+	protected void initializeProvidedProperties(){
+		providedProperties = new HashMap<Object, WidgetDescriptor>();
+	}
+	
+	/**
+	 * Return a list of all the properties in the map
+	 */
+	public List<Object> getHandledProperties(){
+		if (providedProperties == null) initializeProvidedProperties();
+		return new ArrayList<Object>(providedProperties.keySet());
+	}
+	
+	public WidgetDescriptor getPropertyInfo(Object propertyId){
+		if (providedProperties == null) initializeProvidedProperties();
+		return providedProperties.get(propertyId);
+	}
+	
+	protected void addProvidedProperties(Object id, String propertyName){
+		providedProperties.put(id, new WidgetDescriptor(propertyName));
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {	
+	}
+	
+	public IHighlightPropertyWidget getWidgetForProperty(Object porpertyId){
+		return widgets.get(porpertyId);
 	}
 }

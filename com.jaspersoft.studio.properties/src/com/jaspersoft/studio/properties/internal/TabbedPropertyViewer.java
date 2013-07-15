@@ -129,6 +129,22 @@ public class TabbedPropertyViewer extends StructuredViewer {
 			list.select(index);
 		}
 	}
+	
+	/**
+	 * Force the selection to change on the tab with id equals to the one inside the 
+	 * Descriptor passed as parameter. If the tab to select is not found a exception is raised
+	 */
+	public void forceChangeSelectionToWidget(ITabDescriptor tab) {
+		int index = -1;
+		for (int i = 0; i < elements.size(); i++) {
+			if (elements.get(i).getId().equals(tab.getId())) {
+					index = i; 
+			}
+		}
+		Assert.isTrue(index != -1,
+				"Could not set the selected tab in the tabbed property viewer");//$NON-NLS-1$
+		list.select(index);
+	}
 
 	public Control getControl() {
 		return list.getControl();
