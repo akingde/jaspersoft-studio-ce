@@ -203,16 +203,6 @@
          </property>
       </product>
    </extension>
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="com.jaspersoft.studio.rcp.actionSet"
-            label="Cheat Sheets"
-            visible="true">
-        <action label="Cheat Sheets" class="org.eclipse.ui.cheatsheets.CheatSheetExtensionFactory:helpMenuAction" menubarPath="help/group.tutorials" id="org.eclipse.ui.cheatsheets.actions.CheatSheetHelpMenuAction">
-     </action>
-      </actionSet>
-   </extension>
    <extension point="org.eclipse.ui.menus">
    	<menuContribution
     	allPopups="false"
@@ -391,7 +381,8 @@
         class="org.eclipse.equinox.p2.ui.RevertProfilePage"
         id="com.jaspersoft.studio.rcp.pages.RevertProfilePage">
       </page>
-   </extension>   
+   </extension>
+   <!--   
    <extension
          point="org.eclipse.ui.commands">
       <command
@@ -434,4 +425,5 @@
             </command>
       </menuContribution>
    </extension>
+   -->
 </plugin>
