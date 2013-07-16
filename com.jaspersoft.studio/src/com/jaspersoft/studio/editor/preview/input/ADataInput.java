@@ -35,6 +35,8 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.utils.UIUtil;
+
 public abstract class ADataInput implements IDataInput {
 	protected Map<String, Object> params;
 	protected IParameter param;
@@ -165,6 +167,13 @@ public abstract class ADataInput implements IDataInput {
 			return null;
 
 		return actionBars.getStatusLineManager();
+	}
 
+	private static int defCharWidth = -1;
+
+	public static int getCharWidth(Control c) {
+		if (defCharWidth < 0)
+			defCharWidth = UIUtil.getCharWidth(c);
+		return defCharWidth;
 	}
 }

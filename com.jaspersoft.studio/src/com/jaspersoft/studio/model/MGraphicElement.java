@@ -517,17 +517,14 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				return jrElement.getPrintWhenGroupChanges().getName();
 			return ""; //$NON-NLS-1$
 		}
-		JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
-		if (propertiesMap != null)
-			propertiesMap = propertiesMap.cloneProperties();
 		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			JRPropertyExpression[] propertyExpressions = jrElement.getPropertyExpressions();
 			if (propertyExpressions != null)
 				propertyExpressions = propertyExpressions.clone();
-			return new PropertyExpressionsDTO(propertyExpressions, propertiesMap, this);
+			return new PropertyExpressionsDTO(propertyExpressions, getPropertiesMapClone(jrElement), this);
 		}
 		if (id.equals(PROPERTY_MAP))
-			return propertiesMap;
+			return getPropertiesMapClone(jrElement);
 		if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			return new Integer(jrElement.getHeight());
 		if (id.equals(JRDesignElement.PROPERTY_WIDTH))
@@ -561,6 +558,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return new Boolean(jrElement.isPrintWhenDetailOverflows());
 
 		return null;
+	}
+
+	protected JRPropertiesMap getPropertiesMapClone(JRDesignElement jrElement) {
+		JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+		if (propertiesMap != null)
+			propertiesMap = propertiesMap.cloneProperties();
+		return propertiesMap;
 	}
 
 	public Object getPropertyActualValue(Object id) {

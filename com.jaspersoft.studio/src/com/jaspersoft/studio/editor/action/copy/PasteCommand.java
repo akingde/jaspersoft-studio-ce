@@ -42,24 +42,22 @@ public class PasteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		list = new HashMap<ANode, Command>();
-		Object obj = Clipboard.getDefault().getContents();
-		if (obj == null)
-			return false;
-		if (obj instanceof Collection<?>) {
-			Collection<?> bList = (Collection<?>) obj;
-			if (bList.isEmpty())
+		if (list == null) {
+			Object obj = Clipboard.getDefault().getContents();
+			if (obj == null)
 				return false;
-			for (Iterator<?> it = bList.iterator(); it.hasNext();) {
-				ANode node = (ANode) it.next();
-				if (isPastableNode(node)) {
-					list.put(node, null);
+			list = new HashMap<ANode, Command>();
+			if (obj instanceof Collection<?>) {
+				Collection<ANode> bList = (Collection<ANode>) obj;
+				if (bList.isEmpty())
+					return false;
+				for (ANode node : bList) {
+					if (isPastableNode(node))
+						list.put(node, null);
 				}
-			}
-		} else if (obj instanceof ANode)
-			if (isPastableNode(obj))
+			} else if (obj instanceof ANode && isPastableNode(obj))
 				list.put((ANode) obj, null);
-
+		}
 		return !list.isEmpty();
 	}
 

@@ -40,13 +40,11 @@ import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.di
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.utils.UIUtil;
 
 public class SPColorSeries extends ASPropertyWidget {
 	protected Composite composite;
 
-	public SPColorSeries(Composite parent, AbstractSection section,
-			IPropertyDescriptor pDescriptor) {
+	public SPColorSeries(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -56,8 +54,7 @@ public class SPColorSeries extends ASPropertyWidget {
 	}
 
 	protected void createComponent(Composite parent) {
-		composite = section.getWidgetFactory().createComposite(parent,
-				SWT.READ_ONLY);
+		composite = section.getWidgetFactory().createComposite(parent, SWT.READ_ONLY);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
@@ -70,27 +67,24 @@ public class SPColorSeries extends ASPropertyWidget {
 		ftext.setToolTipText(pDescriptor.getDescription());
 		setWidth(composite, 20);
 
-		Button btn = section.getWidgetFactory().createButton(composite, "...",
-				SWT.PUSH);
+		Button btn = section.getWidgetFactory().createButton(composite, "...", SWT.PUSH);
 		btn.setToolTipText(pDescriptor.getDescription());
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				SeriesColorEditor wizard = new SeriesColorEditor();
 				wizard.setValue(series);
-				WizardDialog dialog = new WizardDialog(composite.getShell(),
-						wizard);
+				WizardDialog dialog = new WizardDialog(composite.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					handleTextChanged(section, pDescriptor.getId(),
-							wizard.getValue());
+					handleTextChanged(section, pDescriptor.getId(), wizard.getValue());
 				}
 			}
 		});
 	}
 
 	protected void setWidth(Composite parent, int chars) {
-		int w = UIUtil.getCharWidth(parent) * chars;
+		int w = getCharWidth(parent) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;
@@ -102,8 +96,7 @@ public class SPColorSeries extends ASPropertyWidget {
 		}
 	}
 
-	protected void handleTextChanged(final AbstractSection section,
-			final Object property, Collection<?> text) {
+	protected void handleTextChanged(final AbstractSection section, final Object property, Collection<?> text) {
 		section.changeProperty(property, text);
 	}
 

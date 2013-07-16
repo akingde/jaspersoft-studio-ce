@@ -17,20 +17,19 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 
-public class PasteAction extends SelectionAction {
+public class PasteAction extends ACachedSelectionAction {
 
 	public PasteAction(IWorkbenchPart part) {
 		super(part);
@@ -51,7 +50,7 @@ public class PasteAction extends SelectionAction {
 
 	}
 
-	private PasteCommand createPasteCommand(List<?> selectedObjects) {
+	protected PasteCommand createCommand(List<?> selectedObjects) {
 		for (Object selection : selectedObjects) {
 			PasteCommand cmd = getPasteComand(selection);
 			if (cmd != null)
@@ -93,14 +92,8 @@ public class PasteAction extends SelectionAction {
 	}
 
 	@Override
-	protected boolean calculateEnabled() {
-		Command command = createPasteCommand(getSelectedObjects());
-		return command != null && command.canExecute();
-	}
-
-	@Override
 	public void run() {
-		PasteCommand command = createPasteCommand(getSelectedObjects());
+		PasteCommand command = createCommand(getSelectedObjects());
 		execute(command);
 
 		// Select the pasted edit part

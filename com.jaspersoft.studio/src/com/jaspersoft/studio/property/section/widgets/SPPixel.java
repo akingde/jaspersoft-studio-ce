@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -56,7 +51,6 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
-import com.jaspersoft.studio.utils.UIUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -383,8 +377,7 @@ public class SPPixel extends ASPropertyWidget {
 		}
 		return arg;
 	}
-	
-	
+
 	protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 		Object oldValue = n.getPropertyValue(property);
 		if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
@@ -401,48 +394,53 @@ public class SPPixel extends ASPropertyWidget {
 	/**
 	 * Calculate the percentage of a value
 	 */
-	private Long getNewValue(Double percentage, APropertyNode pnode, String property){
+	private Long getNewValue(Double percentage, APropertyNode pnode, String property) {
 		String oldValue = pnode.getPropertyActualValue(property).toString();
 		Integer oldNumericValue = Integer.parseInt(oldValue);
-		Double newValueLong = (oldNumericValue.doubleValue()*percentage)/100d;
+		Double newValueLong = (oldNumericValue.doubleValue() * percentage) / 100d;
 		Long newValue = Math.round(newValueLong);
 		return newValue;
 	}
-	
+
 	/**
-	 * This method do a percentage resize of one or more elements. If the resize is done on the height or width, and 
-	 * are selected more than one element, then the coordinate X and Y of the element are translated to try to keep the same aspect ratio
-	 * between them
+	 * This method do a percentage resize of one or more elements. If the resize is done on the height or width, and are
+	 * selected more than one element, then the coordinate X and Y of the element are translated to try to keep the same
+	 * aspect ratio between them
 	 */
-	private void percentageResize(){
+	private void percentageResize() {
 		String text = insertField.getText().trim().toLowerCase();
 		int percPosition = text.indexOf("%");
-		if (percPosition>0){
-			try{
-				Double value = Double.parseDouble(text.substring(0,percPosition)); 
+		if (percPosition > 0) {
+			try {
+				Double value = Double.parseDouble(text.substring(0, percPosition));
 				CommandStack cs = section.getEditDomain().getCommandStack();
 				CompoundCommand cc = new CompoundCommand("Set " + pDescriptor.getId());
 				for (APropertyNode pnode : section.getElements()) {
 					try {
 						Long newValue = getNewValue(value, pnode, pDescriptor.getId().toString());
 						Command c = getChangePropertyCommand(pDescriptor.getId(), newValue.intValue(), pnode);
-						if (c != null) cc.add(c);
-						if (pDescriptor.getId().equals(JRDesignElement.PROPERTY_HEIGHT) && section.getElements().size()>1){
+						if (c != null)
+							cc.add(c);
+						if (pDescriptor.getId().equals(JRDesignElement.PROPERTY_HEIGHT) && section.getElements().size() > 1) {
 							newValue = getNewValue(value, pnode, JRDesignElement.PROPERTY_Y);
 							c = getChangePropertyCommand(JRDesignElement.PROPERTY_Y, newValue.intValue(), pnode);
-							if (c != null) cc.add(c);
+							if (c != null)
+								cc.add(c);
 						}
-						if (pDescriptor.getId().equals(JRDesignElement.PROPERTY_WIDTH) && section.getElements().size()>1){
+						if (pDescriptor.getId().equals(JRDesignElement.PROPERTY_WIDTH) && section.getElements().size() > 1) {
 							newValue = getNewValue(value, pnode, JRDesignElement.PROPERTY_X);
 							c = getChangePropertyCommand(JRDesignElement.PROPERTY_X, newValue.intValue(), pnode);
-							if (c != null) cc.add(c);
+							if (c != null)
+								cc.add(c);
 						}
-					} catch (NumberFormatException ex) {}
+					} catch (NumberFormatException ex) {
+					}
 				}
 				cs.execute(cc);
 				APropertyNode firstNode = section.getElements().get(0);
 				setData(firstNode, firstNode.getPropertyActualValue(pDescriptor.getId()));
-			} catch (NumberFormatException ex) {}
+			} catch (NumberFormatException ex) {
+			}
 		}
 	}
 
@@ -451,7 +449,8 @@ public class SPPixel extends ASPropertyWidget {
 	 * textbox is displayed as default type
 	 */
 	private void updateValue() {
-		if (insertField.getText().contains("%")) percentageResize();
+		if (insertField.getText().contains("%"))
+			percentageResize();
 		else {
 			String text = insertField.getText().trim().toLowerCase();
 			String key = getMeasureUnit(text);
@@ -568,7 +567,7 @@ public class SPPixel extends ASPropertyWidget {
 	 *          number of chars to store (used to choose the size)
 	 */
 	protected void setWidth(Composite parent, int chars) {
-		int w = UIUtil.getCharWidth(insertField) * chars;
+		int w = getCharWidth(insertField) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;

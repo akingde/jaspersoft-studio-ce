@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input.array.date;
 
@@ -25,8 +20,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.preview.input.ADataInput;
 import com.jaspersoft.studio.editor.preview.input.array.AWElement;
-import com.jaspersoft.studio.utils.UIUtil;
 
 public abstract class ADateElement extends AWElement {
 
@@ -41,7 +36,7 @@ public abstract class ADateElement extends AWElement {
 		date = new CDateTime(parent, CDT.BORDER | getStyle() | CDT.DROP_DOWN);
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
-		gd.widthHint = 25 * UIUtil.getCharWidth(date);
+		gd.widthHint = 25 * ADataInput.getCharWidth(date);
 		date.setLayoutData(gd);
 		date.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

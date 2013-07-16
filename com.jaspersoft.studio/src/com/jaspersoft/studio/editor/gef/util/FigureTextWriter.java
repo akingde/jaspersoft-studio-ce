@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.util;
 
@@ -68,7 +63,8 @@ public class FigureTextWriter {
 	public void painText(Graphics2D g, IFigure figure) {
 		if (!Misc.nvl(text).isEmpty() && showName) {
 			Font currfont = g.getFont();
-			g.setFont(currfont.deriveFont(16f));
+			if (currfont.getSize() != 16f)
+				g.setFont(currfont.deriveFont(16f));
 
 			computeNamePositionAndSize(g, figure.getClientArea());
 			if (nameSize.height < figure.getBounds().height) {

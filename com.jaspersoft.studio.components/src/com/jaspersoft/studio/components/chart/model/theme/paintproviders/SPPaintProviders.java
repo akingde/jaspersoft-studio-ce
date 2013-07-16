@@ -37,7 +37,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.utils.UIUtil;
 
 public class SPPaintProviders extends ASPropertyWidget {
 	protected Composite composite;
@@ -80,7 +79,7 @@ public class SPPaintProviders extends ASPropertyWidget {
 	}
 
 	protected void setWidth(Composite parent, int chars) {
-		int w = UIUtil.getCharWidth(parent) * chars;
+		int w = getCharWidth(parent) * chars;
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = w;

@@ -35,17 +35,18 @@ import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.UIUtil;
 
 public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	protected IPropertyDescriptor pDescriptor;
 	protected AbstractSection section;
-	
+
 	protected ControlListener checkResize = new ControlAdapter() {
-		
+
 		@Override
 		public void controlResized(ControlEvent e) {
 			getControlToBorder().redraw();
-			
+
 		}
 	};
 
@@ -76,15 +77,14 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	protected abstract void createComponent(Composite parent);
 
 	public abstract void setData(APropertyNode pnode, Object value);
-	
-	public String getId(){
+
+	public String getId() {
 		return pDescriptor.getId().toString();
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return pDescriptor.getDisplayName();
 	}
-
 
 	private CLabel label;
 
@@ -140,64 +140,71 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 		if (statusLineManager != null)
 			statusLineManager.setMessage(null);
 	}
-	
+
 	public abstract Control getControl();
-	
+
 	/**
-	 * Since a property widget can have many controls inside it, this method 
-	 * return the control to which a border will be added to highlight the 
-	 * widget 
+	 * Since a property widget can have many controls inside it, this method return the control to which a border will be
+	 * added to highlight the widget
 	 * 
 	 * @return control to border
 	 */
-	protected Control getControlToBorder(){
+	protected Control getControlToBorder() {
 		return getControl();
 	}
-	
+
 	/**
-	 * Get the paint listener to highlight the control returned from getControlToBorder().
-	 * By default the PaintListner is read from a container where are defined some listener 
-	 * for the highlight of the most common controls.
+	 * Get the paint listener to highlight the control returned from getControlToBorder(). By default the PaintListner is
+	 * read from a container where are defined some listener for the highlight of the most common controls.
 	 * 
 	 * @return a not null paint listener
 	 */
-	protected PaintListener getPaintControlListener(){
+	protected PaintListener getPaintControlListener() {
 		return DefaultWidgetsHighlighters.getWidgetForType(getControlToBorder().getClass());
 	}
-	
+
 	/**
-	 * Default behavior for the highlight of a widget, it add a colored bored around one of the 
-	 * controls inside the ASPropertyWidget. This border is removed after a the specified time
+	 * Default behavior for the highlight of a widget, it add a colored bored around one of the controls inside the
+	 * ASPropertyWidget. This border is removed after a the specified time
 	 * 
 	 */
 	@Override
 	public void highLightWidget(long ms) {
-			//if there isn't a control defined where add the border then return
-			if (getControlToBorder() == null) return;
-			final PaintListener highlighter = getPaintControlListener();
-			getControlToBorder().addPaintListener(highlighter);
-			//getControlToBorder().addControlListener(checkResize);
-			getControlToBorder().redraw();
-			final long sleepTime = ms;
-			//Create a thread to remove the paint listener after specified time
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(sleepTime);
-						//It need two thread to avoid to freeze the UI during the sleep
-						getControlToBorder().getDisplay().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								getControlToBorder().removePaintListener(highlighter);
-								//getControlToBorder().removeControlListener(checkResize);
-								getControlToBorder().redraw();
-							}
-						});
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+		// if there isn't a control defined where add the border then return
+		if (getControlToBorder() == null)
+			return;
+		final PaintListener highlighter = getPaintControlListener();
+		getControlToBorder().addPaintListener(highlighter);
+		// getControlToBorder().addControlListener(checkResize);
+		getControlToBorder().redraw();
+		final long sleepTime = ms;
+		// Create a thread to remove the paint listener after specified time
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(sleepTime);
+					// It need two thread to avoid to freeze the UI during the sleep
+					getControlToBorder().getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							getControlToBorder().removePaintListener(highlighter);
+							// getControlToBorder().removeControlListener(checkResize);
+							getControlToBorder().redraw();
+						}
+					});
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			}).start();
+			}
+		}).start();
+	}
+
+	private static int defCharWidth = -1;
+
+	public static int getCharWidth(Control c) {
+		if (defCharWidth < 0)
+			defCharWidth = UIUtil.getCharWidth(c);
+		return defCharWidth;
 	}
 }

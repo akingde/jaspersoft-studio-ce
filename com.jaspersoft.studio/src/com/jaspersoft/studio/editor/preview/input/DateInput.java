@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.swt.widgets.DRDateTime;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.UIUtil;
 
 public class DateInput extends ADataInput {
 	protected boolean supportDateRange;
@@ -78,7 +77,7 @@ public class DateInput extends ADataInput {
 
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
-		gd.widthHint = 25 * UIUtil.getCharWidth(date);
+		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
 
 		setMandatory(param, date);
@@ -116,7 +115,7 @@ public class DateInput extends ADataInput {
 
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
-		gd.widthHint = 25 * UIUtil.getCharWidth(date);
+		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
 
 		setMandatory(param, date);
@@ -138,7 +137,7 @@ public class DateInput extends ADataInput {
 
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
-		gd.widthHint = 25 * UIUtil.getCharWidth(date);
+		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
 
 		setMandatory(param, date);
@@ -158,7 +157,7 @@ public class DateInput extends ADataInput {
 		date = new CDateTime(parent, CDT.BORDER | CDT.TIME_MEDIUM | CDT.DROP_DOWN);
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
-		gd.widthHint = 25 * UIUtil.getCharWidth(date);
+		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
 
 		setMandatory(param, date);
@@ -179,7 +178,7 @@ public class DateInput extends ADataInput {
 		date = new CDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN);
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
-		gd.widthHint = 25 * UIUtil.getCharWidth(date);
+		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
 
 		setMandatory(param, date);
