@@ -30,7 +30,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allCols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ColumnFull" eSuperTypes="#//OrGroupByColumn"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnFull"/>
   <eClassifiers xsi:type="ecore:EClass" name="OrTable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//FromTable" containment="true"/>
@@ -66,7 +66,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrGroupByColumn">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//ColumnFull" containment="true"/>
+        eType="#//GroupByColumnFull" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupByColumnFull" eSuperTypes="#//OrGroupByColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colGrBy" eType="#//ColumnFull"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrExpr">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
@@ -160,7 +164,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//POperand"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eparam" eType="#//ExpPperand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eparam" eType="#//ExpOperand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scalar" eType="#//ScalarOperand"
         containment="true"/>
@@ -168,7 +172,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="POperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExpPperand">
+  <eClassifiers xsi:type="ecore:EClass" name="ExpOperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOperand">
@@ -194,7 +198,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//Select" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//DbObjectName" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="tbls" eSuperTypes="#//TableFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//DbObjectName" containment="true"/>

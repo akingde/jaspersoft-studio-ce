@@ -45,7 +45,10 @@ OrderByColumnFull:
 	colOrder=ColumnFull direction=('ASC' | 'DESC')?;
 
 GroupByColumns returns OrGroupByColumn:
-	ColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?;
+	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
+
+GroupByColumnFull:
+	colGrBy=ColumnFull;
 
 FullExpression returns OrExpr:
 	ExpressionFragment ({OrExpr.entries+=current} (entries+=ExpressionFragmentSecond)+)?;
@@ -60,7 +63,7 @@ ExpressionGroup returns ExprGroup:
 	{ExprGroup} '(' expr=FullExpression ')';
 
 XExpression returns XExpr:
-	{XExpr} '$X{' xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? '}';
+	'$X' {XExpr} '{' xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? '}';
 
 XExpressionParams returns Prms:
 	JRParameter ({Prms.entries+=current} ("," entries+=JRParameter)+)?;
@@ -86,7 +89,7 @@ Between:
 	opBetween=('BETWEEN' | 'NOT BETWEEN') op2=Operand 'AND' op3=Operand;
 
 InOperator returns InOper:
-	{InOper} op=('NOT IN (' | 'IN (') (subquery=SubQueryOperand | opList=OperandList) ')';
+	{InOper} op=('NOT IN' | 'IN') '(' (subquery=SubQueryOperand | opList=OperandList) ')';
 
 OperandList:
 	XOperandFragment ({OpList.entries+=current} ("," entries+=XOperandFragment)+)?;
@@ -103,10 +106,10 @@ XOperandFragment returns Operand:
 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 
 ParameterOperand returns POperand:
-	{POperand} '$P{' prm=ID '}';
+	'$P' {POperand} '{' prm=ID '}';
 
-ExclamationParameterOperand returns ExpPperand:
-	{ExpPperand} '$P!{' prm=ID '}';
+ExclamationParameterOperand returns ExpOperand:
+	'$P!' {ExpOperand} '{' prm=ID '}';
 
 ColumnOperand returns ColumnOperand:
 	cfull=ColumnFull;

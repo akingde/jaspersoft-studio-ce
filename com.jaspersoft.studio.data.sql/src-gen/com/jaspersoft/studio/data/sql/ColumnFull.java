@@ -2,6 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql;
 
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,6 +14,6 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface ColumnFull extends OrGroupByColumn
+public interface ColumnFull extends EObject
 {
 } // ColumnFull

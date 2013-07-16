@@ -560,41 +560,57 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class GroupByColumnsElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "GroupByColumns");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cColumnFullParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final RuleCall cGroupByColumnFullParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Action cOrGroupByColumnEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
 		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
 		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
-		private final RuleCall cEntriesColumnFullParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		private final RuleCall cEntriesGroupByColumnFullParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
 		
 		//GroupByColumns returns OrGroupByColumn:
-		//	ColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?;
+		//	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
 		public ParserRule getRule() { return rule; }
 
-		//ColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?
+		//GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?
 		public Group getGroup() { return cGroup; }
 
-		//ColumnFull
-		public RuleCall getColumnFullParserRuleCall_0() { return cColumnFullParserRuleCall_0; }
+		//GroupByColumnFull
+		public RuleCall getGroupByColumnFullParserRuleCall_0() { return cGroupByColumnFullParserRuleCall_0; }
 
-		//({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?
+		//({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OrGroupByColumn.entries+=current}
 		public Action getOrGroupByColumnEntriesAction_1_0() { return cOrGroupByColumnEntriesAction_1_0; }
 
-		//("," entries+=ColumnFull)+
+		//("," entries+=GroupByColumnFull)+
 		public Group getGroup_1_1() { return cGroup_1_1; }
 
 		//","
 		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
 
-		//entries+=ColumnFull
+		//entries+=GroupByColumnFull
 		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
 
+		//GroupByColumnFull
+		public RuleCall getEntriesGroupByColumnFullParserRuleCall_1_1_1_0() { return cEntriesGroupByColumnFullParserRuleCall_1_1_1_0; }
+	}
+
+	public class GroupByColumnFullElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "GroupByColumnFull");
+		private final Assignment cColGrByAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cColGrByColumnFullParserRuleCall_0 = (RuleCall)cColGrByAssignment.eContents().get(0);
+		
+		//GroupByColumnFull:
+		//	colGrBy=ColumnFull;
+		public ParserRule getRule() { return rule; }
+
+		//colGrBy=ColumnFull
+		public Assignment getColGrByAssignment() { return cColGrByAssignment; }
+
 		//ColumnFull
-		public RuleCall getEntriesColumnFullParserRuleCall_1_1_1_0() { return cEntriesColumnFullParserRuleCall_1_1_1_0; }
+		public RuleCall getColGrByColumnFullParserRuleCall_0() { return cColGrByColumnFullParserRuleCall_0; }
 	}
 
 	public class FullExpressionElements extends AbstractParserRuleElementFinder {
@@ -736,61 +752,65 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class XExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "XExpression");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cXExprAction_0 = (Action)cGroup.eContents().get(0);
-		private final Keyword cXKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cXfAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cXfXFunctionEnumRuleCall_2_0 = (RuleCall)cXfAssignment_2.eContents().get(0);
-		private final Keyword cCommaKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cColAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cColColumnOperandParserRuleCall_4_0 = (RuleCall)cColAssignment_4.eContents().get(0);
-		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
-		private final Keyword cCommaKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
-		private final Assignment cPrmAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
-		private final RuleCall cPrmXExpressionParamsParserRuleCall_5_1_0 = (RuleCall)cPrmAssignment_5_1.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Keyword cXKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Action cXExprAction_1 = (Action)cGroup.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cXfAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cXfXFunctionEnumRuleCall_3_0 = (RuleCall)cXfAssignment_3.eContents().get(0);
+		private final Keyword cCommaKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cColAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cColColumnOperandParserRuleCall_5_0 = (RuleCall)cColAssignment_5.eContents().get(0);
+		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
+		private final Keyword cCommaKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final Assignment cPrmAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cPrmXExpressionParamsParserRuleCall_6_1_0 = (RuleCall)cPrmAssignment_6_1.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
 		//XExpression returns XExpr:
-		//	{XExpr} "$X{" xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? "}";
+		//	"$X" {XExpr} "{" xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? "}";
 		public ParserRule getRule() { return rule; }
 
-		//{XExpr} "$X{" xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? "}"
+		//"$X" {XExpr} "{" xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? "}"
 		public Group getGroup() { return cGroup; }
 
-		//{XExpr}
-		public Action getXExprAction_0() { return cXExprAction_0; }
+		//"$X"
+		public Keyword getXKeyword_0() { return cXKeyword_0; }
 
-		//"$X{"
-		public Keyword getXKeyword_1() { return cXKeyword_1; }
+		//{XExpr}
+		public Action getXExprAction_1() { return cXExprAction_1; }
+
+		//"{"
+		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
 		//xf=XFunction
-		public Assignment getXfAssignment_2() { return cXfAssignment_2; }
+		public Assignment getXfAssignment_3() { return cXfAssignment_3; }
 
 		//XFunction
-		public RuleCall getXfXFunctionEnumRuleCall_2_0() { return cXfXFunctionEnumRuleCall_2_0; }
+		public RuleCall getXfXFunctionEnumRuleCall_3_0() { return cXfXFunctionEnumRuleCall_3_0; }
 
 		//","
-		public Keyword getCommaKeyword_3() { return cCommaKeyword_3; }
+		public Keyword getCommaKeyword_4() { return cCommaKeyword_4; }
 
 		//col=ColumnOperand
-		public Assignment getColAssignment_4() { return cColAssignment_4; }
+		public Assignment getColAssignment_5() { return cColAssignment_5; }
 
 		//ColumnOperand
-		public RuleCall getColColumnOperandParserRuleCall_4_0() { return cColColumnOperandParserRuleCall_4_0; }
+		public RuleCall getColColumnOperandParserRuleCall_5_0() { return cColColumnOperandParserRuleCall_5_0; }
 
 		//("," prm=XExpressionParams)?
-		public Group getGroup_5() { return cGroup_5; }
+		public Group getGroup_6() { return cGroup_6; }
 
 		//","
-		public Keyword getCommaKeyword_5_0() { return cCommaKeyword_5_0; }
+		public Keyword getCommaKeyword_6_0() { return cCommaKeyword_6_0; }
 
 		//prm=XExpressionParams
-		public Assignment getPrmAssignment_5_1() { return cPrmAssignment_5_1; }
+		public Assignment getPrmAssignment_6_1() { return cPrmAssignment_6_1; }
 
 		//XExpressionParams
-		public RuleCall getPrmXExpressionParamsParserRuleCall_5_1_0() { return cPrmXExpressionParamsParserRuleCall_5_1_0; }
+		public RuleCall getPrmXExpressionParamsParserRuleCall_6_1_0() { return cPrmXExpressionParamsParserRuleCall_6_1_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_6() { return cRightCurlyBracketKeyword_6; }
+		public Keyword getRightCurlyBracketKeyword_7() { return cRightCurlyBracketKeyword_7; }
 	}
 
 	public class XExpressionParamsElements extends AbstractParserRuleElementFinder {
@@ -1065,52 +1085,56 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cOpAlternatives_1_0 = (Alternatives)cOpAssignment_1.eContents().get(0);
 		private final Keyword cOpNOTINKeyword_1_0_0 = (Keyword)cOpAlternatives_1_0.eContents().get(0);
 		private final Keyword cOpINKeyword_1_0_1 = (Keyword)cOpAlternatives_1_0.eContents().get(1);
-		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
-		private final Assignment cSubqueryAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
-		private final RuleCall cSubquerySubQueryOperandParserRuleCall_2_0_0 = (RuleCall)cSubqueryAssignment_2_0.eContents().get(0);
-		private final Assignment cOpListAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
-		private final RuleCall cOpListOperandListParserRuleCall_2_1_0 = (RuleCall)cOpListAssignment_2_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Keyword cLeftParenthesisKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Alternatives cAlternatives_3 = (Alternatives)cGroup.eContents().get(3);
+		private final Assignment cSubqueryAssignment_3_0 = (Assignment)cAlternatives_3.eContents().get(0);
+		private final RuleCall cSubquerySubQueryOperandParserRuleCall_3_0_0 = (RuleCall)cSubqueryAssignment_3_0.eContents().get(0);
+		private final Assignment cOpListAssignment_3_1 = (Assignment)cAlternatives_3.eContents().get(1);
+		private final RuleCall cOpListOperandListParserRuleCall_3_1_0 = (RuleCall)cOpListAssignment_3_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//InOperator returns InOper:
-		//	{InOper} op=("NOT IN (" | "IN (") (subquery=SubQueryOperand | opList=OperandList) ")";
+		//	{InOper} op=("NOT IN" | "IN") "(" (subquery=SubQueryOperand | opList=OperandList) ")";
 		public ParserRule getRule() { return rule; }
 
-		//{InOper} op=("NOT IN (" | "IN (") (subquery=SubQueryOperand | opList=OperandList) ")"
+		//{InOper} op=("NOT IN" | "IN") "(" (subquery=SubQueryOperand | opList=OperandList) ")"
 		public Group getGroup() { return cGroup; }
 
 		//{InOper}
 		public Action getInOperAction_0() { return cInOperAction_0; }
 
-		//op=("NOT IN (" | "IN (")
+		//op=("NOT IN" | "IN")
 		public Assignment getOpAssignment_1() { return cOpAssignment_1; }
 
-		//"NOT IN (" | "IN ("
+		//"NOT IN" | "IN"
 		public Alternatives getOpAlternatives_1_0() { return cOpAlternatives_1_0; }
 
-		//"NOT IN ("
+		//"NOT IN"
 		public Keyword getOpNOTINKeyword_1_0_0() { return cOpNOTINKeyword_1_0_0; }
 
-		//"IN ("
+		//"IN"
 		public Keyword getOpINKeyword_1_0_1() { return cOpINKeyword_1_0_1; }
 
+		//"("
+		public Keyword getLeftParenthesisKeyword_2() { return cLeftParenthesisKeyword_2; }
+
 		//subquery=SubQueryOperand | opList=OperandList
-		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+		public Alternatives getAlternatives_3() { return cAlternatives_3; }
 
 		//subquery=SubQueryOperand
-		public Assignment getSubqueryAssignment_2_0() { return cSubqueryAssignment_2_0; }
+		public Assignment getSubqueryAssignment_3_0() { return cSubqueryAssignment_3_0; }
 
 		//SubQueryOperand
-		public RuleCall getSubquerySubQueryOperandParserRuleCall_2_0_0() { return cSubquerySubQueryOperandParserRuleCall_2_0_0; }
+		public RuleCall getSubquerySubQueryOperandParserRuleCall_3_0_0() { return cSubquerySubQueryOperandParserRuleCall_3_0_0; }
 
 		//opList=OperandList
-		public Assignment getOpListAssignment_2_1() { return cOpListAssignment_2_1; }
+		public Assignment getOpListAssignment_3_1() { return cOpListAssignment_3_1; }
 
 		//OperandList
-		public RuleCall getOpListOperandListParserRuleCall_2_1_0() { return cOpListOperandListParserRuleCall_2_1_0; }
+		public RuleCall getOpListOperandListParserRuleCall_3_1_0() { return cOpListOperandListParserRuleCall_3_1_0; }
 
 		//")"
-		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
 	}
 
 	public class OperandListElements extends AbstractParserRuleElementFinder {
@@ -1290,65 +1314,73 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class ParameterOperandElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ParameterOperand");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cPOperandAction_0 = (Action)cGroup.eContents().get(0);
-		private final Keyword cPKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cPrmAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cPrmIDTerminalRuleCall_2_0 = (RuleCall)cPrmAssignment_2.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Keyword cPKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Action cPOperandAction_1 = (Action)cGroup.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cPrmAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cPrmIDTerminalRuleCall_3_0 = (RuleCall)cPrmAssignment_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//ParameterOperand returns POperand:
-		//	{POperand} "$P{" prm=ID "}";
+		//	"$P" {POperand} "{" prm=ID "}";
 		public ParserRule getRule() { return rule; }
 
-		//{POperand} "$P{" prm=ID "}"
+		//"$P" {POperand} "{" prm=ID "}"
 		public Group getGroup() { return cGroup; }
 
-		//{POperand}
-		public Action getPOperandAction_0() { return cPOperandAction_0; }
+		//"$P"
+		public Keyword getPKeyword_0() { return cPKeyword_0; }
 
-		//"$P{"
-		public Keyword getPKeyword_1() { return cPKeyword_1; }
+		//{POperand}
+		public Action getPOperandAction_1() { return cPOperandAction_1; }
+
+		//"{"
+		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
 		//prm=ID
-		public Assignment getPrmAssignment_2() { return cPrmAssignment_2; }
+		public Assignment getPrmAssignment_3() { return cPrmAssignment_3; }
 
 		//ID
-		public RuleCall getPrmIDTerminalRuleCall_2_0() { return cPrmIDTerminalRuleCall_2_0; }
+		public RuleCall getPrmIDTerminalRuleCall_3_0() { return cPrmIDTerminalRuleCall_3_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_3() { return cRightCurlyBracketKeyword_3; }
+		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
 	}
 
 	public class ExclamationParameterOperandElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ExclamationParameterOperand");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cExpPperandAction_0 = (Action)cGroup.eContents().get(0);
-		private final Keyword cPKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cPrmAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cPrmIDTerminalRuleCall_2_0 = (RuleCall)cPrmAssignment_2.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Keyword cPKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Action cExpOperandAction_1 = (Action)cGroup.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cPrmAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cPrmIDTerminalRuleCall_3_0 = (RuleCall)cPrmAssignment_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//ExclamationParameterOperand returns ExpPperand:
-		//	{ExpPperand} "$P!{" prm=ID "}";
+		//ExclamationParameterOperand returns ExpOperand:
+		//	"$P!" {ExpOperand} "{" prm=ID "}";
 		public ParserRule getRule() { return rule; }
 
-		//{ExpPperand} "$P!{" prm=ID "}"
+		//"$P!" {ExpOperand} "{" prm=ID "}"
 		public Group getGroup() { return cGroup; }
 
-		//{ExpPperand}
-		public Action getExpPperandAction_0() { return cExpPperandAction_0; }
+		//"$P!"
+		public Keyword getPKeyword_0() { return cPKeyword_0; }
 
-		//"$P!{"
-		public Keyword getPKeyword_1() { return cPKeyword_1; }
+		//{ExpOperand}
+		public Action getExpOperandAction_1() { return cExpOperandAction_1; }
+
+		//"{"
+		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
 		//prm=ID
-		public Assignment getPrmAssignment_2() { return cPrmAssignment_2; }
+		public Assignment getPrmAssignment_3() { return cPrmAssignment_3; }
 
 		//ID
-		public RuleCall getPrmIDTerminalRuleCall_2_0() { return cPrmIDTerminalRuleCall_2_0; }
+		public RuleCall getPrmIDTerminalRuleCall_3_0() { return cPrmIDTerminalRuleCall_3_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_3() { return cRightCurlyBracketKeyword_3; }
+		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
 	}
 
 	public class ColumnOperandElements extends AbstractParserRuleElementFinder {
@@ -1649,6 +1681,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private OrderByColumnsElements pOrderByColumns;
 	private OrderByColumnFullElements pOrderByColumnFull;
 	private GroupByColumnsElements pGroupByColumns;
+	private GroupByColumnFullElements pGroupByColumnFull;
 	private FullExpressionElements pFullExpression;
 	private ExpressionFragmentSecondElements pExpressionFragmentSecond;
 	private ExpressionFragmentElements pExpressionFragment;
@@ -1841,13 +1874,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//GroupByColumns returns OrGroupByColumn:
-	//	ColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=ColumnFull)+)?;
+	//	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
 	public GroupByColumnsElements getGroupByColumnsAccess() {
 		return (pGroupByColumns != null) ? pGroupByColumns : (pGroupByColumns = new GroupByColumnsElements());
 	}
 	
 	public ParserRule getGroupByColumnsRule() {
 		return getGroupByColumnsAccess().getRule();
+	}
+
+	//GroupByColumnFull:
+	//	colGrBy=ColumnFull;
+	public GroupByColumnFullElements getGroupByColumnFullAccess() {
+		return (pGroupByColumnFull != null) ? pGroupByColumnFull : (pGroupByColumnFull = new GroupByColumnFullElements());
+	}
+	
+	public ParserRule getGroupByColumnFullRule() {
+		return getGroupByColumnFullAccess().getRule();
 	}
 
 	//FullExpression returns OrExpr:
@@ -1891,7 +1934,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//XExpression returns XExpr:
-	//	{XExpr} "$X{" xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? "}";
+	//	"$X" {XExpr} "{" xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? "}";
 	public XExpressionElements getXExpressionAccess() {
 		return (pXExpression != null) ? pXExpression : (pXExpression = new XExpressionElements());
 	}
@@ -1972,7 +2015,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//InOperator returns InOper:
-	//	{InOper} op=("NOT IN (" | "IN (") (subquery=SubQueryOperand | opList=OperandList) ")";
+	//	{InOper} op=("NOT IN" | "IN") "(" (subquery=SubQueryOperand | opList=OperandList) ")";
 	public InOperatorElements getInOperatorAccess() {
 		return (pInOperator != null) ? pInOperator : (pInOperator = new InOperatorElements());
 	}
@@ -2024,7 +2067,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ParameterOperand returns POperand:
-	//	{POperand} "$P{" prm=ID "}";
+	//	"$P" {POperand} "{" prm=ID "}";
 	public ParameterOperandElements getParameterOperandAccess() {
 		return (pParameterOperand != null) ? pParameterOperand : (pParameterOperand = new ParameterOperandElements());
 	}
@@ -2033,8 +2076,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getParameterOperandAccess().getRule();
 	}
 
-	//ExclamationParameterOperand returns ExpPperand:
-	//	{ExpPperand} "$P!{" prm=ID "}";
+	//ExclamationParameterOperand returns ExpOperand:
+	//	"$P!" {ExpOperand} "{" prm=ID "}";
 	public ExclamationParameterOperandElements getExclamationParameterOperandAccess() {
 		return (pExclamationParameterOperand != null) ? pExclamationParameterOperand : (pExclamationParameterOperand = new ExclamationParameterOperandElements());
 	}

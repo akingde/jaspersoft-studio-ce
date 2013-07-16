@@ -2,7 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.OrGroupByColumn;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
@@ -43,7 +43,7 @@ public class OrGroupByColumnImpl extends MinimalEObjectImpl.Container implements
    * @generated
    * @ordered
    */
-  protected EList<ColumnFull> entries;
+  protected EList<GroupByColumnFull> entries;
 
   /**
    * <!-- begin-user-doc -->
@@ -71,11 +71,11 @@ public class OrGroupByColumnImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<ColumnFull> getEntries()
+  public EList<GroupByColumnFull> getEntries()
   {
     if (entries == null)
     {
-      entries = new EObjectContainmentEList<ColumnFull>(ColumnFull.class, this, SqlPackage.OR_GROUP_BY_COLUMN__ENTRIES);
+      entries = new EObjectContainmentEList<GroupByColumnFull>(GroupByColumnFull.class, this, SqlPackage.OR_GROUP_BY_COLUMN__ENTRIES);
     }
     return entries;
   }
@@ -125,7 +125,7 @@ public class OrGroupByColumnImpl extends MinimalEObjectImpl.Container implements
     {
       case SqlPackage.OR_GROUP_BY_COLUMN__ENTRIES:
         getEntries().clear();
-        getEntries().addAll((Collection<? extends ColumnFull>)newValue);
+        getEntries().addAll((Collection<? extends GroupByColumnFull>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

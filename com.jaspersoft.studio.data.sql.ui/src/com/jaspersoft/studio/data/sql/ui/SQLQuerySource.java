@@ -153,7 +153,7 @@ public class SQLQuerySource {
 				}
 			}
 		});
-
+		viewer.getTextWidget().setData(SQLQueryDesigner.SQLQUERYDESIGNER, designer);
 		return cmp;
 	}
 

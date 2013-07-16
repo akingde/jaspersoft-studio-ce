@@ -78,6 +78,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OR_ORDER_BY_COLUMN: return createOrOrderByColumn();
       case SqlPackage.ORDER_BY_COLUMN_FULL: return createOrderByColumnFull();
       case SqlPackage.OR_GROUP_BY_COLUMN: return createOrGroupByColumn();
+      case SqlPackage.GROUP_BY_COLUMN_FULL: return createGroupByColumnFull();
       case SqlPackage.OR_EXPR: return createOrExpr();
       case SqlPackage.FULL_EXPRESSION: return createFullExpression();
       case SqlPackage.EXPR_GROUP: return createExprGroup();
@@ -92,7 +93,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
       case SqlPackage.POPERAND: return createPOperand();
-      case SqlPackage.EXP_PPERAND: return createExpPperand();
+      case SqlPackage.EXP_OPERAND: return createExpOperand();
       case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
       case SqlPackage.SCALAR_OPERAND: return createScalarOperand();
       case SqlPackage.OR_SELECT: return createOrSelect();
@@ -291,6 +292,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public GroupByColumnFull createGroupByColumnFull()
+  {
+    GroupByColumnFullImpl groupByColumnFull = new GroupByColumnFullImpl();
+    return groupByColumnFull;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public OrExpr createOrExpr()
   {
     OrExprImpl orExpr = new OrExprImpl();
@@ -445,10 +457,10 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public ExpPperand createExpPperand()
+  public ExpOperand createExpOperand()
   {
-    ExpPperandImpl expPperand = new ExpPperandImpl();
-    return expPperand;
+    ExpOperandImpl expOperand = new ExpOperandImpl();
+    return expOperand;
   }
 
   /**

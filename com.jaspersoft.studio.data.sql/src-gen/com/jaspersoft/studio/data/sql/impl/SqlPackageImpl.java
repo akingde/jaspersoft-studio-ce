@@ -9,10 +9,11 @@ import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
 import com.jaspersoft.studio.data.sql.Comparison;
 import com.jaspersoft.studio.data.sql.DbObjectName;
-import com.jaspersoft.studio.data.sql.ExpPperand;
+import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.ExprGroup;
 import com.jaspersoft.studio.data.sql.FromTable;
 import com.jaspersoft.studio.data.sql.FullExpression;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.InOper;
 import com.jaspersoft.studio.data.sql.JRParameter;
 import com.jaspersoft.studio.data.sql.JoinType;
@@ -154,6 +155,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass groupByColumnFullEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass orExprEClass = null;
 
   /**
@@ -252,7 +260,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass expPperandEClass = null;
+  private EClass expOperandEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -765,6 +773,26 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getGroupByColumnFull()
+  {
+    return groupByColumnFullEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getGroupByColumnFull_ColGrBy()
+  {
+    return (EReference)groupByColumnFullEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getOrExpr()
   {
     return orExprEClass;
@@ -1265,9 +1293,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getExpPperand()
+  public EClass getExpOperand()
   {
-    return expPperandEClass;
+    return expOperandEClass;
   }
 
   /**
@@ -1275,9 +1303,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getExpPperand_Prm()
+  public EAttribute getExpOperand_Prm()
   {
-    return (EAttribute)expPperandEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)expOperandEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1398,6 +1426,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EClass getCol()
   {
     return colEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getCol_Entries()
+  {
+    return (EReference)colEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1561,6 +1599,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     orGroupByColumnEClass = createEClass(OR_GROUP_BY_COLUMN);
     createEReference(orGroupByColumnEClass, OR_GROUP_BY_COLUMN__ENTRIES);
 
+    groupByColumnFullEClass = createEClass(GROUP_BY_COLUMN_FULL);
+    createEReference(groupByColumnFullEClass, GROUP_BY_COLUMN_FULL__COL_GR_BY);
+
     orExprEClass = createEClass(OR_EXPR);
     createEReference(orExprEClass, OR_EXPR__ENTRIES);
 
@@ -1625,8 +1666,8 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     pOperandEClass = createEClass(POPERAND);
     createEAttribute(pOperandEClass, POPERAND__PRM);
 
-    expPperandEClass = createEClass(EXP_PPERAND);
-    createEAttribute(expPperandEClass, EXP_PPERAND__PRM);
+    expOperandEClass = createEClass(EXP_OPERAND);
+    createEAttribute(expOperandEClass, EXP_OPERAND__PRM);
 
     columnOperandEClass = createEClass(COLUMN_OPERAND);
     createEReference(columnOperandEClass, COLUMN_OPERAND__CFULL);
@@ -1643,6 +1684,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(orSelectEClass, OR_SELECT__ENTRIES);
 
     colEClass = createEClass(COL);
+    createEReference(colEClass, COL__ENTRIES);
 
     tblsEClass = createEClass(TBLS);
     createEReference(tblsEClass, TBLS__ENTRIES);
@@ -1689,11 +1731,11 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     // Add supertypes to classes
     selectEClass.getESuperTypes().add(this.getModel());
     columnOrAliasEClass.getESuperTypes().add(this.getOrColumn());
-    columnFullEClass.getESuperTypes().add(this.getOrGroupByColumn());
     fromTableEClass.getESuperTypes().add(this.getOrTable());
     dbObjectNameEClass.getESuperTypes().add(this.getColumnFull());
     dbObjectNameEClass.getESuperTypes().add(this.getTableFull());
     orderByColumnFullEClass.getESuperTypes().add(this.getOrOrderByColumn());
+    groupByColumnFullEClass.getESuperTypes().add(this.getOrGroupByColumn());
     fullExpressionEClass.getESuperTypes().add(this.getOrExpr());
     jrParameterEClass.getESuperTypes().add(this.getPrms());
     operandEClass.getESuperTypes().add(this.getOperandList());
@@ -1754,7 +1796,10 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getOrderByColumnFull_Direction(), ecorePackage.getEString(), "direction", null, 0, 1, OrderByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(orGroupByColumnEClass, OrGroupByColumn.class, "OrGroupByColumn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getOrGroupByColumn_Entries(), this.getColumnFull(), null, "entries", null, 0, -1, OrGroupByColumn.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOrGroupByColumn_Entries(), this.getGroupByColumnFull(), null, "entries", null, 0, -1, OrGroupByColumn.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(groupByColumnFullEClass, GroupByColumnFull.class, "GroupByColumnFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getGroupByColumnFull_ColGrBy(), this.getColumnFull(), null, "colGrBy", null, 0, 1, GroupByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(orExprEClass, OrExpr.class, "OrExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOrExpr_Entries(), this.getFullExpression(), null, "entries", null, 0, -1, OrExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1814,14 +1859,14 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getOperand_Xop(), this.getOperand(), null, "xop", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Subq(), this.getOperand(), null, "subq", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Param(), this.getPOperand(), null, "param", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getOperand_Eparam(), this.getExpPperand(), null, "eparam", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOperand_Eparam(), this.getExpOperand(), null, "eparam", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Scalar(), this.getScalarOperand(), null, "scalar", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pOperandEClass, POperand.class, "POperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPOperand_Prm(), ecorePackage.getEString(), "prm", null, 0, 1, POperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(expPperandEClass, ExpPperand.class, "ExpPperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getExpPperand_Prm(), ecorePackage.getEString(), "prm", null, 0, 1, ExpPperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(expOperandEClass, ExpOperand.class, "ExpOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getExpOperand_Prm(), ecorePackage.getEString(), "prm", null, 0, 1, ExpOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(columnOperandEClass, ColumnOperand.class, "ColumnOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getColumnOperand_Cfull(), this.getColumnFull(), null, "cfull", null, 0, 1, ColumnOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1838,6 +1883,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getOrSelect_Entries(), this.getSelect(), null, "entries", null, 0, -1, OrSelect.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(colEClass, Col.class, "Col", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getCol_Entries(), this.getDbObjectName(), null, "entries", null, 0, -1, Col.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tblsEClass, tbls.class, "tbls", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(gettbls_Entries(), this.getDbObjectName(), null, "entries", null, 0, -1, tbls.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

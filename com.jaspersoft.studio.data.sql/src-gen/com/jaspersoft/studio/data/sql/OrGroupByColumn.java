@@ -26,7 +26,7 @@ public interface OrGroupByColumn extends EObject
 {
   /**
    * Returns the value of the '<em><b>Entries</b></em>' containment reference list.
-   * The list contents are of type {@link com.jaspersoft.studio.data.sql.ColumnFull}.
+   * The list contents are of type {@link com.jaspersoft.studio.data.sql.GroupByColumnFull}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Entries</em>' containment reference list isn't clear,
@@ -38,6 +38,6 @@ public interface OrGroupByColumn extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<ColumnFull> getEntries();
+  EList<GroupByColumnFull> getEntries();
 
 } // OrGroupByColumn

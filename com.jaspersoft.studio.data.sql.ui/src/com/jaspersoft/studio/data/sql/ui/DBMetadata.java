@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -204,6 +205,8 @@ public class DBMetadata {
 			}
 		});
 		root.removeChildren();
+		if (tblMap != null)
+			tblMap.clear();
 		final Connection c = getConnection(das);
 		if (c != null)
 			try {
@@ -386,8 +389,12 @@ public class DBMetadata {
 		try {
 			MDBObjects mview = new MTables(msch, title);
 			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", types);
-			while (rs.next())
-				new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
+			if (tblMap == null)
+				tblMap = new LinkedHashMap<String, MSqlTable>();
+			while (rs.next()) {
+				MSqlTable mt = new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
+				tblMap.put(mt.toSQLString(), mt);
+			}
 		} catch (Throwable e) {
 		}
 	}
@@ -477,6 +484,14 @@ public class DBMetadata {
 					treeViewer.expandToLevel(selection, 1);
 			}
 		});
+	}
+
+	private LinkedHashMap<String, MSqlTable> tblMap;
+
+	public LinkedHashMap<String, MSqlTable> getTables() {
+		if (tblMap == null)
+			tblMap = new LinkedHashMap<String, MSqlTable>();
+		return tblMap;
 	}
 
 }

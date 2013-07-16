@@ -140,6 +140,15 @@ public interface SqlFactory extends EFactory
   OrGroupByColumn createOrGroupByColumn();
 
   /**
+   * Returns a new object of class '<em>Group By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Group By Column Full</em>'.
+   * @generated
+   */
+  GroupByColumnFull createGroupByColumnFull();
+
+  /**
    * Returns a new object of class '<em>Or Expr</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -266,13 +275,13 @@ public interface SqlFactory extends EFactory
   POperand createPOperand();
 
   /**
-   * Returns a new object of class '<em>Exp Pperand</em>'.
+   * Returns a new object of class '<em>Exp Operand</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Exp Pperand</em>'.
+   * @return a new object of class '<em>Exp Operand</em>'.
    * @generated
    */
-  ExpPperand createExpPperand();
+  ExpOperand createExpOperand();
 
   /**
    * Returns a new object of class '<em>Column Operand</em>'.

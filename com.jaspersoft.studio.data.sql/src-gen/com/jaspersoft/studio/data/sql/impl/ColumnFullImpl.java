@@ -7,6 +7,8 @@ import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Column Full</b></em>'.
@@ -16,7 +18,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class ColumnFullImpl extends OrGroupByColumnImpl implements ColumnFull
+public class ColumnFullImpl extends MinimalEObjectImpl.Container implements ColumnFull
 {
   /**
    * <!-- begin-user-doc -->

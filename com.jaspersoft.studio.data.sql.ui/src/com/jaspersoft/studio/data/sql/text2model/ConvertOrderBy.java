@@ -3,8 +3,6 @@ package com.jaspersoft.studio.data.sql.text2model;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
-import com.jaspersoft.studio.data.sql.ColumnFull;
-import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.OrOrderByColumn;
 import com.jaspersoft.studio.data.sql.OrderByColumnFull;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -32,14 +30,16 @@ public class ConvertOrderBy {
 	}
 
 	private static void doColumn(SQLQueryDesigner designer, MSelect msel, OrderByColumnFull tf) {
-		EList<ColumnFull> eContents = tf.getColOrder().getEntries();
+		if (tf.getColOrder() == null)
+			return;
+		EList<EObject> eContents = tf.getColOrder().eContents();
 		String column = null;
 		if (tf instanceof DbObjectNameImpl)
 			column = ((DbObjectNameImpl) tf).getDbname();
 		else
-			column = getDbObjectName(eContents, 1);
-		String table = getDbObjectName(eContents, 2);
-		String schema = getDbObjectName(eContents, 3);
+			column = Text2Model.getDbObjectName(eContents, 1);
+		String table = Text2Model.getDbObjectName(eContents, 2);
+		String schema = Text2Model.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
 		MOrderByColumn mocol = findColumn(msel, schema, table, column);
 		if (mocol != null) {
@@ -49,15 +49,16 @@ public class ConvertOrderBy {
 		}
 	}
 
-	public static String getDbObjectName(EList<ColumnFull> eContents, int i) {
-		int size = eContents.size();
-		if (size >= i) {
-			EObject eobj = eContents.get(size - i);
-			if (eobj instanceof DbObjectName)
-				return ((DbObjectName) eobj).getDbname();
-		}
-		return null;
-	}
+	//
+	// public static String getDbObjectName(EList<ColumnFull> eContents, int i) {
+	// int size = eContents.size();
+	// if (size >= i) {
+	// EObject eobj = eContents.get(size - i);
+	// if (eobj instanceof DbObjectName)
+	// return ((DbObjectName) eobj).getDbname();
+	// }
+	// return null;
+	// }
 
 	private static MOrderByColumn findColumn(final MSelect msel, final String schema, final String table, final String column) {
 		KeyValue<MSQLColumn, MFromTable> kv = Text2Model.findColumn(msel, schema, table, column);

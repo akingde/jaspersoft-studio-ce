@@ -140,6 +140,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createOrGroupByColumnAdapter();
       }
       @Override
+      public Adapter caseGroupByColumnFull(GroupByColumnFull object)
+      {
+        return createGroupByColumnFullAdapter();
+      }
+      @Override
       public Adapter caseOrExpr(OrExpr object)
       {
         return createOrExprAdapter();
@@ -210,9 +215,9 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createPOperandAdapter();
       }
       @Override
-      public Adapter caseExpPperand(ExpPperand object)
+      public Adapter caseExpOperand(ExpOperand object)
       {
-        return createExpPperandAdapter();
+        return createExpOperandAdapter();
       }
       @Override
       public Adapter caseColumnOperand(ColumnOperand object)
@@ -467,6 +472,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.GroupByColumnFull <em>Group By Column Full</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.GroupByColumnFull
+   * @generated
+   */
+  public Adapter createGroupByColumnFullAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrExpr <em>Or Expr</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -677,16 +697,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ExpPperand <em>Exp Pperand</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ExpOperand <em>Exp Operand</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.ExpPperand
+   * @see com.jaspersoft.studio.data.sql.ExpOperand
    * @generated
    */
-  public Adapter createExpPperandAdapter()
+  public Adapter createExpOperandAdapter()
   {
     return null;
   }

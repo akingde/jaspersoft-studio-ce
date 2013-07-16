@@ -77,6 +77,9 @@
     <genClasses ecoreClass="Sql.ecore#//OrGroupByColumn">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrGroupByColumn/entries"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//GroupByColumnFull">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//GroupByColumnFull/colGrBy"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrExpr">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrExpr/entries"/>
     </genClasses>
@@ -140,8 +143,8 @@
     <genClasses ecoreClass="Sql.ecore#//POperand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//POperand/prm"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//ExpPperand">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ExpPperand/prm"/>
+    <genClasses ecoreClass="Sql.ecore#//ExpOperand">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ExpOperand/prm"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ColumnOperand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOperand/cfull"/>
@@ -157,7 +160,9 @@
     <genClasses ecoreClass="Sql.ecore#//OrSelect">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrSelect/entries"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//Col"/>
+    <genClasses ecoreClass="Sql.ecore#//Col">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//tbls">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//tbls/entries"/>
     </genClasses>

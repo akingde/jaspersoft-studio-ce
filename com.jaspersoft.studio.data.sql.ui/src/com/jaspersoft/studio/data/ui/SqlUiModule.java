@@ -4,6 +4,8 @@
 package com.jaspersoft.studio.data.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -11,5 +13,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 public class SqlUiModule extends com.jaspersoft.studio.data.ui.AbstractSqlUiModule {
 	public SqlUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+
+	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return SqlHighlightingConfiguration.class;
+	}
+
+	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
+		return SqlHighlightingCalculator.class;
 	}
 }

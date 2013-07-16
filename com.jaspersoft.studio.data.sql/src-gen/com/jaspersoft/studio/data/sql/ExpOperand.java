@@ -6,21 +6,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Exp Pperand</b></em>'.
+ * A representation of the model object '<em><b>Exp Operand</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.ExpPperand#getPrm <em>Prm</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ExpOperand#getPrm <em>Prm</em>}</li>
  * </ul>
  * </p>
  *
- * @see com.jaspersoft.studio.data.sql.SqlPackage#getExpPperand()
+ * @see com.jaspersoft.studio.data.sql.SqlPackage#getExpOperand()
  * @model
  * @generated
  */
-public interface ExpPperand extends EObject
+public interface ExpOperand extends EObject
 {
   /**
    * Returns the value of the '<em><b>Prm</b></em>' attribute.
@@ -32,14 +32,14 @@ public interface ExpPperand extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Prm</em>' attribute.
    * @see #setPrm(String)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getExpPperand_Prm()
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getExpOperand_Prm()
    * @model
    * @generated
    */
   String getPrm();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ExpPperand#getPrm <em>Prm</em>}' attribute.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ExpOperand#getPrm <em>Prm</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Prm</em>' attribute.
@@ -48,4 +48,4 @@ public interface ExpPperand extends EObject
    */
   void setPrm(String value);
 
-} // ExpPperand
+} // ExpOperand

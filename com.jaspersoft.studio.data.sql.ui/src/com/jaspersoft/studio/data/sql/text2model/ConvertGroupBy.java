@@ -3,7 +3,7 @@ package com.jaspersoft.studio.data.sql.text2model;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
-import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.OrGroupByColumn;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -19,16 +19,16 @@ public class ConvertGroupBy {
 	public static void convertGroupBy(SQLQueryDesigner designer, OrGroupByColumn cols) {
 		if (cols == null)
 			return;
-		if (cols instanceof ColumnFull)
-			doColumn(designer, Util.getKeyword(designer.getRoot(), MSelect.class), (ColumnFull) cols);
+		if (cols instanceof GroupByColumnFull)
+			doColumn(designer, Util.getKeyword(designer.getRoot(), MSelect.class), (GroupByColumnFull) cols);
 		else if (cols instanceof OrGroupByColumn) {
 			MSelect msel = Util.getKeyword(designer.getRoot(), MSelect.class);
-			for (ColumnFull fcol : cols.getEntries())
+			for (GroupByColumnFull fcol : cols.getEntries())
 				doColumn(designer, msel, fcol);
 		}
 	}
 
-	private static void doColumn(SQLQueryDesigner designer, MSelect msel, ColumnFull tf) {
+	private static void doColumn(SQLQueryDesigner designer, MSelect msel, GroupByColumnFull tf) {
 		EList<EObject> eContents = tf.eContents();
 		String column = null;
 		if (tf instanceof DbObjectNameImpl)

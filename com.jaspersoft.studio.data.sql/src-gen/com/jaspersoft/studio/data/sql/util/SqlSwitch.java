@@ -106,7 +106,6 @@ public class SqlSwitch<T> extends Switch<T>
       {
         ColumnFull columnFull = (ColumnFull)theEObject;
         T result = caseColumnFull(columnFull);
-        if (result == null) result = caseOrGroupByColumn(columnFull);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -145,7 +144,6 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseDbObjectName(dbObjectName);
         if (result == null) result = caseColumnFull(dbObjectName);
         if (result == null) result = caseTableFull(dbObjectName);
-        if (result == null) result = caseOrGroupByColumn(dbObjectName);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -168,6 +166,14 @@ public class SqlSwitch<T> extends Switch<T>
       {
         OrGroupByColumn orGroupByColumn = (OrGroupByColumn)theEObject;
         T result = caseOrGroupByColumn(orGroupByColumn);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.GROUP_BY_COLUMN_FULL:
+      {
+        GroupByColumnFull groupByColumnFull = (GroupByColumnFull)theEObject;
+        T result = caseGroupByColumnFull(groupByColumnFull);
+        if (result == null) result = caseOrGroupByColumn(groupByColumnFull);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -273,10 +279,10 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.EXP_PPERAND:
+      case SqlPackage.EXP_OPERAND:
       {
-        ExpPperand expPperand = (ExpPperand)theEObject;
-        T result = caseExpPperand(expPperand);
+        ExpOperand expOperand = (ExpOperand)theEObject;
+        T result = caseExpOperand(expOperand);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -307,7 +313,6 @@ public class SqlSwitch<T> extends Switch<T>
         Col col = (Col)theEObject;
         T result = caseCol(col);
         if (result == null) result = caseColumnFull(col);
-        if (result == null) result = caseOrGroupByColumn(col);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -550,6 +555,22 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Group By Column Full</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Group By Column Full</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseGroupByColumnFull(GroupByColumnFull object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Or Expr</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -774,17 +795,17 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Exp Pperand</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Exp Operand</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Exp Pperand</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Exp Operand</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseExpPperand(ExpPperand object)
+  public T caseExpOperand(ExpOperand object)
   {
     return null;
   }

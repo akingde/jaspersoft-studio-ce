@@ -54,6 +54,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 
 public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
+	public static final String SQLQUERYDESIGNER = "SQLQUERYDESIGNER";
 	private SashForm sf;
 	private DBMetadata dbMetadata;
 	private SQLQuerySource source;
@@ -167,14 +168,18 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	protected void updateQueryText(String txt) {
 		source.setQuery(txt);
 		if (!isModelRefresh)
-			Text2Model.text2model(this, source.getXTextDocument());
+			refreshQueryModel();
+	}
+
+	public void refreshQueryModel() {
+		Text2Model.text2model(this, source.getXTextDocument());
 	}
 
 	public void refreshedMetadata() {
 		if (tabFolder.getSelectionIndex() == 0)
 			source.setDirty(true);
 		if (tabFolder.getSelectionIndex() != 0)
-			Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument());
+			refreshQueryModel();
 		if (tabFolder.getSelectionIndex() == 1)
 			outline.scheduleRefresh();
 		if (tabFolder.getSelectionIndex() == 2)

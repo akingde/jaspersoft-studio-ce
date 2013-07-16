@@ -2,7 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.ExpPperand;
+import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -14,18 +14,18 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Exp Pperand</b></em>'.
+ * An implementation of the model object '<em><b>Exp Operand</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExpPperandImpl#getPrm <em>Prm</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExpOperandImpl#getPrm <em>Prm</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpPperand
+public class ExpOperandImpl extends MinimalEObjectImpl.Container implements ExpOperand
 {
   /**
    * The default value of the '{@link #getPrm() <em>Prm</em>}' attribute.
@@ -52,7 +52,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ExpPperandImpl()
+  protected ExpOperandImpl()
   {
     super();
   }
@@ -65,7 +65,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.EXP_PPERAND;
+    return SqlPackage.Literals.EXP_OPERAND;
   }
 
   /**
@@ -88,7 +88,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
     String oldPrm = prm;
     prm = newPrm;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.EXP_PPERAND__PRM, oldPrm, prm));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.EXP_OPERAND__PRM, oldPrm, prm));
   }
 
   /**
@@ -101,7 +101,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
   {
     switch (featureID)
     {
-      case SqlPackage.EXP_PPERAND__PRM:
+      case SqlPackage.EXP_OPERAND__PRM:
         return getPrm();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -117,7 +117,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
   {
     switch (featureID)
     {
-      case SqlPackage.EXP_PPERAND__PRM:
+      case SqlPackage.EXP_OPERAND__PRM:
         setPrm((String)newValue);
         return;
     }
@@ -134,7 +134,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
   {
     switch (featureID)
     {
-      case SqlPackage.EXP_PPERAND__PRM:
+      case SqlPackage.EXP_OPERAND__PRM:
         setPrm(PRM_EDEFAULT);
         return;
     }
@@ -151,7 +151,7 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
   {
     switch (featureID)
     {
-      case SqlPackage.EXP_PPERAND__PRM:
+      case SqlPackage.EXP_OPERAND__PRM:
         return PRM_EDEFAULT == null ? prm != null : !PRM_EDEFAULT.equals(prm);
     }
     return super.eIsSet(featureID);
@@ -174,4 +174,4 @@ public class ExpPperandImpl extends MinimalEObjectImpl.Container implements ExpP
     return result.toString();
   }
 
-} //ExpPperandImpl
+} //ExpOperandImpl

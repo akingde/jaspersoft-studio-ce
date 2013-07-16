@@ -3,7 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.ColumnOperand;
-import com.jaspersoft.studio.data.sql.ExpPperand;
+import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.POperand;
@@ -104,7 +104,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * @generated
    * @ordered
    */
-  protected ExpPperand eparam;
+  protected ExpOperand eparam;
 
   /**
    * The cached value of the '{@link #getScalar() <em>Scalar</em>}' containment reference.
@@ -348,7 +348,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public ExpPperand getEparam()
+  public ExpOperand getEparam()
   {
     return eparam;
   }
@@ -358,9 +358,9 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetEparam(ExpPperand newEparam, NotificationChain msgs)
+  public NotificationChain basicSetEparam(ExpOperand newEparam, NotificationChain msgs)
   {
-    ExpPperand oldEparam = eparam;
+    ExpOperand oldEparam = eparam;
     eparam = newEparam;
     if (eNotificationRequired())
     {
@@ -375,7 +375,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setEparam(ExpPperand newEparam)
+  public void setEparam(ExpOperand newEparam)
   {
     if (newEparam != eparam)
     {
@@ -523,7 +523,7 @@ public class OperandImpl extends OperandListImpl implements Operand
         setParam((POperand)newValue);
         return;
       case SqlPackage.OPERAND__EPARAM:
-        setEparam((ExpPperand)newValue);
+        setEparam((ExpOperand)newValue);
         return;
       case SqlPackage.OPERAND__SCALAR:
         setScalar((ScalarOperand)newValue);
@@ -558,7 +558,7 @@ public class OperandImpl extends OperandListImpl implements Operand
         setParam((POperand)null);
         return;
       case SqlPackage.OPERAND__EPARAM:
-        setEparam((ExpPperand)null);
+        setEparam((ExpOperand)null);
         return;
       case SqlPackage.OPERAND__SCALAR:
         setScalar((ScalarOperand)null);

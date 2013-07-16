@@ -139,12 +139,12 @@ public interface Operand extends OperandList, Operands
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Eparam</em>' containment reference.
-   * @see #setEparam(ExpPperand)
+   * @see #setEparam(ExpOperand)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Eparam()
    * @model containment="true"
    * @generated
    */
-  ExpPperand getEparam();
+  ExpOperand getEparam();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getEparam <em>Eparam</em>}' containment reference.
@@ -154,7 +154,7 @@ public interface Operand extends OperandList, Operands
    * @see #getEparam()
    * @generated
    */
-  void setEparam(ExpPperand value);
+  void setEparam(ExpOperand value);
 
   /**
    * Returns the value of the '<em><b>Scalar</b></em>' containment reference.
