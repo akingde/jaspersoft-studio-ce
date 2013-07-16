@@ -1,22 +1,23 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.editor.text;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.eclipse.core.internal.preferences.EclipsePreferences;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -25,9 +26,13 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.utils.Misc;
 
@@ -69,7 +74,7 @@ public class TextFieldEditor extends FieldEditor {
 	/**
 	 * The text field, or <code>null</code> if none.
 	 */
-	Text textField;
+	private Text textField;
 
 	/**
 	 * Width of text field in characters; initially unlimited.
@@ -90,17 +95,14 @@ public class TextFieldEditor extends FieldEditor {
 	 * Indicates whether the empty string is legal; <code>true</code> by default.
 	 */
 	private boolean emptyStringAllowed = true;
+	private boolean isNullAllowed = false;
 
 	/**
 	 * The validation strategy; <code>VALIDATE_ON_KEY_STROKE</code> by default.
 	 */
 	private int validateStrategy = VALIDATE_ON_KEY_STROKE;
 
-	/**
-	 * Creates a new string field editor
-	 */
-	protected TextFieldEditor() {
-	}
+	private Button bIsNull;
 
 	/**
 	 * Creates a string field editor. Use the method <code>setTextLimit</code> to limit the text.
@@ -118,8 +120,9 @@ public class TextFieldEditor extends FieldEditor {
 	 *          the parent of the field editor's control
 	 * @since 2.0
 	 */
-	public TextFieldEditor(String name, String labelText, int width, int strategy, Composite parent) {
+	public TextFieldEditor(String name, String labelText, int width, int strategy, boolean isNullAllowed, Composite parent) {
 		init(name, labelText);
+		this.isNullAllowed = isNullAllowed;
 		// widthInChars = width;
 		setValidateStrategy(strategy);
 		isValid = false;
@@ -140,7 +143,7 @@ public class TextFieldEditor extends FieldEditor {
 	 *          the parent of the field editor's control
 	 */
 	public TextFieldEditor(String name, String labelText, int width, Composite parent) {
-		this(name, labelText, width, VALIDATE_ON_KEY_STROKE, parent);
+		this(name, labelText, width, VALIDATE_ON_KEY_STROKE, false, parent);
 	}
 
 	/**
@@ -155,6 +158,20 @@ public class TextFieldEditor extends FieldEditor {
 	 */
 	public TextFieldEditor(String name, String labelText, Composite parent) {
 		this(name, labelText, UNLIMITED, parent);
+	}
+
+	/**
+	 * Creates a string field editor of unlimited width. Use the method <code>setTextLimit</code> to limit the text.
+	 * 
+	 * @param name
+	 *          the name of the preference this field editor works on
+	 * @param labelText
+	 *          the label text of the field editor
+	 * @param parent
+	 *          the parent of the field editor's control
+	 */
+	public TextFieldEditor(String name, String labelText, boolean isNullAllowed, Composite parent) {
+		this(name, labelText, UNLIMITED, VALIDATE_ON_KEY_STROKE, isNullAllowed, parent);
 	}
 
 	/*
@@ -176,21 +193,24 @@ public class TextFieldEditor extends FieldEditor {
 	 */
 	protected boolean checkState() {
 		boolean result = false;
-		if (emptyStringAllowed) {
+		if (isNullAllowedAndSet())
 			result = true;
+		else {
+			if (emptyStringAllowed) {
+				result = true;
+			}
+
+			if (textField == null) {
+				result = false;
+			}
+
+			String txt = textField.getText();
+
+			result = (txt.trim().length() > 0) || emptyStringAllowed;
+
+			// call hook for subclasses
+			result = result && doCheckState();
 		}
-
-		if (textField == null) {
-			result = false;
-		}
-
-		String txt = textField.getText();
-
-		result = (txt.trim().length() > 0) || emptyStringAllowed;
-
-		// call hook for subclasses
-		result = result && doCheckState();
-
 		if (result) {
 			clearErrorMessage();
 		} else {
@@ -225,7 +245,8 @@ public class TextFieldEditor extends FieldEditor {
 
 		textField = getTextControl(parent);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-
+		if (isNullAllowed)
+			gd.horizontalSpan = 2;
 		textField.setLayoutData(gd);
 	}
 
@@ -234,7 +255,32 @@ public class TextFieldEditor extends FieldEditor {
 	 */
 	protected void doLoad() {
 		if (textField != null) {
-			String value = getPreferenceStore().getString(getPreferenceName());
+			IPreferenceStore pstore = getPreferenceStore();
+			String value = pstore.getString(getPreferenceName());
+			if (isNullAllowed && bIsNull != null) {
+				if (pstore instanceof ScopedPreferenceStore) {
+					try {
+						Method m = pstore.getClass().getDeclaredMethod("internalGet", String.class);
+						m.setAccessible(true);
+						if (m != null)
+							value = (String) m.invoke(pstore, getPreferenceName());
+					} catch (SecurityException e) {
+						e.printStackTrace();
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+
+				}
+
+				bIsNull.setSelection(value == null);
+				textField.setEnabled(value != null);
+			}
 			textField.setText(Misc.nvl(value));
 			oldValue = value;
 		}
@@ -246,7 +292,11 @@ public class TextFieldEditor extends FieldEditor {
 	protected void doLoadDefault() {
 		if (textField != null) {
 			String value = getPreferenceStore().getDefaultString(getPreferenceName());
-			textField.setText(value);
+			if (isNullAllowed && bIsNull != null) {
+				bIsNull.setSelection(value == null);
+				textField.setEnabled(value != null);
+			}
+			textField.setText(Misc.nvl(value));
 		}
 		valueChanged();
 	}
@@ -255,7 +305,37 @@ public class TextFieldEditor extends FieldEditor {
 	 * (non-Javadoc) Method declared on FieldEditor.
 	 */
 	protected void doStore() {
-		getPreferenceStore().setValue(getPreferenceName(), textField.getText());
+		IPreferenceStore pstore = getPreferenceStore();
+		if (isNullAllowedAndSet()) {
+			if (pstore instanceof EclipsePreferences)
+				((EclipsePreferences) pstore).remove(getPreferenceName());
+			else if (pstore instanceof ScopedPreferenceStore) {
+				// try {
+				for (IEclipsePreferences ep : ((ScopedPreferenceStore) pstore).getPreferenceNodes(true))
+					ep.remove(getPreferenceName());
+
+				// Method m = pstore.getClass().getDeclaredMethod("getStorePreferences");
+				// m.setAccessible(true);
+				// if (m != null) {
+				// IEclipsePreferences ep = (IEclipsePreferences) m.invoke(pstore);
+				// ep.remove(getPreferenceName());
+				// }
+				// } catch (SecurityException e) {
+				// e.printStackTrace();
+				// } catch (NoSuchMethodException e) {
+				// e.printStackTrace();
+				// } catch (IllegalArgumentException e) {
+				// e.printStackTrace();
+				// } catch (IllegalAccessException e) {
+				// e.printStackTrace();
+				// } catch (InvocationTargetException e) {
+				// e.printStackTrace();
+				// }
+
+			} else
+				pstore.setValue(getPreferenceName(), null);
+		} else
+			pstore.setValue(getPreferenceName(), textField.getText());
 	}
 
 	/**
@@ -271,6 +351,8 @@ public class TextFieldEditor extends FieldEditor {
 	 * (non-Javadoc) Method declared on FieldEditor.
 	 */
 	public int getNumberOfControls() {
+		if (isNullAllowed)
+			return 2;
 		return 1;
 	}
 
@@ -280,11 +362,15 @@ public class TextFieldEditor extends FieldEditor {
 	 * @return the current value
 	 */
 	public String getStringValue() {
-		if (textField != null) {
+		if (isNullAllowedAndSet())
+			return null;
+		if (textField != null)
 			return textField.getText();
-		}
-
 		return getPreferenceStore().getString(getPreferenceName());
+	}
+
+	protected boolean isNullAllowedAndSet() {
+		return isNullAllowed && bIsNull != null && bIsNull.getSelection();
 	}
 
 	/**
@@ -308,6 +394,18 @@ public class TextFieldEditor extends FieldEditor {
 	 */
 	public Text getTextControl(Composite parent) {
 		if (textField == null) {
+			if (isNullAllowed) {
+				bIsNull = new Button(parent, SWT.CHECK);
+				bIsNull.setText("Set To NULL Value");
+				bIsNull.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						textField.setEnabled(!bIsNull.getSelection());
+						textField.setText("");
+					}
+				});
+			}
+
 			textField = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 			textField.setFont(parent.getFont());
 			switch (validateStrategy) {
@@ -505,5 +603,6 @@ public class TextFieldEditor extends FieldEditor {
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
 		getTextControl(parent).setEnabled(enabled);
+		bIsNull.setEnabled(enabled);
 	}
 }

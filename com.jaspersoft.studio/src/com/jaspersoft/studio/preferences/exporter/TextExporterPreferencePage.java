@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
@@ -19,10 +14,6 @@ import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -82,20 +73,21 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 				Messages.TextExporterPreferencePage_11, 4, getFieldEditorParent());
 		addField(sfe);
 
-		Composite c = new Composite(getFieldEditorParent(), SWT.NONE);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		c.setLayoutData(gd);
-		c.setLayout(new GridLayout());
-
 		TextFieldEditor te = new TextFieldEditor(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT, Messages.TextExporterPreferencePage_12,
-				c);
-		te.getTextControl(c).setLayoutData(new GridData(GridData.FILL_BOTH));
+				true, getFieldEditorParent());
 		addField(te);
 
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
+		if (!store.contains(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT)) {
+			// we can't store null values in the store, but for this one we have null
+			// a workaround is to remove the property for null values
+			// so we initialise the default only if no properties are initialised
+			store.setDefault(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT,
+					Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT), "")); //$NON-NLS-1$
+		}
+
 		store.setDefault(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH,
@@ -105,9 +97,7 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JRTextExporterParameter.PROPERTY_PAGE_WIDTH,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRTextExporterParameter.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
 
-		store.setDefault(NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"); //$NON-NLS-1$ 
 	}
 
 	/*
