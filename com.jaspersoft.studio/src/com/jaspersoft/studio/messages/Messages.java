@@ -1753,7 +1753,7 @@ public class Messages extends NLS {
 		try {
 			return RB_MESSAGES_BY_KEYS.getString(key.toLowerCase());
 		} catch (MissingResourceException e) {
-			System.out.println("Key: " + key + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
+			//System.out.println("Key: " + key + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
 			return key;
 		}
 	}

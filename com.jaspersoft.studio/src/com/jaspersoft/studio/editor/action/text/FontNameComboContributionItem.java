@@ -37,11 +37,11 @@ public class FontNameComboContributionItem extends APropertyComboContributionIte
 		JasperReportsConfiguration jConfig = model.getJasperConfiguration();
 		if (jConfig != null) {
 			String[] newfonts = jConfig.getFontList();
-			if (newfonts != combo.getItems()) {
+			if (newfonts != fonts) {
 				fonts = newfonts;
 				combo.setItems(fonts);
 			}
-			
+
 		}
 	}
 
