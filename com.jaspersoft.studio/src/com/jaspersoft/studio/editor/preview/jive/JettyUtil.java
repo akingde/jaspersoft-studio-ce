@@ -90,7 +90,8 @@ public final class JettyUtil {
 		String ctxName = file.getProject().getName();
 
 		JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(jContext);
-		String repuri = propUtil.getProperty(WebUtil.PROPERTY_REQUEST_PARAMETER_REPORT_URI);
+		// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
+		String repuri = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.report.uri");
 
 		return String.format("http://localhost:%d/%s/servlets/viewer?%s=%s&%s=%s&jr.async=true", port, ctxName, repuri,
 		// file.getLocation().toString(),

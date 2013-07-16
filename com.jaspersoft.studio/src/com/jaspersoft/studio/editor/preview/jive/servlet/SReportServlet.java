@@ -23,7 +23,6 @@ import net.sf.jasperreports.web.JRInteractiveException;
 import net.sf.jasperreports.web.WebReportContext;
 import net.sf.jasperreports.web.servlets.JasperPrintAccessor;
 import net.sf.jasperreports.web.servlets.ReportServlet;
-import net.sf.jasperreports.web.util.WebUtil;
 
 import com.jaspersoft.studio.editor.preview.jive.Context;
 
@@ -51,10 +50,12 @@ public class SReportServlet extends ReportServlet {
 					.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT_ACCESSOR);
 
 			JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(getJasperReportsContext());
-			String runReportParamName = propUtil.getProperty(WebUtil.PROPERTY_REQUEST_PARAMETER_RUN_REPORT);
+			// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
+			String runReportParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.run.report");
 			String runReport = request.getParameter(runReportParamName);
 			if (jasperPrintAccessor == null || Boolean.valueOf(runReport)) {
-				String reportUriParamName = propUtil.getProperty(WebUtil.PROPERTY_REQUEST_PARAMETER_REPORT_URI);
+				// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
+				String reportUriParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.report.uri");
 				String reportUri = request.getParameter(reportUriParamName);
 
 				cache.set(reportUri, (JasperReport) cprm.get(PRM_JASPERREPORT));
