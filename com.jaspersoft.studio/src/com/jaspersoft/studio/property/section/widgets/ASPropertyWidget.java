@@ -190,7 +190,7 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 							@Override
 							public void run() {
 								getControlToBorder().removePaintListener(highlighter);
-								getControlToBorder().removeControlListener(checkResize);
+								//getControlToBorder().removeControlListener(checkResize);
 								getControlToBorder().redraw();
 							}
 						});

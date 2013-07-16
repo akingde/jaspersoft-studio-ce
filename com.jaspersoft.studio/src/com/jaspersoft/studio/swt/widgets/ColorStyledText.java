@@ -386,5 +386,13 @@ public class ColorStyledText {
 	 public RGB getColor(){
 		 return color.getRGB();
 	 }
+	 
+	 /**
+	  * Return the paint area
+	  * @return composite where all the elements that compose the widget are placed
+	  */
+	 public Composite getPaintArea(){
+		 return paintArea;
+	 }
 	
 }

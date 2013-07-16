@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.type.LineStyleEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.property.combomenu.ComboItem;
@@ -107,5 +108,9 @@ public class SPLineStyleEnum {
 	 */
 	public void setData(Integer b) {
 		combo.select(b);
+	}
+	
+	public Control getControl(){
+		return combo.getControl();
 	}
 }

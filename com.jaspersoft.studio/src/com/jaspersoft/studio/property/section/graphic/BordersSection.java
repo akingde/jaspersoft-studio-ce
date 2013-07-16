@@ -52,6 +52,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer.Location;
@@ -731,6 +732,31 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseLineBox.PROPERTY_PADDING, Messages.BordersSection_Padding_Box_Title);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_LEFT_PADDING, Messages.BordersSection_Left_Label);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_RIGHT_PADDING, Messages.common_right);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_TOP_PADDING, Messages.BordersSection_Top_Label);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, Messages.common_bottom);
+		addProvidedProperties(JRBasePen.PROPERTY_LINE_COLOR, Messages.common_pen_color);
+		addProvidedProperties(JRBasePen.PROPERTY_LINE_WIDTH, Messages.common_pen_width);
+		addProvidedProperties(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_pen_style);
+	}
+	
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId){
+		if (propertyId.equals(JRBaseLineBox.PROPERTY_PADDING)) return new ASHighlightControl(checkBoxPadding.getParent(),Composite.class);
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) return new ASHighlightControl(paddingLeft);
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) return new ASHighlightControl(paddingRight);
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) return new ASHighlightControl(paddingTop);
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) return new ASHighlightControl(paddingBottom);
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR)) return new ASHighlightControl(lineColor.getPaintArea());
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH)) return new ASHighlightControl(lineWidth);
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(),Composite.class);
+		return null;
 	}
 
 }

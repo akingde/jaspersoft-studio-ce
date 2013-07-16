@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -98,6 +99,20 @@ public class DefaultWidgetsHighlighters {
 				e.gc.setForeground(ColorConstants.orange);
 				e.gc.setLineWidth(3);
 				e.gc.drawRectangle(1,1,bounds.width-3,bounds.height-3);
+			}
+		});
+		
+		widgetsMap.put(Spinner.class, new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				Spinner spinner = (Spinner)e.getSource();
+				Rectangle bounds = spinner.getBounds();
+				if (spinner.getVerticalBar() != null){
+					bounds.width = bounds.width - spinner.getVerticalBar().getSize().x;
+				}
+				e.gc.setForeground(ColorConstants.orange);
+				e.gc.setLineWidth(3);
+				e.gc.drawRectangle(0,0,bounds.width-2,bounds.height-2);
 			}
 		});
 	}

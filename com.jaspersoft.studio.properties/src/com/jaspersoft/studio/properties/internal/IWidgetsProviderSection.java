@@ -43,10 +43,10 @@ public interface IWidgetsProviderSection {
 	 * Return a widget associated with a specific property id, the widget must implement
 	 * the interface to be highlighted
 	 * 
-	 * @param porpertyId the id of the property
+	 * @param propertyId the id of the property
 	 * @return the widget to hightlight, can be null
 	 */
-	public IHighlightPropertyWidget getWidgetForProperty(Object porpertyId);
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId);
 	
 	/**
 	 * Return the descriptor for a specific widget

@@ -16,27 +16,32 @@
 package com.jaspersoft.studio.properties.internal;
 
 import java.util.ArrayList;
-import java.util.EventObject;
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalListener;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormColors;
 
 import com.jaspersoft.studio.properties.view.ISection;
@@ -46,7 +51,10 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 
 /**
  * Display a search bar into the top of a property sheet page. This bar can be used 
- * to search and highlight a specific property
+ * to search and highlight a specific property. The bar is obtained with a text with 
+ * the autocomplete function. at the right of the text there is a fake button painted
+ * using a canvas. A click of this button can manually open the autocomplete dialog, event 
+ * if the user is not typing anything.
  * 
  * @author Orlandin Marco
  *
@@ -54,14 +62,9 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 public class TabbedPropertySearch extends Composite {
 	
 	/**
-	 * Combo where the name of the property can be typed or selected from the available
+	 * Text where the name of the property can be typed or selected from the available proposed by the autocomplete
 	 */
-	private Combo textArea;
-
-	/**
-	 * Name of the property actually selected in the combo
-	 */
-	private String comboSelectedText="";
+	private Text textArea;
 	
 	/**
 	 * The factory of the property sheet
@@ -77,83 +80,37 @@ public class TabbedPropertySearch extends Composite {
 	 * Keep the properties list of the last selected element, until the selection dosen't change with an element
 	 * with a different type. Maybe could be improved by storing all the created properties when they are builded
 	 */
-	private ComboDataContainer cachedProperties = null;
+	private PropertiesContainer cachedProperties = null;
 	
 	/**
-	 * 
-	 * Class that contains all the properties selectable 
-	 * for a specific type of item
-	 * 
-	 * @author Orlandin Marco
-	 *
+	 * Color used for the arrow of the fake button
 	 */
-	private class ComboDataContainer{
-		
-		/**
-		 * List of the properties name
-		 */
-		String[] labels;
-		
-		/**
-		 * List of the property ids associated 1:1 with the labels, must have the same size of labels
-		 */
-		Object[] ids;
-		
-		/**
-		 * Create an instance of the class
-		 * 
-		 * @param labels list of the properties name available
-		 * @param ids list of ids associated with the properties name
-		 */
-		public ComboDataContainer(String[] labels, Object[] ids){
-			this.labels = labels;
-			this.ids = ids;
-		}
-		
-		/**
-		 * Return the number of properties
-		 * 
-		 * @return number of properties
-		 */
-		public int getSize(){
-			//Its assumed that ids and labels have the same size
-			return ids.length;
-		}
-	}
+	private Color arrowColor = new Color(null, 0, 0, 0);
 	
 	/**
-	 * Set the text inside the combo without raise any listener. It also place 
-	 * the cursor to a similar position respect where it was with the previous text
-	 * 
-	 * @param text text to set inside the combo
+	 * The autocomplete object for the text element
 	 */
-	private void setTextWithoutListener(String text){
-		Point oldSelection = textArea.getSelection();
-		textArea.setText(text);
-		if (text.length()>=oldSelection.y) textArea.setSelection(oldSelection);
-		else textArea.setSelection(new Point(text.length(),text.length()));
-	}
+	private ManualyOpenedAutocomplete autocomplete;
 	
 	/**
-	 * When the text inside the combobox change this method is called to update the list of 
-	 * element shown inside the combo list, in this way only the properties that contains the 
-	 * typed text are shown
-	 * 
-	 * @param e event that references the combo
+	 * The height of the text element and of the canvas with the arrow painted
 	 */
-	private void updateComboString(EventObject e){
-		comboSelectedText = ((Combo)e.getSource()).getText();
-		ComboDataContainer comboValue = getFilteredProperites(comboSelectedText.toLowerCase().trim());
-		String[] elements = comboValue.labels;
-		//the list of elements is update only if the new subset has a different size from the old one
-		if (textArea.getItemCount() != elements.length) {
-			textArea.setItems(elements);
-			textArea.setVisibleItemCount(textArea.getItemCount());
-			textArea.setData(comboValue.ids);
-			//The set items delete the text inside the combo so it is necessary to insert it programmatically
-			setTextWithoutListener(comboSelectedText);
+	private int widgetHeight = 18;
+	
+	/**
+	 * Action executed when an element from the autocomplete is selected
+	 */
+	private IContentProposalListener proposalListener = new IContentProposalListener(){
+		@Override
+		public void proposalAccepted(IContentProposal proposal) {
+			if (proposal instanceof PropertyContentProposal){
+				PropertyContentProposal propertyProposal = (PropertyContentProposal)proposal;
+				checkSelection(propertyProposal.getPropertyId());
+			}
 		}
-	}
+		
+	};
+	
 
 	/**
 	 * Constructor for TabbedPropertySearch.
@@ -181,87 +138,150 @@ public class TabbedPropertySearch extends Composite {
 		layout.marginWidth = 1;
 		layout.marginHeight = 0;
 		setLayout(layout);
-
-		textArea = new Combo(this, SWT.NONE);
-		textArea.setForeground(factory.getColors().getColor(IFormColors.TITLE));
 		
-		//Selection listener, to show the selected properties
-		textArea.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				comboSelectedText = ((Combo)e.getSource()).getText();
-				checkSelection();
-			}
-		});
+		Composite containerComp = new Composite(this,SWT.BORDER);
+		GridLayout containerLayout = new GridLayout(2,false);
+		containerLayout.marginWidth = 0;
+		containerLayout.marginHeight = 0;
+		containerLayout.horizontalSpacing = 0;
+		containerLayout.verticalSpacing = 0;
+		containerComp.setLayout(containerLayout);
 		
-		//Focus listener, to populate the combo when it is selected
-		textArea.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				updateComboString(e);
-			}
-		});
+		//Create the text area
+		createTextArea(containerComp);
 		
-		//Key listener, to populate the combo when the text inside it change
-		textArea.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.CR) {
-					checkSelection();
-					return;
-				}
-				updateComboString(e);
-				if (textArea.getItemCount()>0 && !textArea.getListVisible()){
-					//if (!(textArea.getItemCount() == 1 && textArea.getItem(0).equals(comboSelectedText)))
-					{
-						textArea.setListVisible(true);
-						setTextWithoutListener(comboSelectedText);
-					}
-				}
-			}
-		});
+		//Create the arrow button 
+		createFakeButton(containerComp);
 		
 		FormData data = new FormData();
 		data.left = new FormAttachment(0, 0);
 		data.top = new FormAttachment(0, 0);
 		data.right = new FormAttachment(100, 0);
 		data.bottom = new FormAttachment(100, 0);
-		textArea.setLayoutData(data);
+		containerComp.setLayoutData(data);
 	}
 	
 	/**
-	 * Method called when there is a selection event. If the text inside the combo
-	 * match one of its elements then the property selected will be highlighted
-	 */
-	private void checkSelection(){
-		int selectionIndex = getIndex(comboSelectedText.toLowerCase());
-		if (selectionIndex != -1){
-			//Get the id of the selected properties
-			Object id = ((Object[])textArea.getData())[selectionIndex];
-			selectElement(id);
-			//In the dropwon list there will be only the selected properties
-			String[] names = {comboSelectedText};
-			Object[] values = {id};
-			textArea.setItems(names);
-			textArea.setData(values);
-			//need re-set the text since the setitems erase it
-			textArea.setText(comboSelectedText);
-			textArea.setSelection(new Point(comboSelectedText.length(),comboSelectedText.length()));
-		}
-	}
-	
-	/**
-	 * Get a string and return the index of the element in the combo that has the same value
-	 * of the string 
+	 * Create the Text area control 
 	 * 
-	 * @param searchedString element to search
-	 * @return index of the searched element in the combo or -1 if it is not found
+	 * @param containerComp  container where the control is placed
 	 */
-	private int getIndex(String searchedString){
-		for(int i=0;i<textArea.getItems().length;i++){
-			if (textArea.getItems()[i].toLowerCase().equals(searchedString)) return i;
+	private void createTextArea(Composite containerComp){
+		textArea = new Text(containerComp, SWT.NONE);
+		textArea.setForeground(factory.getColors().getColor(IFormColors.TITLE));
+		
+		//Focus listener, to populate the combo when it is selected
+		textArea.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				updateAutocompleteContent();
+			}
+		});
+		
+		textArea.addKeyListener(new KeyAdapter() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//when all the text is deleted then the autocomplete dialog is opened showing every choice
+				if (e.keyCode == SWT.BS && textArea.getText().isEmpty() 
+						&& !autocomplete.isProposalOpened()) autocomplete.openProposalPopup();	
+				//The down arrow open the autocomplete dialog is opened 
+				if (e.keyCode == SWT.ARROW_DOWN && !autocomplete.isProposalOpened()) autocomplete.openProposalPopup();
+				//When the return key is pressed the element with the same name of the typed one is selected without open the autocomplete
+				if (e.keyCode == SWT.CR && !autocomplete.isProposalOpened() && cachedProperties != null){
+					String searchedString = textArea.getText().toLowerCase();
+					for(int i=0;i<cachedProperties.getSize();i++){
+						String actualString = cachedProperties.getLabels()[i].toLowerCase();
+						if (actualString.equals(searchedString)){
+							checkSelection(cachedProperties.getIds()[i]);
+							return;
+						}
+					}
+				}
+			}
+		});
+		
+		GridData textData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		textData.heightHint = widgetHeight;
+		textArea.setLayoutData(textData);
+	}
+	
+	/**
+	 * Create a fake arrow button that can be clicked to open or close 
+	 * manually the autocomplete dialog
+	 * 
+	 * @param containerComp container where the button will be placed
+	 */
+	private void createFakeButton(Composite containerComp){
+		Canvas openIcon = new Canvas(containerComp, SWT.NONE);
+		openIcon.setBackground(new Color(null,255,255,255));
+		openIcon.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				Color oldBackground = e.gc.getBackground();
+				e.gc.setBackground(arrowColor);
+				e.gc.setAntialias(SWT.ON);
+				int oddX_offset = e.width % 2 == 0 ? 0 : 1;  
+				int y_offset = 7;
+				int x_offset = 4;
+				int x1 = x_offset-oddX_offset;
+				int y1 = y_offset;
+				int x2 = e.width-x_offset;
+				int y2 = y_offset;
+				int x3 = (e.width-oddX_offset)/2;
+				int y3 = e.height-y_offset;
+				e.gc.fillPolygon(new int[]{x1,y1,x2,y2,x3,y3});
+				e.gc.setAntialias(SWT.DEFAULT);
+				e.gc.setBackground(oldBackground);
+			}
+		});
+		
+		openIcon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				updateAutocompleteContent();
+				if (autocomplete.isProposalOpened()) autocomplete.closeProposalPopup();
+				else autocomplete.openProposalPopup();
+			}
+		});
+		GridData iconData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		iconData.widthHint = 15;
+		iconData.heightHint = widgetHeight;
+		openIcon.setLayoutData(iconData);
+				
+	}
+	
+	/**
+	 * Method called to initialize or update the autocomplete set of elements
+	 */
+	private void updateAutocompleteContent(){
+		if (autocomplete == null) {
+			PropertiesContainer properties = getAllProperties();
+			autocomplete = new ManualyOpenedAutocomplete(textArea, new TextContentAdapter(), properties);
+			autocomplete.addProposalSelectedListener(proposalListener);
 		}
-		return -1;
+		else {
+			Object actualSelectedElement = getSelectedElement();
+			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
+				PropertiesContainer properties = getAllProperties();
+				autocomplete.setProposals(properties);
+			}
+		}
+	}
+	
+	/**
+	 * Method called when there is a selection event. 
+	 * 
+	 * @param id the id of the element to select
+	 */
+	private void checkSelection(Object id){
+		if (id != null) selectElement(id);
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		arrowColor.dispose();
 	}
 	
 	/**
@@ -292,7 +312,7 @@ public class TabbedPropertySearch extends Composite {
 	
 	/**
 	 * Get the element actually selected, i need to search in all section until i not found the one
-	 * where the element is not null because the element is set only in the already created sectuions, 
+	 * where the element is not null because the element is set only in the already created sections, 
 	 * so at first i don't know which section already store the element
 	 * 
 	 * @return
@@ -311,13 +331,13 @@ public class TabbedPropertySearch extends Composite {
 	}
 	
 	/**
-	 * Get a subset of the properties for the selected element. The subset will have only
-	 * the properties that contains the searchedString
+	 * Return all the properties for the selected element. The property are cached and not 
+	 * recalculated until the selection maintain the same type
 	 * 
-	 * @param searchKey the searched String
-	 * @return a not null subset of properties
+	 * @return a PropertiesContainer with all the properties name and relative ids for the 
+	 * selected element type
 	 */
-	private ComboDataContainer getFilteredProperites(String searchKey){
+	private PropertiesContainer getAllProperties(){
 		//Check if i have the properties for the element in the cache
 		if (lastSelectedElement == null || cachedProperties == null){
 			//I haven't build a cache yet, need to create it
@@ -332,29 +352,22 @@ public class TabbedPropertySearch extends Composite {
 				lastSelectedElement = getSelectedElement();
 			}
 		}
-		//Select from all the properties only the one that contains the searched string
-		List<String> result = new ArrayList<String>();
-		List<Object> ids = new ArrayList<Object>();
-		for(int i=0; i<cachedProperties.getSize();i++){
-			String name = cachedProperties.labels[i];
-			if (name.toLowerCase().contains(searchKey)){
-				ids.add(cachedProperties.ids[i]);
-				result.add(name);
-			}
-		}
-		return new ComboDataContainer(result.toArray(new String[result.size()]),
-					ids.toArray(new Object[ids.size()]));
+		return cachedProperties;
 	}
 	
 	/**
-	 * Create a combo container containing all the selectable properties for 
-	 * the actually selected element
+	 * Create a PropertiesContainer containing all the selectable properties for 
+	 * the actually selected element type. The property are also ordered into 
+	 * a lexicographic way
 	 * 
 	 */
-	private ComboDataContainer createElements(){
+	private PropertiesContainer createElements(){
 		List<String> result = new ArrayList<String>();
 		List<Object> ids = new ArrayList<Object>();
+		List<PropertyContentProposal> listToOrder = new ArrayList<PropertyContentProposal>();
 		List<TabContents> lst = factory.getAvailableTabContents();
+		
+		
 		for(TabContents actualContents : lst){
 			for(ISection section : actualContents.getSections()){
 				if (section instanceof IWidgetsProviderSection){
@@ -362,46 +375,21 @@ public class TabbedPropertySearch extends Composite {
 					List<Object> providedProperties = attributesSection.getHandledProperties();
 					for(Object property : providedProperties){
 						WidgetDescriptor desc = attributesSection.getPropertyInfo(property);
-						ids.add(property);
-						result.add(desc.getName());
+						listToOrder.add(new PropertyContentProposal(desc.getName(), property));
 					}
 				}
 			}
 		}
-		return new ComboDataContainer(result.toArray(new String[result.size()]),
+		Collections.sort(listToOrder);
+		for(PropertyContentProposal prop : listToOrder){
+			ids.add(prop.getPropertyId());
+			result.add(prop.getContent());
+		}
+		return new PropertiesContainer(result.toArray(new String[result.size()]),
 				  						ids.toArray(new Object[ids.size()]));
 	}
 	
-	/*
-	private ComboDataContainer createVisibleElements(String searchKey){
-		List<String> result = new ArrayList<String>();
-		List<Object> ids = new ArrayList<Object>();
-		List<TabContents> lst = factory.getAvailableTabContents();
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					IWidgetsProviderSection attributesSection = (IWidgetsProviderSection)section;
-					List<Object> providedProperties = attributesSection.getHandledProperties();
-					for(Object property : providedProperties){
-						String name = attributesSection.getPropertyName(property);
-						if (name.toLowerCase().contains(searchKey)){
-							ids.add(property);
-							result.add(name);
-						}
-					}
-				}
-			}
-		}
-		return new ComboDataContainer(result.toArray(new String[result.size()]),
-				  						ids.toArray(new Object[ids.size()]));
-	}
-	
-	private void checkWidgets(Map widgets, String key, List<String> result){
-		for(Object id : widgets.keySet()){
-			IPropertyWidget widget = (IPropertyWidget)widgets.get(id);
-			if (widget.getId().contains(key) || widget.getName().toLowerCase().contains(key)) result.add(widget.getName());
-		}
-	}*/
+
 
 	/**
 	 * @param e
