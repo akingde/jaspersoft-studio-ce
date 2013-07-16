@@ -55,15 +55,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.ADataAdapterComposite;
+import com.jaspersoft.studio.data.AFileDataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.messages.Messages;
@@ -71,9 +68,8 @@ import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XLSDataAdapterComposite extends ADataAdapterComposite {
+public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 
-	private Text textExcelFileName;
 	private Text textDatePattern;
 	private Text textNumberPattern;
 	private TableViewer tableViewer;
@@ -114,32 +110,17 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		GridLayout gl_composite = new GridLayout(3, false);
 		gl_composite.marginHeight = 0;
 		composite.setLayout(gl_composite);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				1, 1));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText(Messages.XLSDataAdapterComposite_0);
-
-		textExcelFileName = new Text(composite, SWT.BORDER);
-		textExcelFileName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-
-		Button btnBrowse = new Button(composite, SWT.NONE);
-		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
-				false, 1, 1);
-		gd_btnBrowse.widthHint = 100;
-		btnBrowse.setLayoutData(gd_btnBrowse);
-		btnBrowse.setText(Messages.XLSDataAdapterComposite_1);
+		createFileNameWidgets(composite);
 
 		btnCheckQEMode = new Button(this, SWT.CHECK);
-		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
+		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnCheckQEMode.setText(Messages.XLSDataAdapterComposite_2);
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
-		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,
-				1, 1));
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
 		Group grpColumnNames = new Group(composite_1, SWT.NONE);
 		grpColumnNames.setText(Messages.XLSDataAdapterComposite_3);
@@ -147,8 +128,7 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		grpColumnNames.setLayout(gl_grpColumnNames);
 
 		Button btnGetExcelColumnsName = new Button(grpColumnNames, SWT.NONE);
-		btnGetExcelColumnsName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		btnGetExcelColumnsName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnGetExcelColumnsName.setText(Messages.XLSDataAdapterComposite_4);
 
 		Composite composite_3 = new Composite(grpColumnNames, SWT.NONE);
@@ -156,11 +136,9 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		gl_composite_3.marginWidth = 0;
 		gl_composite_3.marginHeight = 0;
 		composite_3.setLayout(gl_composite_3);
-		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
-				1, 1));
+		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		tableViewer = new TableViewer(composite_3, SWT.BORDER
-				| SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		tableViewer.setContentProvider(new XLSContentProvider());
 		tableViewer.setInput(rows);
 
@@ -174,43 +152,36 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		tblclmnColumnName.setMoveable(true);
 		tblclmnColumnName.setWidth(100);
 		tblclmnColumnName.setText(Messages.XLSDataAdapterComposite_5);
-		tableViewerColumnName
-				.setLabelProvider(new ColumnNameIndexLabelProvider(0));
-		tableViewerColumnName.setEditingSupport(new NameIndexEditingSupport(
-				tableViewer, 0));
+		tableViewerColumnName.setLabelProvider(new ColumnNameIndexLabelProvider(0));
+		tableViewerColumnName.setEditingSupport(new NameIndexEditingSupport(tableViewer, 0));
 
 		tableViewerColumnIndex = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnColumnIndex = tableViewerColumnIndex.getColumn();
 		tblclmnColumnIndex.setMoveable(true);
 		tblclmnColumnIndex.setWidth(100);
 		tblclmnColumnIndex.setText(Messages.XLSDataAdapterComposite_6);
-		tableViewerColumnIndex
-				.setLabelProvider(new ColumnNameIndexLabelProvider(1));
-		tableViewerColumnIndex.setEditingSupport(new NameIndexEditingSupport(
-				tableViewer, 1));
+		tableViewerColumnIndex.setLabelProvider(new ColumnNameIndexLabelProvider(1));
+		tableViewerColumnIndex.setEditingSupport(new NameIndexEditingSupport(tableViewer, 1));
 
 		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
 			table.getColumn(i).pack();
 		}
 
 		Composite composite_4 = new Composite(composite_3, SWT.NONE);
-		composite_4.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false,
-				1, 1));
+		composite_4.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 		GridLayout gl_composite_4 = new GridLayout(1, false);
 		gl_composite_4.marginWidth = 0;
 		gl_composite_4.marginHeight = 0;
 		composite_4.setLayout(gl_composite_4);
 
 		btnAdd = new Button(composite_4, SWT.NONE);
-		GridData gd_btnAdd = new GridData(SWT.CENTER, SWT.CENTER, false, false,
-				1, 1);
+		GridData gd_btnAdd = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_btnAdd.widthHint = 100;
 		btnAdd.setLayoutData(gd_btnAdd);
 		btnAdd.setText(Messages.XLSDataAdapterComposite_7);
 
 		btnDelete = new Button(composite_4, SWT.NONE);
-		GridData gd_btnDelete = new GridData(SWT.CENTER, SWT.CENTER, false,
-				false, 1, 1);
+		GridData gd_btnDelete = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_btnDelete.widthHint = 100;
 		btnDelete.setLayoutData(gd_btnDelete);
 		btnDelete.setText(Messages.XLSDataAdapterComposite_8);
@@ -220,8 +191,7 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 
 		Composite composite_2 = new Composite(this, SWT.NONE);
 		composite_2.setLayout(new FillLayout(SWT.HORIZONTAL));
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		Group grpOther = new Group(composite_2, SWT.NONE);
 		grpOther.setText(Messages.XLSDataAdapterComposite_9);
@@ -233,13 +203,11 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		btnCheckUseDatePattern.setText(Messages.XLSDataAdapterComposite_10);
 
 		textDatePattern = new Text(grpOther, SWT.BORDER);
-		textDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		textDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textDatePattern.setEnabled(false);
 
 		btnCreateDatePattern = new Button(grpOther, SWT.NONE);
-		GridData gd_btnCreateDatePattern = new GridData(SWT.CENTER, SWT.CENTER,
-				false, false, 1, 1);
+		GridData gd_btnCreateDatePattern = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_btnCreateDatePattern.widthHint = 100;
 		btnCreateDatePattern.setLayoutData(gd_btnCreateDatePattern);
 		btnCreateDatePattern.setText(Messages.XLSDataAdapterComposite_11);
@@ -249,40 +217,19 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		btnCheckUseNumberPattern.setText(Messages.XLSDataAdapterComposite_12);
 
 		textNumberPattern = new Text(grpOther, SWT.BORDER);
-		textNumberPattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		textNumberPattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textNumberPattern.setEnabled(false);
 
 		btnCreateNumberPattern = new Button(grpOther, SWT.NONE);
-		GridData gd_btnCreateNumberPattern = new GridData(SWT.CENTER,
-				SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnCreateNumberPattern = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_btnCreateNumberPattern.widthHint = 100;
 		btnCreateNumberPattern.setLayoutData(gd_btnCreateNumberPattern);
 		btnCreateNumberPattern.setText(Messages.XLSDataAdapterComposite_13);
 		btnCreateNumberPattern.setEnabled(false);
 
 		btnCheckSkipFirstLine = new Button(grpOther, SWT.CHECK);
-		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
-				false, false, 3, 1));
+		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 		btnCheckSkipFirstLine.setText(Messages.XLSDataAdapterComposite_14);
-
-		/*
-		 * UI ELEMENTS LISTENERS
-		 */
-		// browse and select the Excel file
-		btnBrowse.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
-				fd.setFileName(textExcelFileName.getText());
-				fd.setFilterExtensions(new String[] { "*.xls", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
-				String selection = fd.open();
-				if (selection != null)
-					textExcelFileName.setText(selection);
-			}
-		});
 
 		// get Excel file columns
 		btnGetExcelColumnsName.addSelectionListener(new SelectionAdapter() {
@@ -344,18 +291,17 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		// When no table items,
 		// turns disabled the delete button
 		// and set unchecked the skip first line button
-		tableViewer
-				.addPostSelectionChangedListener(new ISelectionChangedListener() {
+		tableViewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
 
-					public void selectionChanged(SelectionChangedEvent event) {
-						if (rows.size() <= 0) {
-							btnDelete.setEnabled(false);
-							btnCheckSkipFirstLine.setSelection(false);
-						} else {
-							btnDelete.setEnabled(true);
-						}
-					}
-				});
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (rows.size() <= 0) {
+					btnDelete.setEnabled(false);
+					btnCheckSkipFirstLine.setSelection(false);
+				} else {
+					btnDelete.setEnabled(true);
+				}
+			}
+		});
 
 		btnCheckUseDatePattern.addSelectionListener(new SelectionAdapter() {
 
@@ -426,32 +372,19 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		XlsDataAdapter xlsDataAdapter = (XlsDataAdapter) dataAdapter;
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(textExcelFileName, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "fileName")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnCheckQEMode),
-				PojoObservables.observeValue(dataAdapter, "queryExecuterMode")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables
-				.observeSelection(btnCheckSkipFirstLine), PojoObservables
-				.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
+		doBindFileNameWidget(xlsDataAdapter);
+		bindingContext.bindValue(SWTObservables.observeSelection(btnCheckQEMode), PojoObservables.observeValue(dataAdapter, "queryExecuterMode")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(btnCheckSkipFirstLine), PojoObservables.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(textDatePattern, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textNumberPattern, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textDatePattern, SWT.Modify), PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textNumberPattern, SWT.Modify), PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
 
 		List<String> listColumnNames = xlsDataAdapter.getColumnNames();
 		List<Integer> listColumnIndexes = xlsDataAdapter.getColumnIndexes();
-		if ((listColumnNames != null && listColumnNames.size() > 0)
-				&& (listColumnIndexes != null && listColumnIndexes.size() > 0)
-				&& (listColumnNames.size() == listColumnIndexes.size())) {
+		if ((listColumnNames != null && listColumnNames.size() > 0) && (listColumnIndexes != null && listColumnIndexes.size() > 0) && (listColumnNames.size() == listColumnIndexes.size())) {
 
 			for (int i = 0; i < listColumnNames.size(); i++) {
-				rows.add(new String[] { listColumnNames.get(i),
-						listColumnIndexes.get(i).toString() });
+				rows.add(new String[] { listColumnNames.get(i), listColumnIndexes.get(i).toString() });
 			}
 
 			tableViewer.refresh();
@@ -489,10 +422,9 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new XLSDataAdapterDescriptor();
 
-		XlsDataAdapter xlsDataAdapter = (XlsDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		XlsDataAdapter xlsDataAdapter = (XlsDataAdapter) dataAdapterDesc.getDataAdapter();
 
-		xlsDataAdapter.setFileName(textExcelFileName.getText());
+		xlsDataAdapter.setFileName(textFileName.getText());
 		xlsDataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 
 		List<String> listColumnNames = new ArrayList<String>();
@@ -507,8 +439,7 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 
 		xlsDataAdapter.setDatePattern(textDatePattern.getText());
 		xlsDataAdapter.setNumberPattern(textNumberPattern.getText());
-		xlsDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine
-				.getSelection());
+		xlsDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine.getSelection());
 
 		return dataAdapterDesc;
 	}
@@ -595,10 +526,8 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 			if (columnIndex == 0) { // 0 => Name column
 				return row[columnIndex].toString();
 			} else { // 1 => Index column
-				String excelCellLabel = excelCellLabelRenderer(Integer
-						.valueOf(row[columnIndex].toString()));
-				return row[columnIndex] + Messages.XLSDataAdapterComposite_22
-						+ excelCellLabel + Messages.XLSDataAdapterComposite_23;
+				String excelCellLabel = excelCellLabelRenderer(Integer.valueOf(row[columnIndex].toString()));
+				return row[columnIndex] + Messages.XLSDataAdapterComposite_22 + excelCellLabel + Messages.XLSDataAdapterComposite_23;
 			}
 		}
 	}
@@ -612,7 +541,7 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 	 * index 52 => Excel case BA...
 	 * 
 	 * @param Integer
-	 *            index
+	 *          index
 	 * @return String the Excel cell label
 	 */
 	private String excelCellLabelRenderer(Integer index) {
@@ -662,8 +591,8 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 	}
 
 	/**
-	 * This set selection to the table's item represented by the given index.
-	 * Any index out of table's range will select the last item.
+	 * This set selection to the table's item represented by the given index. Any
+	 * index out of table's range will select the last item.
 	 * 
 	 * @param index
 	 */
@@ -689,21 +618,17 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 	 */
 	private void getExcelColumns() throws Exception {
 
-		if (textExcelFileName.getText().length() > 0) {
+		if (textFileName.getText().length() > 0) {
 			DataAdapterDescriptor da = getDataAdapter();
 			if (jConfig == null)
-				jConfig = new JasperReportsConfiguration(
-						DefaultJasperReportsContext.getInstance(), null);
-			DataAdapterService das = DataAdapterServiceUtil
-					.getInstance(jConfig).getService(da.getDataAdapter());
+				jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
+			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			jConfig.setJasperDesign(new JasperDesign());
-			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das,
-					jConfig, new JRDesignDataset(false));
+			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, new JRDesignDataset(false));
 			rows.clear();
 			int columnIndex = 0;
 			for (JRDesignField f : fields) {
-				rows.add(new String[] { f.getName(),
-						String.valueOf(columnIndex++) });
+				rows.add(new String[] { f.getName(), String.valueOf(columnIndex++) });
 			}
 			tableViewer.setInput(rows);
 
@@ -745,8 +670,8 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 	}
 
 	/**
-	 * Check the validity of the column name. It is valid only if it is not
-	 * null, not empty and not already existed.
+	 * Check the validity of the column name. It is valid only if it is not null,
+	 * not empty and not already existed.
 	 * 
 	 * @param string
 	 * @return true or false
@@ -764,9 +689,14 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 
 		return true;
 	}
-	
+
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat("adapter_excel");
+	}
+
+	@Override
+	protected String[] getFileExtensions() {
+		return new String[] { "*.xlsx", "*.*" };
 	}
 }
