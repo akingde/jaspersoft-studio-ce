@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
+import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -31,6 +32,8 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -39,7 +42,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.part.PluginTransfer;
 
+import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
@@ -180,6 +185,9 @@ public class ParametersTable {
 				}
 			}
 		});
+
+		tviewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE, new Transfer[] { TemplateTransfer.getInstance(),
+				PluginTransfer.getInstance() }, new NodeDragListener(tviewer));
 	}
 
 	public <T extends JRParameter> void setFields(List<T> fields) {
