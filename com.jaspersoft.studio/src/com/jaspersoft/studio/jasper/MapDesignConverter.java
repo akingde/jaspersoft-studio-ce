@@ -111,7 +111,7 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 								+ (language == null ? "" : "&language=" + language);
 						kv.key = imageLocation;
 						final Renderable r = RenderableUtil.getInstance(jConfig).getRenderable(imageLocation,
-								OnErrorTypeEnum.ERROR, false);
+								OnErrorTypeEnum.ICON, false);
 						r.getImageData(jConfig);
 						Display.getDefault().asyncExec(new Runnable() {
 
