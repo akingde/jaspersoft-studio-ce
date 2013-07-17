@@ -19,6 +19,7 @@ import net.sf.jasperreports.components.barcode4j.Interleaved2Of5Component;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -41,5 +42,13 @@ public class Interleaved2Of5Section extends AbstractSection {
 				Interleaved2Of5Component.PROPERTY_WIDE_FACTOR);
 		createWidget4Property(group,
 				Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode);
+		addProvidedProperties(Interleaved2Of5Component.PROPERTY_WIDE_FACTOR, Messages.common_wide_factor);
+		addProvidedProperties(Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum);
 	}
 }

@@ -40,6 +40,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -160,107 +161,107 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 		titlePositionD = new EdgePropertyDescriptor(
 				StandardChartSettings.PROPERTY_TITLE_POSITION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position,
+				Messages.MChart_title_position,
 				EdgeEnum.class, NullEnum.NULL);
 		titlePositionD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position_description);
+				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
 		legendPositionD = new EdgePropertyDescriptor(
 				StandardChartSettings.PROPERTY_LEGEND_POSITION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_position,
+				Messages.MChart_legend_position,
 				EdgeEnum.class, NullEnum.NULL);
 		legendPositionD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_position_description);
+				.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
 
 		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(
 				StandardChartSettings.PROPERTY_TITLE_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_color,
+				Messages.MChart_title_color,
 				NullEnum.INHERITED);
 		titleColorD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_color_description);
+				.setDescription(Messages.MChart_title_color_description);
 		desc.add(titleColorD);
 
 		JRExpressionPropertyDescriptor titleExprD = new JRExpressionPropertyDescriptor(
 				StandardChartSettings.PROPERTY_TITLE_EXPRESSION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_expression);
+				Messages.MChart_title_expression);
 		titleExprD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_expression_description);
+				.setDescription(Messages.MChart_title_expression_description);
 		desc.add(titleExprD);
 
 		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(
 				StandardChartSettings.PROPERTY_SUBTITLE_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_subtitle_color,
+				Messages.MChart_subtitle_color,
 				NullEnum.INHERITED);
 		subtitleColorD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_subtitle_color_description);
+				.setDescription(Messages.MChart_subtitle_color_description);
 		desc.add(subtitleColorD);
 
 		JRExpressionPropertyDescriptor subtitleExprD = new JRExpressionPropertyDescriptor(
 				StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_subtitle_expression);
+				Messages.MChart_subtitle_expression);
 		subtitleExprD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_subtitle_expression_description);
+				.setDescription(Messages.MChart_subtitle_expression_description);
 		desc.add(subtitleExprD);
 
 		ColorPropertyDescriptor legendColorD = new ColorPropertyDescriptor(
 				StandardChartSettings.PROPERTY_LEGEND_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_color,
+				Messages.MChart_legend_color,
 				NullEnum.INHERITED);
 		legendColorD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_color_description);
+				.setDescription(Messages.MChart_legend_color_description);
 		desc.add(legendColorD);
 
 		ColorPropertyDescriptor legendBackColorD = new ColorPropertyDescriptor(
 				StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_background_color,
+				Messages.MChart_legend_background_color,
 				NullEnum.INHERITED);
 		legendBackColorD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_background_color_description);
+				.setDescription(Messages.MChart_legend_background_color_description);
 		desc.add(legendBackColorD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(
 				StandardChartSettings.PROPERTY_CUSTOMIZER_CLASS,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_customizer_class);
-		classD.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_customizer_class_description);
+				Messages.MChart_customizer_class);
+		classD.setDescription(Messages.MChart_customizer_class_description);
 		desc.add(classD);
 
 		CheckBoxPropertyDescriptor showLegendD = new CheckBoxPropertyDescriptor(
 				StandardChartSettings.PROPERTY_SHOW_LEGEND,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_show_legend,
+				Messages.MChart_show_legend,
 				NullEnum.NULL);
 		showLegendD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_show_legend_description);
+				.setDescription(Messages.MChart_show_legend_description);
 		desc.add(showLegendD);
 
 		RWComboBoxPropertyDescriptor rendererTypeD = new RWComboBoxPropertyDescriptor(
 				StandardChartSettings.PROPERTY_RENDER_TYPE,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_renderer_type,
+				Messages.MChart_renderer_type,
 				new String[] { "", "draw", "image", "svg" }, NullEnum.NULL); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		rendererTypeD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_renderer_type_description);
+				.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
 		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(
 				StandardChartSettings.PROPERTY_TITLE_FONT,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_font);
+				Messages.MChart_title_font);
 		titleFontD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_font_description);
+				.setDescription(Messages.MChart_title_font_description);
 		desc.add(titleFontD);
 
 		FontPropertyDescriptor subtitleFontD = new FontPropertyDescriptor(
 				StandardChartSettings.PROPERTY_SUBTITLE_FONT,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_subtitle_font);
+				Messages.MChart_subtitle_font);
 		subtitleFontD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_subtitle_font_description);
+				.setDescription(Messages.MChart_subtitle_font_description);
 		desc.add(subtitleFontD);
 
 		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(
 				StandardChartSettings.PROPERTY_LEGEND_FONT,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_font);
+				Messages.MChart_legend_font);
 		legendFontD
-				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_font_description);
+				.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
 		evaluationTimeD = new JSSEnumPropertyDescriptor(
@@ -284,110 +285,110 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor axLineColorD = new ColorPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineColorTitle,
+				StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, Messages.MSpiderChart_axisLineColorTitle,
 				NullEnum.INHERITED);
-		axLineColorD.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineColorDesc);
+		axLineColorD.setDescription(Messages.MSpiderChart_axisLineColorDesc);
 		desc.add(axLineColorD);
 		axLineColorD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_plot);
+				.setCategory(Messages.MChart_plot);
 
 		NTextPropertyDescriptor axLineWidthD = new NTextPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineWidthTitle);
-		axLineWidthD.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineWidthDescription);
+				StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, Messages.MSpiderChart_axisLineWidthTitle);
+		axLineWidthD.setDescription(Messages.MSpiderChart_axisLineWidthDescription);
 		desc.add(axLineWidthD);
 		axLineWidthD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_plot);
+				.setCategory(Messages.MChart_plot);
 
 		JRExpressionPropertyDescriptor maxValExpr = new JRExpressionPropertyDescriptor(
 				StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_maxValueExpTitle);
-		maxValExpr.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_maxValueExpDescription);
+				Messages.MSpiderChart_maxValueExpTitle);
+		maxValExpr.setDescription(Messages.MSpiderChart_maxValueExpDescription);
 		desc.add(maxValExpr);
 
 		rotation = new JSSEnumPropertyDescriptor(
 				StandardSpiderPlot.PROPERTY_ROTATION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position,
+				Messages.MChart_title_position,
 				SpiderRotationEnum.class, NullEnum.NULL);
-		rotation.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position_description);
+		rotation.setDescription(Messages.MChart_title_position_description);
 		desc.add(rotation);
 
 		tableOrder = new JSSEnumPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_TABLE_ORDER, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_tableOrderTitle,
+				StandardSpiderPlot.PROPERTY_TABLE_ORDER, Messages.MSpiderChart_tableOrderTitle,
 				TableOrderEnum.class, NullEnum.NULL);
-		tableOrder.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_tableOrderTitledescription);
+		tableOrder.setDescription(Messages.MSpiderChart_tableOrderTitledescription);
 		desc.add(tableOrder);
 
 		CheckBoxPropertyDescriptor webFilled = new CheckBoxPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_WEB_FILLED, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_webFilledTitle,
+				StandardSpiderPlot.PROPERTY_WEB_FILLED, Messages.MSpiderChart_webFilledTitle,
 				NullEnum.NULL);
-		webFilled.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_webFilledDescription);
+		webFilled.setDescription(Messages.MSpiderChart_webFilledDescription);
 		desc.add(webFilled);
 
 		DoublePropertyDescriptor startAngle = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_START_ANGLE, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_startAngleTitle);
-		startAngle.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_startAngleDescription);
+				StandardSpiderPlot.PROPERTY_START_ANGLE, Messages.MSpiderChart_startAngleTitle);
+		startAngle.setDescription(Messages.MSpiderChart_startAngleDescription);
 		desc.add(startAngle);
 
 		DoublePropertyDescriptor headPercent = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_HEAD_PERCENT, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_headPercentTitle);
-		headPercent.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_headPercentDescription);
+				StandardSpiderPlot.PROPERTY_HEAD_PERCENT, Messages.MSpiderChart_headPercentTitle);
+		headPercent.setDescription(Messages.MSpiderChart_headPercentDescription);
 		desc.add(headPercent);
 
 		DoublePropertyDescriptor interiorGap = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_INTERIOR_GAP, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_interiorGapTitle);
-		interiorGap.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_interiorGapDescription);
+				StandardSpiderPlot.PROPERTY_INTERIOR_GAP, Messages.MSpiderChart_interiorGapTitle);
+		interiorGap.setDescription(Messages.MSpiderChart_interiorGapDescription);
 		desc.add(interiorGap);
 
 		startAngle
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		headPercent
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		interiorGap
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		webFilled
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
-		rotation.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
+		rotation.setCategory(Messages.MChart_chart_title_category);
 		tableOrder
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		maxValExpr
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		titleFontD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		titleColorD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		titlePositionD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 		titleExprD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_title_category);
+				.setCategory(Messages.MChart_chart_title_category);
 
 		subtitleFontD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_subtitle_category);
+				.setCategory(Messages.MChart_chart_subtitle_category);
 		subtitleExprD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_subtitle_category);
+				.setCategory(Messages.MChart_chart_subtitle_category);
 		subtitleColorD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_subtitle_category);
+				.setCategory(Messages.MChart_chart_subtitle_category);
 
 		evaluationGroupNameD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_common_chart_properties_category);
+				.setCategory(Messages.MChart_common_chart_properties_category);
 
-		classD.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_common_chart_properties_category);
+		classD.setCategory(Messages.MChart_common_chart_properties_category);
 
 		legendFontD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_legend_category);
+				.setCategory(Messages.MChart_chart_legend_category);
 		legendBackColorD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_legend_category);
+				.setCategory(Messages.MChart_chart_legend_category);
 		legendColorD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_legend_category);
+				.setCategory(Messages.MChart_chart_legend_category);
 		legendPositionD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_legend_category);
+				.setCategory(Messages.MChart_chart_legend_category);
 		showLegendD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_chart_legend_category);
+				.setCategory(Messages.MChart_chart_legend_category);
 
 		evaluationTimeD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_common_chart_properties_category);
+				.setCategory(Messages.MChart_common_chart_properties_category);
 
 		rendererTypeD
-				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_common_chart_properties_category);
+				.setCategory(Messages.MChart_common_chart_properties_category);
 
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_START_ANGLE, null);
 		defaultsMap.put(StandardSpiderPlot.PROPERTY_HEAD_PERCENT, null);

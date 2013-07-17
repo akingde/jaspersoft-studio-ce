@@ -56,6 +56,13 @@ public class LayoutSection extends AbstractSection {
 		pd = new JSSComboPropertyDescriptor(MGraphicElement.PROPERTY_MAP, Messages.LayoutSection_combotitle, labels);
 		pd.setDescription(Messages.LayoutSection_combodescription);
 	}
+	
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(MGraphicElement.PROPERTY_MAP, Messages.LayoutSection_combotitle);
+	}
 
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {

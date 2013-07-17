@@ -30,11 +30,11 @@ import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.block.BlockFrame;
 import org.jfree.ui.RectangleInsets;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartHorizontalAlignmentEnum;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartVerticalAlignmentEnum;
 import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
@@ -64,7 +64,7 @@ public class MLegendSettings extends APropertyNode {
 
 	@Override
 	public String getDisplayText() {
-		return Messages.common_legend;
+		return "Legend"; //$NON-NLS-1$
 	}
 
 	private IPropertyDescriptor[] descriptors;
@@ -94,37 +94,37 @@ public class MLegendSettings extends APropertyNode {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(LegendSettings.PROPERTY_showLegend, "Show Legend");
-		pd.setDescription("Show Title");
+		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(LegendSettings.PROPERTY_showLegend, Messages.MLegendSettings_showLegendTitle);
+		pd.setDescription(Messages.MLegendSettings_showLegendDescription);
 		desc.add(pd);
 
-		pd = new FontPropertyDescriptor(LegendSettings.PROPERTY_font, com.jaspersoft.studio.messages.Messages.common_font);
-		pd.setDescription(com.jaspersoft.studio.messages.Messages.common_font);
+		pd = new FontPropertyDescriptor(LegendSettings.PROPERTY_font, "Font");
+		pd.setDescription("Font");
 		desc.add(pd);
 
-		posD = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_position, "Position", EdgeEnum.class, NullEnum.NULL);
-		posD.setDescription("Position");
+		posD = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_position, Messages.MLegendSettings_positionTitle, EdgeEnum.class, NullEnum.NULL);
+		posD.setDescription(Messages.MLegendSettings_positionDescription);
 		desc.add(posD);
 
-		hp = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_horizontalAlignment, "Horizontal Alignment", JFreeChartHorizontalAlignmentEnum.class, NullEnum.NULL);
-		hp.setDescription("Horizontal Alignment");
+		hp = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_horizontalAlignment, Messages.MLegendSettings_legendHAlignTitle, JFreeChartHorizontalAlignmentEnum.class, NullEnum.NULL);
+		hp.setDescription(Messages.MLegendSettings_legendHAlignDescription);
 		desc.add(hp);
 
-		vp = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_verticalAlignment, "Vertical Alignment", JFreeChartVerticalAlignmentEnum.class, NullEnum.NULL);
-		vp.setDescription("Vertical Alignment");
+		vp = new JSSEnumPropertyDescriptor(LegendSettings.PROPERTY_verticalAlignment, Messages.MLegendSettings_legendVAlignTitle, JFreeChartVerticalAlignmentEnum.class, NullEnum.NULL);
+		vp.setDescription(Messages.MLegendSettings_legendVAlignDescription);
 		desc.add(vp);
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
-		pd = new PaintProviderPropertyDescriptor(LegendSettings.PROPERTY_foregroundPaint, "Foreground Paint");
-		pd.setDescription("Foreground paint");
+		pd = new PaintProviderPropertyDescriptor(LegendSettings.PROPERTY_foregroundPaint, Messages.MLegendSettings_legendForegroundColorTitle);
+		pd.setDescription(Messages.MLegendSettings_legendForegroundColorDescription);
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(LegendSettings.PROPERTY_backgroundPaint, "Background Paint");
-		pd.setDescription("Background paint");
+		pd = new PaintProviderPropertyDescriptor(LegendSettings.PROPERTY_backgroundPaint, Messages.MLegendSettings_legendBackgroundColorTitle);
+		pd.setDescription(Messages.MLegendSettings_legendBackgroundColorDescription);
 		desc.add(pd);
 
-		PadUtil.createPropertyDescriptors(desc, defaultsMap, LegendSettings.PROPERTY_blockFrame, "Block Frame");
+		PadUtil.createPropertyDescriptors(desc, defaultsMap, LegendSettings.PROPERTY_blockFrame, "Block Frame"); //$NON-NLS-1$
 
 		defaultsMap.put(LegendSettings.PROPERTY_backgroundPaint, null);
 		defaultsMap.put(LegendSettings.PROPERTY_foregroundPaint, null);
@@ -134,7 +134,7 @@ public class MLegendSettings extends APropertyNode {
 		defaultsMap.put(LegendSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
 		defaultsMap.put(LegendSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
 
 	private static JSSEnumPropertyDescriptor posD;

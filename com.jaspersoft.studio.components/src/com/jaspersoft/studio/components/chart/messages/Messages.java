@@ -406,6 +406,18 @@ public class Messages extends NLS {
 	public static String MHighLowPlot_value_axis_tick_label_font_description;
 	public static String MHighLowPlot_value_axis_tick_label_mask_description;
 	public static String MHighLowPlot_value_axis_vertical_tick_labels_description;
+	public static String MLegendSettings_legendBackgroundColorDescription;
+	public static String MLegendSettings_legendBackgroundColorTitle;
+	public static String MLegendSettings_legendForegroundColorDescription;
+	public static String MLegendSettings_legendForegroundColorTitle;
+	public static String MLegendSettings_legendHAlignDescription;
+	public static String MLegendSettings_legendHAlignTitle;
+	public static String MLegendSettings_legendVAlignDescription;
+	public static String MLegendSettings_legendVAlignTitle;
+	public static String MLegendSettings_positionDescription;
+	public static String MLegendSettings_positionTitle;
+	public static String MLegendSettings_showLegendDescription;
+	public static String MLegendSettings_showLegendTitle;
 	public static String MLinePlot_category_axis_label_color_description;
 	public static String MLinePlot_category_axis_label_expression_description;
 	public static String MLinePlot_category_axis_label_font_description;
