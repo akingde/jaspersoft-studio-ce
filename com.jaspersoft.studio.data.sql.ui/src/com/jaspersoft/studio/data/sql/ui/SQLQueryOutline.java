@@ -15,10 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.ui;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+
+import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -30,6 +34,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -123,19 +128,48 @@ public class SQLQueryOutline {
 		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
 		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(treeViewer));
 
-		transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
+		transfers = new Transfer[] { NodeTransfer.getInstance(), TemplateTransfer.getInstance(), PluginTransfer.getInstance() };
 		NodeTreeDropAdapter dropAdapter = new NodeTreeDropAdapter(treeViewer) {
+			@Override
+			public boolean validateDrop(Object target, int op, TransferData type) {
+				return super.validateDrop(target, op, type) || TemplateTransfer.getInstance().isSupportedType(type);
+			}
 
 			@Override
 			public boolean performDrop(Object data) {
-				return doDrop(Util.getAllNodes(data));
-			}
-
-			private boolean doDrop(List<ANode> node) {
+				List<ANode> nodes = new ArrayList<ANode>();
+				List<Object> objects = new ArrayList<Object>();
+				if (data.getClass().isArray()) {
+					Object[] ar = (Object[]) data;
+					for (Object obj : ar)
+						if (obj instanceof ANode)
+							nodes.add((ANode) obj);
+						else
+							objects.add(obj);
+				} else if (data instanceof ANode)
+					nodes.add((ANode) data);
+				else
+					objects.add(data);
 				Object target = getCurrentTarget();
 				if (target instanceof ANode && ((ANode) target).getParent() == null)
 					return false;
+				doDropObjects((ANode) target, objects);
+				return doDrop((ANode) target, Util.getAllNodes(data));
+			}
 
+			private void doDropObjects(ANode target, List<Object> objects) {
+				List<JRDesignParameter> prms = new ArrayList<JRDesignParameter>();
+				for (Object obj : objects)
+					if (obj instanceof JRDesignParameter)
+						prms.add((JRDesignParameter) obj);
+				if (!prms.isEmpty()) {
+					CreateExpression ce = afactory.getAction(CreateExpression.class);
+					if (ce.calculateEnabled(new Object[] { target }))
+						ce.run(prms);
+				}
+			}
+
+			private boolean doDrop(ANode target, List<ANode> node) {
 				Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
 				Set<MSQLColumn> colsset = new LinkedHashSet<MSQLColumn>();
 				Set<ANode> others = new LinkedHashSet<ANode>();
@@ -246,7 +280,7 @@ public class SQLQueryOutline {
 			}
 
 		};
-		treeViewer.addDropSupport(ops, new Transfer[] { NodeTransfer.getInstance() }, dropAdapter);
+		treeViewer.addDropSupport(ops, transfers, dropAdapter);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override

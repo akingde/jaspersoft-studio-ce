@@ -3,7 +3,10 @@ package com.jaspersoft.studio.data.sql.ui;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import net.sf.jasperreports.engine.JRParameter;
+
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.MarginPainter;
@@ -135,7 +138,7 @@ public class SQLQuerySource {
 		});
 
 		DropTarget target = new DropTarget(viewer.getTextWidget(), DND.DROP_MOVE | DND.DROP_COPY);
-		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() });
+		target.setTransfer(new Transfer[] { NodeTransfer.getInstance(), TemplateTransfer.getInstance(), PluginTransfer.getInstance() });
 		target.addDropListener(new StyledTextDropTargetEffect(viewer.getTextWidget()) {
 			@Override
 			public void drop(DropTargetEvent event) {
@@ -149,6 +152,11 @@ public class SQLQuerySource {
 					StringBuffer oldText = new StringBuffer(getQuery());
 
 					oldText.insert(viewer.getTextWidget().getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
+					viewer.getDocument().set(oldText.toString());
+				} else if (obj instanceof JRParameter) {
+					StringBuffer oldText = new StringBuffer(getQuery());
+
+					oldText.insert(viewer.getTextWidget().getCaretOffset(), " $P{" + ((JRParameter) obj).getName() + "} ");
 					viewer.getDocument().set(oldText.toString());
 				}
 			}

@@ -120,7 +120,8 @@ public class Util {
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof AMExpression && src instanceof AMExpression)
-					System.out.println(((AMExpression<?>) n).getId() + " --- " + ((AMExpression<?>) src).getId());
+					;// System.out.println(((AMExpression<?>) n).getId() + " --- " +
+						// ((AMExpression<?>) src).getId());
 				if (src != n && src.equals(n)) {
 					setObject((ANode) n);
 					stop();

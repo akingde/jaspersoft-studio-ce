@@ -18,6 +18,9 @@ package com.jaspersoft.studio.data.sql.action.expression;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -38,6 +41,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 import com.jaspersoft.studio.model.ANode;
@@ -71,6 +75,24 @@ public class CreateExpression extends AAction {
 			mexpr = run(null, (ANode) sel, -1);
 		mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
 		mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
+		showDialog(mexpr);
+	}
+
+	public void run(List<JRDesignParameter> prms) {
+		Object sel = selection[0];
+		MExpression mexpr = null;
+		List<MFromTable> tbls = Util.getFromTables((ANode) sel);
+		for (JRParameter t : prms) {
+			if (sel instanceof AMExpression)
+				mexpr = run(t, (AMExpression<?>) sel);
+			else if (isInSelect(sel))
+				mexpr = run(t, (ANode) sel, -1);
+			sel = mexpr;
+			mexpr.getOperands().add(Factory.getDefaultOperand(mexpr));
+			ParameterPOperand pop = new ParameterPOperand(mexpr);
+			pop.setJrParameter((JRDesignParameter) t);
+			mexpr.getOperands().add(pop);
+		}
 		showDialog(mexpr);
 	}
 
