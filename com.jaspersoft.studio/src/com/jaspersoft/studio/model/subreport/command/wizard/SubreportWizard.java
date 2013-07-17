@@ -194,7 +194,7 @@ public class SubreportWizard extends JSSWizard {
 
 	@Override
 	public void init(JasperReportsConfiguration jd) {
-		super.init(jd);
+		setConfig(jd);
 		if (subreport != null)
 			subreport.setJasperConfiguration(jd);
 		//if (mdataset != null)

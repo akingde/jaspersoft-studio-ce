@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
 
@@ -55,18 +50,14 @@ import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class SubreportPropertyPage extends JSSWizardPage {
 
-	
 	/**
-	 * This variable stores the last set of parameters specified by
-	 * using loadSettings. Settings will be reloaded if the new
-	 * array is different from this one...
+	 * This variable stores the last set of parameters specified by using loadSettings. Settings will be reloaded if the
+	 * new array is different from this one...
 	 */
 	private JRParameter[] lastParameters = null;
-	
-	
-	
+
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
+
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
 		}
@@ -121,7 +112,7 @@ public class SubreportPropertyPage extends JSSWizardPage {
 		setTitle(Messages.common_subreport_parameters);
 		setDescription(Messages.SubreportPropertyPage_description);
 	}
-	
+
 	/**
 	 * Return the context name for the help of this page
 	 */
@@ -222,7 +213,7 @@ public class SubreportPropertyPage extends JSSWizardPage {
 				JRSubreportParameter prop = (JRSubreportParameter) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getExpression() != null)
-						return prop.getExpression();//Misc.nvl(prop.getExpression(), "");
+						return prop.getExpression();// Misc.nvl(prop.getExpression(), "");
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
 				}
@@ -256,8 +247,8 @@ public class SubreportPropertyPage extends JSSWizardPage {
 				tableViewer.refresh();
 			}
 		});
-
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent) });
+		// FIXME we should have an expressionContext here, look also in SubreportWizard there are some comments there
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent, null) });
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -268,45 +259,37 @@ public class SubreportPropertyPage extends JSSWizardPage {
 			tableViewer.setInput(plist);
 		}
 	}
-	
-	
-	
+
 	@Override
 	public void setVisible(boolean visible) {
 		loadSettings();
 		super.setVisible(visible);
 	}
 
-	protected void loadSettings()
-	{
-			JRParameter[] parameters = null;
-			// load settings, if available..
-			if (getSettings() != null && getSettings().containsKey( NewSubreportPage.SUBREPORT_PARAMETERS ))
-			{
-				parameters = (JRParameter[])getSettings().get( NewSubreportPage.SUBREPORT_PARAMETERS );
-			}
-			
-			if (lastParameters != parameters)
-			{
-				lastParameters = parameters;
-				List<JRDesignSubreportParameter> sParameters = new ArrayList<JRDesignSubreportParameter>();
-				
-				if (lastParameters != null && lastParameters.length > 0)
-				{
-					// Create an array of subreport parameters to be used in in the table model...
-					for (JRParameter p : lastParameters)
-					{
-						if (!p.isSystemDefined())
-						{
-							JRDesignSubreportParameter sp = new JRDesignSubreportParameter();
-							sp.setName(p.getName());
-							sp.setExpression(new JRDesignExpression());
-							sParameters.add(sp);
-						}
+	protected void loadSettings() {
+		JRParameter[] parameters = null;
+		// load settings, if available..
+		if (getSettings() != null && getSettings().containsKey(NewSubreportPage.SUBREPORT_PARAMETERS)) {
+			parameters = (JRParameter[]) getSettings().get(NewSubreportPage.SUBREPORT_PARAMETERS);
+		}
+
+		if (lastParameters != parameters) {
+			lastParameters = parameters;
+			List<JRDesignSubreportParameter> sParameters = new ArrayList<JRDesignSubreportParameter>();
+
+			if (lastParameters != null && lastParameters.length > 0) {
+				// Create an array of subreport parameters to be used in in the table model...
+				for (JRParameter p : lastParameters) {
+					if (!p.isSystemDefined()) {
+						JRDesignSubreportParameter sp = new JRDesignSubreportParameter();
+						sp.setName(p.getName());
+						sp.setExpression(new JRDesignExpression());
+						sParameters.add(sp);
 					}
 				}
-				setValue(sParameters.toArray(new JRDesignSubreportParameter[sParameters.size()]));
 			}
+			setValue(sParameters.toArray(new JRDesignSubreportParameter[sParameters.size()]));
+		}
 	}
 
 }

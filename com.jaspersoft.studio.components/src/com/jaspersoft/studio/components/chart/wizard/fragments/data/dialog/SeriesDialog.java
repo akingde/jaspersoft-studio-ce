@@ -17,7 +17,6 @@ package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -52,10 +51,8 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class SeriesDialog<T> extends FormDialog implements
-		IExpressionContextSetter {
-	private final class TLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
+public class SeriesDialog<T> extends FormDialog implements IExpressionContextSetter {
+	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
@@ -90,33 +87,29 @@ public class SeriesDialog<T> extends FormDialog implements
 
 		buildTable(mform.getForm().getBody());
 
-		final Composite bGroup = new Composite(mform.getForm().getBody(),
-				SWT.NONE);
+		final Composite bGroup = new Composite(mform.getForm().getBody(), SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(mform.getForm().getBody().getBackground());
 
-		new NewButton().createNewButtons(bGroup, tableViewer,
-				new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-					public Object newElement(List<?> input, int pos) {
-						JRExpressionEditor wizard = new JRExpressionEditor();
-						wizard.setValue(new JRDesignExpression("\"SERIE "
-								+ (input.size() + 1) + "\""));
-						wizard.setExpressionContext(expContext);
-						WizardDialog dialog = new WizardDialog(bGroup
-								.getShell(), wizard);
-						dialog.create();
-						if (dialog.open() == Dialog.OK) {
-							T prev = null;
-							if (input.size() > 0)
-								prev = (T) input.get(input.size() - 1);
-							return serie.createSerie(wizard.getValue(), prev);
-						}
-						return null;
-					}
+			public Object newElement(List<?> input, int pos) {
+				JRExpressionEditor wizard = new JRExpressionEditor();
+				wizard.setValue(new JRDesignExpression("\"SERIE " + (input.size() + 1) + "\""));
+				wizard.setExpressionContext(expContext);
+				WizardDialog dialog = new WizardDialog(bGroup.getShell(), wizard);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+					T prev = null;
+					if (input.size() > 0)
+						prev = (T) input.get(input.size() - 1);
+					return serie.createSerie(wizard.getValue(), prev);
+				}
+				return null;
+			}
 
-				});
+		});
 
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 
@@ -126,8 +119,7 @@ public class SeriesDialog<T> extends FormDialog implements
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 350;
 		gd.widthHint = 300;
@@ -181,9 +173,7 @@ public class SeriesDialog<T> extends FormDialog implements
 			}
 		});
 
-		JRExpressionCellEditor jrExpressionCellEditor = new JRExpressionCellEditor(
-				parent);
-		jrExpressionCellEditor.setExpressionContext(expContext);
+		JRExpressionCellEditor jrExpressionCellEditor = new JRExpressionCellEditor(parent, expContext);
 		viewer.setCellEditors(new CellEditor[] { jrExpressionCellEditor });
 		viewer.setColumnProperties(new String[] { "NAME" }); //$NON-NLS-1$  
 	}

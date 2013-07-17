@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.expression;
 
@@ -27,15 +22,17 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class JRExpressionCellEditor extends DialogCellEditor {
-	
+
 	private ExpressionContext expContext;
 
-	public JRExpressionCellEditor(Composite parent) {
+	public JRExpressionCellEditor(Composite parent, ExpressionContext expContext) {
 		super(parent);
+		this.expContext = expContext;
 	}
 
-	public JRExpressionCellEditor(Composite parent, int style) {
+	public JRExpressionCellEditor(Composite parent, int style, ExpressionContext expContext) {
 		super(parent, style);
+		this.expContext = expContext;
 	}
 
 	@Override
@@ -65,8 +62,8 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}
-	
-	public void setExpressionContext(ExpressionContext expContext){
-		this.expContext=expContext;
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext = expContext;
 	}
 }

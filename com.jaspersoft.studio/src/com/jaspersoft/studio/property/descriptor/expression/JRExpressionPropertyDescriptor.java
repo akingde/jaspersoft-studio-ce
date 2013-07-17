@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.expression;
 
@@ -27,9 +22,10 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
 
-public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor implements IPropertyDescriptorWidget ,IExpressionContextSetter{
+public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor implements IPropertyDescriptorWidget,
+		IExpressionContextSetter {
 	private ExpressionContext expContext;
-	
+
 	private SPExpression expEditor;
 
 	public JRExpressionPropertyDescriptor(Object id, String displayName) {
@@ -38,9 +34,7 @@ public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor impl
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		JRExpressionCellEditor editor = new JRExpressionCellEditor(parent);
-		editor.setExpressionContext(expContext);
-		return editor;
+		return new JRExpressionCellEditor(parent, expContext);
 	}
 
 	@Override
@@ -58,7 +52,8 @@ public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor impl
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
-		if (expEditor != null) expEditor.setExpressionContext(expContext);
+		this.expContext = expContext;
+		if (expEditor != null)
+			expEditor.setExpressionContext(expContext);
 	}
 }

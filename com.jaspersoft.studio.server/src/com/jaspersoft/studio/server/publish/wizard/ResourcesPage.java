@@ -15,19 +15,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
-import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -35,14 +34,17 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -75,33 +77,85 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setControl(composite);
 		composite.setLayout(new GridLayout());
 
-		Table table = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		table.setLayoutData(gd);
-		table.setHeaderVisible(true);
-
-		TableColumn[] col = new TableColumn[3];
-		col[0] = new TableColumn(table, SWT.NONE);
-		col[0].setText(Messages.ResourcesPage_table_resource);
-
-		col[1] = new TableColumn(table, SWT.NONE);
-		col[1].setText(Messages.ResourcesPage_table_overwrite);
-
-		col[2] = new TableColumn(table, SWT.NONE);
-		col[2].setText("File Size");
-
-		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(70, false));
-		tlayout.addColumnData(new ColumnWeightData(15, false));
-		tlayout.addColumnData(new ColumnWeightData(15, false));
-		table.setLayout(tlayout);
-
-		for (TableColumn c : col)
-			c.pack();
-
-		tableViewer = new TableViewer(table);
+		tableViewer = new TableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ListContentProvider());
-		tableViewer.setLabelProvider(new TLabelProvider());
+		ColumnViewerToolTipSupport.enableFor(tableViewer);
+		Table table = (Table) tableViewer.getControl();
+		table.setHeaderVisible(true);
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn column = viewerColumn.getColumn();
+		column.setText(Messages.ResourcesPage_table_resource);
+		column.setWidth(300);
+		viewerColumn.setLabelProvider(new TLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				MResource fr = (MResource) element;
+				return fr.getDisplayText();
+			}
+
+			@Override
+			public Image getImage(Object element) {
+				MResource fr = (MResource) element;
+				return Activator.getDefault().getImage(fr.getThisIconDescriptor().getIcon16());
+			}
+		});
+
+		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		column = viewerColumn.getColumn();
+		column.setText(Messages.ResourcesPage_table_overwrite);
+		column.setWidth(100);
+		viewerColumn.setLabelProvider(new TLabelProvider() {
+			private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(NullEnum.NOTNULL);
+
+			@Override
+			public String getText(Object element) {
+				MResource fr = (MResource) element;
+				return chLabelProvider.getText(fr.getPublishOptions().isOverwrite());
+			}
+
+			@Override
+			public Image getImage(Object element) {
+				MResource fr = (MResource) element;
+				return chLabelProvider.getCellEditorImage(fr.getPublishOptions().isOverwrite());
+			}
+		});
+
+		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		column = viewerColumn.getColumn();
+		column.setText("Expression");
+		column.setWidth(100);
+		viewerColumn.setLabelProvider(new TLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				MResource fr = (MResource) element;
+				JRDesignExpression exp = fr.getPublishOptions().getjExpression();
+				if (exp != null)
+					return Misc.nvl(exp.getText());
+				return "";
+			}
+
+			@Override
+			public String getToolTipText(Object element) {
+				return getText(element);
+			}
+		});
+
+		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		column = viewerColumn.getColumn();
+		column.setText("File Size");
+		column.setWidth(100);
+		viewerColumn.setLabelProvider(new TLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+				if (element instanceof AFileResource)
+					return ((AFileResource) element).getHFFileSize();
+				return "";
+			}
+
+		});
 
 		attachCellEditors(tableViewer, table);
 
@@ -112,6 +166,8 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
 				if (property.equals("VALUE")) //$NON-NLS-1$
+					return true;
+				if (property.equals("EXPRESSION") && ((MResource) element).getPublishOptions().getjExpression() != null)
 					return true;
 				return false;
 			}
@@ -126,6 +182,8 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					if (prop instanceof AFileResource)
 						return ((AFileResource) element).getHFFileSize();
 				}
+				if ("EXPRESSION".equals(property))
+					return prop.getPublishOptions().getjExpression();
 				return ""; //$NON-NLS-1$
 			}
 
@@ -139,8 +197,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent), new TextCellEditor(parent, SWT.RIGHT) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
+		JRExpressionCellEditor expEditor = new JRExpressionCellEditor(parent, new ExpressionContext(jConfig));
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent), expEditor, new TextCellEditor(parent, SWT.RIGHT) });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "EXPRESSION", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void fillData() {
@@ -148,55 +207,24 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		tableViewer.refresh();
 	}
 
-	class TLabelProvider extends CellLabelProvider implements ITableLabelProvider {
-		private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(NullEnum.NOTNULL);
+	abstract class TLabelProvider extends ColumnLabelProvider {
 
-		public Image getColumnImage(Object element, int columnIndex) {
-			MResource fr = (MResource) element;
-			switch (columnIndex) {
-			case 0:
-				return Activator.getDefault().getImage(fr.getThisIconDescriptor().getIcon16());
-			case 1:
-				return chLabelProvider.getCellEditorImage(fr.getPublishOptions().isOverwrite());
-			}
-			return null;
-		}
-
-		public String getColumnText(Object element, int columnIndex) {
-			MResource fr = (MResource) element;
-			switch (columnIndex) {
-			case 0:
-				return fr.getDisplayText();
-			case 1:
-				return chLabelProvider.getText(fr.getPublishOptions().isOverwrite());
-			case 2:
-				if (element instanceof AFileResource)
-					return ((AFileResource) element).getHFFileSize();
-			}
-			return ""; //$NON-NLS-1$
+		@Override
+		public String getToolTipText(Object element) {
+			if (element instanceof AFileResource && ((AFileResource) element).getFile() != null)
+				return ((AFileResource) element).getFile().getAbsolutePath();
+			return "";
 		}
 
 		@Override
-		public void update(ViewerCell cell) {
-			cell.setText(cell.getElement().toString());
-		}
-
-		public String getToolTipText(Object element) {
-			return ((MResource) element).getToolTip();
-		}
-
-		public Point getToolTipShift(Object object) {
-			return new Point(5, 5);
-		}
-
 		public int getToolTipDisplayDelayTime(Object object) {
-			return 2000;
+			return 100; // msec
 		}
 
+		@Override
 		public int getToolTipTimeDisplayed(Object object) {
-			return 5000;
+			return 5000; // msec
 		}
-
 	}
 
 }

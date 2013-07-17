@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorCellEditor;
@@ -59,17 +60,14 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPMeterInterval extends ASPropertyWidget {
-	private final class TLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
-		private ColorLabelProvider colorLabel = new ColorLabelProvider(
-				NullEnum.NULL);
+	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
+		private ColorLabelProvider colorLabel = new ColorLabelProvider(NullEnum.NULL);
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			JRMeterInterval mi = (JRMeterInterval) element;
 			switch (columnIndex) {
 			case 1:
-				return colorLabel.getImage(Colors.getSWTRGB4AWTGBColor(mi
-						.getBackgroundColor()));
+				return colorLabel.getImage(Colors.getSWTRGB4AWTGBColor(mi.getBackgroundColor()));
 			}
 			return null;
 		}
@@ -82,8 +80,7 @@ public class SPMeterInterval extends ASPropertyWidget {
 			case 0:
 				return Misc.nvl(mi.getLabel(), "");
 			case 1:
-				return colorLabel.getText(Colors.getSWTRGB4AWTGBColor(mi
-						.getBackgroundColor()));
+				return colorLabel.getText(Colors.getSWTRGB4AWTGBColor(mi.getBackgroundColor()));
 			case 2:
 				if (mi.getAlphaDouble() != null)
 					return mi.getAlphaDouble().toString();
@@ -109,9 +106,10 @@ public class SPMeterInterval extends ASPropertyWidget {
 	private TableViewer tableViewer;
 	private Composite sectioncmp;
 	private Composite composite;
+	private JRExpressionCellEditor lowExp;
+	private JRExpressionCellEditor highExp;
 
-	public SPMeterInterval(Composite parent, AbstractSection section,
-			IPropertyDescriptor pDescriptor) {
+	public SPMeterInterval(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -121,8 +119,7 @@ public class SPMeterInterval extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		composite = section.getWidgetFactory().createSection(parent,
-				"Meter Intervals", true, 2);
+		composite = section.getWidgetFactory().createSection(parent, "Meter Intervals", true, 2);
 		sectioncmp = composite.getParent();
 
 		buildTable(composite);
@@ -131,17 +128,16 @@ public class SPMeterInterval extends ASPropertyWidget {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createNewButtons(bGroup, tableViewer,
-				new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-					public Object newElement(List<?> input, int pos) {
-						JRMeterInterval jrm = new JRMeterInterval();
-						jrm.setDataRange(new JRDesignDataRange(null));
-						jrm.setLabel("Interval");
-						return jrm;
-					}
+			public Object newElement(List<?> input, int pos) {
+				JRMeterInterval jrm = new JRMeterInterval();
+				jrm.setDataRange(new JRDesignDataRange(null));
+				jrm.setLabel("Interval");
+				return jrm;
+			}
 
-				});
+		});
 
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 
@@ -151,8 +147,7 @@ public class SPMeterInterval extends ASPropertyWidget {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 200;
 		gd.widthHint = 580;
@@ -163,8 +158,7 @@ public class SPMeterInterval extends ASPropertyWidget {
 		tableViewer = new TableViewer(table) {
 			@Override
 			protected void inputChanged(Object input, Object oldInput) {
-				if (!(input != null && oldInput != null && input
-						.equals(oldInput)))
+				if (!(input != null && oldInput != null && input.equals(oldInput)))
 					propertyChange(section, pDescriptor.getId());
 				super.inputChanged(input, oldInput);
 			}
@@ -247,8 +241,7 @@ public class SPMeterInterval extends ASPropertyWidget {
 					mi.setLabel((String) value);
 				}
 				if (property.equals("COLOR")) {//$NON-NLS-1$
-					mi.setBackgroundColor(Colors
-							.getAWT4SWTRGBColor((RGB) value));
+					mi.setBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
 				}
 				if (property.equals("ALPHA")) {//$NON-NLS-1$
 					try {
@@ -258,12 +251,10 @@ public class SPMeterInterval extends ASPropertyWidget {
 					}
 				}
 				if (property.equals("HIGH")) {//$NON-NLS-1$
-					((JRDesignDataRange) mi.getDataRange())
-							.setHighExpression((JRExpression) value);
+					((JRDesignDataRange) mi.getDataRange()).setHighExpression((JRExpression) value);
 				}
 				if (property.equals("LOW")) {//$NON-NLS-1$
-					((JRDesignDataRange) mi.getDataRange())
-							.setLowExpression((JRExpression) value);
+					((JRDesignDataRange) mi.getDataRange()).setLowExpression((JRExpression) value);
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
@@ -271,12 +262,10 @@ public class SPMeterInterval extends ASPropertyWidget {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				new ColorCellEditor(parent), new TextCellEditor(parent),
-				new JRExpressionCellEditor(parent),
-				new JRExpressionCellEditor(parent) });
-		viewer.setColumnProperties(new String[] {
-				"LABEL", "COLOR", "ALPHA", "LOW", "HIGH" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		lowExp = new JRExpressionCellEditor(parent, null);
+		highExp = new JRExpressionCellEditor(parent, null);
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new ColorCellEditor(parent), new TextCellEditor(parent), lowExp, highExp });
+		viewer.setColumnProperties(new String[] { "LABEL", "COLOR", "ALPHA", "LOW", "HIGH" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
 	}
 
@@ -285,12 +274,16 @@ public class SPMeterInterval extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object value) {
+		if (pnode != null) {
+			ExpressionContext expContext = new ExpressionContext(pnode.getJasperConfiguration());
+			lowExp.setExpressionContext(expContext);
+			highExp.setExpressionContext(expContext);
+		}
 		List<JRMeterInterval> ilist = (List<JRMeterInterval>) value;
 		if (ilist == null) {
 			ilist = new ArrayList<JRMeterInterval>();
 		} else {
-			List<JRMeterInterval> tmp = new ArrayList<JRMeterInterval>(
-					ilist.size());
+			List<JRMeterInterval> tmp = new ArrayList<JRMeterInterval>(ilist.size());
 			for (JRMeterInterval mi : ilist) {
 				tmp.add((JRMeterInterval) mi.clone());
 			}
