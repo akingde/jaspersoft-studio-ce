@@ -21,6 +21,8 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MRDataAdapter;
+import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -104,6 +106,10 @@ public class Publish {
 				if (f instanceof MJrxml) {
 					MJrxml mJrxml = (MJrxml) f;
 					FileUtils.writeFile(mJrxml.getFile(), JRXmlWriterHelper.writeReport(jrConfig, mJrxml.getJd(), version));
+				} else if (f instanceof MRDataAdapter) {
+
+				} else if (f instanceof MRDataAdapterFile) {
+
 				}
 				saveResource(monitor, f);
 			}

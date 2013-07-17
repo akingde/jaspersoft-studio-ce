@@ -105,7 +105,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		column = viewerColumn.getColumn();
 		column.setText(Messages.ResourcesPage_table_overwrite);
-		column.setWidth(100);
+		column.setWidth(80);
 		viewerColumn.setLabelProvider(new TLabelProvider() {
 			private CheckBoxLabelProvider chLabelProvider = new CheckBoxLabelProvider(NullEnum.NOTNULL);
 
@@ -138,7 +138,10 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 			@Override
 			public String getToolTipText(Object element) {
-				return getText(element);
+				String txt = getText(element);
+				if (Misc.isNullOrEmpty(txt))
+					txt = super.getToolTipText(element);
+				return txt;
 			}
 		});
 
@@ -211,9 +214,14 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		@Override
 		public String getToolTipText(Object element) {
+			String tt = "";
+			MResource mres = (MResource) element;
+			tt += "ID: " + mres.getValue().getName();
+			tt += "\nLabel: " + mres.getValue().getLabel();
+			tt += "\nURI: " + mres.getValue().getUriString();
 			if (element instanceof AFileResource && ((AFileResource) element).getFile() != null)
-				return ((AFileResource) element).getFile().getAbsolutePath();
-			return "";
+				tt += "\nFile: " + ((AFileResource) element).getFile().getAbsolutePath();
+			return tt;
 		}
 
 		@Override

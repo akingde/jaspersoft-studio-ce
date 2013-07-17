@@ -48,6 +48,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
+import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.publish.PublishOptions;
@@ -140,7 +141,7 @@ public class ImpDataAdapter extends AImpObject {
 								rd.setParentFolder(runit.getParentFolder());
 								rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
 
-								mres = new MXmlFile(mrunit, rd, -1);
+								mres = new MRDataAdapterFile(mrunit, rd, -1);
 								mres.setFile(file);
 								mres.setPublishOptions(popt);
 
