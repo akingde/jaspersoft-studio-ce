@@ -19,6 +19,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -46,4 +47,11 @@ public class CalloutSection extends AbstractSection {
 		w.getControl().setLayoutData(gd);
 	}
 
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(MCallout.PROP_FOREGROUND, Messages.common_forecolor);
+		addProvidedProperties(MCallout.PROP_BACKGROUND, Messages.common_backcolor);
+		addProvidedProperties(MCallout.PROP_TEXT, "Callout Text");
+	}
 }

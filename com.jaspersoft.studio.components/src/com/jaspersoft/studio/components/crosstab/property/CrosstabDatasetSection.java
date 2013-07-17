@@ -21,6 +21,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstabDataset;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -49,5 +50,11 @@ public class CrosstabDatasetSection extends DatasetSection {
 			return dataset;
 		}
 		return md;
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED, Messages.MCrosstabDataset_data_presorted);
 	}
 }

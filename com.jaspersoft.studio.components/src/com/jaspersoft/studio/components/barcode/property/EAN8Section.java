@@ -19,6 +19,7 @@ import net.sf.jasperreports.components.barcode4j.EAN8Component;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -36,5 +37,11 @@ public class EAN8Section extends AbstractSection {
 				false, 2);
 
 		createWidget4Property(group, EAN8Component.PROPERTY_CHECKSUM_MODE);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(EAN8Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode);
 	}
 }

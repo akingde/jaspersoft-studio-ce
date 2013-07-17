@@ -19,6 +19,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -39,5 +40,12 @@ public class CrosstabColumnGroupSection extends AbstractSection {
 		createWidget4Property(parent,
 				JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT);
 
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignCrosstabColumnGroup.PROPERTY_POSITION, Messages.MColumnGroup_column_position);
+		addProvidedProperties(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, Messages.common_height);
 	}
 }

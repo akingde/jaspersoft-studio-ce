@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -68,5 +69,17 @@ public class CrosstabMeasureSection extends AbstractSection {
 		createWidget4Property(
 				parent,
 				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.common_calculation);
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE, Messages.MMeasure_percentage_of_type);
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION, Messages.MMeasure_value_expression);
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS, Messages.MMeasure_value_class);
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MMeasure_incrementer_factory_class_name);
+		addProvidedProperties(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME, Messages.MMeasure_percentage_calculation_class_name);
 	}
 }

@@ -101,6 +101,8 @@ public class Messages extends NLS {
 	public static String MBucket_order_by_expression;
 	public static String MBucket_order_by_expression_description;
 	public static String MBucket_order_description;
+	public static String MBucket_valueClassDescription;
+	public static String MBucket_valueClassTitle;
 	public static String MCell_backcolor;
 	public static String MCell_backcolor_description;
 	public static String MCell_line_box;

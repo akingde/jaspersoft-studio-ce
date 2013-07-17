@@ -20,6 +20,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -37,5 +38,12 @@ public class CrosstabGroupSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignCrosstabGroup.PROPERTY_NAME);
 		createWidget4Property(parent,
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignCrosstabGroup.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position);
 	}
 }

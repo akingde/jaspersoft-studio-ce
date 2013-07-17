@@ -138,8 +138,8 @@ public class MBucket extends APropertyNode {
 		desc.add(exprD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, "Value Class Name");
-		classD.setDescription("Bucket value class name");
+				JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, Messages.MBucket_valueClassTitle);
+		classD.setDescription(Messages.MBucket_valueClassDescription);
 		desc.add(classD);
 
 		defaultsMap.put(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, null);

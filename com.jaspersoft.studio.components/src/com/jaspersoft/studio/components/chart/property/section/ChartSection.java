@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -63,6 +64,16 @@ public class ChartSection extends AbstractSection {
 		IPropertyDescriptor gpd = getPropertyDesriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP);
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, Messages.MChart_customizer_class);
+		addProvidedProperties(JRBaseChart.PROPERTY_RENDER_TYPE, Messages.MChart_renderer_type);
+		addProvidedProperties(JRBaseChart.PROPERTY_THEME, Messages.MChart_theme);
+		addProvidedProperties(JRDesignChart.PROPERTY_EVALUATION_TIME, Messages.MChart_evaluation_time);
+
 	}
 
 	@Override

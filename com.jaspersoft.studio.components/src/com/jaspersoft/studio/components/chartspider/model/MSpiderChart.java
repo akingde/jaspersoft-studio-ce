@@ -40,7 +40,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -266,18 +265,18 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 		evaluationTimeD = new JSSEnumPropertyDescriptor(
 				SpiderChartComponent.PROPERTY_EVALUATION_TIME,
-				Messages.common_evaluation_time, EvaluationTimeEnum.class,
+				"", EvaluationTimeEnum.class, //$NON-NLS-1$
 				NullEnum.NOTNULL);
 		evaluationTimeD
-				.setDescription(Messages.MGenericElement_evaluation_time_description);
+				.setDescription(""); //$NON-NLS-1$
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
 				SpiderChartComponent.PROPERTY_EVALUATION_GROUP,
-				Messages.MGenericElement_evaluation_group_name,
-				new String[] { "" }); //$NON-NLS-2$
+				"", //$NON-NLS-1$
+				new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$
 		evaluationGroupNameD
-				.setDescription(Messages.MGenericElement_evaluation_group_name_description);
+				.setDescription(""); //$NON-NLS-1$
 		desc.add(evaluationGroupNameD);
 
 		if (mHyperLink == null)
@@ -285,24 +284,24 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor axLineColorD = new ColorPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, "Axis Line Color",
+				StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineColorTitle,
 				NullEnum.INHERITED);
-		axLineColorD.setDescription("Axis line color");
+		axLineColorD.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineColorDesc);
 		desc.add(axLineColorD);
 		axLineColorD
 				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_plot);
 
 		NTextPropertyDescriptor axLineWidthD = new NTextPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, "Axis Line Width");
-		axLineWidthD.setDescription("Axis Line Width");
+				StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineWidthTitle);
+		axLineWidthD.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_axisLineWidthDescription);
 		desc.add(axLineWidthD);
 		axLineWidthD
 				.setCategory(com.jaspersoft.studio.components.chart.messages.Messages.MChart_plot);
 
 		JRExpressionPropertyDescriptor maxValExpr = new JRExpressionPropertyDescriptor(
 				StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION,
-				"Max Value Expression");
-		maxValExpr.setDescription("Max value expression");
+				com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_maxValueExpTitle);
+		maxValExpr.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_maxValueExpDescription);
 		desc.add(maxValExpr);
 
 		rotation = new JSSEnumPropertyDescriptor(
@@ -313,30 +312,30 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		desc.add(rotation);
 
 		tableOrder = new JSSEnumPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_TABLE_ORDER, "Table Order",
+				StandardSpiderPlot.PROPERTY_TABLE_ORDER, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_tableOrderTitle,
 				TableOrderEnum.class, NullEnum.NULL);
-		tableOrder.setDescription("Table order");
+		tableOrder.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_tableOrderTitledescription);
 		desc.add(tableOrder);
 
 		CheckBoxPropertyDescriptor webFilled = new CheckBoxPropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_WEB_FILLED, "Web Filled",
+				StandardSpiderPlot.PROPERTY_WEB_FILLED, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_webFilledTitle,
 				NullEnum.NULL);
-		webFilled.setDescription("Web filled");
+		webFilled.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_webFilledDescription);
 		desc.add(webFilled);
 
 		DoublePropertyDescriptor startAngle = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_START_ANGLE, "Start Angle");
-		startAngle.setDescription("Start angle");
+				StandardSpiderPlot.PROPERTY_START_ANGLE, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_startAngleTitle);
+		startAngle.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_startAngleDescription);
 		desc.add(startAngle);
 
 		DoublePropertyDescriptor headPercent = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_HEAD_PERCENT, "Head Percent");
-		headPercent.setDescription("Head percent");
+				StandardSpiderPlot.PROPERTY_HEAD_PERCENT, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_headPercentTitle);
+		headPercent.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_headPercentDescription);
 		desc.add(headPercent);
 
 		DoublePropertyDescriptor interiorGap = new DoublePropertyDescriptor(
-				StandardSpiderPlot.PROPERTY_INTERIOR_GAP, "Interior Gap");
-		interiorGap.setDescription("Interior gap");
+				StandardSpiderPlot.PROPERTY_INTERIOR_GAP, com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_interiorGapTitle);
+		interiorGap.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MSpiderChart_interiorGapDescription);
 		desc.add(interiorGap);
 
 		startAngle

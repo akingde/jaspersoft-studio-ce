@@ -21,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -33,6 +34,8 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  */
 public class ColorsSection extends AbstractRealValueSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -41,7 +44,7 @@ public class ColorsSection extends AbstractRealValueSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent = getWidgetFactory().createSection(parent, Messages.ColorsSection_colorSectionTitle, true, 4);
-		
+		section = (ExpandableComposite)parent.getParent();
 		//parent.setLayout(new GridLayout(4, false));
 		
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_FORECOLOR);
@@ -55,6 +58,18 @@ public class ColorsSection extends AbstractRealValueSection {
 		gd.horizontalSpan = 4;
 		transparencyComp.setLayoutData(gd);
 		createWidget4Property(transparencyComp, JRBaseStyle.PROPERTY_MODE,false);
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
+	}
+	
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStyle.PROPERTY_FORECOLOR, Messages.common_forecolor);
+		addProvidedProperties(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.common_backcolor);
+		addProvidedProperties(JRBaseStyle.PROPERTY_MODE, Messages.common_mode);
 	}
 
 }

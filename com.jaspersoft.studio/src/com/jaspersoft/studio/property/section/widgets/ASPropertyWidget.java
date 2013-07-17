@@ -10,16 +10,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewSite;
@@ -40,15 +42,6 @@ import com.jaspersoft.studio.utils.UIUtil;
 public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	protected IPropertyDescriptor pDescriptor;
 	protected AbstractSection section;
-
-	protected ControlListener checkResize = new ControlAdapter() {
-
-		@Override
-		public void controlResized(ControlEvent e) {
-			getControlToBorder().redraw();
-
-		}
-	};
 
 	public ASPropertyWidget(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		this.pDescriptor = pDescriptor;
@@ -154,29 +147,36 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	}
 
 	/**
-	 * Get the paint listener to highlight the control returned from getControlToBorder(). By default the PaintListner is
-	 * read from a container where are defined some listener for the highlight of the most common controls.
+	 * According to the type of the control to highlight will be returned an object that offer 
+	 * the functionality to put a border on the widget or to set its background, to highlight it
 	 * 
-	 * @return a not null paint listener
+	 * @return An object that offer the functionality to highlight the widget
 	 */
-	protected PaintListener getPaintControlListener() {
-		return DefaultWidgetsHighlighters.getWidgetForType(getControlToBorder().getClass());
+	protected IHighlightControl getControlHighlight() {
+		Control control = getControlToBorder();
+		if (control.getClass().equals(Spinner.class)) return new BackgroundHighlight(control);
+		if (control.getClass().equals(Text.class)) return new BackgroundHighlight(control);
+		if (control.getClass().equals(Combo.class) && !((control.getStyle() & SWT.READ_ONLY) == SWT.READ_ONLY)) return new BackgroundHighlight(control);
+		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.CHECK) == SWT.CHECK)) return new BackgroundHighlight(control);
+		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH)) return new BackgroundHighlight(control);
+		if (control instanceof Composite) return new BorderHightLight(control);
+		if (control instanceof Button) return new BorderHightLight(control);
+		return null;
 	}
 
 	/**
-	 * Default behavior for the highlight of a widget, it add a colored bored around one of the controls inside the
-	 * ASPropertyWidget. This border is removed after a the specified time
+	 * highlight the widget by changing its background or by drawing a border around it for a fixed (depending from the widget)
+	 * amount of time
 	 * 
 	 */
 	@Override
 	public void highLightWidget(long ms) {
 		// if there isn't a control defined where add the border then return
-		if (getControlToBorder() == null)
-			return;
-		final PaintListener highlighter = getPaintControlListener();
-		getControlToBorder().addPaintListener(highlighter);
-		// getControlToBorder().addControlListener(checkResize);
-		getControlToBorder().redraw();
+		if (getControlToBorder() == null) return;
+		final IHighlightControl highLight = getControlHighlight();
+		if (highLight == null) return;
+		//highlight the control
+		highLight.highLightControl();
 		final long sleepTime = ms;
 		// Create a thread to remove the paint listener after specified time
 		new Thread(new Runnable() {
@@ -188,9 +188,7 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 					getControlToBorder().getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							getControlToBorder().removePaintListener(highlighter);
-							// getControlToBorder().removeControlListener(checkResize);
-							getControlToBorder().redraw();
+							highLight.deHighLightControl();
 						}
 					});
 				} catch (InterruptedException e) {

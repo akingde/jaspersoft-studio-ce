@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.genericElement.MGenericElement;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -34,5 +35,13 @@ public class GenericElementSection extends AbstractSection {
 
 		createWidget4Property(parent, MGenericElement.PROPERTY_NAME);
 		createWidget4Property(parent, MGenericElement.PROPERTY_NAMESPACE);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time);
+		addProvidedProperties(MGenericElement.PROPERTY_NAME, Messages.MGenericElement_generic_type_name);
+		addProvidedProperties(MGenericElement.PROPERTY_NAMESPACE, Messages.MGenericElement_generic_type_namespace);
 	}
 }

@@ -219,6 +219,7 @@ public class TabbedPropertySearch extends Composite {
 			@Override
 			public void paintControl(PaintEvent e) {
 				Color oldBackground = e.gc.getBackground();
+				e.gc.fillRectangle(0,0,e.width,e.height);
 				e.gc.setBackground(arrowColor);
 				e.gc.setAntialias(SWT.ON);
 				int oddX_offset = e.width % 2 == 0 ? 0 : 1;  
@@ -303,7 +304,7 @@ public class TabbedPropertySearch extends Composite {
 						actualSection.expandForProperty(id);
 						//Get the widget from the section and highlight it for 2000ms
 						IHighlightPropertyWidget widget = actualSection.getWidgetForProperty(id);
-						widget.highLightWidget(2000);
+						if (widget != null) widget.highLightWidget(2000);
 					}
 				}
 			}

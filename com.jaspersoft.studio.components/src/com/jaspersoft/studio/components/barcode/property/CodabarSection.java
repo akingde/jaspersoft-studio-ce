@@ -19,6 +19,7 @@ import net.sf.jasperreports.components.barcode4j.CodabarComponent;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -37,4 +38,11 @@ public class CodabarSection extends AbstractSection {
 
 		createWidget4Property(group, CodabarComponent.PROPERTY_WIDE_FACTOR);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(CodabarComponent.PROPERTY_WIDE_FACTOR, Messages.common_wide_factor);
+	}
+	
 }

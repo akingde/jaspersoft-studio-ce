@@ -109,7 +109,7 @@ public class PadUtil {
 		return null;
 	}
 
-	public static void createWidgets4Property(Composite parent, String preID, String prefix, AbstractSection section) {
+	public static Composite createWidgets4Property(Composite parent, String preID, String prefix, AbstractSection section) {
 		Composite group = section.getWidgetFactory().createSection(parent, prefix, true, 4);
 		((Section) group.getParent()).setExpanded(false);
 
@@ -117,5 +117,7 @@ public class PadUtil {
 		section.createWidget4Property(group, preID + PadUtil.PADDING_BOTTOM);
 		section.createWidget4Property(group, preID + PadUtil.PADDING_LEFT);
 		section.createWidget4Property(group, preID + PadUtil.PADDING_RIGHT);
+		
+		return group;
 	}
 }

@@ -56,6 +56,8 @@ import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer.Location;
+import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
+import com.jaspersoft.studio.property.section.widgets.BorderHightLight;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -748,14 +750,14 @@ public class BordersSection extends AbstractSection {
 	}
 	
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId){
-		if (propertyId.equals(JRBaseLineBox.PROPERTY_PADDING)) return new ASHighlightControl(checkBoxPadding.getParent(),Composite.class);
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) return new ASHighlightControl(paddingLeft);
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) return new ASHighlightControl(paddingRight);
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) return new ASHighlightControl(paddingTop);
-		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) return new ASHighlightControl(paddingBottom);
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR)) return new ASHighlightControl(lineColor.getPaintArea());
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH)) return new ASHighlightControl(lineWidth);
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(),Composite.class);
+		if (propertyId.equals(JRBaseLineBox.PROPERTY_PADDING)) return new ASHighlightControl(checkBoxPadding.getParent(), new BorderHightLight(checkBoxPadding.getParent(), Composite.class));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) return new ASHighlightControl(paddingLeft, new BackgroundHighlight(paddingLeft));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) return new ASHighlightControl(paddingRight, new BackgroundHighlight(paddingRight));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) return new ASHighlightControl(paddingTop, new BackgroundHighlight(paddingTop));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) return new ASHighlightControl(paddingBottom, new BackgroundHighlight(paddingBottom));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR)) return new ASHighlightControl(lineColor.getPaintArea(), new BackgroundHighlight(lineColor.getPaintArea()));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH)) return new ASHighlightControl(lineWidth, new BackgroundHighlight(lineWidth));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(), new BorderHightLight(lineStyle.getControl(), Composite.class));
 		return null;
 	}
 

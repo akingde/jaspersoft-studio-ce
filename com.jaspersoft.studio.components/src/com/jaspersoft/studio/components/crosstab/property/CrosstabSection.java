@@ -21,6 +21,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -47,5 +48,16 @@ public class CrosstabSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignCrosstab.PROPERTY_IGNORE_WIDTH);
 		createWidget4Property(parent,
 				JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseCrosstab.PROPERTY_RUN_DIRECTION, Messages.MCrosstab_run_direction);
+		addProvidedProperties(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MCrosstab_parameter_map_expression);
+		addProvidedProperties(JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS, Messages.MCrosstab_repeat_column_headers);
+		addProvidedProperties(JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS, Messages.MCrosstab_repeat_row_headers);
+		addProvidedProperties(JRDesignCrosstab.PROPERTY_IGNORE_WIDTH, Messages.MCrosstab_ignore_witdh);
+		addProvidedProperties(JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET, Messages.MCrosstab_column_break_offset);
 	}
 }

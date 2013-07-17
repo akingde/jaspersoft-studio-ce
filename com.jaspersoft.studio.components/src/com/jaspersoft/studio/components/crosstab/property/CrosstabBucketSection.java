@@ -21,6 +21,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MBucket;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstabGroup;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -61,6 +62,17 @@ public class CrosstabBucketSection extends AbstractSection {
 		createWidget4Property(parent,
 				JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.common_order);
+		addProvidedProperties(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION, Messages.MBucket_order_by_expression);
+		addProvidedProperties(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION, Messages.MBucket_comparator_expression);
+		addProvidedProperties(JRDesignCrosstabBucket.PROPERTY_EXPRESSION, Messages.MBucket_expression);
+		addProvidedProperties(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, Messages.MBucket_valueClassTitle);
+	}
+	
 
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {

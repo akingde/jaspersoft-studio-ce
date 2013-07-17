@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.html.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
@@ -49,6 +50,17 @@ public class HtmlSection extends AbstractSection {
 
 		createWidget4Property(parent,
 				HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION);
-
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(HtmlComponent.PROPERTY_SCALE_TYPE, Messages.MHtml_scaletype);
+		addProvidedProperties(HtmlComponent.PROPERTY_CLIP_ON_OVERFLOW, Messages.MHtml_cliponoverflow);
+		addProvidedProperties(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN, Messages.MHtml_horizontalalign);
+		addProvidedProperties(HtmlComponent.PROPERTY_VERTICAL_ALIGN, Messages.MHtml_verticalalign);
+		addProvidedProperties(HtmlComponent.PROPERTY_EVALUATION_TIME, Messages.MHtml_evaluation_time);
+		addProvidedProperties(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION, Messages.MHtml_content_expression);
+	}
+
 }

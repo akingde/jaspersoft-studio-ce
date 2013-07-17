@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -42,5 +43,15 @@ public class CrosstabCellSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignCellContents.PROPERTY_STYLE);
 		createWidget4Property(parent, JRDesignCrosstabCell.PROPERTY_WIDTH);
 		createWidget4Property(parent, JRDesignCrosstabCell.PROPERTY_HEIGHT);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStyle.PROPERTY_MODE, Messages.MCell_opaque);
+		addProvidedProperties(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MCell_backcolor);
+		addProvidedProperties(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style);
+		addProvidedProperties(JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.common_width);
+		addProvidedProperties(JRDesignCrosstabCell.PROPERTY_HEIGHT, Messages.common_height);
 	}
 }

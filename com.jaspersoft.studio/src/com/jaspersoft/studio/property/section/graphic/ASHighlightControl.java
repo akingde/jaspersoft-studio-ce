@@ -15,11 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
 
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
-import com.jaspersoft.studio.property.section.widgets.DefaultWidgetsHighlighters;
+import com.jaspersoft.studio.property.section.widgets.IHighlightControl;
 
 /**
  * 
@@ -38,20 +37,9 @@ public class ASHighlightControl implements IHighlightPropertyWidget {
 	/**
 	 * The class type used to request and highlighter for the control
 	 */
-	private Class<?> painterClass;
+	private IHighlightControl painterClass;
 	
-	/**
-	 * Create an instance of the class
-	 * 
-	 * @param controlToHighLight the control to highlight. The type of highlighter requested
-	 * will be the same of the control
-	 */
-	public ASHighlightControl(Control controlToHighLight){
-		this.controlToHighLight = controlToHighLight;
-		if (this.controlToHighLight != null) painterClass = this.controlToHighLight.getClass();
-		else painterClass = null;
-	}
-	
+
 	/**
 	 * Create an instance of the class, allow to specify a type of highlighter different from
 	 * the control one
@@ -59,7 +47,7 @@ public class ASHighlightControl implements IHighlightPropertyWidget {
 	 * @param controlToHighLight the control to highlight.
 	 * @param painterClass type of the highlighter requested
 	 */
-	public ASHighlightControl(Control controlToHighLight, Class<?> painterClass){
+	public ASHighlightControl(Control controlToHighLight, IHighlightControl painterClass){
 		this.controlToHighLight = controlToHighLight;
 		this.painterClass = painterClass;
 	}
@@ -69,24 +57,24 @@ public class ASHighlightControl implements IHighlightPropertyWidget {
 	 */
 	@Override
 	public void highLightWidget(long ms) {
-		//if there isn't a control defined where add the border then return
+		// if there isn't a control defined where add the border then return
 		if (controlToHighLight == null) return;
-		final PaintListener highlighter = DefaultWidgetsHighlighters.getWidgetForType(painterClass);
-		controlToHighLight.addPaintListener(highlighter);
-		controlToHighLight.redraw();
+		final IHighlightControl highLight = painterClass;
+		if (highLight == null) return;
+		//highlight the control
+		highLight.highLightControl();
 		final long sleepTime = ms;
-		//Create a thread to remove the paint listener after specified time
+		// Create a thread to remove the paint listener after specified time
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(sleepTime);
-					//It need two thread to avoid to freeze the UI during the sleep
+					// It need two thread to avoid to freeze the UI during the sleep
 					controlToHighLight.getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							controlToHighLight.removePaintListener(highlighter);
-							controlToHighLight.redraw();
+							highLight.deHighLightControl();
 						}
 					});
 				} catch (InterruptedException e) {
@@ -94,7 +82,6 @@ public class ASHighlightControl implements IHighlightPropertyWidget {
 				}
 			}
 		}).start();
-
 	}
 
 }

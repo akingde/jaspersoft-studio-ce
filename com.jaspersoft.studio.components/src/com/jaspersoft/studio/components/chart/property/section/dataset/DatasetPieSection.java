@@ -19,6 +19,7 @@ import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetSection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
@@ -48,4 +49,12 @@ public class DatasetPieSection extends DatasetSection {
 
 	}
 
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, Messages.MChartPieDataset_other_key_expression);
+		addProvidedProperties(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION, Messages.MChartPieDataset_other_label_expression);
+		addProvidedProperties(JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE, Messages.MChartPieDataset_min_percentage);
+		addProvidedProperties(JRDesignPieDataset.PROPERTY_MAX_COUNT, Messages.MChartPieDataset_max_count);
+	}
 }

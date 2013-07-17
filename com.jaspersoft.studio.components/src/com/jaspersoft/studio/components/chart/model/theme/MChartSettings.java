@@ -30,13 +30,13 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.jfree.ui.RectangleInsets;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartAlignEnum;
 import com.jaspersoft.studio.components.chart.model.theme.imageprovider.ImageProviderPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.stroke.StrokePropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.jasper.CachedImageProvider;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -94,49 +94,49 @@ public class MChartSettings extends APropertyNode {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_textAntiAlias, "Text Anti Alias");
-		pd.setDescription("Text anti alias");
+		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_textAntiAlias, Messages.MChartSettings_textAATitle);
+		pd.setDescription(Messages.MChartSettings_textAADescription);
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_antiAlias, "Anti Alias");
-		pd.setDescription("Anti alias");
+		pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_antiAlias, Messages.MChartSettings_antiAliasTitle);
+		pd.setDescription(Messages.MChartSettings_antiAliasDescription);
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_borderVisible, "Visible");
-		pd.setDescription("Border Visible");
-		pd.setCategory(Messages.common_borders);
+		pd = new CheckBoxPropertyDescriptor(ChartSettings.PROPERTY_borderVisible, Messages.MChartSettings_borderVisibleTitle);
+		pd.setDescription(Messages.MChartSettings_borderVisibleDescription);
+		pd.setCategory("Borders"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new TransparencyPropertyDescriptor(ChartSettings.PROPERTY_backgroundImageAlpha, "Image Alpha");
-		pd.setDescription("Background Image Alpha");
-		pd.setCategory(Messages.common_background);
+		pd = new TransparencyPropertyDescriptor(ChartSettings.PROPERTY_backgroundImageAlpha, Messages.MChartSettings_imageAlphaTitle);
+		pd.setDescription(Messages.MChartSettings_imageAlphaDescription);
+		pd.setCategory("Background"); //$NON-NLS-1$
 		desc.add(pd);
 
-		bia = new JSSEnumPropertyDescriptor(ChartSettings.PROPERTY_backgroundImageAlignment, "Image Alignment", JFreeChartAlignEnum.class, NullEnum.NOTNULL);
-		bia.setDescription("Background Image Alignment");
-		bia.setCategory(Messages.common_background);
+		bia = new JSSEnumPropertyDescriptor(ChartSettings.PROPERTY_backgroundImageAlignment, Messages.MChartSettings_imageAlignTitle, JFreeChartAlignEnum.class, NullEnum.NOTNULL);
+		bia.setDescription(Messages.MChartSettings_imageAlignDescription);
+		bia.setCategory("Background"); //$NON-NLS-1$
 		desc.add(bia);
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
-		pd = new PaintProviderPropertyDescriptor(ChartSettings.PROPERTY_backgroundPaint, "Paint");
-		pd.setDescription("Background paint");
-		pd.setCategory(Messages.common_background);
+		pd = new PaintProviderPropertyDescriptor(ChartSettings.PROPERTY_backgroundPaint, Messages.MChartSettings_paintTitle);
+		pd.setDescription(Messages.MChartSettings_paintDescription);
+		pd.setCategory("Background"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(ChartSettings.PROPERTY_borderPaint, "Paint");
-		pd.setDescription("Border paint");
-		pd.setCategory(Messages.common_borders);
+		pd = new PaintProviderPropertyDescriptor(ChartSettings.PROPERTY_borderPaint, Messages.MChartSettings_borderColorTitle);
+		pd.setDescription(Messages.MChartSettings_borderColorDescription);
+		pd.setCategory("Borders"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new ImageProviderPropertyDescriptor(ChartSettings.PROPERTY_backgroundImage, "Image");
-		pd.setDescription("Background Image");
-		pd.setCategory(Messages.common_background);
+		pd = new ImageProviderPropertyDescriptor(ChartSettings.PROPERTY_backgroundImage, Messages.MChartSettings_backgroundImageTitle);
+		pd.setDescription(Messages.MChartSettings_backgroundImageDescription);
+		pd.setCategory("Background"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new StrokePropertyDescriptor(ChartSettings.PROPERTY_borderStroke, "Stroke");
-		pd.setDescription("Border Stroke");
-		pd.setCategory(Messages.common_borders);
+		pd = new StrokePropertyDescriptor(ChartSettings.PROPERTY_borderStroke, Messages.MChartSettings_borderStrokeTitle);
+		pd.setDescription(Messages.MChartSettings_borderStrokeDescription);
+		pd.setCategory("Borders"); //$NON-NLS-1$
 		desc.add(pd);
 
 		defaultsMap.put(ChartSettings.PROPERTY_backgroundPaint, null);
@@ -149,7 +149,7 @@ public class MChartSettings extends APropertyNode {
 		defaultsMap.put(ChartSettings.PROPERTY_borderVisible, Boolean.TRUE);
 		defaultsMap.put(ChartSettings.PROPERTY_backgroundImageAlignment, JFreeChartAlignEnum.TOP_LEFT);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
 
 	private static JSSEnumPropertyDescriptor bia;

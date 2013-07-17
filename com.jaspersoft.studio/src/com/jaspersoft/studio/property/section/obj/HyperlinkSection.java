@@ -408,5 +408,16 @@ public class HyperlinkSection extends AbstractSection {
 			}
 		});
 	}
+	
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, Messages.MHyperLink_hyperlink_anchor_expression);
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, Messages.MHyperLink_hyperlink_page_expression);
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, Messages.MHyperLink_hyperlink_reference_expression);
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, Messages.MHyperLink_whenexpr);
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, Messages.MHyperLink_hyperlink_tooltip_expression);
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
+	}
+
 
 }

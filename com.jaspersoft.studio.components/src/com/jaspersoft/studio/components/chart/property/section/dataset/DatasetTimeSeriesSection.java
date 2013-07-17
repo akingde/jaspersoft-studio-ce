@@ -19,6 +19,7 @@ import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetSection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
@@ -38,6 +39,12 @@ public class DatasetTimeSeriesSection extends DatasetSection {
 
 		createWidget4Property(parent,
 				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, Messages.MChartTimeSeriesDataset_time_period);
 	}
 
 }

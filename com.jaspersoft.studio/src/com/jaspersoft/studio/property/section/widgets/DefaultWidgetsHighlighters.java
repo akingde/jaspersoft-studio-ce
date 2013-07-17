@@ -15,12 +15,12 @@ import java.util.HashMap;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolItem;
 
 /**
@@ -78,43 +78,29 @@ public class DefaultWidgetsHighlighters {
 			}
 		});
 		
-		widgetsMap.put(Text.class, new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				Text textArea = (Text)e.getSource();
-				Rectangle bounds = textArea.getBounds();
-				if (textArea.getVerticalBar() != null){
-					bounds.width = bounds.width - textArea.getVerticalBar().getSize().x;
-				}
-				e.gc.setForeground(ColorConstants.orange);
-				e.gc.setLineWidth(3);
-				e.gc.drawRectangle(0,0,bounds.width-5,bounds.height-5);
-			}
-		});
-		
 		widgetsMap.put(Composite.class, new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				Rectangle bounds = ((Control)e.getSource()).getBounds();
-				e.gc.setForeground(ColorConstants.orange);
-				e.gc.setLineWidth(3);
-				e.gc.drawRectangle(1,1,bounds.width-3,bounds.height-3);
+				GC gc=e.gc;
+				gc.setLineWidth(3);
+				int lineWidth = gc.getLineWidth();
+				gc.setForeground(ColorConstants.orange);
+				gc.drawRectangle(1,1,e.width-lineWidth,e.height-lineWidth);
 			}
 		});
 		
-		widgetsMap.put(Spinner.class, new PaintListener() {
+		widgetsMap.put(Button.class, new PaintListener() {
 			@Override
-			public void paintControl(PaintEvent e) {
-				Spinner spinner = (Spinner)e.getSource();
-				Rectangle bounds = spinner.getBounds();
-				if (spinner.getVerticalBar() != null){
-					bounds.width = bounds.width - spinner.getVerticalBar().getSize().x;
-				}
-				e.gc.setForeground(ColorConstants.orange);
-				e.gc.setLineWidth(3);
-				e.gc.drawRectangle(0,0,bounds.width-2,bounds.height-2);
-			}
+	    public void paintControl(PaintEvent e) {
+				Button obj = (Button)e.getSource();
+		    obj.setBackground(ColorConstants.orange);
+		    org.eclipse.swt.graphics.Pattern pattern;
+		    pattern = new org.eclipse.swt.graphics.Pattern(e.gc.getDevice(), 0,0,0,100, ColorConstants.orange,230, ColorConstants.orange,230);
+		    e.gc.setBackgroundPattern(pattern);
+		    e.gc.fillGradientRectangle(0, 0, obj.getBounds().width, obj.getBounds().height, true);
+	    }
 		});
+
 	}
 	
 	/**

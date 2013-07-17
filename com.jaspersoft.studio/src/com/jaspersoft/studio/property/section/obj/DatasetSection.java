@@ -63,6 +63,17 @@ public class DatasetSection extends AbstractSection {
 		gd.horizontalAlignment = SWT.CENTER;
 		createWidget4Property(parent, JRDesignDataset.PROPERTY_QUERY, false).getControl().setLayoutData(gd);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignDataset.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type);
+		addProvidedProperties(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, Messages.MDataset_filter_expression);
+		addProvidedProperties(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, Messages.MDataset_scriplet_class);
+		addProvidedProperties(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
+		addProvidedProperties(JRDesignDataset.PROPERTY_QUERY, Messages.common_query);
+	}
 
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {

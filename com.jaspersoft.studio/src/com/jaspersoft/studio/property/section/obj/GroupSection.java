@@ -44,6 +44,13 @@ public class GroupSection extends AbstractSection {
 
 		createWidget4Property(parent, JRDesignGroup.PROPERTY_EXPRESSION);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignGroup.PROPERTY_EXPRESSION, Messages.common_expression);
+	}
 
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
