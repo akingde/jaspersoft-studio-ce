@@ -80,6 +80,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createModelAdapter();
       }
       @Override
+      public Adapter caseSelectQuery(SelectQuery object)
+      {
+        return createSelectQueryAdapter();
+      }
+      @Override
       public Adapter caseSelect(Select object)
       {
         return createSelectAdapter();
@@ -287,6 +292,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createModelAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.SelectQuery <em>Select Query</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.SelectQuery
+   * @generated
+   */
+  public Adapter createSelectQueryAdapter()
   {
     return null;
   }

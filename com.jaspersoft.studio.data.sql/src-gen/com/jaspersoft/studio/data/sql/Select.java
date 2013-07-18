@@ -24,7 +24,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface Select extends Model
+public interface Select extends SelectQuery
 {
   /**
    * Returns the value of the '<em><b>Select</b></em>' attribute.

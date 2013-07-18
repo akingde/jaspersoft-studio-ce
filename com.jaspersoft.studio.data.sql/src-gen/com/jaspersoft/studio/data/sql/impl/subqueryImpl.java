@@ -2,7 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Select;
+import com.jaspersoft.studio.data.sql.SelectQuery;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.subquery;
 
@@ -37,7 +37,7 @@ public class subqueryImpl extends OperandImpl implements subquery
    * @generated
    * @ordered
    */
-  protected Select sel;
+  protected SelectQuery sel;
 
   /**
    * <!-- begin-user-doc -->
@@ -65,7 +65,7 @@ public class subqueryImpl extends OperandImpl implements subquery
    * <!-- end-user-doc -->
    * @generated
    */
-  public Select getSel()
+  public SelectQuery getSel()
   {
     return sel;
   }
@@ -75,9 +75,9 @@ public class subqueryImpl extends OperandImpl implements subquery
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetSel(Select newSel, NotificationChain msgs)
+  public NotificationChain basicSetSel(SelectQuery newSel, NotificationChain msgs)
   {
-    Select oldSel = sel;
+    SelectQuery oldSel = sel;
     sel = newSel;
     if (eNotificationRequired())
     {
@@ -92,7 +92,7 @@ public class subqueryImpl extends OperandImpl implements subquery
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSel(Select newSel)
+  public void setSel(SelectQuery newSel)
   {
     if (newSel != sel)
     {
@@ -151,7 +151,7 @@ public class subqueryImpl extends OperandImpl implements subquery
     switch (featureID)
     {
       case SqlPackage.SUBQUERY__SEL:
-        setSel((Select)newValue);
+        setSel((SelectQuery)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -168,7 +168,7 @@ public class subqueryImpl extends OperandImpl implements subquery
     switch (featureID)
     {
       case SqlPackage.SUBQUERY__SEL:
-        setSel((Select)null);
+        setSel((SelectQuery)null);
         return;
     }
     super.eUnset(featureID);

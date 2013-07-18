@@ -30,12 +30,12 @@ public interface subquery extends Operand
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sel</em>' containment reference.
-   * @see #setSel(Select)
+   * @see #setSel(SelectQuery)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getsubquery_Sel()
    * @model containment="true"
    * @generated
    */
-  Select getSel();
+  SelectQuery getSel();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.subquery#getSel <em>Sel</em>}' containment reference.
@@ -45,6 +45,6 @@ public interface subquery extends Operand
    * @see #getSel()
    * @generated
    */
-  void setSel(Select value);
+  void setSel(SelectQuery value);
 
 } // subquery

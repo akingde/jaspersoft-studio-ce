@@ -34,6 +34,7 @@ import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.Prms;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.Select;
+import com.jaspersoft.studio.data.sql.SelectQuery;
 import com.jaspersoft.studio.data.sql.SqlFactory;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.TableFull;
@@ -65,6 +66,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass modelEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass selectQueryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -403,9 +411,29 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getModel_OrderByEntry()
+  public EReference getModel_Query()
   {
     return (EReference)modelEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getModel_OrderByEntry()
+  {
+    return (EReference)modelEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSelectQuery()
+  {
+    return selectQueryEClass;
   }
 
   /**
@@ -1549,7 +1577,10 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     // Create classes and their features
     modelEClass = createEClass(MODEL);
+    createEReference(modelEClass, MODEL__QUERY);
     createEReference(modelEClass, MODEL__ORDER_BY_ENTRY);
+
+    selectQueryEClass = createEClass(SELECT_QUERY);
 
     selectEClass = createEClass(SELECT);
     createEAttribute(selectEClass, SELECT__SELECT);
@@ -1729,7 +1760,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    selectEClass.getESuperTypes().add(this.getModel());
+    selectEClass.getESuperTypes().add(this.getSelectQuery());
     columnOrAliasEClass.getESuperTypes().add(this.getOrColumn());
     fromTableEClass.getESuperTypes().add(this.getOrTable());
     dbObjectNameEClass.getESuperTypes().add(this.getColumnFull());
@@ -1740,7 +1771,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     jrParameterEClass.getESuperTypes().add(this.getPrms());
     operandEClass.getESuperTypes().add(this.getOperandList());
     operandEClass.getESuperTypes().add(this.getOperands());
-    orSelectEClass.getESuperTypes().add(this.getModel());
+    orSelectEClass.getESuperTypes().add(this.getSelectQuery());
     colEClass.getESuperTypes().add(this.getColumnFull());
     tblsEClass.getESuperTypes().add(this.getTableFull());
     opListEClass.getESuperTypes().add(this.getOperandList());
@@ -1748,7 +1779,10 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     // Initialize classes and features; add operations and parameters
     initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getModel_Query(), this.getSelectQuery(), null, "query", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getModel_OrderByEntry(), this.getOrOrderByColumn(), null, "orderByEntry", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(selectQueryEClass, SelectQuery.class, "SelectQuery", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(selectEClass, Select.class, "Select", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSelect_Select(), ecorePackage.getEString(), "select", null, 0, 1, Select.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1892,7 +1926,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getOpList_Entries(), this.getOperand(), null, "entries", null, 0, -1, OpList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(subqueryEClass, subquery.class, "subquery", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getsubquery_Sel(), this.getSelect(), null, "sel", null, 0, 1, subquery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getsubquery_Sel(), this.getSelectQuery(), null, "sel", null, 0, 1, subquery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(xFunctionEEnum, XFunction.class, "XFunction");

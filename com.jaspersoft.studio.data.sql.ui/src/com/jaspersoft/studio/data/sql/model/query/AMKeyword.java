@@ -30,6 +30,12 @@ public class AMKeyword extends MDBObjects implements IQueryString {
 	public static final String SELECT_KEYWORD = "SELECT";
 	public static final String SELECT_DISTINCT_KEYWORD = "SELECT DISTINCT";
 
+	public static final String SET_OPERATOR_UNION = "UNION";
+	public static final String SET_OPERATOR_UNION_ALL = "UNION ALL";
+	public static final String SET_OPERATOR_INTERSECT = "INTERSECT";
+	public static final String SET_OPERATOR_MINUS = "MINUS";
+	public static final String SET_OPERATOR_EXCEPT = "EXCEPT";
+
 	public static final String AND_OPERATOR = "AND";
 	public static final String OR_OPERATOR = "OR";
 	public static final String[] CONDITIONS = new String[] { AND_OPERATOR, OR_OPERATOR };

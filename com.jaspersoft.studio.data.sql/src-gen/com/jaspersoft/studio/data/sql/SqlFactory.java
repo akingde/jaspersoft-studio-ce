@@ -32,6 +32,15 @@ public interface SqlFactory extends EFactory
   Model createModel();
 
   /**
+   * Returns a new object of class '<em>Select Query</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Select Query</em>'.
+   * @generated
+   */
+  SelectQuery createSelectQuery();
+
+  /**
    * Returns a new object of class '<em>Select</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

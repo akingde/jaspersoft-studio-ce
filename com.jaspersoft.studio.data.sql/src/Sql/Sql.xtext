@@ -4,8 +4,11 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate sql "http://www.com.jaspersoft.studio.data.Sql"
 
 Model:
-	Select ({OrSelect.entries+=current} ("UNION" entries+=Select)+)?
+	query=SelectQuery
 	('ORDER BY' orderByEntry=OrderByColumns)?;
+
+SelectQuery:
+	Select ({OrSelect.entries+=current} ((('UNION' ('ALL')?) | 'INTERSECT' | 'MINUS' | 'EXCEPT') entries+=Select)+)?;
 
 Select:
 	select='SELECT' ('DISTINCT')? cols=Columns
@@ -115,7 +118,7 @@ ColumnOperand returns ColumnOperand:
 	cfull=ColumnFull;
 
 SubQueryOperand returns Operand:
-	{subquery} '(' sel=Select ')';
+	{subquery} '(' sel=SelectQuery ')';
 
 ScalarOperand returns ScalarOperand:
 	soint=SIGNED_INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;

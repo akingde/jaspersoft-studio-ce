@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class OrSelectImpl extends ModelImpl implements OrSelect
+public class OrSelectImpl extends SelectQueryImpl implements OrSelect
 {
   /**
    * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.

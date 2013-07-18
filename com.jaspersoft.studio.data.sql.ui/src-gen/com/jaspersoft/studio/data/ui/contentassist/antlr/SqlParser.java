@@ -37,6 +37,7 @@ public class SqlParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
+					put(grammarAccess.getSelectQueryAccess().getAlternatives_1_1_0(), "rule__SelectQuery__Alternatives_1_1_0");
 					put(grammarAccess.getColumnOrAliasAccess().getAlternatives(), "rule__ColumnOrAlias__Alternatives");
 					put(grammarAccess.getOrderByColumnFullAccess().getDirectionAlternatives_1_0(), "rule__OrderByColumnFull__DirectionAlternatives_1_0");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAlternatives_0_0(), "rule__ExpressionFragmentSecond__CAlternatives_0_0");
@@ -56,8 +57,10 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getJoinTypeAccess().getAlternatives(), "rule__JoinType__Alternatives");
 					put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
 					put(grammarAccess.getModelAccess().getGroup_1(), "rule__Model__Group_1__0");
-					put(grammarAccess.getModelAccess().getGroup_1_1(), "rule__Model__Group_1_1__0");
-					put(grammarAccess.getModelAccess().getGroup_2(), "rule__Model__Group_2__0");
+					put(grammarAccess.getSelectQueryAccess().getGroup(), "rule__SelectQuery__Group__0");
+					put(grammarAccess.getSelectQueryAccess().getGroup_1(), "rule__SelectQuery__Group_1__0");
+					put(grammarAccess.getSelectQueryAccess().getGroup_1_1(), "rule__SelectQuery__Group_1_1__0");
+					put(grammarAccess.getSelectQueryAccess().getGroup_1_1_0_0(), "rule__SelectQuery__Group_1_1_0_0__0");
 					put(grammarAccess.getSelectAccess().getGroup(), "rule__Select__Group__0");
 					put(grammarAccess.getSelectAccess().getGroup_5(), "rule__Select__Group_5__0");
 					put(grammarAccess.getSelectAccess().getGroup_6(), "rule__Select__Group_6__0");
@@ -108,8 +111,9 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getParameterOperandAccess().getGroup(), "rule__ParameterOperand__Group__0");
 					put(grammarAccess.getExclamationParameterOperandAccess().getGroup(), "rule__ExclamationParameterOperand__Group__0");
 					put(grammarAccess.getSubQueryOperandAccess().getGroup(), "rule__SubQueryOperand__Group__0");
-					put(grammarAccess.getModelAccess().getEntriesAssignment_1_1_1(), "rule__Model__EntriesAssignment_1_1_1");
-					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_2_1(), "rule__Model__OrderByEntryAssignment_2_1");
+					put(grammarAccess.getModelAccess().getQueryAssignment_0(), "rule__Model__QueryAssignment_0");
+					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_1_1(), "rule__Model__OrderByEntryAssignment_1_1");
+					put(grammarAccess.getSelectQueryAccess().getEntriesAssignment_1_1_1(), "rule__SelectQuery__EntriesAssignment_1_1_1");
 					put(grammarAccess.getSelectAccess().getSelectAssignment_0(), "rule__Select__SelectAssignment_0");
 					put(grammarAccess.getSelectAccess().getColsAssignment_2(), "rule__Select__ColsAssignment_2");
 					put(grammarAccess.getSelectAccess().getTblAssignment_4(), "rule__Select__TblAssignment_4");

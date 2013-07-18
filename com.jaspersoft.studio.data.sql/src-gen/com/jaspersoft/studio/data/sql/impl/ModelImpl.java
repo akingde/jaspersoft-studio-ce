@@ -4,6 +4,7 @@ package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.Model;
 import com.jaspersoft.studio.data.sql.OrOrderByColumn;
+import com.jaspersoft.studio.data.sql.SelectQuery;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getQuery <em>Query</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ModelImpl#getOrderByEntry <em>Order By Entry</em>}</li>
  * </ul>
  * </p>
@@ -30,6 +32,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class ModelImpl extends MinimalEObjectImpl.Container implements Model
 {
+  /**
+   * The cached value of the '{@link #getQuery() <em>Query</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getQuery()
+   * @generated
+   * @ordered
+   */
+  protected SelectQuery query;
+
   /**
    * The cached value of the '{@link #getOrderByEntry() <em>Order By Entry</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -59,6 +71,54 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.MODEL;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SelectQuery getQuery()
+  {
+    return query;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetQuery(SelectQuery newQuery, NotificationChain msgs)
+  {
+    SelectQuery oldQuery = query;
+    query = newQuery;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__QUERY, oldQuery, newQuery);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setQuery(SelectQuery newQuery)
+  {
+    if (newQuery != query)
+    {
+      NotificationChain msgs = null;
+      if (query != null)
+        msgs = ((InternalEObject)query).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__QUERY, null, msgs);
+      if (newQuery != null)
+        msgs = ((InternalEObject)newQuery).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.MODEL__QUERY, null, msgs);
+      msgs = basicSetQuery(newQuery, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.MODEL__QUERY, newQuery, newQuery));
   }
 
   /**
@@ -119,6 +179,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
+      case SqlPackage.MODEL__QUERY:
+        return basicSetQuery(null, msgs);
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
         return basicSetOrderByEntry(null, msgs);
     }
@@ -135,6 +197,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
+      case SqlPackage.MODEL__QUERY:
+        return getQuery();
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
         return getOrderByEntry();
     }
@@ -151,6 +215,9 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
+      case SqlPackage.MODEL__QUERY:
+        setQuery((SelectQuery)newValue);
+        return;
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
         setOrderByEntry((OrOrderByColumn)newValue);
         return;
@@ -168,6 +235,9 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
+      case SqlPackage.MODEL__QUERY:
+        setQuery((SelectQuery)null);
+        return;
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
         setOrderByEntry((OrOrderByColumn)null);
         return;
@@ -185,6 +255,8 @@ public class ModelImpl extends MinimalEObjectImpl.Container implements Model
   {
     switch (featureID)
     {
+      case SqlPackage.MODEL__QUERY:
+        return query != null;
       case SqlPackage.MODEL__ORDER_BY_ENTRY:
         return orderByEntry != null;
     }

@@ -29,8 +29,10 @@
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//JoinType/crossJoin"/>
     </genEnums>
     <genClasses ecoreClass="Sql.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/query"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//SelectQuery"/>
     <genClasses ecoreClass="Sql.ecore#//Select">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Select/select"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/cols"/>

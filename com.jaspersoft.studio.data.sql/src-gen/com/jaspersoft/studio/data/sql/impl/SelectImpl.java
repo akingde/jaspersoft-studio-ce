@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class SelectImpl extends ModelImpl implements Select
+public class SelectImpl extends SelectQueryImpl implements Select
 {
   /**
    * The default value of the '{@link #getSelect() <em>Select</em>}' attribute.

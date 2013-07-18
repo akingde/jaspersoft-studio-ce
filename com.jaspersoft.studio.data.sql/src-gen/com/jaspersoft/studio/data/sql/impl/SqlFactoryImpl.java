@@ -66,6 +66,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     switch (eClass.getClassifierID())
     {
       case SqlPackage.MODEL: return createModel();
+      case SqlPackage.SELECT_QUERY: return createSelectQuery();
       case SqlPackage.SELECT: return createSelect();
       case SqlPackage.OR_COLUMN: return createOrColumn();
       case SqlPackage.COLUMN_OR_ALIAS: return createColumnOrAlias();
@@ -153,6 +154,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ModelImpl model = new ModelImpl();
     return model;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SelectQuery createSelectQuery()
+  {
+    SelectQueryImpl selectQuery = new SelectQueryImpl();
+    return selectQuery;
   }
 
   /**

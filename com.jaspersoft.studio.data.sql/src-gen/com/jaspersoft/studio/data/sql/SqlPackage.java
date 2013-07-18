@@ -68,13 +68,22 @@ public interface SqlPackage extends EPackage
   int MODEL = 0;
 
   /**
+   * The feature id for the '<em><b>Query</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODEL__QUERY = 0;
+
+  /**
    * The feature id for the '<em><b>Order By Entry</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MODEL__ORDER_BY_ENTRY = 0;
+  int MODEL__ORDER_BY_ENTRY = 1;
 
   /**
    * The number of structural features of the '<em>Model</em>' class.
@@ -83,7 +92,26 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MODEL_FEATURE_COUNT = 1;
+  int MODEL_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SelectQueryImpl <em>Select Query</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.SelectQueryImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSelectQuery()
+   * @generated
+   */
+  int SELECT_QUERY = 1;
+
+  /**
+   * The number of structural features of the '<em>Select Query</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SELECT_QUERY_FEATURE_COUNT = 0;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SelectImpl <em>Select</em>}' class.
@@ -93,16 +121,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSelect()
    * @generated
    */
-  int SELECT = 1;
-
-  /**
-   * The feature id for the '<em><b>Order By Entry</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SELECT__ORDER_BY_ENTRY = MODEL__ORDER_BY_ENTRY;
+  int SELECT = 2;
 
   /**
    * The feature id for the '<em><b>Select</b></em>' attribute.
@@ -111,7 +130,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT__SELECT = MODEL_FEATURE_COUNT + 0;
+  int SELECT__SELECT = SELECT_QUERY_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Cols</b></em>' containment reference.
@@ -120,7 +139,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT__COLS = MODEL_FEATURE_COUNT + 1;
+  int SELECT__COLS = SELECT_QUERY_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Tbl</b></em>' containment reference.
@@ -129,7 +148,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT__TBL = MODEL_FEATURE_COUNT + 2;
+  int SELECT__TBL = SELECT_QUERY_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Where Expression</b></em>' containment reference.
@@ -138,7 +157,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT__WHERE_EXPRESSION = MODEL_FEATURE_COUNT + 3;
+  int SELECT__WHERE_EXPRESSION = SELECT_QUERY_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Group By Entry</b></em>' containment reference.
@@ -147,7 +166,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT__GROUP_BY_ENTRY = MODEL_FEATURE_COUNT + 4;
+  int SELECT__GROUP_BY_ENTRY = SELECT_QUERY_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Having Entry</b></em>' containment reference.
@@ -156,7 +175,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT__HAVING_ENTRY = MODEL_FEATURE_COUNT + 5;
+  int SELECT__HAVING_ENTRY = SELECT_QUERY_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Select</em>' class.
@@ -165,7 +184,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SELECT_FEATURE_COUNT = MODEL_FEATURE_COUNT + 6;
+  int SELECT_FEATURE_COUNT = SELECT_QUERY_FEATURE_COUNT + 6;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrColumnImpl <em>Or Column</em>}' class.
@@ -175,7 +194,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrColumn()
    * @generated
    */
-  int OR_COLUMN = 2;
+  int OR_COLUMN = 3;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -203,7 +222,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnOrAlias()
    * @generated
    */
-  int COLUMN_OR_ALIAS = 3;
+  int COLUMN_OR_ALIAS = 4;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -267,7 +286,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnFull()
    * @generated
    */
-  int COLUMN_FULL = 4;
+  int COLUMN_FULL = 5;
 
   /**
    * The number of structural features of the '<em>Column Full</em>' class.
@@ -286,7 +305,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrTable()
    * @generated
    */
-  int OR_TABLE = 5;
+  int OR_TABLE = 6;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -314,7 +333,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getFromTable()
    * @generated
    */
-  int FROM_TABLE = 6;
+  int FROM_TABLE = 7;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -378,7 +397,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableOrAlias()
    * @generated
    */
-  int TABLE_OR_ALIAS = 7;
+  int TABLE_OR_ALIAS = 8;
 
   /**
    * The feature id for the '<em><b>Tfull</b></em>' containment reference.
@@ -424,7 +443,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getTableFull()
    * @generated
    */
-  int TABLE_FULL = 8;
+  int TABLE_FULL = 9;
 
   /**
    * The number of structural features of the '<em>Table Full</em>' class.
@@ -443,7 +462,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDbObjectName()
    * @generated
    */
-  int DB_OBJECT_NAME = 9;
+  int DB_OBJECT_NAME = 10;
 
   /**
    * The feature id for the '<em><b>Dbname</b></em>' attribute.
@@ -471,7 +490,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrOrderByColumn()
    * @generated
    */
-  int OR_ORDER_BY_COLUMN = 10;
+  int OR_ORDER_BY_COLUMN = 11;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -499,7 +518,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrderByColumnFull()
    * @generated
    */
-  int ORDER_BY_COLUMN_FULL = 11;
+  int ORDER_BY_COLUMN_FULL = 12;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -545,7 +564,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrGroupByColumn()
    * @generated
    */
-  int OR_GROUP_BY_COLUMN = 12;
+  int OR_GROUP_BY_COLUMN = 13;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -573,7 +592,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getGroupByColumnFull()
    * @generated
    */
-  int GROUP_BY_COLUMN_FULL = 13;
+  int GROUP_BY_COLUMN_FULL = 14;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -610,7 +629,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrExpr()
    * @generated
    */
-  int OR_EXPR = 14;
+  int OR_EXPR = 15;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -638,7 +657,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getFullExpression()
    * @generated
    */
-  int FULL_EXPRESSION = 15;
+  int FULL_EXPRESSION = 16;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -765,7 +784,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExprGroup()
    * @generated
    */
-  int EXPR_GROUP = 16;
+  int EXPR_GROUP = 17;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -793,7 +812,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getXExpr()
    * @generated
    */
-  int XEXPR = 17;
+  int XEXPR = 18;
 
   /**
    * The feature id for the '<em><b>Xf</b></em>' attribute.
@@ -839,7 +858,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getPrms()
    * @generated
    */
-  int PRMS = 18;
+  int PRMS = 19;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -867,7 +886,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJRParameter()
    * @generated
    */
-  int JR_PARAMETER = 19;
+  int JR_PARAMETER = 20;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -904,7 +923,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getComparison()
    * @generated
    */
-  int COMPARISON = 20;
+  int COMPARISON = 21;
 
   /**
    * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -941,7 +960,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLike()
    * @generated
    */
-  int LIKE = 21;
+  int LIKE = 22;
 
   /**
    * The feature id for the '<em><b>Op Like</b></em>' attribute.
@@ -978,7 +997,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getBetween()
    * @generated
    */
-  int BETWEEN = 22;
+  int BETWEEN = 23;
 
   /**
    * The feature id for the '<em><b>Op Between</b></em>' attribute.
@@ -1024,7 +1043,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getInOper()
    * @generated
    */
-  int IN_OPER = 23;
+  int IN_OPER = 24;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1070,7 +1089,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandList()
    * @generated
    */
-  int OPERAND_LIST = 24;
+  int OPERAND_LIST = 25;
 
   /**
    * The number of structural features of the '<em>Operand List</em>' class.
@@ -1089,7 +1108,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperands()
    * @generated
    */
-  int OPERANDS = 25;
+  int OPERANDS = 26;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1117,7 +1136,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperand()
    * @generated
    */
-  int OPERAND = 26;
+  int OPERAND = 27;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1199,7 +1218,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getPOperand()
    * @generated
    */
-  int POPERAND = 27;
+  int POPERAND = 28;
 
   /**
    * The feature id for the '<em><b>Prm</b></em>' attribute.
@@ -1227,7 +1246,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExpOperand()
    * @generated
    */
-  int EXP_OPERAND = 28;
+  int EXP_OPERAND = 29;
 
   /**
    * The feature id for the '<em><b>Prm</b></em>' attribute.
@@ -1255,7 +1274,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnOperand()
    * @generated
    */
-  int COLUMN_OPERAND = 29;
+  int COLUMN_OPERAND = 30;
 
   /**
    * The feature id for the '<em><b>Cfull</b></em>' containment reference.
@@ -1283,7 +1302,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getScalarOperand()
    * @generated
    */
-  int SCALAR_OPERAND = 30;
+  int SCALAR_OPERAND = 31;
 
   /**
    * The feature id for the '<em><b>Soint</b></em>' attribute.
@@ -1356,16 +1375,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOrSelect()
    * @generated
    */
-  int OR_SELECT = 31;
-
-  /**
-   * The feature id for the '<em><b>Order By Entry</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OR_SELECT__ORDER_BY_ENTRY = MODEL__ORDER_BY_ENTRY;
+  int OR_SELECT = 32;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1374,7 +1384,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OR_SELECT__ENTRIES = MODEL_FEATURE_COUNT + 0;
+  int OR_SELECT__ENTRIES = SELECT_QUERY_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Or Select</em>' class.
@@ -1383,7 +1393,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OR_SELECT_FEATURE_COUNT = MODEL_FEATURE_COUNT + 1;
+  int OR_SELECT_FEATURE_COUNT = SELECT_QUERY_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColImpl <em>Col</em>}' class.
@@ -1393,7 +1403,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getCol()
    * @generated
    */
-  int COL = 32;
+  int COL = 33;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1421,7 +1431,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#gettbls()
    * @generated
    */
-  int TBLS = 33;
+  int TBLS = 34;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1449,7 +1459,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpList()
    * @generated
    */
-  int OP_LIST = 34;
+  int OP_LIST = 35;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1477,7 +1487,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getsubquery()
    * @generated
    */
-  int SUBQUERY = 35;
+  int SUBQUERY = 36;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1568,7 +1578,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getXFunction()
    * @generated
    */
-  int XFUNCTION = 36;
+  int XFUNCTION = 37;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.JoinType <em>Join Type</em>}' enum.
@@ -1578,7 +1588,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJoinType()
    * @generated
    */
-  int JOIN_TYPE = 37;
+  int JOIN_TYPE = 38;
 
 
   /**
@@ -1592,6 +1602,17 @@ public interface SqlPackage extends EPackage
   EClass getModel();
 
   /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getQuery <em>Query</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Query</em>'.
+   * @see com.jaspersoft.studio.data.sql.Model#getQuery()
+   * @see #getModel()
+   * @generated
+   */
+  EReference getModel_Query();
+
+  /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1601,6 +1622,16 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getModel_OrderByEntry();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SelectQuery <em>Select Query</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Select Query</em>'.
+   * @see com.jaspersoft.studio.data.sql.SelectQuery
+   * @generated
+   */
+  EClass getSelectQuery();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Select <em>Select</em>}'.
@@ -2820,12 +2851,30 @@ public interface SqlPackage extends EPackage
     EClass MODEL = eINSTANCE.getModel();
 
     /**
+     * The meta object literal for the '<em><b>Query</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MODEL__QUERY = eINSTANCE.getModel_Query();
+
+    /**
      * The meta object literal for the '<em><b>Order By Entry</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference MODEL__ORDER_BY_ENTRY = eINSTANCE.getModel_OrderByEntry();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SelectQueryImpl <em>Select Query</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.SelectQueryImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSelectQuery()
+     * @generated
+     */
+    EClass SELECT_QUERY = eINSTANCE.getSelectQuery();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SelectImpl <em>Select</em>}' class.

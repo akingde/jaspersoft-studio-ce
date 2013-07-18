@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Model#getQuery <em>Query</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Model#getOrderByEntry <em>Order By Entry</em>}</li>
  * </ul>
  * </p>
@@ -22,6 +23,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Model extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Query</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Query</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Query</em>' containment reference.
+   * @see #setQuery(SelectQuery)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getModel_Query()
+   * @model containment="true"
+   * @generated
+   */
+  SelectQuery getQuery();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Model#getQuery <em>Query</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Query</em>' containment reference.
+   * @see #getQuery()
+   * @generated
+   */
+  void setQuery(SelectQuery value);
+
   /**
    * Returns the value of the '<em><b>Order By Entry</b></em>' containment reference.
    * <!-- begin-user-doc -->

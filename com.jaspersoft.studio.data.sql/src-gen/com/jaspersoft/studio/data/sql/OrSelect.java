@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface OrSelect extends Model
+public interface OrSelect extends SelectQuery
 {
   /**
    * Returns the value of the '<em><b>Entries</b></em>' containment reference list.

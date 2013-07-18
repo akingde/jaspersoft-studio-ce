@@ -22,57 +22,101 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class ModelElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Model");
 		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cQueryAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cQuerySelectQueryParserRuleCall_0_0 = (RuleCall)cQueryAssignment_0.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Keyword cORDERBYKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cOrderByEntryAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cOrderByEntryOrderByColumnsParserRuleCall_1_1_0 = (RuleCall)cOrderByEntryAssignment_1_1.eContents().get(0);
+		
+		//Model:
+		//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?;
+		public ParserRule getRule() { return rule; }
+
+		//query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?
+		public Group getGroup() { return cGroup; }
+
+		//query=SelectQuery
+		public Assignment getQueryAssignment_0() { return cQueryAssignment_0; }
+
+		//SelectQuery
+		public RuleCall getQuerySelectQueryParserRuleCall_0_0() { return cQuerySelectQueryParserRuleCall_0_0; }
+
+		//("ORDER BY" orderByEntry=OrderByColumns)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//"ORDER BY"
+		public Keyword getORDERBYKeyword_1_0() { return cORDERBYKeyword_1_0; }
+
+		//orderByEntry=OrderByColumns
+		public Assignment getOrderByEntryAssignment_1_1() { return cOrderByEntryAssignment_1_1; }
+
+		//OrderByColumns
+		public RuleCall getOrderByEntryOrderByColumnsParserRuleCall_1_1_0() { return cOrderByEntryOrderByColumnsParserRuleCall_1_1_0; }
+	}
+
+	public class SelectQueryElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SelectQuery");
+		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final RuleCall cSelectParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Action cOrSelectEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
-		private final Keyword cUNIONKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Alternatives cAlternatives_1_1_0 = (Alternatives)cGroup_1_1.eContents().get(0);
+		private final Group cGroup_1_1_0_0 = (Group)cAlternatives_1_1_0.eContents().get(0);
+		private final Keyword cUNIONKeyword_1_1_0_0_0 = (Keyword)cGroup_1_1_0_0.eContents().get(0);
+		private final Keyword cALLKeyword_1_1_0_0_1 = (Keyword)cGroup_1_1_0_0.eContents().get(1);
+		private final Keyword cINTERSECTKeyword_1_1_0_1 = (Keyword)cAlternatives_1_1_0.eContents().get(1);
+		private final Keyword cMINUSKeyword_1_1_0_2 = (Keyword)cAlternatives_1_1_0.eContents().get(2);
+		private final Keyword cEXCEPTKeyword_1_1_0_3 = (Keyword)cAlternatives_1_1_0.eContents().get(3);
 		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
 		private final RuleCall cEntriesSelectParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
-		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cORDERBYKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cOrderByEntryAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cOrderByEntryOrderByColumnsParserRuleCall_2_1_0 = (RuleCall)cOrderByEntryAssignment_2_1.eContents().get(0);
 		
-		//Model:
-		//	Select ({OrSelect.entries+=current} ("UNION" entries+=Select)+)? ("ORDER BY" orderByEntry=OrderByColumns)?;
+		//SelectQuery:
+		//	Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?;
 		public ParserRule getRule() { return rule; }
 
-		//Select ({OrSelect.entries+=current} ("UNION" entries+=Select)+)? ("ORDER BY" orderByEntry=OrderByColumns)?
+		//Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?
 		public Group getGroup() { return cGroup; }
 
 		//Select
 		public RuleCall getSelectParserRuleCall_0() { return cSelectParserRuleCall_0; }
 
-		//({OrSelect.entries+=current} ("UNION" entries+=Select)+)?
+		//({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OrSelect.entries+=current}
 		public Action getOrSelectEntriesAction_1_0() { return cOrSelectEntriesAction_1_0; }
 
-		//("UNION" entries+=Select)+
+		//(("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+
 		public Group getGroup_1_1() { return cGroup_1_1; }
 
+		//"UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT"
+		public Alternatives getAlternatives_1_1_0() { return cAlternatives_1_1_0; }
+
+		//"UNION" "ALL"?
+		public Group getGroup_1_1_0_0() { return cGroup_1_1_0_0; }
+
 		//"UNION"
-		public Keyword getUNIONKeyword_1_1_0() { return cUNIONKeyword_1_1_0; }
+		public Keyword getUNIONKeyword_1_1_0_0_0() { return cUNIONKeyword_1_1_0_0_0; }
+
+		//"ALL"?
+		public Keyword getALLKeyword_1_1_0_0_1() { return cALLKeyword_1_1_0_0_1; }
+
+		//"INTERSECT"
+		public Keyword getINTERSECTKeyword_1_1_0_1() { return cINTERSECTKeyword_1_1_0_1; }
+
+		//"MINUS"
+		public Keyword getMINUSKeyword_1_1_0_2() { return cMINUSKeyword_1_1_0_2; }
+
+		//"EXCEPT"
+		public Keyword getEXCEPTKeyword_1_1_0_3() { return cEXCEPTKeyword_1_1_0_3; }
 
 		//entries+=Select
 		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
 
 		//Select
 		public RuleCall getEntriesSelectParserRuleCall_1_1_1_0() { return cEntriesSelectParserRuleCall_1_1_1_0; }
-
-		//("ORDER BY" orderByEntry=OrderByColumns)?
-		public Group getGroup_2() { return cGroup_2; }
-
-		//"ORDER BY"
-		public Keyword getORDERBYKeyword_2_0() { return cORDERBYKeyword_2_0; }
-
-		//orderByEntry=OrderByColumns
-		public Assignment getOrderByEntryAssignment_2_1() { return cOrderByEntryAssignment_2_1; }
-
-		//OrderByColumns
-		public RuleCall getOrderByEntryOrderByColumnsParserRuleCall_2_1_0() { return cOrderByEntryOrderByColumnsParserRuleCall_2_1_0; }
 	}
 
 	public class SelectElements extends AbstractParserRuleElementFinder {
@@ -1405,14 +1449,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cSubqueryAction_0 = (Action)cGroup.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cSelAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cSelSelectParserRuleCall_2_0 = (RuleCall)cSelAssignment_2.eContents().get(0);
+		private final RuleCall cSelSelectQueryParserRuleCall_2_0 = (RuleCall)cSelAssignment_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//SubQueryOperand returns Operand:
-		//	{subquery} "(" sel=Select ")";
+		//	{subquery} "(" sel=SelectQuery ")";
 		public ParserRule getRule() { return rule; }
 
-		//{subquery} "(" sel=Select ")"
+		//{subquery} "(" sel=SelectQuery ")"
 		public Group getGroup() { return cGroup; }
 
 		//{subquery}
@@ -1421,11 +1465,11 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//sel=Select
+		//sel=SelectQuery
 		public Assignment getSelAssignment_2() { return cSelAssignment_2; }
 
-		//Select
-		public RuleCall getSelSelectParserRuleCall_2_0() { return cSelSelectParserRuleCall_2_0; }
+		//SelectQuery
+		public RuleCall getSelSelectQueryParserRuleCall_2_0() { return cSelSelectQueryParserRuleCall_2_0; }
 
 		//")"
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
@@ -1669,6 +1713,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	private ModelElements pModel;
+	private SelectQueryElements pSelectQuery;
 	private SelectElements pSelect;
 	private ColumnsElements pColumns;
 	private ColumnOrAliasElements pColumnOrAlias;
@@ -1753,13 +1798,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Model:
-	//	Select ({OrSelect.entries+=current} ("UNION" entries+=Select)+)? ("ORDER BY" orderByEntry=OrderByColumns)?;
+	//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?;
 	public ModelElements getModelAccess() {
 		return (pModel != null) ? pModel : (pModel = new ModelElements());
 	}
 	
 	public ParserRule getModelRule() {
 		return getModelAccess().getRule();
+	}
+
+	//SelectQuery:
+	//	Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?;
+	public SelectQueryElements getSelectQueryAccess() {
+		return (pSelectQuery != null) ? pSelectQuery : (pSelectQuery = new SelectQueryElements());
+	}
+	
+	public ParserRule getSelectQueryRule() {
+		return getSelectQueryAccess().getRule();
 	}
 
 	//Select:
@@ -2097,7 +2152,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SubQueryOperand returns Operand:
-	//	{subquery} "(" sel=Select ")";
+	//	{subquery} "(" sel=SelectQuery ")";
 	public SubQueryOperandElements getSubQueryOperandAccess() {
 		return (pSubQueryOperand != null) ? pSubQueryOperand : (pSubQueryOperand = new SubQueryOperandElements());
 	}
