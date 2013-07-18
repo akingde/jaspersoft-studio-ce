@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.sql.model;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.model.ANode;
 
@@ -39,8 +40,11 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 		String str = getValue();
 		ANode p = getParent();
 		while (p != null) {
-			if (p instanceof AMSQLObject)
+			if (p instanceof AMSQLObject) {
+				if (p instanceof MSqlSchema && (((MSqlSchema) p).isCurrent() || ((MSqlSchema) p).isNotInMetadata()))
+					return getValue();
 				return ((AMSQLObject) p).toSQLString() + "." + getValue();
+			}
 			p = p.getParent();
 		}
 		return str;
