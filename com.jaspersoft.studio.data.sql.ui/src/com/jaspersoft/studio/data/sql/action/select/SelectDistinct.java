@@ -15,7 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
@@ -25,8 +26,8 @@ public class SelectDistinct extends AAction {
 
 	private static final String CHANGE_TO = "&Change To ";
 
-	public SelectDistinct(SQLQueryDesigner designer) {
-		super(CHANGE_TO + AMKeyword.SELECT_DISTINCT_KEYWORD, designer);
+	public SelectDistinct(TreeViewer treeViewer) {
+		super(CHANGE_TO + AMKeyword.SELECT_DISTINCT_KEYWORD, treeViewer);
 	}
 
 	@Override

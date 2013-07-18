@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -46,9 +47,11 @@ import com.jaspersoft.studio.model.MRoot;
 
 public class CreateXExpression extends AAction {
 	private CreateTable ct;
+	private SQLQueryDesigner designer;
 
-	public CreateXExpression(SQLQueryDesigner designer) {
-		super("Add $X{} Exp&ression", designer);
+	public CreateXExpression(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("Add $X{} Exp&ression", treeViewer);
+		this.designer = designer;
 	}
 
 	@Override
@@ -89,7 +92,7 @@ public class CreateXExpression extends AAction {
 			}
 			if (mftable == null) {
 				if (ct == null)
-					ct = new CreateTable(designer);
+					ct = new CreateTable(designer, treeViewer);
 				MRoot r = (MRoot) ((ANode) sel).getRoot();
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {

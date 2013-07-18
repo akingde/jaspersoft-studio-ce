@@ -15,10 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
@@ -27,8 +27,8 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 
 public class CreateSelectExpression extends AAction {
 
-	public CreateSelectExpression(SQLQueryDesigner designer) {
-		super("Add E&xpression", designer);
+	public CreateSelectExpression(TreeViewer treeViewer) {
+		super("Add E&xpression", treeViewer);
 	}
 
 	@Override

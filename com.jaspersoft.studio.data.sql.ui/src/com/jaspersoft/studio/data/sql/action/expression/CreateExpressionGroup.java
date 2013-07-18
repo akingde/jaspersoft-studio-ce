@@ -15,7 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.expression;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
@@ -26,8 +27,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class CreateExpressionGroup extends AAction {
 
-	public CreateExpressionGroup(SQLQueryDesigner designer) {
-		super("Add Expression &Group", designer);
+	public CreateExpressionGroup(TreeViewer treeViewer) {
+		super("Add Expression &Group", treeViewer);
 	}
 
 	@Override

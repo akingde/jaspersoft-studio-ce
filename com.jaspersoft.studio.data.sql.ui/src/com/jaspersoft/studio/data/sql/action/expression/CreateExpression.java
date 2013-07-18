@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -50,9 +51,11 @@ import com.jaspersoft.studio.model.MRoot;
 
 public class CreateExpression extends AAction {
 	private CreateTable ct;
+	private SQLQueryDesigner designer;
 
-	public CreateExpression(SQLQueryDesigner designer) {
-		super("Add E&xpression", designer);
+	public CreateExpression(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("Add E&xpression", treeViewer);
+		this.designer = designer;
 	}
 
 	@Override
@@ -111,7 +114,7 @@ public class CreateExpression extends AAction {
 			}
 			if (mftable == null) {
 				if (ct == null)
-					ct = new CreateTable(designer);
+					ct = new CreateTable(designer, treeViewer);
 				MRoot r = (MRoot) ((ANode) sel).getRoot();
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {

@@ -113,7 +113,7 @@ public class SQLQueryOutline {
 
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
-		afactory = new ActionFactory(designer);
+		afactory = new ActionFactory(designer, treeViewer);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager mgr) {
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();

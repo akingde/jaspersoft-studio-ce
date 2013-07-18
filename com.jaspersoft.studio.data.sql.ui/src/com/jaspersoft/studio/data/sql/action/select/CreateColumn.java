@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
@@ -41,9 +42,11 @@ import com.jaspersoft.studio.model.MRoot;
 public class CreateColumn extends AAction {
 
 	private CreateTable ct;
+	private SQLQueryDesigner designer;
 
-	public CreateColumn(SQLQueryDesigner designer) {
-		super("&Add Column", designer);
+	public CreateColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("&Add Column", treeViewer);
+		this.designer = designer;
 	}
 
 	@Override
@@ -90,7 +93,7 @@ public class CreateColumn extends AAction {
 			}
 			if (mftable == null) {
 				if (ct == null)
-					ct = new CreateTable(designer);
+					ct = new CreateTable(designer, treeViewer);
 				MRoot r = (MRoot) ((ANode) sel).getRoot();
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {

@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.model.ANode;
 
 public abstract class AMultiSelectionAction extends AAction {
 
-	public AMultiSelectionAction(String text, SQLQueryDesigner designer) {
-		super(text, designer);
+	public AMultiSelectionAction(String text, TreeViewer treeViewer) {
+		super(text, treeViewer);
 	}
 
 	@Override

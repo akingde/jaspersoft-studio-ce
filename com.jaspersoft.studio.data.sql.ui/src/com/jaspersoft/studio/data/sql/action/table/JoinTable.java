@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.sql.action.table;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
@@ -33,9 +34,11 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
 public class JoinTable extends AAction {
+	private SQLQueryDesigner designer;
 
-	public JoinTable(SQLQueryDesigner designer) {
-		super("&Join Table", designer);
+	public JoinTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("&Join Table", treeViewer);
+		this.designer = designer;
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class JoinTable extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell());
+		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer);
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable mtab = getFromTable(mfromTable, dialog);

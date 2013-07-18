@@ -20,15 +20,16 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.model.ANode;
 
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected String name;
 	protected Class<T> type;
 
-	public DeleteAction(SQLQueryDesigner designer, String name, Class<T> type) {
-		super("&Delete " + name, designer);
+	public DeleteAction(TreeViewer treeViewer, String name, Class<T> type) {
+		super("&Delete " + name, treeViewer);
 		this.name = name;
 		this.type = type;
 	}

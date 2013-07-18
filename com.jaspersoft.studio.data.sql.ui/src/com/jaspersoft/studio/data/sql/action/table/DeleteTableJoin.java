@@ -17,7 +17,8 @@ package com.jaspersoft.studio.data.sql.action.table;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -26,8 +27,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class DeleteTableJoin extends AAction {
 
-	public DeleteTableJoin(SQLQueryDesigner designer) {
-		super("Delete &Table Join", designer);
+	public DeleteTableJoin(TreeViewer treeViewer) {
+		super("Delete &Table Join", treeViewer);
 	}
 
 	@Override

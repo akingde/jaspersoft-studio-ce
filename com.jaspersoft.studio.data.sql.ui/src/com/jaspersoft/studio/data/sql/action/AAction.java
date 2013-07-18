@@ -24,15 +24,13 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
-
 public abstract class AAction extends Action {
 	protected Object[] selection;
-	protected SQLQueryDesigner designer;
+	protected TreeViewer treeViewer;
 
-	public AAction(String text, SQLQueryDesigner designer) {
+	public AAction(String text, TreeViewer treeViewer) {
 		super(text);
-		this.designer = designer;
+		this.treeViewer = treeViewer;
 	}
 
 	public boolean calculateEnabled(ISelection iselection) {
@@ -50,9 +48,8 @@ public abstract class AAction extends Action {
 	}
 
 	protected void selectInTree(Object sel) {
-		TreeViewer tv = designer.getOutline().getTreeViewer();
-		tv.refresh(true);
-		tv.setSelection(new TreeSelection(new TreePath(new Object[] { sel })));
-		tv.reveal(sel);
+		treeViewer.refresh(true);
+		treeViewer.setSelection(new TreeSelection(new TreePath(new Object[] { sel })));
+		treeViewer.reveal(sel);
 	}
 }

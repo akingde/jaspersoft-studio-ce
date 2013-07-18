@@ -16,10 +16,10 @@
 package com.jaspersoft.studio.data.sql.action.select;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectColumnDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
@@ -29,8 +29,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class EditColumn extends AAction {
 
-	public EditColumn(SQLQueryDesigner designer) {
-		super("&Edit Column", designer);
+	public EditColumn(TreeViewer treeViewer) {
+		super("&Edit Column", treeViewer);
 	}
 
 	@Override

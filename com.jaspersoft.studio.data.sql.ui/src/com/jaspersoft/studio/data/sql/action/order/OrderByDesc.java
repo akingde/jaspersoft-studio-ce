@@ -15,15 +15,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.order;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.model.ANode;
 
 public class OrderByDesc extends AAction {
 
-	public OrderByDesc(SQLQueryDesigner designer) {
-		super("Set Ascending", designer);
+	public OrderByDesc(TreeViewer treeViewer) {
+		super("Set Ascending", treeViewer);
 	}
 
 	@Override

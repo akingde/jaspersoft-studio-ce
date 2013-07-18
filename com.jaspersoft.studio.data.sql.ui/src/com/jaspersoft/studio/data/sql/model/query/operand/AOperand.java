@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 
-public abstract class AOperand implements Serializable {
+public abstract class AOperand implements Serializable, Cloneable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	protected AMExpression<?> expression;
 
@@ -36,4 +36,9 @@ public abstract class AOperand implements Serializable {
 	public abstract String toXString();
 
 	public abstract String toSQLString();
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }

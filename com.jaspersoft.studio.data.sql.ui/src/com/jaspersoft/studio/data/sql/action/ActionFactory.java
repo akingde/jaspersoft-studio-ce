@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
@@ -53,54 +54,54 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 public class ActionFactory {
 	private List<AAction> actions = new ArrayList<AAction>();
 
-	public ActionFactory(SQLQueryDesigner designer) {
+	public ActionFactory(SQLQueryDesigner designer, TreeViewer treeViewer) {
 
-		actions.add(new SelectDistinct(designer));
-		actions.add(new CreateWhereFromColumn(designer));
-		actions.add(new CreateGroupByFromColumn(designer));
-		actions.add(new CreateHavingFromColumn(designer));
-		actions.add(new CreateOrderByFromColumn(designer));
+		actions.add(new SelectDistinct(treeViewer));
+		actions.add(new CreateWhereFromColumn(designer, treeViewer));
+		actions.add(new CreateGroupByFromColumn(treeViewer));
+		actions.add(new CreateHavingFromColumn(designer, treeViewer));
+		actions.add(new CreateOrderByFromColumn(treeViewer));
 		actions.add(null);
-		actions.add(new CreateColumn(designer));
-		actions.add(new CreateSelectExpression(designer));
+		actions.add(new CreateColumn(designer, treeViewer));
+		actions.add(new CreateSelectExpression(treeViewer));
 		actions.add(null);
-		actions.add(new EditColumn(designer));
+		actions.add(new EditColumn(treeViewer));
 		actions.add(null);
-		actions.add(new DeleteColumn(designer));
-		actions.add(null);
-
-		actions.add(new JoinTable(designer));
-		actions.add(new CreateTable(designer));
-		actions.add(null);
-		actions.add(new EditTableJoin(designer));
-		actions.add(new EditTable(designer));
-		actions.add(null);
-		actions.add(new DeleteTableJoin(designer));
-		actions.add(new DeleteAction<MFromTable>(designer, "Table", MFromTable.class));
+		actions.add(new DeleteColumn(treeViewer));
 		actions.add(null);
 
-		actions.add(new CreateGroupByColumn(designer));
+		actions.add(new JoinTable(designer, treeViewer));
+		actions.add(new CreateTable(designer, treeViewer));
 		actions.add(null);
-		actions.add(new DeleteAction<MGroupByColumn>(designer, "Column", MGroupByColumn.class));
+		actions.add(new EditTableJoin(designer, treeViewer));
+		actions.add(new EditTable(treeViewer));
+		actions.add(null);
+		actions.add(new DeleteTableJoin(treeViewer));
+		actions.add(new DeleteAction<MFromTable>(treeViewer, "Table", MFromTable.class));
 		actions.add(null);
 
-		actions.add(new CreateOrderByColumn(designer));
+		actions.add(new CreateGroupByColumn(designer, treeViewer));
 		actions.add(null);
-		actions.add(new OrderByDesc(designer));
+		actions.add(new DeleteAction<MGroupByColumn>(treeViewer, "Column", MGroupByColumn.class));
 		actions.add(null);
-		actions.add(new DeleteAction<MOrderByColumn>(designer, "Column", MOrderByColumn.class));
+
+		actions.add(new CreateOrderByColumn(designer, treeViewer));
+		actions.add(null);
+		actions.add(new OrderByDesc(treeViewer));
+		actions.add(null);
+		actions.add(new DeleteAction<MOrderByColumn>(treeViewer, "Column", MOrderByColumn.class));
 
 		actions.add(null);
-		actions.add(new CreateExpressionGroup(designer));
-		actions.add(new CreateExpression(designer));
-		actions.add(new CreateXExpression(designer));
-		actions.add(new ChangeOperator(designer));
+		actions.add(new CreateExpressionGroup(treeViewer));
+		actions.add(new CreateExpression(designer, treeViewer));
+		actions.add(new CreateXExpression(designer, treeViewer));
+		actions.add(new ChangeOperator(treeViewer));
 		actions.add(null);
-		actions.add(new EditExpression(designer));
+		actions.add(new EditExpression(treeViewer));
 		actions.add(null);
-		actions.add(new DeleteAction<MExpression>(designer, "Expression", MExpression.class));
-		actions.add(new DeleteAction<MExpressionX>(designer, "Expression $X{}", MExpressionX.class));
-		actions.add(new DeleteAction<MExpressionGroup>(designer, "Expression Group", MExpressionGroup.class));
+		actions.add(new DeleteAction<MExpression>(treeViewer, "Expression", MExpression.class));
+		actions.add(new DeleteAction<MExpressionX>(treeViewer, "Expression $X{}", MExpressionX.class));
+		actions.add(new DeleteAction<MExpressionGroup>(treeViewer, "Expression Group", MExpressionGroup.class));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -110,6 +111,10 @@ public class ActionFactory {
 				return (T) act;
 		}
 		return null;
+	}
+
+	public List<AAction> getActions() {
+		return actions;
 	}
 
 	public void fillMenu(Object[] selection, IMenuManager menu) {

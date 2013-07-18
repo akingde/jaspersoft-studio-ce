@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
@@ -39,9 +40,11 @@ import com.jaspersoft.studio.model.MRoot;
 
 public class CreateGroupByColumn extends AAction {
 	private CreateTable ct;
+	private SQLQueryDesigner designer;
 
-	public CreateGroupByColumn(SQLQueryDesigner designer) {
-		super("&Add Group By Column", designer);
+	public CreateGroupByColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("&Add Group By Column", treeViewer);
+		this.designer = designer;
 	}
 
 	@Override
@@ -88,7 +91,7 @@ public class CreateGroupByColumn extends AAction {
 			}
 			if (mftable == null) {
 				if (ct == null)
-					ct = new CreateTable(designer);
+					ct = new CreateTable(designer, treeViewer);
 				MRoot r = (MRoot) ((ANode) sel).getRoot();
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {

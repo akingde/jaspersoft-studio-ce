@@ -59,4 +59,19 @@ public abstract class AMExpression<T> extends AMQueryObject<T> {
 		this.prevCond = prevCond;
 	}
 
+	@Override
+	public ANode clone() {
+		AMExpression<?> clone = (AMExpression<?>) super.clone();
+		clone.setOperands(new ArrayList<AOperand>());
+		List<AOperand> ops = new ArrayList<AOperand>();
+		for (AOperand op : operands)
+			try {
+				ops.add((AOperand) op.clone());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		clone.setOperands(ops);
+		return clone;
+	}
+
 }

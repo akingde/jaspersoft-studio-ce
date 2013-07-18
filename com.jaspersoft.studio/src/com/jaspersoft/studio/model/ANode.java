@@ -47,7 +47,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class ANode implements INode, Serializable, IAdaptable {
+public abstract class ANode implements INode, Serializable, IAdaptable, Cloneable {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -494,14 +494,18 @@ public abstract class ANode implements INode, Serializable, IAdaptable {
 		this.cut = cut;
 	}
 
+	final void intReset() {
+		children = null;
+		parent = null;
+	}
+
 	public ANode clone() {
 		try {
 			ANode clone = (ANode) super.clone();
-			if (getChildren() != null) {
-				clone.removeChildren();
-				for (INode n : getChildren()) {
+			if (children != null) {
+				clone.intReset();
+				for (INode n : children)
 					clone.addChild(((ANode) n).clone());
-				}
 			}
 			return clone;
 		} catch (CloneNotSupportedException e) {

@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.sql.action.table;
 
 import java.util.Collection;
 
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
@@ -28,9 +29,11 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 
 public class CreateTable extends AAction {
+	private SQLQueryDesigner designer;
 
-	public CreateTable(SQLQueryDesigner designer) {
-		super("&Add Table", designer);
+	public CreateTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("&Add Table", treeViewer);
+		this.designer = designer;
 	}
 
 	@Override

@@ -15,7 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
 import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
@@ -26,8 +27,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class CreateGroupByFromColumn extends AMultiSelectionAction {
 
-	public CreateGroupByFromColumn(SQLQueryDesigner designer) {
-		super("Add To &Group By", designer);
+	public CreateGroupByFromColumn(TreeViewer treeViewer) {
+		super("Add To &Group By", treeViewer);
 	}
 
 	protected boolean isGoodNode(ANode element) {

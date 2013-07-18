@@ -15,7 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.expression;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
@@ -23,8 +24,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class ChangeOperator extends AAction {
 
-	public ChangeOperator(SQLQueryDesigner designer) {
-		super("Change to" + AMKeyword.OR_OPERATOR, designer);
+	public ChangeOperator(TreeViewer treeViewer) {
+		super("Change to" + AMKeyword.OR_OPERATOR, treeViewer);
 	}
 
 	@Override

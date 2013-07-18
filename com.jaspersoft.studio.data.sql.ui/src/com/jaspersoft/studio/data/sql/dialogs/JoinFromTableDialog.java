@@ -20,30 +20,58 @@ import java.util.List;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.action.ActionFactory;
+import com.jaspersoft.studio.data.sql.action.DeleteAction;
+import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
+import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
+import com.jaspersoft.studio.data.sql.action.expression.CreateExpressionGroup;
+import com.jaspersoft.studio.data.sql.action.expression.CreateXExpression;
+import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
+import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.outline.ReportTreeContetProvider;
+import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
 public class JoinFromTableDialog extends ATitledDialog {
 	private MFromTable srcTable;
 	private String fromTable;
 	private String join = AMKeyword.INNER_JOIN;
+	private TreeViewer treeViewer;
+	private ActionFactory afactory;
+	private SQLQueryDesigner designer;
 
-	public JoinFromTableDialog(Shell parentShell) {
+	public JoinFromTableDialog(Shell parentShell, SQLQueryDesigner designer) {
 		super(parentShell);
 		setTitle("Join Table Dialog");
+		setDescription("Use context menu to manage expressions.");
+		this.designer = designer;
 	}
 
 	public void setValue(MFromTable value) {
@@ -120,7 +148,100 @@ public class JoinFromTableDialog extends ATitledDialog {
 
 		DataBindingContext bindingContext = new DataBindingContext();
 		bindingContext.bindValue(SWTObservables.observeSelection(keyword), PojoObservables.observeValue(this, "join")); //$NON-NLS-1$ 
-		bindingContext.bindValue(SWTObservables.observeSelection(ftable), PojoObservables.observeValue(this, "fromTable")); //$NON-NLS-1$ 
+		bindingContext.bindValue(SWTObservables.observeSelection(ftable), PojoObservables.observeValue(this, "fromTable")); //$NON-NLS-1$
+
+		treeViewer = new TreeViewer(cmp, SWT.MULTI | SWT.BORDER);
+		treeViewer.setContentProvider(new ReportTreeContetProvider());
+		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 200;
+		gd.horizontalSpan = 3;
+		treeViewer.getControl().setLayoutData(gd);
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+				Object el = ts.getFirstElement();
+				if (el instanceof MSQLColumn)
+					okPressed();
+				else {
+					if (treeViewer.getExpandedState(el))
+						treeViewer.collapseToLevel(el, 1);
+					else
+						treeViewer.expandToLevel(el, 1);
+				}
+			}
+		});
+		ColumnViewerToolTipSupport.enableFor(treeViewer);
+
+		MenuManager menuMgr = new MenuManager();
+		menuMgr.setRemoveAllWhenShown(true);
+		afactory = new ActionFactory(designer, treeViewer);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager mgr) {
+				TreeSelection s = (TreeSelection) treeViewer.getSelection();
+				Object[] selection = s != null ? s.toArray() : null;
+				boolean isFromTable = false;
+				if (selection != null)
+					for (Object o : selection)
+						if (o instanceof MFromTable) {
+							isFromTable = true;
+							break;
+						}
+
+				for (AAction act : afactory.getActions()) {
+					if (act == null)
+						mgr.add(new org.eclipse.jface.action.Separator());
+					else if (act.calculateEnabled(selection)) {
+						if (isFromTable && !(act instanceof CreateExpressionGroup || act instanceof CreateExpression || act instanceof CreateXExpression))
+							continue;
+						mgr.add(act);
+					}
+				}
+			}
+
+		});
+		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
+		treeViewer.getControl().setMenu(menu);
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				runAction(event, afactory.getAction(ChangeOperator.class));
+				runAction(event, afactory.getAction(EditExpression.class));
+			}
+
+			private void runAction(DoubleClickEvent event, AAction sd) {
+				if (sd.calculateEnabled(event.getSelection()))
+					sd.run();
+			}
+		});
+		treeViewer.getControl().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.character == SWT.DEL && event.stateMask == 0) {
+					TreeSelection s = (TreeSelection) treeViewer.getSelection();
+					if (s == null)
+						return;
+					List<Object> selection = new ArrayList<Object>();
+					for (Object obj : s.toList()) {
+						if (obj instanceof MFromTable)
+							continue;
+						selection.add(obj);
+					}
+
+					List<DeleteAction<?>> dactions = afactory.getDeleteActions(selection.toArray());
+					for (DeleteAction<?> da : dactions) {
+						da.run();
+						break;
+					}
+				}
+			}
+		});
+
+		treeViewer.setInput(srcTable.getParent());
+		treeViewer.expandAll();
 		return cmp;
 	}
 }

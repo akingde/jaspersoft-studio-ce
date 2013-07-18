@@ -16,9 +16,9 @@
 package com.jaspersoft.studio.data.sql.action.expression;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionXDialog;
@@ -30,8 +30,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class EditExpression extends AAction {
 
-	public EditExpression(SQLQueryDesigner designer) {
-		super("&Edit Expression", designer);
+	public EditExpression(TreeViewer treeViewer) {
+		super("&Edit Expression", treeViewer);
 	}
 
 	@Override

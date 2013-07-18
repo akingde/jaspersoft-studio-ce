@@ -33,7 +33,7 @@ public class MFromTableJoin extends MFromTable {
 
 	public MFromTableJoin(MFromTable parent, MSqlTable value, int index) {
 		super(parent, value, index);
-		tableJoin = new TableJoin(this, parent);
+
 	}
 
 	@Override
@@ -41,7 +41,8 @@ public class MFromTableJoin extends MFromTable {
 		if (newparent == null) {
 			tableJoin.getFromTable().removeTableJoin(tableJoin);
 			tableJoin = null;
-		}
+		} else
+			tableJoin = new TableJoin(this, (MFromTable) newparent);
 		super.setParent(newparent, newIndex);
 	}
 
@@ -87,4 +88,9 @@ public class MFromTableJoin extends MFromTable {
 	public TableJoin getTableJoin() {
 		return tableJoin;
 	}
+
+	public void setTableJoin(TableJoin tableJoin) {
+		this.tableJoin = tableJoin;
+	}
+
 }

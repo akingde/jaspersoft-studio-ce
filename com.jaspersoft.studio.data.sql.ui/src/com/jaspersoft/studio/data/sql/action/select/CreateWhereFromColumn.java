@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.select;
 
+import org.eclipse.jface.viewers.TreeViewer;
+
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
@@ -26,9 +28,11 @@ import com.jaspersoft.studio.model.ANode;
 
 public class CreateWhereFromColumn extends AMultiSelectionAction {
 	private CreateExpression ce;
+	private SQLQueryDesigner designer;
 
-	public CreateWhereFromColumn(SQLQueryDesigner designer) {
-		super("Create &Where Condition", designer);
+	public CreateWhereFromColumn(SQLQueryDesigner designer, TreeViewer treeViewer) {
+		super("Create &Where Condition", treeViewer);
+		this.designer = designer;
 	}
 
 	protected boolean isGoodNode(ANode element) {
@@ -46,7 +50,7 @@ public class CreateWhereFromColumn extends AMultiSelectionAction {
 					mwhere = Util.getKeyword(msc, MWhere.class);
 
 				if (ce == null)
-					ce = new CreateExpression(designer);
+					ce = new CreateExpression(designer, treeViewer);
 				ce.run(mwhere, msc);
 				break;
 			}

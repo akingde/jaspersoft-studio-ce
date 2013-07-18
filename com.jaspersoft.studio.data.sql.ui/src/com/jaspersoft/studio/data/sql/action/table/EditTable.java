@@ -16,9 +16,9 @@
 package com.jaspersoft.studio.data.sql.action.table;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditFromTableDialog;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -26,8 +26,8 @@ import com.jaspersoft.studio.model.ANode;
 
 public class EditTable extends AAction {
 
-	public EditTable(SQLQueryDesigner designer) {
-		super("&Edit Table", designer);
+	public EditTable(TreeViewer treeViewer) {
+		super("&Edit Table", treeViewer);
 	}
 
 	@Override
