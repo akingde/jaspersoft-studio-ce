@@ -7,7 +7,7 @@ Model:
 	query=SelectQuery
 	('ORDER BY' orderByEntry=OrderByColumns)?;
 
-SelectQuery:
+SelectQuery returns SelectQuery:
 	Select ({OrSelect.entries+=current} ((('UNION' ('ALL')?) | 'INTERSECT' | 'MINUS' | 'EXCEPT') entries+=Select)+)?;
 
 Select:

@@ -11,7 +11,9 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.SelectQuery;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.impl.ModelImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
@@ -41,16 +43,20 @@ public class Text2Model {
 				EList<?> list = resource.getContents();
 				if (list != null && !list.isEmpty()) {
 					for (Object obj : list) {
-						if (obj instanceof SelectImpl) {
-							SelectImpl sel = (SelectImpl) obj;
-							MRoot root = designer.getRoot();
-							ConvertTables.convertTables(designer, sel.getTbl());
-							ConvertSelectColumns.convertSelectColumns(designer, sel.getCols());
-							ConvertExpression.convertExpression(designer, Util.getKeyword(root, MWhere.class), sel.getWhereExpression());
-							ConvertGroupBy.convertGroupBy(designer, sel.getGroupByEntry());
-							ConvertExpression.convertExpression(designer, Util.getKeyword(root, MHaving.class), sel.getHavingEntry());
-							ConvertOrderBy.convertOrderBy(designer, sel.getOrderByEntry());
+						if (obj instanceof ModelImpl) {
+							SelectQuery sq = ((ModelImpl) obj).getQuery();
+							if (sq instanceof SelectImpl) {
+								SelectImpl sel = (SelectImpl) sq;
+								MRoot root = designer.getRoot();
+								ConvertTables.convertTables(designer, sel.getTbl());
+								ConvertSelectColumns.convertSelectColumns(designer, sel.getCols());
+								ConvertExpression.convertExpression(designer, Util.getKeyword(root, MWhere.class), sel.getWhereExpression());
+								ConvertGroupBy.convertGroupBy(designer, sel.getGroupByEntry());
+								ConvertExpression.convertExpression(designer, Util.getKeyword(root, MHaving.class), sel.getHavingEntry());
+							}
 						}
+
+						ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
 					}
 				}
 				return "";
