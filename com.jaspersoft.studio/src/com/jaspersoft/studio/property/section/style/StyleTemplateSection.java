@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -25,5 +26,11 @@ public class StyleTemplateSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION, Messages.MStyleTemplate_source_expression);
 	}
 }

@@ -19,6 +19,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -65,6 +66,15 @@ public class ParameterSection extends AbstractSection {
 				createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_FOR_PROMPTING);
 		}
 		createWidget4Property(rootComposite, JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME,  Messages.MParameter_nested_type_name);
+		addProvidedProperties(JRDesignParameter.PROPERTY_DESCRIPTION, Messages.common_description);
+		addProvidedProperties(JRDesignParameter.PROPERTY_FOR_PROMPTING, Messages.MParameter_is_for_prompting);
+		addProvidedProperties(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, Messages.MParameter_default_value_expression);
 	}
 	
 	/**

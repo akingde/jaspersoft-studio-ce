@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
@@ -62,5 +63,17 @@ public class TextFieldSection extends AbstractRealValueSection {
 
 		createWidget4Property(parent, JRDesignTextField.PROPERTY_PATTERN_EXPRESSION);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignTextField.PROPERTY_EXPRESSION, Messages.common_expression);
+		addProvidedProperties(JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time);
+		addProvidedProperties(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Messages.common_blank_when_null);
+		addProvidedProperties(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow);
+		addProvidedProperties(JRDesignStyle.PROPERTY_PATTERN, Messages.common_pattern);
+		addProvidedProperties(JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, Messages.MTextField_patternExpressionTitle);
+	}
+	
 
 }

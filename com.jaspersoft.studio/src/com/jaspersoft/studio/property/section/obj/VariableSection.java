@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPIncrementType;
@@ -66,5 +67,16 @@ public class VariableSection extends AbstractSection {
 		gd.horizontalSpan = 2;
 		wrestype.getControl().setLayoutData(gd);
 		widgets.put(pd.getId(), wrestype);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignVariable.PROPERTY_CALCULATION, Messages.MVariable_calculation);
+		addProvidedProperties(JRDesignVariable.PROPERTY_EXPRESSION, Messages.common_expression);
+		addProvidedProperties(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, Messages.MVariable_initial_value_expression);
+		addProvidedProperties(JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.common_increment_type);
+		addProvidedProperties(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MVariable_incrementer_factory_class_name);
+		addProvidedProperties(JRDesignVariable.PROPERTY_RESET_TYPE, Messages.common_reset_type);
 	}
 }

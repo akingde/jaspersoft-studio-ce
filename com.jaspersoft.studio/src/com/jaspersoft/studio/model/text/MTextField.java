@@ -148,7 +148,7 @@ public class MTextField extends MTextElement {
 		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
 		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
@@ -156,19 +156,19 @@ public class MTextField extends MTextElement {
 		desc.add(patternD);
 
 		JRExpressionPropertyDescriptor pexprD = new JRExpressionPropertyDescriptor(
-				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, "Pattern Expression"); //$NON-NLS-1$
+				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, Messages.MTextField_patternExpressionTitle); 
 		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
 		pexprD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField"); //$NON-NLS-1$
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textField"); //$NON-NLS-1$
 
 		patternD.setCategory(Messages.MTextField_textfield_category);
 		exprD.setCategory(Messages.MTextField_textfield_category);
@@ -340,8 +340,8 @@ public class MTextField extends MTextElement {
 		jrDesignTextField.setY(0);
 		jrDesignTextField.setWidth(getDefaultWidth());
 		jrDesignTextField.setHeight(getDefaultHeight());
-		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat(
-				"\"")));
+		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat( //$NON-NLS-1$
+				"\""))); //$NON-NLS-1$
 		return jrDesignTextField;
 	}
 

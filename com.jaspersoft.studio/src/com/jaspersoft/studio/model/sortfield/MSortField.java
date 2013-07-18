@@ -189,24 +189,24 @@ public class MSortField extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, "Type", SortFieldTypeEnum.class,
+		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, Messages.MSortField_typeTitle, SortFieldTypeEnum.class,
 				NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				Image[] images = new Image[] {
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/fields-sort-16.png"),
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/variables-sort-16.png") };
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/fields-sort-16.png"), //$NON-NLS-1$
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/variables-sort-16.png") }; //$NON-NLS-1$
 				return new SPToolBarEnum(parent, section, this, images, false);
 			}
 		};
-		typeD.setDescription("Sort field type");
+		typeD.setDescription("Sort field type"); //$NON-NLS-1$
 		desc.add(typeD);
 
 		orderD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
 				SortOrderEnum.class, NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				Image[] images = new Image[] {
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-column.png"),
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-descending.png") };
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-column.png"), //$NON-NLS-1$
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/sort-number-descending.png") }; //$NON-NLS-1$
 				return new SPToolBarEnum(parent, section, this, images, false);
 			}
 		};
@@ -216,7 +216,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, typeD.getEnumValue(SortOrderEnum.ASCENDING));
 		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, orderD.getEnumValue(SortFieldTypeEnum.FIELD));
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#sortField");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#sortField"); //$NON-NLS-1$
 	}
 
 	/*
@@ -258,7 +258,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 			if (!type.equals(jrField.getType())) {
 				jrField.setType(type);
 				JRDesignDataset ds = getDataSet();
-				String newName = "";
+				String newName = ""; //$NON-NLS-1$
 				if (type.equals(SortFieldTypeEnum.FIELD)) {
 					List<JRField> f = ds.getFieldsList();
 					if (!f.isEmpty())

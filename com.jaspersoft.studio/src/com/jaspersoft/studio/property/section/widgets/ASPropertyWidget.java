@@ -36,6 +36,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
+import com.jaspersoft.studio.property.combomenu.ComboButton;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtil;
 
@@ -152,13 +153,13 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	 * 
 	 * @return An object that offer the functionality to highlight the widget
 	 */
-	protected IHighlightControl getControlHighlight() {
-		Control control = getControlToBorder();
+	 public static IHighlightControl getControlHighlight(Control control) {
 		if (control.getClass().equals(Spinner.class)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Text.class)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Combo.class) && !((control.getStyle() & SWT.READ_ONLY) == SWT.READ_ONLY)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.CHECK) == SWT.CHECK)) return new BackgroundHighlight(control);
-		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH)) return new BackgroundHighlight(control);
+		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH)) return new BorderHightLight(control, Combo.class);
+		if (control.getClass().equals(ComboButton.GraphicButton.class)) return new BackgroundHighlight(control);
 		if (control instanceof Composite) return new BorderHightLight(control);
 		if (control instanceof Button) return new BorderHightLight(control);
 		return null;
@@ -173,7 +174,7 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	public void highLightWidget(long ms) {
 		// if there isn't a control defined where add the border then return
 		if (getControlToBorder() == null) return;
-		final IHighlightControl highLight = getControlHighlight();
+		final IHighlightControl highLight = getControlHighlight(getControlToBorder());
 		if (highLight == null) return;
 		//highlight the control
 		highLight.highLightControl();

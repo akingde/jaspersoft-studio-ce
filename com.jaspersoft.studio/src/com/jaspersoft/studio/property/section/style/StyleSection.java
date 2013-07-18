@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
@@ -50,5 +51,18 @@ public class StyleSection extends AbstractRealValueSection {
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_FILL);
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_RADIUS);
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_SCALE_IMAGE);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignStyle.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style);
+		addProvidedProperties(JRDesignStyle.PROPERTY_DEFAULT, Messages.MStyle_default_style);
+		addProvidedProperties(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Messages.common_blank_when_null);
+		addProvidedProperties(JRDesignStyle.PROPERTY_PATTERN, Messages.common_pattern);
+		addProvidedProperties(JRBaseStyle.PROPERTY_FILL, Messages.common_fill);
+		addProvidedProperties(JRBaseStyle.PROPERTY_RADIUS, Messages.common_radius);
+		addProvidedProperties(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale);
 	}
 }

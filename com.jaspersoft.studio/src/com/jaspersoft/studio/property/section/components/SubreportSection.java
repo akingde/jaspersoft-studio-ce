@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -48,5 +49,18 @@ public class SubreportSection extends AbstractSection {
 		createWidget4Property(cmp, JRDesignSubreport.PROPERTY_RETURN_VALUES, false);
 
 		createWidget4Property(cmp, JRDesignSubreport.PROPERTY_PARAMETERS, false);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM, Messages.MSubreport_run_to_bottom);
+		addProvidedProperties(JRBaseSubreport.PROPERTY_USING_CACHE, Messages.common_using_cache);
+		addProvidedProperties(JRDesignSubreport.PROPERTY_EXPRESSION, Messages.common_expression);
+		addProvidedProperties(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
+		addProvidedProperties(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
+		addProvidedProperties(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, Messages.MSubreport_datasource_expression);
+		addProvidedProperties(JRDesignSubreport.PROPERTY_RETURN_VALUES, Messages.common_return_values);
+		addProvidedProperties(JRDesignSubreport.PROPERTY_PARAMETERS, Messages.common_parameters);
 	}
 }

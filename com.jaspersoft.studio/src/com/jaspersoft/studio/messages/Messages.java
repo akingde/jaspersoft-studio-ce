@@ -1007,6 +1007,22 @@ public class Messages extends NLS {
 	public static String MoveGroupUpAction_actionDescription;
 	public static String MoveGroupUpAction_actionName;
 	public static String MoveGuideCommand_move_guide;
+	public static String MParagraph_firstIdentDescription;
+	public static String MParagraph_firstIdentTitle;
+	public static String MParagraph_leftIdentDescription;
+	public static String MParagraph_leftIdentTitle;
+	public static String MParagraph_lineSpacingSizeDescription;
+	public static String MParagraph_lineSpacingSizeTitle;
+	public static String MParagraph_rightIdentDescription;
+	public static String MParagraph_rightIdentTitle;
+	public static String MParagraph_spacingAfterDescription;
+	public static String MParagraph_spacingAfterTitle;
+	public static String MParagraph_spacingBeforeDescription;
+	public static String MParagraph_spacingBeforeTitle;
+	public static String MParagraph_tabStopsDescription;
+	public static String MParagraph_tabStopsTitle;
+	public static String MParagraph_tabStopWidthDescription;
+	public static String MParagraph_tabStopWidthTitle;
 	public static String MParameter_default_value_expression;
 	public static String MParameter_default_value_expression_description;
 	public static String MParameter_description_description;
@@ -1074,6 +1090,7 @@ public class Messages extends NLS {
 	public static String MScriptlet_name_description;
 	public static String MSortField_name_description;
 	public static String MSortField_order_description;
+	public static String MSortField_typeTitle;
 	public static String MStaticText_text_description;
 	public static String MStyle_backcolor_description;
 	public static String MStyle_blank_when_null_description;
@@ -1135,6 +1152,7 @@ public class Messages extends NLS {
 	public static String MTextField_evaluation_time_description;
 	public static String MTextField_expression_description;
 	public static String MTextField_pattern_description;
+	public static String MTextField_patternExpressionTitle;
 	public static String MTextField_stretch_with_overflow;
 	public static String MTextField_stretch_with_overflow_description;
 	public static String MTextField_textfield_category;

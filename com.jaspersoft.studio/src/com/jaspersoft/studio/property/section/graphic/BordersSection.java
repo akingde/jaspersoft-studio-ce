@@ -757,7 +757,7 @@ public class BordersSection extends AbstractSection {
 		else if (propertyId.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) return new ASHighlightControl(paddingBottom, new BackgroundHighlight(paddingBottom));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR)) return new ASHighlightControl(lineColor.getPaintArea(), new BackgroundHighlight(lineColor.getPaintArea()));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH)) return new ASHighlightControl(lineWidth, new BackgroundHighlight(lineWidth));
-		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(), new BorderHightLight(lineStyle.getControl(), Composite.class));
+		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(), new BackgroundHighlight(lineStyle.getControl()));
 		return null;
 	}
 

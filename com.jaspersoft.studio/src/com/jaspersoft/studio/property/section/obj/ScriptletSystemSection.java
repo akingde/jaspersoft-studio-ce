@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -43,6 +44,14 @@ public class ScriptletSystemSection extends AbstractSection {
 
 		w = createWidget4Property(parent, JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME);
 		w.setReadOnly(true);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignScriptlet.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignScriptlet.PROPERTY_DESCRIPTION, Messages.common_description);
+		addProvidedProperties(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME, Messages.common_class);
 	}
 
 }

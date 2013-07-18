@@ -367,7 +367,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void expandForProperty(Object propertyId) {	
 	}
 	
-	public IHighlightPropertyWidget getWidgetForProperty(Object porpertyId){
-		return widgets.get(porpertyId);
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId){
+		return widgets.get(propertyId);
 	}
 }

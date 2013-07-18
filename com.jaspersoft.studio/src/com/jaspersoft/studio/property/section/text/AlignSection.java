@@ -49,5 +49,13 @@ public class AlignSection extends AbstractRealValueSection {
 
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, false);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, Messages.common_horizontal_alignment);
+		addProvidedProperties(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment);
+	}
+	
 
 }

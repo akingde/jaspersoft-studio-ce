@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -42,6 +43,12 @@ public class StaticTextSection extends AbstractSection {
 		createWidget4Property(parent, JRBaseStaticText.PROPERTY_TEXT);
 		
 	
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStaticText.PROPERTY_TEXT, Messages.common_text);
 	}
 
 }

@@ -31,8 +31,10 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /*
@@ -137,6 +139,25 @@ public class PaddingSection extends AbstractSection {
 			}
 		});
 
+	}
+	
+	@Override
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
+		if (propertyId.equals(JRBaseLineBox.PROPERTY_PADDING)) return new ASHighlightControl(allPadding, new BackgroundHighlight(allPadding));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) return new ASHighlightControl(leftPadding, new BackgroundHighlight(leftPadding));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) return new ASHighlightControl(rightPadding, new BackgroundHighlight(rightPadding));
+		else if (propertyId.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) return new ASHighlightControl(topPadding, new BackgroundHighlight(topPadding));
+		else return new ASHighlightControl(bottomPadding, new BackgroundHighlight(bottomPadding));
+	}
+		
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseLineBox.PROPERTY_PADDING,  Messages.BordersSection_Padding_Box_Title);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, Messages.common_bottom);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_TOP_PADDING, Messages.BordersSection_Top_Label);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_LEFT_PADDING, Messages.BordersSection_Left_Label);
+		addProvidedProperties(JRBaseLineBox.PROPERTY_RIGHT_PADDING, Messages.common_right);
 	}
 
 	/**

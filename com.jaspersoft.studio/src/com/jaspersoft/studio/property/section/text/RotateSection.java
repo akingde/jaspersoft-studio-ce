@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
@@ -39,6 +40,12 @@ public class RotateSection extends AbstractRealValueSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_ROTATION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStyle.PROPERTY_ROTATION, Messages.common_rotation);
 	}
 
 }

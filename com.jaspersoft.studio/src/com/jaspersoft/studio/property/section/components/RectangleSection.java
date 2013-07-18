@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -32,4 +33,12 @@ public class RectangleSection extends AbstractSection {
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_FILL);
 		createWidget4Property(parent, JRBaseStyle.PROPERTY_RADIUS);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseStyle.PROPERTY_FILL, Messages.common_fill);
+		addProvidedProperties(JRBaseStyle.PROPERTY_RADIUS, Messages.common_radius);
+	}
+	
 }

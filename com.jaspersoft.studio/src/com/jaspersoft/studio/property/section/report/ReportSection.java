@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -83,5 +84,21 @@ public class ReportSection extends AbstractSection {
 		gd.horizontalSpan = 3;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_IGNORE_PAGINATION, false).getControl().setLayoutData(gd);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JasperDesign.PROPERTY_NAME, Messages.MReport_report_name);
+		addProvidedProperties(JasperDesign.PROPERTY_LANGUAGE, Messages.common_language);
+		addProvidedProperties(JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
+		addProvidedProperties(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, Messages.MReport_format_factory_class);
+		addProvidedProperties(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, Messages.MReport_when_no_data_type);
+		addProvidedProperties(JasperDesign.PROPERTY_TITLE_NEW_PAGE, Messages.MReport_title_on_a_new_page);
+		addProvidedProperties(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, Messages.MReport_summary_on_a_new_page);
+		addProvidedProperties(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Messages.MReport_summary_with_page_header_and_footer);
+		addProvidedProperties(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, Messages.MReport_float_column_footer);
+		addProvidedProperties(JasperDesign.PROPERTY_IGNORE_PAGINATION, Messages.MReport_ignore_pagination);
+	}
+	
 
 }

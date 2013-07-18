@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -36,5 +37,12 @@ public class VariableSystemSection extends AbstractSection {
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		createWidget4Property(parent, JRDesignVariable.PROPERTY_VALUE_CLASS_NAME).getControl().setLayoutData(gd);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignVariable.PROPERTY_NAME, Messages.common_name);
+		addProvidedProperties(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, Messages.common_value_class_name);
 	}
 }

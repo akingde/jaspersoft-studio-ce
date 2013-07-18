@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -35,5 +36,12 @@ public class ParameterSystemSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_NAME).getControl().setLayoutData(gd);
 
 		createWidget4Property(parent, JRDesignParameter.PROPERTY_VALUE_CLASS_NAME);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignParameter.PROPERTY_NAME,  Messages.common_name);
+		addProvidedProperties(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, Messages.common_class);
 	}
 }

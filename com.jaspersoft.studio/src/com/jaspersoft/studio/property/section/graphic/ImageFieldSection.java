@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -68,4 +69,15 @@ public class ImageFieldSection extends AbstractRealValueSection {
 
 	}
 
+	
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignImage.PROPERTY_EXPRESSION, Messages.common_expression);
+		addProvidedProperties(JRDesignImage.PROPERTY_EVALUATION_TIME, Messages.MImage_evaluation_type);
+		addProvidedProperties(JRBaseImage.PROPERTY_LAZY, Messages.MImage_lazy);
+		addProvidedProperties(JRBaseImage.PROPERTY_USING_CACHE, Messages.common_using_cache);
+		addProvidedProperties(JRBaseStyle.PROPERTY_FILL, Messages.common_fill);
+		addProvidedProperties(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MImage_scale_image);
+		addProvidedProperties(JRBaseImage.PROPERTY_ON_ERROR_TYPE, Messages.MImage_on_error_type);
+	}
 }

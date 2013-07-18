@@ -74,56 +74,56 @@ public class MParagraph extends APropertyNode {
 		desc.add(lineSpacingD);
 
 		FloatPropertyDescriptor lineSpacingSize = new FloatPropertyDescriptor(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE,
-				"Line Spacing Size");
-		lineSpacingSize.setDescription("Line spacing size.");
+				Messages.MParagraph_lineSpacingSizeTitle);
+		lineSpacingSize.setDescription(Messages.MParagraph_lineSpacingSizeDescription);
 		desc.add(lineSpacingSize);
 
 		PixelPropertyDescriptor firstLineIdent = new PixelPropertyDescriptor(
-				JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, "First Line Indent");
-		firstLineIdent.setDescription("First line identation size in pixel.");
+				JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT, Messages.MParagraph_firstIdentTitle);
+		firstLineIdent.setDescription(Messages.MParagraph_firstIdentDescription);
 		desc.add(firstLineIdent);
 
 		PixelPropertyDescriptor leftIdent = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_LEFT_INDENT,
-				"Left Indent");
-		leftIdent.setDescription("Left identation size in pixel.");
+				Messages.MParagraph_leftIdentTitle);
+		leftIdent.setDescription(Messages.MParagraph_leftIdentDescription);
 		desc.add(leftIdent);
 
 		PixelPropertyDescriptor rightIdent = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_RIGHT_INDENT,
-				"Right Indent");
-		rightIdent.setDescription("Right identation size in pixel.");
+				Messages.MParagraph_rightIdentTitle);
+		rightIdent.setDescription(Messages.MParagraph_rightIdentDescription);
 		desc.add(rightIdent);
 
 		PixelPropertyDescriptor spacingBefore = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_SPACING_BEFORE,
-				"Spacing Before");
-		spacingBefore.setDescription("Spacing before paragraph in pixel.");
+				Messages.MParagraph_spacingBeforeTitle);
+		spacingBefore.setDescription(Messages.MParagraph_spacingBeforeDescription);
 		desc.add(spacingBefore);
 
 		PixelPropertyDescriptor spacingAfter = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_SPACING_AFTER,
-				"Spacing After");
-		spacingAfter.setDescription("Spacing after paragraph in pixel.");
+				Messages.MParagraph_spacingAfterTitle);
+		spacingAfter.setDescription(Messages.MParagraph_spacingAfterDescription);
 		desc.add(spacingAfter);
 
 		PixelPropertyDescriptor tabStopWidth = new PixelPropertyDescriptor(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH,
-				"Tab Stop Width");
-		tabStopWidth.setDescription("Tab stop width in pixel.");
+				Messages.MParagraph_tabStopWidthTitle);
+		tabStopWidth.setDescription(Messages.MParagraph_tabStopWidthDescription);
 		desc.add(tabStopWidth);
 
 		TabStopsPropertyDescriptor tabStops = new TabStopsPropertyDescriptor(JRBaseParagraph.PROPERTY_TAB_STOPS,
-				"Tab Stops");
-		tabStops.setDescription("Tab stops.");
+				Messages.MParagraph_tabStopsTitle);
+		tabStops.setDescription(Messages.MParagraph_tabStopsDescription);
 		desc.add(tabStops);
 
-		tabStops.setCategory("Paragraph");
-		lineSpacingD.setCategory("Paragraph");
-		lineSpacingSize.setCategory("Paragraph");
-		firstLineIdent.setCategory("Paragraph");
-		leftIdent.setCategory("Paragraph");
-		rightIdent.setCategory("Paragraph");
-		spacingBefore.setCategory("Paragraph");
-		spacingAfter.setCategory("Paragraph");
-		tabStopWidth.setCategory("Paragraph");
+		tabStops.setCategory("Paragraph"); //$NON-NLS-1$
+		lineSpacingD.setCategory("Paragraph"); //$NON-NLS-1$
+		lineSpacingSize.setCategory("Paragraph"); //$NON-NLS-1$
+		firstLineIdent.setCategory("Paragraph"); //$NON-NLS-1$
+		leftIdent.setCategory("Paragraph"); //$NON-NLS-1$
+		rightIdent.setCategory("Paragraph"); //$NON-NLS-1$
+		spacingBefore.setCategory("Paragraph"); //$NON-NLS-1$
+		spacingAfter.setCategory("Paragraph"); //$NON-NLS-1$
+		tabStopWidth.setCategory("Paragraph"); //$NON-NLS-1$
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#paragraph");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#paragraph"); //$NON-NLS-1$
 	}
 
 	private static IPropertyDescriptor[] descriptors;

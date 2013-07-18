@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -44,6 +45,15 @@ public class PageSizeSection extends AbstractSection {
 		group = getWidgetFactory().createSection(parent, "Page Orientation", false, 2);
 
 		createWidget4Property(group, JasperDesign.PROPERTY_ORIENTATION, false);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JasperDesign.PROPERTY_PAGE_WIDTH,  Messages.MReport_top_margin);
+		addProvidedProperties(JasperDesign.PROPERTY_PAGE_HEIGHT, Messages.MReport_bottom_margin);
+		addProvidedProperties(JasperDesign.PROPERTY_LEFT_MARGIN, Messages.MReport_left_margin);
+		addProvidedProperties(JasperDesign.PROPERTY_RIGHT_MARGIN, Messages.MReport_right_margin);
 	}
 
 }

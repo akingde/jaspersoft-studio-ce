@@ -158,7 +158,7 @@ public class ComboButton extends Viewer {
 	 * @author Orlandin Marco
 	 *
 	 */
-	private class GraphicButton extends Canvas {
+	public class GraphicButton extends Canvas {
 		
 		/**
 		 * Last help listener set for this element
