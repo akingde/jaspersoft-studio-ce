@@ -105,7 +105,7 @@ public class TabbedPropertySearch extends Composite {
 		public void proposalAccepted(IContentProposal proposal) {
 			if (proposal instanceof PropertyContentProposal){
 				PropertyContentProposal propertyProposal = (PropertyContentProposal)proposal;
-				checkSelection(propertyProposal.getPropertyId());
+				selectElement(propertyProposal.getPropertyId(),propertyProposal.getSectionType());
 			}
 		}
 		
@@ -191,9 +191,10 @@ public class TabbedPropertySearch extends Composite {
 				if (e.keyCode == SWT.CR && !autocomplete.isProposalOpened() && cachedProperties != null){
 					String searchedString = textArea.getText().toLowerCase();
 					for(int i=0;i<cachedProperties.getSize();i++){
-						String actualString = cachedProperties.getLabels()[i].toLowerCase();
+						PropertyContainer actualContainer = cachedProperties.getPrperties()[i];
+						String actualString = actualContainer.getName().toLowerCase();
 						if (actualString.equals(searchedString)){
-							checkSelection(cachedProperties.getIds()[i]);
+							checkSelection(actualContainer.getId());
 							return;
 						}
 					}
@@ -256,6 +257,7 @@ public class TabbedPropertySearch extends Composite {
 	 * Method called to initialize or update the autocomplete set of elements
 	 */
 	private void updateAutocompleteContent(){
+		//if (getSelectedElement() != lastSelectedElement) textArea.setText("");
 		if (autocomplete == null) {
 			PropertiesContainer properties = getAllProperties();
 			autocomplete = new ManualyOpenedAutocomplete(textArea, new TextContentAdapter(), properties);
@@ -284,6 +286,7 @@ public class TabbedPropertySearch extends Composite {
 		super.dispose();
 		arrowColor.dispose();
 	}
+
 	
 	/**
 	 * Select the properties in the property sheet page with a specific id
@@ -305,6 +308,38 @@ public class TabbedPropertySearch extends Composite {
 						//Get the widget from the section and highlight it for 2000ms
 						IHighlightPropertyWidget widget = actualSection.getWidgetForProperty(id);
 						if (widget != null) widget.highLightWidget(2000);
+						return;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Select the properties in the property sheet page with a specific id
+	 * 
+	 * @param id the id of the property
+	 */
+	private void selectElement(Object id, Class<?> sectionType){
+		if (sectionType == null) {
+			checkSelection(id);
+			return;
+		}
+		List<TabContents> lst = factory.getAvailableTabContents();
+		for(TabContents actualContents : lst){
+			for(ISection section : actualContents.getSections()){
+				if (section instanceof IWidgetsProviderSection){
+					IWidgetsProviderSection actualSection = ((IWidgetsProviderSection)section);
+					//search the section that contains the property
+					if (actualSection.getClass().equals(sectionType) && actualSection.getHandledProperties().contains(id)){
+						//Select the section, it will also create it
+						factory.setSelection(actualContents);
+						//Expand the properties expandable composite, if it is inside one of it
+						actualSection.expandForProperty(id);
+						//Get the widget from the section and highlight it for 2000ms
+						IHighlightPropertyWidget widget = actualSection.getWidgetForProperty(id);
+						if (widget != null) widget.highLightWidget(2000);
+						return;
 					}
 				}
 			}
@@ -345,7 +380,7 @@ public class TabbedPropertySearch extends Composite {
 			cachedProperties = createElements();
 			lastSelectedElement = getSelectedElement();
 		} else {
-			//I have build a cache
+			//Maybe i have already the element cached
 			Object actualSelectedElement = getSelectedElement();
 			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
 				//The cache was build for an element with different type\properties, i need to rebuild it
@@ -363,11 +398,8 @@ public class TabbedPropertySearch extends Composite {
 	 * 
 	 */
 	private PropertiesContainer createElements(){
-		List<String> result = new ArrayList<String>();
-		List<Object> ids = new ArrayList<Object>();
-		List<PropertyContentProposal> listToOrder = new ArrayList<PropertyContentProposal>();
+		List<PropertyContainer> listToOrder = new ArrayList<PropertyContainer>();
 		List<TabContents> lst = factory.getAvailableTabContents();
-		
 		
 		for(TabContents actualContents : lst){
 			for(ISection section : actualContents.getSections()){
@@ -376,18 +408,13 @@ public class TabbedPropertySearch extends Composite {
 					List<Object> providedProperties = attributesSection.getHandledProperties();
 					for(Object property : providedProperties){
 						WidgetDescriptor desc = attributesSection.getPropertyInfo(property);
-						listToOrder.add(new PropertyContentProposal(desc.getName(), property));
+						listToOrder.add(new PropertyContainer(desc.getName(), property, attributesSection.getClass()));
 					}
 				}
 			}
 		}
 		Collections.sort(listToOrder);
-		for(PropertyContentProposal prop : listToOrder){
-			ids.add(prop.getPropertyId());
-			result.add(prop.getContent());
-		}
-		return new PropertiesContainer(result.toArray(new String[result.size()]),
-				  						ids.toArray(new Object[ids.size()]));
+		return new PropertiesContainer(listToOrder.toArray(new PropertyContainer[listToOrder.size()]));
 	}
 	
 

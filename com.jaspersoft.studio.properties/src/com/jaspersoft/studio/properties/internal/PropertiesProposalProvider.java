@@ -71,10 +71,13 @@ public class PropertiesProposalProvider implements IContentProposalProvider {
 		if (filterProposals) {
 			ArrayList<IContentProposal> list = new ArrayList<IContentProposal>();
 			for (int i = 0; i < proposals.getSize(); i++) {
-				String actualName = proposals.getLabels()[i];
+				PropertyContainer actualContainer = proposals.getPrperties()[i];
+				String actualName = actualContainer.getName();
 				String searchString = contents.toLowerCase().trim();
 				if (actualName.length() >= contents.length() && actualName.toLowerCase().contains(searchString)) {
-					list.add(new PropertyContentProposal(actualName, proposals.getIds()[i]));
+					Object id = actualContainer.getId();
+					Class<?> sectionType = actualContainer.getSectionType();
+					list.add(new PropertyContentProposal(actualName, id, sectionType));
 				}
 			}
 			return (IContentProposal[]) list.toArray(new IContentProposal[list.size()]);
@@ -82,7 +85,8 @@ public class PropertiesProposalProvider implements IContentProposalProvider {
 		if (contentProposals == null) {
 			contentProposals = new IContentProposal[proposals.getSize()];
 			for (int i = 0; i < proposals.getSize(); i++) {
-				contentProposals[i] = new PropertyContentProposal(proposals.getLabels()[i], proposals.getIds()[i]);
+				PropertyContainer actualContainer = proposals.getPrperties()[i];
+				contentProposals[i] = new PropertyContentProposal(actualContainer.getName(), actualContainer.getId(), actualContainer.getSectionType());
 			}
 		}
 		return contentProposals;

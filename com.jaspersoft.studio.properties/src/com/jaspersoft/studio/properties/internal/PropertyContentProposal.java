@@ -31,15 +31,18 @@ public class PropertyContentProposal extends ContentProposal implements Comparab
 	 */
 	private Object propertyId;
 	
+	private Class<?> sectionType;
+	
 	/**
 	 * Create a property proposal
 	 * 
 	 * @param content name of the property
 	 * @param propertyId id of the property
 	 */
-	public PropertyContentProposal(String content, Object propertyId) {
+	public PropertyContentProposal(String content, Object propertyId, Class<?> parentSectionType) {
 		super(content);
 		this.propertyId = propertyId;
+		this.sectionType = parentSectionType;
 	}
 	
 	/**
@@ -48,6 +51,10 @@ public class PropertyContentProposal extends ContentProposal implements Comparab
 	 */
 	public Object getPropertyId(){
 		return propertyId;
+	}
+	
+	public Class<?> getSectionType() {
+		return sectionType;
 	}
 
 	@Override

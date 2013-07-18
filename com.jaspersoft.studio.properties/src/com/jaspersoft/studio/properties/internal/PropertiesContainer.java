@@ -25,15 +25,7 @@ package com.jaspersoft.studio.properties.internal;
  */
 public class PropertiesContainer{
 	
-	/**
-	 * List of the properties name
-	 */
-	private String[] labels;
-	
-	/**
-	 * List of the property ids associated 1:1 with the labels, must have the same size of labels
-	 */
-	private Object[] ids;
+	private PropertyContainer[] properties;
 	
 	/**
 	 * Create an instance of the class. The length of the two array must be the same
@@ -43,10 +35,8 @@ public class PropertiesContainer{
 	 * @param labels list of the properties name available
 	 * @param ids list of ids associated with the properties name
 	 */
-	public PropertiesContainer(String[] labels, Object[] ids){
-		this.labels = labels;
-		this.ids = ids;
-		assert ids.length == labels.length : "There must be the same number of properties names and associated ids";
+	public PropertiesContainer(PropertyContainer[] properties){
+		this.properties = properties;
 	}
 	
 	/**
@@ -56,7 +46,7 @@ public class PropertiesContainer{
 	 */
 	public int getSize(){
 		//Its assumed that ids and labels have the same size
-		return ids.length;
+		return properties.length;
 	}
 	
 	/**
@@ -64,16 +54,7 @@ public class PropertiesContainer{
 	 * 
 	 * @return an array of string
 	 */
-	public String[] getLabels(){
-		return labels;
-	}
-	
-	/**
-	 * Return the array of stored ids
-	 * 
-	 * @return an array of object
-	 */
-	public Object[] getIds(){
-		return ids;
+	public PropertyContainer[] getPrperties(){
+		return properties;
 	}
 }
