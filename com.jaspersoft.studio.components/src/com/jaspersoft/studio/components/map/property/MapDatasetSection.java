@@ -28,12 +28,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class MapDatasetSection extends AbstractSection {
+	
+	private ExpandableComposite section;
+	
 	@Override
 	public void createControls(final Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
@@ -61,6 +65,7 @@ public class MapDatasetSection extends AbstractSection {
 		container.setVisible(enableAndShowDSPanel);
 		
 		final Composite group = getWidgetFactory().createSection(container, com.jaspersoft.studio.messages.Messages.MElementDataset_dataset_run, true, 2, 2); //$NON-NLS-1$
+		section = (ExpandableComposite)group.getParent();
 		createWidget4Property(group, JRDesignElementDataset.PROPERTY_DATASET_RUN);
 		
 		useMarkerDataset.addSelectionListener(new SelectionAdapter() {
@@ -85,6 +90,20 @@ public class MapDatasetSection extends AbstractSection {
 			}
 		});
 	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded() && propertyId.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) section.setExpanded(true);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(StandardItemData.PROPERTY_ITEMS, Messages.MMap_markersTitle);
+		addProvidedProperties(JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MMap_markerDatasetTitle);
+	}
+	
+	
 	
 	private boolean isDatasetSet() {
 		return getElement().getPropertyValue(StandardItemData.PROPERTY_DATASET)!=null;

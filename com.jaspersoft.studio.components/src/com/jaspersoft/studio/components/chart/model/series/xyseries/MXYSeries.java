@@ -127,8 +127,8 @@ public class MXYSeries extends APropertyNode {
 		desc.add(itemHyperLinkD);
 
 		CheckBoxPropertyDescriptor printRVAlueD = new CheckBoxPropertyDescriptor(
-				JRDesignXySeries.PROPERTY_AUTO_SORT, "Auto Sort");
-		printRVAlueD.setDescription("Auto sort");
+				JRDesignXySeries.PROPERTY_AUTO_SORT, Messages.MXYSeries_autoSortTitle);
+		printRVAlueD.setDescription(Messages.MXYSeries_autoSortDescription);
 		desc.add(printRVAlueD);
 
 		defaultsMap.put(JRDesignXySeries.PROPERTY_AUTO_SORT, Boolean.TRUE);

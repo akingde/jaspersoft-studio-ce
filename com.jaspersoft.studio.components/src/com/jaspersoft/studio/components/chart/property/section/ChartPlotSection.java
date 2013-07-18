@@ -51,6 +51,7 @@ public class ChartPlotSection extends AbstractRealValueSection {
 
 		PlotFactory.createPlot(this, parent, tabbedPropertySheetPage);
 	}
+	
 
 	public void createCommon(Composite parent) {
 		Composite group = getWidgetFactory().createComposite(parent);
@@ -84,6 +85,16 @@ public class ChartPlotSection extends AbstractRealValueSection {
 		createWidget4Property(group, JRBaseChartPlot.PROPERTY_ORIENTATION)
 				.getControl().setLayoutData(gd);
 		;
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseChartPlot.PROPERTY_BACKCOLOR, Messages.MChartPlot_backcolor);
+		addProvidedProperties(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA, Messages.MChartPlot_foreground_alpha_percent);
+		addProvidedProperties(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, Messages.MChartPlot_background_alpha_percent);
+		addProvidedProperties(JRBaseChartPlot.PROPERTY_SERIES_COLORS, Messages.MChartPlot_series_colors);
+		addProvidedProperties(JRBaseChartPlot.PROPERTY_ORIENTATION, Messages.MChartPlot_orientation);
 	}
 
 	@Override

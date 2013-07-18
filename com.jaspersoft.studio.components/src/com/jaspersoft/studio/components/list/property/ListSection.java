@@ -21,6 +21,7 @@ import net.sf.jasperreports.components.list.StandardListComponent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -37,7 +38,7 @@ public class ListSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		createWidget4Property(parent,
+		createWidget4Property(parent, 
 				StandardListComponent.PROPERTY_IGNORE_WIDTH);
 		createWidget4Property(parent, MList.PREFIX
 				+ DesignListContents.PROPERTY_HEIGHT);
@@ -46,4 +47,14 @@ public class ListSection extends AbstractSection {
 		createWidget4Property(parent,
 				StandardListComponent.PROPERTY_PRINT_ORDER);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(StandardListComponent.PROPERTY_IGNORE_WIDTH, Messages.MList_ignore_width);
+		addProvidedProperties(MList.PREFIX + DesignListContents.PROPERTY_HEIGHT, Messages.MList_cell_height);
+		addProvidedProperties(MList.PREFIX + DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
+		addProvidedProperties(StandardListComponent.PROPERTY_PRINT_ORDER, Messages.MList_print_order);
+	}
+	
 }

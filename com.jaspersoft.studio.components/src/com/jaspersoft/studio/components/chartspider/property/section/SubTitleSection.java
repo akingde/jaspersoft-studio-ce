@@ -19,7 +19,9 @@ import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -30,6 +32,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class SubTitleSection extends AbstractSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -40,6 +44,7 @@ public class SubTitleSection extends AbstractSection {
 
 		Composite group = getWidgetFactory().createSectionTitle(parent,
 				"Subtitle", true, 2, 1);
+		section = (ExpandableComposite)group.getParent();
 
 		getWidgetFactory().createCLabel(group, "Expression");
 		createWidget4Property(group,
@@ -54,5 +59,18 @@ public class SubTitleSection extends AbstractSection {
 		createWidget4Property(group,
 				StandardChartSettings.PROPERTY_SUBTITLE_FONT, false)
 				.getControl().setLayoutData(gd);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION, Messages.MChart_subtitle_expression);
+		addProvidedProperties(StandardChartSettings.PROPERTY_SUBTITLE_COLOR, Messages.MChart_subtitle_color);
+		addProvidedProperties(StandardChartSettings.PROPERTY_SUBTITLE_FONT, Messages.MChart_subtitle_font);
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
 	}
 }

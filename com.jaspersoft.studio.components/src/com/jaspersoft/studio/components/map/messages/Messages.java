@@ -28,10 +28,22 @@ public class Messages extends NLS {
 	public static String MMap_evaluation_group_description;
 	public static String MMap_evaluation_time;
 	public static String MMap_evaluation_time_description;
+	public static String MMap_imageTypeDescription;
+	public static String MMap_imageTypeTitle;
+	public static String MMap_languageExpressionDescription;
+	public static String MMap_languageExpressionTitle;
 	public static String MMap_latitude_description;
 	public static String MMap_latitude;
 	public static String MMap_longitude;
 	public static String MMap_longitude_description;
+	public static String MMap_mapScaleDescription;
+	public static String MMap_mapScaleTitle;
+	public static String MMap_mapTypeDescription;
+	public static String MMap_mapTypeTitle;
+	public static String MMap_markerDatasetDescription;
+	public static String MMap_markerDatasetTitle;
+	public static String MMap_markersDescription;
+	public static String MMap_markersTitle;
 	public static String MMap_zoom;
 	public static String MMap_zoom_description;
 	static {

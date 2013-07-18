@@ -20,6 +20,7 @@ import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -49,6 +50,15 @@ public class SeriesXyzSection extends AbstractSection {
 		createWidget4Property(parent,
 				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION);
 
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, Messages.common_x_value_expression);
+		addProvidedProperties(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.common_y_value_expression);
+		addProvidedProperties(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION, Messages.MXYZSeries_z_value_expression);
+		addProvidedProperties(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
 	}
 
 }

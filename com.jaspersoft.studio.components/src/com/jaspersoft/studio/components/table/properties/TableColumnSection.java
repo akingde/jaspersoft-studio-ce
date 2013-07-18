@@ -20,6 +20,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -36,5 +37,12 @@ public class TableColumnSection extends AbstractSection {
 		createWidget4Property(parent,
 				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION);
 
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(StandardBaseColumn.PROPERTY_WIDTH, Messages.MColumn_column_width);
+		addProvidedProperties(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MColumn_print_when_expression);
 	}
 }

@@ -19,6 +19,7 @@ import net.sf.jasperreports.components.barcode4j.POSTNETComponent;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -45,4 +46,15 @@ public class POSTNETSection extends AbstractSection {
 		createWidget4Property(group,
 				POSTNETComponent.PROPERTY_BASELINE_POSITION);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT, Messages.MPOSTNET_short_bar_height);
+		addProvidedProperties(POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH, Messages.common_interchar_gap_width);
+		addProvidedProperties(POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum);
+		addProvidedProperties(POSTNETComponent.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode);
+		addProvidedProperties(POSTNETComponent.PROPERTY_BASELINE_POSITION, Messages.MPOSTNET_baseline_position);
+	}
+	
 }

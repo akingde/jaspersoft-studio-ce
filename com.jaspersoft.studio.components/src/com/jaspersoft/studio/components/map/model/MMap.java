@@ -178,54 +178,54 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		JRExpressionPropertyDescriptor latitudeExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, Messages.MMap_latitude);
 		latitudeExprD.setDescription(Messages.MMap_latitude_description);
 		desc.add(latitudeExprD);
-		latitudeExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#latitudeExpression"));
+		latitudeExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#latitudeExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor longitudeExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, Messages.MMap_longitude);
 		longitudeExprD.setDescription(Messages.MMap_longitude_description);
 		desc.add(longitudeExprD);
-		longitudeExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#longitudeExpression"));
+		longitudeExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#longitudeExpression")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor zoomExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, Messages.MMap_zoom);
 		zoomExprD.setDescription(Messages.MMap_zoom_description);
 		desc.add(zoomExprD);
-		zoomExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#zoomExpression"));
+		zoomExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#zoomExpression")); //$NON-NLS-1$
 
-		JRExpressionPropertyDescriptor langExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION, "Language Expression");
-		langExprD.setDescription("Language Expression");
+		JRExpressionPropertyDescriptor langExprD = new JRExpressionPropertyDescriptor(StandardMapComponent.PROPERTY_LANGUAGE_EXPRESSION, Messages.MMap_languageExpressionTitle);
+		langExprD.setDescription(Messages.MMap_languageExpressionDescription);
 		desc.add(langExprD);
-		langExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#languageExpression"));
+		langExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#languageExpression")); //$NON-NLS-1$
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_TIME, Messages.MMap_evaluation_time, EnumHelper.getEnumNames(
 				EvaluationTimeEnum.values(), NullEnum.NOTNULL));
 		evaluationTimeD.setDescription(Messages.MMap_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$
 		evaluationGroupNameD.setDescription(Messages.MMap_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
-		mapTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_MAP_TYPE, "Map Type", MapTypeEnum.class, NullEnum.NOTNULL);
-		mapTypeD.setDescription("Map type.");
+		mapTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_MAP_TYPE, Messages.MMap_mapTypeTitle, MapTypeEnum.class, NullEnum.NOTNULL);
+		mapTypeD.setDescription(Messages.MMap_mapTypeDescription);
 		desc.add(mapTypeD);
 
-		mapScaleD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_MAP_SCALE, "Map Scale", MapScaleEnum.class, NullEnum.NOTNULL);
-		mapScaleD.setDescription("Scale.");
+		mapScaleD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_MAP_SCALE, Messages.MMap_mapScaleTitle, MapScaleEnum.class, NullEnum.NOTNULL);
+		mapScaleD.setDescription(Messages.MMap_mapScaleDescription);
 		desc.add(mapScaleD);
 
-		imageTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_IMAGE_TYPE, "Image Type", MapImageTypeEnum.class, NullEnum.NOTNULL);
-		imageTypeD.setDescription("Image type.");
+		imageTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_IMAGE_TYPE, Messages.MMap_imageTypeTitle, MapImageTypeEnum.class, NullEnum.NOTNULL);
+		imageTypeD.setDescription(Messages.MMap_imageTypeDescription);
 		desc.add(imageTypeD);
 
-		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(JRDesignElementDataset.PROPERTY_DATASET_RUN, "Marker Dataset Run", true);
-		datasetRunD.setDescription("Marker Dataset Run");
+		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MMap_markerDatasetTitle, true);
+		datasetRunD.setDescription(Messages.MMap_markerDatasetDescription);
 		desc.add(datasetRunD);
 
-		MarkerDescriptor markersD = new MarkerDescriptor(StandardItemData.PROPERTY_ITEMS, "Markers");
-		markersD.setDescription("Markers");
+		MarkerDescriptor markersD = new MarkerDescriptor(StandardItemData.PROPERTY_ITEMS, Messages.MMap_markersTitle);
+		markersD.setDescription(Messages.MMap_markersDescription);
 		desc.add(markersD);
-		markersD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#markerDataset"));
+		markersD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#markerDataset")); //$NON-NLS-1$
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#"); //$NON-NLS-1$
 
 		markersD.setCategory(Messages.MMap_common_map_properties);
 		langExprD.setCategory(Messages.MMap_common_map_properties);

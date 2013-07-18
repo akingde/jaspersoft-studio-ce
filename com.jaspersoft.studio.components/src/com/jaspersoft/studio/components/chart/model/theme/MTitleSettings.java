@@ -27,6 +27,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.jfree.ui.RectangleInsets;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartHorizontalAlignmentEnum;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartVerticalAlignmentEnum;
 import com.jaspersoft.studio.components.chart.model.theme.paintprovider.PaintProviderPropertyDescriptor;
@@ -91,34 +92,34 @@ public class MTitleSettings extends APropertyNode {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		CheckBoxPropertyDescriptor showTitleD = new CheckBoxPropertyDescriptor(TitleSettings.PROPERTY_showTitle, "Show Title");
-		showTitleD.setDescription("Show Title");
+		CheckBoxPropertyDescriptor showTitleD = new CheckBoxPropertyDescriptor(TitleSettings.PROPERTY_showTitle, Messages.MTitleSettings_showTitleTitle);
+		showTitleD.setDescription(Messages.MTitleSettings_showTitleDescription);
 		desc.add(showTitleD);
 
-		FontPropertyDescriptor fontD = new FontPropertyDescriptor(TitleSettings.PROPERTY_font, com.jaspersoft.studio.messages.Messages.common_font);
-		fontD.setDescription(com.jaspersoft.studio.messages.Messages.common_font);
+		FontPropertyDescriptor fontD = new FontPropertyDescriptor(TitleSettings.PROPERTY_font, "Font");
+		fontD.setDescription("Font");
 		desc.add(fontD);
 
-		posD = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_position, "Position", EdgeEnum.class, NullEnum.NULL);
-		posD.setDescription("Position");
+		posD = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_position, Messages.MTitleSettings_positionTitle, EdgeEnum.class, NullEnum.NULL);
+		posD.setDescription(Messages.MTitleSettings_positionDescription);
 		desc.add(posD);
 
-		hp = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_horizontalAlignment, "Horizontal Alignment", JFreeChartHorizontalAlignmentEnum.class, NullEnum.NULL);
-		hp.setDescription("Horizontal Alignment");
+		hp = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_horizontalAlignment, Messages.MTitleSettings_horizontalAlignmentTitle, JFreeChartHorizontalAlignmentEnum.class, NullEnum.NULL);
+		hp.setDescription(Messages.MTitleSettings_horizontalAlignmentDescription);
 		desc.add(hp);
 
-		vp = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_verticalAlignment, "Vertical Alignment", JFreeChartVerticalAlignmentEnum.class, NullEnum.NULL);
-		vp.setDescription("Vertical Alignment");
+		vp = new JSSEnumPropertyDescriptor(TitleSettings.PROPERTY_verticalAlignment, Messages.MTitleSettings_verticalAlignementTitle, JFreeChartVerticalAlignmentEnum.class, NullEnum.NULL);
+		vp.setDescription(Messages.MTitleSettings_verticalAlignementDescription);
 		desc.add(vp);
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
 
-		PaintProviderPropertyDescriptor fgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_foregroundPaint, "Foreground Paint");
-		fgPaint.setDescription("Foreground paint");
+		PaintProviderPropertyDescriptor fgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_foregroundPaint, Messages.MTitleSettings_foregroundColorTitle);
+		fgPaint.setDescription(Messages.MTitleSettings_foregroundColorDescription);
 		desc.add(fgPaint);
 
-		PaintProviderPropertyDescriptor bgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_backgroundPaint, "Background Paint");
-		bgPaint.setDescription("Background paint");
+		PaintProviderPropertyDescriptor bgPaint = new PaintProviderPropertyDescriptor(TitleSettings.PROPERTY_backgroundPaint, Messages.MTitleSettings_backgroundColorTitle);
+		bgPaint.setDescription(Messages.MTitleSettings_backgroundColorDescription);
 		desc.add(bgPaint);
 
 		defaultsMap.put(TitleSettings.PROPERTY_backgroundPaint, null);
@@ -129,7 +130,7 @@ public class MTitleSettings extends APropertyNode {
 		defaultsMap.put(TitleSettings.PROPERTY_horizontalAlignment, JFreeChartHorizontalAlignmentEnum.LEFT);
 		defaultsMap.put(TitleSettings.PROPERTY_verticalAlignment, JFreeChartVerticalAlignmentEnum.TOP);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
 
 	private static JSSEnumPropertyDescriptor posD;

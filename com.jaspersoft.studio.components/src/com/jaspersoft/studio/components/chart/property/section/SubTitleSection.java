@@ -21,9 +21,10 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
@@ -35,6 +36,8 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  */
 public class SubTitleSection extends AbstractRealValueSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -44,15 +47,16 @@ public class SubTitleSection extends AbstractRealValueSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		Composite group = getWidgetFactory().createSection(parent,
-				Messages.SubTitleSection_Subtitle_Label, true, 2);
-
+				com.jaspersoft.studio.messages.Messages.SubTitleSection_Subtitle_Label, true, 2);
+		section = (ExpandableComposite)group.getParent();
+		
 		getWidgetFactory().createCLabel(group,
-				Messages.SubTitleSection_Expression_Label);
+				com.jaspersoft.studio.messages.Messages.SubTitleSection_Expression_Label);
 		createWidget4Property(group,
 				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION, false);
 
 		getWidgetFactory().createCLabel(group,
-				Messages.SubTitleSection_Color_Label);
+				com.jaspersoft.studio.messages.Messages.SubTitleSection_Color_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_SUBTITLE_COLOR, false);
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -61,6 +65,19 @@ public class SubTitleSection extends AbstractRealValueSection {
 				false).getControl().setLayoutData(gd);
 	}
 
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION, Messages.MChart_subtitle_expression);
+		addProvidedProperties(JRBaseChart.PROPERTY_SUBTITLE_COLOR, Messages.MChart_subtitle_color);
+		addProvidedProperties(JRDesignChart.PROPERTY_SUBTITLE_FONT, Messages.MChart_subtitle_font);
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
+	}
+	
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);

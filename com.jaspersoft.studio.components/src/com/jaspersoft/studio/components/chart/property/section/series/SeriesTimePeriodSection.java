@@ -20,6 +20,7 @@ import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -50,6 +51,16 @@ public class SeriesTimePeriodSection extends AbstractSection {
 				JRDesignTimePeriodSeries.PROPERTY_SERIES_EXPRESSION);
 		createWidget4Property(parent,
 				JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignTimePeriodSeries.PROPERTY_START_DATE_EXPRESSION, Messages.common_start_date_expression);
+		addProvidedProperties(JRDesignTimePeriodSeries.PROPERTY_END_DATE_EXPRESSION, Messages.common_end_date_expression);
+		addProvidedProperties(JRDesignTimePeriodSeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
+		addProvidedProperties(JRDesignTimePeriodSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
+		addProvidedProperties(JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
 	}
 
 }

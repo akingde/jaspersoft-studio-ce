@@ -20,6 +20,7 @@ import net.sf.jasperreports.components.spiderchart.StandardSpiderPlot;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -39,7 +40,7 @@ public class ChartPlotSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
-
+		
 		createWidget4Property(parent, StandardSpiderPlot.PROPERTY_BACKCOLOR);
 		createWidget4Property(parent,
 				StandardSpiderPlot.PROPERTY_BACKGROUND_ALPHA);
@@ -67,24 +68,21 @@ public class ChartPlotSection extends AbstractSection {
 		createWidget4Property(parent, StandardSpiderPlot.PROPERTY_ROTATION);
 	}
 	
-	/*protected void initializeProvidedProperties() {
+	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_BACKCOLOR, Messages.common_key);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_BACKGROUND_ALPHA, Messages.common_backcolor);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_FOREGROUND_ALPHA, Messages.common_parent_style);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, Messages.MGraphicElement_remove_line_when_blank);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, Messages.MGraphicElement_print_in_first_whole_band);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_BACKCOLOR, Messages.MChartPlot_backcolor);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_BACKGROUND_ALPHA, Messages.MChartPlot_background_alpha_percent);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_FOREGROUND_ALPHA, Messages.MChartPlot_foreground_alpha_percent);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_AXIS_LINE_COLOR, Messages.MSpiderChart_axisLineColorTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_AXIS_LINE_WIDTH, Messages.MSpiderChart_axisLineWidthTitle);
 		
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_LABEL_COLOR, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_LABEL_FONT, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_LABEL_GAP, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_WEB_FILLED, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_TABLE_ORDER, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_START_ANGLE, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_HEAD_PERCENT, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_INTERIOR_GAP, Messages.MGraphicElement_print_in_first_whole_band);
-		addProvidedProperties(StandardSpiderPlot.PROPERTY_ROTATION, Messages.MGraphicElement_print_in_first_whole_band);
-	}*/
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION, Messages.MSpiderChart_maxValueExpTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_WEB_FILLED, Messages.MSpiderChart_webFilledTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_TABLE_ORDER, Messages.MSpiderChart_tableOrderTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_START_ANGLE, Messages.MSpiderChart_startAngleTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_HEAD_PERCENT, Messages.MSpiderChart_headPercentTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_INTERIOR_GAP, Messages.MSpiderChart_interiorGapTitle);
+		addProvidedProperties(StandardSpiderPlot.PROPERTY_ROTATION, Messages.MChart_title_position);
+	}
 
 }

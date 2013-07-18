@@ -20,6 +20,7 @@ import net.sf.jasperreports.components.barcode4j.PDF417Component;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -47,5 +48,15 @@ public class PDF417Section extends AbstractSection {
 		createWidget4Property(group,
 				PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL).getControl()
 				.setLayoutData(gd);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(PDF417Component.PROPERTY_MIN_COLUMNS,  Messages.MPDF417_min_columns);
+		addProvidedProperties(PDF417Component.PROPERTY_MAX_COLUMNS, Messages.MPDF417_max_columns);
+		addProvidedProperties(PDF417Component.PROPERTY_MIN_ROWS, Messages.MPDF417_min_rows);
+		addProvidedProperties(PDF417Component.PROPERTY_MAX_ROWS, Messages.MPDF417_max_rows);
+		addProvidedProperties(PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL, Messages.MPDF417_error_correction_level);
 	}
 }

@@ -20,6 +20,7 @@ import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -54,6 +55,18 @@ public class SeriesGanttSection extends AbstractSection {
 				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION);
 		createWidget4Property(parent,
 				JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, Messages.common_start_date_expression);
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, Messages.common_end_date_expression);
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION, Messages.MGanttSeries_task_expression);
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION, Messages.MGanttSeries_subtask_expression);
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
+		addProvidedProperties(JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION, Messages.MGanttSeries_percent_expression);
 	}
 
 }

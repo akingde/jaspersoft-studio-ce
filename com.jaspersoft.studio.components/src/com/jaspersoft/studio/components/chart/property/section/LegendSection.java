@@ -23,9 +23,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
@@ -37,6 +38,8 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  */
 public class LegendSection extends AbstractRealValueSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -46,12 +49,12 @@ public class LegendSection extends AbstractRealValueSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		Composite group = getWidgetFactory().createSection(parent,
-				Messages.common_legend, true, 2);
-
+				com.jaspersoft.studio.messages.Messages.common_legend, true, 2);
+		section = (ExpandableComposite)group.getParent();
 		createWidget4Property(group, JRBaseChart.PROPERTY_SHOW_LEGEND);
 
 		getWidgetFactory().createCLabel(group,
-				Messages.LegendSection_Position_Label);
+				com.jaspersoft.studio.messages.Messages.LegendSection_Position_Label);
 		createWidget4Property(group, JRBaseChart.PROPERTY_LEGEND_POSITION,
 				false);
 
@@ -63,12 +66,12 @@ public class LegendSection extends AbstractRealValueSection {
 		colorComposite.setLayoutData(gd);
 
 		getWidgetFactory().createCLabel(colorComposite,
-				Messages.LegendSection_Forecolor_Label);
+				com.jaspersoft.studio.messages.Messages.LegendSection_Forecolor_Label);
 		createWidget4Property(colorComposite,
 				JRBaseChart.PROPERTY_LEGEND_COLOR, false);
 
 		getWidgetFactory().createCLabel(colorComposite,
-				Messages.LegendSection_Backcolor_Label);
+				com.jaspersoft.studio.messages.Messages.LegendSection_Backcolor_Label);
 		createWidget4Property(colorComposite,
 				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, false);
 
@@ -77,7 +80,21 @@ public class LegendSection extends AbstractRealValueSection {
 		createWidget4Property(group, JRDesignChart.PROPERTY_LEGEND_FONT, false)
 				.getControl().setLayoutData(gd);
 	}
+	
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRBaseChart.PROPERTY_SHOW_LEGEND, Messages.MChart_show_legend);
+		addProvidedProperties(JRBaseChart.PROPERTY_LEGEND_POSITION, Messages.MChart_legend_position);
+		addProvidedProperties(JRBaseChart.PROPERTY_LEGEND_COLOR, Messages.MChart_legend_color);
+		addProvidedProperties(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, Messages.MChart_legend_background_color);
+		addProvidedProperties(JRDesignChart.PROPERTY_LEGEND_FONT, Messages.MChart_legend_font);
+	}
 
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
+	}
+	
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);

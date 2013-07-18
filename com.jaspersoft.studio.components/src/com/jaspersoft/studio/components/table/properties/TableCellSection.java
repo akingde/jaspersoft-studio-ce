@@ -19,6 +19,7 @@ import net.sf.jasperreports.components.table.DesignCell;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -36,4 +37,13 @@ public class TableCellSection extends AbstractSection {
 		createWidget4Property(parent, DesignCell.PROPERTY_ROW_SPAN);
 		createWidget4Property(parent, DesignCell.PROPERTY_STYLE);
 	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
+		addProvidedProperties(DesignCell.PROPERTY_ROW_SPAN, Messages.MCell_rowspan);
+		addProvidedProperties(DesignCell.PROPERTY_STYLE, Messages.MCell_parent_style);
+	}
+	
 }

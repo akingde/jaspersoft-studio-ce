@@ -19,7 +19,9 @@ import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -30,6 +32,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class TitleSection extends AbstractSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -40,6 +44,7 @@ public class TitleSection extends AbstractSection {
 
 		Composite group = getWidgetFactory().createSectionTitle(parent, "Title",
 				true, 4, 1);
+		section = (ExpandableComposite)group.getParent();
 
 		getWidgetFactory().createCLabel(group, "Expression");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -57,7 +62,20 @@ public class TitleSection extends AbstractSection {
 		gd.horizontalSpan = 4;
 		createWidget4Property(group, StandardChartSettings.PROPERTY_TITLE_FONT,
 				false).getControl().setLayoutData(gd);
-
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(StandardChartSettings.PROPERTY_TITLE_EXPRESSION, Messages.MChart_title_expression);
+		addProvidedProperties(StandardChartSettings.PROPERTY_TITLE_POSITION, Messages.MChart_title_position);
+		addProvidedProperties(StandardChartSettings.PROPERTY_TITLE_COLOR, Messages.MChart_title_color);
+		addProvidedProperties(StandardChartSettings.PROPERTY_TITLE_FONT, Messages.MChart_title_font);
 	}
 
 }

@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.messages.Messages;
@@ -35,6 +36,8 @@ import com.jaspersoft.studio.property.section.AbstractRealValueSection;
  */
 public class TitleSection extends AbstractRealValueSection {
 
+	private ExpandableComposite section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
@@ -45,6 +48,7 @@ public class TitleSection extends AbstractRealValueSection {
 
 		Composite group = getWidgetFactory().createSection(parent,
 				Messages.TitleSection_Title_Label, true, 2);
+		section = (ExpandableComposite)group.getParent();
 
 		getWidgetFactory().createCLabel(group,
 				Messages.TitleSection_Expression_Label);
@@ -65,6 +69,20 @@ public class TitleSection extends AbstractRealValueSection {
 		gd.horizontalSpan = 2;
 		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_FONT, false)
 				.getControl().setLayoutData(gd);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignChart.PROPERTY_TITLE_EXPRESSION, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_expression);
+		addProvidedProperties(JRBaseChart.PROPERTY_TITLE_POSITION, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position);
+		addProvidedProperties(JRBaseChart.PROPERTY_TITLE_COLOR, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_color);
+		addProvidedProperties(JRDesignChart.PROPERTY_TITLE_FONT, com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_font);
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) section.setExpanded(true);
 	}
 
 	@Override

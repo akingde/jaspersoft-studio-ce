@@ -30,6 +30,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.jfree.ui.RectangleInsets;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartAlignEnum;
 import com.jaspersoft.studio.components.chart.model.enums.JFreeChartPlotOrientationEnum;
 import com.jaspersoft.studio.components.chart.model.theme.imageprovider.ImageProviderPropertyDescriptor;
@@ -39,7 +40,6 @@ import com.jaspersoft.studio.components.chart.model.theme.stroke.StrokePropertyD
 import com.jaspersoft.studio.components.chart.model.theme.strokes.StrokesPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.model.theme.util.PadUtil;
 import com.jaspersoft.studio.jasper.CachedImageProvider;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
@@ -71,7 +71,7 @@ public class MPlotSettings extends APropertyNode {
 
 	@Override
 	public String getDisplayText() {
-		return "Plot";
+		return "Plot"; //$NON-NLS-1$
 	}
 
 	private IPropertyDescriptor[] descriptors;
@@ -101,114 +101,114 @@ public class MPlotSettings extends APropertyNode {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(PlotSettings.PROPERTY_outlineVisible, "Visible");
-		pd.setDescription("Outline Visible");
-		pd.setCategory("Outline");
+		PropertyDescriptor pd = new CheckBoxPropertyDescriptor(PlotSettings.PROPERTY_outlineVisible, Messages.MPlotSettings_outlineVisibleTitle);
+		pd.setDescription(Messages.MPlotSettings_outlineVisibleDescription);
+		pd.setCategory("Outline"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(PlotSettings.PROPERTY_domainGridlineVisible, "Visible");
-		pd.setDescription("Domain Grid Line Visible");
-		pd.setCategory("Domain Grid Line");
+		pd = new CheckBoxPropertyDescriptor(PlotSettings.PROPERTY_domainGridlineVisible, Messages.MPlotSettings_domainGridLineVisibleTitle);
+		pd.setDescription(Messages.MPlotSettings_domainGridLineVisibleDescription);
+		pd.setCategory("Domain Grid Line"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new CheckBoxPropertyDescriptor(PlotSettings.PROPERTY_rangeGridlineVisible, "Visible");
-		pd.setDescription("Range Grid Line Visible");
-		pd.setCategory("Range Grid Line");
+		pd = new CheckBoxPropertyDescriptor(PlotSettings.PROPERTY_rangeGridlineVisible, Messages.MPlotSettings_rangeGridLineVisibleTitle);
+		pd.setDescription(Messages.MPlotSettings_rangeGridLineVisibleDescription);
+		pd.setCategory("Range Grid Line"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new FontPropertyDescriptor(PlotSettings.PROPERTY_displayFont, "Display Font");
-		pd.setDescription("Display Font");
+		pd = new FontPropertyDescriptor(PlotSettings.PROPERTY_displayFont, Messages.MPlotSettings_displayFontTitle);
+		pd.setDescription(Messages.MPlotSettings_displayFontDescription);
 		desc.add(pd);
 
-		pd = new FontPropertyDescriptor(PlotSettings.PROPERTY_tickLabelFont, "Tick Label Font");
-		pd.setDescription("Tick Label Font");
+		pd = new FontPropertyDescriptor(PlotSettings.PROPERTY_tickLabelFont, Messages.MPlotSettings_tickLabelFontTitle);
+		pd.setDescription(Messages.MPlotSettings_tickLabelFontDescription);
 		desc.add(pd);
 
-		pd = new TransparencyPropertyDescriptor(PlotSettings.PROPERTY_backgroundImageAlpha, "Alpha");
-		pd.setDescription("Background  Alpha");
+		pd = new TransparencyPropertyDescriptor(PlotSettings.PROPERTY_backgroundImageAlpha, Messages.MPlotSettings_backgroundAlphaTitle);
+		pd.setDescription(Messages.MPlotSettings_backgroundAlphaDescription);
 		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
-		pd = new TransparencyPropertyDescriptor(PlotSettings.PROPERTY_foregroundAlpha, "Foreground Alpha");
-		pd.setDescription("Foreground  Alpha");
+		pd = new TransparencyPropertyDescriptor(PlotSettings.PROPERTY_foregroundAlpha, Messages.MPlotSettings_foregroundAlphaTitle);
+		pd.setDescription(Messages.MPlotSettings_foregroundAlphaDescription);
 		desc.add(pd);
 
-		pd = new DegreePropertyDescriptor(PlotSettings.PROPERTY_labelRotation, "Label Rotation");
-		pd.setDescription("Label Rotation");
+		pd = new DegreePropertyDescriptor(PlotSettings.PROPERTY_labelRotation, Messages.MPlotSettings_labelRotationTitle);
+		pd.setDescription(Messages.MPlotSettings_labelRotationDescription);
 		desc.add(pd);
 
-		bia = new JSSEnumPropertyDescriptor(PlotSettings.PROPERTY_backgroundImageAlignment, "Image Alignment", JFreeChartAlignEnum.class, NullEnum.NOTNULL);
-		bia.setDescription("Background Image Alignment");
+		bia = new JSSEnumPropertyDescriptor(PlotSettings.PROPERTY_backgroundImageAlignment, Messages.MPlotSettings_backgroundImgAlignTitle, JFreeChartAlignEnum.class, NullEnum.NOTNULL);
+		bia.setDescription(Messages.MPlotSettings_backgroundImgAlignDescription);
 		bia.setCategory(Messages.common_background);
 		desc.add(bia);
 
-		orientation = new JSSEnumPropertyDescriptor(PlotSettings.PROPERTY_orientation, "Orientation", JFreeChartPlotOrientationEnum.class, NullEnum.NOTNULL);
-		orientation.setDescription("Orientation");
+		orientation = new JSSEnumPropertyDescriptor(PlotSettings.PROPERTY_orientation, Messages.MPlotSettings_orientationTitle, JFreeChartPlotOrientationEnum.class, NullEnum.NOTNULL);
+		orientation.setDescription(Messages.MPlotSettings_orientationDescription);
 		desc.add(orientation);
 
-		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_backgroundPaint, "Paint");
-		pd.setDescription("Background paint");
+		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_backgroundPaint, Messages.MPlotSettings_backgroundColorTitle);
+		pd.setDescription(Messages.MPlotSettings_backgroundColorDescription);
 		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_outlinePaint, "Paint");
-		pd.setDescription("Outline paint");
-		pd.setCategory("Outline");
+		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_outlinePaint, Messages.MPlotSettings_outlineColorTitle);
+		pd.setDescription(Messages.MPlotSettings_outlineColorDescription);
+		pd.setCategory("Outline"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_domainGridlinePaint, "Paint");
-		pd.setDescription("Domain Grid Line paint");
-		pd.setCategory("Domain Grid Line");
+		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_domainGridlinePaint, Messages.MPlotSettings_domainGridLineColorTitle);
+		pd.setDescription(Messages.MPlotSettings_domainGridLineColorDescription);
+		pd.setCategory("Domain Grid Line"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_rangeGridlinePaint, "Paint");
-		pd.setDescription("Range Grid Line paint");
-		pd.setCategory("Range Grid Line");
+		pd = new PaintProviderPropertyDescriptor(PlotSettings.PROPERTY_rangeGridlinePaint, Messages.MPlotSettings_rangeGridLineColorTitle);
+		pd.setDescription(Messages.MPlotSettings_rangeGridLineColorDescription);
+		pd.setCategory("Range Grid Line"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new ImageProviderPropertyDescriptor(PlotSettings.PROPERTY_backgroundImage, "Image");
-		pd.setDescription("Background Image");
+		pd = new ImageProviderPropertyDescriptor(PlotSettings.PROPERTY_backgroundImage, Messages.MPlotSettings_backGroundImageTitle);
+		pd.setDescription(Messages.MPlotSettings_backGroundImageDescription);
 		pd.setCategory(Messages.common_background);
 		desc.add(pd);
 
-		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_outlineStroke, "Stroke");
-		pd.setDescription("Outline Stroke");
-		pd.setCategory("Outline");
+		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_outlineStroke, Messages.MPlotSettings_outlineStrokeTitle);
+		pd.setDescription(Messages.MPlotSettings_outlineStrokeDescription);
+		pd.setCategory("Outline"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_domainGridlineStroke, "Stroke");
-		pd.setDescription("Domain Grid Line  Stroke");
-		pd.setCategory("Domain Grid Line");
+		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_domainGridlineStroke, Messages.MPlotSettings_domainGridLineStrokeTitle);
+		pd.setDescription(Messages.MPlotSettings_domainGridLineStrokeDescription);
+		pd.setCategory("Domain Grid Line"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_rangeGridlineStroke, "Stroke");
-		pd.setDescription("Range Grid Line Stroke");
-		pd.setCategory("Range Grid Line");
+		pd = new StrokePropertyDescriptor(PlotSettings.PROPERTY_rangeGridlineStroke, Messages.MPlotSettings_rangeGridLineStrokeTitle);
+		pd.setDescription(Messages.MPlotSettings_rangeGridLineStrokeDescription);
+		pd.setCategory("Range Grid Line"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new StrokesPropertyDescriptor(PlotSettings.PROPERTY_seriesStrokeSequence, "Stroke Sequence");
-		pd.setDescription("Series Stroke Sequence");
-		pd.setCategory("Series");
+		pd = new StrokesPropertyDescriptor(PlotSettings.PROPERTY_seriesStrokeSequence, Messages.MPlotSettings_strokeSequenceTitle);
+		pd.setDescription(Messages.MPlotSettings_strokeSequenceDescription);
+		pd.setCategory("Series"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new StrokesPropertyDescriptor(PlotSettings.PROPERTY_seriesOutlineStrokeSequence, "Outline Stroke Sequence");
-		pd.setDescription("Series Outline Stroke Sequence");
-		pd.setCategory("Series");
+		pd = new StrokesPropertyDescriptor(PlotSettings.PROPERTY_seriesOutlineStrokeSequence, Messages.MPlotSettings_outlineStrokeSequenceTitle);
+		pd.setDescription(Messages.MPlotSettings_outlineStrokeSequenceDescription);
+		pd.setCategory("Series"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new PaintProvidersPropertyDescriptor(PlotSettings.PROPERTY_seriesColorSequence, "Color Sequence");
-		pd.setDescription("Series Color Sequence");
-		pd.setCategory("Series");
+		pd = new PaintProvidersPropertyDescriptor(PlotSettings.PROPERTY_seriesColorSequence, Messages.MPlotSettings_colorSequenceTitle);
+		pd.setDescription(Messages.MPlotSettings_colorSequenceDescription);
+		pd.setCategory("Series"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new PaintProvidersPropertyDescriptor(PlotSettings.PROPERTY_seriesGradientPaintSequence, "Gradient Paint Sequence");
-		pd.setDescription("Series Gradient Paint Sequence");
-		pd.setCategory("Series");
+		pd = new PaintProvidersPropertyDescriptor(PlotSettings.PROPERTY_seriesGradientPaintSequence, Messages.MPlotSettings_gradientPaintSequenceTitle);
+		pd.setDescription(Messages.MPlotSettings_gradientPaintSequenceDescription);
+		pd.setCategory("Series"); //$NON-NLS-1$
 		desc.add(pd);
 
-		pd = new PaintProvidersPropertyDescriptor(PlotSettings.PROPERTY_seriesOutlinePaintSequence, "Outline Paint Sequence");
-		pd.setDescription("Series Outline Paint Sequence");
-		pd.setCategory("Series");
+		pd = new PaintProvidersPropertyDescriptor(PlotSettings.PROPERTY_seriesOutlinePaintSequence, Messages.MPlotSettings_outlinePaintSequenceTitle);
+		pd.setDescription(Messages.MPlotSettings_outlinePaintSequenceDescription);
+		pd.setCategory("Series"); //$NON-NLS-1$
 		desc.add(pd);
 
 		PadUtil.createPropertyDescriptors(desc, defaultsMap);
@@ -234,7 +234,7 @@ public class MPlotSettings extends APropertyNode {
 		defaultsMap.put(PlotSettings.PROPERTY_backgroundImageAlignment, JFreeChartAlignEnum.TOP_LEFT);
 		defaultsMap.put(PlotSettings.PROPERTY_orientation, JFreeChartPlotOrientationEnum.HORIZONTAL);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/sample.reference/chartthemes/index.html#chartthemes"); //$NON-NLS-1$
 	}
 
 	private static JSSEnumPropertyDescriptor orientation;

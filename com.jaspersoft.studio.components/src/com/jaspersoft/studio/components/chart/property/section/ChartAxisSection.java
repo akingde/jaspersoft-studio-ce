@@ -20,6 +20,7 @@ import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractRealValueSection;
 
@@ -41,6 +42,12 @@ public class ChartAxisSection extends AbstractRealValueSection {
 		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, JRDesignChartAxis.PROPERTY_POSITION);
+	}
+	
+	@Override
+	protected void initializeProvidedProperties() {
+		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignChartAxis.PROPERTY_POSITION, Messages.MChartAxes_position);
 	}
 
 }
