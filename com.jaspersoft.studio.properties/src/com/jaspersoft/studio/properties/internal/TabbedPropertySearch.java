@@ -41,6 +41,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormColors;
 
@@ -257,13 +258,11 @@ public class TabbedPropertySearch extends Composite {
 	 * Method called to initialize or update the autocomplete set of elements
 	 */
 	private void updateAutocompleteContent(){
-		//if (getSelectedElement() != lastSelectedElement) textArea.setText("");
 		if (autocomplete == null) {
 			PropertiesContainer properties = getAllProperties();
 			autocomplete = new ManualyOpenedAutocomplete(textArea, new TextContentAdapter(), properties);
 			autocomplete.addProposalSelectedListener(proposalListener);
-		}
-		else {
+		} else {
 			Object actualSelectedElement = getSelectedElement();
 			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
 				PropertiesContainer properties = getAllProperties();
@@ -307,7 +306,11 @@ public class TabbedPropertySearch extends Composite {
 						actualSection.expandForProperty(id);
 						//Get the widget from the section and highlight it for 2000ms
 						IHighlightPropertyWidget widget = actualSection.getWidgetForProperty(id);
-						if (widget != null) widget.highLightWidget(2000);
+						if (widget != null) {
+							Control highLightedControl = widget.getControlToBorder();
+							if (highLightedControl != null) highLightedControl.forceFocus();
+							widget.highLightWidget(2000);
+						}
 						return;
 					}
 				}
@@ -388,6 +391,7 @@ public class TabbedPropertySearch extends Composite {
 				lastSelectedElement = getSelectedElement();
 			}
 		}
+		textArea.setText("");
 		return cachedProperties;
 	}
 	

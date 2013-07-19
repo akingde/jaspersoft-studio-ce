@@ -57,6 +57,46 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 	 * page a change in section height
 	 */
 	private ExpansionAdapter sectionSizeChange;
+	
+	/**
+	 * This class extends a classic section to notify to a listener when the section is 
+	 * expanded programmatically. By default infact this expand listner is not notified 
+	 * if the section is expanded programmatically.
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class NotifyExpandSection extends Section{
+
+		/**
+		 * Adapter to notify when the section is expanded programmatically
+		 */
+		private ExpansionAdapter expansionNotifier = null;
+		
+		/**
+		 * The first two parameter are the same meaning of the standard section
+		 * 
+		 * @param parent
+		 * @param style
+		 * @param expansionNotifier Adapter to notify when the section is expanded programmatically,
+		 * if it is null the behavior is the same of a standard section
+		 */
+		public NotifyExpandSection(Composite parent, int style, ExpansionAdapter expansionNotifier) {
+			super(parent, style);
+			this.expansionNotifier = expansionNotifier;
+		}
+		
+		/**
+		 * Expand the section and if the expansionNotifier is not null then call then notify
+		 * the expansion
+		 */
+		@Override
+		public void setExpanded(boolean expanded) {
+			super.setExpanded(expanded);
+			if (expansionNotifier != null) 
+				expansionNotifier.expansionStateChanged(new ExpansionEvent(this, expanded));
+		}	
+	}
 
 	/**
 	 * private constructor.
@@ -306,8 +346,7 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		int style = Section.EXPANDED | Section.TITLE_BAR;
 		if (expandable)
 			style = style | Section.TWISTIE;
-		// Section section = createSection(parent, style);
-		Section section = new Section(parent, style);
+		Section section = new NotifyExpandSection(parent, style, sectionSizeChange);
 		section.titleBarTextMarginWidth = 0;
 		// section.marginWidth = 2;
 		section.setTitleBarBorderColor(SWTResourceManager.getColor(SWT.COLOR_GRAY));
@@ -320,6 +359,8 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 			section.setLayoutData(gd);
 		}
 		section.setText(text);
+		if (sectionSizeChange != null)
+			section.addExpansionListener(sectionSizeChange);
 		// section.setSeparatorControl(new Label(section, SWT.SEPARATOR
 		// | SWT.HORIZONTAL));
 
@@ -337,7 +378,7 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		style = style | Section.EXPANDED;
 		if (expandable)
 			style = style | Section.TREE_NODE;
-		Section section = new Section(parent, style);
+		Section section = new NotifyExpandSection(parent, style, sectionSizeChange);
 		section.titleBarTextMarginWidth = 0;
 
 		section.setFont(SWTResourceManager.getBoldFont(section.getFont()));

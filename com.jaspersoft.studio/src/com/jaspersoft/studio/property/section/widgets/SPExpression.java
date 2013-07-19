@@ -56,7 +56,7 @@ public class SPExpression extends AHistorySPropertyWidget implements IExpression
 	}
 	
 	@Override
-	protected Control getControlToBorder() {
+	public Control getControlToBorder() {
 		return getTextControl();
 	}
 	

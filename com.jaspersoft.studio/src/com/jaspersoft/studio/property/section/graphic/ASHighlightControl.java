@@ -84,4 +84,9 @@ public class ASHighlightControl implements IHighlightPropertyWidget {
 		}).start();
 	}
 
+	@Override
+	public Control getControlToBorder() {
+		return controlToHighLight;
+	}
+
 }

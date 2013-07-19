@@ -141,6 +141,11 @@ public class BordersSection extends AbstractSection {
 	private Canvas square;
 	
 	/**
+	 * Group section where the controls regarding the border are placed
+	 */
+	private Group rightPanel;
+	
+	/**
 	 * The widget used to set\show the line color
 	 */
 	private ColorStyledText lineColor;
@@ -178,7 +183,7 @@ public class BordersSection extends AbstractSection {
 				
 		createPaddingPanel(mainLayout);
 		
-		Group rightPanel = new Group(mainLayout, SWT.NONE);
+		rightPanel = new Group(mainLayout, SWT.NONE);
 		rightPanel.setText(Messages.common_borders);
 		rightPanel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		rightPanel.setLayout(new GridLayout(2,false));
@@ -747,6 +752,7 @@ public class BordersSection extends AbstractSection {
 		addProvidedProperties(JRBasePen.PROPERTY_LINE_COLOR, Messages.common_pen_color);
 		addProvidedProperties(JRBasePen.PROPERTY_LINE_WIDTH, Messages.common_pen_width);
 		addProvidedProperties(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_pen_style);
+		addProvidedProperties("BordersDefinitionGroup", Messages.common_borders);
 	}
 	
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId){
@@ -758,6 +764,7 @@ public class BordersSection extends AbstractSection {
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_COLOR)) return new ASHighlightControl(lineColor.getPaintArea(), new BackgroundHighlight(lineColor.getPaintArea()));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_WIDTH)) return new ASHighlightControl(lineWidth, new BackgroundHighlight(lineWidth));
 		else if (propertyId.equals(JRBasePen.PROPERTY_LINE_STYLE)) return new ASHighlightControl(lineStyle.getControl(), new BackgroundHighlight(lineStyle.getControl()));
+		else if (propertyId.equals("BordersDefinitionGroup")) return new ASHighlightControl(rightPanel, new BorderHightLight(rightPanel, Composite.class));
 		return null;
 	}
 

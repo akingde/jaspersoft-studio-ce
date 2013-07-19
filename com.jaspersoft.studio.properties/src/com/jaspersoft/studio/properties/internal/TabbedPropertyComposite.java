@@ -122,6 +122,7 @@ public class TabbedPropertyComposite extends Composite {
 		scrolledComposite.setAlwaysShowScrollBars(false);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setShowFocusedControl(true);
 
 		tabComposite = factory.createComposite(scrolledComposite, SWT.NO_FOCUS);
 		GridLayout layout2 = new GridLayout();

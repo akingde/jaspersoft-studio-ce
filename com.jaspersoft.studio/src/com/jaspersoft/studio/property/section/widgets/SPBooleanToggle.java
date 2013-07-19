@@ -46,7 +46,7 @@ public class SPBooleanToggle extends ASPropertyWidget {
 	}
 	
 	@Override
-	protected Control getControlToBorder() {
+	public Control getControlToBorder() {
 		return parent;
 	}
 	

@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewSite;
@@ -143,7 +144,7 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	 * 
 	 * @return control to border
 	 */
-	protected Control getControlToBorder() {
+	public Control getControlToBorder() {
 		return getControl();
 	}
 
@@ -156,6 +157,7 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 	 public static IHighlightControl getControlHighlight(Control control) {
 		if (control.getClass().equals(Spinner.class)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Text.class)) return new BackgroundHighlight(control);
+		if (control.getClass().equals(ToolBar.class)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Combo.class) && !((control.getStyle() & SWT.READ_ONLY) == SWT.READ_ONLY)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.CHECK) == SWT.CHECK)) return new BackgroundHighlight(control);
 		if (control.getClass().equals(Button.class) && ((control.getStyle() & SWT.PUSH) == SWT.PUSH)) return new BorderHightLight(control, Combo.class);

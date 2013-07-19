@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.properties.internal;
 
+import org.eclipse.swt.widgets.Control;
+
 /**
  * Interface to implement if a widget can be highlighted by the search widget function
  * 
@@ -29,4 +31,9 @@ public interface IHighlightPropertyWidget {
 	 * @param ms time to wait to have the widget return to normal
 	 */
 	public void highLightWidget(long ms);
+	
+	/**
+	 * Return the control that will be highlighted
+	 */
+	public Control getControlToBorder();
 }

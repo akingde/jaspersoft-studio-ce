@@ -64,7 +64,9 @@ public class LocationSection extends AbstractSection {
 	
 	@Override
 	public void expandForProperty(Object propertyId) {
-		if (section != null && !section.isExpanded()) section.setExpanded(true);
+		if (section != null && !section.isExpanded()) {
+			section.setExpanded(true);
+		}
 	}
 	
 	@Override
