@@ -70,6 +70,8 @@ public final class Messages extends NLS {
 	 */
 	public static String TabbedPropertyList_properties_not_available;
 
+	public static String TabbedPropertySearch_searchPropertyLabel;
+
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}

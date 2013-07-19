@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormColors;
 
+import com.jaspersoft.studio.properties.messages.Messages;
 import com.jaspersoft.studio.properties.view.ISection;
 import com.jaspersoft.studio.properties.view.TabContents;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
@@ -170,12 +171,22 @@ public class TabbedPropertySearch extends Composite {
 	private void createTextArea(Composite containerComp){
 		textArea = new Text(containerComp, SWT.NONE);
 		textArea.setForeground(factory.getColors().getColor(IFormColors.TITLE));
+		textArea.setText(Messages.TabbedPropertySearch_searchPropertyLabel);
 		
 		//Focus listener, to populate the combo when it is selected
 		textArea.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
+				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)){
+					textArea.setText("");
+				}
 				updateAutocompleteContent();
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (textArea.getText().isEmpty()) 
+					textArea.setText(Messages.TabbedPropertySearch_searchPropertyLabel); 
 			}
 		});
 		
@@ -242,6 +253,9 @@ public class TabbedPropertySearch extends Composite {
 		openIcon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
+				if (textArea.getText().equals(Messages.TabbedPropertySearch_searchPropertyLabel)){
+					textArea.setText("");
+				}
 				updateAutocompleteContent();
 				if (autocomplete.isProposalOpened()) autocomplete.closeProposalPopup();
 				else autocomplete.openProposalPopup();
@@ -391,7 +405,7 @@ public class TabbedPropertySearch extends Composite {
 				lastSelectedElement = getSelectedElement();
 			}
 		}
-		textArea.setText("");
+		textArea.setText(""); //$NON-NLS-1$
 		return cachedProperties;
 	}
 	
