@@ -15,10 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.export;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -27,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -45,30 +45,24 @@ public class JrxmlExporter extends AExporter {
 	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
 
 	@Override
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
-		IFile f = super.exportToIFile(res, rd, fkeyname);
-		if (f != null)
-			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN), Boolean.toString(rd.isMainReport()));
-		return f;
-	}
-
-	@Override
-	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
-		File f = super.exportFile(res, rd, fkeyname);
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
 			try {
-				JasperDesign jd = JRXmlLoader.load(f);
+				JasperDesign jd = JRXmlLoader.load(f.getContents());
 				setPropServerURL(res, jd);
 				setPropReportUnit(res, jd);
 				getResources(res, jd);
 
 				MServerProfile sp = (MServerProfile) res.getRoot();
 				if (sp != null)
-					FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(null, jd, sp.getValue().getJrVersion()));
+					f.setContents(new ByteArrayInputStream(JRXmlWriterHelper.writeReport(null, jd, sp.getValue().getJrVersion()).getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		if (f != null)
+			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN), Boolean.toString(rd.isMainReport()));
 		return f;
 	}
 

@@ -15,15 +15,24 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model.server;
 
+import java.io.IOException;
+
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.util.CastorUtil;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -126,4 +135,30 @@ public class MServerProfile extends ANode {
 		this.wsClient = wsClient;
 	}
 
+	private IFolder tmpDir;
+
+	public void setProjectPath(String projectPath) {
+		getValue().setProjectPath(projectPath);
+		tmpDir = null;
+		AExporter.fileurimap.clear();
+	}
+
+	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException, CoreException {
+		if (tmpDir == null || !tmpDir.exists()) {
+			if (getValue().getProjectPath() != null) {
+				String path = getValue().getProjectPath();
+				if (path.charAt(0) == '/')
+					path = path.substring(1);
+				int indx = path.indexOf("/");
+				String ppath = path.substring(0, indx);
+				String fpath = path.substring(indx);
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
+				tmpDir = prj.getFolder(fpath);
+			} else
+				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI());
+			if (!tmpDir.exists())
+				tmpDir.create(true, true, monitor);
+		}
+		return tmpDir;
+	}
 }

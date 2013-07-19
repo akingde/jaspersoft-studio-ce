@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.export;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,48 +24,61 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public abstract class AExporter {
-	protected static Map<String, String> fileurimap = new HashMap<String, String>();
+	public static Map<String, IFile> fileurimap = new HashMap<String, IFile>();
 
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
-		File f = exportFile(res, rd, fkeyname);
-		if (f != null)
-			return FileUtils.getInProjectFile(f.toURI());
-		return null;
-	}
-
-	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname) throws Exception {
-		File f = getTempFile(res, rd, fkeyname, getExtension());
-		if (f != null)
-			fileurimap.put(fkeyname, f.getAbsolutePath());
-		return f;
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+		return getTempFile(res, rd, fkeyname, getExtension(), monitor);
 	}
 
 	public abstract String getExtension();
 
-	private File getTempFile(MResource res, ResourceDescriptor rd, String fkeyname, String dextention) throws Exception {
-		String filename = fileurimap.get(fkeyname);
-
-		File f = null;
-		if (filename != null)
-			f = new File(filename);
-		else {
-			String fname = rd.getName();
-			int lastpoint = fname.lastIndexOf("."); //$NON-NLS-1$
-			if (lastpoint > 0 && lastpoint < fname.length())
-				fname = fname.substring(0, lastpoint) + "_"; //$NON-NLS-1$
-			f = FileUtils.createTempFile("tempjrsfile_"+fname, dextention); //$NON-NLS-1$
-		}
-		try {
-			WSClientHelper.getResource(res, rd, f);
-		} catch (Exception e) {
-			UIUtils.showError(e);
-			return null;
+	protected IFile getTempFile(MResource res, ResourceDescriptor rd, String fkeyname, String dextention, IProgressMonitor monitor) throws Exception {
+		IFile f = fileurimap.get(fkeyname);
+		if (f == null) {
+			INode root = res.getRoot();
+			IFolder troot = null;
+			if (root != null && root instanceof MServerProfile)
+				troot = ((MServerProfile) root).getTmpDir(monitor);
+			else
+				troot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI());
+			IResource r = troot.findMember(rd.getParentFolder());
+			if (r != null && r instanceof IFile) {
+				r.delete(true, monitor);
+				r = null;
+			}
+			if (r == null || !r.exists()) {
+				r = troot.getFolder(rd.getParentFolder());
+				FileUtils.prepareFolder((IFolder) r, monitor);
+			}
+			troot = (IFolder) r;
+			String path = rd.getName() + dextention;
+			r = troot.findMember(path);
+			if (r != null && r instanceof IFolder) {
+				r.delete(true, monitor);
+				r = null;
+			}
+			if (r == null || !r.exists()) {
+				f = troot.getFile(path);
+				f.create(new ByteArrayInputStream("".getBytes("UTF-8")), true, monitor);
+			}
+			try {
+				WSClientHelper.getResource(res, rd, new File(f.getRawLocationURI()));
+			} catch (Exception e) {
+				UIUtils.showError(e);
+				return null;
+			}
+			fileurimap.put(fkeyname, f);
 		}
 		return f;
 	}

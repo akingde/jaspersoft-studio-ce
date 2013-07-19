@@ -92,7 +92,8 @@ public class OpenInEditorAction extends Action {
 					pm.run(true, true, new IRunnableWithProgress() {
 						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 							try {
-								dorun(obj);
+								monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
+								dorun(obj, monitor);
 							} catch (Throwable e) {
 								throw new InvocationTargetException(e);
 							} finally {
@@ -111,7 +112,7 @@ public class OpenInEditorAction extends Action {
 		}
 	}
 
-	protected void dorun(final Object obj) throws Exception, FileNotFoundException, IOException {
+	protected void dorun(final Object obj, IProgressMonitor monitor) throws Exception, FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
 			MResource res = (MResource) obj;
 			ResourceDescriptor rd = res.getValue();
@@ -120,20 +121,20 @@ public class OpenInEditorAction extends Action {
 			if (fkeyname == null)
 				return;
 			String type = rd.getWsType();
-			File f = null;
+			IFile f = null;
 			if (type.equals(ResourceDescriptor.TYPE_JRXML)) {
-				IFile file = new JrxmlExporter().exportToIFile(res, rd, fkeyname);
+				IFile file = new JrxmlExporter().exportToIFile(res, rd, fkeyname, monitor);
 				if (file != null)
 					openEditor(file);
 				return;
 			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
-				f = new ImageExporter().exportFile(res, rd, fkeyname);
+				f = new ImageExporter().exportToIFile(res, rd, fkeyname, monitor);
 			else if (type.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
-				f = new ResourceBundleExporter().exportFile(res, rd, fkeyname);
+				f = new ResourceBundleExporter().exportToIFile(res, rd, fkeyname, monitor);
 			else if (type.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
-				f = new StyleTemplateExporter().exportFile(res, rd, fkeyname);
+				f = new StyleTemplateExporter().exportToIFile(res, rd, fkeyname, monitor);
 			else if (type.equals(ResourceDescriptor.TYPE_XML_FILE))
-				f = new XmlExporter().exportFile(res, rd, fkeyname);
+				f = new XmlExporter().exportToIFile(res, rd, fkeyname, monitor);
 			if (f != null)
 				openEditor(f);
 		}

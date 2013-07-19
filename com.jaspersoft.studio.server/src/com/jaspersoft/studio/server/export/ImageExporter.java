@@ -15,11 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.export;
 
-import java.io.File;
-
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.MResource;
@@ -27,25 +28,23 @@ import com.jaspersoft.studio.server.model.MResource;
 public class ImageExporter extends AExporter {
 
 	@Override
-	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
-			throws Exception {
-		File f = super.exportFile(res, rd, fkeyname);
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
-			String filename = f.getAbsolutePath();
+			String filename = f.getFullPath().toPortableString();
 			int dotPos = filename.lastIndexOf(".");
 			String strFilename = filename.substring(0, dotPos);
-			ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils
-					.getBytes(f));
+			ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils.getBytes(f));
 			if (itype == ImageTypeEnum.GIF) {
-				f = FileUtils.fileRenamed(f, strFilename, ".gif", false);
+				f = FileUtils.fileRenamed(f, strFilename, ".gif", false, monitor);
 			} else if (itype == ImageTypeEnum.JPEG) {
-				f = FileUtils.fileRenamed(f, strFilename, ".jpeg", false);
+				f = FileUtils.fileRenamed(f, strFilename, ".jpeg", false, monitor);
 			} else if (itype == ImageTypeEnum.PNG) {
-				f = FileUtils.fileRenamed(f, strFilename, ".png", false);
+				f = FileUtils.fileRenamed(f, strFilename, ".png", false, monitor);
 			} else if (itype == ImageTypeEnum.TIFF) {
-				f = FileUtils.fileRenamed(f, strFilename, ".tiff", false);
+				f = FileUtils.fileRenamed(f, strFilename, ".tiff", false, monitor);
 			}
-			fileurimap.put(fkeyname, f.getAbsolutePath());
+			fileurimap.put(fkeyname, f);
 		}
 		return f;
 	}

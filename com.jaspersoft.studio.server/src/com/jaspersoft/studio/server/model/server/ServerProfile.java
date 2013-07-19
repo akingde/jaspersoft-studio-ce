@@ -28,6 +28,15 @@ public class ServerProfile implements Resource, Cloneable {
 	private String jrVersion = JRXmlWriterHelper.LAST_VERSION;
 	private int timeout = 300000;
 	private boolean chunked;
+	private String projectPath;
+
+	public String getProjectPath() {
+		return projectPath;
+	}
+
+	public void setProjectPath(String projectPath) {
+		this.projectPath = projectPath;
+	}
 
 	public String getJrVersion() {
 		return jrVersion;
