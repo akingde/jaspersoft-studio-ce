@@ -16,13 +16,16 @@
 package com.jaspersoft.studio.editor.action.text;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import net.sf.jasperreports.engine.base.JRBaseFont;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -100,7 +103,7 @@ public class FontSizeButtonsContributionItem extends ContributionItem implements
 	/**
 	 * The model of the selected element
 	 */
-	protected APropertyNode model;
+	protected List<APropertyNode> models;
 	
 	
 	public FontSizeButtonsContributionItem() {
@@ -137,23 +140,27 @@ public class FontSizeButtonsContributionItem extends ContributionItem implements
 	 * @param increment true if you want to increment the font, false otherwise
 	 */
 	protected void createCommand(boolean increment){
-		Object fontSize = model.getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		if (fontSize.equals("")) fontSize = model.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		Integer newValue = 2;
-		if (fontSize != null && fontSize.toString().length()>0){
-			newValue = Integer.valueOf(fontSize.toString());
-			Integer plus = null;
-			if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
-			else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
-			if ((newValue+plus)>99) newValue = 99;
-			else if ((newValue+plus)>0) newValue += plus;
-			
-			Command c = getChangePropertyCommand(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), model);
-			if (c != null) {
-				CommandStack cs = getCommandStack();
-				cs.execute(c);
+		CompoundCommand changeSizeCommands = new CompoundCommand();
+		for (APropertyNode model : models){
+			Object fontSize = model.getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
+			if (fontSize.equals("")) fontSize = model.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
+			Integer newValue = 2;
+			if (fontSize != null && fontSize.toString().length()>0){
+				newValue = Integer.valueOf(fontSize.toString());
+				Integer plus = null;
+				if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
+				else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
+				if ((newValue+plus)>99) newValue = 99;
+				else if ((newValue+plus)>0) newValue += plus;
+				
+				Command c = getChangePropertyCommand(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), model);
+				if (c != null) {
+					changeSizeCommands.add(c);
+				}
 			}
 		}
+		CommandStack cs = getCommandStack();
+		cs.execute(changeSizeCommands);
 	}
 	
 	/**
@@ -165,6 +172,7 @@ public class FontSizeButtonsContributionItem extends ContributionItem implements
 	 */
 	@SuppressWarnings("unchecked")
 	protected void createControl(Composite parent) {
+		models.clear();
 		if (selection != null) {
 			StructuredSelection ss = (StructuredSelection) selection;
 			for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
@@ -172,11 +180,11 @@ public class FontSizeButtonsContributionItem extends ContributionItem implements
 				if (obj instanceof EditPart)
 					obj = ((EditPart) obj).getModel();
 				if (obj instanceof APropertyNode) {
-					model = (APropertyNode) obj;
+					models.add((APropertyNode) obj);
 				}
 			}
 		}
-		if (model != null){
+		if (models.size()>0){
 			buttons = new ToolBar(parent, SWT.FLAT | SWT.WRAP);
 			createButton(true);
 			createButton(false);
@@ -240,7 +248,7 @@ public class FontSizeButtonsContributionItem extends ContributionItem implements
 	@Override
 	public void setSelection(ISelection selection) {
 		this.selection = selection;
-		model = null;
+		models = new ArrayList<APropertyNode>();;
 	}
 
 	@Override
