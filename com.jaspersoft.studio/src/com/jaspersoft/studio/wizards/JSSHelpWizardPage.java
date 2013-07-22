@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
@@ -38,6 +39,21 @@ public abstract class JSSHelpWizardPage extends WizardPage implements ContextDat
 		 contextName = getContextName();
 	}
 	
+
+  /**
+   * Creates a new wizard page with the given name, title, and image.
+   *
+   * @param pageName the name of the page
+   * @param title the title for this wizard page,
+   *   or <code>null</code> if none
+   * @param titleImage the image descriptor for the title of this wizard page,
+   *   or <code>null</code> if none
+   */
+  protected JSSHelpWizardPage(String pageName, String title, ImageDescriptor titleImage) {
+  	super(pageName, title, titleImage);
+		 contextName = getContextName();
+  }
+	
 	/**
 	 * This method is called by the constructor of JSSHelpWizardPage to initialize the context name 
 	 * of a wizard page. With the context name a contextual help will be available. This method 
@@ -46,6 +62,10 @@ public abstract class JSSHelpWizardPage extends WizardPage implements ContextDat
 	 * be a default one without help.
 	 */
 	protected abstract String getContextName();
+	
+	protected void setContextName(String contextName){
+		this.contextName = contextName;
+	}
 	
 	/**
 	 * Set the root control of the wizard, and also add a listener to do the perform help action 
