@@ -48,4 +48,9 @@ public class NewResourcePage extends AWizardPage {
 		}
 		return super.isPageComplete();
 	}
+
+	@Override
+	protected String getContextName() {
+		return null;
+	}
 }

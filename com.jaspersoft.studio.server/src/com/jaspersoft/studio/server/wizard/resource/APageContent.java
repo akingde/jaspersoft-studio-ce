@@ -76,6 +76,10 @@ public abstract class APageContent {
 	public void setPageComplete(boolean complete) {
 		page.setPageComplete(complete);
 	}
+	
+	public String getHelpContext(){
+		return null;
+	}
 
 	public void dispose() {
 

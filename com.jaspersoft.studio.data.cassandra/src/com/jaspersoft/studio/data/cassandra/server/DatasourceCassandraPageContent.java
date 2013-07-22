@@ -77,4 +77,9 @@ public class DatasourceCassandraPageContent extends APageContent {
 
 		return composite;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.adapter_cassandra";
+	}
 }

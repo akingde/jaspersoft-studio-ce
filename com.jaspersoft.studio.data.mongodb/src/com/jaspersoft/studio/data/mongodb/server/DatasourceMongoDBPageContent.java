@@ -98,4 +98,9 @@ public class DatasourceMongoDBPageContent extends APageContent {
 
 		return composite;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.adapter_mongodb";
+	}
 }

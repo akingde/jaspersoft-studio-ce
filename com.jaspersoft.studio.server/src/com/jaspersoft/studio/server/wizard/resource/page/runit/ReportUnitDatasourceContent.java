@@ -49,6 +49,12 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 	public String getPageName() {
 		return "com.jaspersoft.studio.server.page.runit.datasource";
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editReportUnitDSContent";
+	}
+
 
 	@Override
 	public Control createContent(Composite parent) {

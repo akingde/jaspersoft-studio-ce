@@ -403,4 +403,9 @@ public class DatasourceVDSPageContent extends APageContent {
 
 		lob.createOrderButtons(bGroup, rightTView);
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editVirtualDatasource";
+	}
 }

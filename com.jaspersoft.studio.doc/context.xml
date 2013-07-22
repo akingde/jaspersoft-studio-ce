@@ -337,4 +337,32 @@
    <context id="wizard_import_select_properties" title="Select the Properties to import">
       <description>Here you can see all the properties that can be automatically imported into JasperSoft Studio (existing properties will be replaced), select one or more of them and press Finish to import all the selected data into Jaspersoft Studio</description>
    </context>
+   <context id="editInputControl" title="Edit Input Control">
+      <description>Input controls are graphical widgets the server displays with the report. Input controls can be used to Prompt the user for input, validate the format of the input, pass the input to the report.Based on the input, the server modifies the WHERE filter clauses in SQL parametrized queries. Input controls correspond to the parameters defined in JRXML reports, such as $P{name}. The server maps the value that the user enters for the input control to the parameter of the same name. If you define an input control in the JasperReport and the server can’t find a parameter by the same name in the JRXML, the input control doesn’t function when the report runs.</description>
+  	  <topic href="http://community.jaspersoft.com/documentation/jasperreports-server-user-guide/adding-input-controls" label="Input Controls in JasperReport Server" />
+   </context>
+   <context id="editGenericFile" title="Edit File Resource">
+      <description>In this dialog you can download a file resource or replace the one in the server with another one. Depending on the type of file resource (for example with images) you can also see a preview of the resource actually on the server.</description>
+   </context>
+   <context id="editResource" title="Edit Resource">
+      <description>In this dialog you can view and edit some generic informations about the resource. The only informations that can be edited are a textual description of the resource and the name used when the it is shown. The information inside a dark gray field, like the Id, can not b changed.</description>
+   </context>
+   <context id="editReportUnitContent" title="Edit Report Unit">
+      <description>In this dialog you specify the main report of the report unit. This report will be the one executed when the report unit is launched, all the other report inside the report unit could be anyway executed if they are subreport inside the main one.</description>
+   </context>
+   <context id="editReportUnitDSContent" title="Edit Report Unit Main Datasource">
+      <description>In this dialog you specify the main datasource of the report unit. This will be the datasource used from the main report.</description>
+   </context>
+   <context id="editReportUnitICContent" title="Edit Report Unit Input Control">
+      <description>In this dialog you specify how the input control defined inside the report unit will interact with the user. For example you can define if the input controls values will be requested from the user with an input dialog and where this dialog will be placed.</description>
+   </context>
+   <context id="editListOfValue" title="Edit List Of Value">
+      <description>In this dialog you can add, remove or edit the every single elements of a list of values. To every value is associated a name and the type of both name and value is textual. This list of values can be used from other controls, like the input controls.</description>
+   </context>
+   <context id="editDataType" title="Edit Data Type">
+      <description>In this dialog you can define the attributes of a data type. Between this attributes there is a base data type like Date, String, Number and so one. Then, depending from the base type, you can apply to it some constraints to define your own type. For example you can define a new data type that has as base type a number but with the constraints to have as minimum 0 and as maximum 100.</description>
+   </context>
+   <context id="editVirtualDatasource" title="Edit Virtual Datasource">
+      <description>A virtual data source is an artifact that combines one or more physical data sources together to provide for easy data integration. The physical sources can be JDBC sources, delimited text files, spreadsheets, or even Web services. In this dialog you can add other datasources on the server inside the virtual datasource, or you can remove from the virtual datasource any datasource inside it</description>
+   </context>
 </contexts>

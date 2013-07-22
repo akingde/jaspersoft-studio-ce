@@ -144,6 +144,12 @@ public class ResourcePageContent extends APageContent {
 		tname.setFocus();
 		return composite;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editResource";
+	}
+
 
 	public static String safeChar(String input) {
 		char[] allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_./".toCharArray();

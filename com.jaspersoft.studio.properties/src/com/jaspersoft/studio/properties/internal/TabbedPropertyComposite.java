@@ -43,6 +43,8 @@ public class TabbedPropertyComposite extends Composite {
 
 	private TabbedPropertyTitle title;
 
+	private TabbedPropertySearch searchBar;
+
 	private TabbedPropertyList listComposite;
 
 	private boolean displayTitle;
@@ -105,7 +107,7 @@ public class TabbedPropertyComposite extends Composite {
 			title.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 		//Create the search bar for the properties
-		TabbedPropertySearch searchBar = new TabbedPropertySearch(parent, factory);
+		searchBar = new TabbedPropertySearch(parent, factory);
 		searchBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		listComposite = new TabbedPropertyList(mainComposite);
@@ -180,6 +182,14 @@ public class TabbedPropertyComposite extends Composite {
 		return title;
 	}
 
+	/**
+	 * Return the search bar for the search of a property
+	 * 
+	 */
+	public TabbedPropertySearch getSearchBar(){
+		return searchBar;
+	}
+	
 	/**
 	 * Get the tab composite where sections display their property contents.
 	 * 

@@ -17,9 +17,10 @@ package com.jaspersoft.studio.server.wizard.resource;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardContainer;
-import org.eclipse.jface.wizard.WizardPage;
 
-public abstract class AWizardPage extends WizardPage {
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+
+public abstract class AWizardPage extends JSSHelpWizardPage {
 
 	public AWizardPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);

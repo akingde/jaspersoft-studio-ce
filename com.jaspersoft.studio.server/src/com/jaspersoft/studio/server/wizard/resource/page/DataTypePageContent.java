@@ -173,4 +173,9 @@ public class DataTypePageContent extends APageContent {
 			return rd.getDataType() - shift;
 		}
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editDataType";
+	}
 }

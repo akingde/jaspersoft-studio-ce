@@ -99,6 +99,12 @@ public class ReportUnitContent extends APageContent {
 		proxy.setResourceDescriptor(rd);
 		return proxy;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editReportUnitContent";
+	}
+
 
 	private ReportProxy proxy = new ReportProxy();
 	private SelectorJrxml selectorJrxml;

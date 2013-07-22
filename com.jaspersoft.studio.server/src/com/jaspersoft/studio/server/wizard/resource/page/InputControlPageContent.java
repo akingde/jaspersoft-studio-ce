@@ -249,6 +249,11 @@ public class InputControlPageContent extends APageContent implements IPageComple
 		proxy.setResourceDescriptor(rd);
 		return proxy;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editInputControl";
+	}
 
 	private ShiftMapProxy proxy = new ShiftMapProxy();
 	private QueryVisibleColumnsTable qvct;

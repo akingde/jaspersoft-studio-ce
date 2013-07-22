@@ -141,4 +141,9 @@ public class DatasourceJDBCPageContent extends APageContent {
 		SecretsUtil secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
 		return secretsUtil.getSecret(AbstractDataAdapterService.SECRETS_CATEGORY, encodedPasswd);
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.adapter_JDBC";
+	}
 }

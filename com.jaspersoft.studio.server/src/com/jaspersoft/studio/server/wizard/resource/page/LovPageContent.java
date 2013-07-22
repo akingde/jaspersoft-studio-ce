@@ -235,4 +235,9 @@ public class LovPageContent extends APageContent {
 		}
 		return false;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editListOfValue";
+	}
 }

@@ -96,4 +96,9 @@ public class DatasourceJndiPageContent extends APageContent {
 
 		return composite;
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.adapter_jndi";
+	}
 }

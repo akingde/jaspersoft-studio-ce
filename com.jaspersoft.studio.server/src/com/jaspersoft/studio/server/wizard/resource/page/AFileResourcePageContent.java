@@ -150,6 +150,12 @@ public abstract class AFileResourcePageContent extends APageContent {
 	protected void createFileTab(Composite tabFolder) {
 
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editGenericFile";
+	}
+
 
 	protected abstract String[] getFilter();
 

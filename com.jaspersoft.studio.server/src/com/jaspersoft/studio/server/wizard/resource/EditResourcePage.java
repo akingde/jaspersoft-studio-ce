@@ -15,9 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -27,6 +32,7 @@ import org.eclipse.swt.widgets.TabItem;
 public class EditResourcePage extends AWizardPage {
 	private APageContent[] rcontent;
 	private TabFolder tabFolder;
+	private List<String> helpContexts;
 
 	public EditResourcePage(APageContent... rcontent) {
 		super("editresourcepage");
@@ -43,19 +49,31 @@ public class EditResourcePage extends AWizardPage {
 
 		DataBindingContext bindingContext = new DataBindingContext();
 		WizardPageSupport.create(this, bindingContext);
-
+		helpContexts = new ArrayList<String>();
 		for (APageContent pc : rcontent) {
 			Control cmp = pc.createContent(tabFolder);
 			if (cmp == null)
 				continue;
 			pc.setBindingContext(bindingContext);
-
+			
 			TabItem item = new TabItem(tabFolder, SWT.NONE);
 			item.setText(pc.getName());
-
+			helpContexts.add(pc.getHelpContext());
 			item.setControl(cmp);
 		}
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectHelpByTab(tabFolder.getSelectionIndex());
+			}
+		});
 		setControl(tabFolder);
+		selectHelpByTab(1);
+	}
+	
+	private void selectHelpByTab(int selectedTab){
+		if (selectedTab <0 || helpContexts.size()<=selectedTab) setContextName(helpContexts.get(0));
+		else setContextName(helpContexts.get(selectedTab));
 	}
 
 	public void setFirstPage(int indx) {
@@ -68,5 +86,11 @@ public class EditResourcePage extends AWizardPage {
 		for (APageContent p : rcontent)
 			p.dispose();
 		super.dispose();
+	}
+	
+
+	@Override
+	protected String getContextName() {
+		return null;
 	}
 }

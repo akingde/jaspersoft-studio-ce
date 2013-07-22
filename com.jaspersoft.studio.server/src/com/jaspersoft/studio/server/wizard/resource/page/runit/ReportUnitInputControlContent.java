@@ -52,6 +52,12 @@ public class ReportUnitInputControlContent extends ReportUnitContent {
 	public String getPageName() {
 		return "com.jaspersoft.studio.server.page.runit.ic";
 	}
+	
+	@Override
+	public String getHelpContext() {
+		return "com.jaspersoft.studio.doc.editReportUnitICContent";
+	}
+
 
 	@Override
 	public boolean isPageComplete() {
