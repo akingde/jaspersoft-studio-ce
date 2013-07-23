@@ -409,10 +409,16 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <configurations>
       <plugin id="com.jaspersoft.studio.rcp" autoStart="false" startLevel="5" />
+      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <!--
+      	Apparently Tycho 0.18 does not respect this property.
+      	The solution is that we need to add the bundle org.eclipse.update.configurator and set its start level.
+      	<property name="org.eclipse.update.reconcile" value="false" />
+      -->
    </configurations>
 
 </product>
