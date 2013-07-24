@@ -9,6 +9,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.TableFull;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OrTableImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -56,8 +57,10 @@ public class ConvertTables {
 
 	private static MSqlTable getTable(MRoot dbroot, TableFull tf) {
 		EList<EObject> eContents = tf.eContents();
-		final String table = Text2Model.getDbObjectName(eContents, 1);
-		final String schema = Text2Model.getDbObjectName(eContents, 2);
+		String table = Text2Model.getDbObjectName(eContents, 1);
+		String schema = Text2Model.getDbObjectName(eContents, 2);
+		if (tf instanceof DbObjectNameImpl)
+			table = ((DbObjectNameImpl) tf).getDbname();
 		// String catalog = getDbObjectName(eContents, 3);
 		MSqlTable msqlt = Text2Model.findTable(dbroot, schema, table);
 		if (msqlt == null)
