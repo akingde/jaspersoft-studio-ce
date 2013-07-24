@@ -17,11 +17,18 @@ package com.jaspersoft.studio.server.publish.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -30,9 +37,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -42,7 +51,13 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.publish.ResourcePublishMethod;
+import com.jaspersoft.studio.server.publish.action.ReferenceResourceAction;
+import com.jaspersoft.studio.server.publish.action.ResourceExpressionAction;
+import com.jaspersoft.studio.server.publish.action.ResourceToFolderAction;
+import com.jaspersoft.studio.server.publish.action.SelectLocalAction;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -77,7 +92,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setControl(composite);
 		composite.setLayout(new GridLayout());
 
-		tableViewer = new TableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		tableViewer = new TableViewer(composite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ListContentProvider());
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 		Table table = (Table) tableViewer.getControl();
@@ -97,8 +112,20 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 			@Override
 			public Image getImage(Object element) {
+				setErrorMessage(null);
+				ResourcesPage.this.setPageComplete(true);
 				MResource fr = (MResource) element;
-				return Activator.getDefault().getImage(fr.getThisIconDescriptor().getIcon16());
+				ImageDescriptor id = fr.getThisIconDescriptor().getIcon16();
+				PublishOptions popt = fr.getPublishOptions();
+				if (popt.getPublishMethod() != ResourcePublishMethod.LOCAL && popt.getReferencedResource() == null) {
+					FieldDecoration fd = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+					setErrorMessage("Please fix the referenced missing resources.");
+					ResourcesPage.this.setPageComplete(false);
+					return ResourceManager.decorateImage(id.createImage(), fd.getImage(), ResourceManager.BOTTOM_LEFT);
+				}
+				if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE)
+					return Activator.getDefault().getImage(ResourceManager.decorateImage(id, MResource.LINK_DECORATOR, ResourceManager.BOTTOM_LEFT));
+				return Activator.getDefault().getImage(id);
 			}
 		});
 
@@ -130,10 +157,9 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			@Override
 			public String getText(Object element) {
 				MResource fr = (MResource) element;
-				JRDesignExpression exp = fr.getPublishOptions().getjExpression();
-				if (exp != null)
-					return Misc.nvl(exp.getText());
-				return "";
+				if (fr.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
+					return fr.getPublishOptions().getRepoExpression();
+				return Misc.nvl(fr.getPublishOptions().getExpression());
 			}
 
 			@Override
@@ -162,6 +188,35 @@ public class ResourcesPage extends JSSHelpWizardPage {
 
 		attachCellEditors(tableViewer, table);
 
+		MenuManager menuMgr = new MenuManager();
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			private ReferenceResourceAction sresource = new ReferenceResourceAction(tableViewer);
+			private ResourceToFolderAction sres = new ResourceToFolderAction(tableViewer);
+			private SelectLocalAction slocal = new SelectLocalAction(tableViewer);
+			private ResourceExpressionAction rexp = new ResourceExpressionAction(tableViewer);
+
+			public void menuAboutToShow(IMenuManager menu) {
+				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
+				if (s != null) {
+					MResource mres = (MResource) s.getFirstElement();
+					if (mres.getPublishOptions().isOverwrite()) {
+						if (sresource.calculateEnabled(mres))
+							menu.add(sresource);
+						if (sres.calculateEnabled(mres))
+							menu.add(sres);
+						if (slocal.calculateEnabled(mres))
+							menu.add(slocal);
+						if (rexp.calculateEnabled(mres))
+							menu.add(rexp);
+					}
+				}
+			}
+
+		});
+		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
+		tableViewer.getControl().setMenu(menu);
+
 		fillData();
 	}
 
@@ -185,8 +240,11 @@ public class ResourcesPage extends JSSHelpWizardPage {
 					if (prop instanceof AFileResource)
 						return ((AFileResource) element).getHFFileSize();
 				}
-				if ("EXPRESSION".equals(property))
-					return prop.getPublishOptions().getjExpression();
+				if ("EXPRESSION".equals(property)) {
+					JRDesignExpression jd = new JRDesignExpression();
+					jd.setText(prop.getPublishOptions().getExpression());
+					return jd;
+				}
 				return ""; //$NON-NLS-1$
 			}
 
@@ -195,6 +253,8 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				MResource data = (MResource) tableItem.getData();
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					data.getPublishOptions().setOverwrite((Boolean) value);
+				if ("EXPRESSION".equals(property)) //$NON-NLS-1$
+					data.getPublishOptions().setExpression(((JRDesignExpression) value).getText());
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
@@ -218,7 +278,20 @@ public class ResourcesPage extends JSSHelpWizardPage {
 			MResource mres = (MResource) element;
 			tt += "ID: " + mres.getValue().getName();
 			tt += "\nLabel: " + mres.getValue().getLabel();
-			tt += "\nURI: " + mres.getValue().getUriString();
+
+			if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.LOCAL)
+				tt += "\nURI: " + mres.getValue().getUriString();
+			else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REFERENCE) {
+				tt += "\nURI: " + mres.getValue().getUriString();
+				if (mres.getPublishOptions().getReferencedResource() != null)
+					tt += "\nReference To: " + mres.getPublishOptions().getReferencedResource().getUriString();
+			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.RESOURCE) {
+				if (mres.getPublishOptions().getReferencedResource() != null)
+					tt += "\nURI: " + mres.getPublishOptions().getReferencedResource().getUriString();
+			} else if (mres.getPublishOptions().getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
+				if (mres.getPublishOptions().getReferencedResource() != null)
+					tt += "\nURI: " + mres.getPublishOptions().getReferencedResource().getUriString();
+
 			if (element instanceof AFileResource && ((AFileResource) element).getFile() != null)
 				tt += "\nFile: " + ((AFileResource) element).getFile().getAbsolutePath();
 			return tt;

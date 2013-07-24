@@ -9,6 +9,7 @@ import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -21,8 +22,6 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
-import com.jaspersoft.studio.server.model.MRDataAdapter;
-import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -57,7 +56,7 @@ public class Publish {
 				postProcessLocal((MJrxml) node);
 			else if (node instanceof MReportUnit) {
 				for (INode n : node.getChildren())
-					if (n instanceof MJrxml && ((MJrxml) n).getValue().isMainReport()) {
+					if (n instanceof MJrxml) {
 						postProcessLocal((MJrxml) n);
 						break;
 					}
@@ -87,8 +86,12 @@ public class Publish {
 		List<MResource> files = ((JasperReportsConfiguration) jrConfig).get(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
-			if (popt.isOverwrite() && popt.getjExpression() != null)
-				popt.getjExpression().setText(popt.getExpression());
+			if (popt.isOverwrite() && popt.getjExpression() != null) {
+				if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION)
+					popt.getjExpression().setText(popt.getRepoExpression());
+				else if (popt.getPublishMethod() == ResourcePublishMethod.LOCAL)
+					popt.getjExpression().setText(popt.getExpression());
+			}
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
 		}
@@ -100,17 +103,38 @@ public class Publish {
 			mrunit.setValue(saveResource(monitor, mrunit));
 		jrxml.setValue(saveResource(monitor, jrxml));
 
+		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
+
+		PublishUtil.savePreferences(ifile, files);
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
 			if (popt.isOverwrite()) {
-				if (f instanceof MJrxml) {
-					MJrxml mJrxml = (MJrxml) f;
-					FileUtils.writeFile(mJrxml.getFile(), JRXmlWriterHelper.writeReport(jrConfig, mJrxml.getJd(), version));
-				} else if (f instanceof MRDataAdapter) {
+				if (popt.getPublishMethod() != null)
+					if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE) {
+						ResourceDescriptor rd = f.getValue();
+						ResourceDescriptor ref = new ResourceDescriptor();
+						ref.setName(rd.getName());
+						ref.setLabel(rd.getLabel());
+						ref.setDescription(rd.getDescription());
+						ref.setIsReference(false);
+						ref.setReferenceUri(popt.getReferencedResource().getUriString());
+						ref.setParentFolder(rd.getParentFolder());
+						ref.setUriString(rd.getUriString());
+						ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 
-				} else if (f instanceof MRDataAdapterFile) {
-
-				}
+						f.setValue(ref);
+					} else if (popt.getPublishMethod() == ResourcePublishMethod.RESOURCE) {
+						if (popt.getReferencedResource() == null)
+							continue;
+						ResourceDescriptor rd = f.getValue();
+						rd.setParentFolder(popt.getReferencedResource().getUriString());
+						rd.setUriString(rd.getParentFolder() + rd.getName());
+					} else if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION) {
+						;
+					} else if (f instanceof MJrxml) {
+						MJrxml mJrxml = (MJrxml) f;
+						FileUtils.writeFile(mJrxml.getFile(), JRXmlWriterHelper.writeReport(jrConfig, mJrxml.getJd(), version));
+					}
 				saveResource(monitor, f);
 			}
 			if (monitor.isCanceled())

@@ -43,6 +43,7 @@ public class JrxmlExporter extends AExporter {
 	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
 	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
 	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
+	public static final QualifiedName KEY_REPORT_ISMAIN = new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN);
 
 	@Override
 	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
@@ -62,7 +63,7 @@ public class JrxmlExporter extends AExporter {
 			}
 		}
 		if (f != null)
-			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN), Boolean.toString(rd.isMainReport()));
+			f.setPersistentProperty(KEY_REPORT_ISMAIN, Boolean.toString(rd.isMainReport()));
 		return f;
 	}
 

@@ -17,6 +17,12 @@ package com.jaspersoft.studio.server.publish;
 
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+
+/**
+ * @author slavic
+ * 
+ */
 public class PublishOptions {
 	private boolean isOverwrite = true;
 	private JRDesignExpression jExpression;
@@ -45,4 +51,34 @@ public class PublishOptions {
 	public void setExpression(String expression) {
 		this.expression = expression;
 	}
+
+	private ResourceDescriptor referencedResource;
+	private ResourcePublishMethod publishMethod = ResourcePublishMethod.LOCAL;
+
+	public ResourceDescriptor getReferencedResource() {
+		return referencedResource;
+	}
+
+	public void setReferencedResource(ResourceDescriptor referencedResource) {
+		this.referencedResource = referencedResource;
+	}
+
+	/**
+	 * @return null if local, true if a reference, false if located in another
+	 *         place
+	 */
+	public ResourcePublishMethod getPublishMethod() {
+		return publishMethod;
+	}
+
+	public void setPublishMethod(ResourcePublishMethod publishMethod) {
+		this.publishMethod = publishMethod;
+		if (publishMethod == ResourcePublishMethod.LOCAL)
+			referencedResource = null;
+	}
+
+	public String getRepoExpression() {
+		return "\"repo:" + getReferencedResource().getUriString() + "\"";
+	}
+
 }

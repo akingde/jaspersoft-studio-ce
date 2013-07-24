@@ -46,7 +46,7 @@ import com.jaspersoft.studio.utils.Misc;
  *
  */
 public class MResource extends APropertyNode implements ICopyable {
-	private static final ImageDescriptor LINK_DECORATOR = Activator.getDefault().getImageDescriptor("/icons/link_decorator.png");
+	public static final ImageDescriptor LINK_DECORATOR = Activator.getDefault().getImageDescriptor("/icons/link_decorator.png");
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MResource(ANode parent, ResourceDescriptor rd, int index) {

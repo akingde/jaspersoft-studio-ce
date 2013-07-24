@@ -91,8 +91,7 @@ public abstract class ASelector {
 							ref.setIsReference(false);
 							ref.setReferenceUri(ref.getUriString());
 							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
-							ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
-									+ ref.getName());
+							ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
 							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 							replaceChildren(res, ref);
 

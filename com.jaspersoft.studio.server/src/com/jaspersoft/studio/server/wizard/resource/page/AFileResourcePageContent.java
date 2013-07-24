@@ -29,6 +29,7 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationUpdater;
@@ -88,6 +89,11 @@ public abstract class AFileResourcePageContent extends APageContent {
 							IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 							if (file != null)
 								doSaveFile(file.getLocation().toPortableString());
+							try {
+								file.getParent().refreshLocal(2, null);
+							} catch (CoreException e1) {
+								UIUtils.showError(e1);
+							}
 						}
 					}
 				}

@@ -45,6 +45,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
@@ -109,17 +110,7 @@ public class ImpDataAdapter extends AImpObject {
 				DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is, prj);
 				if (dad != null) {
 					DataAdapter da = dad.getDataAdapter();
-					String fname = null;
-					if (da instanceof JsonDataAdapter)
-						fname = ((JsonDataAdapter) da).getFileName();
-					else if (da instanceof CsvDataAdapter)
-						fname = ((CsvDataAdapter) da).getFileName();
-					else if (da instanceof XmlDataAdapter)
-						fname = ((XmlDataAdapter) da).getFileName();
-					else if (da instanceof XlsDataAdapter)
-						fname = ((XlsDataAdapter) da).getFileName();
-					else if (da instanceof XlsxDataAdapter)
-						fname = ((XlsxDataAdapter) da).getFileName();
+					String fname = getFileName(da);
 					if (fname != null) {
 						InputStream fis = null;
 						OutputStream fos = null;
@@ -141,11 +132,16 @@ public class ImpDataAdapter extends AImpObject {
 								rd.setParentFolder(runit.getParentFolder());
 								rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
 
-								mres = new MRDataAdapterFile(mrunit, rd, -1);
-								mres.setFile(file);
-								mres.setPublishOptions(popt);
+								MRDataAdapterFile mdaf = new MRDataAdapterFile(mrunit, rd, -1);
+								mdaf.setFile(file);
+								mdaf.setPublishOptions(new PublishOptions());
 
-								PublishUtil.getResources(jrConfig).add(mres);
+								PublishUtil.getResources(jrConfig).add(mdaf);
+
+								setFileName(da, rd.getUriString());
+								f = FileUtils.createTempFile("tmp", "");
+								org.apache.commons.io.FileUtils.writeStringToFile(f, DataAdapterManager.toDataAdapterFile(dad));
+								mres.setFile(f);
 							}
 						} catch (JRException e) {
 							e.printStackTrace();
@@ -165,5 +161,33 @@ public class ImpDataAdapter extends AImpObject {
 			}
 		}
 		return mres;
+	}
+
+	protected void setFileName(DataAdapter da, String fname) {
+		if (da instanceof JsonDataAdapter)
+			((JsonDataAdapter) da).setFileName(fname);
+		else if (da instanceof CsvDataAdapter)
+			((CsvDataAdapter) da).setFileName(fname);
+		else if (da instanceof XmlDataAdapter)
+			((XmlDataAdapter) da).setFileName(fname);
+		else if (da instanceof XlsDataAdapter)
+			((XlsDataAdapter) da).setFileName(fname);
+		else if (da instanceof XlsxDataAdapter)
+			((XlsxDataAdapter) da).setFileName(fname);
+	}
+
+	protected String getFileName(DataAdapter da) {
+		String fname = null;
+		if (da instanceof JsonDataAdapter)
+			fname = ((JsonDataAdapter) da).getFileName();
+		else if (da instanceof CsvDataAdapter)
+			fname = ((CsvDataAdapter) da).getFileName();
+		else if (da instanceof XmlDataAdapter)
+			fname = ((XmlDataAdapter) da).getFileName();
+		else if (da instanceof XlsDataAdapter)
+			fname = ((XlsDataAdapter) da).getFileName();
+		else if (da instanceof XlsxDataAdapter)
+			fname = ((XlsxDataAdapter) da).getFileName();
+		return fname;
 	}
 }

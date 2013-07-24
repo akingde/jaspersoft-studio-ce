@@ -62,7 +62,10 @@ public abstract class AExporter {
 				FileUtils.prepareFolder((IFolder) r, monitor);
 			}
 			troot = (IFolder) r;
-			String path = rd.getName() + dextention;
+			String path = rd.getName();
+			if (!path.endsWith(dextention)) {
+				path += dextention;
+			}
 			r = troot.findMember(path);
 			if (r != null && r instanceof IFolder) {
 				r.delete(true, monitor);
@@ -72,13 +75,13 @@ public abstract class AExporter {
 				f = troot.getFile(path);
 				f.create(new ByteArrayInputStream("".getBytes("UTF-8")), true, monitor);
 			}
-			try {
-				WSClientHelper.getResource(res, rd, new File(f.getRawLocationURI()));
-			} catch (Exception e) {
-				UIUtils.showError(e);
-				return null;
-			}
 			fileurimap.put(fkeyname, f);
+		}
+		try {
+			WSClientHelper.getResource(res, rd, new File(f.getRawLocationURI()));
+		} catch (Exception e) {
+			UIUtils.showError(e);
+			return null;
 		}
 		return f;
 	}

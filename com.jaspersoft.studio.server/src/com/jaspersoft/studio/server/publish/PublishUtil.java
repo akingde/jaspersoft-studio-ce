@@ -2,10 +2,18 @@ package com.jaspersoft.studio.server.publish;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -20,6 +28,7 @@ public class PublishUtil {
 	public static List<MResource> getResources(JasperReportsConfiguration jrConfig) {
 		List<MResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		jrConfig.put(KEY_PUBLISH2JSS_DATA, resources);
+		loadPreferences((IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
 		return resources;
 	}
 
@@ -74,5 +83,52 @@ public class PublishUtil {
 			rd.setName(jd.getName().replace(" ", ""));
 		if (Misc.isNullOrEmpty(rd.getLabel()))
 			rd.setLabel(jd.getName());
+	}
+
+	public static void savePreferences(IFile ifile, List<MResource> files) throws CoreException {
+		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
+		for (QualifiedName key : pmap.keySet()) {
+			if (key.equals(JrxmlExporter.KEY_REPORT_ISMAIN))
+				continue;
+			ifile.setPersistentProperty(key, null);
+		}
+		for (MResource f : files) {
+			PublishOptions popt = f.getPublishOptions();
+			String prefix = f.getValue().getName();
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), Boolean.toString(popt.isOverwrite()));
+
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"), popt.getPublishMethod().toString());
+			if (popt.getReferencedResource() != null)
+				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), popt.getReferencedResource().getUriString());
+			else
+				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), null);
+		}
+	}
+
+	public static void loadPreferences(IFile ifile, List<MResource> files) {
+		for (MResource f : files) {
+			PublishOptions popt = f.getPublishOptions();
+			String prefix = f.getValue().getName();
+			try {
+				String ovw = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"));
+				if (ovw != null)
+					popt.setOverwrite(Boolean.parseBoolean(ovw));
+				String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
+				if (ref != null) {
+					popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
+					String path = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
+					if (path != null) {
+						ResourceDescriptor rd = new ResourceDescriptor();
+						rd.setUriString(path);
+						rd.setWsType(f.getValue().getWsType());
+						popt.setReferencedResource(WSClientHelper.getResource(f, rd, FileUtils.createTempFile("tmp", "")));
+					} else
+						popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+				}
+			} catch (Exception e) {
+				popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+				e.printStackTrace();
+			}
+		}
 	}
 }

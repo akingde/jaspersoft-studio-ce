@@ -38,6 +38,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MRDataAdapter;
+import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
@@ -228,10 +230,13 @@ public class WSClientHelper {
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 
-				if (rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew()) {
+				String wsType = rd.getWsType();
+				if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew())
 					rd = cli.addOrModifyResource(rd, file);
-				} else {
-					if (rd.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew() && rd.getName().equals("main_jrxml"))
+				else if (res instanceof MRDataAdapterFile || res instanceof MRDataAdapter)
+					rd = cli.addOrModifyResource(rd, file);
+				else {
+					if (wsType.equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew() && rd.getName().equals("main_jrxml"))
 						rd.setMainReport(true);
 					String turi = rd.getUriString();
 					ResourceDescriptor trd = cli.modifyReportUnitResource(ruuri, rd, file);
@@ -256,14 +261,26 @@ public class WSClientHelper {
 			return WSClientHelper.saveResource(f, monitor, false);
 		} catch (Exception e) {
 			if (f.getValue().getIsNew()) {
-				f.getValue().setIsNew(false);
-				if (!(f instanceof MReportUnit)) {
+				ResourceDescriptor rd = f.getValue();
+				MServerProfile sp = (MServerProfile) f.getRoot();
+				MReportUnit n = f.getReportUnit();
+				IConnection wsClient = sp.getWsClient();
+				if (!(f instanceof MReportUnit || f instanceof MRDataAdapter || f instanceof MRDataAdapterFile)) {
 					ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
 					f.getValue().setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$ //$NON-NLS-2$  
 					ResourceDescriptor v = f.getValue();
 					f.getValue().setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
 				}
-				return WSClientHelper.saveResource(f, monitor, false);
+				if (n != null && !(f instanceof MReportUnit))
+					wsClient.delete(rd, ((MReportUnit) n).getValue().getUriString());
+				else
+					wsClient.delete(rd);
+				try {
+					return WSClientHelper.saveResource(f, monitor, false);
+				} catch (Exception e1) {
+					f.getValue().setIsNew(false);
+					return WSClientHelper.saveResource(f, monitor, false);
+				}
 			}
 			throw e;
 		}
