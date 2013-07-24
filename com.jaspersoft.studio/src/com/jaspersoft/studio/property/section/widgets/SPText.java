@@ -31,6 +31,12 @@ import com.jaspersoft.studio.utils.inputhistory.InputHistoryCache;
 
 public class SPText extends AHistorySPropertyWidget {
 	protected Text ftext;
+	
+	/**
+	 * Flag used to avoid that the handletextchanged is called twice when CR is pressed (because the 
+	 * CR made the control to loose the focus)
+	 */
+	private boolean disableFocusLost = false;
 
 	public SPText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -60,8 +66,11 @@ public class SPText extends AHistorySPropertyWidget {
 		ftext.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.CR)
+				if (e.keyCode == SWT.CR){
+					disableFocusLost = true;
 					handleTextChanged(section, pDescriptor.getId(), ftext.getText());
+					disableFocusLost = false;
+				}
 			}
 
 			@Override
@@ -89,10 +98,12 @@ public class SPText extends AHistorySPropertyWidget {
 
 	@Override
 	protected void handleFocusLost() {
-		String v = (String) section.getElement().getPropertyValue(pDescriptor.getId());
-		if (!(v != null && v.equals(ftext.getText())))
-			handleTextChanged(section, pDescriptor.getId(), ftext.getText());
-		super.handleFocusLost();
+		if (!disableFocusLost){
+			String v = (String) section.getElement().getPropertyValue(pDescriptor.getId());
+			if (!(v != null && v.equals(ftext.getText())))
+				handleTextChanged(section, pDescriptor.getId(), ftext.getText());
+			super.handleFocusLost();
+		}
 	}
 
 	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {

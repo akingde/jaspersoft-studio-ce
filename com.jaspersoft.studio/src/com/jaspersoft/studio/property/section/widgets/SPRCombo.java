@@ -15,6 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -82,7 +86,13 @@ public class SPRCombo extends ASPropertyWidget {
 			if (selection == 0 && pd.getItems().length > 0) {
 				str = Misc.nvl(str);
 				int oldpos = str.length();
-				combo.setItem(0, str);
+				//If the value of the element is not in the combo then it is added in the selections
+				//list in the first position, then selected
+				List<String> newItems = new ArrayList<String>();
+				newItems.add(str);
+				newItems.addAll(Arrays.asList(items));
+				combo.setItems(newItems.toArray(new String[newItems.size()]));
+				if (newItems.size()>0) combo.select(0);
 				combo.setSelection(new Point(oldpos, oldpos));
 			} else {
 				combo.select(selection);

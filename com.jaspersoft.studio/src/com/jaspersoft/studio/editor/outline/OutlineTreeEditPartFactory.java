@@ -211,7 +211,6 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		} else if (child instanceof MField) {
 			return new DeleteFieldCommand((MFields) parent, (MField) child);
 		} else if (child instanceof MSortField) {
-			System.out.println("DELETE SortField");
 			return new DeleteSortFieldCommand((MSortFields) parent, (MSortField) child);
 		} else if (child instanceof MGroup) {
 			return new DeleteGroupCommand((MGroups) parent, (MGroup) child);

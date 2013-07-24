@@ -34,6 +34,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -148,7 +149,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 
-		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.common_name);
+		JSSTextPropertyDescriptor nameD = new  JSSValidatedTextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.common_name, new FieldNameValidator());
 		nameD.setDescription(Messages.MField_name_description);
 		desc.add(nameD);
 

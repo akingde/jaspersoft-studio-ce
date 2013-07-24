@@ -606,6 +606,7 @@ public class Messages extends NLS {
 	public static String FieldEditorOverlayPage_2;
 	public static String FieldEditorOverlayPage_3;
 	public static String FieldEditorOverlayPage_4;
+	public static String FieldNameValidator_fieldDuplicatedName;
 	public static String FileDatasourcePage_description;
 	public static String FileDatasourcePage_file_datasource;
 	public static String FileDatasourcePage_use_first_row_as_header;
@@ -766,6 +767,7 @@ public class Messages extends NLS {
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage1;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage2;
 	public static String JSSTemplateTransferDropTargetListener_createLabelTitle;
+	public static String JSSValidatedTextPropertyDescriptor_unableToEditTitle;
 	public static String LastPageAction_actionName;
 	public static String LastPageAction_actionTooltip;
 	public static String LayoutSection_combodescription;
@@ -1703,6 +1705,7 @@ public class Messages extends NLS {
 	public static String common_yes;
 	public static String common_no;
 
+	public static String VariableNameValidator_variableDuplicatedName;
 	public static String VErrorPreview_bytesLabel;
 	public static String VErrorPreview_compilationTimeLabel;
 	public static String VErrorPreview_errorsFoundLabel;

@@ -10,11 +10,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
@@ -140,6 +143,18 @@ public class MSortField extends APropertyNode implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	/**
+	 * Return an hashset of all the already used sortfields name of a specific type.
+	 */
+	private HashSet<String> getUsedValues(SortFieldTypeEnum type){
+		HashSet<String> result = new HashSet<String>();
+		JRDesignDataset jrDataset = getDataSet();
+		for (JRSortField field : jrDataset.getSortFieldsList()){
+			if (field.getType().equals(type)) result.add(field.getName());
+		}
+		return result;
+	}
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
@@ -148,21 +163,23 @@ public class MSortField extends APropertyNode implements ICopyable {
 			JRDesignDataset jrDataset = getDataSet();
 			if (getValue() != null) {
 				JRDesignSortField sortField = (JRDesignSortField) getValue();
-				String[] items = null;
+				List<String> items = new ArrayList<String>();
 				if (sortField.getType().equals(SortFieldTypeEnum.FIELD)) {
 					JRField[] fields = jrDataset.getFields();
-					items = new String[fields.length];
+					HashSet<String> usedFields = getUsedValues(SortFieldTypeEnum.FIELD);
 					for (int j = 0; j < fields.length; j++) {
-						items[j] = fields[j].getName();
+						String name = fields[j].getName();
+						if (!usedFields.contains(name)) items.add(name);
 					}
 				} else {
 					JRVariable[] vars = jrDataset.getVariables();
-					items = new String[vars.length];
+					HashSet<String> usedVariables = getUsedValues(SortFieldTypeEnum.VARIABLE);
 					for (int j = 0; j < vars.length; j++) {
-						items[j] = vars[j].getName();
+						String name = vars[j].getName();
+						if (!usedVariables.contains(name)) items.add(name);
 					}
 				}
-				nameD.setItems(items);
+				nameD.setItems(items.toArray(new String[items.size()]));
 			}
 		}
 	}
@@ -228,13 +245,33 @@ public class MSortField extends APropertyNode implements ICopyable {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME))
 			return jrField.getName();
-		if (id.equals(JRDesignSortField.PROPERTY_ORDER))
+		if (id.equals(JRDesignSortField.PROPERTY_ORDER)){
+			if (orderD == null) getPropertyDescriptors();
 			return orderD.getEnumValue(jrField.getOrderValue());
-		if (id.equals(JRDesignSortField.PROPERTY_TYPE))
+		}
+		if (id.equals(JRDesignSortField.PROPERTY_TYPE)){
+			if (typeD == null) getPropertyDescriptors();
 			return typeD.getEnumValue(jrField.getType());
+		}
 		return null;
 	}
+	
+	/**
+	 * FIXME: this function is used to generate the key from a sortfield into the sortfields 
+	 * map inside the jasperreports structure. This function in jasperreport is private and for 
+	 * this reason it was copied here. It is necessary because when the name of a sortfield is changed
+	 * also the map should be updated but JR dosen't do that, so we need to do it manually, but to 
+	 * do it we need the function to calculate the key. Delete and reinsert the sortfield is not 
+	 * a solution, it's an unnecessary heavy operation and other that this it raise a series of events
+	 * that cause many problems in JSS nodes model
+	 * 
+	 */
+	private String getSortFieldKey(JRSortField sortField)
+	{
+		return sortField.getName() + "|" + sortField.getType().getName();
+	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -244,11 +281,12 @@ public class MSortField extends APropertyNode implements ICopyable {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME)) {
 			if (!value.equals("")) { //$NON-NLS-1$
+				String oldKey = getSortFieldKey(jrField);
 				jrField.setName((String) value);
 				JRDesignDataset d = ModelUtils.getDataset(this);
 				if (d != null) {
-					d.getSortFieldsMap().remove(jrField);
-					d.getSortFieldsMap().put(jrField.getName(), jrField);
+					d.getSortFieldsMap().remove(oldKey);
+					d.getSortFieldsMap().put(getSortFieldKey(jrField), jrField);
 				}
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))

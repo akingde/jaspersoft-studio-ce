@@ -147,38 +147,38 @@ public class MGroup extends APropertyNode implements ICopyable {
 		desc.add(expressionD);
 
 		PixelPropertyDescriptor minhD = new PixelPropertyDescriptor(JRBaseGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,
-				"Min Height To Start New Page");
-		minhD.setDescription("Min Height To Start New Page");
+				Messages.MGroup_minHeightTitle);
+		minhD.setDescription(Messages.MGroup_minHeightDescription);
 		desc.add(minhD);
 
 		CheckBoxPropertyDescriptor stNewColD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_START_NEW_COLUMN,
-				"Start New Column");
-		stNewColD.setDescription("Start new column for new group");
+				Messages.MGroup_newColTitle);
+		stNewColD.setDescription(Messages.MGroup_newColDescription);
 		desc.add(stNewColD);
 
 		CheckBoxPropertyDescriptor stNewPageD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_START_NEW_PAGE,
-				"Start New Page");
-		stNewPageD.setDescription("Start new page for new group");
+				Messages.MGroup_newPageTitle);
+		stNewPageD.setDescription(Messages.MGroup_newPageDescription);
 		desc.add(stNewPageD);
 
 		CheckBoxPropertyDescriptor rPageNumD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_RESET_PAGE_NUMBER,
-				"Reset Page Number");
-		rPageNumD.setDescription("Reset page number.");
+				Messages.MGroup_pageNumberTitle);
+		rPageNumD.setDescription(Messages.MGroup_pageNumberDescription);
 		desc.add(rPageNumD);
 
 		CheckBoxPropertyDescriptor rHeadEPD = new CheckBoxPropertyDescriptor(
-				JRBaseGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, "Reprint Header On Each Page");
-		rHeadEPD.setDescription("Reprint header on each page.");
+				JRBaseGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Messages.MGroup_reprintTitle);
+		rHeadEPD.setDescription(Messages.MGroup_reprintPosition);
 		desc.add(rHeadEPD);
 
 		CheckBoxPropertyDescriptor keepToD = new CheckBoxPropertyDescriptor(JRBaseGroup.PROPERTY_KEEP_TOGETHER,
-				"Keep Together");
-		keepToD.setDescription("Keep together.");
+				Messages.MGroup_keepTitle);
+		keepToD.setDescription(Messages.MGroup_keepDescription);
 		desc.add(keepToD);
 
-		positionD = new JSSEnumPropertyDescriptor(JRBaseGroup.PROPERTY_FOOTER_POSITION, "Footer Position",
+		positionD = new JSSEnumPropertyDescriptor(JRBaseGroup.PROPERTY_FOOTER_POSITION, Messages.MGroup_footerPosTitle,
 				FooterPositionEnum.class, NullEnum.NOTNULL);
-		positionD.setDescription("Footer position.");
+		positionD.setDescription(Messages.MGroup_footerPosDescription);
 		desc.add(positionD);
 
 		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, CONST_MIN_HEIGHT);
@@ -189,7 +189,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		defaultsMap.put(JRDesignGroup.PROPERTY_START_NEW_COLUMN, Boolean.FALSE);
 		defaultsMap.put(JRDesignGroup.PROPERTY_START_NEW_PAGE, Boolean.FALSE);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#group");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#group"); //$NON-NLS-1$
 	}
 
 	private static final Integer CONST_MIN_HEIGHT = new Integer(0);

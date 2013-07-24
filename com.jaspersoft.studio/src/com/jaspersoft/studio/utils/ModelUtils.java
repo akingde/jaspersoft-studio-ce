@@ -90,6 +90,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -1398,5 +1399,40 @@ public class ModelUtils {
 		}
 		return markerData;
 	}
+	
+	/**
+	 * Return a list of sortfield, that are on the same level of the node passed
+	 * as parameter (so if the node is fore example a field of a subdataset then 
+	 * only the sortfield defined inside the subdataset will be returned)
+	 * 
+	 * @param node node used to retrieve the sortfields
+	 * @return a list of sortfield or null if from the passed node wasn't possibile to reach
+	 * the sortfields
+	 */
+	public static List<INode> getSortFields(ANode node) {
+		ANode n = node.getParent();
+		while (n != null) {
+			if (n instanceof MDataset || n instanceof MReport) return findSortFieldsNode(n);
+			n = n.getParent();
+		}
+		return null;
+	}
+	
+	/**
+	 * Given a root node, like a MReport or an MDataset, search a node 
+	 * MSortFields inside its children and return the sortfields defined 
+	 * under it
+	 * 
+	 * @param parent and MReport or MDataset node
+	 * @return all the sortfields defined on the same level of the passed node,
+	 * it will never be null
+	 */
+	private static List<INode> findSortFieldsNode(ANode parent){
+		for(INode node : parent.getChildren()){
+			if (node instanceof MSortFields) return node.getChildren();
+		}
+		return new ArrayList<INode>();
+	}
+
 	
 }
