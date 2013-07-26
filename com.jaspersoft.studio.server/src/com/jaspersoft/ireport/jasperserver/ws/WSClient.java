@@ -39,6 +39,7 @@ import org.apache.axis.EngineConfiguration;
 import org.apache.axis.attachments.AttachmentPart;
 import org.apache.axis.client.Call;
 import org.apache.axis.transport.http.HTTPConstants;
+import org.eclipse.osgi.util.NLS;
 
 import com.jaspersoft.ireport.jasperserver.ws.permissions.PermissionsManagement;
 import com.jaspersoft.ireport.jasperserver.ws.permissions.PermissionsManagementServiceLocator;
@@ -51,8 +52,10 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.OperationResult;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Request;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.ws.xml.Marshaller;
 import com.jaspersoft.jasperserver.ws.xml.Unmarshaller;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -62,7 +65,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class WSClient {
 
-	public static final String AXIS_CONFIGURATION_RESOURCE = "/com/jaspersoft/ireport/jasperserver/ws/client-config.wsdd";
+	public static final String AXIS_CONFIGURATION_RESOURCE = "/com/jaspersoft/ireport/jasperserver/ws/client-config.wsdd"; //$NON-NLS-1$
 
 	private JServer server = null;
 
@@ -160,7 +163,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(composeErrorMessage(or));
 
 			cachedServerVersion = or.getVersion();
 			return cachedServerVersion;
@@ -182,7 +185,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(composeErrorMessage(or));
 
 			return or.getResourceDescriptors();
 
@@ -205,7 +208,7 @@ public class WSClient {
 
 		try {
 			Request req = new Request();
-			req.setOperationName("delete");
+			req.setOperationName("delete"); //$NON-NLS-1$
 			req.setResourceDescriptor(descriptor);
 			req.setLocale(getServer().getLocale());
 
@@ -218,7 +221,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(composeErrorMessage(or));
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -236,6 +239,21 @@ public class WSClient {
 	public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile) throws Exception {
 		return get(descriptor, outputFile, null);
 	}
+	
+	/**
+	 * When the server return an error as result of an operation this function compose
+	 * the message to display to the user
+	 * 
+	 * @param or the operation result
+	 * @return message to display to the user
+	 */
+	private String composeErrorMessage(OperationResult or){
+		if (or.getMessage() != null){
+			return NLS.bind(Messages.WSClient_errorWithMessage, new Object[]{or.getReturnCode(), or.getMessage()});
+		} else {
+			return NLS.bind(Messages.WSClient_errorWithoutMessage, or.getReturnCode());
+		}
+	}
 
 	/**
 	 * Export a resource using the "get" ws and save the resource in the file
@@ -251,7 +269,7 @@ public class WSClient {
 		try {
 			Request req = new Request();
 
-			req.setOperationName("get");
+			req.setOperationName("get"); //$NON-NLS-1$
 			req.setResourceDescriptor(descriptor);
 			req.setLocale(getServer().getLocale());
 
@@ -265,13 +283,24 @@ public class WSClient {
 			if (outputFile == null) {
 				req.getArguments().add(new Argument(Argument.NO_RESOURCE_DATA_ATTACHMENT, null));
 			}
+			
+			/*if (descriptor.getWsType().equals("css")) {
+				for(int i=0; i<descriptor.getProperties().size();i++){
+					ResourceProperty prop = (ResourceProperty)descriptor.getProperties().get(i);
+					if (prop.getName().equals("PROP_IS_REFERENCE") || prop.getName().equals("PROP_HAS_DATA")){
+						descriptor.getProperties().remove(i);
+						i--;
+					}
+				}
+				descriptor.setWsType("unknow");
+			}*/
 
 			String result = getManagementService().get(marshaller.marshal(req));
 
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(composeErrorMessage(or));
 
 			Object[] resAtts = ((org.apache.axis.client.Stub) getManagementService()).getAttachments();
 			if (resAtts != null && resAtts.length > 0 && outputFile != null) {
@@ -284,7 +313,7 @@ public class WSClient {
 					os.write(buffer, 0, bCount);
 				}
 			} else if (outputFile != null) {
-				throw new Exception("Attachment not present!");
+				throw new Exception("Attachment not present!"); //$NON-NLS-1$
 			}
 
 			rd = (ResourceDescriptor) or.getResourceDescriptors().get(0);
@@ -346,23 +375,23 @@ public class WSClient {
 
 		try {
 			Request req = new Request();
-			req.setOperationName("runReport");
+			req.setOperationName("runReport"); //$NON-NLS-1$
 			req.setLocale(getServer().getLocale());
 			ResourceDescriptor newRUDescriptor = new ResourceDescriptor();
 			newRUDescriptor.setUriString(descriptor.getUriString());
 			for (Iterator<String> i = parameters.keySet().iterator(); i.hasNext();) {
-				String key = "" + i.next();
+				String key = "" + i.next(); //$NON-NLS-1$
 				Object value = parameters.get(key);
 				if (value instanceof java.util.Collection) {
 					Iterator<?> cIter = ((Collection<?>) value).iterator();
 					while (cIter.hasNext()) {
-						String item = "" + cIter.next();
-						ListItem l = new ListItem(key + "", item);
+						String item = "" + cIter.next(); //$NON-NLS-1$
+						ListItem l = new ListItem(key + "", item); //$NON-NLS-1$
 						l.setIsListItem(true);
 						newRUDescriptor.getParameters().add(l);
 					}
 				} else {
-					newRUDescriptor.getParameters().add(new ListItem(key + "", parameters.get(key)));
+					newRUDescriptor.getParameters().add(new ListItem(key + "", parameters.get(key))); //$NON-NLS-1$
 				}
 			}
 
@@ -374,7 +403,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(composeErrorMessage(or));
 
 			Map<String, FileContent> results = new HashMap<String, FileContent>();
 
@@ -386,9 +415,9 @@ public class WSClient {
 				String name = actualDH.getName(); // ((org.apache.axis.attachments.AttachmentPart)resAtts[i]).getAttachmentFile();
 				String contentId = ((org.apache.axis.attachments.AttachmentPart) resAtts[i]).getContentId();
 				if (name == null)
-					name = "attachment-" + i;
+					name = "attachment-" + i; //$NON-NLS-1$
 				if (contentId == null)
-					contentId = "attachment-" + i;
+					contentId = "attachment-" + i; //$NON-NLS-1$
 
 				InputStream is = actualDH.getInputStream();
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -488,7 +517,7 @@ public class WSClient {
 
 		try {
 			Request req = new Request();
-			req.setOperationName("put");
+			req.setOperationName("put"); //$NON-NLS-1$
 			req.setLocale(getServer().getLocale());
 
 			if (reportUnitUri != null && reportUnitUri.length() > 0) {
@@ -533,7 +562,7 @@ public class WSClient {
 			OperationResult or = (OperationResult) unmarshal(result);
 
 			if (or.getReturnCode() != 0)
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(composeErrorMessage(or));
 
 			return (ResourceDescriptor) or.getResourceDescriptors().get(0);
 
@@ -546,7 +575,7 @@ public class WSClient {
 	public void move(ResourceDescriptor resource, String destinationFolderURI) throws Exception {
 		try {
 			Request req = new Request();
-			req.setOperationName("move");
+			req.setOperationName("move"); //$NON-NLS-1$
 			req.setResourceDescriptor(resource);
 			req.setLocale(getServer().getLocale());
 			req.getArguments().add(new Argument(Argument.DESTINATION_URI, destinationFolderURI));
@@ -554,7 +583,7 @@ public class WSClient {
 			String result = getManagementService().move(marshaller.marshal(req));
 			OperationResult or = (OperationResult) unmarshal(result);
 			if (or.getReturnCode() != OperationResult.SUCCESS) {
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage()); //$NON-NLS-1$
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -565,7 +594,7 @@ public class WSClient {
 	public ResourceDescriptor copy(ResourceDescriptor resource, String destinationFolderURI) throws Exception {
 		try {
 			Request req = new Request();
-			req.setOperationName("copy");
+			req.setOperationName("copy"); //$NON-NLS-1$
 			req.setResourceDescriptor(resource);
 			req.setLocale(getServer().getLocale());
 			req.getArguments().add(new Argument(Argument.DESTINATION_URI, destinationFolderURI));
@@ -573,7 +602,7 @@ public class WSClient {
 			String result = getManagementService().copy(marshaller.marshal(req));
 			OperationResult or = (OperationResult) unmarshal(result);
 			if (or.getReturnCode() != OperationResult.SUCCESS) {
-				throw new Exception(or.getReturnCode() + " - " + or.getMessage());
+				throw new Exception(or.getReturnCode() + " - " + or.getMessage()); //$NON-NLS-1$
 			}
 
 			ResourceDescriptor copyDescriptor;
@@ -683,7 +712,7 @@ public class WSClient {
 		if (userAndRoleManagementService == null) {
 			UserAndRoleManagementServiceLocator rsl = new UserAndRoleManagementServiceLocator(getEngineConfiguration());
 			String uriString = getWebservicesUri();
-			uriString = uriString.replace("/repository", "/UserAndRoleManagementService");
+			uriString = uriString.replace("/repository", "/UserAndRoleManagementService"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			userAndRoleManagementService = rsl.getUserAndRoleManagementServicePort(new java.net.URL(uriString));
 			((org.apache.axis.client.Stub) userAndRoleManagementService).setUsername(getUsername());
@@ -722,7 +751,7 @@ public class WSClient {
 		if (permissionsManagement == null) {
 			PermissionsManagementServiceLocator rsl = new PermissionsManagementServiceLocator(getEngineConfiguration());
 			String uriString = getWebservicesUri();
-			uriString = uriString.replace("/repository", "/PermissionsManagementService");
+			uriString = uriString.replace("/repository", "/PermissionsManagementService"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			permissionsManagement = rsl.getPermissionsManagementServicePort(new java.net.URL(uriString));
 			((org.apache.axis.client.Stub) permissionsManagement).setUsername(getUsername());
@@ -761,7 +790,7 @@ public class WSClient {
 		if (reportScheduler == null) {
 			ReportSchedulerServiceLocator rsl = new ReportSchedulerServiceLocator(getEngineConfiguration());
 			String uriString = getWebservicesUri();
-			uriString = uriString.replace("/repository", "/ReportScheduler");
+			uriString = uriString.replace("/repository", "/ReportScheduler"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			reportScheduler = rsl.getReportScheduler(new java.net.URL(uriString));
 			((org.apache.axis.client.Stub) reportScheduler).setUsername(getUsername());

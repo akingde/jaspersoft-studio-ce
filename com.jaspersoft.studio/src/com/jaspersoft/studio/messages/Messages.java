@@ -572,6 +572,8 @@ public class Messages extends NLS {
 	public static String ExportAsRtfAction_tooltip;
 	public static String ExportAsTemplateHandler_errorMessage;
 	public static String ExportAsTemplateHandler_errorTitle;
+	public static String ExportAsTemplateHandler_successMessage;
+	public static String ExportAsTemplateHandler_successTitle;
 	public static String ExportAsTextAction_filtername;
 	public static String ExportAsTextAction_title;
 	public static String ExportAsTextAction_tooltip;
@@ -611,6 +613,8 @@ public class Messages extends NLS {
 	public static String FileDatasourcePage_file_datasource;
 	public static String FileDatasourcePage_use_first_row_as_header;
 	public static String FileInput_selectfile;
+	public static String FinalPage_errorConclusiveMessage;
+	public static String FinalPage_errorTitle;
 	public static String FirstPageAction_actionName;
 	public static String FirstPageAction_actionTooltip;
 	public static String FloatCellEditorValidator_this_is_not_a_float_number;

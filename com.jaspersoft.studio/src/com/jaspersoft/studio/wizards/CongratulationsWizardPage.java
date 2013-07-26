@@ -23,6 +23,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+/**
+ * Generic congratulation page to place at the end of a wizard. It is composed of 
+ * three main strings, a title, an informative text and a conclusive text, in this order. 
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class CongratulationsWizardPage extends JSSWizardPage {
 
 	private String textAllTheInformation;
@@ -42,14 +49,29 @@ public class CongratulationsWizardPage extends JSSWizardPage {
 		this.textCongratulations = congratText;
 	}
 	
+	/**
+	 * Set the layout data of the informative text
+	 * 
+	 * @param newData a GridData
+	 */
 	public void setAllInformationData(GridData newData){
 		fieldData[1] = newData;
 	}
 	
+	/**
+	 * Set the layout data of the title text
+	 * 
+	 * @param newData a GridData
+	 */
 	public void setCongratulationsData(GridData newData){
 		fieldData[0] = newData;
 	}
 	
+	/**
+	 * Set the layout data of the conclusive text
+	 * 
+	 * @param newData a GridData
+	 */
 	public void setFinishData(GridData newData){
 		fieldData[2] = newData;
 	}

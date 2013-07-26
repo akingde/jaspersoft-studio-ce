@@ -905,6 +905,10 @@
             id="ExtendedTableProvider"
             providerClass="com.jaspersoft.studio.components.engine.ExtendedTemplateProvider">
       </templateProvider>
+      <templateProvider
+            id="JSTemplateProvider"
+            providerClass="com.jaspersoft.studio.components.engine.JSTemplateProvider">
+      </templateProvider>
    </extension>
    <extension
          point="com.jaspersoft.studio.stylesViewContributor">

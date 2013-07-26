@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -117,6 +118,12 @@ public class ResourcePage extends JSSHelpWizardPage {
 	private IFile reportFile;
 	
 	/**
+	 * Path inserted in the textarea when the dialog is advanced, this is done so the path
+	 * can be read even when the control are disposed
+	 */
+	private String pathString;
+	
+	/**
 	 * Boolean flag, true if there are conflict on the resource names, otherwise false
 	 */
 	private boolean conflictResources;
@@ -166,7 +173,13 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 * name and extension
 	 */
 	public String getDestinationPath(){
-		return pathText.getText();
+		return pathString;
+	}
+	
+	@Override
+	public IWizardPage getNextPage() {
+		pathString = pathText.getText();
+		return super.getNextPage();
 	}
 	
 	@Override

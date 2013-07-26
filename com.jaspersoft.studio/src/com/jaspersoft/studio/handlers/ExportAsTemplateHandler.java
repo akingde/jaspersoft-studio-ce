@@ -53,6 +53,10 @@ public class ExportAsTemplateHandler extends AbstractHandler {
 		if (wizard.canOpen()){
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.open();
+			MessageBox messageBox = new MessageBox(UIUtils.getShell(), SWT.ICON_INFORMATION |SWT.OK);
+			messageBox.setText(Messages.ExportAsTemplateHandler_successTitle);
+		  messageBox.setMessage(Messages.ExportAsTemplateHandler_successMessage+wizard.getPath());
+		  messageBox.open();
 		} else {
 			 MessageBox messageBox = new MessageBox(UIUtils.getShell(), SWT.ICON_WARNING |SWT.OK);
 			 messageBox.setText(Messages.ExportAsTemplateHandler_errorTitle);

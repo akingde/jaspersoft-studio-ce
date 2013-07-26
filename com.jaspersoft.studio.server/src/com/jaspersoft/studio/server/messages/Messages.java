@@ -263,6 +263,8 @@ public class Messages extends NLS {
 	public static String RDXmlFile_desc;
 	public static String RDXmlFile_id;
 	public static String RDXmlFile_title;
+	public static String WSClient_errorWithMessage;
+	public static String WSClient_errorWithoutMessage;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

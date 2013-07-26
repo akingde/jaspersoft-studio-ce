@@ -30,7 +30,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
@@ -40,7 +39,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.wizards.CongratulationsWizardPage;
+import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
  * Class that implement the wizard to export a report as a template. the wizard is composed
@@ -120,22 +119,8 @@ public class TemplateExporterWizard extends Wizard implements IExportWizard {
 	 * 
 	 * @return
 	 */
-	private CongratulationsWizardPage createCongratPage(){
-		CongratulationsWizardPage thirdPage = new CongratulationsWizardPage(
-																									Messages.TemplateExporterWizard_congratTitle, 
-																									Messages.TemplateExporterWizard_congratDesc, 
-																									Messages.TemplateExporterWizard_congratMessage, 
-																									Messages.TemplateExporterWizard_congrattoFinish, 
-																									Messages.TemplateExporterWizard_congratCongratulations);
-		GridData informationData = new GridData(SWT.FILL, SWT.FILL, true, false);
-		informationData.widthHint = 170;
-		thirdPage.setAllInformationData(informationData);
-		
-		GridData finishData = new GridData(SWT.FILL, SWT.LEFT, true, false);
-		finishData.heightHint = 130;
-		thirdPage.setFinishData(finishData);
-		
-		return thirdPage;
+	private JSSHelpWizardPage createCongratPage(){	
+		return new FinalPage();
 	}
 	
 	/**
@@ -147,7 +132,8 @@ public class TemplateExporterWizard extends Wizard implements IExportWizard {
 	public boolean canOpen(){
 		return selection != null && !selection.isEmpty();
 	}
-
+	
+	
 	/**
 	 * Initialize the selection of the wizard, by searching an IFile in the selected element
 	 * in the Project Explorer or in the actually opened and focused editor
@@ -192,6 +178,7 @@ public class TemplateExporterWizard extends Wizard implements IExportWizard {
 	 * 
 	 * @return the code of the pressed button on the dialog
 	 */
+	@SuppressWarnings("unused")
 	private int createErrorMessage(List<String> errors){
 		String conf = ""; //$NON-NLS-1$
 		for(String error : errors){
@@ -210,16 +197,35 @@ public class TemplateExporterWizard extends Wizard implements IExportWizard {
 		return result;
 	}
 	
+	/**
+	 * Return a list of validation errors for the selected report with the selected engine
+	 * the list is void if there aren't errors
+	 * 
+	 * @return a list of strings where every string is a validation error message
+	 */
+	public List<String> getValidationErrors(){
+		return secondPage.validateWithSelectedEngine(firstPage.getDesign());
+	}
+	
+	/**
+	 * Return the path selected as destination for the template
+	 * 
+	 * @return the destination path
+	 */
+	public String getPath(){
+		return firstPage.getDestinationPath();
+	}
 
 	/**
 	 * The finish of the wizard call the finish of every single step
 	 */
 	@Override
 	public boolean performFinish() {		
-		List<String> validationError = secondPage.validateWithSelectedEngine(firstPage.getDesign());
+		/* The validation is done on the transition between the second and third step
+		 * List<String> validationError = getValidationErrors();
 		if (validationError.size()>0){
 			if (createErrorMessage(validationError) == IDialogConstants.CANCEL_ID) return false;
-		}
+		}*/
 		firstPage.finish();
 		secondPage.finish(firstPage.getDesign().getName(),firstPage.getDestinationPath());
 		return true;
