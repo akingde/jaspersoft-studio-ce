@@ -37,7 +37,7 @@ public class SqlParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
-					put(grammarAccess.getSelectQueryAccess().getAlternatives_1_1_0(), "rule__SelectQuery__Alternatives_1_1_0");
+					put(grammarAccess.getSelectSubSetAccess().getOpAlternatives_0_0(), "rule__SelectSubSet__OpAlternatives_0_0");
 					put(grammarAccess.getColumnOrAliasAccess().getAlternatives(), "rule__ColumnOrAlias__Alternatives");
 					put(grammarAccess.getOrderByColumnFullAccess().getDirectionAlternatives_1_0(), "rule__OrderByColumnFull__DirectionAlternatives_1_0");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAlternatives_0_0(), "rule__ExpressionFragmentSecond__CAlternatives_0_0");
@@ -58,9 +58,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getModelAccess().getGroup(), "rule__Model__Group__0");
 					put(grammarAccess.getModelAccess().getGroup_1(), "rule__Model__Group_1__0");
 					put(grammarAccess.getSelectQueryAccess().getGroup(), "rule__SelectQuery__Group__0");
-					put(grammarAccess.getSelectQueryAccess().getGroup_1(), "rule__SelectQuery__Group_1__0");
-					put(grammarAccess.getSelectQueryAccess().getGroup_1_1(), "rule__SelectQuery__Group_1_1__0");
-					put(grammarAccess.getSelectQueryAccess().getGroup_1_1_0_0(), "rule__SelectQuery__Group_1_1_0_0__0");
+					put(grammarAccess.getSelectSubSetAccess().getGroup(), "rule__SelectSubSet__Group__0");
 					put(grammarAccess.getSelectAccess().getGroup(), "rule__Select__Group__0");
 					put(grammarAccess.getSelectAccess().getGroup_5(), "rule__Select__Group_5__0");
 					put(grammarAccess.getSelectAccess().getGroup_6(), "rule__Select__Group_6__0");
@@ -76,7 +74,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTablesAccess().getGroup_1(), "rule__Tables__Group_1__0");
 					put(grammarAccess.getTablesAccess().getGroup_1_1(), "rule__Tables__Group_1_1__0");
 					put(grammarAccess.getFromTableAccess().getGroup(), "rule__FromTable__Group__0");
-					put(grammarAccess.getFromTableAccess().getGroup_1(), "rule__FromTable__Group_1__0");
+					put(grammarAccess.getFromTableJoinAccess().getGroup(), "rule__FromTableJoin__Group__0");
 					put(grammarAccess.getTableOrAliasAccess().getGroup(), "rule__TableOrAlias__Group__0");
 					put(grammarAccess.getTableFullAccess().getGroup(), "rule__TableFull__Group__0");
 					put(grammarAccess.getTableFullAccess().getGroup_1(), "rule__TableFull__Group_1__0");
@@ -113,7 +111,10 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSubQueryOperandAccess().getGroup(), "rule__SubQueryOperand__Group__0");
 					put(grammarAccess.getModelAccess().getQueryAssignment_0(), "rule__Model__QueryAssignment_0");
 					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_1_1(), "rule__Model__OrderByEntryAssignment_1_1");
-					put(grammarAccess.getSelectQueryAccess().getEntriesAssignment_1_1_1(), "rule__SelectQuery__EntriesAssignment_1_1_1");
+					put(grammarAccess.getSelectQueryAccess().getOpAssignment_1(), "rule__SelectQuery__OpAssignment_1");
+					put(grammarAccess.getSelectSubSetAccess().getOpAssignment_0(), "rule__SelectSubSet__OpAssignment_0");
+					put(grammarAccess.getSelectSubSetAccess().getAllAssignment_1(), "rule__SelectSubSet__AllAssignment_1");
+					put(grammarAccess.getSelectSubSetAccess().getQueryAssignment_2(), "rule__SelectSubSet__QueryAssignment_2");
 					put(grammarAccess.getSelectAccess().getSelectAssignment_0(), "rule__Select__SelectAssignment_0");
 					put(grammarAccess.getSelectAccess().getColsAssignment_2(), "rule__Select__ColsAssignment_2");
 					put(grammarAccess.getSelectAccess().getTblAssignment_4(), "rule__Select__TblAssignment_4");
@@ -128,9 +129,10 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getColumnFullAccess().getEntriesAssignment_1_1_1(), "rule__ColumnFull__EntriesAssignment_1_1_1");
 					put(grammarAccess.getTablesAccess().getEntriesAssignment_1_1_1(), "rule__Tables__EntriesAssignment_1_1_1");
 					put(grammarAccess.getFromTableAccess().getTableAssignment_0(), "rule__FromTable__TableAssignment_0");
-					put(grammarAccess.getFromTableAccess().getJoinAssignment_1_0(), "rule__FromTable__JoinAssignment_1_0");
-					put(grammarAccess.getFromTableAccess().getOnTableAssignment_1_1(), "rule__FromTable__OnTableAssignment_1_1");
-					put(grammarAccess.getFromTableAccess().getJoinExprAssignment_1_3(), "rule__FromTable__JoinExprAssignment_1_3");
+					put(grammarAccess.getFromTableAccess().getFjoinAssignment_1(), "rule__FromTable__FjoinAssignment_1");
+					put(grammarAccess.getFromTableJoinAccess().getJoinAssignment_0(), "rule__FromTableJoin__JoinAssignment_0");
+					put(grammarAccess.getFromTableJoinAccess().getOnTableAssignment_1(), "rule__FromTableJoin__OnTableAssignment_1");
+					put(grammarAccess.getFromTableJoinAccess().getJoinExprAssignment_3(), "rule__FromTableJoin__JoinExprAssignment_3");
 					put(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0(), "rule__TableOrAlias__TfullAssignment_0");
 					put(grammarAccess.getTableOrAliasAccess().getAliasAssignment_1(), "rule__TableOrAlias__AliasAssignment_1");
 					put(grammarAccess.getTableOrAliasAccess().getTblAliasAssignment_2(), "rule__TableOrAlias__TblAliasAssignment_2");

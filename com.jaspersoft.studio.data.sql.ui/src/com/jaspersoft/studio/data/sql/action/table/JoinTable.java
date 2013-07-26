@@ -60,7 +60,7 @@ public class JoinTable extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer, true);
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable mtab = getFromTable(mfromTable, dialog);
@@ -105,7 +105,7 @@ public class JoinTable extends AAction {
 		String ft = dialog.getFromTable();
 		MFromTable mtab = null;
 		for (INode n : p.getChildren()) {
-			if (n instanceof MFromTable && ((MFromTable) n).getValue().toSQLString().equals(ft)) {
+			if (n instanceof MFromTable && ((MFromTable) n).getDisplayText().equals(ft)) {
 				mtab = (MFromTable) n;
 				break;
 			}

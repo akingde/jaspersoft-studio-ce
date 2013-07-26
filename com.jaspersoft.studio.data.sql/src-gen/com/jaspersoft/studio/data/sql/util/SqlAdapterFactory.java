@@ -85,6 +85,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createSelectQueryAdapter();
       }
       @Override
+      public Adapter caseSelectSubSet(SelectSubSet object)
+      {
+        return createSelectSubSetAdapter();
+      }
+      @Override
       public Adapter caseSelect(Select object)
       {
         return createSelectAdapter();
@@ -113,6 +118,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFromTable(FromTable object)
       {
         return createFromTableAdapter();
+      }
+      @Override
+      public Adapter caseFromTableJoin(FromTableJoin object)
+      {
+        return createFromTableJoinAdapter();
       }
       @Override
       public Adapter caseTableOrAlias(TableOrAlias object)
@@ -235,11 +245,6 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createScalarOperandAdapter();
       }
       @Override
-      public Adapter caseOrSelect(OrSelect object)
-      {
-        return createOrSelectAdapter();
-      }
-      @Override
       public Adapter caseCol(Col object)
       {
         return createColAdapter();
@@ -307,6 +312,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createSelectQueryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.SelectSubSet <em>Select Sub Set</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.SelectSubSet
+   * @generated
+   */
+  public Adapter createSelectSubSetAdapter()
   {
     return null;
   }
@@ -397,6 +417,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFromTableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.FromTableJoin <em>From Table Join</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.FromTableJoin
+   * @generated
+   */
+  public Adapter createFromTableJoinAdapter()
   {
     return null;
   }
@@ -757,21 +792,6 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createScalarOperandAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OrSelect <em>Or Select</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.OrSelect
-   * @generated
-   */
-  public Adapter createOrSelectAdapter()
   {
     return null;
   }

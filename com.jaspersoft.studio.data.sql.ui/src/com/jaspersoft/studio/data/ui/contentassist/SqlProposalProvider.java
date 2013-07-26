@@ -14,19 +14,24 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.text2model.Text2Model;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
 
 /**
  * see
@@ -39,7 +44,7 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	@Override
-	public void completeFromTable_OnTable(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	public void complete_FromTableJoin(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		proposeTables(context, acceptor);
 	}
 
@@ -92,12 +97,15 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 		proposeColumnOrAlias(context, acceptor);
 	}
 
-	protected void proposeColumn(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+	protected ANode proposeColumn(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		MRoot qroot = null;
 		Object obj = getDesigner(context);
 		if (obj instanceof SQLQueryDesigner) {
 			SQLQueryDesigner d = (SQLQueryDesigner) obj;
-			d.refreshQueryModel();
-			List<MFromTable> tbls = Util.getFromTables(d.getRoot());
+			qroot = new MRoot(null, null);
+			Util.createSelect(qroot);
+			Text2Model.convertSelect(d, qroot, (SelectImpl) context.getCurrentModel());
+			List<MFromTable> tbls = Util.getFromTables(qroot);
 			for (MFromTable mft : tbls) {
 				for (INode n : mft.getValue().getChildren()) {
 					MSQLColumn mc = (MSQLColumn) n;
@@ -115,14 +123,13 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 				}
 			}
 		}
+		return qroot;
 	}
 
 	protected void proposeColumnOrAlias(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		proposeColumn(context, acceptor);
-		Object obj = getDesigner(context);
-		if (obj instanceof SQLQueryDesigner) {
-			SQLQueryDesigner d = (SQLQueryDesigner) obj;
-			MSelect msel = Util.getKeyword(d.getRoot(), MSelect.class);
+		ANode qroot = proposeColumn(context, acceptor);
+		if (qroot != null) {
+			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (INode n : msel.getChildren()) {
 				if (n instanceof AMQueryAliased && ((AMQueryAliased<?>) n).getAlias() != null) {
 					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(((AMQueryAliased<?>) n).getAlias(), n.getStyledDisplayText(), null, context);

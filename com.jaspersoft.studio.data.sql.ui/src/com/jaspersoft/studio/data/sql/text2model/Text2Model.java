@@ -12,7 +12,9 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.SelectQuery;
+import com.jaspersoft.studio.data.sql.SelectSubSet;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.action.union.CreateUnion;
 import com.jaspersoft.studio.data.sql.impl.ModelImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
@@ -20,7 +22,9 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
+import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
+import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -40,22 +44,30 @@ public class Text2Model {
 		System.out.println("convert the model");
 		doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 			public String exec(XtextResource resource) {
+				ANode root = designer.getRoot();
 				EList<?> list = resource.getContents();
 				if (list != null && !list.isEmpty()) {
 					for (Object obj : list) {
 						if (obj instanceof ModelImpl) {
 							SelectQuery sq = ((ModelImpl) obj).getQuery();
 							if (sq instanceof SelectImpl) {
-								SelectImpl sel = (SelectImpl) sq;
-								MRoot root = designer.getRoot();
-								ConvertTables.convertTables(designer, sel.getTbl());
-								ConvertSelectColumns.convertSelectColumns(designer, sel.getCols());
-								ConvertExpression.convertExpression(designer, Util.getKeyword(root, MWhere.class), sel.getWhereExpression());
-								ConvertGroupBy.convertGroupBy(designer, sel.getGroupByEntry());
-								ConvertExpression.convertExpression(designer, Util.getKeyword(root, MHaving.class), sel.getHavingEntry());
+								convertSelect(designer, root, (SelectImpl) sq);
+								EList<SelectSubSet> op = ((SelectImpl) sq).getOp();
+								if (op != null && !op.isEmpty()) {
+									for (SelectSubSet sss : op) {
+										MUnion munion = null;
+										if (sss.getOp() != null) {
+											munion = CreateUnion.createUnion(root);
+											String setop = sss.getOp().toUpperCase();
+											if (setop.equals(AMKeyword.SET_OPERATOR_UNION) && sss.getAll() != null)
+												setop += " ALL";
+											munion.setValue(setop);
+										}
+										convertSelect(designer, Misc.nvl(munion, root), (SelectImpl) sss.getQuery());
+									}
+								}
 							}
 						}
-
 						ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
 					}
 				}
@@ -63,6 +75,14 @@ public class Text2Model {
 			}
 
 		});
+	}
+
+	public static void convertSelect(SQLQueryDesigner designer, ANode qroot, SelectImpl sel) {
+		ConvertTables.convertTables(designer, qroot, sel.getTbl());
+		ConvertSelectColumns.convertSelectColumns(designer, qroot, sel.getCols());
+		ConvertExpression.convertExpression(designer, qroot, Util.getKeyword(qroot, MWhere.class), sel.getWhereExpression());
+		ConvertGroupBy.convertGroupBy(designer, qroot, sel.getGroupByEntry());
+		ConvertExpression.convertExpression(designer, qroot, Util.getKeyword(qroot, MHaving.class), sel.getHavingEntry());
 	}
 
 	private static void cleanDBMetadata(MRoot dbRoot) {

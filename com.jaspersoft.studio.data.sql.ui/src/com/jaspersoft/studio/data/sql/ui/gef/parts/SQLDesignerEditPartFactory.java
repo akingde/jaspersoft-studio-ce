@@ -22,6 +22,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
+import com.jaspersoft.studio.model.MRoot;
 
 /*
  * A factory for creating JasperDesignEditPart objects.
@@ -33,7 +34,9 @@ public class SQLDesignerEditPartFactory implements EditPartFactory {
 	@Override
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
-		if (model instanceof MFrom)
+		if (model instanceof MRoot)
+			editPart = new QueryEditPart();
+		else if (model instanceof MFrom)
 			editPart = new FromEditPart();
 		else if (model instanceof MFromTable)
 			editPart = new TableEditPart();

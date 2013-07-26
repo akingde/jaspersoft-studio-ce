@@ -4,6 +4,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.jaspersoft.studio.data.sql.FromTable;
+import com.jaspersoft.studio.data.sql.FromTableJoin;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.TableFull;
@@ -15,17 +16,18 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertTables {
-	public static void convertTables(SQLQueryDesigner designer, OrTable tbls) {
+	public static void convertTables(SQLQueryDesigner designer, ANode qroot, OrTable tbls) {
 		if (tbls == null)
 			return;
 		if (tbls instanceof FromTable)
-			doTables(designer, Util.getKeyword(designer.getRoot(), MFrom.class), (FromTable) tbls);
+			doTables(designer, Util.getKeyword(qroot, MFrom.class), (FromTable) tbls);
 		else if (tbls instanceof OrTableImpl) {
-			MFrom mfrom = Util.getKeyword(designer.getRoot(), MFrom.class);
+			MFrom mfrom = Util.getKeyword(qroot, MFrom.class);
 			for (FromTable ftbl : tbls.getEntries())
 				doTables(designer, mfrom, ftbl);
 		}
@@ -41,16 +43,18 @@ public class ConvertTables {
 			if (t.getTblAlias() != null)
 				mft.setAlias(t.getTblAlias().getDbname());
 			mft.setAliasKeyword(Misc.nvl(t.getAlias(), " "));
-			if (ftbl.getOnTable() != null) {
-				TableOrAlias onTbl = ftbl.getOnTable();
-				MSqlTable msqljt = getTable(dbroot, ftbl.getOnTable().getTfull());
-				MFromTableJoin mftj = new MFromTableJoin(mft, msqljt);
-				if (onTbl.getTblAlias() != null)
-					mftj.setAlias(onTbl.getTblAlias().getDbname());
-				mftj.setJoin(ftbl.getJoin().getLiteral());
-				mftj.setAliasKeyword(Misc.nvl(onTbl.getAlias(), " "));
+			if (ftbl.getFjoin() != null) {
+				for (FromTableJoin ftj : ftbl.getFjoin()) {
+					TableOrAlias onTbl = ftj.getOnTable();
+					MSqlTable msqljt = getTable(dbroot, ftj.getOnTable().getTfull());
+					MFromTableJoin mftj = new MFromTableJoin(mft, msqljt);
+					if (onTbl.getTblAlias() != null)
+						mftj.setAlias(onTbl.getTblAlias().getDbname());
+					mftj.setJoin(ftj.getJoin().getLiteral());
+					mftj.setAliasKeyword(Misc.nvl(onTbl.getAlias(), " "));
 
-				new ConvertExpression().convertExpression(designer, mftj, ftbl.getJoinExpr());
+					new ConvertExpression().convertExpression(designer, mfrom.getParent(), mftj, ftj.getJoinExpr());
+				}
 			}
 		}
 	}

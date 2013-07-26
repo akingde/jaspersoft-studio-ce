@@ -66,7 +66,7 @@ public class FromTableColumnsDialog extends ATitledDialog {
 	}
 
 	public void setSelection(ANode sel) {
-		for (INode n : sel.getRoot().getChildren())
+		for (INode n : Util.getQueryRoot(sel).getChildren())
 			if (n instanceof MFrom) {
 				root = (MFrom) n;
 				break;

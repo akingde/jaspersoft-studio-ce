@@ -12,6 +12,7 @@ import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.ExprGroup;
 import com.jaspersoft.studio.data.sql.FromTable;
+import com.jaspersoft.studio.data.sql.FromTableJoin;
 import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.InOper;
@@ -27,7 +28,6 @@ import com.jaspersoft.studio.data.sql.OrColumn;
 import com.jaspersoft.studio.data.sql.OrExpr;
 import com.jaspersoft.studio.data.sql.OrGroupByColumn;
 import com.jaspersoft.studio.data.sql.OrOrderByColumn;
-import com.jaspersoft.studio.data.sql.OrSelect;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.OrderByColumnFull;
 import com.jaspersoft.studio.data.sql.POperand;
@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.sql.Prms;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.Select;
 import com.jaspersoft.studio.data.sql.SelectQuery;
+import com.jaspersoft.studio.data.sql.SelectSubSet;
 import com.jaspersoft.studio.data.sql.SqlFactory;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.TableFull;
@@ -79,6 +80,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass selectSubSetEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass selectEClass = null;
 
   /**
@@ -115,6 +123,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass fromTableEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass fromTableJoinEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -289,13 +304,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass orSelectEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass colEClass = null;
 
   /**
@@ -441,6 +449,46 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getSelectSubSet()
+  {
+    return selectSubSetEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSelectSubSet_Op()
+  {
+    return (EAttribute)selectSubSetEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSelectSubSet_All()
+  {
+    return (EAttribute)selectSubSetEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSelectSubSet_Query()
+  {
+    return (EReference)selectSubSetEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getSelect()
   {
     return selectEClass;
@@ -451,9 +499,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getSelect_Op()
+  {
+    return (EReference)selectEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getSelect_Select()
   {
-    return (EAttribute)selectEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)selectEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -463,7 +521,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getSelect_Cols()
   {
-    return (EReference)selectEClass.getEStructuralFeatures().get(1);
+    return (EReference)selectEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -473,7 +531,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getSelect_Tbl()
   {
-    return (EReference)selectEClass.getEStructuralFeatures().get(2);
+    return (EReference)selectEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -483,7 +541,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getSelect_WhereExpression()
   {
-    return (EReference)selectEClass.getEStructuralFeatures().get(3);
+    return (EReference)selectEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -493,7 +551,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getSelect_GroupByEntry()
   {
-    return (EReference)selectEClass.getEStructuralFeatures().get(4);
+    return (EReference)selectEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -503,7 +561,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getSelect_HavingEntry()
   {
-    return (EReference)selectEClass.getEStructuralFeatures().get(5);
+    return (EReference)selectEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -631,9 +689,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFromTable_Join()
+  public EReference getFromTable_Fjoin()
   {
-    return (EAttribute)fromTableEClass.getEStructuralFeatures().get(1);
+    return (EReference)fromTableEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -641,9 +699,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFromTable_OnTable()
+  public EClass getFromTableJoin()
   {
-    return (EReference)fromTableEClass.getEStructuralFeatures().get(2);
+    return fromTableJoinEClass;
   }
 
   /**
@@ -651,9 +709,29 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFromTable_JoinExpr()
+  public EAttribute getFromTableJoin_Join()
   {
-    return (EReference)fromTableEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)fromTableJoinEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFromTableJoin_OnTable()
+  {
+    return (EReference)fromTableJoinEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFromTableJoin_JoinExpr()
+  {
+    return (EReference)fromTableJoinEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1431,26 +1509,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getOrSelect()
-  {
-    return orSelectEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getOrSelect_Entries()
-  {
-    return (EReference)orSelectEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getCol()
   {
     return colEClass;
@@ -1582,7 +1640,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     selectQueryEClass = createEClass(SELECT_QUERY);
 
+    selectSubSetEClass = createEClass(SELECT_SUB_SET);
+    createEAttribute(selectSubSetEClass, SELECT_SUB_SET__OP);
+    createEAttribute(selectSubSetEClass, SELECT_SUB_SET__ALL);
+    createEReference(selectSubSetEClass, SELECT_SUB_SET__QUERY);
+
     selectEClass = createEClass(SELECT);
+    createEReference(selectEClass, SELECT__OP);
     createEAttribute(selectEClass, SELECT__SELECT);
     createEReference(selectEClass, SELECT__COLS);
     createEReference(selectEClass, SELECT__TBL);
@@ -1606,9 +1670,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     fromTableEClass = createEClass(FROM_TABLE);
     createEReference(fromTableEClass, FROM_TABLE__TABLE);
-    createEAttribute(fromTableEClass, FROM_TABLE__JOIN);
-    createEReference(fromTableEClass, FROM_TABLE__ON_TABLE);
-    createEReference(fromTableEClass, FROM_TABLE__JOIN_EXPR);
+    createEReference(fromTableEClass, FROM_TABLE__FJOIN);
+
+    fromTableJoinEClass = createEClass(FROM_TABLE_JOIN);
+    createEAttribute(fromTableJoinEClass, FROM_TABLE_JOIN__JOIN);
+    createEReference(fromTableJoinEClass, FROM_TABLE_JOIN__ON_TABLE);
+    createEReference(fromTableJoinEClass, FROM_TABLE_JOIN__JOIN_EXPR);
 
     tableOrAliasEClass = createEClass(TABLE_OR_ALIAS);
     createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__TFULL);
@@ -1711,9 +1778,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOTIME);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SODT);
 
-    orSelectEClass = createEClass(OR_SELECT);
-    createEReference(orSelectEClass, OR_SELECT__ENTRIES);
-
     colEClass = createEClass(COL);
     createEReference(colEClass, COL__ENTRIES);
 
@@ -1771,7 +1835,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     jrParameterEClass.getESuperTypes().add(this.getPrms());
     operandEClass.getESuperTypes().add(this.getOperandList());
     operandEClass.getESuperTypes().add(this.getOperands());
-    orSelectEClass.getESuperTypes().add(this.getSelectQuery());
     colEClass.getESuperTypes().add(this.getColumnFull());
     tblsEClass.getESuperTypes().add(this.getTableFull());
     opListEClass.getESuperTypes().add(this.getOperandList());
@@ -1784,7 +1847,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(selectQueryEClass, SelectQuery.class, "SelectQuery", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+    initEClass(selectSubSetEClass, SelectSubSet.class, "SelectSubSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSelectSubSet_Op(), ecorePackage.getEString(), "op", null, 0, 1, SelectSubSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSelectSubSet_All(), ecorePackage.getEString(), "all", null, 0, 1, SelectSubSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSelectSubSet_Query(), this.getSelect(), null, "query", null, 0, 1, SelectSubSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(selectEClass, Select.class, "Select", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSelect_Op(), this.getSelectSubSet(), null, "op", null, 0, -1, Select.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSelect_Select(), ecorePackage.getEString(), "select", null, 0, 1, Select.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSelect_Cols(), this.getOrColumn(), null, "cols", null, 0, 1, Select.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSelect_Tbl(), this.getOrTable(), null, "tbl", null, 0, 1, Select.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1808,9 +1877,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(fromTableEClass, FromTable.class, "FromTable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFromTable_Table(), this.getTableOrAlias(), null, "table", null, 0, 1, FromTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFromTable_Join(), this.getJoinType(), "join", null, 0, 1, FromTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFromTable_OnTable(), this.getTableOrAlias(), null, "onTable", null, 0, 1, FromTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFromTable_JoinExpr(), this.getOrExpr(), null, "joinExpr", null, 0, 1, FromTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFromTable_Fjoin(), this.getFromTableJoin(), null, "fjoin", null, 0, -1, FromTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(fromTableJoinEClass, FromTableJoin.class, "FromTableJoin", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFromTableJoin_Join(), this.getJoinType(), "join", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFromTableJoin_OnTable(), this.getTableOrAlias(), null, "onTable", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFromTableJoin_JoinExpr(), this.getOrExpr(), null, "joinExpr", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tableOrAliasEClass, TableOrAlias.class, "TableOrAlias", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTableOrAlias_Tfull(), this.getTableFull(), null, "tfull", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1912,9 +1984,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getScalarOperand_Sodate(), ecorePackage.getEDate(), "sodate", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sotime(), ecorePackage.getEDate(), "sotime", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScalarOperand_Sodt(), ecorePackage.getEDate(), "sodt", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(orSelectEClass, OrSelect.class, "OrSelect", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getOrSelect_Entries(), this.getSelect(), null, "entries", null, 0, -1, OrSelect.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(colEClass, Col.class, "Col", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getCol_Entries(), this.getDbObjectName(), null, "entries", null, 0, -1, Col.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

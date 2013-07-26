@@ -8,14 +8,14 @@ Model:
 	('ORDER BY' orderByEntry=OrderByColumns)?;
 
 SelectQuery returns SelectQuery:
-	Select ({OrSelect.entries+=current} ((('UNION' ('ALL')?) | 'INTERSECT' | 'MINUS' | 'EXCEPT') entries+=Select)+)?;
+	Select (op+=SelectSubSet)*;
+
+SelectSubSet:
+	op=('UNION' | 'INTERSECT' | 'MINUS' | 'EXCEPT') all=('ALL')? query=Select;
 
 Select:
-	select='SELECT' ('DISTINCT')? cols=Columns
-	'FROM' tbl=Tables
-	('WHERE' whereExpression=FullExpression)?
-	('GROUP BY' groupByEntry=GroupByColumns)?
-	('HAVING' havingEntry=FullExpression)?;
+	select='SELECT' ('DISTINCT')? cols=Columns 'FROM' tbl=Tables ('WHERE' whereExpression=FullExpression)? ('GROUP BY'
+	groupByEntry=GroupByColumns)? ('HAVING' havingEntry=FullExpression)?;
 
 Columns returns OrColumn:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
@@ -30,7 +30,10 @@ Tables returns OrTable:
 	FromTable ({OrTable.entries+=current} ("," entries+=FromTable)+)?;
 
 FromTable:
-	table=TableOrAlias (join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression)?;
+	table=TableOrAlias (fjoin+=FromTableJoin)*;
+
+FromTableJoin:
+	join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression;
 
 TableOrAlias:
 	tfull=TableFull alias=('AS')? (tblAlias=DbObjectName)?;

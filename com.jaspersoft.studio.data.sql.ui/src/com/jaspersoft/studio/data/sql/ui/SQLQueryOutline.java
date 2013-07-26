@@ -137,6 +137,8 @@ public class SQLQueryOutline {
 
 			@Override
 			public boolean performDrop(Object data) {
+				if (data == null)
+					return false;
 				List<ANode> nodes = new ArrayList<ANode>();
 				List<Object> objects = new ArrayList<Object>();
 				if (data.getClass().isArray()) {

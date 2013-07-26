@@ -38,12 +38,7 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
-import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
-import com.jaspersoft.studio.data.sql.model.query.MHaving;
-import com.jaspersoft.studio.data.sql.model.query.MWhere;
-import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
-import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.text2model.Text2Model;
 import com.jaspersoft.studio.data.sql.ui.DBMetadata;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
@@ -306,11 +301,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			root.removeChildren();
 		else
 			root = new MRoot(null, getjDataset());
-		new MSelect(root);
-		new MFrom(root);
-		new MWhere(root);
-		new MGroupBy(root);
-		new MHaving(root);
+		Util.createSelect(root);
 		new MOrderBy(root);
 	}
 }

@@ -59,64 +59,76 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SelectQuery");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final RuleCall cSelectParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Action cOrSelectEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
-		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
-		private final Alternatives cAlternatives_1_1_0 = (Alternatives)cGroup_1_1.eContents().get(0);
-		private final Group cGroup_1_1_0_0 = (Group)cAlternatives_1_1_0.eContents().get(0);
-		private final Keyword cUNIONKeyword_1_1_0_0_0 = (Keyword)cGroup_1_1_0_0.eContents().get(0);
-		private final Keyword cALLKeyword_1_1_0_0_1 = (Keyword)cGroup_1_1_0_0.eContents().get(1);
-		private final Keyword cINTERSECTKeyword_1_1_0_1 = (Keyword)cAlternatives_1_1_0.eContents().get(1);
-		private final Keyword cMINUSKeyword_1_1_0_2 = (Keyword)cAlternatives_1_1_0.eContents().get(2);
-		private final Keyword cEXCEPTKeyword_1_1_0_3 = (Keyword)cAlternatives_1_1_0.eContents().get(3);
-		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
-		private final RuleCall cEntriesSelectParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		private final Assignment cOpAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cOpSelectSubSetParserRuleCall_1_0 = (RuleCall)cOpAssignment_1.eContents().get(0);
 		
 		//SelectQuery:
-		//	Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?;
+		//	Select op+=SelectSubSet*;
 		public ParserRule getRule() { return rule; }
 
-		//Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?
+		//Select op+=SelectSubSet*
 		public Group getGroup() { return cGroup; }
 
 		//Select
 		public RuleCall getSelectParserRuleCall_0() { return cSelectParserRuleCall_0; }
 
-		//({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?
-		public Group getGroup_1() { return cGroup_1; }
+		//op+=SelectSubSet*
+		public Assignment getOpAssignment_1() { return cOpAssignment_1; }
 
-		//{OrSelect.entries+=current}
-		public Action getOrSelectEntriesAction_1_0() { return cOrSelectEntriesAction_1_0; }
+		//SelectSubSet
+		public RuleCall getOpSelectSubSetParserRuleCall_1_0() { return cOpSelectSubSetParserRuleCall_1_0; }
+	}
 
-		//(("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+
-		public Group getGroup_1_1() { return cGroup_1_1; }
+	public class SelectSubSetElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SelectSubSet");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cOpAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Alternatives cOpAlternatives_0_0 = (Alternatives)cOpAssignment_0.eContents().get(0);
+		private final Keyword cOpUNIONKeyword_0_0_0 = (Keyword)cOpAlternatives_0_0.eContents().get(0);
+		private final Keyword cOpINTERSECTKeyword_0_0_1 = (Keyword)cOpAlternatives_0_0.eContents().get(1);
+		private final Keyword cOpMINUSKeyword_0_0_2 = (Keyword)cOpAlternatives_0_0.eContents().get(2);
+		private final Keyword cOpEXCEPTKeyword_0_0_3 = (Keyword)cOpAlternatives_0_0.eContents().get(3);
+		private final Assignment cAllAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Keyword cAllALLKeyword_1_0 = (Keyword)cAllAssignment_1.eContents().get(0);
+		private final Assignment cQueryAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cQuerySelectParserRuleCall_2_0 = (RuleCall)cQueryAssignment_2.eContents().get(0);
+		
+		//SelectSubSet:
+		//	op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT") all="ALL"? query=Select;
+		public ParserRule getRule() { return rule; }
 
-		//"UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT"
-		public Alternatives getAlternatives_1_1_0() { return cAlternatives_1_1_0; }
+		//op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT") all="ALL"? query=Select
+		public Group getGroup() { return cGroup; }
 
-		//"UNION" "ALL"?
-		public Group getGroup_1_1_0_0() { return cGroup_1_1_0_0; }
+		//op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT")
+		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
+
+		//"UNION" | "INTERSECT" | "MINUS" | "EXCEPT"
+		public Alternatives getOpAlternatives_0_0() { return cOpAlternatives_0_0; }
 
 		//"UNION"
-		public Keyword getUNIONKeyword_1_1_0_0_0() { return cUNIONKeyword_1_1_0_0_0; }
-
-		//"ALL"?
-		public Keyword getALLKeyword_1_1_0_0_1() { return cALLKeyword_1_1_0_0_1; }
+		public Keyword getOpUNIONKeyword_0_0_0() { return cOpUNIONKeyword_0_0_0; }
 
 		//"INTERSECT"
-		public Keyword getINTERSECTKeyword_1_1_0_1() { return cINTERSECTKeyword_1_1_0_1; }
+		public Keyword getOpINTERSECTKeyword_0_0_1() { return cOpINTERSECTKeyword_0_0_1; }
 
 		//"MINUS"
-		public Keyword getMINUSKeyword_1_1_0_2() { return cMINUSKeyword_1_1_0_2; }
+		public Keyword getOpMINUSKeyword_0_0_2() { return cOpMINUSKeyword_0_0_2; }
 
 		//"EXCEPT"
-		public Keyword getEXCEPTKeyword_1_1_0_3() { return cEXCEPTKeyword_1_1_0_3; }
+		public Keyword getOpEXCEPTKeyword_0_0_3() { return cOpEXCEPTKeyword_0_0_3; }
 
-		//entries+=Select
-		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+		//all="ALL"?
+		public Assignment getAllAssignment_1() { return cAllAssignment_1; }
+
+		//"ALL"
+		public Keyword getAllALLKeyword_1_0() { return cAllALLKeyword_1_0; }
+
+		//query=Select
+		public Assignment getQueryAssignment_2() { return cQueryAssignment_2; }
 
 		//Select
-		public RuleCall getEntriesSelectParserRuleCall_1_1_1_0() { return cEntriesSelectParserRuleCall_1_1_1_0; }
+		public RuleCall getQuerySelectParserRuleCall_2_0() { return cQuerySelectParserRuleCall_2_0; }
 	}
 
 	public class SelectElements extends AbstractParserRuleElementFinder {
@@ -386,20 +398,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cTableAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cTableTableOrAliasParserRuleCall_0_0 = (RuleCall)cTableAssignment_0.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Assignment cJoinAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
-		private final RuleCall cJoinJoinTypeEnumRuleCall_1_0_0 = (RuleCall)cJoinAssignment_1_0.eContents().get(0);
-		private final Assignment cOnTableAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cOnTableTableOrAliasParserRuleCall_1_1_0 = (RuleCall)cOnTableAssignment_1_1.eContents().get(0);
-		private final Keyword cONKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final Assignment cJoinExprAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final RuleCall cJoinExprFullExpressionParserRuleCall_1_3_0 = (RuleCall)cJoinExprAssignment_1_3.eContents().get(0);
+		private final Assignment cFjoinAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cFjoinFromTableJoinParserRuleCall_1_0 = (RuleCall)cFjoinAssignment_1.eContents().get(0);
 		
 		//FromTable:
-		//	table=TableOrAlias (join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?;
+		//	table=TableOrAlias fjoin+=FromTableJoin*;
 		public ParserRule getRule() { return rule; }
 
-		//table=TableOrAlias (join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?
+		//table=TableOrAlias fjoin+=FromTableJoin*
 		public Group getGroup() { return cGroup; }
 
 		//table=TableOrAlias
@@ -408,29 +414,51 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//TableOrAlias
 		public RuleCall getTableTableOrAliasParserRuleCall_0_0() { return cTableTableOrAliasParserRuleCall_0_0; }
 
-		//(join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?
-		public Group getGroup_1() { return cGroup_1; }
+		//fjoin+=FromTableJoin*
+		public Assignment getFjoinAssignment_1() { return cFjoinAssignment_1; }
+
+		//FromTableJoin
+		public RuleCall getFjoinFromTableJoinParserRuleCall_1_0() { return cFjoinFromTableJoinParserRuleCall_1_0; }
+	}
+
+	public class FromTableJoinElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "FromTableJoin");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cJoinAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cJoinJoinTypeEnumRuleCall_0_0 = (RuleCall)cJoinAssignment_0.eContents().get(0);
+		private final Assignment cOnTableAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cOnTableTableOrAliasParserRuleCall_1_0 = (RuleCall)cOnTableAssignment_1.eContents().get(0);
+		private final Keyword cONKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cJoinExprAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cJoinExprFullExpressionParserRuleCall_3_0 = (RuleCall)cJoinExprAssignment_3.eContents().get(0);
+		
+		//FromTableJoin:
+		//	join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression;
+		public ParserRule getRule() { return rule; }
+
+		//join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression
+		public Group getGroup() { return cGroup; }
 
 		//join=JoinType
-		public Assignment getJoinAssignment_1_0() { return cJoinAssignment_1_0; }
+		public Assignment getJoinAssignment_0() { return cJoinAssignment_0; }
 
 		//JoinType
-		public RuleCall getJoinJoinTypeEnumRuleCall_1_0_0() { return cJoinJoinTypeEnumRuleCall_1_0_0; }
+		public RuleCall getJoinJoinTypeEnumRuleCall_0_0() { return cJoinJoinTypeEnumRuleCall_0_0; }
 
 		//onTable=TableOrAlias
-		public Assignment getOnTableAssignment_1_1() { return cOnTableAssignment_1_1; }
+		public Assignment getOnTableAssignment_1() { return cOnTableAssignment_1; }
 
 		//TableOrAlias
-		public RuleCall getOnTableTableOrAliasParserRuleCall_1_1_0() { return cOnTableTableOrAliasParserRuleCall_1_1_0; }
+		public RuleCall getOnTableTableOrAliasParserRuleCall_1_0() { return cOnTableTableOrAliasParserRuleCall_1_0; }
 
 		//"ON"
-		public Keyword getONKeyword_1_2() { return cONKeyword_1_2; }
+		public Keyword getONKeyword_2() { return cONKeyword_2; }
 
 		//joinExpr=FullExpression
-		public Assignment getJoinExprAssignment_1_3() { return cJoinExprAssignment_1_3; }
+		public Assignment getJoinExprAssignment_3() { return cJoinExprAssignment_3; }
 
 		//FullExpression
-		public RuleCall getJoinExprFullExpressionParserRuleCall_1_3_0() { return cJoinExprFullExpressionParserRuleCall_1_3_0; }
+		public RuleCall getJoinExprFullExpressionParserRuleCall_3_0() { return cJoinExprFullExpressionParserRuleCall_3_0; }
 	}
 
 	public class TableOrAliasElements extends AbstractParserRuleElementFinder {
@@ -1714,12 +1742,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	private ModelElements pModel;
 	private SelectQueryElements pSelectQuery;
+	private SelectSubSetElements pSelectSubSet;
 	private SelectElements pSelect;
 	private ColumnsElements pColumns;
 	private ColumnOrAliasElements pColumnOrAlias;
 	private ColumnFullElements pColumnFull;
 	private TablesElements pTables;
 	private FromTableElements pFromTable;
+	private FromTableJoinElements pFromTableJoin;
 	private TableOrAliasElements pTableOrAlias;
 	private TableFullElements pTableFull;
 	private DbObjectNameElements pDbObjectName;
@@ -1808,13 +1838,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SelectQuery:
-	//	Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?;
+	//	Select op+=SelectSubSet*;
 	public SelectQueryElements getSelectQueryAccess() {
 		return (pSelectQuery != null) ? pSelectQuery : (pSelectQuery = new SelectQueryElements());
 	}
 	
 	public ParserRule getSelectQueryRule() {
 		return getSelectQueryAccess().getRule();
+	}
+
+	//SelectSubSet:
+	//	op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT") all="ALL"? query=Select;
+	public SelectSubSetElements getSelectSubSetAccess() {
+		return (pSelectSubSet != null) ? pSelectSubSet : (pSelectSubSet = new SelectSubSetElements());
+	}
+	
+	public ParserRule getSelectSubSetRule() {
+		return getSelectSubSetAccess().getRule();
 	}
 
 	//Select:
@@ -1869,13 +1909,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FromTable:
-	//	table=TableOrAlias (join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?;
+	//	table=TableOrAlias fjoin+=FromTableJoin*;
 	public FromTableElements getFromTableAccess() {
 		return (pFromTable != null) ? pFromTable : (pFromTable = new FromTableElements());
 	}
 	
 	public ParserRule getFromTableRule() {
 		return getFromTableAccess().getRule();
+	}
+
+	//FromTableJoin:
+	//	join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression;
+	public FromTableJoinElements getFromTableJoinAccess() {
+		return (pFromTableJoin != null) ? pFromTableJoin : (pFromTableJoin = new FromTableJoinElements());
+	}
+	
+	public ParserRule getFromTableJoinRule() {
+		return getFromTableJoinAccess().getRule();
 	}
 
 	//TableOrAlias:

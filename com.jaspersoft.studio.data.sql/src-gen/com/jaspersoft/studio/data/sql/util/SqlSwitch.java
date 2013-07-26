@@ -86,6 +86,13 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.SELECT_SUB_SET:
+      {
+        SelectSubSet selectSubSet = (SelectSubSet)theEObject;
+        T result = caseSelectSubSet(selectSubSet);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.SELECT:
       {
         Select select = (Select)theEObject;
@@ -128,6 +135,13 @@ public class SqlSwitch<T> extends Switch<T>
         FromTable fromTable = (FromTable)theEObject;
         T result = caseFromTable(fromTable);
         if (result == null) result = caseOrTable(fromTable);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.FROM_TABLE_JOIN:
+      {
+        FromTableJoin fromTableJoin = (FromTableJoin)theEObject;
+        T result = caseFromTableJoin(fromTableJoin);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -307,14 +321,6 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OR_SELECT:
-      {
-        OrSelect orSelect = (OrSelect)theEObject;
-        T result = caseOrSelect(orSelect);
-        if (result == null) result = caseSelectQuery(orSelect);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SqlPackage.COL:
       {
         Col col = (Col)theEObject;
@@ -381,6 +387,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseSelectQuery(SelectQuery object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Select Sub Set</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Select Sub Set</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSelectSubSet(SelectSubSet object)
   {
     return null;
   }
@@ -477,6 +499,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFromTable(FromTable object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>From Table Join</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>From Table Join</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFromTableJoin(FromTableJoin object)
   {
     return null;
   }
@@ -861,22 +899,6 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseScalarOperand(ScalarOperand object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Or Select</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Or Select</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseOrSelect(OrSelect object)
   {
     return null;
   }

@@ -16,17 +16,18 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertSelectColumns {
-	public static void convertSelectColumns(SQLQueryDesigner designer, OrColumn cols) {
+	public static void convertSelectColumns(SQLQueryDesigner designer, ANode qroot, OrColumn cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof ColumnOrAlias)
-			doColumns(designer, Util.getKeyword(designer.getRoot(), MSelect.class), (ColumnOrAlias) cols);
+			doColumns(designer, Util.getKeyword(qroot, MSelect.class), (ColumnOrAlias) cols);
 		else if (cols instanceof OrColumnImpl) {
-			MSelect msel = Util.getKeyword(designer.getRoot(), MSelect.class);
+			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (ColumnOrAlias fcol : cols.getEntries())
 				doColumns(designer, msel, fcol);
 		}

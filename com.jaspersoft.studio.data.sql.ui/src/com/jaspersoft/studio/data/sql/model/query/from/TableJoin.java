@@ -15,7 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.model.query.from;
 
-public class TableJoin {
+import java.io.Serializable;
+
+import net.sf.jasperreports.engine.JRConstants;
+
+public class TableJoin implements Serializable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private MFromTable fromTable;
 	private MFromTableJoin joinTable;
 

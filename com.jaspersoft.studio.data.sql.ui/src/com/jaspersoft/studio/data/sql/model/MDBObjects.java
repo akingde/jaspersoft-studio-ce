@@ -32,7 +32,11 @@ public class MDBObjects extends ANode {
 	private String id;
 
 	public MDBObjects(ANode parent, String value, String image) {
-		super(parent, -1);
+		this(parent, value, image, -1);
+	}
+
+	public MDBObjects(ANode parent, String value, String image, int index) {
+		super(parent, index);
 		setValue(value);
 		this.image = image;
 		id = UUID.randomUUID().toString();

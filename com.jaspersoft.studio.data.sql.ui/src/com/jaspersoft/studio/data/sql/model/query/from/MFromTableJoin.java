@@ -93,4 +93,8 @@ public class MFromTableJoin extends MFromTable {
 		this.tableJoin = tableJoin;
 	}
 
+	public String toSQLString() {
+		return getDisplayText();
+	}
+
 }

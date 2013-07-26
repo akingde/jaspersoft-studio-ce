@@ -56,6 +56,10 @@ public class AMKeyword extends MDBObjects implements IQueryString {
 		super(parent, value, image);
 	}
 
+	public AMKeyword(ANode parent, String value, String image, int index) {
+		super(parent, value, image, index);
+	}
+
 	@Override
 	public StyledString getStyledDisplayText() {
 		return new StyledString(getDisplayText(), FontUtils.KEYWORDS_STYLER);

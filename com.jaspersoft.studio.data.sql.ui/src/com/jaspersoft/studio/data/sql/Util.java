@@ -26,13 +26,18 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
+import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.MHaving;
+import com.jaspersoft.studio.data.sql.model.query.MUnion;
+import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -64,7 +69,7 @@ public class Util {
 
 	public static List<MSqlTable> getTables(ANode sel) {
 		List<MSqlTable> list = new ArrayList<MSqlTable>();
-		MRoot r = (MRoot) sel.getRoot();
+		ANode r = getQueryRoot(sel);
 		for (INode n : r.getChildren()) {
 			if (n instanceof MFrom) {
 				for (INode t : n.getChildren()) {
@@ -80,9 +85,16 @@ public class Util {
 		return list;
 	}
 
+	public static ANode getQueryRoot(ANode n) {
+		ANode root = n;
+		while (!(root instanceof MRoot || root instanceof MUnion))
+			root = root.getParent();
+		return root;
+	}
+
 	public static List<MFromTable> getFromTables(ANode sel) {
 		List<MFromTable> list = new ArrayList<MFromTable>();
-		MRoot r = (MRoot) sel.getRoot();
+		ANode r = getQueryRoot(sel);
 		for (INode n : r.getChildren()) {
 			if (n instanceof MFrom) {
 				for (INode t : n.getChildren()) {
@@ -133,7 +145,7 @@ public class Util {
 	}
 
 	public static <T extends AMKeyword> T getKeyword(ANode msc, Class<T> clazz) {
-		for (INode n : msc.getRoot().getChildren())
+		for (INode n : getQueryRoot(msc).getChildren())
 			if (clazz.isInstance(n))
 				return (T) n;
 		return null;
@@ -293,5 +305,13 @@ public class Util {
 	public static void removeFrom(List<?> col, int from) {
 		for (int i = col.size() - 1; i > from; i--)
 			col.remove(i);
+	}
+
+	public static void createSelect(ANode parent) {
+		new MSelect(parent);
+		new MFrom(parent);
+		new MWhere(parent);
+		new MGroupBy(parent);
+		new MHaving(parent);
 	}
 }

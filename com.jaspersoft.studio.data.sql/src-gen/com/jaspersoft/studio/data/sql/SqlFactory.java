@@ -41,6 +41,15 @@ public interface SqlFactory extends EFactory
   SelectQuery createSelectQuery();
 
   /**
+   * Returns a new object of class '<em>Select Sub Set</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Select Sub Set</em>'.
+   * @generated
+   */
+  SelectSubSet createSelectSubSet();
+
+  /**
    * Returns a new object of class '<em>Select</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -93,6 +102,15 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   FromTable createFromTable();
+
+  /**
+   * Returns a new object of class '<em>From Table Join</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>From Table Join</em>'.
+   * @generated
+   */
+  FromTableJoin createFromTableJoin();
 
   /**
    * Returns a new object of class '<em>Table Or Alias</em>'.
@@ -309,15 +327,6 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   ScalarOperand createScalarOperand();
-
-  /**
-   * Returns a new object of class '<em>Or Select</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Or Select</em>'.
-   * @generated
-   */
-  OrSelect createOrSelect();
 
   /**
    * Returns a new object of class '<em>Col</em>'.

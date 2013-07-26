@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.graph.DirectedGraph;
@@ -32,19 +34,14 @@ import org.eclipse.draw2d.graph.Node;
 import org.eclipse.draw2d.graph.NodeList;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-import com.jaspersoft.studio.data.sql.ui.gef.figures.SqlTableFigure;
-import com.jaspersoft.studio.data.sql.ui.gef.parts.FromEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.RelationshipPart;
-import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 
 public class DirectedGraphLayoutVisitor {
-	Map<AbstractGraphicalEditPart, Object> partToNodesMap;
-	DirectedGraph graph;
+	private static final Insets PADDING = new Insets(10, 8, 10, 12);
+	private Map<AbstractGraphicalEditPart, Object> partToNodesMap;
+	private DirectedGraph graph;
 
-	/**
-	 * Public method for reading graph nodes
-	 */
-	public void layoutDiagram(FromEditPart diagram) {
+	public void layoutDiagram(AbstractGraphicalEditPart diagram) {
 		partToNodesMap = new HashMap<AbstractGraphicalEditPart, Object>();
 		graph = new DirectedGraph();
 		graph.setDirection(PositionConstants.EAST);
@@ -52,91 +49,54 @@ public class DirectedGraphLayoutVisitor {
 		if (graph.nodes.size() > 0) {
 			addEdges(diagram);
 			new NodeJoiningDirectedGraphLayout().visit(graph);
-			applyResults(diagram);
+			applyChildrenResults(diagram);
 		}
 	}
 
-	// ******************* SchemaDiagramPart contribution methods **********/
-
-	protected void addNodes(FromEditPart diagram) {
-		for (Object obj : diagram.getChildren())
-			addNodes((TableEditPart) obj);
-	}
-
-	/**
-	 * Adds nodes to the graph object for use by the GraphLayoutManager
-	 */
-	protected void addNodes(TableEditPart tablePart) {
-		Node n = new Node(tablePart);
-		n.width = tablePart.getFigure().getPreferredSize(400, 300).width;
-		n.height = tablePart.getFigure().getPreferredSize(400, 300).height;
-		n.setPadding(new Insets(10, 8, 10, 12));
-		partToNodesMap.put(tablePart, n);
-		graph.nodes.add(n);
-	}
-
-	protected void addEdges(FromEditPart diagram) {
-		for (int i = 0; i < diagram.getChildren().size(); i++) {
-			TableEditPart tablePart = (TableEditPart) diagram.getChildren().get(i);
-			addEdges(tablePart);
+	protected void addNodes(AbstractGraphicalEditPart diagram) {
+		for (Object obj : diagram.getChildren()) {
+			AbstractGraphicalEditPart part = (AbstractGraphicalEditPart) obj;
+			Node n = new Node(part);
+			Dimension psize = part.getFigure().getPreferredSize(400, 300);
+			n.width = psize.width;
+			n.height = psize.height;
+			n.setPadding(PADDING);
+			partToNodesMap.put(part, n);
+			graph.nodes.add(n);
 		}
 	}
 
-	// ******************* TablePart contribution methods **********/
-
-	protected void addEdges(TableEditPart tablePart) {
-		List<?> outgoing = tablePart.getSourceConnections();
-		for (int i = 0; i < outgoing.size(); i++) {
-			RelationshipPart relationshipPart = (RelationshipPart) tablePart.getSourceConnections().get(i);
-			addEdges(relationshipPart);
+	protected void addEdges(AbstractGraphicalEditPart diagram) {
+		for (Object obj : diagram.getChildren()) {
+			AbstractGraphicalEditPart part = (AbstractGraphicalEditPart) obj;
+			for (Object item : part.getSourceConnections()) {
+				RelationshipPart rpart = (RelationshipPart) item;
+				Node source = (Node) partToNodesMap.get(rpart.getSource());
+				Node target = (Node) partToNodesMap.get(rpart.getTarget());
+				Edge e = new Edge(rpart, source, target);
+				e.weight = 2;
+				graph.edges.add(e);
+				partToNodesMap.put(rpart, e);
+			}
 		}
 	}
 
-	// ******************* RelationshipPart contribution methods **********/
+	protected void applyChildrenResults(AbstractGraphicalEditPart diagram) {
+		List<AbstractGraphicalEditPart> children = diagram.getChildren();
+		for (AbstractGraphicalEditPart tp : children) {
+			Node n = (Node) partToNodesMap.get(tp);
+			IFigure f = tp.getFigure();
 
-	protected void addEdges(RelationshipPart relationshipPart) {
-		Node source = (Node) partToNodesMap.get(relationshipPart.getSource());
-		Node target = (Node) partToNodesMap.get(relationshipPart.getTarget());
-		Edge e = new Edge(relationshipPart, source, target);
-		e.weight = 2;
-		graph.edges.add(e);
-		partToNodesMap.put(relationshipPart, e);
-	}
+			Dimension psize = f.getPreferredSize();
+			AbstractGraphicalEditPart p = (AbstractGraphicalEditPart) tp.getParent();
+			Rectangle r = p.getFigure().getBounds();
+			f.setBounds(new Rectangle(r.x + n.x, r.y + n.y, psize.width, psize.height));
 
-	// ******************* SchemaDiagramPart apply methods **********/
-
-	protected void applyResults(FromEditPart diagram) {
-		applyChildrenResults(diagram);
-	}
-
-	protected void applyChildrenResults(FromEditPart diagram) {
-		for (int i = 0; i < diagram.getChildren().size(); i++) {
-			TableEditPart tablePart = (TableEditPart) diagram.getChildren().get(i);
-			applyResults(tablePart);
+			List<RelationshipPart> sc = tp.getSourceConnections();
+			for (RelationshipPart rp : sc)
+				applyResults(rp);
 		}
 	}
-
-	protected void applyOwnResults(FromEditPart diagram) {
-	}
-
-	// ******************* TablePart apply methods **********/
-
-	public void applyResults(TableEditPart tablePart) {
-
-		Node n = (Node) partToNodesMap.get(tablePart);
-		SqlTableFigure tableFigure = tablePart.getFigure();
-
-		Rectangle bounds = new Rectangle(n.x, n.y, tableFigure.getPreferredSize().width, tableFigure.getPreferredSize().height);
-
-		tableFigure.setBounds(bounds);
-
-		for (int i = 0; i < tablePart.getSourceConnections().size(); i++) {
-			RelationshipPart relationship = (RelationshipPart) tablePart.getSourceConnections().get(i);
-			applyResults(relationship);
-		}
-	}
-
-	// ******************* RelationshipPart apply methods **********/
 
 	protected void applyResults(RelationshipPart relationshipPart) {
 		Edge e = (Edge) partToNodesMap.get(relationshipPart);

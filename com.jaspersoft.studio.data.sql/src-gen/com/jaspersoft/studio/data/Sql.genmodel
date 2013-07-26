@@ -33,7 +33,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SelectQuery"/>
+    <genClasses ecoreClass="Sql.ecore#//SelectSubSet">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//SelectSubSet/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//SelectSubSet/all"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SelectSubSet/query"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Select">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/op"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Select/select"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/cols"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Select/tbl"/>
@@ -56,9 +62,12 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//FromTable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/table"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FromTable/join"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/onTable"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/joinExpr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTable/fjoin"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//FromTableJoin">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FromTableJoin/join"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTableJoin/onTable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FromTableJoin/joinExpr"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//TableOrAlias">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tfull"/>
@@ -158,9 +167,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sodate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sotime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sodt"/>
-    </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OrSelect">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrSelect/entries"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Col">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>

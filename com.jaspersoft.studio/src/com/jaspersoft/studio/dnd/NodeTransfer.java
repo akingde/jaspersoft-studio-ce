@@ -77,7 +77,7 @@ public class NodeTransfer extends ByteArrayTransfer {
 	 * Method declared on Transfer.
 	 */
 	protected void javaToNative(Object object, TransferData transferData) {
-		byte[] bytes = toByteArray((ANode[]) object);
+		byte[] bytes = toByteArray((Object[]) object);
 		if (bytes != null)
 			super.javaToNative(bytes, transferData);
 	}
@@ -96,7 +96,7 @@ public class NodeTransfer extends ByteArrayTransfer {
 		return null;
 	}
 
-	protected byte[] toByteArray(ANode[] nodes) {
+	protected byte[] toByteArray(Object[] nodes) {
 		byte[] bytes = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {

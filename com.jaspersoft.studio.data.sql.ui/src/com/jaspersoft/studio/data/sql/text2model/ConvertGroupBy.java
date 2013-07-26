@@ -13,16 +13,17 @@ import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.KeyValue;
 
 public class ConvertGroupBy {
-	public static void convertGroupBy(SQLQueryDesigner designer, OrGroupByColumn cols) {
+	public static void convertGroupBy(SQLQueryDesigner designer, ANode qroot, OrGroupByColumn cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof GroupByColumnFull)
-			doColumn(designer, Util.getKeyword(designer.getRoot(), MSelect.class), (GroupByColumnFull) cols);
+			doColumn(designer, Util.getKeyword(qroot, MSelect.class), (GroupByColumnFull) cols);
 		else if (cols instanceof OrGroupByColumn) {
-			MSelect msel = Util.getKeyword(designer.getRoot(), MSelect.class);
+			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (GroupByColumnFull fcol : cols.getEntries())
 				doColumn(designer, msel, fcol);
 		}

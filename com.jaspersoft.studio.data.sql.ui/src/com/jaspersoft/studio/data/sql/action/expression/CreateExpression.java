@@ -115,7 +115,7 @@ public class CreateExpression extends AAction {
 			if (mftable == null) {
 				if (ct == null)
 					ct = new CreateTable(designer, treeViewer);
-				MRoot r = (MRoot) ((ANode) sel).getRoot();
+				ANode r = Util.getQueryRoot((ANode) sel);
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {
 						mftable = ct.run(tbl, (MFrom) n, -1);

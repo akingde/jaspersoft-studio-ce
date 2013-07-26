@@ -52,6 +52,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.FromEditPart;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.QueryEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.SQLDesignerEditPartFactory;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 import com.jaspersoft.studio.dnd.NodeTransfer;
@@ -109,7 +110,7 @@ public class SQLQueryDiagram {
 	}
 
 	protected void refreshViewer() {
-		viewer.setContents(Util.getKeyword(designer.getRoot(), MFrom.class));
+		viewer.setContents(designer.getRoot());
 
 		TreeSelection s = (TreeSelection) designer.getOutline().getTreeViewer().getSelection();
 		List<MFromTable> tables = new ArrayList<MFromTable>();
@@ -118,17 +119,25 @@ public class SQLQueryDiagram {
 				tables.add((MFromTable) obj);
 		}
 		if (!tables.isEmpty()) {
-			EditPart ep = viewer.getRootEditPart();
-			FromEditPart fep = (FromEditPart) ep.getChildren().get(0);
 			List<TableEditPart> parts = new ArrayList<TableEditPart>();
-			for (Object tep : fep.getChildren()) {
-				if (tep instanceof TableEditPart && tables.contains(((TableEditPart) tep).getModel())) {
-					parts.add((TableEditPart) tep);
-				}
-			}
+			EditPart ep = viewer.getRootEditPart();
+			for (Object obj : ep.getChildren())
+				doAddParts(obj, parts, tables);
 			viewer.setSelection(new StructuredSelection(parts));
 			if (!parts.isEmpty())
 				viewer.reveal(parts.get(0));
+		}
+	}
+
+	private void doAddParts(Object obj, List<TableEditPart> parts, List<MFromTable> tables) {
+		if (obj instanceof QueryEditPart) {
+			for (Object o : ((QueryEditPart) obj).getChildren())
+				doAddParts(o, parts, tables);
+		} else if (obj instanceof FromEditPart) {
+			for (Object tep : ((FromEditPart) obj).getChildren()) {
+				if (tep instanceof TableEditPart && tables.contains(((TableEditPart) tep).getModel()))
+					parts.add((TableEditPart) tep);
+			}
 		}
 	}
 

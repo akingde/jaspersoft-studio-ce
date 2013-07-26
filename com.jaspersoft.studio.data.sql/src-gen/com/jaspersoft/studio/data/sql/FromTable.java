@@ -2,6 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql;
 
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -12,9 +13,7 @@ package com.jaspersoft.studio.data.sql;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.FromTable#getTable <em>Table</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.FromTable#getJoin <em>Join</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.FromTable#getOnTable <em>On Table</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.FromTable#getJoinExpr <em>Join Expr</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.FromTable#getFjoin <em>Fjoin</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,84 +50,19 @@ public interface FromTable extends OrTable
   void setTable(TableOrAlias value);
 
   /**
-   * Returns the value of the '<em><b>Join</b></em>' attribute.
-   * The literals are from the enumeration {@link com.jaspersoft.studio.data.sql.JoinType}.
+   * Returns the value of the '<em><b>Fjoin</b></em>' containment reference list.
+   * The list contents are of type {@link com.jaspersoft.studio.data.sql.FromTableJoin}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Join</em>' attribute isn't clear,
+   * If the meaning of the '<em>Fjoin</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Join</em>' attribute.
-   * @see com.jaspersoft.studio.data.sql.JoinType
-   * @see #setJoin(JoinType)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTable_Join()
-   * @model
-   * @generated
-   */
-  JoinType getJoin();
-
-  /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FromTable#getJoin <em>Join</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Join</em>' attribute.
-   * @see com.jaspersoft.studio.data.sql.JoinType
-   * @see #getJoin()
-   * @generated
-   */
-  void setJoin(JoinType value);
-
-  /**
-   * Returns the value of the '<em><b>On Table</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>On Table</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>On Table</em>' containment reference.
-   * @see #setOnTable(TableOrAlias)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTable_OnTable()
+   * @return the value of the '<em>Fjoin</em>' containment reference list.
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTable_Fjoin()
    * @model containment="true"
    * @generated
    */
-  TableOrAlias getOnTable();
-
-  /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FromTable#getOnTable <em>On Table</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>On Table</em>' containment reference.
-   * @see #getOnTable()
-   * @generated
-   */
-  void setOnTable(TableOrAlias value);
-
-  /**
-   * Returns the value of the '<em><b>Join Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Join Expr</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Join Expr</em>' containment reference.
-   * @see #setJoinExpr(OrExpr)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFromTable_JoinExpr()
-   * @model containment="true"
-   * @generated
-   */
-  OrExpr getJoinExpr();
-
-  /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FromTable#getJoinExpr <em>Join Expr</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Join Expr</em>' containment reference.
-   * @see #getJoinExpr()
-   * @generated
-   */
-  void setJoinExpr(OrExpr value);
+  EList<FromTableJoin> getFjoin();
 
 } // FromTable

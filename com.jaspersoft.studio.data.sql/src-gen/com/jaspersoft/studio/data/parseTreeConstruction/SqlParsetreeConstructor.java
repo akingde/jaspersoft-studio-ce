@@ -33,40 +33,42 @@ protected class ThisRootNode extends RootToken {
 		switch(index) {
 			case 0: return new Model_Group(this, this, 0, inst);
 			case 1: return new SelectQuery_Group(this, this, 1, inst);
-			case 2: return new Select_Group(this, this, 2, inst);
-			case 3: return new Columns_Group(this, this, 3, inst);
-			case 4: return new ColumnOrAlias_Alternatives(this, this, 4, inst);
-			case 5: return new ColumnFull_Group(this, this, 5, inst);
-			case 6: return new Tables_Group(this, this, 6, inst);
-			case 7: return new FromTable_Group(this, this, 7, inst);
-			case 8: return new TableOrAlias_Group(this, this, 8, inst);
-			case 9: return new TableFull_Group(this, this, 9, inst);
-			case 10: return new DbObjectName_DbnameAssignment(this, this, 10, inst);
-			case 11: return new OrderByColumns_Group(this, this, 11, inst);
-			case 12: return new OrderByColumnFull_Group(this, this, 12, inst);
-			case 13: return new GroupByColumns_Group(this, this, 13, inst);
-			case 14: return new GroupByColumnFull_ColGrByAssignment(this, this, 14, inst);
-			case 15: return new FullExpression_Group(this, this, 15, inst);
-			case 16: return new ExpressionFragmentSecond_Group(this, this, 16, inst);
-			case 17: return new ExpressionFragment_Alternatives(this, this, 17, inst);
-			case 18: return new ExpressionGroup_Group(this, this, 18, inst);
-			case 19: return new XExpression_Group(this, this, 19, inst);
-			case 20: return new XExpressionParams_Group(this, this, 20, inst);
-			case 21: return new JRParameter_JrprmAssignment(this, this, 21, inst);
-			case 22: return new Expression_Group(this, this, 22, inst);
-			case 23: return new Comparison_Group(this, this, 23, inst);
-			case 24: return new Like_Group(this, this, 24, inst);
-			case 25: return new Between_Group(this, this, 25, inst);
-			case 26: return new InOperator_Group(this, this, 26, inst);
-			case 27: return new OperandList_Group(this, this, 27, inst);
-			case 28: return new Operand_Group(this, this, 28, inst);
-			case 29: return new OperandFragment_Alternatives(this, this, 29, inst);
-			case 30: return new XOperandFragment_Alternatives(this, this, 30, inst);
-			case 31: return new ParameterOperand_Group(this, this, 31, inst);
-			case 32: return new ExclamationParameterOperand_Group(this, this, 32, inst);
-			case 33: return new ColumnOperand_CfullAssignment(this, this, 33, inst);
-			case 34: return new SubQueryOperand_Group(this, this, 34, inst);
-			case 35: return new ScalarOperand_Alternatives(this, this, 35, inst);
+			case 2: return new SelectSubSet_Group(this, this, 2, inst);
+			case 3: return new Select_Group(this, this, 3, inst);
+			case 4: return new Columns_Group(this, this, 4, inst);
+			case 5: return new ColumnOrAlias_Alternatives(this, this, 5, inst);
+			case 6: return new ColumnFull_Group(this, this, 6, inst);
+			case 7: return new Tables_Group(this, this, 7, inst);
+			case 8: return new FromTable_Group(this, this, 8, inst);
+			case 9: return new FromTableJoin_Group(this, this, 9, inst);
+			case 10: return new TableOrAlias_Group(this, this, 10, inst);
+			case 11: return new TableFull_Group(this, this, 11, inst);
+			case 12: return new DbObjectName_DbnameAssignment(this, this, 12, inst);
+			case 13: return new OrderByColumns_Group(this, this, 13, inst);
+			case 14: return new OrderByColumnFull_Group(this, this, 14, inst);
+			case 15: return new GroupByColumns_Group(this, this, 15, inst);
+			case 16: return new GroupByColumnFull_ColGrByAssignment(this, this, 16, inst);
+			case 17: return new FullExpression_Group(this, this, 17, inst);
+			case 18: return new ExpressionFragmentSecond_Group(this, this, 18, inst);
+			case 19: return new ExpressionFragment_Alternatives(this, this, 19, inst);
+			case 20: return new ExpressionGroup_Group(this, this, 20, inst);
+			case 21: return new XExpression_Group(this, this, 21, inst);
+			case 22: return new XExpressionParams_Group(this, this, 22, inst);
+			case 23: return new JRParameter_JrprmAssignment(this, this, 23, inst);
+			case 24: return new Expression_Group(this, this, 24, inst);
+			case 25: return new Comparison_Group(this, this, 25, inst);
+			case 26: return new Like_Group(this, this, 26, inst);
+			case 27: return new Between_Group(this, this, 27, inst);
+			case 28: return new InOperator_Group(this, this, 28, inst);
+			case 29: return new OperandList_Group(this, this, 29, inst);
+			case 30: return new Operand_Group(this, this, 30, inst);
+			case 31: return new OperandFragment_Alternatives(this, this, 31, inst);
+			case 32: return new XOperandFragment_Alternatives(this, this, 32, inst);
+			case 33: return new ParameterOperand_Group(this, this, 33, inst);
+			case 34: return new ExclamationParameterOperand_Group(this, this, 34, inst);
+			case 35: return new ColumnOperand_CfullAssignment(this, this, 35, inst);
+			case 36: return new SubQueryOperand_Group(this, this, 36, inst);
+			case 37: return new ScalarOperand_Alternatives(this, this, 37, inst);
 			default: return null;
 		}	
 	}	
@@ -253,11 +255,11 @@ protected class Model_OrderByEntryAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule SelectQuery ****************
  *
  * SelectQuery:
- * 	Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?;
+ * 	Select op+=SelectSubSet*;
  *
  **/
 
-// Select ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?
+// Select op+=SelectSubSet*
 protected class SelectQuery_Group extends GroupToken {
 	
 	public SelectQuery_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -272,7 +274,7 @@ protected class SelectQuery_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new SelectQuery_Group_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new SelectQuery_OpAssignment_1(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new SelectQuery_SelectParserRuleCall_0(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
@@ -280,8 +282,7 @@ protected class SelectQuery_Group extends GroupToken {
 
     @Override
 	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getSelectQueryAccess().getOrSelectEntriesAction_1_0().getType().getClassifier() && 
-		   getEObject().eClass() != grammarAccess.getSelectRule().getType().getClassifier())
+		if(getEObject().eClass() != grammarAccess.getSelectRule().getType().getClassifier())
 			return null;
 		return eObjectConsumer;
 	}
@@ -310,8 +311,6 @@ protected class SelectQuery_SelectParserRuleCall_0 extends RuleCallToken {
 
     @Override
 	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getSelectRule().getType().getClassifier())
-			return null;
 		if(checkForRecursion(Select_Group.class, eObjectConsumer)) return null;
 		return eObjectConsumer;
 	}
@@ -324,142 +323,185 @@ protected class SelectQuery_SelectParserRuleCall_0 extends RuleCallToken {
 	}	
 }
 
-// ({OrSelect.entries+=current} (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+)?
-protected class SelectQuery_Group_1 extends GroupToken {
+// op+=SelectSubSet*
+protected class SelectQuery_OpAssignment_1 extends AssignmentToken  {
 	
-	public SelectQuery_Group_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public SelectQuery_OpAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getSelectQueryAccess().getGroup_1();
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSelectQueryAccess().getOpAssignment_1();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new SelectQuery_Group_1_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new SelectSubSet_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("op",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("op");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getSelectSubSetRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSelectQueryAccess().getOpSelectSubSetParserRuleCall_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SelectQuery_OpAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new SelectQuery_SelectParserRuleCall_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+
+/************ end Rule SelectQuery ****************/
+
+
+/************ begin Rule SelectSubSet ****************
+ *
+ * SelectSubSet:
+ * 	op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT") all="ALL"? query=Select;
+ *
+ **/
+
+// op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT") all="ALL"? query=Select
+protected class SelectSubSet_Group extends GroupToken {
+	
+	public SelectSubSet_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getSelectSubSetAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SelectSubSet_QueryAssignment_2(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
 
     @Override
 	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getSelectQueryAccess().getOrSelectEntriesAction_1_0().getType().getClassifier())
+		if(getEObject().eClass() != grammarAccess.getSelectSubSetRule().getType().getClassifier())
 			return null;
 		return eObjectConsumer;
 	}
 
 }
 
-// {OrSelect.entries+=current}
-protected class SelectQuery_OrSelectEntriesAction_1_0 extends ActionToken  {
-
-	public SelectQuery_OrSelectEntriesAction_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
+// op=("UNION" | "INTERSECT" | "MINUS" | "EXCEPT")
+protected class SelectSubSet_OpAssignment_0 extends AssignmentToken  {
 	
-	@Override
-	public Action getGrammarElement() {
-		return grammarAccess.getSelectQueryAccess().getOrSelectEntriesAction_1_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new SelectQuery_SelectParserRuleCall_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		Object val = eObjectConsumer.getConsumable("entries", false);
-		if(val == null) return null;
-		if(!eObjectConsumer.isConsumedWithLastConsumtion("entries")) return null;
-		return createEObjectConsumer((EObject) val);
-	}
-}
-
-// (("UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT") entries+=Select)+
-protected class SelectQuery_Group_1_1 extends GroupToken {
-	
-	public SelectQuery_Group_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getSelectQueryAccess().getGroup_1_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new SelectQuery_EntriesAssignment_1_1_1(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// "UNION" "ALL"? | "INTERSECT" | "MINUS" | "EXCEPT"
-protected class SelectQuery_Alternatives_1_1_0 extends AlternativesToken {
-
-	public SelectQuery_Alternatives_1_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Alternatives getGrammarElement() {
-		return grammarAccess.getSelectQueryAccess().getAlternatives_1_1_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new SelectQuery_INTERSECTKeyword_1_1_0_1(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// "INTERSECT"
-protected class SelectQuery_INTERSECTKeyword_1_1_0_1 extends KeywordToken  {
-	
-	public SelectQuery_INTERSECTKeyword_1_1_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Keyword getGrammarElement() {
-		return grammarAccess.getSelectQueryAccess().getINTERSECTKeyword_1_1_0_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new SelectQuery_Group_1_1(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new SelectQuery_OrSelectEntriesAction_1_0(lastRuleCallOrigin, this, 1, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-
-// entries+=Select
-protected class SelectQuery_EntriesAssignment_1_1_1 extends AssignmentToken  {
-	
-	public SelectQuery_EntriesAssignment_1_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public SelectSubSet_OpAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getSelectQueryAccess().getEntriesAssignment_1_1_1();
+		return grammarAccess.getSelectSubSetAccess().getOpAssignment_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("op",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("op");
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getSelectSubSetAccess().getOpUNIONKeyword_0_0_0(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getSelectSubSetAccess().getOpUNIONKeyword_0_0_0();
+			return obj;
+		}
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getSelectSubSetAccess().getOpINTERSECTKeyword_0_0_1(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getSelectSubSetAccess().getOpINTERSECTKeyword_0_0_1();
+			return obj;
+		}
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getSelectSubSetAccess().getOpMINUSKeyword_0_0_2(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getSelectSubSetAccess().getOpMINUSKeyword_0_0_2();
+			return obj;
+		}
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getSelectSubSetAccess().getOpEXCEPTKeyword_0_0_3(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getSelectSubSetAccess().getOpEXCEPTKeyword_0_0_3();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// all="ALL"?
+protected class SelectSubSet_AllAssignment_1 extends AssignmentToken  {
+	
+	public SelectSubSet_AllAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSelectSubSetAccess().getAllAssignment_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SelectSubSet_OpAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("all",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("all");
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getSelectSubSetAccess().getAllALLKeyword_1_0(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getSelectSubSetAccess().getAllALLKeyword_1_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// query=Select
+protected class SelectSubSet_QueryAssignment_2 extends AssignmentToken  {
+	
+	public SelectSubSet_QueryAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSelectSubSetAccess().getQueryAssignment_2();
 	}
 
     @Override
@@ -472,13 +514,13 @@ protected class SelectQuery_EntriesAssignment_1_1_1 extends AssignmentToken  {
 
     @Override	
 	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("entries",false)) == null) return null;
-		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("entries");
+		if((value = eObjectConsumer.getConsumable("query",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("query");
 		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getSelectRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSelectQueryAccess().getEntriesSelectParserRuleCall_1_1_1_0(); 
+				element = grammarAccess.getSelectSubSetAccess().getQuerySelectParserRuleCall_2_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -490,16 +532,15 @@ protected class SelectQuery_EntriesAssignment_1_1_1 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new SelectQuery_Alternatives_1_1_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new SelectSubSet_AllAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new SelectSubSet_OpAssignment_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 
-
-
-/************ end Rule SelectQuery ****************/
+/************ end Rule SelectSubSet ****************/
 
 
 /************ begin Rule Select ****************
@@ -1885,11 +1926,11 @@ protected class Tables_EntriesAssignment_1_1_1 extends AssignmentToken  {
 /************ begin Rule FromTable ****************
  *
  * FromTable:
- * 	table=TableOrAlias (join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?;
+ * 	table=TableOrAlias fjoin+=FromTableJoin*;
  *
  **/
 
-// table=TableOrAlias (join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?
+// table=TableOrAlias fjoin+=FromTableJoin*
 protected class FromTable_Group extends GroupToken {
 	
 	public FromTable_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -1904,7 +1945,7 @@ protected class FromTable_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FromTable_Group_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new FromTable_FjoinAssignment_1(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new FromTable_TableAssignment_0(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
@@ -1964,45 +2005,109 @@ protected class FromTable_TableAssignment_0 extends AssignmentToken  {
 	}	
 }
 
-// (join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression)?
-protected class FromTable_Group_1 extends GroupToken {
+// fjoin+=FromTableJoin*
+protected class FromTable_FjoinAssignment_1 extends AssignmentToken  {
 	
-	public FromTable_Group_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getFromTableAccess().getGroup_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new FromTable_JoinExprAssignment_1_3(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// join=JoinType
-protected class FromTable_JoinAssignment_1_0 extends AssignmentToken  {
-	
-	public FromTable_JoinAssignment_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FromTable_FjoinAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getFromTableAccess().getJoinAssignment_1_0();
+		return grammarAccess.getFromTableAccess().getFjoinAssignment_1();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FromTable_TableAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new FromTableJoin_Group(this, this, 0, inst);
 			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("fjoin",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("fjoin");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getFromTableJoinRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getFromTableAccess().getFjoinFromTableJoinParserRuleCall_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new FromTable_FjoinAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new FromTable_TableAssignment_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+
+/************ end Rule FromTable ****************/
+
+
+/************ begin Rule FromTableJoin ****************
+ *
+ * FromTableJoin:
+ * 	join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression;
+ *
+ **/
+
+// join=JoinType onTable=TableOrAlias "ON" joinExpr=FullExpression
+protected class FromTableJoin_Group extends GroupToken {
+	
+	public FromTableJoin_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getFromTableJoinAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FromTableJoin_JoinExprAssignment_3(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getFromTableJoinRule().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// join=JoinType
+protected class FromTableJoin_JoinAssignment_0 extends AssignmentToken  {
+	
+	public FromTableJoin_JoinAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getFromTableJoinAccess().getJoinAssignment_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
 		}	
 	}
 
@@ -2010,9 +2115,9 @@ protected class FromTable_JoinAssignment_1_0 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("join",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("join");
-		if(enumLitSerializer.isValid(obj.getEObject(), grammarAccess.getFromTableAccess().getJoinJoinTypeEnumRuleCall_1_0_0(), value, null)) { 
+		if(enumLitSerializer.isValid(obj.getEObject(), grammarAccess.getFromTableJoinAccess().getJoinJoinTypeEnumRuleCall_0_0(), value, null)) { 
 			type = AssignmentType.ENUM_RULE_CALL;
-			element = grammarAccess.getFromTableAccess().getJoinJoinTypeEnumRuleCall_1_0_0();
+			element = grammarAccess.getFromTableJoinAccess().getJoinJoinTypeEnumRuleCall_0_0();
 			return obj;
 		}
 		return null;
@@ -2021,15 +2126,15 @@ protected class FromTable_JoinAssignment_1_0 extends AssignmentToken  {
 }
 
 // onTable=TableOrAlias
-protected class FromTable_OnTableAssignment_1_1 extends AssignmentToken  {
+protected class FromTableJoin_OnTableAssignment_1 extends AssignmentToken  {
 	
-	public FromTable_OnTableAssignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FromTableJoin_OnTableAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getFromTableAccess().getOnTableAssignment_1_1();
+		return grammarAccess.getFromTableJoinAccess().getOnTableAssignment_1();
 	}
 
     @Override
@@ -2048,7 +2153,7 @@ protected class FromTable_OnTableAssignment_1_1 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getTableOrAliasRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getFromTableAccess().getOnTableTableOrAliasParserRuleCall_1_1_0(); 
+				element = grammarAccess.getFromTableJoinAccess().getOnTableTableOrAliasParserRuleCall_1_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -2060,28 +2165,28 @@ protected class FromTable_OnTableAssignment_1_1 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new FromTable_JoinAssignment_1_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new FromTableJoin_JoinAssignment_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 // "ON"
-protected class FromTable_ONKeyword_1_2 extends KeywordToken  {
+protected class FromTableJoin_ONKeyword_2 extends KeywordToken  {
 	
-	public FromTable_ONKeyword_1_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FromTableJoin_ONKeyword_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getFromTableAccess().getONKeyword_1_2();
+		return grammarAccess.getFromTableJoinAccess().getONKeyword_2();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FromTable_OnTableAssignment_1_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new FromTableJoin_OnTableAssignment_1(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -2089,15 +2194,15 @@ protected class FromTable_ONKeyword_1_2 extends KeywordToken  {
 }
 
 // joinExpr=FullExpression
-protected class FromTable_JoinExprAssignment_1_3 extends AssignmentToken  {
+protected class FromTableJoin_JoinExprAssignment_3 extends AssignmentToken  {
 	
-	public FromTable_JoinExprAssignment_1_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FromTableJoin_JoinExprAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getFromTableAccess().getJoinExprAssignment_1_3();
+		return grammarAccess.getFromTableJoinAccess().getJoinExprAssignment_3();
 	}
 
     @Override
@@ -2116,7 +2221,7 @@ protected class FromTable_JoinExprAssignment_1_3 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getFullExpressionRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getFromTableAccess().getJoinExprFullExpressionParserRuleCall_1_3_0(); 
+				element = grammarAccess.getFromTableJoinAccess().getJoinExprFullExpressionParserRuleCall_3_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -2128,15 +2233,14 @@ protected class FromTable_JoinExprAssignment_1_3 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new FromTable_ONKeyword_1_2(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new FromTableJoin_ONKeyword_2(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 
-
-/************ end Rule FromTable ****************/
+/************ end Rule FromTableJoin ****************/
 
 
 /************ begin Rule TableOrAlias ****************

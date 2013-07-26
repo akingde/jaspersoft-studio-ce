@@ -38,13 +38,13 @@ import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertExpression {
-	public static void convertExpression(SQLQueryDesigner designer, ANode parent, OrExpr cols) {
+	public static void convertExpression(SQLQueryDesigner designer, ANode qroot, ANode parent, OrExpr cols) {
 		if (cols == null)
 			return;
 		if (cols instanceof FullExpression)
-			doExpression(designer, Util.getKeyword(designer.getRoot(), MSelect.class), parent, (FullExpression) cols);
+			doExpression(designer, Util.getKeyword(qroot, MSelect.class), parent, (FullExpression) cols);
 		else if (cols instanceof OrExpr) {
-			MSelect msel = Util.getKeyword(designer.getRoot(), MSelect.class);
+			MSelect msel = Util.getKeyword(qroot, MSelect.class);
 			for (FullExpression fcol : cols.getEntries())
 				doExpression(designer, msel, parent, fcol);
 		}
@@ -84,7 +84,7 @@ public class ConvertExpression {
 			setPrevOperator(me, prevCond);
 		} else if (tf.getExpgroup() != null) {
 			MExpressionGroup meg = new MExpressionGroup(parent);
-			convertExpression(designer, meg, tf.getExpgroup().getExpr());
+			convertExpression(designer, msel.getParent(), meg, tf.getExpgroup().getExpr());
 			// setPrevOperator(meg, prevCond);
 		} else if (tf.getXexp() != null) {
 			MExpressionX me = new MExpressionX(parent, null, -1);

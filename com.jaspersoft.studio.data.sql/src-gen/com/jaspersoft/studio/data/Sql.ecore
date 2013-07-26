@@ -8,7 +8,15 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SelectQuery"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectSubSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="all" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//Select"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Select" eSuperTypes="#//SelectQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" upperBound="-1" eType="#//SelectSubSet"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="select" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cols" eType="#//OrColumn"
         containment="true"/>
@@ -41,6 +49,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="FromTable" eSuperTypes="#//OrTable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//TableOrAlias"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fjoin" upperBound="-1"
+        eType="#//FromTableJoin" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromTableJoin">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="#//JoinType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="onTable" eType="#//TableOrAlias"
         containment="true"/>
@@ -196,10 +208,6 @@
     <eLiterals name="rightOuterJoin" value="2" literal="RIGHT OUTER JOIN"/>
     <eLiterals name="fullOuterJoin" value="3" literal="FULL OUTER JOIN"/>
     <eLiterals name="crossJoin" value="4" literal="CROSS JOIN"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OrSelect" eSuperTypes="#//SelectQuery">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//Select" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"

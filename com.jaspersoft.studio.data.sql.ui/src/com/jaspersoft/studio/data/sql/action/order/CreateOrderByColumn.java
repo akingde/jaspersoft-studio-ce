@@ -36,7 +36,6 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 
 public class CreateOrderByColumn extends AAction {
 	private CreateTable ct;
@@ -92,7 +91,7 @@ public class CreateOrderByColumn extends AAction {
 			if (mftable == null) {
 				if (ct == null)
 					ct = new CreateTable(designer, treeViewer);
-				MRoot r = (MRoot) ((ANode) sel).getRoot();
+				ANode r = Util.getQueryRoot((ANode) sel);
 				for (INode n : r.getChildren()) {
 					if (n instanceof MFrom) {
 						mftable = ct.run(tbl, (MFrom) n, -1);

@@ -67,12 +67,14 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     {
       case SqlPackage.MODEL: return createModel();
       case SqlPackage.SELECT_QUERY: return createSelectQuery();
+      case SqlPackage.SELECT_SUB_SET: return createSelectSubSet();
       case SqlPackage.SELECT: return createSelect();
       case SqlPackage.OR_COLUMN: return createOrColumn();
       case SqlPackage.COLUMN_OR_ALIAS: return createColumnOrAlias();
       case SqlPackage.COLUMN_FULL: return createColumnFull();
       case SqlPackage.OR_TABLE: return createOrTable();
       case SqlPackage.FROM_TABLE: return createFromTable();
+      case SqlPackage.FROM_TABLE_JOIN: return createFromTableJoin();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
       case SqlPackage.TABLE_FULL: return createTableFull();
       case SqlPackage.DB_OBJECT_NAME: return createDbObjectName();
@@ -97,7 +99,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.EXP_OPERAND: return createExpOperand();
       case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
       case SqlPackage.SCALAR_OPERAND: return createScalarOperand();
-      case SqlPackage.OR_SELECT: return createOrSelect();
       case SqlPackage.COL: return createCol();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OP_LIST: return createOpList();
@@ -172,6 +173,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public SelectSubSet createSelectSubSet()
+  {
+    SelectSubSetImpl selectSubSet = new SelectSubSetImpl();
+    return selectSubSet;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Select createSelect()
   {
     SelectImpl select = new SelectImpl();
@@ -231,6 +243,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     FromTableImpl fromTable = new FromTableImpl();
     return fromTable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FromTableJoin createFromTableJoin()
+  {
+    FromTableJoinImpl fromTableJoin = new FromTableJoinImpl();
+    return fromTableJoin;
   }
 
   /**
@@ -495,17 +518,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     ScalarOperandImpl scalarOperand = new ScalarOperandImpl();
     return scalarOperand;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public OrSelect createOrSelect()
-  {
-    OrSelectImpl orSelect = new OrSelectImpl();
-    return orSelect;
   }
 
   /**

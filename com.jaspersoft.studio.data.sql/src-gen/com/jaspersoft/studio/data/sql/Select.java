@@ -2,6 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql;
 
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -11,6 +12,7 @@ package com.jaspersoft.studio.data.sql;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Select#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getSelect <em>Select</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getCols <em>Cols</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Select#getTbl <em>Tbl</em>}</li>
@@ -26,6 +28,22 @@ package com.jaspersoft.studio.data.sql;
  */
 public interface Select extends SelectQuery
 {
+  /**
+   * Returns the value of the '<em><b>Op</b></em>' containment reference list.
+   * The list contents are of type {@link com.jaspersoft.studio.data.sql.SelectSubSet}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Op</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Op</em>' containment reference list.
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getSelect_Op()
+   * @model containment="true"
+   * @generated
+   */
+  EList<SelectSubSet> getOp();
+
   /**
    * Returns the value of the '<em><b>Select</b></em>' attribute.
    * <!-- begin-user-doc -->

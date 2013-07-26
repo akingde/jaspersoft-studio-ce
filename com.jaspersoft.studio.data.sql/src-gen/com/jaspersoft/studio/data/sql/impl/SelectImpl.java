@@ -7,15 +7,23 @@ import com.jaspersoft.studio.data.sql.OrExpr;
 import com.jaspersoft.studio.data.sql.OrGroupByColumn;
 import com.jaspersoft.studio.data.sql.OrTable;
 import com.jaspersoft.studio.data.sql.Select;
+import com.jaspersoft.studio.data.sql.SelectSubSet;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+
+import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getOp <em>Op</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getSelect <em>Select</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getCols <em>Cols</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.SelectImpl#getTbl <em>Tbl</em>}</li>
@@ -37,6 +46,16 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class SelectImpl extends SelectQueryImpl implements Select
 {
+  /**
+   * The cached value of the '{@link #getOp() <em>Op</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOp()
+   * @generated
+   * @ordered
+   */
+  protected EList<SelectSubSet> op;
+
   /**
    * The default value of the '{@link #getSelect() <em>Select</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -126,6 +145,20 @@ public class SelectImpl extends SelectQueryImpl implements Select
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.SELECT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<SelectSubSet> getOp()
+  {
+    if (op == null)
+    {
+      op = new EObjectContainmentEList<SelectSubSet>(SelectSubSet.class, this, SqlPackage.SELECT__OP);
+    }
+    return op;
   }
 
   /**
@@ -401,6 +434,8 @@ public class SelectImpl extends SelectQueryImpl implements Select
   {
     switch (featureID)
     {
+      case SqlPackage.SELECT__OP:
+        return ((InternalEList<?>)getOp()).basicRemove(otherEnd, msgs);
       case SqlPackage.SELECT__COLS:
         return basicSetCols(null, msgs);
       case SqlPackage.SELECT__TBL:
@@ -425,6 +460,8 @@ public class SelectImpl extends SelectQueryImpl implements Select
   {
     switch (featureID)
     {
+      case SqlPackage.SELECT__OP:
+        return getOp();
       case SqlPackage.SELECT__SELECT:
         return getSelect();
       case SqlPackage.SELECT__COLS:
@@ -446,11 +483,16 @@ public class SelectImpl extends SelectQueryImpl implements Select
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
+      case SqlPackage.SELECT__OP:
+        getOp().clear();
+        getOp().addAll((Collection<? extends SelectSubSet>)newValue);
+        return;
       case SqlPackage.SELECT__SELECT:
         setSelect((String)newValue);
         return;
@@ -483,6 +525,9 @@ public class SelectImpl extends SelectQueryImpl implements Select
   {
     switch (featureID)
     {
+      case SqlPackage.SELECT__OP:
+        getOp().clear();
+        return;
       case SqlPackage.SELECT__SELECT:
         setSelect(SELECT_EDEFAULT);
         return;
@@ -515,6 +560,8 @@ public class SelectImpl extends SelectQueryImpl implements Select
   {
     switch (featureID)
     {
+      case SqlPackage.SELECT__OP:
+        return op != null && !op.isEmpty();
       case SqlPackage.SELECT__SELECT:
         return SELECT_EDEFAULT == null ? select != null : !SELECT_EDEFAULT.equals(select);
       case SqlPackage.SELECT__COLS:
