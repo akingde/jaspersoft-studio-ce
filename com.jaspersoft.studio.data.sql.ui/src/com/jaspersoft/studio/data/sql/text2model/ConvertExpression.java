@@ -19,6 +19,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.XExpr;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OperandImpl;
+import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
@@ -32,6 +33,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.ParameterNotPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.KeyValue;
@@ -73,7 +75,9 @@ public class ConvertExpression {
 			} else if (tf.getIn() != null) {
 				me.setOperator(Operator.getOperator(tf.getIn().getOp().replace("(", "").trim()));
 				if (tf.getIn().getSubquery() != null) {
-
+					MSelectSubQuery qroot = new MSelectSubQuery(me);
+					Util.createSelect(qroot);
+					Text2Model.convertSelect(designer, qroot, (SelectImpl) tf.getIn().getSubquery().getSel());
 				} else if (tf.getIn().getOpList() != null) {
 					for (EObject eobj : tf.getIn().getOpList().eContents()) {
 						if (eobj instanceof Operand)

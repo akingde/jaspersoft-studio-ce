@@ -21,19 +21,20 @@ import java.util.List;
 import java.util.Set;
 
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
-import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
-import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
@@ -87,7 +88,7 @@ public class Util {
 
 	public static ANode getQueryRoot(ANode n) {
 		ANode root = n;
-		while (!(root instanceof MRoot || root instanceof MUnion))
+		while (!(root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery))
 			root = root.getParent();
 		return root;
 	}

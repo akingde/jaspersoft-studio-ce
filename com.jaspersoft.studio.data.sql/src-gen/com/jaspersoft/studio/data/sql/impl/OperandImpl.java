@@ -9,6 +9,7 @@ import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.SubQueryOperand;
 
 import java.util.Collection;
 
@@ -84,7 +85,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * @generated
    * @ordered
    */
-  protected Operand subq;
+  protected SubQueryOperand subq;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -252,7 +253,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public Operand getSubq()
+  public SubQueryOperand getSubq()
   {
     return subq;
   }
@@ -262,9 +263,9 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetSubq(Operand newSubq, NotificationChain msgs)
+  public NotificationChain basicSetSubq(SubQueryOperand newSubq, NotificationChain msgs)
   {
-    Operand oldSubq = subq;
+    SubQueryOperand oldSubq = subq;
     subq = newSubq;
     if (eNotificationRequired())
     {
@@ -279,7 +280,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSubq(Operand newSubq)
+  public void setSubq(SubQueryOperand newSubq)
   {
     if (newSubq != subq)
     {
@@ -517,7 +518,7 @@ public class OperandImpl extends OperandListImpl implements Operand
         setXop((Operand)newValue);
         return;
       case SqlPackage.OPERAND__SUBQ:
-        setSubq((Operand)newValue);
+        setSubq((SubQueryOperand)newValue);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)newValue);
@@ -552,7 +553,7 @@ public class OperandImpl extends OperandListImpl implements Operand
         setXop((Operand)null);
         return;
       case SqlPackage.OPERAND__SUBQ:
-        setSubq((Operand)null);
+        setSubq((SubQueryOperand)null);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)null);

@@ -10,12 +10,14 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OrColumnImpl;
+import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
@@ -36,6 +38,10 @@ public class ConvertSelectColumns {
 	private static void doColumns(SQLQueryDesigner designer, MSelect msel, ColumnOrAlias fcol) {
 		if (fcol.getAllCols() != null) {
 			new MSelectExpression(msel, "*");
+		} else if (fcol.getSq() != null) {
+			MSelectSubQuery qroot = new MSelectSubQuery(msel);
+			Util.createSelect(qroot);
+			Text2Model.convertSelect(designer, qroot, (SelectImpl) fcol.getSq().getSel());
 		} else {
 			AMQueryAliased<?> mscol = getColumn(msel, fcol.getCfull());
 			mscol.setAliasKeyword(Misc.nvl(fcol.getAlias(), " "));

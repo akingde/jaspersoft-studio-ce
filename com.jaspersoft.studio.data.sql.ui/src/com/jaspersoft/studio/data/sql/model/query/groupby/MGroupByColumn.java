@@ -13,13 +13,14 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.sql.model.query;
+package com.jaspersoft.studio.data.sql.model.query.groupby;
 
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
+import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.model.ANode;

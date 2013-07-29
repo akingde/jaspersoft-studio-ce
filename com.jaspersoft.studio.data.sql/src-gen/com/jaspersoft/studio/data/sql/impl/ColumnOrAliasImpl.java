@@ -6,6 +6,7 @@ import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
 import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.SubQueryOperand;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getCfull <em>Cfull</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getSq <em>Sq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getColAlias <em>Col Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getAllCols <em>All Cols</em>}</li>
@@ -42,6 +44,16 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
    * @ordered
    */
   protected ColumnFull cfull;
+
+  /**
+   * The cached value of the '{@link #getSq() <em>Sq</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSq()
+   * @generated
+   * @ordered
+   */
+  protected SubQueryOperand sq;
 
   /**
    * The default value of the '{@link #getAlias() <em>Alias</em>}' attribute.
@@ -167,6 +179,54 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
    * <!-- end-user-doc -->
    * @generated
    */
+  public SubQueryOperand getSq()
+  {
+    return sq;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetSq(SubQueryOperand newSq, NotificationChain msgs)
+  {
+    SubQueryOperand oldSq = sq;
+    sq = newSq;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__SQ, oldSq, newSq);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSq(SubQueryOperand newSq)
+  {
+    if (newSq != sq)
+    {
+      NotificationChain msgs = null;
+      if (sq != null)
+        msgs = ((InternalEObject)sq).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__SQ, null, msgs);
+      if (newSq != null)
+        msgs = ((InternalEObject)newSq).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__SQ, null, msgs);
+      msgs = basicSetSq(newSq, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__SQ, newSq, newSq));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getAlias()
   {
     return alias;
@@ -268,6 +328,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
     {
       case SqlPackage.COLUMN_OR_ALIAS__CFULL:
         return basicSetCfull(null, msgs);
+      case SqlPackage.COLUMN_OR_ALIAS__SQ:
+        return basicSetSq(null, msgs);
       case SqlPackage.COLUMN_OR_ALIAS__COL_ALIAS:
         return basicSetColAlias(null, msgs);
     }
@@ -286,6 +348,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
     {
       case SqlPackage.COLUMN_OR_ALIAS__CFULL:
         return getCfull();
+      case SqlPackage.COLUMN_OR_ALIAS__SQ:
+        return getSq();
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         return getAlias();
       case SqlPackage.COLUMN_OR_ALIAS__COL_ALIAS:
@@ -308,6 +372,9 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
     {
       case SqlPackage.COLUMN_OR_ALIAS__CFULL:
         setCfull((ColumnFull)newValue);
+        return;
+      case SqlPackage.COLUMN_OR_ALIAS__SQ:
+        setSq((SubQueryOperand)newValue);
         return;
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         setAlias((String)newValue);
@@ -335,6 +402,9 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
       case SqlPackage.COLUMN_OR_ALIAS__CFULL:
         setCfull((ColumnFull)null);
         return;
+      case SqlPackage.COLUMN_OR_ALIAS__SQ:
+        setSq((SubQueryOperand)null);
+        return;
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         setAlias(ALIAS_EDEFAULT);
         return;
@@ -360,6 +430,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
     {
       case SqlPackage.COLUMN_OR_ALIAS__CFULL:
         return cfull != null;
+      case SqlPackage.COLUMN_OR_ALIAS__SQ:
+        return sq != null;
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         return ALIAS_EDEFAULT == null ? alias != null : !ALIAS_EDEFAULT.equals(alias);
       case SqlPackage.COLUMN_OR_ALIAS__COL_ALIAS:

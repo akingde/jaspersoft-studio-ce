@@ -3,9 +3,9 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.InOper;
-import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.OperandList;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.SubQueryOperand;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -61,7 +61,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
    * @generated
    * @ordered
    */
-  protected Operand subquery;
+  protected SubQueryOperand subquery;
 
   /**
    * The cached value of the '{@link #getOpList() <em>Op List</em>}' containment reference.
@@ -122,7 +122,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
    * <!-- end-user-doc -->
    * @generated
    */
-  public Operand getSubquery()
+  public SubQueryOperand getSubquery()
   {
     return subquery;
   }
@@ -132,9 +132,9 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetSubquery(Operand newSubquery, NotificationChain msgs)
+  public NotificationChain basicSetSubquery(SubQueryOperand newSubquery, NotificationChain msgs)
   {
-    Operand oldSubquery = subquery;
+    SubQueryOperand oldSubquery = subquery;
     subquery = newSubquery;
     if (eNotificationRequired())
     {
@@ -149,7 +149,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSubquery(Operand newSubquery)
+  public void setSubquery(SubQueryOperand newSubquery)
   {
     if (newSubquery != subquery)
     {
@@ -265,7 +265,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
         setOp((String)newValue);
         return;
       case SqlPackage.IN_OPER__SUBQUERY:
-        setSubquery((Operand)newValue);
+        setSubquery((SubQueryOperand)newValue);
         return;
       case SqlPackage.IN_OPER__OP_LIST:
         setOpList((OperandList)newValue);
@@ -288,7 +288,7 @@ public class InOperImpl extends MinimalEObjectImpl.Container implements InOper
         setOp(OP_EDEFAULT);
         return;
       case SqlPackage.IN_OPER__SUBQUERY:
-        setSubquery((Operand)null);
+        setSubquery((SubQueryOperand)null);
         return;
       case SqlPackage.IN_OPER__OP_LIST:
         setOpList((OperandList)null);

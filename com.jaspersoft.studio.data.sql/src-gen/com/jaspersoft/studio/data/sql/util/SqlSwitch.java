@@ -314,6 +314,13 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.SUB_QUERY_OPERAND:
+      {
+        SubQueryOperand subQueryOperand = (SubQueryOperand)theEObject;
+        T result = caseSubQueryOperand(subQueryOperand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.SCALAR_OPERAND:
       {
         ScalarOperand scalarOperand = (ScalarOperand)theEObject;
@@ -342,16 +349,6 @@ public class SqlSwitch<T> extends Switch<T>
         OpList opList = (OpList)theEObject;
         T result = caseOpList(opList);
         if (result == null) result = caseOperandList(opList);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.SUBQUERY:
-      {
-        subquery subquery = (subquery)theEObject;
-        T result = casesubquery(subquery);
-        if (result == null) result = caseOperand(subquery);
-        if (result == null) result = caseOperandList(subquery);
-        if (result == null) result = caseOperands(subquery);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -888,6 +885,22 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Sub Query Operand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Sub Query Operand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSubQueryOperand(SubQueryOperand object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Scalar Operand</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -947,22 +960,6 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOpList(OpList object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>subquery</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>subquery</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casesubquery(subquery object)
   {
     return null;
   }

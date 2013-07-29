@@ -38,11 +38,11 @@ import com.jaspersoft.studio.data.sql.SelectQuery;
 import com.jaspersoft.studio.data.sql.SelectSubSet;
 import com.jaspersoft.studio.data.sql.SqlFactory;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.SubQueryOperand;
 import com.jaspersoft.studio.data.sql.TableFull;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
 import com.jaspersoft.studio.data.sql.XExpr;
 import com.jaspersoft.studio.data.sql.XFunction;
-import com.jaspersoft.studio.data.sql.subquery;
 import com.jaspersoft.studio.data.sql.tbls;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -297,6 +297,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass subQueryOperandEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass scalarOperandEClass = null;
 
   /**
@@ -319,13 +326,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass opListEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass subqueryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -609,9 +609,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getColumnOrAlias_Sq()
+  {
+    return (EReference)columnOrAliasEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getColumnOrAlias_Alias()
   {
-    return (EAttribute)columnOrAliasEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)columnOrAliasEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -621,7 +631,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getColumnOrAlias_ColAlias()
   {
-    return (EReference)columnOrAliasEClass.getEStructuralFeatures().get(2);
+    return (EReference)columnOrAliasEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -631,7 +641,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EAttribute getColumnOrAlias_AllCols()
   {
-    return (EAttribute)columnOrAliasEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)columnOrAliasEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1159,9 +1169,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getComparison_SubOperator()
+  {
+    return (EAttribute)comparisonEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getComparison_Op2()
   {
-    return (EReference)comparisonEClass.getEStructuralFeatures().get(1);
+    return (EReference)comparisonEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1439,6 +1459,26 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getSubQueryOperand()
+  {
+    return subQueryOperandEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSubQueryOperand_Sel()
+  {
+    return (EReference)subQueryOperandEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getScalarOperand()
   {
     return scalarOperandEClass;
@@ -1569,26 +1609,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getsubquery()
-  {
-    return subqueryEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getsubquery_Sel()
-  {
-    return (EReference)subqueryEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EEnum getXFunction()
   {
     return xFunctionEEnum;
@@ -1659,6 +1679,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     columnOrAliasEClass = createEClass(COLUMN_OR_ALIAS);
     createEReference(columnOrAliasEClass, COLUMN_OR_ALIAS__CFULL);
+    createEReference(columnOrAliasEClass, COLUMN_OR_ALIAS__SQ);
     createEAttribute(columnOrAliasEClass, COLUMN_OR_ALIAS__ALIAS);
     createEReference(columnOrAliasEClass, COLUMN_OR_ALIAS__COL_ALIAS);
     createEAttribute(columnOrAliasEClass, COLUMN_OR_ALIAS__ALL_COLS);
@@ -1732,6 +1753,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     comparisonEClass = createEClass(COMPARISON);
     createEAttribute(comparisonEClass, COMPARISON__OPERATOR);
+    createEAttribute(comparisonEClass, COMPARISON__SUB_OPERATOR);
     createEReference(comparisonEClass, COMPARISON__OP2);
 
     likeEClass = createEClass(LIKE);
@@ -1770,6 +1792,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     columnOperandEClass = createEClass(COLUMN_OPERAND);
     createEReference(columnOperandEClass, COLUMN_OPERAND__CFULL);
 
+    subQueryOperandEClass = createEClass(SUB_QUERY_OPERAND);
+    createEReference(subQueryOperandEClass, SUB_QUERY_OPERAND__SEL);
+
     scalarOperandEClass = createEClass(SCALAR_OPERAND);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOINT);
     createEAttribute(scalarOperandEClass, SCALAR_OPERAND__SOSTR);
@@ -1786,9 +1811,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     opListEClass = createEClass(OP_LIST);
     createEReference(opListEClass, OP_LIST__ENTRIES);
-
-    subqueryEClass = createEClass(SUBQUERY);
-    createEReference(subqueryEClass, SUBQUERY__SEL);
 
     // Create enums
     xFunctionEEnum = createEEnum(XFUNCTION);
@@ -1838,7 +1860,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     colEClass.getESuperTypes().add(this.getColumnFull());
     tblsEClass.getESuperTypes().add(this.getTableFull());
     opListEClass.getESuperTypes().add(this.getOperandList());
-    subqueryEClass.getESuperTypes().add(this.getOperand());
 
     // Initialize classes and features; add operations and parameters
     initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1866,6 +1887,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(columnOrAliasEClass, ColumnOrAlias.class, "ColumnOrAlias", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getColumnOrAlias_Cfull(), this.getColumnFull(), null, "cfull", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getColumnOrAlias_Sq(), this.getSubQueryOperand(), null, "sq", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getColumnOrAlias_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getColumnOrAlias_ColAlias(), this.getDbObjectName(), null, "colAlias", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getColumnOrAlias_AllCols(), ecorePackage.getEString(), "allCols", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1939,6 +1961,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(comparisonEClass, Comparison.class, "Comparison", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getComparison_Operator(), ecorePackage.getEString(), "operator", null, 0, 1, Comparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getComparison_SubOperator(), ecorePackage.getEString(), "subOperator", null, 0, 1, Comparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getComparison_Op2(), this.getOperands(), null, "op2", null, 0, 1, Comparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(likeEClass, Like.class, "Like", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1952,7 +1975,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(inOperEClass, InOper.class, "InOper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getInOper_Op(), ecorePackage.getEString(), "op", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getInOper_Subquery(), this.getOperand(), null, "subquery", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInOper_Subquery(), this.getSubQueryOperand(), null, "subquery", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getInOper_OpList(), this.getOperandList(), null, "opList", null, 0, 1, InOper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(operandListEClass, OperandList.class, "OperandList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1963,7 +1986,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(operandEClass, Operand.class, "Operand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOperand_Column(), this.getColumnOperand(), null, "column", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Xop(), this.getOperand(), null, "xop", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getOperand_Subq(), this.getOperand(), null, "subq", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOperand_Subq(), this.getSubQueryOperand(), null, "subq", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Param(), this.getPOperand(), null, "param", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Eparam(), this.getExpOperand(), null, "eparam", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Scalar(), this.getScalarOperand(), null, "scalar", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1976,6 +1999,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(columnOperandEClass, ColumnOperand.class, "ColumnOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getColumnOperand_Cfull(), this.getColumnFull(), null, "cfull", null, 0, 1, ColumnOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(subQueryOperandEClass, SubQueryOperand.class, "SubQueryOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getSubQueryOperand_Sel(), this.getSelectQuery(), null, "sel", null, 0, 1, SubQueryOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(scalarOperandEClass, ScalarOperand.class, "ScalarOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getScalarOperand_Soint(), ecorePackage.getEIntegerObject(), "soint", null, 0, 1, ScalarOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1993,9 +2019,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(opListEClass, OpList.class, "OpList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOpList_Entries(), this.getOperand(), null, "entries", null, 0, -1, OpList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(subqueryEClass, subquery.class, "subquery", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getsubquery_Sel(), this.getSelectQuery(), null, "sel", null, 0, 1, subquery.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
     initEEnum(xFunctionEEnum, XFunction.class, "XFunction");

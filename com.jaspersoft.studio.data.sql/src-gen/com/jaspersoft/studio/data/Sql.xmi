@@ -118,8 +118,13 @@
       </type>
       <alternatives xsi:type="xtext:Alternatives">
         <elements xsi:type="xtext:Group">
-          <elements xsi:type="xtext:Assignment" feature="cfull" operator="=">
-            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.6"/>
+          <elements xsi:type="xtext:Alternatives">
+            <elements xsi:type="xtext:Assignment" feature="cfull" operator="=">
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.6"/>
+            </elements>
+            <elements xsi:type="xtext:Assignment" feature="sq" operator="=">
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.37"/>
+            </elements>
           </elements>
           <elements xsi:type="xtext:Assignment" cardinality="?" feature="alias" operator="=">
             <terminal xsi:type="xtext:Keyword" value="AS"/>
@@ -540,6 +545,13 @@
             <elements xsi:type="xtext:Keyword" value="&lt;>"/>
           </terminal>
         </elements>
+        <elements xsi:type="xtext:Assignment" cardinality="?" feature="subOperator" operator="=">
+          <terminal xsi:type="xtext:Alternatives">
+            <elements xsi:type="xtext:Keyword" value="ANY"/>
+            <elements xsi:type="xtext:Keyword" value="ALL"/>
+            <elements xsi:type="xtext:Keyword" value="SOME"/>
+          </terminal>
+        </elements>
         <elements xsi:type="xtext:Assignment" feature="op2" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.31"/>
         </elements>
@@ -735,12 +747,12 @@
     </rules>
     <rules xsi:type="xtext:ParserRule" name="SubQueryOperand">
       <type metamodel="/0/@metamodelDeclarations.1">
-        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//Operand"/>
+        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//SubQueryOperand"/>
       </type>
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Action">
           <type metamodel="/0/@metamodelDeclarations.1">
-            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//subquery"/>
+            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//SubQueryOperand"/>
           </type>
         </elements>
         <elements xsi:type="xtext:Keyword" value="("/>

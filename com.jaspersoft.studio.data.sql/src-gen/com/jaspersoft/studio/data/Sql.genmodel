@@ -52,6 +52,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ColumnOrAlias">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOrAlias/cfull"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOrAlias/sq"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnOrAlias/alias"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOrAlias/colAlias"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnOrAlias/allCols"/>
@@ -123,6 +124,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Comparison">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Comparison/operator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Comparison/subOperator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Comparison/op2"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Like">
@@ -160,6 +162,9 @@
     <genClasses ecoreClass="Sql.ecore#//ColumnOperand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOperand/cfull"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//SubQueryOperand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SubQueryOperand/sel"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ScalarOperand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/soint"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sostr"/>
@@ -176,9 +181,6 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OpList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpList/entries"/>
-    </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//subquery">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//subquery/sel"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ComparisonImpl#getOperator <em>Operator</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ComparisonImpl#getSubOperator <em>Sub Operator</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ComparisonImpl#getOp2 <em>Op2</em>}</li>
  * </ul>
  * </p>
@@ -50,6 +51,26 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
    * @ordered
    */
   protected String operator = OPERATOR_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getSubOperator() <em>Sub Operator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSubOperator()
+   * @generated
+   * @ordered
+   */
+  protected static final String SUB_OPERATOR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getSubOperator() <em>Sub Operator</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSubOperator()
+   * @generated
+   * @ordered
+   */
+  protected String subOperator = SUB_OPERATOR_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getOp2() <em>Op2</em>}' containment reference.
@@ -103,6 +124,29 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
     operator = newOperator;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COMPARISON__OPERATOR, oldOperator, operator));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getSubOperator()
+  {
+    return subOperator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSubOperator(String newSubOperator)
+  {
+    String oldSubOperator = subOperator;
+    subOperator = newSubOperator;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COMPARISON__SUB_OPERATOR, oldSubOperator, subOperator));
   }
 
   /**
@@ -181,6 +225,8 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
     {
       case SqlPackage.COMPARISON__OPERATOR:
         return getOperator();
+      case SqlPackage.COMPARISON__SUB_OPERATOR:
+        return getSubOperator();
       case SqlPackage.COMPARISON__OP2:
         return getOp2();
     }
@@ -199,6 +245,9 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
     {
       case SqlPackage.COMPARISON__OPERATOR:
         setOperator((String)newValue);
+        return;
+      case SqlPackage.COMPARISON__SUB_OPERATOR:
+        setSubOperator((String)newValue);
         return;
       case SqlPackage.COMPARISON__OP2:
         setOp2((Operands)newValue);
@@ -220,6 +269,9 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
       case SqlPackage.COMPARISON__OPERATOR:
         setOperator(OPERATOR_EDEFAULT);
         return;
+      case SqlPackage.COMPARISON__SUB_OPERATOR:
+        setSubOperator(SUB_OPERATOR_EDEFAULT);
+        return;
       case SqlPackage.COMPARISON__OP2:
         setOp2((Operands)null);
         return;
@@ -239,6 +291,8 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
     {
       case SqlPackage.COMPARISON__OPERATOR:
         return OPERATOR_EDEFAULT == null ? operator != null : !OPERATOR_EDEFAULT.equals(operator);
+      case SqlPackage.COMPARISON__SUB_OPERATOR:
+        return SUB_OPERATOR_EDEFAULT == null ? subOperator != null : !SUB_OPERATOR_EDEFAULT.equals(subOperator);
       case SqlPackage.COMPARISON__OP2:
         return op2 != null;
     }
@@ -258,6 +312,8 @@ public class ComparisonImpl extends MinimalEObjectImpl.Container implements Comp
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (operator: ");
     result.append(operator);
+    result.append(", subOperator: ");
+    result.append(subOperator);
     result.append(')');
     return result.toString();
   }

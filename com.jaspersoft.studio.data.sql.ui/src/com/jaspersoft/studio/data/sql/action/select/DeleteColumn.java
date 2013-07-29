@@ -18,8 +18,8 @@ package com.jaspersoft.studio.data.sql.action.select;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.action.DeleteAction;
-import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
-import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;

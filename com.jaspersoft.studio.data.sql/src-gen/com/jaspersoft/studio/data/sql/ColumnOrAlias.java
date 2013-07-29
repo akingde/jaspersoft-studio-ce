@@ -12,6 +12,7 @@ package com.jaspersoft.studio.data.sql;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getCfull <em>Cfull</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getSq <em>Sq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getColAlias <em>Col Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAllCols <em>All Cols</em>}</li>
@@ -49,6 +50,32 @@ public interface ColumnOrAlias extends OrColumn
    * @generated
    */
   void setCfull(ColumnFull value);
+
+  /**
+   * Returns the value of the '<em><b>Sq</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Sq</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Sq</em>' containment reference.
+   * @see #setSq(SubQueryOperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getColumnOrAlias_Sq()
+   * @model containment="true"
+   * @generated
+   */
+  SubQueryOperand getSq();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getSq <em>Sq</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Sq</em>' containment reference.
+   * @see #getSq()
+   * @generated
+   */
+  void setSq(SubQueryOperand value);
 
   /**
    * Returns the value of the '<em><b>Alias</b></em>' attribute.

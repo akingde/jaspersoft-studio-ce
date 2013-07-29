@@ -320,6 +320,15 @@ public interface SqlFactory extends EFactory
   ColumnOperand createColumnOperand();
 
   /**
+   * Returns a new object of class '<em>Sub Query Operand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Sub Query Operand</em>'.
+   * @generated
+   */
+  SubQueryOperand createSubQueryOperand();
+
+  /**
    * Returns a new object of class '<em>Scalar Operand</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -354,15 +363,6 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   OpList createOpList();
-
-  /**
-   * Returns a new object of class '<em>subquery</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>subquery</em>'.
-   * @generated
-   */
-  subquery createsubquery();
 
   /**
    * Returns the package supported by this factory.

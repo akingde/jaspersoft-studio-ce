@@ -27,6 +27,8 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.data.sql.QueryWriter;
+import com.jaspersoft.studio.data.sql.model.ISubQuery;
+import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.ui.gef.layout.GraphLayoutManager;
@@ -41,20 +43,13 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		// FreeformLayeredPane fig = new FreeformLayeredPane();
-		// FreeformLayer fig = new FreeformLayer();
 		RectangleFigure fig = new RectangleFigure() {
 			@Override
 			public Insets getInsets() {
 				return INSETS;
 			}
 		};
-		// fig.setLocation(new Point(0, 0));
-		// fig.setSize(10000, 10000);
 		fig.setLayoutManager(new GraphLayoutManager(this));
-		// FreeformLayout layout = new FreeformLayout();
-		// layout.setPositiveCoordinates(true);
-		// fig.setLayoutManager(layout);
 		fig.setBackgroundColor(SWTResourceManager.getColor(248, 248, 255));
 		fig.setOpaque(true);
 		return fig;
@@ -69,12 +64,27 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected List getModelChildren() {
 		final List<ANode> list = new ArrayList<ANode>();
-		new ModelVisitor<ANode>((INode) getModel()) {
+		final INode mfrom = (INode) getModel();
+		new ModelVisitor<ANode>(mfrom) {
 
 			@Override
 			public boolean visit(INode n) {
+				if (n instanceof MUnion || n instanceof ISubQuery)
+					return false;
 				if (n instanceof MFromTable)
 					list.add((ANode) n);
+				return true;
+			}
+		};
+		// look for subquery return MFrom ...
+		new ModelVisitor<ANode>(mfrom.getParent()) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MFrom && n != mfrom) {
+					list.add((ANode) n);
+					return false;
+				}
 				return true;
 			}
 		};

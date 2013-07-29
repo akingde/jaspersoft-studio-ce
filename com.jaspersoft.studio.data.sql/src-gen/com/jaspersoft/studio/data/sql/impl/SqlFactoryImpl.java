@@ -98,11 +98,11 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.POPERAND: return createPOperand();
       case SqlPackage.EXP_OPERAND: return createExpOperand();
       case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
+      case SqlPackage.SUB_QUERY_OPERAND: return createSubQueryOperand();
       case SqlPackage.SCALAR_OPERAND: return createScalarOperand();
       case SqlPackage.COL: return createCol();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OP_LIST: return createOpList();
-      case SqlPackage.SUBQUERY: return createsubquery();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -514,6 +514,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public SubQueryOperand createSubQueryOperand()
+  {
+    SubQueryOperandImpl subQueryOperand = new SubQueryOperandImpl();
+    return subQueryOperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public ScalarOperand createScalarOperand()
   {
     ScalarOperandImpl scalarOperand = new ScalarOperandImpl();
@@ -551,17 +562,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     OpListImpl opList = new OpListImpl();
     return opList;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public subquery createsubquery()
-  {
-    subqueryImpl subquery = new subqueryImpl();
-    return subquery;
   }
 
   /**

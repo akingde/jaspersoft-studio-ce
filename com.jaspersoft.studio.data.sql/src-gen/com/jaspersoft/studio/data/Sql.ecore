@@ -36,6 +36,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOrAlias" eSuperTypes="#//OrColumn">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cfull" eType="#//ColumnFull"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sq" eType="#//SubQueryOperand"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="colAlias" eType="#//DbObjectName"
         containment="true"/>
@@ -144,6 +146,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Comparison">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//Operands"
         containment="true"/>
   </eClassifiers>
@@ -160,7 +163,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InOper">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//Operand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//SubQueryOperand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="opList" eType="#//OperandList"
         containment="true"/>
@@ -175,7 +178,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="xop" eType="#//Operand"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subq" eType="#//Operand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subq" eType="#//SubQueryOperand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//POperand"
         containment="true"/>
@@ -192,6 +195,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOperand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cfull" eType="#//ColumnFull"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubQueryOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//SelectQuery"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScalarOperand">
@@ -220,9 +227,5 @@
   <eClassifiers xsi:type="ecore:EClass" name="OpList" eSuperTypes="#//OperandList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//Operand" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="subquery" eSuperTypes="#//Operand">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//SelectQuery"
-        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

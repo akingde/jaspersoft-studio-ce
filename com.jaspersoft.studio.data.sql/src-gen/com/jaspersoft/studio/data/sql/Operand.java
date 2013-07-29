@@ -87,12 +87,12 @@ public interface Operand extends OperandList, Operands
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Subq</em>' containment reference.
-   * @see #setSubq(Operand)
+   * @see #setSubq(SubQueryOperand)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Subq()
    * @model containment="true"
    * @generated
    */
-  Operand getSubq();
+  SubQueryOperand getSubq();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getSubq <em>Subq</em>}' containment reference.
@@ -102,7 +102,7 @@ public interface Operand extends OperandList, Operands
    * @see #getSubq()
    * @generated
    */
-  void setSubq(Operand value);
+  void setSubq(SubQueryOperand value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.

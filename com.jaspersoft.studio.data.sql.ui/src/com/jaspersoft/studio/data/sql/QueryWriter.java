@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql;
 
+import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
@@ -34,6 +35,11 @@ public class QueryWriter {
 				return true;
 			}
 
+			@Override
+			protected void postChildIteration(INode n) {
+				if (n instanceof ISubQuery)
+					sb.append(")");
+			}
 		};
 		return sb.toString();
 	}
@@ -51,6 +57,11 @@ public class QueryWriter {
 				return true;
 			}
 
+			@Override
+			protected void postChildIteration(INode n) {
+				if (n instanceof ISubQuery)
+					sb.append(")");
+			}
 		};
 		return sb.toString();
 	}

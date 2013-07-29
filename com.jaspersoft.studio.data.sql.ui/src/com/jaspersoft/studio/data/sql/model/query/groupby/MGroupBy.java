@@ -13,10 +13,11 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.sql.model.query;
+package com.jaspersoft.studio.data.sql.model.query.groupby;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.model.ANode;
 
 public class MGroupBy extends AMKeyword {

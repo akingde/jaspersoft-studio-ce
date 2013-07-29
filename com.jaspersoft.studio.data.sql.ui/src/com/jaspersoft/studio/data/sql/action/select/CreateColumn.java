@@ -34,7 +34,6 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
-import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -55,7 +54,7 @@ public class CreateColumn extends AAction {
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof MSelect || element instanceof MSelectColumn || element instanceof MSelectExpression;
+		return element instanceof MSelect || (element instanceof ANode && ((ANode) element).getParent() instanceof MSelect);
 	}
 
 	@Override
@@ -72,8 +71,11 @@ public class CreateColumn extends AAction {
 			MFromTable mftable = cols.get(t);
 			if (sel instanceof MSelect)
 				sel = run(t, mftable, (MSelect) sel, 0);
-			else if (sel instanceof MSelectColumn)
-				sel = run(t, mftable, (MSelectColumn) sel);
+			else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MSelect) {
+				MSelect msel = (MSelect) ((ANode) sel).getParent();
+				int index = msel.getChildren().indexOf(sel) + 1;
+				sel = run(t, mftable, msel, index);
+			}
 		}
 		selectInTree(sel);
 	}

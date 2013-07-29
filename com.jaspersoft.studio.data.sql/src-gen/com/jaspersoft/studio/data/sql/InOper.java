@@ -59,12 +59,12 @@ public interface InOper extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Subquery</em>' containment reference.
-   * @see #setSubquery(Operand)
+   * @see #setSubquery(SubQueryOperand)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getInOper_Subquery()
    * @model containment="true"
    * @generated
    */
-  Operand getSubquery();
+  SubQueryOperand getSubquery();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.InOper#getSubquery <em>Subquery</em>}' containment reference.
@@ -74,7 +74,7 @@ public interface InOper extends EObject
    * @see #getSubquery()
    * @generated
    */
-  void setSubquery(Operand value);
+  void setSubquery(SubQueryOperand value);
 
   /**
    * Returns the value of the '<em><b>Op List</b></em>' containment reference.

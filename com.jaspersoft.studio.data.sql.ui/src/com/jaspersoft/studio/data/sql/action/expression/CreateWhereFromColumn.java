@@ -13,14 +13,13 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.sql.action.select;
+package com.jaspersoft.studio.data.sql.action.expression;
 
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AMultiSelectionAction;
-import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;

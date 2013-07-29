@@ -240,6 +240,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createColumnOperandAdapter();
       }
       @Override
+      public Adapter caseSubQueryOperand(SubQueryOperand object)
+      {
+        return createSubQueryOperandAdapter();
+      }
+      @Override
       public Adapter caseScalarOperand(ScalarOperand object)
       {
         return createScalarOperandAdapter();
@@ -258,11 +263,6 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseOpList(OpList object)
       {
         return createOpListAdapter();
-      }
-      @Override
-      public Adapter casesubquery(subquery object)
-      {
-        return createsubqueryAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -782,6 +782,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.SubQueryOperand <em>Sub Query Operand</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.SubQueryOperand
+   * @generated
+   */
+  public Adapter createSubQueryOperandAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ScalarOperand <em>Scalar Operand</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -837,21 +852,6 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createOpListAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.subquery <em>subquery</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.subquery
-   * @generated
-   */
-  public Adapter createsubqueryAdapter()
   {
     return null;
   }

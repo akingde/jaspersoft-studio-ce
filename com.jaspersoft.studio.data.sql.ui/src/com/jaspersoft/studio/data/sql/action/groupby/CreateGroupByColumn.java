@@ -30,10 +30,10 @@ import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.query.MGroupBy;
-import com.jaspersoft.studio.data.sql.model.query.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
+import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 

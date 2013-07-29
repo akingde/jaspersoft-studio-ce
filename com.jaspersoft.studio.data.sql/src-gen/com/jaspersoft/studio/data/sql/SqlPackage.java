@@ -298,13 +298,22 @@ public interface SqlPackage extends EPackage
   int COLUMN_OR_ALIAS__CFULL = OR_COLUMN_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Sq</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_OR_ALIAS__SQ = OR_COLUMN_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Alias</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COLUMN_OR_ALIAS__ALIAS = OR_COLUMN_FEATURE_COUNT + 1;
+  int COLUMN_OR_ALIAS__ALIAS = OR_COLUMN_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Col Alias</b></em>' containment reference.
@@ -313,7 +322,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COLUMN_OR_ALIAS__COL_ALIAS = OR_COLUMN_FEATURE_COUNT + 2;
+  int COLUMN_OR_ALIAS__COL_ALIAS = OR_COLUMN_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>All Cols</b></em>' attribute.
@@ -322,7 +331,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COLUMN_OR_ALIAS__ALL_COLS = OR_COLUMN_FEATURE_COUNT + 3;
+  int COLUMN_OR_ALIAS__ALL_COLS = OR_COLUMN_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>Column Or Alias</em>' class.
@@ -331,7 +340,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COLUMN_OR_ALIAS_FEATURE_COUNT = OR_COLUMN_FEATURE_COUNT + 4;
+  int COLUMN_OR_ALIAS_FEATURE_COUNT = OR_COLUMN_FEATURE_COUNT + 5;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColumnFullImpl <em>Column Full</em>}' class.
@@ -1018,13 +1027,22 @@ public interface SqlPackage extends EPackage
   int COMPARISON__OPERATOR = 0;
 
   /**
+   * The feature id for the '<em><b>Sub Operator</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPARISON__SUB_OPERATOR = 1;
+
+  /**
    * The feature id for the '<em><b>Op2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMPARISON__OP2 = 1;
+  int COMPARISON__OP2 = 2;
 
   /**
    * The number of structural features of the '<em>Comparison</em>' class.
@@ -1033,7 +1051,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COMPARISON_FEATURE_COUNT = 2;
+  int COMPARISON_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.LikeImpl <em>Like</em>}' class.
@@ -1378,6 +1396,34 @@ public interface SqlPackage extends EPackage
   int COLUMN_OPERAND_FEATURE_COUNT = 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SubQueryOperandImpl <em>Sub Query Operand</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.SubQueryOperandImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSubQueryOperand()
+   * @generated
+   */
+  int SUB_QUERY_OPERAND = 33;
+
+  /**
+   * The feature id for the '<em><b>Sel</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SUB_QUERY_OPERAND__SEL = 0;
+
+  /**
+   * The number of structural features of the '<em>Sub Query Operand</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SUB_QUERY_OPERAND_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl <em>Scalar Operand</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1385,7 +1431,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getScalarOperand()
    * @generated
    */
-  int SCALAR_OPERAND = 33;
+  int SCALAR_OPERAND = 34;
 
   /**
    * The feature id for the '<em><b>Soint</b></em>' attribute.
@@ -1458,7 +1504,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getCol()
    * @generated
    */
-  int COL = 34;
+  int COL = 35;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1486,7 +1532,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#gettbls()
    * @generated
    */
-  int TBLS = 35;
+  int TBLS = 36;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1514,7 +1560,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpList()
    * @generated
    */
-  int OP_LIST = 36;
+  int OP_LIST = 37;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1533,97 +1579,6 @@ public interface SqlPackage extends EPackage
    * @ordered
    */
   int OP_LIST_FEATURE_COUNT = OPERAND_LIST_FEATURE_COUNT + 1;
-
-  /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.subqueryImpl <em>subquery</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.subqueryImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getsubquery()
-   * @generated
-   */
-  int SUBQUERY = 37;
-
-  /**
-   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__ENTRIES = OPERAND__ENTRIES;
-
-  /**
-   * The feature id for the '<em><b>Column</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__COLUMN = OPERAND__COLUMN;
-
-  /**
-   * The feature id for the '<em><b>Xop</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__XOP = OPERAND__XOP;
-
-  /**
-   * The feature id for the '<em><b>Subq</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__SUBQ = OPERAND__SUBQ;
-
-  /**
-   * The feature id for the '<em><b>Param</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__PARAM = OPERAND__PARAM;
-
-  /**
-   * The feature id for the '<em><b>Eparam</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__EPARAM = OPERAND__EPARAM;
-
-  /**
-   * The feature id for the '<em><b>Scalar</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__SCALAR = OPERAND__SCALAR;
-
-  /**
-   * The feature id for the '<em><b>Sel</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY__SEL = OPERAND_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>subquery</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SUBQUERY_FEATURE_COUNT = OPERAND_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.
@@ -1859,6 +1814,17 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getColumnOrAlias_Cfull();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getSq <em>Sq</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Sq</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnOrAlias#getSq()
+   * @see #getColumnOrAlias()
+   * @generated
+   */
+  EReference getColumnOrAlias_Sq();
 
   /**
    * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAlias <em>Alias</em>}'.
@@ -2448,6 +2414,17 @@ public interface SqlPackage extends EPackage
   EAttribute getComparison_Operator();
 
   /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Comparison#getSubOperator <em>Sub Operator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Sub Operator</em>'.
+   * @see com.jaspersoft.studio.data.sql.Comparison#getSubOperator()
+   * @see #getComparison()
+   * @generated
+   */
+  EAttribute getComparison_SubOperator();
+
+  /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Comparison#getOp2 <em>Op2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2747,6 +2724,27 @@ public interface SqlPackage extends EPackage
   EReference getColumnOperand_Cfull();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SubQueryOperand <em>Sub Query Operand</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Sub Query Operand</em>'.
+   * @see com.jaspersoft.studio.data.sql.SubQueryOperand
+   * @generated
+   */
+  EClass getSubQueryOperand();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.SubQueryOperand#getSel <em>Sel</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Sel</em>'.
+   * @see com.jaspersoft.studio.data.sql.SubQueryOperand#getSel()
+   * @see #getSubQueryOperand()
+   * @generated
+   */
+  EReference getSubQueryOperand_Sel();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.ScalarOperand <em>Scalar Operand</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2884,27 +2882,6 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getOpList_Entries();
-
-  /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.subquery <em>subquery</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>subquery</em>'.
-   * @see com.jaspersoft.studio.data.sql.subquery
-   * @generated
-   */
-  EClass getsubquery();
-
-  /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.subquery#getSel <em>Sel</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Sel</em>'.
-   * @see com.jaspersoft.studio.data.sql.subquery#getSel()
-   * @see #getsubquery()
-   * @generated
-   */
-  EReference getsubquery_Sel();
 
   /**
    * Returns the meta object for enum '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}'.
@@ -3120,6 +3097,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference COLUMN_OR_ALIAS__CFULL = eINSTANCE.getColumnOrAlias_Cfull();
+
+    /**
+     * The meta object literal for the '<em><b>Sq</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference COLUMN_OR_ALIAS__SQ = eINSTANCE.getColumnOrAlias_Sq();
 
     /**
      * The meta object literal for the '<em><b>Alias</b></em>' attribute feature.
@@ -3598,6 +3583,14 @@ public interface SqlPackage extends EPackage
     EAttribute COMPARISON__OPERATOR = eINSTANCE.getComparison_Operator();
 
     /**
+     * The meta object literal for the '<em><b>Sub Operator</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COMPARISON__SUB_OPERATOR = eINSTANCE.getComparison_SubOperator();
+
+    /**
      * The meta object literal for the '<em><b>Op2</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3840,6 +3833,24 @@ public interface SqlPackage extends EPackage
     EReference COLUMN_OPERAND__CFULL = eINSTANCE.getColumnOperand_Cfull();
 
     /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SubQueryOperandImpl <em>Sub Query Operand</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.SubQueryOperandImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSubQueryOperand()
+     * @generated
+     */
+    EClass SUB_QUERY_OPERAND = eINSTANCE.getSubQueryOperand();
+
+    /**
+     * The meta object literal for the '<em><b>Sel</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SUB_QUERY_OPERAND__SEL = eINSTANCE.getSubQueryOperand_Sel();
+
+    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl <em>Scalar Operand</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3950,24 +3961,6 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference OP_LIST__ENTRIES = eINSTANCE.getOpList_Entries();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.subqueryImpl <em>subquery</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.subqueryImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getsubquery()
-     * @generated
-     */
-    EClass SUBQUERY = eINSTANCE.getsubquery();
-
-    /**
-     * The meta object literal for the '<em><b>Sel</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SUBQUERY__SEL = eINSTANCE.getsubquery_Sel();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.

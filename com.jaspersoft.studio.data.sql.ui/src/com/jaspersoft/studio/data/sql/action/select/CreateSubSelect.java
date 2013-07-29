@@ -16,19 +16,18 @@
 package com.jaspersoft.studio.data.sql.action.select;
 
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
-import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
 
-public class CreateSelectExpression extends AAction {
+public class CreateSubSelect extends AAction {
 
-	public CreateSelectExpression(TreeViewer treeViewer) {
-		super("Add E&xpression", treeViewer);
+	public CreateSubSelect(TreeViewer treeViewer) {
+		super("Add &Sub Select", treeViewer);
 	}
 
 	@Override
@@ -43,25 +42,21 @@ public class CreateSelectExpression extends AAction {
 
 	@Override
 	public void run() {
-		EditSelectExpressionDialog dialog = new EditSelectExpressionDialog(Display.getDefault().getActiveShell());
-		MSelectExpression mexpr = new MSelectExpression(null, " ");
-		dialog.setValue(mexpr);
-		if (dialog.open() == Window.OK) {
-			Object sel = selection[0];
-			MSelect mselect = null;
-			int index = 0;
-			if (sel instanceof MSelect)
-				mselect = (MSelect) sel;
-			else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MSelect) {
-				mselect = (MSelect) ((ANode) sel).getParent();
-				index = mselect.getChildren().indexOf((MSelectExpression) sel) + 1;
-			}
-			mexpr.setParent(mselect, index);
-			mexpr.setValue(dialog.getExpression());
-			mexpr.setAlias(dialog.getAlias());
-			mexpr.setAliasKeyword(dialog.getAliasKeyword());
-			selectInTree(mexpr);
+		Object sel = selection[0];
+		MSelect mselect = null;
+		int index = 0;
+		if (sel instanceof MSelect)
+			mselect = (MSelect) sel;
+		else if (sel instanceof ANode && ((ANode) sel).getParent() instanceof MSelect) {
+			mselect = (MSelect) ((ANode) sel).getParent();
+			index = mselect.getChildren().indexOf((MSelectExpression) sel) + 1;
 		}
+
+		MSelectSubQuery msq = new MSelectSubQuery(mselect, index);
+		Util.createSelect(msq);
+
+		selectInTree(msq);
+		treeViewer.expandToLevel(msq, 1);
 	}
 
 }

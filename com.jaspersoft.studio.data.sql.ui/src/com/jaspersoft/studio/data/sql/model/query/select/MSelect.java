@@ -23,8 +23,12 @@ import com.jaspersoft.studio.model.ANode;
 public class MSelect extends AMKeyword {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	public MSelect(ANode parent, String value, int index) {
+		super(parent, value, null, index);
+	}
+
 	public MSelect(ANode parent) {
-		super(parent, AMKeyword.SELECT_KEYWORD, null);
+		this(parent, AMKeyword.SELECT_KEYWORD, -1);
 	}
 
 	@Override

@@ -21,7 +21,7 @@ Columns returns OrColumn:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
 
 ColumnOrAlias:
-	(cfull=ColumnFull alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
+	((cfull=ColumnFull | sq=SubQueryOperand) alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
 
 ColumnFull returns ColumnFull:
 	DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
@@ -86,7 +86,7 @@ Expression returns FullExpression:
 	op1=Operand (isnull=('IS NULL' | 'IS NOT NULL') | in=InOperator | between=Between | like=Like | comp=Comparison);
 
 Comparison:
-	operator=('>' | '>=' | '<' | '<=' | '=' | '<>') op2=Operand;
+	operator=('>' | '>=' | '<' | '<=' | '=' | '<>') subOperator=('ANY' | 'ALL' | 'SOME')? op2=Operand;
 
 Like:
 	opLike=('LIKE' | 'NOT LIKE') op2=StringOperand;
@@ -120,8 +120,8 @@ ExclamationParameterOperand returns ExpOperand:
 ColumnOperand returns ColumnOperand:
 	cfull=ColumnFull;
 
-SubQueryOperand returns Operand:
-	{subquery} '(' sel=SelectQuery ')';
+SubQueryOperand returns SubQueryOperand:
+	{SubQueryOperand} '(' sel=SelectQuery ')';
 
 ScalarOperand returns ScalarOperand:
 	soint=SIGNED_INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;

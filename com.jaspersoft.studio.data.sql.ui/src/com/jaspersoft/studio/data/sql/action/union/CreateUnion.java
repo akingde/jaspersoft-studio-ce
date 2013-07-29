@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
+import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
@@ -27,7 +28,7 @@ public class CreateUnion extends AAction {
 	}
 
 	public static boolean isInSelect(Object element) {
-		return element instanceof AMKeyword && !(element instanceof MExpressionGroup || element instanceof MSetOperator);
+		return element instanceof AMKeyword && !(element instanceof MExpressionGroup || element instanceof MSetOperator || element instanceof ISubQuery);
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class CreateUnion extends AAction {
 		AMKeyword sel = (AMKeyword) selection[0];
 		ANode parent = sel.getParent();
 		if (sel != null && parent != null) {
-			if (parent instanceof MUnion)
+			if (parent instanceof ISubQuery)
 				parent = parent.getParent();
 			MUnion munion = createUnion(parent);
 			selectInTree(munion);
