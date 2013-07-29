@@ -19,10 +19,19 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.components.map.messages.messages"; //$NON-NLS-1$
+	public static String MapAuthenticationSection_ApiKeyText;
+	public static String MapAuthenticationSection_ClientIdText;
+	public static String MapAuthenticationSection_SignatureText;
+	public static String MapAuthenticationSection_VersionText;
 	public static String MapDatasetSection_DeleteConfirmationMsg;
 	public static String MapDatasetSection_DeleteConfirmationTitle;
 	public static String MapDatasetSection_UseMarkersDatasetBtn;
 	public static String MapWizard_map_wizard;
+	public static String MMap_ApiKeyDescription;
+	public static String MMap_ApiKeyText;
+	public static String MMap_Category_Authentication;
+	public static String MMap_ClientIdDescription;
+	public static String MMap_ClientIdText;
 	public static String MMap_common_map_properties;
 	public static String MMap_evaluation_group;
 	public static String MMap_evaluation_group_description;
@@ -44,6 +53,10 @@ public class Messages extends NLS {
 	public static String MMap_markerDatasetTitle;
 	public static String MMap_markersDescription;
 	public static String MMap_markersTitle;
+	public static String MMap_SignatureDescription;
+	public static String MMap_SignatureText;
+	public static String MMap_VersionDescription;
+	public static String MMap_VersionText;
 	public static String MMap_zoom;
 	public static String MMap_zoom_description;
 	static {

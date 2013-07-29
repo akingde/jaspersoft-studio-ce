@@ -59,6 +59,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -200,7 +201,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		evaluationTimeD.setDescription(Messages.MMap_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$
 		evaluationGroupNameD.setDescription(Messages.MMap_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
@@ -225,6 +226,22 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		desc.add(markersD);
 		markersD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#markerDataset")); //$NON-NLS-1$
 
+		NTextPropertyDescriptor mapKeyD = new NTextPropertyDescriptor(MapComponent.PROPERTY_KEY, Messages.MMap_ApiKeyText);
+		mapKeyD.setDescription(Messages.MMap_ApiKeyDescription);
+		desc.add(mapKeyD);
+		
+		NTextPropertyDescriptor mapClientIdD = new NTextPropertyDescriptor(MapComponent.PROPERTY_CLIENT_ID, Messages.MMap_ClientIdText);
+		mapClientIdD.setDescription(Messages.MMap_ClientIdDescription);
+		desc.add(mapClientIdD);
+
+		NTextPropertyDescriptor mapClientSignatureD = new NTextPropertyDescriptor(MapComponent.PROPERTY_SIGNATURE, Messages.MMap_SignatureText);
+		mapClientSignatureD.setDescription(Messages.MMap_SignatureDescription);
+		desc.add(mapClientSignatureD);
+
+		NTextPropertyDescriptor mapVersionD = new NTextPropertyDescriptor(MapComponent.PROPERTY_VERSION, Messages.MMap_VersionText);
+		mapVersionD.setDescription(Messages.MMap_VersionDescription);
+		desc.add(mapVersionD);
+		
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#"); //$NON-NLS-1$
 
 		markersD.setCategory(Messages.MMap_common_map_properties);
@@ -238,6 +255,11 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		latitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		longitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		zoomExprD.setCategory(Messages.MMap_common_map_properties);
+		
+		mapKeyD.setCategory(Messages.MMap_Category_Authentication);
+		mapClientIdD.setCategory(Messages.MMap_Category_Authentication);
+		mapClientSignatureD.setCategory(Messages.MMap_Category_Authentication);
+		mapVersionD.setCategory(Messages.MMap_Category_Authentication);
 
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapTypeEnum.ROADMAP);
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapScaleEnum.ONE);
@@ -306,6 +328,20 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
 			return imageTypeD.getEnumValue(component.getImageType());
 
+		// map authentication info
+		if (id.equals(MapComponent.PROPERTY_KEY)) {
+			return getJasperDesign().getProperty(MapComponent.PROPERTY_KEY);
+		}
+		else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
+			return getJasperDesign().getProperty(MapComponent.PROPERTY_CLIENT_ID);
+		}
+		else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
+			return getJasperDesign().getProperty(MapComponent.PROPERTY_SIGNATURE);
+		}
+		else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+			return getJasperDesign().getProperty(MapComponent.PROPERTY_VERSION);
+		}
+		
 		return super.getPropertyValue(id);
 	}
 
@@ -365,6 +401,18 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			component.setMapScale((MapScaleEnum) mapScaleD.getEnumValue(value));
 		else if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
 			component.setImageType((MapImageTypeEnum) imageTypeD.getEnumValue(value));
+		else if (id.equals(MapComponent.PROPERTY_KEY)) {
+			getJasperDesign().setProperty(MapComponent.PROPERTY_KEY, (String) value);
+		}
+		else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
+			getJasperDesign().setProperty(MapComponent.PROPERTY_CLIENT_ID, (String) value);
+		}
+		else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
+			getJasperDesign().setProperty(MapComponent.PROPERTY_SIGNATURE, (String) value);
+		}
+		else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+			getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
+		}
 		else
 			super.setPropertyValue(id, value);
 	}

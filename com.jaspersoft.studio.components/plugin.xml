@@ -442,6 +442,14 @@
             </input>
          </propertySection>
          <propertySection
+               class="com.jaspersoft.studio.components.map.property.MapAuthenticationSection"
+               id="com.jaspersoft.studio.components.map.property.MapAuthenticationSection"
+               tab="com.jaspersoft.studio.components.map.authentication">
+            <input
+                  type="com.jaspersoft.studio.components.map.model.MMap">
+            </input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.components.table.properties.TableDatasetSection"
                id="com.jaspersoft.studio.components.table.properties.TableDatasetSection"
                tab="com.jaspersoft.studio.editor.section.DATASET">
@@ -744,6 +752,13 @@
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.components.Map"
+               category="element"
+               id="com.jaspersoft.studio.components.map.authentication"
+               image="icons/map-authentication-16.png"
+               label="%labelAuthentication">
+         </propertyTab>           
+         <propertyTab
+               afterTab="com.jaspersoft.studio.components.map.authentication"
                category="element"
                id="com.jaspersoft.studio.components.map"
                image="icons/map-16.png"
