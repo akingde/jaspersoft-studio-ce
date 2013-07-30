@@ -23,8 +23,10 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectColumnDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditSelectExpressionDialog;
+import com.jaspersoft.studio.data.sql.dialogs.EditSelectSubQueryDialog;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.model.ANode;
 
 public class EditColumn extends AAction {
@@ -40,7 +42,7 @@ public class EditColumn extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		return element instanceof MSelectColumn || element instanceof MSelectExpression;
+		return element instanceof MSelectColumn || element instanceof MSelectExpression || element instanceof MSelectSubQuery;
 	}
 
 	@Override
@@ -52,9 +54,22 @@ public class EditColumn extends AAction {
 			} else if (obj instanceof MSelectExpression) {
 				doRunExpression((MSelectExpression) obj);
 				break;
+			} else if (obj instanceof MSelectSubQuery) {
+				doRunSubQuery((MSelectSubQuery) obj);
+				break;
 			}
 		}
 
+	}
+
+	protected void doRunSubQuery(MSelectSubQuery mcol) {
+		EditSelectSubQueryDialog dialog = new EditSelectSubQueryDialog(Display.getDefault().getActiveShell());
+		dialog.setValue(mcol);
+		if (dialog.open() == Window.OK) {
+			mcol.setAlias(dialog.getAlias());
+			mcol.setAliasKeyword(dialog.getAliasKeyword());
+			selectInTree(mcol);
+		}
 	}
 
 	protected void doRunExpression(MSelectExpression mcol) {

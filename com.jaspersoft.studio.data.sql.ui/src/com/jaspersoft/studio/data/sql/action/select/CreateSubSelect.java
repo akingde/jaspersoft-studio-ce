@@ -27,7 +27,7 @@ import com.jaspersoft.studio.model.ANode;
 public class CreateSubSelect extends AAction {
 
 	public CreateSubSelect(TreeViewer treeViewer) {
-		super("Add &Sub Select", treeViewer);
+		super("Add &Sub Query", treeViewer);
 	}
 
 	@Override

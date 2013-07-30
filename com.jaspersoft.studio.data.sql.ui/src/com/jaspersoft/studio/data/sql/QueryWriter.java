@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.sql;
 
 import com.jaspersoft.studio.data.sql.model.ISubQuery;
+import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
@@ -30,15 +31,20 @@ public class QueryWriter {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof IQueryString)
+				if (n instanceof ISubQuery)
+					sb.append("(");
+				else if (n instanceof IQueryString)
 					sb.append(((IQueryString) n).toSQLString());
 				return true;
 			}
 
 			@Override
 			protected void postChildIteration(INode n) {
-				if (n instanceof ISubQuery)
+				if (n instanceof ISubQuery) {
 					sb.append(")");
+					if (n instanceof AMQueryAliased<?>)
+						sb.append(((AMQueryAliased) n).addAlias());
+				}
 			}
 		};
 		return sb.toString();
@@ -52,15 +58,20 @@ public class QueryWriter {
 			public boolean visit(INode n) {
 				if (n instanceof MUnion || n instanceof MOrderBy)
 					stop();
-				if (n instanceof IQueryString)
+				if (n instanceof ISubQuery)
+					sb.append("(");
+				else if (n instanceof IQueryString)
 					sb.append(((IQueryString) n).toSQLString());
 				return true;
 			}
 
 			@Override
 			protected void postChildIteration(INode n) {
-				if (n instanceof ISubQuery)
+				if (n instanceof ISubQuery) {
 					sb.append(")");
+					if (n instanceof AMQueryAliased<?>)
+						sb.append(((AMQueryAliased) n).addAlias());
+				}
 			}
 		};
 		return sb.toString();

@@ -174,16 +174,28 @@ public class SQLQueryDiagram {
 			Set<ANode> others = new LinkedHashSet<ANode>();
 			Util.filterTables(node, tablesset, colsset, others);
 
+			MFrom mfrom = null;
+			EditPart ep = getTargetEditPart();
+			if (ep instanceof ColumnEditPart)
+				ep = ep.getParent();
+			if (ep instanceof TableEditPart)
+				ep = ep.getParent();
+
+			if (ep instanceof FromEditPart)
+				mfrom = (MFrom) ep.getModel();
+			else
+				mfrom = Util.getKeyword(designer.getRoot(), MFrom.class);
+
 			if (!tablesset.isEmpty()) {
 				CreateTable ct = designer.getOutline().getAfactory().getAction(CreateTable.class);
-				if (ct.calculateEnabled(new Object[] { Util.getKeyword(designer.getRoot(), MFrom.class) })) {
+				if (ct.calculateEnabled(new Object[] { mfrom })) {
 					ct.run(tablesset);
 					refreshViewer();
 				}
 			}
 			if (!colsset.isEmpty()) {
 				CreateColumn ct = designer.getOutline().getAfactory().getAction(CreateColumn.class);
-				if (ct.calculateEnabled(new Object[] { Util.getKeyword(designer.getRoot(), MSelect.class) })) {
+				if (ct.calculateEnabled(new Object[] { mfrom })) {
 					ct.run(colsset);
 					refreshViewer();
 				}
