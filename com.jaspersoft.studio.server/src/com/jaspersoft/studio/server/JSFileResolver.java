@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
@@ -62,14 +62,14 @@ public class JSFileResolver extends SimpleFileResolver {
 	}
 
 	private void init(IProgressMonitor monitor) {
-		serverUri = jDesign.getProperty(JrxmlExporter.PROP_SERVERURL);
+		serverUri = jDesign.getProperty(AExporter.PROP_SERVERURL);
 		if (serverUri != null)
 			try {
 				c = ServerManager.getServer(serverUri, monitor);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		runitUri = jDesign.getProperty(JrxmlExporter.PROP_REPORTUNIT);
+		runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
 	}
 
 	private Map<String, File> map = new CacheMap<String, File>(30000);

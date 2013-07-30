@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -33,7 +34,7 @@ public class PublishUtil {
 	}
 
 	public static ResourceDescriptor getMainReport(MReportUnit mrunit, JasperDesign jd) {
-		String jrxmln = jd.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
+		String jrxmln = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 		if (jrxmln != null) {
 			String unit = mrunit.getValue().getUriString() + "_files/"; //$NON-NLS-1$
 			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring(unit.length()).indexOf('/') < 0) {

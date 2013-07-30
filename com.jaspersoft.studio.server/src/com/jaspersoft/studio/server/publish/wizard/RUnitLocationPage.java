@@ -60,7 +60,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MFolder;
@@ -501,7 +501,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					try {
 						if (n instanceof MReportUnit && !ResourceDescriptorUtil.isReportMain((IFile) jConfig.get(FileUtils.KEY_FILE))) {
 							MReportUnit mReportUnit = (MReportUnit) n;
-							String res = jDesign.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
+							String res = jDesign.getProperty(AExporter.PROP_REPORTRESOURCE);
 							if (!Misc.isNullOrEmpty(res)) {
 								mReportUnit.setValue(WSClientHelper.getResource(n, mReportUnit.getValue()));
 								List<ResourceDescriptor> children = mReportUnit.getValue().getChildren();

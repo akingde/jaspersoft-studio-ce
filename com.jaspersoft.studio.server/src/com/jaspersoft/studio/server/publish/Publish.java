@@ -10,6 +10,7 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -19,7 +20,7 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -155,12 +156,17 @@ public class Publish {
 		INode n = node.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile server = (MServerProfile) n;
-			rpt.setProperty(JrxmlExporter.PROP_SERVERURL, server.getValue().getUrl());
+			rpt.setProperty(AExporter.PROP_SERVERURL, server.getValue().getUrl());
 		}
-		rpt.setProperty(JrxmlExporter.PROP_REPORTRESOURCE, node.getValue().getUriString());
+		rpt.setProperty(AExporter.PROP_REPORTRESOURCE, node.getValue().getUriString());
 		if (node.getParent() instanceof MReportUnit) {
 			MReportUnit mrunit = (MReportUnit) node.getParent();
-			rpt.setProperty(JrxmlExporter.PROP_REPORTUNIT, mrunit.getValue().getUriString());
+			rpt.setProperty(AExporter.PROP_REPORTUNIT, mrunit.getValue().getUriString());
+		}
+		try {
+			AExporter.setServerLocation(node, (IFile) jrConfig.get(FileUtils.KEY_FILE));
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 	}
 }

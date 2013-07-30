@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.osgi.service.prefs.Preferences;
@@ -43,13 +45,14 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ServerManager {
 	private static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
@@ -263,7 +266,7 @@ public class ServerManager {
 		return newServerProfile;
 	}
 
-	public static MServerProfile getServerProfile(JasperDesign jd) {
+	public static MServerProfile getServerProfile(JasperDesign jd, JasperReportsConfiguration jConfig) {
 		final MRoot root = new MRoot(null, null);
 		MServerProfile sp = null;
 		List<ServerProfile> servers = getServerList();
@@ -272,7 +275,7 @@ public class ServerManager {
 			new MDummy(sp);
 		}
 
-		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
+		String prop = JRSEditorContributor.getServerURL(jd, (IFile) jConfig.get(FileUtils.KEY_FILE));
 		if (prop != null && !prop.isEmpty()) {
 			for (INode n : root.getChildren()) {
 				if (n instanceof MServerProfile && ((MServerProfile) n).getValue().getUrl().equals(prop)) {

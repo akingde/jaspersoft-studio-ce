@@ -15,11 +15,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
@@ -28,8 +32,9 @@ import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.JSFileResolver;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
 import com.jaspersoft.studio.utils.AContributorAction;
@@ -40,7 +45,7 @@ public class JRSEditorContributor implements IEditorContributor {
 	public void onLoad(final JasperDesign jd, final EditorPart editor) {
 		if (!(editor instanceof JrxmlEditor))
 			return;
-		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
+		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
 
@@ -73,7 +78,7 @@ public class JRSEditorContributor implements IEditorContributor {
 		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) jrConfig;
 		JasperDesign jd = jConfig.getJasperDesign();
 
-		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
+		String prop = getServerURL(jd, (IFile) jrConfig.getValue(FileUtils.KEY_FILE));
 		if (prop == null)
 			return;
 
@@ -87,6 +92,18 @@ public class JRSEditorContributor implements IEditorContributor {
 		}
 		if (run)
 			getAction(monitor, jConfig).run();
+	}
+
+	public static String getServerURL(JasperDesign jd, IFile f) {
+		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
+		if (prop == null && f != null) {
+			try {
+				prop = f.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		return prop;
 	}
 
 	protected static JrxmlPublishAction getAction(IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
@@ -109,13 +126,13 @@ public class JRSEditorContributor implements IEditorContributor {
 		String s = toolTip;
 		JasperDesign jd = ((JasperReportsConfiguration) jrConfig).getJasperDesign();
 		if (jd != null) {
-			String p = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
+			String p = jd.getProperty(AExporter.PROP_SERVERURL);
 			if (p != null)
 				s += "\nServer: " + p;
-			p = jd.getProperty(JrxmlExporter.PROP_REPORTUNIT);
+			p = jd.getProperty(AExporter.PROP_REPORTUNIT);
 			if (p != null)
 				s += "\nReport Unit: " + p;
-			p = jd.getProperty(JrxmlExporter.PROP_REPORTRESOURCE);
+			p = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
 			if (p != null)
 				s += "\nResource name: " + p;
 		}

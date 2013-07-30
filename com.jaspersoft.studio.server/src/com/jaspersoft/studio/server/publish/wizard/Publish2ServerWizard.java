@@ -115,7 +115,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	public ANode getNode() {
 		if (node == null) {
-			ANode mserv = ServerManager.getServerProfile(jDesign);
+			ANode mserv = ServerManager.getServerProfile(jDesign, jrConfig);
 			if (mserv == null)
 				mserv = new MRoot(null, jDesign);
 			mserv.setJasperConfiguration(jrConfig);

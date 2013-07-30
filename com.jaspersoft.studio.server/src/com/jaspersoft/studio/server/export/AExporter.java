@@ -26,19 +26,36 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.QualifiedName;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public abstract class AExporter {
 	public static Map<String, IFile> fileurimap = new HashMap<String, IFile>();
+	public static final String PROP_SERVERURL = "ireport.jasperserver.url";
+	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
+	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
 
 	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
-		return getTempFile(res, rd, fkeyname, getExtension(), monitor);
+		IFile f = getTempFile(res, rd, fkeyname, getExtension(), monitor);
+		setServerLocation(res, f);
+		return f;
+	}
+
+	public static void setServerLocation(MResource res, IFile f) throws CoreException {
+		if (f != null) {
+			MServerProfile sp = (MServerProfile) res.getRoot();
+			if (sp != null)
+				f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_SERVERURL), sp.getValue().getUrl());
+			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORTRESOURCE), res.getValue().getUriString());
+		}
 	}
 
 	public abstract String getExtension();

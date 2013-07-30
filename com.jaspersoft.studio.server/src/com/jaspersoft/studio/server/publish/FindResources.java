@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MResource;
@@ -57,7 +57,7 @@ public class FindResources {
 		try {
 			WSClientHelper.connect(mserv, monitor);
 			if (mserv != null) {
-				String prunit = jd.getProperty(JrxmlExporter.PROP_REPORTUNIT);
+				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
 				if (prunit != null) {
 					WSClientHelper.connectGetData(mserv, monitor);
 					// We can try to locate a previous existing Report Unit.
