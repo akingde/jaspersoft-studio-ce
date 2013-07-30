@@ -53,29 +53,24 @@ public class EditServerAction extends Action {
 		setText(Messages.EditServerAction_title);
 		setDescription(Messages.EditServerAction_desc);
 		setToolTipText(Messages.EditServerAction_desc);
-		setImageDescriptor(Activator.getDefault().getImageDescriptor(
-				"icons/server--pencil.png")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/server--pencil.png")); //$NON-NLS-1$
 	}
 
 	@Override
 	public boolean isEnabled() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		return firstElement != null && (firstElement instanceof MServerProfile);
 	}
 
 	@Override
 	public void run() {
-		Object obj = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
+		Object obj = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		if (obj instanceof MServerProfile) {
 			final MServerProfile mspold = (MServerProfile) obj;
 			ServerProfile sp = mspold.getValue();
 			try {
-				ServerProfileWizard wizard = new ServerProfileWizard(
-						new MServerProfile(null, (ServerProfile) sp.clone()));
-				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
-						Display.getDefault().getActiveShell(), wizard);
+				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, (ServerProfile) sp.clone()));
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(Display.getDefault().getActiveShell(), wizard);
 				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
@@ -95,15 +90,13 @@ public class EditServerAction extends Action {
 		}
 	}
 
-	public static void fillServerProfile(final MServerProfile mspold,
-			final TreeViewer treeViewer) {
+	public static void fillServerProfile(final MServerProfile mspold, final TreeViewer treeViewer) {
 		Job job = new Job(Messages.EditServerAction_jobname) {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					monitor.beginTask(Messages.EditServerAction_taskname,
-							IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.EditServerAction_taskname, IProgressMonitor.UNKNOWN);
 					mspold.removeChildren();
 					new MDummy(mspold);
 					showSelection();
@@ -125,9 +118,8 @@ public class EditServerAction extends Action {
 					@Override
 					public void run() {
 						treeViewer.refresh(true);
-						TreeSelection s = (TreeSelection) treeViewer
-								.getSelection();
-						if (!s.isEmpty()){
+						TreeSelection s = (TreeSelection) treeViewer.getSelection();
+						if (!s.isEmpty()) {
 							TreePath[] p = s.getPaths();
 							treeViewer.expandToLevel(p[0], 1);
 						}

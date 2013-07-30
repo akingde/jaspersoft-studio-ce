@@ -182,7 +182,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		blpath.setToolTipText(ttip);
 
 		ServerProfile value = sprofile.getValue();
-
+		Proxy proxy = new Proxy(value);
 		blpath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -210,7 +210,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				}), null);
 		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(value, "url"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new URLValidator()), null);
-		dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify), PojoObservables.observeValue(value, "projectPath"), //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify), PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
 		dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify), PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
 		dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
@@ -223,7 +223,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		dbc.bindValue(SWTObservables.observeSelection(bdaterange), PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
 
-		dbc.bindValue(SWTObservables.observeText(cversion.getControl()), PojoObservables.observeValue(new Proxy(value), "jrVersion")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(cversion.getControl()), PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
 		tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(sprofile.getValue().getPass()));
 	}
@@ -245,6 +245,10 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		public void setProjectPath(String projectPath) {
 			sprofile.setProjectPath(projectPath);
+		}
+
+		public String getProjectPath() {
+			return sp.getProjectPath();
 		}
 	}
 

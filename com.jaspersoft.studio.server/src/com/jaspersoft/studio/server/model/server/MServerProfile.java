@@ -135,18 +135,29 @@ public class MServerProfile extends ANode {
 		this.wsClient = wsClient;
 	}
 
-	private IFolder tmpDir;
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		resetTmpPaths();
+	}
 
-	public void setProjectPath(String projectPath) {
-		getValue().setProjectPath(projectPath);
+	protected void resetTmpPaths() {
 		tmpDir = null;
 		AExporter.fileurimap.clear();
 	}
 
+	private IFolder tmpDir;
+
+	public void setProjectPath(String projectPath) {
+		getValue().setProjectPath(projectPath);
+		resetTmpPaths();
+	}
+
 	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException, CoreException {
 		if (tmpDir == null || !tmpDir.exists()) {
-			if (getValue().getProjectPath() != null) {
-				String path = getValue().getProjectPath();
+			String prjpath = getValue().getProjectPath().trim();
+			if (prjpath != null && !prjpath.isEmpty()) {
+				String path = prjpath;
 				if (path.charAt(0) == '/')
 					path = path.substring(1);
 				int indx = path.indexOf("/");

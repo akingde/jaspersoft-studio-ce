@@ -74,7 +74,8 @@ public abstract class AExporter {
 			if (r == null || !r.exists()) {
 				f = troot.getFile(path);
 				f.create(new ByteArrayInputStream("".getBytes("UTF-8")), true, monitor);
-			}
+			} else
+				f = (IFile) r;
 			fileurimap.put(fkeyname, f);
 		}
 		try {
