@@ -69,6 +69,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	private DatasetRunWidget dsRun;
 	private ExpressionContext expContext;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
+	public CTabFolder ctFolder;
 
 	public ElementDatasetWidget(Composite parent) {
 		this.dsRunSelectionListeners = new ArrayList<DatasetRunSelectionListener>();
@@ -365,16 +366,19 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	public void createDataset(Composite composite) {
 		Composite grDataset = new Composite(composite, SWT.NONE);
 		grDataset.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		grDataset.setLayout(new GridLayout());
+		grDataset.setLayout(new GridLayout(1,false));
 
-		CTabFolder ctFolder = new CTabFolder(grDataset, SWT.TOP);
+		ctFolder = new CTabFolder(grDataset, SWT.TOP);
 		ctFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		// createFields(ctFolder);
 		// createData(ctFolder);
 		createParametersMap(ctFolder);
 		createConnection(ctFolder);
-
+		GridData folderData = new GridData(SWT.FILL, SWT.TOP, true, false);
+		folderData.heightHint = 90;
+		folderData.minimumHeight = 90;
+		ctFolder.setLayoutData(folderData);
 		ctFolder.setSelection(0);
 	}
 

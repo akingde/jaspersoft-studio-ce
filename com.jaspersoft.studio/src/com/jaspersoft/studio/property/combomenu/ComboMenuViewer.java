@@ -84,6 +84,18 @@ public class ComboMenuViewer implements IMenuProvider {
 	 * Last element selected in the menu
 	 */
 	private ComboItem selectedItem = null;
+	
+	/**
+	 * Flag used to disable the update of the image and of the text inside the combo button. This 
+	 * is done to make the selection happen but not to show it in the button, and assigning it a static
+	 * Appearance
+	 */
+	private boolean disableSelectedItemUpdate = false;
+	
+	/**
+	 * Disable the emphasis effect on the last selected item when set to true
+	 */
+	private boolean disableSelectedItemEmphasis = false;
 
 	/**
 	 * Represent the action associated to every element of the menu, so it represent an entry in the menu
@@ -162,8 +174,10 @@ public class ComboMenuViewer implements IMenuProvider {
 		 * Selection event
 		 */
 		public void widgetSelected(SelectionEvent event) {
-			dropDownHandle.setText(getText());
-			dropDownHandle.setImage(getImageDescriptor());
+			if (!disableSelectedItemUpdate){
+				dropDownHandle.setText(getText());
+				dropDownHandle.setImage(getImageDescriptor());
+			}
 			selectedItem = getItem();
 			for (ComboItemAction listener : this.listeners) {
 				listener.exec();
@@ -194,7 +208,29 @@ public class ComboMenuViewer implements IMenuProvider {
 			}
 		});
 	}
+	
+	/**
+	 * Used to disable the update of the image and of the text inside the combo button. This 
+	 * is done to make the selection happen but not to show it in the button, and assigning it a static
+	 * Appearance
+	 * 
+	 * @param value true if the refresh of the button appearance should be disabled on selection, otherwise true. The
+	 * default value is false
+	 */
+	public void disableSelectedItemUpdate(boolean value){
+		disableSelectedItemUpdate = value;
+	}
 
+	/**
+	 * Disable the emphasis effect on the last selected item
+	 * 
+	 * @param value true if the emphasis on the last selected element should be disabled, otherwise false. By
+	 * default it is false
+	 */
+	public void disableSelectedEmphasis(boolean value){
+		disableSelectedItemEmphasis = value;
+	}
+	
 	/**
 	 * Add a new action to execute when an element form the popup menu is selected
 	 * 
@@ -467,12 +503,14 @@ public class ComboMenuViewer implements IMenuProvider {
 	 * @param menuManager
 	 */
 	protected void setSelectionToMenu(Menu menu) {
-		int index = getSelectionIndex();
-		if (menu != null && !menu.isDisposed()) {
-			if (index < 0 || index >= menu.getItemCount()) {
-				menu.setDefaultItem(null);
-			} else {
-				menu.setDefaultItem(menu.getItem(index));
+		if (!disableSelectedItemEmphasis){
+			int index = getSelectionIndex();
+			if (menu != null && !menu.isDisposed()) {
+				if (index < 0 || index >= menu.getItemCount()) {
+					menu.setDefaultItem(null);
+				} else {
+					menu.setDefaultItem(menu.getItem(index));
+				}
 			}
 		}
 	}
@@ -489,6 +527,17 @@ public class ComboMenuViewer implements IMenuProvider {
 			dropDownHandle.setText(selectedItem.getText());
 			dropDownHandle.setImage(selectedItem.getImage());
 		}
+	}
+	
+	/**
+	 * Show in the button the image and the text of a specific item
+	 * 
+	 * @param item item from where the image and the text to show in the button are taken.
+	 * Can not be null and it can be an element external to the items list.
+	 */
+	public void select(ComboItem item) {
+		dropDownHandle.setText(item.getText());
+		dropDownHandle.setImage(item.getImage());
 	}
 
 	/**

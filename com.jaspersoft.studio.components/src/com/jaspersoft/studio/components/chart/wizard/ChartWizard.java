@@ -99,7 +99,7 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 		if (chart != null)
 			chart.setJasperConfiguration(jConfig);
 	}
-
+	
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext=expContext;
 		if(step1!=null){

@@ -27,6 +27,8 @@ public class Messages extends NLS {
 	public static String AFileResourcePage_filetabitem;
 	public static String AFileResourcePage_selectresourcefile;
 	public static String AFileResourcePage_uploadfile;
+	public static String AFileResourcePageContent_upDownButtonTitle;
+	public static String AFileResourcePageContent_uploadFromFS;
 	public static String AResourcePage_creationdate;
 	public static String AResourcePage_description;
 	public static String AResourcePage_id;
@@ -65,6 +67,7 @@ public class Messages extends NLS {
 	public static String Common_ErrSecurePrefStorage;
 	public static String InputControlPageContent_boolean;
 	public static String InputControlPageContent_singleValue;
+	public static String JrxmlPageContent_uploadFromRepo;
 	public static String JrxmlPublishAction_defaultresourcelabel;
 	public static String JrxmlPublishAction_defaultresourcename;
 	public static String JrxmlPublishAction_jobname;

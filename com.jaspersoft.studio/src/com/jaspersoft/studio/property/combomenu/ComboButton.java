@@ -713,6 +713,7 @@ public class ComboButton extends Viewer {
 		GC gc = new GC(UIUtils.getDisplay());
 		try {
 			gc.setFont(UIUtils.getDisplay().getSystemFont());
+			gc.getFont().getFontData()[0].setStyle(SWT.BOLD);
 			size = gc.stringExtent(text.concat("  "));
 		} finally {
 			gc.dispose();

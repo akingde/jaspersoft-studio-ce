@@ -47,6 +47,7 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 	private DatasetSeriesWidget eDatasetSeries;
 	private JasperReportsConfiguration jrContext;
 	private ExpressionContext expContext;
+	private Composite composite;
 
 	protected ChartDataPage(JRDesignElement jrChart,
 			JRDesignElementDataset edataset,
@@ -68,7 +69,7 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 	}
 	
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
 		setControl(composite);
 
@@ -81,12 +82,15 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 				eDatasetSeries.setExpressionContext(getExpressionContextFromDSRun());
 			}
 		});
+		composite.layout();
 	}
 
 	public void updateData() {
 		eDatasetSeries.setDataset(jrContext.getJasperDesign(), jrChart,
 				edataset);
 		ewDataset.setDataset(edataset, jrContext.getJasperDesign());
+		//It is necessary a layout to because the changing in the image can resize the other elements
+		composite.layout();
 	}
 
 	@Override

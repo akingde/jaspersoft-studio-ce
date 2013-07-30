@@ -365,4 +365,13 @@
    <context id="editVirtualDatasource" title="Edit Virtual Datasource">
       <description>A virtual data source is an artifact that combines one or more physical data sources together to provide for easy data integration. The physical sources can be JDBC sources, delimited text files, spreadsheets, or even Web services. In this dialog you can add other datasources on the server inside the virtual datasource, or you can remove from the virtual datasource any datasource inside it</description>
    </context>
+      <context id="editVirtualDatasource" title="Edit Virtual Datasource">
+      <description>A virtual data source is an artifact that combines one or more physical data sources together to provide for easy data integration. The physical sources can be JDBC sources, delimited text files, spreadsheets, or even Web services. In this dialog you can add other datasources on the server inside the virtual datasource, or you can remove from the virtual datasource any datasource inside it</description>
+   </context>   
+   <context id="editOtherSection" title="Define the section Other">
+      <description>The slice "Other" contains the sum of all the slices with a percentage value less then of the allowed minimum. In this dialog you can define the label and the key of this special slice and eventually and hyperlink for it</description>
+   </context>
+   <context id="createHyperlinkSection" title="Definition of an Hyperlink">
+      <description>In this dialog you can set an Hyperlink to the value represented in the chart, allowing the user to click the chart to open a web page or drill down the report. The clickable area depends on the chart type.</description>
+   </context>
 </contexts>

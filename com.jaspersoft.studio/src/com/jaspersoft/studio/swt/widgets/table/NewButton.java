@@ -56,7 +56,7 @@ public class NewButton {
 			}
 			int index = -1;
 			if (!s.isEmpty())
-				index = inlist.indexOf(s.getFirstElement());
+				index = inlist.indexOf(s.getFirstElement())+1;
 			Object selement = newElement.newElement(inlist, index);
 			if (selement != null) {
 				if (selement instanceof Object[]) {
