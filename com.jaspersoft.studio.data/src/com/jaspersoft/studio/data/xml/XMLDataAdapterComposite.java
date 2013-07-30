@@ -82,6 +82,8 @@ public class XMLDataAdapterComposite extends AFileDataAdapterComposite {
 		gl_composite.marginHeight = 0;
 		composite.setLayout(gl_composite);
 
+		createFileNameWidgets(composite);
+
 		supportsNamespaces = new Button(this, SWT.CHECK);
 		supportsNamespaces.setText(Messages.XMLDataAdapterComposite_NamespacesSupport);
 		supportsNamespaces.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
