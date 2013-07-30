@@ -37,9 +37,7 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
 public class XLSFieldsProvider implements IFieldsProvider {
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
@@ -48,23 +46,18 @@ public class XLSFieldsProvider implements IFieldsProvider {
 
 		JRXlsDataSource ds = null;
 
-		XlsDataAdapter da = (XlsDataAdapter) ((AbstractDataAdapterService) con)
-				.getDataAdapter();
+		XlsDataAdapter da = (XlsDataAdapter) ((AbstractDataAdapterService) con).getDataAdapter();
 		if (da.isQueryExecuterMode()) {
-			JRXlsQueryExecuter qe = (JRXlsQueryExecuter) new JRXlsQueryExecuterFactory()
-					.createQueryExecuter(jConfig, reportDataset,
-							ParameterUtil.convertMap(parameters));
+			JRXlsQueryExecuter qe = (JRXlsQueryExecuter) new JRXlsQueryExecuterFactory().createQueryExecuter(jConfig, reportDataset, ParameterUtil.convertMap(parameters, reportDataset));
 			ds = (JRXlsDataSource) qe.createDatasource();
 		} else {
-			ds = (JRXlsDataSource) parameters
-					.get(JRParameter.REPORT_DATA_SOURCE);
+			ds = (JRXlsDataSource) parameters.get(JRParameter.REPORT_DATA_SOURCE);
 		}
 		if (ds != null) {
 			ds.setUseFirstRowAsHeader(da.isUseFirstRowAsHeader());
 			ds.next();
 			Map<String, Integer> map = ds.getColumnNames();
-			List<JRDesignField> columns = new ArrayList<JRDesignField>(map
-					.keySet().size());
+			List<JRDesignField> columns = new ArrayList<JRDesignField>(map.keySet().size());
 			for (String key : map.keySet()) {
 				JRDesignField field = new JRDesignField();
 				field.setName(key);

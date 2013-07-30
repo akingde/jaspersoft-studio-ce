@@ -40,9 +40,7 @@ public class MondrianFieldsProvider implements IFieldsProvider {
 	}
 
 	@Override
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		con.contributeParameters(parameters);
 
@@ -51,15 +49,12 @@ public class MondrianFieldsProvider implements IFieldsProvider {
 
 		// JasperReports query executer instances require
 		// REPORT_PARAMETERS_MAP parameter to be defined and not null
-		Map<String, JRValueParameter> tmpMap = ParameterUtil
-				.convertMap(parameters);
-		tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(
-				new HashMap<String, JRValueParameter>()));
+		Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(parameters, jDataset);
+		tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String, JRValueParameter>()));
 
-		JRMondrianQueryExecuter qe = new JRMondrianQueryExecuter(jConfig,
-				jDataset, tmpMap);
+		JRMondrianQueryExecuter qe = new JRMondrianQueryExecuter(jConfig, jDataset, tmpMap);
 		qe.createDatasource();
-		
+
 		// FIXME - We need to implement this!
 		return null;
 	}

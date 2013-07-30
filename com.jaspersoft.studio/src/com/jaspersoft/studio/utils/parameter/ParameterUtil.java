@@ -73,11 +73,17 @@ public class ParameterUtil {
 		return "";
 	}
 
-	public static Map<String, JRValueParameter> convertMap(Map<String, ?> inmap) {
+	public static Map<String, JRValueParameter> convertMap(Map<String, ?> inmap, JRDataset dataset) {
 		Map<String, JRValueParameter> outmap = new HashMap<String, JRValueParameter>();
 		for (String key : inmap.keySet())
 			outmap.put(key, new SimpleValueParameter(inmap.get(key)));
-
+		for (JRParameter p : dataset.getParameters()) {
+			SimpleValueParameter svp = new SimpleValueParameter(inmap.get(p.getName()));
+			if (inmap.get(p.getName()) == null)
+				svp.setValueClass(p.getValueClass());
+			outmap.put(p.getName(), svp);
+		}
+		outmap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(inmap));
 		return outmap;
 	}
 }

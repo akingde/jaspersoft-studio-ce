@@ -27,7 +27,9 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.query.JRCsvQueryExecuter;
 import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
 
@@ -37,9 +39,7 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
 public class CSVFieldsProvider implements IFieldsProvider {
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
@@ -48,16 +48,17 @@ public class CSVFieldsProvider implements IFieldsProvider {
 
 		JRCsvDataSource ds = null;
 
-		CsvDataAdapter da = (CsvDataAdapter) ((AbstractDataAdapterService) con)
-				.getDataAdapter();
+		CsvDataAdapter da = (CsvDataAdapter) ((AbstractDataAdapterService) con).getDataAdapter();
 		if (da.isQueryExecuterMode()) {
-			JRCsvQueryExecuter qe = (JRCsvQueryExecuter) new JRCsvQueryExecuterFactory()
-					.createQueryExecuter(jConfig, reportDataset,
-							ParameterUtil.convertMap(parameters));
+			if (reportDataset.getQuery() == null) {
+				JRDesignQuery query = new JRDesignQuery();
+				query.setLanguage("csv");
+				((JRDesignDataset) reportDataset).setQuery(query);
+			}
+			JRCsvQueryExecuter qe = (JRCsvQueryExecuter) new JRCsvQueryExecuterFactory().createQueryExecuter(jConfig, reportDataset, ParameterUtil.convertMap(parameters, reportDataset));
 			ds = (JRCsvDataSource) qe.createDatasource();
 		} else {
-			ds = (JRCsvDataSource) parameters
-					.get(JRParameter.REPORT_DATA_SOURCE);
+			ds = (JRCsvDataSource) parameters.get(JRParameter.REPORT_DATA_SOURCE);
 		}
 		List<JRDesignField> columns = new ArrayList<JRDesignField>();
 		if (da.getColumnNames() != null && !da.getColumnNames().isEmpty()) {

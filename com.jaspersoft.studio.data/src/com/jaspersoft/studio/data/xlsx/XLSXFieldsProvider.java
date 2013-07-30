@@ -37,9 +37,7 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
 public class XLSXFieldsProvider implements IFieldsProvider {
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
@@ -48,23 +46,18 @@ public class XLSXFieldsProvider implements IFieldsProvider {
 
 		JRXlsxDataSource ds = null;
 
-		XlsxDataAdapter da = (XlsxDataAdapter) ((AbstractDataAdapterService) con)
-				.getDataAdapter();
+		XlsxDataAdapter da = (XlsxDataAdapter) ((AbstractDataAdapterService) con).getDataAdapter();
 		if (da.isQueryExecuterMode()) {
-			JRXlsxQueryExecuter qe = (JRXlsxQueryExecuter) new JRXlsxQueryExecuterFactory()
-					.createQueryExecuter(jConfig, reportDataset,
-							ParameterUtil.convertMap(parameters));
+			JRXlsxQueryExecuter qe = (JRXlsxQueryExecuter) new JRXlsxQueryExecuterFactory().createQueryExecuter(jConfig, reportDataset, ParameterUtil.convertMap(parameters, reportDataset));
 			ds = (JRXlsxDataSource) qe.createDatasource();
 		} else {
-			ds = (JRXlsxDataSource) parameters
-					.get(JRParameter.REPORT_DATA_SOURCE);
+			ds = (JRXlsxDataSource) parameters.get(JRParameter.REPORT_DATA_SOURCE);
 		}
 		if (ds != null) {
 			ds.setUseFirstRowAsHeader(da.isUseFirstRowAsHeader());
 			ds.next();
 			Map<String, Integer> map = ds.getColumnNames();
-			List<JRDesignField> columns = new ArrayList<JRDesignField>(map
-					.keySet().size());
+			List<JRDesignField> columns = new ArrayList<JRDesignField>(map.keySet().size());
 			for (String key : map.keySet()) {
 				JRDesignField field = new JRDesignField();
 				field.setName(key);
