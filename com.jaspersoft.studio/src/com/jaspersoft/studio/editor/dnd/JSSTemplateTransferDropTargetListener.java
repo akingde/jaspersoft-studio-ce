@@ -217,7 +217,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 			
 			createLabelForField(command);
 			
-			if(command instanceof DialogEnabledCommand){
+			if(command instanceof DialogEnabledCommand && command.canExecute()){
 				// If we have a special command that supports dialog (i.e: image creation)
 				// we'll show the popup dialog and continue with creation only if
 				// the user has confirmed.

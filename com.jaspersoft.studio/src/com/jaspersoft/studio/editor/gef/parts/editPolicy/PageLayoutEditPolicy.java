@@ -57,7 +57,7 @@ import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -292,7 +292,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 					constraint.setLocation(x, y);
 				} else if (parent instanceof MGraphicElement) {
 					// Parent is a graphical element, check if it's a container
-					if (!(parent instanceof IContainer)) {
+					if (!(parent instanceof IContainerLayout)) {
 						IGraphicElement container = searchParent(parent);
 						int x = constraint.x - container.getBounds().x;
 						int y = constraint.y - container.getBounds().y;

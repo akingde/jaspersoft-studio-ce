@@ -12,6 +12,7 @@ package com.jaspersoft.studio.model.command;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;
@@ -29,6 +30,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
@@ -172,21 +174,31 @@ public class CreateElementCommand extends Command {
 	 *          the index
 	 */
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
-		this.jConfig = destNode.getJasperConfiguration();
-		this.srcNode = srcNode;
-		this.jasperDesign = destNode.getJasperDesign();
-		this.jrElement = (JRDesignElement) srcNode.getValue();
-		if (destNode instanceof IGroupElement)
-			jrGroup = ((IGroupElement) destNode).getJRElementGroup();
-		else
-			jrGroup = (JRElementGroup) destNode.getValue();
-		destValue = destNode.getValue();
-		this.destNode = destNode;
-		this.index = index;
-		if (destNode instanceof IGraphicElementContainer)
-			d = ((IGraphicElementContainer) destNode).getSize();
-		if (destNode instanceof IContainerLayout)
-			pholder = ((IContainerLayout) destNode).getPropertyHolder();
+		if (destNode != null){
+			this.jConfig = destNode.getJasperConfiguration();
+			this.srcNode = srcNode;
+			this.jasperDesign = destNode.getJasperDesign();
+			this.jrElement = (JRDesignElement) srcNode.getValue();
+			if (destNode instanceof IGroupElement)
+				jrGroup = ((IGroupElement) destNode).getJRElementGroup();
+			else
+				jrGroup = (JRElementGroup) destNode.getValue();
+			destValue = destNode.getValue();
+			this.destNode = destNode;
+			this.index = index;
+			if (destNode instanceof IGraphicElementContainer)
+				d = ((IGraphicElementContainer) destNode).getSize();
+			if (destNode instanceof IContainerLayout)
+				pholder = ((IContainerLayout) destNode).getPropertyHolder();
+		} else {
+			this.destNode = null;
+			MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the element", "The element can not be created because there aren't container where it can be placed");
+		}
+	}
+	
+	@Override
+	public boolean canExecute() {
+		return destNode != null;
 	}
 
 	private Dimension d;
