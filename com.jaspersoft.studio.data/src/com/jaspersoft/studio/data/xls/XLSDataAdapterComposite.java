@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
@@ -623,8 +624,19 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 			if (jConfig == null)
 				jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
+			 ((AbstractDataAdapterService) das).getDataAdapter();
 			jConfig.setJasperDesign(new JasperDesign());
+			
+			//The get fields method call once a next on the data adapter to get the first line and from that is read the
+			//fields name. But is useFirstRowAsHeader flag is set to false than the next call will skip the first line
+			//that is the only one read to get the fields, so it will return an empty set of column names. For this 
+			//reason this flag must be force to true if the data adapter is used to get the column names
+			XlsDataAdapter xlsAdapter = (XlsDataAdapter)da.getDataAdapter();
+			boolean useRowHeader = xlsAdapter.isUseFirstRowAsHeader();
+			xlsAdapter.setUseFirstRowAsHeader(true);
 			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, new JRDesignDataset(false));
+			xlsAdapter.setUseFirstRowAsHeader(useRowHeader);
+			
 			rows.clear();
 			int columnIndex = 0;
 			for (JRDesignField f : fields) {
@@ -637,6 +649,7 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 			btnDelete.setEnabled(true);
 		}
 	}
+
 
 	@Override
 	public void dispose() {
@@ -697,6 +710,6 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.xlsx", "*.*" };
+		return new String[] { "*.xls", "*.*" };
 	}
 }
