@@ -12,10 +12,12 @@ import com.jaspersoft.studio.data.sql.TableOrAlias;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OrTableImpl;
+import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.utils.Misc;
@@ -36,27 +38,54 @@ public class ConvertTables {
 	private static void doTables(SQLQueryDesigner designer, MFrom mfrom, FromTable ftbl) {
 		TableOrAlias t = ftbl.getTable();
 		if (t.getTfull() != null) {
-			MRoot dbroot = designer.getDbMetadata().getRoot();
-
-			MSqlTable msqlt = getTable(dbroot, t.getTfull());
-			MFromTable mft = new MFromTable(mfrom, msqlt);
+			MFromTable mft = getFromTable(t, mfrom, designer);
 			if (t.getTblAlias() != null)
 				mft.setAlias(t.getTblAlias().getDbname());
 			mft.setAliasKeyword(Misc.nvl(t.getAlias(), " "));
 			if (ftbl.getFjoin() != null) {
 				for (FromTableJoin ftj : ftbl.getFjoin()) {
 					TableOrAlias onTbl = ftj.getOnTable();
-					MSqlTable msqljt = getTable(dbroot, ftj.getOnTable().getTfull());
-					MFromTableJoin mftj = new MFromTableJoin(mft, msqljt);
+					MFromTableJoin mftj = getFromTableJoin(onTbl, mft, designer);
+
 					if (onTbl.getTblAlias() != null)
 						mftj.setAlias(onTbl.getTblAlias().getDbname());
 					mftj.setJoin(ftj.getJoin().getLiteral());
 					mftj.setAliasKeyword(Misc.nvl(onTbl.getAlias(), " "));
 
-					new ConvertExpression().convertExpression(designer, mfrom.getParent(), mftj, ftj.getJoinExpr());
+					ConvertExpression.convertExpression(designer, mfrom.getParent(), mftj, ftj.getJoinExpr());
 				}
 			}
 		}
+	}
+
+	private static MFromTableJoin getFromTableJoin(TableOrAlias t, MFromTable mfrom, SQLQueryDesigner designer) {
+		MFromTableJoin mft = null;
+		if (t.getSq() != null) {
+			MQueryTable mqt = new MQueryTable(null);
+			mft = new MFromTableJoin(mfrom, mqt);
+			mqt.setSubquery(Util.createSelect(mft));
+			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq().getSel());
+		} else {
+			MRoot dbroot = designer.getDbMetadata().getRoot();
+			MSqlTable msqlt = getTable(dbroot, t.getTfull());
+			mft = new MFromTableJoin(mfrom, msqlt);
+		}
+		return mft;
+	}
+
+	private static MFromTable getFromTable(TableOrAlias t, MFrom mfrom, SQLQueryDesigner designer) {
+		MFromTable mft = null;
+		if (t.getSq() != null) {
+			MQueryTable mqt = new MQueryTable(null);
+			mft = new MFromTable(mfrom, mqt);
+			mqt.setSubquery(Util.createSelect(mft));
+			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq().getSel());
+		} else {
+			MRoot dbroot = designer.getDbMetadata().getRoot();
+			MSqlTable msqlt = getTable(dbroot, t.getTfull());
+			mft = new MFromTable(mfrom, msqlt);
+		}
+		return mft;
 	}
 
 	private static MSqlTable getTable(MRoot dbroot, TableFull tf) {

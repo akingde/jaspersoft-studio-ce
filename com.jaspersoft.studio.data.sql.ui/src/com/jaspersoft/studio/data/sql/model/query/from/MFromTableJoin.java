@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
@@ -68,13 +69,18 @@ public class MFromTableJoin extends MFromTable {
 
 	@Override
 	public String getDisplayText() {
-		return " " + join + " " + super.getDisplayText() + " ON ";
+		String s = " " + join + " ";
+		if (getValue() instanceof MQueryTable)
+			return s + "(";
+		return s + super.getDisplayText() + " ON ";
 	}
 
 	@Override
 	public StyledString getStyledDisplayText() {
 		StyledString dt = new StyledString(join + " ", FontUtils.KEYWORDS_STYLER);
 		String tbltext = super.getDisplayText();
+		if (getValue() instanceof MQueryTable)
+			return dt.append("(");
 		int ind = (join + " " + tbltext).indexOf(" AS ");
 		dt.append(tbltext);
 		if (ind >= 0)

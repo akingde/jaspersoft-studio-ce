@@ -24,6 +24,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 
 public class MFromTable extends AMQueryAliased<MSqlTable> {
@@ -35,6 +36,14 @@ public class MFromTable extends AMQueryAliased<MSqlTable> {
 
 	public MFromTable(ANode parent, MSqlTable value, int index) {
 		super(parent, value, null, index);
+	}
+
+	@Override
+	public String toSQLString() {
+		String sql = super.toSQLString();
+		if (getValue() instanceof MQueryTable)
+			return "(";
+		return sql;
 	}
 
 	@Override

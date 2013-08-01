@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
@@ -35,8 +37,13 @@ public class MExpression extends AMExpression<Object> {
 	@Override
 	public String getDisplayText() {
 		String dt = "";
-		if (!isFirst())
-			dt += prevCond + " ";
+		if (!isFirst()) {
+			if (getParent() instanceof MFromTableJoin && getParent().getValue() instanceof MQueryTable) {
+				MFromTableJoin mftj = (MFromTableJoin) getParent();
+				dt += ") " + mftj.addAlias() + " ON ";
+			} else
+				dt += prevCond + " ";
+		}
 		String[] ops = null;
 		if (operator.getNrOperands() > 3) {
 			ops = new String[] { "", "" };
@@ -61,8 +68,17 @@ public class MExpression extends AMExpression<Object> {
 	public StyledString getStyledDisplayText() {
 		String dt = getDisplayText();
 		StyledString ss = new StyledString(dt);
-		if (!isFirst())
-			ss.setStyle(0, (prevCond + " ").length(), FontUtils.KEYWORDS_STYLER);
+		if (!isFirst()) {
+			if (getParent() instanceof MFromTableJoin && getParent().getValue() instanceof MQueryTable) {
+				int ind = dt.indexOf(" AS ");
+				if (ind >= 0)
+					ss.setStyle(ind, " AS ".length(), FontUtils.KEYWORDS_STYLER);
+				ind = (dt).indexOf(" ON ");
+				if (ind >= 0)
+					ss.setStyle(ind, " ON ".length(), FontUtils.KEYWORDS_STYLER);
+			} else
+				ss.setStyle(0, (prevCond + " ").length(), FontUtils.KEYWORDS_STYLER);
+		}
 		if (operator.getNrOperands() != 2 || (operator.getNrOperands() == 2 && operator == Operator.LIKE)) {
 			String sqlname = " " + operator.getSqlname() + " ";
 			ss.setStyle(dt.indexOf(sqlname), sqlname.length(), FontUtils.KEYWORDS_STYLER);

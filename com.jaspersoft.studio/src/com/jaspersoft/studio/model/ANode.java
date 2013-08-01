@@ -286,14 +286,16 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		// event
 		child.setJasperConfiguration(getJasperConfiguration());
 		child.setParent(null, -1);
-		getChildren().remove(child);
+		if (children != null)
+			children.remove(child);
 	}
 
 	/**
 	 * Removes the children.
 	 */
 	public void removeChildren() {
-		removeChildren(getChildren());
+		if (children != null)
+			removeChildren(children);
 	}
 
 	/**

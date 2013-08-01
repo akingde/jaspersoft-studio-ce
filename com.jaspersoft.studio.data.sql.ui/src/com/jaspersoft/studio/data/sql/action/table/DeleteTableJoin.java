@@ -63,13 +63,16 @@ public class DeleteTableJoin extends AAction {
 		return mcol;
 	}
 
-	protected MFromTable doDelete(MFromTableJoin mcol) {
-		MFromTable mtbl = new MFromTable(mcol.getParent().getParent(), mcol.getValue());
-		mtbl.setAlias(mcol.getAlias());
-		mtbl.setAliasKeyword(mcol.getAliasKeyword());
+	protected MFromTable doDelete(MFromTableJoin mftj) {
+		MFromTable mtbl = new MFromTable(mftj.getParent().getParent(), mftj.getValue());
+		mtbl.setAlias(mftj.getAlias());
+		mtbl.setAliasKeyword(mftj.getAliasKeyword());
 
-		mcol.setParent(null, -1);
-		Util.cleanTableVersions(mtbl, mcol);
+		mftj.setParent(null, -1);
+
+		Util.copySubQuery(mftj, mtbl);
+
+		Util.cleanTableVersions(mtbl, mftj);
 
 		selectInTree(mtbl);
 		return mtbl;

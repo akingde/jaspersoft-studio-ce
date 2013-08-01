@@ -30,6 +30,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -48,7 +49,16 @@ public class JoinTable extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		return element instanceof MFromTable && !(element instanceof MFromTableJoin) && Util.getKeyword(element, MFrom.class).getChildren().size() > 1;
+		boolean b = element instanceof MFromTable && !(element instanceof MFromTableJoin);
+		if (b) {
+			MFrom mfrom = null;
+			if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
+				mfrom = Util.getKeyword(element.getParent(), MFrom.class);
+			else
+				mfrom = Util.getKeyword(element, MFrom.class);
+			b = b && mfrom.getChildren().size() > 1;
+		}
+		return b;
 	}
 
 	@Override
@@ -80,6 +90,8 @@ public class JoinTable extends AAction {
 		mtbljoin.setAlias(srcTbl.getAlias());
 		mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
 
+		Util.copySubQuery(srcTbl, mtbljoin);
+
 		MExpression mexpr = new MExpression(mtbljoin, src, -1);
 		mexpr.getOperands().add(new FieldOperand(src, mtbljoin, mexpr));
 		mexpr.getOperands().add(new FieldOperand(dest, destTbl, mexpr));
@@ -102,7 +114,7 @@ public class JoinTable extends AAction {
 		ANode p = mcol.getParent();
 		if (p instanceof MFromTableJoin)
 			p = p.getParent();
-		String ft = dialog.getFromTable();
+		String ft = dialog.getFromTable().replace(",", "").trim();
 		MFromTable mtab = null;
 		for (INode n : p.getChildren()) {
 			if (n instanceof MFromTable && ((MFromTable) n).getDisplayText().equals(ft)) {

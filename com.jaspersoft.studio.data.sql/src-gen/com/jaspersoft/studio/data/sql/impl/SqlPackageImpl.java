@@ -769,9 +769,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getTableOrAlias_Sq()
+  {
+    return (EReference)tableOrAliasEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getTableOrAlias_Alias()
   {
-    return (EAttribute)tableOrAliasEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)tableOrAliasEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -781,7 +791,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getTableOrAlias_TblAlias()
   {
-    return (EReference)tableOrAliasEClass.getEStructuralFeatures().get(2);
+    return (EReference)tableOrAliasEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1700,6 +1710,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     tableOrAliasEClass = createEClass(TABLE_OR_ALIAS);
     createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__TFULL);
+    createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__SQ);
     createEAttribute(tableOrAliasEClass, TABLE_OR_ALIAS__ALIAS);
     createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__TBL_ALIAS);
 
@@ -1908,6 +1919,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(tableOrAliasEClass, TableOrAlias.class, "TableOrAlias", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTableOrAlias_Tfull(), this.getTableFull(), null, "tfull", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTableOrAlias_Sq(), this.getSubQueryOperand(), null, "sq", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTableOrAlias_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTableOrAlias_TblAlias(), this.getDbObjectName(), null, "tblAlias", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

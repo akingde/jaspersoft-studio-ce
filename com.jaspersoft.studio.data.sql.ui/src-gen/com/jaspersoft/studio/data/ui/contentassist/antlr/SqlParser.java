@@ -40,6 +40,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSelectSubSetAccess().getOpAlternatives_0_0(), "rule__SelectSubSet__OpAlternatives_0_0");
 					put(grammarAccess.getColumnOrAliasAccess().getAlternatives(), "rule__ColumnOrAlias__Alternatives");
 					put(grammarAccess.getColumnOrAliasAccess().getAlternatives_0_0(), "rule__ColumnOrAlias__Alternatives_0_0");
+					put(grammarAccess.getTableOrAliasAccess().getAlternatives_0(), "rule__TableOrAlias__Alternatives_0");
 					put(grammarAccess.getOrderByColumnFullAccess().getDirectionAlternatives_1_0(), "rule__OrderByColumnFull__DirectionAlternatives_1_0");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAlternatives_0_0(), "rule__ExpressionFragmentSecond__CAlternatives_0_0");
 					put(grammarAccess.getExpressionFragmentAccess().getAlternatives(), "rule__ExpressionFragment__Alternatives");
@@ -136,7 +137,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFromTableJoinAccess().getJoinAssignment_0(), "rule__FromTableJoin__JoinAssignment_0");
 					put(grammarAccess.getFromTableJoinAccess().getOnTableAssignment_1(), "rule__FromTableJoin__OnTableAssignment_1");
 					put(grammarAccess.getFromTableJoinAccess().getJoinExprAssignment_3(), "rule__FromTableJoin__JoinExprAssignment_3");
-					put(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0(), "rule__TableOrAlias__TfullAssignment_0");
+					put(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0_0(), "rule__TableOrAlias__TfullAssignment_0_0");
+					put(grammarAccess.getTableOrAliasAccess().getSqAssignment_0_1(), "rule__TableOrAlias__SqAssignment_0_1");
 					put(grammarAccess.getTableOrAliasAccess().getAliasAssignment_1(), "rule__TableOrAlias__AliasAssignment_1");
 					put(grammarAccess.getTableOrAliasAccess().getTblAliasAssignment_2(), "rule__TableOrAlias__TblAliasAssignment_2");
 					put(grammarAccess.getTableFullAccess().getEntriesAssignment_1_1_1(), "rule__TableFull__EntriesAssignment_1_1_1");

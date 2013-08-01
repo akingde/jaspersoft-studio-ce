@@ -872,10 +872,10 @@ ruleTableOrAlias returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-((
+(((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0_0()); 
 	    }
 		lv_tfull_0_0=ruleTableFull		{
 	        if ($current==null) {
@@ -890,19 +890,38 @@ ruleTableOrAlias returns [EObject current=null]
 	    }
 
 )
-)(
+)
+    |(
 (
-		lv_alias_1_0=
+		{ 
+	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getSqSubQueryOperandParserRuleCall_0_1_0()); 
+	    }
+		lv_sq_1_0=ruleSubQueryOperand		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTableOrAliasRule());
+	        }
+       		set(
+       			$current, 
+       			"sq",
+        		lv_sq_1_0, 
+        		"SubQueryOperand");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))(
+(
+		lv_alias_2_0=
 	KEYWORD_18
     {
-        newLeafNode(lv_alias_1_0, grammarAccess.getTableOrAliasAccess().getAliasASKeyword_1_0());
+        newLeafNode(lv_alias_2_0, grammarAccess.getTableOrAliasAccess().getAliasASKeyword_1_0());
     }
 
 	    {
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getTableOrAliasRule());
 	        }
-       		setWithLastConsumed($current, "alias", lv_alias_1_0, "AS");
+       		setWithLastConsumed($current, "alias", lv_alias_2_0, "AS");
 	    }
 
 )
@@ -911,14 +930,14 @@ ruleTableOrAlias returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getTableOrAliasAccess().getTblAliasDbObjectNameParserRuleCall_2_0()); 
 	    }
-		lv_tblAlias_2_0=ruleDbObjectName		{
+		lv_tblAlias_3_0=ruleDbObjectName		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTableOrAliasRule());
 	        }
        		set(
        			$current, 
        			"tblAlias",
-        		lv_tblAlias_2_0, 
+        		lv_tblAlias_3_0, 
         		"DbObjectName");
 	        afterParserOrEnumRuleCall();
 	    }

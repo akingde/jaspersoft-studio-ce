@@ -72,6 +72,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//TableOrAlias">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tfull"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/sq"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//TableOrAlias/alias"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tblAlias"/>
     </genClasses>

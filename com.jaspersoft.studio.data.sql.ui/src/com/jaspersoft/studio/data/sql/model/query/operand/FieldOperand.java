@@ -55,7 +55,7 @@ public class FieldOperand extends AOperand {
 	@Override
 	public String toSQLString() {
 		if (column == null)
-			return "";
+			return "___";
 		StringBuffer ss = new StringBuffer();
 		if (fromTable.getAlias() != null && !fromTable.getAlias().trim().isEmpty())
 			ss.append(fromTable.getAlias());

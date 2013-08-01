@@ -4,6 +4,7 @@ package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.DbObjectName;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.SubQueryOperand;
 import com.jaspersoft.studio.data.sql.TableFull;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
 
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl#getTfull <em>Tfull</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl#getSq <em>Sq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.TableOrAliasImpl#getTblAlias <em>Tbl Alias</em>}</li>
  * </ul>
@@ -42,6 +44,16 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
    * @ordered
    */
   protected TableFull tfull;
+
+  /**
+   * The cached value of the '{@link #getSq() <em>Sq</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSq()
+   * @generated
+   * @ordered
+   */
+  protected SubQueryOperand sq;
 
   /**
    * The default value of the '{@link #getAlias() <em>Alias</em>}' attribute.
@@ -147,6 +159,54 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
    * <!-- end-user-doc -->
    * @generated
    */
+  public SubQueryOperand getSq()
+  {
+    return sq;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetSq(SubQueryOperand newSq, NotificationChain msgs)
+  {
+    SubQueryOperand oldSq = sq;
+    sq = newSq;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_OR_ALIAS__SQ, oldSq, newSq);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSq(SubQueryOperand newSq)
+  {
+    if (newSq != sq)
+    {
+      NotificationChain msgs = null;
+      if (sq != null)
+        msgs = ((InternalEObject)sq).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_OR_ALIAS__SQ, null, msgs);
+      if (newSq != null)
+        msgs = ((InternalEObject)newSq).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.TABLE_OR_ALIAS__SQ, null, msgs);
+      msgs = basicSetSq(newSq, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.TABLE_OR_ALIAS__SQ, newSq, newSq));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getAlias()
   {
     return alias;
@@ -225,6 +285,8 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
     {
       case SqlPackage.TABLE_OR_ALIAS__TFULL:
         return basicSetTfull(null, msgs);
+      case SqlPackage.TABLE_OR_ALIAS__SQ:
+        return basicSetSq(null, msgs);
       case SqlPackage.TABLE_OR_ALIAS__TBL_ALIAS:
         return basicSetTblAlias(null, msgs);
     }
@@ -243,6 +305,8 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
     {
       case SqlPackage.TABLE_OR_ALIAS__TFULL:
         return getTfull();
+      case SqlPackage.TABLE_OR_ALIAS__SQ:
+        return getSq();
       case SqlPackage.TABLE_OR_ALIAS__ALIAS:
         return getAlias();
       case SqlPackage.TABLE_OR_ALIAS__TBL_ALIAS:
@@ -263,6 +327,9 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
     {
       case SqlPackage.TABLE_OR_ALIAS__TFULL:
         setTfull((TableFull)newValue);
+        return;
+      case SqlPackage.TABLE_OR_ALIAS__SQ:
+        setSq((SubQueryOperand)newValue);
         return;
       case SqlPackage.TABLE_OR_ALIAS__ALIAS:
         setAlias((String)newValue);
@@ -287,6 +354,9 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
       case SqlPackage.TABLE_OR_ALIAS__TFULL:
         setTfull((TableFull)null);
         return;
+      case SqlPackage.TABLE_OR_ALIAS__SQ:
+        setSq((SubQueryOperand)null);
+        return;
       case SqlPackage.TABLE_OR_ALIAS__ALIAS:
         setAlias(ALIAS_EDEFAULT);
         return;
@@ -309,6 +379,8 @@ public class TableOrAliasImpl extends MinimalEObjectImpl.Container implements Ta
     {
       case SqlPackage.TABLE_OR_ALIAS__TFULL:
         return tfull != null;
+      case SqlPackage.TABLE_OR_ALIAS__SQ:
+        return sq != null;
       case SqlPackage.TABLE_OR_ALIAS__ALIAS:
         return ALIAS_EDEFAULT == null ? alias != null : !ALIAS_EDEFAULT.equals(alias);
       case SqlPackage.TABLE_OR_ALIAS__TBL_ALIAS:

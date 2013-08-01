@@ -20,6 +20,8 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
@@ -33,8 +35,13 @@ public class MExpressionGroup extends AMKeyword {
 	@Override
 	public String getDisplayText() {
 		String str = "";
-		if (!isFirst())
-			str += super.getDisplayText();
+		if (!isFirst()) {
+			if (getParent() instanceof MFromTableJoin && getParent().getValue() instanceof MQueryTable) {
+				MFromTableJoin mftj = (MFromTableJoin) getParent();
+				str += ") " + mftj.addAlias() + " ON ";
+			} else
+				str += super.getDisplayText();
+		}
 		str += " (";
 		if (getChildren().isEmpty())
 			str += ")";

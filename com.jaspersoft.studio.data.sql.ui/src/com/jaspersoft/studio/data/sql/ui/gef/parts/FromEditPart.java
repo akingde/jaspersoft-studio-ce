@@ -31,6 +31,7 @@ import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.ui.gef.layout.GraphLayoutManager;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.FromContainerEditPolicy;
 import com.jaspersoft.studio.model.ANode;
@@ -72,7 +73,10 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 				if (n instanceof MUnion || n instanceof ISubQuery)
 					return false;
 				if (n instanceof MFromTable)
-					list.add((ANode) n);
+					if (n.getValue() instanceof MQueryTable)
+						return false;
+					else
+						list.add((ANode) n);
 				return true;
 			}
 		};

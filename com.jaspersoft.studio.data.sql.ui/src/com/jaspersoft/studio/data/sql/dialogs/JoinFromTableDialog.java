@@ -99,10 +99,12 @@ public class JoinFromTableDialog extends ATitledDialog {
 		if (srcTable instanceof MFromTableJoin)
 			parent = parent.getParent();
 		List<String> lst = new ArrayList<String>();
-		for (INode s : parent.getChildren())
+		for (INode s : parent.getChildren()) {
+			if (srcTable == s)
+				continue;
 			if (!s.getDisplayText().equals(srcTable.toSQLString()))
 				lst.add(s.getDisplayText());
-
+		}
 		return lst.toArray(new String[lst.size()]);
 	}
 

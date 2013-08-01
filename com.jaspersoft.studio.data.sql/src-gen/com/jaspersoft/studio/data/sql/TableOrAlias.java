@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getTfull <em>Tfull</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getSq <em>Sq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.TableOrAlias#getTblAlias <em>Tbl Alias</em>}</li>
  * </ul>
@@ -49,6 +50,32 @@ public interface TableOrAlias extends EObject
    * @generated
    */
   void setTfull(TableFull value);
+
+  /**
+   * Returns the value of the '<em><b>Sq</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Sq</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Sq</em>' containment reference.
+   * @see #setSq(SubQueryOperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getTableOrAlias_Sq()
+   * @model containment="true"
+   * @generated
+   */
+  SubQueryOperand getSq();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getSq <em>Sq</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Sq</em>' containment reference.
+   * @see #getSq()
+   * @generated
+   */
+  void setSq(SubQueryOperand value);
 
   /**
    * Returns the value of the '<em><b>Alias</b></em>' attribute.

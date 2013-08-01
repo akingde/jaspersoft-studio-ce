@@ -42,6 +42,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.BottomAnchor;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.TopAnchor;
@@ -93,11 +94,6 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 				set.put(msc.getValue().getValue(), msc);
 			}
 		}
-		// for (String col : set) {
-		// CheckBox cb = cbMap.get(col);
-		// cb.setSelected(set.contains(((Label)
-		// cb.getChildren().get(0)).getText()));
-		// }
 		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
 		Point location = f.getLocation();
 		Rectangle constraint = new Rectangle(location.x, location.y, -1, -1);
@@ -146,16 +142,29 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List getModelSourceConnections() {
-		if (getModel().getTableJoins() != null && !getModel().getTableJoins().isEmpty())
-			return getModel().getTableJoins();
+		if (getModel().getTableJoins() != null && !getModel().getTableJoins().isEmpty()) {
+			List<TableJoin> joins = new ArrayList<TableJoin>();
+			for (TableJoin tj : getModel().getTableJoins()) {
+				if (isSubQuery(tj))
+					continue;
+				joins.add(tj);
+			}
+			return joins;
+		}
 		return super.getModelSourceConnections();
+	}
+
+	protected boolean isSubQuery(TableJoin tj) {
+		return tj.getFromTable().getValue() instanceof MQueryTable || tj.getJoinTable().getValue() instanceof MQueryTable;
 	}
 
 	@Override
 	protected List getModelTargetConnections() {
 		if (getModel() instanceof MFromTableJoin) {
 			List<TableJoin> joins = new ArrayList<TableJoin>();
-			joins.add(((MFromTableJoin) getModel()).getTableJoin());
+			TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();
+			if (!isSubQuery(tj))
+				joins.add(tj);
 			return joins;
 		}
 		return super.getModelTargetConnections();

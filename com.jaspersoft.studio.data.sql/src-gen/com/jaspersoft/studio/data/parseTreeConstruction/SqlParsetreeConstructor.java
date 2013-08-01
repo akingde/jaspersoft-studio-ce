@@ -2315,11 +2315,11 @@ protected class FromTableJoin_JoinExprAssignment_3 extends AssignmentToken  {
 /************ begin Rule TableOrAlias ****************
  *
  * TableOrAlias:
- * 	tfull=TableFull alias="AS"? tblAlias=DbObjectName?;
+ * 	(tfull=TableFull | sq=SubQueryOperand) alias="AS"? tblAlias=DbObjectName?;
  *
  **/
 
-// tfull=TableFull alias="AS"? tblAlias=DbObjectName?
+// (tfull=TableFull | sq=SubQueryOperand) alias="AS"? tblAlias=DbObjectName?
 protected class TableOrAlias_Group extends GroupToken {
 	
 	public TableOrAlias_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -2336,7 +2336,7 @@ protected class TableOrAlias_Group extends GroupToken {
 		switch(index) {
 			case 0: return new TableOrAlias_TblAliasAssignment_2(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new TableOrAlias_AliasAssignment_1(lastRuleCallOrigin, this, 1, inst);
-			case 2: return new TableOrAlias_TfullAssignment_0(lastRuleCallOrigin, this, 2, inst);
+			case 2: return new TableOrAlias_Alternatives_0(lastRuleCallOrigin, this, 2, inst);
 			default: return null;
 		}	
 	}
@@ -2350,16 +2350,39 @@ protected class TableOrAlias_Group extends GroupToken {
 
 }
 
-// tfull=TableFull
-protected class TableOrAlias_TfullAssignment_0 extends AssignmentToken  {
+// tfull=TableFull | sq=SubQueryOperand
+protected class TableOrAlias_Alternatives_0 extends AlternativesToken {
+
+	public TableOrAlias_Alternatives_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
 	
-	public TableOrAlias_TfullAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	@Override
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getTableOrAliasAccess().getAlternatives_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new TableOrAlias_TfullAssignment_0_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new TableOrAlias_SqAssignment_0_1(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// tfull=TableFull
+protected class TableOrAlias_TfullAssignment_0_0 extends AssignmentToken  {
+	
+	public TableOrAlias_TfullAssignment_0_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getTableOrAliasAccess().getTfullAssignment_0();
+		return grammarAccess.getTableOrAliasAccess().getTfullAssignment_0_0();
 	}
 
     @Override
@@ -2378,7 +2401,7 @@ protected class TableOrAlias_TfullAssignment_0 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getTableFullRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0(); 
+				element = grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -2395,6 +2418,52 @@ protected class TableOrAlias_TfullAssignment_0 extends AssignmentToken  {
 	}	
 }
 
+// sq=SubQueryOperand
+protected class TableOrAlias_SqAssignment_0_1 extends AssignmentToken  {
+	
+	public TableOrAlias_SqAssignment_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getTableOrAliasAccess().getSqAssignment_0_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SubQueryOperand_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("sq",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sq");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getSubQueryOperandRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getTableOrAliasAccess().getSqSubQueryOperandParserRuleCall_0_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
+		}	
+	}	
+}
+
+
 // alias="AS"?
 protected class TableOrAlias_AliasAssignment_1 extends AssignmentToken  {
 	
@@ -2410,7 +2479,7 @@ protected class TableOrAlias_AliasAssignment_1 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new TableOrAlias_TfullAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new TableOrAlias_Alternatives_0(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -2470,7 +2539,7 @@ protected class TableOrAlias_TblAliasAssignment_2 extends AssignmentToken  {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
 			case 0: return new TableOrAlias_AliasAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
-			case 1: return new TableOrAlias_TfullAssignment_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new TableOrAlias_Alternatives_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	

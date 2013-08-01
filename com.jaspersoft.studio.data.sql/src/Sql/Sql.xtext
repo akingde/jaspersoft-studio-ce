@@ -36,7 +36,7 @@ FromTableJoin:
 	join=JoinType onTable=TableOrAlias 'ON' joinExpr=FullExpression;
 
 TableOrAlias:
-	tfull=TableFull alias=('AS')? (tblAlias=DbObjectName)?;
+	(tfull=TableFull | sq=SubQueryOperand) alias=('AS')? (tblAlias=DbObjectName)?;
 
 TableFull:
 	DbObjectName ({tbls.entries+=current} ("." entries+=DbObjectName)+)?;

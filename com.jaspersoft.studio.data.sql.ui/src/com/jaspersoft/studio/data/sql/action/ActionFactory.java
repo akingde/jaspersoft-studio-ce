@@ -40,6 +40,7 @@ import com.jaspersoft.studio.data.sql.action.select.CreateSubSelect;
 import com.jaspersoft.studio.data.sql.action.select.DeleteColumn;
 import com.jaspersoft.studio.data.sql.action.select.EditColumn;
 import com.jaspersoft.studio.data.sql.action.select.SelectDistinct;
+import com.jaspersoft.studio.data.sql.action.table.CreateSubQueryTable;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.DeleteTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.EditTable;
@@ -80,6 +81,7 @@ public class ActionFactory {
 
 		actions.add(new JoinTable(designer, treeViewer));
 		actions.add(new CreateTable(designer, treeViewer));
+		actions.add(new CreateSubQueryTable(designer, treeViewer));
 		actions.add(null);
 		actions.add(new EditTableJoin(designer, treeViewer));
 		actions.add(new EditTable(treeViewer));

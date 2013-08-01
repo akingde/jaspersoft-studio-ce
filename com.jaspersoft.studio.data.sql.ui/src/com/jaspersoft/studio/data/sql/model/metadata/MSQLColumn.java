@@ -38,15 +38,17 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 	public MSQLColumn(ANode parent, String value, ResultSet rs) {
 		super(parent, value, null);
 		try {
-			typeName = rs.getString("TYPE_NAME");
-			columnSize = rs.getInt("COLUMN_SIZE");
-			scale = rs.getInt("DECIMAL_DIGITS");
-			precission = rs.getInt("NUM_PREC_RADIX");
-			nullable = rs.getInt("NULLABLE") == DatabaseMetaData.columnNullable;
-			tooltip = formatedType();
-			remarks = rs.getString("REMARKS");
-			if (remarks != null)
-				tooltip += "\n" + remarks;
+			if (rs != null) {
+				typeName = rs.getString("TYPE_NAME");
+				columnSize = rs.getInt("COLUMN_SIZE");
+				scale = rs.getInt("DECIMAL_DIGITS");
+				precission = rs.getInt("NUM_PREC_RADIX");
+				nullable = rs.getInt("NULLABLE") == DatabaseMetaData.columnNullable;
+				tooltip = formatedType();
+				remarks = rs.getString("REMARKS");
+				if (remarks != null)
+					tooltip += "\n" + remarks;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

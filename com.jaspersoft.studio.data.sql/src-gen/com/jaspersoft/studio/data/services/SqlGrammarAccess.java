@@ -476,25 +476,37 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class TableOrAliasElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "TableOrAlias");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTfullAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTfullTableFullParserRuleCall_0_0 = (RuleCall)cTfullAssignment_0.eContents().get(0);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Assignment cTfullAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
+		private final RuleCall cTfullTableFullParserRuleCall_0_0_0 = (RuleCall)cTfullAssignment_0_0.eContents().get(0);
+		private final Assignment cSqAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
+		private final RuleCall cSqSubQueryOperandParserRuleCall_0_1_0 = (RuleCall)cSqAssignment_0_1.eContents().get(0);
 		private final Assignment cAliasAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final Keyword cAliasASKeyword_1_0 = (Keyword)cAliasAssignment_1.eContents().get(0);
 		private final Assignment cTblAliasAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cTblAliasDbObjectNameParserRuleCall_2_0 = (RuleCall)cTblAliasAssignment_2.eContents().get(0);
 		
 		//TableOrAlias:
-		//	tfull=TableFull alias="AS"? tblAlias=DbObjectName?;
+		//	(tfull=TableFull | sq=SubQueryOperand) alias="AS"? tblAlias=DbObjectName?;
 		public ParserRule getRule() { return rule; }
 
-		//tfull=TableFull alias="AS"? tblAlias=DbObjectName?
+		//(tfull=TableFull | sq=SubQueryOperand) alias="AS"? tblAlias=DbObjectName?
 		public Group getGroup() { return cGroup; }
 
+		//tfull=TableFull | sq=SubQueryOperand
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+
 		//tfull=TableFull
-		public Assignment getTfullAssignment_0() { return cTfullAssignment_0; }
+		public Assignment getTfullAssignment_0_0() { return cTfullAssignment_0_0; }
 
 		//TableFull
-		public RuleCall getTfullTableFullParserRuleCall_0_0() { return cTfullTableFullParserRuleCall_0_0; }
+		public RuleCall getTfullTableFullParserRuleCall_0_0_0() { return cTfullTableFullParserRuleCall_0_0_0; }
+
+		//sq=SubQueryOperand
+		public Assignment getSqAssignment_0_1() { return cSqAssignment_0_1; }
+
+		//SubQueryOperand
+		public RuleCall getSqSubQueryOperandParserRuleCall_0_1_0() { return cSqSubQueryOperandParserRuleCall_0_1_0; }
 
 		//alias="AS"?
 		public Assignment getAliasAssignment_1() { return cAliasAssignment_1; }
@@ -1961,7 +1973,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TableOrAlias:
-	//	tfull=TableFull alias="AS"? tblAlias=DbObjectName?;
+	//	(tfull=TableFull | sq=SubQueryOperand) alias="AS"? tblAlias=DbObjectName?;
 	public TableOrAliasElements getTableOrAliasAccess() {
 		return (pTableOrAlias != null) ? pTableOrAlias : (pTableOrAlias = new TableOrAliasElements());
 	}

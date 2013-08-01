@@ -40,6 +40,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -88,7 +89,7 @@ public class Util {
 
 	public static ANode getQueryRoot(ANode n) {
 		ANode root = n;
-		while (!(root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery))
+		while (!(root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery || (root instanceof MFromTable && root.getValue() instanceof MQueryTable)))
 			root = root.getParent();
 		return root;
 	}
@@ -102,7 +103,8 @@ public class Util {
 					list.add((MFromTable) t);
 					if (!t.getChildren().isEmpty()) {
 						for (INode jt : t.getChildren())
-							list.add((MFromTable) jt);
+							if (jt instanceof MFromTable)
+								list.add((MFromTable) jt);
 					}
 				}
 				break;
@@ -308,11 +310,22 @@ public class Util {
 			col.remove(i);
 	}
 
-	public static void createSelect(ANode parent) {
-		new MSelect(parent);
+	public static void copySubQuery(MFromTable mftj, MFromTable mtbl) {
+		if (mftj.getValue() instanceof MQueryTable) {
+			List<INode> children = new ArrayList<INode>(mftj.getChildren());
+			for (INode n : children) {
+				if (n instanceof MUnion || n instanceof MSelect || n instanceof MFrom || n instanceof MWhere || n instanceof MGroupBy || n instanceof MHaving)
+					mtbl.addChild((ANode) n);
+			}
+		}
+	}
+
+	public static MSelect createSelect(ANode parent) {
+		MSelect ms = new MSelect(parent);
 		new MFrom(parent);
 		new MWhere(parent);
 		new MGroupBy(parent);
 		new MHaving(parent);
+		return ms;
 	}
 }

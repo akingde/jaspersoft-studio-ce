@@ -73,10 +73,12 @@ public class DirectedGraphLayoutVisitor {
 				RelationshipPart rpart = (RelationshipPart) item;
 				Node source = (Node) partToNodesMap.get(rpart.getSource());
 				Node target = (Node) partToNodesMap.get(rpart.getTarget());
-				Edge e = new Edge(rpart, source, target);
-				e.weight = 2;
-				graph.edges.add(e);
-				partToNodesMap.put(rpart, e);
+				if (source != null && target != null) {
+					Edge e = new Edge(rpart, source, target);
+					e.weight = 2;
+					graph.edges.add(e);
+					partToNodesMap.put(rpart, e);
+				}
 			}
 		}
 	}
@@ -100,6 +102,8 @@ public class DirectedGraphLayoutVisitor {
 
 	protected void applyResults(RelationshipPart relationshipPart) {
 		Edge e = (Edge) partToNodesMap.get(relationshipPart);
+		if (e == null)
+			return;
 		NodeList nodes = e.vNodes;
 
 		PolylineConnection conn = (PolylineConnection) relationshipPart.getConnectionFigure();

@@ -1338,6 +1338,28 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+rule__TableOrAlias__Alternatives_0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0_0()); }
+(rule__TableOrAlias__TfullAssignment_0_0)
+{ after(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0_0()); }
+)
+
+    |(
+{ before(grammarAccess.getTableOrAliasAccess().getSqAssignment_0_1()); }
+(rule__TableOrAlias__SqAssignment_0_1)
+{ after(grammarAccess.getTableOrAliasAccess().getSqAssignment_0_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 rule__OrderByColumnFull__DirectionAlternatives_1_0
     @init {
 		int stackSize = keepStackSize();
@@ -3562,9 +3584,9 @@ rule__TableOrAlias__Group__0__Impl
     }
 :
 (
-{ before(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0()); }
-(rule__TableOrAlias__TfullAssignment_0)
-{ after(grammarAccess.getTableOrAliasAccess().getTfullAssignment_0()); }
+{ before(grammarAccess.getTableOrAliasAccess().getAlternatives_0()); }
+(rule__TableOrAlias__Alternatives_0)
+{ after(grammarAccess.getTableOrAliasAccess().getAlternatives_0()); }
 )
 
 ;
@@ -6853,14 +6875,29 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__TableOrAlias__TfullAssignment_0
+rule__TableOrAlias__TfullAssignment_0_0
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0()); }
-	ruleTableFull{ after(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0()); }
+{ before(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0_0()); }
+	ruleTableFull{ after(grammarAccess.getTableOrAliasAccess().getTfullTableFullParserRuleCall_0_0_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__TableOrAlias__SqAssignment_0_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getTableOrAliasAccess().getSqSubQueryOperandParserRuleCall_0_1_0()); }
+	ruleSubQueryOperand{ after(grammarAccess.getTableOrAliasAccess().getSqSubQueryOperandParserRuleCall_0_1_0()); }
 )
 
 ;

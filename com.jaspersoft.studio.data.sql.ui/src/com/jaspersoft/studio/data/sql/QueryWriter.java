@@ -19,7 +19,10 @@ import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
+import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
@@ -40,10 +43,13 @@ public class QueryWriter {
 
 			@Override
 			protected void postChildIteration(INode n) {
-				if (n instanceof ISubQuery) {
+				boolean b = n instanceof MFromTable && n.getValue() instanceof MQueryTable;
+				if (n instanceof ISubQuery || b) {
+					if (b && n instanceof MFromTableJoin)
+						return;
 					sb.append(")");
 					if (n instanceof AMQueryAliased<?>)
-						sb.append(((AMQueryAliased) n).addAlias());
+						sb.append(((AMQueryAliased<?>) n).addAlias());
 				}
 			}
 		};
@@ -67,10 +73,13 @@ public class QueryWriter {
 
 			@Override
 			protected void postChildIteration(INode n) {
-				if (n instanceof ISubQuery) {
+				boolean b = n instanceof MFromTable && n.getValue() instanceof MQueryTable;
+				if (n instanceof ISubQuery || b) {
 					sb.append(")");
+					if (b && n instanceof MFromTableJoin)
+						return;
 					if (n instanceof AMQueryAliased<?>)
-						sb.append(((AMQueryAliased) n).addAlias());
+						sb.append(((AMQueryAliased<?>) n).addAlias());
 				}
 			}
 		};

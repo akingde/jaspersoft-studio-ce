@@ -501,13 +501,22 @@ public interface SqlPackage extends EPackage
   int TABLE_OR_ALIAS__TFULL = 0;
 
   /**
+   * The feature id for the '<em><b>Sq</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TABLE_OR_ALIAS__SQ = 1;
+
+  /**
    * The feature id for the '<em><b>Alias</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TABLE_OR_ALIAS__ALIAS = 1;
+  int TABLE_OR_ALIAS__ALIAS = 2;
 
   /**
    * The feature id for the '<em><b>Tbl Alias</b></em>' containment reference.
@@ -516,7 +525,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_OR_ALIAS__TBL_ALIAS = 2;
+  int TABLE_OR_ALIAS__TBL_ALIAS = 3;
 
   /**
    * The number of structural features of the '<em>Table Or Alias</em>' class.
@@ -525,7 +534,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TABLE_OR_ALIAS_FEATURE_COUNT = 3;
+  int TABLE_OR_ALIAS_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.TableFullImpl <em>Table Full</em>}' class.
@@ -1987,6 +1996,17 @@ public interface SqlPackage extends EPackage
   EReference getTableOrAlias_Tfull();
 
   /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getSq <em>Sq</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Sq</em>'.
+   * @see com.jaspersoft.studio.data.sql.TableOrAlias#getSq()
+   * @see #getTableOrAlias()
+   * @generated
+   */
+  EReference getTableOrAlias_Sq();
+
+  /**
    * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.TableOrAlias#getAlias <em>Alias</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3235,6 +3255,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference TABLE_OR_ALIAS__TFULL = eINSTANCE.getTableOrAlias_Tfull();
+
+    /**
+     * The meta object literal for the '<em><b>Sq</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TABLE_OR_ALIAS__SQ = eINSTANCE.getTableOrAlias_Sq();
 
     /**
      * The meta object literal for the '<em><b>Alias</b></em>' attribute feature.
