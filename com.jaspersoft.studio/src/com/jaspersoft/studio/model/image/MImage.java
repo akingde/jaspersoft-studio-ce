@@ -47,6 +47,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
 
 /*
@@ -188,6 +189,15 @@ public class MImage extends MGraphicElementLineBox {
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#image");
 
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
+		anchorNameExp.setDescription(Messages.MTextField_anchorNameDescription);
+		desc.add(anchorNameExp);
+		
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignImage.PROPERTY_BOOKMARK_LEVEL, Messages.MTextField_bookmarkLevelLabel);
+		bookmarkLevel.setDescription(Messages.MTextField_bookmarkLevelDescription);
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		desc.add(bookmarkLevel);
+		
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
@@ -276,6 +286,12 @@ public class MImage extends MGraphicElementLineBox {
 			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
+		}
+		if (id.equals(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+			return ExprUtil.getExpression(jrElement.getAnchorNameExpression());
+		}
+		if (id.equals(JRDesignImage.PROPERTY_BOOKMARK_LEVEL)){
+			return jrElement.getBookmarkLevel();
 		}
 		return super.getPropertyValue(id);
 	}
@@ -374,7 +390,10 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(jrElement.getHyperlinkWhenExpression(), value));
-		}
+		} else if (id.equals(JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION))
+			jrElement.setAnchorNameExpression(ExprUtil.setValues(jrElement.getAnchorNameExpression(), value));
+		else if (id.equals(JRDesignImage.PROPERTY_BOOKMARK_LEVEL))
+			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0); 
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;

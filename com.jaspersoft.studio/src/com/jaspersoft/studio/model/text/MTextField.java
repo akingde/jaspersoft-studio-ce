@@ -43,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 
 /*
  * The Class MTextField.
@@ -149,7 +150,16 @@ public class MTextField extends MTextElement {
 		desc.add(exprD);
 		exprD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textFieldExpression")); //$NON-NLS-1$
-
+		
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION, Messages.MTextField_anchorNameLabel);
+		anchorNameExp.setDescription(Messages.MTextField_anchorNameDescription);
+		desc.add(anchorNameExp);
+		
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL, Messages.MTextField_bookmarkLevelLabel);
+		bookmarkLevel.setDescription(Messages.MTextField_bookmarkLevelDescription);
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		desc.add(bookmarkLevel);
+		
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
 		patternD.setDescription(Messages.MTextField_pattern_description);
@@ -159,6 +169,7 @@ public class MTextField extends MTextElement {
 				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, Messages.MTextField_patternExpressionTitle); 
 		pexprD.setDescription("Pattern expression"); //$NON-NLS-1$
 		desc.add(pexprD);
+		
 		pexprD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#patternExpression")); //$NON-NLS-1$
 
@@ -239,7 +250,6 @@ public class MTextField extends MTextElement {
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
-
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
@@ -250,7 +260,12 @@ public class MTextField extends MTextElement {
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		}
-
+		if (id.equals(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+			return ExprUtil.getExpression(jrElement.getAnchorNameExpression());
+		}
+		if (id.equals(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL)){
+			return jrElement.getBookmarkLevel();
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -290,6 +305,10 @@ public class MTextField extends MTextElement {
 			jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(jrElement.getHyperlinkWhenExpression(), value));
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
+		else if (id.equals(JRDesignTextField.PROPERTY_ANCHOR_NAME_EXPRESSION))
+			jrElement.setAnchorNameExpression(ExprUtil.setValues(jrElement.getAnchorNameExpression(), value));
+		else if (id.equals(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL))
+			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;

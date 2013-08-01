@@ -41,6 +41,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -63,6 +64,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
@@ -280,6 +282,15 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 				.setDescription(""); //$NON-NLS-1$
 		desc.add(evaluationGroupNameD);
 
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION, com.jaspersoft.studio.messages.Messages.MTextField_anchorNameLabel);
+		anchorNameExp.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_anchorNameDescription);
+		desc.add(anchorNameExp);
+		
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(StandardChartSettings.PROPERTY_BOOKMARK_LEVEL, com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelLabel);
+		bookmarkLevel.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelDescription);
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		desc.add(bookmarkLevel);
+		
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
@@ -476,6 +487,12 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(cs.getHyperlinkWhenExpression());
 		}
+		if (id.equals(StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+			return ExprUtil.getExpression(cs.getAnchorNameExpression());
+		}
+		if (id.equals(StandardChartSettings.PROPERTY_BOOKMARK_LEVEL)){
+			return cs.getBookmarkLevel();
+		}
 
 		if (id.equals(StandardChartSettings.PROPERTY_TITLE_FONT)) {
 			tFont = MFontUtil.getMFont(tFont, cs.getTitleFont(),
@@ -625,7 +642,11 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 				.equals(StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION)) {
 			cs.setSubtitleExpression(ExprUtil.setValues(
 					cs.getSubtitleExpression(), value));
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+		} else if (id.equals(StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION))
+			cs.setAnchorNameExpression(ExprUtil.setValues(cs.getAnchorNameExpression(), value));
+		else if (id.equals(StandardChartSettings.PROPERTY_BOOKMARK_LEVEL))
+			cs.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			cs.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			cs.setLinkType((String) value);

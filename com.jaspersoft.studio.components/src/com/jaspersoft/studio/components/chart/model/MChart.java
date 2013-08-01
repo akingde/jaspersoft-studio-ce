@@ -112,6 +112,7 @@ import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.Para
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
@@ -286,6 +287,16 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		legendPositionD.setDescription(Messages.MChart_legend_position_description);
 		legendPositionD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend_position"));
 		desc.add(legendPositionD);
+		
+		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION, com.jaspersoft.studio.messages.Messages.MTextField_anchorNameLabel);
+		anchorNameExp.setHelpRefBuilder(new HelpReferenceBuilder("http://127.0.0.1:55429/help/topic/net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#anchorNameExpression")); //$NON-NLS-1$
+		anchorNameExp.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_anchorNameDescription);
+		desc.add(anchorNameExp);
+		
+		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignChart.PROPERTY_BOOKMARK_LEVEL, com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelLabel);
+		bookmarkLevel.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelDescription);
+		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
+		desc.add(bookmarkLevel);
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend");
 
@@ -409,7 +420,13 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		}
-
+		if (id.equals(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+			return ExprUtil.getExpression(jrElement.getAnchorNameExpression());
+		}
+		if (id.equals(JRDesignChart.PROPERTY_BOOKMARK_LEVEL)){
+			return jrElement.getBookmarkLevel();
+		}
+		
 		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
 			if (mChartPlot == null) {
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
@@ -517,7 +534,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			jrElement.setTitleExpression(ExprUtil.setValues(jrElement.getTitleExpression(), value));
 		} else if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION)) {
 			jrElement.setSubtitleExpression(ExprUtil.setValues(jrElement.getSubtitleExpression(), value));
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+		} else if (id.equals(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION))
+			jrElement.setAnchorNameExpression(ExprUtil.setValues(jrElement.getAnchorNameExpression(), value));
+		else if (id.equals(JRDesignChart.PROPERTY_BOOKMARK_LEVEL))
+			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			jrElement.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			jrElement.setLinkType((String) value);

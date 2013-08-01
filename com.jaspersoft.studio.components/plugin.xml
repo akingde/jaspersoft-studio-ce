@@ -393,9 +393,51 @@
             </input>
          </propertySection>
          <propertySection
+               class="com.jaspersoft.studio.components.chart.property.section.ChartBookmarkSection"
+               id="com.jaspersoft.studio.components.chart.property.section.ChartBookmarkSection"
+               tab="com.jaspersoft.studio.editor.section.HYPERLINK">
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.MChart">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chartspider.model.MSpiderChart">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.dataset.MChartHighLowDataset">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.dataset.MChartPieDataset">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.category.MCategorySeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.gantt.MGanttSeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.pie.MPieSeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.time.MTimeSeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.timeperiod.MTimePeriodSeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.xyseries.MXYSeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.series.xyzseries.MXYZSeries">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.components.chart.model.chartAxis.MChartAxes">
+            </input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.components.chart.property.section.ChartHyperlinkSection"
                id="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
-               tab="com.jaspersoft.studio.editor.section.HYPERLINK">
+               tab="com.jaspersoft.studio.editor.section.HYPERLINK"
+               afterSection="com.jaspersoft.studio.components.chart.property.section.ChartBookmarkSection">
             <input
                   type="com.jaspersoft.studio.components.chart.model.MChart">
             </input>

@@ -1227,9 +1227,21 @@
             </input>
          </propertySection>
          <propertySection
+               class="com.jaspersoft.studio.property.section.graphic.BookmarkSection"
+               id="com.jaspersoft.studio.property.section.graphic.BookmarkSection"
+               tab="com.jaspersoft.studio.editor.section.HYPERLINK">
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextField">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.image.MImage">
+            </input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
                id="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
-               tab="com.jaspersoft.studio.editor.section.HYPERLINK">
+               tab="com.jaspersoft.studio.editor.section.HYPERLINK"
+               afterSection="com.jaspersoft.studio.property.section.graphic.BookmarkSection">
             <input
                   type="com.jaspersoft.studio.model.text.MTextField">
             </input>

@@ -30,15 +30,19 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.graphic.ASHighlightControl;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
 import com.jaspersoft.studio.property.section.widgets.SPParameter;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -67,7 +71,9 @@ public class HyperlinkSection extends AbstractSection {
 	
 	/**
 	 * Element hider for the elements related to the when field, so the label an the expression field\button
+	 * Now not used since the when area is always visible
 	 */
+	@SuppressWarnings("unused")
 	private ElementHider when;
 
 	/**
@@ -124,6 +130,11 @@ public class HyperlinkSection extends AbstractSection {
 	 * composite where all the elements are placed
 	 */
 	private Composite mainComposite;
+	
+	/**
+	 * Expandable composite where the control are placed
+	 */
+	private ExpandableComposite section;
 	
 	/**
 	 * Hashmap that contains, for every hyperlink type, a list of hiders. Every one of these hider contains one or 
@@ -244,7 +255,7 @@ public class HyperlinkSection extends AbstractSection {
 			propertyValue = element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_LINK_TYPE);
 			String typeValue = propertyValue != null ? propertyValue.toString() : linkTypeItems[0];
 			//I don't set the text on the combo if it has already the right value to avoid to raise the panel refresh
-			if (!typeValue.equals(typeCombo.getText())) typeCombo.setText(typeValue);
+			if (!typeValue.equals(typeCombo.getText())) typeCombo.setText(typeValue);	
 		}
 		isRefreshing = false;
 	}
@@ -328,13 +339,17 @@ public class HyperlinkSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		
-		mainComposite = new Composite(parent, SWT.NONE);
+		mainComposite = getWidgetFactory().createSection(parent, "Hyperlink", true, 3);
+		section = (ExpandableComposite)mainComposite.getParent();
+		
 		mainComposite.setLayout(new GridLayout(3, false));
 		GridData parentData = new GridData(SWT.FILL,SWT.FILL, true, true);
 		//the composite must have a fixed height because for some reason, when the components are hided it 
 		//is resized to a smaller dimension, but when components are shown it is not resized to a bigger one
-		parentData.minimumHeight = 250;
-		mainComposite.setLayoutData(parentData);
+		parentData.minimumHeight = 280;
+		section.setLayoutData(parentData);
+		mainComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 		
 		createLabel(mainComposite, Messages.MHyperLink_link_target_description, Messages.MHyperLink_link_target);
 		targetCombo = new Combo(mainComposite, SWT.NONE);
@@ -409,14 +424,32 @@ public class HyperlinkSection extends AbstractSection {
 		});
 	}
 	
+	@Override
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
+		if (JRDesignHyperlink.PROPERTY_LINK_TARGET.equals(propertyId)){
+			return new ASHighlightControl(targetCombo, new BackgroundHighlight(targetCombo));
+		} else if (JRDesignHyperlink.PROPERTY_LINK_TYPE.equals(propertyId)){
+			return new ASHighlightControl(typeCombo, new BackgroundHighlight(typeCombo));
+		} else return super.getWidgetForProperty(propertyId);
+	}
+	
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_LINK_TARGET, Messages.MHyperLink_link_target);
+		addProvidedProperties(JRDesignHyperlink.PROPERTY_LINK_TYPE, Messages.MHyperLink_link_type);
 		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, Messages.MHyperLink_hyperlink_anchor_expression);
 		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, Messages.MHyperLink_hyperlink_page_expression);
 		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, Messages.MHyperLink_hyperlink_reference_expression);
 		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION, Messages.MHyperLink_whenexpr);
 		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, Messages.MHyperLink_hyperlink_tooltip_expression);
 		addProvidedProperties(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
+	}
+	
+	@Override
+	public void expandForProperty(Object propertyId) {
+		if (section != null && !section.isExpanded()) {
+			section.setExpanded(true);
+		}
 	}
 
 
