@@ -60,6 +60,7 @@ import com.jaspersoft.studio.server.dnd.RepositoryImageDragSourceListener;
 import com.jaspersoft.studio.server.dnd.UnitDragSourceListener;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -221,6 +222,10 @@ public class ServerProvider implements IRepositoryViewProvider {
 					refreshAction.run();
 				treeViewer.expandToLevel(el, 1);
 			}
+		}
+		if (el instanceof MInputControl && editAction.isEnabled()) {
+			editAction.run();
+			return;
 		}
 		if (editServerAction.isEnabled())
 			editServerAction.run();
