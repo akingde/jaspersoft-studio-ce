@@ -258,6 +258,13 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 										if (monitor.isCanceled())
 											break;
 									}
+									if (!bundles.isEmpty())
+										selectedTemplate = bundles.get(0);
+									GalleryItem rootItem = gal.getItem(0);
+									if (gal.getSelectionCount() <= 0 && rootItem.getItemCount() > 0) {
+										gal.setSelection(new GalleryItem[] { rootItem.getItem(0) });
+										setPageComplete(validatePage());
+									}
 								}
 							});
 						}

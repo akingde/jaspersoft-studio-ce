@@ -55,7 +55,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 
 		setTitle(Messages.ReportNewWizard_0);
 		setDescription(Messages.ReportNewWizardPage_description);
-		setFileExtension("jrxml");//$NON-NLS-1$
+		setFileExtension(FileExtension.JRXML);//$NON-NLS-1$
 	}
 
 	/**
@@ -152,7 +152,9 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 			}
 		}
 
-		String filename = baseName + FileExtension.PointJRXML;
+		String filename = baseName;
+		if (!filename.endsWith(FileExtension.PointJRXML))
+			filename += FileExtension.PointJRXML;
 
 		if (this.currentSelection != null) {
 			if (this.currentSelection instanceof TreeSelection) {
@@ -185,7 +187,8 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 * @return the first valid file name
 	 */
 	private String getValidFileName(IProject prj, String prjPath, String basename) {
-
+		if (!basename.endsWith(FileExtension.PointJRXML))
+			basename = basename.replaceAll(FileExtension.PointJRXML + "$", "");
 		String filename = basename + FileExtension.PointJRXML;
 		String pattern = basename + "_{0}" + FileExtension.PointJRXML;
 
