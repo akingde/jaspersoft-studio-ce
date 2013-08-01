@@ -271,10 +271,14 @@ public class WSClientHelper {
 					ResourceDescriptor v = f.getValue();
 					f.getValue().setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
 				}
-				if (n != null && !(f instanceof MReportUnit))
-					wsClient.delete(rd, ((MReportUnit) n).getValue().getUriString());
-				else
-					wsClient.delete(rd);
+				try {
+					if (n != null && !(f instanceof MReportUnit))
+						wsClient.delete(rd, ((MReportUnit) n).getValue().getUriString());
+					else
+						wsClient.delete(rd);
+				} catch (Exception e1) {
+					e.printStackTrace();
+				}
 				try {
 					return WSClientHelper.saveResource(f, monitor, false);
 				} catch (Exception e1) {

@@ -55,7 +55,7 @@ public class PublishUtil {
 						if (rd != null)
 							return rd;
 					} catch (Exception e) {
-						e.printStackTrace();// maybe ask something?
+						rd.setMainReport(true);
 						return rd;
 					}
 				}
