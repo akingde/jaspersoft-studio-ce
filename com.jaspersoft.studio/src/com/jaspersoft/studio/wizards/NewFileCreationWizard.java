@@ -14,6 +14,8 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileExtension;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -44,7 +46,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 * This variable is used to load default file name in case this page is shown for the first time, otherwise the page
 	 * is left as it is.
 	 */
-	//boolean firstLoad = true;
+	// boolean firstLoad = true;
 
 	public NewFileCreationWizard(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
@@ -127,10 +129,10 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	public void loadSettings() {
 
-		//if (!firstLoad)
-		//	return;
+		// if (!firstLoad)
+		// return;
 
-		//firstLoad = false;
+		// firstLoad = false;
 
 		String baseName = ReportNewWizard.NEW_REPORT_JRXML;
 
@@ -150,7 +152,7 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 			}
 		}
 
-		String filename = baseName + ".jrxml";
+		String filename = baseName + FileExtension.PointJRXML;
 
 		if (this.currentSelection != null) {
 			if (this.currentSelection instanceof TreeSelection) {
@@ -184,8 +186,8 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 	 */
 	private String getValidFileName(IProject prj, String prjPath, String basename) {
 
-		String filename = basename + ".jrxml";
-		String pattern = basename + "_{0}.jrxml";
+		String filename = basename + FileExtension.PointJRXML;
+		String pattern = basename + "_{0}" + FileExtension.PointJRXML;
 
 		// Initial name...
 		String f = prjPath + File.separator + filename;

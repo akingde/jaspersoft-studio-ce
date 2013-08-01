@@ -136,10 +136,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 		if (showCongratulationsStep) {
 			congratulationsStep = new CongratulationsWizardPage(Messages.CongratulationsWizardPage_title,
-																													Messages.CongratulationsWizardPage_titleMessage,
-																													Messages.CongratulationsWizardPage_label1,
-																													Messages.CongratulationsWizardPage_label2,
-																													Messages.CongratulationsWizardPage_label3);
+					Messages.CongratulationsWizardPage_titleMessage, Messages.CongratulationsWizardPage_label1,
+					Messages.CongratulationsWizardPage_label2, Messages.CongratulationsWizardPage_label3);
 			addPage(congratulationsStep);
 		}
 	}
@@ -233,11 +231,12 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		if (getSettings().containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
 			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
 		}
-		
-		//If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the 
-		//sub report
+
+		// If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the
+		// sub report
 		if (getSettings().containsKey(WizardDataSourcePage.EXTRA_PARAMETERS)) {
-			templateSettings.put(DefaultTemplateEngine.OTHER_PARAMETERS, getSettings().get(WizardDataSourcePage.EXTRA_PARAMETERS));
+			templateSettings.put(DefaultTemplateEngine.OTHER_PARAMETERS,
+					getSettings().get(WizardDataSourcePage.EXTRA_PARAMETERS));
 		}
 
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
@@ -253,7 +252,14 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 			// Store the report bundle on file system
 			IContainer container = (IContainer) resource;
-			reportFile = container.getFile(new Path(fileName));
+			Display.getDefault().syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					reportFile = step1.createNewFile();// container.getFile(new Path(fileName));
+				}
+			});
+
 			String repname = reportFile.getName();
 			int lindx = repname.lastIndexOf(".");
 			if (lindx > 0 && lindx < repname.length() - 1)
