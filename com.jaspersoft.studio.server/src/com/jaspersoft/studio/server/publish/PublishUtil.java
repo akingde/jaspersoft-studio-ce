@@ -17,6 +17,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -103,6 +104,13 @@ public class PublishUtil {
 				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), popt.getReferencedResource().getUriString());
 			else
 				ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"), null);
+		}
+	}
+
+	public static void savePreferencesNoOverwrite(IFile ifile, MResource f) throws CoreException {
+		if (f instanceof MInputControl) {
+			String prefix = f.getValue().getName();
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), Boolean.toString(false));
 		}
 	}
 

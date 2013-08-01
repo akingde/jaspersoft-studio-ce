@@ -137,6 +137,7 @@ public class Publish {
 						FileUtils.writeFile(mJrxml.getFile(), JRXmlWriterHelper.writeReport(jrConfig, mJrxml.getJd(), version));
 					}
 				saveResource(monitor, f);
+				PublishUtil.savePreferencesNoOverwrite(ifile, f);
 			}
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;
