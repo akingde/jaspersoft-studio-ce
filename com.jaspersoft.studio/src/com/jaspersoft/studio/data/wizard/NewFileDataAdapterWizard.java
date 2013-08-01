@@ -45,6 +45,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
@@ -265,6 +266,8 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		return true;
 	}
 
+	private IFile file;
+
 	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
 		// create a sample file
 		monitor.beginTask("Creating " + fileName, 2); //$NON-NLS-1$
@@ -275,8 +278,14 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 			IStatus status = new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null); //$NON-NLS-1$
 			throw new CoreException(status);
 		}
-		IContainer container = (IContainer) resource;
-		final IFile file = container.getFile(new Path(fileName));
+		Display.getDefault().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				file = step1.createNewFile();
+			}
+		});
+
 		InputStream in = null;
 		try {
 			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter);
@@ -290,6 +299,11 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$
+		openEditor(file);
+		monitor.worked(1);
+	}
+
+	protected void openEditor(final IFile file) {
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -303,7 +317,6 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 				}
 			}
 		});
-		monitor.worked(1);
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

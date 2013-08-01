@@ -46,6 +46,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
@@ -192,6 +193,8 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
+	private IFile file;
+
 	/**
 	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
 	 * the editor on the newly created file.
@@ -205,8 +208,14 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Container \"" + containerName + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		IContainer container = (IContainer) resource;
-		final IFile file = container.getFile(new Path(fileName));
+		Display.getDefault().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				file = step1.createNewFile();
+			}
+		});
+
 		InputStream in = null;
 		try {
 			in = openContentStream();
@@ -221,6 +230,11 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$
+		openEditor(file);
+		monitor.worked(1);
+	}
+
+	protected void openEditor(final IFile file) {
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -231,7 +245,6 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 				}
 			}
 		});
-		monitor.worked(1);
 	}
 
 	private IFile reportFile;
