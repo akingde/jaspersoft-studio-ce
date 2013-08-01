@@ -198,6 +198,8 @@ public class DBMetadata {
 
 			@Override
 			public void run() {
+				if (msg.isDisposed())
+					return;
 				msg.setText("Getting metadata for\n" + da.getName() + "\nPlease wait ...");
 				stackLayout.topControl = mcmp;
 				mcmp.layout(true);
