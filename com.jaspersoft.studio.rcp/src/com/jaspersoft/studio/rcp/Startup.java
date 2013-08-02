@@ -15,12 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.rcp;
 
-import java.util.Arrays;
-
-import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -28,13 +25,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.IStartup;
 
 import com.jaspersoft.studio.rcp.heartbeat.Heartbeat;
@@ -52,42 +44,10 @@ public class Startup implements IStartup {
 		try {
 			if (!project.exists()) {
 				project.create(monitor);
-			}
-			project.open(monitor);
-
-			IProjectDescription description = project.getDescription();
-			description.setName(Messages.Startup_jss_project);
-			String[] ids = description.getNatureIds();
-			if (!Arrays.asList(ids).contains(JavaCore.NATURE_ID)) {
-				String[] newIds = new String[ids.length + 1];
-				System.arraycopy(ids, 0, newIds, 0, ids.length);
-				newIds[newIds.length - 1] = JavaCore.NATURE_ID;
-				description.setNatureIds(newIds);
-
-				project.setDescription(description, monitor);
-
-				ICommand java = description.newCommand();
-				java.setBuilderName(JavaCore.BUILDER_ID);
-
-				description.setBuildSpec(new ICommand[] { java });
-
-				project.setDescription(description, monitor);
-
-				IJavaProject javaproj = JavaCore.create(project);
-				javaproj.setOutputLocation(project.getFullPath(), monitor);
-				IClasspathEntry srcEntry = JavaCore.newSourceEntry(project
-						.getFullPath());
-				IClasspathEntry containerEntry = JavaCore
-						.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER));
-				javaproj.setRawClasspath(new IClasspathEntry[] {
-						containerEntry, srcEntry }, monitor);
-			}
-			ids = description.getNatureIds();
-			if (!Arrays.asList(ids).contains(JasperReportsNature.NATURE_ID)) {
-				String[] newIds = new String[ids.length + 1];
-				System.arraycopy(ids, 0, newIds, 0, ids.length);
-				newIds[newIds.length - 1] = JasperReportsNature.NATURE_ID;
-				description.setNatureIds(newIds);
+				project.open(monitor);
+				ProjectUtil.createJRProject(monitor, project);
+				IProjectDescription description = project.getDescription();
+				description.setName(Messages.Startup_jss_project);
 				project.setDescription(description, monitor);
 			}
 		} catch (CoreException e) {
