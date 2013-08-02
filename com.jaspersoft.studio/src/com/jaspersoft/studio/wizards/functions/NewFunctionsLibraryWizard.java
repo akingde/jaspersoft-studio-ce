@@ -79,7 +79,6 @@ public class NewFunctionsLibraryWizard extends Wizard implements INewWizard {
 		final String libraryName = page1.getLibraryName();
 		final String sourceFolder = page1.getPackageFragmentRootText();
 		final String packageName = page1.getPackageText();
-		final String categoryName = page1.getCategoryName();
 		final String categoryLabel = page1.getCategoryLabel();
 		final String categoryDescription = page1.getCategoryDescription();
 		final String categoryClass = page1.getCategoryClass();

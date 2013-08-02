@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -60,7 +61,6 @@ import com.jaspersoft.studio.swt.widgets.AutoCompletionHelper;
 public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 
 	private Text libraryName;
-	private Text categoryName;
 	private Text categoryClass;
 	private IJavaProject selectedJavaProject;
 	private Button createSampleFunctions;
@@ -68,7 +68,6 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 	private List<String> existingCategories;
 
 	private IStatus libraryNameStatus = Status.OK_STATUS;
-	private IStatus categoryNameStatus = Status.OK_STATUS;
 	private IStatus categoryClassStatus = Status.OK_STATUS;
 	private Text categoryLabel;
 	private Text categoryDescription;
@@ -100,7 +99,6 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		return 
 				!libraryName.getText().isEmpty() &&
 				!getPackageFragmentRootText().isEmpty() &&
-				!categoryName.getText().isEmpty() && 
 				!categoryClass.getText().isEmpty(); 
 	}
 
@@ -117,7 +115,6 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		createContainerControls(composite, cols);
 		createPackageControls(composite, cols);
 		createSeparator(composite, cols);
-		createCategoryNameControls(composite,cols);
 		createCategoryLabelAndDescControls(composite,cols);
 		createCategoryClassControls(composite,cols);
 		createSeparator(composite, cols);
@@ -143,34 +140,28 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		});
 	}
 
-	private void createCategoryNameControls(Composite parent, int cols) {
-		Label categoryNameLbl = new Label(parent, SWT.NONE);
-		categoryNameLbl.setText("Category Name:");
-		categoryNameLbl.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
-		categoryName = new Text(parent, SWT.BORDER);
-		categoryName.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
-		categoryName.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				categoryNameStatus = JavaConventions.validateJavaTypeName(
-						categoryName.getText(), JavaCore.VERSION_1_6, JavaCore.VERSION_1_6);
-				// suggest the class
-				String txt = getPackageText();
-				if(!txt.isEmpty()) txt+=".";
-				categoryClass.setText(txt+categoryName.getText());
-				// suggest the label
-				categoryLabel.setText(categoryName.getText());
-				doStatusUpdate();
-			}
-		});
-	}
-	
 	private void createCategoryLabelAndDescControls(Composite parent, int cols) {
 		Label categoryLabelLbl = new Label(parent, SWT.NONE);
 		categoryLabelLbl.setText("Category Label:");
 		categoryLabelLbl.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 		categoryLabel = new Text(parent, SWT.BORDER);
 		categoryLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
+		categoryLabel.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				// Try to guess the category name
+				// Capitalize the first character of each word
+				// and remove the whitespaces
+				String nameTxt = categoryLabel.getText();
+				nameTxt = WordUtils.capitalize(nameTxt).replaceAll("\\s","");
+				// suggest the class
+				String txt = getPackageText();
+				if(!txt.isEmpty()) txt+=".";
+				categoryClass.setText(txt+nameTxt);
+				doStatusUpdate();
+			}
+		});
+		
 		
 		Label categoryDescriptionLbl = new Label(parent, SWT.NONE);
 		categoryDescriptionLbl.setText("Category Description:");
@@ -237,7 +228,6 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 			libraryNameStatus,
 			fContainerStatus,
 			fPackageStatus,
-			categoryNameStatus,
 			categoryClassStatus
 		};
 		// the mode severe status will be displayed
@@ -311,13 +301,6 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 	 */
 	public boolean isCreateSampleReport() {
 		return createSampleJRXML.getSelection();
-	}
-
-	/**
-	 * @return the category name (label)
-	 */
-	public String getCategoryName() {
-		return categoryName.getText();
 	}
 	
 	/**
