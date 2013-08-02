@@ -240,8 +240,9 @@ public class WSClientHelper {
 						rd.setMainReport(true);
 					String turi = rd.getUriString();
 					ResourceDescriptor trd = cli.modifyReportUnitResource(ruuri, rd, file);
-					if (!trd.getUriString().equals(turi))
-						rd = getResource(cli, rd, null);
+					// if (!trd.getUriString().equals(turi))
+					// rd = getResource(cli, rd, null);
+					rd = trd;
 				}
 			} else
 				rd = cli.addOrModifyResource(rd, file);
