@@ -48,9 +48,11 @@ public class FunctionsLibraryGenerationUtil {
 	private static final String CATEGORY_CLASS_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "CategoryClass.vm";
 	private static final String LIBRARY_MESSAGES_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "SampleFunctionsMessages.vm";
 	private static final String JR_EXTENSION_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "JRExtension.vm";
+	private static final String SAMPLE_JRXML_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "SampleFunctionsReport.vm";
 	
 	private static final String JR_MESSAGES_PROPERTIES = "jasperreports_messages.properties";
 	private static final String JR_EXTENSION_PROPERTIES = "jasperreports_extension.properties";
+	private static final String SAMPLE_JRXML = "SampleFunctionsReport.jrxml";
 	
 	private IJavaProject javaProject;
 	private IPackageFragmentRoot packageFragmentRoot;
@@ -83,6 +85,7 @@ public class FunctionsLibraryGenerationUtil {
 		functionContext.put("packageName", packageName);
 		functionContext.put("categoriesList", categories);
 		functionContext.put("functionLibraryName", libraryName);
+		functionContext.put("printSampleMethods", createSampleMethods);
 
 		Template functionTemplate = ve.getTemplate(FUNCTION_CLASS_TEMPLATE_LOCATION);
 		StringWriter fsw = new StringWriter();
@@ -194,8 +197,18 @@ public class FunctionsLibraryGenerationUtil {
 	/**
 	 * Creates the sample JRXML file that uses the sample methods of the newly created 
 	 * library of functions.
+	 * @throws CoreException 
 	 */
-	public void createSampleJRXML() {
-		// TODO - implement...
+	public void createSampleJRXML() throws CoreException {
+		IFile sampleJRXMLFile = javaProject.getProject().getFile(SAMPLE_JRXML);
+		if(!sampleJRXMLFile.exists()){
+			// For now we don't need to specify anything in the context
+			// It will simply "copy" the JRXML content
+			VelocityContext sampleJRXMLContext = new VelocityContext();
+			Template categoryTemplate = ve.getTemplate(SAMPLE_JRXML_TEMPLATE_LOCATION);
+			StringWriter jrxmlsw = new StringWriter();
+			categoryTemplate.merge( sampleJRXMLContext, jrxmlsw );
+			sampleJRXMLFile.create(new ByteArrayInputStream(jrxmlsw.toString().getBytes()), IResource.FORCE, monitor);
+		}
 	}
 }
