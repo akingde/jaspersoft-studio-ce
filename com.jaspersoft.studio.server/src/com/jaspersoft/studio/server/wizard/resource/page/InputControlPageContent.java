@@ -20,6 +20,8 @@ import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -231,8 +233,15 @@ public class InputControlPageContent extends APageContent implements IPageComple
 		gd.horizontalSpan = 2;
 		cmp.setLayoutData(gd);
 
-		qvct = new QueryVisibleColumnsTable(cmp, res.getValue());
+		qvct = new QueryVisibleColumnsTable(cmp, res.getValue(), this, sQuery);
 
+		tvalue.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				page.setPageComplete(sQuery.isPageComplete());
+			}
+		});
 		bindingContext.bindValue(SWTObservables.observeText(tvalue, SWT.Modify), PojoObservables.observeValue(res.getValue(), "queryValueColumn")); //$NON-NLS-1$
 	}
 
@@ -249,7 +258,7 @@ public class InputControlPageContent extends APageContent implements IPageComple
 		proxy.setResourceDescriptor(rd);
 		return proxy;
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.editInputControl";

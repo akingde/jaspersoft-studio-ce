@@ -11,8 +11,6 @@
 
 package com.jaspersoft.studio.jasper;
 
-import java.awt.RenderingHints.Key;
-
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
@@ -40,6 +38,8 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.CacheMap;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -137,7 +137,9 @@ public final class ImageConverter extends ElementConverter {
 	private Renderable getRenderable(JasperReportsContext jasperReportsContext, JRImage imageElement,
 			JRPrintImage printImage) {
 		Renderable r = null;
-		String location = JRExpressionUtil.getSimpleExpressionText(imageElement.getExpression());
+		String location = ExpressionUtil.eval(imageElement.getExpression(),
+				(JasperReportsConfiguration) jasperReportsContext);
+		// JRExpressionUtil.getSimpleExpressionText(imageElement.getExpression());
 		if (location != null) {
 			try {
 				r = RenderableUtil.getInstance(jasperReportsContext).getRenderable(location, OnErrorTypeEnum.ERROR, false);

@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
+import com.jaspersoft.studio.server.wizard.resource.APageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -43,9 +45,13 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class QueryVisibleColumnsTable {
 	private ResourceDescriptor rd;
+	private APageContent page;
+	private SelectorQuery sQuery;
 
-	public QueryVisibleColumnsTable(Composite composite, ResourceDescriptor rd) {
+	public QueryVisibleColumnsTable(Composite composite, ResourceDescriptor rd, APageContent page, SelectorQuery sQuery) {
 		this.rd = rd;
+		this.page = page;
+		this.sQuery = sQuery;
 		createControls(composite);
 	}
 
@@ -56,8 +62,13 @@ public class QueryVisibleColumnsTable {
 	private ListOrderButtons border;
 
 	public void dispose() {
+		setValues();
+	}
+
+	protected void setValues() {
 		List<String> lst = (List<String>) tableViewer.getInput();
 		rd.setQueryVisibleColumns(lst.toArray(new String[lst.size()]));
+		page.setPageComplete(sQuery.isPageComplete());
 	}
 
 	private void createControls(Composite composite) {
@@ -67,7 +78,13 @@ public class QueryVisibleColumnsTable {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		bnew = new NewButton();
+		bnew = new NewButton() {
+			@Override
+			protected void afterElementAdded(Object selement) {
+				setValues();
+				super.afterElementAdded(selement);
+			}
+		};
 		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
@@ -76,18 +93,23 @@ public class QueryVisibleColumnsTable {
 
 		});
 
-		bdel = new DeleteButton();
+		bdel = new DeleteButton() {
+			@Override
+			protected void afterElementDeleted(Object selement) {
+				setValues();
+				super.afterElementDeleted(selement);
+			}
+		};
 		bdel.createDeleteButton(bGroup, tableViewer);
 		border = new ListOrderButtons();
 		border.createOrderButtons(bGroup, tableViewer);
 
-		tableViewer.setInput(new ArrayList<String>(Arrays.asList(rd
-				.getQueryVisibleColumns())));
+		tableViewer.setInput(new ArrayList<String>(Arrays.asList(rd.getQueryVisibleColumns())));
+
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 200;
 		table.setLayoutData(gd);

@@ -18,6 +18,7 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.utils.Misc;
 
 public class SelectorQuery extends ASelector {
 
@@ -38,8 +39,7 @@ public class SelectorQuery extends ASelector {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
 			String t = r.getWsType();
-			if (t.equals(ResourceDescriptor.TYPE_QUERY)
-					|| t.equals(ResourceDescriptor.TYPE_REFERENCE))
+			if (t.equals(ResourceDescriptor.TYPE_QUERY) || t.equals(ResourceDescriptor.TYPE_REFERENCE))
 				return r;
 		}
 		return null;
@@ -48,6 +48,17 @@ public class SelectorQuery extends ASelector {
 	@Override
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		return getQuery(ru);
+	}
+
+	@Override
+	public boolean isPageComplete() {
+		boolean b = super.isPageComplete();
+		if (b) {
+			ResourceDescriptor rd = res.getValue();
+			String[] qvc = rd.getQueryVisibleColumns();
+			b = b && qvc != null && qvc.length > 0 && !Misc.isNullOrEmpty(rd.getQueryValueColumn());
+		}
+		return b;
 	}
 
 }

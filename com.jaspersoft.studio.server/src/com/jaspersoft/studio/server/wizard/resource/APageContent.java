@@ -33,8 +33,7 @@ public abstract class APageContent {
 		this(parent, resource, new DataBindingContext());
 	}
 
-	public APageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public APageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		this.res = resource;
 		this.pnode = parent;
 		this.bindingContext = bindingContext;
@@ -54,8 +53,7 @@ public abstract class APageContent {
 
 	public abstract Control createContent(Composite parent);
 
-	public static IWizardPage[] getPages(MResource res,
-			APageContent... rcontent) {
+	public static IWizardPage[] getPages(MResource res, APageContent... rcontent) {
 		if (res.getValue() != null && res.getValue().getIsNew()) {
 			IWizardPage[] pages = new IWizardPage[rcontent.length];
 			for (int i = 0; i < pages.length; i++)
@@ -69,15 +67,18 @@ public abstract class APageContent {
 		this.page = page;
 	}
 
+	private boolean isPageComplete = true;
+
 	public boolean isPageComplete() {
-		return true;
+		return isPageComplete;
 	}
 
 	public void setPageComplete(boolean complete) {
+		this.isPageComplete = complete;
 		page.setPageComplete(complete);
 	}
-	
-	public String getHelpContext(){
+
+	public String getHelpContext() {
 		return null;
 	}
 
