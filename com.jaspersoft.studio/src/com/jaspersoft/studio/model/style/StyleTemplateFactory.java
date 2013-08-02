@@ -166,6 +166,8 @@ public class StyleTemplateFactory {
 		JasperDesign jd = jConf.getJasperDesign();
 		String[] items = cstyles.get(jd);
 		if (items == null) {
+			//If i have not a JD i return an empty array to avoid exception
+			if (jd == null) return new String[]{};
 			JRStyle[] styles = jd.getStyles();
 			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
 			int size = 1;

@@ -1428,6 +1428,18 @@
        </postsetvalue>
     </extension>
     <extension point="org.eclipse.ui.commands">
+      <category name="Languages" id="com.jaspersoft.studio.switchlanguage.category">
+      </category>
+      <command
+            categoryId="com.jaspersoft.studio.switchlanguage.category"
+            id="com.jaspersoft.studio.switchlanguage.command"
+            name="Language">
+         <commandParameter
+               id="com.jaspersoft.studio.switchlanguage.locale"
+               name="locale"
+               optional="true">
+         </commandParameter>
+      </command>
 	  <command
          categoryId="org.eclipse.gef.category.view"
          description="Show or hide the grid"
@@ -2090,6 +2102,10 @@
        </definition>
     </extension>
 	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="com.jaspersoft.studio.handlers.SwitchLanguageHandler"
+            commandId="com.jaspersoft.studio.switchlanguage.command">
+        </handler>
 		<handler commandId="com.jaspersoft.studio.command.exportFilesTo"
 			class="com.jaspersoft.studio.handlers.ExportFilesToHandler">
 		</handler>
@@ -2097,8 +2113,31 @@
 			class="com.jaspersoft.studio.handlers.ExportAsTemplateHandler">
 		</handler>
 	</extension>
-	<extension id="com.jaspersoft.studio.menus.saveReportTo"
-		point="org.eclipse.ui.menus">
+	<extension id="com.jaspersoft.studio.menus.saveReportTo" point="org.eclipse.ui.menus">
+		<menuContribution locationURI="menu:window">
+	         <menu label="Language" mnemonic="L" id="com.jaspersoft.studio.switchlanguage.menus">
+	            <command
+	                  commandId="com.jaspersoft.studio.switchlanguage.command"
+	                  icon="icons/resources/language/us.png"
+	                  id="com.jaspersoft.studio.switchlanguage.menus.english"
+	                  label="English">
+	               <parameter
+	                     name="com.jaspersoft.studio.switchlanguage.locale"
+	                     value="en">
+	               </parameter>
+	            </command>
+	            <command
+	                  commandId="com.jaspersoft.studio.switchlanguage.command"
+	                  icon="icons/resources/language/it.png"
+	                  id="com.jaspersoft.studio.switchlanguage.menus.italian"
+	                  label="Italian">
+	               <parameter
+	                     name="com.jaspersoft.studio.switchlanguage.locale"
+	                     value="it">
+	               </parameter>
+	            </command>
+	         </menu>
+	    </menuContribution>
 		<menuContribution locationURI="menu:file?after=export">
 			<command commandId="com.jaspersoft.studio.command.exportFilesTo"
 				icon="icons/eclipseicons/save.gif" label="%ExportFiles" style="push">
