@@ -1,0 +1,2 @@
+${functionsLibraryClass}.HELLO_WORLD_MSG.description                     = A dummy method that prints an "Hello World!" message
+${functionsLibraryClass}.HELLO_WORLD_MSG.name                            = Hello World

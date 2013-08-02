@@ -1,0 +1,20 @@
+#set( $clazzSuffix = ".class" )
+
+package $packageName;
+
+import net.sf.jasperreports.functions.annotations.Function;
+import net.sf.jasperreports.functions.annotations.FunctionCategories;
+
+@FunctionCategories({ 
+	#foreach( $category in $categoriesList )
+	    $category$clazzSuffix#if( $foreach.hasNext ),#end
+	#end
+ })
+ public class $functionLibraryName {
+ 
+ 	@Function("HELLO_WORLD_MSG")
+ 	public static String HELLO_WORLD_MSG() {
+ 		return "Hello World!";
+ 	}
+ 	
+ }
