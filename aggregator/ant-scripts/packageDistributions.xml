@@ -96,7 +96,18 @@
 		<!-- rename the folder -->
 		<move file="${dirlocation.linux.x86}/${productRootFolder}" tofile="${dirlocation.linux.x86}/${jss.distro.folder}" />
 		<!-- create tar.gz file -->
-		<tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${dirlocation.linux.x86}/" compression="gzip" longfile="gnu" />
+		<!-- <tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${dirlocation.linux.x86}/" compression="gzip" longfile="gnu" /> -->
+		<tar destfile="${dist}/${jss.linux.x86.tgz}" longfile="gnu" compression="gzip">
+			<tarfileset dir="${dirlocation.linux.x86}/" filemode="755">
+				<include name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*" />
+				<include name="**/Jaspersoft Studio" />
+			</tarfileset>
+			<tarfileset dir="${dirlocation.linux.x86}/">
+				<include name="**/*" />
+				<exclude name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*"/>
+				<exclude name="**/Jaspersoft Studio" />
+			</tarfileset>
+		</tar>
 		<!-- create debian package -->
 		<antcall target="createDeb">
 			<param name="architecture" value="i386"/>
@@ -119,7 +130,18 @@
 		<!-- rename the folder -->
 		<move file="${dirlocation.linux.x86_64}/${productRootFolder}" tofile="${dirlocation.linux.x86_64}/${jss.distro.folder}" />
 		<!-- create tar.gz file -->
-		<tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${dirlocation.linux.x86_64}/" compression="gzip" longfile="gnu" />
+		<!-- <tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${dirlocation.linux.x86_64}/" compression="gzip" longfile="gnu" /> -->
+		<tar destfile="${dist}/${jss.linux.x86_64.tgz}" longfile="gnu" compression="gzip">
+			<tarfileset dir="${dirlocation.linux.x86_64}/" filemode="755">
+				<include name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*" />
+				<include name="**/Jaspersoft Studio" />
+			</tarfileset>
+			<tarfileset dir="${dirlocation.linux.x86_64}/">
+				<include name="**/*" />
+				<exclude name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*"/>
+				<exclude name="**/Jaspersoft Studio" />
+			</tarfileset>
+		</tar>
 		<!-- create debian package -->
 		<antcall target="createDeb">
 			<param name="architecture" value="amd64"/>
