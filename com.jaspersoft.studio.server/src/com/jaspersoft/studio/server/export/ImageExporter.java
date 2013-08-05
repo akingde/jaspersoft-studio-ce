@@ -33,16 +33,19 @@ public class ImageExporter extends AExporter {
 		if (f != null) {
 			String filename = f.getFullPath().toPortableString();
 			int dotPos = filename.lastIndexOf(".");
-			String strFilename = filename.substring(0, dotPos);
+			if (dotPos >= 0)
+				filename = filename.substring(0, dotPos);
 			ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils.getBytes(f));
+			if (itype == ImageTypeEnum.UNKNOWN)
+				itype = ImageTypeEnum.PNG;
 			if (itype == ImageTypeEnum.GIF) {
-				f = FileUtils.fileRenamed(f, strFilename, ".gif", false, monitor);
+				f = FileUtils.fileRenamed(f, filename, ".gif", false, monitor);
 			} else if (itype == ImageTypeEnum.JPEG) {
-				f = FileUtils.fileRenamed(f, strFilename, ".jpeg", false, monitor);
+				f = FileUtils.fileRenamed(f, filename, ".jpeg", false, monitor);
 			} else if (itype == ImageTypeEnum.PNG) {
-				f = FileUtils.fileRenamed(f, strFilename, ".png", false, monitor);
+				f = FileUtils.fileRenamed(f, filename, ".png", false, monitor);
 			} else if (itype == ImageTypeEnum.TIFF) {
-				f = FileUtils.fileRenamed(f, strFilename, ".tiff", false, monitor);
+				f = FileUtils.fileRenamed(f, filename, ".tiff", false, monitor);
 			}
 			fileurimap.put(fkeyname, f);
 		}
@@ -51,7 +54,7 @@ public class ImageExporter extends AExporter {
 
 	@Override
 	public String getExtension() {
-		return ".png";
+		return "";
 	}
 
 }

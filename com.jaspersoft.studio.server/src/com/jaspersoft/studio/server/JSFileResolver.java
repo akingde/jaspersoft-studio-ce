@@ -52,8 +52,7 @@ public class JSFileResolver extends SimpleFileResolver {
 		this(new ArrayList<File>(), jasperDesign, monitor);
 	}
 
-	public JSFileResolver(List<File> parentFolders, JasperDesign jDesign,
-			IProgressMonitor monitor) {
+	public JSFileResolver(List<File> parentFolders, JasperDesign jDesign, IProgressMonitor monitor) {
 		super(parentFolders);
 		this.jDesign = jDesign;
 		init(monitor);
@@ -67,7 +66,7 @@ public class JSFileResolver extends SimpleFileResolver {
 			try {
 				c = ServerManager.getServer(serverUri, monitor);
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
 	}
@@ -118,8 +117,7 @@ public class JSFileResolver extends SimpleFileResolver {
 
 					// find the resource...
 					for (ResourceDescriptor r : reportUnitResources) {
-						if (r.getName() == null
-								|| !r.getName().equals(objectUri))
+						if (r.getName() == null || !r.getName().equals(objectUri))
 							continue;
 						if (r.getIsReference())
 							r = ReferenceResolver.resolveReference(c, r, null);
@@ -142,11 +140,9 @@ public class JSFileResolver extends SimpleFileResolver {
 
 	protected boolean isFileResource(ResourceDescriptor r) {
 		String t = r.getWsType();
-		return t.equals(ResourceDescriptor.TYPE_IMAGE)
-				||
-				// resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
-				// ||
-				t.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE)
-				|| t.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
+		return t.equals(ResourceDescriptor.TYPE_IMAGE) ||
+		// resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
+		// ||
+				t.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE) || t.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 	}
 }

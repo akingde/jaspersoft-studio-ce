@@ -350,6 +350,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>(2);
 		dragListeners.add(new RepositoryImageDragSourceListener(treeViewer));
 		dragListeners.add(new UnitDragSourceListener(treeViewer));
+		// dragListeners.add(new InputControlDragSourceListener(treeViewer));
 		return dragListeners;
 	}
 
@@ -357,6 +358,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 	public List<TransferDropTargetListener> getTransferDropTargetListeners(TreeViewer treeViewer) {
 		List<TransferDropTargetListener> dropListeners = new ArrayList<TransferDropTargetListener>(1);
 		dropListeners.add(new RepositoryFileResourceDropTargetListener(FileTransfer.getInstance()));
+		// dropListeners.add(new InputControlDropTargetListener(treeViewer));
 		return dropListeners;
 	}
 }

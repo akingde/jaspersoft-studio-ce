@@ -62,41 +62,42 @@ public abstract class AExporter {
 
 	protected IFile getTempFile(MResource res, ResourceDescriptor rd, String fkeyname, String dextention, IProgressMonitor monitor) throws Exception {
 		IFile f = fileurimap.get(fkeyname);
-		if (f == null) {
-			INode root = res.getRoot();
-			IFolder troot = null;
-			if (root != null && root instanceof MServerProfile)
-				troot = ((MServerProfile) root).getTmpDir(monitor);
-			else
-				troot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI());
-			IResource r = troot.findMember(rd.getParentFolder());
-			if (r != null && r instanceof IFile) {
-				r.delete(true, monitor);
-				r = null;
-			}
-			if (r == null || !r.exists()) {
-				r = troot.getFolder(rd.getParentFolder());
-				FileUtils.prepareFolder((IFolder) r, monitor);
-			}
-			troot = (IFolder) r;
-			String path = rd.getName();
-			if (!path.endsWith(dextention)) {
-				path += dextention;
-			}
-			r = troot.findMember(path);
-			if (r != null && r instanceof IFolder) {
-				r.delete(true, monitor);
-				r = null;
-			}
-			if (r == null || !r.exists()) {
-				f = troot.getFile(path);
-				f.create(new ByteArrayInputStream("".getBytes("UTF-8")), true, monitor);
-			} else
-				f = (IFile) r;
-			fileurimap.put(fkeyname, f);
+		// if (f == null) {
+		INode root = res.getRoot();
+		IFolder troot = null;
+		if (root != null && root instanceof MServerProfile)
+			troot = ((MServerProfile) root).getTmpDir(monitor);
+		else
+			troot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI());
+		IResource r = troot.findMember(rd.getParentFolder());
+		if (r != null && r instanceof IFile) {
+			r.delete(true, monitor);
+			r = null;
 		}
+		if (r == null || !r.exists()) {
+			r = troot.getFolder(rd.getParentFolder());
+			FileUtils.prepareFolder((IFolder) r, monitor);
+		}
+		troot = (IFolder) r;
+		String path = rd.getName();
+		if (!path.endsWith(dextention)) {
+			path += dextention;
+		}
+		r = troot.findMember(path);
+		if (r != null && r instanceof IFolder) {
+			r.delete(true, monitor);
+			r = null;
+		}
+		if (r == null || !r.exists()) {
+			f = troot.getFile(path);
+			f.create(new ByteArrayInputStream("".getBytes("UTF-8")), true, monitor);
+		} else
+			f = (IFile) r;
+		fileurimap.put(fkeyname, f);
+		// }
 		try {
 			WSClientHelper.getResource(res, rd, new File(f.getRawLocationURI()));
+			f.refreshLocal(1, monitor);
 		} catch (Exception e) {
 			UIUtils.showError(e);
 			return null;
