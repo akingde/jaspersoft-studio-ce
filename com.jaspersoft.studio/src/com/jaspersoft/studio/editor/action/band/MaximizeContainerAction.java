@@ -119,13 +119,15 @@ public class MaximizeContainerAction extends SelectionAction {
 	}
 
 	private JRElementGroup getContainer(ANode n) {
-		Object val = n.getValue();
-		if (n instanceof IGroupElement)
-			return ((IGroupElement) n).getJRElementGroup();
-		if (val instanceof JRElementGroup)
-			return (JRElementGroup) val;
-		if (val instanceof JRDesignElement)
-			return getContainer(n.getParent());
+		if (n != null){
+			Object val = n.getValue();
+			if (n instanceof IGroupElement)
+				return ((IGroupElement) n).getJRElementGroup();
+			if (val instanceof JRElementGroup)
+				return (JRElementGroup) val;
+			if (val instanceof JRDesignElement)
+				return getContainer(n.getParent());
+		}
 		return null;
 	}
 

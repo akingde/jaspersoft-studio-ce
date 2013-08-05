@@ -230,12 +230,12 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 				if (command instanceof CompoundCommand){
 					//If the command is a compound command i execute its content one by one
 					for(Object singleCmd : ((CompoundCommand)command).getCommands()){
-						if (singleCmd instanceof CreateE4ObjectCommand){
-							CreateE4ObjectCommand cmd = (CreateE4ObjectCommand)singleCmd;
+						if (singleCmd instanceof CreateElementCommand){
+							CreateElementCommand cmd = (CreateElementCommand)singleCmd;
 							getViewer().getEditDomain().getCommandStack().execute(cmd);
 							//if one command is cancelled during the execution even the following are skipped
 							if (cmd.isCancelled()) break;
-						}
+						} else getViewer().getEditDomain().getCommandStack().execute((Command)singleCmd);
 					}
 				}
 				else getViewer().getEditDomain().getCommandStack().execute(command);

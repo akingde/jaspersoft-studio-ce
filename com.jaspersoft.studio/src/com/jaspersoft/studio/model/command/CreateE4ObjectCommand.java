@@ -30,10 +30,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
 	
-	/**
-	 * Flag used to mark a command as cancelled during it's execution
-	 */
-	protected boolean operationCancelled;
+
 
 	public CreateE4ObjectCommand(ANode child, ANode parent, Rectangle location, int index) {
 		super();
@@ -42,7 +39,6 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		this.location = location;
 		this.index = index;
 		this.jasperDesign = parent.getJasperDesign();
-		this.operationCancelled = false;
 	}
 	
 	public ANode getChild(){
@@ -102,15 +98,12 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		}
 	}
 	
-	/**
-	 * Check if the command was cancelled during the execution
-	 * 
-	 * @return true if the command was cancelled during the execution, false otherwise
-	 */
-	public boolean isCancelled(){
-		return operationCancelled;
+	@Override
+	public boolean canExecute() {
+		return true;
 	}
 
+	
 	private JRDesignVariable var;
 
 	@Override

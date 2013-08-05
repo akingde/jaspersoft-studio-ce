@@ -90,7 +90,7 @@ public class ChartDataPage extends JSSWizardPage implements IExpressionContextSe
 				edataset);
 		ewDataset.setDataset(edataset, jrContext.getJasperDesign());
 		//It is necessary a layout to because the changing in the image can resize the other elements
-		composite.layout();
+		composite.layout(true, true);
 	}
 
 	@Override

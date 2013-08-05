@@ -78,6 +78,11 @@ public class CreateElementCommand extends Command {
 
 	/** The index. */
 	protected int index;
+	
+	/**
+	 * Flag used to mark a command as cancelled during it's execution
+	 */
+	protected boolean operationCancelled = false;;
 
 	protected CreateElementCommand() {
 		super();
@@ -192,9 +197,19 @@ public class CreateElementCommand extends Command {
 				pholder = ((IContainerLayout) destNode).getPropertyHolder();
 		} else {
 			this.destNode = null;
-			MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the element", "The element can not be created because there aren't container where it can be placed");
+			MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the element", "The element can not be created because there aren't containers where it can be placed");
 		}
 	}
+	
+	/**
+	 * Check if the command was cancelled during the execution
+	 * 
+	 * @return true if the command was cancelled during the execution, false otherwise
+	 */
+	public boolean isCancelled(){
+		return operationCancelled;
+	}
+
 	
 	@Override
 	public boolean canExecute() {

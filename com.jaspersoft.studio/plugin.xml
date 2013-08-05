@@ -2123,7 +2123,7 @@
 	                  label="English">
 	               <parameter
 	                     name="com.jaspersoft.studio.switchlanguage.locale"
-	                     value="en">
+	                     value="en_EN">
 	               </parameter>
 	            </command>
 	            <command
@@ -2133,7 +2133,7 @@
 	                  label="Italian">
 	               <parameter
 	                     name="com.jaspersoft.studio.switchlanguage.locale"
-	                     value="it">
+	                     value="it_IT">
 	               </parameter>
 	            </command>
 	         </menu>
