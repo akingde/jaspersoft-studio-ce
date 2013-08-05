@@ -35,6 +35,7 @@
 package com.jaspersoft.studio.data.cassandra;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -59,8 +60,8 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 
 	private CassandraDataAdapterDescriptor dataAdapterDescriptor;
 
-	public CassandraDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public CassandraDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		initComponents();
 	}
 

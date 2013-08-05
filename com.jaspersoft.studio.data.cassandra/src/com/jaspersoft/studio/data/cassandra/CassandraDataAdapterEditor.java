@@ -34,6 +34,8 @@
  */
 package com.jaspersoft.studio.data.cassandra;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -50,9 +52,9 @@ public class CassandraDataAdapterEditor implements DataAdapterEditor {
 
     protected CassandraDataAdapterComposite composite = null;
 
-    public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
+	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage, JasperReportsContext jrContext) {
         if (composite == null)
-            composite = new CassandraDataAdapterComposite(parent, style);
+			composite = new CassandraDataAdapterComposite(parent, style, jrContext);
         return composite;
     }
 
