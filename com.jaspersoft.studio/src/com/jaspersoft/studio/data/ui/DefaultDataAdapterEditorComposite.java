@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -74,12 +75,13 @@ public class DefaultDataAdapterEditorComposite extends ADataAdapterComposite {
 	 * @param style
 	 * @param wizardPage
 	 */
-	public DefaultDataAdapterEditorComposite(Composite parent, int style, WizardPage wizardPage) {
+	public DefaultDataAdapterEditorComposite(Composite parent, int style, WizardPage wizardPage,
+			JasperReportsContext jrContext) {
 
 		/*
 		 * UI ELEMENTS
 		 */
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(2, false));
 
 		// data model init

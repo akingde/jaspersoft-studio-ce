@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.mongodb;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -44,8 +45,8 @@ public class MongoDbDataAdapterComposite extends ADataAdapterComposite {
 
     private MongoDbDataAdapterDescriptor dataAdapterDescriptor;
 
-    public MongoDbDataAdapterComposite(Composite parent, int style) {
-        super(parent, style);
+	public MongoDbDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
         initComponents();
     }
 

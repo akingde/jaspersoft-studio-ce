@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.hive;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -32,9 +34,9 @@ public class HiveDataAdapterEditor implements DataAdapterEditor {
 	protected HiveDataAdapterComposite composite = null;
 
 	public ADataAdapterComposite getComposite(Composite parent, int style,
-			WizardPage wizardPage) {
+ WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (composite == null)
-			composite = new HiveDataAdapterComposite(parent, style);
+			composite = new HiveDataAdapterComposite(parent, style, jrContext);
 		return composite;
 	}
 

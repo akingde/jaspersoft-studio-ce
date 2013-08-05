@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.queryexecutor;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -36,9 +38,9 @@ public class QueryExecutorDataAdapterEditor implements DataAdapterEditor {
 		return composite.getDataAdapter();
 	}
 
-	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
+	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (composite == null) {
-			composite = new QueryExecutorDataAdapterComposite(parent, style);
+			composite = new QueryExecutorDataAdapterComposite(parent, style, jrContext);
 		}
 		return composite;
 	}

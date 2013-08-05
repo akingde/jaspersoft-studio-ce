@@ -21,6 +21,7 @@ import java.util.TimeZone;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -70,9 +71,9 @@ public class XMLDataAdapterComposite extends AFileDataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public XMLDataAdapterComposite(Composite parent, int style) {
+	public XMLDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(this, SWT.NONE);

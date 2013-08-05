@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -30,8 +31,8 @@ public class NameComposite extends ADataAdapterComposite {
 	private DataAdapterDescriptor dataAdapterDesc = null;
 	private Text textName;
 
-	public NameComposite(Composite parent, int style) {
-		super(parent, style);
+	public NameComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(2, false));
 
 		Label lblName = new Label(this, SWT.NONE);

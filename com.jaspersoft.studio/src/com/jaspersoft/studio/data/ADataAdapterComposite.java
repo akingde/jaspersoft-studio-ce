@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
@@ -19,6 +14,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -31,9 +27,10 @@ public abstract class ADataAdapterComposite extends Composite {
 	protected DataBindingContext bindingContext;
 
 	public final static String PREFIX = "com.jaspersoft.studio.doc.";
-	
-	public ADataAdapterComposite(Composite parent, int style) {
+
+	public ADataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 		super(parent, style);
+		this.jrContext = jrContext;
 		bindingContext = new DataBindingContext();
 	}
 
@@ -42,7 +39,6 @@ public abstract class ADataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	
 	public String getHelpContextId() {
 		return PREFIX.concat("dataAdapters_wizard_list");
 	}
@@ -102,6 +98,12 @@ public abstract class ADataAdapterComposite extends Composite {
 		addDirtyListenersToContext();
 	}
 
+	private JasperReportsContext jrContext;
+
+	public JasperReportsContext getJrContext() {
+		return jrContext;
+	}
+
 	protected abstract void bindWidgets(DataAdapter dataAdapter);
 
 	public abstract DataAdapterDescriptor getDataAdapter();
@@ -115,10 +117,10 @@ public abstract class ADataAdapterComposite extends Composite {
 	public void removeModifyListener(PropertyChangeListener listener) {
 		pchangesuport.removePropertyChangeListener(listener);
 	}
-	
+
 	/**
-	 * This generic method should be used by clients in order to 
-	 * perform additional custom updates involving the UI components.
+	 * This generic method should be used by clients in order to perform additional custom updates involving the UI
+	 * components.
 	 */
 	public void performAdditionalUpdates() {
 		// Default: do nothing - subclasses should override if needed

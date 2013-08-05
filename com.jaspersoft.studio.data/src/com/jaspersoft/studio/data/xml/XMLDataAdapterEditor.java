@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xml;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -36,9 +38,9 @@ public class XMLDataAdapterEditor implements DataAdapterEditor {
 		return this.composite.getDataAdapter();
 	}
 
-	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
+	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (this.composite == null) {
-			composite = new XMLDataAdapterComposite(parent, style);
+			composite = new XMLDataAdapterComposite(parent, style, jrContext);
 		}
 		return this.composite;
 	}

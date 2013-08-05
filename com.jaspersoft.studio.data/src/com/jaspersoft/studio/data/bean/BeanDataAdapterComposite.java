@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.bean;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -46,8 +47,8 @@ public class BeanDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public BeanDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public BeanDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(2, false));
 
 		Label lblFactory = new Label(this, SWT.NONE);

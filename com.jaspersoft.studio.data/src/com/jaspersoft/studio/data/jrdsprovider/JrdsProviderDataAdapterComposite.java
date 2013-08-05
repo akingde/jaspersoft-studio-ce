@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.jrdsprovider;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -43,8 +44,8 @@ public class JrdsProviderDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public JrdsProviderDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public JrdsProviderDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);

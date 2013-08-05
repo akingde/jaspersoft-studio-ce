@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -96,12 +97,12 @@ public class XLSDataAdapterComposite extends AFileDataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public XLSDataAdapterComposite(Composite parent, int style) {
+	public XLSDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
 		/*
 		 * UI ELEMENTS
 		 */
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		// data model init

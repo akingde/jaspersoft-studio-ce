@@ -20,6 +20,7 @@ import java.util.TimeZone;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -68,8 +69,8 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public JsonDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public JsonDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(this, SWT.NONE);

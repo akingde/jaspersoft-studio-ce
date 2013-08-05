@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.hibernate;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -48,9 +49,9 @@ public class HibernateDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public HibernateDataAdapterComposite(Composite parent, int style) {
+	public HibernateDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(this, SWT.NONE);

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.ui;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -37,9 +39,10 @@ public class DefaultDataAdapterEditor implements DataAdapterEditor {
 		    return this.composite.getDataAdapter();
 	  }
 
-	  public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
+	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage,
+			JasperReportsContext jrContext) {
 		    if (composite == null) {
-			      composite = new DefaultDataAdapterEditorComposite(parent, style, wizardPage);
+			composite = new DefaultDataAdapterEditorComposite(parent, style, wizardPage, jrContext);
 		    }
 		    return composite;
 	  }

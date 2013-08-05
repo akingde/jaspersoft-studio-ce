@@ -20,6 +20,7 @@ import java.util.TimeZone;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -66,9 +67,9 @@ public class RemoteXMLDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public RemoteXMLDataAdapterComposite(Composite parent, int style) {
+	public RemoteXMLDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(this, SWT.NONE);

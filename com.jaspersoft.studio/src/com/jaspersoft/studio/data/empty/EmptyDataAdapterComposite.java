@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.empty;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -39,8 +40,8 @@ public class EmptyDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public EmptyDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public EmptyDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);

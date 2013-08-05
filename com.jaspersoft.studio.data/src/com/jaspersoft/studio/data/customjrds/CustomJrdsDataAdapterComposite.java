@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.customjrds;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -45,12 +46,12 @@ public class CustomJrdsDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public CustomJrdsDataAdapterComposite(Composite parent, int style) {
+	public CustomJrdsDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
 		/*
 		 * UI ELEMENTS
 		 */
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);

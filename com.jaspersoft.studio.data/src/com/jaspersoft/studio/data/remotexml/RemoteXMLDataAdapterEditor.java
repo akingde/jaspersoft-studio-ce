@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.remotexml;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -36,9 +38,9 @@ public class RemoteXMLDataAdapterEditor implements DataAdapterEditor {
 		return this.composite.getDataAdapter();
 	}
 
-	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
+	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (this.composite == null) {
-			composite = new RemoteXMLDataAdapterComposite(parent, style);
+			composite = new RemoteXMLDataAdapterComposite(parent, style, jrContext);
 		}
 		return this.composite;
 	}

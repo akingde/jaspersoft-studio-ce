@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.xmla;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -60,9 +61,9 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public XmlaDataAdapterComposite(Composite parent, int style) {
+	public XmlaDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(3, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);

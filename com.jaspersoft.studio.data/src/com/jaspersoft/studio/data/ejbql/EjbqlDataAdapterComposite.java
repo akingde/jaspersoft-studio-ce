@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.ejbql;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -41,8 +42,8 @@ public class EjbqlDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public EjbqlDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public EjbqlDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);

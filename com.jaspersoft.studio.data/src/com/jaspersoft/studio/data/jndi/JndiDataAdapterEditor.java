@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.jndi;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -37,9 +39,9 @@ public class JndiDataAdapterEditor implements DataAdapterEditor {
 	}
 
 	public ADataAdapterComposite getComposite(Composite parent, int style,
-			WizardPage wizardPage) {
+ WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (composite == null) {
-			composite = new JndiDataAdapterComposite(parent, style);
+			composite = new JndiDataAdapterComposite(parent, style, jrContext);
 		}
 		return composite;
 	}

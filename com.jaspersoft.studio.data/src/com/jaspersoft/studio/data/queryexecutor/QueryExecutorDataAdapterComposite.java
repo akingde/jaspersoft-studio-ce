@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.queryexecutor;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -30,8 +31,8 @@ public class QueryExecutorDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public QueryExecutorDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public QueryExecutorDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 	}
 
 	@Override

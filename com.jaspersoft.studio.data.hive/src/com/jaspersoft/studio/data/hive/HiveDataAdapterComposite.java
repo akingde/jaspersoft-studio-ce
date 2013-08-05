@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.hive;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -41,8 +42,8 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 
 	private HiveDataAdapterDescriptor dataAdapterDescriptor;
 
-	public HiveDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public HiveDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		initComponents();
 	}
 

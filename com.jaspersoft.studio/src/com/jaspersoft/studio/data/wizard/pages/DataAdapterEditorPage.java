@@ -1,19 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard.pages;
+
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -49,6 +46,12 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 
 	public void setStorage(ADataAdapterStorage storage) {
 		this.storage = storage;
+	}
+
+	private JasperReportsContext jrContext;
+
+	public void setJrContext(JasperReportsContext jrContext) {
+		this.jrContext = jrContext;
 	}
 
 	/**
@@ -155,7 +158,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 			editorComposite.dispose();
 		}
 
-		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL, this);
+		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL, this, jrContext);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		// 4. set the new dataAdapter to the DataAdapterEditor
@@ -256,12 +259,13 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 
 	@Override
 	public void performFinishInvoked() {
-		if(editorComposite!=null) editorComposite.performAdditionalUpdates();
+		if (editorComposite != null)
+			editorComposite.performAdditionalUpdates();
 	}
 
 	@Override
 	public void performCancelInvoked() {
 		// do nothing...
 	}
- 
+
 }

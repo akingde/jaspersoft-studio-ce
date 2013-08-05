@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.jdbc;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -159,8 +160,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public JDBCDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public JDBCDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 		GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;

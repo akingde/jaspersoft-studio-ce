@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.hibernate.spring;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -37,9 +39,9 @@ public class SpringHibernateDataAdapterEditor implements DataAdapterEditor {
 	}
 
 	public ADataAdapterComposite getComposite(Composite parent, int style,
-			WizardPage wizardPage) {
+ WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (composite == null) {
-			composite = new SpringHibernateDataAdapterComposite(parent, style);
+			composite = new SpringHibernateDataAdapterComposite(parent, style, jrContext);
 		}
 		return composite;
 	}

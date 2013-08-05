@@ -1,22 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 
@@ -64,6 +60,13 @@ public class DataAdapterWizard extends AbstractDataAdapterWizard implements Sele
 			dataAdapterEditorPage.setEditMode(true);
 		}
 		addPage(dataAdapterEditorPage);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		if (page instanceof DataAdapterEditorPage)
+			((DataAdapterEditorPage) page).setJrContext(getConfig());
+		return super.getNextPage(page);
 	}
 
 	@Override

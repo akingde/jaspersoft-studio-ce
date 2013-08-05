@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.csv;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import java.util.TreeMap;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -109,12 +109,12 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public CSVDataAdapterComposite(Composite parent, int style) {
+	public CSVDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 
 		/*
 		 * UI ELEMENTS
 		 */
-		super(parent, style);
+		super(parent, style, jrContext);
 		setLayout(new GridLayout(1, false));
 
 		// data model init
@@ -1021,7 +1021,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 	 *           , Exception
 	 */
 	private void getCSVColumns() throws IOException, Exception {
-		JRCsvDataSource ds = new JRCsvDataSource(new File(textFileName.getText()));
+		JRCsvDataSource ds = new JRCsvDataSource(getJrContext(), textFileName.getText());
 		ds.setUseFirstRowAsHeader(true);
 
 		if (btnRadioFieldComma.getSelection())

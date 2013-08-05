@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.mondrian;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.mondrian.MondrianDataAdapter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -39,8 +40,8 @@ import com.jaspersoft.studio.data.messages.Messages;
 public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 	private Text textCatalogURI;
 
-	public MondrianDataAdapterComposite(Composite parent, int style) {
-		super(parent, style);
+	public MondrianDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+		super(parent, style, jrContext);
 	}
 
 	@Override

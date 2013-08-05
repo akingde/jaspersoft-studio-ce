@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.mondrian;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -36,11 +38,11 @@ public class MondrianDataAdapterEditor extends JDBCDataAdapterEditor {
 	 * .swt.widgets.Composite, int)
 	 */
 	public ADataAdapterComposite getComposite(Composite parent, int style,
-			WizardPage wizardPage) {
+ WizardPage wizardPage, JasperReportsContext jrContext) {
 		if (composite == null || composite.getParent() != parent) {
 			if (composite != null)
 				composite.dispose();
-			composite = new MondrianDataAdapterComposite(parent, style);
+			composite = new MondrianDataAdapterComposite(parent, style, jrContext);
 			composite.setContextId("adapter_mondrian");
 		}
 		return composite;
