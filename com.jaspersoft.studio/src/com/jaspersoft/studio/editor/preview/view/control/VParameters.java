@@ -60,11 +60,13 @@ public class VParameters extends AVParameters {
 		showEmptyParametersWarning = false;
 	}
 
+	protected boolean isSystem = false;
+
 	public void setupDefaultValues() {
 		JRDataset mDataset = jContext.getJasperDesign().getMainDataset();
 		for (String pname : incontrols.keySet()) {
 			for (JRParameter p : prompts) {
-				if (p.isSystemDefined())
+				if ((!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
 					continue;
 				if (p.getName().equals(pname)) {
 					if (p.getDefaultValueExpression() != null) {
@@ -104,18 +106,19 @@ public class VParameters extends AVParameters {
 		return true;
 	}
 
-	private void createControl(Composite sectionClient, ParameterJasper pres, IDataInput in, JRDesignParameter p, boolean first){
+	private void createControl(Composite sectionClient, ParameterJasper pres, IDataInput in, JRDesignParameter p,
+			boolean first) {
 		incontrols.put(p.getName(), in);
 		createVerticalSeprator(first);
 		createLabel(sectionClient, pres, in);
 		in.createInput(sectionClient, pres, params);
 	}
-	
+
 	protected boolean createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params, boolean first)
 			throws ClassNotFoundException {
 		ParameterJasper pres = new ParameterJasper(p);
-		//Use a custom control for the report maxcount instead of the integer standard one
-		if (p.getName().equals(JRParameter.REPORT_MAX_COUNT)){
+		// Use a custom control for the report maxcount instead of the integer standard one
+		if (p.getName().equals(JRParameter.REPORT_MAX_COUNT)) {
 			createControl(sectionClient, pres, new BooleanNumericInput(), p, first);
 			return true;
 		}

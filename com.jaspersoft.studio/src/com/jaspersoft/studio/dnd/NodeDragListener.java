@@ -28,7 +28,7 @@ import com.jaspersoft.studio.model.ANode;
  * Supports dragging gadgets from a structured viewer.
  */
 public class NodeDragListener extends DragSourceAdapter {
-	private StructuredViewer viewer;
+	protected StructuredViewer viewer;
 
 	public NodeDragListener(StructuredViewer viewer) {
 		this.viewer = viewer;

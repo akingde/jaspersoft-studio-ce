@@ -145,7 +145,7 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	public void setJasperPrint(final Statistics stats, JasperPrint jasperPrint) {
 		this.jasperPrint = jasperPrint;
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (getDefaultViewer() instanceof IJRPrintable) {
 					JasperPrint jrprint = getJasperPrint();

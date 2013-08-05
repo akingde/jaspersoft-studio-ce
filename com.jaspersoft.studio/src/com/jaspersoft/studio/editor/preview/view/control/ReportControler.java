@@ -140,6 +140,7 @@ public class ReportControler {
 
 	public void resetParametersToDefault() {
 		prmInput.setupDefaultValues();
+		prmRepInput.setupDefaultValues();
 	}
 
 	private void setParameters() {
@@ -210,15 +211,24 @@ public class ReportControler {
 		return viewmap;
 	}
 
+	private VReportParameters prmRepInput;
+
 	private void fillForms() {
 		prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
 		prmInput.createInputControls(prompts, jasperParameters);
 
-		VReportParameters prmRepInput = (VReportParameters) viewmap.get(FORM_REPORT_PARAMETERS);
-		prmRepInput.createInputControls(prompts, jasperParameters);
+		Display.getDefault().asyncExec(new Runnable() {
 
-		VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
-		vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
+			@Override
+			public void run() {
+				prmRepInput = (VReportParameters) viewmap.get(FORM_REPORT_PARAMETERS);
+				prmRepInput.createInputControls(prompts, jasperParameters);
+
+				VSorting vs = (VSorting) viewmap.get(FORM_SORTING);
+				vs.setJasperReports(jrContext.getJasperDesign(), prompts, jasperParameters);
+			}
+		});
+
 	}
 
 	public void viewerChanged(APreview view) {
@@ -232,8 +242,8 @@ public class ReportControler {
 		VSimpleErrorPreview errorView = pcontainer.getErrorView();
 		pcontainer.getRightContainer().switchView(null, errorView);
 		errorView.setMessage(Messages.ReportControler_generating);
-
 		c = pcontainer.getConsole();
+
 		c.showConsole();
 		c.clearConsole();
 		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
