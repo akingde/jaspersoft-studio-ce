@@ -210,8 +210,9 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 
 			// 2. set in the wizard page the data adapter to edit
 			if (selectedFactory != factory) {
-				dataAdapterEditorPage.setDataAdapter(newDataAdapter);
 				dataAdapterEditorPage.setJrContext(getConfig());
+				dataAdapterEditorPage.setDataAdapter(newDataAdapter);
+
 				selectedFactory = factory;
 			}
 		}
