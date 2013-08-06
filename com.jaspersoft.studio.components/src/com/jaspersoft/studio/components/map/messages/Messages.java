@@ -22,6 +22,7 @@ public class Messages extends NLS {
 	public static String MapAuthenticationSection_ApiKeyText;
 	public static String MapAuthenticationSection_ClientIdText;
 	public static String MapAuthenticationSection_SignatureText;
+	public static String MapAuthenticationSection_UseBusinessAPICheckbox;
 	public static String MapAuthenticationSection_VersionText;
 	public static String MapDatasetSection_DeleteConfirmationMsg;
 	public static String MapDatasetSection_DeleteConfirmationTitle;
@@ -53,6 +54,8 @@ public class Messages extends NLS {
 	public static String MMap_markerDatasetTitle;
 	public static String MMap_markersDescription;
 	public static String MMap_markersTitle;
+	public static String MMap_OnErrorType;
+	public static String MMap_OnErrorTypeDescription;
 	public static String MMap_SignatureDescription;
 	public static String MMap_SignatureText;
 	public static String MMap_VersionDescription;

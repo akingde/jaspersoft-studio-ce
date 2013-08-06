@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -148,6 +149,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 	}
 
 	private IPropertyDescriptor[] descriptors;
+	private JSSEnumPropertyDescriptor onErrorTypeD;
 	private static Map<String, Object> defaultsMap;
 
 	@Override
@@ -201,7 +203,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		evaluationTimeD.setDescription(Messages.MMap_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$
 		evaluationGroupNameD.setDescription(Messages.MMap_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
@@ -216,6 +218,11 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		imageTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_IMAGE_TYPE, Messages.MMap_imageTypeTitle, MapImageTypeEnum.class, NullEnum.NOTNULL);
 		imageTypeD.setDescription(Messages.MMap_imageTypeDescription);
 		desc.add(imageTypeD);
+		
+		onErrorTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, Messages.MMap_OnErrorType,
+				OnErrorTypeEnum.class, NullEnum.NULL);
+		onErrorTypeD.setDescription(Messages.MMap_OnErrorTypeDescription);
+		desc.add(onErrorTypeD);
 
 		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MMap_markerDatasetTitle, true);
 		datasetRunD.setDescription(Messages.MMap_markerDatasetDescription);
@@ -250,6 +257,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		mapTypeD.setCategory(Messages.MMap_common_map_properties);
 		mapScaleD.setCategory(Messages.MMap_common_map_properties);
 		imageTypeD.setCategory(Messages.MMap_common_map_properties);
+		onErrorTypeD.setCategory(Messages.MMap_common_map_properties);
 		evaluationTimeD.setCategory(Messages.MMap_common_map_properties);
 		evaluationGroupNameD.setCategory(Messages.MMap_common_map_properties);
 		latitudeExprD.setCategory(Messages.MMap_common_map_properties);
@@ -264,6 +272,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapTypeEnum.ROADMAP);
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapScaleEnum.ONE);
 		defaultsMap.put(StandardMapComponent.PROPERTY_IMAGE_TYPE, MapImageTypeEnum.PNG);
+		defaultsMap.put(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
 		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, MapComponent.DEFAULT_ZOOM);
 	}
@@ -327,6 +336,9 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			return mapScaleD.getEnumValue(component.getMapScale());
 		if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
 			return imageTypeD.getEnumValue(component.getImageType());
+		if (id.equals(StandardMapComponent.PROPERTY_ON_ERROR_TYPE)) {
+			return onErrorTypeD.getEnumValue(component.getOnErrorType());
+		}
 
 		// map authentication info
 		if (id.equals(MapComponent.PROPERTY_KEY)) {
@@ -401,17 +413,40 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			component.setMapScale((MapScaleEnum) mapScaleD.getEnumValue(value));
 		else if (id.equals(StandardMapComponent.PROPERTY_IMAGE_TYPE))
 			component.setImageType((MapImageTypeEnum) imageTypeD.getEnumValue(value));
+		else if (id.equals(StandardMapComponent.PROPERTY_ON_ERROR_TYPE)) {
+			component.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
+		}
 		else if (id.equals(MapComponent.PROPERTY_KEY)) {
-			getJasperDesign().setProperty(MapComponent.PROPERTY_KEY, (String) value);
+			if(value instanceof String){
+				getJasperDesign().setProperty(MapComponent.PROPERTY_KEY, (String) value);
+			}
+			else {
+				getJasperDesign().removeProperty(MapComponent.PROPERTY_KEY);
+			}
 		}
 		else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
-			getJasperDesign().setProperty(MapComponent.PROPERTY_CLIENT_ID, (String) value);
+			if(value instanceof String) {
+				getJasperDesign().setProperty(MapComponent.PROPERTY_CLIENT_ID, (String) value);
+			}
+			else {
+				getJasperDesign().removeProperty(MapComponent.PROPERTY_CLIENT_ID);
+			}
 		}
 		else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
-			getJasperDesign().setProperty(MapComponent.PROPERTY_SIGNATURE, (String) value);
+			if(value instanceof String) {
+				getJasperDesign().setProperty(MapComponent.PROPERTY_SIGNATURE, (String) value);
+			}
+			else {
+				getJasperDesign().removeProperty(MapComponent.PROPERTY_SIGNATURE);
+			}
 		}
 		else if (id.equals(MapComponent.PROPERTY_VERSION)) {
-			getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
+			if(value instanceof String) {
+				getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
+			}
+			else {
+				getJasperDesign().removeProperty(MapComponent.PROPERTY_VERSION);
+			}
 		}
 		else
 			super.setPropertyValue(id, value);

@@ -16,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -207,5 +208,23 @@ public abstract class ASPropertyWidget implements IHighlightPropertyWidget {
 		if (defCharWidth < 0)
 			defCharWidth = UIUtil.getCharWidth(c);
 		return defCharWidth;
+	}
+	
+	/**
+	 * Toggle the visibility of the property widget.
+	 */
+	public void toggleVisibility(boolean show) {
+		// widget label
+		if(getLabel().getLayoutData() instanceof GridData) {
+			((GridData) getLabel().getLayoutData()).exclude = !show;
+		}
+		getLabel().setVisible(show);
+		getLabel().setEnabled(show);
+		// widget control
+		if(getControl().getLayoutData() instanceof GridData) {
+			((GridData) getControl().getLayoutData()).exclude = !show;
+		}
+		getControl().setVisible(show);
+		getControl().setEnabled(show);
 	}
 }

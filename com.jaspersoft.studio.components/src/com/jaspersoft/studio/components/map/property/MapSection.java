@@ -66,6 +66,7 @@ public class MapSection extends AbstractSection {
 
 		createWidget4Property(parent, StandardMapComponent.PROPERTY_IMAGE_TYPE);
 
+		createWidget4Property(parent, StandardMapComponent.PROPERTY_ON_ERROR_TYPE);
 	}
 	
 	
@@ -80,6 +81,7 @@ public class MapSection extends AbstractSection {
 		addProvidedProperties(StandardMapComponent.PROPERTY_MAP_TYPE, Messages.MMap_mapTypeTitle);
 		addProvidedProperties(StandardMapComponent.PROPERTY_MAP_SCALE, Messages.MMap_mapScaleTitle);
 		addProvidedProperties(StandardMapComponent.PROPERTY_IMAGE_TYPE, Messages.MMap_imageTypeTitle);
+		addProvidedProperties(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, Messages.MMap_OnErrorType);
 	}
 	
 }
