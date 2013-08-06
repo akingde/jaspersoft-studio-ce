@@ -133,7 +133,8 @@ public class MarkerPage extends WizardPage {
 			public Object newElement(List<?> input, int pos) {
 				ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
 
-				props.add(new StandardItemProperty("id", "CHANGE_ME", null));
+				props.add(new StandardItemProperty("id", "CHANGE_ME_ID", null));
+				props.add(new StandardItemProperty("label", "CHANGE_ME_LABEL", null));
 				props.add(new StandardItemProperty("latitude", "0", null));
 				props.add(new StandardItemProperty("longitude", "0", null));
 
