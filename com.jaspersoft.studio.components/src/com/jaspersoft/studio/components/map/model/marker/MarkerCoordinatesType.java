@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jasperreports.components.map.Marker;
+import net.sf.jasperreports.components.map.MapComponent;
 
 /**
  * Simple enum that allows to distinguish different kind of marker coordinates.
@@ -28,7 +28,7 @@ import net.sf.jasperreports.components.map.Marker;
  *
  */
 public enum MarkerCoordinatesType {
-	LATITUDE_LONGITUDE(Arrays.asList(Marker.PROPERTY_latitude,Marker.PROPERTY_longitude)),
+	LATITUDE_LONGITUDE(Arrays.asList(MapComponent.PROPERTY_latitude,MapComponent.PROPERTY_longitude)),
 	XY(Arrays.asList("x","y"));
 
 	private List<String> mandatoryProperties;
