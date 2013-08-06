@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -371,6 +373,15 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 			objectCategoryItem.setData(categoryKey);
 			functionCategories.add(objectCategoryItem);
 		}
+		
+		// Let's order alphabetically the categories
+		Collections.sort(functionCategories, new Comparator<ObjectCategoryItem>() {
+			@Override
+			public int compare(ObjectCategoryItem arg0, ObjectCategoryItem arg1) {
+				return arg0.getDisplayName().compareTo(arg1.getDisplayName());
+			}
+		});
+		
 		if (!functionCategories.isEmpty()) {
 			builtinFunctionsItem
 					.setData(functionCategories
