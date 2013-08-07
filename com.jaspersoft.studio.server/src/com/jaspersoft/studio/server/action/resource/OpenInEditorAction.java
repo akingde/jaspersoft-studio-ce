@@ -18,15 +18,16 @@ package com.jaspersoft.studio.server.action.resource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -87,26 +88,44 @@ public class OpenInEditorAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {
-				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-				try {
-					pm.run(true, true, new IRunnableWithProgress() {
-						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-							try {
-								monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
-								dorun(obj, monitor);
-							} catch (Throwable e) {
-								throw new InvocationTargetException(e);
-							} finally {
-								monitor.done();
-							}
+				WorkspaceJob job = new WorkspaceJob("Open File In Editor") {
+					public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+						try {
+							monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
+							dorun(obj, monitor);
+						} catch (Throwable e) {
+							UIUtils.showError(e);
+						} finally {
+							monitor.done();
 						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setUser(true);
+				job.schedule();
 
-					});
-				} catch (InvocationTargetException e) {
-					UIUtils.showError(e.getCause());
-				} catch (InterruptedException e) {
-					UIUtils.showError(e);
-				}
+				// ProgressMonitorDialog pm = new
+				// ProgressMonitorDialog(Display.getDefault().getActiveShell());
+				// try {
+				// pm.run(true, true, new IRunnableWithProgress() {
+				// public void run(IProgressMonitor monitor) throws
+				// InvocationTargetException, InterruptedException {
+				// try {
+				// monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
+				// dorun(obj, monitor);
+				// } catch (Throwable e) {
+				// throw new InvocationTargetException(e);
+				// } finally {
+				// monitor.done();
+				// }
+				// }
+				//
+				// });
+				// } catch (InvocationTargetException e) {
+				// UIUtils.showError(e.getCause());
+				// } catch (InterruptedException e) {
+				// UIUtils.showError(e);
+				// }
 				break;
 			}
 		}

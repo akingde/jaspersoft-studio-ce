@@ -82,6 +82,7 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 			}
 		};
 		job.setPriority(Job.LONG);
+		job.setUser(true);
 		job.schedule();
 		return true;
 	}
@@ -107,7 +108,6 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 				}
 			}
 		}
-
 		// move elements here
 		mrunit.removeChildren(tm);
 
@@ -115,8 +115,8 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 			mrunit.addChild(tm.get(i), i + indx);
 
 		List<MInputControl> ics = doBuildICList(mrunit);
-		doGetFullResources(mrunit, ics);
-		doSaveBack(monitor, ics);
+		IConnection c = doGetFullResources(mrunit, ics);
+		doSaveBack(c, mrunit.getValue().getUriString(), ics);
 		ServerManager.selectIfExists(monitor, mrunit);
 		return Status.OK_STATUS;
 	}
@@ -129,27 +129,25 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 		return ics;
 	}
 
-	protected void doGetFullResources(MReportUnit mrunit, List<MInputControl> ics) {
+	protected IConnection doGetFullResources(MReportUnit mrunit, List<MInputControl> ics) {
 		IConnection c = ((MServerProfile) mrunit.getRoot()).getWsClient();
 		for (MInputControl n : ics) {
 			try {
 				ResourceDescriptor rd = n.getValue();
-				System.out.println("get/delete: " + rd.getUriString());
 				n.setValue(WSClientHelper.getResource(c, rd, null));
 				c.delete(rd, mrunit.getValue().getUriString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		return c;
 	}
 
-	protected void doSaveBack(IProgressMonitor monitor, List<MInputControl> ics) {
-		System.out.println("now saving all back: ");
+	protected void doSaveBack(IConnection c, String ruuri, List<MInputControl> ics) {
 		for (MInputControl n : ics) {
 			try {
 				n.getValue().setIsNew(true);
-				System.out.println("save: " + n.getValue().getUriString());
-				WSClientHelper.saveResource(n, monitor, false);
+				c.modifyReportUnitResource(ruuri, n.getValue(), null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

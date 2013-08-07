@@ -507,7 +507,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			return;
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
-		editorInput = FileUtils.checkAndConvertEditorInput(editorInput);
+		editorInput = FileUtils.checkAndConvertEditorInput(editorInput, new NullProgressMonitor());
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;

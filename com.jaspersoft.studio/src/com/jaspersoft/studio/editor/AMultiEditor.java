@@ -21,6 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
@@ -251,7 +252,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		input = FileUtils.checkAndConvertEditorInput(input);
+		input = FileUtils.checkAndConvertEditorInput(input, new NullProgressMonitor());
 		super.init(site, input);
 		setSite(site);
 		setPartName(input.getName());

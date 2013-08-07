@@ -68,7 +68,7 @@ public abstract class AExporter {
 		if (root != null && root instanceof MServerProfile)
 			troot = ((MServerProfile) root).getTmpDir(monitor);
 		else
-			troot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI());
+			troot = FileUtils.getInProjectFolder(FileUtils.createTempDir().toURI(), monitor);
 		IResource r = troot.findMember(rd.getParentFolder());
 		if (r != null && r instanceof IFile) {
 			r.delete(true, monitor);

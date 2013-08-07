@@ -162,8 +162,7 @@ public class MServerProfile extends ANode {
 		resetTmpPaths();
 	}
 
-	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException,
-			CoreException {
+	public IFolder getTmpDir(IProgressMonitor monitor) throws IOException, CoreException {
 		if (tmpDir == null || !tmpDir.exists()) {
 			String prjpath = getValue().getProjectPath();
 			if (prjpath != null && !prjpath.trim().isEmpty()) {
@@ -173,12 +172,10 @@ public class MServerProfile extends ANode {
 				int indx = path.indexOf("/");
 				String ppath = path.substring(0, indx);
 				String fpath = path.substring(indx);
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot()
-						.getProject(ppath);
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
 				tmpDir = prj.getFolder(fpath);
 			} else
-				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir()
-						.toURI());
+				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor);
 			if (!tmpDir.exists())
 				tmpDir.create(true, true, monitor);
 		}
