@@ -1,27 +1,25 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils.expr;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRStringUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -72,145 +70,63 @@ public abstract class AInterpreter {
 
 	public Object interpretExpression(String expression) {
 		try {
-			expression = prepareExpression(expression);
+			if (dataset != null)
+				expression = prepareExpression(expression, 0);
 			return eval(expression);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
 
-	protected String prepareExpression(String expression) throws Exception {
-		if (dataset != null)
-			for (JRParameter parameter : dataset.getParametersList()) {
-				String p1 = "$P{" + parameter.getName() + "}";
-				// String p2 = "$P!{" + parameter.getName() + "}";
+	private Set<String> literals = new HashSet<String>();
 
-				// evaluate the Default expression value
-
-				// Integer expID = (Integer)parameterNameToExpressionID.get(parameter.getName());
-
-				int ip1 = expression.indexOf(p1);
-
-				if (ip1 < 0)
-					continue;
-
-				Object defValue;
-				if (parameter.getDefaultValueExpression() != null && !parameter.getDefaultValueExpression().equals("")) {
-					String expText = "";
-					if (parameter.getDefaultValueExpression() != null) {
-						expText = parameter.getDefaultValueExpression().getText();
-					}
-					defValue = recursiveInterpreter(expText, dataset.getParametersList(), 0, parameter.getName());
-					// interpreter.eval("bshCalculator.evaluate(" + expID.intValue() + ")");
-				} else {
-					// this param does not have a default value.
-					defValue = null;
-					if (isConvertNullParams()) {
-						if (parameter.getValueClassName().equals("java.lang.String")) {
-							defValue = "";
-						}
-					}
+	protected String prepareExpression(String expression, int recursion) throws Exception {
+		while (expression.indexOf("$P{") >= 0) {
+			String pname = Misc.extract(expression, "$P{", "}");
+			JRParameter pr = null;
+			for (JRParameter p : dataset.getParametersList()) {
+				if (p.getName().equals(pname)) {
+					pr = p;
+					break;
 				}
-
-				while (ip1 != -1) {
-					// String replacement...
-					// if( defValue==null ) {
-					// return null;
-					// }
-
-					String before = expression.substring(0, ip1);
-					String after = expression.substring(ip1 + p1.length());
-
-					String param_name_literal = "param_"
-							+ net.sf.jasperreports.engine.util.JRStringUtil.escapeJavaStringLiteral(parameter.getName());
-
-					expression = before + param_name_literal + after;
-					// set the value...
-					set(param_name_literal, defValue);
-
-					/*
-					 * if (parameter.getValueClassName().equals("java.lang.String")) { String stt = defValue.toString(); //stt =
-					 * Misc.string_replace("''","'", stt); expression = before + stt + after; } else expression = before + "" +
-					 * defValue.toString() + "" + after;
-					 */
-					ip1 = expression.indexOf(p1);
-				}
-
-				/*
-				 * int ip2 = expression.indexOf(p2); while( ip2!=-1 ) { // String replacement, Altering the SQL statement. if(
-				 * defValue==null ) { throw new IllegalArgumentException("Please set a " + "default value for the parameter '" +
-				 * parameter.getName() + "'" ); }
-				 * 
-				 * String before = expression.substring(0, ip2); String after = expression.substring(ip2+p2.length());
-				 * expression = before + "" + defValue.toString() + "" + after; ip2 = expression.indexOf(p2); }
-				 */
 			}
+			if (pr == null)
+				throw new JRException("Paramater $P{" + pname + "} does not exists in the dataset");
+			String pnameLiteral = getLiteral(pname);
+			expression = Misc.strReplace(pnameLiteral, "$P{" + pname + "}", expression);
+
+			if (!literals.contains(pnameLiteral))
+				recursiveInterpreter(recursion, pr);
+		}
 		return expression;
 	}
 
-	public Object recursiveInterpreter(String expression, List<JRParameter> parameters) throws Exception {
-		return recursiveInterpreter(expression, parameters, 0);
+	protected Object recursiveInterpreter(int recursion, JRParameter prm) throws Exception {
+		++recursion;
+		String pliteral = getLiteral(prm.getName());
+		if (literals.contains(pliteral))
+			return get(pliteral);
+		JRExpression exp = prm.getDefaultValueExpression();
+		if (recursion > 100 || exp == null || Misc.isNullOrEmpty(exp.getText()))
+			return getNull(pliteral, prm);
+		return setValue(eval(prepareExpression(exp.getText(), recursion)), pliteral);
 	}
 
-	public Object recursiveInterpreter(String expression, List<JRParameter> parameters, int recursion_level)
-			throws Exception {
-		return recursiveInterpreter(expression, parameters, 0, null);
+	private Object getNull(String pliteral, JRParameter prm) throws Exception {
+		if (isConvertNullParams() && prm.getValueClass().equals(String.class))
+			return setValue("", pliteral);
+		return setValue(null, pliteral);
 	}
 
-	public Object recursiveInterpreter(String expression, List<JRParameter> parameters, int recursion_level,
-			String this_param_name) throws Exception {
-		++recursion_level;
+	private Object setValue(Object v, String literal) throws Exception {
+		set(literal, v);
+		literals.add(literal);
+		return v;
+	}
 
-		if (expression == null || expression.length() == 0)
-			return null;
-
-		// System.out.println("Valuto ["+ recursion_level +"]: " + expression);
-		if (recursion_level > 100)
-			return null;
-		if (expression != null && expression.trim().length() > 0) {
-			// for each parameter, we have to calc the real value...
-			while (expression.indexOf("$P{") >= 0) {
-				int start_index = expression.indexOf("$P{") + 3;
-				String param_name = expression.substring(start_index, expression.indexOf("}", start_index));
-				String param_expression = "";
-				for (int i = 0; i < parameters.size(); ++i) {
-					JRDesignParameter p = (JRDesignParameter) parameters.get(i);
-					if (p.getName().equals(param_name)) {
-						param_expression = p.getDefaultValueExpression().getText();
-						break;
-					}
-				}
-
-				String param_name_literal = "param_"
-						+ net.sf.jasperreports.engine.util.JRStringUtil.escapeJavaStringLiteral(param_name);
-
-				expression = Misc.strReplace(param_name_literal, "$P{" + param_name + "}", expression);
-				// interpreter.set( param_name_literal, recursiveInterpreter(interpreter, param_expression, parameters,
-				// recursion_level));
-
-				// If the parameter was never evaluated before, that can happen is some cases,
-				// evaluate it now!
-				if (get(param_name_literal) == null) {
-					Object paramValue = recursiveInterpreter(param_expression, parameters, recursion_level, this_param_name);
-					set(param_name_literal, paramValue);
-				}
-			}
-
-			String this_param_name_literal = "param_unknow";
-
-			if (this_param_name != null) {
-				this_param_name_literal = "param_"
-						+ net.sf.jasperreports.engine.util.JRStringUtil.escapeJavaStringLiteral(this_param_name);
-			}
-			// System.out.println("interpreto ["+ recursion_level +"]: " + expression);
-			// System.out.flush();
-			Object res = eval(expression);
-			set(this_param_name_literal, res);
-			// System.out.println("Result: " + res);
-			// System.out.flush();
-			return res;
-		}
-		return null;
+	private String getLiteral(String pname) {
+		return "param_" + JRStringUtil.escapeJavaStringLiteral(pname).replace(".", "_");
 	}
 
 	private boolean convertNullParams = false;

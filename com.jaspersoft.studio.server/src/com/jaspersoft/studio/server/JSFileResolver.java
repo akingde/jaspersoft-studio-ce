@@ -55,7 +55,7 @@ public class JSFileResolver extends SimpleFileResolver {
 	public JSFileResolver(List<File> parentFolders, JasperDesign jDesign, IProgressMonitor monitor) {
 		super(parentFolders);
 		this.jDesign = jDesign;
-		init(monitor);
+		getConnection();
 
 		setResolveAbsolutePath(true);
 	}
@@ -64,6 +64,7 @@ public class JSFileResolver extends SimpleFileResolver {
 		serverUri = jDesign.getProperty(AExporter.PROP_SERVERURL);
 		if (serverUri != null)
 			try {
+				lastC = System.currentTimeMillis();
 				c = ServerManager.getServer(serverUri, monitor);
 			} catch (Exception e) {
 				// e.printStackTrace();
@@ -71,11 +72,10 @@ public class JSFileResolver extends SimpleFileResolver {
 		runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
 	}
 
-	private Map<String, File> map = new CacheMap<String, File>(30000);
+	private long lastC;
 
-	@Override
-	public File resolveFile(String fileName) {
-		if (c == null) {
+	protected void getConnection() {
+		if (c == null && System.currentTimeMillis() - lastC > 30000) {
 			Job job = new Job("Initialize connection") {
 				protected IStatus run(IProgressMonitor monitor) {
 					init(monitor);
@@ -86,6 +86,13 @@ public class JSFileResolver extends SimpleFileResolver {
 			job.setSystem(true);
 			job.schedule();
 		}
+	}
+
+	private Map<String, File> map = new CacheMap<String, File>(30000);
+
+	@Override
+	public File resolveFile(String fileName) {
+		getConnection();
 		if (c != null && fileName.startsWith("repo:")) {
 			File f = map.get(fileName);
 			if (f != null)

@@ -136,9 +136,7 @@ public class Misc {
 
 	public static String strReplace(String s1, String s2, String s3) {
 		String string = "";
-		string = "";
-
-		if (s2 == null || s3 == null || s2.length() == 0)
+		if (s2 == null || s3 == null || isNullOrEmpty(s2))
 			return s3;
 
 		int pos_i = 0; // posizione corrente.
@@ -149,11 +147,8 @@ public class Misc {
 			string += s3.substring(pos_i, pos_f) + s1;
 			// +string.substring(pos+ s2.length());
 			pos_f = pos_i = pos_f + len;
-
 		}
-
-		string += s3.substring(pos_i);
-		return string;
+		return string + s3.substring(pos_i);
 	}
 
 	public static String getExpressionText(JRExpression exp) {
@@ -172,5 +167,10 @@ public class Misc {
 		if (resid.indexOf(".") > 0)
 			return resid.substring(0, resid.indexOf("."));
 		return resid;
+	}
+
+	public static String extract(String expr, String start, String end) {
+		int sindx = expr.indexOf(start) + start.length();
+		return expr.substring(sindx, expr.indexOf(end, sindx));
 	}
 }
