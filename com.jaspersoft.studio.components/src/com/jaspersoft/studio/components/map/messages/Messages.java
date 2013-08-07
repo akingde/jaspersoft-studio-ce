@@ -28,6 +28,12 @@ public class Messages extends NLS {
 	public static String MapDatasetSection_DeleteConfirmationTitle;
 	public static String MapDatasetSection_UseMarkersDatasetBtn;
 	public static String MapWizard_map_wizard;
+	public static String MarkerPage_Description;
+	public static String MarkerPage_IdColumn;
+	public static String MarkerPage_LabelColumn;
+	public static String MarkerPage_LatitudeColumn;
+	public static String MarkerPage_LongitudeColumn;
+	public static String MarkerPage_Title;
 	public static String MMap_ApiKeyDescription;
 	public static String MMap_ApiKeyText;
 	public static String MMap_Category_Authentication;

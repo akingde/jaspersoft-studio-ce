@@ -13,25 +13,6 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-/*
- * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of JasperReports.
- * 
- * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
- * <http://www.gnu.org/licenses/>.
- */
 package com.jaspersoft.studio.components.map.model.marker.dialog;
 
 import java.util.ArrayList;
@@ -57,6 +38,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
@@ -108,8 +90,8 @@ public class MarkerPage extends WizardPage {
 
 	protected MarkerPage(String pageName) {
 		super(pageName);
-		setTitle("Map Markers List");
-		setDescription("Map Markers list.");
+		setTitle(Messages.MarkerPage_Title);
+		setDescription(Messages.MarkerPage_Description);
 	}
 
 	public void createControl(final Composite parent) {
@@ -133,10 +115,10 @@ public class MarkerPage extends WizardPage {
 			public Object newElement(List<?> input, int pos) {
 				ArrayList<ItemProperty> props = new ArrayList<ItemProperty>();
 
-				props.add(new StandardItemProperty("id", "CHANGE_ME_ID", null));
-				props.add(new StandardItemProperty("label", "CHANGE_ME_LABEL", null));
-				props.add(new StandardItemProperty("latitude", "0", null));
-				props.add(new StandardItemProperty("longitude", "0", null));
+				props.add(new StandardItemProperty("id", "CHANGE_ME_ID", null)); //$NON-NLS-1$ //$NON-NLS-2$
+				props.add(new StandardItemProperty("label", "CHANGE_ME_LABEL", null)); //$NON-NLS-1$ //$NON-NLS-2$
+				props.add(new StandardItemProperty("latitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
+				props.add(new StandardItemProperty("longitude", "0", null)); //$NON-NLS-1$ //$NON-NLS-2$
 
 				StandardItem v = new StandardItem(props);
 				MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
@@ -177,25 +159,29 @@ public class MarkerPage extends WizardPage {
 		tableViewer.setLabelProvider(new TMarkerLabelProvider());
 		// attachCellEditors(tableViewer, table);
 
-		TableColumn[] column = new TableColumn[3];
+		TableColumn[] column = new TableColumn[4];
 
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Id");
-		
-		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Latitude");
+		column[0].setText(Messages.MarkerPage_IdColumn);
 
+		column[1] = new TableColumn(table, SWT.NONE);
+		column[1].setText(Messages.MarkerPage_LabelColumn);
+		
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Longitude");
+		column[2].setText(Messages.MarkerPage_LatitudeColumn);
+
+		column[3] = new TableColumn(table, SWT.NONE);
+		column[3].setText(Messages.MarkerPage_LongitudeColumn);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 
 		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(20, true));
 		tlayout.addColumnData(new ColumnWeightData(30, true));
-		tlayout.addColumnData(new ColumnWeightData(35, true));
-		tlayout.addColumnData(new ColumnWeightData(35, true));
+		tlayout.addColumnData(new ColumnWeightData(25, true));
+		tlayout.addColumnData(new ColumnWeightData(25, true));
 		table.setLayout(tlayout);
 	}
 
