@@ -44,7 +44,7 @@ public class MRDashboard extends MResource {
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
-		rd.setWsType(ResourceDescriptor.TYPE_DASHBOARDUNIT);
+		rd.setWsType(ResourceDescriptor.TYPE_DASHBOARD);
 		return rd;
 	}
 }

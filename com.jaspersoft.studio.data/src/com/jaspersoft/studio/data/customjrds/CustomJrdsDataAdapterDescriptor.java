@@ -18,6 +18,7 @@ package com.jaspersoft.studio.data.customjrds;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -26,22 +27,15 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor {
-
-	private DataSourceDataAdapter dsDataAdapter = new DataSourceDataAdapterImpl();
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public DataAdapter getDataAdapter() {
-		if (dsDataAdapter == null) {
-			dsDataAdapter = new DataSourceDataAdapterImpl();
-			dsDataAdapter
-					.setFactoryClass("com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory");
+		if (dataAdapter == null) {
+			dataAdapter = new DataSourceDataAdapterImpl();
+			((DataSourceDataAdapter) dataAdapter).setFactoryClass("com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory");
 		}
-		return dsDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		dsDataAdapter = (DataSourceDataAdapter) dataAdapter;
+		return dataAdapter;
 	}
 
 	@Override

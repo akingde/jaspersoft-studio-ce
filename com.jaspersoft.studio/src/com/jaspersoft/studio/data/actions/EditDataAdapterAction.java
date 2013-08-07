@@ -60,7 +60,7 @@ public class EditDataAdapterAction extends Action {
 			MDataAdapter mDataAdapter = (MDataAdapter) obj;
 			ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
 
-			DataAdapterDescriptor dataAdapter = mDataAdapter.getDataAdapter();
+			DataAdapterDescriptor dataAdapter = mDataAdapter.getValue();
 			String key = storage.getUrl(dataAdapter);
 			DataAdapterWizard wizard = new DataAdapterWizard(dataAdapter, storage);
 			DataAdapterWizardDialog dialog = new DataAdapterWizardDialog(Display.getCurrent().getActiveShell(), wizard);

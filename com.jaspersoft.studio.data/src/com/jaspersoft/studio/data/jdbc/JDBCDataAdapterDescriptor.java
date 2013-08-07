@@ -19,8 +19,8 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -41,18 +41,14 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author gtoffoli
  *
  */
-public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider, IWizardDataEditorProvider {
-	private JdbcDataAdapter jdbcDataAdapter = new JdbcDataAdapterImpl();
+public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public DataAdapter getDataAdapter() {
-		return jdbcDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.jdbcDataAdapter = (JdbcDataAdapter) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new JdbcDataAdapterImpl();
+		return dataAdapter;
 	}
 
 	@Override
@@ -76,9 +72,7 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	protected IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
@@ -99,16 +93,15 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 	 *      org.eclipse.jface.wizard.WizardPage)
 	 * 
 	 * @param Composite
-	 *            parent - the parent composite
+	 *          parent - the parent composite
 	 * @param WizardPage
-	 *            page - the page used to show the composite, it can be used to
-	 *            access the nested Wizard (probably JSSWizard)
+	 *          page - the page used to show the composite, it can be used to
+	 *          access the nested Wizard (probably JSSWizard)
 	 * 
 	 * @return an editor composite extending AWizardDataEditorComposite
 	 */
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 
 		return new JDBCWizardDataEditorComposite(parent, page, this);
 	}

@@ -64,7 +64,7 @@ public class DuplicateDataAdapterAction extends Action {
 				MDataAdapter mDataAdapter = (MDataAdapter) obj;
 				mdas = (MDataAdapters) mDataAdapter.getParent();
 				ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
-				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getDataAdapter());
+				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getValue());
 				String name = COPY_OF + copyDataAdapter.getName();
 				for (int j = 1; j < 1000; j++) {
 					if (storage.isDataAdapterNameValid(name))

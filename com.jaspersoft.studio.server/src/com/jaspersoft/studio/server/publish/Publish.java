@@ -30,7 +30,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class Publish {
 	private JasperReportsConfiguration jrConfig;
-	private List<MResource> resources = new ArrayList<MResource>();
+	private List<String> resources = new ArrayList<String>();
 
 	public Publish(JasperReportsConfiguration jrConfig) {
 		this.jrConfig = jrConfig;
@@ -45,8 +45,8 @@ public class Publish {
 
 			String str = "Success!\n";
 			str += "The following resources where published on the JasperReports Server:\n";
-			for (MResource mres : resources)
-				str += mres.getValue().getUriString() + "\n";
+			for (String mres : resources)
+				str += mres + "\n";
 			UIUtils.showInformation(str);
 
 			// refresh
@@ -102,7 +102,8 @@ public class Publish {
 		mrunit.getValue().getChildren().add(jrxml.getValue());
 		if (parent instanceof MReportUnit)
 			mrunit.setValue(saveResource(monitor, mrunit));
-		jrxml.setValue(saveResource(monitor, jrxml));
+		if (mrunit == null || !mrunit.getValue().getUriString().equals(jrxml.getValue().getUriString()))
+			jrxml.setValue(saveResource(monitor, jrxml));
 
 		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 
@@ -146,9 +147,10 @@ public class Publish {
 	}
 
 	private ResourceDescriptor saveResource(IProgressMonitor monitor, MResource mres) throws Exception {
+		String uri = mres.getValue().getUriString();
 		ResourceDescriptor rd = WSClientHelper.save(monitor, mres);
 		if (rd != null)
-			resources.add(mres);
+			resources.add(uri);
 		return rd;
 	}
 
@@ -159,7 +161,14 @@ public class Publish {
 			MServerProfile server = (MServerProfile) n;
 			rpt.setProperty(AExporter.PROP_SERVERURL, server.getValue().getUrl());
 		}
-		rpt.setProperty(AExporter.PROP_REPORTRESOURCE, node.getValue().getUriString());
+		ResourceDescriptor rd = node.getValue();
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
+			for (Object r : rd.getChildren())
+				if (((ResourceDescriptor) r).getWsType().equals(ResourceDescriptor.TYPE_JRXML)) {
+					rd = (ResourceDescriptor) r;
+					break;
+				}
+		rpt.setProperty(AExporter.PROP_REPORTRESOURCE, rd.getUriString());
 		if (node.getParent() instanceof MReportUnit) {
 			MReportUnit mrunit = (MReportUnit) node.getParent();
 			rpt.setProperty(AExporter.PROP_REPORTUNIT, mrunit.getValue().getUriString());

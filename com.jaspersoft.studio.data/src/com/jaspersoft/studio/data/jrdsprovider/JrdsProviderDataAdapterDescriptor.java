@@ -17,11 +17,11 @@ package com.jaspersoft.studio.data.jrdsprovider;
 
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -39,23 +39,16 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.ui.EmptyWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
-		implements IFieldsProvider, IWizardDataEditorProvider {
-	private DataSourceProviderDataAdapter dsProviderDataAdapter;
+public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
-	public DataAdapter getDataAdapter() {
-		if (dsProviderDataAdapter == null) {
-			dsProviderDataAdapter = new DataSourceProviderDataAdapterImpl();
-			dsProviderDataAdapter
-					.setProviderClass("com.jaspersoft.studio.data.sample.PersonBeansDataSource");
+	public DataSourceProviderDataAdapter getDataAdapter() {
+		if (dataAdapter == null) {
+			dataAdapter = new DataSourceProviderDataAdapterImpl();
+			((DataSourceProviderDataAdapter) dataAdapter).setProviderClass("com.jaspersoft.studio.data.sample.PersonBeansDataSource");
 		}
-		return dsProviderDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		dsProviderDataAdapter = (DataSourceProviderDataAdapter) dataAdapter;
+		return (DataSourceProviderDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -65,9 +58,7 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 
 	private IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider(jConfig);
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
@@ -80,11 +71,9 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	private void getFieldProvider(JasperReportsConfiguration jConfig) {
 		if (fprovider == null) {
 			fprovider = new JRDSProviderFieldsProvider();
-			DataSourceProviderDataAdapterService ds = new DataSourceProviderDataAdapterService(
-					jConfig, dsProviderDataAdapter);
+			DataSourceProviderDataAdapterService ds = new DataSourceProviderDataAdapterService(jConfig, getDataAdapter());
 			try {
-				((JRDSProviderFieldsProvider) fprovider).setProvider(ds
-						.getProvider());
+				((JRDSProviderFieldsProvider) fprovider).setProvider(ds.getProvider());
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
@@ -102,8 +91,7 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new EmptyWizardDataEditorComposite(parent, page, this);
 	}
 }

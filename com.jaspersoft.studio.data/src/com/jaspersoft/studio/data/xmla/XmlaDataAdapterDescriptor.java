@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xmla;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
 import net.sf.jasperreports.data.xmla.XmlaDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -26,16 +26,13 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor {
-	private XmlaDataAdapterImpl beanDataAdapter = new XmlaDataAdapterImpl();
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public XmlaDataAdapter getDataAdapter() {
-		return beanDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (XmlaDataAdapterImpl) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new XmlaDataAdapterImpl();
+		return (XmlaDataAdapter) dataAdapter;
 	}
 
 	@Override

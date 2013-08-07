@@ -420,13 +420,16 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		Object obj = jrContext.getValue(AMultiEditor.THEEDITOR);
 		if (obj instanceof JrxmlEditor) {
 			ReportContainer rc = (ReportContainer) ((JrxmlEditor) obj).getEditor(JrxmlEditor.PAGE_DESIGNER);
-			refresh(rc.getActiveEditor());
+			if (rc != null)
+				refresh(rc.getActiveEditor());
 		} else if (obj instanceof AMultiEditor) {
 			refresh(((AMultiEditor) obj).getActiveEditor());
 		}
 	}
 
 	public static void refresh(IEditorPart ep) {
+		if (ep == null)
+			return;
 		if (ep instanceof IGraphicalEditor) {
 			IGraphicalEditor ige = (IGraphicalEditor) ep;
 			GraphicalViewer gv = ige.getGraphicalViewer();

@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.hibernate;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
@@ -29,17 +29,14 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 
-public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider{
-	private HibernateDataAdapterImpl beanDataAdapter = new HibernateDataAdapterImpl();
+public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public HibernateDataAdapter getDataAdapter() {
-		return beanDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (HibernateDataAdapterImpl) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new HibernateDataAdapterImpl();
+		return (HibernateDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -61,8 +58,7 @@ public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implem
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new HQLWizardDataEditorComposite(parent, page, this);
 	}
 }

@@ -65,9 +65,11 @@ public class MDataAdapters extends ANode {
 		return iconDescriptor;
 	}
 
+	private transient ADataAdapterStorage storage;
+
 	public MDataAdapters(ANode parent, ADataAdapterStorage storage) {
 		super(parent, -1);
-		setValue(storage);
+		this.storage = storage;
 		storage.addPropertyChangeListener(this);
 		storage.getDataAdapterDescriptors();
 		for (DataAdapterDescriptor dad : storage.getDataAdapterDescriptors())
@@ -76,7 +78,7 @@ public class MDataAdapters extends ANode {
 
 	@Override
 	public ADataAdapterStorage getValue() {
-		return (ADataAdapterStorage) super.getValue();
+		return storage;
 	}
 
 	/*

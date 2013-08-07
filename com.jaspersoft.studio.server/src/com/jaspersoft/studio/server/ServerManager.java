@@ -307,9 +307,8 @@ public class ServerManager {
 						MResource r = (MResource) n;
 						if (r.getValue().getUriString().equals(puri)) {
 							for (INode cn : r.getChildren())
-								if (((MResource) cn).getValue().getUriString().equals(uri)) {
+								if (cn instanceof MResource && ((MResource) cn).getValue().getUriString().equals(uri))
 									doRefresh((MResource) cn, monitor);
-								}
 							doRefresh(r, monitor);
 						}
 					}

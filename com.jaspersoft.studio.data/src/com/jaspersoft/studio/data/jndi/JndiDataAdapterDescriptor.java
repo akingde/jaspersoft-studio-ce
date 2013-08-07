@@ -17,10 +17,10 @@ package com.jaspersoft.studio.data.jndi;
 
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.jndi.JndiDataAdapter;
 import net.sf.jasperreports.data.jndi.JndiDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -37,18 +37,14 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider, IWizardDataEditorProvider {
-	private JndiDataAdapterImpl beanDataAdapter = new JndiDataAdapterImpl();
+public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public JndiDataAdapter getDataAdapter() {
-		return beanDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (JndiDataAdapterImpl) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new JndiDataAdapterImpl();
+		return (JndiDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -71,9 +67,7 @@ public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	private IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
@@ -89,8 +83,7 @@ public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new JndiWizardDataEditorComposite(parent, page, this);
 	}
 }

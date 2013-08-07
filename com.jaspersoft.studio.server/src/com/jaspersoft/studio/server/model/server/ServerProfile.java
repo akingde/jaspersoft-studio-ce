@@ -15,11 +15,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model.server;
 
+import java.io.Serializable;
+
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.repo.Resource;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 
-public class ServerProfile implements Resource, Cloneable {
+public class ServerProfile implements Resource, Cloneable, Serializable {
+
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private boolean supportsDateRanges;
 	private String name;
 	private String url;

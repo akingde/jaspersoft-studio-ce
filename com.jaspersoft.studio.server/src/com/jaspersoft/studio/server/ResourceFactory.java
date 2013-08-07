@@ -246,7 +246,7 @@ public class ResourceFactory {
 		if (wstype.equals(ResourceDescriptor.TYPE_XML_FILE))
 			return new MXmlFile(parent, resource, index);
 
-		if (wstype.equals(ResourceDescriptor.TYPE_DASHBOARDUNIT))
+		if (wstype.equals(ResourceDescriptor.TYPE_DASHBOARD))
 			return new MRDashboard(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
 			return new MRMondrianSchema(parent, resource, index);

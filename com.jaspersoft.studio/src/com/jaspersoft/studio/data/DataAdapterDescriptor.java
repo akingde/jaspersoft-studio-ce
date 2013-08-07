@@ -1,21 +1,19 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
+import java.io.Serializable;
+
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -29,7 +27,10 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
  * 
  * @author gtoffoli
  */
-public abstract class DataAdapterDescriptor implements IIconDescriptor {
+public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	protected transient DataAdapter dataAdapter;
+
 	/**
 	 *
 	 */
@@ -38,7 +39,9 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor {
 	/**
 	 * FIXME consider remove
 	 */
-	public abstract void setDataAdapter(DataAdapter dataAdapter);
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.dataAdapter = dataAdapter;
+	}
 
 	/**
 	 * FIXME consider remove

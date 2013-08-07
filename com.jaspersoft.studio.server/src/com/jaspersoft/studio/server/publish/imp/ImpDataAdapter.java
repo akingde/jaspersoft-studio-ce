@@ -138,7 +138,7 @@ public class ImpDataAdapter extends AImpObject {
 
 								PublishUtil.getResources(jrConfig).add(mdaf);
 
-								setFileName(da, rd.getUriString());
+								setFileName(da, "repo:" + rd.getUriString());
 								f = FileUtils.createTempFile("tmp", "");
 								org.apache.commons.io.FileUtils.writeStringToFile(f, DataAdapterManager.toDataAdapterFile(dad));
 								mres.setFile(f);

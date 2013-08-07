@@ -17,8 +17,8 @@ package com.jaspersoft.studio.data.hive;
 
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -41,20 +41,16 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Eric Diaz
  * 
  */
-public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider, IWizardDataEditorProvider {
-	private HiveDataAdapter dataAdapter = new HiveDataAdapterImplementation();
+public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private IFieldsProvider fieldsProvider;
 
 	@Override
 	public HiveDataAdapter getDataAdapter() {
-		return dataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.dataAdapter = (HiveDataAdapter) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new HiveDataAdapterImplementation();
+		return (HiveDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -70,9 +66,7 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return null;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fieldsProvider.getFields(con, jConfig, reportDataset);
 	}
@@ -88,8 +82,7 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new HiveWizardDataEditorComposite(parent, page, this);
 	}
 }

@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.mondrian;
 
 import net.sf.jasperreports.data.mondrian.MondrianDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
@@ -26,6 +27,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  *
  */
 public class MondrianDataAdapterDescriptor extends JDBCDataAdapterDescriptor {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MondrianDataAdapterDescriptor() {
 		setDataAdapter(new MondrianDataAdapterImpl());

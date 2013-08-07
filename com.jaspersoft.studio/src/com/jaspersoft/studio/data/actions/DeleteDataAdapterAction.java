@@ -66,7 +66,7 @@ public class DeleteDataAdapterAction extends Action {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
 				MDataAdapter mDataAdapter = (MDataAdapter) obj;
-				DataAdapterDescriptor m = mDataAdapter.getDataAdapter();
+				DataAdapterDescriptor m = mDataAdapter.getValue();
 				if (storage == null)
 					storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
 				if (storage != null)

@@ -38,8 +38,8 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -57,18 +57,14 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.ui.EmptyWizardDataEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider, IWizardDataEditorProvider {
-	private XlsxDataAdapter xlsxDataAdapter = new XlsxDataAdapterImpl();
+public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public DataAdapter getDataAdapter() {
-		return xlsxDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.xlsxDataAdapter = (XlsxDataAdapter) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new XlsxDataAdapterImpl();
+		return dataAdapter;
 	}
 
 	@Override
@@ -92,9 +88,7 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	private IFieldsProvider fprovider;
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, reportDataset);
 	}
@@ -110,8 +104,7 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new EmptyWizardDataEditorComposite(parent, page, this);
 	}
 }

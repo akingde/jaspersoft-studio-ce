@@ -37,33 +37,29 @@ import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionComposite;
 public class SelectorDatasource {
 
 	/**
-	 * Creates a tabitem containing the datasource composite widget that allows
-	 * to edit the datasource information associated to a specific resource.
+	 * Creates a tabitem containing the datasource composite widget that allows to
+	 * edit the datasource information associated to a specific resource.
 	 * 
 	 * @param tabFolder
-	 *            the parent tabfolder for the new item
+	 *          the parent tabfolder for the new item
 	 * @param parent
-	 *            the anode that will contain information regarding the remote
-	 *            JasperServer
+	 *          the anode that will contain information regarding the remote
+	 *          JasperServer
 	 * @param res
-	 *            the resource which datasource information must be modified
+	 *          the resource which datasource information must be modified
 	 */
-	public DatasourceSelectionComposite createDatasource(TabFolder tabFolder, final ANode parent,
-			final MResource res) {
+	public DatasourceSelectionComposite createDatasource(TabFolder tabFolder, final ANode parent, final MResource res) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText(Messages.SelectorDatasource_TabTitle);
 
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(
-				tabFolder, SWT.NONE);
+		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(tabFolder, SWT.NONE);
 		dsSelectionCmp.configurePage(parent, res);
 		item.setControl(dsSelectionCmp);
 		return dsSelectionCmp;
 	}
 
-	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode,
-			final MResource res) {
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(
-				parent, SWT.NONE);
+	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final MResource res) {
+		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(parent, SWT.NONE);
 		dsSelectionCmp.configurePage(pnode, res);
 		return dsSelectionCmp;
 	}
@@ -73,13 +69,12 @@ public class SelectorDatasource {
 	 * specified resource.
 	 * 
 	 * @param res
-	 *            the resource element
+	 *          the resource element
 	 * @param rd
-	 *            the resource descriptor representing the new datasource
-	 *            information
+	 *          the resource descriptor representing the new datasource
+	 *          information
 	 */
-	public static void replaceDatasource(final MResource res,
-			ResourceDescriptor rd) {
+	public static void replaceDatasource(final MResource res, ResourceDescriptor rd) {
 		ResourceDescriptor rdel = getDatasource(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);
@@ -90,29 +85,28 @@ public class SelectorDatasource {
 	}
 
 	/**
-	 * Gets, if it exists, the datasource information associated to the
-	 * specified {@link ResourceDescriptor} element.
+	 * Gets, if it exists, the datasource information associated to the specified
+	 * {@link ResourceDescriptor} element.
 	 * 
 	 * @param ru
-	 *            the input resource descriptor
+	 *          the input resource descriptor
 	 * @return the resource descriptor representing the datasource associated if
 	 *         found, <code>null</code> otherwise
 	 */
 	public static ResourceDescriptor getDatasource(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (isDatasource(r))
+			if (r != null && isDatasource(r))
 				return r;
 		}
 		return null;
 	}
 
 	/**
-	 * Checks if the specified {@link ResourceDescriptor} element is a
-	 * datasource.
+	 * Checks if the specified {@link ResourceDescriptor} element is a datasource.
 	 * 
 	 * @param r
-	 *            the resource to check
+	 *          the resource to check
 	 * @return <code>true</code> if the resource is a datasource,
 	 *         <code>false</code> otherwise
 	 */

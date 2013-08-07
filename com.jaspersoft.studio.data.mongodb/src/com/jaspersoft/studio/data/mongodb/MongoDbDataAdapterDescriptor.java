@@ -17,8 +17,8 @@ package com.jaspersoft.studio.data.mongodb;
 
 import java.util.List;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -41,20 +41,16 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Eric Diaz
  * 
  */
-public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor
-		implements IFieldsProvider, IWizardDataEditorProvider {
-	private MongoDbDataAdapter dataAdapter = new MongoDbDataAdapterImplementation();
+public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private IFieldsProvider fieldsProvider;
 
 	@Override
 	public MongoDbDataAdapter getDataAdapter() {
-		return dataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.dataAdapter = (MongoDbDataAdapter) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new MongoDbDataAdapterImplementation();
+		return (MongoDbDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -70,9 +66,7 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor
 		return null;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset reportDataset) throws JRException, UnsupportedOperationException {
 		getFieldProvider();
 		return fieldsProvider.getFields(con, jConfig, reportDataset);
 	}
@@ -88,8 +82,7 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new MongoDBWizardDataEditorComposite(parent, page, this);
 	}
 }

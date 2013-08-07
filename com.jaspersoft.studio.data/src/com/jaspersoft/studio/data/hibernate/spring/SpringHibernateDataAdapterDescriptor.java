@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.hibernate.spring;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapter;
 import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -26,17 +26,15 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class SpringHibernateDataAdapterDescriptor extends DataAdapterDescriptor {
-	private SpringHibernateDataAdapterImpl beanDataAdapter = new SpringHibernateDataAdapterImpl();
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public SpringHibernateDataAdapter getDataAdapter() {
-		return beanDataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new SpringHibernateDataAdapterImpl();
+		return (SpringHibernateDataAdapter) dataAdapter;
 	}
 
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (SpringHibernateDataAdapterImpl) dataAdapter;
-	}
 
 	@Override
 	public DataAdapterEditor getEditor() {

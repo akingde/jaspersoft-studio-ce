@@ -120,7 +120,7 @@ public class DataAdapterDragSourceListener implements TransferDragSourceListener
 				// fallback solution
 				tempDataAdapterFile = File.createTempFile(DATA_ADAPTER_FILE_PREFIX, DATA_ADAPTER_FILE_EXT);
 			}
-			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter.getDataAdapter());
+			String xml = DataAdapterManager.toDataAdapterFile(dataAdapter.getValue());
 			FileUtils.writeByteArrayToFile(tempDataAdapterFile, xml.getBytes(ENCODING));
 			return tempDataAdapterFile.getAbsolutePath();
 		} catch (UnsupportedEncodingException e) {

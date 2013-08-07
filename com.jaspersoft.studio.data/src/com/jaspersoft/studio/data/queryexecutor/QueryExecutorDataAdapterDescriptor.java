@@ -16,8 +16,8 @@
 package com.jaspersoft.studio.data.queryexecutor;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.qe.QueryExecuterDataAdapter;
 import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -28,22 +28,18 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor {
-	private QueryExecuterDataAdapter queryExecuterDataAdapter = new QueryExecuterDataAdapterImpl();
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public DataAdapter getDataAdapter() {
-		return queryExecuterDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.queryExecuterDataAdapter = (QueryExecuterDataAdapter) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new QueryExecuterDataAdapterImpl();
+		return dataAdapter;
 	}
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
-				"icons/QueryExecutorDataAdapterIcon-16.gif");
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/QueryExecutorDataAdapterIcon-16.gif");
 	}
 
 	@Override

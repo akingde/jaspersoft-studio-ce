@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.bean;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -26,22 +26,16 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
-	private BeanDataAdapter beanDataAdapter;
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public BeanDataAdapter getDataAdapter() {
-		if (beanDataAdapter == null) {
-			beanDataAdapter = new BeanDataAdapterImpl();
-			beanDataAdapter
-					.setFactoryClass("com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory");
-			beanDataAdapter.setMethodName("createBeanCollection");
+		if (dataAdapter == null) {
+			dataAdapter = new BeanDataAdapterImpl();
+			((BeanDataAdapter) dataAdapter).setFactoryClass("com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory");
+			((BeanDataAdapter) dataAdapter).setMethodName("createBeanCollection");
 		}
-		return beanDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (BeanDataAdapter) dataAdapter;
+		return (BeanDataAdapter) dataAdapter;
 	}
 
 	@Override

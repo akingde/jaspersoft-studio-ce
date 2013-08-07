@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.ejbql;
 
-import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapterImpl;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
@@ -30,16 +30,13 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 
 public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider {
-	private EjbqlDataAdapterImpl beanDataAdapter = new EjbqlDataAdapterImpl();
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
 	public EjbqlDataAdapter getDataAdapter() {
-		return beanDataAdapter;
-	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.beanDataAdapter = (EjbqlDataAdapterImpl) dataAdapter;
+		if (dataAdapter == null)
+			dataAdapter = new EjbqlDataAdapterImpl();
+		return (EjbqlDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -61,8 +58,7 @@ public class EjbqlDataAdapterDescriptor extends DataAdapterDescriptor implements
 	}
 
 	@Override
-	public AWizardDataEditorComposite createDataEditorComposite(
-			Composite parent, WizardPage page) {
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
 		return new EjbqlWizardDataEditorComposite(parent, page, this);
 	}
 }

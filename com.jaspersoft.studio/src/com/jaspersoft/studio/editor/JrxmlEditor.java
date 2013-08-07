@@ -281,6 +281,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	@Override
 	public IEditorPart getEditor(int pageIndex) {
+		if (getContainer().isDisposed())
+			return null;
 		return super.getEditor(pageIndex);
 	}
 

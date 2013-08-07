@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.actions;
 
@@ -74,7 +69,7 @@ public class ExportDataAdapterAction extends Action {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
 				SaveAsDialog saveAsDialog = new SaveAsDialog(Display.getDefault().getActiveShell());
-				saveAsDialog.setOriginalName(((MDataAdapter) obj).getDataAdapter().getName().replace(" ", "") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				saveAsDialog.setOriginalName(((MDataAdapter) obj).getValue().getName().replace(" ", "") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				saveAsDialog.open();
 				IPath path = saveAsDialog.getResult();
 				if (path != null)
@@ -91,7 +86,7 @@ public class ExportDataAdapterAction extends Action {
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
-							DataAdapterDescriptor m = ((MDataAdapter) obj).getDataAdapter();
+							DataAdapterDescriptor m = ((MDataAdapter) obj).getValue();
 							String xml = DataAdapterManager.toDataAdapterFile(m);
 							if (file.exists())
 								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor); //$NON-NLS-1$

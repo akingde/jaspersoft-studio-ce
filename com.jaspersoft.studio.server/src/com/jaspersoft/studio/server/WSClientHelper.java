@@ -238,7 +238,7 @@ public class WSClientHelper {
 				else {
 					if (wsType.equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew() && rd.getName().equals("main_jrxml"))
 						rd.setMainReport(true);
-					String turi = rd.getUriString();
+					// String turi = rd.getUriString();
 					ResourceDescriptor trd = cli.modifyReportUnitResource(ruuri, rd, file);
 					// if (!trd.getUriString().equals(turi))
 					// rd = getResource(cli, rd, null);
@@ -278,7 +278,7 @@ public class WSClientHelper {
 					else
 						wsClient.delete(rd);
 				} catch (Exception e1) {
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
 				try {
 					return WSClientHelper.saveResource(f, monitor, false);

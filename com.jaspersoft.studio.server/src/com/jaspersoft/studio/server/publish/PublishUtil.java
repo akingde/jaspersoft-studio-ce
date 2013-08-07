@@ -36,14 +36,14 @@ public class PublishUtil {
 
 	public static ResourceDescriptor getMainReport(MReportUnit mrunit, JasperDesign jd) {
 		String jrxmln = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
+		String unit = mrunit.getValue().getUriString(); //$NON-NLS-1$
 		if (jrxmln != null) {
-			String unit = mrunit.getValue().getUriString() + "_files/"; //$NON-NLS-1$
-			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring(unit.length()).indexOf('/') < 0) {
+			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring((unit + "_files/").length()).indexOf('/') < 0) {
 				MServerProfile sp = (MServerProfile) mrunit.getRoot();
 				if (sp != null) {
 					ResourceDescriptor rd = new ResourceDescriptor();
-					rd.setName(jrxmln.substring(unit.length()));
-					rd.setLabel(jrxmln.substring(unit.length()));
+					rd.setName(jrxmln.substring((unit + "_files/").length()));
+					rd.setLabel(jrxmln.substring((unit + "_files/").length()));
 					rd.setUriString(jrxmln);
 					rd.setParentFolder(unit + "_files/" + rd.getName()); //$NON-NLS-1$
 					rd.setIsNew(true);
@@ -70,6 +70,7 @@ public class PublishUtil {
 		mainr.setMainReport(true);
 		mainr.setIsReference(false);
 		mainr.setHasData(true);
+		mainr.setParentFolder(unit + "_files/");
 		return mainr;
 	}
 

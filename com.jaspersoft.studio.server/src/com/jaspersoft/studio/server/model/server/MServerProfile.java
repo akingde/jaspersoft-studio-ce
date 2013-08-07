@@ -26,12 +26,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -125,9 +127,16 @@ public class MServerProfile extends ANode {
 		return CastorUtil.write(getValue(), MAPPINGFILE);
 	}
 
-	private IConnection wsClient;
+	private transient IConnection wsClient;
 
 	public IConnection getWsClient() {
+		if (wsClient == null)
+			try {
+				WSClientHelper.connect(this, new NullProgressMonitor());
+			} catch (Exception e) {
+				e.printStackTrace();
+				// UIUtils.showError(e);
+			}
 		return wsClient;
 	}
 
@@ -146,7 +155,7 @@ public class MServerProfile extends ANode {
 		AExporter.fileurimap.clear();
 	}
 
-	private IFolder tmpDir;
+	private transient IFolder tmpDir;
 
 	public void setProjectPath(String projectPath) {
 		getValue().setProjectPath(projectPath);
