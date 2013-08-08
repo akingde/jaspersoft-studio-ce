@@ -76,7 +76,7 @@ public class SwitchLanguageHandler extends AbstractHandler {
 	 * Read the configuration file of the application and rewerite it with a new regional code
 	 * if the code is changed then it is also requested a platform restart.
 	 * The regional code will be set at the place of the old code if found, otherwise before the 
-	 * parameter -vmargs. If event this parameter is not found then it is set at the end of the file
+	 * first parameter found between -clean, -vm, -vmargs. If none of this parameters are found then it is set at the end of the file
 	 * 
 	 * @param locale
 	 * @return
@@ -107,7 +107,7 @@ public class SwitchLanguageHandler extends AbstractHandler {
 				int lineNumber = 0;
 				while(line !=null){
 					if (line.equals("-nl")) localePosition = lineNumber+1; //$NON-NLS-1$
-					else if (line.equals("-vmargs") && localePosition == -1) { //$NON-NLS-1$
+					else if (localePosition == -1 && (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$
 						configLines.add("-nl"); //$NON-NLS-1$
 						configLines.add("");
 						localePosition = lineNumber+1;
