@@ -72,12 +72,12 @@ public class ResourcePageContent extends APageContent {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tparent.setLayoutData(gd);
-		//tparent.setEnabled(false);
+		// tparent.setEnabled(false);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_type);
 		Text ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//ttype.setEnabled(false);
+		// ttype.setEnabled(false);
 
 		Button bisRef = new Button(composite, SWT.CHECK);
 		bisRef.setText("is Reference");
@@ -88,7 +88,7 @@ public class ResourcePageContent extends APageContent {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tcdate.setLayoutData(gd);
-		//tcdate.setEnabled(false);
+		// tcdate.setEnabled(false);
 
 		UIUtil.createSeparator(composite, 3);
 
@@ -112,7 +112,7 @@ public class ResourcePageContent extends APageContent {
 		tdesc.setLayoutData(gd);
 
 		final ResourceDescriptor rd = res.getValue();
-		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(rd, "uriString")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(rd, "parentFolder")); //$NON-NLS-1$
 
 		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate")); //$NON-NLS-1$
 
@@ -144,12 +144,11 @@ public class ResourcePageContent extends APageContent {
 		tname.setFocus();
 		return composite;
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.editResource";
 	}
-
 
 	public static String safeChar(String input) {
 		char[] allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_./".toCharArray();
@@ -163,10 +162,10 @@ public class ResourcePageContent extends APageContent {
 		}
 		return result.toString();
 	}
-	
+
 	@Override
 	public boolean isPageComplete() {
-		if(tid.getText().trim().isEmpty() || tname.getText().trim().isEmpty()){
+		if (tid.getText().trim().isEmpty() || tname.getText().trim().isEmpty()) {
 			return false;
 		}
 		return super.isPageComplete();
