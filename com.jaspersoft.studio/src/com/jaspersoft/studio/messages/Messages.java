@@ -1573,6 +1573,8 @@ public class Messages extends NLS {
 	public static String SubTitleSection_Subtitle_Label;
 	public static String SwitchLanguageHandler_errorMessage;
 	public static String SwitchLanguageHandler_errorTitle;
+	public static String SwitchLanguageHandler_restartMessage;
+	public static String SwitchLanguageHandler_restartTitle;
 	public static String SwitchViewsAction_actionTooltip;
 	public static String TemplateExporterWizard_congratCongratulations;
 	public static String TemplateExporterWizard_congratDesc;

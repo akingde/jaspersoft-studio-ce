@@ -52,7 +52,11 @@ public class SwitchLanguageHandler extends AbstractHandler {
 		String locale = event.getParameter("com.jaspersoft.studio.switchlanguage.locale"); //$NON-NLS-1$
 		boolean needToRestart = changeLocale(locale);
 		if (needToRestart) {
-			return new RestartWorkbenchHandler().execute(event);
+			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SwitchLanguageHandler_restartTitle, null,
+					Messages.SwitchLanguageHandler_restartMessage, MessageDialog.QUESTION, new String[] { Messages.common_yes , Messages.common_no}, 1); 
+			int selection = dialog.open();
+			if (selection == 0)
+				return new RestartWorkbenchHandler().execute(event);
 		}
 		return null;
 	}
@@ -107,9 +111,9 @@ public class SwitchLanguageHandler extends AbstractHandler {
 				int lineNumber = 0;
 				while(line !=null){
 					if (line.equals("-nl")) localePosition = lineNumber+1; //$NON-NLS-1$
-					else if (localePosition == -1 && (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$
+					else if (localePosition == -1 && (line.equals("-vmargs") || line.equals("-clean") || line.equals("-vm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						configLines.add("-nl"); //$NON-NLS-1$
-						configLines.add("");
+						configLines.add(""); //$NON-NLS-1$
 						localePosition = lineNumber+1;
 					}
 					configLines.add(line);
