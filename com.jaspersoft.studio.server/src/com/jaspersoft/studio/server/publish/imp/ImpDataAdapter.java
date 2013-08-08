@@ -121,7 +121,9 @@ public class ImpDataAdapter extends AImpObject {
 							if (fis != null) {
 								IOUtils.copy(fis, fos);
 
-								int indx = fname.lastIndexOf(File.separator);
+								fname = fname.replace("\\", "/");
+
+								int indx = fname.lastIndexOf("/");
 								if (indx >= 0 && indx + 1 < fname.length())
 									fname = fname.substring(indx + 1);
 
