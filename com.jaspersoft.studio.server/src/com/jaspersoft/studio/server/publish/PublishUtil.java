@@ -21,6 +21,7 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -36,16 +37,17 @@ public class PublishUtil {
 
 	public static ResourceDescriptor getMainReport(MReportUnit mrunit, JasperDesign jd) {
 		String jrxmln = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
-		String unit = mrunit.getValue().getUriString(); //$NON-NLS-1$
+		String unit = mrunit.getValue().getUriString();
 		if (jrxmln != null) {
-			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring((unit + "_files/").length()).indexOf('/') < 0) {
+			if (unit != null && jrxmln.startsWith(unit) && jrxmln.length() > unit.length() && jrxmln.substring((unit + WSClientHelper._FILES).length()).indexOf('/') < 0) {
 				MServerProfile sp = (MServerProfile) mrunit.getRoot();
 				if (sp != null) {
 					ResourceDescriptor rd = new ResourceDescriptor();
-					rd.setName(jrxmln.substring((unit + "_files/").length()));
-					rd.setLabel(jrxmln.substring((unit + "_files/").length()));
+					rd.setName(jrxmln.substring((unit + WSClientHelper._FILES).length()));
+					rd.setLabel(ResourcePageContent.safeChar(rd.getName()));
 					rd.setUriString(jrxmln);
-					rd.setParentFolder(unit + "_files/" + rd.getName()); //$NON-NLS-1$
+					rd.setParentFolder(unit + "_files");
+					rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 					rd.setIsNew(true);
 					rd.setWsType(ResourceDescriptor.TYPE_JRXML);
 					rd.setIsReference(false);
@@ -70,7 +72,8 @@ public class PublishUtil {
 		mainr.setMainReport(true);
 		mainr.setIsReference(false);
 		mainr.setHasData(true);
-		mainr.setParentFolder(unit + "_files/");
+		mainr.setParentFolder(unit + "_files");
+		mainr.setUriString(mainr.getParentFolder() + "/" + mainr.getName());
 		return mainr;
 	}
 

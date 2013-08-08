@@ -243,6 +243,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					// suggest the ID
 					if (canSuggestID) {
 						ruID.setText(rtext);
+						ru.setName(ResourcePageContent.safeChar(rtext));
+						ru.setUriString(ru.getParentFolder() + "/" + ru.getName());
 					}
 				}
 				isRefresh = false;
@@ -267,6 +269,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				if (validationError == null) {
 					ResourceDescriptor ru = getNewRunit().getValue();
 					ru.setName(rtext);
+					ru.setUriString(ru.getParentFolder() + "/" + ru.getName());
 				}
 				if (!isFillingInput && validationError == null) {
 					canSuggestID = false;

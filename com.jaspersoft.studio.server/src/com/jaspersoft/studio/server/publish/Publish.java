@@ -102,8 +102,8 @@ public class Publish {
 		mrunit.getValue().getChildren().add(jrxml.getValue());
 		if (parent instanceof MReportUnit)
 			mrunit.setValue(saveResource(monitor, mrunit));
-		if (mrunit == null || !mrunit.getValue().getUriString().equals(jrxml.getValue().getUriString()))
-			jrxml.setValue(saveResource(monitor, jrxml));
+
+		jrxml.setValue(saveResource(monitor, jrxml));
 
 		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 

@@ -164,7 +164,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 								}
 							}
 						});
-					} else if (event.getSelectedPage() == page2) {
+					} else if (event.getSelectedPage() == page2 && getStartingPage() == page1) {
 						if (jrConfig.get(JRSEditorContributor.KEY_PUBLISH2JSS, false))
 							doFinish();
 					}

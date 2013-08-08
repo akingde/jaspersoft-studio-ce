@@ -268,9 +268,9 @@ public class WSClientHelper {
 				IConnection wsClient = sp.getWsClient();
 				if (!(f instanceof MReportUnit || f instanceof MRDataAdapter || f instanceof MRDataAdapterFile)) {
 					ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
-					f.getValue().setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$ //$NON-NLS-2$  
 					ResourceDescriptor v = f.getValue();
-					f.getValue().setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
+					v.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$    
+					v.setUriString(v.getParentFolder() + "/" + f.getValue().getName());//$NON-NLS-1$
 				}
 				try {
 					if (n != null && !(f instanceof MReportUnit))
@@ -477,5 +477,7 @@ public class WSClientHelper {
 		}
 		return null;
 	}
+
+	public static final String _FILES = "_files/";
 
 }

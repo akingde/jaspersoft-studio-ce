@@ -72,7 +72,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 					oldru.getChildren().add(SelectorDatasource.getDatasource(ru));
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 
