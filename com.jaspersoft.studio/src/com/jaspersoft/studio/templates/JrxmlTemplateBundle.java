@@ -145,7 +145,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 	public String getLabel() {
 		return label;
 	}
-	
+
 	/**
 	 * @param label
 	 *          the label to set
@@ -153,7 +153,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
 
 	/**
 	 * Return the name of all the resources referenced by this template. This can be an expensive operation, since the
@@ -238,7 +237,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 		return getJasperDesign().getProperty(properyName);
 	}
 
-
 	/**
 	 * This method check that an expression has a text of type:
 	 * 
@@ -291,8 +289,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (is != null)
-				FileUtils.closeStream(is);
+			FileUtils.closeStream(is);
 		}
 	}
 
@@ -347,7 +344,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 
 	}
 
-
 	/**
 	 * Check for an icon provided by the template. If an icon is not available, it defaults to an internal report png.
 	 * 
@@ -362,7 +358,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 		}
 		return ResourceManager.getImage(descriptor);
 	}
-
 
 	/**
 	 * @return the templateIcon
@@ -380,7 +375,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 		this.icon = templateIcon;
 	}
 
-
 	/**
 	 * The jasperdesign provided by the template ready to be customized. If the jasperdesign was not previously loaded
 	 * then it is read from the JRXML file
@@ -391,7 +385,6 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 			loadJasperDesign();
 		return jasperDesign;
 	}
-
 
 	/**
 	 * @return the templateURL

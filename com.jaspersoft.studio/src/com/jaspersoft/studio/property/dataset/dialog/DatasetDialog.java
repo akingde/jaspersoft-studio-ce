@@ -50,6 +50,8 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
 import com.jaspersoft.studio.data.IFieldSetter;
+import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
+import com.jaspersoft.studio.data.designer.QueryStatus;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
@@ -151,6 +153,10 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		dataquery = new DataQueryAdapters(mform.getForm().getBody(), jConfig, newdataset, background) {
+			@Override
+			protected void createStatusBar(Composite comp) {
+				qStatus = new QueryStatus(comp);
+			}
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
@@ -169,7 +175,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 			@Override
 			public int getContainerType() {
-				return CONTAINER_WITH_INFO_TABLES;
+				return AQueryDesignerContainer.CONTAINER_WITH_INFO_TABLES;
 			}
 
 		};

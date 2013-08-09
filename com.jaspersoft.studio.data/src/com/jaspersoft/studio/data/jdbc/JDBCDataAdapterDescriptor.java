@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.ui.WizardQueryEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -102,7 +103,6 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	 */
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
-
-		return new JDBCWizardDataEditorComposite(parent, page, this);
+		return new WizardQueryEditorComposite(parent, page, this, "sql");
 	}
 }

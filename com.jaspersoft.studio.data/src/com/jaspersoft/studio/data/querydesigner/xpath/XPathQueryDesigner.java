@@ -59,6 +59,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.designer.tree.NodeBoldStyledLabelProvider;
 import com.jaspersoft.studio.data.designer.tree.TreeBasedQueryDesigner;
 import com.jaspersoft.studio.data.messages.Messages;
@@ -66,7 +67,6 @@ import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.XMLUtils;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
@@ -134,7 +134,7 @@ public class XPathQueryDesigner extends TreeBasedQueryDesigner {
 	}
 
 	private boolean showAdditionalInfo() {
-		return container.getContainerType() == DataQueryAdapters.CONTAINER_WITH_INFO_TABLES;
+		return container.getContainerType() == AQueryDesignerContainer.CONTAINER_WITH_INFO_TABLES;
 	}
 
 	@Override

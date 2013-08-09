@@ -28,6 +28,7 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
+import com.jaspersoft.studio.data.ui.WizardQueryEditorComposite;
 
 public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implements IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -59,6 +60,6 @@ public class HibernateDataAdapterDescriptor extends DataAdapterDescriptor implem
 
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
-		return new HQLWizardDataEditorComposite(parent, page, this);
+		return new WizardQueryEditorComposite(parent, page, this, "sql");
 	}
 }

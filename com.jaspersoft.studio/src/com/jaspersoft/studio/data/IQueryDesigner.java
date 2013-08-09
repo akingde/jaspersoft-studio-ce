@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public interface IQueryDesigner {
@@ -41,7 +41,7 @@ public interface IQueryDesigner {
 
 	public void setDataAdapter(DataAdapterDescriptor da);
 
-	public void setParentContainer(DataQueryAdapters dataQueryAdapters);
+	public void setParentContainer(AQueryDesignerContainer dataQueryAdapters);
 
 	public void setFields(List<JRDesignField> fields);
 

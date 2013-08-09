@@ -27,9 +27,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.Misc;
 
-public class QueryStatus {
-	private String msg;
-	private Throwable t;
+public class QueryStatus extends AQueryStatus {
 	private ToolItem msgItem;
 	private ToolBar toolBar;
 
@@ -80,8 +78,7 @@ public class QueryStatus {
 	}
 
 	protected void setMessage(final Throwable t, String message, boolean enabled) {
-		this.t = t;
-		msg = message;
+		super.setMessage(t, message, enabled);
 		cutMessage();
 		msgItem.setToolTipText(Misc.nvl(msg));
 		msgItem.setEnabled(enabled);

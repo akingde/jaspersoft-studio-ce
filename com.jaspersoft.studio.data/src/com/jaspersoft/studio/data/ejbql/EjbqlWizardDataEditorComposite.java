@@ -26,19 +26,17 @@ import com.jaspersoft.studio.data.querydesigner.ejbql.EJBQLLineStyler;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 
 /**
- * Editor composite for the EJBQL query language.
- * This is supposed to used by {@link EjbqlDataAdapterDescriptor}.
+ * Editor composite for the EJBQL query language. This is supposed to used by
+ * {@link EjbqlDataAdapterDescriptor}.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  */
-public class EjbqlWizardDataEditorComposite extends	SimpleQueryWizardDataEditorComposite {
+public class EjbqlWizardDataEditorComposite extends SimpleQueryWizardDataEditorComposite {
 
 	private EJBQLLineStyler lineStyler = new EJBQLLineStyler();
-	
-	public EjbqlWizardDataEditorComposite(Composite parent, WizardPage page,
-			DataAdapterDescriptor dataAdapterDescriptor) {
-		super(parent, page, dataAdapterDescriptor);
-		setQueryLanguage("ejbql"); //$NON-NLS-1$
+
+	public EjbqlWizardDataEditorComposite(Composite parent, WizardPage page, DataAdapterDescriptor dataAdapterDescriptor) {
+		super(parent, page, dataAdapterDescriptor, "ejbql"); //$NON-NLS-1$ 
 		setTitle(Messages.EjbqlWizardDataEditorComposite_Title);
 		styledText.addLineStyleListener(lineStyler);
 		styledText.addModifyListener(new ModifyListener() {

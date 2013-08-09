@@ -19,7 +19,6 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
@@ -52,7 +51,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.MDataAdapters;
-import com.jaspersoft.studio.data.designer.QueryStatus;
+import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
@@ -61,17 +60,14 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class DataQueryAdapters {
+public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 
 	/** Property to save a default data adapter to select */
 	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
 
-	public static final int CONTAINER_WITH_NO_TABLES = 0x01;
-	public static final int CONTAINER_WITH_INFO_TABLES = 0x02;
-
 	private JRDesignDataset newdataset;
 	private JasperDesign jDesign;
-	private JasperReportsConfiguration jConfig;
+
 	private Color background;
 	private IFile file;
 
@@ -282,16 +278,6 @@ public abstract class DataQueryAdapters {
 		runner.run(fork, cancelable, runnable);
 	}
 
-	private QueryStatus qStatus;
-
-	protected void createStatusBar(final Composite comp) {
-		qStatus = new QueryStatus(comp);
-	}
-
-	public QueryStatus getQueryStatus() {
-		return qStatus;
-	}
-
 	public void getFields(IProgressMonitor monitor) {
 		doGetFields(monitor);
 	}
@@ -342,31 +328,11 @@ public abstract class DataQueryAdapters {
 		return qdfactory.getDesigner(newdataset.getQuery().getLanguage()).getQuery();
 	}
 
-	public abstract void setFields(List<JRDesignField> fields);
-
-	public abstract List<JRDesignField> getCurrentFields();
-
-	public abstract void setParameters(List<JRDesignParameter> params);
-
 	public DataAdapterDescriptor getDataAdapter() {
 		return dscombo.getSelected();
 	}
 
-	public void doGetFields() {
-		try {
-			run(true, true, new IRunnableWithProgress() {
-
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					doGetFields(monitor);
-				}
-			});
-		} catch (InvocationTargetException ex) {
-			getQueryStatus().showError(ex.getTargetException());
-		} catch (InterruptedException ex) {
-			getQueryStatus().showError(ex);
-		}
-	}
-
+	@Override
 	protected void doGetFields(IProgressMonitor monitor) {
 		final DataAdapterDescriptor da = dscombo.getSelected();
 		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation(jConfig)) {
@@ -402,11 +368,5 @@ public abstract class DataQueryAdapters {
 			}
 		}
 	}
-
-	public JasperReportsConfiguration getjConfig() {
-		return jConfig;
-	}
-
-	public abstract int getContainerType();
 
 }

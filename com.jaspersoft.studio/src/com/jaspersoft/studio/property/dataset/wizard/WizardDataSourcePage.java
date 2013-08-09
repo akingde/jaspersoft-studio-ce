@@ -32,10 +32,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -43,7 +39,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -128,36 +123,34 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 	}
 
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
-		setControl(composite);
+		Composite composite_container = new Composite(parent, SWT.NONE);
+		setControl(composite_container);
 
-		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
-
-		Composite composite_container = new Composite(composite, SWT.NONE);
-		composite_container.setLayout(new FormLayout());
+		GridLayout layout = new GridLayout(3, false);
+		layout.marginWidth = 0;
+		composite_container.setLayout(layout);
 
 		Label lblDataAdapter = new Label(composite_container, SWT.NONE);
-		FormData fd_lblDataAdapter = new FormData();
-		fd_lblDataAdapter.top = new FormAttachment(0, 24);
-		fd_lblDataAdapter.left = new FormAttachment(0, 10);
-		lblDataAdapter.setLayoutData(fd_lblDataAdapter);
+		// FormData fd_lblDataAdapter = new FormData();
+		// fd_lblDataAdapter.top = new FormAttachment(0, 24);
+		// fd_lblDataAdapter.left = new FormAttachment(0, 10);
+		// lblDataAdapter.setLayoutData(fd_lblDataAdapter);
 		lblDataAdapter.setText(Messages.WizardDataSourcePage_lblNewLabel_text);
 
-		Composite composite_dataadapter = new Composite(composite_container, SWT.NONE);
-		GridLayout gl_composite_dataadapter = new GridLayout(2, false);
-		gl_composite_dataadapter.horizontalSpacing = 0;
-		gl_composite_dataadapter.marginWidth = 0;
-		gl_composite_dataadapter.marginHeight = 0;
-		gl_composite_dataadapter.verticalSpacing = 0;
-		composite_dataadapter.setLayout(gl_composite_dataadapter);
-		FormData fd_composite_dataadapter = new FormData();
-		fd_composite_dataadapter.left = new FormAttachment(lblDataAdapter, 6);
-		fd_composite_dataadapter.right = new FormAttachment(100, -10);
-		fd_composite_dataadapter.top = new FormAttachment(0, 15);
-		composite_dataadapter.setLayoutData(fd_composite_dataadapter);
+		// Composite composite_dataadapter = new Composite(composite_container, SWT.NONE);
+		// GridLayout gl_composite_dataadapter = new GridLayout(2, false);
+		// gl_composite_dataadapter.horizontalSpacing = 0;
+		// gl_composite_dataadapter.marginWidth = 0;
+		// gl_composite_dataadapter.marginHeight = 0;
+		// gl_composite_dataadapter.verticalSpacing = 0;
+		// composite_dataadapter.setLayout(gl_composite_dataadapter);
+		// FormData fd_composite_dataadapter = new FormData();
+		// fd_composite_dataadapter.left = new FormAttachment(lblDataAdapter, 6);
+		// fd_composite_dataadapter.right = new FormAttachment(100, -10);
+		// fd_composite_dataadapter.top = new FormAttachment(0, 10);
+		// composite_dataadapter.setLayoutData(fd_composite_dataadapter);
 
-		dataAdaptersCombo = new Combo(composite_dataadapter, SWT.READ_ONLY);
+		dataAdaptersCombo = new Combo(composite_container, SWT.READ_ONLY);
 		// Code used for TableCombo from Nebula, unfortunately on Mac it looks too bad to be used.
 		// dataAdaptersCombo.defineColumns(1);
 		// dataAdaptersCombo.setShowTableHeader(false);
@@ -176,8 +169,8 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		});
 		dataAdaptersCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-		Button btnNew = new Button(composite_dataadapter, SWT.NONE);
-		btnNew.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
+		Button btnNew = new Button(composite_container, SWT.NONE);
+		// btnNew.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
 		btnNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -202,16 +195,17 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 
 		composite_editor = new Composite(composite_container, SWT.NONE);
 		composite_editor.setLayout(new StackLayout());
-		FormData fd_composite_editor = new FormData();
-		fd_composite_editor.bottom = new FormAttachment(100, -10);
-		fd_composite_editor.right = new FormAttachment(composite_dataadapter, 0, SWT.RIGHT);
-		fd_composite_editor.left = new FormAttachment(0, 10);
-		fd_composite_editor.top = new FormAttachment(0, 89);
-		composite_editor.setLayoutData(fd_composite_editor);
+		// FormData fd_composite_editor = new FormData();
+		// fd_composite_editor.right = new FormAttachment(composite_dataadapter, 0, SWT.RIGHT);
+		// fd_composite_editor.left = new FormAttachment(0, 0);
+		// fd_composite_editor.top = new FormAttachment(composite_dataadapter, 10);
+		// fd_composite_editor.bottom = new FormAttachment(100, 0);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		composite_editor.setLayoutData(gd);
 
 		lblEmptyEditor = new Label(composite_editor, SWT.BORDER);
 		lblEmptyEditor.setText(Messages.WizardDataSourcePage_lblThisDataAdapter_text);
-
 	}
 
 	/**
@@ -303,7 +297,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 	 * Invoked when a data adapter is selected from the combo box...
 	 */
 	public void handleDataAdapterSelectionEvent(SelectionEvent event) {
-
+		setErrorMessage(null);
 		selectedDataAdapterDescriptor = null;
 
 		if (dataAdaptersCombo.getSelectionIndex() >= 0) {

@@ -51,11 +51,11 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 		MRoot root = (MRoot) getModel();
 		List<MFrom> list = new ArrayList<MFrom>();
 		for (INode n : root.getChildren()) {
-			if (n instanceof MFrom)
+			if (n instanceof MFrom && !n.getChildren().isEmpty())
 				list.add((MFrom) n);
 			else if (n instanceof MUnion)
 				for (INode sn : n.getChildren())
-					if (sn instanceof MFrom)
+					if (sn instanceof MFrom && !n.getChildren().isEmpty())
 						list.add((MFrom) n);
 		}
 		return list;

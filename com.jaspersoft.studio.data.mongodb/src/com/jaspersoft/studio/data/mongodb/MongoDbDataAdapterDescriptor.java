@@ -27,12 +27,14 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.mongodb.MongoDbDataSource;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapter;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.ui.WizardQueryEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -83,6 +85,6 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implemen
 
 	@Override
 	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
-		return new MongoDBWizardDataEditorComposite(parent, page, this);
+		return new WizardQueryEditorComposite(parent, page, this, MongoDbDataSource.QUERY_LANGUAGE);
 	}
 }
