@@ -56,5 +56,7 @@
 		<module>../../jre.linux.gtk.x86_64.feature</module>
 		<module>../../jre.macosx.cocoa.x86_64.feature</module>
 		<module>../../com.jaspersoft.studio.jre.feature</module>
+		<!-- i18n feature -->
+		<module>../../com.jaspersoft.studio.i18n.feature</module>
 	</modules>
 </project> 
