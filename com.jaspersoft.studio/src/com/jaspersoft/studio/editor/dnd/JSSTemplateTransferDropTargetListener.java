@@ -143,7 +143,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 						int y = creatElementC.getLocation().y - band.getBounds().y;
 						int actualWidth = creatElementC.getLocation().width != -1 ? creatElementC.getLocation().width : defaultWidth;
 						location = new Rectangle(x, y, actualWidth, defaultHeight);
-						location.setY(2);
+						location.y = 2;
 						dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage2;
 					} else if (creationCommands.size()==1){
 						// There isn't enough space in the Column header, the static text will be placed into the detail if only one field is dragged
@@ -151,7 +151,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 						int y = creatElementC.getLocation().y - band.getBounds().y;
 						int actualWidth = creatElementC.getLocation().width != -1 ? creatElementC.getLocation().width : defaultWidth;
 						location = new Rectangle(x, y, actualWidth, defaultHeight);
-						location.setX(location.getLocation().x - location.width);
+						location.x = location.getLocation().x - location.width;
 						dragMessage = Messages.JSSTemplateTransferDropTargetListener_createLabelMessage1;
 					}
 					//Check if was generated a command
