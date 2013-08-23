@@ -10,4 +10,10 @@
         name="Import and open reports samples">
       </cheatsheet>
  </extension>
+ <extension
+       point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+    <input
+          class="com.jaspersoft.studio.doc.samples.messages.ResourcePublisher">
+    </input>
+ </extension>
 </fragment>

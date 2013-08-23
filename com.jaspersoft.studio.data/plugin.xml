@@ -73,5 +73,11 @@
             MappingToolClass="com.jaspersoft.studio.data.tools.mapping.BeanMappingTool">
       </mappingTool>
    </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.jaspersoft.studio.data.messages.ResourcePublisher">
+      </input>
+   </extension>
 
 </plugin>

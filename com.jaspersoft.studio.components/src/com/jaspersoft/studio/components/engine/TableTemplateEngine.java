@@ -139,6 +139,11 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private TableSections sections;
 	
 	/**
+	 * The height of the summary
+	 */
+	private int summaryHeight;
+	
+	/**
 	 * Create a column 
 	 *  
 	 * @param tbl the table 
@@ -297,13 +302,15 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 					parentCol.setGroupHeader(groupField.getName(), cell);
 				}
 				tbl.addColumn(parentCol);
-				tableHeight = getTableHeight(parentCol);
+				int minimumHeight = getTableHeight(parentCol);
+				if (tableHeight < minimumHeight) tableHeight = minimumHeight;
 			} else {
 				//There are no groups, so will not be created group columns
 				for (Object f : tableFields) {
 					createColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				tableHeight = getTableHeight((StandardColumn)tbl.getColumns().get(0));
+				int minimumHeight = getTableHeight((StandardColumn)tbl.getColumns().get(0));
+				if (tableHeight < minimumHeight) tableHeight = minimumHeight;
 			}
 		} else {
 			//If there are no fields defined create an empty column
@@ -383,6 +390,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		//Initialize the styles list
 		stylesList = buildStylesList(jd);
 		JRDesignComponentElement tableComponent = getTable(jd);
+		summaryHeight = jd.getSummary().getHeight();
 		/**
 		 * If the template table is found it will be used to create the style of the real table and of its 
 		 * content
@@ -465,9 +473,10 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	public static JRDesignStaticText findStaticTextElement(StandardTable parent, String exp) {
 		StandardColumn col = (StandardColumn)parent.getColumns().get(0);
 		if (col != null){
-			JRDesignStaticText result = DefaultTemplateEngine.findStaticTextElement(col.getTableHeader(), exp);
-			if (result == null) result = DefaultTemplateEngine.findStaticTextElement(col.getColumnHeader(), exp);
-			if (result == null) result = DefaultTemplateEngine.findStaticTextElement(col.getDetailCell(), exp);
+			JRDesignStaticText result = null;
+			if (col.getTableHeader() != null) result = DefaultTemplateEngine.findStaticTextElement(col.getTableHeader(), exp);
+			if (col.getColumnHeader() != null && result == null) result = DefaultTemplateEngine.findStaticTextElement(col.getColumnHeader(), exp);
+			if (col.getDetailCell() != null && result == null) result = DefaultTemplateEngine.findStaticTextElement(col.getDetailCell(), exp);
 			return result;
 		}
 		return null;
@@ -483,9 +492,10 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	public static JRDesignTextField findTextFieldElement(StandardTable parent, String exp) {
 		StandardColumn col = (StandardColumn)parent.getColumns().get(0);
 		if (col != null){
-			JRDesignTextField result = DefaultTemplateEngine.findTextFieldElement(col.getTableHeader(), exp);
-			if (result == null) result = DefaultTemplateEngine.findTextFieldElement(col.getColumnHeader(), exp);
-			if (result == null) result = DefaultTemplateEngine.findTextFieldElement(col.getDetailCell(), exp);
+			JRDesignTextField result = null;
+			if (col.getTableHeader() != null) DefaultTemplateEngine.findTextFieldElement(col.getTableHeader(), exp);
+			if (col.getColumnHeader() != null && result == null) result = DefaultTemplateEngine.findTextFieldElement(col.getColumnHeader(), exp);
+			if (col.getDetailCell() != null && result == null) result = DefaultTemplateEngine.findTextFieldElement(col.getDetailCell(), exp);
 			return result;
 		}
 		return null;
@@ -569,7 +579,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		}
 		
 		//Set the summary and table height and width according to the new value, and add the table to the report
-		summaryBand.setHeight(tableHeight);
+		//summaryBand.setHeight(tableHeight);
+		summaryBand.setHeight(summaryHeight);
 		table.setWidth(tableWidth);
 		table.setHeight(tableHeight);
 		table.setX(tableX);

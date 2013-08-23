@@ -113,7 +113,6 @@ public class LocaleSourceProvider extends AbstractSourceProvider {
 	public Map<String, String> getCurrentState() {
 		Map<String,String> currentState = new HashMap<String,String>(1);
 		String locale =  getLocale();
-		System.out.println(locale);
 		currentState.put(ACTUAL_LOCALE, locale);
 		return currentState;
 	}

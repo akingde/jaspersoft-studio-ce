@@ -56,7 +56,7 @@ import com.jaspersoft.studio.messages.Messages;
 public class SwitchLanguageHandler extends AbstractHandler implements IElementUpdater {
 	
 	/**
-	 * Execute the command, read the regional code from the paramenter passed by the plugin file and
+	 * Execute the command, read the regional code from the parameter passed by the plugin file and
 	 * call the method to write the regional code to the configuration. If the configuration is modified
 	 * than call a restart
 	 */
@@ -100,7 +100,7 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	
 	/**
 	 * Take the actual language code and if it is the same of the updated 
-	 * element thant the element is marked as checked
+	 * element that the element is marked as checked
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override

@@ -109,5 +109,11 @@
             name="Create a report with a chart">
       </cheatsheet>
    </extension>
+    <extension
+          point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+       <input
+             class="com.jaspersoft.studio.doc.messages.ResourcePublisher">
+       </input>
+    </extension>
 
 </plugin>

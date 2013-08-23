@@ -43,4 +43,16 @@
          </toolbar>
       </menuContribution>
    </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceSender">
+      <sender
+            class="com.jaspersoft.studio.community.translationSender.TranslationCommunitySender">
+      </sender>
+   </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.jaspersoft.studio.community.messages.ResourcePublisher">
+      </input>
+   </extension>
 </plugin>

@@ -204,6 +204,36 @@
       </product>
    </extension>
    <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:window">
+         <menu
+               id="com.jaspersoft.studio.switchlanguage.menus"
+               label="%language"
+               mnemonic="L">
+            <command
+                  commandId="com.jaspersoft.studio.switchlanguage.command"
+                  icon="icons/language/us.png"
+                  id="com.jaspersoft.studio.switchlanguage.menus.english"
+                  label="English"
+                  style="toggle">
+               <parameter
+                     name="com.jaspersoft.studio.switchlanguage.locale"
+                     value="en_EN">
+               </parameter>
+            </command>
+            <command
+                  commandId="com.jaspersoft.studio.switchlanguage.command"
+                  icon="icons/language/it.png"
+                  id="com.jaspersoft.studio.switchlanguage.menus.italian"
+                  label="Italiano"
+                  style="toggle">
+               <parameter
+                     name="com.jaspersoft.studio.switchlanguage.locale"
+                     value="it_IT">
+               </parameter>
+            </command>
+         </menu>
+      </menuContribution>
    	<menuContribution
     	allPopups="false"
         locationURI="toolbar:org.eclipse.ui.main.toolbar">
@@ -423,75 +453,6 @@
             class="com.jaspersoft.studio.rcp.p2.InstallNewSoftwareHandler">
       </handler>-->
    </extension>
-   <extension point="org.eclipse.ui.menus">
-   		<menuContribution locationURI="menu:window">
-	         <menu label="%language" mnemonic="L" id="com.jaspersoft.studio.switchlanguage.menus">
-	            <command
-                   commandId="com.jaspersoft.studio.switchlanguage.command"
-                   icon="icons/language/us.png"
-                   id="com.jaspersoft.studio.switchlanguage.menus.english"
-                   label="English"
-                   style="toggle">
-	               <parameter
-	                     name="com.jaspersoft.studio.switchlanguage.locale"
-	                     value="en_EN">
-	               </parameter>
-                 <!-- <visibleWhen
-                      checkEnabled="false">
-                   <with
-                         variable="actual_locale">
-                      <not>
-                         <equals
-                               value="en_EN">
-                         </equals>
-                      </not>
-                   </with>
-                </visibleWhen>-->
-	            </command>
-	            <command
-                   commandId="com.jaspersoft.studio.switchlanguage.command"
-                   icon="icons/language/it.png"
-                   id="com.jaspersoft.studio.switchlanguage.menus.italian"
-                   label="Italiano"
-                   style="toggle">
-	               <parameter
-	                     name="com.jaspersoft.studio.switchlanguage.locale"
-	                     value="it_IT">
-	               </parameter>
-                 <!-- <visibleWhen
-                      checkEnabled="false">
-                   <with
-                         variable="actual_locale">
-                      <not>
-                         <equals
-                               value="it_IT">
-                         </equals>
-                      </not>
-                   </with>
-                </visibleWhen>-->
-	            </command>
-	         </menu>
-	    </menuContribution>
-	    
-	     <!--  
-      <menuContribution
-            locationURI="menu:help">
-            <command
-                  commandId="com.jaspersoft.studio.rcp.command.update"
-            	  mnemonic="%Update.command.mnemonic"
-                  id="com.jaspersoft.studio.rcp.menu.update">
-            </command>
-                        
-      </menuContribution>
-      <menuContribution
-            locationURI="menu:help">
-            <command
-                  commandId="com.jaspersoft.studio.rcp.command.install"
-            	  mnemonic="%Install.command.mnemonic"
-                  id="com.jaspersoft.studio.rcp.menu.install">
-            </command>
-      </menuContribution>   -->
-   </extension>
    <extension
          point="org.eclipse.ui.services">
       <sourceProvider
@@ -501,6 +462,12 @@
                priorityLevel="activeWorkbenchWindow">
          </variable>
       </sourceProvider>
+   </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.jaspersoft.studio.rcp.messages.ResourcePublisher">
+      </input>
    </extension>
 
 </plugin>

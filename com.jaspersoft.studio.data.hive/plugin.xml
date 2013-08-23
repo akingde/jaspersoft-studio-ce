@@ -32,5 +32,11 @@
             plugin="com.jaspersoft.studio.doc">
       </contexts>
    </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.jaspersoft.studio.data.hive.messages.ResourcePublisher">
+      </input>
+   </extension>
 
 </plugin>

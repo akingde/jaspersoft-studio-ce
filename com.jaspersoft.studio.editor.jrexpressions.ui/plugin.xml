@@ -268,4 +268,10 @@
             languageName="groovy">
       </languageSupport>
    </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.messages.ResourcePublisher">
+      </input>
+   </extension>
 </plugin>

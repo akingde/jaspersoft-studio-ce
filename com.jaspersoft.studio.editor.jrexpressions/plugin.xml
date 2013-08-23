@@ -10,6 +10,12 @@
        genModel = "com/jaspersoft/studio/editor/jrexpressions/JavaJRExpression.genmodel" /> 
 	
   </extension>
+  <extension
+        point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+     <input
+           class="com.jaspersoft.studio.editor.jrexpressions.messages.ResourcePublisher">
+     </input>
+  </extension>
 
 
 

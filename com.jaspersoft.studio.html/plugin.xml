@@ -34,6 +34,12 @@
          </propertySection>
       </propertySections>
    </extension>
+   <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.jaspersoft.studio.html.messages.ResourcePublisher">
+      </input>
+   </extension>
 
 
 </plugin>
