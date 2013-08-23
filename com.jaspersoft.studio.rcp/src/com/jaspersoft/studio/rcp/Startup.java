@@ -27,7 +27,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IStartup;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.rcp.heartbeat.Heartbeat;
 import com.jaspersoft.studio.rcp.messages.Messages;
@@ -50,6 +52,8 @@ public class Startup implements IStartup {
 				description.setName(Messages.Startup_jss_project);
 				project.setDescription(description, monitor);
 			}
+			IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
+			registry.setDefaultEditor("*.properties", "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor");
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} finally {
