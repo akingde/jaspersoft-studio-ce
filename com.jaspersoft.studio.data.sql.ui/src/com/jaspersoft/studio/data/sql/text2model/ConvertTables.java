@@ -24,14 +24,18 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertTables {
 	public static void convertTables(SQLQueryDesigner designer, ANode qroot, OrTable tbls) {
-		if (tbls == null)
-			return;
-		if (tbls instanceof FromTable)
-			doTables(designer, Util.getKeyword(qroot, MFrom.class), (FromTable) tbls);
-		else if (tbls instanceof OrTableImpl) {
-			MFrom mfrom = Util.getKeyword(qroot, MFrom.class);
-			for (FromTable ftbl : tbls.getEntries())
-				doTables(designer, mfrom, ftbl);
+		try {
+			if (tbls == null)
+				return;
+			if (tbls instanceof FromTable)
+				doTables(designer, Util.getKeyword(qroot, MFrom.class), (FromTable) tbls);
+			else if (tbls instanceof OrTableImpl) {
+				MFrom mfrom = Util.getKeyword(qroot, MFrom.class);
+				for (FromTable ftbl : tbls.getEntries())
+					doTables(designer, mfrom, ftbl);
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 
