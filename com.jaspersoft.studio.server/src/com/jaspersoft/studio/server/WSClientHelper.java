@@ -113,7 +113,7 @@ public class WSClientHelper {
 		depth++;
 
 		List<ResourceDescriptor> children = client.list(rd);
-		if (parent instanceof MResource && ((MResource) parent).getValue().getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
+		if (parent instanceof MServerProfile || (parent instanceof MResource && ((MResource) parent).getValue().getWsType().equals(ResourceDescriptor.TYPE_FOLDER))) {
 			Collections.sort(children, new Comparator<ResourceDescriptor>() {
 
 				@Override
@@ -122,7 +122,19 @@ public class WSClientHelper {
 						return -1;
 					if (arg1.getLabel() == null)
 						return 1;
-					return arg0.getLabel().compareTo(arg1.getLabel());
+					String wsType0 = arg0.getWsType();
+					String wsType1 = arg1.getWsType();
+					if (wsType0.equals(wsType1))
+						return arg0.getLabel().compareTo(arg1.getLabel());
+					if (wsType0.equals(ResourceDescriptor.TYPE_FOLDER))
+						return -1;
+					if (wsType1.equals(ResourceDescriptor.TYPE_FOLDER))
+						return 1;
+					if (wsType0.equals(ResourceDescriptor.TYPE_REPORTUNIT))
+						return -1;
+					if (wsType1.equals(ResourceDescriptor.TYPE_REPORTUNIT))
+						return 1;
+					return wsType0.compareTo(wsType1);
 				}
 			});
 		}
