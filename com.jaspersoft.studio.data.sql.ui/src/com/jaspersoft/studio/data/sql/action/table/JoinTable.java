@@ -72,11 +72,8 @@ public class JoinTable extends AAction {
 		}
 		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer, true);
 		dialog.setValue(mfromTable);
-		if (dialog.open() == Dialog.OK) {
-			MFromTable mtab = getFromTable(mfromTable, dialog);
-
-			doRun(null, mfromTable, null, mtab);
-		}
+		if (dialog.open() == Dialog.OK)
+			doRun(null, mfromTable, null, getFromTable(mfromTable, dialog));
 	}
 
 	public void doRun(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl) {

@@ -93,7 +93,7 @@ public class ColumnLayoutEditPolicy extends FlowLayoutEditPolicy {
 	 * @return
 	 */
 	protected Command getCreateCommand(CreateRequest request) {
-		System.out.println(request);
+		// System.out.println(request);
 
 		return null;
 	}
