@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='24'>
+  <ius size='23'>
     <iu id='org.apache.commons.dbcp' name='Apache Commons DBCP' version='1.4.0.v201204271417'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
@@ -123,11 +123,6 @@
       <repositories size='2'>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
         <repository location='http://download.eclipse.org/releases/juno'/>
-      </repositories>
-    </iu>
-    <iu id='de.itemis.xtext.utils.jface.feature.group' name='Xtext JFace Integration (XJI)' version='1.0.0.201205141449'>
-      <repositories size='1'>
-        <repository location='http://updates.yakindu.com/indigo/milestones/'/>
       </repositories>
     </iu>
     <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.3.1.v201208210947'>
