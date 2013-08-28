@@ -71,5 +71,6 @@
 		<module>../../com.jaspersoft.studio.properties</module>
 		<module>../../com.jaspersoft.studio.rcp</module>
 		<module>../../com.jaspersoft.studio.server</module>
+		<module>../../com.jaspersoft.studio.xtext.jface</module>
 	</modules>
 </project> 
