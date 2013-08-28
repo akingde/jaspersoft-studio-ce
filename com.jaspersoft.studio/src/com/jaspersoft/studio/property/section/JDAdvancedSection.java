@@ -18,6 +18,7 @@ import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
@@ -34,6 +35,8 @@ import com.jaspersoft.studio.property.JRPropertySheetEntry;
 public class JDAdvancedSection extends AdvancedPropertySection implements PropertyChangeListener {
 	private EditDomain editDomain;
 	private APropertyNode element;
+	protected TabbedPropertySheetPage atabbedPropertySheetPage;
+
 
 	public JDAdvancedSection() {
 		super();
@@ -49,15 +52,23 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		data.top = new FormAttachment(0, 0);
 		data.bottom = new FormAttachment(100, 0);
 		page.getControl().setLayoutData(data);
+		UpdatePageContent();
+	}
+	
+	private void UpdatePageContent(){
+		if (page != null && element != null && getEditDomain() != null){
+			page.selectionChanged(getPart(), new StructuredSelection(element));
+			JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(), (ANode) element);
+			page.setRootEntry(propertySheetEntry);			
+		}
 	}
 
-	TabbedPropertySheetPage atabbedPropertySheetPage;
 
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
-		super.setInput(part, selection);
-		if (page != null && selection instanceof IStructuredSelection) {
-
+		setPart(part);
+		setSelection(selection);
+		if (selection instanceof IStructuredSelection) {
 			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 			if (provider != null)
 				setEditDomain(provider.getEditDomain());
@@ -67,13 +78,8 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 			Assert.isTrue(input instanceof EditPart);
 			Object model = ((EditPart) input).getModel();
 			Assert.isTrue(model instanceof APropertyNode);
-			if (getEditDomain() != null) {
-				JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(),
-						(ANode) model);
-				page.setRootEntry(propertySheetEntry);
-
-				this.element = (APropertyNode) model;
-			}
+			this.element = (APropertyNode) model;
+			UpdatePageContent();
 		}
 	}
 

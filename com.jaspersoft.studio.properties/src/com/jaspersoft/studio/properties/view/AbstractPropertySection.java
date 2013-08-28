@@ -133,4 +133,13 @@ public abstract class AbstractPropertySection implements ISection {
 	public void refresh() {
 		/* empty default implementation */
 	}
+	
+	protected void setPart(IWorkbenchPart part){
+		this.part = part;
+	}
+	
+	protected void setSelection(ISelection selection){
+		this.selection = selection;
+	}
+	
 }

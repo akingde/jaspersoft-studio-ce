@@ -286,6 +286,80 @@ public class TabbedPropertySearch extends Composite {
 	}
 	
 	/**
+	 * Return all the properties for the selected element. The property are cached and not 
+	 * recalculated until the selection maintain the same type
+	 * 
+	 * @return a PropertiesContainer with all the properties name and relative ids for the 
+	 * selected element type
+	 */
+	private PropertiesContainer getAllProperties(){
+		//Check if i have the properties for the element in the cache
+		if (lastSelectedElement == null || cachedProperties == null){
+			//I haven't build a cache yet, need to create it
+			cachedProperties = createElements();
+			lastSelectedElement = getSelectedElement();
+		} else {
+			//Maybe i have already the element cached
+			Object actualSelectedElement = getSelectedElement();
+			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
+				//The cache was build for an element with different type\properties, i need to rebuild it
+				cachedProperties = createElements();
+				lastSelectedElement = getSelectedElement();
+			}
+		}
+		textArea.setText(""); //$NON-NLS-1$
+		return cachedProperties;
+	}
+	
+	
+	/**
+	 * Get the element actually selected, i need to search in all section until i not found the one
+	 * where the element is not null because the element is set only in the already created sections, 
+	 * so at first i don't know which section already store the element
+	 * 
+	 * @return
+	 */
+	private Object getSelectedElement(){
+		List<TabContents> lst = factory.getAvailableTabContents();
+		for(TabContents actualContents : lst){
+			for(ISection section : actualContents.getSections()){
+				if (section instanceof IWidgetsProviderSection){
+					Object selectedElement = ((IWidgetsProviderSection)section).getSelectedElement();
+					if (selectedElement != null) return selectedElement;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Create a PropertiesContainer containing all the selectable properties for 
+	 * the actually selected element type. The property are also ordered into 
+	 * a lexicographic way
+	 * 
+	 */
+	private PropertiesContainer createElements(){
+		List<PropertyContainer> listToOrder = new ArrayList<PropertyContainer>();
+		List<TabContents> lst = factory.getAvailableTabContents();
+		
+		for(TabContents actualContents : lst){
+			for(ISection section : actualContents.getSections()){
+				if (section instanceof IWidgetsProviderSection){
+					IWidgetsProviderSection attributesSection = (IWidgetsProviderSection)section;
+					List<Object> providedProperties = attributesSection.getHandledProperties();
+					for(Object property : providedProperties){
+						WidgetDescriptor desc = attributesSection.getPropertyInfo(property);
+						listToOrder.add(new PropertyContainer(desc.getName(), property, attributesSection.getClass()));
+					}
+				}
+			}
+		}
+		Collections.sort(listToOrder);
+		return new PropertiesContainer(listToOrder.toArray(new PropertyContainer[listToOrder.size()]));
+	}
+	
+	
+	/**
 	 * Method called when there is a selection event. 
 	 * 
 	 * @param id the id of the element to select
@@ -363,80 +437,6 @@ public class TabbedPropertySearch extends Composite {
 		}
 	}
 	
-	/**
-	 * Get the element actually selected, i need to search in all section until i not found the one
-	 * where the element is not null because the element is set only in the already created sections, 
-	 * so at first i don't know which section already store the element
-	 * 
-	 * @return
-	 */
-	private Object getSelectedElement(){
-		List<TabContents> lst = factory.getAvailableTabContents();
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					Object selectedElement = ((IWidgetsProviderSection)section).getSelectedElement();
-					if (selectedElement != null) return selectedElement;
-				}
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Return all the properties for the selected element. The property are cached and not 
-	 * recalculated until the selection maintain the same type
-	 * 
-	 * @return a PropertiesContainer with all the properties name and relative ids for the 
-	 * selected element type
-	 */
-	private PropertiesContainer getAllProperties(){
-		//Check if i have the properties for the element in the cache
-		if (lastSelectedElement == null || cachedProperties == null){
-			//I haven't build a cache yet, need to create it
-			cachedProperties = createElements();
-			lastSelectedElement = getSelectedElement();
-		} else {
-			//Maybe i have already the element cached
-			Object actualSelectedElement = getSelectedElement();
-			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
-				//The cache was build for an element with different type\properties, i need to rebuild it
-				cachedProperties = createElements();
-				lastSelectedElement = getSelectedElement();
-			}
-		}
-		textArea.setText(""); //$NON-NLS-1$
-		return cachedProperties;
-	}
-	
-	/**
-	 * Create a PropertiesContainer containing all the selectable properties for 
-	 * the actually selected element type. The property are also ordered into 
-	 * a lexicographic way
-	 * 
-	 */
-	private PropertiesContainer createElements(){
-		List<PropertyContainer> listToOrder = new ArrayList<PropertyContainer>();
-		List<TabContents> lst = factory.getAvailableTabContents();
-		
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					IWidgetsProviderSection attributesSection = (IWidgetsProviderSection)section;
-					List<Object> providedProperties = attributesSection.getHandledProperties();
-					for(Object property : providedProperties){
-						WidgetDescriptor desc = attributesSection.getPropertyInfo(property);
-						listToOrder.add(new PropertyContainer(desc.getName(), property, attributesSection.getClass()));
-					}
-				}
-			}
-		}
-		Collections.sort(listToOrder);
-		return new PropertiesContainer(listToOrder.toArray(new PropertyContainer[listToOrder.size()]));
-	}
-	
-
-
 	/**
 	 * @param e
 	 */
