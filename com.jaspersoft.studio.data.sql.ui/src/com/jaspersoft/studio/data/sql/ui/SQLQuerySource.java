@@ -42,8 +42,6 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 
-import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
-
 public class SQLQuerySource {
 	private static final Color SRC_MARGINS_COLOR = SWTResourceManager.getColor(220, 220, 220);
 	private SQLQueryDesigner designer;
@@ -57,7 +55,6 @@ public class SQLQuerySource {
 	}
 
 	private XtextSourceViewer viewer;
-	private StyledTextXtextAdapter xtextAdapter;
 
 	public Control createSource(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.BORDER);
