@@ -55,4 +55,34 @@ public class SimpleFontFaceExport implements FontFace {
 		return font;
 	}
 
+	@Override
+	public String getTtf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPdf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getSvg() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getWoff() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
