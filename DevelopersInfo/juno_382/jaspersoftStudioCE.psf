@@ -2,6 +2,7 @@
 <psf version="2.0">
 <provider id="org.tigris.subversion.subclipse.core.svnnature">
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/aggregator,aggregator"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.essiembre.eclipse.i18n.resourcebundle,com.essiembre.eclipse.i18n.resourcebundle"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio,com.jaspersoft.studio"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.community,com.jaspersoft.studio.community"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.components,com.jaspersoft.studio.components"/>
@@ -25,6 +26,7 @@
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.rcp.product,com.jaspersoft.studio.rcp.product"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.server,com.jaspersoft.studio.server"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.updatesite,com.jaspersoft.studio.updatesite"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.xtext.jface,com.jaspersoft.studio.xtext.jface"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/DevelopersInfo,DevelopersInfo"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/jre.linux.gtk.x86.feature,jre.linux.gtk.x86.feature"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/jre.linux.gtk.x86_64.feature,jre.linux.gtk.x86_64.feature"/>
