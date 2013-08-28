@@ -74,7 +74,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
-	
+
 	private ClasspathListener classpathlistener;
 	private PreferenceListener preferenceListener;
 	private IPreferencesService service;
@@ -128,7 +128,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
 			} catch (Throwable e) {
 				JaspersoftStudioPlugin.getInstance().logError(
-						"Cannot complete operations successfully after a classpath change occurred.",e);
+						"Cannot complete operations successfully after a classpath change occurred.", e);
 			}
 		}
 	}
@@ -150,6 +150,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			service = Platform.getPreferencesService();
 			qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		}
+		initClassloader(file);
 		IProject project = null;
 		if (file != null) {
 			put(FileUtils.KEY_FILE, file);
@@ -157,20 +158,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			if (project != null) {
 				lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE, InstanceScope.SCOPE };
 				contexts = new IScopeContext[] { new ResourceScope(file), new ProjectScope(project), INSTANCE_SCOPE };
-				try {
-					if (project.getNature(JavaCore.NATURE_ID) != null) {
-						ClassLoader tcl = Thread.currentThread().getContextClassLoader();
-						javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), tcl);
-						ClassLoader cl = javaclassloader;
-						cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
-						cl = new CompositeClassloader(cl, this.getClass().getClassLoader());
-						setClassLoader(cl);
-						classpathlistener = new ClasspathListener();
-						javaclassloader.addClasspathListener(classpathlistener);
-					}
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
 			}
 			initFileResolver(file);
 		} else {
@@ -184,10 +171,26 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 	}
 
-	public void dispose() {
-		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
-		if (javaclassloader != null)
-			javaclassloader.removeClasspathListener(classpathlistener);
+	protected void initClassloader(IFile file) {
+		try {
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			if (file != null) {
+				IProject project = file.getProject();
+				// insert a classloader for . resolving resource bundles
+
+				if (project != null && project.getNature(JavaCore.NATURE_ID) != null) {
+					javaclassloader = JavaProjectClassLoader.instance(JavaCore.create(project), cl);
+					classpathlistener = new ClasspathListener();
+					javaclassloader.addClasspathListener(classpathlistener);
+					cl = javaclassloader;
+				}
+			}
+			cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
+			cl = new CompositeClassloader(cl, this.getClass().getClassLoader());
+			setClassLoader(cl);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initFileResolver(IFile file) {
@@ -201,12 +204,23 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 		setExtensions(RepositoryService.class, list);
 		List<PersistenceServiceFactory> persistenceServiceFactoryList = getExtensions(PersistenceServiceFactory.class);
-		if (persistenceServiceFactoryList != null) {
+		if (persistenceServiceFactoryList != null)
 			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
-		}
 		setExtensions(PersistenceServiceFactory.class, persistenceServiceFactoryList);
-
 		setFileResolver(new ProxyFileResolver());
+	}
+
+	@Override
+	public void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
+		super.setClassLoader(classLoader);
+		put(AbstractClasspathAwareDataAdapterService.CURRENT_CLASS_LOADER, classLoader);
+	}
+
+	public void dispose() {
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+		if (javaclassloader != null)
+			javaclassloader.removeClasspathListener(classpathlistener);
 	}
 
 	public void put(String key, Object value) {
@@ -226,13 +240,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 	public ClassLoader getClassLoader() {
 		return classLoader;
-	}
-
-	@Override
-	public void setClassLoader(ClassLoader classLoader) {
-		this.classLoader = classLoader;
-		super.setClassLoader(classLoader);
-		put(AbstractClasspathAwareDataAdapterService.CURRENT_CLASS_LOADER, classLoader);
 	}
 
 	public FileResolver getFileResolver() {
@@ -458,15 +465,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					// NOTE: Let's use this for now as quick solution, in case of
 					// bad performances we'll have to fix this approach
 					ResourceBundle.clearCache(getClassLoader());
-					functionsBundles = super.getExtensions(FunctionsBundle.class); 
+					functionsBundles = super.getExtensions(FunctionsBundle.class);
 					Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
 					functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
 				}
 				result = (List<T>) functionsBundles;
-			}	else if(extensionType == MessageProviderFactory.class) {
-				if(messageProviderFactory==null || refreshMessageProviderFactory){
+			} else if (extensionType == MessageProviderFactory.class) {
+				if (messageProviderFactory == null || refreshMessageProviderFactory) {
 					messageProviderFactory = new ResourceBundleMessageProviderFactory(getClassLoader());
-					refreshFunctionsBundles=false;
+					refreshFunctionsBundles = false;
 				}
 				result = (List<T>) Collections.singletonList(messageProviderFactory);
 			} else {

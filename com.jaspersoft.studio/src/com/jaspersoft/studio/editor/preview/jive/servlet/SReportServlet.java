@@ -10,31 +10,33 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.jive.servlet;
 
+import java.io.PrintWriter;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.repo.JasperDesignCache;
-import net.sf.jasperreports.web.JRInteractiveException;
 import net.sf.jasperreports.web.WebReportContext;
 import net.sf.jasperreports.web.servlets.JasperPrintAccessor;
-import net.sf.jasperreports.web.servlets.ReportServlet;
+import net.sf.jasperreports.web.servlets.ReportOutputServlet;
 
 import com.jaspersoft.studio.editor.preview.jive.Context;
 
-public class SReportServlet extends ReportServlet {
+public class SReportServlet extends ReportOutputServlet {
 	public static String PRM_JSSContext = "jss.context";
 	public static String PRM_JRPARAMETERS = "prm.in";
 	public static String PRM_JASPERREPORT = "jasperreport";
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
-	public void runReport(HttpServletRequest request, WebReportContext webReportContext) throws JRException,
-			JRInteractiveException {
+	public void render(HttpServletRequest request, HttpServletResponse response, WebReportContext webReportContext,
+			PrintWriter writer) throws JRException // IOException, ServletException
+	{
 		Map<String, Object> prm = webReportContext.getParameterValues();
 
 		String jsskey = request.getParameter(PRM_JSSContext);
@@ -51,11 +53,13 @@ public class SReportServlet extends ReportServlet {
 
 			JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(getJasperReportsContext());
 			// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
-			String runReportParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.run.report");
+			String runReportParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
+					+ "web.request.parameter.run.report");
 			String runReport = request.getParameter(runReportParamName);
 			if (jasperPrintAccessor == null || Boolean.valueOf(runReport)) {
 				// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
-				String reportUriParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.report.uri");
+				String reportUriParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
+						+ "web.request.parameter.report.uri");
 				String reportUri = request.getParameter(reportUriParamName);
 
 				cache.set(reportUri, (JasperReport) cprm.get(PRM_JASPERREPORT));
@@ -64,6 +68,6 @@ public class SReportServlet extends ReportServlet {
 
 		}
 
-		super.runReport(request, webReportContext);
+		super.render(request, response, webReportContext, writer);
 	}
 }

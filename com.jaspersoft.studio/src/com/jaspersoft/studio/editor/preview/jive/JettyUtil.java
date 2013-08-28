@@ -17,10 +17,15 @@ import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.ReportPreviewUtil;
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.web.servlets.ImageServlet;
+import net.sf.jasperreports.web.servlets.ReportActionServlet;
+import net.sf.jasperreports.web.servlets.ReportContextCreatorServlet;
+import net.sf.jasperreports.web.servlets.ReportJiveComponentsServlet;
+import net.sf.jasperreports.web.servlets.ReportOutputServlet;
+import net.sf.jasperreports.web.servlets.ReportPageStatusServlet;
+import net.sf.jasperreports.web.servlets.RequirejsConfigServlet;
 import net.sf.jasperreports.web.servlets.ResourceServlet;
 import net.sf.jasperreports.web.servlets.ViewerServlet;
 import net.sf.jasperreports.web.util.WebUtil;
@@ -88,14 +93,10 @@ public final class JettyUtil {
 
 	public static String getURL(IFile file, String uuid, JasperReportsConfiguration jContext) {
 		String ctxName = file.getProject().getName();
-
-		JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(jContext);
-		// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
-		String repuri = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX + "web.request.parameter.report.uri");
-
-		return String.format("http://localhost:%d/%s/servlets/viewer?%s=%s&%s=%s&jr.async=true", port, ctxName, repuri,
-		// file.getLocation().toString(),
-				file.getProjectRelativePath().toString(), SReportServlet.PRM_JSSContext, uuid);
+		String prjRelPath = file.getProjectRelativePath().toString();
+		return String.format("http://localhost:%d/%s/servlets/viewer?" + WebUtil.REQUEST_PARAMETER_REPORT_URI
+				+ "=%s&%s=%s&" + WebUtil.REQUEST_PARAMETER_ASYNC_REPORT + "=true", port, ctxName, prjRelPath,
+				SReportServlet.PRM_JSSContext, uuid);
 	}
 
 	private static List<Handler> createContext(IProject project, final JasperReportsConfiguration jContext) {
@@ -106,7 +107,7 @@ public final class JettyUtil {
 		context.setContextPath("/" + project.getName());
 		context.setClassLoader(ReportPreviewUtil.createProjectClassLoader(project));
 
-		context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
+		// context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
 
 		ServletHolder rs = new ServletHolder(new ResourceServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -116,12 +117,7 @@ public final class JettyUtil {
 				return jContext;
 			}
 		});
-		rs.setInitParameter("cacheControl", "max-age=0,public");
-		context.addServlet(rs, "/servlets/resource");
-
-		context.addServlet(new ServletHolder(new SResourceServlet()), "/jquery/*");
-		context.addServlet(new ServletHolder(new SResourceServlet()), "/javascript/*");
-		context.addServlet(new ServletHolder(new SResourceServlet()), "/images/*");
+		context.addServlet(rs, "/servlets/resources");
 
 		rs = new ServletHolder(new ImageServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -131,8 +127,13 @@ public final class JettyUtil {
 				return jContext;
 			}
 		});
-		rs.setInitParameter("cacheControl", "max-age=0,public");
 		context.addServlet(rs, "/servlets/image");
+
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/scripts/*");
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/jquery/*");
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/javascript/*");
+		context.addServlet(new ServletHolder(new SResourceServlet()), "/images/*");
+
 		rs = new ServletHolder(new ViewerServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -141,7 +142,9 @@ public final class JettyUtil {
 				return jContext;
 			}
 		});
-		rs.setInitParameter("cacheControl", "max-age=0,public");
+		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.header.template", "viewer/CustomHeaderTemplate.vm");
+		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.body.template", "viewer/CustomBodyTemplate.vm");
+		rs.setInitParameter("net.sf.jasperreports.web.servlets.viewer.footer.template", "viewer/CustomFooterTemplate.vm");
 		context.addServlet(rs, "/servlets/myviewer");
 
 		rs = new ServletHolder(new ViewerServlet() {
@@ -152,8 +155,61 @@ public final class JettyUtil {
 				return jContext;
 			}
 		});
-		rs.setInitParameter("cacheControl", "max-age=0,public");
 		context.addServlet(rs, "/servlets/viewer");
+
+		context.addServlet(new ServletHolder(new ReportContextCreatorServlet() {
+			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+			@Override
+			public JasperReportsContext getJasperReportsContext() {
+				return jContext;
+			}
+		}), "/servlets/reportcontext");
+
+		context.addServlet(new ServletHolder(new ReportOutputServlet() {
+			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+			@Override
+			public JasperReportsContext getJasperReportsContext() {
+				return jContext;
+			}
+		}), "/servlets/reportoutput");
+
+		context.addServlet(new ServletHolder(new ReportPageStatusServlet() {
+			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+			@Override
+			public JasperReportsContext getJasperReportsContext() {
+				return jContext;
+			}
+		}), "/servlets/reportpagestatus");
+
+		context.addServlet(new ServletHolder(new ReportActionServlet() {
+			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+			@Override
+			public JasperReportsContext getJasperReportsContext() {
+				return jContext;
+			}
+		}), "/servlets/reportaction");
+
+		context.addServlet(new ServletHolder(new ReportJiveComponentsServlet() {
+			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+			@Override
+			public JasperReportsContext getJasperReportsContext() {
+				return jContext;
+			}
+		}), "/servlets/reportcomponents");
+
+		context.addServlet(new ServletHolder(new RequirejsConfigServlet() {
+			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+			@Override
+			public JasperReportsContext getJasperReportsContext() {
+				return jContext;
+			}
+		}), "/servlets/requirejsconfig");
 
 		ServletHolder reportServletHolder = new ServletHolder(new SReportServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
