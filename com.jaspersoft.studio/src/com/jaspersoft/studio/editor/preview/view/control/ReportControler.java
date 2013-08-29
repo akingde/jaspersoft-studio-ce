@@ -67,7 +67,6 @@ import com.jaspersoft.studio.editor.preview.input.array.CollectionInput;
 import com.jaspersoft.studio.editor.preview.input.map.MapInput;
 import com.jaspersoft.studio.editor.preview.jive.Context;
 import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
-import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
 import com.jaspersoft.studio.editor.preview.stats.RecordCountScriptletFactory;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -377,8 +376,8 @@ public class ReportControler {
 				try {
 					Map<String, Object> prm = new HashMap<String, Object>();
 
-					prm.put(SReportServlet.PRM_JRPARAMETERS, jasperParameters);
-					prm.put(SReportServlet.PRM_JASPERREPORT, jasperReport);
+					prm.put(JettyUtil.PRM_JRPARAMETERS, jasperParameters);
+					prm.put(JettyUtil.PRM_JASPERREPORT, jasperReport);
 
 					UUID randomUUID = UUID.randomUUID();
 					Context.putContext(randomUUID.toString(), prm);

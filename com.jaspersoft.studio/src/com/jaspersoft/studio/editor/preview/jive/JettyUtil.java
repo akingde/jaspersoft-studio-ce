@@ -15,13 +15,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.jasperreports.eclipse.ui.ReportPreviewUtil;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.repo.JasperDesignCache;
+import net.sf.jasperreports.web.WebReportContext;
+import net.sf.jasperreports.web.servlets.JasperPrintAccessor;
 import net.sf.jasperreports.web.servlets.ReportActionServlet;
 import net.sf.jasperreports.web.servlets.ReportContextCreatorServlet;
 import net.sf.jasperreports.web.servlets.ReportJiveComponentsServlet;
+import net.sf.jasperreports.web.servlets.ReportOutputServlet;
 import net.sf.jasperreports.web.servlets.ReportPageStatusServlet;
 import net.sf.jasperreports.web.servlets.RequirejsConfigServlet;
 import net.sf.jasperreports.web.servlets.ResourceServlet;
@@ -38,7 +46,6 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
 import com.jaspersoft.studio.editor.preview.jive.servlet.SResourceServlet;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -52,6 +59,9 @@ public final class JettyUtil {
 	private static Map<IProject, List<Handler>> hmap = new HashMap<IProject, List<Handler>>();
 	private static int port = 8888;
 	private static ContextHandlerCollection contextHandlerCollection;
+	public static String PRM_JSSContext = "jss_context";
+	public static String PRM_JRPARAMETERS = "prm_in";
+	public static String PRM_JASPERREPORT = "jasperreport";
 
 	public static void startJetty(IProject project, JasperReportsConfiguration jContext) {
 		try {
@@ -93,8 +103,8 @@ public final class JettyUtil {
 		String ctxName = file.getProject().getName();
 		String prjRelPath = file.getProjectRelativePath().toString();
 		return String.format("http://localhost:%d/%s/servlets/viewer?" + WebUtil.REQUEST_PARAMETER_REPORT_URI
-				+ "=%s&%s=%s&" + WebUtil.REQUEST_PARAMETER_ASYNC_REPORT + "=true", port, ctxName, prjRelPath,
-				SReportServlet.PRM_JSSContext, uuid);
+				+ "=%s&%s=%s&" + WebUtil.REQUEST_PARAMETER_ASYNC_REPORT + "=true", port, ctxName, prjRelPath, PRM_JSSContext,
+				uuid);
 	}
 
 	private static List<Handler> createContext(IProject project, final JasperReportsConfiguration jContext) {
@@ -162,9 +172,44 @@ public final class JettyUtil {
 			public JasperReportsContext getJasperReportsContext() {
 				return jContext;
 			}
+
+			@Override
+			protected void initWebContext(HttpServletRequest request, WebReportContext webReportContext) {
+				Map<String, Object> prm = webReportContext.getParameterValues();
+
+				String jsskey = request.getParameter(PRM_JSSContext);
+				Map<String, Object> cprm = Context.getContext(jsskey);
+				if (cprm != null) {
+					Object das = cprm.get(PRM_JRPARAMETERS);
+					if (das != null)
+						prm.putAll((Map<String, Object>) das);
+
+					JasperDesignCache cache = JasperDesignCache.getInstance(getJasperReportsContext(), webReportContext);
+
+					JasperPrintAccessor jasperPrintAccessor = (JasperPrintAccessor) webReportContext
+							.getParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT_ACCESSOR);
+
+					JRPropertiesUtil propUtil = JRPropertiesUtil.getInstance(getJasperReportsContext());
+					// FIXME - after JR Team refactor to JIVE use a constant in WebUtil class
+					String runReportParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
+							+ "web.request.parameter.run.report");
+					String runReport = request.getParameter(runReportParamName);
+					if (jasperPrintAccessor == null || Boolean.valueOf(runReport)) {
+						// FIXME - after JR Team refactor to JIVE use a constant in WebUtil
+						// class
+						// String reportUriParamName = propUtil.getProperty(JRPropertiesUtil.PROPERTY_PREFIX
+						// + "web.request.parameter.report.uri");
+						String reportUri = request.getParameter(WebUtil.REQUEST_PARAMETER_REPORT_URI);
+
+						cache.set(reportUri, (JasperReport) cprm.get(PRM_JASPERREPORT));
+					}
+					// Context.unsetContext(jsskey);
+
+				}
+			}
 		}), "/servlets/reportcontext");
 
-		context.addServlet(new ServletHolder(new SReportServlet() {
+		context.addServlet(new ServletHolder(new ReportOutputServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 			@Override
@@ -209,7 +254,7 @@ public final class JettyUtil {
 			}
 		}), "/servlets/requirejsconfig");
 
-		ServletHolder reportServletHolder = new ServletHolder(new SReportServlet() {
+		ServletHolder reportServletHolder = new ServletHolder(new ReportOutputServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 			@Override
