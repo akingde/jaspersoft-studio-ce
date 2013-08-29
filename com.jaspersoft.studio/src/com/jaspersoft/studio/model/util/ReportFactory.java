@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignBreak;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
@@ -75,6 +76,7 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.model.genericElement.MComponentElement;
 import com.jaspersoft.studio.model.genericElement.MGenericElement;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.group.MGroups;
@@ -373,6 +375,8 @@ public class ReportFactory {
 		} else if (jrObject instanceof JRGenericElement) {
 			return new MGenericElement(parent, (JRDesignGenericElement) jrObject, newIndex);
 
+		} else if (jrObject instanceof JRDesignComponentElement) {
+			return new MComponentElement(parent, (JRDesignComponentElement) jrObject, newIndex);
 			// styles
 		} else if (jrObject instanceof JRDesignStyle) {
 			if (newIndex != -1) {
