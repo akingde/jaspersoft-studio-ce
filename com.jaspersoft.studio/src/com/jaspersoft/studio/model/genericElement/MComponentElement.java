@@ -91,7 +91,8 @@ public class MComponentElement extends MGraphicElement {
 	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		return getIconDescriptor().getToolTip() + "\n"
+				+ (String) getPropertyValue(JRDesignComponentElement.PROPERTY_COMPONENT_KEY);
 	}
 
 	private IPropertyDescriptor[] descriptors;

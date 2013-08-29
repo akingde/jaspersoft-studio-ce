@@ -271,28 +271,22 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					}
 				}
 			});
-			
-			//This listener display the tooltip text for the abbreviated nodes names
+
+			// This listener display the tooltip text for the abbreviated nodes names
 			tree.addMouseMoveListener(new MouseMoveListener() {
-				
-				  public void mouseMove(MouseEvent e){
-				  	EditPart part = getViewer().findObjectAt(new Point(e.x,e.y));
-		  			Tree t = (Tree) e.getSource();
-				  	if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)){
-				  		Object model = part.getModel();
-				  		if (model instanceof ANode){
-				  			String text = ((ANode)model).getDisplayText();
-				  			String widgetText = ((TreeItem)((TreeEditPart)part).getWidget()).getText();
-				  			//Display the tooltip only if the name is truncated
-				  			if (widgetText.contains("...")) {
-				  				t.setToolTipText(text);
-					  			return;
-				  			}
-				  		}
-				  	}
-				  	t.setToolTipText(null);
-	      }
-	
+
+				public void mouseMove(MouseEvent e) {
+					EditPart part = getViewer().findObjectAt(new Point(e.x, e.y));
+					Tree t = (Tree) e.getSource();
+					if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)) {
+						Object model = part.getModel();
+						String text = ((ANode) model).getToolTip();
+						t.setToolTipText(text);
+						return;
+					}
+					t.setToolTipText(null);
+				}
+
 			});
 		}
 	}
