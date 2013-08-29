@@ -191,7 +191,7 @@ public class FontFamilyPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
 				fd.setText(Messages.FontFamilyPage_browseDialogTitle);
-				fd.setFilterExtensions(new String[] { "*.TTF", "*.ttf", "*.eot", "*.EOT", "*.svg", "*.SVG", "*.woff", "*.WOFF" }); //$NON-NLS-1$ //$NON-NLS-2$
+				fd.setFilterExtensions(new String[] { "*.TTF;*.ttf;*.eot;*.EOT;*.svg;*.SVG;*.woff;*.WOFF" }); //$NON-NLS-1$  
 				String selected = fd.open();
 				if (selected != null) {
 					if (type.equals(NORMAL)) {
