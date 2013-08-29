@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts.utils;
 
@@ -21,11 +16,13 @@ import net.sf.jasperreports.engine.fonts.FontFace;
 
 public class SimpleFontFaceExport implements FontFace {
 
-	/**
-	 * 
-	 */
 	private String file;
 	private Font font;
+	private String pdf;
+	private String eot;
+	private String svg;
+	private String woff;
+	private String ttf;
 
 	/**
 	 * 
@@ -57,32 +54,27 @@ public class SimpleFontFaceExport implements FontFace {
 
 	@Override
 	public String getTtf() {
-		// TODO Auto-generated method stub
-		return null;
+		return ttf;
 	}
 
 	@Override
 	public String getPdf() {
-		// TODO Auto-generated method stub
-		return null;
+		return pdf;
 	}
 
 	@Override
 	public String getEot() {
-		// TODO Auto-generated method stub
-		return null;
+		return eot;
 	}
 
 	@Override
 	public String getSvg() {
-		// TODO Auto-generated method stub
-		return null;
+		return svg;
 	}
 
 	@Override
 	public String getWoff() {
-		// TODO Auto-generated method stub
-		return null;
+		return woff;
 	}
 
 }

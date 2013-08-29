@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts;
 
@@ -168,7 +163,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 						public void run() {
 							IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
 									"Error saving file.", e.getCause()); //$NON-NLS-1$
-							ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave, null, status);
+							ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave,
+									null, status);
 						}
 					});
 				}
@@ -240,7 +236,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 	}
 
 	private String writeFont2zip(ZipOutputStream zipos, FontFace font) throws IOException, FileNotFoundException {
-		File file = new File(font.getFile());
+		File file = new File(font.getTtf());
 		if (file.exists()) {
 			String name = "fonts/" + file.getName(); //$NON-NLS-1$
 			ZipEntry ttfZipEntry = new ZipEntry(name);

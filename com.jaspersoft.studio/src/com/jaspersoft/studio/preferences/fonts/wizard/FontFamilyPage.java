@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts.wizard;
 
@@ -114,8 +109,7 @@ public class FontFamilyPage extends WizardPage {
 		// put a label here
 		new Label(gr, SWT.NONE);
 		Label label = new Label(gr, SWT.WRAP);
-		label
-				.setText(Messages.FontFamilyPage_hintText);
+		label.setText(Messages.FontFamilyPage_hintText);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		// gd.horizontalSpan = 2;
 		gd.widthHint = 300;
@@ -197,7 +191,7 @@ public class FontFamilyPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
 				fd.setText(Messages.FontFamilyPage_browseDialogTitle);
-				fd.setFilterExtensions(new String[] { "*.TTF", "*.ttf" }); //$NON-NLS-1$ //$NON-NLS-2$
+				fd.setFilterExtensions(new String[] { "*.TTF", "*.ttf", "*.eot", "*.EOT", "*.svg", "*.SVG", "*.woff", "*.WOFF" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selected = fd.open();
 				if (selected != null) {
 					if (type.equals(NORMAL)) {
