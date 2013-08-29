@@ -19,7 +19,6 @@ import net.sf.jasperreports.eclipse.ui.ReportPreviewUtil;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.web.servlets.ImageServlet;
 import net.sf.jasperreports.web.servlets.ReportActionServlet;
 import net.sf.jasperreports.web.servlets.ReportContextCreatorServlet;
 import net.sf.jasperreports.web.servlets.ReportJiveComponentsServlet;
@@ -118,7 +117,7 @@ public final class JettyUtil {
 		});
 		context.addServlet(rs, "/servlets/resources");
 
-		rs = new ServletHolder(new ImageServlet() {
+		rs = new ServletHolder(new ResourceServlet() {
 			private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 			@Override
