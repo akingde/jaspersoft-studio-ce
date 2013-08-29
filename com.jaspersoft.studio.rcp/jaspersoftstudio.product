@@ -415,6 +415,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <property name="eclipse.log.level" value="ERROR"/>
       <!--
       	Apparently Tycho 0.18 does not respect this property.
       	The solution is that we need to add the bundle org.eclipse.update.configurator and set its start level.
