@@ -116,11 +116,6 @@ public class StylesListSection extends AbstractSection {
 	private MStyle defaultStyle = null;
 
 	/**
-	 * Reference to the element actually displayed
-	 */
-	private APropertyNode element = null;
-
-	/**
 	 * The map of the element own attributes
 	 */
 	private HashMap<String, Object> elementAttributes = null;
@@ -796,7 +791,7 @@ public class StylesListSection extends AbstractSection {
 			if (style == defaultStyle)
 				hasDefaultStyleInGerarchy = true;
 		}
-		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != element)
+		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement())
 			printStyleAttribute(
 					parent,
 					defaultStyle,
@@ -829,7 +824,7 @@ public class StylesListSection extends AbstractSection {
 		if (leftStringColor == null) {
 			leftStringColor = new Color(null, 42, 96, 213);
 		}
-		List<INode> list = getStylesRoot(element).getChildren();
+		List<INode> list = getStylesRoot(getElement()).getChildren();
 		List<INode> externalList = new ArrayList<INode>();
 		for(INode style : list){
 			if (style instanceof MStyle) {
@@ -864,7 +859,7 @@ public class StylesListSection extends AbstractSection {
 			Object elementAttribute = defaultValues.get(key);
 			if (elementAttribute != null && elementAttributes.containsKey(key)) {
 				printObject(
-						"", key, elementAttribute, parent, sameSizeGridData, ovverridenAttributes.contains(key), element, false, elementAttributes); //$NON-NLS-1$
+						"", key, elementAttribute, parent, sameSizeGridData, ovverridenAttributes.contains(key), getElement(), false, elementAttributes); //$NON-NLS-1$
 			}
 		}
 	}
@@ -877,7 +872,7 @@ public class StylesListSection extends AbstractSection {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
 			getElement().getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
 			// Set the handler for every style also because in this way an update of the style is immediately reflected
-			for (INode style : getStylesRoot(element).getChildren()) {
+			for (INode style : getStylesRoot(getElement()).getChildren()) {
 				style.getPropertyChangeSupport().removePropertyChangeListener(this);
 				style.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
@@ -891,7 +886,7 @@ public class StylesListSection extends AbstractSection {
 	public void aboutToBeHidden() {
 		if (getElement() != null) {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
-			ANode styles = getStylesRoot(element);
+			ANode styles = getStylesRoot(getElement());
 			//check in case the selected element was deleted
 			if (styles != null){
 				for (INode style : styles.getChildren()) {
@@ -972,8 +967,8 @@ public class StylesListSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		trackerListener.refresh();
-		element = getElement();
-		elementAttributes = element.getStylesDescriptors();
+		setElement(getElement());
+		elementAttributes = getElement().getStylesDescriptors();
 		// Dispose the old widgets
 		for (Control kid : parent.getChildren()) {
 			kid.dispose();
@@ -983,14 +978,14 @@ public class StylesListSection extends AbstractSection {
 		parent.setLayout(layout);
 		printWindowTitle(parent);
 		initStyleMaps();
-		LinkedList<MStyle> styles = buildStylesGerarchy(element);
+		LinkedList<MStyle> styles = buildStylesGerarchy(getElement());
 		// Printing the main attribute, opening the guard
 		mainElementEvent = true;
-		printElementAttribute(parent, element, Messages.StylesSectionList_Element_Attributes);
+		printElementAttribute(parent, getElement(), Messages.StylesSectionList_Element_Attributes);
 		// Element printed, closing the guard
 		mainElementEvent = false;
 		printStyles(styles, parent);
-		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(element));
+		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
 		ovverridenAttributes = null;
 		//styleMaps = null;
 		parent.layout();
@@ -1026,22 +1021,22 @@ public class StylesListSection extends AbstractSection {
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		element = getElement();
+		setElement(getElement());
 		initStyleMaps();
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		parent.setLayout(layout);
 		printWindowTitle(parent);
 		initStyleMaps();
-		LinkedList<MStyle> styles = buildStylesGerarchy(element);
-		elementAttributes = element.getStylesDescriptors();
+		LinkedList<MStyle> styles = buildStylesGerarchy(getElement());
+		elementAttributes = getElement().getStylesDescriptors();
 		// Printing the main attribute, opening the guard
 		mainElementEvent = true;
-		printElementAttribute(parent, element, Messages.StylesSectionList_Element_Attributes);
+		printElementAttribute(parent, getElement(), Messages.StylesSectionList_Element_Attributes);
 		// Element printed, closing the guard
 		mainElementEvent = false;
 		printStyles(styles, parent);
-		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(element));
+		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
 		ovverridenAttributes = null;
 		//styleMaps = null;
 	}

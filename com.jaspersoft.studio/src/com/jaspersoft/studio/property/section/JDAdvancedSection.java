@@ -12,6 +12,8 @@ package com.jaspersoft.studio.property.section;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditDomain;
@@ -28,11 +30,23 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
+import com.jaspersoft.studio.properties.internal.IWidgetsProviderSection;
+import com.jaspersoft.studio.properties.internal.WidgetDescriptor;
 import com.jaspersoft.studio.properties.view.AdvancedPropertySection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.JRPropertySheetEntry;
 
-public class JDAdvancedSection extends AdvancedPropertySection implements PropertyChangeListener {
+
+
+/**
+ * 
+ * This class implements the IWidgetsProvider section, even if it dosen't provide any widgets, but 
+ * the implementation allow to return the selected element. It's pretty important that every section
+ * could return the selected element
+ *
+ */
+public class JDAdvancedSection extends AdvancedPropertySection implements PropertyChangeListener, IWidgetsProviderSection {
 	private EditDomain editDomain;
 	private APropertyNode element;
 	protected TabbedPropertySheetPage atabbedPropertySheetPage;
@@ -150,5 +164,28 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 			page.refresh();
 		isRefreshing = false;
 	}
+
+	@Override
+	public Object getSelectedElement() {
+		return getElement();
+	}
+
+	@Override
+	public List<Object> getHandledProperties() {
+		return new ArrayList<Object>();
+	}
+
+	@Override
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
+		return null;
+	}
+
+	@Override
+	public WidgetDescriptor getPropertyInfo(Object propertyId) {
+		return null;
+	}
+
+	@Override
+	public void expandForProperty(Object propertyId) {}
 
 }
