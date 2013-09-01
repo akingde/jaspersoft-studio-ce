@@ -269,11 +269,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ColumnOrAlias");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
-		private final Alternatives cAlternatives_0_0 = (Alternatives)cGroup_0.eContents().get(0);
-		private final Assignment cCfullAssignment_0_0_0 = (Assignment)cAlternatives_0_0.eContents().get(0);
-		private final RuleCall cCfullColumnFullParserRuleCall_0_0_0_0 = (RuleCall)cCfullAssignment_0_0_0.eContents().get(0);
-		private final Assignment cSqAssignment_0_0_1 = (Assignment)cAlternatives_0_0.eContents().get(1);
-		private final RuleCall cSqSubQueryOperandParserRuleCall_0_0_1_0 = (RuleCall)cSqAssignment_0_0_1.eContents().get(0);
+		private final Assignment cCeAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
+		private final RuleCall cCeOperandParserRuleCall_0_0_0 = (RuleCall)cCeAssignment_0_0.eContents().get(0);
 		private final Assignment cAliasAssignment_0_1 = (Assignment)cGroup_0.eContents().get(1);
 		private final Keyword cAliasASKeyword_0_1_0 = (Keyword)cAliasAssignment_0_1.eContents().get(0);
 		private final Assignment cColAliasAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
@@ -282,29 +279,20 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cAllColsSTARTerminalRuleCall_1_0 = (RuleCall)cAllColsAssignment_1.eContents().get(0);
 		
 		//ColumnOrAlias:
-		//	(cfull=ColumnFull | sq=SubQueryOperand) alias="AS"? colAlias=DbObjectName? | allCols=STAR;
+		//	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR;
 		public ParserRule getRule() { return rule; }
 
-		//(cfull=ColumnFull | sq=SubQueryOperand) alias="AS"? colAlias=DbObjectName? | allCols=STAR
+		//ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//(cfull=ColumnFull | sq=SubQueryOperand) alias="AS"? colAlias=DbObjectName?
+		//ce=Operand alias="AS"? colAlias=DbObjectName?
 		public Group getGroup_0() { return cGroup_0; }
 
-		//cfull=ColumnFull | sq=SubQueryOperand
-		public Alternatives getAlternatives_0_0() { return cAlternatives_0_0; }
+		//ce=Operand
+		public Assignment getCeAssignment_0_0() { return cCeAssignment_0_0; }
 
-		//cfull=ColumnFull
-		public Assignment getCfullAssignment_0_0_0() { return cCfullAssignment_0_0_0; }
-
-		//ColumnFull
-		public RuleCall getCfullColumnFullParserRuleCall_0_0_0_0() { return cCfullColumnFullParserRuleCall_0_0_0_0; }
-
-		//sq=SubQueryOperand
-		public Assignment getSqAssignment_0_0_1() { return cSqAssignment_0_0_1; }
-
-		//SubQueryOperand
-		public RuleCall getSqSubQueryOperandParserRuleCall_0_0_1_0() { return cSqSubQueryOperandParserRuleCall_0_0_1_0; }
+		//Operand
+		public RuleCall getCeOperandParserRuleCall_0_0_0() { return cCeOperandParserRuleCall_0_0_0; }
 
 		//alias="AS"?
 		public Assignment getAliasAssignment_0_1() { return cAliasAssignment_0_1; }
@@ -564,17 +552,17 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class DbObjectNameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "DbObjectName");
 		private final Assignment cDbnameAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cDbnameIDTerminalRuleCall_0 = (RuleCall)cDbnameAssignment.eContents().get(0);
+		private final RuleCall cDbnameDBIDTerminalRuleCall_0 = (RuleCall)cDbnameAssignment.eContents().get(0);
 		
 		//DbObjectName:
-		//	dbname=ID;
+		//	dbname=DBID;
 		public ParserRule getRule() { return rule; }
 
-		//dbname=ID
+		//dbname=DBID
 		public Assignment getDbnameAssignment() { return cDbnameAssignment; }
 
-		//ID
-		public RuleCall getDbnameIDTerminalRuleCall_0() { return cDbnameIDTerminalRuleCall_0; }
+		//DBID
+		public RuleCall getDbnameDBIDTerminalRuleCall_0() { return cDbnameDBIDTerminalRuleCall_0; }
 	}
 
 	public class OrderByColumnsElements extends AbstractParserRuleElementFinder {
@@ -1362,12 +1350,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cXopXOperandFragmentParserRuleCall_1_0 = (RuleCall)cXopAssignment_1.eContents().get(0);
 		private final Assignment cSubqAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cSubqSubQueryOperandParserRuleCall_2_0 = (RuleCall)cSubqAssignment_2.eContents().get(0);
+		private final Assignment cFuncAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cFuncOperandFunctionParserRuleCall_3_0 = (RuleCall)cFuncAssignment_3.eContents().get(0);
 		
 		//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
-		//	subq=SubQueryOperand;
+		//	subq=SubQueryOperand | func=OperandFunction;
 		public ParserRule getRule() { return rule; }
 
-		/// *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand
+		/// *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		/// *opGroup=OperandGroup |* / column=ColumnOperand
@@ -1387,6 +1377,120 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//SubQueryOperand
 		public RuleCall getSubqSubQueryOperandParserRuleCall_2_0() { return cSubqSubQueryOperandParserRuleCall_2_0; }
+
+		//func=OperandFunction
+		public Assignment getFuncAssignment_3() { return cFuncAssignment_3; }
+
+		//OperandFunction
+		public RuleCall getFuncOperandFunctionParserRuleCall_3_0() { return cFuncOperandFunctionParserRuleCall_3_0; }
+	}
+
+	public class OperandGroupElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OperandGroup");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cOpGroupAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cOpAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cOpOperandParserRuleCall_2_0 = (RuleCall)cOpAssignment_2.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		
+		//OperandGroup returns OpGroup:
+		//	{OpGroup} "(" op=Operand ")";
+		public ParserRule getRule() { return rule; }
+
+		//{OpGroup} "(" op=Operand ")"
+		public Group getGroup() { return cGroup; }
+
+		//{OpGroup}
+		public Action getOpGroupAction_0() { return cOpGroupAction_0; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//op=Operand
+		public Assignment getOpAssignment_2() { return cOpAssignment_2; }
+
+		//Operand
+		public RuleCall getOpOperandParserRuleCall_2_0() { return cOpOperandParserRuleCall_2_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+	}
+
+	public class OperandFunctionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OperandFunction");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cOperandFunctionArgumentsAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cFnameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cFnameFSTARTTerminalRuleCall_1_0 = (RuleCall)cFnameAssignment_1.eContents().get(0);
+		private final Assignment cArgAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cArgOperandFunctionArgsParserRuleCall_2_0 = (RuleCall)cArgAssignment_2.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		
+		//OperandFunction:
+		//	{OperandFunctionArguments} fname=FSTART arg=OperandFunctionArgs ")";
+		public ParserRule getRule() { return rule; }
+
+		//{OperandFunctionArguments} fname=FSTART arg=OperandFunctionArgs ")"
+		public Group getGroup() { return cGroup; }
+
+		//{OperandFunctionArguments}
+		public Action getOperandFunctionArgumentsAction_0() { return cOperandFunctionArgumentsAction_0; }
+
+		//fname=FSTART
+		public Assignment getFnameAssignment_1() { return cFnameAssignment_1; }
+
+		//FSTART
+		public RuleCall getFnameFSTARTTerminalRuleCall_1_0() { return cFnameFSTARTTerminalRuleCall_1_0; }
+
+		//arg=OperandFunctionArgs
+		public Assignment getArgAssignment_2() { return cArgAssignment_2; }
+
+		//OperandFunctionArgs
+		public RuleCall getArgOperandFunctionArgsParserRuleCall_2_0() { return cArgOperandFunctionArgsParserRuleCall_2_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+	}
+
+	public class OperandFunctionArgsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OperandFunctionArgs");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cOperandFragmentParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cArgListEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cEntriesOperandFragmentParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		
+		//OperandFunctionArgs:
+		//	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
+		public ParserRule getRule() { return rule; }
+
+		//OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?
+		public Group getGroup() { return cGroup; }
+
+		//OperandFragment
+		public RuleCall getOperandFragmentParserRuleCall_0() { return cOperandFragmentParserRuleCall_0; }
+
+		//({ArgList.entries+=current} ("," entries+=OperandFragment)+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{ArgList.entries+=current}
+		public Action getArgListEntriesAction_1_0() { return cArgListEntriesAction_1_0; }
+
+		//("," entries+=OperandFragment)+
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
+
+		//entries+=OperandFragment
+		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
+
+		//OperandFragment
+		public RuleCall getEntriesOperandFragmentParserRuleCall_1_1_1_0() { return cEntriesOperandFragmentParserRuleCall_1_1_1_0; }
 	}
 
 	public class XOperandFragmentElements extends AbstractParserRuleElementFinder {
@@ -1399,8 +1503,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cScalarAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cScalarScalarOperandParserRuleCall_2_0 = (RuleCall)cScalarAssignment_2.eContents().get(0);
 		
-		////OperandGroup returns OpGroup:
-		////	{OpGroup} '(' op=Operand ')';
 		//XOperandFragment returns Operand:
 		//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 		public ParserRule getRule() { return rule; }
@@ -1817,6 +1919,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private OperandListElements pOperandList;
 	private OperandElements pOperand;
 	private OperandFragmentElements pOperandFragment;
+	private OperandGroupElements pOperandGroup;
+	private OperandFunctionElements pOperandFunction;
+	private TerminalRule tFSTART;
+	private OperandFunctionArgsElements pOperandFunctionArgs;
 	private XOperandFragmentElements pXOperandFragment;
 	private ParameterOperandElements pParameterOperand;
 	private ExclamationParameterOperandElements pExclamationParameterOperand;
@@ -1825,6 +1931,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private ScalarOperandElements pScalarOperand;
 	private StringOperandElements pStringOperand;
 	private JoinTypeElements unknownRuleJoinType;
+	private TerminalRule tDBID;
 	private TerminalRule tSTAR;
 	private TerminalRule tSIGNED_INT;
 	private TerminalRule tTIMESTAMP;
@@ -1923,7 +2030,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ColumnOrAlias:
-	//	(cfull=ColumnFull | sq=SubQueryOperand) alias="AS"? colAlias=DbObjectName? | allCols=STAR;
+	//	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR;
 	public ColumnOrAliasElements getColumnOrAliasAccess() {
 		return (pColumnOrAlias != null) ? pColumnOrAlias : (pColumnOrAlias = new ColumnOrAliasElements());
 	}
@@ -1993,7 +2100,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//DbObjectName:
-	//	dbname=ID;
+	//	dbname=DBID;
 	public DbObjectNameElements getDbObjectNameAccess() {
 		return (pDbObjectName != null) ? pDbObjectName : (pDbObjectName = new DbObjectNameElements());
 	}
@@ -2194,7 +2301,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
-	//	subq=SubQueryOperand;
+	//	subq=SubQueryOperand | func=OperandFunction;
 	public OperandFragmentElements getOperandFragmentAccess() {
 		return (pOperandFragment != null) ? pOperandFragment : (pOperandFragment = new OperandFragmentElements());
 	}
@@ -2203,8 +2310,42 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getOperandFragmentAccess().getRule();
 	}
 
-	////OperandGroup returns OpGroup:
-	////	{OpGroup} '(' op=Operand ')';
+	//OperandGroup returns OpGroup:
+	//	{OpGroup} "(" op=Operand ")";
+	public OperandGroupElements getOperandGroupAccess() {
+		return (pOperandGroup != null) ? pOperandGroup : (pOperandGroup = new OperandGroupElements());
+	}
+	
+	public ParserRule getOperandGroupRule() {
+		return getOperandGroupAccess().getRule();
+	}
+
+	//OperandFunction:
+	//	{OperandFunctionArguments} fname=FSTART arg=OperandFunctionArgs ")";
+	public OperandFunctionElements getOperandFunctionAccess() {
+		return (pOperandFunction != null) ? pOperandFunction : (pOperandFunction = new OperandFunctionElements());
+	}
+	
+	public ParserRule getOperandFunctionRule() {
+		return getOperandFunctionAccess().getRule();
+	}
+
+	//terminal FSTART:
+	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")* "(";
+	public TerminalRule getFSTARTRule() {
+		return (tFSTART != null) ? tFSTART : (tFSTART = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "FSTART"));
+	} 
+
+	//OperandFunctionArgs:
+	//	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
+	public OperandFunctionArgsElements getOperandFunctionArgsAccess() {
+		return (pOperandFunctionArgs != null) ? pOperandFunctionArgs : (pOperandFunctionArgs = new OperandFunctionArgsElements());
+	}
+	
+	public ParserRule getOperandFunctionArgsRule() {
+		return getOperandFunctionArgsAccess().getRule();
+	}
+
 	//XOperandFragment returns Operand:
 	//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 	public XOperandFragmentElements getXOperandFragmentAccess() {
@@ -2285,6 +2426,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public EnumRule getJoinTypeRule() {
 		return getJoinTypeAccess().getRule();
 	}
+
+	//terminal DBID:
+	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")* | "\'" ("a".."z" | "A".."Z" | "_") ("a".."z" |
+	//	"A".."Z" | "_" | "0".."9")* "\'" | "\"" ("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")* "\"" | "`"
+	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")* "`" | "[" ("a".."z" | "A".."Z" | "_") ("a".."z" |
+	//	"A".."Z" | "_" | "0".."9")* "]";
+	public TerminalRule getDBIDRule() {
+		return (tDBID != null) ? tDBID : (tDBID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "DBID"));
+	} 
 
 	//terminal STAR:
 	//	"*";

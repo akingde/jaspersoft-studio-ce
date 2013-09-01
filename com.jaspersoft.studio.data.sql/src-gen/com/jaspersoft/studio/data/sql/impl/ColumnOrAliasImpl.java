@@ -2,11 +2,10 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
 import com.jaspersoft.studio.data.sql.DbObjectName;
+import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.SqlPackage;
-import com.jaspersoft.studio.data.sql.SubQueryOperand;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -23,8 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getCfull <em>Cfull</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getSq <em>Sq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getCe <em>Ce</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getColAlias <em>Col Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOrAliasImpl#getAllCols <em>All Cols</em>}</li>
@@ -36,24 +34,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
 {
   /**
-   * The cached value of the '{@link #getCfull() <em>Cfull</em>}' containment reference.
+   * The cached value of the '{@link #getCe() <em>Ce</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCfull()
+   * @see #getCe()
    * @generated
    * @ordered
    */
-  protected ColumnFull cfull;
-
-  /**
-   * The cached value of the '{@link #getSq() <em>Sq</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSq()
-   * @generated
-   * @ordered
-   */
-  protected SubQueryOperand sq;
+  protected Operands ce;
 
   /**
    * The default value of the '{@link #getAlias() <em>Alias</em>}' attribute.
@@ -131,9 +119,9 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
    * <!-- end-user-doc -->
    * @generated
    */
-  public ColumnFull getCfull()
+  public Operands getCe()
   {
-    return cfull;
+    return ce;
   }
 
   /**
@@ -141,13 +129,13 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetCfull(ColumnFull newCfull, NotificationChain msgs)
+  public NotificationChain basicSetCe(Operands newCe, NotificationChain msgs)
   {
-    ColumnFull oldCfull = cfull;
-    cfull = newCfull;
+    Operands oldCe = ce;
+    ce = newCe;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__CFULL, oldCfull, newCfull);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__CE, oldCe, newCe);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -158,68 +146,20 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setCfull(ColumnFull newCfull)
+  public void setCe(Operands newCe)
   {
-    if (newCfull != cfull)
+    if (newCe != ce)
     {
       NotificationChain msgs = null;
-      if (cfull != null)
-        msgs = ((InternalEObject)cfull).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__CFULL, null, msgs);
-      if (newCfull != null)
-        msgs = ((InternalEObject)newCfull).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__CFULL, null, msgs);
-      msgs = basicSetCfull(newCfull, msgs);
+      if (ce != null)
+        msgs = ((InternalEObject)ce).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__CE, null, msgs);
+      if (newCe != null)
+        msgs = ((InternalEObject)newCe).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__CE, null, msgs);
+      msgs = basicSetCe(newCe, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__CFULL, newCfull, newCfull));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public SubQueryOperand getSq()
-  {
-    return sq;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetSq(SubQueryOperand newSq, NotificationChain msgs)
-  {
-    SubQueryOperand oldSq = sq;
-    sq = newSq;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__SQ, oldSq, newSq);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setSq(SubQueryOperand newSq)
-  {
-    if (newSq != sq)
-    {
-      NotificationChain msgs = null;
-      if (sq != null)
-        msgs = ((InternalEObject)sq).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__SQ, null, msgs);
-      if (newSq != null)
-        msgs = ((InternalEObject)newSq).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.COLUMN_OR_ALIAS__SQ, null, msgs);
-      msgs = basicSetSq(newSq, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__SQ, newSq, newSq));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OR_ALIAS__CE, newCe, newCe));
   }
 
   /**
@@ -326,10 +266,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN_OR_ALIAS__CFULL:
-        return basicSetCfull(null, msgs);
-      case SqlPackage.COLUMN_OR_ALIAS__SQ:
-        return basicSetSq(null, msgs);
+      case SqlPackage.COLUMN_OR_ALIAS__CE:
+        return basicSetCe(null, msgs);
       case SqlPackage.COLUMN_OR_ALIAS__COL_ALIAS:
         return basicSetColAlias(null, msgs);
     }
@@ -346,10 +284,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN_OR_ALIAS__CFULL:
-        return getCfull();
-      case SqlPackage.COLUMN_OR_ALIAS__SQ:
-        return getSq();
+      case SqlPackage.COLUMN_OR_ALIAS__CE:
+        return getCe();
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         return getAlias();
       case SqlPackage.COLUMN_OR_ALIAS__COL_ALIAS:
@@ -370,11 +306,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN_OR_ALIAS__CFULL:
-        setCfull((ColumnFull)newValue);
-        return;
-      case SqlPackage.COLUMN_OR_ALIAS__SQ:
-        setSq((SubQueryOperand)newValue);
+      case SqlPackage.COLUMN_OR_ALIAS__CE:
+        setCe((Operands)newValue);
         return;
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         setAlias((String)newValue);
@@ -399,11 +332,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN_OR_ALIAS__CFULL:
-        setCfull((ColumnFull)null);
-        return;
-      case SqlPackage.COLUMN_OR_ALIAS__SQ:
-        setSq((SubQueryOperand)null);
+      case SqlPackage.COLUMN_OR_ALIAS__CE:
+        setCe((Operands)null);
         return;
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         setAlias(ALIAS_EDEFAULT);
@@ -428,10 +358,8 @@ public class ColumnOrAliasImpl extends OrColumnImpl implements ColumnOrAlias
   {
     switch (featureID)
     {
-      case SqlPackage.COLUMN_OR_ALIAS__CFULL:
-        return cfull != null;
-      case SqlPackage.COLUMN_OR_ALIAS__SQ:
-        return sq != null;
+      case SqlPackage.COLUMN_OR_ALIAS__CE:
+        return ce != null;
       case SqlPackage.COLUMN_OR_ALIAS__ALIAS:
         return ALIAS_EDEFAULT == null ? alias != null : !ALIAS_EDEFAULT.equals(alias);
       case SqlPackage.COLUMN_OR_ALIAS__COL_ALIAS:

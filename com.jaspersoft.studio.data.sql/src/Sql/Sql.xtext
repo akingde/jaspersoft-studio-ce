@@ -21,7 +21,7 @@ Columns returns OrColumn:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
 
 ColumnOrAlias:
-	((cfull=ColumnFull | sq=SubQueryOperand) alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
+	(ce=Operand alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
 
 ColumnFull returns ColumnFull:
 	DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
@@ -42,7 +42,7 @@ TableFull:
 	DbObjectName ({tbls.entries+=current} ("." entries+=DbObjectName)+)?;
 
 DbObjectName:
-	dbname=ID;
+	dbname=DBID;
 
 OrderByColumns returns OrOrderByColumn:
 	OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?;
@@ -104,10 +104,20 @@ Operand returns Operands:
 	OperandFragment ({Operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
 
 OperandFragment returns Operand:
-/*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand;
+/*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction;
 
-//OperandGroup returns OpGroup:
-//	{OpGroup} '(' op=Operand ')';
+OperandGroup returns OpGroup:
+	{OpGroup} '(' op=Operand ')';
+
+OperandFunction returns OperandFunction:
+	fname=ID args=OperandFunctionArguments;
+
+OperandFunctionArguments returns OperandFunctionArguments:
+	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
+
+OperandFunctionArgs:
+	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
+
 XOperandFragment returns Operand:
 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 
@@ -132,6 +142,13 @@ StringOperand:
 enum JoinType:
 	innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
+
+terminal DBID:
+	(('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*)
+	| ('\'' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '\'')
+	| ('"' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '"')
+	| ('`' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '`')
+	| ('[' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ']');
 
 terminal STAR:
 	"*";

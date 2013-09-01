@@ -5,6 +5,8 @@ package com.jaspersoft.studio.data.sql.impl;
 import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.Operand;
+import com.jaspersoft.studio.data.sql.OperandFunction;
+import com.jaspersoft.studio.data.sql.OperandFunctionArgs;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
@@ -37,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getColumn <em>Column</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getSubq <em>Subq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getFunc <em>Func</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getParam <em>Param</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getScalar <em>Scalar</em>}</li>
@@ -86,6 +89,16 @@ public class OperandImpl extends OperandListImpl implements Operand
    * @ordered
    */
   protected SubQueryOperand subq;
+
+  /**
+   * The cached value of the '{@link #getFunc() <em>Func</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFunc()
+   * @generated
+   * @ordered
+   */
+  protected OperandFunction func;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -301,6 +314,54 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
+  public OperandFunction getFunc()
+  {
+    return func;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFunc(OperandFunction newFunc, NotificationChain msgs)
+  {
+    OperandFunction oldFunc = func;
+    func = newFunc;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__FUNC, oldFunc, newFunc);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFunc(OperandFunction newFunc)
+  {
+    if (newFunc != func)
+    {
+      NotificationChain msgs = null;
+      if (func != null)
+        msgs = ((InternalEObject)func).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND__FUNC, null, msgs);
+      if (newFunc != null)
+        msgs = ((InternalEObject)newFunc).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND__FUNC, null, msgs);
+      msgs = basicSetFunc(newFunc, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__FUNC, newFunc, newFunc));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public POperand getParam()
   {
     return param;
@@ -458,6 +519,8 @@ public class OperandImpl extends OperandListImpl implements Operand
         return basicSetXop(null, msgs);
       case SqlPackage.OPERAND__SUBQ:
         return basicSetSubq(null, msgs);
+      case SqlPackage.OPERAND__FUNC:
+        return basicSetFunc(null, msgs);
       case SqlPackage.OPERAND__PARAM:
         return basicSetParam(null, msgs);
       case SqlPackage.OPERAND__EPARAM:
@@ -486,6 +549,8 @@ public class OperandImpl extends OperandListImpl implements Operand
         return getXop();
       case SqlPackage.OPERAND__SUBQ:
         return getSubq();
+      case SqlPackage.OPERAND__FUNC:
+        return getFunc();
       case SqlPackage.OPERAND__PARAM:
         return getParam();
       case SqlPackage.OPERAND__EPARAM:
@@ -519,6 +584,9 @@ public class OperandImpl extends OperandListImpl implements Operand
         return;
       case SqlPackage.OPERAND__SUBQ:
         setSubq((SubQueryOperand)newValue);
+        return;
+      case SqlPackage.OPERAND__FUNC:
+        setFunc((OperandFunction)newValue);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)newValue);
@@ -555,6 +623,9 @@ public class OperandImpl extends OperandListImpl implements Operand
       case SqlPackage.OPERAND__SUBQ:
         setSubq((SubQueryOperand)null);
         return;
+      case SqlPackage.OPERAND__FUNC:
+        setFunc((OperandFunction)null);
+        return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)null);
         return;
@@ -586,6 +657,8 @@ public class OperandImpl extends OperandListImpl implements Operand
         return xop != null;
       case SqlPackage.OPERAND__SUBQ:
         return subq != null;
+      case SqlPackage.OPERAND__FUNC:
+        return func != null;
       case SqlPackage.OPERAND__PARAM:
         return param != null;
       case SqlPackage.OPERAND__EPARAM:
@@ -612,6 +685,13 @@ public class OperandImpl extends OperandListImpl implements Operand
         default: return -1;
       }
     }
+    if (baseClass == OperandFunctionArgs.class)
+    {
+      switch (derivedFeatureID)
+      {
+        default: return -1;
+      }
+    }
     return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
   }
 
@@ -628,6 +708,13 @@ public class OperandImpl extends OperandListImpl implements Operand
       switch (baseFeatureID)
       {
         case SqlPackage.OPERANDS__ENTRIES: return SqlPackage.OPERAND__ENTRIES;
+        default: return -1;
+      }
+    }
+    if (baseClass == OperandFunctionArgs.class)
+    {
+      switch (baseFeatureID)
+      {
         default: return -1;
       }
     }

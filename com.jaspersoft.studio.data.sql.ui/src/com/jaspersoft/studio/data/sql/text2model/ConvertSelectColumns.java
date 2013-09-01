@@ -5,10 +5,15 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
+import com.jaspersoft.studio.data.sql.Operand;
+import com.jaspersoft.studio.data.sql.OperandFunction;
 import com.jaspersoft.studio.data.sql.OrColumn;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
+import com.jaspersoft.studio.data.sql.impl.OperandImpl;
+import com.jaspersoft.studio.data.sql.impl.OperandsImpl;
 import com.jaspersoft.studio.data.sql.impl.OrColumnImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
@@ -36,18 +41,94 @@ public class ConvertSelectColumns {
 	}
 
 	private static void doColumns(SQLQueryDesigner designer, MSelect msel, ColumnOrAlias fcol) {
-		if (fcol.getAllCols() != null) {
+		if (fcol.getAllCols() != null)
 			new MSelectExpression(msel, "*");
-		} else if (fcol.getSq() != null) {
-			MSelectSubQuery qroot = new MSelectSubQuery(msel);
-			Util.createSelect(qroot);
-			Text2Model.convertSelect(designer, qroot, (SelectImpl) fcol.getSq().getSel());
-		} else {
-			AMQueryAliased<?> mscol = getColumn(msel, fcol.getCfull());
-			mscol.setAliasKeyword(Misc.nvl(fcol.getAlias(), " "));
-			if (fcol.getColAlias() != null)
-				mscol.setAlias(fcol.getColAlias().getDbname());
+		else if (fcol.getCe() != null) {
+			if (fcol.getCe() instanceof OperandImpl)
+				setupAlias(getMSelectColumn(designer, (OperandImpl) fcol.getCe(), msel), fcol);
+			else if (fcol.getCe() instanceof OperandsImpl) {
+				AMQueryAliased<?> mscol = null;
+				for (Operand op : fcol.getCe().getEntries()) {
+					mscol = getMSelectColumn(designer, (OperandImpl) op, msel);
+					break;
+					// if (op.getSubq() != null) {
+					// MSelectSubQuery qroot = new MSelectSubQuery(msel);
+					// Util.createSelect(qroot);
+					// Text2Model.convertSelect(designer, qroot, (SelectImpl)
+					// op.getSubq().getSel());
+					// } else if (op.getColumn() != null) {
+					// mscol = getColumn(msel, op.getColumn().getCfull());
+					// } else if (op.getFunc() != null) {
+					// getColumnUnknown(msel, op.getFunc().toString());
+					// } else if (op.getParam() != null) {
+					// getColumnUnknown(msel, op.getParam().toString());
+					// } else if (op.getScalar() != null) {
+					// getColumnUnknown(msel, op.getScalar().toString());
+					// }
+				}
+				setupAlias(mscol, fcol);
+			}
 		}
+	}
+
+	private static AMQueryAliased<?> getMSelectColumn(SQLQueryDesigner designer, OperandImpl op, MSelect msel) {
+		AMQueryAliased<?> mscol = null;
+		if (op.getSubq() != null) {
+			mscol = new MSelectSubQuery(msel);
+			Util.createSelect(mscol);
+			Text2Model.convertSelect(designer, mscol, (SelectImpl) op.getSubq().getSel());
+		} else if (op.getColumn() != null)
+			mscol = getColumn(msel, op.getColumn().getCfull());
+		else if (op.getFunc() != null)
+			mscol = getColumnUnknown(msel, getFunctionString(op.getFunc()));
+		else if (op.getParam() != null)
+			mscol = getColumnUnknown(msel, op.getParam().toString());
+		else if (op.getScalar() != null)
+			mscol = getColumnUnknown(msel, getScalarString(op.getScalar()));
+		else if (op.getXop() != null)
+			mscol = getMSelectColumn(designer, (OperandImpl) op.getXop(), msel);
+		return mscol;
+	}
+
+	private static String getFunctionString(OperandFunction f) {
+		String sargs = "";
+		// OperandFunctionArguments args = f.getArgs();
+		// if (args != null) {
+		// String sep = "";
+		// OperandFunctionArgs fargs = args.getArg();
+		// for (EObject eobj : fargs.eContents()) {
+		// sargs += sep;
+		// if (eobj instanceof Operand) {
+		// sargs += " arg ";
+		// }
+		// sep = ",";
+		// }
+		// }
+		return /* f.getFname() + */"(" + sargs + ")";
+	}
+
+	private static String getScalarString(ScalarOperand sc) {
+		if (sc.getSodate() != null)
+			return sc.getSodate().toString();
+		if (sc.getSodbl() != null)
+			return sc.getSodbl().toString();
+		if (sc.getSodt() != null)
+			return sc.getSodt().toString();
+		if (sc.getSoint() != null)
+			return sc.getSoint().toString();
+		if (sc.getSostr() != null)
+			return sc.getSostr();
+		if (sc.getSotime() != null)
+			return sc.getSotime().toString();
+		return "";
+	}
+
+	private static void setupAlias(AMQueryAliased<?> mscol, ColumnOrAlias fcol) {
+		if (mscol == null)
+			return;
+		mscol.setAliasKeyword(Misc.nvl(fcol.getAlias(), " "));
+		if (fcol.getColAlias() != null)
+			mscol.setAlias(fcol.getColAlias().getDbname());
 	}
 
 	private static AMQueryAliased<?> getColumn(MSelect msel, ColumnFull tf) {

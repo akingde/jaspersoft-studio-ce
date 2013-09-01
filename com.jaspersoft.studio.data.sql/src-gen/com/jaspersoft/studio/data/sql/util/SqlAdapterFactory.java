@@ -225,6 +225,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createOperandAdapter();
       }
       @Override
+      public Adapter caseOpGroup(OpGroup object)
+      {
+        return createOpGroupAdapter();
+      }
+      @Override
+      public Adapter caseOperandFunction(OperandFunction object)
+      {
+        return createOperandFunctionAdapter();
+      }
+      @Override
+      public Adapter caseOperandFunctionArgs(OperandFunctionArgs object)
+      {
+        return createOperandFunctionArgsAdapter();
+      }
+      @Override
       public Adapter casePOperand(POperand object)
       {
         return createPOperandAdapter();
@@ -263,6 +278,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseOpList(OpList object)
       {
         return createOpListAdapter();
+      }
+      @Override
+      public Adapter caseOperandFunctionArguments(OperandFunctionArguments object)
+      {
+        return createOperandFunctionArgumentsAdapter();
+      }
+      @Override
+      public Adapter caseArgList(ArgList object)
+      {
+        return createArgListAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -737,6 +762,51 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OpGroup <em>Op Group</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OpGroup
+   * @generated
+   */
+  public Adapter createOpGroupAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandFunction <em>Operand Function</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OperandFunction
+   * @generated
+   */
+  public Adapter createOperandFunctionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandFunctionArgs <em>Operand Function Args</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OperandFunctionArgs
+   * @generated
+   */
+  public Adapter createOperandFunctionArgsAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.POperand <em>POperand</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -852,6 +922,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createOpListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandFunctionArguments <em>Operand Function Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.OperandFunctionArguments
+   * @generated
+   */
+  public Adapter createOperandFunctionArgumentsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ArgList <em>Arg List</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.ArgList
+   * @generated
+   */
+  public Adapter createArgListAdapter()
   {
     return null;
   }

@@ -2,49 +2,12 @@
  */
 package com.jaspersoft.studio.data.sql.util;
 
+import com.jaspersoft.studio.data.sql.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
-import com.jaspersoft.studio.data.sql.Between;
-import com.jaspersoft.studio.data.sql.Col;
-import com.jaspersoft.studio.data.sql.ColumnFull;
-import com.jaspersoft.studio.data.sql.ColumnOperand;
-import com.jaspersoft.studio.data.sql.ColumnOrAlias;
-import com.jaspersoft.studio.data.sql.Comparison;
-import com.jaspersoft.studio.data.sql.DbObjectName;
-import com.jaspersoft.studio.data.sql.ExpOperand;
-import com.jaspersoft.studio.data.sql.ExprGroup;
-import com.jaspersoft.studio.data.sql.FromTable;
-import com.jaspersoft.studio.data.sql.FromTableJoin;
-import com.jaspersoft.studio.data.sql.FullExpression;
-import com.jaspersoft.studio.data.sql.GroupByColumnFull;
-import com.jaspersoft.studio.data.sql.InOper;
-import com.jaspersoft.studio.data.sql.JRParameter;
-import com.jaspersoft.studio.data.sql.Like;
-import com.jaspersoft.studio.data.sql.Model;
-import com.jaspersoft.studio.data.sql.OpList;
-import com.jaspersoft.studio.data.sql.Operand;
-import com.jaspersoft.studio.data.sql.OperandList;
-import com.jaspersoft.studio.data.sql.Operands;
-import com.jaspersoft.studio.data.sql.OrColumn;
-import com.jaspersoft.studio.data.sql.OrExpr;
-import com.jaspersoft.studio.data.sql.OrGroupByColumn;
-import com.jaspersoft.studio.data.sql.OrOrderByColumn;
-import com.jaspersoft.studio.data.sql.OrTable;
-import com.jaspersoft.studio.data.sql.OrderByColumnFull;
-import com.jaspersoft.studio.data.sql.POperand;
-import com.jaspersoft.studio.data.sql.Prms;
-import com.jaspersoft.studio.data.sql.ScalarOperand;
-import com.jaspersoft.studio.data.sql.Select;
-import com.jaspersoft.studio.data.sql.SelectQuery;
-import com.jaspersoft.studio.data.sql.SelectSubSet;
-import com.jaspersoft.studio.data.sql.SqlPackage;
-import com.jaspersoft.studio.data.sql.SubQueryOperand;
-import com.jaspersoft.studio.data.sql.TableFull;
-import com.jaspersoft.studio.data.sql.TableOrAlias;
-import com.jaspersoft.studio.data.sql.XExpr;
-import com.jaspersoft.studio.data.sql.tbls;
-import com.jaspersoft.studio.data.sql.compatibility.Switch;
+import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -327,6 +290,28 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseOperand(operand);
         if (result == null) result = caseOperandList(operand);
         if (result == null) result = caseOperands(operand);
+        if (result == null) result = caseOperandFunctionArgs(operand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OP_GROUP:
+      {
+        OpGroup opGroup = (OpGroup)theEObject;
+        T result = caseOpGroup(opGroup);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OPERAND_FUNCTION:
+      {
+        OperandFunction operandFunction = (OperandFunction)theEObject;
+        T result = caseOperandFunction(operandFunction);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OPERAND_FUNCTION_ARGS:
+      {
+        OperandFunctionArgs operandFunctionArgs = (OperandFunctionArgs)theEObject;
+        T result = caseOperandFunctionArgs(operandFunctionArgs);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -386,6 +371,22 @@ public class SqlSwitch<T> extends Switch<T>
         OpList opList = (OpList)theEObject;
         T result = caseOpList(opList);
         if (result == null) result = caseOperandList(opList);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS:
+      {
+        OperandFunctionArguments operandFunctionArguments = (OperandFunctionArguments)theEObject;
+        T result = caseOperandFunctionArguments(operandFunctionArguments);
+        if (result == null) result = caseOperandFunction(operandFunctionArguments);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.ARG_LIST:
+      {
+        ArgList argList = (ArgList)theEObject;
+        T result = caseArgList(argList);
+        if (result == null) result = caseOperandFunctionArgs(argList);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -874,6 +875,54 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Op Group</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Op Group</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOpGroup(OpGroup object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Operand Function</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Operand Function</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOperandFunction(OperandFunction object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Operand Function Args</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Operand Function Args</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOperandFunctionArgs(OperandFunctionArgs object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>POperand</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -997,6 +1046,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOpList(OpList object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Operand Function Arguments</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Operand Function Arguments</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOperandFunctionArguments(OperandFunctionArguments object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Arg List</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Arg List</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseArgList(ArgList object)
   {
     return null;
   }

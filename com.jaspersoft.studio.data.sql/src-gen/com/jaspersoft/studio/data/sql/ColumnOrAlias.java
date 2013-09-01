@@ -11,8 +11,7 @@ package com.jaspersoft.studio.data.sql;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getCfull <em>Cfull</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getSq <em>Sq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getCe <em>Ce</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getColAlias <em>Col Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAllCols <em>All Cols</em>}</li>
@@ -26,56 +25,30 @@ package com.jaspersoft.studio.data.sql;
 public interface ColumnOrAlias extends OrColumn
 {
   /**
-   * Returns the value of the '<em><b>Cfull</b></em>' containment reference.
+   * Returns the value of the '<em><b>Ce</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Cfull</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Ce</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Cfull</em>' containment reference.
-   * @see #setCfull(ColumnFull)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getColumnOrAlias_Cfull()
+   * @return the value of the '<em>Ce</em>' containment reference.
+   * @see #setCe(Operands)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getColumnOrAlias_Ce()
    * @model containment="true"
    * @generated
    */
-  ColumnFull getCfull();
+  Operands getCe();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getCfull <em>Cfull</em>}' containment reference.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getCe <em>Ce</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Cfull</em>' containment reference.
-   * @see #getCfull()
+   * @param value the new value of the '<em>Ce</em>' containment reference.
+   * @see #getCe()
    * @generated
    */
-  void setCfull(ColumnFull value);
-
-  /**
-   * Returns the value of the '<em><b>Sq</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Sq</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Sq</em>' containment reference.
-   * @see #setSq(SubQueryOperand)
-   * @see com.jaspersoft.studio.data.sql.SqlPackage#getColumnOrAlias_Sq()
-   * @model containment="true"
-   * @generated
-   */
-  SubQueryOperand getSq();
-
-  /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getSq <em>Sq</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Sq</em>' containment reference.
-   * @see #getSq()
-   * @generated
-   */
-  void setSq(SubQueryOperand value);
+  void setCe(Operands value);
 
   /**
    * Returns the value of the '<em><b>Alias</b></em>' attribute.

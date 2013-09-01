@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.sql;
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getColumn <em>Column</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getSubq <em>Subq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getFunc <em>Func</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getScalar <em>Scalar</em>}</li>
@@ -24,7 +25,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface Operand extends OperandList, Operands
+public interface Operand extends OperandList, Operands, OperandFunctionArgs
 {
   /**
    * Returns the value of the '<em><b>Column</b></em>' containment reference.
@@ -103,6 +104,32 @@ public interface Operand extends OperandList, Operands
    * @generated
    */
   void setSubq(SubQueryOperand value);
+
+  /**
+   * Returns the value of the '<em><b>Func</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Func</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Func</em>' containment reference.
+   * @see #setFunc(OperandFunction)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Func()
+   * @model containment="true"
+   * @generated
+   */
+  OperandFunction getFunc();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getFunc <em>Func</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Func</em>' containment reference.
+   * @see #getFunc()
+   * @generated
+   */
+  void setFunc(OperandFunction value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.

@@ -95,6 +95,9 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OPERAND_LIST: return createOperandList();
       case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
+      case SqlPackage.OP_GROUP: return createOpGroup();
+      case SqlPackage.OPERAND_FUNCTION: return createOperandFunction();
+      case SqlPackage.OPERAND_FUNCTION_ARGS: return createOperandFunctionArgs();
       case SqlPackage.POPERAND: return createPOperand();
       case SqlPackage.EXP_OPERAND: return createExpOperand();
       case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
@@ -103,6 +106,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.COL: return createCol();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OP_LIST: return createOpList();
+      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS: return createOperandFunctionArguments();
+      case SqlPackage.ARG_LIST: return createArgList();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -481,6 +486,39 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public OpGroup createOpGroup()
+  {
+    OpGroupImpl opGroup = new OpGroupImpl();
+    return opGroup;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OperandFunction createOperandFunction()
+  {
+    OperandFunctionImpl operandFunction = new OperandFunctionImpl();
+    return operandFunction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OperandFunctionArgs createOperandFunctionArgs()
+  {
+    OperandFunctionArgsImpl operandFunctionArgs = new OperandFunctionArgsImpl();
+    return operandFunctionArgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public POperand createPOperand()
   {
     POperandImpl pOperand = new POperandImpl();
@@ -562,6 +600,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     OpListImpl opList = new OpListImpl();
     return opList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OperandFunctionArguments createOperandFunctionArguments()
+  {
+    OperandFunctionArgumentsImpl operandFunctionArguments = new OperandFunctionArgumentsImpl();
+    return operandFunctionArguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ArgList createArgList()
+  {
+    ArgListImpl argList = new ArgListImpl();
+    return argList;
   }
 
   /**

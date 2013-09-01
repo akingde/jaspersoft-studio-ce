@@ -73,11 +73,6 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	@Override
-	public void completeColumnOrAlias_Cfull(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		proposeColumn(context, acceptor);
-	}
-
-	@Override
 	public void completeOrderByColumnFull_ColOrder(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		proposeColumnOrAlias(context, acceptor);
 	}

@@ -293,6 +293,33 @@ public interface SqlFactory extends EFactory
   Operand createOperand();
 
   /**
+   * Returns a new object of class '<em>Op Group</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Op Group</em>'.
+   * @generated
+   */
+  OpGroup createOpGroup();
+
+  /**
+   * Returns a new object of class '<em>Operand Function</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Operand Function</em>'.
+   * @generated
+   */
+  OperandFunction createOperandFunction();
+
+  /**
+   * Returns a new object of class '<em>Operand Function Args</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Operand Function Args</em>'.
+   * @generated
+   */
+  OperandFunctionArgs createOperandFunctionArgs();
+
+  /**
    * Returns a new object of class '<em>POperand</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -363,6 +390,24 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   OpList createOpList();
+
+  /**
+   * Returns a new object of class '<em>Operand Function Arguments</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Operand Function Arguments</em>'.
+   * @generated
+   */
+  OperandFunctionArguments createOperandFunctionArguments();
+
+  /**
+   * Returns a new object of class '<em>Arg List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Arg List</em>'.
+   * @generated
+   */
+  ArgList createArgList();
 
   /**
    * Returns the package supported by this factory.

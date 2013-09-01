@@ -34,9 +34,7 @@
         eType="#//ColumnOrAlias" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOrAlias" eSuperTypes="#//OrColumn">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cfull" eType="#//ColumnFull"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sq" eType="#//SubQueryOperand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ce" eType="#//Operands"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="colAlias" eType="#//DbObjectName"
@@ -175,12 +173,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//Operand" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Operand" eSuperTypes="#//OperandList #//Operands">
+  <eClassifiers xsi:type="ecore:EClass" name="Operand" eSuperTypes="#//OperandList #//Operands #//OperandFunctionArgs">
     <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//ColumnOperand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="xop" eType="#//Operand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subq" eType="#//SubQueryOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="func" eType="#//OperandFunction"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//POperand"
         containment="true"/>
@@ -189,6 +189,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="scalar" eType="#//ScalarOperand"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//Operands"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperandFunction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OperandFunctionArgs"/>
   <eClassifiers xsi:type="ecore:EClass" name="POperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -227,6 +233,15 @@
         eType="#//DbObjectName" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OpList" eSuperTypes="#//OperandList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Operand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperandFunctionArguments" eSuperTypes="#//OperandFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arg" eType="#//OperandFunctionArgs"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgList" eSuperTypes="#//OperandFunctionArgs">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//Operand" containment="true"/>
   </eClassifiers>
