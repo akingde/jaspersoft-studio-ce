@@ -66,16 +66,15 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 				String selection = fd.open();
 				if (selection != null) {
 					IFile contextfile = (IFile) getJrContext().getValue(FileUtils.KEY_FILE);
-					if (contextfile != null) {
-						IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-						try {
-							IFile[] resource = root.findFilesForLocationURI(new URI("file://" + selection));
-							if (resource != null && resource.length > 0 && contextfile.getProject().equals(resource[0].getProject()))
-								selection = resource[0].getProjectRelativePath().toOSString();
-						} catch (URISyntaxException e1) {
-						}
-						textFileName.setText(selection);
+
+					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+					try {
+						IFile[] resource = root.findFilesForLocationURI(new URI("file://" + selection));
+						if (contextfile != null && resource != null && resource.length > 0 && contextfile.getProject().equals(resource[0].getProject()))
+							selection = resource[0].getProjectRelativePath().toOSString();
+					} catch (URISyntaxException e1) {
 					}
+					textFileName.setText(selection);
 				}
 			}
 		});

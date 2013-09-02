@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard.pages;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -30,6 +31,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
 public class DataAdapterEditorPage extends WizardPage implements WizardEndingStateListener {
@@ -157,7 +159,8 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 		if (editorComposite != null) {
 			editorComposite.dispose();
 		}
-
+		if (jrContext == null)
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL, this, jrContext);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
