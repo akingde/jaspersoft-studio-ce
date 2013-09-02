@@ -97,6 +97,9 @@ public class PositionErrorDecorator implements IElementDecorator {
 				fh = band.getHeight();
 				fw = itemModel.getJasperDesign().getPageWidth();
 			} else if  (itemModel.getParent() instanceof MPage){
+				//I'm into a separate editor, here the relative dimensions inside the band dosen't count
+				x = 0;
+				y = 0;
 				if (fig.getParent() != null){
 					Rectangle r = fig.getParent().getBounds();
 				  fh = r.height;
