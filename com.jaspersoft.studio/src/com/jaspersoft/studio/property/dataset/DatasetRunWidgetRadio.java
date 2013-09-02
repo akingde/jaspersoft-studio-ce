@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset;
 
@@ -49,45 +44,87 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	}
 
 	public void setData(JRDesignDatasetRun datasetrun) {
-
 		if (this.datasetrun == datasetrun)
 			return;
 		this.datasetrun = datasetrun;
 
 		removeListeners();
 
-		datasourceExpressionBox.setEnabled(false);
-		connectionExpressionBox.setEnabled(false);
+		isReportConnection = false;
+		isEmptyDatasource = false;
 
-		radioUseParentConnection.setSelection(false);
-		radioUseConnectionExpression.setSelection(false);
-		radioUseDatasourceExpression.setSelection(false);
-		radioUseEmptyDatasource.setSelection(false);
-		radioNoConnection.setSelection(false);
-		connectionExpressionBox.setExpression(null);
-		datasourceExpressionBox.setExpression(null);
+		isUseParentConnection = false;
+		isUseConnectionExpression = false;
+		isUseDatasourceExpression = false;
+		isUseEmptyDatasource = false;
+		isNoConnection = false;
+
+		// connectionExpressionBox.setExpression(null);
+		// datasourceExpressionBox.setExpression(null);
+
 		if (datasetrun != null) {
 			if (datasetrun.getConnectionExpression() != null) {
-				connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
-				boolean isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
-				connectionExpressionBox.setEnabled(!isReportConnection);
-				radioUseParentConnection.setSelection(isReportConnection);
-				radioUseConnectionExpression.setSelection(!isReportConnection);
+				// connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
+				isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
+
+				isUseParentConnection = isReportConnection;
+				isUseConnectionExpression = !isReportConnection;
 			} else if (datasetrun.getDataSourceExpression() != null) {
-				datasourceExpressionBox.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
-				boolean isEmptyDatasource = datasetrun.getDataSourceExpression().getText()
+				// datasourceExpressionBox.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
+				isEmptyDatasource = datasetrun.getDataSourceExpression().getText()
 						.equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
-				datasourceExpressionBox.setEnabled(!isEmptyDatasource);
-				radioUseEmptyDatasource.setSelection(isEmptyDatasource);
-				radioUseDatasourceExpression.setSelection(!isEmptyDatasource);
+
+				isUseEmptyDatasource = isEmptyDatasource;
+				isUseDatasourceExpression = !isEmptyDatasource;
 			} else {
-				radioNoConnection.setSelection(true);
+				isNoConnection = true;
 			}
 		} else {
-			connectionExpressionBox.setExpression(null);
-			datasourceExpressionBox.setExpression(null);
+			// connectionExpressionBox.setExpression(null);
+			// datasourceExpressionBox.setExpression(null);
 		}
+		setEnabledWidgets();
 		addListeners();
+	}
+
+	private boolean isReportConnection = false;
+	private boolean isEmptyDatasource = false;
+
+	private boolean isUseParentConnection = false;
+	private boolean isUseConnectionExpression = false;
+	private boolean isUseDatasourceExpression = false;
+	private boolean isUseEmptyDatasource = false;
+	private boolean isNoConnection = false;
+
+	private void setEnabledWidgets() {
+		setSelection4Widget(radioUseParentConnection, isUseParentConnection);
+		setSelection4Widget(radioUseConnectionExpression, isUseConnectionExpression);
+		setSelection4Widget(radioUseDatasourceExpression, isUseDatasourceExpression);
+		setSelection4Widget(radioUseEmptyDatasource, isUseEmptyDatasource);
+		setSelection4Widget(radioNoConnection, isNoConnection);
+
+		setEnabled4Widget(connectionExpressionBox, isUseConnectionExpression);
+		setEnabled4Widget(datasourceExpressionBox, isUseDatasourceExpression);
+
+		if (isUseConnectionExpression || isUseParentConnection)
+			connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
+		else
+			connectionExpressionBox.setExpression(null);
+
+		if (isUseDatasourceExpression || isUseEmptyDatasource)
+			datasourceExpressionBox.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
+		else
+			datasourceExpressionBox.setExpression(null);
+	}
+
+	private static void setEnabled4Widget(WTextExpression b, boolean value) {
+		if (b.getEnabled() != value)
+			b.setEnabled(value);
+	}
+
+	private static void setSelection4Widget(Button b, boolean value) {
+		if (b.getSelection() != value)
+			b.setSelection(value);
 	}
 
 	public Control getControl() {
@@ -175,11 +212,14 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 				if (radioNoConnection.getSelection())
 					setNoConnection();
-				else if (radioUseConnectionExpression.getSelection() || radioUseParentConnection.getSelection()) {
+				else if (radioUseConnectionExpression.getSelection())
+					setConnection("$P{REPORT_CONNECTION} "); //$NON-NLS-1$
+				else if (radioUseParentConnection.getSelection())
 					setConnection("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
-				} else if (radioUseDatasourceExpression.getSelection() || radioUseEmptyDatasource.getSelection()) {
+				else if (radioUseDatasourceExpression.getSelection())
+					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource() ");//$NON-NLS-1$ 
+				else if (radioUseEmptyDatasource.getSelection())
 					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$ 
-				}
 
 				connectionExpressionBox.setEnabled(radioUseConnectionExpression.getSelection());
 				datasourceExpressionBox.setEnabled(radioUseDatasourceExpression.getSelection());
