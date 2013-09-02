@@ -73,7 +73,7 @@ public final class ExpressionContextUtils {
 	 * @return the list of parameters
 	 */
 	public static List<JRParameter> getAllDatasetsParameters(ExpressionContext exprContext){
-		if(exprContext.hasDatasets()){
+		if(exprContext.hasDatasets() && exprContext.canShowParameters()){
 			List<JRParameter> elements = new ArrayList<JRParameter>();
 			for(JRDesignDataset d : exprContext.getDatasets()) {
 				elements.addAll(d.getParametersList());
@@ -92,7 +92,7 @@ public final class ExpressionContextUtils {
 	 * @return the list of variables
 	 */
 	public static List<JRVariable> getAllDatasetsVariables(ExpressionContext exprContext){
-		if(exprContext.hasDatasets()){
+		if(exprContext.hasDatasets() && exprContext.canShowVariables()){
 			List<JRVariable> elements = new ArrayList<JRVariable>();
 			for(JRDesignDataset d : exprContext.getDatasets()) {
 				elements.addAll(d.getVariablesList());
@@ -111,7 +111,7 @@ public final class ExpressionContextUtils {
 	 * @return the list of fields
 	 */
 	public static List<JRField> getAllDatasetsFields(ExpressionContext exprContext){
-		if(exprContext.hasDatasets()){
+		if(exprContext.hasDatasets() && exprContext.canShowFields()){
 			List<JRField> elements = new ArrayList<JRField>();
 			for(JRDesignDataset d : exprContext.getDatasets()) {
 				elements.addAll(d.getFieldsList());
@@ -130,7 +130,7 @@ public final class ExpressionContextUtils {
 	 * @return the list of variables
 	 */
 	public static List<JRVariable> getAllCrosstabsVariables(ExpressionContext exprContext) {
-		if(exprContext.hasCrosstabs()) {
+		if(exprContext.hasCrosstabs() && exprContext.canShowVariables()) {
 			List<JRVariable> elements = new ArrayList<JRVariable>();
 			for(JRDesignCrosstab c : exprContext.getCrosstabs()) {
 				elements.addAll(Arrays.asList(c.getVariables()));
@@ -149,7 +149,7 @@ public final class ExpressionContextUtils {
 	 * @return the list of parameters
 	 */
 	public static List<JRParameter> getAllCrosstabsParameters(ExpressionContext exprContext) {
-		if(exprContext.hasCrosstabs()) {
+		if(exprContext.hasCrosstabs() && exprContext.canShowParameters()) {
 			List<JRParameter> elements = new ArrayList<JRParameter>();
 			for(JRDesignCrosstab c : exprContext.getCrosstabs()) {
 				elements.addAll(Arrays.asList(c.getParameters()));

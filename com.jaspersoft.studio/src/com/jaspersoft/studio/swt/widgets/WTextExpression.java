@@ -362,6 +362,13 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
 	}
+	
+	/**
+	 * @return the expression context currently set, <code>null</code> if none
+	 */
+	public ExpressionContext getExpressionContext() {
+		return this.expContext;
+	}
 
 	/**
 	 * Adds a new listener that will be notified of any expression change/notification.

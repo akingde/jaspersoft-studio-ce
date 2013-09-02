@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.property.section.obj;
 
 import java.util.Collection;
+import java.util.EnumSet;
 
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -19,11 +20,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class ParameterSection extends AbstractSection {
 	
@@ -117,6 +122,13 @@ public class ParameterSection extends AbstractSection {
 					else setCompVisible(false);
 				}
 				widgets.get(key).setData(element, element.getPropertyValue(key));
+				if (key.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)){
+					// fix the visibilities mask: allows only PARAMETERS
+					ExpressionContext expContext = ((WTextExpression) ((SPExpression) widgets.get(key)).getControl()).getExpressionContext();
+					if(expContext!=null){
+						expContext.setVisibilities(EnumSet.of(Visibility.SHOW_PARAMETERS));
+					}
+				}
 			}
 		}
 		isRefreshing = false;

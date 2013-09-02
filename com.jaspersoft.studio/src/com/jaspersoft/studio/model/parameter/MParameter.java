@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,9 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionContext.Visibility;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -235,6 +239,21 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		jrDesignParameter.setSystemDefined(false);
 		jrDesignParameter.setName(ModelUtils.getDefaultName(jrDataset.getParametersMap(), "Parameter")); //$NON-NLS-1$
 		return jrDesignParameter;
+	}
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		for(IPropertyDescriptor d : descriptors) {
+			if(d.getId().equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
+				// fix the visibilities mask: allows only PARAMETERS
+				ExpressionContext expContext = ModelUtils.getElementExpressionContext(null, this);
+				if(expContext!=null){
+					expContext.setVisibilities(EnumSet.of(Visibility.SHOW_PARAMETERS));
+					((IExpressionContextSetter)d).setExpressionContext(expContext);
+				}
+			}
+		}
 	}
 
 	public boolean isCopyable2(Object parent) {

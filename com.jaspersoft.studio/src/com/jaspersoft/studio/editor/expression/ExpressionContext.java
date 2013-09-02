@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.editor.expression;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,12 +43,21 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author gtoffoli
  */
 public class ExpressionContext {
+
 	public static final String ATTRIBUTE_EXPRESSION_CONTEXT = "EXPRESSION_CONTEXT";
-
+	public static JEditorPane activeEditor = null;
 	private static ExpressionContext globalContext = null;
-	
 	private JasperReportsConfiguration config=null;
-
+	private List<JRDesignDataset> datasets = new ArrayList<JRDesignDataset>();
+	private List<JRDesignCrosstab> crosstabs = new ArrayList<JRDesignCrosstab>();
+	private EnumSet<ExpressionContext.Visibility> visibilities;
+	
+	public enum Visibility {
+		SHOW_VARIABLES,
+		SHOW_PARAMETERS,
+		SHOW_FIELDS
+	}
+	
 	public static ExpressionContext getGlobalContext() {
 		return globalContext;
 	}
@@ -55,11 +65,6 @@ public class ExpressionContext {
 	synchronized public static void setGlobalContext(ExpressionContext g) {
 		globalContext = g;
 	}
-
-	public static JEditorPane activeEditor = null;
-
-	private List<JRDesignDataset> datasets = new ArrayList<JRDesignDataset>();
-	private List<JRDesignCrosstab> crosstabs = new ArrayList<JRDesignCrosstab>();
 
 	/**
 	 * Return the datasources available for this context. Actually only one datasource should be visible at time, but in
@@ -77,7 +82,16 @@ public class ExpressionContext {
 		return crosstabs;
 	}
 
+	/*
+	 * Hidden constructor.
+	 * Enables the visibilities for fields, parameters and fields.
+	 */
+	private ExpressionContext() {
+		visibilities = EnumSet.allOf(Visibility.class);
+	}
+	
 	public ExpressionContext(JasperReportsConfiguration config) {
+		this();
 		this.config=config;
 	}
 
@@ -218,5 +232,21 @@ public class ExpressionContext {
 			crosstabs = new ArrayList<JRDesignCrosstab>();
 		}
 		crosstabs.add(crosstab);
+	}
+	
+	public boolean canShowFields() {
+		return visibilities.contains(Visibility.SHOW_FIELDS);
+	}
+	
+	public boolean canShowParameters() {
+		return visibilities.contains(Visibility.SHOW_PARAMETERS);
+	}
+	
+	public boolean canShowVariables() {
+		return visibilities.contains(Visibility.SHOW_VARIABLES);
+	}
+	
+	public void setVisibilities(EnumSet<Visibility> mask) {
+		this.visibilities = mask;
 	}
 }
