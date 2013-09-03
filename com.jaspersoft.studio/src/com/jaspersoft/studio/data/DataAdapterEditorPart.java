@@ -23,11 +23,13 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.SWT;
@@ -168,12 +170,12 @@ public class DataAdapterEditorPart extends ABasicEditor {
 				public void widgetSelected(SelectionEvent e) {
 					ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 					try {
-						ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(((IFileEditorInput) getEditorInput())
-								.getFile().getProject()));
-
-						if (cl != null)
-							Thread.currentThread().setContextClassLoader(cl);
-
+						IProject project = ((IFileEditorInput) getEditorInput()).getFile().getProject();
+						if(project.hasNature(JavaCore.NATURE_ID)) {
+							ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project));
+							if (cl != null)
+								Thread.currentThread().setContextClassLoader(cl);
+						}
 						DataAdapterServiceUtil.getInstance(jrContext).getService(editor.getDataAdapter().getDataAdapter()).test();
 
 						MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
