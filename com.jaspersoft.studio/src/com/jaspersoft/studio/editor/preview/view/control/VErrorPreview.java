@@ -371,7 +371,7 @@ public class VErrorPreview extends APreview {
 	}
 
 	public void addMessage(String msg) {
-		tmessage.setText(tmessage.getText() + msg + "\n"); //$NON-NLS-1$
+		tmessage.setText(tmessage.getText() + msg + System.lineSeparator());  
 		// textSection.setText("Console: " + msg);
 	}
 
@@ -385,7 +385,7 @@ public class VErrorPreview extends APreview {
 			if (t instanceof InvocationTargetException)
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
-			terror.setText(terror.getText() + msg + "\n"); //$NON-NLS-1$
+			terror.setText(terror.getText() + msg + System.lineSeparator()); //$NON-NLS-1$
 			addError2List(t, t.getMessage(), null);
 			// errorSection.setText("Errors: 1");
 		} else
