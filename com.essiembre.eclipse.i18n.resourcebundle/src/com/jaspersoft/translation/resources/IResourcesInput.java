@@ -40,4 +40,11 @@ public interface IResourcesInput {
 	 * @return not null list of resources
 	 */
 	public List<AbstractResourceDefinition> getResourcesElements();
+	
+	/**
+	 * This is used to contribute contextual help information for the plugin
+	 * 
+	 * @return the id of the information to shows when the user press the help keu
+	 */
+	public String getContextId();
 }

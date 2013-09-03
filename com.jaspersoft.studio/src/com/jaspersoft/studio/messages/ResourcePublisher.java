@@ -75,5 +75,10 @@ public class ResourcePublisher implements IResourcesInput{
 		return result;
 	}
 
+	@Override
+	public String getContextId() {
+		return null;
+	}
+
 
 }

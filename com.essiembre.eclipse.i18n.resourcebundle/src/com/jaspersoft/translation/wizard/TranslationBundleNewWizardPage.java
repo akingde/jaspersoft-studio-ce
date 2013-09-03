@@ -160,6 +160,11 @@ public class TranslationBundleNewWizardPage extends ResourceBundleNewWizardPage 
 		updateStatus(null, IMessageProvider.NONE);
 	}
 	
+	@Override
+	protected String getContextName() {
+		return "com.essiembre.eclipse.i18n.resourcebundle.defineStructureHelp";
+	}
+	
 	/**
 	@Override
 	public void setVisible(boolean visible) {

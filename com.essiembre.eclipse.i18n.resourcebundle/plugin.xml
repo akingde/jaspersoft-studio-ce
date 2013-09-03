@@ -168,5 +168,12 @@
             order="2">
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="context.xml"
+            plugin="com.essiembre.eclipse.i18n.resourcebundle">
+      </contexts>
+   </extension>
    
 </plugin>

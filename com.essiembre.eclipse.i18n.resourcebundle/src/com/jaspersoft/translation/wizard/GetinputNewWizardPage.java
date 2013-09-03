@@ -28,7 +28,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -53,7 +52,7 @@ import com.jaspersoft.translation.resources.IResourcesInput;
  * @author Orlandin Marco
  *
  */
-public class GetinputNewWizardPage extends WizardPage {
+public class GetinputNewWizardPage extends HelpWizardPage {
 
 	/**
 	 * A treeview where all the resource available are shown, they are divided
@@ -96,6 +95,8 @@ public class GetinputNewWizardPage extends WizardPage {
 	 */
 	private static List<IResourcesInput> loadedElementsList = null;
 	
+	private final static String HELP_ID = "com.essiembre.eclipse.i18n.resourcebundle.newResourceHelp";
+	
 	/**
 	 * View content provider for the tree
 	 * 
@@ -120,8 +121,7 @@ public class GetinputNewWizardPage extends WizardPage {
 			if (parentElement instanceof Collection)
 				return ((Collection<?>) parentElement).toArray();
 			else
-				return ((IResourcesInput) parentElement).getResourcesElements()
-						.toArray();
+				return ((IResourcesInput) parentElement).getResourcesElements().toArray();
 		}
 
 		@Override
@@ -251,8 +251,19 @@ public class GetinputNewWizardPage extends WizardPage {
 			if (resource.getPackageName() != null) packageLbl.setText(resource.getPackageName());
 			else packageLbl.setText(RBEPlugin.getString("resource.wiz.information.noPackage"));
 			parentControl.layout(true,true);
-		}
+			getHelpData(item.getParentItem().getData());
+		} else getHelpData(item.getData());
 		setPageComplete(canFlipToNextPage());
+	}
+	
+	private void getHelpData(Object item){
+		if (getSelectedElements().length == 0){
+			setContextName(HELP_ID);
+		} else if (item instanceof IResourcesInput){
+			String heldId = ((IResourcesInput)item).getContextId();
+			if (heldId != null) setContextName(heldId);
+			else setContextName(HELP_ID);
+		}
 	}
 
 	/**
@@ -328,6 +339,11 @@ public class GetinputNewWizardPage extends WizardPage {
 	@Override
 	public boolean canFlipToNextPage() {
 		return (getSelectedElements().length>0);
+	}
+
+	@Override
+	protected String getContextName() {
+		return HELP_ID;
 	}
 
 }

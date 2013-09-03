@@ -64,4 +64,9 @@ public final class ResourcePublisher implements IResourcesInput{
 		return propertiesCache;
 	}
 
+	@Override
+	public String getContextId() {
+		return null;
+	}
+
 }

@@ -31,7 +31,6 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -49,6 +48,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.ui.widgets.LocaleSelector;
+import com.jaspersoft.translation.wizard.HelpWizardPage;
 
 /**
  * The "New" wizard page allows setting the container for the new bundle group
@@ -58,7 +58,7 @@ import com.essiembre.eclipse.rbe.ui.widgets.LocaleSelector;
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: essiembre $ $Revision: 1.4 $ $Date: 2005/12/07 03:35:54 $
  */
-public class ResourceBundleNewWizardPage extends WizardPage {
+public class ResourceBundleNewWizardPage extends HelpWizardPage {
 
 	public static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
 			+ RBEPlugin.getString("editor.default") //$NON-NLS-1$
@@ -401,5 +401,10 @@ public class ResourceBundleNewWizardPage extends WizardPage {
 			return selectedLocale.toString();
 		}
 		return DEFAULT_LOCALE;
+	}
+
+	@Override
+	protected String getContextName() {
+		return null;
 	}
 }
