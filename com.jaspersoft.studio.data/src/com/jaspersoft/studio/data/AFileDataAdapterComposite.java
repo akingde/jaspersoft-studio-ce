@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.data;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -33,7 +34,8 @@ import com.jaspersoft.studio.data.messages.Messages;
 public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	protected Text textFileName;
 
-	public AFileDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
+	public AFileDataAdapterComposite(Composite parent, int style,
+			JasperReportsContext jrContext) {
 		super(parent, style, jrContext);
 	}
 
@@ -47,7 +49,8 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 		textFileName.setLayoutData(gd);
 
 		Button btnBrowse = new Button(parent, SWT.NONE);
-		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
 		btnBrowse.setText(Messages.XLSXDataAdapterComposite_1);
@@ -60,20 +63,26 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				FileDialog fd = new FileDialog(Display.getDefault()
+						.getActiveShell());
 				fd.setFileName(textFileName.getText());
 				fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null) {
-					IFile contextfile = (IFile) getJrContext().getValue(FileUtils.KEY_FILE);
+					IFile contextfile = (IFile) getJrContext().getValue(
+							FileUtils.KEY_FILE);
 
-					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-					try {
-						IFile[] resource = root.findFilesForLocationURI(new URI("file://" + selection));
-						if (contextfile != null && resource != null && resource.length > 0 && contextfile.getProject().equals(resource[0].getProject()))
-							selection = resource[0].getProjectRelativePath().toOSString();
-					} catch (URISyntaxException e1) {
-					}
+					IWorkspaceRoot root = ResourcesPlugin.getWorkspace()
+							.getRoot();
+					IFile[] resource = root.findFilesForLocationURI(new File(
+							selection).toURI());
+					if (contextfile != null
+							&& resource != null
+							&& resource.length > 0
+							&& contextfile.getProject().equals(
+									resource[0].getProject()))
+						selection = resource[0].getProjectRelativePath()
+								.toOSString();
 					textFileName.setText(selection);
 				}
 			}
@@ -83,8 +92,13 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 	protected abstract String[] getFileExtensions();
 
 	protected void doBindFileNameWidget(DataAdapter dataAdapter) {
-		Binding binding = bindingContext.bindValue(SWTObservables.observeText(textFileName, SWT.Modify), PojoObservables.observeValue(dataAdapter, "fileName"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyFileValidator(getJrContext())), null);
-		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
+		Binding binding = bindingContext.bindValue(SWTObservables.observeText(
+				textFileName, SWT.Modify), PojoObservables.observeValue(
+				dataAdapter, "fileName"), //$NON-NLS-1$
+				new UpdateValueStrategy()
+						.setAfterConvertValidator(new NotEmptyFileValidator(
+								getJrContext())), null);
+		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null,
+				new ControlDecorationUpdater());
 	}
 }
