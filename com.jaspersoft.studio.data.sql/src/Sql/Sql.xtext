@@ -109,15 +109,21 @@ OperandFragment returns Operand:
 OperandGroup returns OpGroup:
 	{OpGroup} '(' op=Operand ')';
 
-OperandFunction returns OperandFunction:
-	fname=ID args=OperandFunctionArguments;
+OperandFunction returns OpFunction:
+	{OpFunction} fname=FNAME args=OpFunctionArg ')';
 
-OperandFunctionArguments returns OperandFunctionArguments:
-	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
+OpFunctionArg:
+	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
 
-OperandFunctionArgs:
-	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
+terminal FNAME:
+	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' |
+	'0'..'9')* '(';
 
+	//OperandFunctionArguments returns OperandFunctionArguments:
+//	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
+
+//OperandFunctionArgs:
+//	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
 XOperandFragment returns Operand:
 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 
@@ -144,11 +150,10 @@ enum JoinType:
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
 terminal DBID:
-	(('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*)
-	| ('\'' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '\'')
-	| ('"' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '"')
-	| ('`' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '`')
-	| ('[' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ']');
+	(('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*) | ('\'' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' |
+	'A'..'Z' | '_' | '0'..'9')* '\'') | ('"' ('a'..'z' | 'A'..'Z' |
+	'_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '"') | ('`' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' |
+	'A'..'Z' | '_' | '0'..'9')* '`') | ('[' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ']');
 
 terminal STAR:
 	"*";

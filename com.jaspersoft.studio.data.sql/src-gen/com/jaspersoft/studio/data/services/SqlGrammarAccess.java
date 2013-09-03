@@ -1420,77 +1420,77 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class OperandFunctionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OperandFunction");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cOperandFunctionArgumentsAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cOpFunctionAction_0 = (Action)cGroup.eContents().get(0);
 		private final Assignment cFnameAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cFnameFSTARTTerminalRuleCall_1_0 = (RuleCall)cFnameAssignment_1.eContents().get(0);
-		private final Assignment cArgAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cArgOperandFunctionArgsParserRuleCall_2_0 = (RuleCall)cArgAssignment_2.eContents().get(0);
+		private final RuleCall cFnameFNAMETerminalRuleCall_1_0 = (RuleCall)cFnameAssignment_1.eContents().get(0);
+		private final Assignment cArgsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cArgsOpFunctionArgParserRuleCall_2_0 = (RuleCall)cArgsAssignment_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
-		//OperandFunction:
-		//	{OperandFunctionArguments} fname=FSTART arg=OperandFunctionArgs ")";
+		//OperandFunction returns OpFunction:
+		//	{OpFunction} fname=FNAME args=OpFunctionArg ")";
 		public ParserRule getRule() { return rule; }
 
-		//{OperandFunctionArguments} fname=FSTART arg=OperandFunctionArgs ")"
+		//{OpFunction} fname=FNAME args=OpFunctionArg ")"
 		public Group getGroup() { return cGroup; }
 
-		//{OperandFunctionArguments}
-		public Action getOperandFunctionArgumentsAction_0() { return cOperandFunctionArgumentsAction_0; }
+		//{OpFunction}
+		public Action getOpFunctionAction_0() { return cOpFunctionAction_0; }
 
-		//fname=FSTART
+		//fname=FNAME
 		public Assignment getFnameAssignment_1() { return cFnameAssignment_1; }
 
-		//FSTART
-		public RuleCall getFnameFSTARTTerminalRuleCall_1_0() { return cFnameFSTARTTerminalRuleCall_1_0; }
+		//FNAME
+		public RuleCall getFnameFNAMETerminalRuleCall_1_0() { return cFnameFNAMETerminalRuleCall_1_0; }
 
-		//arg=OperandFunctionArgs
-		public Assignment getArgAssignment_2() { return cArgAssignment_2; }
+		//args=OpFunctionArg
+		public Assignment getArgsAssignment_2() { return cArgsAssignment_2; }
 
-		//OperandFunctionArgs
-		public RuleCall getArgOperandFunctionArgsParserRuleCall_2_0() { return cArgOperandFunctionArgsParserRuleCall_2_0; }
+		//OpFunctionArg
+		public RuleCall getArgsOpFunctionArgParserRuleCall_2_0() { return cArgsOpFunctionArgParserRuleCall_2_0; }
 
 		//")"
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 	}
 
-	public class OperandFunctionArgsElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OperandFunctionArgs");
+	public class OpFunctionArgElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OpFunctionArg");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cOperandFragmentParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final RuleCall cOperandParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Action cArgListEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Action cOpFListEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
 		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
 		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
-		private final RuleCall cEntriesOperandFragmentParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		private final RuleCall cEntriesOperandParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
 		
-		//OperandFunctionArgs:
-		//	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
+		//OpFunctionArg:
+		//	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
 		public ParserRule getRule() { return rule; }
 
-		//OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?
+		//Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?
 		public Group getGroup() { return cGroup; }
 
-		//OperandFragment
-		public RuleCall getOperandFragmentParserRuleCall_0() { return cOperandFragmentParserRuleCall_0; }
+		//Operand
+		public RuleCall getOperandParserRuleCall_0() { return cOperandParserRuleCall_0; }
 
-		//({ArgList.entries+=current} ("," entries+=OperandFragment)+)?
+		//({OpFList.entries+=current} ("," entries+=Operand)+)?
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{ArgList.entries+=current}
-		public Action getArgListEntriesAction_1_0() { return cArgListEntriesAction_1_0; }
+		//{OpFList.entries+=current}
+		public Action getOpFListEntriesAction_1_0() { return cOpFListEntriesAction_1_0; }
 
-		//("," entries+=OperandFragment)+
+		//("," entries+=Operand)+
 		public Group getGroup_1_1() { return cGroup_1_1; }
 
 		//","
 		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
 
-		//entries+=OperandFragment
+		//entries+=Operand
 		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
 
-		//OperandFragment
-		public RuleCall getEntriesOperandFragmentParserRuleCall_1_1_1_0() { return cEntriesOperandFragmentParserRuleCall_1_1_1_0; }
+		//Operand
+		public RuleCall getEntriesOperandParserRuleCall_1_1_1_0() { return cEntriesOperandParserRuleCall_1_1_1_0; }
 	}
 
 	public class XOperandFragmentElements extends AbstractParserRuleElementFinder {
@@ -1503,6 +1503,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cScalarAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cScalarScalarOperandParserRuleCall_2_0 = (RuleCall)cScalarAssignment_2.eContents().get(0);
 		
+		////OperandFunctionArguments returns OperandFunctionArguments:
+		////	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
+		////OperandFunctionArgs:
+		////	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
 		//XOperandFragment returns Operand:
 		//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 		public ParserRule getRule() { return rule; }
@@ -1921,8 +1925,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private OperandFragmentElements pOperandFragment;
 	private OperandGroupElements pOperandGroup;
 	private OperandFunctionElements pOperandFunction;
-	private TerminalRule tFSTART;
-	private OperandFunctionArgsElements pOperandFunctionArgs;
+	private OpFunctionArgElements pOpFunctionArg;
+	private TerminalRule tFNAME;
 	private XOperandFragmentElements pXOperandFragment;
 	private ParameterOperandElements pParameterOperand;
 	private ExclamationParameterOperandElements pExclamationParameterOperand;
@@ -2320,8 +2324,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getOperandGroupAccess().getRule();
 	}
 
-	//OperandFunction:
-	//	{OperandFunctionArguments} fname=FSTART arg=OperandFunctionArgs ")";
+	//OperandFunction returns OpFunction:
+	//	{OpFunction} fname=FNAME args=OpFunctionArg ")";
 	public OperandFunctionElements getOperandFunctionAccess() {
 		return (pOperandFunction != null) ? pOperandFunction : (pOperandFunction = new OperandFunctionElements());
 	}
@@ -2330,22 +2334,26 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getOperandFunctionAccess().getRule();
 	}
 
-	//terminal FSTART:
-	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")* "(";
-	public TerminalRule getFSTARTRule() {
-		return (tFSTART != null) ? tFSTART : (tFSTART = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "FSTART"));
-	} 
-
-	//OperandFunctionArgs:
-	//	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
-	public OperandFunctionArgsElements getOperandFunctionArgsAccess() {
-		return (pOperandFunctionArgs != null) ? pOperandFunctionArgs : (pOperandFunctionArgs = new OperandFunctionArgsElements());
+	//OpFunctionArg:
+	//	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
+	public OpFunctionArgElements getOpFunctionArgAccess() {
+		return (pOpFunctionArg != null) ? pOpFunctionArg : (pOpFunctionArg = new OpFunctionArgElements());
 	}
 	
-	public ParserRule getOperandFunctionArgsRule() {
-		return getOperandFunctionArgsAccess().getRule();
+	public ParserRule getOpFunctionArgRule() {
+		return getOpFunctionArgAccess().getRule();
 	}
 
+	//terminal FNAME:
+	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")* "(";
+	public TerminalRule getFNAMERule() {
+		return (tFNAME != null) ? tFNAME : (tFNAME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "FNAME"));
+	} 
+
+	////OperandFunctionArguments returns OperandFunctionArguments:
+	////	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
+	////OperandFunctionArgs:
+	////	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
 	//XOperandFragment returns Operand:
 	//	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 	public XOperandFragmentElements getXOperandFragmentAccess() {

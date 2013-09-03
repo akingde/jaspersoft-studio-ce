@@ -2560,14 +2560,14 @@ ruleOperandFunction returns [EObject current=null]
 ((
     {
         $current = forceCreateModelElement(
-            grammarAccess.getOperandFunctionAccess().getOperandFunctionArgumentsAction_0(),
+            grammarAccess.getOperandFunctionAccess().getOpFunctionAction_0(),
             $current);
     }
 )(
 (
-		lv_fname_1_0=RULE_FSTART
+		lv_fname_1_0=RULE_FNAME
 		{
-			newLeafNode(lv_fname_1_0, grammarAccess.getOperandFunctionAccess().getFnameFSTARTTerminalRuleCall_1_0()); 
+			newLeafNode(lv_fname_1_0, grammarAccess.getOperandFunctionAccess().getFnameFNAMETerminalRuleCall_1_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -2577,24 +2577,24 @@ ruleOperandFunction returns [EObject current=null]
        			$current, 
        			"fname",
         		lv_fname_1_0, 
-        		"FSTART");
+        		"FNAME");
 	    }
 
 )
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOperandFunctionAccess().getArgOperandFunctionArgsParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getOperandFunctionAccess().getArgsOpFunctionArgParserRuleCall_2_0()); 
 	    }
-		lv_arg_2_0=ruleOperandFunctionArgs		{
+		lv_args_2_0=ruleOpFunctionArg		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getOperandFunctionRule());
 	        }
        		set(
        			$current, 
-       			"arg",
-        		lv_arg_2_0, 
-        		"OperandFunctionArgs");
+       			"args",
+        		lv_args_2_0, 
+        		"OpFunctionArg");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2611,54 +2611,54 @@ ruleOperandFunction returns [EObject current=null]
 
 
 
-// Entry rule entryRuleOperandFunctionArgs
-entryRuleOperandFunctionArgs returns [EObject current=null]
+// Entry rule entryRuleOpFunctionArg
+entryRuleOpFunctionArg returns [EObject current=null]
 	:
-	{ newCompositeNode(grammarAccess.getOperandFunctionArgsRule()); }
-	 iv_ruleOperandFunctionArgs=ruleOperandFunctionArgs 
-	 { $current=$iv_ruleOperandFunctionArgs.current; } 
+	{ newCompositeNode(grammarAccess.getOpFunctionArgRule()); }
+	 iv_ruleOpFunctionArg=ruleOpFunctionArg 
+	 { $current=$iv_ruleOpFunctionArg.current; } 
 	 EOF 
 ;
 
-// Rule OperandFunctionArgs
-ruleOperandFunctionArgs returns [EObject current=null] 
+// Rule OpFunctionArg
+ruleOpFunctionArg returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
 (
     { 
-        newCompositeNode(grammarAccess.getOperandFunctionArgsAccess().getOperandFragmentParserRuleCall_0()); 
+        newCompositeNode(grammarAccess.getOpFunctionArgAccess().getOperandParserRuleCall_0()); 
     }
-    this_OperandFragment_0=ruleOperandFragment
+    this_Operand_0=ruleOperand
     {
-        $current = $this_OperandFragment_0.current;
+        $current = $this_Operand_0.current;
         afterParserOrEnumRuleCall();
     }
 ((
     {
         $current = forceCreateModelElementAndAdd(
-            grammarAccess.getOperandFunctionArgsAccess().getArgListEntriesAction_1_0(),
+            grammarAccess.getOpFunctionArgAccess().getOpFListEntriesAction_1_0(),
             $current);
     }
 )(
 	otherlv_2=KEYWORD_4
     {
-    	newLeafNode(otherlv_2, grammarAccess.getOperandFunctionArgsAccess().getCommaKeyword_1_1_0());
+    	newLeafNode(otherlv_2, grammarAccess.getOpFunctionArgAccess().getCommaKeyword_1_1_0());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOperandFunctionArgsAccess().getEntriesOperandFragmentParserRuleCall_1_1_1_0()); 
+	        newCompositeNode(grammarAccess.getOpFunctionArgAccess().getEntriesOperandParserRuleCall_1_1_1_0()); 
 	    }
-		lv_entries_3_0=ruleOperandFragment		{
+		lv_entries_3_0=ruleOperand		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getOperandFunctionArgsRule());
+	            $current = createModelElementForParent(grammarAccess.getOpFunctionArgRule());
 	        }
        		add(
        			$current, 
        			"entries",
         		lv_entries_3_0, 
-        		"OperandFragment");
+        		"Operand");
 	        afterParserOrEnumRuleCall();
 	    }
 

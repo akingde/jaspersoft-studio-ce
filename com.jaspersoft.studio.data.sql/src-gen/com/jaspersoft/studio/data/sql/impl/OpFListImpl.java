@@ -2,30 +2,28 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.OperandFunctionArgs;
+import com.jaspersoft.studio.data.sql.OpFList;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Operand Function Args</b></em>'.
+ * An implementation of the model object '<em><b>Op FList</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
-public class OperandFunctionArgsImpl extends MinimalEObjectImpl.Container implements OperandFunctionArgs
+public class OpFListImpl extends OpFunctionArgImpl implements OpFList
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected OperandFunctionArgsImpl()
+  protected OpFListImpl()
   {
     super();
   }
@@ -38,7 +36,7 @@ public class OperandFunctionArgsImpl extends MinimalEObjectImpl.Container implem
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.OPERAND_FUNCTION_ARGS;
+    return SqlPackage.Literals.OP_FLIST;
   }
 
-} //OperandFunctionArgsImpl
+} //OpFListImpl

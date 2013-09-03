@@ -281,6 +281,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         Operands operands = (Operands)theEObject;
         T result = caseOperands(operands);
+        if (result == null) result = caseOpFunctionArg(operands);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -290,7 +291,7 @@ public class SqlSwitch<T> extends Switch<T>
         T result = caseOperand(operand);
         if (result == null) result = caseOperandList(operand);
         if (result == null) result = caseOperands(operand);
-        if (result == null) result = caseOperandFunctionArgs(operand);
+        if (result == null) result = caseOpFunctionArg(operand);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -301,17 +302,17 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OPERAND_FUNCTION:
+      case SqlPackage.OP_FUNCTION:
       {
-        OperandFunction operandFunction = (OperandFunction)theEObject;
-        T result = caseOperandFunction(operandFunction);
+        OpFunction opFunction = (OpFunction)theEObject;
+        T result = caseOpFunction(opFunction);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OPERAND_FUNCTION_ARGS:
+      case SqlPackage.OP_FUNCTION_ARG:
       {
-        OperandFunctionArgs operandFunctionArgs = (OperandFunctionArgs)theEObject;
-        T result = caseOperandFunctionArgs(operandFunctionArgs);
+        OpFunctionArg opFunctionArg = (OpFunctionArg)theEObject;
+        T result = caseOpFunctionArg(opFunctionArg);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -374,19 +375,11 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS:
+      case SqlPackage.OP_FLIST:
       {
-        OperandFunctionArguments operandFunctionArguments = (OperandFunctionArguments)theEObject;
-        T result = caseOperandFunctionArguments(operandFunctionArguments);
-        if (result == null) result = caseOperandFunction(operandFunctionArguments);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case SqlPackage.ARG_LIST:
-      {
-        ArgList argList = (ArgList)theEObject;
-        T result = caseArgList(argList);
-        if (result == null) result = caseOperandFunctionArgs(argList);
+        OpFList opFList = (OpFList)theEObject;
+        T result = caseOpFList(opFList);
+        if (result == null) result = caseOpFunctionArg(opFList);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -891,33 +884,33 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Operand Function</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Op Function</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Operand Function</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Op Function</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseOperandFunction(OperandFunction object)
+  public T caseOpFunction(OpFunction object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Operand Function Args</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Op Function Arg</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Operand Function Args</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Op Function Arg</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseOperandFunctionArgs(OperandFunctionArgs object)
+  public T caseOpFunctionArg(OpFunctionArg object)
   {
     return null;
   }
@@ -1051,33 +1044,17 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Operand Function Arguments</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Op FList</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Operand Function Arguments</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Op FList</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseOperandFunctionArguments(OperandFunctionArguments object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Arg List</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Arg List</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseArgList(ArgList object)
+  public T caseOpFList(OpFList object)
   {
     return null;
   }

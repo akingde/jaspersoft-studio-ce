@@ -142,9 +142,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//InOper/opList"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OperandList"/>
-    <genClasses ecoreClass="Sql.ecore#//Operands">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operands/entries"/>
-    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//Operands"/>
     <genClasses ecoreClass="Sql.ecore#//Operand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/column"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/xop"/>
@@ -157,8 +155,13 @@
     <genClasses ecoreClass="Sql.ecore#//OpGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpGroup/op"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OperandFunction"/>
-    <genClasses ecoreClass="Sql.ecore#//OperandFunctionArgs"/>
+    <genClasses ecoreClass="Sql.ecore#//OpFunction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunction/fname"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OpFunctionArg">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunctionArg/entries"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//POperand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//POperand/prm"/>
     </genClasses>
@@ -188,12 +191,6 @@
     <genClasses ecoreClass="Sql.ecore#//OpList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpList/entries"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OperandFunctionArguments">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OperandFunctionArguments/fname"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OperandFunctionArguments/arg"/>
-    </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//ArgList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ArgList/entries"/>
-    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OpFList"/>
   </genPackages>
 </genmodel:GenModel>

@@ -707,24 +707,45 @@
     </rules>
     <rules xsi:type="xtext:ParserRule" name="OperandFunction">
       <type metamodel="/0/@metamodelDeclarations.1">
-        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OperandFunction"/>
+        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OpFunction"/>
       </type>
       <alternatives xsi:type="xtext:Group">
         <elements xsi:type="xtext:Action">
           <type metamodel="/0/@metamodelDeclarations.1">
-            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OperandFunctionArguments"/>
+            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OpFunction"/>
           </type>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="fname" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.35"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="arg" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.36"/>
+        </elements>
+        <elements xsi:type="xtext:Assignment" feature="args" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.35"/>
         </elements>
         <elements xsi:type="xtext:Keyword" value=")"/>
       </alternatives>
     </rules>
-    <rules xsi:type="xtext:TerminalRule" name="FSTART">
+    <rules xsi:type="xtext:ParserRule" name="OpFunctionArg">
+      <type metamodel="/0/@metamodelDeclarations.1">
+        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OpFunctionArg"/>
+      </type>
+      <alternatives xsi:type="xtext:Group">
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.31"/>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Action" feature="entries" operator="+=">
+            <type metamodel="/0/@metamodelDeclarations.1">
+              <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OpFList"/>
+            </type>
+          </elements>
+          <elements xsi:type="xtext:Group" cardinality="+">
+            <elements xsi:type="xtext:Keyword" value=","/>
+            <elements xsi:type="xtext:Assignment" feature="entries" operator="+=">
+              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.31"/>
+            </elements>
+          </elements>
+        </elements>
+      </alternatives>
+    </rules>
+    <rules xsi:type="xtext:TerminalRule" name="FNAME">
       <type metamodel="/0/@metamodelDeclarations.0">
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
@@ -756,27 +777,6 @@
           </elements>
         </elements>
         <elements xsi:type="xtext:Keyword" value="("/>
-      </alternatives>
-    </rules>
-    <rules xsi:type="xtext:ParserRule" name="OperandFunctionArgs">
-      <type metamodel="/0/@metamodelDeclarations.1">
-        <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OperandFunctionArgs"/>
-      </type>
-      <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.32"/>
-        <elements xsi:type="xtext:Group" cardinality="?">
-          <elements xsi:type="xtext:Action" feature="entries" operator="+=">
-            <type metamodel="/0/@metamodelDeclarations.1">
-              <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//ArgList"/>
-            </type>
-          </elements>
-          <elements xsi:type="xtext:Group" cardinality="+">
-            <elements xsi:type="xtext:Keyword" value=","/>
-            <elements xsi:type="xtext:Assignment" feature="entries" operator="+=">
-              <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.32"/>
-            </elements>
-          </elements>
-        </elements>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="XOperandFragment">

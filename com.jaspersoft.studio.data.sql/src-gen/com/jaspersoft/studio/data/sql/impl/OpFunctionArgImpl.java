@@ -2,8 +2,8 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.ArgList;
-import com.jaspersoft.studio.data.sql.Operand;
+import com.jaspersoft.studio.data.sql.OpFunctionArg;
+import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import java.util.Collection;
@@ -15,23 +15,25 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Arg List</b></em>'.
+ * An implementation of the model object '<em><b>Op Function Arg</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.ArgListImpl#getEntries <em>Entries</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionArgImpl#getEntries <em>Entries</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
+public class OpFunctionArgImpl extends MinimalEObjectImpl.Container implements OpFunctionArg
 {
   /**
    * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.
@@ -41,14 +43,14 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
    * @generated
    * @ordered
    */
-  protected EList<Operand> entries;
+  protected EList<Operands> entries;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ArgListImpl()
+  protected OpFunctionArgImpl()
   {
     super();
   }
@@ -61,7 +63,7 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.ARG_LIST;
+    return SqlPackage.Literals.OP_FUNCTION_ARG;
   }
 
   /**
@@ -69,11 +71,11 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Operand> getEntries()
+  public EList<Operands> getEntries()
   {
     if (entries == null)
     {
-      entries = new EObjectContainmentEList<Operand>(Operand.class, this, SqlPackage.ARG_LIST__ENTRIES);
+      entries = new EObjectContainmentEList<Operands>(Operands.class, this, SqlPackage.OP_FUNCTION_ARG__ENTRIES);
     }
     return entries;
   }
@@ -88,7 +90,7 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
   {
     switch (featureID)
     {
-      case SqlPackage.ARG_LIST__ENTRIES:
+      case SqlPackage.OP_FUNCTION_ARG__ENTRIES:
         return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -104,7 +106,7 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
   {
     switch (featureID)
     {
-      case SqlPackage.ARG_LIST__ENTRIES:
+      case SqlPackage.OP_FUNCTION_ARG__ENTRIES:
         return getEntries();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -121,9 +123,9 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
   {
     switch (featureID)
     {
-      case SqlPackage.ARG_LIST__ENTRIES:
+      case SqlPackage.OP_FUNCTION_ARG__ENTRIES:
         getEntries().clear();
-        getEntries().addAll((Collection<? extends Operand>)newValue);
+        getEntries().addAll((Collection<? extends Operands>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -139,7 +141,7 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
   {
     switch (featureID)
     {
-      case SqlPackage.ARG_LIST__ENTRIES:
+      case SqlPackage.OP_FUNCTION_ARG__ENTRIES:
         getEntries().clear();
         return;
     }
@@ -156,10 +158,10 @@ public class ArgListImpl extends OperandFunctionArgsImpl implements ArgList
   {
     switch (featureID)
     {
-      case SqlPackage.ARG_LIST__ENTRIES:
+      case SqlPackage.OP_FUNCTION_ARG__ENTRIES:
         return entries != null && !entries.isEmpty();
     }
     return super.eIsSet(featureID);
   }
 
-} //ArgListImpl
+} //OpFunctionArgImpl

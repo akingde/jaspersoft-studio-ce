@@ -1202,6 +1202,34 @@ public interface SqlPackage extends EPackage
   int OPERAND_LIST_FEATURE_COUNT = 0;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OpFunctionArgImpl <em>Op Function Arg</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.OpFunctionArgImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFunctionArg()
+   * @generated
+   */
+  int OP_FUNCTION_ARG = 32;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OP_FUNCTION_ARG__ENTRIES = 0;
+
+  /**
+   * The number of structural features of the '<em>Op Function Arg</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OP_FUNCTION_ARG_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OperandsImpl <em>Operands</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1218,7 +1246,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OPERANDS__ENTRIES = 0;
+  int OPERANDS__ENTRIES = OP_FUNCTION_ARG__ENTRIES;
 
   /**
    * The number of structural features of the '<em>Operands</em>' class.
@@ -1227,7 +1255,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OPERANDS_FEATURE_COUNT = 1;
+  int OPERANDS_FEATURE_COUNT = OP_FUNCTION_ARG_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OperandImpl <em>Operand</em>}' class.
@@ -1349,42 +1377,41 @@ public interface SqlPackage extends EPackage
   int OP_GROUP_FEATURE_COUNT = 1;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionImpl <em>Operand Function</em>}' class.
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl <em>Op Function</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.OperandFunctionImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandFunction()
+   * @see com.jaspersoft.studio.data.sql.impl.OpFunctionImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFunction()
    * @generated
    */
-  int OPERAND_FUNCTION = 31;
+  int OP_FUNCTION = 31;
 
   /**
-   * The number of structural features of the '<em>Operand Function</em>' class.
+   * The feature id for the '<em><b>Fname</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OPERAND_FUNCTION_FEATURE_COUNT = 0;
+  int OP_FUNCTION__FNAME = 0;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionArgsImpl <em>Operand Function Args</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.OperandFunctionArgsImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandFunctionArgs()
-   * @generated
-   */
-  int OPERAND_FUNCTION_ARGS = 32;
-
-  /**
-   * The number of structural features of the '<em>Operand Function Args</em>' class.
+   * The feature id for the '<em><b>Args</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OPERAND_FUNCTION_ARGS_FEATURE_COUNT = 0;
+  int OP_FUNCTION__ARGS = 1;
+
+  /**
+   * The number of structural features of the '<em>Op Function</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OP_FUNCTION_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.POperandImpl <em>POperand</em>}' class.
@@ -1656,51 +1683,14 @@ public interface SqlPackage extends EPackage
   int OP_LIST_FEATURE_COUNT = OPERAND_LIST_FEATURE_COUNT + 1;
 
   /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionArgumentsImpl <em>Operand Function Arguments</em>}' class.
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OpFListImpl <em>Op FList</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.OperandFunctionArgumentsImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandFunctionArguments()
+   * @see com.jaspersoft.studio.data.sql.impl.OpFListImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFList()
    * @generated
    */
-  int OPERAND_FUNCTION_ARGUMENTS = 41;
-
-  /**
-   * The feature id for the '<em><b>Fname</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OPERAND_FUNCTION_ARGUMENTS__FNAME = OPERAND_FUNCTION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Arg</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OPERAND_FUNCTION_ARGUMENTS__ARG = OPERAND_FUNCTION_FEATURE_COUNT + 1;
-
-  /**
-   * The number of structural features of the '<em>Operand Function Arguments</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int OPERAND_FUNCTION_ARGUMENTS_FEATURE_COUNT = OPERAND_FUNCTION_FEATURE_COUNT + 2;
-
-  /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ArgListImpl <em>Arg List</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.impl.ArgListImpl
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getArgList()
-   * @generated
-   */
-  int ARG_LIST = 42;
+  int OP_FLIST = 41;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1709,16 +1699,16 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ARG_LIST__ENTRIES = OPERAND_FUNCTION_ARGS_FEATURE_COUNT + 0;
+  int OP_FLIST__ENTRIES = OP_FUNCTION_ARG__ENTRIES;
 
   /**
-   * The number of structural features of the '<em>Arg List</em>' class.
+   * The number of structural features of the '<em>Op FList</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ARG_LIST_FEATURE_COUNT = OPERAND_FUNCTION_ARGS_FEATURE_COUNT + 1;
+  int OP_FLIST_FEATURE_COUNT = OP_FUNCTION_ARG_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.
@@ -1728,7 +1718,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getXFunction()
    * @generated
    */
-  int XFUNCTION = 43;
+  int XFUNCTION = 42;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.JoinType <em>Join Type</em>}' enum.
@@ -1738,7 +1728,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJoinType()
    * @generated
    */
-  int JOIN_TYPE = 44;
+  int JOIN_TYPE = 43;
 
 
   /**
@@ -2714,17 +2704,6 @@ public interface SqlPackage extends EPackage
   EClass getOperands();
 
   /**
-   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.Operands#getEntries <em>Entries</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Entries</em>'.
-   * @see com.jaspersoft.studio.data.sql.Operands#getEntries()
-   * @see #getOperands()
-   * @generated
-   */
-  EReference getOperands_Entries();
-
-  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Operand <em>Operand</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2833,24 +2812,57 @@ public interface SqlPackage extends EPackage
   EReference getOpGroup_Op();
 
   /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OperandFunction <em>Operand Function</em>}'.
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OpFunction <em>Op Function</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Operand Function</em>'.
-   * @see com.jaspersoft.studio.data.sql.OperandFunction
+   * @return the meta object for class '<em>Op Function</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFunction
    * @generated
    */
-  EClass getOperandFunction();
+  EClass getOpFunction();
 
   /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OperandFunctionArgs <em>Operand Function Args</em>}'.
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.OpFunction#getFname <em>Fname</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Operand Function Args</em>'.
-   * @see com.jaspersoft.studio.data.sql.OperandFunctionArgs
+   * @return the meta object for the attribute '<em>Fname</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFunction#getFname()
+   * @see #getOpFunction()
    * @generated
    */
-  EClass getOperandFunctionArgs();
+  EAttribute getOpFunction_Fname();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.OpFunction#getArgs <em>Args</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Args</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFunction#getArgs()
+   * @see #getOpFunction()
+   * @generated
+   */
+  EReference getOpFunction_Args();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OpFunctionArg <em>Op Function Arg</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Op Function Arg</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFunctionArg
+   * @generated
+   */
+  EClass getOpFunctionArg();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.OpFunctionArg#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFunctionArg#getEntries()
+   * @see #getOpFunctionArg()
+   * @generated
+   */
+  EReference getOpFunctionArg_Entries();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.POperand <em>POperand</em>}'.
@@ -3076,57 +3088,14 @@ public interface SqlPackage extends EPackage
   EReference getOpList_Entries();
 
   /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OperandFunctionArguments <em>Operand Function Arguments</em>}'.
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.OpFList <em>Op FList</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Operand Function Arguments</em>'.
-   * @see com.jaspersoft.studio.data.sql.OperandFunctionArguments
+   * @return the meta object for class '<em>Op FList</em>'.
+   * @see com.jaspersoft.studio.data.sql.OpFList
    * @generated
    */
-  EClass getOperandFunctionArguments();
-
-  /**
-   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.OperandFunctionArguments#getFname <em>Fname</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Fname</em>'.
-   * @see com.jaspersoft.studio.data.sql.OperandFunctionArguments#getFname()
-   * @see #getOperandFunctionArguments()
-   * @generated
-   */
-  EAttribute getOperandFunctionArguments_Fname();
-
-  /**
-   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.OperandFunctionArguments#getArg <em>Arg</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Arg</em>'.
-   * @see com.jaspersoft.studio.data.sql.OperandFunctionArguments#getArg()
-   * @see #getOperandFunctionArguments()
-   * @generated
-   */
-  EReference getOperandFunctionArguments_Arg();
-
-  /**
-   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.ArgList <em>Arg List</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Arg List</em>'.
-   * @see com.jaspersoft.studio.data.sql.ArgList
-   * @generated
-   */
-  EClass getArgList();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.ArgList#getEntries <em>Entries</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Entries</em>'.
-   * @see com.jaspersoft.studio.data.sql.ArgList#getEntries()
-   * @see #getArgList()
-   * @generated
-   */
-  EReference getArgList_Entries();
+  EClass getOpFList();
 
   /**
    * Returns the meta object for enum '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}'.
@@ -3958,14 +3927,6 @@ public interface SqlPackage extends EPackage
     EClass OPERANDS = eINSTANCE.getOperands();
 
     /**
-     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference OPERANDS__ENTRIES = eINSTANCE.getOperands_Entries();
-
-    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OperandImpl <em>Operand</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4050,24 +4011,48 @@ public interface SqlPackage extends EPackage
     EReference OP_GROUP__OP = eINSTANCE.getOpGroup_Op();
 
     /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionImpl <em>Operand Function</em>}' class.
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl <em>Op Function</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.OperandFunctionImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandFunction()
+     * @see com.jaspersoft.studio.data.sql.impl.OpFunctionImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFunction()
      * @generated
      */
-    EClass OPERAND_FUNCTION = eINSTANCE.getOperandFunction();
+    EClass OP_FUNCTION = eINSTANCE.getOpFunction();
 
     /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionArgsImpl <em>Operand Function Args</em>}' class.
+     * The meta object literal for the '<em><b>Fname</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.OperandFunctionArgsImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandFunctionArgs()
      * @generated
      */
-    EClass OPERAND_FUNCTION_ARGS = eINSTANCE.getOperandFunctionArgs();
+    EAttribute OP_FUNCTION__FNAME = eINSTANCE.getOpFunction_Fname();
+
+    /**
+     * The meta object literal for the '<em><b>Args</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OP_FUNCTION__ARGS = eINSTANCE.getOpFunction_Args();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OpFunctionArgImpl <em>Op Function Arg</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.OpFunctionArgImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFunctionArg()
+     * @generated
+     */
+    EClass OP_FUNCTION_ARG = eINSTANCE.getOpFunctionArg();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OP_FUNCTION_ARG__ENTRIES = eINSTANCE.getOpFunctionArg_Entries();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.POperandImpl <em>POperand</em>}' class.
@@ -4254,48 +4239,14 @@ public interface SqlPackage extends EPackage
     EReference OP_LIST__ENTRIES = eINSTANCE.getOpList_Entries();
 
     /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionArgumentsImpl <em>Operand Function Arguments</em>}' class.
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.OpFListImpl <em>Op FList</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.OperandFunctionArgumentsImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandFunctionArguments()
+     * @see com.jaspersoft.studio.data.sql.impl.OpFListImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFList()
      * @generated
      */
-    EClass OPERAND_FUNCTION_ARGUMENTS = eINSTANCE.getOperandFunctionArguments();
-
-    /**
-     * The meta object literal for the '<em><b>Fname</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute OPERAND_FUNCTION_ARGUMENTS__FNAME = eINSTANCE.getOperandFunctionArguments_Fname();
-
-    /**
-     * The meta object literal for the '<em><b>Arg</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference OPERAND_FUNCTION_ARGUMENTS__ARG = eINSTANCE.getOperandFunctionArguments_Arg();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ArgListImpl <em>Arg List</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.impl.ArgListImpl
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getArgList()
-     * @generated
-     */
-    EClass ARG_LIST = eINSTANCE.getArgList();
-
-    /**
-     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ARG_LIST__ENTRIES = eINSTANCE.getArgList_Entries();
+    EClass OP_FLIST = eINSTANCE.getOpFList();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.

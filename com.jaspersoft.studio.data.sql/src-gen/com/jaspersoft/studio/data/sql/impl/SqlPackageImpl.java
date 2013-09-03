@@ -2,7 +2,6 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.ArgList;
 import com.jaspersoft.studio.data.sql.Between;
 import com.jaspersoft.studio.data.sql.Col;
 import com.jaspersoft.studio.data.sql.ColumnFull;
@@ -21,12 +20,12 @@ import com.jaspersoft.studio.data.sql.JRParameter;
 import com.jaspersoft.studio.data.sql.JoinType;
 import com.jaspersoft.studio.data.sql.Like;
 import com.jaspersoft.studio.data.sql.Model;
+import com.jaspersoft.studio.data.sql.OpFList;
+import com.jaspersoft.studio.data.sql.OpFunction;
+import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.OpGroup;
 import com.jaspersoft.studio.data.sql.OpList;
 import com.jaspersoft.studio.data.sql.Operand;
-import com.jaspersoft.studio.data.sql.OperandFunction;
-import com.jaspersoft.studio.data.sql.OperandFunctionArgs;
-import com.jaspersoft.studio.data.sql.OperandFunctionArguments;
 import com.jaspersoft.studio.data.sql.OperandList;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.OrColumn;
@@ -288,14 +287,14 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass operandFunctionEClass = null;
+  private EClass opFunctionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass operandFunctionArgsEClass = null;
+  private EClass opFunctionArgEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -358,14 +357,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass operandFunctionArgumentsEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass argListEClass = null;
+  private EClass opFListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1359,16 +1351,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getOperands_Entries()
-  {
-    return (EReference)operandsEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getOperand()
   {
     return operandEClass;
@@ -1469,9 +1451,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getOperandFunction()
+  public EClass getOpFunction()
   {
-    return operandFunctionEClass;
+    return opFunctionEClass;
   }
 
   /**
@@ -1479,9 +1461,39 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getOperandFunctionArgs()
+  public EAttribute getOpFunction_Fname()
   {
-    return operandFunctionArgsEClass;
+    return (EAttribute)opFunctionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOpFunction_Args()
+  {
+    return (EReference)opFunctionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOpFunctionArg()
+  {
+    return opFunctionArgEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOpFunctionArg_Entries()
+  {
+    return (EReference)opFunctionArgEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1699,49 +1711,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getOperandFunctionArguments()
+  public EClass getOpFList()
   {
-    return operandFunctionArgumentsEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getOperandFunctionArguments_Fname()
-  {
-    return (EAttribute)operandFunctionArgumentsEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getOperandFunctionArguments_Arg()
-  {
-    return (EReference)operandFunctionArgumentsEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getArgList()
-  {
-    return argListEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getArgList_Entries()
-  {
-    return (EReference)argListEClass.getEStructuralFeatures().get(0);
+    return opFListEClass;
   }
 
   /**
@@ -1913,7 +1885,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     operandListEClass = createEClass(OPERAND_LIST);
 
     operandsEClass = createEClass(OPERANDS);
-    createEReference(operandsEClass, OPERANDS__ENTRIES);
 
     operandEClass = createEClass(OPERAND);
     createEReference(operandEClass, OPERAND__COLUMN);
@@ -1927,9 +1898,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     opGroupEClass = createEClass(OP_GROUP);
     createEReference(opGroupEClass, OP_GROUP__OP);
 
-    operandFunctionEClass = createEClass(OPERAND_FUNCTION);
+    opFunctionEClass = createEClass(OP_FUNCTION);
+    createEAttribute(opFunctionEClass, OP_FUNCTION__FNAME);
+    createEReference(opFunctionEClass, OP_FUNCTION__ARGS);
 
-    operandFunctionArgsEClass = createEClass(OPERAND_FUNCTION_ARGS);
+    opFunctionArgEClass = createEClass(OP_FUNCTION_ARG);
+    createEReference(opFunctionArgEClass, OP_FUNCTION_ARG__ENTRIES);
 
     pOperandEClass = createEClass(POPERAND);
     createEAttribute(pOperandEClass, POPERAND__PRM);
@@ -1960,12 +1934,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     opListEClass = createEClass(OP_LIST);
     createEReference(opListEClass, OP_LIST__ENTRIES);
 
-    operandFunctionArgumentsEClass = createEClass(OPERAND_FUNCTION_ARGUMENTS);
-    createEAttribute(operandFunctionArgumentsEClass, OPERAND_FUNCTION_ARGUMENTS__FNAME);
-    createEReference(operandFunctionArgumentsEClass, OPERAND_FUNCTION_ARGUMENTS__ARG);
-
-    argListEClass = createEClass(ARG_LIST);
-    createEReference(argListEClass, ARG_LIST__ENTRIES);
+    opFListEClass = createEClass(OP_FLIST);
 
     // Create enums
     xFunctionEEnum = createEEnum(XFUNCTION);
@@ -2010,14 +1979,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     groupByColumnFullEClass.getESuperTypes().add(this.getOrGroupByColumn());
     fullExpressionEClass.getESuperTypes().add(this.getOrExpr());
     jrParameterEClass.getESuperTypes().add(this.getPrms());
+    operandsEClass.getESuperTypes().add(this.getOpFunctionArg());
     operandEClass.getESuperTypes().add(this.getOperandList());
     operandEClass.getESuperTypes().add(this.getOperands());
-    operandEClass.getESuperTypes().add(this.getOperandFunctionArgs());
     colEClass.getESuperTypes().add(this.getColumnFull());
     tblsEClass.getESuperTypes().add(this.getTableFull());
     opListEClass.getESuperTypes().add(this.getOperandList());
-    operandFunctionArgumentsEClass.getESuperTypes().add(this.getOperandFunction());
-    argListEClass.getESuperTypes().add(this.getOperandFunctionArgs());
+    opFListEClass.getESuperTypes().add(this.getOpFunctionArg());
 
     // Initialize classes and features; add operations and parameters
     initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2139,13 +2107,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(operandListEClass, OperandList.class, "OperandList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(operandsEClass, Operands.class, "Operands", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getOperands_Entries(), this.getOperand(), null, "entries", null, 0, -1, Operands.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(operandEClass, Operand.class, "Operand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOperand_Column(), this.getColumnOperand(), null, "column", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Xop(), this.getOperand(), null, "xop", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Subq(), this.getSubQueryOperand(), null, "subq", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getOperand_Func(), this.getOperandFunction(), null, "func", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOperand_Func(), this.getOpFunction(), null, "func", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Param(), this.getPOperand(), null, "param", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Eparam(), this.getExpOperand(), null, "eparam", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Scalar(), this.getScalarOperand(), null, "scalar", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2153,9 +2120,12 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(opGroupEClass, OpGroup.class, "OpGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOpGroup_Op(), this.getOperands(), null, "op", null, 0, 1, OpGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(operandFunctionEClass, OperandFunction.class, "OperandFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(opFunctionEClass, OpFunction.class, "OpFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getOpFunction_Fname(), ecorePackage.getEString(), "fname", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOpFunction_Args(), this.getOpFunctionArg(), null, "args", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(operandFunctionArgsEClass, OperandFunctionArgs.class, "OperandFunctionArgs", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(opFunctionArgEClass, OpFunctionArg.class, "OpFunctionArg", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOpFunctionArg_Entries(), this.getOperands(), null, "entries", null, 0, -1, OpFunctionArg.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pOperandEClass, POperand.class, "POperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getPOperand_Prm(), ecorePackage.getEString(), "prm", null, 0, 1, POperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2186,12 +2156,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(opListEClass, OpList.class, "OpList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOpList_Entries(), this.getOperand(), null, "entries", null, 0, -1, OpList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(operandFunctionArgumentsEClass, OperandFunctionArguments.class, "OperandFunctionArguments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getOperandFunctionArguments_Fname(), ecorePackage.getEString(), "fname", null, 0, 1, OperandFunctionArguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getOperandFunctionArguments_Arg(), this.getOperandFunctionArgs(), null, "arg", null, 0, 1, OperandFunctionArguments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(argListEClass, ArgList.class, "ArgList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getArgList_Entries(), this.getOperand(), null, "entries", null, 0, -1, ArgList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(opFListEClass, OpFList.class, "OpFList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     // Initialize enums and add enum literals
     initEEnum(xFunctionEEnum, XFunction.class, "XFunction");

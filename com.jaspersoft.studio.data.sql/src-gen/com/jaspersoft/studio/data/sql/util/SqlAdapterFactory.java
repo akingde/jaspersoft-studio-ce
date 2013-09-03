@@ -230,14 +230,14 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createOpGroupAdapter();
       }
       @Override
-      public Adapter caseOperandFunction(OperandFunction object)
+      public Adapter caseOpFunction(OpFunction object)
       {
-        return createOperandFunctionAdapter();
+        return createOpFunctionAdapter();
       }
       @Override
-      public Adapter caseOperandFunctionArgs(OperandFunctionArgs object)
+      public Adapter caseOpFunctionArg(OpFunctionArg object)
       {
-        return createOperandFunctionArgsAdapter();
+        return createOpFunctionArgAdapter();
       }
       @Override
       public Adapter casePOperand(POperand object)
@@ -280,14 +280,9 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createOpListAdapter();
       }
       @Override
-      public Adapter caseOperandFunctionArguments(OperandFunctionArguments object)
+      public Adapter caseOpFList(OpFList object)
       {
-        return createOperandFunctionArgumentsAdapter();
-      }
-      @Override
-      public Adapter caseArgList(ArgList object)
-      {
-        return createArgListAdapter();
+        return createOpFListAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -777,31 +772,31 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandFunction <em>Operand Function</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OpFunction <em>Op Function</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.OperandFunction
+   * @see com.jaspersoft.studio.data.sql.OpFunction
    * @generated
    */
-  public Adapter createOperandFunctionAdapter()
+  public Adapter createOpFunctionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandFunctionArgs <em>Operand Function Args</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OpFunctionArg <em>Op Function Arg</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.OperandFunctionArgs
+   * @see com.jaspersoft.studio.data.sql.OpFunctionArg
    * @generated
    */
-  public Adapter createOperandFunctionArgsAdapter()
+  public Adapter createOpFunctionArgAdapter()
   {
     return null;
   }
@@ -927,31 +922,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OperandFunctionArguments <em>Operand Function Arguments</em>}'.
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.OpFList <em>Op FList</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.OperandFunctionArguments
+   * @see com.jaspersoft.studio.data.sql.OpFList
    * @generated
    */
-  public Adapter createOperandFunctionArgumentsAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.ArgList <em>Arg List</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see com.jaspersoft.studio.data.sql.ArgList
-   * @generated
-   */
-  public Adapter createArgListAdapter()
+  public Adapter createOpFListAdapter()
   {
     return null;
   }

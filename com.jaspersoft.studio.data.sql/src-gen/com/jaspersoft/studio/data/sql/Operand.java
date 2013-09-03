@@ -25,7 +25,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface Operand extends OperandList, Operands, OperandFunctionArgs
+public interface Operand extends OperandList, Operands
 {
   /**
    * Returns the value of the '<em><b>Column</b></em>' containment reference.
@@ -114,12 +114,12 @@ public interface Operand extends OperandList, Operands, OperandFunctionArgs
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Func</em>' containment reference.
-   * @see #setFunc(OperandFunction)
+   * @see #setFunc(OpFunction)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Func()
    * @model containment="true"
    * @generated
    */
-  OperandFunction getFunc();
+  OpFunction getFunc();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getFunc <em>Func</em>}' containment reference.
@@ -129,7 +129,7 @@ public interface Operand extends OperandList, Operands, OperandFunctionArgs
    * @see #getFunc()
    * @generated
    */
-  void setFunc(OperandFunction value);
+  void setFunc(OpFunction value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.

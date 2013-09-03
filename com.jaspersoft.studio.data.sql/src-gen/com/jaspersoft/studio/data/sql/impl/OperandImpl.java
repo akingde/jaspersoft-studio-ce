@@ -4,9 +4,9 @@ package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ExpOperand;
+import com.jaspersoft.studio.data.sql.OpFunction;
+import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.Operand;
-import com.jaspersoft.studio.data.sql.OperandFunction;
-import com.jaspersoft.studio.data.sql.OperandFunctionArgs;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
@@ -58,7 +58,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * @generated
    * @ordered
    */
-  protected EList<Operand> entries;
+  protected EList<Operands> entries;
 
   /**
    * The cached value of the '{@link #getColumn() <em>Column</em>}' containment reference.
@@ -98,7 +98,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * @generated
    * @ordered
    */
-  protected OperandFunction func;
+  protected OpFunction func;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -156,11 +156,11 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Operand> getEntries()
+  public EList<Operands> getEntries()
   {
     if (entries == null)
     {
-      entries = new EObjectContainmentEList<Operand>(Operand.class, this, SqlPackage.OPERAND__ENTRIES);
+      entries = new EObjectContainmentEList<Operands>(Operands.class, this, SqlPackage.OPERAND__ENTRIES);
     }
     return entries;
   }
@@ -314,7 +314,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public OperandFunction getFunc()
+  public OpFunction getFunc()
   {
     return func;
   }
@@ -324,9 +324,9 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFunc(OperandFunction newFunc, NotificationChain msgs)
+  public NotificationChain basicSetFunc(OpFunction newFunc, NotificationChain msgs)
   {
-    OperandFunction oldFunc = func;
+    OpFunction oldFunc = func;
     func = newFunc;
     if (eNotificationRequired())
     {
@@ -341,7 +341,7 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFunc(OperandFunction newFunc)
+  public void setFunc(OpFunction newFunc)
   {
     if (newFunc != func)
     {
@@ -574,7 +574,7 @@ public class OperandImpl extends OperandListImpl implements Operand
     {
       case SqlPackage.OPERAND__ENTRIES:
         getEntries().clear();
-        getEntries().addAll((Collection<? extends Operand>)newValue);
+        getEntries().addAll((Collection<? extends Operands>)newValue);
         return;
       case SqlPackage.OPERAND__COLUMN:
         setColumn((ColumnOperand)newValue);
@@ -586,7 +586,7 @@ public class OperandImpl extends OperandListImpl implements Operand
         setSubq((SubQueryOperand)newValue);
         return;
       case SqlPackage.OPERAND__FUNC:
-        setFunc((OperandFunction)newValue);
+        setFunc((OpFunction)newValue);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)newValue);
@@ -624,7 +624,7 @@ public class OperandImpl extends OperandListImpl implements Operand
         setSubq((SubQueryOperand)null);
         return;
       case SqlPackage.OPERAND__FUNC:
-        setFunc((OperandFunction)null);
+        setFunc((OpFunction)null);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)null);
@@ -677,15 +677,15 @@ public class OperandImpl extends OperandListImpl implements Operand
   @Override
   public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass)
   {
-    if (baseClass == Operands.class)
+    if (baseClass == OpFunctionArg.class)
     {
       switch (derivedFeatureID)
       {
-        case SqlPackage.OPERAND__ENTRIES: return SqlPackage.OPERANDS__ENTRIES;
+        case SqlPackage.OPERAND__ENTRIES: return SqlPackage.OP_FUNCTION_ARG__ENTRIES;
         default: return -1;
       }
     }
-    if (baseClass == OperandFunctionArgs.class)
+    if (baseClass == Operands.class)
     {
       switch (derivedFeatureID)
       {
@@ -703,15 +703,15 @@ public class OperandImpl extends OperandListImpl implements Operand
   @Override
   public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass)
   {
-    if (baseClass == Operands.class)
+    if (baseClass == OpFunctionArg.class)
     {
       switch (baseFeatureID)
       {
-        case SqlPackage.OPERANDS__ENTRIES: return SqlPackage.OPERAND__ENTRIES;
+        case SqlPackage.OP_FUNCTION_ARG__ENTRIES: return SqlPackage.OPERAND__ENTRIES;
         default: return -1;
       }
     }
-    if (baseClass == OperandFunctionArgs.class)
+    if (baseClass == Operands.class)
     {
       switch (baseFeatureID)
       {

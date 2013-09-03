@@ -2,8 +2,8 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.OperandFunctionArgs;
-import com.jaspersoft.studio.data.sql.OperandFunctionArguments;
+import com.jaspersoft.studio.data.sql.OpFunction;
+import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -13,22 +13,23 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Operand Function Arguments</b></em>'.
+ * An implementation of the model object '<em><b>Op Function</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionArgumentsImpl#getFname <em>Fname</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandFunctionArgumentsImpl#getArg <em>Arg</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getFname <em>Fname</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl#getArgs <em>Args</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements OperandFunctionArguments
+public class OpFunctionImpl extends MinimalEObjectImpl.Container implements OpFunction
 {
   /**
    * The default value of the '{@link #getFname() <em>Fname</em>}' attribute.
@@ -51,21 +52,21 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   protected String fname = FNAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getArg() <em>Arg</em>}' containment reference.
+   * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getArg()
+   * @see #getArgs()
    * @generated
    * @ordered
    */
-  protected OperandFunctionArgs arg;
+  protected OpFunctionArg args;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected OperandFunctionArgumentsImpl()
+  protected OpFunctionImpl()
   {
     super();
   }
@@ -78,7 +79,7 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.OPERAND_FUNCTION_ARGUMENTS;
+    return SqlPackage.Literals.OP_FUNCTION;
   }
 
   /**
@@ -101,7 +102,7 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
     String oldFname = fname;
     fname = newFname;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND_FUNCTION_ARGUMENTS__FNAME, oldFname, fname));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__FNAME, oldFname, fname));
   }
 
   /**
@@ -109,9 +110,9 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public OperandFunctionArgs getArg()
+  public OpFunctionArg getArgs()
   {
-    return arg;
+    return args;
   }
 
   /**
@@ -119,13 +120,13 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetArg(OperandFunctionArgs newArg, NotificationChain msgs)
+  public NotificationChain basicSetArgs(OpFunctionArg newArgs, NotificationChain msgs)
   {
-    OperandFunctionArgs oldArg = arg;
-    arg = newArg;
+    OpFunctionArg oldArgs = args;
+    args = newArgs;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG, oldArg, newArg);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__ARGS, oldArgs, newArgs);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -136,20 +137,20 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setArg(OperandFunctionArgs newArg)
+  public void setArgs(OpFunctionArg newArgs)
   {
-    if (newArg != arg)
+    if (newArgs != args)
     {
       NotificationChain msgs = null;
-      if (arg != null)
-        msgs = ((InternalEObject)arg).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG, null, msgs);
-      if (newArg != null)
-        msgs = ((InternalEObject)newArg).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG, null, msgs);
-      msgs = basicSetArg(newArg, msgs);
+      if (args != null)
+        msgs = ((InternalEObject)args).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OP_FUNCTION__ARGS, null, msgs);
+      if (newArgs != null)
+        msgs = ((InternalEObject)newArgs).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OP_FUNCTION__ARGS, null, msgs);
+      msgs = basicSetArgs(newArgs, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG, newArg, newArg));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OP_FUNCTION__ARGS, newArgs, newArgs));
   }
 
   /**
@@ -162,8 +163,8 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG:
-        return basicSetArg(null, msgs);
+      case SqlPackage.OP_FUNCTION__ARGS:
+        return basicSetArgs(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -178,10 +179,10 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__FNAME:
+      case SqlPackage.OP_FUNCTION__FNAME:
         return getFname();
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG:
-        return getArg();
+      case SqlPackage.OP_FUNCTION__ARGS:
+        return getArgs();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -196,11 +197,11 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__FNAME:
+      case SqlPackage.OP_FUNCTION__FNAME:
         setFname((String)newValue);
         return;
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG:
-        setArg((OperandFunctionArgs)newValue);
+      case SqlPackage.OP_FUNCTION__ARGS:
+        setArgs((OpFunctionArg)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -216,11 +217,11 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__FNAME:
+      case SqlPackage.OP_FUNCTION__FNAME:
         setFname(FNAME_EDEFAULT);
         return;
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG:
-        setArg((OperandFunctionArgs)null);
+      case SqlPackage.OP_FUNCTION__ARGS:
+        setArgs((OpFunctionArg)null);
         return;
     }
     super.eUnset(featureID);
@@ -236,10 +237,10 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__FNAME:
+      case SqlPackage.OP_FUNCTION__FNAME:
         return FNAME_EDEFAULT == null ? fname != null : !FNAME_EDEFAULT.equals(fname);
-      case SqlPackage.OPERAND_FUNCTION_ARGUMENTS__ARG:
-        return arg != null;
+      case SqlPackage.OP_FUNCTION__ARGS:
+        return args != null;
     }
     return super.eIsSet(featureID);
   }
@@ -261,4 +262,4 @@ public class OperandFunctionArgumentsImpl extends OperandFunctionImpl implements
     return result.toString();
   }
 
-} //OperandFunctionArgumentsImpl
+} //OpFunctionImpl
