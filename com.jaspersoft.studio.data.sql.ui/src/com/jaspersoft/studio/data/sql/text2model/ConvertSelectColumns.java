@@ -5,8 +5,10 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
+import com.jaspersoft.studio.data.sql.OpFunction;
+import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.Operand;
-import com.jaspersoft.studio.data.sql.OperandFunction;
+import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.OrColumn;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
@@ -48,27 +50,31 @@ public class ConvertSelectColumns {
 				setupAlias(getMSelectColumn(designer, (OperandImpl) fcol.getCe(), msel), fcol);
 			else if (fcol.getCe() instanceof OperandsImpl) {
 				AMQueryAliased<?> mscol = null;
-				for (Operand op : fcol.getCe().getEntries()) {
+				for (Operands op : fcol.getCe().getEntries()) {
 					mscol = getMSelectColumn(designer, (OperandImpl) op, msel);
-					break;
-					// if (op.getSubq() != null) {
-					// MSelectSubQuery qroot = new MSelectSubQuery(msel);
-					// Util.createSelect(qroot);
-					// Text2Model.convertSelect(designer, qroot, (SelectImpl)
-					// op.getSubq().getSel());
-					// } else if (op.getColumn() != null) {
-					// mscol = getColumn(msel, op.getColumn().getCfull());
-					// } else if (op.getFunc() != null) {
-					// getColumnUnknown(msel, op.getFunc().toString());
-					// } else if (op.getParam() != null) {
-					// getColumnUnknown(msel, op.getParam().toString());
-					// } else if (op.getScalar() != null) {
-					// getColumnUnknown(msel, op.getScalar().toString());
-					// }
+					mscol.setValue(operand2String((Operand) op));
 				}
 				setupAlias(mscol, fcol);
 			}
 		}
+	}
+
+	protected static String operand2String(Operand oper) {
+		// if (oper.getSubq() != null) {
+		// MSelectSubQuery qroot = new MSelectSubQuery(msel);
+		// Util.createSelect(qroot);
+		// Text2Model.convertSelect(designer, qroot, (SelectImpl)
+		// oper.getSubq().getSel());
+		// } else
+		if (oper.getColumn() != null)
+			return getColumn(oper.getColumn().getCfull());
+		if (oper.getFunc() != null)
+			return getFunctionString(oper.getFunc(), oper);
+		if (oper.getParam() != null)
+			return oper.getParam().toString();
+		if (oper.getScalar() != null)
+			return oper.getScalar().toString();
+		return "";
 	}
 
 	private static AMQueryAliased<?> getMSelectColumn(SQLQueryDesigner designer, OperandImpl op, MSelect msel) {
@@ -80,7 +86,7 @@ public class ConvertSelectColumns {
 		} else if (op.getColumn() != null)
 			mscol = getColumn(msel, op.getColumn().getCfull());
 		else if (op.getFunc() != null)
-			mscol = getColumnUnknown(msel, getFunctionString(op.getFunc()));
+			mscol = getColumnUnknown(msel, getFunctionString(op.getFunc(), op));
 		else if (op.getParam() != null)
 			mscol = getColumnUnknown(msel, op.getParam().toString());
 		else if (op.getScalar() != null)
@@ -90,21 +96,19 @@ public class ConvertSelectColumns {
 		return mscol;
 	}
 
-	private static String getFunctionString(OperandFunction f) {
-		String sargs = "";
-		// OperandFunctionArguments args = f.getArgs();
-		// if (args != null) {
-		// String sep = "";
-		// OperandFunctionArgs fargs = args.getArg();
-		// for (EObject eobj : fargs.eContents()) {
-		// sargs += sep;
-		// if (eobj instanceof Operand) {
-		// sargs += " arg ";
-		// }
-		// sep = ",";
-		// }
-		// }
-		return /* f.getFname() + */"(" + sargs + ")";
+	private static String getFunctionString(OpFunction f, Operand oper) {
+		String sargs = " ";
+		OpFunctionArg args = f.getArgs();
+		if (args != null) {
+			String sep = "";
+			for (Operands eobj : args.getEntries()) {
+				sargs += sep;
+				if (eobj instanceof Operand)
+					sargs += operand2String((Operand) eobj);
+				sep = ",";
+			}
+		}
+		return f.getFname() + "(" + sargs + ")";
 	}
 
 	private static String getScalarString(ScalarOperand sc) {
@@ -129,6 +133,23 @@ public class ConvertSelectColumns {
 		mscol.setAliasKeyword(Misc.nvl(fcol.getAlias(), " "));
 		if (fcol.getColAlias() != null)
 			mscol.setAlias(fcol.getColAlias().getDbname());
+	}
+
+	private static String getColumn(ColumnFull tf) {
+		EList<EObject> eContents = tf.eContents();
+		String column = null;
+		if (tf instanceof DbObjectNameImpl)
+			column = ((DbObjectNameImpl) tf).getDbname();
+		else
+			column = Text2Model.getDbObjectName(eContents, 1);
+		String table = Text2Model.getDbObjectName(eContents, 2);
+		String schema = Text2Model.getDbObjectName(eContents, 3);
+		// String catalog = getDbObjectName(eContents, 3);
+		if (table != null)
+			column = table + "." + column;
+		if (schema != null)
+			column = schema + "." + column;
+		return column;
 	}
 
 	private static AMQueryAliased<?> getColumn(MSelect msel, ColumnFull tf) {
