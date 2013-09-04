@@ -56,7 +56,11 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 	private ReportViewer rptviewer;
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) throws Exception {
-		if (this.jrprint != jrprint) {
+		setJRPRint(stats, jrprint, false);
+	}
+
+	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) throws Exception {
+		if (this.jrprint != jrprint || refresh) {
 			rptviewer.setDocument(jrprint);
 
 			tmpFile = File.createTempFile("report", getExtension(), getTmpPath());

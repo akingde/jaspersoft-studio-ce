@@ -225,7 +225,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		IActionBars bars = getActionBars();
 		removeZoom(bars.getToolBarManager());
 		bars.clearGlobalActionHandlers();
-
+		lastEditor = activeEditor;
 		addGlobal(bars);
 		if (activeEditor instanceof XMLEditor) {
 			if (textEditorContributor == null) {
@@ -257,7 +257,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			selectionListener.contributeToContextBars(selection);
 		}
 		bars.updateActionBars();
-		lastEditor = activeEditor;
+
 	}
 
 	public IEditorPart getLastEditor() {

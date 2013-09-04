@@ -82,7 +82,7 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 		tmanager.add(new ZoomFitPageAction(rptviewer));
 		tmanager.add(new ZoomActualSizeAction(rptviewer));
 		tmanager.add(new Separator());
-		
+
 		tmanager.add(new ExportImageAction(rptviewer));
 		tmanager.add(new Separator());
 
@@ -91,7 +91,11 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 
 	protected JasperPrint jrprint;
 
-	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
+	public void setJRPRint(Statistics stats, JasperPrint jrprint) throws Exception {
+		setJRPRint(stats, jrprint, false);
+	}
+
+	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) {
 		int ind = Math.max(0, rptviewer.getPageIndex());
 		if (jrprint != null)
 			ind = Math.max(ind, jrprint.getPages().size());
@@ -125,7 +129,6 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 				refresh = false;
 			}
 		});
-
 	}
 
 	@Override

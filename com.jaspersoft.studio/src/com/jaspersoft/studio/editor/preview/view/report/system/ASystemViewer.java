@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.report.system;
 
@@ -40,11 +35,13 @@ public abstract class ASystemViewer extends SWTViewer {
 
 	protected abstract String getExtension(JasperPrint jrprint);
 
+	private boolean lastError = false;
+
 	@Override
-	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
-		boolean same = this.jrprint == jrprint;
-		super.setJRPRint(stats, jrprint);
-		if (this.jrprint != null && !same) {
+	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) {
+		boolean same = this.jrprint == jrprint && !lastError;
+		super.setJRPRint(stats, jrprint, refresh);
+		if (this.jrprint != null && (!same || refresh)) {
 			try {
 				String ext = getExtension(jrprint);
 				File tmpFile = File.createTempFile("report", ext);
@@ -64,8 +61,10 @@ public abstract class ASystemViewer extends SWTViewer {
 									.format(
 											"No file association defined in your sistem for: %s\nFile is located at: \n\n%s\n\nPlease open it manually or fix file association and retry.",
 											ext, tmpFile.getAbsolutePath()));
+				lastError = false;
 			} catch (Exception e) {
 				UIUtils.showError(e);
+				lastError = true;
 			}
 		}
 	}
