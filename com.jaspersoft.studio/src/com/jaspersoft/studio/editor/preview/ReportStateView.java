@@ -1,20 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IPage;
@@ -25,6 +21,7 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 
 public class ReportStateView extends PageBookView {
 	public static final String ID = "com.jaspersoft.studio.editor.preview.reportstate";
+	private ReportStatePage page;
 
 	@Override
 	protected IPage createDefaultPage(PageBook book) {
@@ -35,16 +32,24 @@ public class ReportStateView extends PageBookView {
 	}
 
 	@Override
-	protected PageRec doCreatePage(IWorkbenchPart part) {
+	protected PageRec doCreatePage(final IWorkbenchPart part) {
 		PreviewJRPrint preview = null;
-		if (part instanceof PreviewJRPrint) {
+		if (part instanceof PreviewJRPrint)
 			preview = (PreviewJRPrint) part;
-		} else if (part instanceof JrxmlEditor) {
-			preview = (PreviewJRPrint) ((JrxmlEditor) part).getEditor(JrxmlEditor.PAGE_PREVIEW);
-		} else {
+		else if (part instanceof JrxmlEditor) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					PreviewJRPrint preview = (PreviewJRPrint) ((JrxmlEditor) part).getEditor(JrxmlEditor.PAGE_PREVIEW);
+					page.setupConsole(preview.getConsole());
+				}
+			});
+
+		} else
 			throw new RuntimeException("Unsupported WorkbenchPart: " + part.toString());
-		}
-		ReportStatePage page = new ReportStatePage(preview.getConsole());
+		page = new ReportStatePage(preview != null ? preview.getConsole() : null);
 		initPage(page);
 		page.createControl(getPageBook());
 		return new PageRec(part, page);

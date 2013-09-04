@@ -11,7 +11,6 @@
 package com.jaspersoft.studio.editor;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -259,7 +258,18 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			createPage0();
 			createPage1();
-			createPage2();
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						createPage2();
+					} catch (PartInitException e) {
+						UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
+					}
+				}
+			});
+
 		} catch (PartInitException e) {
 			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 		} catch (Throwable e) {
@@ -529,24 +539,51 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			getJrContext(file);
 			if (!isRefresh) {
-				in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
-
-				JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
-				JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
-				// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
-				// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
-				// editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-				// for (AContributorAction a : editorActions) {
-				// a.setJrConfig(jrContext);
-				// ((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
-				// }
-
-				jrContext.setJasperDesign(jd);
-				setModel(ReportFactory.createReport(jrContext));
+				final InputStream inp = in;
+				final IFile ifile = file;
+				Job job = new Job("Initialising " + getPartName()) {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						monitor.beginTask("Initialising " + getPartName(), IProgressMonitor.UNKNOWN);
+						try {
+							doInitModel(monitor, getEditorInput(), inp, ifile);
+						} finally {
+							monitor.done();
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setPriority(Job.LONG);
+				job.schedule();
 			}
-		} catch (JRException e) {
+		} catch (Exception e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
+		}
+	}
+
+	protected void doInitModel(IProgressMonitor monitor, IEditorInput editorInput, InputStream in, IFile file) {
+		try {
+			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
+
+			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
+			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
+			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
+			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
+			// editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+			// for (AContributorAction a : editorActions) {
+			// a.setJrConfig(jrContext);
+			// ((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
+			// }
+
+			jrContext.setJasperDesign(jd);
+			Display.getDefault().syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					setModel(ReportFactory.createReport(jrContext));
+				}
+			});
 		} catch (ResourceException e) {
 			if (e.getMessage().startsWith("File not found")) {
 				closeEditor();
@@ -556,15 +593,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 		} catch (Exception e) {
 			setModel(null);
-			throw new PartInitException(e.getMessage(), e);
+			handleJRException(editorInput, e, false);
 		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					setModel(null);
-					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
-				}
+			FileUtils.closeStream(in);
 		}
 	}
 

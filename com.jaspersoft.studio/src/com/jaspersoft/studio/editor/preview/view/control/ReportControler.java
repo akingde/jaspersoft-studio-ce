@@ -587,7 +587,7 @@ public class ReportControler {
 				APreview pv = pcontainer.getDefaultViewer();
 				if (pv instanceof IJRPrintable)
 					try {
-						((IJRPrintable) pv).setJRPRint(stats, null);
+						((IJRPrintable) pv).setJRPRint(stats, jPrint);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
