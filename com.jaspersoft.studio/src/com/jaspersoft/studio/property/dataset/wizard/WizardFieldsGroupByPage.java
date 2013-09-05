@@ -18,13 +18,20 @@ package com.jaspersoft.studio.property.dataset.wizard;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 public class WizardFieldsGroupByPage extends WizardFieldsPage {
 	
-	
+	private Map<String, Object> settings = null;
 
 	public WizardFieldsGroupByPage() {
 		super("groupfields"); //$NON-NLS-1$
@@ -60,6 +67,29 @@ public class WizardFieldsGroupByPage extends WizardFieldsPage {
 		}
 	}
 
+	public void createControl(Composite parent) {
+		super.createControl(parent);
+		Button buttonCreate = new Button(mainComposite, SWT.CHECK | SWT.WRAP);
+		buttonCreate.setText(Messages.WizardFieldsGroupByPage_createSortfields);
+		GridData data = new GridData(SWT.FILL, SWT.TOP, true, false, 4, 1);
+		data.widthHint = 600;
+		buttonCreate.setLayoutData(data);
+		buttonCreate.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean createSortFields = ((Button)e.getSource()).getSelection();
+				getLocalSettings().put(WizardDataSourcePage.ORDER_GROUP, createSortFields);
+			}
+		});
+		getLocalSettings().put(WizardDataSourcePage.ORDER_GROUP, false);
+	}
+	
+	private Map<String, Object> getLocalSettings(){
+		if (settings == null && getWizard() != null && getWizard() instanceof JSSWizard){
+				settings = ((JSSWizard)getWizard()).getSettings();
+		}
+		return settings;
+	}
 	
 	
 	/**
@@ -69,16 +99,8 @@ public class WizardFieldsGroupByPage extends WizardFieldsPage {
 	@Override
 	public void storeSettings()
 	{
-		System.out.println("Saving group fields...");
-		if (getWizard() instanceof JSSWizard &&
-				getWizard() != null)
-			{
-				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
-			
-				if (settings == null) return;
-				
-				settings.put(WizardDataSourcePage.GROUP_FIELDS,  getSelectedFields() ); // the type is IPath
-			}
-		
+			Map<String, Object> settings = getLocalSettings();
+			if (settings == null) return;
+			settings.put(WizardDataSourcePage.GROUP_FIELDS,  getSelectedFields() ); // the type is IPath
 	}
 }

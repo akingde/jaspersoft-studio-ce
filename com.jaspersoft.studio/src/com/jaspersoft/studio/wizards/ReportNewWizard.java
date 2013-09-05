@@ -232,6 +232,10 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		if (getSettings().containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
 			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
 		}
+		
+		if (getSettings().containsKey(WizardDataSourcePage.ORDER_GROUP)){
+			templateSettings.put(DefaultTemplateEngine.ORDER_GROUP, getSettings().get(WizardDataSourcePage.ORDER_GROUP));
+		}
 
 		// If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the
 		// sub report

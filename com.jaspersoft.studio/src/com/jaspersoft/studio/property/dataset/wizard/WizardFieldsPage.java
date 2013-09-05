@@ -49,6 +49,7 @@ public class WizardFieldsPage extends JSSWizardPage {
 	private Table leftTable;
 	protected TableViewer rightTView;
 	protected TableViewer leftTView;
+	protected Composite mainComposite;
 	
 	/**
 	 * Set of buttons to manage the list...
@@ -82,11 +83,11 @@ public class WizardFieldsPage extends JSSWizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(4, false));
-		setControl(composite);
+		mainComposite = new Composite(parent, SWT.NONE);
+		mainComposite.setLayout(new GridLayout(4, false));
+		setControl(mainComposite);
 
-		leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+		leftTable = new Table(mainComposite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_VERTICAL);
 		gd.widthHint = 300;
 		leftTable.setLayoutData(gd);
@@ -105,12 +106,12 @@ public class WizardFieldsPage extends JSSWizardPage {
 		leftTView.setContentProvider(new ListContentProvider());
 		setLabelProvider(leftTView);
 
-		Composite bGroup = new Composite(composite, SWT.NONE);
+		Composite bGroup = new Composite(mainComposite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		// -----------------------------------
-		rightTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+		rightTable = new Table(mainComposite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumWidth = 300;
 		rightTable.setLayoutData(gd);
@@ -124,7 +125,7 @@ public class WizardFieldsPage extends JSSWizardPage {
 		attachCellEditors(rightTView, rightTable);
 		
 
-		createOrderButtons(composite);
+		createOrderButtons(mainComposite);
 		
 		leftTView.setInput(inFields);
 		rightTView.setInput(outFields);

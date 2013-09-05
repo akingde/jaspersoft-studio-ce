@@ -44,10 +44,13 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
+import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -548,6 +551,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" +groupField.getName() + "}", groupField.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 					newGroup.setExpression(groupExpression);
 					tableDataset.addGroup(newGroup);
+					
+					if (createSortFields){
+						JRDesignSortField sortfield = new JRDesignSortField();
+						sortfield.setType(SortFieldTypeEnum.FIELD);
+						sortfield.setOrder(SortOrderEnum.DESCENDING);
+						sortfield.setName(groupField.getName());
+						tableDataset.addSortField(sortfield);
+					}
 				} catch (JRException e) {
 					e.printStackTrace();
 				}

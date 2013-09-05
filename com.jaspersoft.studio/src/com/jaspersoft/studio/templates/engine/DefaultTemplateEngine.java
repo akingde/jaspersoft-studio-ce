@@ -31,9 +31,12 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -60,7 +63,10 @@ public class DefaultTemplateEngine implements TemplateEngine {
 	final static public String GROUP_FIELDS = "main_group_fields"; //$NON-NLS-1$
 	final static public String DATA_ADAPTER = "data_adapter"; //$NON-NLS-1$
 	final static public String OTHER_PARAMETERS = "parameters"; //$NON-NLS-1$
+	final static public String ORDER_GROUP = "create_sort_fields"; //$NON-NLS-1$
 
+	protected boolean createSortFields = false;
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings)
@@ -79,7 +85,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		List<Object> groupFields = (List<Object>) settings.get(GROUP_FIELDS);
 
 		JRDesignDataset dataset = (JRDesignDataset) settings.get(DATASET);
-
+		createSortFields = (Boolean)settings.get(ORDER_GROUP);
 		if (dataset != null) {
 			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
 
@@ -134,21 +140,27 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		}
 
 		// Adjusting groups
-		if (groupFields != null)
+		if (groupFields != null){
 			for (int i = 0; i < groupFields.size(); ++i) {
-				if (jd.getGroupsList().size() <= i) {
-					try {
-						// Add a new group on the fly...
-						JRDesignGroup g = new JRDesignGroup();
-						String name = ((JRField) groupFields.get(i)).getName();
-						g.setName(name);
-						JRDesignExpression jre = new JRDesignExpression();
-						jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-						g.setExpression(jre);
-						jd.addGroup(g);
-					} catch (JRException e) {}
-				}
-
+				try {
+					String name = ((JRField) groupFields.get(i)).getName();
+					if (jd.getGroupsList().size() <= i) {
+							// Add a new group on the fly...
+							JRDesignGroup g = new JRDesignGroup();
+							g.setName(name);
+							JRDesignExpression jre = new JRDesignExpression();
+							jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+							g.setExpression(jre);
+							jd.addGroup(g);
+					}
+					if (createSortFields){
+						JRDesignSortField sortfield = new JRDesignSortField();
+						sortfield.setType(SortFieldTypeEnum.FIELD);
+						sortfield.setOrder(SortOrderEnum.DESCENDING);
+						sortfield.setName(name);
+						jd.addSortField(sortfield);
+					}
+				} catch (JRException e) {}
 				JRField gr = (JRField) groupFields.get(i);
 				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
 
@@ -184,7 +196,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 					}
 				}
 			}
-
+		}
 		// Remove extra groups...
 		if (!keepExtraGroups && !noLayoutChanges && groupFields != null) {
 			while (groupFields.size() < jd.getGroupsList().size()) {

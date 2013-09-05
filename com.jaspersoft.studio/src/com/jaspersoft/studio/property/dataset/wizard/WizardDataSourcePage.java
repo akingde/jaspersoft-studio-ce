@@ -79,6 +79,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 	public static final String DATASET_QUERY_LANGUAGE = "query_language"; //$NON-NLS-1$
 	public static final String DATASET_QUERY_TEXT = "query_text"; //$NON-NLS-1$
 	public static final String EXTRA_PARAMETERS = "extra_parameters"; //$NON-NLS-1$
+	public static final String ORDER_GROUP = "create_sort_fields"; //$NON-NLS-1$
 
 	private Composite composite_editor = null;
 	private AWizardDataEditorComposite activeEditor = null;

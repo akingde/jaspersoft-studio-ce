@@ -263,6 +263,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 									GalleryItem rootItem = gal.getItem(0);
 									if (gal.getSelectionCount() <= 0 && rootItem.getItemCount() > 0) {
 										gal.setSelection(new GalleryItem[] { rootItem.getItem(0) });
+										storeSettings();
 										setPageComplete(validatePage());
 									}
 								}
