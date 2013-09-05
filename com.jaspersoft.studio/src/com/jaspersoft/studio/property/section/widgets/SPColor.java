@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -52,7 +51,7 @@ public class SPColor extends ASPropertyWidget {
 		foreButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(toolBar.getShell());
-				cd.setText(Messages.ColorsSection_element_forecolor);
+				cd.setText(pDescriptor.getDisplayName());
 				cd.setRGB((RGB) section.getElement().getPropertyValue(pDescriptor.getId()));
 				RGB newColor = cd.open();
 				if (newColor != null)
