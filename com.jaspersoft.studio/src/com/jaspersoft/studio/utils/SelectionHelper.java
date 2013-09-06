@@ -42,6 +42,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -78,6 +79,16 @@ public class SelectionHelper {
 				.getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null && activeWorkbenchWindow.getActivePage() != null) {
 			IEditorPart p = activeWorkbenchWindow.getActivePage().getActiveEditor();
+			if(p == null) {
+				// look among the editor references
+				IEditorReference[] editorReferences = activeWorkbenchWindow.getActivePage().getEditorReferences();
+				if(editorReferences.length == 1){
+					IWorkbenchPart part = editorReferences[0].getPart(false);
+					if(part instanceof IEditorPart) {
+						p = (IEditorPart) part;
+					}
+				}
+			}
 			return p;
 		}
 		return null;

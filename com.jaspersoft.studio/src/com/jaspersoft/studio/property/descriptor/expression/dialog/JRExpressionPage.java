@@ -91,7 +91,7 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 
 	public void createControl(Composite parent) {
 		// Seeks for a possible contributed composite
-		ExpressionEditorSupport editorSupportForReportLanguage = ExpressionEditorSupportUtil.getEditorSupportForReportLanguage();
+		ExpressionEditorSupport editorSupportForReportLanguage = ExpressionEditorSupportUtil.getEditorSupport(exprContext);
 		if(editorSupportForReportLanguage!=null){
 			contributedComposite = editorSupportForReportLanguage.createExpressionEditorComposite(parent);
 			contributedComposite.setExpressionContext(getExpressionContext());

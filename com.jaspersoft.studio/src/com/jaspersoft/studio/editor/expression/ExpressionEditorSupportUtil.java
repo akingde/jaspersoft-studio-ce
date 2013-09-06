@@ -111,6 +111,29 @@ public class ExpressionEditorSupportUtil {
 	}
 
 	/**
+	 * Gets the editor support for a specific expression context.
+	 * <p>
+	 * 
+	 * The expression context is used to retrieve the language from the JasperDesign model. 
+	 * If none can be found then as fallback solution it tries to invoke the 
+	 * {@link #getEditorSupportForReportLanguage()} method.
+	 * 
+	 * @param exprContext
+	 *          the expression context
+	 * @return the editor supports, <code>null</code> if none
+	 */
+	public static ExpressionEditorSupport getEditorSupport(ExpressionContext exprContext) {
+		if(exprContext!=null) {
+			JasperDesign jasperDesign = exprContext.getJasperReportsConfiguration().getJasperDesign();
+			if(jasperDesign!=null) {
+				return ExpressionEditorSupportUtil.getEditorSupportForLanguage(jasperDesign.getLanguage());
+			}
+		}
+		// fallback solution
+		return ExpressionEditorSupportUtil.getEditorSupportForReportLanguage();
+	}
+	
+	/**
 	 * Gets the editor support for the language attribute set for the report.
 	 * 
 	 * @return the editor support, <code>null</code> if none
