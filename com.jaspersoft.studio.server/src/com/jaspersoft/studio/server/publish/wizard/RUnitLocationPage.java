@@ -344,7 +344,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void treeExpanded(final TreeExpansionEvent event) {
 				if (!skipEvents) {
 					try {
-						getContainer().run(false, true, new IRunnableWithProgress() {
+						getContainer().run(true, true, new IRunnableWithProgress() {
+
 							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 								monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 								try {
@@ -453,12 +454,18 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	private boolean skipEvents = false;
 
 	public void fillInput() {
-		isFillingInput = true;
-		initIDLabel();
-		setSelectedNode();
-		if (n instanceof MServerProfile)
-			look4SelectedUnit((MServerProfile) n);
-		isFillingInput = false;
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				isFillingInput = true;
+				initIDLabel();
+				setSelectedNode();
+				if (n instanceof MServerProfile)
+					look4SelectedUnit((MServerProfile) n);
+				isFillingInput = false;
+			}
+		});
 	}
 
 	private void initIDLabel() {

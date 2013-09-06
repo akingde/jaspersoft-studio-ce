@@ -55,10 +55,11 @@ public class FindResources {
 
 	public static ANode findReportUnit(MServerProfile mserv, IProgressMonitor monitor, JasperDesign jd) {
 		try {
-			WSClientHelper.connect(mserv, monitor);
 			if (mserv != null) {
 				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
-				if (prunit != null) {
+				String srvURL = jd.getProperty(AExporter.PROP_SERVERURL);
+				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
+					WSClientHelper.connect(mserv, monitor);
 					WSClientHelper.connectGetData(mserv, monitor);
 					// We can try to locate a previous existing Report Unit.
 					// If not possible we will popup the selection tree as
