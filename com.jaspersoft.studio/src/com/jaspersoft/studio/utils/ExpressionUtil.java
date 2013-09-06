@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExpressionUtil {
-	public static final String eval(JRExpression expr, JasperReportsConfiguration jConfig, JasperDesign jd) {
+	public static synchronized final String eval(JRExpression expr, JasperReportsConfiguration jConfig, JasperDesign jd) {
 		if (expr == null)
 			return null;
 		if (jd == null)
@@ -32,15 +32,16 @@ public class ExpressionUtil {
 		return null;
 	}
 
-	public static final String eval(JRExpression expr, JasperReportsConfiguration jConfig) {
+	public static synchronized final String eval(JRExpression expr, JasperReportsConfiguration jConfig) {
 		return eval(expr, jConfig, jConfig.getJasperDesign());
 	}
 
-	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig) {
+	public static synchronized final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig) {
 		return eval(expr, jrd, jConfig, jConfig.getJasperDesign());
 	}
 
-	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, JasperDesign jd) {
+	public static synchronized final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig,
+			JasperDesign jd) {
 		if (expr == null || jrd == null || jd == null)
 			return null;
 		return new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig).interpretExpression(expr.getText());
