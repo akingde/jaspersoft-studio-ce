@@ -2,30 +2,28 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.SqlPackage;
+import com.jaspersoft.studio.data.sql.Star;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Op Function Arg</b></em>'.
+ * An implementation of the model object '<em><b>Star</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
-public class OpFunctionArgImpl extends MinimalEObjectImpl.Container implements OpFunctionArg
+public class StarImpl extends OperandsImpl implements Star
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected OpFunctionArgImpl()
+  protected StarImpl()
   {
     super();
   }
@@ -38,7 +36,7 @@ public class OpFunctionArgImpl extends MinimalEObjectImpl.Container implements O
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.OP_FUNCTION_ARG;
+    return SqlPackage.Literals.STAR;
   }
 
-} //OpFunctionArgImpl
+} //StarImpl

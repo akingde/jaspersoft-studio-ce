@@ -62,12 +62,12 @@ public interface XExpr extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Col</em>' containment reference.
-   * @see #setCol(ColumnOperand)
+   * @see #setCol(ColumnFull)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getXExpr_Col()
    * @model containment="true"
    * @generated
    */
-  ColumnOperand getCol();
+  ColumnFull getCol();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.XExpr#getCol <em>Col</em>}' containment reference.
@@ -77,7 +77,7 @@ public interface XExpr extends EObject
    * @see #getCol()
    * @generated
    */
-  void setCol(ColumnOperand value);
+  void setCol(ColumnFull value);
 
   /**
    * Returns the value of the '<em><b>Prm</b></em>' containment reference.

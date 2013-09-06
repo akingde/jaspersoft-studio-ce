@@ -2,6 +2,7 @@
  */
 package com.jaspersoft.studio.data.sql;
 
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +26,7 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface Operand extends OperandList, Operands
+public interface Operand extends EObject
 {
   /**
    * Returns the value of the '<em><b>Column</b></em>' containment reference.

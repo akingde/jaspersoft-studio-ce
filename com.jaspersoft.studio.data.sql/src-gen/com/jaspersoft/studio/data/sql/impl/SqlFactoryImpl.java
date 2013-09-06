@@ -106,6 +106,11 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.COL: return createCol();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OP_LIST: return createOpList();
+      case SqlPackage.PLUS: return createPlus();
+      case SqlPackage.MINUS: return createMinus();
+      case SqlPackage.STAR: return createStar();
+      case SqlPackage.DIV: return createDiv();
+      case SqlPackage.CONCAT: return createConcat();
       case SqlPackage.OP_FLIST: return createOpFList();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -599,6 +604,61 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     OpListImpl opList = new OpListImpl();
     return opList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Plus createPlus()
+  {
+    PlusImpl plus = new PlusImpl();
+    return plus;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Minus createMinus()
+  {
+    MinusImpl minus = new MinusImpl();
+    return minus;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Star createStar()
+  {
+    StarImpl star = new StarImpl();
+    return star;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Div createDiv()
+  {
+    DivImpl div = new DivImpl();
+    return div;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Concat createConcat()
+  {
+    ConcatImpl concat = new ConcatImpl();
+    return concat;
   }
 
   /**

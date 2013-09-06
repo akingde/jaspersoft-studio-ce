@@ -142,7 +142,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//InOper/opList"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OperandList"/>
-    <genClasses ecoreClass="Sql.ecore#//Operands"/>
+    <genClasses ecoreClass="Sql.ecore#//Operands">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operands/op1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operands/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operands/right"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Operand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/column"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/xop"/>
@@ -159,9 +163,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunction/fname"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OpFunctionArg">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunctionArg/entries"/>
-    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OpFunctionArg"/>
     <genClasses ecoreClass="Sql.ecore#//POperand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//POperand/prm"/>
     </genClasses>
@@ -191,6 +193,13 @@
     <genClasses ecoreClass="Sql.ecore#//OpList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpList/entries"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OpFList"/>
+    <genClasses ecoreClass="Sql.ecore#//Plus"/>
+    <genClasses ecoreClass="Sql.ecore#//Minus"/>
+    <genClasses ecoreClass="Sql.ecore#//Star"/>
+    <genClasses ecoreClass="Sql.ecore#//Div"/>
+    <genClasses ecoreClass="Sql.ecore#//Concat"/>
+    <genClasses ecoreClass="Sql.ecore#//OpFList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFList/entries"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

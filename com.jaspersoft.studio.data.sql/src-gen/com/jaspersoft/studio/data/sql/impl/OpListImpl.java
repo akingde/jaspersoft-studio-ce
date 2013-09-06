@@ -3,7 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.OpList;
-import com.jaspersoft.studio.data.sql.Operand;
+import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import java.util.Collection;
@@ -41,7 +41,7 @@ public class OpListImpl extends OperandListImpl implements OpList
    * @generated
    * @ordered
    */
-  protected EList<Operand> entries;
+  protected EList<ScalarOperand> entries;
 
   /**
    * <!-- begin-user-doc -->
@@ -69,11 +69,11 @@ public class OpListImpl extends OperandListImpl implements OpList
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Operand> getEntries()
+  public EList<ScalarOperand> getEntries()
   {
     if (entries == null)
     {
-      entries = new EObjectContainmentEList<Operand>(Operand.class, this, SqlPackage.OP_LIST__ENTRIES);
+      entries = new EObjectContainmentEList<ScalarOperand>(ScalarOperand.class, this, SqlPackage.OP_LIST__ENTRIES);
     }
     return entries;
   }
@@ -123,7 +123,7 @@ public class OpListImpl extends OperandListImpl implements OpList
     {
       case SqlPackage.OP_LIST__ENTRIES:
         getEntries().clear();
-        getEntries().addAll((Collection<? extends Operand>)newValue);
+        getEntries().addAll((Collection<? extends ScalarOperand>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

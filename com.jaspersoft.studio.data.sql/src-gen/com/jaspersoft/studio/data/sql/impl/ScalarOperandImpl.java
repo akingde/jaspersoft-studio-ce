@@ -14,7 +14,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +33,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class ScalarOperandImpl extends MinimalEObjectImpl.Container implements ScalarOperand
+public class ScalarOperandImpl extends OperandListImpl implements ScalarOperand
 {
   /**
    * The default value of the '{@link #getSoint() <em>Soint</em>}' attribute.
@@ -44,7 +43,7 @@ public class ScalarOperandImpl extends MinimalEObjectImpl.Container implements S
    * @generated
    * @ordered
    */
-  protected static final Integer SOINT_EDEFAULT = null;
+  protected static final int SOINT_EDEFAULT = 0;
 
   /**
    * The cached value of the '{@link #getSoint() <em>Soint</em>}' attribute.
@@ -54,7 +53,7 @@ public class ScalarOperandImpl extends MinimalEObjectImpl.Container implements S
    * @generated
    * @ordered
    */
-  protected Integer soint = SOINT_EDEFAULT;
+  protected int soint = SOINT_EDEFAULT;
 
   /**
    * The default value of the '{@link #getSostr() <em>Sostr</em>}' attribute.
@@ -182,7 +181,7 @@ public class ScalarOperandImpl extends MinimalEObjectImpl.Container implements S
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getSoint()
+  public int getSoint()
   {
     return soint;
   }
@@ -192,9 +191,9 @@ public class ScalarOperandImpl extends MinimalEObjectImpl.Container implements S
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSoint(Integer newSoint)
+  public void setSoint(int newSoint)
   {
-    Integer oldSoint = soint;
+    int oldSoint = soint;
     soint = newSoint;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.SCALAR_OPERAND__SOINT, oldSoint, soint));
@@ -416,7 +415,7 @@ public class ScalarOperandImpl extends MinimalEObjectImpl.Container implements S
     switch (featureID)
     {
       case SqlPackage.SCALAR_OPERAND__SOINT:
-        return SOINT_EDEFAULT == null ? soint != null : !SOINT_EDEFAULT.equals(soint);
+        return soint != SOINT_EDEFAULT;
       case SqlPackage.SCALAR_OPERAND__SOSTR:
         return SOSTR_EDEFAULT == null ? sostr != null : !SOSTR_EDEFAULT.equals(sostr);
       case SqlPackage.SCALAR_OPERAND__SODBL:

@@ -2,30 +2,28 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.OpFunctionArg;
+import com.jaspersoft.studio.data.sql.Plus;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Op Function Arg</b></em>'.
+ * An implementation of the model object '<em><b>Plus</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
-public class OpFunctionArgImpl extends MinimalEObjectImpl.Container implements OpFunctionArg
+public class PlusImpl extends OperandsImpl implements Plus
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected OpFunctionArgImpl()
+  protected PlusImpl()
   {
     super();
   }
@@ -38,7 +36,7 @@ public class OpFunctionArgImpl extends MinimalEObjectImpl.Container implements O
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.OP_FUNCTION_ARG;
+    return SqlPackage.Literals.PLUS;
   }
 
-} //OpFunctionArgImpl
+} //PlusImpl

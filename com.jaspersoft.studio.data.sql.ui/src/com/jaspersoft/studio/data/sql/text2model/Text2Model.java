@@ -15,6 +15,7 @@ import com.jaspersoft.studio.data.sql.SelectQuery;
 import com.jaspersoft.studio.data.sql.SelectSubSet;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.union.CreateUnion;
+import com.jaspersoft.studio.data.sql.impl.ColImpl;
 import com.jaspersoft.studio.data.sql.impl.ModelImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
@@ -118,6 +119,12 @@ public class Text2Model {
 			EObject eobj = eContents.get(size - i);
 			if (eobj instanceof DbObjectName)
 				return ((DbObjectName) eobj).getDbname();
+		}
+		if (!eContents.isEmpty() && eContents.get(0) instanceof ColImpl) {
+			ColImpl c = (ColImpl) eContents.get(0);
+			size = c.getEntries().size();
+			if (size >= 3 - i)
+				return c.getEntries().get(3 - i).getDbname();
 		}
 		return null;
 	}

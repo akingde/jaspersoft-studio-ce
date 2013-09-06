@@ -95,7 +95,7 @@ public class ConvertExpression {
 			XExpr xexpr = tf.getXexp();
 			FieldOperand fc = null;
 			if (xexpr.getCol() != null)
-				fc = doColumn(designer, msel, xexpr.getCol().getCfull(), me);
+				fc = doColumn(designer, msel, xexpr.getCol(), me);
 			me.getOperands().add(Misc.nvl(fc, new FieldOperand(null, null, me)));
 			me.setFunction(xexpr.getXf().getLiteral());
 			if (xexpr.getPrm() != null)
@@ -126,7 +126,13 @@ public class ConvertExpression {
 			return null;
 		if (ops instanceof OperandImpl)
 			return getOperand(designer, msel, (Operand) ops, me);
-		return getOperand(designer, msel, ops.getEntries().get(0), me);
+		if (ops.getOp1() != null)
+			return getOperand(designer, msel, ops.getOp1(), me);
+		if (ops.getLeft() != null)
+			return getOperand(designer, msel, ops.getLeft(), me);
+		if (ops.getRight() != null)
+			return getOperand(designer, msel, ops.getRight(), me);
+		return null;
 	}
 
 	private static AOperand getOperand(SQLQueryDesigner designer, MSelect msel, Operand op, AMExpression<?> me) {
@@ -166,11 +172,9 @@ public class ConvertExpression {
 			return new ScalarOperand<BigDecimal>(me, sop.getSodbl());
 		if (sop.getSodt() != null)
 			return new ScalarOperand<Timestamp>(me, new Timestamp(sop.getSodt().getTime()));
-		if (sop.getSoint() != null)
-			return new ScalarOperand<Integer>(me, sop.getSoint());
 		if (sop.getSotime() != null)
 			return new ScalarOperand<Time>(me, new Time(sop.getSotime().getTime()));
-		return null;
+		return new ScalarOperand<Integer>(me, sop.getSoint());
 	}
 
 	private static FieldOperand doColumn(SQLQueryDesigner designer, MSelect msel, ColumnFull tf, AMExpression<?> mexpr) {

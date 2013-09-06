@@ -119,7 +119,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="XExpr">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="xf" eType="#//XFunction"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//ColumnOperand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//ColumnFull"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="prm" eType="#//Prms" containment="true"/>
   </eClassifiers>
@@ -169,8 +169,15 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OperandList"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Operands" eSuperTypes="#//OpFunctionArg"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Operand" eSuperTypes="#//OperandList #//Operands">
+  <eClassifiers xsi:type="ecore:EClass" name="Operands" eSuperTypes="#//OpFunctionArg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Operand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//ColumnOperand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="xop" eType="#//Operand"
@@ -195,10 +202,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="args" eType="#//OpFunctionArg"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArg">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//Operands" containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArg"/>
   <eClassifiers xsi:type="ecore:EClass" name="POperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -213,8 +217,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//SelectQuery"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ScalarOperand">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="soint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScalarOperand" eSuperTypes="#//OperandList">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="soint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sostr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodbl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
@@ -238,7 +242,15 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OpList" eSuperTypes="#//OperandList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//Operand" containment="true"/>
+        eType="#//ScalarOperand" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OpFList" eSuperTypes="#//OpFunctionArg"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Plus" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Minus" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Star" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Div" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Concat" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFList" eSuperTypes="#//OpFunctionArg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Operands" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

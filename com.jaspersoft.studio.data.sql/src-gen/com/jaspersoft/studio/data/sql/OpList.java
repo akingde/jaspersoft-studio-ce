@@ -24,7 +24,7 @@ public interface OpList extends OperandList
 {
   /**
    * Returns the value of the '<em><b>Entries</b></em>' containment reference list.
-   * The list contents are of type {@link com.jaspersoft.studio.data.sql.Operand}.
+   * The list contents are of type {@link com.jaspersoft.studio.data.sql.ScalarOperand}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Entries</em>' containment reference list isn't clear,
@@ -36,6 +36,6 @@ public interface OpList extends OperandList
    * @model containment="true"
    * @generated
    */
-  EList<Operand> getEntries();
+  EList<ScalarOperand> getEntries();
 
 } // OpList

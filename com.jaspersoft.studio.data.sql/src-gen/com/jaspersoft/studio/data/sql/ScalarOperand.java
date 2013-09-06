@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 
 import java.util.Date;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scalar Operand</b></em>'.
@@ -29,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ScalarOperand extends EObject
+public interface ScalarOperand extends OperandList
 {
   /**
    * Returns the value of the '<em><b>Soint</b></em>' attribute.
@@ -40,12 +38,12 @@ public interface ScalarOperand extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Soint</em>' attribute.
-   * @see #setSoint(Integer)
+   * @see #setSoint(int)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getScalarOperand_Soint()
    * @model
    * @generated
    */
-  Integer getSoint();
+  int getSoint();
 
   /**
    * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ScalarOperand#getSoint <em>Soint</em>}' attribute.
@@ -55,7 +53,7 @@ public interface ScalarOperand extends EObject
    * @see #getSoint()
    * @generated
    */
-  void setSoint(Integer value);
+  void setSoint(int value);
 
   /**
    * Returns the value of the '<em><b>Sostr</b></em>' attribute.

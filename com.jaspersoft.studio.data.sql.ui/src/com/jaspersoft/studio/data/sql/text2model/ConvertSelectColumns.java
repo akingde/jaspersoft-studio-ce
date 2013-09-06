@@ -4,14 +4,22 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ColumnOrAlias;
+import com.jaspersoft.studio.data.sql.Concat;
+import com.jaspersoft.studio.data.sql.Div;
+import com.jaspersoft.studio.data.sql.ExpOperand;
+import com.jaspersoft.studio.data.sql.Minus;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.OrColumn;
+import com.jaspersoft.studio.data.sql.POperand;
+import com.jaspersoft.studio.data.sql.Plus;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
+import com.jaspersoft.studio.data.sql.Star;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OperandImpl;
@@ -49,32 +57,33 @@ public class ConvertSelectColumns {
 			if (fcol.getCe() instanceof OperandImpl)
 				setupAlias(getMSelectColumn(designer, (OperandImpl) fcol.getCe(), msel), fcol);
 			else if (fcol.getCe() instanceof OperandsImpl) {
-				AMQueryAliased<?> mscol = null;
-				for (Operands op : fcol.getCe().getEntries()) {
-					mscol = getMSelectColumn(designer, (OperandImpl) op, msel);
-					mscol.setValue(operand2String((Operand) op));
-				}
+				OperandsImpl ops = (OperandsImpl) fcol.getCe();
+				AMQueryAliased<?> mscol = getColumnUnknown(msel, operands2String(ops));
 				setupAlias(mscol, fcol);
 			}
 		}
 	}
 
-	protected static String operand2String(Operand oper) {
-		// if (oper.getSubq() != null) {
-		// MSelectSubQuery qroot = new MSelectSubQuery(msel);
-		// Util.createSelect(qroot);
-		// Text2Model.convertSelect(designer, qroot, (SelectImpl)
-		// oper.getSubq().getSel());
-		// } else
-		if (oper.getColumn() != null)
-			return getColumn(oper.getColumn().getCfull());
-		if (oper.getFunc() != null)
-			return getFunctionString(oper.getFunc(), oper);
-		if (oper.getParam() != null)
-			return oper.getParam().toString();
-		if (oper.getScalar() != null)
-			return oper.getScalar().toString();
-		return "";
+	protected static String operands2String(Operands ops) {
+		Operand op = ops.getOp1();
+		if (op == null)
+			op = ops.getLeft().getOp1();
+
+		String str = operand2String(op);
+		if (ops instanceof Plus)
+			str += " + ";
+		else if (ops instanceof Minus)
+			str += " - ";
+		else if (ops instanceof Star)
+			str += " * ";
+		else if (ops instanceof Div)
+			str += " / ";
+		else if (ops instanceof Concat)
+			str += " || ";
+
+		if (ops.getRight() != null)
+			str += operand2String(ops.getRight());
+		return str;
 	}
 
 	private static AMQueryAliased<?> getMSelectColumn(SQLQueryDesigner designer, OperandImpl op, MSelect msel) {
@@ -96,19 +105,49 @@ public class ConvertSelectColumns {
 		return mscol;
 	}
 
+	protected static String operand2String(Operand oper) {
+		// if (oper.getSubq() != null) {
+		// MSelectSubQuery qroot = new MSelectSubQuery(msel);
+		// Util.createSelect(qroot);
+		// Text2Model.convertSelect(designer, qroot, (SelectImpl)
+		// oper.getSubq().getSel());
+		// } else
+		if (oper.getColumn() != null)
+			return getColumn(oper.getColumn().getCfull());
+		if (oper.getFunc() != null)
+			return getFunctionString(oper.getFunc(), oper);
+		if (oper.getParam() != null)
+			return oper.getParam().toString();
+		if (oper.getScalar() != null)
+			return getScalarString(oper.getScalar());
+		if (oper.getXop() != null)
+			return operand2String(oper.getXop());
+		return "";
+	}
+
 	private static String getFunctionString(OpFunction f, Operand oper) {
 		String sargs = " ";
 		OpFunctionArg args = f.getArgs();
 		if (args != null) {
 			String sep = "";
-			for (Operands eobj : args.getEntries()) {
+			for (EObject eobj : args.eContents()) {
 				sargs += sep;
-				if (eobj instanceof Operand)
-					sargs += operand2String((Operand) eobj);
+				if (eobj instanceof OperandImpl)
+					sargs += operand2String(((OperandImpl) eobj).getXop());
+				else if (eobj instanceof ColumnOperand)
+					sargs += getColumn(((ColumnOperand) eobj).getCfull());
+				else if (eobj instanceof POperand)
+					sargs += ((POperand) eobj).toString();
+				else if (eobj instanceof ExpOperand)
+					sargs += ((ExpOperand) eobj).toString();
+				else if (eobj instanceof ScalarOperand)
+					sargs += eobj.toString();
+				else if (eobj instanceof Operands)
+					sargs += operands2String((Operands) eobj);
 				sep = ",";
 			}
 		}
-		return f.getFname() + "(" + sargs + ")";
+		return f.getFname() + sargs + ")";
 	}
 
 	private static String getScalarString(ScalarOperand sc) {
@@ -118,13 +157,11 @@ public class ConvertSelectColumns {
 			return sc.getSodbl().toString();
 		if (sc.getSodt() != null)
 			return sc.getSodt().toString();
-		if (sc.getSoint() != null)
-			return sc.getSoint().toString();
 		if (sc.getSostr() != null)
 			return sc.getSostr();
 		if (sc.getSotime() != null)
 			return sc.getSotime().toString();
-		return "";
+		return Integer.toString(sc.getSoint());
 	}
 
 	private static void setupAlias(AMQueryAliased<?> mscol, ColumnOrAlias fcol) {

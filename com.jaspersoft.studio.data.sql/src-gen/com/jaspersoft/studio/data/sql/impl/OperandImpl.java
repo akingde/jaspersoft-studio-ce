@@ -5,28 +5,20 @@ package com.jaspersoft.studio.data.sql.impl;
 import com.jaspersoft.studio.data.sql.ColumnOperand;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.OpFunction;
-import com.jaspersoft.studio.data.sql.OpFunctionArg;
 import com.jaspersoft.studio.data.sql.Operand;
-import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.SubQueryOperand;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +27,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getEntries <em>Entries</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getColumn <em>Column</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getSubq <em>Subq</em>}</li>
@@ -48,18 +39,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class OperandImpl extends OperandListImpl implements Operand
+public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
 {
-  /**
-   * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getEntries()
-   * @generated
-   * @ordered
-   */
-  protected EList<Operands> entries;
-
   /**
    * The cached value of the '{@link #getColumn() <em>Column</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -149,20 +130,6 @@ public class OperandImpl extends OperandListImpl implements Operand
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.OPERAND;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<Operands> getEntries()
-  {
-    if (entries == null)
-    {
-      entries = new EObjectContainmentEList<Operands>(Operands.class, this, SqlPackage.OPERAND__ENTRIES);
-    }
-    return entries;
   }
 
   /**
@@ -511,8 +478,6 @@ public class OperandImpl extends OperandListImpl implements Operand
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND__ENTRIES:
-        return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
       case SqlPackage.OPERAND__COLUMN:
         return basicSetColumn(null, msgs);
       case SqlPackage.OPERAND__XOP:
@@ -541,8 +506,6 @@ public class OperandImpl extends OperandListImpl implements Operand
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND__ENTRIES:
-        return getEntries();
       case SqlPackage.OPERAND__COLUMN:
         return getColumn();
       case SqlPackage.OPERAND__XOP:
@@ -566,16 +529,11 @@ public class OperandImpl extends OperandListImpl implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND__ENTRIES:
-        getEntries().clear();
-        getEntries().addAll((Collection<? extends Operands>)newValue);
-        return;
       case SqlPackage.OPERAND__COLUMN:
         setColumn((ColumnOperand)newValue);
         return;
@@ -611,9 +569,6 @@ public class OperandImpl extends OperandListImpl implements Operand
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND__ENTRIES:
-        getEntries().clear();
-        return;
       case SqlPackage.OPERAND__COLUMN:
         setColumn((ColumnOperand)null);
         return;
@@ -649,8 +604,6 @@ public class OperandImpl extends OperandListImpl implements Operand
   {
     switch (featureID)
     {
-      case SqlPackage.OPERAND__ENTRIES:
-        return entries != null && !entries.isEmpty();
       case SqlPackage.OPERAND__COLUMN:
         return column != null;
       case SqlPackage.OPERAND__XOP:
@@ -667,58 +620,6 @@ public class OperandImpl extends OperandListImpl implements Operand
         return scalar != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass)
-  {
-    if (baseClass == OpFunctionArg.class)
-    {
-      switch (derivedFeatureID)
-      {
-        case SqlPackage.OPERAND__ENTRIES: return SqlPackage.OP_FUNCTION_ARG__ENTRIES;
-        default: return -1;
-      }
-    }
-    if (baseClass == Operands.class)
-    {
-      switch (derivedFeatureID)
-      {
-        default: return -1;
-      }
-    }
-    return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass)
-  {
-    if (baseClass == OpFunctionArg.class)
-    {
-      switch (baseFeatureID)
-      {
-        case SqlPackage.OP_FUNCTION_ARG__ENTRIES: return SqlPackage.OPERAND__ENTRIES;
-        default: return -1;
-      }
-    }
-    if (baseClass == Operands.class)
-    {
-      switch (baseFeatureID)
-      {
-        default: return -1;
-      }
-    }
-    return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
   }
 
 } //OperandImpl

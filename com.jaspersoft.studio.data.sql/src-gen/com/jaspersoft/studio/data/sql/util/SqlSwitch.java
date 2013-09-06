@@ -289,9 +289,6 @@ public class SqlSwitch<T> extends Switch<T>
       {
         Operand operand = (Operand)theEObject;
         T result = caseOperand(operand);
-        if (result == null) result = caseOperandList(operand);
-        if (result == null) result = caseOperands(operand);
-        if (result == null) result = caseOpFunctionArg(operand);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -348,6 +345,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         ScalarOperand scalarOperand = (ScalarOperand)theEObject;
         T result = caseScalarOperand(scalarOperand);
+        if (result == null) result = caseOperandList(scalarOperand);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -372,6 +370,51 @@ public class SqlSwitch<T> extends Switch<T>
         OpList opList = (OpList)theEObject;
         T result = caseOpList(opList);
         if (result == null) result = caseOperandList(opList);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PLUS:
+      {
+        Plus plus = (Plus)theEObject;
+        T result = casePlus(plus);
+        if (result == null) result = caseOperands(plus);
+        if (result == null) result = caseOpFunctionArg(plus);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.MINUS:
+      {
+        Minus minus = (Minus)theEObject;
+        T result = caseMinus(minus);
+        if (result == null) result = caseOperands(minus);
+        if (result == null) result = caseOpFunctionArg(minus);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.STAR:
+      {
+        Star star = (Star)theEObject;
+        T result = caseStar(star);
+        if (result == null) result = caseOperands(star);
+        if (result == null) result = caseOpFunctionArg(star);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.DIV:
+      {
+        Div div = (Div)theEObject;
+        T result = caseDiv(div);
+        if (result == null) result = caseOperands(div);
+        if (result == null) result = caseOpFunctionArg(div);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.CONCAT:
+      {
+        Concat concat = (Concat)theEObject;
+        T result = caseConcat(concat);
+        if (result == null) result = caseOperands(concat);
+        if (result == null) result = caseOpFunctionArg(concat);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1039,6 +1082,86 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOpList(OpList object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Plus</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Plus</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePlus(Plus object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Minus</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Minus</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMinus(Minus object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Star</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Star</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseStar(Star object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Div</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Div</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDiv(Div object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Concat</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Concat</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseConcat(Concat object)
   {
     return null;
   }

@@ -392,6 +392,51 @@ public interface SqlFactory extends EFactory
   OpList createOpList();
 
   /**
+   * Returns a new object of class '<em>Plus</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Plus</em>'.
+   * @generated
+   */
+  Plus createPlus();
+
+  /**
+   * Returns a new object of class '<em>Minus</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Minus</em>'.
+   * @generated
+   */
+  Minus createMinus();
+
+  /**
+   * Returns a new object of class '<em>Star</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Star</em>'.
+   * @generated
+   */
+  Star createStar();
+
+  /**
+   * Returns a new object of class '<em>Div</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Div</em>'.
+   * @generated
+   */
+  Div createDiv();
+
+  /**
+   * Returns a new object of class '<em>Concat</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Concat</em>'.
+   * @generated
+   */
+  Concat createConcat();
+
+  /**
    * Returns a new object of class '<em>Op FList</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

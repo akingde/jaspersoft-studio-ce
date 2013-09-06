@@ -69,7 +69,7 @@ ExpressionGroup returns ExprGroup:
 	{ExprGroup} '(' expr=FullExpression ')';
 
 XExpression returns XExpr:
-	'$X' {XExpr} '{' xf=XFunction "," col=ColumnOperand ("," prm=XExpressionParams)? '}';
+	'$X' {XExpr} '{' xf=XFunction "," col=ColumnFull ("," prm=XExpressionParams)? '}';
 
 XExpressionParams returns Prms:
 	JRParameter ({Prms.entries+=current} ("," entries+=JRParameter)+)?;
@@ -98,11 +98,12 @@ InOperator returns InOper:
 	{InOper} op=('NOT IN' | 'IN') '(' (subquery=SubQueryOperand | opList=OperandList) ')';
 
 OperandList:
-	XOperandFragment ({OpList.entries+=current} ("," entries+=XOperandFragment)+)?;
+	ScalarOperand ({OpList.entries+=current} ("," entries+=ScalarOperand)+)?;
 
 Operand returns Operands:
-	OperandFragment ({Operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
-
+	op1=OperandFragment (({Plus.left=current} '+' | {Minus.left=current} '-' | {Star.left=current} STAR |
+	{Div.left=current} '/' | {Concat.left=current} '||') right=OperandFragment)*;
+	//	OperandFragment ({Operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
 OperandFragment returns Operand:
 /*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction;
 
@@ -115,10 +116,6 @@ OperandFunction returns OpFunction:
 OpFunctionArg:
 	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
 
-terminal FNAME:
-	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' |
-	'0'..'9')* '(';
-
 	//OperandFunctionArguments returns OperandFunctionArguments:
 //	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
 
@@ -128,10 +125,10 @@ XOperandFragment returns Operand:
 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 
 ParameterOperand returns POperand:
-	'$P' {POperand} '{' prm=ID '}';
+	'$P' {POperand} prm=BRACEDPRM;
 
 ExclamationParameterOperand returns ExpOperand:
-	'$P!' {ExpOperand} '{' prm=ID '}';
+	'$P!' {ExpOperand} prm=BRACEDPRM;
 
 ColumnOperand returns ColumnOperand:
 	cfull=ColumnFull;
@@ -140,7 +137,7 @@ SubQueryOperand returns SubQueryOperand:
 	{SubQueryOperand} '(' sel=SelectQuery ')';
 
 ScalarOperand returns ScalarOperand:
-	soint=SIGNED_INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
+	soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
 
 StringOperand:
 	STRING;
@@ -149,16 +146,19 @@ enum JoinType:
 	innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
+terminal FNAME:
+	STRINGID '(';
+
 terminal DBID:
-	(('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*) | ('\'' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' |
-	'A'..'Z' | '_' | '0'..'9')* '\'') | ('"' ('a'..'z' | 'A'..'Z' |
-	'_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* '"') | ('`' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' |
-	'A'..'Z' | '_' | '0'..'9')* '`') | ('[' ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')* ']');
+	(STRINGID | ('\'' STRINGID '\'') | ('"' STRINGID '"') | ('`' STRINGID '`') | ('[' STRINGID ']'));
+
+terminal fragment STRINGID:
+	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 
 terminal STAR:
 	"*";
 
-terminal SIGNED_INT returns ecore::EIntegerObject:
+terminal INT returns ecore::EInt:
 	'-'? ('0'..'9')+;
 
 terminal TIMESTAMP returns ecore::EDate:
@@ -172,6 +172,15 @@ terminal TIME returns ecore::EDate:
 
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
 	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
+
+terminal BRACEDPRM:
+	'{' PRMNAME '}';
+
+//terminal XPRM:
+//	!('\r' | '\n' | '}' | ',' | '{' | ' ') -> ',';
+
+terminal fragment PRMNAME:
+	(!('\r' | '\n' | '}' | ',' | '{'))+;
 
 terminal SL_COMMENT:
 	('--' | '#' | '//') !('\n' | '\r')* ('\r'? '\n')?;
