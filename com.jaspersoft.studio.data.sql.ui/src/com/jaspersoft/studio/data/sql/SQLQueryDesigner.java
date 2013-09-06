@@ -281,6 +281,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	@Override
 	public void dispose() {
+		if (dbMetadata != null)
+			dbMetadata.dispose();
 		if (outline != null)
 			outline.dispose();
 		if (diagram != null)

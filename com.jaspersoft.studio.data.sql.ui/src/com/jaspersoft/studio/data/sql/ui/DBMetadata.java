@@ -193,6 +193,7 @@ public class DBMetadata {
 	public void updateUI(final DataAdapterDescriptor da, final DataAdapterService das, IProgressMonitor monitor) {
 		if (running)
 			return;
+		this.monitor = monitor;
 		running = true;
 		Display.getDefault().syncExec(new Runnable() {
 
@@ -209,10 +210,10 @@ public class DBMetadata {
 		root.removeChildren();
 		if (tblMap != null)
 			tblMap.clear();
-		final Connection c = getConnection(das);
-		if (c != null)
+		connection = getConnection(das);
+		if (connection != null)
 			try {
-				final DatabaseMetaData meta = c.getMetaData();
+				final DatabaseMetaData meta = connection.getMetaData();
 				ResultSet schemas = meta.getSchemas();
 				while (schemas.next()) {
 					String tableSchema = schemas.getString("TABLE_SCHEM");
@@ -223,32 +224,39 @@ public class DBMetadata {
 					if (monitor.isCanceled())
 						break;
 				}
+				schemas.close();
 				updateUI(root);
+				List<String> tableTypes = new ArrayList<String>();
+				ResultSet rs = meta.getTableTypes();
+				while (rs.next()) {
+					tableTypes.add(rs.getString("TABLE_TYPE"));
+				}
+				rs.close();
 				for (INode n : root.getChildren()) {
 					MSqlSchema schema = (MSqlSchema) n;
 					try {
-						ResultSet rs = meta.getTableTypes();
-						while (rs.next()) {
-							String ttype = rs.getString("TABLE_TYPE");
+						for (String ttype : tableTypes)
 							readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, WordUtils.capitalizeFully(ttype), new String[] { ttype });
-						}
 						updateItermediateUI();
 						setFirstSelection();
 					} catch (Throwable e) {
+						e.printStackTrace();
 					}
 					try {
-						ResultSet rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
+						rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
 						MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
 						while (rs.next())
 							new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
+						rs.close();
 					} catch (Throwable e) {
+						e.printStackTrace();
 					}
 					try {
-						ResultSet rs = meta.getFunctions(schema.getTableCatalog(), schema.getValue(), "%");
+						rs = meta.getFunctions(schema.getTableCatalog(), schema.getValue(), "%");
 						MDBObjects mfunct = new MDBObjects(schema, "Functions", "icons/function.png");
 						while (rs.next())
 							new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
-
+						rs.close();
 						// System.out.println(meta.getSystemFunctions());
 						// System.out.println(meta.getNumericFunctions());
 						// System.out.println(meta.getStringFunctions());
@@ -258,6 +266,7 @@ public class DBMetadata {
 						// System.out.println(meta.getSchemaTerm());
 						// System.out.println(meta.getProcedureTerm());
 					} catch (Throwable e) {
+						e.printStackTrace();
 					}
 					updateItermediateUI();
 					if (monitor.isCanceled())
@@ -274,11 +283,12 @@ public class DBMetadata {
 								ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue(), "%");
 								while (rs.next())
 									new MSQLColumn(mt, rs.getString("COLUMN_NAME"), rs);
-
+								rs.close();
 								readPrimaryKeys(meta, mt, tables);
 
 								return false;
 							} catch (Throwable e) {
+								e.printStackTrace();
 							}
 						}
 						return true;
@@ -295,6 +305,7 @@ public class DBMetadata {
 								readForeignKeys(meta, (MSqlTable) n, (MTables) mt.getParent());
 								return false;
 							} catch (Throwable e) {
+								e.printStackTrace();
 							}
 						}
 						return true;
@@ -361,6 +372,7 @@ public class DBMetadata {
 				// the link is not good, what we do?
 			}
 		}
+		rs.close();
 		if (fk != null)
 			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
 	}
@@ -381,8 +393,8 @@ public class DBMetadata {
 					break;
 				}
 			}
-
 		}
+		rs.close();
 		if (pk != null)
 			pk.setColumns(cols.toArray(new MSQLColumn[cols.size()]));
 	}
@@ -397,7 +409,9 @@ public class DBMetadata {
 				MSqlTable mt = new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
 				tblMap.put(mt.toSQLString(), mt);
 			}
+			rs.close();
 		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -489,11 +503,18 @@ public class DBMetadata {
 	}
 
 	private LinkedHashMap<String, MSqlTable> tblMap;
+	private Connection connection;
+	private IProgressMonitor monitor;
 
 	public LinkedHashMap<String, MSqlTable> getTables() {
 		if (tblMap == null)
 			tblMap = new LinkedHashMap<String, MSqlTable>();
 		return tblMap;
+	}
+
+	public void dispose() {
+		if (monitor != null)
+			monitor.setCanceled(true);
 	}
 
 }
