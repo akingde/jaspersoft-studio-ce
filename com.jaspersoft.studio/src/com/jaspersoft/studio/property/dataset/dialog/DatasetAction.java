@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -22,7 +17,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -73,17 +67,10 @@ public class DatasetAction extends SelectionAction {
 	public void run() {
 		try {
 			MDataset mdataset = getMDatasetToShow();
-			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset,
-					mdataset.getJasperConfiguration());
-			if (dlg.open() == Window.OK) {
-				Display.getCurrent().asyncExec(new Runnable() {
-					public void run() {
-						execute(dlg.getCommand());
-					}
-				});
-			}
+			new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mdataset.getJasperConfiguration(),
+					getCommandStack()).open();
 		} catch (Exception e) {
-			UIUtils.showError(Messages.DatasetAction_ErrorMsg,e);
+			UIUtils.showError(Messages.DatasetAction_ErrorMsg, e);
 		}
 	}
 
@@ -91,25 +78,23 @@ public class DatasetAction extends SelectionAction {
 	 * Gets the MDataset instance for which we should open the "Dataset & Query" dialog.
 	 */
 	private MDataset getMDatasetToShow() {
-		ISelection selection = getSelection(); 
-		if(selection instanceof IStructuredSelection){
+		ISelection selection = getSelection();
+		if (selection instanceof IStructuredSelection) {
 			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
 			// Selection of an EditPart that wraps the MDataset element, or one of its children.
 			// Example: selecting an Dataset from the Outline view, or its fields
-			if(firstElement instanceof EditPart && 
-					((EditPart) firstElement).getModel() instanceof ANode){ 
-					ANode currentNode = (ANode) ((EditPart) firstElement).getModel();
-					while (currentNode!=null){
-						if(currentNode instanceof MDataset){
-							return (MDataset) currentNode;
-						}
-						else{
-							currentNode=currentNode.getParent();
-						}
+			if (firstElement instanceof EditPart && ((EditPart) firstElement).getModel() instanceof ANode) {
+				ANode currentNode = (ANode) ((EditPart) firstElement).getModel();
+				while (currentNode != null) {
+					if (currentNode instanceof MDataset) {
+						return (MDataset) currentNode;
+					} else {
+						currentNode = currentNode.getParent();
 					}
+				}
 			}
 		}
-		
+
 		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
 		if (part instanceof ReportEditor) {
 			MReport mreport = (MReport) part.getModel().getChildren().get(0);
@@ -131,7 +116,7 @@ public class DatasetAction extends SelectionAction {
 				}
 			}
 		}
-		
+
 		// Try a fallback solution in order to be sure to have a valid dataset
 		// Get it from the currently opened active editor
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
@@ -139,10 +124,10 @@ public class DatasetAction extends SelectionAction {
 			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
 			if (mroot != null) {
 				final ANode mreport = (ANode) mroot.getChildren().get(0);
-				return (MDataset) ((MReport)mreport).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+				return (MDataset) ((MReport) mreport).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 			}
 		}
-		
+
 		return null;
 	}
 

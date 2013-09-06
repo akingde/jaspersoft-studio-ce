@@ -62,7 +62,7 @@ public class JRQueryCellEditor extends ATextDialogRWCellEditor {
 		MQuery mquery = (MQuery) getValue();
 		MDataset mdataset = mquery.getMdataset();
 		Shell shell = cellEditorWindow.getShell();
-		DatasetDialog dlg = new DatasetDialog(shell, mdataset, mquery.getJasperConfiguration());
+		DatasetDialog dlg = new DatasetDialog(shell, mdataset, mquery.getJasperConfiguration(), null);
 		if (dlg.open() == Window.OK)
 			return dlg.getCommand();
 

@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -77,9 +78,11 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	private JasperReportsConfiguration jConfig;
 	private Map<JRField, JRField> mapfields;
 	private Map<JRParameter, JRParameter> mapparam;
+	private CommandStack cmdStack;
 
-	public DatasetDialog(Shell shell, MDataset mdataset, JasperReportsConfiguration jConfig) {
+	public DatasetDialog(Shell shell, MDataset mdataset, JasperReportsConfiguration jConfig, CommandStack cmdStack) {
 		super(shell);
+		this.cmdStack = cmdStack;
 		this.mdataset = mdataset;
 		this.jConfig = jConfig;
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
@@ -112,7 +115,11 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	@Override
 	public boolean close() {
-		createCommand();
+		if (getReturnCode() == OK) {
+			createCommand();
+			if (cmdStack != null)
+				cmdStack.execute(command);
+		}
 		dataquery.dispose();
 		return super.close();
 	}

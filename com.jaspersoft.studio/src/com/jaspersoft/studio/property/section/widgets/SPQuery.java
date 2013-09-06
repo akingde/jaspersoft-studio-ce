@@ -1,23 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -48,9 +42,8 @@ public class SPQuery extends SPText {
 			public void widgetSelected(SelectionEvent e) {
 				PatternEditor wizard = new PatternEditor();
 				wizard.setValue(ftext.getText());
-				DatasetDialog dlg = new DatasetDialog(ftext.getShell(), mdataset, mquery.getJasperConfiguration());
-				if (dlg.open() == Window.OK)
-					section.getEditDomain().getCommandStack().execute(dlg.getCommand());
+				new DatasetDialog(ftext.getShell(), mdataset, mquery.getJasperConfiguration(), section.getEditDomain()
+						.getCommandStack()).open();
 			}
 		});
 	}
