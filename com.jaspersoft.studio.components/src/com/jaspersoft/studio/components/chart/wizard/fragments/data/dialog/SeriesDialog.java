@@ -42,6 +42,7 @@ import org.eclipse.ui.forms.IManagedForm;
 
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.ISeriesFactory;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
@@ -95,16 +96,18 @@ public class SeriesDialog<T> extends FormDialog implements IExpressionContextSet
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue(new JRDesignExpression("\"SERIE " + (input.size() + 1) + "\""));
-				wizard.setExpressionContext(expContext);
-				WizardDialog dialog = new WizardDialog(bGroup.getShell(), wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					T prev = null;
-					if (input.size() > 0)
-						prev = (T) input.get(input.size() - 1);
-					return serie.createSerie(wizard.getValue(), prev);
+				if(ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue(new JRDesignExpression("\"SERIE " + (input.size() + 1) + "\""));
+					wizard.setExpressionContext(expContext);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(bGroup.getShell(), wizard);
+					dialog.create();
+					if (dialog.open() == Dialog.OK) {
+						T prev = null;
+						if (input.size() > 0)
+							prev = (T) input.get(input.size() - 1);
+						return serie.createSerie(wizard.getValue(), prev);
+					}
 				}
 				return null;
 			}

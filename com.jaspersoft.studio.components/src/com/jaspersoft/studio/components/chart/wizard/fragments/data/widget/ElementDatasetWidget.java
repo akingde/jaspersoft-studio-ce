@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
@@ -242,16 +243,17 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		prmMapItem.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue((JRDesignExpression) eDataset.getDatasetRun()
-						.getParametersMapExpression());
-				wizard.setExpressionContext(expContext);
-				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
-						wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					((JRDesignDatasetRun) eDataset.getDatasetRun())
-							.setParametersMapExpression(wizard.getValue());
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue((JRDesignExpression) eDataset.getDatasetRun()
+							.getParametersMapExpression());
+					wizard.setExpressionContext(expContext);
+					WizardDialog dialog = 
+							ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(btnIncrement.getShell(),wizard);
+					if (dialog.open() == Dialog.OK) {
+						((JRDesignDatasetRun) eDataset.getDatasetRun())
+								.setParametersMapExpression(wizard.getValue());
+					}
 				}
 			}
 
@@ -325,25 +327,26 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		btnIncrement.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue((JRDesignExpression) eDataset
-						.getIncrementWhenExpression());
-				// Increment when expression should rely on the dataset run
-				// information.
-				JRDatasetRun datasetRun = eDataset.getDatasetRun();
-				JRDesignDataset dds = jrDesign.getMainDesignDataset();
-				if (datasetRun != null && datasetRun.getDatasetName() != null) {
-					dds = ModelUtils.getDesignDatasetByName(jrDesign,
-							datasetRun.getDatasetName());
-				}
-				ExpressionContext ec = new ExpressionContext(dds, expContext
-						.getJasperReportsConfiguration());
-				wizard.setExpressionContext(ec);
-				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
-						wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					eDataset.setIncrementWhenExpression(wizard.getValue());
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue((JRDesignExpression) eDataset
+							.getIncrementWhenExpression());
+					// Increment when expression should rely on the dataset run
+					// information.
+					JRDatasetRun datasetRun = eDataset.getDatasetRun();
+					JRDesignDataset dds = jrDesign.getMainDesignDataset();
+					if (datasetRun != null && datasetRun.getDatasetName() != null) {
+						dds = ModelUtils.getDesignDatasetByName(jrDesign,
+								datasetRun.getDatasetName());
+					}
+					ExpressionContext ec = new ExpressionContext(dds, expContext
+							.getJasperReportsConfiguration());
+					wizard.setExpressionContext(ec);
+					WizardDialog dialog = 
+							ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(btnIncrement.getShell(),wizard);
+					if (dialog.open() == Dialog.OK) {
+						eDataset.setIncrementWhenExpression(wizard.getValue());
+					}
 				}
 			}
 

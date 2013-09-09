@@ -28,6 +28,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -51,6 +54,7 @@ public class ExpressionEditorSupportUtil {
 	private static final IExpressionEditorSupportFactory supportFactory;
 	private static final Map<String, ExpressionEditorSupport> editorSupports;
 	private static ExpressionContext currentContext;
+	private static Boolean isExpressionEditorDialogOpen=Boolean.FALSE;
 
 	static {
 		supportFactory = JaspersoftStudioPlugin.getExtensionManager().getExpressionEditorSupportFactory();
@@ -316,4 +320,43 @@ public class ExpressionEditorSupportUtil {
 		}
 	}
 
+	/**
+	 * Creates and returns a wizard dialog for the expression editor wizard passed as parameter.
+	 * <p>
+	 * 
+	 * NOTE: We need to ensure that only one expression editor dialog is open at a time.
+	 * Unfortunately in Linux it seems that the dialog does open modeless, while in Windows and MacOSX
+	 * it opens correctly as modal.
+	 * 
+	 * @param parentShell the parent shell
+	 * @param newWizard the wizard that the dialog will work on
+	 * @return the wizard dialog newly created instance, <code>null</code> if it can not be created
+	 */
+	public static WizardDialog getExpressionEditorWizardDialog(Shell parentShell,Wizard newWizard){
+		synchronized (isExpressionEditorDialogOpen) {
+			if(isExpressionEditorDialogOpen){
+				return null;
+			}
+			else {
+				isExpressionEditorDialogOpen=Boolean.TRUE;
+				return new WizardDialog(parentShell, newWizard);
+			}
+		}
+	}
+	
+	/**
+	 * Updates the dedicated flag once the expression editor dialog is closed.
+	 */
+	public static void notifyExpressionEditorDialogClosing() {
+		synchronized (isExpressionEditorDialogOpen) {
+			isExpressionEditorDialogOpen=Boolean.FALSE;
+		}
+	}
+	
+	/**
+	 * @return <code>true</code> if expression editor dialog is open, <code>false</code> otherwise
+	 */
+	public static boolean isExpressionEditorDialogOpen(){
+		return isExpressionEditorDialogOpen.booleanValue();
+	}
 }

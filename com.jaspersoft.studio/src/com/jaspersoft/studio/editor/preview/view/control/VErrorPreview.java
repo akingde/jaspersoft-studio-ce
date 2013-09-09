@@ -57,6 +57,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
@@ -248,21 +249,21 @@ public class VErrorPreview extends APreview {
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
 			if (expr.getId() == exp.getId()) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setExpressionContext(new ExpressionContext(dataset, jContext));
-				wizard.setValue(exp);
-				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					JRExpression e = wizard.getValue();
-
-					IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-					if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-						JrxmlEditor editor = (JrxmlEditor) activeJRXMLEditor;
-						CommandStack cs = (CommandStack) editor.getAdapter(CommandStack.class);
-						if (cs != null) {
-							cs.execute(new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(), e.getValueClassName()));
-							jContext.getJasperDesign().getEventSupport().firePropertyChange(JasperDesign.PROPERTY_NAME, true, false);
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setExpressionContext(new ExpressionContext(dataset, jContext));
+					wizard.setValue(exp);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						JRExpression e = wizard.getValue();
+						IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
+						if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
+							JrxmlEditor editor = (JrxmlEditor) activeJRXMLEditor;
+							CommandStack cs = (CommandStack) editor.getAdapter(CommandStack.class);
+							if (cs != null) {
+								cs.execute(new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(), e.getValueClassName()));
+								jContext.getJasperDesign().getEventSupport().firePropertyChange(JasperDesign.PROPERTY_NAME, true, false);
+							}
 						}
 					}
 				}

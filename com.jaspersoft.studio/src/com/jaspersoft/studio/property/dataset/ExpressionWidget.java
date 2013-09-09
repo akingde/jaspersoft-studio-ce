@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class ExpressionWidget {
@@ -73,18 +74,19 @@ public class ExpressionWidget {
 		expButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue(expression);
-				wizard.setExpressionContext(exprContext);
-				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					JRDesignExpression exprTmp = wizard.getValue();
-					if(exprTmp!=null){
-						setExpressionText(exprTmp.getText(), exprTmp.getValueClassName());
-					}
-					else{
-						setExpression(exprTmp);
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue(expression);
+					wizard.setExpressionContext(exprContext);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						JRDesignExpression exprTmp = wizard.getValue();
+						if(exprTmp!=null){
+							setExpressionText(exprTmp.getText(), exprTmp.getValueClassName());
+						}
+						else{
+							setExpression(exprTmp);
+						}
 					}
 				}
 			}

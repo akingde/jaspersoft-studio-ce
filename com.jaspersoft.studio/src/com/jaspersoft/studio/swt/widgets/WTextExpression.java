@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
@@ -202,13 +203,15 @@ public class WTextExpression extends Composite implements IExpressionContextSett
 		btnEditExpression.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue(expression);
-				wizard.setExpressionContext(expContext);
-				WizardDialog dialog = new WizardDialog(getShell(), wizard);
-				if (dialog.open() == Dialog.OK) {
-					JRDesignExpression value = wizard.getValue();
-					setExpression(value);
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue(expression);
+					wizard.setExpressionContext(expContext);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(getShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						JRDesignExpression value = wizard.getValue();
+						setExpression(value);
+					}
 				}
 			}
 

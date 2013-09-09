@@ -72,6 +72,8 @@ public class JRExpressionEditor extends Wizard {
 		super.dispose();
 		// Remove any expression context reference
 		ExpressionEditorSupportUtil.setCurrentExpressionContext(null);
+		// Notify closing
+		ExpressionEditorSupportUtil.notifyExpressionEditorDialogClosing();
 	}
 	
 	

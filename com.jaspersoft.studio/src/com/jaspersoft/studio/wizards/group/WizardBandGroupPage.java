@@ -50,6 +50,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
@@ -235,17 +236,19 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		dsExprDialog.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				JRDesignExpression mexp = (JRDesignExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-				wizard.setValue(mexp);
-				wizard.setExpressionContext(expContext);
-				WizardDialog dialog = new WizardDialog(dsExprDialog.getShell(), wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					mexp = wizard.getValue();
-					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
-
-					dsExpr.setText(mexp.getText());
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					JRDesignExpression mexp = (JRDesignExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
+					wizard.setValue(mexp);
+					wizard.setExpressionContext(expContext);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(dsExprDialog.getShell(), wizard);
+					dialog.create();
+					if (dialog.open() == Dialog.OK) {
+						mexp = wizard.getValue();
+						group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
+	
+						dsExpr.setText(mexp.getText());
+					}
 				}
 			}
 

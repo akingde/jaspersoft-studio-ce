@@ -25,6 +25,7 @@ import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -56,14 +57,16 @@ public class ExpressionListFieldEditor extends ListEditor{
 
 	@Override
 	protected String getNewInputObject() {
-		JRExpressionEditor wizard = new JRExpressionEditor();
-		WizardDialog dialog = new WizardDialog(getShell(),wizard);
-		dialog.create();
-		if (dialog.open() == Dialog.OK) {
-			JRDesignExpression newExp = wizard.getValue();
-			if(newExp!=null &&
-					!Misc.nvl(newExp.getText()).equals("")){
-				return newExp.getText();
+		if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+			JRExpressionEditor wizard = new JRExpressionEditor();
+			WizardDialog dialog = 
+					ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(getShell(),wizard);
+			if (dialog.open() == Dialog.OK) {
+				JRDesignExpression newExp = wizard.getValue();
+				if(newExp!=null &&
+						!Misc.nvl(newExp.getText()).equals("")){
+					return newExp.getText();
+				}
 			}
 		}
 		return null;

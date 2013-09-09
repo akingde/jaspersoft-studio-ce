@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class JRExpressionCellEditor extends DialogCellEditor {
@@ -37,15 +38,17 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		JRExpressionEditor wizard = new JRExpressionEditor();
-		wizard.setValue((JRDesignExpression) getValue());
-		wizard.setExpressionContext(expContext);
-		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
-		dialog.create();
-		if (dialog.open() == Dialog.OK) {
-			JRDesignExpression value = wizard.getValue();
-			// updateContents(value);
-			return value;
+		if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+			JRExpressionEditor wizard = new JRExpressionEditor();
+			wizard.setValue((JRDesignExpression) getValue());
+			wizard.setExpressionContext(expContext);
+			WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(cellEditorWindow.getShell(), wizard);
+			dialog.create();
+			if (dialog.open() == Dialog.OK) {
+				JRDesignExpression value = wizard.getValue();
+				// updateContents(value);
+				return value;
+			}
 		}
 		return null;
 	}

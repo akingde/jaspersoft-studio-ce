@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
@@ -140,15 +141,16 @@ public class SPDatasetRun extends ASPropertyWidget {
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JRDesignDatasetRun datasetRun = mDataSet.getValue();
-
-				JRExpressionEditor wizard = new JRExpressionEditor();
-				wizard.setValue((JRDesignExpression) datasetRun.getParametersMapExpression());
-				WizardDialog dialog = new WizardDialog(paramMap.getShell(), wizard);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION,
-							wizard.getValue());
+				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+					JRDesignDatasetRun datasetRun = mDataSet.getValue();
+					JRExpressionEditor wizard = new JRExpressionEditor();
+					wizard.setValue((JRDesignExpression) datasetRun.getParametersMapExpression());
+					WizardDialog dialog = 
+							ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(paramMap.getShell(), wizard);
+					if (dialog.open() == Dialog.OK) {
+						changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION,
+								wizard.getValue());
+					}
 				}
 			}
 
