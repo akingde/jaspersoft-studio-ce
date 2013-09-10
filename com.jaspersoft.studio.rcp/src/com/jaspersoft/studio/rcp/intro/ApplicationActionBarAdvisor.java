@@ -77,6 +77,9 @@ import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.menus.IMenuService;
 
+import com.jaspersoft.studio.rcp.Activator;
+import com.jaspersoft.studio.rcp.workspace.ActionSwitchWorkspace;
+
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private final IWorkbenchWindow window;
@@ -176,7 +179,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IWorkbenchAction previousAction;
 
 	// IDE-specific actions
-	private IWorkbenchAction openWorkspaceAction;
+	private IAction switchWorkspaceAction;
 
 	private IWorkbenchAction projectPropertyDialogAction;
 
@@ -501,7 +504,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(getPrintItem());
 		menu.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
 		menu.add(new Separator());
-		menu.add(openWorkspaceAction);
+		menu.add(switchWorkspaceAction);
 		menu.add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
 		menu.add(new Separator());
 		menu.add(importResourcesAction);
@@ -887,7 +890,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		upAction = null;
 		nextAction = null;
 		previousAction = null;
-		openWorkspaceAction = null;
+		switchWorkspaceAction = null;
 		projectPropertyDialogAction = null;
 		newWizardAction = null;
 		newWizardDropDownAction = null;
@@ -1136,8 +1139,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		buildProjectAction = IDEActionFactory.BUILD_PROJECT.create(window);
 		register(buildProjectAction);
 
-		openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
-		register(openWorkspaceAction);
+		switchWorkspaceAction = new ActionSwitchWorkspace(Activator.getDefault().getImage("icons/jss_icon_64.png"));
+		register(switchWorkspaceAction);
 		
 		projectPropertyDialogAction = IDEActionFactory.OPEN_PROJECT_PROPERTIES
 				.create(window);
