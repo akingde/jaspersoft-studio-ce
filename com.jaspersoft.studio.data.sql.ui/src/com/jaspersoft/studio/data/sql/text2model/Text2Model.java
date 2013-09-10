@@ -32,6 +32,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.model.util.ModelVisitor;
@@ -164,14 +165,18 @@ public class Text2Model {
 		return new MSqlSchema(dbroot, schema, null, true);
 	}
 
-	public static MSqlTable findTable(MRoot dbroot, String schema, final String table) {
+	public static MSqlTable findTable(MRoot dbroot, String schema, final String table, final SQLQueryDesigner designer) {
 		MSqlSchema ms = findSchema(dbroot, schema);
+		if (ms.getChildren().isEmpty() || ms.getChildren().get(0) instanceof MDummy)
+			designer.getDbMetadata().loadSchema(ms);
 		return new ModelVisitor<MSqlTable>(ms) {
 			@Override
 			public boolean visit(INode n) {
 				if (n instanceof MSqlTable) {
 					MSqlTable mt = (MSqlTable) n;
 					if (mt.getValue().equalsIgnoreCase(table)) {
+						if (mt.getChildren().isEmpty() || mt.getChildren().get(0) instanceof MDummy)
+							designer.getDbMetadata().loadTable(mt);
 						setObject(mt);
 						stop();
 					}

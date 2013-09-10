@@ -96,7 +96,7 @@ public class DatasetAction extends SelectionAction {
 		}
 
 		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
-		if (part instanceof ReportEditor) {
+		if (part.getModel() != null && !part.getModel().getChildren().isEmpty() && part instanceof ReportEditor) {
 			MReport mreport = (MReport) part.getModel().getChildren().get(0);
 			// get report main dataset
 			return (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
@@ -105,7 +105,7 @@ public class DatasetAction extends SelectionAction {
 			// FIXME - Now this solution works because list/crosstab/table editors will
 			// have only one child MDataset element. Once this will be no longer valid,
 			// the code below must be changed
-			if (part.getModel().getChildren().size() > 0) {
+			if (part.getModel() != null && !part.getModel().getChildren().isEmpty()) {
 				INode firstChild = part.getModel().getChildren().get(0);
 				if (firstChild instanceof MPage) {
 					for (INode c : firstChild.getChildren()) {

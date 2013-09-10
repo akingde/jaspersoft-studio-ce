@@ -22,6 +22,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.TablesDialog;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
@@ -74,7 +75,14 @@ public class CreateTable extends AAction {
 		return run(node, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
 	}
 
-	public MFromTable run(MSqlTable node, MFrom mfrom, int index) {
+	public MFromTable run(final MSqlTable node, MFrom mfrom, int index) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				designer.getDbMetadata().loadTable(Util.getTable(designer.getDbMetadata().getRoot(), node));
+			}
+		});
 		return new MFromTable(mfrom, node, index);
 	}
 }

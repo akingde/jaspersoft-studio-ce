@@ -40,10 +40,10 @@ import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.text2model.Text2Model;
-import com.jaspersoft.studio.data.sql.ui.DBMetadata;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.data.sql.ui.SQLQuerySource;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
+import com.jaspersoft.studio.data.sql.ui.metadata.DBMetadata;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -161,6 +161,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	@Override
 	protected void updateQueryText(String txt) {
+		if (refreshMetadata)
+			return;
 		source.setQuery(txt);
 		if (!isModelRefresh)
 			refreshQueryModel();
@@ -170,11 +172,21 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		Text2Model.text2model(this, source.getXTextDocument());
 	}
 
+	private boolean refreshMetadata = false;
+
+	public void setRefreshMetadata(boolean refreshMetadata) {
+		this.refreshMetadata = refreshMetadata;
+	}
+
 	public void refreshedMetadata() {
 		if (tabFolder.getSelectionIndex() == 0)
 			source.setDirty(true);
-		if (tabFolder.getSelectionIndex() != 0)
-			refreshQueryModel();
+		if (tabFolder.getSelectionIndex() != 0) {
+			refreshMetadata = true;
+			Util.refreshTables(dbMetadata.getRoot(), getRoot(), this);
+			refreshMetadata = false;
+		}
+		// refreshQueryModel();
 		if (tabFolder.getSelectionIndex() == 1)
 			outline.scheduleRefresh();
 		if (tabFolder.getSelectionIndex() == 2)
@@ -182,6 +194,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	public void refreshQuery() {
+		if (refreshMetadata)
+			return;
 		if (root != null) {
 			isModelRefresh = true;
 			if (!isQueryModelEmpty())
@@ -226,6 +240,8 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 			@Override
 			public void run() {
+				if (runningmonitor != null)
+					runningmonitor.setCanceled(true);
 				updateMetadata();
 			}
 		});
@@ -252,7 +268,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						try {
 							monitor.beginTask("Reading metadata", IProgressMonitor.UNKNOWN);
 							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
-							dbMetadata.updateUI(da, das, monitor);
+							dbMetadata.updateMetadata(da, das, monitor);
 						} finally {
 							monitor.done();
 							runningthread = null;

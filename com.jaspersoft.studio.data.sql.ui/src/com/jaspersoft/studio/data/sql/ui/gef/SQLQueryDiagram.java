@@ -49,7 +49,6 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
-import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.FromEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.QueryEditPart;

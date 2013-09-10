@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.dialogs;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +51,19 @@ import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
 public class FromTableColumnsDialog extends ATitledDialog {
+	private final class MetaDataListener implements PropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+
+			treeViewer.refresh(true);
+		}
+	}
+
 	private TreeViewer treeViewer;
 	private Map<MSQLColumn, MFromTable> cols = new HashMap<MSQLColumn, MFromTable>();
 	private MFrom root;
 	private int style = SWT.MULTI;
+	private MetaDataListener metaDataListener;
 
 	public FromTableColumnsDialog(Shell parentShell) {
 		super(parentShell);
@@ -75,6 +86,7 @@ public class FromTableColumnsDialog extends ATitledDialog {
 
 	@Override
 	public boolean close() {
+		root.getRoot().getPropertyChangeSupport().removePropertyChangeListener(metaDataListener);
 		if (getReturnCode() == OK) {
 			TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 			for (TreePath tp : ts.getPaths())
@@ -161,6 +173,8 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			}
 		});
 		treeViewer.setInput(root);
+		metaDataListener = new MetaDataListener();
+		root.getRoot().getPropertyChangeSupport().addPropertyChangeListener(metaDataListener);
 
 		treeViewer.expandAll();
 		return cmp;

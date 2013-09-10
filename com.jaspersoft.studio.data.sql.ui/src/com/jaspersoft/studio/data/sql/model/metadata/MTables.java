@@ -17,6 +17,8 @@ package com.jaspersoft.studio.data.sql.model.metadata;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.apache.commons.lang.WordUtils;
+
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.model.ANode;
 
@@ -33,5 +35,10 @@ public class MTables extends MDBObjects {
 
 	public String getTableSchema() {
 		return ((MSqlSchema) getParent()).getTableCatalog();
+	}
+
+	@Override
+	public String getDisplayText() {
+		return WordUtils.capitalizeFully(getValue());
 	}
 }

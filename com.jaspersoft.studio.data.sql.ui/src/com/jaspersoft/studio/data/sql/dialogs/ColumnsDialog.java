@@ -59,7 +59,6 @@ public class ColumnsDialog extends ATitledDialog {
 			if (obj instanceof MSQLColumn)
 				cols.add((MSQLColumn) obj);
 		}
-
 		return super.close();
 	}
 

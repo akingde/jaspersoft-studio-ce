@@ -71,7 +71,7 @@ public class ConvertTables {
 			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq().getSel());
 		} else {
 			MRoot dbroot = designer.getDbMetadata().getRoot();
-			MSqlTable msqlt = getTable(dbroot, t.getTfull());
+			MSqlTable msqlt = getTable(dbroot, t.getTfull(), designer);
 			mft = new MFromTableJoin(mfrom, msqlt);
 		}
 		return mft;
@@ -86,20 +86,20 @@ public class ConvertTables {
 			Text2Model.convertSelect(designer, mft, (SelectImpl) t.getSq().getSel());
 		} else {
 			MRoot dbroot = designer.getDbMetadata().getRoot();
-			MSqlTable msqlt = getTable(dbroot, t.getTfull());
+			MSqlTable msqlt = getTable(dbroot, t.getTfull(), designer);
 			mft = new MFromTable(mfrom, msqlt);
 		}
 		return mft;
 	}
 
-	private static MSqlTable getTable(MRoot dbroot, TableFull tf) {
+	private static MSqlTable getTable(MRoot dbroot, TableFull tf, SQLQueryDesigner designer) {
 		EList<EObject> eContents = tf.eContents();
 		String table = Text2Model.getDbObjectName(eContents, 1);
 		String schema = Text2Model.getDbObjectName(eContents, 2);
 		if (tf instanceof DbObjectNameImpl)
 			table = ((DbObjectNameImpl) tf).getDbname();
 		// String catalog = getDbObjectName(eContents, 3);
-		MSqlTable msqlt = Text2Model.findTable(dbroot, schema, table);
+		MSqlTable msqlt = Text2Model.findTable(dbroot, schema, table, designer);
 		if (msqlt == null)
 			msqlt = Text2Model.getTableUnknown(dbroot, schema, table);
 		return msqlt;

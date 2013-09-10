@@ -160,7 +160,6 @@ public class UsedColumnsDialog extends ATitledDialog {
 			}
 		});
 		treeViewer.setInput(root);
-
 		treeViewer.expandAll();
 		return cmp;
 	}

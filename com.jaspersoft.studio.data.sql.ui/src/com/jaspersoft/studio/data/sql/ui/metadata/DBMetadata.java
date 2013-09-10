@@ -13,13 +13,12 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.sql.ui;
+package com.jaspersoft.studio.data.sql.ui.metadata;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,13 +29,15 @@ import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 
-import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -59,22 +60,15 @@ import org.eclipse.ui.part.PluginTransfer;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
-import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
-import com.jaspersoft.studio.data.sql.model.metadata.MFunction;
-import com.jaspersoft.studio.data.sql.model.metadata.MProcedure;
-import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
-import com.jaspersoft.studio.data.sql.model.metadata.MTables;
-import com.jaspersoft.studio.data.sql.model.metadata.keys.ForeignKey;
-import com.jaspersoft.studio.data.sql.model.metadata.keys.PrimaryKey;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
@@ -106,8 +100,7 @@ public class DBMetadata {
 		msg.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				if (!running)
-					designer.updateMetadata();
+				doRefreshMetadata();
 			}
 		});
 
@@ -159,19 +152,52 @@ public class DBMetadata {
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
+
 				if (treeViewer.getExpandedState(el))
 					treeViewer.collapseToLevel(el, 1);
-				else
+				else {
 					treeViewer.expandToLevel(el, 1);
+					if (el instanceof MSqlSchema)
+						loadSchema((MSqlSchema) el);
+					else if (el instanceof MSqlTable)
+						loadTable((MSqlTable) el);
+				}
 			}
+		});
+		treeViewer.addTreeListener(new ITreeViewerListener() {
+
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+			}
+
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				final Object element = event.getElement();
+				if (element instanceof MSqlSchema)
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							loadSchema((MSqlSchema) element);
+						}
+					});
+				else if (element instanceof MSqlTable)
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							loadTable((MSqlTable) element);
+						}
+					});
+			}
+
 		});
 		MenuManager menuMgr = new MenuManager();
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
 		menuMgr.add(new Action("&Refresh") {
 			@Override
 			public void run() {
-				if (!running)
-					designer.updateMetadata();
+				doRefreshMetadata();
 			}
 		});
 		treeViewer.getControl().setMenu(menu);
@@ -189,11 +215,13 @@ public class DBMetadata {
 	private StackLayout stackLayout;
 	private Composite mcmp;
 	private Composite composite;
+	private DataAdapterService das;
 
-	public void updateUI(final DataAdapterDescriptor da, final DataAdapterService das, IProgressMonitor monitor) {
+	public void updateMetadata(final DataAdapterDescriptor da, DataAdapterService das, final IProgressMonitor monitor) {
 		if (running)
 			return;
-		this.monitor = monitor;
+		this.das = das;
+		monitors.add(monitor);
 		running = true;
 		Display.getDefault().syncExec(new Runnable() {
 
@@ -210,216 +238,109 @@ public class DBMetadata {
 		root.removeChildren();
 		if (tblMap != null)
 			tblMap.clear();
-		connection = getConnection(das);
+		Connection connection = getConnection(das, true);
 		if (connection != null)
 			try {
-				final DatabaseMetaData meta = connection.getMetaData();
-				ResultSet schemas = meta.getSchemas();
-				while (schemas.next()) {
-					String tableSchema = schemas.getString("TABLE_SCHEM");
-					String tableCatalog = null;
-					if (meta.supportsCatalogsInTableDefinitions())
-						tableCatalog = schemas.getString("TABLE_CATALOG");
-					new MSqlSchema(root, tableSchema, tableCatalog);
-					if (monitor.isCanceled())
-						break;
-				}
-				schemas.close();
+				DatabaseMetaData meta = connection.getMetaData();
+				tableTypes = MetaDataUtil.readTableTypes(meta);
+				MSqlSchema mcurrent = MetaDataUtil.readSchemas(monitor, root, meta, schema);
 				updateUI(root);
-				List<String> tableTypes = new ArrayList<String>();
-				ResultSet rs = meta.getTableTypes();
-				while (rs.next()) {
-					tableTypes.add(rs.getString("TABLE_TYPE"));
-				}
-				rs.close();
-				for (INode n : root.getChildren()) {
-					MSqlSchema schema = (MSqlSchema) n;
-					try {
-						for (String ttype : tableTypes)
-							readTables(meta, schema.getValue(), schema.getTableCatalog(), schema, WordUtils.capitalizeFully(ttype), new String[] { ttype });
-						updateItermediateUI();
-						setFirstSelection();
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-					try {
-						rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
-						MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
-						while (rs.next())
-							new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
-						rs.close();
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-					try {
-						rs = meta.getFunctions(schema.getTableCatalog(), schema.getValue(), "%");
-						MDBObjects mfunct = new MDBObjects(schema, "Functions", "icons/function.png");
-						while (rs.next())
-							new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
-						rs.close();
-						// System.out.println(meta.getSystemFunctions());
-						// System.out.println(meta.getNumericFunctions());
-						// System.out.println(meta.getStringFunctions());
-						// System.out.println(meta.getTimeDateFunctions());
-						// System.out.println(meta.getSQLKeywords());
-						// System.out.println(meta.getCatalogTerm());
-						// System.out.println(meta.getSchemaTerm());
-						// System.out.println(meta.getProcedureTerm());
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-					updateItermediateUI();
-					if (monitor.isCanceled())
-						break;
-				}
-				new ModelVisitor<Object>(root) {
-
-					@Override
-					public boolean visit(INode n) {
-						if (n instanceof MSqlTable) {
-							try {
-								MSqlTable mt = (MSqlTable) n;
-								MTables tables = (MTables) mt.getParent();
-								ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue(), "%");
-								while (rs.next())
-									new MSQLColumn(mt, rs.getString("COLUMN_NAME"), rs);
-								rs.close();
-								readPrimaryKeys(meta, mt, tables);
-
-								return false;
-							} catch (Throwable e) {
-								e.printStackTrace();
-							}
-						}
-						return true;
-					}
-				};
-				updateItermediateUI();
-				new ModelVisitor<Object>(root) {
-
-					@Override
-					public boolean visit(INode n) {
-						if (n instanceof MSqlTable) {
-							try {
-								MSqlTable mt = (MSqlTable) n;
-								readForeignKeys(meta, (MSqlTable) n, (MTables) mt.getParent());
-								return false;
-							} catch (Throwable e) {
-								e.printStackTrace();
-							}
-						}
-						return true;
-					}
-				};
-
-				// meta.getCrossReference(parentCatalog, parentSchema,
-				// parentTable,
-				// foreignCatalog, foreignSchema, foreignTable);
-				// meta.getExportedKeys(catalog, tableSchema, table);
-				// meta.getUDTs(catalog, schemaPattern, typeNamePattern, types)
-				// meta.getFunctionColumns(catalog, schemaPattern,
-				// functionNamePattern, columnNamePattern)
-				// meta.getProcedureColumns(catalog, schemaPattern,
-				// procedureNamePattern, columnNamePattern)
+				if (mcurrent != null)
+					readSchema(meta, mcurrent, monitor, true);
 			} catch (Throwable e) {
 				updateUI(root);
 				designer.showError(e);
 			}
-		// if we refresh ... we should look in the query and replace existing
-		// objects, otherwise, we may have some surprises, because equals will not
-		// work
-		Util.refreshTables(root, designer.getRoot());
+		Util.refreshTables(root, designer.getRoot(), designer);
 		updateItermediateUI();
+		monitors.remove(monitor);
 		running = false;
 	}
 
-	protected void readForeignKeys(final DatabaseMetaData meta, MSqlTable mt, MTables tables) throws SQLException {
-		ResultSet rs;
-		rs = meta.getImportedKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
-		ForeignKey fk = null;
-		List<MSQLColumn> srcCols = new ArrayList<MSQLColumn>();
-		List<MSQLColumn> dstCols = new ArrayList<MSQLColumn>();
-
-		while (rs.next()) {
-			String pkcolname = rs.getString("PKCOLUMN_NAME");
-			String fkcatalog = rs.getString("FKTABLE_CAT");
-			String fkschema = rs.getString("FKTABLE_SCHEM");
-			String fktable = rs.getString("FKTABLE_NAME");
-			String fkcolname = rs.getString("FKCOLUMN_NAME");
-			MSqlTable dTable = null;
-			if (fk == null || !fk.getFkName().equals(pkcolname)) {
-				fk = new ForeignKey(rs.getString("FK_NAME"));
-				dTable = Util.getTable(root, fkcatalog, fkschema, fktable);
-			}
-			// short keySeq = rs.getShort("PKKEY_SEQ");
-			for (INode n : mt.getChildren()) {
-				if (n.getValue().equals(pkcolname)) {
-					((MSQLColumn) n).addForeignKey(fk);
-					srcCols.add((MSQLColumn) n);
-					break;
-				}
-			}
-			// short keySeq = rs.getShort("FKKEY_SEQ");
-			if (dTable != null)
-				for (INode n : dTable.getChildren()) {
-					if (n.getValue().equals(fkcolname)) {
-						((MSQLColumn) n).addForeignKey(fk);
-						dstCols.add((MSQLColumn) n);
-						break;
+	public void loadTable(final MSqlTable mtable) {
+		if (das != null && (mtable.getChildren().isEmpty() || mtable.getChildren().get(0) instanceof MDummy)) {
+			try {
+				designer.run(true, true, new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Reading Table Information", IProgressMonitor.UNKNOWN);
+						try {
+							monitors.add(monitor);
+							DatabaseMetaData meta = getConnection(das, false).getMetaData();
+							MetaDataUtil.readTableColumns(meta, mtable, monitor);
+							updateItermediateUI();
+							if (monitor.isCanceled())
+								return;
+							MetaDataUtil.readTableKeys(meta, mtable, monitor);
+							updateItermediateUI();
+						} catch (Throwable e) {
+							designer.showError(e);
+						} finally {
+							monitors.remove(monitor);
+							monitor.done();
+						}
 					}
-				}
-			else {
-				// the link is not good, what we do?
+				});
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
-		rs.close();
-		if (fk != null)
-			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
 	}
 
-	protected void readPrimaryKeys(final DatabaseMetaData meta, MSqlTable mt, MTables tables) throws SQLException {
-		ResultSet rs = meta.getPrimaryKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
-		PrimaryKey pk = null;
-		List<MSQLColumn> cols = new ArrayList<MSQLColumn>();
-		while (rs.next()) {
-			if (pk == null)
-				pk = new PrimaryKey(rs.getString("PK_NAME"));
-			String cname = rs.getString("COLUMN_NAME");
-			// short keySeq = rs.getShort("KEY_SEQ");
-			for (INode n : mt.getChildren()) {
-				if (n.getValue().equals(cname)) {
-					((MSQLColumn) n).setPrimaryKey(pk);
-					cols.add((MSQLColumn) n);
-					break;
-				}
+	public void loadSchema(final MSqlSchema mschema) {
+		if (das != null && (mschema.getChildren().isEmpty() || mschema.getChildren().get(0) instanceof MDummy)) {
+			try {
+				designer.run(true, true, new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Reading Schema Information", IProgressMonitor.UNKNOWN);
+						try {
+							monitors.add(monitor);
+							readSchema(getConnection(das, false).getMetaData(), mschema, monitor, false);
+						} catch (Throwable e) {
+							designer.showError(e);
+						} finally {
+							monitors.remove(monitor);
+							monitor.done();
+						}
+					}
+				});
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
-		rs.close();
-		if (pk != null)
-			pk.setColumns(cols.toArray(new MSQLColumn[cols.size()]));
 	}
 
-	protected void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MDBObjects msch, String title, String[] types) {
+	protected void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, boolean firstSelection) {
 		try {
-			MDBObjects mview = new MTables(msch, title);
-			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", types);
-			if (tblMap == null)
-				tblMap = new LinkedHashMap<String, MSqlTable>();
-			while (rs.next()) {
-				MSqlTable mt = new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
-				tblMap.put(mt.toSQLString(), mt);
-			}
-			rs.close();
+			MetaDataUtil.readSchema(meta, schema, monitor, tableTypes);
+			updateItermediateUI(false);
+			if (monitor.isCanceled())
+				return;
+			MetaDataUtil.readSchemaTables(meta, schema, getTables(), monitor);
+			updateItermediateUI();
+			if (monitor.isCanceled())
+				return;
+			if (firstSelection)
+				setFirstSelection();
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+		if (monitor.isCanceled())
+			return;
+		MetaDataUtil.readProcedures(meta, schema, monitor);
+		updateItermediateUI();
 	}
 
 	public MRoot getRoot() {
 		return root;
 	}
 
-	public Connection getConnection(final DataAdapterService das) {
+	public Connection getConnection(final DataAdapterService das, boolean readCurrentSchema) {
 		schema = null;
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		try {
@@ -432,7 +353,7 @@ public class DBMetadata {
 
 		Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
 		// TODO implement some compatibility, getSchema() available since 1.7
-		if (c != null) {
+		if (readCurrentSchema && c != null) {
 			try {
 				Method m = c.getClass().getMethod("getSchema", new Class<?>[0]);
 				if (m != null)
@@ -471,40 +392,40 @@ public class DBMetadata {
 	}
 
 	protected void updateItermediateUI() {
+		updateItermediateUI(true);
+	}
+
+	protected void updateItermediateUI(final boolean refreshMetadata) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (!treeViewer.getControl().isDisposed()) {
 					treeViewer.refresh(true);
-					designer.refreshedMetadata();
+					if (refreshMetadata)
+						designer.refreshedMetadata();
 				}
 			}
 		});
 	}
 
 	protected void setFirstSelection() {
+		if (schema == null)
+			return;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				MSqlSchema selection = null;
-				if (schema != null) {
-					for (INode n : DBMetadata.this.root.getChildren()) {
-						if (n instanceof MSqlSchema) {
-							if (n.getValue().equals(schema)) {
-								((MSqlSchema) n).setCurrent(true);
-								selection = (MSqlSchema) n;
-								break;
-							}
-						}
+				for (INode n : DBMetadata.this.root.getChildren()) {
+					if (n instanceof MSqlSchema && n.getValue().equals(schema)) {
+						((MSqlSchema) n).setCurrent(true);
+						treeViewer.expandToLevel((MSqlSchema) n, 1);
+						break;
 					}
 				}
-				if (selection != null)
-					treeViewer.expandToLevel(selection, 1);
 			}
 		});
 	}
 
 	private LinkedHashMap<String, MSqlTable> tblMap;
-	private Connection connection;
-	private IProgressMonitor monitor;
+	private List<IProgressMonitor> monitors = new ArrayList<IProgressMonitor>();
+	private List<String> tableTypes;
 
 	public LinkedHashMap<String, MSqlTable> getTables() {
 		if (tblMap == null)
@@ -513,8 +434,16 @@ public class DBMetadata {
 	}
 
 	public void dispose() {
-		if (monitor != null)
-			monitor.setCanceled(true);
+		if (monitors != null)
+			for (IProgressMonitor m : monitors)
+				m.setCanceled(true);
+	}
+
+	protected void doRefreshMetadata() {
+		if (!running) {
+			designer.showInfo("");
+			designer.updateMetadata();
+		}
 	}
 
 }

@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.swt.widgets.Display;
+
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
@@ -89,7 +91,7 @@ public class Util {
 
 	public static ANode getQueryRoot(ANode n) {
 		ANode root = n;
-		while (!(root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery || (root instanceof MFromTable && root.getValue() instanceof MQueryTable)))
+		while (!(root != null && (root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery || (root instanceof MFromTable && root.getValue() instanceof MQueryTable))))
 			root = root.getParent();
 		return root;
 	}
@@ -147,6 +149,7 @@ public class Util {
 		return mv.getObject();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends AMKeyword> T getKeyword(ANode msc, Class<T> clazz) {
 		for (INode n : getQueryRoot(msc).getChildren())
 			if (clazz.isInstance(n))
@@ -208,7 +211,7 @@ public class Util {
 		};
 	}
 
-	public static void refreshTables(MRoot rmeta, MRoot rquery) {
+	public static void refreshTables(MRoot rmeta, final MRoot rquery, final SQLQueryDesigner designer) {
 		List<MSqlTable> oldTables = getTables(rquery);
 		Set<MSqlTable> newTables = new HashSet<MSqlTable>();
 		for (MSqlTable mt : oldTables) {
@@ -218,6 +221,16 @@ public class Util {
 		}
 		for (MSqlTable t : newTables)
 			replaceTable(rquery, t);
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				designer.setRefreshMetadata(true);
+				rquery.getPropertyChangeSupport().firePropertyChange("tablesupdated", false, true);
+				designer.setRefreshMetadata(false);
+			}
+		});
+
 	}
 
 	public static void replaceTable(MRoot rquery, final MSqlTable mtable) {
