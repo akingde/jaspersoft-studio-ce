@@ -178,9 +178,9 @@ public class ConvertSelectColumns {
 		if (tf instanceof DbObjectNameImpl)
 			column = ((DbObjectNameImpl) tf).getDbname();
 		else
-			column = Text2Model.getDbObjectName(eContents, 1);
-		String table = Text2Model.getDbObjectName(eContents, 2);
-		String schema = Text2Model.getDbObjectName(eContents, 3);
+			column = ConvertUtil.getDbObjectName(eContents, 1);
+		String table = ConvertUtil.getDbObjectName(eContents, 2);
+		String schema = ConvertUtil.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
 		if (table != null)
 			column = table + "." + column;
@@ -195,9 +195,9 @@ public class ConvertSelectColumns {
 		if (tf instanceof DbObjectNameImpl)
 			column = ((DbObjectNameImpl) tf).getDbname();
 		else
-			column = Text2Model.getDbObjectName(eContents, 1);
-		String table = Text2Model.getDbObjectName(eContents, 2);
-		String schema = Text2Model.getDbObjectName(eContents, 3);
+			column = ConvertUtil.getDbObjectName(eContents, 1);
+		String table = ConvertUtil.getDbObjectName(eContents, 2);
+		String schema = ConvertUtil.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
 		MSelectColumn msqlt = findColumn(msel, schema, table, column);
 		if (msqlt == null)
@@ -210,7 +210,7 @@ public class ConvertSelectColumns {
 	}
 
 	private static MSelectColumn findColumn(final MSelect msel, final String schema, final String table, final String column) {
-		KeyValue<MSQLColumn, MFromTable> kv = Text2Model.findColumn(msel, schema, table, column);
+		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column);
 		if (kv != null)
 			return new MSelectColumn(msel, kv.key, kv.value);
 		return null;

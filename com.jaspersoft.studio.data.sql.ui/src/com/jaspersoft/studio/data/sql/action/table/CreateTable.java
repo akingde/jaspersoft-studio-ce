@@ -80,7 +80,7 @@ public class CreateTable extends AAction {
 
 			@Override
 			public void run() {
-				designer.getDbMetadata().loadTable(Util.getTable(designer.getDbMetadata().getRoot(), node));
+				designer.getDbMetadata().loadTable(Util.getTable(designer.getDbMetadata().getRoot(), node, designer));
 			}
 		});
 		return new MFromTable(mfrom, node, index);

@@ -45,6 +45,7 @@ public class MetaDataUtil {
 
 	public static void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
 		schema.removeChildren();
+		schema.setNotInMetadata(false);
 		for (String ttype : tableTypes)
 			new MTables(schema, ttype);
 

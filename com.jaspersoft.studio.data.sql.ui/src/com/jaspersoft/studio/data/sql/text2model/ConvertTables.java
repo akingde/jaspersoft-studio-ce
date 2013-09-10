@@ -94,14 +94,14 @@ public class ConvertTables {
 
 	private static MSqlTable getTable(MRoot dbroot, TableFull tf, SQLQueryDesigner designer) {
 		EList<EObject> eContents = tf.eContents();
-		String table = Text2Model.getDbObjectName(eContents, 1);
-		String schema = Text2Model.getDbObjectName(eContents, 2);
+		String table = ConvertUtil.getDbObjectName(eContents, 1);
+		String schema = ConvertUtil.getDbObjectName(eContents, 2);
 		if (tf instanceof DbObjectNameImpl)
 			table = ((DbObjectNameImpl) tf).getDbname();
 		// String catalog = getDbObjectName(eContents, 3);
-		MSqlTable msqlt = Text2Model.findTable(dbroot, schema, table, designer);
+		MSqlTable msqlt = ConvertUtil.findTable(dbroot, schema, table, designer);
 		if (msqlt == null)
-			msqlt = Text2Model.getTableUnknown(dbroot, schema, table);
+			msqlt = ConvertUtil.getTableUnknown(dbroot, schema, table, designer);
 		return msqlt;
 	}
 

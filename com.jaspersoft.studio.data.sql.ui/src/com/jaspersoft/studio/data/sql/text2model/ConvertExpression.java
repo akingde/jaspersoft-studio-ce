@@ -183,11 +183,11 @@ public class ConvertExpression {
 		if (tf instanceof DbObjectNameImpl)
 			column = ((DbObjectNameImpl) tf).getDbname();
 		else
-			column = Text2Model.getDbObjectName(eContents, 1);
-		String table = Text2Model.getDbObjectName(eContents, 2);
-		String schema = Text2Model.getDbObjectName(eContents, 3);
+			column = ConvertUtil.getDbObjectName(eContents, 1);
+		String table = ConvertUtil.getDbObjectName(eContents, 2);
+		String schema = ConvertUtil.getDbObjectName(eContents, 3);
 		// String catalog = getDbObjectName(eContents, 3);
-		KeyValue<MSQLColumn, MFromTable> kv = Text2Model.findColumn(msel, schema, table, column);
+		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column);
 		if (kv != null)
 			return new FieldOperand(kv.key, kv.value, mexpr);
 		return null;

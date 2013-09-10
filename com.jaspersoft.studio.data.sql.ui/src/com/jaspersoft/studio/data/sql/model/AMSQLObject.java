@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class AMSQLObject extends MDBObjects implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -41,9 +42,12 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 		ANode p = getParent();
 		while (p != null) {
 			if (p instanceof AMSQLObject) {
-				if (p instanceof MSqlSchema && (((MSqlSchema) p).isCurrent() || ((MSqlSchema) p).isNotInMetadata()))
+				if (p instanceof MSqlSchema && (((MSqlSchema) p).isCurrent()))
 					return getValue();
-				return ((AMSQLObject) p).toSQLString() + "." + getValue();
+				String s = ((AMSQLObject) p).toSQLString();
+				if (Misc.isNullOrEmpty(s))
+					return getValue();
+				return s + "." + getValue();
 			}
 			p = p.getParent();
 		}

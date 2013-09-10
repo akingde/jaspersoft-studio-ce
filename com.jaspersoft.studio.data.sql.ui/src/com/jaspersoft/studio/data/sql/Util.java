@@ -26,6 +26,7 @@ import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
@@ -215,7 +216,7 @@ public class Util {
 		List<MSqlTable> oldTables = getTables(rquery);
 		Set<MSqlTable> newTables = new HashSet<MSqlTable>();
 		for (MSqlTable mt : oldTables) {
-			MSqlTable newTbl = getTable(rmeta, mt);
+			MSqlTable newTbl = getTable(rmeta, mt, designer);
 			if (newTbl != null)
 				newTables.add(newTbl);
 		}
@@ -234,12 +235,14 @@ public class Util {
 	}
 
 	public static void replaceTable(MRoot rquery, final MSqlTable mtable) {
+		final String sqlTable = mtable.toSQLString();
 		new ModelVisitor<MSqlTable>(rquery) {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MFromTable && n.getValue().equals(mtable))
-					n.setValue(mtable);
+				if (n instanceof MFromTable)
+					if (((MFromTable) n).getValue().toSQLString().equals(sqlTable))
+						n.setValue(mtable);
 				if (n instanceof MSelectColumn) {
 					MSQLColumn mc = getColumn(((MSelectColumn) n).getMFromTable(), ((MSelectColumn) n).getValue());
 					if (mc != null)
@@ -283,21 +286,35 @@ public class Util {
 		};
 	}
 
-	public static MSqlTable getTable(MRoot rmeta, final MSqlTable mt) {
-		ModelVisitor<MSqlTable> v = new ModelVisitor<MSqlTable>(rmeta) {
+	public static MSqlTable getTable(MRoot rmeta, final MSqlTable mt, final SQLQueryDesigner designer) {
+		MSqlSchema msch = null;
+		if (mt.getParent() != null) {
+			if (mt.getParent() instanceof MSqlSchema)
+				msch = (MSqlSchema) mt.getParent();
+			else if (mt.getParent().getParent() != null && mt.getParent().getParent() instanceof MSqlSchema)
+				msch = (MSqlSchema) mt.getParent().getParent();
+		}
+		final String schema = msch != null ? msch.getValue() : "";
+		return new ModelVisitor<MSqlTable>(rmeta) {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MSqlTable) {
-					if (n.equals(mt)) {
+				if (n instanceof MSqlSchema) {
+					MSqlSchema mschema = (MSqlSchema) n;
+					if (!mschema.getValue().equalsIgnoreCase(schema) || mschema.isNotInMetadata())
+						return false;
+					else
+						designer.getDbMetadata().loadSchema(mschema);
+				} else if (n instanceof MSqlTable) {
+					if (((MSqlTable) n).getValue().equalsIgnoreCase(mt.getValue())) {
+						designer.getDbMetadata().loadTable((MSqlTable) n);
 						setObject((MSqlTable) n);
 						stop();
 					}
 				}
 				return true;
 			}
-		};
-		return v.getObject();
+		}.getObject();
 	}
 
 	public static MSqlTable getTable(MRoot rmeta, final String cat, final String schema, final String table) {

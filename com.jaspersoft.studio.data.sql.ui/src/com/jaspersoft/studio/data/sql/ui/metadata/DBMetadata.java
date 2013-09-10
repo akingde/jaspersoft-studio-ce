@@ -251,8 +251,16 @@ public class DBMetadata {
 				updateUI(root);
 				designer.showError(e);
 			}
-		Util.refreshTables(root, designer.getRoot(), designer);
 		updateItermediateUI();
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				Util.refreshTables(root, designer.getRoot(), designer);
+				updateItermediateUI();
+			}
+		});
+
 		monitors.remove(monitor);
 		running = false;
 	}

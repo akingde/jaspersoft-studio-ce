@@ -181,11 +181,11 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public void refreshedMetadata() {
 		if (tabFolder.getSelectionIndex() == 0)
 			source.setDirty(true);
-		if (tabFolder.getSelectionIndex() != 0) {
-			refreshMetadata = true;
-			Util.refreshTables(dbMetadata.getRoot(), getRoot(), this);
-			refreshMetadata = false;
-		}
+		// if (tabFolder.getSelectionIndex() != 0) {
+		// refreshMetadata = true;
+		// Util.refreshTables(dbMetadata.getRoot(), getRoot(), this);
+		// refreshMetadata = false;
+		// }
 		// refreshQueryModel();
 		if (tabFolder.getSelectionIndex() == 1)
 			outline.scheduleRefresh();

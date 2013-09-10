@@ -42,6 +42,10 @@ public class MSqlSchema extends AMSQLObject {
 		return isNotInMetadata;
 	}
 
+	public void setNotInMetadata(boolean isNotInMetadata) {
+		this.isNotInMetadata = isNotInMetadata;
+	}
+
 	public String getTableCatalog() {
 		return tableCatalog;
 	}

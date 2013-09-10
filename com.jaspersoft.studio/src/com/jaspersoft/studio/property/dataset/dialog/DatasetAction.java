@@ -67,8 +67,9 @@ public class DatasetAction extends SelectionAction {
 	public void run() {
 		try {
 			MDataset mdataset = getMDatasetToShow();
-			new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mdataset.getJasperConfiguration(),
-					getCommandStack()).open();
+			if (mdataset != null)
+				new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mdataset.getJasperConfiguration(),
+						getCommandStack()).open();
 		} catch (Exception e) {
 			UIUtils.showError(Messages.DatasetAction_ErrorMsg, e);
 		}
