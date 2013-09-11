@@ -450,9 +450,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		} else if (obj instanceof MResource) {
 			if (n != null)
 				treeViewer.setSelection(new StructuredSelection(n), true);
-		} else {
+		} else
 			setPageComplete(false);
-		}
 		performPageChecks();
 		isRefresh = false;
 	}
@@ -466,9 +465,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void run() {
 				isFillingInput = true;
 				initIDLabel();
-				setSelectedNode();
 				if (n instanceof MServerProfile)
 					look4SelectedUnit((MServerProfile) n);
+				setSelectedNode();
 				isFillingInput = false;
 			}
 		});
@@ -543,7 +542,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					} catch (Exception ce) {
 						ce.printStackTrace();
 					}
-					setSelectedNode();
 				}
 			});
 		} catch (InvocationTargetException e) {
