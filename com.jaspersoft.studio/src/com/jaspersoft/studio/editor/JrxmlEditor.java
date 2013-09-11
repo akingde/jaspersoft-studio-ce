@@ -541,20 +541,20 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			if (!isRefresh) {
 				final InputStream inp = in;
 				final IFile ifile = file;
-				Job job = new Job("Initialising " + getPartName()) {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Initialising " + getPartName(), IProgressMonitor.UNKNOWN);
-						try {
-							doInitModel(monitor, getEditorInput(), inp, ifile);
-						} finally {
-							monitor.done();
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setPriority(Job.LONG);
-				job.schedule();
+				// Job job = new Job("Initialising " + getPartName()) {
+				// @Override
+				// protected IStatus run(IProgressMonitor monitor) {
+				// monitor.beginTask("Initialising " + getPartName(), IProgressMonitor.UNKNOWN);
+				// try {
+				doInitModel(new NullProgressMonitor(), getEditorInput(), inp, ifile);
+				// } finally {
+				// monitor.done();
+				// }
+				// return Status.OK_STATUS;
+				// }
+				// };
+				// job.setPriority(Job.LONG);
+				// job.schedule();
 			}
 		} catch (Exception e) {
 			setModel(null);
