@@ -34,6 +34,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.equinox.app.IApplication;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.commands.ICommandService;
@@ -59,6 +60,13 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 
 	private static final String PROP_EXIT_DATA = "eclipse.exitdata"; //$NON-NLS-1$
 	
+	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
+	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
+	private static final String PROP_COMMANDS = "eclipse.commands"; //$NON-NLS-1$
+	private static final String CMD_NL = "-nl"; //$NON-NLS-1$
+	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
+	private static final String NEW_LINE = "\n"; //$NON-NLS-1$
+	
 	/**
 	 * Execute the command, read the regional code from the parameter passed by the plugin file and
 	 * call the method to write the regional code to the configuration. If the configuration is modified
@@ -67,13 +75,15 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String locale = event.getParameter("com.jaspersoft.studio.switchlanguage.locale"); //$NON-NLS-1$
 		boolean needToRestart = changeLocale(locale);
+		needToRestart = true;
 		if (needToRestart) {
 			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SwitchLanguageHandler_restartTitle, null,
 					Messages.SwitchLanguageHandler_restartMessage, MessageDialog.QUESTION, new String[] { Messages.common_yes , Messages.common_no}, 1); 
 			int selection = dialog.open();
 			if (selection == 0){
-				System.setProperty(PROP_EXIT_DATA, "\n-nl \n" + locale);
-				System.setProperty(PROP_EXIT_CODE, Integer.toString(24));
+				String command_line = buildCommandLine(locale);
+				System.setProperty(PROP_EXIT_DATA, command_line);
+				System.setProperty(PROP_EXIT_CODE, IApplication.EXIT_RELAUNCH.toString());
 				return new RestartWorkbenchHandler().execute(event);
 			} else {
 				//Request an update of the locale provider and force the update of the menu item, in this way the language
@@ -102,6 +112,50 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private String buildCommandLine(String nl) {
+	    String property = System.getProperty(PROP_VM);  
+
+	    StringBuffer result = new StringBuffer();
+	    if (property != null) {
+	        result.append(property);
+	    }
+	    result.append(NEW_LINE);
+
+	    // append the vmargs and commands. Assume that these already end in \n
+	    String vmargs = System.getProperty(PROP_VMARGS);
+	    if (vmargs != null) {
+	        result.append(vmargs);
+	    }
+
+	    // append the rest of the args, replacing or adding -data as required
+	    property = System.getProperty(PROP_COMMANDS);
+	    if (property != null) {// find the index of the arg to replace its value
+	        int cmd_nl_pos = property.lastIndexOf(CMD_NL);
+	        if (cmd_nl_pos != -1) {
+	            cmd_nl_pos += CMD_NL.length() + 1;
+	            result.append(property.substring(0, cmd_nl_pos));
+	            result.append(nl);
+	            result.append(property.substring(property.indexOf('\n', cmd_nl_pos)));
+	        } else {
+	            result.append(NEW_LINE);
+	            result.append(property);
+	            result.append(NEW_LINE);
+	            result.append(CMD_NL);
+	            result.append(NEW_LINE);
+	            result.append(nl);
+	        }
+	    }
+
+	    // put the vmargs back at the very end (the eclipse.commands property
+	    // already contains the -vm arg)
+	    if (vmargs != null) {
+	        result.append(CMD_VMARGS);
+	        result.append(NEW_LINE);
+	        result.append(vmargs);
+	    }
+	    return result.toString();
 	}
 	
 	/**
