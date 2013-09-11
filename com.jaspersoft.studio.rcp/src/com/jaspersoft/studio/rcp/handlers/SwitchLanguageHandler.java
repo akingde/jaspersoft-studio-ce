@@ -55,6 +55,10 @@ import com.jaspersoft.studio.messages.Messages;
 @SuppressWarnings("restriction")
 public class SwitchLanguageHandler extends AbstractHandler implements IElementUpdater {
 	
+	private static final String PROP_EXIT_CODE = "eclipse.exitcode"; //$NON-NLS-1$
+
+	private static final String PROP_EXIT_DATA = "eclipse.exitdata"; //$NON-NLS-1$
+	
 	/**
 	 * Execute the command, read the regional code from the parameter passed by the plugin file and
 	 * call the method to write the regional code to the configuration. If the configuration is modified
@@ -67,9 +71,11 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SwitchLanguageHandler_restartTitle, null,
 					Messages.SwitchLanguageHandler_restartMessage, MessageDialog.QUESTION, new String[] { Messages.common_yes , Messages.common_no}, 1); 
 			int selection = dialog.open();
-			if (selection == 0)
+			if (selection == 0){
+				System.setProperty(PROP_EXIT_DATA, "\n-nl \n" + locale);
+				System.setProperty(PROP_EXIT_CODE, Integer.toString(24));
 				return new RestartWorkbenchHandler().execute(event);
-			else {
+			} else {
 				//Request an update of the locale provider and force the update of the menu item, in this way the language
 				//menu is show updated even without a restart
 				IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
