@@ -72,7 +72,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				return;
 			try {
 				v = (PropertyDTO) v.clone();
-				JRPropertyDialog dialog = new JRPropertyDialog(Display.getDefault().getActiveShell());
+				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
 
 				dialog.setValue(v);
 				if (dialog.open() == Window.OK)
@@ -162,7 +162,7 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 				name += "_" + i; //$NON-NLS-1$
 				PropertyDTO v = new PropertyDTO(name, "NEW_VALUE");
 				v.setPnode(value.getPnode());
-				JRPropertyDialog dialog = new JRPropertyDialog(Display.getDefault().getActiveShell());
+				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
 				dialog.setValue(v);
 				if (dialog.open() == Window.OK)
 					return v;

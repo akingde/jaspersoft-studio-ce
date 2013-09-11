@@ -40,7 +40,7 @@ public class JPropertiesCellEditor extends DialogCellEditor {
 			return wizard.getValue();
 		return null;
 	}
-
+	
 	private JPropertiesLabelProvider labelProvider;
 
 	@Override

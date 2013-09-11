@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -37,6 +38,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -48,6 +50,7 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
+import com.jaspersoft.studio.property.descriptor.propexpr.dialog.JRPropertyDialog;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -120,7 +123,7 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				int i = 1;
+				/*int i = 1;
 				String name = "newproperty"; //$NON-NLS-1$
 				while (getName(input, name, i) == null)
 					i++;
@@ -130,6 +133,21 @@ public class JRPropertyPage extends JSSHelpWizardPage {
 				p.setProperty(name);
 				p.setValue("NEW_VALUE"); //$NON-NLS-1$
 				return p;
+				*/
+				
+				int i = 1;
+				String name = "newproperty"; //$NON-NLS-1$
+				while (getName(input, name, i) == null)
+					i++;
+				name += "_" + i; //$NON-NLS-1$
+				PropertyDTO p = new PropertyDTO();
+				p.setProperty(name);
+				p.setValue("NEW_VALUE");
+				JRPropertyDialog dialog = new JRPropertyDialog(Display.getDefault().getActiveShell());
+				dialog.setValue(p);
+				if (dialog.open() == Window.OK)
+					return p;
+				return null;
 			}
 
 			private String getName(List<?> input, String name, int i) {

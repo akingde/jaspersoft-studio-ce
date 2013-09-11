@@ -751,6 +751,11 @@ public class Messages extends NLS {
 	public static String JRExporterPreferencePage_9;
 	public static String JRExpressionPage_description;
 	public static String JRExpressionPage_value_class_name;
+	public static String JRPropertyDialog_propName;
+	public static String JRPropertyDialog_propValue;
+	public static String JRPropertyDialog_shellTitle;
+	public static String JRPropertyDialog_spacialProperties;
+	public static String JRPropertyDialog_valuePlaceHolder;
 	public static String JRPropertyPage_description;
 	public static String JRPropertyPage_error_message_property_must_not_be_empty;
 	public static String JRPropertyPage_value;

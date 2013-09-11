@@ -20,6 +20,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -40,20 +41,49 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
+/**
+ * create a scrollable composite that emulate a list of elements. the elements can be selected and an action can
+ * be associated with the double click. every element is a composite with inside a label for the title and a styled text
+ * for the description
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class SelectableComposite extends ScrolledComposite {
 
+	/**
+	 * list of elements displayed
+	 */
 	private List<ElementDescription> items;
 	
+  /**
+   * composite of the selected element
+   */
 	private Composite selectedComposite;
 	
+	/**
+	 * color used as background for the unselected elements
+	 */
 	private Color unselectedColor = new Color(null, new RGB(255,255,225));
 	
+	/**
+	 * color used as background for the selected element
+	 */
 	private Color selectedColor = new Color(null, new RGB(51,153,255));
 	
+	/**
+	 * font used in the title label
+	 */
 	private Font boldFont = new Font(UIUtils.getDisplay(),"Arial", 10, SWT.BOLD );
 	
+	/**
+	 * adapter used to define what action must be done when the user double click an element
+	 */
 	private SelectionAdapter mouseDoubleClick;
 
+	/**
+	 * listener that handle the selection and the double click on a list element composite
+	 */
 	private MouseListener compositeMouseAction = new MouseListener() {
 		
 		@Override
@@ -80,7 +110,7 @@ public class SelectableComposite extends ScrolledComposite {
 	};
 	
 	private void widgetSelected(Object source) {
-		if (source instanceof Composite){
+		if (source.getClass().equals(Composite.class)){
 			if (source != selectedComposite){
 				if (selectedComposite != null){
 					selectedComposite.setBackground(unselectedColor);
@@ -94,35 +124,73 @@ public class SelectableComposite extends ScrolledComposite {
 		} else widgetSelected(((Control)source).getParent());
 	}
 	
-	public SelectableComposite(Composite parent, List<ElementDescription> items) {
+	public SelectableComposite(Composite parent) {
 		super(parent,  SWT.V_SCROLL);
-		this.items = items;
+		items = null;
 		setLayout(new GridLayout(1, false));
 		selectedComposite = null;
 		mouseDoubleClick = null;
 		this.getVerticalBar().setIncrement(5);
+	}
+	
+	/**
+	 * Return if the content of the composite has already been set
+	 * 
+	 * @return true if the content of the composite has been set, false otherwise
+	 */
+	public boolean isItemSetted(){
+		return items != null;
+	}
+	
+	/**
+	 * set the content of the composite 
+	 * 
+	 * @param itemsthe list of elements to display
+	 */
+	public void setItems(List<ElementDescription> items){
+		this.items = items;
 		createItems();
 	}
 	
-	private void setScrolledFocus(){
-		this.forceFocus();
-	}
-	
-	private void setChildrenColor(Composite parent, Color color){
-		for(Control child : parent.getChildren()){
-			child.setBackground(color);
-		}
-	}
-	
+	/**
+	 * set the listener called when the user double click an element of the list.
+	 * inside the data of the event you will find the ElementDescription that has generated
+	 * the double clicked element of the list
+	 * 
+	 * @param listener
+	 */
 	public void SetDoubleClickListener(SelectionAdapter listener){
 		this.mouseDoubleClick = listener;
 	}
 	
 
-	
+	/**
+	 * return the actually selected element
+	 * 
+	 * @return the ElementDescription of the actually selected element or null if none
+	 */
 	public ElementDescription getSelectedElement(){
 		if (selectedComposite != null) return (ElementDescription)selectedComposite.getData();
 		return null;
+	}
+	
+	/**
+	 * Force the focus on the scrollable composite
+	 */
+	private void setScrolledFocus(){
+		this.forceFocus();
+	}
+	
+	/**
+	 *set the background of a composite and of all its children
+	 *
+	 * @param parent
+	 * @param color
+	 */
+	private void setChildrenColor(Composite parent, Color color){
+		for(Control child : parent.getChildren()){
+			child.setBackground(color);
+		}
 	}
 	
 	private void createItems(){
@@ -137,7 +205,9 @@ public class SelectableComposite extends ScrolledComposite {
 		for(ElementDescription item : items){
 			Composite comp = new Composite(mainComposite, SWT.BORDER);
 			comp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-			comp.setLayout(new GridLayout(1,false));
+			GridLayout containerLayout = new GridLayout(1,false);
+			
+			comp.setLayout(containerLayout);
 			comp.setData(item);
 			comp.setBackground(unselectedColor);
 			
@@ -146,7 +216,7 @@ public class SelectableComposite extends ScrolledComposite {
 			titleLabel.setText(item.getName());
 			titleLabel.addMouseListener(compositeMouseAction);
 			
-			createDescription(item.getDescription(), comp);
+			createDescription(item.getDescription(), comp, item.getStyles());
 			
 			comp.addMouseListener(compositeMouseAction);
 			setChildrenColor(comp, unselectedColor);
@@ -160,14 +230,16 @@ public class SelectableComposite extends ScrolledComposite {
 			}
 
 		});
-		
 	}
-	
-	private void createDescription(String text, Composite comp){
-		final StyledText descLabel = new StyledText(comp,SWT.MULTI);
+
+	private void createDescription(String text, Composite comp, StyleRange[] styles){
+		final StyledText descLabel = new StyledText(comp,SWT.MULTI | SWT.WRAP );
+		descLabel.setRightMargin(10);
 		descLabel.setEditable(false);
 		descLabel.setText(text);
+		descLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		descLabel.addMouseListener(compositeMouseAction);
+		if (styles != null && styles.length>0) descLabel.setStyleRanges(styles);
 		descLabel.addFocusListener(new FocusAdapter() {
 			
 			@Override
