@@ -61,10 +61,15 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	private static final String PROP_EXIT_DATA = "eclipse.exitdata"; //$NON-NLS-1$
 	
 	private static final String PROP_VM = "eclipse.vm"; //$NON-NLS-1$
+	
 	private static final String PROP_VMARGS = "eclipse.vmargs"; //$NON-NLS-1$
+	
 	private static final String PROP_COMMANDS = "eclipse.commands"; //$NON-NLS-1$
+	
 	private static final String CMD_NL = "-nl"; //$NON-NLS-1$
+	
 	private static final String CMD_VMARGS = "-vmargs"; //$NON-NLS-1$
+	
 	private static final String NEW_LINE = "\n"; //$NON-NLS-1$
 	
 	/**
@@ -75,7 +80,6 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String locale = event.getParameter("com.jaspersoft.studio.switchlanguage.locale"); //$NON-NLS-1$
 		boolean needToRestart = changeLocale(locale);
-		needToRestart = true;
 		if (needToRestart) {
 			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SwitchLanguageHandler_restartTitle, null,
 					Messages.SwitchLanguageHandler_restartMessage, MessageDialog.QUESTION, new String[] { Messages.common_yes , Messages.common_no}, 1); 
@@ -114,6 +118,14 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 		}
 	}
 	
+	/**
+	 * Generate a starting parameter by reading the old parameters and changing the nl value
+	 * or adding it if not present. It's equivalent to launch the application with an -nl
+	 * followed by the regional code arguments
+	 * 
+	 * @param nl the regional code
+	 * @return the full arguments line used to restart the application
+	 */
 	private String buildCommandLine(String nl) {
 	    String property = System.getProperty(PROP_VM);  
 
