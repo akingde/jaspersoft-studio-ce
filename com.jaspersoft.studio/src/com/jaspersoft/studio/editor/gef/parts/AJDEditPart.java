@@ -88,7 +88,7 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 	 */
 	public IResource getAssociatedFile() {
 		IEditorInput edinput = null;
-		if (getViewer().getEditDomain() instanceof DefaultEditDomain) {
+		if (getViewer() != null && getViewer().getEditDomain() instanceof DefaultEditDomain) {
 			IEditorPart ip = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
 			edinput = ip.getEditorInput();
 		} else {
