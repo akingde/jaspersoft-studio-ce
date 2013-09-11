@@ -77,11 +77,6 @@ XExpressionParams returns Prms:
 JRParameter:
 	jrprm=ID;
 
-enum XFunction:
-	xin='IN' | xnotin='NOTIN' | xeq='EQUAL' | xnoteq='NOTEQUAL' | xls='LESS' | xgt='GREATER'
-	| xlsr='LESS]' | xgtl='[GREATER' | xbwn='BETWEEN' | xbwnc='[BETWEEN]' | xbwnl='[BETWEEN'
-	| xbwnr='BETWEEN]';
-
 Expression returns FullExpression:
 	op1=Operand (isnull=('IS NULL' | 'IS NOT NULL') | in=InOperator | between=Between | like=Like | comp=Comparison);
 
@@ -111,7 +106,7 @@ OperandGroup returns OpGroup:
 	{OpGroup} '(' op=Operand ')';
 
 OperandFunction returns OpFunction:
-	{OpFunction} fname=FNAME args=OpFunctionArg ')';
+	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg) ')';
 
 OpFunctionArg:
 	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
@@ -142,18 +137,23 @@ ScalarOperand returns ScalarOperand:
 StringOperand:
 	STRING;
 
+enum XFunction:
+	xin='IN' | xnotin='NOTIN' | xeq='EQUAL' | xnoteq='NOTEQUAL' | xls='LESS' | xgt='GREATER'
+	| xlsr='LESS]' | xgtl='[GREATER' | xbwn='BETWEEN' | xbwnc='[BETWEEN]' | xbwnl='[BETWEEN'
+	| xbwnr='BETWEEN]';
+
 enum JoinType:
 	innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
-terminal FNAME:
-	STRINGID '(';
-
-terminal DBID:
+DBID:
 	(STRINGID | ('\'' STRINGID '\'') | ('"' STRINGID '"') | ('`' STRINGID '`') | ('[' STRINGID ']'));
 
-terminal fragment STRINGID:
-	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+FNAME:
+	STRINGID '(';
+
+BRACEDPRM:
+	'{' ID '}';
 
 terminal STAR:
 	"*";
@@ -173,14 +173,18 @@ terminal TIME returns ecore::EDate:
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
 	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
 
-terminal BRACEDPRM:
-	'{' PRMNAME '}';
+terminal STRINGID:
+	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 
-//terminal XPRM:
-//	!('\r' | '\n' | '}' | ',' | '{' | ' ') -> ',';
+terminal ID:
+	('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '#' | '-')+;
 
-terminal fragment PRMNAME:
-	(!('\r' | '\n' | '}' | ',' | '{'))+;
+	//'^'? ('a'..'z' | 'A'..'Z' | '_') PRMNAME;
+//	',' PRMNAME;
+
+//terminal PRMNAME:
+//(!('\r' | '\n' | '}' | ',' | '{' | '--' | '//'))+;
+//	('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '#' | '-')+;
 
 terminal SL_COMMENT:
 	('--' | '#' | '//') !('\n' | '\r')* ('\r'? '\n')?;

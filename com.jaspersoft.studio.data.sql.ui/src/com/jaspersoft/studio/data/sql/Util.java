@@ -275,7 +275,7 @@ public class Util {
 			}
 
 			private MSQLColumn getColumn(MFromTable mtable, MSQLColumn old) {
-				if (mtable.getValue().equals(old.getParent())) {
+				if (mtable != null && mtable.getValue() != null && old != null && mtable.getValue().equals(old.getParent())) {
 					for (INode n : mtable.getChildren()) {
 						if (n.equals(old))
 							return (MSQLColumn) n;

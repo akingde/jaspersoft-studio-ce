@@ -51,22 +51,26 @@ public class ConvertSelectColumns {
 	}
 
 	private static void doColumns(SQLQueryDesigner designer, MSelect msel, ColumnOrAlias fcol) {
-		if (fcol.getAllCols() != null)
-			new MSelectExpression(msel, "*");
-		else if (fcol.getCe() != null) {
-			if (fcol.getCe() instanceof OperandImpl)
-				setupAlias(getMSelectColumn(designer, (OperandImpl) fcol.getCe(), msel), fcol);
-			else if (fcol.getCe() instanceof OperandsImpl) {
-				OperandsImpl ops = (OperandsImpl) fcol.getCe();
-				AMQueryAliased<?> mscol = getColumnUnknown(msel, operands2String(ops));
-				setupAlias(mscol, fcol);
+		try {
+			if (fcol.getAllCols() != null)
+				new MSelectExpression(msel, "*");
+			else if (fcol.getCe() != null) {
+				if (fcol.getCe() instanceof OperandImpl)
+					setupAlias(getMSelectColumn(designer, (OperandImpl) fcol.getCe(), msel), fcol);
+				else if (fcol.getCe() instanceof OperandsImpl) {
+					OperandsImpl ops = (OperandsImpl) fcol.getCe();
+					AMQueryAliased<?> mscol = getColumnUnknown(msel, operands2String(ops));
+					setupAlias(mscol, fcol);
+				}
 			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 
 	protected static String operands2String(Operands ops) {
 		Operand op = ops.getOp1();
-		if (op == null)
+		if (op == null && ops.getLeft() != null)
 			op = ops.getLeft().getOp1();
 
 		String str = operand2String(op);

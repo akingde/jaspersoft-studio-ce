@@ -41,14 +41,18 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertExpression {
 	public static void convertExpression(SQLQueryDesigner designer, ANode qroot, ANode parent, OrExpr cols) {
-		if (cols == null)
-			return;
-		if (cols instanceof FullExpression)
-			doExpression(designer, Util.getKeyword(qroot, MSelect.class), parent, (FullExpression) cols);
-		else if (cols instanceof OrExpr) {
-			MSelect msel = Util.getKeyword(qroot, MSelect.class);
-			for (FullExpression fcol : cols.getEntries())
-				doExpression(designer, msel, parent, fcol);
+		try {
+			if (cols == null)
+				return;
+			if (cols instanceof FullExpression)
+				doExpression(designer, Util.getKeyword(qroot, MSelect.class), parent, (FullExpression) cols);
+			else if (cols instanceof OrExpr) {
+				MSelect msel = Util.getKeyword(qroot, MSelect.class);
+				for (FullExpression fcol : cols.getEntries())
+					doExpression(designer, msel, parent, fcol);
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 

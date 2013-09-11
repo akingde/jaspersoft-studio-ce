@@ -130,20 +130,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="JRParameter" eSuperTypes="#//Prms">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="jrprm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
-    <eLiterals name="xin" literal="IN"/>
-    <eLiterals name="xnotin" value="1" literal="NOTIN"/>
-    <eLiterals name="xeq" value="2" literal="EQUAL"/>
-    <eLiterals name="xnoteq" value="3" literal="NOTEQUAL"/>
-    <eLiterals name="xls" value="4" literal="LESS"/>
-    <eLiterals name="xgt" value="5" literal="GREATER"/>
-    <eLiterals name="xlsr" value="6" literal="LESS]"/>
-    <eLiterals name="xgtl" value="7" literal="[GREATER"/>
-    <eLiterals name="xbwn" value="8" literal="BETWEEN"/>
-    <eLiterals name="xbwnc" value="9" literal="[BETWEEN]"/>
-    <eLiterals name="xbwnl" value="10" literal="[BETWEEN"/>
-    <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Comparison">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="subOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -224,6 +210,20 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sotime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
+    <eLiterals name="xin" literal="IN"/>
+    <eLiterals name="xnotin" value="1" literal="NOTIN"/>
+    <eLiterals name="xeq" value="2" literal="EQUAL"/>
+    <eLiterals name="xnoteq" value="3" literal="NOTEQUAL"/>
+    <eLiterals name="xls" value="4" literal="LESS"/>
+    <eLiterals name="xgt" value="5" literal="GREATER"/>
+    <eLiterals name="xlsr" value="6" literal="LESS]"/>
+    <eLiterals name="xgtl" value="7" literal="[GREATER"/>
+    <eLiterals name="xbwn" value="8" literal="BETWEEN"/>
+    <eLiterals name="xbwnc" value="9" literal="[BETWEEN]"/>
+    <eLiterals name="xbwnl" value="10" literal="[BETWEEN"/>
+    <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
     <eLiterals name="innerJoin" literal="INNER JOIN"/>

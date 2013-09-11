@@ -2744,9 +2744,9 @@ protected class DbObjectName_DbnameAssignment extends AssignmentToken  {
 			return null;
 		if((value = eObjectConsumer.getConsumable("dbname",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("dbname");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getDbObjectNameAccess().getDbnameDBIDTerminalRuleCall_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getDbObjectNameAccess().getDbnameDBIDTerminalRuleCall_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getDbObjectNameAccess().getDbnameDBIDParserRuleCall_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getDbObjectNameAccess().getDbnameDBIDParserRuleCall_0();
 			return obj;
 		}
 		return null;
@@ -6957,11 +6957,11 @@ protected class OperandGroup_RightParenthesisKeyword_3 extends KeywordToken  {
 /************ begin Rule OperandFunction ****************
  *
  * OperandFunction returns OpFunction:
- * 	{OpFunction} fname=FNAME args=OpFunctionArg ")";
+ * 	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg) ")";
  *
  **/
 
-// {OpFunction} fname=FNAME args=OpFunctionArg ")"
+// {OpFunction} fname=FNAME (STAR | args=OpFunctionArg) ")"
 protected class OperandFunction_Group extends GroupToken {
 	
 	public OperandFunction_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -7040,9 +7040,9 @@ protected class OperandFunction_FnameAssignment_1 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("fname",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("fname");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOperandFunctionAccess().getFnameFNAMETerminalRuleCall_1_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getOperandFunctionAccess().getFnameFNAMETerminalRuleCall_1_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOperandFunctionAccess().getFnameFNAMEParserRuleCall_1_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getOperandFunctionAccess().getFnameFNAMEParserRuleCall_1_0();
 			return obj;
 		}
 		return null;
@@ -7050,16 +7050,61 @@ protected class OperandFunction_FnameAssignment_1 extends AssignmentToken  {
 
 }
 
-// args=OpFunctionArg
-protected class OperandFunction_ArgsAssignment_2 extends AssignmentToken  {
+// STAR | args=OpFunctionArg
+protected class OperandFunction_Alternatives_2 extends AlternativesToken {
+
+	public OperandFunction_Alternatives_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
 	
-	public OperandFunction_ArgsAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	@Override
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getOperandFunctionAccess().getAlternatives_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new OperandFunction_STARTerminalRuleCall_2_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new OperandFunction_ArgsAssignment_2_1(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// STAR
+protected class OperandFunction_STARTerminalRuleCall_2_0 extends UnassignedTextToken {
+
+	public OperandFunction_STARTerminalRuleCall_2_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getOperandFunctionAccess().getSTARTerminalRuleCall_2_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new OperandFunction_FnameAssignment_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// args=OpFunctionArg
+protected class OperandFunction_ArgsAssignment_2_1 extends AssignmentToken  {
+	
+	public OperandFunction_ArgsAssignment_2_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getOperandFunctionAccess().getArgsAssignment_2();
+		return grammarAccess.getOperandFunctionAccess().getArgsAssignment_2_1();
 	}
 
     @Override
@@ -7078,7 +7123,7 @@ protected class OperandFunction_ArgsAssignment_2 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getOpFunctionArgRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getOperandFunctionAccess().getArgsOpFunctionArgParserRuleCall_2_0(); 
+				element = grammarAccess.getOperandFunctionAccess().getArgsOpFunctionArgParserRuleCall_2_1_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -7096,6 +7141,7 @@ protected class OperandFunction_ArgsAssignment_2 extends AssignmentToken  {
 	}	
 }
 
+
 // ")"
 protected class OperandFunction_RightParenthesisKeyword_3 extends KeywordToken  {
 	
@@ -7111,7 +7157,7 @@ protected class OperandFunction_RightParenthesisKeyword_3 extends KeywordToken  
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new OperandFunction_ArgsAssignment_2(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new OperandFunction_Alternatives_2(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -7650,9 +7696,9 @@ protected class ParameterOperand_PrmAssignment_2 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("prm",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("prm");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getParameterOperandAccess().getPrmBRACEDPRMTerminalRuleCall_2_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getParameterOperandAccess().getPrmBRACEDPRMTerminalRuleCall_2_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0();
 			return obj;
 		}
 		return null;
@@ -7772,9 +7818,9 @@ protected class ExclamationParameterOperand_PrmAssignment_2 extends AssignmentTo
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("prm",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("prm");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getExclamationParameterOperandAccess().getPrmBRACEDPRMTerminalRuleCall_2_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getExclamationParameterOperandAccess().getPrmBRACEDPRMTerminalRuleCall_2_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getExclamationParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getExclamationParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0();
 			return obj;
 		}
 		return null;
@@ -8240,6 +8286,9 @@ protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
 
 
 /************ end Rule ScalarOperand ****************/
+
+
+
 
 
 }

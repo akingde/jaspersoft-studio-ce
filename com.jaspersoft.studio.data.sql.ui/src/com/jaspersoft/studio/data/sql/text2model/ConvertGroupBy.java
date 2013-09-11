@@ -30,18 +30,22 @@ public class ConvertGroupBy {
 	}
 
 	private static void doColumn(SQLQueryDesigner designer, MSelect msel, GroupByColumnFull tf) {
-		EList<EObject> eContents = tf.eContents();
-		String column = null;
-		if (tf instanceof DbObjectNameImpl)
-			column = ((DbObjectNameImpl) tf).getDbname();
-		else
-			column = ConvertUtil.getDbObjectName(eContents, 1);
-		String table = ConvertUtil.getDbObjectName(eContents, 2);
-		String schema = ConvertUtil.getDbObjectName(eContents, 3);
-		// String catalog = getDbObjectName(eContents, 3);
-		KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column);
-		if (kv != null)
-			new MGroupByColumn(Util.getKeyword(msel.getParent(), MGroupBy.class), kv.key, kv.value);
+		try {
+			EList<EObject> eContents = tf.eContents();
+			String column = null;
+			if (tf instanceof DbObjectNameImpl)
+				column = ((DbObjectNameImpl) tf).getDbname();
+			else
+				column = ConvertUtil.getDbObjectName(eContents, 1);
+			String table = ConvertUtil.getDbObjectName(eContents, 2);
+			String schema = ConvertUtil.getDbObjectName(eContents, 3);
+			// String catalog = getDbObjectName(eContents, 3);
+			KeyValue<MSQLColumn, MFromTable> kv = ConvertUtil.findColumn(msel, schema, table, column);
+			if (kv != null)
+				new MGroupByColumn(Util.getKeyword(msel.getParent(), MGroupBy.class), kv.key, kv.value);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 }

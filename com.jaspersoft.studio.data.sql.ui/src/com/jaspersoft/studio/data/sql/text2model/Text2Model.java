@@ -22,42 +22,45 @@ import com.jaspersoft.studio.utils.Misc;
 public class Text2Model {
 
 	public static void text2model(final SQLQueryDesigner designer, XtextDocument doc) {
-		designer.refreshViewer();
-		ConvertUtil.cleanDBMetadata(designer.getDbMetadata().getRoot());
-		System.out.println("convert the model");
-		doc.readOnly(new IUnitOfWork<String, XtextResource>() {
-			public String exec(XtextResource resource) {
-				ANode root = designer.getRoot();
-				EList<?> list = resource.getContents();
-				if (list != null && !list.isEmpty()) {
-					for (Object obj : list) {
-						if (obj instanceof ModelImpl) {
-							SelectQuery sq = ((ModelImpl) obj).getQuery();
-							if (sq instanceof SelectImpl) {
-								convertSelect(designer, root, (SelectImpl) sq);
-								EList<SelectSubSet> op = ((SelectImpl) sq).getOp();
-								if (op != null && !op.isEmpty()) {
-									for (SelectSubSet sss : op) {
-										MUnion munion = null;
-										if (sss.getOp() != null) {
-											munion = CreateUnion.createUnion(root);
-											String setop = sss.getOp().toUpperCase();
-											if (setop.equals(AMKeyword.SET_OPERATOR_UNION) && sss.getAll() != null)
-												setop += " ALL";
-											munion.setValue(setop);
+		try {
+			designer.refreshViewer();
+			ConvertUtil.cleanDBMetadata(designer.getDbMetadata().getRoot());
+			System.out.println("convert the model");
+			doc.readOnly(new IUnitOfWork<String, XtextResource>() {
+				public String exec(XtextResource resource) {
+					ANode root = designer.getRoot();
+					EList<?> list = resource.getContents();
+					if (list != null && !list.isEmpty()) {
+						for (Object obj : list) {
+							if (obj instanceof ModelImpl) {
+								SelectQuery sq = ((ModelImpl) obj).getQuery();
+								if (sq instanceof SelectImpl) {
+									convertSelect(designer, root, (SelectImpl) sq);
+									EList<SelectSubSet> op = ((SelectImpl) sq).getOp();
+									if (op != null && !op.isEmpty()) {
+										for (SelectSubSet sss : op) {
+											MUnion munion = null;
+											if (sss.getOp() != null) {
+												munion = CreateUnion.createUnion(root);
+												String setop = sss.getOp().toUpperCase();
+												if (setop.equals(AMKeyword.SET_OPERATOR_UNION) && sss.getAll() != null)
+													setop += " ALL";
+												munion.setValue(setop);
+											}
+											convertSelect(designer, Misc.nvl(munion, root), (SelectImpl) sss.getQuery());
 										}
-										convertSelect(designer, Misc.nvl(munion, root), (SelectImpl) sss.getQuery());
 									}
 								}
 							}
+							ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
 						}
-						ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
 					}
+					return "";
 				}
-				return "";
-			}
-
-		});
+			});
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void convertSelect(SQLQueryDesigner designer, ANode qroot, SelectImpl sel) {
