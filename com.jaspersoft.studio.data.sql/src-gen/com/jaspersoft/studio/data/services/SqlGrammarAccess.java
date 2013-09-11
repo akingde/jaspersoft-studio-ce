@@ -1703,52 +1703,20 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "DBID");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Keyword cApostropheKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final RuleCall cIDTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
-		private final Keyword cApostropheKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final RuleCall cSTRINGTerminalRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
-		private final Keyword cLeftSquareBracketKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final RuleCall cIDTerminalRuleCall_3_1 = (RuleCall)cGroup_3.eContents().get(1);
-		private final Keyword cRightSquareBracketKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final RuleCall cSTRINGTerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
 		//DBID:
-		//	ID | "\'" ID "\'" | STRING | "[" ID "]";
+		//	ID | STRING;
 		public ParserRule getRule() { return rule; }
 
-		//ID | "\'" ID "\'" | STRING | "[" ID "]"
+		//ID | STRING
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//ID
 		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
 
-		//"\'" ID "\'"
-		public Group getGroup_1() { return cGroup_1; }
-
-		//"\'"
-		public Keyword getApostropheKeyword_1_0() { return cApostropheKeyword_1_0; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_1_1() { return cIDTerminalRuleCall_1_1; }
-
-		//"\'"
-		public Keyword getApostropheKeyword_1_2() { return cApostropheKeyword_1_2; }
-
 		//STRING
-		public RuleCall getSTRINGTerminalRuleCall_2() { return cSTRINGTerminalRuleCall_2; }
-
-		//"[" ID "]"
-		public Group getGroup_3() { return cGroup_3; }
-
-		//"["
-		public Keyword getLeftSquareBracketKeyword_3_0() { return cLeftSquareBracketKeyword_3_0; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_3_1() { return cIDTerminalRuleCall_3_1; }
-
-		//"]"
-		public Keyword getRightSquareBracketKeyword_3_2() { return cRightSquareBracketKeyword_3_2; }
+		public RuleCall getSTRINGTerminalRuleCall_1() { return cSTRINGTerminalRuleCall_1; }
 	}
 
 	public class FNAMEElements extends AbstractParserRuleElementFinder {
@@ -1757,7 +1725,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		
-		////	STRINGID | ('\'' STRINGID '\'') | ('"' STRINGID '"') | ('`' STRINGID '`') | ('[' STRINGID ']');
 		//FNAME: //	STRINGID '(';
 		//	ID "(";
 		public ParserRule getRule() { return rule; }
@@ -1992,6 +1959,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private TerminalRule tDATE;
 	private TerminalRule tTIME;
 	private TerminalRule tSIGNED_DOUBLE;
+	private TerminalRule tSTRING;
 	private TerminalRule tID;
 	private TerminalRule tSL_COMMENT;
 	
@@ -2470,7 +2438,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//DBID:
-	//	ID | "\'" ID "\'" | STRING | "[" ID "]";
+	//	ID | STRING;
 	public DBIDElements getDBIDAccess() {
 		return (pDBID != null) ? pDBID : (pDBID = new DBIDElements());
 	}
@@ -2479,7 +2447,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getDBIDAccess().getRule();
 	}
 
-	////	STRINGID | ('\'' STRINGID '\'') | ('"' STRINGID '"') | ('`' STRINGID '`') | ('[' STRINGID ']');
 	//FNAME: //	STRINGID '(';
 	//	ID "(";
 	public FNAMEElements getFNAMEAccess() {
@@ -2538,6 +2505,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return (tSIGNED_DOUBLE != null) ? tSIGNED_DOUBLE : (tSIGNED_DOUBLE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SIGNED_DOUBLE"));
 	} 
 
+	//terminal STRING:
+	//	"\"" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\""))* "\"" | "\'" ("\\" ("b" | "t" |
+	//	"n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\'"))* "\'" | "`" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" |
+	//	"\"" | "\'" | "\\") | !("\\" | "\""))* "`" | "[" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") |
+	//	!("\\" | "\""))* "]";
+	public TerminalRule getSTRINGRule() {
+		return (tSTRING != null) ? tSTRING : (tSTRING = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "STRING"));
+	} 
+
 	////terminal STRINGID:
 	////	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	//terminal ID:
@@ -2551,13 +2527,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	//	("--" | "#" | "//") !("\n" | "\r")* ("\r"? "\n")?;
 	public TerminalRule getSL_COMMENTRule() {
 		return (tSL_COMMENT != null) ? tSL_COMMENT : (tSL_COMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SL_COMMENT"));
-	} 
-
-	//terminal STRING:
-	//	"\"" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\""))* "\"" | "\'" ("\\" ("b" | "t" |
-	//	"n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\'"))* "\'";
-	public TerminalRule getSTRINGRule() {
-		return gaTerminals.getSTRINGRule();
 	} 
 
 	//terminal ML_COMMENT:
