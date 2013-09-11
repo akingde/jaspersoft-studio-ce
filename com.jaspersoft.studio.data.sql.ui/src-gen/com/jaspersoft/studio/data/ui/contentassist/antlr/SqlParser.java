@@ -114,16 +114,13 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOperandAccess().getGroup_1_0_2(), "rule__Operand__Group_1_0_2__0");
 					put(grammarAccess.getOperandAccess().getGroup_1_0_3(), "rule__Operand__Group_1_0_3__0");
 					put(grammarAccess.getOperandAccess().getGroup_1_0_4(), "rule__Operand__Group_1_0_4__0");
-					put(grammarAccess.getOperandGroupAccess().getGroup(), "rule__OperandGroup__Group__0");
 					put(grammarAccess.getOperandFunctionAccess().getGroup(), "rule__OperandFunction__Group__0");
 					put(grammarAccess.getOpFunctionArgAccess().getGroup(), "rule__OpFunctionArg__Group__0");
 					put(grammarAccess.getOpFunctionArgAccess().getGroup_1(), "rule__OpFunctionArg__Group_1__0");
 					put(grammarAccess.getOpFunctionArgAccess().getGroup_1_1(), "rule__OpFunctionArg__Group_1_1__0");
 					put(grammarAccess.getSubQueryOperandAccess().getGroup(), "rule__SubQueryOperand__Group__0");
 					put(grammarAccess.getDBIDAccess().getGroup_1(), "rule__DBID__Group_1__0");
-					put(grammarAccess.getDBIDAccess().getGroup_2(), "rule__DBID__Group_2__0");
 					put(grammarAccess.getDBIDAccess().getGroup_3(), "rule__DBID__Group_3__0");
-					put(grammarAccess.getDBIDAccess().getGroup_4(), "rule__DBID__Group_4__0");
 					put(grammarAccess.getFNAMEAccess().getGroup(), "rule__FNAME__Group__0");
 					put(grammarAccess.getModelAccess().getQueryAssignment_0(), "rule__Model__QueryAssignment_0");
 					put(grammarAccess.getModelAccess().getOrderByEntryAssignment_1_1(), "rule__Model__OrderByEntryAssignment_1_1");
@@ -196,7 +193,6 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOperandFragmentAccess().getXopAssignment_1(), "rule__OperandFragment__XopAssignment_1");
 					put(grammarAccess.getOperandFragmentAccess().getSubqAssignment_2(), "rule__OperandFragment__SubqAssignment_2");
 					put(grammarAccess.getOperandFragmentAccess().getFuncAssignment_3(), "rule__OperandFragment__FuncAssignment_3");
-					put(grammarAccess.getOperandGroupAccess().getOpAssignment_2(), "rule__OperandGroup__OpAssignment_2");
 					put(grammarAccess.getOperandFunctionAccess().getFnameAssignment_1(), "rule__OperandFunction__FnameAssignment_1");
 					put(grammarAccess.getOperandFunctionAccess().getArgsAssignment_2_1(), "rule__OperandFunction__ArgsAssignment_2_1");
 					put(grammarAccess.getOpFunctionArgAccess().getEntriesAssignment_1_1_1(), "rule__OpFunctionArg__EntriesAssignment_1_1_1");

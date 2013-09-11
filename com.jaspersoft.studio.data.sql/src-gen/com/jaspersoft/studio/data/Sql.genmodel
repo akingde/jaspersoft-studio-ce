@@ -156,9 +156,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/eparam"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/scalar"/>
     </genClasses>
-    <genClasses ecoreClass="Sql.ecore#//OpGroup">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpGroup/op"/>
-    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OpFunction">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunction/fname"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>

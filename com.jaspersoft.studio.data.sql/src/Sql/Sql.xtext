@@ -98,7 +98,7 @@ OperandList:
 Operand returns Operands:
 	op1=OperandFragment (({Plus.left=current} '+' | {Minus.left=current} '-' | {Star.left=current} STAR |
 	{Div.left=current} '/' | {Concat.left=current} '||') right=OperandFragment)*;
-	//	OperandFragment ({Operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
+
 OperandFragment returns Operand:
 /*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction;
 
@@ -111,11 +111,6 @@ OperandFunction returns OpFunction:
 OpFunctionArg:
 	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
 
-	//OperandFunctionArguments returns OperandFunctionArguments:
-//	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
-
-//OperandFunctionArgs:
-//	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
 XOperandFragment returns Operand:
 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
 
@@ -147,10 +142,12 @@ enum JoinType:
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
 DBID:
-	(STRINGID | ('\'' STRINGID '\'') | ('"' STRINGID '"') | ('`' STRINGID '`') | ('[' STRINGID ']'));
+	ID | ('\'' ID '\'') | STRING | ('[' ID ']');
+	//	STRINGID | ('\'' STRINGID '\'') | ('"' STRINGID '"') | ('`' STRINGID '`') | ('[' STRINGID ']');
 
 FNAME:
-	STRINGID '(';
+//	STRINGID '(';
+	ID '(';
 
 terminal JRPARAM:
 	'$P{'->'}';
@@ -176,12 +173,11 @@ terminal TIME returns ecore::EDate:
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
 	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
 
-terminal STRINGID:
-	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
-
+	//terminal STRINGID:
+//	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 terminal ID:
-	('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '#' | '-')+;
-
+	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+	//('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '#' | '-')+;
 terminal SL_COMMENT:
 	('--' | '#' | '//') !('\n' | '\r')* ('\r'? '\n')?;
 

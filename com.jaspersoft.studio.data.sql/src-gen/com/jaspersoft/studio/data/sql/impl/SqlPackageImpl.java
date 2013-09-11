@@ -26,7 +26,6 @@ import com.jaspersoft.studio.data.sql.Model;
 import com.jaspersoft.studio.data.sql.OpFList;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionArg;
-import com.jaspersoft.studio.data.sql.OpGroup;
 import com.jaspersoft.studio.data.sql.OpList;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.OperandList;
@@ -279,13 +278,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass operandEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass opGroupEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1501,26 +1493,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getOpGroup()
-  {
-    return opGroupEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getOpGroup_Op()
-  {
-    return (EReference)opGroupEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getOpFunction()
   {
     return opFunctionEClass;
@@ -2018,9 +1990,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(operandEClass, OPERAND__EPARAM);
     createEReference(operandEClass, OPERAND__SCALAR);
 
-    opGroupEClass = createEClass(OP_GROUP);
-    createEReference(opGroupEClass, OP_GROUP__OP);
-
     opFunctionEClass = createEClass(OP_FUNCTION);
     createEAttribute(opFunctionEClass, OP_FUNCTION__FNAME);
     createEReference(opFunctionEClass, OP_FUNCTION__ARGS);
@@ -2256,9 +2225,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getOperand_Param(), this.getPOperand(), null, "param", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Eparam(), this.getExpOperand(), null, "eparam", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperand_Scalar(), this.getScalarOperand(), null, "scalar", null, 0, 1, Operand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(opGroupEClass, OpGroup.class, "OpGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getOpGroup_Op(), this.getOperands(), null, "op", null, 0, 1, OpGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(opFunctionEClass, OpFunction.class, "OpFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getOpFunction_Fname(), ecorePackage.getEString(), "fname", null, 0, 1, OpFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

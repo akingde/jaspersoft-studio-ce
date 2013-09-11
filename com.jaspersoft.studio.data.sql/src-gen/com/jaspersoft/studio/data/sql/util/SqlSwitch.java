@@ -292,13 +292,6 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case SqlPackage.OP_GROUP:
-      {
-        OpGroup opGroup = (OpGroup)theEObject;
-        T result = caseOpGroup(opGroup);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case SqlPackage.OP_FUNCTION:
       {
         OpFunction opFunction = (OpFunction)theEObject;
@@ -906,22 +899,6 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOperand(Operand object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Op Group</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Op Group</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseOpGroup(OpGroup object)
   {
     return null;
   }

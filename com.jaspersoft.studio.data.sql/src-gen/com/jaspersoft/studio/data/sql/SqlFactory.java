@@ -293,15 +293,6 @@ public interface SqlFactory extends EFactory
   Operand createOperand();
 
   /**
-   * Returns a new object of class '<em>Op Group</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Op Group</em>'.
-   * @generated
-   */
-  OpGroup createOpGroup();
-
-  /**
    * Returns a new object of class '<em>Op Function</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

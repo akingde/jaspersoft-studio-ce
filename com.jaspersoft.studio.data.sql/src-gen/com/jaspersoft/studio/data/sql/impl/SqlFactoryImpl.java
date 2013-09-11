@@ -95,7 +95,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OPERAND_LIST: return createOperandList();
       case SqlPackage.OPERANDS: return createOperands();
       case SqlPackage.OPERAND: return createOperand();
-      case SqlPackage.OP_GROUP: return createOpGroup();
       case SqlPackage.OP_FUNCTION: return createOpFunction();
       case SqlPackage.OP_FUNCTION_ARG: return createOpFunctionArg();
       case SqlPackage.POPERAND: return createPOperand();
@@ -483,17 +482,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     OperandImpl operand = new OperandImpl();
     return operand;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public OpGroup createOpGroup()
-  {
-    OpGroupImpl opGroup = new OpGroupImpl();
-    return opGroup;
   }
 
   /**

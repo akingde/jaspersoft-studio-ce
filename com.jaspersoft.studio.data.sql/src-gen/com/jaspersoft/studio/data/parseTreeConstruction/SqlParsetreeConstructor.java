@@ -63,15 +63,14 @@ protected class ThisRootNode extends RootToken {
 			case 29: return new OperandList_Group(this, this, 29, inst);
 			case 30: return new Operand_Group(this, this, 30, inst);
 			case 31: return new OperandFragment_Alternatives(this, this, 31, inst);
-			case 32: return new OperandGroup_Group(this, this, 32, inst);
-			case 33: return new OperandFunction_Group(this, this, 33, inst);
-			case 34: return new OpFunctionArg_Group(this, this, 34, inst);
-			case 35: return new XOperandFragment_Alternatives(this, this, 35, inst);
-			case 36: return new ParameterOperand_PrmAssignment(this, this, 36, inst);
-			case 37: return new ExclamationParameterOperand_PrmAssignment(this, this, 37, inst);
-			case 38: return new ColumnOperand_CfullAssignment(this, this, 38, inst);
-			case 39: return new SubQueryOperand_Group(this, this, 39, inst);
-			case 40: return new ScalarOperand_Alternatives(this, this, 40, inst);
+			case 32: return new OperandFunction_Group(this, this, 32, inst);
+			case 33: return new OpFunctionArg_Group(this, this, 33, inst);
+			case 34: return new XOperandFragment_Alternatives(this, this, 34, inst);
+			case 35: return new ParameterOperand_PrmAssignment(this, this, 35, inst);
+			case 36: return new ExclamationParameterOperand_PrmAssignment(this, this, 36, inst);
+			case 37: return new ColumnOperand_CfullAssignment(this, this, 37, inst);
+			case 38: return new SubQueryOperand_Group(this, this, 38, inst);
+			case 39: return new ScalarOperand_Alternatives(this, this, 39, inst);
 			default: return null;
 		}	
 	}	
@@ -6576,7 +6575,6 @@ protected class Operand_RightAssignment_1_1 extends AssignmentToken  {
 
 /************ begin Rule OperandFragment ****************
  *
- * //	OperandFragment ({Operands.entries+=current} (('+' | '-' | STAR | '/' | '||') entries+=OperandFragment)+)?;
  * OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
  * 	subq=SubQueryOperand | func=OperandFunction;
  *
@@ -6798,164 +6796,10 @@ protected class OperandFragment_FuncAssignment_3 extends AssignmentToken  {
 /************ end Rule OperandFragment ****************/
 
 
-/************ begin Rule OperandGroup ****************
- *
- * OperandGroup returns OpGroup:
- * 	{OpGroup} "(" op=Operand ")";
- *
- **/
-
-// {OpGroup} "(" op=Operand ")"
-protected class OperandGroup_Group extends GroupToken {
-	
-	public OperandGroup_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getOperandGroupAccess().getGroup();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new OperandGroup_RightParenthesisKeyword_3(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getOperandGroupAccess().getOpGroupAction_0().getType().getClassifier())
-			return null;
-		return eObjectConsumer;
-	}
-
-}
-
-// {OpGroup}
-protected class OperandGroup_OpGroupAction_0 extends ActionToken  {
-
-	public OperandGroup_OpGroupAction_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Action getGrammarElement() {
-		return grammarAccess.getOperandGroupAccess().getOpGroupAction_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(!eObjectConsumer.isConsumed()) return null;
-		return eObjectConsumer;
-	}
-}
-
-// "("
-protected class OperandGroup_LeftParenthesisKeyword_1 extends KeywordToken  {
-	
-	public OperandGroup_LeftParenthesisKeyword_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Keyword getGrammarElement() {
-		return grammarAccess.getOperandGroupAccess().getLeftParenthesisKeyword_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new OperandGroup_OpGroupAction_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// op=Operand
-protected class OperandGroup_OpAssignment_2 extends AssignmentToken  {
-	
-	public OperandGroup_OpAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getOperandGroupAccess().getOpAssignment_2();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new Operand_Group(this, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override	
-	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("op",true)) == null) return null;
-		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("op");
-		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
-			IEObjectConsumer param = createEObjectConsumer((EObject)value);
-			if(param.isInstanceOf(grammarAccess.getOperandRule().getType().getClassifier())) {
-				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getOperandGroupAccess().getOpOperandParserRuleCall_2_0(); 
-				consumed = obj;
-				return param;
-			}
-		}
-		return null;
-	}
-
-    @Override
-	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
-		if(value == inst.getEObject() && !inst.isConsumed()) return null;
-		switch(index) {
-			case 0: return new OperandGroup_LeftParenthesisKeyword_1(lastRuleCallOrigin, next, actIndex, consumed);
-			default: return null;
-		}	
-	}	
-}
-
-// ")"
-protected class OperandGroup_RightParenthesisKeyword_3 extends KeywordToken  {
-	
-	public OperandGroup_RightParenthesisKeyword_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Keyword getGrammarElement() {
-		return grammarAccess.getOperandGroupAccess().getRightParenthesisKeyword_3();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new OperandGroup_OpAssignment_2(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-
-/************ end Rule OperandGroup ****************/
-
-
 /************ begin Rule OperandFunction ****************
  *
+ * //OperandGroup returns OpGroup:
+ * //	{OpGroup} '(' op=Operand ')';
  * OperandFunction returns OpFunction:
  * 	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg) ")";
  *
@@ -7409,10 +7253,6 @@ protected class OpFunctionArg_EntriesAssignment_1_1_1 extends AssignmentToken  {
 
 /************ begin Rule XOperandFragment ****************
  *
- * //OperandFunctionArguments returns OperandFunctionArguments:
- * //	{OperandFunctionArguments} '(' arg=OperandFunctionArgs ')';
- * //OperandFunctionArgs:
- * //	OperandFragment ({ArgList.entries+=current} ("," entries+=OperandFragment)+)?;
  * XOperandFragment returns Operand:
  * 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;
  *
@@ -7635,7 +7475,6 @@ protected class ParameterOperand_PrmAssignment extends AssignmentToken  {
 
 /************ begin Rule ExclamationParameterOperand ****************
  *
- * //'$P' {POperand} prm=BRACEDPRM;
  * ExclamationParameterOperand returns ExpOperand:
  * 	prm=JRNPARAM;
  *
@@ -7681,7 +7520,6 @@ protected class ExclamationParameterOperand_PrmAssignment extends AssignmentToke
 
 /************ begin Rule ColumnOperand ****************
  *
- * //	'$P!' {ExpOperand} prm=BRACEDPRM;
  * ColumnOperand:
  * 	cfull=ColumnFull;
  *
