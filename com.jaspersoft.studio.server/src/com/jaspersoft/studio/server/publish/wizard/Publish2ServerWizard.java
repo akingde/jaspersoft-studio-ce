@@ -179,6 +179,12 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 			initJDesign(page_1.getFile());
 			page0.setValue(jDesign, getNode());
 		}
+		if (page == page1) {
+			if (!page0.isPageComplete()) {
+				page0.setValue(jDesign, getNode());
+				return page0;
+			}
+		}
 		if (page == page2) {
 			if (node instanceof MJrxml)
 				return null;
@@ -203,8 +209,9 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 								if (hasDepResources)
 									page1.fillData();
 								else {
-									getContainer().showPage(getNextPage(page1));
-									getContainer().updateButtons();
+									IWizardContainer container = getContainer();
+									container.showPage(getNextPage(page1));
+									container.updateButtons();
 								}
 							}
 						});

@@ -118,6 +118,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		}
 		if (n instanceof AMJrxmlContainer)
 			return (AMJrxmlContainer) n;
+		newrunit.setJasperConfiguration(jConfig);
 		return newrunit;
 	}
 
@@ -132,14 +133,19 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 	@Override
 	public boolean isPageComplete() {
 		boolean isC = super.isPageComplete() && getErrorMessage() == null;
-		if (isC) {
-			TreeSelection ts = (TreeSelection) treeViewer.getSelection();
-			Object firstElement = ts.getFirstElement();
-			isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
-			if (isC && firstElement instanceof MFolder) {
-				MReportUnit runit = getReportUnit();
-				isC = runit instanceof MReportUnit && runit.getParent() != null;
-			}
+		if (isC)
+			isC = isPageCompleteLogic();
+		return isC;
+	}
+
+	protected boolean isPageCompleteLogic() {
+		boolean isC;
+		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+		Object firstElement = ts.getFirstElement();
+		isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
+		if (isC && firstElement instanceof MFolder) {
+			MReportUnit runit = getReportUnit();
+			isC = runit instanceof MReportUnit && runit.getParent() != null;
 		}
 		return isC;
 	}
@@ -489,7 +495,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				treeViewer.refresh();
 				if (n != null)
 					treeViewer.setSelection(new StructuredSelection(n), true);
-				setPageComplete(isPageComplete());
+				setPageComplete(isPageCompleteLogic());
 				skipEvents = false;
 				handleSelectionChanged(n);
 			}

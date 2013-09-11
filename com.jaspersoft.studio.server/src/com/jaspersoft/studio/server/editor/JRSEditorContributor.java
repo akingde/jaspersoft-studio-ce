@@ -107,7 +107,7 @@ public class JRSEditorContributor implements IEditorContributor {
 	}
 
 	protected static JrxmlPublishAction getAction(IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
-		JrxmlPublishAction publishAction = new JrxmlPublishAction(2, monitor);
+		JrxmlPublishAction publishAction = new JrxmlPublishAction(1, monitor);
 		publishAction.setJrConfig(jrConfig);
 		return publishAction;
 	}
