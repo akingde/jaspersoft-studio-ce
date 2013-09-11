@@ -67,8 +67,8 @@ protected class ThisRootNode extends RootToken {
 			case 33: return new OperandFunction_Group(this, this, 33, inst);
 			case 34: return new OpFunctionArg_Group(this, this, 34, inst);
 			case 35: return new XOperandFragment_Alternatives(this, this, 35, inst);
-			case 36: return new ParameterOperand_Group(this, this, 36, inst);
-			case 37: return new ExclamationParameterOperand_Group(this, this, 37, inst);
+			case 36: return new ParameterOperand_PrmAssignment(this, this, 36, inst);
+			case 37: return new ExclamationParameterOperand_PrmAssignment(this, this, 37, inst);
 			case 38: return new ColumnOperand_CfullAssignment(this, this, 38, inst);
 			case 39: return new SubQueryOperand_Group(this, this, 39, inst);
 			case 40: return new ScalarOperand_Alternatives(this, this, 40, inst);
@@ -7464,7 +7464,7 @@ protected class XOperandFragment_ParamAssignment_0 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new ParameterOperand_Group(this, this, 0, inst);
+			case 0: return new ParameterOperand_PrmAssignment(this, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -7509,7 +7509,7 @@ protected class XOperandFragment_EparamAssignment_1 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new ExclamationParameterOperand_Group(this, this, 0, inst);
+			case 0: return new ExclamationParameterOperand_PrmAssignment(this, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -7591,49 +7591,20 @@ protected class XOperandFragment_ScalarAssignment_2 extends AssignmentToken  {
 /************ begin Rule ParameterOperand ****************
  *
  * ParameterOperand returns POperand:
- * 	"$P" {POperand} prm=BRACEDPRM;
+ * 	prm=JRPARAM;
  *
  **/
 
-// "$P" {POperand} prm=BRACEDPRM
-protected class ParameterOperand_Group extends GroupToken {
+// prm=JRPARAM
+protected class ParameterOperand_PrmAssignment extends AssignmentToken  {
 	
-	public ParameterOperand_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ParameterOperand_PrmAssignment(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getParameterOperandAccess().getGroup();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new ParameterOperand_PrmAssignment_2(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getParameterOperandAccess().getPOperandAction_1().getType().getClassifier())
-			return null;
-		return eObjectConsumer;
-	}
-
-}
-
-// "$P"
-protected class ParameterOperand_PKeyword_0 extends KeywordToken  {
-	
-	public ParameterOperand_PKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Keyword getGrammarElement() {
-		return grammarAccess.getParameterOperandAccess().getPKeyword_0();
+	public Assignment getGrammarElement() {
+		return grammarAccess.getParameterOperandAccess().getPrmAssignment();
 	}
 
     @Override
@@ -7643,119 +7614,43 @@ protected class ParameterOperand_PKeyword_0 extends KeywordToken  {
 		}	
 	}
 
-}
-
-// {POperand}
-protected class ParameterOperand_POperandAction_1 extends ActionToken  {
-
-	public ParameterOperand_POperandAction_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Action getGrammarElement() {
-		return grammarAccess.getParameterOperandAccess().getPOperandAction_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new ParameterOperand_PKeyword_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(!eObjectConsumer.isConsumed()) return null;
-		return eObjectConsumer;
-	}
-}
-
-// prm=BRACEDPRM
-protected class ParameterOperand_PrmAssignment_2 extends AssignmentToken  {
-	
-	public ParameterOperand_PrmAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getParameterOperandAccess().getPrmAssignment_2();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new ParameterOperand_POperandAction_1(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
     @Override	
 	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getParameterOperandRule().getType().getClassifier())
+			return null;
 		if((value = eObjectConsumer.getConsumable("prm",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("prm");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0(), value, null)) {
-			type = AssignmentType.DATATYPE_RULE_CALL;
-			element = grammarAccess.getParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getParameterOperandAccess().getPrmJRPARAMTerminalRuleCall_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getParameterOperandAccess().getPrmJRPARAMTerminalRuleCall_0();
 			return obj;
 		}
 		return null;
 	}
 
 }
-
 
 /************ end Rule ParameterOperand ****************/
 
 
 /************ begin Rule ExclamationParameterOperand ****************
  *
+ * //'$P' {POperand} prm=BRACEDPRM;
  * ExclamationParameterOperand returns ExpOperand:
- * 	"$P!" {ExpOperand} prm=BRACEDPRM;
+ * 	prm=JRNPARAM;
  *
  **/
 
-// "$P!" {ExpOperand} prm=BRACEDPRM
-protected class ExclamationParameterOperand_Group extends GroupToken {
+// prm=JRNPARAM
+protected class ExclamationParameterOperand_PrmAssignment extends AssignmentToken  {
 	
-	public ExclamationParameterOperand_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public ExclamationParameterOperand_PrmAssignment(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getExclamationParameterOperandAccess().getGroup();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new ExclamationParameterOperand_PrmAssignment_2(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getExclamationParameterOperandAccess().getExpOperandAction_1().getType().getClassifier())
-			return null;
-		return eObjectConsumer;
-	}
-
-}
-
-// "$P!"
-protected class ExclamationParameterOperand_PKeyword_0 extends KeywordToken  {
-	
-	public ExclamationParameterOperand_PKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Keyword getGrammarElement() {
-		return grammarAccess.getExclamationParameterOperandAccess().getPKeyword_0();
+	public Assignment getGrammarElement() {
+		return grammarAccess.getExclamationParameterOperandAccess().getPrmAssignment();
 	}
 
     @Override
@@ -7765,62 +7660,15 @@ protected class ExclamationParameterOperand_PKeyword_0 extends KeywordToken  {
 		}	
 	}
 
-}
-
-// {ExpOperand}
-protected class ExclamationParameterOperand_ExpOperandAction_1 extends ActionToken  {
-
-	public ExclamationParameterOperand_ExpOperandAction_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Action getGrammarElement() {
-		return grammarAccess.getExclamationParameterOperandAccess().getExpOperandAction_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new ExclamationParameterOperand_PKeyword_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(!eObjectConsumer.isConsumed()) return null;
-		return eObjectConsumer;
-	}
-}
-
-// prm=BRACEDPRM
-protected class ExclamationParameterOperand_PrmAssignment_2 extends AssignmentToken  {
-	
-	public ExclamationParameterOperand_PrmAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getExclamationParameterOperandAccess().getPrmAssignment_2();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new ExclamationParameterOperand_ExpOperandAction_1(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
     @Override	
 	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getExclamationParameterOperandRule().getType().getClassifier())
+			return null;
 		if((value = eObjectConsumer.getConsumable("prm",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("prm");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getExclamationParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0(), value, null)) {
-			type = AssignmentType.DATATYPE_RULE_CALL;
-			element = grammarAccess.getExclamationParameterOperandAccess().getPrmBRACEDPRMParserRuleCall_2_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getExclamationParameterOperandAccess().getPrmJRNPARAMTerminalRuleCall_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getExclamationParameterOperandAccess().getPrmJRNPARAMTerminalRuleCall_0();
 			return obj;
 		}
 		return null;
@@ -7828,12 +7676,12 @@ protected class ExclamationParameterOperand_PrmAssignment_2 extends AssignmentTo
 
 }
 
-
 /************ end Rule ExclamationParameterOperand ****************/
 
 
 /************ begin Rule ColumnOperand ****************
  *
+ * //	'$P!' {ExpOperand} prm=BRACEDPRM;
  * ColumnOperand:
  * 	cfull=ColumnFull;
  *
@@ -8286,7 +8134,6 @@ protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
 
 
 /************ end Rule ScalarOperand ****************/
-
 
 
 

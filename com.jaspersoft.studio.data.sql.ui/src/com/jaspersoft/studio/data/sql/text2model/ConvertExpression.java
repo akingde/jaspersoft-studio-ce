@@ -151,11 +151,11 @@ public class ConvertExpression {
 				aop = getScalarOperand(me, op.getXop().getScalar());
 			} else if (xop.getParam() != null) {
 				ParameterPOperand pop = new ParameterPOperand(me);
-				pop.setJrParameter(xop.getParam().getPrm());
+				pop.setJrParameter(ConvertUtil.getParamValue(xop.getParam().getPrm()));
 				return pop;
 			} else if (xop.getEparam() != null) {
 				ParameterNotPOperand prm = new ParameterNotPOperand(me);
-				prm.setJrParameter(xop.getEparam().getPrm());
+				prm.setJrParameter(ConvertUtil.getParamExclamationValue(xop.getEparam().getPrm()));
 				return prm;
 			}
 		} else if (op.getSubq() != null) {

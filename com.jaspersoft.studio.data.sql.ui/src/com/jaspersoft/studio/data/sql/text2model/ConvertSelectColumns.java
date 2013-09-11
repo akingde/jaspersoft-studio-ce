@@ -101,7 +101,9 @@ public class ConvertSelectColumns {
 		else if (op.getFunc() != null)
 			mscol = getColumnUnknown(msel, getFunctionString(op.getFunc(), op));
 		else if (op.getParam() != null)
-			mscol = getColumnUnknown(msel, op.getParam().toString());
+			mscol = getColumnUnknown(msel, op.getParam().getPrm());
+		else if (op.getEparam() != null)
+			mscol = getColumnUnknown(msel, op.getEparam().getPrm());
 		else if (op.getScalar() != null)
 			mscol = getColumnUnknown(msel, getScalarString(op.getScalar()));
 		else if (op.getXop() != null)
@@ -121,7 +123,9 @@ public class ConvertSelectColumns {
 		if (oper.getFunc() != null)
 			return getFunctionString(oper.getFunc(), oper);
 		if (oper.getParam() != null)
-			return oper.getParam().toString();
+			return oper.getParam().getPrm();
+		if (oper.getEparam() != null)
+			return oper.getEparam().getPrm();
 		if (oper.getScalar() != null)
 			return getScalarString(oper.getScalar());
 		if (oper.getXop() != null)
@@ -141,9 +145,9 @@ public class ConvertSelectColumns {
 				else if (eobj instanceof ColumnOperand)
 					sargs += getColumn(((ColumnOperand) eobj).getCfull());
 				else if (eobj instanceof POperand)
-					sargs += ((POperand) eobj).toString();
+					sargs += ((POperand) eobj).getPrm();
 				else if (eobj instanceof ExpOperand)
-					sargs += ((ExpOperand) eobj).toString();
+					sargs += ((ExpOperand) eobj).getPrm();
 				else if (eobj instanceof ScalarOperand)
 					sargs += eobj.toString();
 				else if (eobj instanceof Operands)

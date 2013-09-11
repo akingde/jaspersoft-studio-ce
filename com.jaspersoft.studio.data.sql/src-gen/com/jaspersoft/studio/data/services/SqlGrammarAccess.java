@@ -1584,58 +1584,35 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	public class ParameterOperandElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ParameterOperand");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cPKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Action cPOperandAction_1 = (Action)cGroup.eContents().get(1);
-		private final Assignment cPrmAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cPrmBRACEDPRMParserRuleCall_2_0 = (RuleCall)cPrmAssignment_2.eContents().get(0);
+		private final Assignment cPrmAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cPrmJRPARAMTerminalRuleCall_0 = (RuleCall)cPrmAssignment.eContents().get(0);
 		
 		//ParameterOperand returns POperand:
-		//	"$P" {POperand} prm=BRACEDPRM;
+		//	prm=JRPARAM;
 		public ParserRule getRule() { return rule; }
 
-		//"$P" {POperand} prm=BRACEDPRM
-		public Group getGroup() { return cGroup; }
+		//prm=JRPARAM
+		public Assignment getPrmAssignment() { return cPrmAssignment; }
 
-		//"$P"
-		public Keyword getPKeyword_0() { return cPKeyword_0; }
-
-		//{POperand}
-		public Action getPOperandAction_1() { return cPOperandAction_1; }
-
-		//prm=BRACEDPRM
-		public Assignment getPrmAssignment_2() { return cPrmAssignment_2; }
-
-		//BRACEDPRM
-		public RuleCall getPrmBRACEDPRMParserRuleCall_2_0() { return cPrmBRACEDPRMParserRuleCall_2_0; }
+		//JRPARAM
+		public RuleCall getPrmJRPARAMTerminalRuleCall_0() { return cPrmJRPARAMTerminalRuleCall_0; }
 	}
 
 	public class ExclamationParameterOperandElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ExclamationParameterOperand");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cPKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Action cExpOperandAction_1 = (Action)cGroup.eContents().get(1);
-		private final Assignment cPrmAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cPrmBRACEDPRMParserRuleCall_2_0 = (RuleCall)cPrmAssignment_2.eContents().get(0);
+		private final Assignment cPrmAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cPrmJRNPARAMTerminalRuleCall_0 = (RuleCall)cPrmAssignment.eContents().get(0);
 		
+		////'$P' {POperand} prm=BRACEDPRM;
 		//ExclamationParameterOperand returns ExpOperand:
-		//	"$P!" {ExpOperand} prm=BRACEDPRM;
+		//	prm=JRNPARAM;
 		public ParserRule getRule() { return rule; }
 
-		//"$P!" {ExpOperand} prm=BRACEDPRM
-		public Group getGroup() { return cGroup; }
+		//prm=JRNPARAM
+		public Assignment getPrmAssignment() { return cPrmAssignment; }
 
-		//"$P!"
-		public Keyword getPKeyword_0() { return cPKeyword_0; }
-
-		//{ExpOperand}
-		public Action getExpOperandAction_1() { return cExpOperandAction_1; }
-
-		//prm=BRACEDPRM
-		public Assignment getPrmAssignment_2() { return cPrmAssignment_2; }
-
-		//BRACEDPRM
-		public RuleCall getPrmBRACEDPRMParserRuleCall_2_0() { return cPrmBRACEDPRMParserRuleCall_2_0; }
+		//JRNPARAM
+		public RuleCall getPrmJRNPARAMTerminalRuleCall_0() { return cPrmJRNPARAMTerminalRuleCall_0; }
 	}
 
 	public class ColumnOperandElements extends AbstractParserRuleElementFinder {
@@ -1643,6 +1620,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cCfullAssignment = (Assignment)rule.eContents().get(1);
 		private final RuleCall cCfullColumnFullParserRuleCall_0 = (RuleCall)cCfullAssignment.eContents().get(0);
 		
+		////	'$P!' {ExpOperand} prm=BRACEDPRM;
 		//ColumnOperand:
 		//	cfull=ColumnFull;
 		public ParserRule getRule() { return rule; }
@@ -1857,30 +1835,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 	}
-
-	public class BRACEDPRMElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "BRACEDPRM");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cLeftCurlyBracketKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final RuleCall cIDTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
-		private final Keyword cRightCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		
-		//BRACEDPRM:
-		//	"{" ID "}";
-		public ParserRule getRule() { return rule; }
-
-		//"{" ID "}"
-		public Group getGroup() { return cGroup; }
-
-		//"{"
-		public Keyword getLeftCurlyBracketKeyword_0() { return cLeftCurlyBracketKeyword_0; }
-
-		//ID
-		public RuleCall getIDTerminalRuleCall_1() { return cIDTerminalRuleCall_1; }
-
-		//"}"
-		public Keyword getRightCurlyBracketKeyword_2() { return cRightCurlyBracketKeyword_2; }
-	}
 	
 	
 	public class XFunctionElements extends AbstractEnumRuleElementFinder {
@@ -2093,7 +2047,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private JoinTypeElements unknownRuleJoinType;
 	private DBIDElements pDBID;
 	private FNAMEElements pFNAME;
-	private BRACEDPRMElements pBRACEDPRM;
+	private TerminalRule tJRPARAM;
+	private TerminalRule tJRNPARAM;
 	private TerminalRule tSTAR;
 	private TerminalRule tINT;
 	private TerminalRule tTIMESTAMP;
@@ -2510,7 +2465,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ParameterOperand returns POperand:
-	//	"$P" {POperand} prm=BRACEDPRM;
+	//	prm=JRPARAM;
 	public ParameterOperandElements getParameterOperandAccess() {
 		return (pParameterOperand != null) ? pParameterOperand : (pParameterOperand = new ParameterOperandElements());
 	}
@@ -2519,8 +2474,9 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getParameterOperandAccess().getRule();
 	}
 
+	////'$P' {POperand} prm=BRACEDPRM;
 	//ExclamationParameterOperand returns ExpOperand:
-	//	"$P!" {ExpOperand} prm=BRACEDPRM;
+	//	prm=JRNPARAM;
 	public ExclamationParameterOperandElements getExclamationParameterOperandAccess() {
 		return (pExclamationParameterOperand != null) ? pExclamationParameterOperand : (pExclamationParameterOperand = new ExclamationParameterOperandElements());
 	}
@@ -2529,6 +2485,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getExclamationParameterOperandAccess().getRule();
 	}
 
+	////	'$P!' {ExpOperand} prm=BRACEDPRM;
 	//ColumnOperand:
 	//	cfull=ColumnFull;
 	public ColumnOperandElements getColumnOperandAccess() {
@@ -2611,15 +2568,19 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getFNAMEAccess().getRule();
 	}
 
-	//BRACEDPRM:
-	//	"{" ID "}";
-	public BRACEDPRMElements getBRACEDPRMAccess() {
-		return (pBRACEDPRM != null) ? pBRACEDPRM : (pBRACEDPRM = new BRACEDPRMElements());
-	}
-	
-	public ParserRule getBRACEDPRMRule() {
-		return getBRACEDPRMAccess().getRule();
-	}
+	////BRACEDPRM:
+	////	'{' ID '}';
+	//terminal JRPARAM:
+	//	"$P{"->"}";
+	public TerminalRule getJRPARAMRule() {
+		return (tJRPARAM != null) ? tJRPARAM : (tJRPARAM = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "JRPARAM"));
+	} 
+
+	//terminal JRNPARAM:
+	//	"$P!{"->"}";
+	public TerminalRule getJRNPARAMRule() {
+		return (tJRNPARAM != null) ? tJRNPARAM : (tJRNPARAM = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "JRNPARAM"));
+	} 
 
 	//terminal STAR:
 	//	"*";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xtext="http://www.eclipse.org/2008/Xtext">
-  <xtext:Grammar name="com.jaspersoft.studio.data.Sql" usedGrammars="/1" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.55">
+  <xtext:Grammar name="com.jaspersoft.studio.data.Sql" usedGrammars="/1" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.56">
     <metamodelDeclarations xsi:type="xtext:ReferencedMetamodel" alias="ecore">
       <ePackage href="http://www.eclipse.org/emf/2002/Ecore#/"/>
     </metamodelDeclarations>
@@ -129,7 +129,7 @@
           </elements>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="allCols" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.47"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.48"/>
         </elements>
       </alternatives>
     </rules>
@@ -442,7 +442,7 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//JRParameter"/>
       </type>
       <alternatives xsi:type="xtext:Assignment" feature="jrprm" operator="=">
-        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.55"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="Expression">
@@ -619,7 +619,7 @@
                   <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//Star"/>
                 </type>
               </elements>
-              <elements xsi:type="xtext:RuleCall" rule="/0/@rules.47"/>
+              <elements xsi:type="xtext:RuleCall" rule="/0/@rules.48"/>
             </elements>
             <elements xsi:type="xtext:Group">
               <elements xsi:type="xtext:Action" feature="left" operator="=">
@@ -694,7 +694,7 @@
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.45"/>
         </elements>
         <elements xsi:type="xtext:Alternatives">
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.47"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.48"/>
           <elements xsi:type="xtext:Assignment" feature="args" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.34"/>
           </elements>
@@ -743,32 +743,16 @@
       <type metamodel="/0/@metamodelDeclarations.1">
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//POperand"/>
       </type>
-      <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:Keyword" value="$P"/>
-        <elements xsi:type="xtext:Action">
-          <type metamodel="/0/@metamodelDeclarations.1">
-            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//POperand"/>
-          </type>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="prm" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.46"/>
-        </elements>
+      <alternatives xsi:type="xtext:Assignment" feature="prm" operator="=">
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.46"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="ExclamationParameterOperand">
       <type metamodel="/0/@metamodelDeclarations.1">
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//ExpOperand"/>
       </type>
-      <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:Keyword" value="$P!"/>
-        <elements xsi:type="xtext:Action">
-          <type metamodel="/0/@metamodelDeclarations.1">
-            <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//ExpOperand"/>
-          </type>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="prm" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.46"/>
-        </elements>
+      <alternatives xsi:type="xtext:Assignment" feature="prm" operator="=">
+        <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.47"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="ColumnOperand">
@@ -802,22 +786,22 @@
       </type>
       <alternatives xsi:type="xtext:Alternatives">
         <elements xsi:type="xtext:Assignment" feature="soint" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.48"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.49"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="sostr" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.41"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="sodbl" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.52"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
         </elements>
         <elements xsi:type="xtext:Assignment" feature="sodate" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.50"/>
-        </elements>
-        <elements xsi:type="xtext:Assignment" feature="sotime" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.51"/>
         </elements>
+        <elements xsi:type="xtext:Assignment" feature="sotime" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.52"/>
+        </elements>
         <elements xsi:type="xtext:Assignment" feature="sodt" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.49"/>
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.50"/>
         </elements>
       </alternatives>
     </rules>
@@ -914,25 +898,25 @@
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
       <alternatives xsi:type="xtext:Alternatives">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
         <elements xsi:type="xtext:Group">
           <elements xsi:type="xtext:Keyword" value="'"/>
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
           <elements xsi:type="xtext:Keyword" value="'"/>
         </elements>
         <elements xsi:type="xtext:Group">
           <elements xsi:type="xtext:Keyword" value="&quot;"/>
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
           <elements xsi:type="xtext:Keyword" value="&quot;"/>
         </elements>
         <elements xsi:type="xtext:Group">
           <elements xsi:type="xtext:Keyword" value="`"/>
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
           <elements xsi:type="xtext:Keyword" value="`"/>
         </elements>
         <elements xsi:type="xtext:Group">
           <elements xsi:type="xtext:Keyword" value="["/>
-          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
           <elements xsi:type="xtext:Keyword" value="]"/>
         </elements>
       </alternatives>
@@ -942,18 +926,30 @@
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.53"/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
         <elements xsi:type="xtext:Keyword" value="("/>
       </alternatives>
     </rules>
-    <rules xsi:type="xtext:ParserRule" name="BRACEDPRM">
+    <rules xsi:type="xtext:TerminalRule" name="JRPARAM">
       <type metamodel="/0/@metamodelDeclarations.0">
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:Keyword" value="{"/>
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.54"/>
-        <elements xsi:type="xtext:Keyword" value="}"/>
+        <elements xsi:type="xtext:Keyword" value="$P{"/>
+        <elements xsi:type="xtext:UntilToken">
+          <terminal xsi:type="xtext:Keyword" value="}"/>
+        </elements>
+      </alternatives>
+    </rules>
+    <rules xsi:type="xtext:TerminalRule" name="JRNPARAM">
+      <type metamodel="/0/@metamodelDeclarations.0">
+        <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </type>
+      <alternatives xsi:type="xtext:Group">
+        <elements xsi:type="xtext:Keyword" value="$P!{"/>
+        <elements xsi:type="xtext:UntilToken">
+          <terminal xsi:type="xtext:Keyword" value="}"/>
+        </elements>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:TerminalRule" name="STAR">
@@ -979,9 +975,9 @@
         <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.50"/>
-        <elements xsi:type="xtext:Keyword" value=" "/>
         <elements xsi:type="xtext:RuleCall" rule="/0/@rules.51"/>
+        <elements xsi:type="xtext:Keyword" value=" "/>
+        <elements xsi:type="xtext:RuleCall" rule="/0/@rules.52"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:TerminalRule" name="DATE">
@@ -1172,7 +1168,7 @@
       </alternatives>
     </rules>
   </xtext:Grammar>
-  <xtext:Grammar name="org.eclipse.xtext.common.Terminals" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.55">
+  <xtext:Grammar name="org.eclipse.xtext.common.Terminals" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.56">
     <metamodelDeclarations xsi:type="xtext:ReferencedMetamodel" alias="ecore">
       <ePackage href="http://www.eclipse.org/emf/2002/Ecore#/"/>
     </metamodelDeclarations>

@@ -159,4 +159,11 @@ public class ConvertUtil {
 		}.getObject();
 	}
 
+	public static String getParamValue(String prm) {
+		return prm.replace("$P{", "").replace("}", "");
+	}
+
+	public static String getParamExclamationValue(String prm) {
+		return prm.replace("$P!{", "").replace("}", "");
+	}
 }
