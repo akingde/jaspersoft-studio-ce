@@ -128,6 +128,8 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.frame.MFrame;
+import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.model.image.command.CreateImageCommand;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.util.ModelVisitor;
@@ -511,10 +513,6 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof MColumn && ((MColumn) parent).getMTable() != null)
 				return new CreateColumnCommand((MColumn) parent, (MColumn) child, newIndex);
 		}
-		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
-		if (child instanceof MElementGroup && parent instanceof MCell)
-			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
 		if (child instanceof MTable) {
 			if (parent instanceof MElementGroup)
 				return new CreateTableCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
@@ -528,7 +526,25 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof IGroupElement && parent instanceof IGraphicElementContainer) {
 				return new CreateTableCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
-		}
+		} 
+		if (child instanceof MImage) {
+			if (parent instanceof MCell)
+				return new CreateImageCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
+			if (parent instanceof MBand)
+				return new CreateImageCommand((MBand) parent, (MGraphicElement) child, location, newIndex);
+			if (parent instanceof MFrame)
+				return new CreateImageCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
+			if (parent instanceof MReport)
+				return new CreateImageCommand(parent, (MGraphicElement) child, location, newIndex);
+
+			if (parent instanceof IGroupElement) {
+				return new com.jaspersoft.studio.model.command.CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
+		} 
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
 		if (parent instanceof MTable && child instanceof MGraphicElement) {
 			MTable mt = (MTable) parent;
 			if (location != null) {

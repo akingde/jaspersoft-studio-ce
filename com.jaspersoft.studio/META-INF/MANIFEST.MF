@@ -446,6 +446,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.model",
  com.jaspersoft.studio.model.frame,
  com.jaspersoft.studio.model.image,
+ com.jaspersoft.studio.model.image.command,
  com.jaspersoft.studio.model.parameter;
   uses:="com.jaspersoft.studio.model.util,
    net.sf.jasperreports.engine.design,

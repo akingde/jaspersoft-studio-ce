@@ -303,11 +303,11 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (getParent() instanceof MPage
+		if (getTableManager() != null && (getParent() instanceof MPage
 				&& evt instanceof CollectionElementAddedEvent
 				|| evt instanceof CollectionElementRemovedEvent
 				|| evt.getOldValue() instanceof DesignCell
-				|| evt.getNewValue() instanceof DesignCell)
+				|| evt.getNewValue() instanceof DesignCell))
 			getTableManager().update();
 		else if (getTableManager() != null)
 			getTableManager().update();
