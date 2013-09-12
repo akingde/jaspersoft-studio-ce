@@ -31,6 +31,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -49,6 +50,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.callout.MCallout;
@@ -107,8 +110,10 @@ import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableEditPart;
 import com.jaspersoft.studio.components.table.part.TablePageEditPart;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -533,7 +538,25 @@ public class TableComponentFactory implements IComponentFactory {
 					int x = r != null ? r.x : 0;
 					int y = r != null ? r.y : 0;
 					location = location.setLocation(location.x - x, location.y - y);
-					ModelVisitor<MCell> mv = new ModelVisitor<MCell>(parent) {
+					
+					//The parent even if it is a MTable could not have the children if we are in the main editor
+					//so we must open the table editor and take the table from there to get the children
+					IEditorPart editorPart = Workbench.getInstance().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+					INode tableEditorModel = null;
+					if (editorPart instanceof JrxmlEditor){
+						JrxmlEditor jrxmlEditor = (JrxmlEditor)editorPart;
+						jrxmlEditor.openEditor(parent.getValue(), parent);
+						IEditorPart reportContainer = jrxmlEditor.getActiveEditor();
+						if (reportContainer instanceof ReportContainer){
+							ReportContainer container = (ReportContainer)reportContainer;
+							if (container.getActiveEditor() instanceof TableEditor){
+								TableEditor tableEditor = (TableEditor)container.getActiveEditor();
+								tableEditorModel = tableEditor.getModel();
+							}
+						}
+					}
+					
+					ModelVisitor<MCell> mv = new ModelVisitor<MCell>(tableEditorModel != null? tableEditorModel : parent) {
 						@Override
 						public boolean visit(INode n) {
 							if (n instanceof MCell && ((MCell) n).getCell() == cell)
@@ -542,6 +565,10 @@ public class TableComponentFactory implements IComponentFactory {
 						}
 					};
 					MCell mcell = (MCell) mv.getObject();
+					if (mcell == null){
+						UIUtils.showInformation("Impossible to create the element", "The element could not be created in this position, try to enter into the table editor and place it from there");
+						return null;
+					}
 					return new CreateElementCommand(mcell, (MGraphicElement) child, location, newIndex);
 				}
 			}
