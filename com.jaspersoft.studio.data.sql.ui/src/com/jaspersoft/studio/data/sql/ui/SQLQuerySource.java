@@ -40,6 +40,7 @@ import com.google.inject.Injector;
 import com.jaspersoft.studio.data.sql.Activator;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 
 public class SQLQuerySource {
@@ -146,8 +147,8 @@ public class SQLQuerySource {
 						obj = arr[0];
 				}
 				if (obj instanceof AMSQLObject) {
+					performCustomDropOperations((AMSQLObject)obj);
 					StringBuffer oldText = new StringBuffer(getQuery());
-
 					oldText.insert(viewer.getTextWidget().getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
 					viewer.getDocument().set(oldText.toString());
 				} else if (obj instanceof JRParameter) {
@@ -155,6 +156,19 @@ public class SQLQuerySource {
 
 					oldText.insert(viewer.getTextWidget().getCaretOffset(), " $P{" + ((JRParameter) obj).getName() + "} ");
 					viewer.getDocument().set(oldText.toString());
+				}
+			}
+
+			/*
+			 * Should perform some custom drop operations here depending on
+			 * the specific type of AMSQLObject.
+			 */
+			private void performCustomDropOperations(AMSQLObject obj) {
+				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD REVIEW
+				// Forcing the loading of the tables information so the user can use smoothly
+				// the graphical editor (Diagram Tab) without NPE.
+				if(obj instanceof MSqlTable) {
+					designer.getDbMetadata().loadTable((MSqlTable) obj);
 				}
 			}
 		});

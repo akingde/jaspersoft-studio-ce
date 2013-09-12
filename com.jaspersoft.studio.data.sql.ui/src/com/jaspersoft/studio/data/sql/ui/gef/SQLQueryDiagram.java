@@ -186,6 +186,12 @@ public class SQLQueryDiagram {
 				mfrom = Util.getKeyword(designer.getRoot(), MFrom.class);
 
 			if (!tablesset.isEmpty()) {
+				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD REVIEW
+				// Forcing the loading of the tables information so the user can use smoothly
+				// the graphical editor (Diagram Tab) without NPE.
+				for(MSqlTable t : tablesset) {
+					designer.getDbMetadata().loadTable(t);
+				}
 				CreateTable ct = designer.getOutline().getAfactory().getAction(CreateTable.class);
 				if (ct.calculateEnabled(new Object[] { mfrom })) {
 					ct.run(tablesset);

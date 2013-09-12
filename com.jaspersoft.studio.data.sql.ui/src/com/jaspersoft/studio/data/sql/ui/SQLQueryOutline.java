@@ -258,6 +258,12 @@ public class SQLQueryOutline {
 
 			protected void doDropTable(Object target, Set<MSqlTable> tablesset) {
 				if (!tablesset.isEmpty()) {
+					// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD REVIEW
+					// Forcing the loading of the tables information so the user can use smoothly
+					// the graphical editor (Diagram Tab) without NPE.
+					for(MSqlTable t : tablesset) {
+						designer.getDbMetadata().loadTable(t);
+					}
 					CreateTable ct = afactory.getAction(CreateTable.class);
 					if (ct.calculateEnabled(new Object[] { target }))
 						ct.run(tablesset);
