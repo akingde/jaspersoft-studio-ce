@@ -530,13 +530,14 @@ public class TableComponentFactory implements IComponentFactory {
 		if (child instanceof MImage) {
 			if (parent instanceof MCell)
 				return new CreateImageCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
+			if (parent instanceof MElementGroup)
+				return new CreateImageCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
 				return new CreateImageCommand((MBand) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateImageCommand((MFrame) parent, (MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
 				return new CreateImageCommand(parent, (MGraphicElement) child, location, newIndex);
-
 			if (parent instanceof IGroupElement) {
 				return new com.jaspersoft.studio.model.command.CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
