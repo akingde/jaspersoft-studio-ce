@@ -30,7 +30,7 @@ import org.eclipse.swt.custom.StyleRange;
  * @author Orlandin Marco
  *
  */
-public class ElementDescription {
+public class ElementDescription implements Comparable<ElementDescription> {
 	
 	/**
 	 * Textual title of the element
@@ -219,5 +219,10 @@ public class ElementDescription {
 	public StyleRange[] getStyles(){
 		Collections.sort(textStyles);
 		return textStyles.toArray(new StyleRange[textStyles.size()]);
+	}
+
+	@Override
+	public int compareTo(ElementDescription o) {
+		return name.compareTo(o.getName());
 	}
 }

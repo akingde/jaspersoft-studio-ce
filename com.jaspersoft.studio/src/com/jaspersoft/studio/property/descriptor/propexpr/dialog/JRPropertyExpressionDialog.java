@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
+import java.util.Collections;
+
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -74,6 +76,7 @@ public class JRPropertyExpressionDialog extends JRPropertyDialog
 	@Override
 	protected void initializeHints(){
 		hints = HintsPropertiesList.getElementProperties(value.getPnode().getValue());
+		Collections.sort(hints);
 	}
 	
 	@Override

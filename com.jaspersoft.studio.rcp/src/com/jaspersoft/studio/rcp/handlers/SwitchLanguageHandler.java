@@ -85,6 +85,9 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 					Messages.SwitchLanguageHandler_restartMessage, MessageDialog.QUESTION, new String[] { Messages.common_yes , Messages.common_no}, 1); 
 			int selection = dialog.open();
 			if (selection == 0){
+				//Some OS (linux\mac) dosen't reload the configuration file after the restart. So when eclipse is 
+				//re-launched it is done with the -nl parameter to the new locale. Essentially it's like it is launched
+				//from command line with the explicit nl parameter
 				String command_line = buildCommandLine(locale);
 				System.setProperty(PROP_EXIT_DATA, command_line);
 				System.setProperty(PROP_EXIT_CODE, IApplication.EXIT_RELAUNCH.toString());
@@ -182,7 +185,7 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	
 
 	/**
-	 * Read the configuration file of the application and rewerite it with a new regional code
+	 * Read the configuration file of the application and rewrite it with a new regional code
 	 * if the code is changed then it is also requested a platform restart.
 	 * The regional code will be set at the place of the old code if found, otherwise before the 
 	 * first parameter found between -clean, -vm, -vmargs. If none of this parameters are found then it is set at the end of the file

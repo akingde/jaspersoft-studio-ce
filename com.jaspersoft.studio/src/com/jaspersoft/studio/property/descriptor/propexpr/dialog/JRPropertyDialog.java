@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -172,6 +173,7 @@ public class JRPropertyDialog extends Dialog {
 	 */
 	protected void initializeHints(){
 		hints = HintsPropertiesList.getElementProperties(JasperDesign.class);
+		Collections.sort(hints);
 	}
 	
 	/**
