@@ -309,8 +309,15 @@ public final class PageFormatDialog extends FormDialog {
 
 			public void widgetSelected(SelectionEvent e) {
 				Point p = PageSize.getFormatSize(PageSize.getFormats()[pformat.getSelectionIndex()]);
-				pwidth.setValue(p.x);
-				pheigh.setValue(p.y);
+				// Standard measures are for portrait: should switch if landascape
+				if(portrait.getSelection()) {
+					pwidth.setValue(p.x);
+					pheigh.setValue(p.y);
+				}
+				else {
+					pwidth.setValue(p.y);
+					pheigh.setValue(p.x);
+				}
 				recalcColumns();
 				setTBounds();
 			}
