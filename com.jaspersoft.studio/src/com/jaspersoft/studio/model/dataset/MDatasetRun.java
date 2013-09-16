@@ -18,7 +18,9 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -33,6 +35,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MDatasetRun extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -179,13 +182,22 @@ public class MDatasetRun extends APropertyNode {
 				ParameterDTO v = (ParameterDTO) value;
 				
 				ParameterDTO internalDTO = (ParameterDTO)getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+				//The parameter must be updated also into the referenced dataset since the JRDatasetRunParameterExpressionFactory check that every parameter in the dataset run
+				//is associated to a parameter with the same name in the referenced dataset
+				JRDesignDataset originalDataset = ModelUtils.getDesignDatasetByName(getJasperDesign(), getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).toString());
 				
-				for (JRDatasetParameter prm : internalDTO.getValue())
+				for (JRDatasetParameter prm : internalDTO.getValue()){
 					jrElement.removeParameter(prm);
+					originalDataset.removeParameter(prm.getName());
+				}
 
 				for (JRDatasetParameter param : v.getValue())
 					try {
 						jrElement.addParameter(param);
+						JRDesignParameter designParam = new JRDesignParameter();
+						designParam.setName(param.getName());
+						designParam.setDefaultValueExpression(param.getExpression());
+						originalDataset.addParameter(designParam);
 					} catch (JRException e) {
 						e.printStackTrace();
 					}
