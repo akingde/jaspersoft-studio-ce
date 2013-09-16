@@ -43,7 +43,8 @@ public class ReportStateView extends PageBookView {
 				public void run() {
 					// TODO Auto-generated method stub
 					PreviewJRPrint preview = (PreviewJRPrint) ((JrxmlEditor) part).getEditor(JrxmlEditor.PAGE_PREVIEW);
-					page.setupConsole(preview.getConsole());
+					if (preview != null)
+						page.setupConsole(preview.getConsole());
 				}
 			});
 
