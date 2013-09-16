@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.sql.ui;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,12 +74,14 @@ import com.jaspersoft.studio.data.sql.model.query.orderby.AMOrderByMember;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
@@ -258,11 +261,16 @@ public class SQLQueryOutline {
 
 			protected void doDropTable(Object target, Set<MSqlTable> tablesset) {
 				if (!tablesset.isEmpty()) {
-					// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD REVIEW
-					// Forcing the loading of the tables information so the user can use smoothly
-					// the graphical editor (Diagram Tab) without NPE.
-					for(MSqlTable t : tablesset) {
+					for (MSqlTable t : tablesset)
 						designer.getDbMetadata().loadTable(t);
+					if (target instanceof MSelect || target instanceof MSelectColumn || target instanceof MSelectExpression) {
+						Set<MSQLColumn> cols = new HashSet<MSQLColumn>();
+						for (MSqlTable t : tablesset) {
+							for (INode n : t.getChildren())
+								cols.add((MSQLColumn) n);
+						}
+						doDropColumn(target, cols);
+						return;
 					}
 					CreateTable ct = afactory.getAction(CreateTable.class);
 					if (ct.calculateEnabled(new Object[] { target }))
