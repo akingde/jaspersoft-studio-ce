@@ -177,8 +177,10 @@ public class MDatasetRun extends APropertyNode {
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
-
-				for (JRDatasetParameter prm : propertyDTO.getValue())
+				
+				ParameterDTO internalDTO = (ParameterDTO)getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+				
+				for (JRDatasetParameter prm : internalDTO.getValue())
 					jrElement.removeParameter(prm);
 
 				for (JRDatasetParameter param : v.getValue())
