@@ -42,6 +42,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.BottomAnchor;
@@ -54,6 +55,11 @@ import com.jaspersoft.studio.model.INode;
 public class TableEditPart extends AbstractGraphicalEditPart {
 	private Map<String, MSelectColumn> set = new HashMap<String, MSelectColumn>();
 	private SQLQueryDesigner designer;
+	private boolean allstar;
+
+	public boolean isAllstar() {
+		return allstar;
+	}
 
 	@Override
 	protected IFigure createFigure() {
@@ -88,12 +94,20 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 		MSelect msel = Util.getKeyword(fromTable, MSelect.class);
 		set.clear();
+		allstar = false;
 		for (INode n : msel.getChildren()) {
-			if (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(fromTable)) {
-				MSelectColumn msc = (MSelectColumn) n;
-				set.put(msc.getValue().getValue(), msc);
+			if (n instanceof MSelectExpression && n.getValue().equals("*")) {
+				allstar = true;
+				break;
 			}
 		}
+		if (!allstar)
+			for (INode n : msel.getChildren()) {
+				if (allstar || (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(fromTable))) {
+					MSelectColumn msc = (MSelectColumn) n;
+					set.put(msc.getValue().getValue(), msc);
+				}
+			}
 		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
 		Point location = f.getLocation();
 		Rectangle constraint = new Rectangle(location.x, location.y, -1, -1);

@@ -68,6 +68,12 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 						ct.run(cols);
 					}
 				} else {
+					if (ColumnEditPart.this.getParent().isAllstar()) {
+						// get all columns from tables
+						// remove *
+						setSelected(true);
+						return;
+					}
 					DeleteColumn dc = afactory.getAction(DeleteColumn.class);
 					if (dc.calculateEnabled(new Object[] { mSelCol }))
 						dc.run();
@@ -93,8 +99,12 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void refreshVisuals() {
 		isRefreshing = true;
-		mSelCol = getParent().getColumnMap().get(colname);
-		getFigure().setSelected(mSelCol != null);
+		if (getParent().isAllstar())
+			getFigure().setSelected(true);
+		else {
+			mSelCol = getParent().getColumnMap().get(colname);
+			getFigure().setSelected(mSelCol != null);
+		}
 		isRefreshing = false;
 	}
 
