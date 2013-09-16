@@ -3141,12 +3141,12 @@ ruleDBID returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
     newLeafNode(this_ID_0, grammarAccess.getDBIDAccess().getIDTerminalRuleCall_0()); 
     }
 
-    |    this_STRING_1=RULE_STRING    {
-		$current.merge(this_STRING_1);
+    |    this_DBNAME_1=RULE_DBNAME    {
+		$current.merge(this_DBNAME_1);
     }
 
     { 
-    newLeafNode(this_STRING_1, grammarAccess.getDBIDAccess().getSTRINGTerminalRuleCall_1()); 
+    newLeafNode(this_DBNAME_1, grammarAccess.getDBIDAccess().getDBNAMETerminalRuleCall_1()); 
     }
 )
     ;

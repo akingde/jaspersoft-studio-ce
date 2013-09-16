@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.jaspersoft.studio.data.sql.ColumnFull;
+import com.jaspersoft.studio.data.sql.Comparison;
 import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.JRParameter;
 import com.jaspersoft.studio.data.sql.Operand;
@@ -63,19 +65,21 @@ public class ConvertExpression {
 		if (tf.getExp() != null) {
 			tf = tf.getExp();
 			MExpression me = new MExpression(parent, null, -1);
-			me.getOperands().add(getOperand(designer, msel, tf.getOp1(), me));
-			if (tf.getComp() != null) {
-				me.setOperator(Operator.getOperator(tf.getComp().getOperator()));
-				me.getOperands().add(getOperand(designer, msel, tf.getComp().getOp2(), me));
+			List<AOperand> opds = me.getOperands();
+			opds.add(getOperand(designer, msel, tf.getOp1(), me));
+			Comparison comp = tf.getComp();
+			if (comp != null) {
+				me.setOperator(Operator.getOperator(comp.getOperator()));
+				opds.add(getOperand(designer, msel, comp.getOp2(), me));
 			} else if (tf.getIsnull() != null)
 				me.setOperator(Operator.getOperator(tf.getIsnull()));
 			else if (tf.getBetween() != null) {
 				me.setOperator(Operator.getOperator(tf.getBetween().getOpBetween()));
-				me.getOperands().add(getOperand(designer, msel, tf.getBetween().getOp2(), me));
-				me.getOperands().add(getOperand(designer, msel, tf.getBetween().getOp3(), me));
+				opds.add(getOperand(designer, msel, tf.getBetween().getOp2(), me));
+				opds.add(getOperand(designer, msel, tf.getBetween().getOp3(), me));
 			} else if (tf.getLike() != null) {
 				me.setOperator(Operator.getOperator(tf.getLike().getOpLike()));
-				me.getOperands().add(new ScalarOperand<String>(me, tf.getLike().getOp2()));
+				opds.add(new ScalarOperand<String>(me, tf.getLike().getOp2()));
 			} else if (tf.getIn() != null) {
 				me.setOperator(Operator.getOperator(tf.getIn().getOp().replace("(", "").trim()));
 				if (tf.getIn().getSubquery() != null) {
@@ -85,7 +89,7 @@ public class ConvertExpression {
 				} else if (tf.getIn().getOpList() != null) {
 					for (EObject eobj : tf.getIn().getOpList().eContents()) {
 						if (eobj instanceof Operand)
-							me.getOperands().add(getOperand(designer, msel, (Operand) eobj, me));
+							opds.add(getOperand(designer, msel, (Operand) eobj, me));
 					}
 				}
 			}

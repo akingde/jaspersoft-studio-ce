@@ -142,10 +142,9 @@ enum JoinType:
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
 DBID:
-	ID | STRING;
+	ID | DBNAME;
 
 FNAME:
-//	STRINGID '(';
 	ID '(';
 
 terminal JRPARAM:
@@ -174,15 +173,15 @@ terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
 
 terminal STRING:
 	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"' |
-	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'" |
+	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
+
+terminal DBNAME:
 	'`' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '`'))* '`' |
 	'[' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | ']'))* ']';
 
-	//terminal STRINGID:
-//	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 terminal ID:
 	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
-	//('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '#' | '-')+;
+
 terminal SL_COMMENT:
 	('--' | '#' | '//') !('\n' | '\r')* ('\r'? '\n')?;
 

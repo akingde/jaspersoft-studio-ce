@@ -1703,20 +1703,20 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "DBID");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final RuleCall cSTRINGTerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		private final RuleCall cDBNAMETerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
 		//DBID:
-		//	ID | STRING;
+		//	ID | DBNAME;
 		public ParserRule getRule() { return rule; }
 
-		//ID | STRING
+		//ID | DBNAME
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//ID
 		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
 
-		//STRING
-		public RuleCall getSTRINGTerminalRuleCall_1() { return cSTRINGTerminalRuleCall_1; }
+		//DBNAME
+		public RuleCall getDBNAMETerminalRuleCall_1() { return cDBNAMETerminalRuleCall_1; }
 	}
 
 	public class FNAMEElements extends AbstractParserRuleElementFinder {
@@ -1725,15 +1725,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		
-		//FNAME: //	STRINGID '(';
+		//FNAME:
 		//	ID "(";
 		public ParserRule getRule() { return rule; }
 
-		////	STRINGID '(';
 		//ID "("
 		public Group getGroup() { return cGroup; }
 
-		////	STRINGID '(';
 		//ID
 		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
 
@@ -1960,6 +1958,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private TerminalRule tTIME;
 	private TerminalRule tSIGNED_DOUBLE;
 	private TerminalRule tSTRING;
+	private TerminalRule tDBNAME;
 	private TerminalRule tID;
 	private TerminalRule tSL_COMMENT;
 	
@@ -2438,7 +2437,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//DBID:
-	//	ID | STRING;
+	//	ID | DBNAME;
 	public DBIDElements getDBIDAccess() {
 		return (pDBID != null) ? pDBID : (pDBID = new DBIDElements());
 	}
@@ -2447,7 +2446,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getDBIDAccess().getRule();
 	}
 
-	//FNAME: //	STRINGID '(';
+	//FNAME:
 	//	ID "(";
 	public FNAMEElements getFNAMEAccess() {
 		return (pFNAME != null) ? pFNAME : (pFNAME = new FNAMEElements());
@@ -2507,22 +2506,24 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//terminal STRING:
 	//	"\"" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\""))* "\"" | "\'" ("\\" ("b" | "t" |
-	//	"n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\'"))* "\'" | "`" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" |
-	//	"\"" | "\'" | "\\") | !("\\" | "\""))* "`" | "[" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") |
-	//	!("\\" | "\""))* "]";
+	//	"n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\'"))* "\'";
 	public TerminalRule getSTRINGRule() {
 		return (tSTRING != null) ? tSTRING : (tSTRING = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "STRING"));
 	} 
 
-	////terminal STRINGID:
-	////	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+	//terminal DBNAME:
+	//	"`" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "`"))* "`" | "[" ("\\" ("b" | "t" | "n"
+	//	| "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "]"))* "]";
+	public TerminalRule getDBNAMERule() {
+		return (tDBNAME != null) ? tDBNAME : (tDBNAME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "DBNAME"));
+	} 
+
 	//terminal ID:
 	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")*;
 	public TerminalRule getIDRule() {
 		return (tID != null) ? tID : (tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID"));
 	} 
 
-	////('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '#' | '-')+;
 	//terminal SL_COMMENT:
 	//	("--" | "#" | "//") !("\n" | "\r")* ("\r"? "\n")?;
 	public TerminalRule getSL_COMMENTRule() {

@@ -1968,9 +1968,9 @@ rule__DBID__Alternatives
 )
 
     |(
-{ before(grammarAccess.getDBIDAccess().getSTRINGTerminalRuleCall_1()); }
-	RULE_STRING
-{ after(grammarAccess.getDBIDAccess().getSTRINGTerminalRuleCall_1()); }
+{ before(grammarAccess.getDBIDAccess().getDBNAMETerminalRuleCall_1()); }
+	RULE_DBNAME
+{ after(grammarAccess.getDBIDAccess().getDBNAMETerminalRuleCall_1()); }
 )
 
 ;
