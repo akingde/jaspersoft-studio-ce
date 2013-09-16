@@ -54,13 +54,19 @@ public class ConvertSelectColumns {
 		try {
 			if (fcol.getAllCols() != null)
 				new MSelectExpression(msel, "*");
-			else if (fcol.getCe() != null) {
-				if (fcol.getCe() instanceof OperandImpl)
-					setupAlias(getMSelectColumn(designer, (OperandImpl) fcol.getCe(), msel), fcol);
-				else if (fcol.getCe() instanceof OperandsImpl) {
-					OperandsImpl ops = (OperandsImpl) fcol.getCe();
-					AMQueryAliased<?> mscol = getColumnUnknown(msel, operands2String(ops));
-					setupAlias(mscol, fcol);
+			else {
+				Operands ce = fcol.getCe();
+				if (ce != null) {
+					if (ce instanceof OperandImpl)
+						setupAlias(getMSelectColumn(designer, (OperandImpl) ce, msel), fcol);
+					else if (ce instanceof OperandsImpl) {
+						AMQueryAliased<?> mscol = null;
+						if (ce.getOp1() != null && ce.getLeft() == null && ce.getRight() == null)
+							mscol = getMSelectColumn(designer, (OperandImpl) ce.getOp1(), msel);
+						else
+							mscol = getColumnUnknown(msel, operands2String(ce));
+						setupAlias(mscol, fcol);
+					}
 				}
 			}
 		} catch (Throwable e) {
