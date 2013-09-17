@@ -57,8 +57,6 @@ public class CreateColumnBeginAction extends ACreateAction {
 		setId(CreateColumnBeginAction.ID);
 		setImageDescriptor(
 				Activator.getDefault().getImageDescriptor("icons/table-insert-column-begin.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(
-				Activator.getDefault().getImageDescriptor("icons/table-insert-column-begin.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 
