@@ -36,6 +36,8 @@ public class ConvertOrderBy {
 		String column = null;
 		if (tf instanceof DbObjectNameImpl)
 			column = ((DbObjectNameImpl) tf).getDbname();
+		else if (tf.getColOrder() instanceof DbObjectNameImpl)
+			column = ((DbObjectNameImpl) tf.getColOrder()).getDbname();
 		else
 			column = ConvertUtil.getDbObjectName(eContents, 1);
 		String table = ConvertUtil.getDbObjectName(eContents, 2);

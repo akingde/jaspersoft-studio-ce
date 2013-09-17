@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -104,22 +106,28 @@ public class ConvertExpression {
 			FieldOperand fc = null;
 			if (xexpr.getCol() != null)
 				fc = doColumn(designer, msel, xexpr.getCol(), me);
-			me.getOperands().add(Misc.nvl(fc, new FieldOperand(null, null, me)));
+			if (fc != null)
+				me.getOperands().add(fc);
+			else
+				me.getOperands().add(new FieldOperand(null, null, me));
 			me.setFunction(xexpr.getXf().getLiteral());
-			if (xexpr.getPrm() != null)
+			if (xexpr.getPrm() != null) {
+				JRDesignDataset jrDataset = designer.getjDataset();
 				if (xexpr.getPrm() instanceof JRParameter)
-					addParam(me, (JRParameter) xexpr.getPrm());
+					addParam(me, (JRParameter) xexpr.getPrm(), jrDataset);
 				else
 					for (EObject fcol : xexpr.getPrm().eContents()) {
 						if (fcol instanceof JRParameter)
-							addParam(me, (JRParameter) fcol);
+							addParam(me, (JRParameter) fcol, jrDataset);
 					}
+			}
 			setPrevOperator(me, prevCond);
 		}
 	}
 
-	protected static void addParam(MExpressionX me, JRParameter fcol) {
+	protected static void addParam(MExpressionX me, JRParameter fcol, JRDesignDataset jrDataset) {
 		ParameterPOperand pop = new ParameterPOperand(me);
+		pop.setJrDataset(jrDataset);
 		pop.setJrParameter(fcol.getJrprm());
 		me.getOperands().add(pop);
 	}

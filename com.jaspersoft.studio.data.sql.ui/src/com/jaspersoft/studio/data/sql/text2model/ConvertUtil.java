@@ -91,7 +91,8 @@ public class ConvertUtil {
 	}
 
 	public static KeyValue<MSQLColumn, MFromTable> findColumn(final MSelect msel, final String schema, final String table, final String column) {
-		return new ModelVisitor<KeyValue<MSQLColumn, MFromTable>>(Util.getKeyword(msel, MFrom.class)) {
+		MFrom mfrom = Util.getKeyword(msel, MFrom.class);
+		KeyValue<MSQLColumn, MFromTable> key = new ModelVisitor<KeyValue<MSQLColumn, MFromTable>>(mfrom) {
 
 			@Override
 			public boolean visit(INode n) {
@@ -118,11 +119,21 @@ public class ConvertUtil {
 				return false;
 			}
 		}.getObject();
+		if (key == null) {
+			for (MFromTable mft : Util.getFromTables(msel)) {
+				if (mft.getValue().isNotInMetadata())
+					return new KeyValue<MSQLColumn, MFromTable>(new MSQLColumn(mft.getValue(), column, null), mft);
+			}
+		}
+		return key;
 	}
 
 	public static MSqlTable getTableUnknown(MRoot dbroot, String schema, String table, SQLQueryDesigner designer) {
 		MSqlSchema msqlschem = ConvertUtil.findSchema(dbroot, Misc.nvl(schema), designer);
-		return new MSqlTable(msqlschem, Misc.nvl(table), true);
+		MSqlTable mtbl = findTable(dbroot, schema, Misc.nvl(table), designer);
+		if (mtbl == null)
+			return new MSqlTable(msqlschem, Misc.nvl(table), true);
+		return mtbl;
 	}
 
 	public static MSqlSchema findSchema(MRoot dbroot, String schema, SQLQueryDesigner designer) {
