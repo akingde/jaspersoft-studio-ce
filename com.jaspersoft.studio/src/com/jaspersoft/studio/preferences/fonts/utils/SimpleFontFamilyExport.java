@@ -255,4 +255,10 @@ public class SimpleFontFamilyExport implements FontFamily {
 		return new SimpleFontFaceExport(value);
 	}
 
+	@Override
+	public boolean isVisible() {
+		// FIXME
+		return false;
+	}
+
 }
