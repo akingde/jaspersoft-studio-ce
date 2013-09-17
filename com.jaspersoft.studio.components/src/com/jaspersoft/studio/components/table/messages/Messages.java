@@ -56,6 +56,12 @@ public class Messages extends NLS {
 	public static String MTable_whennodatalabel;
 	public static String MTableGroupFooter_group_footer;
 	public static String MTableGroupHeader_group_header;
+	public static String RemoveStylesAction_actionTitle;
+	public static String RemoveStylesAction_messageText;
+	public static String RemoveStylesAction_messageTitle;
+	public static String RemoveStylesAction_option1;
+	public static String RemoveStylesAction_option2;
+	public static String RemoveStylesAction_option3;
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
 	public static String TableEditor_table;

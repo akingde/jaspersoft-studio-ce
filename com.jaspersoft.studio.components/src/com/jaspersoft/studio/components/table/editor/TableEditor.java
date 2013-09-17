@@ -28,6 +28,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.table.action.EditStyleAction;
+import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
@@ -115,6 +117,14 @@ public class TableEditor extends AbstractVisualEditor {
 		List<String> selectionActions = getSelectionActions();
 		selectionActions.add(CreateColumnEndAction.ID);
 
+		action = new CreateColumnGroupAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateColumnGroupAction.ID);
+		
+		action = new EditStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(EditStyleAction.ID);
+		
 		action = new CreateColumnBeginAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnBeginAction.ID);
@@ -127,9 +137,9 @@ public class TableEditor extends AbstractVisualEditor {
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnAfterAction.ID);
 
-		action = new CreateColumnGroupAction(this);
+		action = new RemoveTableStylesAction(this);
 		registry.registerAction(action);
-		selectionActions.add(CreateColumnGroupAction.ID);
+		selectionActions.add(RemoveTableStylesAction.ID);
 
 		action = new UnGroupColumnsAction(this);
 		registry.registerAction(action);

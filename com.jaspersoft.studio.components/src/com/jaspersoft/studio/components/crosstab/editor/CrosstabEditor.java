@@ -28,6 +28,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.crosstab.action.EditCrosstabStyleAction;
+import com.jaspersoft.studio.components.crosstab.action.RemoveCrosstabStylesAction;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.action.CreateColumnCrosstabHeaderAction;
@@ -106,6 +108,14 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		List<String> selectionActions = getSelectionActions();
 		selectionActions.add(CreateMeasureAction.ID);
 
+		action = new EditCrosstabStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(EditCrosstabStyleAction.ID);
+		
+		action = new RemoveCrosstabStylesAction(this);
+		registry.registerAction(action);
+		selectionActions.add(RemoveCrosstabStylesAction.ID);
+		
 		action = new CreateColumnGroupAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnGroupAction.ID);

@@ -51,6 +51,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.crosstab.action.EditCrosstabStyleAction;
+import com.jaspersoft.studio.components.crosstab.action.RemoveCrosstabStylesAction;
 import com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.CrosstabFigure;
@@ -569,6 +570,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		// lst.add(new CreateCrosstabHeaderAction(part));
 		// lst.add(new CreateCrosstabWhenNoDataAction(part));
 		lst.add(new EditCrosstabStyleAction(part));
+		lst.add(new RemoveCrosstabStylesAction(part));
 		return lst;
 	}
 
@@ -582,6 +584,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		lst.add(CreateCrosstabWhenNoDataAction.ID);
 		lst.add(CreateCrosstabParameterAction.ID);
 		lst.add(EditCrosstabStyleAction.ID);
+		lst.add(RemoveCrosstabStylesAction.ID);
 		return lst;
 	}
 

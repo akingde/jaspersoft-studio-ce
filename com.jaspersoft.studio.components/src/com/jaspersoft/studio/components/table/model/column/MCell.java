@@ -227,7 +227,7 @@ public class MCell extends MColumn implements IGraphicElement,
 	public void setPropertyValue(Object id, Object value) {
 		if (cell != null) {
 			if (id.equals(DesignCell.PROPERTY_STYLE)) {
-				if (!value.equals("")) { //$NON-NLS-1$
+				if (!value.equals("") && value != null) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap()
 							.get(value);
 					if (style != null) {
@@ -237,6 +237,9 @@ public class MCell extends MColumn implements IGraphicElement,
 						cell.setStyleNameReference((String) value);
 						cell.setStyle(null);
 					}
+				} else {
+					cell.setStyle(null);
+					cell.setStyleNameReference(null);
 				}
 			} else if (id.equals(DesignCell.PROPERTY_ROW_SPAN)) {
 				cell.setRowSpan((Integer) value);

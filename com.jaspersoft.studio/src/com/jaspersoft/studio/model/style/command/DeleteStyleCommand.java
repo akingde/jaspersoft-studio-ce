@@ -52,6 +52,11 @@ public class DeleteStyleCommand extends Command {
 		this.jrDesign = srcNode.getJasperDesign();
 		this.jrStyle = (JRDesignStyle) srcNode.getValue();
 	}
+	
+	public DeleteStyleCommand(JasperDesign design, JRDesignStyle style) {
+		this.jrDesign = design;
+		this.jrStyle = style;
+	}
 
 	/*
 	 * (non-Javadoc)
