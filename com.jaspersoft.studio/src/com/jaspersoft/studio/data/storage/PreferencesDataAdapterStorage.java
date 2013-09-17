@@ -100,24 +100,28 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				e.printStackTrace();
 			}
 		}
-		Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
-		Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
-		while (urls.hasMoreElements()) {
-			InputStream in = null;
-			try {
-				in = urls.nextElement().openStream();
-				DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in, null);
-				if (dad == null)
-					continue;
-				DataAdapterDescriptor prefdad = findDataAdapter(dad.getName());
-				if (prefdad == null)
-					addDataAdapter(getNewID(), dad);
-				else
-					addDataAdapter(getUrl(prefdad), dad);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				FileUtils.closeStream(in);
+
+		// Add a list of default data adapters only if none is found.
+		if(getDataAdapterDescriptors().size()==0) {
+			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
+			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
+			while (urls.hasMoreElements()) {
+				InputStream in = null;
+				try {
+					in = urls.nextElement().openStream();
+					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in, null);
+					if (dad == null)
+						continue;
+					DataAdapterDescriptor prefdad = findDataAdapter(dad.getName());
+					if (prefdad == null)
+						addDataAdapter(getNewID(), dad);
+					else
+						addDataAdapter(getUrl(prefdad), dad);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					FileUtils.closeStream(in);
+				}
 			}
 		}
 	}
