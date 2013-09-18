@@ -842,7 +842,7 @@
    <extension
          point="com.jaspersoft.studio.toolitems">
       <toolitems
-            ActionID="create_table_column_after"
+            ActionID="create_table_column_begin"
             id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
             tooltip="%createTabelColBeginningTooltip">
          <selectedObject
@@ -851,9 +851,6 @@
          <selectedObject
                class="com.jaspersoft.studio.components.table.model.column.MColumn">
          </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.model.MPage">
-         </selectedObject>
       </toolitems>
       <toolitems
             ActionID="create_table_column"
@@ -861,6 +858,9 @@
             tooltip="%createTabelColEndTooltip">
          <selectedObject
                class="com.jaspersoft.studio.components.table.model.MTable">
+         </selectedObject>
+         <selectedObject
+               class="com.jaspersoft.studio.components.table.model.column.MColumn">
          </selectedObject>
       </toolitems>
       <toolitems
