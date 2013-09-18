@@ -152,6 +152,7 @@ public class ReportRunControler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
+					prmInput.setReportUnit(rdrepunit);
 					if (!prmInput.checkFieldsFilled())
 						return Status.CANCEL_STATUS;
 					Map<String, Object> prmcopy = new HashMap<String, Object>();

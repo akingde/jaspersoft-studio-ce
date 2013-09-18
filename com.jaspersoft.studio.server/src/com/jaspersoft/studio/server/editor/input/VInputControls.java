@@ -40,9 +40,14 @@ public class VInputControls extends AVParameters {
 	}
 
 	private InputControlsManager icm;
+	private ResourceDescriptor rdrepunit;
 
 	public VInputControls(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
+	}
+
+	public void setReportUnit(ResourceDescriptor rdrepunit) {
+		this.rdrepunit = rdrepunit;
 	}
 
 	public void createInputControls(InputControlsManager icm) {
@@ -80,12 +85,20 @@ public class VInputControls extends AVParameters {
 
 	public boolean checkFieldsFilled() {
 		if (icm.isAnyVisible()) {
+			boolean rAlwaysPrompt = rdrepunit.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
+
+			boolean hasDirty = false;
 			for (ResourceDescriptor p : icm.getInputControls()) {
 				String pname = p.getName();
-				if (p.isVisible() && !p.isReadOnly() && incontrols.containsKey(pname))
-					if (p.isMandatory() && icm.getParameters().containsKey(pname) && !incontrols.get(pname).isDirty())
+				if (p.isVisible() && !p.isReadOnly() && incontrols.containsKey(pname)) {
+					if (incontrols.get(pname).isDirty())
+						hasDirty = true;
+					if (p.isMandatory() && icm.getParameters().containsKey(pname) && !hasDirty)
 						return false;
+				}
 			}
+			if (rAlwaysPrompt && !hasDirty)
+				return false;
 		}
 		return true;
 	}
