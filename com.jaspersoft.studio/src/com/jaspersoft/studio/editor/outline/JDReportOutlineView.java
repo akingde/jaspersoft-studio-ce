@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline;
 
+import java.awt.MouseInfo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,18 +32,22 @@ import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.SelectionRequest;
+import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -68,6 +73,7 @@ import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.editor.java2d.figure.ScrollableThumbnail;
 import com.jaspersoft.studio.editor.java2d.figure.Thumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
+import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
@@ -107,6 +113,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 	/** The dispose listener. */
 	private DisposeListener disposeListener;
+	
+	private Point mousePosition = null;
+	
+	private boolean enableFocusFix = Util.isLinux();
 
 	/**
 	 * Instantiates a new jD report outline view.
@@ -235,10 +245,32 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		setContents(editor.getModel());
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
+			
+			tree.addFocusListener(new FocusListener() {
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					mousePosition = null;
+				}
+				
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (enableFocusFix && mousePosition != null){
+						EditPart part = getViewer().findObjectAt(mousePosition);
+						if (part != null && part.getModel() instanceof MRoot){
+							EditPart translatedPart = getViewer().findObjectAt(new Point(mousePosition.x+10, mousePosition.y));
+							if (translatedPart != null && translatedPart.getModel() != part.getModel()) {
+								TreeItem item = (TreeItem)((NotDragableTreeEditPart)translatedPart).getWidget();
+								item.setExpanded(!item.getExpanded());
+							}
+						}
+					}
+				}
+			});
+
 			tree.addMouseListener(new MouseListener() {
 
 				public void mouseUp(MouseEvent e) {
-
 				}
 
 				public void mouseDown(MouseEvent e) {
@@ -276,6 +308,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			tree.addMouseMoveListener(new MouseMoveListener() {
 
 				public void mouseMove(MouseEvent e) {
+					mousePosition = new Point(e.x, e.y);
 					EditPart part = getViewer().findObjectAt(new Point(e.x, e.y));
 					Tree t = (Tree) e.getSource();
 					if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)) {
