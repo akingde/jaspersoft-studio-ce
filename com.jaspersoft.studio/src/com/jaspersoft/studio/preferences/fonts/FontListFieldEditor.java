@@ -13,7 +13,6 @@ package com.jaspersoft.studio.preferences.fonts;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,8 +48,8 @@ import org.eclipse.swt.widgets.Widget;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
-import com.jaspersoft.studio.preferences.fonts.utils.SimpleFontFamilyExport;
 import com.jaspersoft.studio.preferences.fonts.wizard.FontConfigWizard;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class FontListFieldEditor extends TableFieldEditor {
@@ -91,17 +90,17 @@ public class FontListFieldEditor extends TableFieldEditor {
 				res = new String[fontFamily.size()][1];
 				for (int i = 0; i < fontFamily.size(); i++) {
 					res[i][0] = fontFamily.get(i).getName();
-					if (fontFamily instanceof SimpleFontFamily) {
-						SimpleFontFamily sff = (SimpleFontFamily) fontFamily;
-						if (sff.getNormalFace() != null)
-							sff.setNormalPdfFont(sff.getNormalFace().getName());
-						if (sff.getBoldFace() != null)
-							sff.setBoldPdfFont(sff.getBoldFace().getName());
-						if (sff.getItalicFace() != null)
-							sff.setItalicPdfFont(sff.getItalicFace().getName());
-						if (sff.getBoldItalicFace() != null)
-							sff.setBoldItalicPdfFont(sff.getBoldItalicFace().getName());
-					}
+					// if (fontFamily instanceof SimpleFontFamily) {
+					// SimpleFontFamily sff = (SimpleFontFamily) fontFamily;
+					// if (sff.getNormalFace() != null)
+					// sff.setNormalFace(sff.getNormalFace() );
+					// if (sff.getBoldFace() != null)
+					// sff.setBoldPdfFont(sff.getBoldFace().getName());
+					// if (sff.getItalicFace() != null)
+					// sff.setItalicPdfFont(sff.getItalicFace().getName());
+					// if (sff.getBoldItalicFace() != null)
+					// sff.setBoldItalicPdfFont(sff.getBoldItalicFace().getName());
+					// }
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -193,27 +192,10 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 			List<FontFamily> newfonts = new ArrayList<FontFamily>(lst.size());
 			for (FontFamily f : lst) {
-				SimpleFontFamilyExport newf = new SimpleFontFamilyExport((SimpleFontFamily) f);
-				if (f.getNormalFace() != null) {
-					newf.setNormal(writeFont2zip(zipos, f.getNormalFace()));
-					newf.setNormalPdfFont(f.getNormalFace().getName());
-				} else
-					newf.setNormalPdfFont(null);
-				if (f.getBoldFace() != null) {
-					newf.setBold(writeFont2zip(zipos, f.getBoldFace()));
-					newf.setBoldPdfFont(f.getBoldFace().getName());
-				} else
-					newf.setBoldPdfFont(null);
-				if (f.getItalicFace() != null) {
-					newf.setItalic(writeFont2zip(zipos, f.getItalicFace()));
-					newf.setItalicPdfFont(f.getItalicFace().getName());
-				} else
-					newf.setItalicPdfFont(null);
-				if (f.getBoldItalicFace() != null) {
-					newf.setBoldItalic(writeFont2zip(zipos, f.getBoldItalicFace()));
-					newf.setBoldItalicPdfFont(f.getBoldItalicFace().getName());
-				} else
-					newf.setBoldItalicPdfFont(null);
+				writeFont2zip(zipos, f.getNormalFace());
+				writeFont2zip(zipos, f.getBoldFace());
+				writeFont2zip(zipos, f.getItalicFace());
+				writeFont2zip(zipos, f.getBoldItalicFace());
 
 				String pdfenc = f.getPdfEncoding();
 				if (ModelUtils.getKey4PDFEncoding(pdfenc) == null) {
@@ -221,7 +203,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 					((SimpleFontFamily) f).setPdfEncoding(pdfenc);
 				}
 
-				newfonts.add(newf);
+				newfonts.add(f);
 			}
 
 			ZipEntry fontsXmlEntry = new ZipEntry("fonts/" + fontXmlFile); //$NON-NLS-1$
@@ -235,23 +217,32 @@ public class FontListFieldEditor extends TableFieldEditor {
 		}
 	}
 
-	private String writeFont2zip(ZipOutputStream zipos, FontFace font) throws IOException, FileNotFoundException {
-		File file = new File(font.getTtf());
+	private void writeFont2zip(ZipOutputStream zipos, FontFace font) throws IOException {
+		writeFont(zipos, font.getTtf());
+		writeFont(zipos, font.getEot());
+		writeFont(zipos, font.getSvg());
+		writeFont(zipos, font.getWoff());
+	}
+
+	private static void writeFont(ZipOutputStream zipos, String fontname) throws IOException {
+		if (Misc.isNullOrEmpty(fontname))
+			return;
+		File file = new File(fontname);
 		if (file.exists()) {
 			String name = "fonts/" + file.getName(); //$NON-NLS-1$
 			ZipEntry ttfZipEntry = new ZipEntry(name);
 			zipos.putNextEntry(ttfZipEntry);
 
-			byte[] buffer = new byte[4096]; // Create a buffer for copying
-			int bytesRead;
-
-			FileInputStream in = new FileInputStream(font.getFile()); // Stream to read file
-			while ((bytesRead = in.read(buffer)) != -1)
-				zipos.write(buffer, 0, bytesRead);
-			FileUtils.closeStream(in);
-			return name;
+			FileInputStream in = new FileInputStream(fontname); // Stream to read file
+			try {
+				byte[] buffer = new byte[4096]; // Create a buffer for copying
+				int bytesRead;
+				while ((bytesRead = in.read(buffer)) != -1)
+					zipos.write(buffer, 0, bytesRead);
+			} finally {
+				FileUtils.closeStream(in);
+			}
 		}
-		return null;
 	}
 
 	private FontFamily runDialog(FontFamily font) {

@@ -618,6 +618,7 @@ public class Messages extends NLS {
 	public static String FirstPageAction_actionName;
 	public static String FirstPageAction_actionTooltip;
 	public static String FloatCellEditorValidator_this_is_not_a_float_number;
+	public static String FontFaceDialog_dialog_title;
 	public static String FontFamilyPage_boldItalicLabel;
 	public static String FontFamilyPage_boldLabel;
 	public static String FontFamilyPage_browseButton;

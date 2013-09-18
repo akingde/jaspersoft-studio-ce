@@ -10,14 +10,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts.wizard;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.fonts.FontFace;
 import net.sf.jasperreports.engine.fonts.FontFamily;
+import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -26,13 +30,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class FontFamilyPage extends WizardPage {
@@ -186,44 +190,47 @@ public class FontFamilyPage extends WizardPage {
 
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText(Messages.FontFamilyPage_browseButton);
-		button.addSelectionListener(new SelectionListener() {
-
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
-				fd.setText(Messages.FontFamilyPage_browseDialogTitle);
-				fd.setFilterExtensions(new String[] { "*.TTF;*.ttf;*.eot;*.EOT;*.svg;*.SVG;*.woff;*.WOFF" }); //$NON-NLS-1$  
-				String selected = fd.open();
-				if (selected != null) {
-					if (type.equals(NORMAL)) {
-						fontFamily.setNormal(selected);
-						if (fontFamily.getNormalFace() != null)
-							fontFamily.setNormalPdfFont(fontFamily.getNormalFace().getName());
-						txt.setText(fontFamily.getNormalFace().getName());
-					} else if (type.equals(BOLD)) {
-						fontFamily.setBold(selected);
-						if (fontFamily.getBoldFace() != null)
-							fontFamily.setBoldItalicPdfFont(fontFamily.getBoldFace().getName());
-						txt.setText(fontFamily.getBoldFace().getName());
-					} else if (type.equals(ITALIC)) {
-						fontFamily.setItalic(selected);
-						if (fontFamily.getItalicFace() != null)
-							fontFamily.setItalicPdfFont(fontFamily.getItalicFace().getName());
-						txt.setText(fontFamily.getItalicFace().getName());
-					} else if (type.equals(BOLDITALIC)) {
-						fontFamily.setBoldItalic(selected);
-						if (fontFamily.getBoldItalicFace() != null)
-							fontFamily.setBoldItalicPdfFont(fontFamily.getBoldItalicFace().getName());
-						txt.setText(fontFamily.getBoldItalicFace().getName());
-					}
-				}
-			}
+				SimpleFontFace fontFace = new SimpleFontFace(DefaultJasperReportsContext.getInstance());
+				if (type.equals(NORMAL))
+					copyValues((SimpleFontFace) fontFamily.getNormalFace(), fontFace);
+				else if (type.equals(BOLD))
+					copyValues((SimpleFontFace) fontFamily.getBoldFace(), fontFace);
+				else if (type.equals(ITALIC))
+					copyValues((SimpleFontFace) fontFamily.getItalicFace(), fontFace);
+				else if (type.equals(BOLDITALIC))
+					copyValues((SimpleFontFace) fontFamily.getBoldItalicFace(), fontFace);
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
+				FontFaceDialog ffd = new FontFaceDialog(Display.getDefault().getActiveShell(), fontFace);
+				if (ffd.open() == Dialog.OK) {
+					if (type.equals(NORMAL))
+						fontFamily.setNormalFace(fontFace);
+					else if (type.equals(BOLD))
+						fontFamily.setBoldFace(fontFace);
+					else if (type.equals(ITALIC))
+						fontFamily.setItalicFace(fontFace);
+					else if (type.equals(BOLDITALIC))
+						fontFamily.setBoldItalicFace(fontFace);
+				}
+				String str = Misc.nvl(fontFace.getTtf());
+				str += (str.isEmpty() ? "" : ";") + Misc.nvl(fontFace.getEot());
+				str += (str.isEmpty() || fontFace.getEot() == null ? "" : ";") + Misc.nvl(fontFace.getSvg());
+				str += (str.isEmpty() || fontFace.getSvg() == null ? "" : ";") + Misc.nvl(fontFace.getWoff());
+
+				txt.setText(fontFace.getName());
+				txt.setToolTipText(str);
 			}
 		});
-
 		return txt;
+	}
+
+	private static void copyValues(SimpleFontFace src, SimpleFontFace dest) {
+		dest.setTtf(src.getTtf());
+		dest.setEot(src.getEot());
+		dest.setSvg(src.getSvg());
+		dest.setWoff(src.getWoff());
 	}
 
 	private void fillWidgets() {
