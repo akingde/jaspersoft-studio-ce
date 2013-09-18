@@ -96,7 +96,7 @@ public class SeriesDialog<T> extends FormDialog implements IExpressionContextSet
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				if(ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setValue(new JRDesignExpression("\"SERIE " + (input.size() + 1) + "\""));
 					wizard.setExpressionContext(expContext);
