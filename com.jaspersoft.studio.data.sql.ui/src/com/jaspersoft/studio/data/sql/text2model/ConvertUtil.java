@@ -142,10 +142,15 @@ public class ConvertUtil {
 		boolean isNull = schema.isEmpty();
 		for (INode n : dbroot.getChildren()) {
 			MSqlSchema ms = (MSqlSchema) n;
-			if ((!isNull && ms.getValue().equalsIgnoreCase(schema)) || (isNull && ms.isCurrent())) {
+			if ((!isNull && ms.getValue().equalsIgnoreCase(schema)) || (isNull && (ms.isCurrent() || ms.getValue().equals(schema)))) {
 				designer.getDbMetadata().loadSchema(ms);
 				return ms;
 			}
+		}
+		for (INode n : dbroot.getChildren()) {
+			MSqlSchema ms = (MSqlSchema) n;
+			if (ms.getValue().equals(schema))
+				return ms;
 		}
 		return new MSqlSchema(dbroot, schema, null, true);
 	}

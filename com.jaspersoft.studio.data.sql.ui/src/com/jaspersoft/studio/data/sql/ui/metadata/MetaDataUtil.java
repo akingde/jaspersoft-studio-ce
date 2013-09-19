@@ -24,8 +24,8 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 
 public class MetaDataUtil {
-	public static MSqlSchema readSchemas(IProgressMonitor monitor, MRoot root, DatabaseMetaData meta, String schema) throws SQLException {
-		MSqlSchema mcurrent = null;
+	public static List<MSqlSchema> readSchemas(IProgressMonitor monitor, MRoot root, DatabaseMetaData meta, String[] cschemas) throws SQLException {
+		List<MSqlSchema> mcurrent = new ArrayList<MSqlSchema>();
 		ResultSet schemas = meta.getSchemas();
 		while (schemas.next()) {
 			String tableSchema = schemas.getString("TABLE_SCHEM");
@@ -33,13 +33,21 @@ public class MetaDataUtil {
 			if (meta.supportsCatalogsInTableDefinitions())
 				tableCatalog = schemas.getString("TABLE_CATALOG");
 			MSqlSchema mschema = new MSqlSchema(root, tableSchema, tableCatalog);
-			if (schema != null && schema.equals(tableSchema))
-				mcurrent = mschema;
+
 			new MDummy(mschema);
 			if (monitor.isCanceled())
 				break;
 		}
 		schemas.close();
+		if (cschemas != null)
+			for (String s : cschemas) {
+				for (INode n : root.getChildren()) {
+					if (n instanceof MSqlSchema && s.equals(((MSqlSchema) n).getValue())) {
+						mcurrent.add(((MSqlSchema) n));
+						((MSqlSchema) n).setCurrent(true);
+					}
+				}
+			}
 		return mcurrent;
 	}
 

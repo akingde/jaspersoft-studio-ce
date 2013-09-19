@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.data.sql.ui.metadata;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
@@ -71,6 +70,7 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.utils.Misc;
 
 public class DBMetadata {
 	private TreeViewer treeViewer;
@@ -113,7 +113,11 @@ public class DBMetadata {
 					List<INode> children = node.getChildren();
 					List<INode> newchildren = new ArrayList<INode>();
 					for (INode n : children) {
+						if (n.getValue() == null)
+							continue;
 						if (n instanceof INotInMetadata && ((INotInMetadata) n).isNotInMetadata())
+							continue;
+						if (n.getValue() instanceof String && Misc.isNullOrEmpty((String) n.getValue()))
 							continue;
 						newchildren.add(n);
 					}
@@ -243,10 +247,10 @@ public class DBMetadata {
 			try {
 				DatabaseMetaData meta = connection.getMetaData();
 				tableTypes = MetaDataUtil.readTableTypes(meta);
-				MSqlSchema mcurrent = MetaDataUtil.readSchemas(monitor, root, meta, schema);
+				List<MSqlSchema> mcurrent = MetaDataUtil.readSchemas(monitor, root, meta, schema);
 				updateUI(root);
-				if (mcurrent != null)
-					readSchema(meta, mcurrent, monitor, true);
+				for (MSqlSchema mcs : mcurrent)
+					readSchema(meta, mcs, monitor, true);
 			} catch (Throwable e) {
 				updateUI(root);
 				designer.showError(e);
@@ -362,20 +366,14 @@ public class DBMetadata {
 		Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
 		// TODO implement some compatibility, getSchema() available since 1.7
 		if (readCurrentSchema && c != null) {
-			try {
-				Method m = c.getClass().getMethod("getSchema", new Class<?>[0]);
-				if (m != null)
-					schema = (String) m.invoke(c, new Object[0]);
-				// schema = c.getSchema();
-			} catch (Throwable e) {
-			}
+			schema = SchemaUtil.getSchemaPath(c);
 		}
 		return c;
 	}
 
-	private String schema;
+	private String[] schema;
 
-	public String getCurrentSchema() {
+	public String[] getCurrentSchema() {
 		return schema;
 	}
 
@@ -388,6 +386,7 @@ public class DBMetadata {
 				if (DBMetadata.this.root == null)
 					DBMetadata.this.root = new MRoot(null, null);
 				treeViewer.setInput(DBMetadata.this.root);
+				designer.refreshQueryModel();
 				setFirstSelection();
 				if (root.getChildren().isEmpty()) {
 					msg.setText("No Metadata.\nDouble click to refresh.");
