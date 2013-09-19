@@ -33,7 +33,6 @@ public class MetaDataUtil {
 			if (meta.supportsCatalogsInTableDefinitions())
 				tableCatalog = schemas.getString("TABLE_CATALOG");
 			MSqlSchema mschema = new MSqlSchema(root, tableSchema, tableCatalog);
-
 			new MDummy(mschema);
 			if (monitor.isCanceled())
 				break;

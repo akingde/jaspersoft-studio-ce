@@ -70,7 +70,6 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
-import com.jaspersoft.studio.utils.Misc;
 
 public class DBMetadata {
 	private TreeViewer treeViewer;
@@ -113,11 +112,9 @@ public class DBMetadata {
 					List<INode> children = node.getChildren();
 					List<INode> newchildren = new ArrayList<INode>();
 					for (INode n : children) {
-						if (n.getValue() == null)
-							continue;
 						if (n instanceof INotInMetadata && ((INotInMetadata) n).isNotInMetadata())
 							continue;
-						if (n.getValue() instanceof String && Misc.isNullOrEmpty((String) n.getValue()))
+						if (n.getValue() instanceof String && ((String) n.getValue()).isEmpty())
 							continue;
 						newchildren.add(n);
 					}

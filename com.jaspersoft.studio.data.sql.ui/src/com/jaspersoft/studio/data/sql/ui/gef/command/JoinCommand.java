@@ -52,6 +52,12 @@ public class JoinCommand extends Command {
 	@Override
 	public void execute() {
 		ActionFactory afactory = designer.getOutline().getAfactory();
+		if (srcTbl instanceof MFromTableJoin && !(destTbl instanceof MFromTableJoin)) {
+			MFromTable tmp = srcTbl;
+			srcTbl = destTbl;
+			destTbl = tmp;
+		}
+
 		if (srcTbl instanceof MFromTableJoin) {
 			DeleteTableJoin dtj = afactory.getAction(DeleteTableJoin.class);
 			dtj.calculateEnabled(new Object[] { srcTbl });
