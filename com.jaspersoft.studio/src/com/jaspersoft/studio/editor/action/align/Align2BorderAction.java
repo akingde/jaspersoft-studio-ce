@@ -29,6 +29,7 @@ import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.gef.commands.AlignCommand;
@@ -164,7 +165,7 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
 			return Collections.EMPTY_LIST;
 		Object primary = editparts.get(editparts.size() - 1);
-		editparts = ToolUtilities.getSelectionWithoutDependants(editparts);
+		editparts = ToolUtilitiesCompatibility.getSelectionWithoutDependants(editparts);
 		ToolUtilities.filterEditPartsUnderstanding(editparts, request);
 		if (!editparts.contains(primary))
 			return Collections.EMPTY_LIST;

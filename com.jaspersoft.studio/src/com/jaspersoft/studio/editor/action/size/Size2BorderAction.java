@@ -33,6 +33,7 @@ import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.gef.commands.ResizeCommand;
 import com.jaspersoft.studio.messages.Messages;
@@ -137,7 +138,7 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
 			return Collections.EMPTY_LIST;
 		Object primary = editparts.get(editparts.size() - 1);
-		editparts = ToolUtilities.getSelectionWithoutDependants(editparts);
+		editparts = ToolUtilitiesCompatibility.getSelectionWithoutDependants(editparts);
 		ToolUtilities.filterEditPartsUnderstanding(editparts, request);
 		if (!editparts.contains(primary))
 			return Collections.EMPTY_LIST;

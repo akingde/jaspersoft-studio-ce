@@ -39,3 +39,8 @@ com.jaspersoft.studio. See references to classes inside it.
 Eclipse 3.6 has also this method, but it dosen't call some methods that are instead called from the version 
 in eclipse 3.7+. So this override take method as it's defined in eclipse 3.7+, so in the newer version there
 will not differences from the original, and in the 3.6 there is the same behavior of the 3.7+.
+
+9. Added the method ToolUtilitiesCompatibility:getSelectionWithoutDependants because on eclipse 3.6 gef has a 
+bug on the library method ToolUtilities:getSelectionWithoutDependants, since it try to cast always to graphical edit part 
+the received parameter content. This was resolved in the next version but to assure back compatibility and avoid class 
+cast exception we imported it.
