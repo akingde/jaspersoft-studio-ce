@@ -163,13 +163,15 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	protected void updateQueryText(String txt) {
 		if (refreshMetadata)
 			return;
-		source.setQuery(txt);
+		if (source != null)
+			source.setQuery(txt);
 		if (!isModelRefresh)
 			refreshQueryModel();
 	}
 
 	public void refreshQueryModel() {
-		Text2Model.text2model(this, source.getXTextDocument());
+		if (source != null)
+			Text2Model.text2model(this, source.getXTextDocument());
 	}
 
 	private boolean refreshMetadata = false;
