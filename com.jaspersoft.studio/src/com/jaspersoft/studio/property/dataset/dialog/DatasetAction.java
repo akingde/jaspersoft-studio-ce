@@ -61,10 +61,15 @@ public class DatasetAction extends SelectionAction {
 		setEnabled(false);
 	}
 
+	private static boolean dialogExists = false;
+
 	/**
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
+		if (dialogExists)
+			return;
+		dialogExists = true;
 		try {
 			MDataset mdataset = getMDatasetToShow();
 			if (mdataset != null)
@@ -72,6 +77,8 @@ public class DatasetAction extends SelectionAction {
 						getCommandStack()).open();
 		} catch (Exception e) {
 			UIUtils.showError(Messages.DatasetAction_ErrorMsg, e);
+		} finally {
+			dialogExists = false;
 		}
 	}
 
