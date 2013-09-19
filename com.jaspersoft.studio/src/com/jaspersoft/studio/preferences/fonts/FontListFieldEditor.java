@@ -31,7 +31,13 @@ import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
 import org.eclipse.core.commands.operations.OperationStatus;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -146,27 +152,46 @@ public class FontListFieldEditor extends TableFieldEditor {
 	protected void exportPressed() {
 		int[] selection = table.getSelectionIndices();
 		if (selection != null && selection.length > 0) {
-			List<FontFamily> lst = new ArrayList<FontFamily>(selection.length);
+			final List<FontFamily> lst = new ArrayList<FontFamily>(selection.length);
 			for (int s : selection)
 				lst.add(fontFamily.get(s));
+			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 			FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 			fd.setText(Messages.FontListFieldEditor_exportToJar);
+			fd.setFilterPath(root.getLocation().toOSString());
 			fd.setFilterExtensions(new String[] { "*.jar", "*.zip" }); //$NON-NLS-1$ //$NON-NLS-2$
-			String selected = fd.open();
+			final String selected = fd.open();
 			if (selected != null) {
-				try {
-					exportJAR(lst, selected);
-				} catch (final Exception e) {
-					e.printStackTrace();
-					Display.getCurrent().asyncExec(new Runnable() {
-						public void run() {
-							IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-									"Error saving file.", e.getCause()); //$NON-NLS-1$
-							ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave,
-									null, status);
+				Job job = new Job(Messages.FontListFieldEditor_exportToJar) {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						monitor.beginTask(Messages.FontListFieldEditor_exportToJar, IProgressMonitor.UNKNOWN);
+						try {
+							exportJAR(lst, selected);
+
+							IFile[] resource = root.findFilesForLocationURI(new File(selected).toURI());
+							if (resource != null) {
+								for (IFile f : resource)
+									f.refreshLocal(1, monitor);
+							}
+						} catch (final Exception e) {
+							e.printStackTrace();
+							Display.getCurrent().asyncExec(new Runnable() {
+								public void run() {
+									IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
+											"Error saving file.", e.getCause()); //$NON-NLS-1$
+									ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.FontListFieldEditor_errorSave,
+											null, status);
+								}
+							});
+						} finally {
+							monitor.done();
 						}
-					});
-				}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setPriority(Job.LONG);
+				job.schedule();
 			}
 		}
 	}
@@ -218,6 +243,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 	}
 
 	private void writeFont2zip(ZipOutputStream zipos, FontFace font) throws IOException {
+		if (font == null)
+			return;
 		writeFont(zipos, font.getTtf());
 		writeFont(zipos, font.getEot());
 		writeFont(zipos, font.getSvg());
