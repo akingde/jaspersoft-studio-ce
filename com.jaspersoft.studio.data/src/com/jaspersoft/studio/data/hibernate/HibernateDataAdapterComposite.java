@@ -20,6 +20,8 @@ import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -55,8 +57,7 @@ public class HibernateDataAdapterComposite extends ADataAdapterComposite {
 		setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				1, 1));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite = new GridLayout(3, false);
 		gl_composite.marginWidth = 0;
 		gl_composite.marginHeight = 0;
@@ -74,8 +75,9 @@ public class HibernateDataAdapterComposite extends ADataAdapterComposite {
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFileName(xmlFileName.getText());
 				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
@@ -96,8 +98,9 @@ public class HibernateDataAdapterComposite extends ADataAdapterComposite {
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFileName(xmlFileName.getText());
 				fd.setFilterExtensions(new String[] { "*.properties", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
@@ -113,25 +116,16 @@ public class HibernateDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(
-				SWTObservables.observeText(xmlFileName, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "XMLFileName")); //$NON-NLS-1$
-		bindingContext
-				.bindValue(
-						SWTObservables.observeText(propFileName, SWT.Modify),
-						PojoObservables.observeValue(dataAdapter,
-								"propertiesFileName")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeSelection(btnUseAnnotation),
-				PojoObservables.observeValue(dataAdapter, "useAnnotation")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(xmlFileName, SWT.Modify), PojoObservables.observeValue(dataAdapter, "XMLFileName")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(propFileName, SWT.Modify), PojoObservables.observeValue(dataAdapter, "propertiesFileName")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(btnUseAnnotation), PojoObservables.observeValue(dataAdapter, "useAnnotation")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new HibernateDataAdapterDescriptor();
 
-		HibernateDataAdapter dataAdapter = (HibernateDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		HibernateDataAdapter dataAdapter = (HibernateDataAdapter) dataAdapterDesc.getDataAdapter();
 
 		dataAdapter.setXMLFileName(xmlFileName.getText());
 		dataAdapter.setPropertiesFileName(propFileName.getText());

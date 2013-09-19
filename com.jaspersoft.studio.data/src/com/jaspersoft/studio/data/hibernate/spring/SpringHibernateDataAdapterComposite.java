@@ -20,6 +20,8 @@ import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapter;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -54,8 +56,7 @@ public class SpringHibernateDataAdapterComposite extends ADataAdapterComposite {
 		setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				1, 1));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite = new GridLayout(3, false);
 		gl_composite.marginWidth = 0;
 		gl_composite.marginHeight = 0;
@@ -73,8 +74,9 @@ public class SpringHibernateDataAdapterComposite extends ADataAdapterComposite {
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFileName(springConfig.getText());
 				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
@@ -95,27 +97,22 @@ public class SpringHibernateDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(
-				SWTObservables.observeText(springConfig, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "springConfig")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(beanIDtxt, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "beanId")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(springConfig, SWT.Modify), PojoObservables.observeValue(dataAdapter, "springConfig")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(beanIDtxt, SWT.Modify), PojoObservables.observeValue(dataAdapter, "beanId")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new SpringHibernateDataAdapterDescriptor();
 
-		SpringHibernateDataAdapter dataAdapter = (SpringHibernateDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		SpringHibernateDataAdapter dataAdapter = (SpringHibernateDataAdapter) dataAdapterDesc.getDataAdapter();
 
 		dataAdapter.setSpringConfig(springConfig.getText());
 		dataAdapter.setBeanId(beanIDtxt.getText());
 
 		return dataAdapterDesc;
 	}
-	
+
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat("adapter_hibernatespring");

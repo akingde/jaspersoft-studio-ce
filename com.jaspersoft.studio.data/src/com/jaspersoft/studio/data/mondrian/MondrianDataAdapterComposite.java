@@ -20,6 +20,8 @@ import net.sf.jasperreports.data.mondrian.MondrianDataAdapter;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -50,8 +52,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 		cmp.setLayout(new GridLayout(3, false));
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(cmp, SWT.NONE)
-				.setText(Messages.MondrianDataAdapterComposite_0);
+		new Label(cmp, SWT.NONE).setText(Messages.MondrianDataAdapterComposite_0);
 
 		textCatalogURI = new Text(cmp, SWT.BORDER);
 		textCatalogURI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -63,8 +64,9 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFileName(textCatalogURI.getText());
 				fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
@@ -77,9 +79,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		super.bindWidgets(dataAdapter);
-		bindingContext.bindValue(
-				SWTObservables.observeText(textCatalogURI, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "catalogURI")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textCatalogURI, SWT.Modify), PojoObservables.observeValue(dataAdapter, "catalogURI")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -88,8 +88,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 			dataAdapterDesc = new MondrianDataAdapterDescriptor();
 		super.getDataAdapter();
 
-		MondrianDataAdapter mDataAdapter = (MondrianDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		MondrianDataAdapter mDataAdapter = (MondrianDataAdapter) dataAdapterDesc.getDataAdapter();
 		mDataAdapter.setCatalogURI(textCatalogURI.getText());
 
 		return dataAdapterDesc;
