@@ -64,6 +64,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MCrosstab extends MGraphicElementLineBox implements IContainer, IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
@@ -156,7 +157,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 
 		JRExpressionPropertyDescriptor paramMapExprD = new JRExpressionPropertyDescriptor(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MCrosstab_parameter_map_expression);
 		paramMapExprD.setDescription(Messages.MCrosstab_parameter_map_expression_description);
-		paramMapExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression"));
+		paramMapExprD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parametersMapExpression")); //$NON-NLS-1$
 		desc.add(paramMapExprD);
 
 		CheckBoxPropertyDescriptor repeatColumnHeadersD = new CheckBoxPropertyDescriptor(JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS, Messages.MCrosstab_repeat_column_headers, NullEnum.NOTNULL);
@@ -179,6 +180,11 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		datasetD.setDescription(Messages.MCrosstab_dataset_description);
 		desc.add(datasetD);
 
+		JSSComboPropertyDescriptor horizongalPositionD = new JSSComboPropertyDescriptor(JRBaseCrosstab.PROPERTY_HORIZONTAL_POSITION, Messages.MCrosstab_horizontalposition, HorizontalPositionUtil.getItems());
+		horizongalPositionD.setDescription(Messages.MCrosstab_horizontalposition);
+		desc.add(horizongalPositionD);
+		horizongalPositionD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+
 		datasetD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 		repeatColumnHeadersD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 		repeatRowHeadersD.setCategory(Messages.MCrosstab_crosstab_properties_category);
@@ -187,7 +193,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		runDirectionD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 		paramMapExprD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstab");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#crosstab"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -204,6 +210,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 
 		if (id.equals(JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS))
 			return jrElement.isRepeatColumnHeaders();
+		if (id.equals(JRBaseCrosstab.PROPERTY_HORIZONTAL_POSITION))
+			return HorizontalPositionUtil.getPos4TextPosition(jrElement.getHorizontalPosition());
 		if (id.equals(JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS))
 			return jrElement.isRepeatRowHeaders();
 		if (id.equals(JRDesignCrosstab.PROPERTY_IGNORE_WIDTH))
@@ -234,6 +242,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 			jrElement.setRepeatColumnHeaders((Boolean) value);
 		else if (id.equals(JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS))
 			jrElement.setRepeatRowHeaders((Boolean) value);
+		else if (id.equals(JRBaseCrosstab.PROPERTY_HORIZONTAL_POSITION))
+			jrElement.setHorizontalPosition(HorizontalPositionUtil.getTextPosition4Pos((Integer) value));
 		else if (id.equals(JRDesignCrosstab.PROPERTY_IGNORE_WIDTH))
 			jrElement.setIgnoreWidth((Boolean) value);
 		else if (id.equals(JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET))
@@ -433,7 +443,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-		datasetList.add((MDatasetRun)getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET));
+		datasetList.add((MDatasetRun) getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET));
 		return datasetList;
 	}
 

@@ -119,6 +119,7 @@ public class Messages extends NLS {
 	public static String MCrosstab_crosstab_properties_category;
 	public static String MCrosstab_dataset;
 	public static String MCrosstab_dataset_description;
+	public static String MCrosstab_horizontalposition;
 	public static String MCrosstab_ignore_witdh;
 	public static String MCrosstab_ignore_witdh_description;
 	public static String MCrosstab_parameter_map_expression;
