@@ -114,8 +114,13 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	/** The dispose listener. */
 	private DisposeListener disposeListener;
 	
-	private Point mousePosition = null;
+	private Point mousePosition = new Point(-1, -1);
 	
+	/**
+	 * On linux the click event on the arrow to expand a tree node is not catched
+	 * if the tree element hasen't the focus. So we need a trick to have here the same
+	 * behavior of the others operative systems
+	 */
 	private boolean enableFocusFix = Util.isLinux();
 
 	/**
@@ -250,12 +255,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				
 				@Override
 				public void focusLost(FocusEvent e) {
-					mousePosition = null;
+					mousePosition.setLocation(-1, -1);
 				}
 				
 				@Override
 				public void focusGained(FocusEvent e) {
-					if (enableFocusFix && mousePosition != null){
+					if (enableFocusFix && mousePosition.x != -1){
 						EditPart part = getViewer().findObjectAt(mousePosition);
 						if (part != null && part.getModel() instanceof MRoot){
 							EditPart translatedPart = getViewer().findObjectAt(new Point(mousePosition.x+10, mousePosition.y));
@@ -308,7 +313,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			tree.addMouseMoveListener(new MouseMoveListener() {
 
 				public void mouseMove(MouseEvent e) {
-					mousePosition = new Point(e.x, e.y);
+					mousePosition.setLocation(e.x, e.y);
 					EditPart part = getViewer().findObjectAt(new Point(e.x, e.y));
 					Tree t = (Tree) e.getSource();
 					if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)) {

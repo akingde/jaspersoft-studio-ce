@@ -689,7 +689,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void handlePropertyChange(int propertyId) {
 		if (!isRefresh) {
-			if (propertyId == ISaveablePart.PROP_DIRTY)
+			if (propertyId == ISaveablePart.PROP_DIRTY && previewEditor != null)
 				previewEditor.setDirty(true);
 			super.handlePropertyChange(propertyId);
 		}
