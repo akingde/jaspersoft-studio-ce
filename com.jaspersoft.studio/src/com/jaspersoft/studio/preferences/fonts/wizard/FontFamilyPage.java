@@ -227,6 +227,8 @@ public class FontFamilyPage extends WizardPage {
 	}
 
 	private static void copyValues(SimpleFontFace src, SimpleFontFace dest) {
+		if (src == null)
+			return;
 		dest.setTtf(src.getTtf());
 		dest.setEot(src.getEot());
 		dest.setSvg(src.getSvg());
