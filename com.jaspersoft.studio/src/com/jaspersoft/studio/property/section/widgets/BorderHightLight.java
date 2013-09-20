@@ -64,7 +64,7 @@ public class BorderHightLight implements IHighlightControl {
 	 */
 	@Override
 	public void highLightControl() {
-		if (controlToHighlight != null){
+		if (controlToHighlight != null && !controlToHighlight.isDisposed()){
 			if (borderPainter == null) borderPainter = DefaultWidgetsHighlighters.getWidgetForType(controlToHighlight.getClass());
 			controlToHighlight.addPaintListener(borderPainter);
 			controlToHighlight.redraw();
@@ -76,7 +76,7 @@ public class BorderHightLight implements IHighlightControl {
 	 */
 	@Override
 	public void deHighLightControl() {
-		if (controlToHighlight != null && borderPainter != null){
+		if (controlToHighlight != null && borderPainter != null && !controlToHighlight.isDisposed()){
 			controlToHighlight.removePaintListener(borderPainter);
 			controlToHighlight.redraw();
 		}

@@ -50,7 +50,7 @@ public class BackgroundHighlight implements IHighlightControl{
 	 * Highlight the control by changing its background color
 	 */
 	public void highLightControl(){
-		if (controlToHighlight != null){
+		if (controlToHighlight != null && !controlToHighlight.isDisposed()){
 			oldBackground = controlToHighlight.getBackground().getRGB();
 			controlToHighlight.setBackground(ColorConstants.orange);
 		}
@@ -60,8 +60,8 @@ public class BackgroundHighlight implements IHighlightControl{
 	 * Restore the control background to the default one
 	 */
 	public void deHighLightControl(){
-		if (oldBackground != null){
-			controlToHighlight.setBackground(null);//FIXME: new Color(controlToHighlight.getDisplay(),oldBackground) dosen't always restore the color, sometimes keep the new one
+		if (oldBackground != null && !controlToHighlight.isDisposed()){
+			controlToHighlight.setBackground(null);
 			controlToHighlight.redraw();
 		}
 	}
