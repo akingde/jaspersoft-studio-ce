@@ -64,7 +64,7 @@ public class ConvertSelectColumns {
 						if (ce.getOp1() != null && ce.getLeft() == null && ce.getRight() == null)
 							mscol = getMSelectColumn(designer, (OperandImpl) ce.getOp1(), msel);
 						else
-							mscol = getColumnUnknown(msel, operands2String(ce));
+							mscol = getColumnUnknown(msel, operands2String(ce, msel));
 						setupAlias(mscol, fcol);
 					}
 				}
@@ -74,12 +74,12 @@ public class ConvertSelectColumns {
 		}
 	}
 
-	protected static String operands2String(Operands ops) {
+	protected static String operands2String(Operands ops, MSelect msel) {
 		Operand op = ops.getOp1();
 		if (op == null && ops.getLeft() != null)
 			op = ops.getLeft().getOp1();
 
-		String str = operand2String(op);
+		String str = operand2String(op, msel);
 		if (ops instanceof Plus)
 			str += " + ";
 		else if (ops instanceof Minus)
@@ -92,7 +92,7 @@ public class ConvertSelectColumns {
 			str += " || ";
 
 		if (ops.getRight() != null)
-			str += operand2String(ops.getRight());
+			str += operand2String(ops.getRight(), msel);
 		return str;
 	}
 
@@ -105,7 +105,7 @@ public class ConvertSelectColumns {
 		} else if (op.getColumn() != null)
 			mscol = getColumn(msel, op.getColumn().getCfull());
 		else if (op.getFunc() != null)
-			mscol = getColumnUnknown(msel, getFunctionString(op.getFunc(), op));
+			mscol = getColumnUnknown(msel, getFunctionString(op.getFunc(), op, msel));
 		else if (op.getParam() != null)
 			mscol = getColumnUnknown(msel, op.getParam().getPrm());
 		else if (op.getEparam() != null)
@@ -117,7 +117,7 @@ public class ConvertSelectColumns {
 		return mscol;
 	}
 
-	protected static String operand2String(Operand oper) {
+	protected static String operand2String(Operand oper, MSelect msel) {
 		// if (oper.getSubq() != null) {
 		// MSelectSubQuery qroot = new MSelectSubQuery(msel);
 		// Util.createSelect(qroot);
@@ -125,9 +125,9 @@ public class ConvertSelectColumns {
 		// oper.getSubq().getSel());
 		// } else
 		if (oper.getColumn() != null)
-			return getColumn(oper.getColumn().getCfull());
+			return getColumn(oper.getColumn().getCfull(), msel);
 		if (oper.getFunc() != null)
-			return getFunctionString(oper.getFunc(), oper);
+			return getFunctionString(oper.getFunc(), oper, msel);
 		if (oper.getParam() != null)
 			return oper.getParam().getPrm();
 		if (oper.getEparam() != null)
@@ -135,11 +135,11 @@ public class ConvertSelectColumns {
 		if (oper.getScalar() != null)
 			return getScalarString(oper.getScalar());
 		if (oper.getXop() != null)
-			return operand2String(oper.getXop());
+			return operand2String(oper.getXop(), msel);
 		return "";
 	}
 
-	private static String getFunctionString(OpFunction f, Operand oper) {
+	private static String getFunctionString(OpFunction f, Operand oper, MSelect msel) {
 		String sargs = " ";
 		OpFunctionArg args = f.getArgs();
 		if (args != null) {
@@ -147,9 +147,9 @@ public class ConvertSelectColumns {
 			for (EObject eobj : args.eContents()) {
 				sargs += sep;
 				if (eobj instanceof OperandImpl)
-					sargs += operand2String(((OperandImpl) eobj).getXop());
+					sargs += operand2String((OperandImpl) eobj, msel);
 				else if (eobj instanceof ColumnOperand)
-					sargs += getColumn(((ColumnOperand) eobj).getCfull());
+					sargs += getColumn(((ColumnOperand) eobj).getCfull(), msel);
 				else if (eobj instanceof POperand)
 					sargs += ((POperand) eobj).getPrm();
 				else if (eobj instanceof ExpOperand)
@@ -157,7 +157,7 @@ public class ConvertSelectColumns {
 				else if (eobj instanceof ScalarOperand)
 					sargs += eobj.toString();
 				else if (eobj instanceof Operands)
-					sargs += operands2String((Operands) eobj);
+					sargs += operands2String((Operands) eobj, msel);
 				sep = ",";
 			}
 		}
@@ -186,7 +186,7 @@ public class ConvertSelectColumns {
 			mscol.setAlias(fcol.getColAlias().getDbname());
 	}
 
-	private static String getColumn(ColumnFull tf) {
+	private static String getColumn(ColumnFull tf, MSelect msel) {
 		EList<EObject> eContents = tf.eContents();
 		String column = null;
 		if (tf instanceof DbObjectNameImpl)
@@ -200,6 +200,7 @@ public class ConvertSelectColumns {
 			column = table + "." + column;
 		if (schema != null)
 			column = schema + "." + column;
+		ConvertUtil.findColumn(msel, schema, table, column);
 		return column;
 	}
 

@@ -38,8 +38,9 @@ public class ConvertUtil {
 		if (!eContents.isEmpty() && eContents.get(0) instanceof ColImpl) {
 			ColImpl c = (ColImpl) eContents.get(0);
 			size = c.getEntries().size();
-			if (size >= 3 - i)
-				return c.getEntries().get(3 - i).getDbname();
+			int indx = size - i;
+			if (size >= indx && indx >= 0)
+				return c.getEntries().get(indx).getDbname();
 		}
 		return null;
 	}
