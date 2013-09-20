@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import java.util.Locale;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -38,6 +40,15 @@ public class SPResourceType extends SPText {
 		super.setReadOnly(readonly);
 		btn.setEnabled(!readonly);
 	}
+	
+	private String removeLocale(String fileName){
+		for (Locale loc : Locale.getAvailableLocales()){
+			if (fileName.endsWith("_"+loc.toString())) {
+				return fileName.substring(0, fileName.length() - loc.toString().length() -1);
+			}
+		}
+		return fileName;
+	}
 
 	protected void createComponent(Composite parent) {
 		super.createComponent(parent);
@@ -52,8 +63,13 @@ public class SPResourceType extends SPText {
 				dialog.setInitialPattern("*.properties"); //$NON-NLS-1$
 				if (dialog.open() == Window.OK) {
 					IFile file = (IFile) dialog.getFirstResult();
-					if (file != null)
-						handleTextChanged(section, pDescriptor.getId(), file.getProjectRelativePath().toOSString());
+					if (file != null){
+						String fileName = file.getProjectRelativePath().toOSString().trim();
+						int propertiesIndex = fileName.toLowerCase().lastIndexOf(".properties");
+						if (propertiesIndex != -1) fileName = fileName.substring(0, propertiesIndex);
+						fileName = removeLocale(fileName);
+						handleTextChanged(section, pDescriptor.getId(), fileName);
+					}
 				}
 			}
 		});
