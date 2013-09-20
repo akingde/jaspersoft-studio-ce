@@ -11,6 +11,8 @@
 package com.jaspersoft.studio.utils.expr;
 
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -19,6 +21,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRResourcesUtil;
 import net.sf.jasperreports.engine.util.JRStringUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -98,6 +101,24 @@ public abstract class AInterpreter {
 
 			if (!literals.contains(pnameLiteral))
 				recursiveInterpreter(recursion, pr);
+		}
+		while (expression.indexOf("$R{") >= 0) {
+			String pname = Misc.extract(expression, "$R{", "}");
+			String baseName = dataset.getResourceBundle();
+			if (baseName == null)
+				baseName = jasperDesign.getMainDataset().getResourceBundle();
+			if (!Misc.isNullOrEmpty(baseName)) {
+				Locale locale = Locale.getDefault();
+				Object obj = jConfig.getJRParameters().get(JRParameter.REPORT_LOCALE);
+				if (obj != null && obj instanceof Locale)
+					locale = (Locale) obj;
+				ResourceBundle rb = JRResourcesUtil.loadResourceBundle(baseName, locale, jConfig.getClassLoader());
+				if (rb != null)
+					baseName = Misc.nvl(rb.getString(pname));
+			}
+			if (baseName == null)
+				baseName = "";
+			expression = Misc.strReplace("\"" + baseName + "\"", "$R{" + pname + "}", expression);
 		}
 		return expression;
 	}

@@ -342,8 +342,8 @@ public class ReportControler {
 
 							setupRecordCounters();
 							// We create the fillHandle to run the report based on the type of data adapter....
-							AsynchronousFillHandle fh = AsynchronousFillHandle
-									.createHandle(jrContext, jasperReport, jasperParameters);
+							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,
+									new HashMap<String, Object>(jasperParameters));
 
 							if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS) {
 								cancelMessage();
