@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.compatibility;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -120,6 +123,22 @@ public class JRXmlWriterHelper {
 			VersionDialog dialog = new VersionDialog(Display.getDefault().getActiveShell(), version, resource);
 			if (dialog.open() == Dialog.OK) {
 				version = dialog.getVersion();
+				try {
+					ScopedPreferenceStore pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(resource,
+							JaspersoftStudioPlugin.getUniqueIdentifier());
+					pstore.setValue(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, version);
+
+					// resource.setPersistentProperty(new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
+					// StudioPreferencePage.JSS_COMPATIBILITY_VERSION), version);
+					if (dialog.isHideNext())
+						pstore.setValue(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false);
+					pstore.save();
+					// resource.setPersistentProperty(new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(),
+					// StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG), "false");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 			}
 		}
 		return version;
@@ -134,17 +153,21 @@ public class JRXmlWriterHelper {
 			return LAST_VERSION;
 		}
 	}
-	
+
 	/**
-	 * Checks if the compatible version specified in the Jaspersoft Studio 
-	 * preference page is greater, or even equal, than the one passed as parameter.
+	 * Checks if the compatible version specified in the Jaspersoft Studio preference page is greater, or even equal, than
+	 * the one passed as parameter.
 	 * 
-	 * @param jconfig the JasperReports context
-	 * @param compareVersion the version to compare with
-	 * @param equalToo flag that specifies if also equal version is accepted
+	 * @param jconfig
+	 *          the JasperReports context
+	 * @param compareVersion
+	 *          the version to compare with
+	 * @param equalToo
+	 *          flag that specifies if also equal version is accepted
 	 * @return <code>true</code> if compatible version is greater (or equal), <code>false</code> otherwise
 	 */
-	public static boolean isCompatibleVersionGreater(JasperReportsConfiguration jconfig, String compareVersion, boolean equalToo) {
+	public static boolean isCompatibleVersionGreater(JasperReportsConfiguration jconfig, String compareVersion,
+			boolean equalToo) {
 		boolean verified = false;
 		if (equalToo) {
 			verified = getCompatibleVersion(jconfig).compareTo(compareVersion) >= 0;
@@ -153,17 +176,21 @@ public class JRXmlWriterHelper {
 		}
 		return verified;
 	}
-	
+
 	/**
-	 * Checks if the compatible version specified in the Jaspersoft Studio 
-	 * preference page is minor, or even equal, than the one passed as parameter.
+	 * Checks if the compatible version specified in the Jaspersoft Studio preference page is minor, or even equal, than
+	 * the one passed as parameter.
 	 * 
-	 * @param jconfig the JasperReports context
-	 * @param compareVersion the version to compare with
-	 * @param equalToo flag that specifies if also equal version is accepted
+	 * @param jconfig
+	 *          the JasperReports context
+	 * @param compareVersion
+	 *          the version to compare with
+	 * @param equalToo
+	 *          flag that specifies if also equal version is accepted
 	 * @return <code>true</code> if compatible version is minor (or equal), <code>false</code> otherwise
 	 */
-	public static boolean isCompatibleVersionMinor(JasperReportsConfiguration jconfig, String compareVersion, boolean equalToo) {
+	public static boolean isCompatibleVersionMinor(JasperReportsConfiguration jconfig, String compareVersion,
+			boolean equalToo) {
 		boolean verified = false;
 		if (equalToo) {
 			verified = getCompatibleVersion(jconfig).compareTo(compareVersion) <= 0;
@@ -172,32 +199,35 @@ public class JRXmlWriterHelper {
 		}
 		return verified;
 	}
-	
+
 	/**
-	 * Checks if the compatible version specified in the Jaspersoft Studio 
-	 * preference page is equal to the one passed as parameter.
+	 * Checks if the compatible version specified in the Jaspersoft Studio preference page is equal to the one passed as
+	 * parameter.
 	 * 
-	 * @param jconfig the JasperReports context
-	 * @param compareVersion the version to compare with
-	 * @param equalToo flag that specifies if also equal version is accepted
+	 * @param jconfig
+	 *          the JasperReports context
+	 * @param compareVersion
+	 *          the version to compare with
+	 * @param equalToo
+	 *          flag that specifies if also equal version is accepted
 	 * @return <code>true</code> if compatible version is equal, <code>false</code> otherwise
 	 */
 	public static boolean isCompatibleVersionEqual(JasperReportsConfiguration jconfig, String compareVersion) {
-		return getCompatibleVersion(jconfig).compareTo(compareVersion)==0;
+		return getCompatibleVersion(jconfig).compareTo(compareVersion) == 0;
 	}
-	
+
 	/**
 	 * Reads the information about the compatible version of JasperReports to be used.
 	 * 
-	 * @param jconfig the JasperReports context
+	 * @param jconfig
+	 *          the JasperReports context
 	 * @return the compatible version
 	 */
 	private static String getCompatibleVersion(JasperReportsConfiguration jconfig) {
 		String ver = jconfig.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION);
-		if(ver.equals(LAST_VERSION)){
+		if (ver.equals(LAST_VERSION)) {
 			return net.sf.jasperreports.engine.JasperCompileManager.class.getPackage().getImplementationVersion();
-		}
-		else {
+		} else {
 			return ver;
 		}
 	}

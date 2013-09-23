@@ -78,7 +78,7 @@ public class WLocale extends Composite {
 				if (locales[i].getDisplayName().equals(strLocale))
 					return locales[i];
 			}
-			return null;
+			return Locale.getDefault();
 		}
 	}
 

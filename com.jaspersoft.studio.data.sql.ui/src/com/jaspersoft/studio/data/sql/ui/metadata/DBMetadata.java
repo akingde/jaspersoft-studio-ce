@@ -330,6 +330,8 @@ public class DBMetadata {
 			updateItermediateUI(false);
 			if (monitor.isCanceled())
 				return;
+			if (!schema.isNotInMetadata())
+				return;
 			MetaDataUtil.readSchemaTables(meta, schema, getTables(), monitor);
 			updateItermediateUI();
 			if (monitor.isCanceled())
@@ -341,8 +343,10 @@ public class DBMetadata {
 		}
 		if (monitor.isCanceled())
 			return;
-		MetaDataUtil.readProcedures(meta, schema, monitor);
-		updateItermediateUI();
+		if (schema.isNotInMetadata()) {
+			MetaDataUtil.readProcedures(meta, schema, monitor);
+			updateItermediateUI();
+		}
 	}
 
 	public MRoot getRoot() {

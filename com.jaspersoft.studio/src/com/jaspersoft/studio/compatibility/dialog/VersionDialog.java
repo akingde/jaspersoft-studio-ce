@@ -1,21 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.compatibility.dialog;
-
-import java.io.IOException;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.Dialog;
@@ -29,20 +22,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.StudioPreferencePage;
 
 public class VersionDialog extends Dialog {
 
 	private IResource res;
+	private boolean hideNext = false;
 
 	public VersionDialog(Shell parent, String version, IResource res) {
 		super(parent);
 		this.version = version;
 		this.res = res;
+	}
+
+	public boolean isHideNext() {
+		return hideNext;
 	}
 
 	@Override
@@ -83,15 +78,14 @@ public class VersionDialog extends Dialog {
 		b.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					ScopedPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore(res,
-							JaspersoftStudioPlugin.getUniqueIdentifier());
-					store.setValue(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, Boolean.toString(!b.getSelection()));
+				hideNext = b.getSelection();
 
-					store.save();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				// ScopedPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore(res,
+				// JaspersoftStudioPlugin.getUniqueIdentifier());
+				// store.setValue(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, Boolean.toString(!b.getSelection()));
+				//
+				// store.save();
+
 			}
 
 		});

@@ -51,11 +51,19 @@ public class MetaDataUtil {
 	}
 
 	public static void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
-		schema.removeChildren();
-		schema.setNotInMetadata(false);
-		for (String ttype : tableTypes)
-			new MTables(schema, ttype);
+		ResultSet rs;
+		try {
+			rs = meta.getSchemas(schema.getTableCatalog(), schema.getValue());
+			while (rs.next()) {
+				schema.removeChildren();
+				schema.setNotInMetadata(false);
 
+				for (String ttype : tableTypes)
+					new MTables(schema, ttype);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void readSchemaTables(DatabaseMetaData meta, MSqlSchema schema, LinkedHashMap<String, MSqlTable> tables, IProgressMonitor monitor) {

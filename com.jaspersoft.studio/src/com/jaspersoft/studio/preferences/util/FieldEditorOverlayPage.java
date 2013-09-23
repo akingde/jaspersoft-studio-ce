@@ -196,11 +196,9 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		IResource resource = null;
 		if (getElement() instanceof IResource) {
 			resource = (IResource) getElement();
-		}
-		else if (getElement() instanceof IFileEditorInput) {
+		} else if (getElement() instanceof IFileEditorInput) {
 			resource = ((IFileEditorInput) getElement()).getFile();
-		}
-		else {
+		} else {
 			resource = (IResource) getElement().getAdapter(IResource.class);
 		}
 		return resource;
@@ -258,6 +256,10 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		}
 
 		// Set workspace/project radio buttons
+		setupWPREnabled();
+	}
+
+	protected void setupWPREnabled() {
 		try {
 			useWorkspaceSettingsButton.setSelection(false);
 			useProjectSettingsButton.setSelection(false);
@@ -268,7 +270,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			if (confPrjButton != null)
 				confPrjButton.setEnabled(false);
 
-			String use = getResource().getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS));
+			IResource r = getResource();
+			String use = r.getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS));
 			if (PROJECT.equals(use)) {
 				useProjectSettingsButton.setSelection(true);
 				if (confPrjButton != null)
@@ -324,7 +327,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 */
 	private void updateFieldEditors() {
 		// We iterate through all field editors
-
+		// setupWPREnabled();
 		boolean enabled = false;
 		if (isResourcePage())
 			enabled = useResourceSettingsButton.getSelection();
@@ -332,6 +335,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			enabled = useProjectSettingsButton.getSelection();
 
 		updateFieldEditors(enabled);
+
 	}
 
 	/**

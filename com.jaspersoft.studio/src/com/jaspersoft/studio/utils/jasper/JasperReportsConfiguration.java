@@ -313,13 +313,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		String val = super.getProperty(key);
 		if (val != null)
 			return val;
-		val = service.getString(qualifier, key, null, contexts);
-		if (val != null)
-			return val;
-		val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
-		if (val != null)
-			return val;
-		IResource file = (IResource) get(FileUtils.KEY_FILE);
+		IFile file = (IFile) get(FileUtils.KEY_FILE);
 		if (file != null) {
 			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
 			val = t != null && t.isEmpty() ? null : t;
@@ -333,6 +327,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 		if (val != null)
 			return val;
+		val = service.getString(qualifier, key, null, contexts);
+		if (val != null)
+			return val;
+		val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
+		if (val != null)
+			return val;
+
 		String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(key);
 		val = t != null && t.isEmpty() ? null : t;
 		if (val != null)
