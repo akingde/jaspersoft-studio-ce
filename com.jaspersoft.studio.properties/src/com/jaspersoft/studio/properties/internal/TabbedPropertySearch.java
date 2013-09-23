@@ -278,7 +278,7 @@ public class TabbedPropertySearch extends Composite {
 			autocomplete.addProposalSelectedListener(proposalListener);
 		} else {
 			Object actualSelectedElement = getSelectedElement();
-			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
+			if (lastSelectedElement == null || (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass()))){
 				PropertiesContainer properties = getAllProperties();
 				autocomplete.setProposals(properties);
 			}
