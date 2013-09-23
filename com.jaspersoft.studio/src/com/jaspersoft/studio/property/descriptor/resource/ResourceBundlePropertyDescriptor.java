@@ -18,6 +18,7 @@ import java.util.Locale;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -72,34 +73,36 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 				break;
 			}
 		}
-		IPath path = f.getParent().getFullPath();
-		if (!hasEntry(path, f)
-				&& UIUtils.showConfirmation("Add to Classpath", Messages.ResourceBundlePropertyDescriptor_warning))
-			addSourceFolder(path, f);
+		try {
+			IPath path = f.getParent().getFullPath();
+			if (!hasEntry(path, f)
+					&& UIUtils.showConfirmation("Add to Classpath", Messages.ResourceBundlePropertyDescriptor_warning)) {
+				addSourceFolder(path, f);
+				val = val.substring(val.lastIndexOf("/") + 1);
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 		return val;
 	}
 
-	private void addSourceFolder(IPath folder, IFile f) {
+	private void addSourceFolder(IPath folder, IFile f) throws JavaModelException {
 		IJavaProject openProject = JavaCore.create(f.getProject());
 
-		try {
-			IClasspathEntry[] entries = openProject.getRawClasspath();
-			List<IClasspathEntry> entriesArray = new ArrayList<IClasspathEntry>(Arrays.asList(entries));
-			IClasspathEntry srcEntry = JavaCore.newSourceEntry(folder, null);
+		IClasspathEntry[] entries = openProject.getRawClasspath();
+		List<IClasspathEntry> entriesArray = new ArrayList<IClasspathEntry>(Arrays.asList(entries));
+		IClasspathEntry srcEntry = JavaCore.newSourceEntry(folder, null);
 
-			int nestedResource = preventNesting(srcEntry, entriesArray);
-			while (nestedResource != -1) {
-				entriesArray.remove(nestedResource);
-				nestedResource = preventNesting(srcEntry, entriesArray);
-			}
-
-			entriesArray.add(JavaCore.newSourceEntry(srcEntry.getPath()));
-			IClasspathEntry[] newEntries = entriesArray.toArray(new IClasspathEntry[entriesArray.size()]);
-
-			openProject.setRawClasspath(newEntries, null);
-		} catch (JavaModelException e) {
-			e.printStackTrace();
+		int nestedResource = preventNesting(srcEntry, entriesArray);
+		while (nestedResource != -1) {
+			entriesArray.remove(nestedResource);
+			nestedResource = preventNesting(srcEntry, entriesArray);
 		}
+
+		entriesArray.add(JavaCore.newSourceEntry(srcEntry.getPath()));
+		IClasspathEntry[] newEntries = entriesArray.toArray(new IClasspathEntry[entriesArray.size()]);
+
+		openProject.setRawClasspath(newEntries, null);
 	}
 
 	private int preventNesting(IClasspathEntry entry, List<IClasspathEntry> classpath) {
@@ -107,29 +110,25 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 			IPath entryPath = entry.getPath();
 			for (int j = 0; j < classpath.size(); j++) {
 				IClasspathEntry otherEntry = classpath.get(j);
-				if (entry != otherEntry && otherEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-					if (entryPath.isPrefixOf(otherEntry.getPath())) {
-						return j;
-					}
-				}
+				if (entry != otherEntry && otherEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE
+						&& entryPath.isPrefixOf(otherEntry.getPath()))
+					return j;
 			}
 		}
 		return -1;
 	}
 
-	private boolean hasEntry(IPath path, IFile f) {
+	private boolean hasEntry(IPath path, IFile f) throws CoreException {
+		if (f.getProject().getNature(JavaCore.NATURE_ID) == null)
+			return true;
 		IJavaProject openProject = JavaCore.create(f.getProject());
-		try {
-			IClasspathEntry[] entries = openProject.getRawClasspath();
-			for (IClasspathEntry entry : entries) {
-				if (entry.getPath().equals(path))
-					return true;
-				else if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().isPrefixOf(path)) {
-					return true;
-				}
+		IClasspathEntry[] entries = openProject.getRawClasspath();
+		for (IClasspathEntry entry : entries) {
+			if (entry.getPath().equals(path))
+				return true;
+			else if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().isPrefixOf(path)) {
+				return true;
 			}
-		} catch (JavaModelException e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
