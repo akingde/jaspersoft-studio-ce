@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -312,7 +313,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 	public JrxmlTemplateBundle(URL url, boolean isExternal) throws Exception {
 		this.templateURL = url;
 		this.isExternal = isExternal;
-		String urlPath = templateURL.toExternalForm();
+		String urlPath = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");
 		if (urlPath.endsWith(FileExtension.PointJRXML)) {
 			String propertiesPath = urlPath.substring(0, urlPath.length() - 6).concat("_descriptor.properties");
 
@@ -327,7 +328,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 			// locate the template thumbnail by replacing the .jrxml with png....
 			String[] imageExtensions = new String[] { ".png", ".gif", ".jpg" };
 
-			String baseImageUrl = templateURL.toExternalForm();
+			String baseImageUrl = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");
 			// remove the .jrxml...
 			baseImageUrl = baseImageUrl.substring(0, baseImageUrl.length() - FileExtension.PointJRXML.length());
 			for (String extension : imageExtensions) {
