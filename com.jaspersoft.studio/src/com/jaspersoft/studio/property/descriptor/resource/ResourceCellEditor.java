@@ -44,8 +44,12 @@ public class ResourceCellEditor extends ATextDialogCellEditor {
 		if (dialog.open() == Window.OK) {
 			IFile file = (IFile) dialog.getFirstResult();
 			if (file != null)
-				return file.getProjectRelativePath().toOSString();
+				return convertFile2Value(file);
 		}
 		return null;
+	}
+
+	protected String convertFile2Value(IFile f) {
+		return f.getProjectRelativePath().toOSString();
 	}
 }

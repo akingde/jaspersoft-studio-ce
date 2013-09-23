@@ -44,7 +44,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.resource.ResourceBundlePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -195,8 +195,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet"));
 
-		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE,
-				Messages.MDataset_resource_bundle);
+		ResourceBundlePropertyDescriptor resBundleD = new ResourceBundlePropertyDescriptor(
+				JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
 		resBundleD.setDescription(Messages.MDataset_resource_bundle_description);
 		desc.add(resBundleD);
 
@@ -276,17 +276,16 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
-		if (id.equals(JRDesignDataset.PROPERTY_NAME)){
-			//When the name is changed, the one inside the jasperdesign is updated also
+		if (id.equals(JRDesignDataset.PROPERTY_NAME)) {
+			// When the name is changed, the one inside the jasperdesign is updated also
 			JasperDesign design = getJasperDesign();
 			String oldName = jrDataset.getName();
 			jrDataset.setName((String) value);
-			if (design != null){
+			if (design != null) {
 				design.getDatasetMap().remove(oldName);
 				design.getDatasetMap().put(jrDataset.getName(), jrDataset);
 			}
-		}
-		else if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)) {
+		} else if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)) {
 			String v = (String) value;
 			if (v != null && v.trim().isEmpty())
 				v = null;
