@@ -38,12 +38,9 @@ public class SPResourceType extends SPText {
 		super.setReadOnly(readonly);
 		btn.setEnabled(!readonly);
 	}
-
-	protected void createComponent(Composite parent) {
-		super.createComponent(parent);
-
-		btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
-		btn.addSelectionListener(new SelectionAdapter() {
+	
+	protected SelectionAdapter buttonPressed(){
+		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(ftext.getShell(), false,
@@ -56,7 +53,14 @@ public class SPResourceType extends SPText {
 						handleTextChanged(section, pDescriptor.getId(), convertFile2Value(file));
 				}
 			}
-		});
+		};
+	}
+
+
+	protected void createComponent(Composite parent) {
+		super.createComponent(parent);
+		btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
+		btn.addSelectionListener(buttonPressed());
 	}
 
 	protected String convertFile2Value(IFile f) {
