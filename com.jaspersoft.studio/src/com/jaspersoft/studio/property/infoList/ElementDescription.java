@@ -173,7 +173,7 @@ public class ElementDescription implements Comparable<ElementDescription> {
 		//remove all the unnecessary white spaces between tags
 		replaceAll("> +<", "><");
 		//substitute the line break characters with \r\n
-		replaceAll("<br>|<br/>|</br>|</ul>", "\r\n");
+		replaceAll("<br>|<br/>|</br>|</ul>|<p>|</p>", "\r\n");
 		replaceAll("<ul>|</li>", "");
 		replaceAll("<li>", "\r\n -");
 		replaceAll("&lt;", "<");

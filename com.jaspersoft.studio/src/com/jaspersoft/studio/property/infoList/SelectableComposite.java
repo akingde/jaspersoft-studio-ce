@@ -74,7 +74,12 @@ public class SelectableComposite extends ScrolledComposite {
 	/**
 	 * font used in the title label
 	 */
-	private Font boldFont = new Font(UIUtils.getDisplay(),"Arial", 10, SWT.BOLD );
+	private Font boldFont = new Font(UIUtils.getDisplay(),"Arial", 9, SWT.BOLD );
+	
+	/**
+	 * font used in the description styled text
+	 */
+	private Font descFont = new Font(UIUtils.getDisplay(),"Arial", 8 , SWT.NORMAL );
 	
 	/**
 	 * adapter used to define what action must be done when the user double click an element
@@ -234,6 +239,7 @@ public class SelectableComposite extends ScrolledComposite {
 
 	private void createDescription(String text, Composite comp, StyleRange[] styles){
 		final StyledText descLabel = new StyledText(comp,SWT.MULTI | SWT.WRAP );
+		descLabel.setFont(descFont);
 		descLabel.setRightMargin(10);
 		descLabel.setEditable(false);
 		descLabel.setText(text);
@@ -257,6 +263,7 @@ public class SelectableComposite extends ScrolledComposite {
 		selectedColor.dispose();
 		unselectedColor.dispose();
 		boldFont.dispose();
+		descFont.dispose();
 	}
 	
 }
