@@ -1553,6 +1553,8 @@ public class Messages extends NLS {
 	public static String SPLegendAlignementEnum_left;
 	public static String SPLegendAlignementEnum_right;
 	public static String SPLegendAlignementEnum_top;
+	public static String SPResourceType_messageDescription;
+	public static String SPResourceType_messageTitle;
 	public static String StretchToContentAction_name;
 	public static String StretchToContentAction_tooltip;
 	public static String StudioPreferencePage_message1;
