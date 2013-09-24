@@ -1471,7 +1471,6 @@ public class Messages extends NLS {
 	public static String ReportTemplatesWizardPage_description;
 	public static String ReportTemplatesWizardPage_title;
 	public static String ResetValueCommand_restore_default_value;
-	public static String ResourceBundlePropertyDescriptor_warning;
 	public static String ResourceCellEditor_open_resource;
 	public static String ResourcePage_browseButton;
 	public static String ResourcePage_conflictMessage;

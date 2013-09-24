@@ -39,8 +39,26 @@ import com.jaspersoft.studio.property.section.widgets.SPResourceType;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.wizards.ResourceBundleFilterDialog;
 
+/**
+ * 
+ * Widget descriptor with a button to select a properties resource file and a text area where the path of the selected
+ * resource is shown. From the selected filename is calculated the bundle base name. 
+ * Other than this if the parent folder of the file is not in the classpath it is proposed to the user to add it automatically
+ * 
+ * @author Orlandin Marco & Slavic
+ *
+ */
 public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 
+	/**
+	 * This class extends the original widget to select a resource to be used 
+	 * only with resource bundle. For example the selection of the file is limited
+	 * to the files with .properties extension and contained in the actually opened
+	 * project or in one of its dependences
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
 	private class SPBundleType extends SPResourceType {
 		
 		public SPBundleType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
