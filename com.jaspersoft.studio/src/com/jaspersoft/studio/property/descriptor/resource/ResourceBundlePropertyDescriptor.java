@@ -59,18 +59,19 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					IJavaProject openProject = SelectionHelper.getJavaProjectFromCurrentJRXMLEditor();
-					ResourceBundleFilterDialog dialog = new ResourceBundleFilterDialog(ftext.getShell(), false, openProject);
-					dialog.setTitle(Messages.ResourceCellEditor_open_resource);
-					if (dialog.open() == Window.OK) {
-						IFile file = (IFile) dialog.getFirstResult();
-				
-						if (file != null){
-							String fileName = convertFile2Value(file);
-							handleTextChanged(section, pDescriptor.getId(), fileName);
-							IPath path = file.getParent().getFullPath();
-							if (!hasEntry(path, openProject)){
-								boolean answerYes = UIUtils.showConfirmation(Messages.SPResourceType_messageTitle, Messages.SPResourceType_messageDescription);
-								if (answerYes) addSourceFolder(path, openProject);
+					if (openProject != null){
+						ResourceBundleFilterDialog dialog = new ResourceBundleFilterDialog(ftext.getShell(), false, openProject);
+						dialog.setTitle(Messages.ResourceCellEditor_open_resource);
+						if (dialog.open() == Window.OK) {
+							IFile file = (IFile) dialog.getFirstResult();
+							if (file != null){
+								String fileName = convertFile2Value(file);
+								handleTextChanged(section, pDescriptor.getId(), fileName);
+								IPath path = file.getParent().getFullPath();
+								if (!hasEntry(path, openProject)){
+									boolean answerYes = UIUtils.showConfirmation(Messages.SPResourceType_messageTitle, Messages.SPResourceType_messageDescription);
+									if (answerYes) addSourceFolder(path, openProject);
+								}
 							}
 						}
 					}
