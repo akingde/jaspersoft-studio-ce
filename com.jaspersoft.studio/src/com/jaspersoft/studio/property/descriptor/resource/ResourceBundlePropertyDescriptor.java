@@ -18,14 +18,17 @@ import java.util.Locale;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
@@ -33,9 +36,49 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPResourceType;
+import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.wizards.ResourceBundleFilterDialog;
 
 public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 
+	private class SPBundleType extends SPResourceType {
+		
+		public SPBundleType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+			super(parent, section, pDescriptor);
+		}
+
+		@Override
+		protected String convertFile2Value(IFile f) {
+			return ResourceBundlePropertyDescriptor.this.convertFile2Value(f);
+		}
+		
+		@Override
+		protected SelectionAdapter buttonPressed(){
+			return new SelectionAdapter() {
+				
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					IJavaProject openProject = SelectionHelper.getJavaProjectFromCurrentJRXMLEditor();
+					ResourceBundleFilterDialog dialog = new ResourceBundleFilterDialog(ftext.getShell(), false, openProject);
+					dialog.setTitle(Messages.ResourceCellEditor_open_resource);
+					if (dialog.open() == Window.OK) {
+						IFile file = (IFile) dialog.getFirstResult();
+				
+						if (file != null){
+							String fileName = convertFile2Value(file);
+							handleTextChanged(section, pDescriptor.getId(), fileName);
+							IPath path = file.getParent().getFullPath();
+							if (!hasEntry(path, openProject)){
+								boolean answerYes = UIUtils.showConfirmation(Messages.SPResourceType_messageTitle, Messages.SPResourceType_messageDescription);
+								if (answerYes) addSourceFolder(path, openProject);
+							}
+						}
+					}
+				}
+			};
+		}
+	};
+	
 	public ResourceBundlePropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
 	}
@@ -54,81 +97,104 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		ASPropertyWidget textWidget = new SPResourceType(parent, section, this) {
-			@Override
-			protected String convertFile2Value(IFile f) {
-				return ResourceBundlePropertyDescriptor.this.convertFile2Value(f);
-			}
-		};
+		ASPropertyWidget textWidget = new SPBundleType(parent, section, this);
 		textWidget.setReadOnly(readOnly);
 		return textWidget;
 	}
 
 	private String convertFile2Value(IFile f) {
-		String val = f.getProjectRelativePath().toOSString();
-		val = val.replaceAll(".properties$", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		for (Locale l : Locale.getAvailableLocales()) {
-			if (val.endsWith("_" + l.toString())) { //$NON-NLS-1$
-				val = val.replaceAll("_" + l.toString() + "$", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				break;
-			}
-		}
+		String fileName = f.getProjectRelativePath().toOSString().trim();
+		int propertiesIndex = fileName.toLowerCase().lastIndexOf(".properties"); //$NON-NLS-1$
+		if (propertiesIndex != -1) fileName = fileName.substring(0, propertiesIndex);
+		fileName = removeLocale(fileName);
+		return fileName;
+	}
+
+	/**
+	 * Add a path to the classpath of the project
+	 * 
+	 * @param folder the path to include
+	 * @param openProject the project
+	 */
+	private void addSourceFolder(IPath folder, IJavaProject openProject){
 		try {
-			IPath path = f.getParent().getFullPath();
-			if (!hasEntry(path, f)
-					&& UIUtils.showConfirmation("Add to Classpath", Messages.ResourceBundlePropertyDescriptor_warning)) {
-				addSourceFolder(path, f);
-				val = val.substring(val.lastIndexOf("/") + 1);
+			IClasspathEntry[] entries = openProject.getRawClasspath();
+			List<IClasspathEntry> entriesArray = new ArrayList<IClasspathEntry>(Arrays.asList(entries));
+			IClasspathEntry srcEntry= JavaCore.newSourceEntry(folder, null);
+	
+			int nestedResource = preventNesting(srcEntry, entriesArray);
+			while (nestedResource != -1){
+				entriesArray.remove(nestedResource);
+				nestedResource = preventNesting(srcEntry, entriesArray);
 			}
-		} catch (CoreException e) {
+			
+			entriesArray.add(JavaCore.newSourceEntry(srcEntry.getPath()));			
+			IClasspathEntry[] newEntries = entriesArray.toArray(new IClasspathEntry[entriesArray.size()]);
+			
+			openProject.setRawClasspath(newEntries, null);
+		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
-		return val;
+	}
+	/**
+	 * Check if one of the resources already in the classpath is included also in the one we want to add
+	 * 
+	 * @param entry resource to add
+	 * @param classpath actual resources in the classpath
+	 * @return index of the resource of classpath that is already included as subfolder in entry or -1 if none
+	 */
+	private int preventNesting(IClasspathEntry entry, List<IClasspathEntry> classpath){
+	  if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
+	  	IPath entryPath = entry.getPath();
+	    for (int j = 0; j < classpath.size(); j++){
+	            IClasspathEntry otherEntry = classpath.get(j);
+	            if (entry != otherEntry && otherEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE){
+	                    if (entryPath.isPrefixOf(otherEntry.getPath())){
+	                    	return j;
+	                    }
+	            }
+	    }
+	  }
+	  return -1;
 	}
 
-	private void addSourceFolder(IPath folder, IFile f) throws JavaModelException {
-		IJavaProject openProject = JavaCore.create(f.getProject());
-
-		IClasspathEntry[] entries = openProject.getRawClasspath();
-		List<IClasspathEntry> entriesArray = new ArrayList<IClasspathEntry>(Arrays.asList(entries));
-		IClasspathEntry srcEntry = JavaCore.newSourceEntry(folder, null);
-
-		int nestedResource = preventNesting(srcEntry, entriesArray);
-		while (nestedResource != -1) {
-			entriesArray.remove(nestedResource);
-			nestedResource = preventNesting(srcEntry, entriesArray);
-		}
-
-		entriesArray.add(JavaCore.newSourceEntry(srcEntry.getPath()));
-		IClasspathEntry[] newEntries = entriesArray.toArray(new IClasspathEntry[entriesArray.size()]);
-
-		openProject.setRawClasspath(newEntries, null);
-	}
-
-	private int preventNesting(IClasspathEntry entry, List<IClasspathEntry> classpath) {
-		if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-			IPath entryPath = entry.getPath();
-			for (int j = 0; j < classpath.size(); j++) {
-				IClasspathEntry otherEntry = classpath.get(j);
-				if (entry != otherEntry && otherEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE
-						&& entryPath.isPrefixOf(otherEntry.getPath()))
-					return j;
+	
+	/**
+	 * Check if the filename has a locale as terminal part, in this case the locale is removed
+	 * to get a base name
+	 * 
+	 * @param fileName original filename
+	 * @return filename without locale (if the filename had not a locale this is equal to the filename)
+	 */
+	private String removeLocale(String fileName){
+		for (Locale loc : Locale.getAvailableLocales()){
+			if (fileName.endsWith("_"+loc.toString())) { //$NON-NLS-1$
+				return fileName.substring(0, fileName.length() - loc.toString().length() -1);
 			}
 		}
-		return -1;
+		return fileName;
 	}
-
-	private boolean hasEntry(IPath path, IFile f) throws CoreException {
-		if (f.getProject().getNature(JavaCore.NATURE_ID) == null)
-			return true;
-		IJavaProject openProject = JavaCore.create(f.getProject());
-		IClasspathEntry[] entries = openProject.getRawClasspath();
-		for (IClasspathEntry entry : entries) {
-			if (entry.getPath().equals(path))
-				return true;
-			else if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().isPrefixOf(path)) {
-				return true;
+	
+	
+	/**
+	 * Check if a path is already inside the classpath of the project. It is 
+	 * also consider if the path is a subfolder of a folder already in the classpath
+	 * 
+	 * @param path the path
+	 * @param openProject the project
+	 * @return true if the path is already included (directly or indirectly) in the classpath, otherwise false
+	 */
+	private boolean hasEntry(IPath path, IJavaProject openProject){
+		try {
+			IClasspathEntry[] entries = openProject.getRawClasspath();
+			for(IClasspathEntry entry : entries){
+				 if (entry.getPath().equals(path)) return true;
+				 else if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().isPrefixOf(path)){
+             	return true;
+         }
 			}
+		} catch (JavaModelException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
