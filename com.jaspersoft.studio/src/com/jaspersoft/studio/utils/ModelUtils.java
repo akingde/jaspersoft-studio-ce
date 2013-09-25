@@ -1222,6 +1222,11 @@ public class ModelUtils {
 	 * @see IComponentFactory#getElementExpressionContext(Object)
 	 */
 	public static ExpressionContext getElementExpressionContext(JRDesignElement element, ANode node) {
+		// Pre-check to possibly retrieve the JRDesignElement 
+		if(element==null && node!=null && node.getValue() instanceof JRDesignElement) {
+			element = (JRDesignElement) node.getValue();
+		}
+		
 		if (element != null) {
 			JRElementGroup group = getTopElementGroup(element);
 			if (group instanceof JRDesignCellContents) {
