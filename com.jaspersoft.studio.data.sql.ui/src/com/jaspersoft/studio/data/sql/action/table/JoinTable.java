@@ -74,11 +74,17 @@ public class JoinTable extends AAction {
 		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer, true);
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
-			MFromTable srcTbl = mfromTable;
-			if (mfromTable instanceof MFromTableJoin)
-				srcTbl = (MFromTable) mfromTable.getParent();
 			MFromTable destTbl = getFromTable(mfromTable, dialog);
-			doRun(null, srcTbl, null, destTbl);
+
+			if (mfromTable instanceof MFromTableJoin) {
+				mfromTable = (MFromTable) mfromTable.getParent();
+
+				MFromTable tmp = destTbl;
+				destTbl = mfromTable;
+				mfromTable = tmp;
+			}
+
+			doRun(null, mfromTable, null, destTbl);
 		}
 	}
 

@@ -99,8 +99,15 @@ public class JoinFromTableDialog extends ATitledDialog {
 		if (srcTable instanceof MFromTableJoin)
 			parent = parent.getParent();
 		List<String> lst = new ArrayList<String>();
+		String spStr = null;
+		if (srcTable instanceof MFromTableJoin) {
+			MFromTable sp = ((MFromTable) srcTable.getParent());
+			spStr = sp.toSQLString().replace(",", "").trim();
+		}
 		for (INode s : parent.getChildren()) {
 			if (srcTable == s)
+				continue;
+			if (spStr != null && s.getDisplayText().equals(spStr))
 				continue;
 			if (!s.getDisplayText().equals(srcTable.toSQLString()))
 				lst.add(s.getDisplayText());
@@ -115,6 +122,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 			if (fromTables[i].equals(ftbl))
 				return i;
 		}
+		if (fromTables != null && fromTables.length > 0)
+			fromTable = fromTables[0];
 		return 0;
 	}
 
