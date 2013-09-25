@@ -513,7 +513,7 @@
       </page>
       <page
             id="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage.property" 
-            name="Templates locations"
+            name="Template locations"
             class="com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property">
             <enabledWhen>
