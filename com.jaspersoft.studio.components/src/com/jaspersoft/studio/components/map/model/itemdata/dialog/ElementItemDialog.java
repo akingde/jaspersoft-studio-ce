@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementDataHelper;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementsListWidgetConfiguration;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementItemDTO;
@@ -105,16 +106,16 @@ public class ElementItemDialog extends Dialog {
 		dialogArea.setLayout(new GridLayout(1,false));
 		
 		Group itemKindGrp = new Group(dialogArea,SWT.NONE);
-		itemKindGrp.setText(NLS.bind("{0} Item Kind",wconfig.getElementTxt()));
+		itemKindGrp.setText(NLS.bind(Messages.ElementItemDialog_ItemKind,wconfig.getElementTxt()));
 		itemKindGrp.setLayout(new GridLayout(1,false));
 		itemKindGrp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		staticRBtn = new Button(itemKindGrp,SWT.RADIO);
-		staticRBtn.setText("Static");
+		staticRBtn.setText(Messages.ElementItemDialog_Static);
 		staticRBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		datasetRBtn = new Button(itemKindGrp,SWT.RADIO);
-		datasetRBtn.setText("Dataset");
+		datasetRBtn.setText(Messages.ElementItemDialog_DatasetBased);
 		datasetRBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		datasetCombo = new Combo(itemKindGrp, SWT.READ_ONLY);
@@ -124,7 +125,7 @@ public class ElementItemDialog extends Dialog {
 		datasetCombo.setLayoutData(datasetComboGD);
 		
 		Group propertiesGrp = new Group(dialogArea, SWT.NONE);
-		propertiesGrp.setText("Properties");
+		propertiesGrp.setText(Messages.ElementItemDialog_Properties);
 		propertiesGrp.setLayout(new GridLayout(2,false));
 		propertiesGrp.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		
@@ -132,16 +133,16 @@ public class ElementItemDialog extends Dialog {
 		propertiesTV.getTable().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,3));
 		
 		btnAddProperty = new Button(propertiesGrp, SWT.PUSH);
-		btnAddProperty.setText("Add");
+		btnAddProperty.setText(Messages.ElementItemDialog_Add);
 		btnAddProperty.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 
 		btnModifyProperty = new Button(propertiesGrp, SWT.PUSH);
-		btnModifyProperty.setText("Modify");
+		btnModifyProperty.setText(Messages.ElementItemDialog_Modify);
 		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 
 		
 		btnRemoveProperty = new Button(propertiesGrp, SWT.PUSH);
-		btnRemoveProperty.setText("Remove");
+		btnRemoveProperty.setText(Messages.ElementItemDialog_Remove);
 		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		
 		initWidgets();
@@ -234,12 +235,12 @@ public class ElementItemDialog extends Dialog {
 		tv.getTable().setLinesVisible(true);
 		
 		TableViewerColumn tvcName = new TableViewerColumn(tv, SWT.NONE);
-		tvcName.getColumn().setText("Name");
+		tvcName.getColumn().setText(Messages.ElementItemDialog_NameColumn);
 		tvcName.setLabelProvider(getItemPropertyNameLabelProvider());
 		tl_itemPropertiesTableViewer.setColumnData(tvcName.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 
 		TableViewerColumn tvcValue = new TableViewerColumn(tv, SWT.NONE);
-		tvcValue.getColumn().setText("Value");
+		tvcValue.getColumn().setText(Messages.ElementItemDialog_ValueColumn);
 		tvcValue.setLabelProvider(getItemPropertyValueLabelProvider());
 		tl_itemPropertiesTableViewer.setColumnData(tvcValue.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 		
@@ -276,7 +277,7 @@ public class ElementItemDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(NLS.bind("{0} Item information",wconfig.getElementTxt()));
+		newShell.setText(NLS.bind(Messages.ElementItemDialog_DialogTitle,wconfig.getElementTxt()));
 		UIUtils.resizeAndCenterShell(newShell, 500, 550);
 	}
 	
@@ -322,8 +323,8 @@ public class ElementItemDialog extends Dialog {
 		if(property!=null) {
 			if(isMandatoryProperty(property.getName())){
 				MessageDialog.openError(
-						UIUtils.getShell(), "Error", 
-						NLS.bind("You can not remove the property {0}. It is a mandatory one.",property.getName()));
+						UIUtils.getShell(), Messages.ElementItemDialog_ErrorDialogTitle, 
+						NLS.bind(Messages.ElementItemDialog_ErrorDialogMandatoryNameMsg,property.getName()));
 			}
 			else {
 				((StandardItem)item).removeItemProperty(property);
@@ -387,7 +388,7 @@ public class ElementItemDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		if(datasetRBtn.getSelection() && datasetCombo.getText().isEmpty()) {
-			MessageDialog.openError(UIUtils.getShell(), "Error", "No dataset has been specified. Choose one or switch to static.");
+			MessageDialog.openError(UIUtils.getShell(), Messages.ElementItemDialog_ErrorDialogTitle, Messages.ElementItemDialog_ErrorDialogNoDatasetMsg);
 		}
 		else {
 			super.okPressed();	

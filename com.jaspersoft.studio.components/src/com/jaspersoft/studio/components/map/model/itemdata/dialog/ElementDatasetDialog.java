@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataDatasetDTO;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.jface.dialogs.EditableDatasetBaseComposite;
@@ -66,7 +67,7 @@ public class ElementDatasetDialog extends TitleAreaDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Element Dataset");
+		newShell.setText(Messages.ElementDatasetDialog_DialogTitle);
 	}
 	
 	@Override

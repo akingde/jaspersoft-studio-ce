@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementDataHelper;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementDTO;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementItemDTO;
@@ -38,14 +39,14 @@ public class StylesLabelProvider extends LabelProvider {
 		if(element instanceof MapDataElementDTO) {
 			ItemProperty name = ((MapDataElementDTO) element).getName();
 			if(name!=null){
-				return "Style " + ElementDataHelper.getItemPropertyValueAsString(name);
+				return Messages.StylesLabelProvider_Style + ElementDataHelper.getItemPropertyValueAsString(name);
 			}
 			else {
-				return "Style " + ElementDataHelper.DEFAULT_ELEMENT_NAME;
+				return Messages.StylesLabelProvider_Style + ElementDataHelper.DEFAULT_ELEMENT_NAME;
 			}
 		}
 		else if(element instanceof MapDataElementItemDTO) {
-			return "Style Item";
+			return Messages.StylesLabelProvider_StyleItem;
 		}
 		return super.getText(element);
 	}
@@ -53,10 +54,10 @@ public class StylesLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if(element instanceof MapDataElementDTO){
-			return Activator.getDefault().getImage("/icons/pathstyle-icon-16.png");
+			return Activator.getDefault().getImage("/icons/pathstyle-icon-16.png"); //$NON-NLS-1$
 		}
 		else if(element instanceof MapDataElementItemDTO){
-			return Activator.getDefault().getImage("/icons/pathstyleitem-icon-16.png");
+			return Activator.getDefault().getImage("/icons/pathstyleitem-icon-16.png"); //$NON-NLS-1$
 		}
 		return super.getImage(element);
 	}

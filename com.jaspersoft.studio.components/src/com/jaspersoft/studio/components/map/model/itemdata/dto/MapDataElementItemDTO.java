@@ -58,7 +58,7 @@ public class MapDataElementItemDTO implements JRCloneable{
 	public void setParentName(ItemProperty parentName) {
 		this.parentName = ElementDataHelper.fixElementNameProperty(parentName);
 		if(this.item!=null) {
-			ItemProperty pname = ElementDataHelper.getItemProperty(this.item, "name");
+			ItemProperty pname = ElementDataHelper.getItemProperty(this.item, "name"); //$NON-NLS-1$
 			if(pname!=null) {
 				((StandardItem)this.item).removeItemProperty(pname);
 			}

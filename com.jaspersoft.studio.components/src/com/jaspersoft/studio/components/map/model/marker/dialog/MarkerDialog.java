@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.MarkerCoordinatesType;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
@@ -69,7 +70,7 @@ public class MarkerDialog extends Dialog {
 	}
 
 	private boolean isPropertyMandatory(ItemProperty mprop) {
-		return "id".equals(mprop.getName()) || coordinatesType.isMandatoryProperty(mprop.getName());
+		return "id".equals(mprop.getName()) || coordinatesType.isMandatoryProperty(mprop.getName()); //$NON-NLS-1$
 	}
 
 	private StandardItem value;
@@ -94,7 +95,7 @@ public class MarkerDialog extends Dialog {
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Marker Dialog");
+		newShell.setText(Messages.MarkerDialog_Title);
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class MarkerDialog extends Dialog {
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				StandardItemProperty v = new StandardItemProperty("property", "value", null);
+				StandardItemProperty v = new StandardItemProperty("property", "value", null); //$NON-NLS-1$ //$NON-NLS-2$
 
 				MarkerPropertyDialog dialog = new MarkerPropertyDialog(Display.getDefault().getActiveShell());
 				dialog.setValue(v, expContext, isPropertyMandatory(v));
@@ -186,10 +187,10 @@ public class MarkerDialog extends Dialog {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Name");
+		column[0].setText(Messages.MarkerDialog_Name);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Value/Expression");
+		column[1].setText(Messages.MarkerDialog_ValueOrExpression);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();

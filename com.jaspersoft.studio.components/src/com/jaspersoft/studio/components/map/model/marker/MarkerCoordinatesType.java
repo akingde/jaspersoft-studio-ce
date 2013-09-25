@@ -29,7 +29,7 @@ import net.sf.jasperreports.components.map.MapComponent;
  */
 public enum MarkerCoordinatesType {
 	LATITUDE_LONGITUDE(Arrays.asList(MapComponent.PROPERTY_latitude,MapComponent.PROPERTY_longitude)),
-	XY(Arrays.asList("x","y"));
+	XY(Arrays.asList("x","y")); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private List<String> mandatoryProperties;
 	

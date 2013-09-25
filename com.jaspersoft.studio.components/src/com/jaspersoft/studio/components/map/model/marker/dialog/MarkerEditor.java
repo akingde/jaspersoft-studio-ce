@@ -17,6 +17,7 @@ package com.jaspersoft.studio.components.map.model.marker.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
 
 public class MarkerEditor extends Wizard {
@@ -37,7 +38,7 @@ public class MarkerEditor extends Wizard {
 
 	public MarkerEditor() {
 		super();
-		setWindowTitle("Map Markers");
+		setWindowTitle(Messages.MarkerEditor_Title);
 		setNeedsProgressMonitor(false);
 	}
 

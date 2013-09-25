@@ -20,6 +20,7 @@ import net.sf.jasperreports.components.map.StandardMapComponent;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementsListWidgetConfiguration;
 
 /**
@@ -32,17 +33,17 @@ public class MapStylesWidgetConfiguration implements ElementsListWidgetConfigura
 
 	@Override
 	public String getElementsTabTitle() {
-		return "Map Styles";
+		return Messages.MapStylesWidgetConfiguration_MapStyles;
 	}
 
 	@Override
 	public String getElementTxt() {
-		return "Style";
+		return Messages.MapStylesWidgetConfiguration_Style;
 	}
 
 	@Override
 	public Image getAddNewElementIcon() {
-		return Activator.getDefault().getImage("/icons/pathstyle-add-16.png");
+		return Activator.getDefault().getImage("/icons/pathstyle-add-16.png"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class MapStylesWidgetConfiguration implements ElementsListWidgetConfigura
 
 	@Override
 	public String getElementPropertiesResourceLocation() {
-		return "/resources/styleData.properties";
+		return "/resources/styleData.properties"; //$NON-NLS-1$
 	}
 
 	@Override

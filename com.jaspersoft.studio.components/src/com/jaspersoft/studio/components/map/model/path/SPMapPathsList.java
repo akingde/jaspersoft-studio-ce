@@ -53,7 +53,7 @@ public class SPMapPathsList extends SPMapDataElementsList {
 
 	@Override
 	protected List<String> getMandatoryProperties() {
-		return Arrays.asList("latitude","longitude");
+		return Arrays.asList("latitude","longitude"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

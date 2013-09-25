@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.dialog.MarkerEditor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -44,7 +45,7 @@ public class SPMarker extends ASPropertyWidget {
 	@Override
 	protected void createComponent(Composite parent) {
 		btn = new Button(parent, SWT.PUSH);
-		btn.setText("Markers List");
+		btn.setText(Messages.SPMarker_MarkersListBtn);
 		btn.addSelectionListener(new SelectionListener() {
 
 			@Override

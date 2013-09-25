@@ -75,7 +75,7 @@ public class MapDataElementsConfiguration implements JRCloneable {
 		Map<String,String> map = new HashMap<String, String>();
 		for(MapDataDatasetDTO d : datasets) {
 			JRDatasetRun dsRun = d.getDataset().getDatasetRun();
-			String designDSname = "";
+			String designDSname = ""; //$NON-NLS-1$
 			if(dsRun!=null){
 				designDSname = dsRun.getDatasetName();
 			}

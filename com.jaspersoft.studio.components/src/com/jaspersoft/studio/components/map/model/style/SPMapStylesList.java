@@ -53,7 +53,7 @@ public class SPMapStylesList extends SPMapDataElementsList {
 
 	@Override
 	protected List<String> getMandatoryProperties() {
-		return Arrays.asList("name");
+		return Arrays.asList("name"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -18,6 +18,7 @@ package com.jaspersoft.studio.components.map.model.itemdata;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.osgi.util.NLS;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementsConfiguration;
 
 /**
@@ -38,11 +39,11 @@ public class MapDataElementsConfigurationLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		if(element == null) {
-			return NLS.bind("<No {0} defined>",itemsKind); 
+			return NLS.bind(Messages.MapDataElementsConfigurationLabelProvider_NoElementsDefined,itemsKind); 
 		}
 		else if (element instanceof MapDataElementsConfiguration){
 			int size = ((MapDataElementsConfiguration) element).getElements().size();
-			return NLS.bind("[{0}: {1}]", itemsKind, size);
+			return NLS.bind(Messages.MapDataElementsConfigurationLabelProvider_ElementsNum, itemsKind, size);
 		}
 		else {
 			return super.getText(element);			

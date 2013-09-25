@@ -40,7 +40,7 @@ import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementsCo
  */
 public class ElementDataHelper {
 	
-	public static final String ELEMENT_DATASET_PREFIX = "{0} Dataset ";
+	public static final String ELEMENT_DATASET_PREFIX = "{0} Dataset "; //$NON-NLS-1$
 	public static final String DEFAULT_ELEMENT_NAME = "<default>"; //$NON-NLS-1$
 
 	private ElementDataHelper(){
@@ -100,7 +100,7 @@ public class ElementDataHelper {
 	}
 
 	private static ItemProperty getElementNameForItem(Item item) {
-		ItemProperty nameProperty = getItemProperty(item, "name");
+		ItemProperty nameProperty = getItemProperty(item, "name"); //$NON-NLS-1$
 		return nameProperty!=null ? (ItemProperty) nameProperty.clone() : null;
 	}
 	
@@ -118,7 +118,7 @@ public class ElementDataHelper {
 			}
 			else {
 				if(addDoubleQuotes){
-					propertyValue = "\""+propertyValue+"\"";
+					propertyValue = "\""+propertyValue+"\""; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			return propertyValue;
@@ -291,11 +291,11 @@ public class ElementDataHelper {
 	public static boolean areNamesEqual(ItemProperty name1, ItemProperty name2) {
 		ItemProperty name1fixed = fixElementNameProperty(name1);
 		ItemProperty name2fixed = fixElementNameProperty(name2);
-		String name1Txt = "";
+		String name1Txt = ""; //$NON-NLS-1$
 		if(name1fixed!=null){
 			name1Txt=getItemPropertyValueAsString(name1fixed, true);
 		}
-		String name2Txt = "";
+		String name2Txt = ""; //$NON-NLS-1$
 		if(name2fixed!=null){
 			name2Txt=getItemPropertyValueAsString(name2fixed, true);
 		}

@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.MapDataElementsConfigurationLabelProvider;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -44,7 +45,7 @@ public class MapPathsDescriptor extends NTextPropertyDescriptor {
 	
 	@Override
 	public ILabelProvider getLabelProvider() {
-		return new MapDataElementsConfigurationLabelProvider("Paths");
+		return new MapDataElementsConfigurationLabelProvider(Messages.MapPathsDescriptor_Paths);
 	}
 	
 	@Override

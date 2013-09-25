@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementsListWidgetConfiguration;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
@@ -72,11 +73,11 @@ public class MapElementDialog extends Dialog implements IExpressionContextSetter
 		dialogArea.setLayout(new GridLayout(1, false));
 		
 		useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
-		useExpressionCheckbox.setText("Use an expression");
+		useExpressionCheckbox.setText(Messages.MapElementDialog_UseExpression);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 			
 		Label lblPropertyValue=new Label(dialogArea,SWT.NONE);
-		lblPropertyValue.setText("Property Value");
+		lblPropertyValue.setText(Messages.MapElementDialog_PropertyValue);
 		lblPropertyValue.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 		
 		propertyValue = new Text(dialogArea,SWT.BORDER);
@@ -162,7 +163,7 @@ public class MapElementDialog extends Dialog implements IExpressionContextSetter
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(NLS.bind("Enter the name for the {0}",wconfig.getElementTxt()));
+		newShell.setText(NLS.bind(Messages.MapElementDialog_DialogTitle,wconfig.getElementTxt()));
 		UIUtils.resizeAndCenterShell(newShell, 300, 180);
 	}
 	
@@ -184,8 +185,8 @@ public class MapElementDialog extends Dialog implements IExpressionContextSetter
 					&& (valueExpression == null
 							|| valueExpression.getText() == null || valueExpression
 							.getText().isEmpty())) {
-				MessageDialog.openError(UIUtils.getShell(), "Error", 
-						NLS.bind("The name of the {0} is a mandatory property and must be set.",wconfig.getElementTxt()));
+				MessageDialog.openError(UIUtils.getShell(), Messages.MapElementDialog_ErrorDialogTitle, 
+						NLS.bind(Messages.MapElementDialog_ErrorDialogMsg,wconfig.getElementTxt()));
 				return;
 			}
 		}

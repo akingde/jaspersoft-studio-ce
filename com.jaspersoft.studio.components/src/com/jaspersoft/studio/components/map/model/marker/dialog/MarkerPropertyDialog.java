@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
@@ -63,7 +64,7 @@ public class MarkerPropertyDialog extends Dialog {
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Marker Property Dialog");
+		newShell.setText(Messages.MarkerPropertyDialog_DialogTitle);
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class MarkerPropertyDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Property Name");
+		label.setText(Messages.MarkerPropertyDialog_PropertyName);
 
 		cprop = new Text(composite, SWT.BORDER);
 		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
@@ -95,7 +96,7 @@ public class MarkerPropertyDialog extends Dialog {
 		});
 
 		buseexpr = new Button(composite, SWT.CHECK);
-		buseexpr.setText("Use An Expression");
+		buseexpr.setText(Messages.MarkerPropertyDialog_UseExpression);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		buseexpr.setLayoutData(gd);
@@ -133,7 +134,7 @@ public class MarkerPropertyDialog extends Dialog {
 		composite.setLayout(new GridLayout());
 
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Value Expression");
+		label.setText(Messages.MarkerPropertyDialog_ValueExpression);
 
 		evalue = new WTextExpression(composite, SWT.NONE, 1);
 		evalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
@@ -153,7 +154,7 @@ public class MarkerPropertyDialog extends Dialog {
 		composite.setLayout(new GridLayout());
 
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Value");
+		label.setText(Messages.MarkerPropertyDialog_Value);
 
 		tvalue = new Text(composite, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));

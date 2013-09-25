@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
@@ -86,16 +87,16 @@ public class ItemPropertyDialog extends Dialog implements IExpressionContextSett
 		
 		Label lblPropertyName = new Label(dialogArea, SWT.NONE);
 		lblPropertyName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		lblPropertyName.setText("Property Name");
+		lblPropertyName.setText(Messages.ItemPropertyDialog_PropertyName);
 		propertyName = new Text(dialogArea, SWT.BORDER);
 		propertyName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
-		useExpressionCheckbox.setText("Use an expression");
+		useExpressionCheckbox.setText(Messages.ItemPropertyDialog_UseExpression);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 			
 		Label lblPropertyValue=new Label(dialogArea,SWT.NONE);
-		lblPropertyValue.setText("Property Value");
+		lblPropertyValue.setText(Messages.ItemPropertyDialog_PropertyValue);
 		lblPropertyValue.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 		
 		propertyValue = new Text(dialogArea,SWT.BORDER);
@@ -145,7 +146,7 @@ public class ItemPropertyDialog extends Dialog implements IExpressionContextSett
 
 	private void initWidgets() {
 		if(this.itemProperty==null){
-			this.itemProperty = new StandardItemProperty("","",null);
+			this.itemProperty = new StandardItemProperty("","",null); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if(this.itemProperty.getValue()!=null){
 			useExpressionCheckbox.setSelection(false);
@@ -220,7 +221,7 @@ public class ItemPropertyDialog extends Dialog implements IExpressionContextSett
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Edit Item property");
+		newShell.setText(Messages.ItemPropertyDialog_EditItemProperty);
 		UIUtils.resizeAndCenterShell(newShell, 450, 400);
 	}
 	

@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.Activator;
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.itemdata.ElementsTreeStatus.LAST_OPERATION;
 import com.jaspersoft.studio.components.map.model.itemdata.dialog.ElementDatasetDialog;
 import com.jaspersoft.studio.components.map.model.itemdata.dialog.ElementItemDialog;
@@ -153,7 +154,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		btnAddNewElement = new Button(elementsCmp, SWT.NONE);
 		btnAddNewElement.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnAddNewElement.setImage(widgetConfig.getAddNewElementIcon());
-		btnAddNewElement.setToolTipText(NLS.bind("Add a new {0}", widgetConfig.getElementTxt()));
+		btnAddNewElement.setToolTipText(NLS.bind(Messages.SPMapDataElementsList_AddNewElement, widgetConfig.getElementTxt()));
 		btnAddNewElement.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -163,8 +164,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		btnMoveUpItem = new Button(elementsCmp, SWT.NONE);
 		btnMoveUpItem.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnMoveUpItem.setImage(Activator.getDefault().getImage("/icons/pathitem-moveup-16.png"));
-		btnMoveUpItem.setToolTipText("Move up");
+		btnMoveUpItem.setImage(Activator.getDefault().getImage("/icons/pathitem-moveup-16.png")); //$NON-NLS-1$
+		btnMoveUpItem.setToolTipText(Messages.SPMapDataElementsList_MoveUp);
 		btnMoveUpItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -174,8 +175,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		btnMoveDownItem = new Button(elementsCmp, SWT.NONE);
 		btnMoveDownItem.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnMoveDownItem.setImage(Activator.getDefault().getImage("/icons/pathitem-movedown-16.png"));
-		btnMoveDownItem.setToolTipText("Move down");
+		btnMoveDownItem.setImage(Activator.getDefault().getImage("/icons/pathitem-movedown-16.png")); //$NON-NLS-1$
+		btnMoveDownItem.setToolTipText(Messages.SPMapDataElementsList_MoveDown);
 		btnMoveDownItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -228,9 +229,9 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		private AddItemAction(){
 			super();
-			setText("Add new Item");
-			setToolTipText(NLS.bind("Add a new item the current {0}",widgetConfig.getElementTxt()));
-			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/add_element.gif"));
+			setText(Messages.SPMapDataElementsList_AddNewItem);
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_AddNewItemTooltip,widgetConfig.getElementTxt()));
+			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/add_element.gif")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -258,9 +259,9 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private class EditElementAction extends Action {
 		private EditElementAction() {
 			super();
-			setText(NLS.bind("Edit {0}",widgetConfig.getElementTxt()));
-			setToolTipText(NLS.bind("Edit the selected {0} information",widgetConfig.getElementTxt()));
-			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/edit_element.gif"));
+			setText(NLS.bind(Messages.SPMapDataElementsList_EditElement,widgetConfig.getElementTxt()));
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_EditElementTooltip,widgetConfig.getElementTxt()));
+			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/edit_element.gif")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -275,7 +276,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private void modifySelectedElement(MapDataElementDTO selectedElement) {
 		ItemProperty clonedElementName = JRCloneUtils.nullSafeClone(selectedElement.getName());
 		if(clonedElementName==null){
-			clonedElementName = new StandardItemProperty("name","",null);
+			clonedElementName = new StandardItemProperty("name","",null); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		MapElementDialog dialog = new MapElementDialog(UIUtils.getShell(), clonedElementName, widgetConfig);
 		dialog.setExpressionContext(getDefaultExpressionContext());
@@ -288,16 +289,16 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private class DeleteElementAction extends Action {
 		private DeleteElementAction(){
 			super();
-			setText(NLS.bind("Delete {0}",widgetConfig.getElementTxt()));
-			setToolTipText(NLS.bind("Delete the selected {0}",widgetConfig.getElementTxt()));
-			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/delete_element.gif"));
+			setText(NLS.bind(Messages.SPMapDataElementsList_DeleteElement,widgetConfig.getElementTxt()));
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_DeleteElementTooltip,widgetConfig.getElementTxt()));
+			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/delete_element.gif")); //$NON-NLS-1$
 		}
 		
 		@Override
 		public void run() {
 			boolean deleteElement = MessageDialog.openQuestion(
-					UIUtils.getShell(), NLS.bind("Delete {0}",widgetConfig.getElementTxt()), 
-					NLS.bind("Are you sure you want to delete the following {0}? All the associated items will be removed.",widgetConfig));
+					UIUtils.getShell(), NLS.bind(Messages.SPMapDataElementsList_DeleteElement,widgetConfig.getElementTxt()), 
+					NLS.bind(Messages.SPMapDataElementsList_ConfirmElementDelete,widgetConfig));
 			if(deleteElement){
 				IStructuredSelection selection = (IStructuredSelection) elementsTV.getSelection();
 		        Object selObj = selection.getFirstElement();
@@ -312,9 +313,9 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private class EditItemAction extends Action {
 		private EditItemAction(){
 			super();
-			setText("Edit Item");
-			setToolTipText(NLS.bind("Modify the information associated to the {0} Item",widgetConfig.getElementTxt()));
-			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/edit_element.gif"));
+			setText(Messages.SPMapDataElementsList_EditItem);
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_EditItemTooltip,widgetConfig.getElementTxt()));
+			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/edit_element.gif")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -344,16 +345,16 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private class DeleteItemAction extends Action {
 		private DeleteItemAction(){
 			super();
-			setText("Delete Item");
-			setToolTipText(NLS.bind("Delete the following {0} Item", widgetConfig.getElementTxt()));
-			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/delete_element.gif"));
+			setText(Messages.SPMapDataElementsList_DeleteItem);
+			setToolTipText(NLS.bind(Messages.SPMapDataElementsList_DeleteItemTooltip, widgetConfig.getElementTxt()));
+			setImageDescriptor(Activator.getDefault().getImageDescriptor("/icons/delete_element.gif")); //$NON-NLS-1$
 		}
 		
 		@Override
 		public void run() {
 			boolean delete = MessageDialog.openQuestion(
-					UIUtils.getShell(),NLS.bind("Remove {0} Item",widgetConfig.getElementTxt()), 
-					NLS.bind("Are you sure you want to delete the {0} Item?", widgetConfig.getElementTxt()));
+					UIUtils.getShell(),NLS.bind(Messages.SPMapDataElementsList_RemoveQuestionTitle,widgetConfig.getElementTxt()), 
+					NLS.bind(Messages.SPMapDataElementsList_RemoveQuestionMsg, widgetConfig.getElementTxt()));
 			if(delete){
 				MapDataElementItemDTO item = (MapDataElementItemDTO) ((IStructuredSelection) elementsTV.getSelection()).getFirstElement();
 				ItemProperty parentName = item.getParentName();
@@ -373,7 +374,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	
 	protected void addNewElementBtnPressed() {
 		StandardItemProperty pname = new StandardItemProperty();
-		pname.setName("name");
+		pname.setName("name"); //$NON-NLS-1$
 		MapElementDialog dialog = new MapElementDialog(UIUtils.getShell(), pname, widgetConfig);
 		dialog.setExpressionContext(getDefaultExpressionContext());
 		if(dialog.open()==Window.OK) {
@@ -385,7 +386,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 			StandardItem dummyItem = new StandardItem();
 			dummyItem.addItemProperty(elementName);
 			for(String p : getMandatoryProperties()) {
-				dummyItem.addItemProperty(new StandardItemProperty(p, "CHANGE_ME", null));
+				dummyItem.addItemProperty(new StandardItemProperty(p, "CHANGE_ME", null)); //$NON-NLS-1$
 			}
 			dummyElementItem.setItem(dummyItem);
 			newElement.getDataItems().add(dummyElementItem);
@@ -413,7 +414,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		datasetsCmp = new Composite(parentFolder,SWT.NONE);
 		datasetsCmp.setLayout(new GridLayout(2,false));
 		datasetsTab.setControl(datasetsCmp);
-		datasetsTab.setText("Associated Datasets");
+		datasetsTab.setText(Messages.SPMapDataElementsList_DatasetTabTitle);
 		
 		datasetsTV = new TableViewer(datasetsCmp, SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE);
 		datasetsTV.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
@@ -434,8 +435,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		btnAddNewDataset = new Button(datasetsCmp, SWT.NONE);
 		btnAddNewDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnAddNewDataset.setImage(Activator.getDefault().getImage("/icons/add_element.gif"));
-		btnAddNewDataset.setToolTipText("Add a new Dataset suitable for the elements");
+		btnAddNewDataset.setImage(Activator.getDefault().getImage("/icons/add_element.gif")); //$NON-NLS-1$
+		btnAddNewDataset.setToolTipText(Messages.SPMapDataElementsList_AddNewDatasetBtnTooltip);
 		btnAddNewDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -445,8 +446,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		btnModifyDataset = new Button(datasetsCmp, SWT.NONE);
 		btnModifyDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnModifyDataset.setImage(Activator.getDefault().getImage("/icons/edit_element.gif"));
-		btnModifyDataset.setToolTipText("Modify an existing Dataset");
+		btnModifyDataset.setImage(Activator.getDefault().getImage("/icons/edit_element.gif")); //$NON-NLS-1$
+		btnModifyDataset.setToolTipText(Messages.SPMapDataElementsList_ModifyDatasetBtnTooltip);
 		btnModifyDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -456,8 +457,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		btnRemoveDataset = new Button(datasetsCmp, SWT.NONE);
 		btnRemoveDataset.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnRemoveDataset.setImage(Activator.getDefault().getImage("/icons/delete_element.gif"));
-		btnRemoveDataset.setToolTipText("Delete an existing Dataset");
+		btnRemoveDataset.setImage(Activator.getDefault().getImage("/icons/delete_element.gif")); //$NON-NLS-1$
+		btnRemoveDataset.setToolTipText(Messages.SPMapDataElementsList_DeleteDatasetBtnTooltip);
 		btnRemoveDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -477,7 +478,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private void addNewDatasetBtnPressed() {
 		ElementDatasetDialog elementDatasetDialog = new ElementDatasetDialog(
 				UIUtils.getShell(),
-				"Add Dataset", NLS.bind("Configure here a new dataset suitable for Map {0} generation.",widgetConfig.getElementTxt()),
+				Messages.SPMapDataElementsList_AddDatasetDialogTitle, NLS.bind(Messages.SPMapDataElementsList_AddDatasetDialogInfoMsg,widgetConfig.getElementTxt()),
 				null,jConfig);
 		elementDatasetDialog.setDefaultExpressionContext(getDefaultExpressionContext());
 		if(elementDatasetDialog.open()==Window.OK){
@@ -495,7 +496,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 			Object dsClone = ((MapDataDatasetDTO) firstElement).getDataset().clone();
 			ElementDatasetDialog elementDatasetDialog = new ElementDatasetDialog(
 					UIUtils.getShell(),
-					"Edit Dataset", NLS.bind("Edit the information associated to the dataset suitable for Map {0} generation.",widgetConfig.getElementTxt()),
+					Messages.SPMapDataElementsList_EditDatasetDialogTitle, NLS.bind(Messages.SPMapDataElementsList_EditDatasetDialogInfoMsg,widgetConfig.getElementTxt()),
 					(JRElementDataset)dsClone,jConfig);
 			elementDatasetDialog.setDefaultExpressionContext(getDefaultExpressionContext());
 			if(elementDatasetDialog.open()==Window.OK){
@@ -509,9 +510,8 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private void removeDatasetBtnPressed() {
 		Object firstElement = ((IStructuredSelection)datasetsTV.getSelection()).getFirstElement();
 		if(firstElement instanceof MapDataDatasetDTO) {
-			boolean confirm = MessageDialog.openQuestion(UIUtils.getShell(), "Remove Dataset",
-					NLS.bind("If you proceed removing the Dataset all {0} Items related will be automatically be considered as static. " +
-					"Are you sure you want to proceed?", widgetConfig.getElementTxt()));
+			boolean confirm = MessageDialog.openQuestion(UIUtils.getShell(), Messages.SPMapDataElementsList_RemoveDatasetQuestionTitle,
+					NLS.bind(Messages.SPMapDataElementsList_RemoveDatasetQuestionMsg, widgetConfig.getElementTxt()));
 			if(confirm) {
 				mapElementsConfig.getDatasets().remove((MapDataDatasetDTO) firstElement);
 				refreshDatasetsTableViewer();				
@@ -561,7 +561,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 	private StandardItem createStandardItem() {
 		StandardItem item = new StandardItem();
 		for(String pname : getMandatoryProperties()) {
-			item.addItemProperty(new StandardItemProperty(pname,"CHANGE_ME",null));
+			item.addItemProperty(new StandardItemProperty(pname,"CHANGE_ME",null)); //$NON-NLS-1$
 		}
 		return item;
 	}

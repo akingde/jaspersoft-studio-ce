@@ -16,6 +16,9 @@
 package com.jaspersoft.studio.components.map.model.marker;
 
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.osgi.util.NLS;
+
+import com.jaspersoft.studio.components.map.messages.Messages;
 
 /*
  * @author Chicu Veaceslav
@@ -35,7 +38,7 @@ public class MarkerLabelProvider extends LabelProvider {
 			int expsize = 0;
 			if (dto.getMarkers() != null)
 				expsize += dto.getMarkers().size();
-			return "[Markers: " + expsize + "]";
+			return NLS.bind(Messages.MarkerLabelProvider_MarkersNum, expsize);
 		} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return element.toString();
 	}

@@ -208,7 +208,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		evaluationTimeD.setDescription(Messages.MMap_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP, Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-1$  //$NON-NLS-2$
 		evaluationGroupNameD.setDescription(Messages.MMap_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
@@ -254,12 +254,12 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		mapVersionD.setDescription(Messages.MMap_VersionDescription);
 		desc.add(mapVersionD);
 		
-		MapPathsDescriptor mapPathsD = new MapPathsDescriptor(StandardMapComponent.PROPERTY_PATH_DATA_LIST, "Map Paths");
-		mapPathsD.setDescription("Various locations on a given map can be connected to form a path. A map can have multiple paths or none.");
+		MapPathsDescriptor mapPathsD = new MapPathsDescriptor(StandardMapComponent.PROPERTY_PATH_DATA_LIST, Messages.MMap_MapPaths);
+		mapPathsD.setDescription(Messages.MMap_MapPathsDescription);
 		desc.add(mapPathsD);
 		
-		MapStylesDescriptor mapPathStylesD = new MapStylesDescriptor(StandardMapComponent.PROPERTY_PATH_STYLE_LIST, "Map Styles");
-		mapPathStylesD.setDescription("A style element groups common style properties for a given path, so that individual items (points) in the path have to remember only the name of the path style");
+		MapStylesDescriptor mapPathStylesD = new MapStylesDescriptor(StandardMapComponent.PROPERTY_PATH_STYLE_LIST, Messages.MMap_MapStyles);
+		mapPathStylesD.setDescription(Messages.MMap_MapStylesDescription);
 		desc.add(mapPathStylesD);
 		
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#"); //$NON-NLS-1$
@@ -282,8 +282,8 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		mapClientSignatureD.setCategory(Messages.MMap_Category_Authentication);
 		mapVersionD.setCategory(Messages.MMap_Category_Authentication);
 		
-		mapPathStylesD.setCategory("Paths and Styles");
-		mapPathsD.setCategory("Paths and Styles");
+		mapPathStylesD.setCategory(Messages.MMap_PathsStylesCategory);
+		mapPathsD.setCategory(Messages.MMap_PathsStylesCategoryDesc);
 
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapTypeEnum.ROADMAP);
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapScaleEnum.ONE);
@@ -378,7 +378,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			else {
 				pathDataList = JRCloneUtils.cloneList(pathDataList);
 			}
-			return ElementDataHelper.convertFromElementDataInformation(pathDataList,"Path");
+			return ElementDataHelper.convertFromElementDataInformation(pathDataList,Messages.MMap_PathLabel);
 		}
 		
 		if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)){
@@ -389,7 +389,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			else {
 				pathStylesList = JRCloneUtils.cloneList(pathStylesList);
 			}
-			return ElementDataHelper.convertFromElementDataInformation(pathStylesList,"Style");
+			return ElementDataHelper.convertFromElementDataInformation(pathStylesList,Messages.MMap_StyleLabel);
 		}
 		
 		return super.getPropertyValue(id);

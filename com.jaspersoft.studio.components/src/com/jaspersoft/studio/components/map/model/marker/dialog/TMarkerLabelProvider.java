@@ -24,6 +24,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.marker.MarkerCoordinatesType;
 
 public class TMarkerLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -49,38 +50,38 @@ public class TMarkerLabelProvider extends LabelProvider implements ITableLabelPr
 		switch (columnIndex) {
 		case 3:
 			for (ItemProperty mp : prp) {
-				if (coordinatesType == MarkerCoordinatesType.LATITUDE_LONGITUDE && mp.getName().equals("longitude")) {
+				if (coordinatesType == MarkerCoordinatesType.LATITUDE_LONGITUDE && mp.getName().equals("longitude")) { //$NON-NLS-1$
 					return getValue(mp);
 				}
-				if (coordinatesType == MarkerCoordinatesType.XY && mp.getName().equals("y")) {
+				if (coordinatesType == MarkerCoordinatesType.XY && mp.getName().equals("y")) { //$NON-NLS-1$
 					return getValue(mp);
 				}
 			}
-			return "<UNDEFINED>";
+			return Messages.TMarkerLabelProvider_Undefined;
 		case 2:
 			for (ItemProperty mp : prp) {
-				if (coordinatesType == MarkerCoordinatesType.LATITUDE_LONGITUDE && mp.getName().equals("latitude")) {
+				if (coordinatesType == MarkerCoordinatesType.LATITUDE_LONGITUDE && mp.getName().equals("latitude")) { //$NON-NLS-1$
 					return getValue(mp);
 				}
-				if (coordinatesType == MarkerCoordinatesType.XY && mp.getName().equals("x")) {
+				if (coordinatesType == MarkerCoordinatesType.XY && mp.getName().equals("x")) { //$NON-NLS-1$
 					return getValue(mp);
 				}
 			}
-			return "<UNDEFINED>";
+			return Messages.TMarkerLabelProvider_Undefined;
 		case 1:
 			for (ItemProperty mp : prp) {
-				if (mp.getName().equals("label")) {
+				if (mp.getName().equals("label")) { //$NON-NLS-1$
 					return getValue(mp);
 				}
 			}
-			return "<MISSING LABEL>";
+			return Messages.TMarkerLabelProvider_MissingLabel;
 		case 0:
 			for (ItemProperty mp : prp) {
-				if (mp.getName().equals("id")) {
+				if (mp.getName().equals("id")) { //$NON-NLS-1$
 					return getValue(mp);
 				}
 			}
-			return "<MISSING ID>";
+			return Messages.TMarkerLabelProvider_MissingId;
 		}
 		return ""; //$NON-NLS-1$
 	}
@@ -91,6 +92,6 @@ public class TMarkerLabelProvider extends LabelProvider implements ITableLabelPr
 		if (mp.getValue() != null)
 			return mp.getValue();
 
-		return "null";
+		return "null"; //$NON-NLS-1$
 	}
 }
