@@ -112,7 +112,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		
 		tabfolder = new TabFolder(parent, SWT.NONE);
 		GridData tabfolderGD = new GridData(SWT.FILL, SWT.FILL, true, false);
-		tabfolderGD.heightHint = 200;
+		tabfolderGD.heightHint = 150;
 		tabfolder.setLayoutData(tabfolderGD);
 		
 		createElementsTab(tabfolder);
