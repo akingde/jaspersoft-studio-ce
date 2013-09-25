@@ -23,6 +23,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
+import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
@@ -67,6 +68,15 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 					if (tables.get(s).isCurrentSchema())
 						proposal.setReplacementString(s);
 					acceptor.accept(proposal);
+				}
+			}
+			img = JasperReportsPlugin.getDefault().getImage("icons/database.png");
+			for (INode n : d.getDbMetadata().getRoot().getChildren()) {
+				if (n instanceof MSqlSchema && !((MSqlSchema) n).isNotInMetadata() && !((MSqlSchema) n).isCurrent()) {
+					String s = (String) n.getValue();
+					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(n.getDisplayText(), s, img, context);
+					if (proposal != null)
+						acceptor.accept(proposal);
 				}
 			}
 		}
