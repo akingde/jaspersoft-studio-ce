@@ -84,7 +84,7 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 
 	@Override
 	public void completeColumnOperand_Cfull(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		proposeColumnOrAlias(context, acceptor);
+		proposeColumn(context, acceptor);
 	}
 
 	@Override
@@ -99,21 +99,23 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 			SQLQueryDesigner d = (SQLQueryDesigner) obj;
 			qroot = new MRoot(null, null);
 			Util.createSelect(qroot);
-			Text2Model.convertSelect(d, qroot, (SelectImpl) context.getCurrentModel());
-			List<MFromTable> tbls = Util.getFromTables(qroot);
-			for (MFromTable mft : tbls) {
-				for (INode n : mft.getValue().getChildren()) {
-					MSQLColumn mc = (MSQLColumn) n;
-					String s = mc.getValue();
-					if (mft.getAlias() != null)
-						s = mft.getAlias() + "." + s;
-					else
-						s = mft.getValue().toSQLString() + "." + s;
-					ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(mc.getDisplayText(), s, null, context);
-					if (proposal != null) {
-						if (mft.getValue().isCurrentSchema())
-							proposal.setReplacementString(mc.getDisplayText());
-						acceptor.accept(proposal);
+			if (context.getCurrentModel() instanceof SelectImpl) {
+				Text2Model.convertSelect(d, qroot, (SelectImpl) context.getCurrentModel());
+				List<MFromTable> tbls = Util.getFromTables(qroot);
+				for (MFromTable mft : tbls) {
+					for (INode n : mft.getValue().getChildren()) {
+						MSQLColumn mc = (MSQLColumn) n;
+						String s = mc.getValue();
+						if (mft.getAlias() != null)
+							s = mft.getAlias() + "." + s;
+						else
+							s = mft.getValue().toSQLString() + "." + s;
+						ConfigurableCompletionProposal proposal = (ConfigurableCompletionProposal) createCompletionProposal(mc.getDisplayText(), s, null, context);
+						if (proposal != null) {
+							if (mft.getValue().isCurrentSchema())
+								proposal.setReplacementString(mc.getDisplayText());
+							acceptor.accept(proposal);
+						}
 					}
 				}
 			}

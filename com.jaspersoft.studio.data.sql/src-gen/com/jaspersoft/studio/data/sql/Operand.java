@@ -134,30 +134,30 @@ public interface Operand extends EObject
   void setFunc(OpFunction value);
 
   /**
-   * Returns the value of the '<em><b>Sqlcase</b></em>' attribute.
+   * Returns the value of the '<em><b>Sqlcase</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Sqlcase</em>' attribute isn't clear,
+   * If the meaning of the '<em>Sqlcase</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Sqlcase</em>' attribute.
-   * @see #setSqlcase(String)
+   * @return the value of the '<em>Sqlcase</em>' containment reference.
+   * @see #setSqlcase(SQLCaseOperand)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Sqlcase()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getSqlcase();
+  SQLCaseOperand getSqlcase();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}' attribute.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Sqlcase</em>' attribute.
+   * @param value the new value of the '<em>Sqlcase</em>' containment reference.
    * @see #getSqlcase()
    * @generated
    */
-  void setSqlcase(String value);
+  void setSqlcase(SQLCaseOperand value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.

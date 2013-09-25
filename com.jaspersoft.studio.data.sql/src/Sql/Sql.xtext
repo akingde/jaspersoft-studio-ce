@@ -84,7 +84,10 @@ Comparison:
 	operator=('>' | '>=' | '<' | '<=' | '=' | '<>') subOperator=('ANY' | 'ALL' | 'SOME')? op2=Operand;
 
 Like:
-	opLike=('LIKE' | 'NOT LIKE') op2=StringOperand;
+	opLike=('LIKE' | 'NOT LIKE') op2=LikeOperand;
+
+LikeOperand returns LikeOperand:
+	op2=StringOperand | fop2=OperandFunction;
 
 Between:
 	opBetween=('BETWEEN' | 'NOT BETWEEN') op2=Operand 'AND' op3=Operand;
@@ -133,6 +136,15 @@ ScalarOperand returns ScalarOperand:
 StringOperand:
 	STRING;
 
+SQLCASE returns SQLCaseOperand:
+	'CASE' (expr=FullExpression)? when=SQLCaseWhens 'END';
+
+SQLCaseWhens:
+	SqlCaseWhen ({WhenList.entries+=current} (entries+=SqlCaseWhen)+)?;
+
+SqlCaseWhen returns SqlCaseWhen:
+	'WHEN' expr=FullExpression 'THEN' texp=Operand ('ELSE' eexp=Operand)?;
+
 enum XFunction:
 	xin='IN' | xnotin='NOTIN' | xeq='EQUAL' | xnoteq='NOTEQUAL' | xls='LESS' | xgt='GREATER'
 	| xlsr='LESS]' | xgtl='[GREATER' | xbwn='BETWEEN' | xbwnc='[BETWEEN]' | xbwnl='[BETWEEN'
@@ -153,9 +165,6 @@ terminal JRPARAM:
 
 terminal JRNPARAM:
 	'$P!{'->'}';
-
-terminal SQLCASE:
-	'CASE '->' END';
 
 terminal STAR:
 	"*";

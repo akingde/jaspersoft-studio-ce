@@ -200,6 +200,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createLikeAdapter();
       }
       @Override
+      public Adapter caseLikeOperand(LikeOperand object)
+      {
+        return createLikeOperandAdapter();
+      }
+      @Override
       public Adapter caseBetween(Between object)
       {
         return createBetweenAdapter();
@@ -260,6 +265,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createScalarOperandAdapter();
       }
       @Override
+      public Adapter caseSQLCaseOperand(SQLCaseOperand object)
+      {
+        return createSQLCaseOperandAdapter();
+      }
+      @Override
+      public Adapter caseSQLCaseWhens(SQLCaseWhens object)
+      {
+        return createSQLCaseWhensAdapter();
+      }
+      @Override
+      public Adapter caseSqlCaseWhen(SqlCaseWhen object)
+      {
+        return createSqlCaseWhenAdapter();
+      }
+      @Override
       public Adapter caseCol(Col object)
       {
         return createColAdapter();
@@ -303,6 +323,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
       public Adapter caseOpFList(OpFList object)
       {
         return createOpFListAdapter();
+      }
+      @Override
+      public Adapter caseWhenList(WhenList object)
+      {
+        return createWhenListAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -702,6 +727,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.LikeOperand <em>Like Operand</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.LikeOperand
+   * @generated
+   */
+  public Adapter createLikeOperandAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Between <em>Between</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -882,6 +922,51 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.SQLCaseOperand <em>SQL Case Operand</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.SQLCaseOperand
+   * @generated
+   */
+  public Adapter createSQLCaseOperandAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.SQLCaseWhens <em>SQL Case Whens</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.SQLCaseWhens
+   * @generated
+   */
+  public Adapter createSQLCaseWhensAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.SqlCaseWhen <em>Case When</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.SqlCaseWhen
+   * @generated
+   */
+  public Adapter createSqlCaseWhenAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.Col <em>Col</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -1012,6 +1097,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createOpFListAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.WhenList <em>When List</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.WhenList
+   * @generated
+   */
+  public Adapter createWhenListAdapter()
   {
     return null;
   }

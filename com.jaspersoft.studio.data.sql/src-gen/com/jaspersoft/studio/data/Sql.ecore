@@ -138,7 +138,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Like">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="opLike" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//LikeOperand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LikeOperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fop2" eType="#//OpFunction"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Between">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="opBetween" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -172,7 +178,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="func" eType="#//OpFunction"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sqlcase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sqlcase" eType="#//SQLCaseOperand"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//POperand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eparam" eType="#//ExpOperand"
@@ -207,6 +214,21 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sotime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLCaseOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="when" eType="#//SQLCaseWhens"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLCaseWhens"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlCaseWhen" eSuperTypes="#//SQLCaseWhens">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="texp" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eexp" eType="#//Operands"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
     <eLiterals name="xin" literal="IN"/>
@@ -249,5 +271,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="OpFList" eSuperTypes="#//OpFunctionArg">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
         eType="#//Operands" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WhenList" eSuperTypes="#//SQLCaseWhens">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//SqlCaseWhen" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

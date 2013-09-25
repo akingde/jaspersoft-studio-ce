@@ -1105,13 +1105,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cOpLikeLIKEKeyword_0_0_0 = (Keyword)cOpLikeAlternatives_0_0.eContents().get(0);
 		private final Keyword cOpLikeNOTLIKEKeyword_0_0_1 = (Keyword)cOpLikeAlternatives_0_0.eContents().get(1);
 		private final Assignment cOp2Assignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cOp2StringOperandParserRuleCall_1_0 = (RuleCall)cOp2Assignment_1.eContents().get(0);
+		private final RuleCall cOp2LikeOperandParserRuleCall_1_0 = (RuleCall)cOp2Assignment_1.eContents().get(0);
 		
 		//Like:
-		//	opLike=("LIKE" | "NOT LIKE") op2=StringOperand;
+		//	opLike=("LIKE" | "NOT LIKE") op2=LikeOperand;
 		public ParserRule getRule() { return rule; }
 
-		//opLike=("LIKE" | "NOT LIKE") op2=StringOperand
+		//opLike=("LIKE" | "NOT LIKE") op2=LikeOperand
 		public Group getGroup() { return cGroup; }
 
 		//opLike=("LIKE" | "NOT LIKE")
@@ -1126,11 +1126,39 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"NOT LIKE"
 		public Keyword getOpLikeNOTLIKEKeyword_0_0_1() { return cOpLikeNOTLIKEKeyword_0_0_1; }
 
-		//op2=StringOperand
+		//op2=LikeOperand
 		public Assignment getOp2Assignment_1() { return cOp2Assignment_1; }
 
+		//LikeOperand
+		public RuleCall getOp2LikeOperandParserRuleCall_1_0() { return cOp2LikeOperandParserRuleCall_1_0; }
+	}
+
+	public class LikeOperandElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "LikeOperand");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cOp2Assignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cOp2StringOperandParserRuleCall_0_0 = (RuleCall)cOp2Assignment_0.eContents().get(0);
+		private final Assignment cFop2Assignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cFop2OperandFunctionParserRuleCall_1_0 = (RuleCall)cFop2Assignment_1.eContents().get(0);
+		
+		//LikeOperand:
+		//	op2=StringOperand | fop2=OperandFunction;
+		public ParserRule getRule() { return rule; }
+
+		//op2=StringOperand | fop2=OperandFunction
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//op2=StringOperand
+		public Assignment getOp2Assignment_0() { return cOp2Assignment_0; }
+
 		//StringOperand
-		public RuleCall getOp2StringOperandParserRuleCall_1_0() { return cOp2StringOperandParserRuleCall_1_0; }
+		public RuleCall getOp2StringOperandParserRuleCall_0_0() { return cOp2StringOperandParserRuleCall_0_0; }
+
+		//fop2=OperandFunction
+		public Assignment getFop2Assignment_1() { return cFop2Assignment_1; }
+
+		//OperandFunction
+		public RuleCall getFop2OperandFunctionParserRuleCall_1_0() { return cFop2OperandFunctionParserRuleCall_1_0; }
 	}
 
 	public class BetweenElements extends AbstractParserRuleElementFinder {
@@ -1393,7 +1421,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cFuncAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
 		private final RuleCall cFuncOperandFunctionParserRuleCall_3_0 = (RuleCall)cFuncAssignment_3.eContents().get(0);
 		private final Assignment cSqlcaseAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
-		private final RuleCall cSqlcaseSQLCASETerminalRuleCall_4_0 = (RuleCall)cSqlcaseAssignment_4.eContents().get(0);
+		private final RuleCall cSqlcaseSQLCASEParserRuleCall_4_0 = (RuleCall)cSqlcaseAssignment_4.eContents().get(0);
 		
 		//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
 		//	subq=SubQueryOperand | func=OperandFunction | sqlcase=SQLCASE;
@@ -1431,7 +1459,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		public Assignment getSqlcaseAssignment_4() { return cSqlcaseAssignment_4; }
 
 		//SQLCASE
-		public RuleCall getSqlcaseSQLCASETerminalRuleCall_4_0() { return cSqlcaseSQLCASETerminalRuleCall_4_0; }
+		public RuleCall getSqlcaseSQLCASEParserRuleCall_4_0() { return cSqlcaseSQLCASEParserRuleCall_4_0; }
 	}
 
 	public class OperandFunctionElements extends AbstractParserRuleElementFinder {
@@ -1708,6 +1736,126 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getSTRINGTerminalRuleCall() { return cSTRINGTerminalRuleCall; }
 	}
 
+	public class SQLCASEElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SQLCASE");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cCASEKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cExprAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cExprFullExpressionParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
+		private final Assignment cWhenAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cWhenSQLCaseWhensParserRuleCall_2_0 = (RuleCall)cWhenAssignment_2.eContents().get(0);
+		private final Keyword cENDKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		
+		//SQLCASE returns SQLCaseOperand:
+		//	"CASE" expr=FullExpression? when=SQLCaseWhens "END";
+		public ParserRule getRule() { return rule; }
+
+		//"CASE" expr=FullExpression? when=SQLCaseWhens "END"
+		public Group getGroup() { return cGroup; }
+
+		//"CASE"
+		public Keyword getCASEKeyword_0() { return cCASEKeyword_0; }
+
+		//expr=FullExpression?
+		public Assignment getExprAssignment_1() { return cExprAssignment_1; }
+
+		//FullExpression
+		public RuleCall getExprFullExpressionParserRuleCall_1_0() { return cExprFullExpressionParserRuleCall_1_0; }
+
+		//when=SQLCaseWhens
+		public Assignment getWhenAssignment_2() { return cWhenAssignment_2; }
+
+		//SQLCaseWhens
+		public RuleCall getWhenSQLCaseWhensParserRuleCall_2_0() { return cWhenSQLCaseWhensParserRuleCall_2_0; }
+
+		//"END"
+		public Keyword getENDKeyword_3() { return cENDKeyword_3; }
+	}
+
+	public class SQLCaseWhensElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SQLCaseWhens");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cSqlCaseWhenParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Action cWhenListEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Assignment cEntriesAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cEntriesSqlCaseWhenParserRuleCall_1_1_0 = (RuleCall)cEntriesAssignment_1_1.eContents().get(0);
+		
+		//SQLCaseWhens:
+		//	SqlCaseWhen ({WhenList.entries+=current} entries+=SqlCaseWhen+)?;
+		public ParserRule getRule() { return rule; }
+
+		//SqlCaseWhen ({WhenList.entries+=current} entries+=SqlCaseWhen+)?
+		public Group getGroup() { return cGroup; }
+
+		//SqlCaseWhen
+		public RuleCall getSqlCaseWhenParserRuleCall_0() { return cSqlCaseWhenParserRuleCall_0; }
+
+		//({WhenList.entries+=current} entries+=SqlCaseWhen+)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//{WhenList.entries+=current}
+		public Action getWhenListEntriesAction_1_0() { return cWhenListEntriesAction_1_0; }
+
+		//entries+=SqlCaseWhen+
+		public Assignment getEntriesAssignment_1_1() { return cEntriesAssignment_1_1; }
+
+		//SqlCaseWhen
+		public RuleCall getEntriesSqlCaseWhenParserRuleCall_1_1_0() { return cEntriesSqlCaseWhenParserRuleCall_1_1_0; }
+	}
+
+	public class SqlCaseWhenElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SqlCaseWhen");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cWHENKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cExprAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cExprFullExpressionParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
+		private final Keyword cTHENKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cTexpAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cTexpOperandParserRuleCall_3_0 = (RuleCall)cTexpAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cELSEKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cEexpAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cEexpOperandParserRuleCall_4_1_0 = (RuleCall)cEexpAssignment_4_1.eContents().get(0);
+		
+		//SqlCaseWhen:
+		//	"WHEN" expr=FullExpression "THEN" texp=Operand ("ELSE" eexp=Operand)?;
+		public ParserRule getRule() { return rule; }
+
+		//"WHEN" expr=FullExpression "THEN" texp=Operand ("ELSE" eexp=Operand)?
+		public Group getGroup() { return cGroup; }
+
+		//"WHEN"
+		public Keyword getWHENKeyword_0() { return cWHENKeyword_0; }
+
+		//expr=FullExpression
+		public Assignment getExprAssignment_1() { return cExprAssignment_1; }
+
+		//FullExpression
+		public RuleCall getExprFullExpressionParserRuleCall_1_0() { return cExprFullExpressionParserRuleCall_1_0; }
+
+		//"THEN"
+		public Keyword getTHENKeyword_2() { return cTHENKeyword_2; }
+
+		//texp=Operand
+		public Assignment getTexpAssignment_3() { return cTexpAssignment_3; }
+
+		//Operand
+		public RuleCall getTexpOperandParserRuleCall_3_0() { return cTexpOperandParserRuleCall_3_0; }
+
+		//("ELSE" eexp=Operand)?
+		public Group getGroup_4() { return cGroup_4; }
+
+		//"ELSE"
+		public Keyword getELSEKeyword_4_0() { return cELSEKeyword_4_0; }
+
+		//eexp=Operand
+		public Assignment getEexpAssignment_4_1() { return cEexpAssignment_4_1; }
+
+		//Operand
+		public RuleCall getEexpOperandParserRuleCall_4_1_0() { return cEexpOperandParserRuleCall_4_1_0; }
+	}
+
 	public class DBIDElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "DBID");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -1940,6 +2088,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private ExpressionElements pExpression;
 	private ComparisonElements pComparison;
 	private LikeElements pLike;
+	private LikeOperandElements pLikeOperand;
 	private BetweenElements pBetween;
 	private InOperatorElements pInOperator;
 	private OperandListElements pOperandList;
@@ -1954,13 +2103,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private SubQueryOperandElements pSubQueryOperand;
 	private ScalarOperandElements pScalarOperand;
 	private StringOperandElements pStringOperand;
+	private SQLCASEElements pSQLCASE;
+	private SQLCaseWhensElements pSQLCaseWhens;
+	private SqlCaseWhenElements pSqlCaseWhen;
 	private XFunctionElements unknownRuleXFunction;
 	private JoinTypeElements unknownRuleJoinType;
 	private DBIDElements pDBID;
 	private FNAMEElements pFNAME;
 	private TerminalRule tJRPARAM;
 	private TerminalRule tJRNPARAM;
-	private TerminalRule tSQLCASE;
 	private TerminalRule tSTAR;
 	private TerminalRule tINT;
 	private TerminalRule tTIMESTAMP;
@@ -2272,13 +2423,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Like:
-	//	opLike=("LIKE" | "NOT LIKE") op2=StringOperand;
+	//	opLike=("LIKE" | "NOT LIKE") op2=LikeOperand;
 	public LikeElements getLikeAccess() {
 		return (pLike != null) ? pLike : (pLike = new LikeElements());
 	}
 	
 	public ParserRule getLikeRule() {
 		return getLikeAccess().getRule();
+	}
+
+	//LikeOperand:
+	//	op2=StringOperand | fop2=OperandFunction;
+	public LikeOperandElements getLikeOperandAccess() {
+		return (pLikeOperand != null) ? pLikeOperand : (pLikeOperand = new LikeOperandElements());
+	}
+	
+	public ParserRule getLikeOperandRule() {
+		return getLikeOperandAccess().getRule();
 	}
 
 	//Between:
@@ -2424,6 +2585,36 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getStringOperandAccess().getRule();
 	}
 
+	//SQLCASE returns SQLCaseOperand:
+	//	"CASE" expr=FullExpression? when=SQLCaseWhens "END";
+	public SQLCASEElements getSQLCASEAccess() {
+		return (pSQLCASE != null) ? pSQLCASE : (pSQLCASE = new SQLCASEElements());
+	}
+	
+	public ParserRule getSQLCASERule() {
+		return getSQLCASEAccess().getRule();
+	}
+
+	//SQLCaseWhens:
+	//	SqlCaseWhen ({WhenList.entries+=current} entries+=SqlCaseWhen+)?;
+	public SQLCaseWhensElements getSQLCaseWhensAccess() {
+		return (pSQLCaseWhens != null) ? pSQLCaseWhens : (pSQLCaseWhens = new SQLCaseWhensElements());
+	}
+	
+	public ParserRule getSQLCaseWhensRule() {
+		return getSQLCaseWhensAccess().getRule();
+	}
+
+	//SqlCaseWhen:
+	//	"WHEN" expr=FullExpression "THEN" texp=Operand ("ELSE" eexp=Operand)?;
+	public SqlCaseWhenElements getSqlCaseWhenAccess() {
+		return (pSqlCaseWhen != null) ? pSqlCaseWhen : (pSqlCaseWhen = new SqlCaseWhenElements());
+	}
+	
+	public ParserRule getSqlCaseWhenRule() {
+		return getSqlCaseWhenAccess().getRule();
+	}
+
 	//enum XFunction:
 	//	xin="IN" | xnotin="NOTIN" | xeq="EQUAL" | xnoteq="NOTEQUAL" | xls="LESS" | xgt="GREATER" | xlsr="LESS]" |
 	//	xgtl="[GREATER" | xbwn="BETWEEN" | xbwnc="[BETWEEN]" | xbwnl="[BETWEEN" | xbwnr="BETWEEN]";
@@ -2476,12 +2667,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	//	"$P!{"->"}";
 	public TerminalRule getJRNPARAMRule() {
 		return (tJRNPARAM != null) ? tJRNPARAM : (tJRNPARAM = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "JRNPARAM"));
-	} 
-
-	//terminal SQLCASE:
-	//	"CASE "->" END";
-	public TerminalRule getSQLCASERule() {
-		return (tSQLCASE != null) ? tSQLCASE : (tSQLCASE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SQLCASE"));
 	} 
 
 	//terminal STAR:

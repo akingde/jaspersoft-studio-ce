@@ -256,6 +256,13 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.LIKE_OPERAND:
+      {
+        LikeOperand likeOperand = (LikeOperand)theEObject;
+        T result = caseLikeOperand(likeOperand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.BETWEEN:
       {
         Between between = (Between)theEObject;
@@ -342,6 +349,28 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.SQL_CASE_OPERAND:
+      {
+        SQLCaseOperand sqlCaseOperand = (SQLCaseOperand)theEObject;
+        T result = caseSQLCaseOperand(sqlCaseOperand);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.SQL_CASE_WHENS:
+      {
+        SQLCaseWhens sqlCaseWhens = (SQLCaseWhens)theEObject;
+        T result = caseSQLCaseWhens(sqlCaseWhens);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.SQL_CASE_WHEN:
+      {
+        SqlCaseWhen sqlCaseWhen = (SqlCaseWhen)theEObject;
+        T result = caseSqlCaseWhen(sqlCaseWhen);
+        if (result == null) result = caseSQLCaseWhens(sqlCaseWhen);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.COL:
       {
         Col col = (Col)theEObject;
@@ -416,6 +445,14 @@ public class SqlSwitch<T> extends Switch<T>
         OpFList opFList = (OpFList)theEObject;
         T result = caseOpFList(opFList);
         if (result == null) result = caseOpFunctionArg(opFList);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.WHEN_LIST:
+      {
+        WhenList whenList = (WhenList)theEObject;
+        T result = caseWhenList(whenList);
+        if (result == null) result = caseSQLCaseWhens(whenList);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -824,6 +861,22 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Like Operand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Like Operand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseLikeOperand(LikeOperand object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Between</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1016,6 +1069,54 @@ public class SqlSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>SQL Case Operand</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>SQL Case Operand</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSQLCaseOperand(SQLCaseOperand object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>SQL Case Whens</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>SQL Case Whens</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSQLCaseWhens(SQLCaseWhens object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Case When</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Case When</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseSqlCaseWhen(SqlCaseWhen object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Col</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -1155,6 +1256,22 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseOpFList(OpFList object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>When List</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>When List</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWhenList(WhenList object)
   {
     return null;
   }

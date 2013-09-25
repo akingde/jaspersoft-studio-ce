@@ -248,6 +248,15 @@ public interface SqlFactory extends EFactory
   Like createLike();
 
   /**
+   * Returns a new object of class '<em>Like Operand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Like Operand</em>'.
+   * @generated
+   */
+  LikeOperand createLikeOperand();
+
+  /**
    * Returns a new object of class '<em>Between</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -356,6 +365,33 @@ public interface SqlFactory extends EFactory
   ScalarOperand createScalarOperand();
 
   /**
+   * Returns a new object of class '<em>SQL Case Operand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>SQL Case Operand</em>'.
+   * @generated
+   */
+  SQLCaseOperand createSQLCaseOperand();
+
+  /**
+   * Returns a new object of class '<em>SQL Case Whens</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>SQL Case Whens</em>'.
+   * @generated
+   */
+  SQLCaseWhens createSQLCaseWhens();
+
+  /**
+   * Returns a new object of class '<em>Case When</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Case When</em>'.
+   * @generated
+   */
+  SqlCaseWhen createSqlCaseWhen();
+
+  /**
    * Returns a new object of class '<em>Col</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -435,6 +471,15 @@ public interface SqlFactory extends EFactory
    * @generated
    */
   OpFList createOpFList();
+
+  /**
+   * Returns a new object of class '<em>When List</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>When List</em>'.
+   * @generated
+   */
+  WhenList createWhenList();
 
   /**
    * Returns the package supported by this factory.

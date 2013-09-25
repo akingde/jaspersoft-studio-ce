@@ -7,6 +7,7 @@ import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.POperand;
+import com.jaspersoft.studio.data.sql.SQLCaseOperand;
 import com.jaspersoft.studio.data.sql.ScalarOperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.SubQueryOperand;
@@ -83,24 +84,14 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
   protected OpFunction func;
 
   /**
-   * The default value of the '{@link #getSqlcase() <em>Sqlcase</em>}' attribute.
+   * The cached value of the '{@link #getSqlcase() <em>Sqlcase</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getSqlcase()
    * @generated
    * @ordered
    */
-  protected static final String SQLCASE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getSqlcase() <em>Sqlcase</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSqlcase()
-   * @generated
-   * @ordered
-   */
-  protected String sqlcase = SQLCASE_EDEFAULT;
+  protected SQLCaseOperand sqlcase;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -350,7 +341,7 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getSqlcase()
+  public SQLCaseOperand getSqlcase()
   {
     return sqlcase;
   }
@@ -360,12 +351,37 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSqlcase(String newSqlcase)
+  public NotificationChain basicSetSqlcase(SQLCaseOperand newSqlcase, NotificationChain msgs)
   {
-    String oldSqlcase = sqlcase;
+    SQLCaseOperand oldSqlcase = sqlcase;
     sqlcase = newSqlcase;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__SQLCASE, oldSqlcase, sqlcase));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__SQLCASE, oldSqlcase, newSqlcase);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSqlcase(SQLCaseOperand newSqlcase)
+  {
+    if (newSqlcase != sqlcase)
+    {
+      NotificationChain msgs = null;
+      if (sqlcase != null)
+        msgs = ((InternalEObject)sqlcase).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND__SQLCASE, null, msgs);
+      if (newSqlcase != null)
+        msgs = ((InternalEObject)newSqlcase).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.OPERAND__SQLCASE, null, msgs);
+      msgs = basicSetSqlcase(newSqlcase, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__SQLCASE, newSqlcase, newSqlcase));
   }
 
   /**
@@ -530,6 +546,8 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return basicSetSubq(null, msgs);
       case SqlPackage.OPERAND__FUNC:
         return basicSetFunc(null, msgs);
+      case SqlPackage.OPERAND__SQLCASE:
+        return basicSetSqlcase(null, msgs);
       case SqlPackage.OPERAND__PARAM:
         return basicSetParam(null, msgs);
       case SqlPackage.OPERAND__EPARAM:
@@ -593,7 +611,7 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         setFunc((OpFunction)newValue);
         return;
       case SqlPackage.OPERAND__SQLCASE:
-        setSqlcase((String)newValue);
+        setSqlcase((SQLCaseOperand)newValue);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)newValue);
@@ -631,7 +649,7 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         setFunc((OpFunction)null);
         return;
       case SqlPackage.OPERAND__SQLCASE:
-        setSqlcase(SQLCASE_EDEFAULT);
+        setSqlcase((SQLCaseOperand)null);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)null);
@@ -665,7 +683,7 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
       case SqlPackage.OPERAND__FUNC:
         return func != null;
       case SqlPackage.OPERAND__SQLCASE:
-        return SQLCASE_EDEFAULT == null ? sqlcase != null : !SQLCASE_EDEFAULT.equals(sqlcase);
+        return sqlcase != null;
       case SqlPackage.OPERAND__PARAM:
         return param != null;
       case SqlPackage.OPERAND__EPARAM:
@@ -674,23 +692,6 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return scalar != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (sqlcase: ");
-    result.append(sqlcase);
-    result.append(')');
-    return result.toString();
   }
 
 } //OperandImpl

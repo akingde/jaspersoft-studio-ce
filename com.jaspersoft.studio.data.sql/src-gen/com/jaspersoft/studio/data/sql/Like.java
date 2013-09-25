@@ -50,29 +50,29 @@ public interface Like extends EObject
   void setOpLike(String value);
 
   /**
-   * Returns the value of the '<em><b>Op2</b></em>' attribute.
+   * Returns the value of the '<em><b>Op2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Op2</em>' attribute isn't clear,
+   * If the meaning of the '<em>Op2</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Op2</em>' attribute.
-   * @see #setOp2(String)
+   * @return the value of the '<em>Op2</em>' containment reference.
+   * @see #setOp2(LikeOperand)
    * @see com.jaspersoft.studio.data.sql.SqlPackage#getLike_Op2()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getOp2();
+  LikeOperand getOp2();
 
   /**
-   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Like#getOp2 <em>Op2</em>}' attribute.
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Like#getOp2 <em>Op2</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Op2</em>' attribute.
+   * @param value the new value of the '<em>Op2</em>' containment reference.
    * @see #getOp2()
    * @generated
    */
-  void setOp2(String value);
+  void setOp2(LikeOperand value);
 
 } // Like

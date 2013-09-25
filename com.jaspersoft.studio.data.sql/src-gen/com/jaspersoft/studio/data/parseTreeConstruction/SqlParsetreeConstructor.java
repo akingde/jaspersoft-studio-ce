@@ -58,19 +58,23 @@ protected class ThisRootNode extends RootToken {
 			case 24: return new Expression_Group(this, this, 24, inst);
 			case 25: return new Comparison_Group(this, this, 25, inst);
 			case 26: return new Like_Group(this, this, 26, inst);
-			case 27: return new Between_Group(this, this, 27, inst);
-			case 28: return new InOperator_Group(this, this, 28, inst);
-			case 29: return new OperandList_Group(this, this, 29, inst);
-			case 30: return new Operand_Group(this, this, 30, inst);
-			case 31: return new OperandFragment_Alternatives(this, this, 31, inst);
-			case 32: return new OperandFunction_Group(this, this, 32, inst);
-			case 33: return new OpFunctionArg_Group(this, this, 33, inst);
-			case 34: return new XOperandFragment_Alternatives(this, this, 34, inst);
-			case 35: return new ParameterOperand_PrmAssignment(this, this, 35, inst);
-			case 36: return new ExclamationParameterOperand_PrmAssignment(this, this, 36, inst);
-			case 37: return new ColumnOperand_CfullAssignment(this, this, 37, inst);
-			case 38: return new SubQueryOperand_Group(this, this, 38, inst);
-			case 39: return new ScalarOperand_Alternatives(this, this, 39, inst);
+			case 27: return new LikeOperand_Alternatives(this, this, 27, inst);
+			case 28: return new Between_Group(this, this, 28, inst);
+			case 29: return new InOperator_Group(this, this, 29, inst);
+			case 30: return new OperandList_Group(this, this, 30, inst);
+			case 31: return new Operand_Group(this, this, 31, inst);
+			case 32: return new OperandFragment_Alternatives(this, this, 32, inst);
+			case 33: return new OperandFunction_Group(this, this, 33, inst);
+			case 34: return new OpFunctionArg_Group(this, this, 34, inst);
+			case 35: return new XOperandFragment_Alternatives(this, this, 35, inst);
+			case 36: return new ParameterOperand_PrmAssignment(this, this, 36, inst);
+			case 37: return new ExclamationParameterOperand_PrmAssignment(this, this, 37, inst);
+			case 38: return new ColumnOperand_CfullAssignment(this, this, 38, inst);
+			case 39: return new SubQueryOperand_Group(this, this, 39, inst);
+			case 40: return new ScalarOperand_Alternatives(this, this, 40, inst);
+			case 41: return new SQLCASE_Group(this, this, 41, inst);
+			case 42: return new SQLCaseWhens_Group(this, this, 42, inst);
+			case 43: return new SqlCaseWhen_Group(this, this, 43, inst);
 			default: return null;
 		}	
 	}	
@@ -5164,11 +5168,11 @@ protected class Comparison_Op2Assignment_2 extends AssignmentToken  {
 /************ begin Rule Like ****************
  *
  * Like:
- * 	opLike=("LIKE" | "NOT LIKE") op2=StringOperand;
+ * 	opLike=("LIKE" | "NOT LIKE") op2=LikeOperand;
  *
  **/
 
-// opLike=("LIKE" | "NOT LIKE") op2=StringOperand
+// opLike=("LIKE" | "NOT LIKE") op2=LikeOperand
 protected class Like_Group extends GroupToken {
 	
 	public Like_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5235,7 +5239,7 @@ protected class Like_OpLikeAssignment_0 extends AssignmentToken  {
 
 }
 
-// op2=StringOperand
+// op2=LikeOperand
 protected class Like_Op2Assignment_1 extends AssignmentToken  {
 	
 	public Like_Op2Assignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5250,7 +5254,7 @@ protected class Like_Op2Assignment_1 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Like_OpLikeAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new LikeOperand_Alternatives(this, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -5259,9 +5263,95 @@ protected class Like_Op2Assignment_1 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("op2",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("op2");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getLikeAccess().getOp2StringOperandParserRuleCall_1_0(), value, null)) {
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getLikeOperandRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getLikeAccess().getOp2LikeOperandParserRuleCall_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new Like_OpLikeAssignment_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+
+/************ end Rule Like ****************/
+
+
+/************ begin Rule LikeOperand ****************
+ *
+ * LikeOperand:
+ * 	op2=StringOperand | fop2=OperandFunction;
+ *
+ **/
+
+// op2=StringOperand | fop2=OperandFunction
+protected class LikeOperand_Alternatives extends AlternativesToken {
+
+	public LikeOperand_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getLikeOperandAccess().getAlternatives();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new LikeOperand_Op2Assignment_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new LikeOperand_Fop2Assignment_1(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getLikeOperandRule().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// op2=StringOperand
+protected class LikeOperand_Op2Assignment_0 extends AssignmentToken  {
+	
+	public LikeOperand_Op2Assignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getLikeOperandAccess().getOp2Assignment_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("op2",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("op2");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getLikeOperandAccess().getOp2StringOperandParserRuleCall_0_0(), value, null)) {
 			type = AssignmentType.DATATYPE_RULE_CALL;
-			element = grammarAccess.getLikeAccess().getOp2StringOperandParserRuleCall_1_0();
+			element = grammarAccess.getLikeOperandAccess().getOp2StringOperandParserRuleCall_0_0();
 			return obj;
 		}
 		return null;
@@ -5269,8 +5359,53 @@ protected class Like_Op2Assignment_1 extends AssignmentToken  {
 
 }
 
+// fop2=OperandFunction
+protected class LikeOperand_Fop2Assignment_1 extends AssignmentToken  {
+	
+	public LikeOperand_Fop2Assignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getLikeOperandAccess().getFop2Assignment_1();
+	}
 
-/************ end Rule Like ****************/
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new OperandFunction_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("fop2",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("fop2");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getOperandFunctionRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getLikeOperandAccess().getFop2OperandFunctionParserRuleCall_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
+		}	
+	}	
+}
+
+
+/************ end Rule LikeOperand ****************/
 
 
 /************ begin Rule Between ****************
@@ -6809,7 +6944,8 @@ protected class OperandFragment_SqlcaseAssignment_4 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+			case 0: return new SQLCASE_Group(this, this, 0, inst);
+			default: return null;
 		}	
 	}
 
@@ -6817,14 +6953,25 @@ protected class OperandFragment_SqlcaseAssignment_4 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("sqlcase",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sqlcase");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0();
-			return obj;
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getSQLCASERule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASEParserRuleCall_4_0(); 
+				consumed = obj;
+				return param;
+			}
 		}
 		return null;
 	}
 
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
+		}	
+	}	
 }
 
 
@@ -8008,6 +8155,633 @@ protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
 
 /************ end Rule ScalarOperand ****************/
 
+
+
+/************ begin Rule SQLCASE ****************
+ *
+ * SQLCASE returns SQLCaseOperand:
+ * 	"CASE" expr=FullExpression? when=SQLCaseWhens "END";
+ *
+ **/
+
+// "CASE" expr=FullExpression? when=SQLCaseWhens "END"
+protected class SQLCASE_Group extends GroupToken {
+	
+	public SQLCASE_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getSQLCASEAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SQLCASE_ENDKeyword_3(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getSQLCASERule().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// "CASE"
+protected class SQLCASE_CASEKeyword_0 extends KeywordToken  {
+	
+	public SQLCASE_CASEKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getSQLCASEAccess().getCASEKeyword_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+}
+
+// expr=FullExpression?
+protected class SQLCASE_ExprAssignment_1 extends AssignmentToken  {
+	
+	public SQLCASE_ExprAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSQLCASEAccess().getExprAssignment_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FullExpression_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("expr",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("expr");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getFullExpressionRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSQLCASEAccess().getExprFullExpressionParserRuleCall_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SQLCASE_CASEKeyword_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// when=SQLCaseWhens
+protected class SQLCASE_WhenAssignment_2 extends AssignmentToken  {
+	
+	public SQLCASE_WhenAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSQLCASEAccess().getWhenAssignment_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SQLCaseWhens_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("when",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("when");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getSQLCaseWhensRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSQLCASEAccess().getWhenSQLCaseWhensParserRuleCall_2_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SQLCASE_ExprAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new SQLCASE_CASEKeyword_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// "END"
+protected class SQLCASE_ENDKeyword_3 extends KeywordToken  {
+	
+	public SQLCASE_ENDKeyword_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getSQLCASEAccess().getENDKeyword_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SQLCASE_WhenAssignment_2(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+
+/************ end Rule SQLCASE ****************/
+
+
+/************ begin Rule SQLCaseWhens ****************
+ *
+ * SQLCaseWhens:
+ * 	SqlCaseWhen ({WhenList.entries+=current} entries+=SqlCaseWhen+)?;
+ *
+ **/
+
+// SqlCaseWhen ({WhenList.entries+=current} entries+=SqlCaseWhen+)?
+protected class SQLCaseWhens_Group extends GroupToken {
+	
+	public SQLCaseWhens_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getSQLCaseWhensAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SQLCaseWhens_Group_1(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new SQLCaseWhens_SqlCaseWhenParserRuleCall_0(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getSqlCaseWhenRule().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getSQLCaseWhensAccess().getWhenListEntriesAction_1_0().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// SqlCaseWhen
+protected class SQLCaseWhens_SqlCaseWhenParserRuleCall_0 extends RuleCallToken {
+	
+	public SQLCaseWhens_SqlCaseWhenParserRuleCall_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getSQLCaseWhensAccess().getSqlCaseWhenParserRuleCall_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SqlCaseWhen_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getSqlCaseWhenRule().getType().getClassifier())
+			return null;
+		if(checkForRecursion(SqlCaseWhen_Group.class, eObjectConsumer)) return null;
+		return eObjectConsumer;
+	}
+	
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, inst);
+		}	
+	}	
+}
+
+// ({WhenList.entries+=current} entries+=SqlCaseWhen+)?
+protected class SQLCaseWhens_Group_1 extends GroupToken {
+	
+	public SQLCaseWhens_Group_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getSQLCaseWhensAccess().getGroup_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SQLCaseWhens_EntriesAssignment_1_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getSQLCaseWhensAccess().getWhenListEntriesAction_1_0().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// {WhenList.entries+=current}
+protected class SQLCaseWhens_WhenListEntriesAction_1_0 extends ActionToken  {
+
+	public SQLCaseWhens_WhenListEntriesAction_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Action getGrammarElement() {
+		return grammarAccess.getSQLCaseWhensAccess().getWhenListEntriesAction_1_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SQLCaseWhens_SqlCaseWhenParserRuleCall_0(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		Object val = eObjectConsumer.getConsumable("entries", false);
+		if(val == null) return null;
+		if(!eObjectConsumer.isConsumedWithLastConsumtion("entries")) return null;
+		return createEObjectConsumer((EObject) val);
+	}
+}
+
+// entries+=SqlCaseWhen+
+protected class SQLCaseWhens_EntriesAssignment_1_1 extends AssignmentToken  {
+	
+	public SQLCaseWhens_EntriesAssignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSQLCaseWhensAccess().getEntriesAssignment_1_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SqlCaseWhen_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("entries",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("entries");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getSqlCaseWhenRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSQLCaseWhensAccess().getEntriesSqlCaseWhenParserRuleCall_1_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SQLCaseWhens_EntriesAssignment_1_1(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new SQLCaseWhens_WhenListEntriesAction_1_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+
+
+/************ end Rule SQLCaseWhens ****************/
+
+
+/************ begin Rule SqlCaseWhen ****************
+ *
+ * SqlCaseWhen:
+ * 	"WHEN" expr=FullExpression "THEN" texp=Operand ("ELSE" eexp=Operand)?;
+ *
+ **/
+
+// "WHEN" expr=FullExpression "THEN" texp=Operand ("ELSE" eexp=Operand)?
+protected class SqlCaseWhen_Group extends GroupToken {
+	
+	public SqlCaseWhen_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SqlCaseWhen_Group_4(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new SqlCaseWhen_TexpAssignment_3(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getSqlCaseWhenRule().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// "WHEN"
+protected class SqlCaseWhen_WHENKeyword_0 extends KeywordToken  {
+	
+	public SqlCaseWhen_WHENKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getWHENKeyword_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+}
+
+// expr=FullExpression
+protected class SqlCaseWhen_ExprAssignment_1 extends AssignmentToken  {
+	
+	public SqlCaseWhen_ExprAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getExprAssignment_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FullExpression_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("expr",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("expr");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getFullExpressionRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSqlCaseWhenAccess().getExprFullExpressionParserRuleCall_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SqlCaseWhen_WHENKeyword_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// "THEN"
+protected class SqlCaseWhen_THENKeyword_2 extends KeywordToken  {
+	
+	public SqlCaseWhen_THENKeyword_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getTHENKeyword_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SqlCaseWhen_ExprAssignment_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// texp=Operand
+protected class SqlCaseWhen_TexpAssignment_3 extends AssignmentToken  {
+	
+	public SqlCaseWhen_TexpAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getTexpAssignment_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new Operand_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("texp",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("texp");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getOperandRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSqlCaseWhenAccess().getTexpOperandParserRuleCall_3_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SqlCaseWhen_THENKeyword_2(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// ("ELSE" eexp=Operand)?
+protected class SqlCaseWhen_Group_4 extends GroupToken {
+	
+	public SqlCaseWhen_Group_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getGroup_4();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SqlCaseWhen_EexpAssignment_4_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// "ELSE"
+protected class SqlCaseWhen_ELSEKeyword_4_0 extends KeywordToken  {
+	
+	public SqlCaseWhen_ELSEKeyword_4_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getELSEKeyword_4_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new SqlCaseWhen_TexpAssignment_3(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// eexp=Operand
+protected class SqlCaseWhen_EexpAssignment_4_1 extends AssignmentToken  {
+	
+	public SqlCaseWhen_EexpAssignment_4_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getSqlCaseWhenAccess().getEexpAssignment_4_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new Operand_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("eexp",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("eexp");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getOperandRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getSqlCaseWhenAccess().getEexpOperandParserRuleCall_4_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new SqlCaseWhen_ELSEKeyword_4_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+
+
+/************ end Rule SqlCaseWhen ****************/
 
 
 

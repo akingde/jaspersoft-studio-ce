@@ -2,8 +2,8 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.Like;
 import com.jaspersoft.studio.data.sql.LikeOperand;
+import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -17,56 +17,56 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Like</b></em>'.
+ * An implementation of the model object '<em><b>Like Operand</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeImpl#getOpLike <em>Op Like</em>}</li>
- *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeImpl#getOp2 <em>Op2</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl#getOp2 <em>Op2</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl#getFop2 <em>Fop2</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class LikeImpl extends MinimalEObjectImpl.Container implements Like
+public class LikeOperandImpl extends MinimalEObjectImpl.Container implements LikeOperand
 {
   /**
-   * The default value of the '{@link #getOpLike() <em>Op Like</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOpLike()
-   * @generated
-   * @ordered
-   */
-  protected static final String OP_LIKE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getOpLike() <em>Op Like</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOpLike()
-   * @generated
-   * @ordered
-   */
-  protected String opLike = OP_LIKE_EDEFAULT;
-
-  /**
-   * The cached value of the '{@link #getOp2() <em>Op2</em>}' containment reference.
+   * The default value of the '{@link #getOp2() <em>Op2</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getOp2()
    * @generated
    * @ordered
    */
-  protected LikeOperand op2;
+  protected static final String OP2_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getOp2() <em>Op2</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOp2()
+   * @generated
+   * @ordered
+   */
+  protected String op2 = OP2_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getFop2() <em>Fop2</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFop2()
+   * @generated
+   * @ordered
+   */
+  protected OpFunction fop2;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected LikeImpl()
+  protected LikeOperandImpl()
   {
     super();
   }
@@ -79,7 +79,7 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.LIKE;
+    return SqlPackage.Literals.LIKE_OPERAND;
   }
 
   /**
@@ -87,30 +87,7 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getOpLike()
-  {
-    return opLike;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOpLike(String newOpLike)
-  {
-    String oldOpLike = opLike;
-    opLike = newOpLike;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE__OP_LIKE, oldOpLike, opLike));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public LikeOperand getOp2()
+  public String getOp2()
   {
     return op2;
   }
@@ -120,13 +97,36 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOp2(LikeOperand newOp2, NotificationChain msgs)
+  public void setOp2(String newOp2)
   {
-    LikeOperand oldOp2 = op2;
+    String oldOp2 = op2;
     op2 = newOp2;
     if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE_OPERAND__OP2, oldOp2, op2));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpFunction getFop2()
+  {
+    return fop2;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFop2(OpFunction newFop2, NotificationChain msgs)
+  {
+    OpFunction oldFop2 = fop2;
+    fop2 = newFop2;
+    if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE__OP2, oldOp2, newOp2);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE_OPERAND__FOP2, oldFop2, newFop2);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -137,20 +137,20 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setOp2(LikeOperand newOp2)
+  public void setFop2(OpFunction newFop2)
   {
-    if (newOp2 != op2)
+    if (newFop2 != fop2)
     {
       NotificationChain msgs = null;
-      if (op2 != null)
-        msgs = ((InternalEObject)op2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.LIKE__OP2, null, msgs);
-      if (newOp2 != null)
-        msgs = ((InternalEObject)newOp2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.LIKE__OP2, null, msgs);
-      msgs = basicSetOp2(newOp2, msgs);
+      if (fop2 != null)
+        msgs = ((InternalEObject)fop2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.LIKE_OPERAND__FOP2, null, msgs);
+      if (newFop2 != null)
+        msgs = ((InternalEObject)newFop2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.LIKE_OPERAND__FOP2, null, msgs);
+      msgs = basicSetFop2(newFop2, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE__OP2, newOp2, newOp2));
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE_OPERAND__FOP2, newFop2, newFop2));
   }
 
   /**
@@ -163,8 +163,8 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
   {
     switch (featureID)
     {
-      case SqlPackage.LIKE__OP2:
-        return basicSetOp2(null, msgs);
+      case SqlPackage.LIKE_OPERAND__FOP2:
+        return basicSetFop2(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -179,10 +179,10 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
   {
     switch (featureID)
     {
-      case SqlPackage.LIKE__OP_LIKE:
-        return getOpLike();
-      case SqlPackage.LIKE__OP2:
+      case SqlPackage.LIKE_OPERAND__OP2:
         return getOp2();
+      case SqlPackage.LIKE_OPERAND__FOP2:
+        return getFop2();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -197,11 +197,11 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
   {
     switch (featureID)
     {
-      case SqlPackage.LIKE__OP_LIKE:
-        setOpLike((String)newValue);
+      case SqlPackage.LIKE_OPERAND__OP2:
+        setOp2((String)newValue);
         return;
-      case SqlPackage.LIKE__OP2:
-        setOp2((LikeOperand)newValue);
+      case SqlPackage.LIKE_OPERAND__FOP2:
+        setFop2((OpFunction)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -217,11 +217,11 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
   {
     switch (featureID)
     {
-      case SqlPackage.LIKE__OP_LIKE:
-        setOpLike(OP_LIKE_EDEFAULT);
+      case SqlPackage.LIKE_OPERAND__OP2:
+        setOp2(OP2_EDEFAULT);
         return;
-      case SqlPackage.LIKE__OP2:
-        setOp2((LikeOperand)null);
+      case SqlPackage.LIKE_OPERAND__FOP2:
+        setFop2((OpFunction)null);
         return;
     }
     super.eUnset(featureID);
@@ -237,10 +237,10 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
   {
     switch (featureID)
     {
-      case SqlPackage.LIKE__OP_LIKE:
-        return OP_LIKE_EDEFAULT == null ? opLike != null : !OP_LIKE_EDEFAULT.equals(opLike);
-      case SqlPackage.LIKE__OP2:
-        return op2 != null;
+      case SqlPackage.LIKE_OPERAND__OP2:
+        return OP2_EDEFAULT == null ? op2 != null : !OP2_EDEFAULT.equals(op2);
+      case SqlPackage.LIKE_OPERAND__FOP2:
+        return fop2 != null;
     }
     return super.eIsSet(featureID);
   }
@@ -256,10 +256,10 @@ public class LikeImpl extends MinimalEObjectImpl.Container implements Like
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (opLike: ");
-    result.append(opLike);
+    result.append(" (op2: ");
+    result.append(op2);
     result.append(')');
     return result.toString();
   }
 
-} //LikeImpl
+} //LikeOperandImpl

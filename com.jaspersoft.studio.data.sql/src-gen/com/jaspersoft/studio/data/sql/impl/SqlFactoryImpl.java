@@ -90,6 +90,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.JR_PARAMETER: return createJRParameter();
       case SqlPackage.COMPARISON: return createComparison();
       case SqlPackage.LIKE: return createLike();
+      case SqlPackage.LIKE_OPERAND: return createLikeOperand();
       case SqlPackage.BETWEEN: return createBetween();
       case SqlPackage.IN_OPER: return createInOper();
       case SqlPackage.OPERAND_LIST: return createOperandList();
@@ -102,6 +103,9 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
       case SqlPackage.SUB_QUERY_OPERAND: return createSubQueryOperand();
       case SqlPackage.SCALAR_OPERAND: return createScalarOperand();
+      case SqlPackage.SQL_CASE_OPERAND: return createSQLCaseOperand();
+      case SqlPackage.SQL_CASE_WHENS: return createSQLCaseWhens();
+      case SqlPackage.SQL_CASE_WHEN: return createSqlCaseWhen();
       case SqlPackage.COL: return createCol();
       case SqlPackage.TBLS: return createtbls();
       case SqlPackage.OP_LIST: return createOpList();
@@ -111,6 +115,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.DIV: return createDiv();
       case SqlPackage.CONCAT: return createConcat();
       case SqlPackage.OP_FLIST: return createOpFList();
+      case SqlPackage.WHEN_LIST: return createWhenList();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -434,6 +439,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public LikeOperand createLikeOperand()
+  {
+    LikeOperandImpl likeOperand = new LikeOperandImpl();
+    return likeOperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Between createBetween()
   {
     BetweenImpl between = new BetweenImpl();
@@ -566,6 +582,39 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public SQLCaseOperand createSQLCaseOperand()
+  {
+    SQLCaseOperandImpl sqlCaseOperand = new SQLCaseOperandImpl();
+    return sqlCaseOperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SQLCaseWhens createSQLCaseWhens()
+  {
+    SQLCaseWhensImpl sqlCaseWhens = new SQLCaseWhensImpl();
+    return sqlCaseWhens;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public SqlCaseWhen createSqlCaseWhen()
+  {
+    SqlCaseWhenImpl sqlCaseWhen = new SqlCaseWhenImpl();
+    return sqlCaseWhen;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Col createCol()
   {
     ColImpl col = new ColImpl();
@@ -658,6 +707,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     OpFListImpl opFList = new OpFListImpl();
     return opFList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WhenList createWhenList()
+  {
+    WhenListImpl whenList = new WhenListImpl();
+    return whenList;
   }
 
   /**

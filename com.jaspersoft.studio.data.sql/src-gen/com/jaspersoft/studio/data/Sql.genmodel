@@ -129,7 +129,11 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Like">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Like/opLike"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Like/op2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Like/op2"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//LikeOperand">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//LikeOperand/op2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//LikeOperand/fop2"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Between">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Between/opBetween"/>
@@ -152,7 +156,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/xop"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/subq"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/func"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Operand/sqlcase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/sqlcase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/eparam"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/scalar"/>
@@ -182,6 +186,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sotime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ScalarOperand/sodt"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//SQLCaseOperand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SQLCaseOperand/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SQLCaseOperand/when"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//SQLCaseWhens"/>
+    <genClasses ecoreClass="Sql.ecore#//SqlCaseWhen">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/texp"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SqlCaseWhen/eexp"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Col">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Col/entries"/>
     </genClasses>
@@ -198,6 +212,9 @@
     <genClasses ecoreClass="Sql.ecore#//Concat"/>
     <genClasses ecoreClass="Sql.ecore#//OpFList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFList/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//WhenList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//WhenList/entries"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

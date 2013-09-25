@@ -1073,7 +1073,7 @@ public interface SqlPackage extends EPackage
   int LIKE__OP_LIKE = 0;
 
   /**
-   * The feature id for the '<em><b>Op2</b></em>' attribute.
+   * The feature id for the '<em><b>Op2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1091,6 +1091,43 @@ public interface SqlPackage extends EPackage
   int LIKE_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl <em>Like Operand</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.LikeOperandImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLikeOperand()
+   * @generated
+   */
+  int LIKE_OPERAND = 25;
+
+  /**
+   * The feature id for the '<em><b>Op2</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LIKE_OPERAND__OP2 = 0;
+
+  /**
+   * The feature id for the '<em><b>Fop2</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LIKE_OPERAND__FOP2 = 1;
+
+  /**
+   * The number of structural features of the '<em>Like Operand</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LIKE_OPERAND_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl <em>Between</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1098,7 +1135,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getBetween()
    * @generated
    */
-  int BETWEEN = 25;
+  int BETWEEN = 26;
 
   /**
    * The feature id for the '<em><b>Op Between</b></em>' attribute.
@@ -1144,7 +1181,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getInOper()
    * @generated
    */
-  int IN_OPER = 26;
+  int IN_OPER = 27;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1190,7 +1227,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperandList()
    * @generated
    */
-  int OPERAND_LIST = 27;
+  int OPERAND_LIST = 28;
 
   /**
    * The number of structural features of the '<em>Operand List</em>' class.
@@ -1209,7 +1246,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFunctionArg()
    * @generated
    */
-  int OP_FUNCTION_ARG = 31;
+  int OP_FUNCTION_ARG = 32;
 
   /**
    * The number of structural features of the '<em>Op Function Arg</em>' class.
@@ -1228,7 +1265,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperands()
    * @generated
    */
-  int OPERANDS = 28;
+  int OPERANDS = 29;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1274,7 +1311,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOperand()
    * @generated
    */
-  int OPERAND = 29;
+  int OPERAND = 30;
 
   /**
    * The feature id for the '<em><b>Column</b></em>' containment reference.
@@ -1313,7 +1350,7 @@ public interface SqlPackage extends EPackage
   int OPERAND__FUNC = 3;
 
   /**
-   * The feature id for the '<em><b>Sqlcase</b></em>' attribute.
+   * The feature id for the '<em><b>Sqlcase</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1365,7 +1402,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFunction()
    * @generated
    */
-  int OP_FUNCTION = 30;
+  int OP_FUNCTION = 31;
 
   /**
    * The feature id for the '<em><b>Fname</b></em>' attribute.
@@ -1402,7 +1439,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getPOperand()
    * @generated
    */
-  int POPERAND = 32;
+  int POPERAND = 33;
 
   /**
    * The feature id for the '<em><b>Prm</b></em>' attribute.
@@ -1430,7 +1467,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getExpOperand()
    * @generated
    */
-  int EXP_OPERAND = 33;
+  int EXP_OPERAND = 34;
 
   /**
    * The feature id for the '<em><b>Prm</b></em>' attribute.
@@ -1458,7 +1495,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getColumnOperand()
    * @generated
    */
-  int COLUMN_OPERAND = 34;
+  int COLUMN_OPERAND = 35;
 
   /**
    * The feature id for the '<em><b>Cfull</b></em>' containment reference.
@@ -1486,7 +1523,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSubQueryOperand()
    * @generated
    */
-  int SUB_QUERY_OPERAND = 35;
+  int SUB_QUERY_OPERAND = 36;
 
   /**
    * The feature id for the '<em><b>Sel</b></em>' containment reference.
@@ -1514,7 +1551,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getScalarOperand()
    * @generated
    */
-  int SCALAR_OPERAND = 36;
+  int SCALAR_OPERAND = 37;
 
   /**
    * The feature id for the '<em><b>Soint</b></em>' attribute.
@@ -1580,6 +1617,108 @@ public interface SqlPackage extends EPackage
   int SCALAR_OPERAND_FEATURE_COUNT = OPERAND_LIST_FEATURE_COUNT + 6;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SQLCaseOperandImpl <em>SQL Case Operand</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.SQLCaseOperandImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSQLCaseOperand()
+   * @generated
+   */
+  int SQL_CASE_OPERAND = 38;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_OPERAND__EXPR = 0;
+
+  /**
+   * The feature id for the '<em><b>When</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_OPERAND__WHEN = 1;
+
+  /**
+   * The number of structural features of the '<em>SQL Case Operand</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_OPERAND_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SQLCaseWhensImpl <em>SQL Case Whens</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.SQLCaseWhensImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSQLCaseWhens()
+   * @generated
+   */
+  int SQL_CASE_WHENS = 39;
+
+  /**
+   * The number of structural features of the '<em>SQL Case Whens</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_WHENS_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SqlCaseWhenImpl <em>Case When</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.SqlCaseWhenImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSqlCaseWhen()
+   * @generated
+   */
+  int SQL_CASE_WHEN = 40;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_WHEN__EXPR = SQL_CASE_WHENS_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Texp</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_WHEN__TEXP = SQL_CASE_WHENS_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Eexp</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_WHEN__EEXP = SQL_CASE_WHENS_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Case When</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SQL_CASE_WHEN_FEATURE_COUNT = SQL_CASE_WHENS_FEATURE_COUNT + 3;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ColImpl <em>Col</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1587,7 +1726,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getCol()
    * @generated
    */
-  int COL = 37;
+  int COL = 41;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1615,7 +1754,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#gettbls()
    * @generated
    */
-  int TBLS = 38;
+  int TBLS = 42;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1643,7 +1782,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpList()
    * @generated
    */
-  int OP_LIST = 39;
+  int OP_LIST = 43;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1671,7 +1810,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getPlus()
    * @generated
    */
-  int PLUS = 40;
+  int PLUS = 44;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1717,7 +1856,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getMinus()
    * @generated
    */
-  int MINUS = 41;
+  int MINUS = 45;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1763,7 +1902,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getStar()
    * @generated
    */
-  int STAR = 42;
+  int STAR = 46;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1809,7 +1948,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getDiv()
    * @generated
    */
-  int DIV = 43;
+  int DIV = 47;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1855,7 +1994,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getConcat()
    * @generated
    */
-  int CONCAT = 44;
+  int CONCAT = 48;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -1901,7 +2040,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getOpFList()
    * @generated
    */
-  int OP_FLIST = 45;
+  int OP_FLIST = 49;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1922,6 +2061,34 @@ public interface SqlPackage extends EPackage
   int OP_FLIST_FEATURE_COUNT = OP_FUNCTION_ARG_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.WhenListImpl <em>When List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.data.sql.impl.WhenListImpl
+   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getWhenList()
+   * @generated
+   */
+  int WHEN_LIST = 50;
+
+  /**
+   * The feature id for the '<em><b>Entries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN_LIST__ENTRIES = SQL_CASE_WHENS_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>When List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHEN_LIST_FEATURE_COUNT = SQL_CASE_WHENS_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1929,7 +2096,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getXFunction()
    * @generated
    */
-  int XFUNCTION = 46;
+  int XFUNCTION = 51;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.JoinType <em>Join Type</em>}' enum.
@@ -1939,7 +2106,7 @@ public interface SqlPackage extends EPackage
    * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJoinType()
    * @generated
    */
-  int JOIN_TYPE = 47;
+  int JOIN_TYPE = 52;
 
 
   /**
@@ -2798,15 +2965,47 @@ public interface SqlPackage extends EPackage
   EAttribute getLike_OpLike();
 
   /**
-   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Like#getOp2 <em>Op2</em>}'.
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Like#getOp2 <em>Op2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Op2</em>'.
+   * @return the meta object for the containment reference '<em>Op2</em>'.
    * @see com.jaspersoft.studio.data.sql.Like#getOp2()
    * @see #getLike()
    * @generated
    */
-  EAttribute getLike_Op2();
+  EReference getLike_Op2();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.LikeOperand <em>Like Operand</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Like Operand</em>'.
+   * @see com.jaspersoft.studio.data.sql.LikeOperand
+   * @generated
+   */
+  EClass getLikeOperand();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.LikeOperand#getOp2 <em>Op2</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Op2</em>'.
+   * @see com.jaspersoft.studio.data.sql.LikeOperand#getOp2()
+   * @see #getLikeOperand()
+   * @generated
+   */
+  EAttribute getLikeOperand_Op2();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.LikeOperand#getFop2 <em>Fop2</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Fop2</em>'.
+   * @see com.jaspersoft.studio.data.sql.LikeOperand#getFop2()
+   * @see #getLikeOperand()
+   * @generated
+   */
+  EReference getLikeOperand_Fop2();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Between <em>Between</em>}'.
@@ -3002,15 +3201,15 @@ public interface SqlPackage extends EPackage
   EReference getOperand_Func();
 
   /**
-   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}'.
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Sqlcase</em>'.
+   * @return the meta object for the containment reference '<em>Sqlcase</em>'.
    * @see com.jaspersoft.studio.data.sql.Operand#getSqlcase()
    * @see #getOperand()
    * @generated
    */
-  EAttribute getOperand_Sqlcase();
+  EReference getOperand_Sqlcase();
 
   /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}'.
@@ -3248,6 +3447,91 @@ public interface SqlPackage extends EPackage
   EAttribute getScalarOperand_Sodt();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SQLCaseOperand <em>SQL Case Operand</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>SQL Case Operand</em>'.
+   * @see com.jaspersoft.studio.data.sql.SQLCaseOperand
+   * @generated
+   */
+  EClass getSQLCaseOperand();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.SQLCaseOperand#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see com.jaspersoft.studio.data.sql.SQLCaseOperand#getExpr()
+   * @see #getSQLCaseOperand()
+   * @generated
+   */
+  EReference getSQLCaseOperand_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.SQLCaseOperand#getWhen <em>When</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>When</em>'.
+   * @see com.jaspersoft.studio.data.sql.SQLCaseOperand#getWhen()
+   * @see #getSQLCaseOperand()
+   * @generated
+   */
+  EReference getSQLCaseOperand_When();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SQLCaseWhens <em>SQL Case Whens</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>SQL Case Whens</em>'.
+   * @see com.jaspersoft.studio.data.sql.SQLCaseWhens
+   * @generated
+   */
+  EClass getSQLCaseWhens();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SqlCaseWhen <em>Case When</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Case When</em>'.
+   * @see com.jaspersoft.studio.data.sql.SqlCaseWhen
+   * @generated
+   */
+  EClass getSqlCaseWhen();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.SqlCaseWhen#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see com.jaspersoft.studio.data.sql.SqlCaseWhen#getExpr()
+   * @see #getSqlCaseWhen()
+   * @generated
+   */
+  EReference getSqlCaseWhen_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.SqlCaseWhen#getTexp <em>Texp</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Texp</em>'.
+   * @see com.jaspersoft.studio.data.sql.SqlCaseWhen#getTexp()
+   * @see #getSqlCaseWhen()
+   * @generated
+   */
+  EReference getSqlCaseWhen_Texp();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.SqlCaseWhen#getEexp <em>Eexp</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Eexp</em>'.
+   * @see com.jaspersoft.studio.data.sql.SqlCaseWhen#getEexp()
+   * @see #getSqlCaseWhen()
+   * @generated
+   */
+  EReference getSqlCaseWhen_Eexp();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Col <em>Col</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3380,6 +3664,27 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getOpFList_Entries();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.WhenList <em>When List</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>When List</em>'.
+   * @see com.jaspersoft.studio.data.sql.WhenList
+   * @generated
+   */
+  EClass getWhenList();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.data.sql.WhenList#getEntries <em>Entries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Entries</em>'.
+   * @see com.jaspersoft.studio.data.sql.WhenList#getEntries()
+   * @see #getWhenList()
+   * @generated
+   */
+  EReference getWhenList_Entries();
 
   /**
    * Returns the meta object for enum '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}'.
@@ -4115,12 +4420,38 @@ public interface SqlPackage extends EPackage
     EAttribute LIKE__OP_LIKE = eINSTANCE.getLike_OpLike();
 
     /**
+     * The meta object literal for the '<em><b>Op2</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LIKE__OP2 = eINSTANCE.getLike_Op2();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl <em>Like Operand</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.LikeOperandImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getLikeOperand()
+     * @generated
+     */
+    EClass LIKE_OPERAND = eINSTANCE.getLikeOperand();
+
+    /**
      * The meta object literal for the '<em><b>Op2</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute LIKE__OP2 = eINSTANCE.getLike_Op2();
+    EAttribute LIKE_OPERAND__OP2 = eINSTANCE.getLikeOperand_Op2();
+
+    /**
+     * The meta object literal for the '<em><b>Fop2</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LIKE_OPERAND__FOP2 = eINSTANCE.getLikeOperand_Fop2();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl <em>Between</em>}' class.
@@ -4277,12 +4608,12 @@ public interface SqlPackage extends EPackage
     EReference OPERAND__FUNC = eINSTANCE.getOperand_Func();
 
     /**
-     * The meta object literal for the '<em><b>Sqlcase</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Sqlcase</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute OPERAND__SQLCASE = eINSTANCE.getOperand_Sqlcase();
+    EReference OPERAND__SQLCASE = eINSTANCE.getOperand_Sqlcase();
 
     /**
      * The meta object literal for the '<em><b>Param</b></em>' containment reference feature.
@@ -4475,6 +4806,76 @@ public interface SqlPackage extends EPackage
     EAttribute SCALAR_OPERAND__SODT = eINSTANCE.getScalarOperand_Sodt();
 
     /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SQLCaseOperandImpl <em>SQL Case Operand</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.SQLCaseOperandImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSQLCaseOperand()
+     * @generated
+     */
+    EClass SQL_CASE_OPERAND = eINSTANCE.getSQLCaseOperand();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SQL_CASE_OPERAND__EXPR = eINSTANCE.getSQLCaseOperand_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>When</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SQL_CASE_OPERAND__WHEN = eINSTANCE.getSQLCaseOperand_When();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SQLCaseWhensImpl <em>SQL Case Whens</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.SQLCaseWhensImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSQLCaseWhens()
+     * @generated
+     */
+    EClass SQL_CASE_WHENS = eINSTANCE.getSQLCaseWhens();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SqlCaseWhenImpl <em>Case When</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.SqlCaseWhenImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getSqlCaseWhen()
+     * @generated
+     */
+    EClass SQL_CASE_WHEN = eINSTANCE.getSqlCaseWhen();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SQL_CASE_WHEN__EXPR = eINSTANCE.getSqlCaseWhen_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>Texp</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SQL_CASE_WHEN__TEXP = eINSTANCE.getSqlCaseWhen_Texp();
+
+    /**
+     * The meta object literal for the '<em><b>Eexp</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SQL_CASE_WHEN__EEXP = eINSTANCE.getSqlCaseWhen_Eexp();
+
+    /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.ColImpl <em>Col</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4595,6 +4996,24 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference OP_FLIST__ENTRIES = eINSTANCE.getOpFList_Entries();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.WhenListImpl <em>When List</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.data.sql.impl.WhenListImpl
+     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getWhenList()
+     * @generated
+     */
+    EClass WHEN_LIST = eINSTANCE.getWhenList();
+
+    /**
+     * The meta object literal for the '<em><b>Entries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WHEN_LIST__ENTRIES = eINSTANCE.getWhenList_Entries();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.XFunction <em>XFunction</em>}' enum.

@@ -39,6 +39,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterNotPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
 import com.jaspersoft.studio.data.sql.widgets.scalar.DateWidget;
 import com.jaspersoft.studio.data.sql.widgets.scalar.NumberWidget;
 import com.jaspersoft.studio.data.sql.widgets.scalar.StringWidget;
@@ -88,6 +89,8 @@ public class Factory {
 			return new ParameterWidget(parent, (ParameterNotPOperand) operand);
 		if (operand instanceof ParameterPOperand)
 			return new ParameterWidget(parent, (ParameterPOperand) operand);
+		if (operand instanceof UnknownOperand)
+			return new UnknownOperandWidget(parent, (UnknownOperand) operand);
 		if (operand instanceof ScalarOperand) {
 			Object opval = ((ScalarOperand<?>) operand).getValue();
 			if (opval instanceof String)
@@ -174,6 +177,7 @@ public class Factory {
 			opMap.put("Date", getOperand(w, new ScalarOperand<Date>(mexpr, new Date())));
 			opMap.put("Time", getOperand(w, new ScalarOperand<Time>(mexpr, new Time(new Date().getTime()))));
 			opMap.put("Timestamp", getOperand(w, new ScalarOperand<Timestamp>(mexpr, new Timestamp(new Date().getTime()))));
+			opMap.put("Free Text", getOperand(w, new UnknownOperand(mexpr, "")));
 			w.setOperandMap(opMap);
 		}
 		return opMap;

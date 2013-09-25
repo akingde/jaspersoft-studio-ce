@@ -15,14 +15,18 @@ import com.jaspersoft.studio.data.sql.ColumnFull;
 import com.jaspersoft.studio.data.sql.Comparison;
 import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.JRParameter;
+import com.jaspersoft.studio.data.sql.Like;
+import com.jaspersoft.studio.data.sql.LikeOperand;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.OrExpr;
+import com.jaspersoft.studio.data.sql.QueryWriter;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.XExpr;
 import com.jaspersoft.studio.data.sql.impl.DbObjectNameImpl;
 import com.jaspersoft.studio.data.sql.impl.OperandImpl;
+import com.jaspersoft.studio.data.sql.impl.ScalarOperandImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
@@ -36,6 +40,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterNotPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ScalarOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
@@ -44,6 +49,12 @@ import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ConvertExpression {
+
+	public static String convertExpression2String(SQLQueryDesigner designer, ANode qroot, ANode parent, OrExpr cols) {
+		convertExpression(designer, qroot, parent, cols);
+		return QueryWriter.writeSubQuery(parent).replaceFirst("\n", "");
+	}
+
 	public static void convertExpression(SQLQueryDesigner designer, ANode qroot, ANode parent, OrExpr cols) {
 		try {
 			if (cols == null)
@@ -79,19 +90,29 @@ public class ConvertExpression {
 				me.setOperator(Operator.getOperator(tf.getBetween().getOpBetween()));
 				opds.add(getOperand(designer, msel, tf.getBetween().getOp2(), me));
 				opds.add(getOperand(designer, msel, tf.getBetween().getOp3(), me));
-			} else if (tf.getLike() != null) {
-				me.setOperator(Operator.getOperator(tf.getLike().getOpLike()));
-				opds.add(new ScalarOperand<String>(me, tf.getLike().getOp2()));
-			} else if (tf.getIn() != null) {
-				me.setOperator(Operator.getOperator(tf.getIn().getOp().replace("(", "").trim()));
-				if (tf.getIn().getSubquery() != null) {
-					MSelectSubQuery qroot = new MSelectSubQuery(me);
-					Util.createSelect(qroot);
-					Text2Model.convertSelect(designer, qroot, (SelectImpl) tf.getIn().getSubquery().getSel());
-				} else if (tf.getIn().getOpList() != null) {
-					for (EObject eobj : tf.getIn().getOpList().eContents()) {
-						if (eobj instanceof Operand)
-							opds.add(getOperand(designer, msel, (Operand) eobj, me));
+			} else {
+				Like like = tf.getLike();
+				if (like != null) {
+					me.setOperator(Operator.getOperator(like.getOpLike()));
+					LikeOperand op2 = like.getOp2();
+					if (op2.getOp2() != null)
+						opds.add(new ScalarOperand<String>(me, op2.getOp2()));
+					else if (op2.getFop2() != null)
+						opds.add(new UnknownOperand(me, ConvertSelectColumns.getFunctionString(designer, msel, parent, op2.getFop2(), msel)));
+				} else if (tf.getIn() != null) {
+					me.setOperator(Operator.getOperator(tf.getIn().getOp().replace("(", "").trim()));
+					if (tf.getIn().getSubquery() != null) {
+						MSelectSubQuery qroot = new MSelectSubQuery(me);
+						Util.createSelect(qroot);
+						Text2Model.convertSelect(designer, qroot, (SelectImpl) tf.getIn().getSubquery().getSel());
+					} else if (tf.getIn().getOpList() != null) {
+						if (tf.getIn().getOpList() instanceof ScalarOperandImpl) {
+							opds.add(getScalarOperand(me, (ScalarOperandImpl) tf.getIn().getOpList()));
+						} else
+							for (EObject eobj : tf.getIn().getOpList().eContents()) {
+								if (eobj instanceof Operand)
+									opds.add(getOperand(designer, msel, (Operand) eobj, me));
+							}
 					}
 				}
 			}
