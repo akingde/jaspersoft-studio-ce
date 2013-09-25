@@ -2,58 +2,14 @@
  */
 package com.jaspersoft.studio.data.sql.util;
 
+import com.jaspersoft.studio.data.sql.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-import org.eclipse.emf.ecore.EObject;
 
-import com.jaspersoft.studio.data.sql.Between;
-import com.jaspersoft.studio.data.sql.Col;
-import com.jaspersoft.studio.data.sql.ColumnFull;
-import com.jaspersoft.studio.data.sql.ColumnOperand;
-import com.jaspersoft.studio.data.sql.ColumnOrAlias;
-import com.jaspersoft.studio.data.sql.Comparison;
-import com.jaspersoft.studio.data.sql.Concat;
-import com.jaspersoft.studio.data.sql.DbObjectName;
-import com.jaspersoft.studio.data.sql.Div;
-import com.jaspersoft.studio.data.sql.ExpOperand;
-import com.jaspersoft.studio.data.sql.ExprGroup;
-import com.jaspersoft.studio.data.sql.FromTable;
-import com.jaspersoft.studio.data.sql.FromTableJoin;
-import com.jaspersoft.studio.data.sql.FullExpression;
-import com.jaspersoft.studio.data.sql.GroupByColumnFull;
-import com.jaspersoft.studio.data.sql.InOper;
-import com.jaspersoft.studio.data.sql.JRParameter;
-import com.jaspersoft.studio.data.sql.Like;
-import com.jaspersoft.studio.data.sql.Minus;
-import com.jaspersoft.studio.data.sql.Model;
-import com.jaspersoft.studio.data.sql.OpFList;
-import com.jaspersoft.studio.data.sql.OpFunction;
-import com.jaspersoft.studio.data.sql.OpFunctionArg;
-import com.jaspersoft.studio.data.sql.OpList;
-import com.jaspersoft.studio.data.sql.Operand;
-import com.jaspersoft.studio.data.sql.OperandList;
-import com.jaspersoft.studio.data.sql.Operands;
-import com.jaspersoft.studio.data.sql.OrColumn;
-import com.jaspersoft.studio.data.sql.OrExpr;
-import com.jaspersoft.studio.data.sql.OrGroupByColumn;
-import com.jaspersoft.studio.data.sql.OrOrderByColumn;
-import com.jaspersoft.studio.data.sql.OrTable;
-import com.jaspersoft.studio.data.sql.OrderByColumnFull;
-import com.jaspersoft.studio.data.sql.POperand;
-import com.jaspersoft.studio.data.sql.Plus;
-import com.jaspersoft.studio.data.sql.Prms;
-import com.jaspersoft.studio.data.sql.ScalarOperand;
-import com.jaspersoft.studio.data.sql.Select;
-import com.jaspersoft.studio.data.sql.SelectQuery;
-import com.jaspersoft.studio.data.sql.SelectSubSet;
-import com.jaspersoft.studio.data.sql.SqlPackage;
-import com.jaspersoft.studio.data.sql.Star;
-import com.jaspersoft.studio.data.sql.SubQueryOperand;
-import com.jaspersoft.studio.data.sql.TableFull;
-import com.jaspersoft.studio.data.sql.TableOrAlias;
-import com.jaspersoft.studio.data.sql.XExpr;
-import com.jaspersoft.studio.data.sql.tbls;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

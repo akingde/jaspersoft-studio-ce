@@ -41,7 +41,7 @@ public class ConvertTables {
 
 	private static void doTables(SQLQueryDesigner designer, MFrom mfrom, FromTable ftbl) {
 		TableOrAlias t = ftbl.getTable();
-		if (t.getTfull() != null) {
+		if (t != null && t.getTfull() != null) {
 			MFromTable mft = getFromTable(t, mfrom, designer);
 			if (t.getTblAlias() != null)
 				mft.setAlias(t.getTblAlias().getDbname());

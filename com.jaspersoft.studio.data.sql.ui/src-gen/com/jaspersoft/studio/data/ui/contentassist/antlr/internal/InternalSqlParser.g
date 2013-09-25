@@ -1855,6 +1855,12 @@ rule__OperandFragment__Alternatives
 { after(grammarAccess.getOperandFragmentAccess().getFuncAssignment_3()); }
 )
 
+    |(
+{ before(grammarAccess.getOperandFragmentAccess().getSqlcaseAssignment_4()); }
+(rule__OperandFragment__SqlcaseAssignment_4)
+{ after(grammarAccess.getOperandFragmentAccess().getSqlcaseAssignment_4()); }
+)
+
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -8017,6 +8023,21 @@ rule__OperandFragment__FuncAssignment_3
 (
 { before(grammarAccess.getOperandFragmentAccess().getFuncOperandFunctionParserRuleCall_3_0()); }
 	ruleOperandFunction{ after(grammarAccess.getOperandFragmentAccess().getFuncOperandFunctionParserRuleCall_3_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__OperandFragment__SqlcaseAssignment_4
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0()); }
+	RULE_SQLCASE{ after(grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0()); }
 )
 
 ;

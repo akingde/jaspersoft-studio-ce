@@ -12,10 +12,11 @@ import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalSqlLexer extends Lexer {
-    public static final int RULE_ID=74;
+    public static final int RULE_SQLCASE=66;
+    public static final int RULE_ID=75;
     public static final int RULE_JRNPARAM=65;
-    public static final int RULE_DATE=68;
-    public static final int RULE_ANY_OTHER=78;
+    public static final int RULE_DATE=69;
+    public static final int RULE_ANY_OTHER=79;
     public static final int KEYWORD_19=49;
     public static final int KEYWORD_56=7;
     public static final int KEYWORD_55=10;
@@ -41,14 +42,14 @@ public class InternalSqlLexer extends Lexer {
     public static final int KEYWORD_7=58;
     public static final int KEYWORD_8=59;
     public static final int KEYWORD_9=60;
-    public static final int RULE_TIME=69;
+    public static final int RULE_TIME=70;
     public static final int KEYWORD_28=36;
     public static final int KEYWORD_29=37;
-    public static final int RULE_SIGNED_DOUBLE=71;
-    public static final int RULE_TIMESTAMP=70;
-    public static final int RULE_INT=67;
+    public static final int RULE_SIGNED_DOUBLE=72;
+    public static final int RULE_TIMESTAMP=71;
+    public static final int RULE_INT=68;
     public static final int KEYWORD_24=41;
-    public static final int RULE_DBNAME=73;
+    public static final int RULE_DBNAME=74;
     public static final int KEYWORD_60=4;
     public static final int KEYWORD_25=42;
     public static final int KEYWORD_26=34;
@@ -68,14 +69,14 @@ public class InternalSqlLexer extends Lexer {
     public static final int KEYWORD_2=53;
     public static final int KEYWORD_31=28;
     public static final int KEYWORD_38=25;
-    public static final int RULE_SL_COMMENT=75;
+    public static final int RULE_SL_COMMENT=76;
     public static final int KEYWORD_37=24;
     public static final int KEYWORD_36=33;
     public static final int KEYWORD_35=32;
-    public static final int RULE_ML_COMMENT=76;
+    public static final int RULE_ML_COMMENT=77;
     public static final int KEYWORD_39=26;
-    public static final int RULE_STRING=72;
-    public static final int RULE_STAR=66;
+    public static final int RULE_STRING=73;
+    public static final int RULE_STAR=67;
     public static final int RULE_JRPARAM=64;
     public static final int KEYWORD_41=21;
     public static final int KEYWORD_40=27;
@@ -83,7 +84,7 @@ public class InternalSqlLexer extends Lexer {
     public static final int KEYWORD_42=22;
     public static final int KEYWORD_45=14;
     public static final int KEYWORD_44=13;
-    public static final int RULE_WS=77;
+    public static final int RULE_WS=78;
     public static final int KEYWORD_47=16;
     public static final int KEYWORD_46=15;
     public static final int KEYWORD_49=18;
@@ -3761,13 +3762,91 @@ public class InternalSqlLexer extends Lexer {
     }
     // $ANTLR end "RULE_JRNPARAM"
 
+    // $ANTLR start "RULE_SQLCASE"
+    public final void mRULE_SQLCASE() throws RecognitionException {
+        try {
+            int _type = RULE_SQLCASE;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:145:14: ( 'CASE ' ( options {greedy=false; } : . )* ' END' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:145:16: 'CASE ' ( options {greedy=false; } : . )* ' END'
+            {
+            match("CASE "); 
+
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:145:24: ( options {greedy=false; } : . )*
+            loop3:
+            do {
+                int alt3=2;
+                int LA3_0 = input.LA(1);
+
+                if ( (LA3_0==' ') ) {
+                    int LA3_1 = input.LA(2);
+
+                    if ( (LA3_1=='E') ) {
+                        int LA3_3 = input.LA(3);
+
+                        if ( (LA3_3=='N') ) {
+                            int LA3_4 = input.LA(4);
+
+                            if ( (LA3_4=='D') ) {
+                                alt3=2;
+                            }
+                            else if ( ((LA3_4>='\u0000' && LA3_4<='C')||(LA3_4>='E' && LA3_4<='\uFFFF')) ) {
+                                alt3=1;
+                            }
+
+
+                        }
+                        else if ( ((LA3_3>='\u0000' && LA3_3<='M')||(LA3_3>='O' && LA3_3<='\uFFFF')) ) {
+                            alt3=1;
+                        }
+
+
+                    }
+                    else if ( ((LA3_1>='\u0000' && LA3_1<='D')||(LA3_1>='F' && LA3_1<='\uFFFF')) ) {
+                        alt3=1;
+                    }
+
+
+                }
+                else if ( ((LA3_0>='\u0000' && LA3_0<='\u001F')||(LA3_0>='!' && LA3_0<='\uFFFF')) ) {
+                    alt3=1;
+                }
+
+
+                switch (alt3) {
+            	case 1 :
+            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:145:52: .
+            	    {
+            	    matchAny(); 
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop3;
+                }
+            } while (true);
+
+            match(" END"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "RULE_SQLCASE"
+
     // $ANTLR start "RULE_STAR"
     public final void mRULE_STAR() throws RecognitionException {
         try {
             int _type = RULE_STAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:145:11: ( '*' )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:145:13: '*'
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:11: ( '*' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:13: '*'
             {
             match('*'); 
 
@@ -3786,19 +3865,19 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:10: ( ( '-' )? ( '0' .. '9' )+ )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:12: ( '-' )? ( '0' .. '9' )+
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:10: ( ( '-' )? ( '0' .. '9' )+ )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:12: ( '-' )? ( '0' .. '9' )+
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:12: ( '-' )?
-            int alt3=2;
-            int LA3_0 = input.LA(1);
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:12: ( '-' )?
+            int alt4=2;
+            int LA4_0 = input.LA(1);
 
-            if ( (LA3_0=='-') ) {
-                alt3=1;
+            if ( (LA4_0=='-') ) {
+                alt4=1;
             }
-            switch (alt3) {
+            switch (alt4) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:12: '-'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:12: '-'
                     {
                     match('-'); 
 
@@ -3807,21 +3886,21 @@ public class InternalSqlLexer extends Lexer {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:17: ( '0' .. '9' )+
-            int cnt4=0;
-            loop4:
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:17: ( '0' .. '9' )+
+            int cnt5=0;
+            loop5:
             do {
-                int alt4=2;
-                int LA4_0 = input.LA(1);
+                int alt5=2;
+                int LA5_0 = input.LA(1);
 
-                if ( ((LA4_0>='0' && LA4_0<='9')) ) {
-                    alt4=1;
+                if ( ((LA5_0>='0' && LA5_0<='9')) ) {
+                    alt5=1;
                 }
 
 
-                switch (alt4) {
+                switch (alt5) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:147:18: '0' .. '9'
+            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:18: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -3829,12 +3908,12 @@ public class InternalSqlLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt4 >= 1 ) break loop4;
+            	    if ( cnt5 >= 1 ) break loop5;
                         EarlyExitException eee =
-                            new EarlyExitException(4, input);
+                            new EarlyExitException(5, input);
                         throw eee;
                 }
-                cnt4++;
+                cnt5++;
             } while (true);
 
 
@@ -3853,8 +3932,8 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_TIMESTAMP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:16: ( RULE_DATE ' ' RULE_TIME )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:149:18: RULE_DATE ' ' RULE_TIME
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:151:16: ( RULE_DATE ' ' RULE_TIME )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:151:18: RULE_DATE ' ' RULE_TIME
             {
             mRULE_DATE(); 
             match(' '); 
@@ -3875,8 +3954,8 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_DATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:151:11: ( '\\'' '0' .. '9' '0' .. '9' '0' .. '9' '0' .. '9' '-' '0' .. '1' '0' .. '9' '-' '0' .. '3' '0' .. '9' '\\'' )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:151:13: '\\'' '0' .. '9' '0' .. '9' '0' .. '9' '0' .. '9' '-' '0' .. '1' '0' .. '9' '-' '0' .. '3' '0' .. '9' '\\''
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:153:11: ( '\\'' '0' .. '9' '0' .. '9' '0' .. '9' '0' .. '9' '-' '0' .. '1' '0' .. '9' '-' '0' .. '3' '0' .. '9' '\\'' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:153:13: '\\'' '0' .. '9' '0' .. '9' '0' .. '9' '0' .. '9' '-' '0' .. '1' '0' .. '9' '-' '0' .. '3' '0' .. '9' '\\''
             {
             match('\''); 
             matchRange('0','9'); 
@@ -3906,8 +3985,8 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_TIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:153:11: ( '\\'' '0' .. '9' '0' .. '9' ':' '0' .. '9' '0' .. '9' ':' '0' .. '1' '0' .. '9' '.' '0' .. '9' '0' .. '9' '0' .. '9' '\\'' )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:153:13: '\\'' '0' .. '9' '0' .. '9' ':' '0' .. '9' '0' .. '9' ':' '0' .. '1' '0' .. '9' '.' '0' .. '9' '0' .. '9' '0' .. '9' '\\''
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:11: ( '\\'' '0' .. '9' '0' .. '9' ':' '0' .. '9' '0' .. '9' ':' '0' .. '1' '0' .. '9' '.' '0' .. '9' '0' .. '9' '0' .. '9' '\\'' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:13: '\\'' '0' .. '9' '0' .. '9' ':' '0' .. '9' '0' .. '9' ':' '0' .. '1' '0' .. '9' '.' '0' .. '9' '0' .. '9' '0' .. '9' '\\''
             {
             match('\''); 
             matchRange('0','9'); 
@@ -3939,19 +4018,19 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_SIGNED_DOUBLE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:20: ( ( '-' )? ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )? )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:22: ( '-' )? ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:20: ( ( '-' )? ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:22: ( '-' )? ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )?
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:22: ( '-' )?
-            int alt5=2;
-            int LA5_0 = input.LA(1);
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:22: ( '-' )?
+            int alt6=2;
+            int LA6_0 = input.LA(1);
 
-            if ( (LA5_0=='-') ) {
-                alt5=1;
+            if ( (LA6_0=='-') ) {
+                alt6=1;
             }
-            switch (alt5) {
+            switch (alt6) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:22: '-'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:22: '-'
                     {
                     match('-'); 
 
@@ -3960,21 +4039,21 @@ public class InternalSqlLexer extends Lexer {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:27: ( '0' .. '9' )+
-            int cnt6=0;
-            loop6:
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:27: ( '0' .. '9' )+
+            int cnt7=0;
+            loop7:
             do {
-                int alt6=2;
-                int LA6_0 = input.LA(1);
+                int alt7=2;
+                int LA7_0 = input.LA(1);
 
-                if ( ((LA6_0>='0' && LA6_0<='9')) ) {
-                    alt6=1;
+                if ( ((LA7_0>='0' && LA7_0<='9')) ) {
+                    alt7=1;
                 }
 
 
-                switch (alt6) {
+                switch (alt7) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:28: '0' .. '9'
+            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:28: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -3982,41 +4061,41 @@ public class InternalSqlLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt6 >= 1 ) break loop6;
+            	    if ( cnt7 >= 1 ) break loop7;
                         EarlyExitException eee =
-                            new EarlyExitException(6, input);
+                            new EarlyExitException(7, input);
                         throw eee;
                 }
-                cnt6++;
+                cnt7++;
             } while (true);
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:39: ( '.' ( '0' .. '9' )+ )?
-            int alt8=2;
-            int LA8_0 = input.LA(1);
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:39: ( '.' ( '0' .. '9' )+ )?
+            int alt9=2;
+            int LA9_0 = input.LA(1);
 
-            if ( (LA8_0=='.') ) {
-                alt8=1;
+            if ( (LA9_0=='.') ) {
+                alt9=1;
             }
-            switch (alt8) {
+            switch (alt9) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:40: '.' ( '0' .. '9' )+
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:40: '.' ( '0' .. '9' )+
                     {
                     match('.'); 
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:44: ( '0' .. '9' )+
-                    int cnt7=0;
-                    loop7:
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:44: ( '0' .. '9' )+
+                    int cnt8=0;
+                    loop8:
                     do {
-                        int alt7=2;
-                        int LA7_0 = input.LA(1);
+                        int alt8=2;
+                        int LA8_0 = input.LA(1);
 
-                        if ( ((LA7_0>='0' && LA7_0<='9')) ) {
-                            alt7=1;
+                        if ( ((LA8_0>='0' && LA8_0<='9')) ) {
+                            alt8=1;
                         }
 
 
-                        switch (alt7) {
+                        switch (alt8) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:155:45: '0' .. '9'
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:45: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -4024,12 +4103,12 @@ public class InternalSqlLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    if ( cnt7 >= 1 ) break loop7;
+                    	    if ( cnt8 >= 1 ) break loop8;
                                 EarlyExitException eee =
-                                    new EarlyExitException(7, input);
+                                    new EarlyExitException(8, input);
                                 throw eee;
                         }
-                        cnt7++;
+                        cnt8++;
                     } while (true);
 
 
@@ -4054,47 +4133,47 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
-            int alt11=2;
-            int LA11_0 = input.LA(1);
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            int alt12=2;
+            int LA12_0 = input.LA(1);
 
-            if ( (LA11_0=='\"') ) {
-                alt11=1;
+            if ( (LA12_0=='\"') ) {
+                alt12=1;
             }
-            else if ( (LA11_0=='\'') ) {
-                alt11=2;
+            else if ( (LA12_0=='\'') ) {
+                alt12=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 11, 0, input);
+                    new NoViableAltException("", 12, 0, input);
 
                 throw nvae;
             }
-            switch (alt11) {
+            switch (alt12) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
-                    loop9:
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
+                    loop10:
                     do {
-                        int alt9=3;
-                        int LA9_0 = input.LA(1);
+                        int alt10=3;
+                        int LA10_0 = input.LA(1);
 
-                        if ( (LA9_0=='\\') ) {
-                            alt9=1;
+                        if ( (LA10_0=='\\') ) {
+                            alt10=1;
                         }
-                        else if ( ((LA9_0>='\u0000' && LA9_0<='!')||(LA9_0>='#' && LA9_0<='[')||(LA9_0>=']' && LA9_0<='\uFFFF')) ) {
-                            alt9=2;
+                        else if ( ((LA10_0>='\u0000' && LA10_0<='!')||(LA10_0>='#' && LA10_0<='[')||(LA10_0>=']' && LA10_0<='\uFFFF')) ) {
+                            alt10=2;
                         }
 
 
-                        switch (alt9) {
+                        switch (alt10) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -4110,7 +4189,7 @@ public class InternalSqlLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:66: ~ ( ( '\\\\' | '\"' ) )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:66: ~ ( ( '\\\\' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -4126,7 +4205,7 @@ public class InternalSqlLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop9;
+                    	    break loop10;
                         }
                     } while (true);
 
@@ -4135,26 +4214,26 @@ public class InternalSqlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
-                    loop10:
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
+                    loop11:
                     do {
-                        int alt10=3;
-                        int LA10_0 = input.LA(1);
+                        int alt11=3;
+                        int LA11_0 = input.LA(1);
 
-                        if ( (LA10_0=='\\') ) {
-                            alt10=1;
+                        if ( (LA11_0=='\\') ) {
+                            alt11=1;
                         }
-                        else if ( ((LA10_0>='\u0000' && LA10_0<='&')||(LA10_0>='(' && LA10_0<='[')||(LA10_0>=']' && LA10_0<='\uFFFF')) ) {
-                            alt10=2;
+                        else if ( ((LA11_0>='\u0000' && LA11_0<='&')||(LA11_0>='(' && LA11_0<='[')||(LA11_0>=']' && LA11_0<='\uFFFF')) ) {
+                            alt11=2;
                         }
 
 
-                        switch (alt10) {
+                        switch (alt11) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -4170,7 +4249,7 @@ public class InternalSqlLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:157:137: ~ ( ( '\\\\' | '\\'' ) )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:137: ~ ( ( '\\\\' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -4186,7 +4265,7 @@ public class InternalSqlLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop10;
+                    	    break loop11;
                         }
                     } while (true);
 
@@ -4213,47 +4292,47 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_DBNAME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:13: ( ( '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`' | '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']' ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:15: ( '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`' | '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:13: ( ( '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`' | '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']' ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:15: ( '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`' | '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']' )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:15: ( '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`' | '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']' )
-            int alt14=2;
-            int LA14_0 = input.LA(1);
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:15: ( '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`' | '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']' )
+            int alt15=2;
+            int LA15_0 = input.LA(1);
 
-            if ( (LA14_0=='`') ) {
-                alt14=1;
+            if ( (LA15_0=='`') ) {
+                alt15=1;
             }
-            else if ( (LA14_0=='[') ) {
-                alt14=2;
+            else if ( (LA15_0=='[') ) {
+                alt15=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 14, 0, input);
+                    new NoViableAltException("", 15, 0, input);
 
                 throw nvae;
             }
-            switch (alt14) {
+            switch (alt15) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:16: '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:16: '`' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )* '`'
                     {
                     match('`'); 
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )*
-                    loop12:
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '`' ) ) )*
+                    loop13:
                     do {
-                        int alt12=3;
-                        int LA12_0 = input.LA(1);
+                        int alt13=3;
+                        int LA13_0 = input.LA(1);
 
-                        if ( (LA12_0=='\\') ) {
-                            alt12=1;
+                        if ( (LA13_0=='\\') ) {
+                            alt13=1;
                         }
-                        else if ( ((LA12_0>='\u0000' && LA12_0<='[')||(LA12_0>=']' && LA12_0<='_')||(LA12_0>='a' && LA12_0<='\uFFFF')) ) {
-                            alt12=2;
+                        else if ( ((LA13_0>='\u0000' && LA13_0<='[')||(LA13_0>=']' && LA13_0<='_')||(LA13_0>='a' && LA13_0<='\uFFFF')) ) {
+                            alt13=2;
                         }
 
 
-                        switch (alt12) {
+                        switch (alt13) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -4269,7 +4348,7 @@ public class InternalSqlLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:66: ~ ( ( '\\\\' | '`' ) )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:66: ~ ( ( '\\\\' | '`' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='_')||(input.LA(1)>='a' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -4285,7 +4364,7 @@ public class InternalSqlLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop12;
+                    	    break loop13;
                         }
                     } while (true);
 
@@ -4294,26 +4373,26 @@ public class InternalSqlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:86: '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:86: '[' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )* ']'
                     {
                     match('['); 
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:90: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )*
-                    loop13:
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:90: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | ']' ) ) )*
+                    loop14:
                     do {
-                        int alt13=3;
-                        int LA13_0 = input.LA(1);
+                        int alt14=3;
+                        int LA14_0 = input.LA(1);
 
-                        if ( (LA13_0=='\\') ) {
-                            alt13=1;
+                        if ( (LA14_0=='\\') ) {
+                            alt14=1;
                         }
-                        else if ( ((LA13_0>='\u0000' && LA13_0<='[')||(LA13_0>='^' && LA13_0<='\uFFFF')) ) {
-                            alt13=2;
+                        else if ( ((LA14_0>='\u0000' && LA14_0<='[')||(LA14_0>='^' && LA14_0<='\uFFFF')) ) {
+                            alt14=2;
                         }
 
 
-                        switch (alt13) {
+                        switch (alt14) {
                     	case 1 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:91: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:91: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -4329,7 +4408,7 @@ public class InternalSqlLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:159:136: ~ ( ( '\\\\' | ']' ) )
+                    	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:136: ~ ( ( '\\\\' | ']' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='[')||(input.LA(1)>='^' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -4345,7 +4424,7 @@ public class InternalSqlLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop13;
+                    	    break loop14;
                         }
                     } while (true);
 
@@ -4372,8 +4451,8 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -4384,18 +4463,18 @@ public class InternalSqlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:161:35: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
-            loop15:
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:35: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            loop16:
             do {
-                int alt15=2;
-                int LA15_0 = input.LA(1);
+                int alt16=2;
+                int LA16_0 = input.LA(1);
 
-                if ( ((LA15_0>='0' && LA15_0<='9')||(LA15_0>='A' && LA15_0<='Z')||LA15_0=='_'||(LA15_0>='a' && LA15_0<='z')) ) {
-                    alt15=1;
+                if ( ((LA16_0>='0' && LA16_0<='9')||(LA16_0>='A' && LA16_0<='Z')||LA16_0=='_'||(LA16_0>='a' && LA16_0<='z')) ) {
+                    alt16=1;
                 }
 
 
-                switch (alt15) {
+                switch (alt16) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:
             	    {
@@ -4413,7 +4492,7 @@ public class InternalSqlLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop15;
+            	    break loop16;
                 }
             } while (true);
 
@@ -4433,37 +4512,37 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:17: ( ( '--' | '#' | '//' ) (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:19: ( '--' | '#' | '//' ) (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:17: ( ( '--' | '#' | '//' ) (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:19: ( '--' | '#' | '//' ) (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:19: ( '--' | '#' | '//' )
-            int alt16=3;
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:19: ( '--' | '#' | '//' )
+            int alt17=3;
             switch ( input.LA(1) ) {
             case '-':
                 {
-                alt16=1;
+                alt17=1;
                 }
                 break;
             case '#':
                 {
-                alt16=2;
+                alt17=2;
                 }
                 break;
             case '/':
                 {
-                alt16=3;
+                alt17=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 16, 0, input);
+                    new NoViableAltException("", 17, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt16) {
+            switch (alt17) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:20: '--'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:20: '--'
                     {
                     match("--"); 
 
@@ -4471,14 +4550,14 @@ public class InternalSqlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:25: '#'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:25: '#'
                     {
                     match('#'); 
 
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:29: '//'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:29: '//'
                     {
                     match("//"); 
 
@@ -4488,20 +4567,20 @@ public class InternalSqlLexer extends Lexer {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:35: (~ ( ( '\\n' | '\\r' ) ) )*
-            loop17:
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:35: (~ ( ( '\\n' | '\\r' ) ) )*
+            loop18:
             do {
-                int alt17=2;
-                int LA17_0 = input.LA(1);
+                int alt18=2;
+                int LA18_0 = input.LA(1);
 
-                if ( ((LA17_0>='\u0000' && LA17_0<='\t')||(LA17_0>='\u000B' && LA17_0<='\f')||(LA17_0>='\u000E' && LA17_0<='\uFFFF')) ) {
-                    alt17=1;
+                if ( ((LA18_0>='\u0000' && LA18_0<='\t')||(LA18_0>='\u000B' && LA18_0<='\f')||(LA18_0>='\u000E' && LA18_0<='\uFFFF')) ) {
+                    alt18=1;
                 }
 
 
-                switch (alt17) {
+                switch (alt18) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:35: ~ ( ( '\\n' | '\\r' ) )
+            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:35: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -4517,31 +4596,31 @@ public class InternalSqlLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop17;
+            	    break loop18;
                 }
             } while (true);
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:51: ( ( '\\r' )? '\\n' )?
-            int alt19=2;
-            int LA19_0 = input.LA(1);
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:51: ( ( '\\r' )? '\\n' )?
+            int alt20=2;
+            int LA20_0 = input.LA(1);
 
-            if ( (LA19_0=='\n'||LA19_0=='\r') ) {
-                alt19=1;
+            if ( (LA20_0=='\n'||LA20_0=='\r') ) {
+                alt20=1;
             }
-            switch (alt19) {
+            switch (alt20) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:52: ( '\\r' )? '\\n'
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:52: ( '\\r' )? '\\n'
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:52: ( '\\r' )?
-                    int alt18=2;
-                    int LA18_0 = input.LA(1);
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:52: ( '\\r' )?
+                    int alt19=2;
+                    int LA19_0 = input.LA(1);
 
-                    if ( (LA18_0=='\r') ) {
-                        alt18=1;
+                    if ( (LA19_0=='\r') ) {
+                        alt19=1;
                     }
-                    switch (alt18) {
+                    switch (alt19) {
                         case 1 :
-                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:163:52: '\\r'
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:52: '\\r'
                             {
                             match('\r'); 
 
@@ -4573,37 +4652,37 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:24: ( options {greedy=false; } : . )*
-            loop20:
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:24: ( options {greedy=false; } : . )*
+            loop21:
             do {
-                int alt20=2;
-                int LA20_0 = input.LA(1);
+                int alt21=2;
+                int LA21_0 = input.LA(1);
 
-                if ( (LA20_0=='*') ) {
-                    int LA20_1 = input.LA(2);
+                if ( (LA21_0=='*') ) {
+                    int LA21_1 = input.LA(2);
 
-                    if ( (LA20_1=='/') ) {
-                        alt20=2;
+                    if ( (LA21_1=='/') ) {
+                        alt21=2;
                     }
-                    else if ( ((LA20_1>='\u0000' && LA20_1<='.')||(LA20_1>='0' && LA20_1<='\uFFFF')) ) {
-                        alt20=1;
+                    else if ( ((LA21_1>='\u0000' && LA21_1<='.')||(LA21_1>='0' && LA21_1<='\uFFFF')) ) {
+                        alt21=1;
                     }
 
 
                 }
-                else if ( ((LA20_0>='\u0000' && LA20_0<=')')||(LA20_0>='+' && LA20_0<='\uFFFF')) ) {
-                    alt20=1;
+                else if ( ((LA21_0>='\u0000' && LA21_0<=')')||(LA21_0>='+' && LA21_0<='\uFFFF')) ) {
+                    alt21=1;
                 }
 
 
-                switch (alt20) {
+                switch (alt21) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:165:52: .
+            	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:52: .
             	    {
             	    matchAny(); 
 
@@ -4611,7 +4690,7 @@ public class InternalSqlLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop20;
+            	    break loop21;
                 }
             } while (true);
 
@@ -4633,22 +4712,22 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:169:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:169:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:167:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
-            int cnt21=0;
-            loop21:
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:169:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            int cnt22=0;
+            loop22:
             do {
-                int alt21=2;
-                int LA21_0 = input.LA(1);
+                int alt22=2;
+                int LA22_0 = input.LA(1);
 
-                if ( ((LA21_0>='\t' && LA21_0<='\n')||LA21_0=='\r'||LA21_0==' ') ) {
-                    alt21=1;
+                if ( ((LA22_0>='\t' && LA22_0<='\n')||LA22_0=='\r'||LA22_0==' ') ) {
+                    alt22=1;
                 }
 
 
-                switch (alt21) {
+                switch (alt22) {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:
             	    {
@@ -4666,12 +4745,12 @@ public class InternalSqlLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt21 >= 1 ) break loop21;
+            	    if ( cnt22 >= 1 ) break loop22;
                         EarlyExitException eee =
-                            new EarlyExitException(21, input);
+                            new EarlyExitException(22, input);
                         throw eee;
                 }
-                cnt21++;
+                cnt22++;
             } while (true);
 
 
@@ -4690,8 +4769,8 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:169:16: ( . )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:169:18: .
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:171:16: ( . )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:171:18: .
             {
             matchAny(); 
 
@@ -4706,10 +4785,10 @@ public class InternalSqlLexer extends Lexer {
     // $ANTLR end "RULE_ANY_OTHER"
 
     public void mTokens() throws RecognitionException {
-        // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:8: ( KEYWORD_60 | KEYWORD_58 | KEYWORD_59 | KEYWORD_56 | KEYWORD_57 | KEYWORD_54 | KEYWORD_55 | KEYWORD_52 | KEYWORD_53 | KEYWORD_44 | KEYWORD_45 | KEYWORD_46 | KEYWORD_47 | KEYWORD_48 | KEYWORD_49 | KEYWORD_50 | KEYWORD_51 | KEYWORD_41 | KEYWORD_42 | KEYWORD_43 | KEYWORD_37 | KEYWORD_38 | KEYWORD_39 | KEYWORD_40 | KEYWORD_31 | KEYWORD_32 | KEYWORD_33 | KEYWORD_34 | KEYWORD_35 | KEYWORD_36 | KEYWORD_26 | KEYWORD_27 | KEYWORD_28 | KEYWORD_29 | KEYWORD_30 | KEYWORD_22 | KEYWORD_23 | KEYWORD_24 | KEYWORD_25 | KEYWORD_13 | KEYWORD_14 | KEYWORD_15 | KEYWORD_16 | KEYWORD_17 | KEYWORD_18 | KEYWORD_19 | KEYWORD_20 | KEYWORD_21 | KEYWORD_1 | KEYWORD_2 | KEYWORD_3 | KEYWORD_4 | KEYWORD_5 | KEYWORD_6 | KEYWORD_7 | KEYWORD_8 | KEYWORD_9 | KEYWORD_10 | KEYWORD_11 | KEYWORD_12 | RULE_JRPARAM | RULE_JRNPARAM | RULE_STAR | RULE_INT | RULE_TIMESTAMP | RULE_DATE | RULE_TIME | RULE_SIGNED_DOUBLE | RULE_STRING | RULE_DBNAME | RULE_ID | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_WS | RULE_ANY_OTHER )
-        int alt22=75;
-        alt22 = dfa22.predict(input);
-        switch (alt22) {
+        // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:8: ( KEYWORD_60 | KEYWORD_58 | KEYWORD_59 | KEYWORD_56 | KEYWORD_57 | KEYWORD_54 | KEYWORD_55 | KEYWORD_52 | KEYWORD_53 | KEYWORD_44 | KEYWORD_45 | KEYWORD_46 | KEYWORD_47 | KEYWORD_48 | KEYWORD_49 | KEYWORD_50 | KEYWORD_51 | KEYWORD_41 | KEYWORD_42 | KEYWORD_43 | KEYWORD_37 | KEYWORD_38 | KEYWORD_39 | KEYWORD_40 | KEYWORD_31 | KEYWORD_32 | KEYWORD_33 | KEYWORD_34 | KEYWORD_35 | KEYWORD_36 | KEYWORD_26 | KEYWORD_27 | KEYWORD_28 | KEYWORD_29 | KEYWORD_30 | KEYWORD_22 | KEYWORD_23 | KEYWORD_24 | KEYWORD_25 | KEYWORD_13 | KEYWORD_14 | KEYWORD_15 | KEYWORD_16 | KEYWORD_17 | KEYWORD_18 | KEYWORD_19 | KEYWORD_20 | KEYWORD_21 | KEYWORD_1 | KEYWORD_2 | KEYWORD_3 | KEYWORD_4 | KEYWORD_5 | KEYWORD_6 | KEYWORD_7 | KEYWORD_8 | KEYWORD_9 | KEYWORD_10 | KEYWORD_11 | KEYWORD_12 | RULE_JRPARAM | RULE_JRNPARAM | RULE_SQLCASE | RULE_STAR | RULE_INT | RULE_TIMESTAMP | RULE_DATE | RULE_TIME | RULE_SIGNED_DOUBLE | RULE_STRING | RULE_DBNAME | RULE_ID | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_WS | RULE_ANY_OTHER )
+        int alt23=76;
+        alt23 = dfa23.predict(input);
+        switch (alt23) {
             case 1 :
                 // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:10: KEYWORD_60
                 {
@@ -5145,91 +5224,98 @@ public class InternalSqlLexer extends Lexer {
                 }
                 break;
             case 63 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:688: RULE_STAR
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:688: RULE_SQLCASE
+                {
+                mRULE_SQLCASE(); 
+
+                }
+                break;
+            case 64 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:701: RULE_STAR
                 {
                 mRULE_STAR(); 
 
                 }
                 break;
-            case 64 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:698: RULE_INT
+            case 65 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:711: RULE_INT
                 {
                 mRULE_INT(); 
 
                 }
                 break;
-            case 65 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:707: RULE_TIMESTAMP
+            case 66 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:720: RULE_TIMESTAMP
                 {
                 mRULE_TIMESTAMP(); 
 
                 }
                 break;
-            case 66 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:722: RULE_DATE
+            case 67 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:735: RULE_DATE
                 {
                 mRULE_DATE(); 
 
                 }
                 break;
-            case 67 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:732: RULE_TIME
+            case 68 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:745: RULE_TIME
                 {
                 mRULE_TIME(); 
 
                 }
                 break;
-            case 68 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:742: RULE_SIGNED_DOUBLE
+            case 69 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:755: RULE_SIGNED_DOUBLE
                 {
                 mRULE_SIGNED_DOUBLE(); 
 
                 }
                 break;
-            case 69 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:761: RULE_STRING
+            case 70 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:774: RULE_STRING
                 {
                 mRULE_STRING(); 
 
                 }
                 break;
-            case 70 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:773: RULE_DBNAME
+            case 71 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:786: RULE_DBNAME
                 {
                 mRULE_DBNAME(); 
 
                 }
                 break;
-            case 71 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:785: RULE_ID
+            case 72 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:798: RULE_ID
                 {
                 mRULE_ID(); 
 
                 }
                 break;
-            case 72 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:793: RULE_SL_COMMENT
+            case 73 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:806: RULE_SL_COMMENT
                 {
                 mRULE_SL_COMMENT(); 
 
                 }
                 break;
-            case 73 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:809: RULE_ML_COMMENT
+            case 74 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:822: RULE_ML_COMMENT
                 {
                 mRULE_ML_COMMENT(); 
 
                 }
                 break;
-            case 74 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:825: RULE_WS
+            case 75 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:838: RULE_WS
                 {
                 mRULE_WS(); 
 
                 }
                 break;
-            case 75 :
-                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:833: RULE_ANY_OTHER
+            case 76 :
+                // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:1:846: RULE_ANY_OTHER
                 {
                 mRULE_ANY_OTHER(); 
 
@@ -5241,177 +5327,169 @@ public class InternalSqlLexer extends Lexer {
     }
 
 
-    protected DFA22 dfa22 = new DFA22(this);
-    static final String DFA22_eotS =
-        "\1\uffff\6\53\1\51\13\53\1\51\1\114\1\116\1\51\4\uffff\1\125\1\uffff"+
-        "\1\131\4\uffff\1\136\3\51\4\uffff\1\53\1\uffff\5\53\1\154\2\53\3"+
-        "\uffff\4\53\1\167\1\170\12\53\1\u0085\16\uffff\1\136\14\uffff\6"+
-        "\53\1\uffff\2\53\1\uffff\2\53\2\uffff\6\53\2\uffff\10\53\1\u00a6"+
-        "\1\u00a7\1\u00a8\1\u00a9\4\uffff\2\53\1\u00ae\1\53\1\u00b1\1\u00b2"+
-        "\1\uffff\2\53\1\uffff\3\53\2\uffff\2\53\1\u00c1\7\53\1\u00c9\3\53"+
-        "\6\uffff\1\53\10\uffff\2\53\3\uffff\1\53\1\u00d3\1\53\2\uffff\2"+
-        "\53\1\uffff\4\53\1\u00dd\2\53\1\uffff\1\u00e0\1\u00e1\1\u00e2\4"+
-        "\uffff\2\53\4\uffff\2\53\1\uffff\1\53\1\uffff\1\u00ec\1\uffff\1"+
-        "\u00ed\1\u00ee\5\uffff\2\53\2\uffff\1\u00f6\1\53\1\u00f8\5\uffff"+
-        "\1\53\1\u00fc\1\u00fe\1\u00ff\2\uffff\1\u0100\3\uffff\1\u0103\15"+
-        "\uffff\1\u010b\6\uffff";
-    static final String DFA22_eofS =
-        "\u0110\uffff";
-    static final String DFA22_minS =
-        "\1\0\1\111\1\122\1\105\1\116\1\117\1\122\1\0\2\105\1\122\1\116\1"+
+    protected DFA23 dfa23 = new DFA23(this);
+    static final String DFA23_eotS =
+        "\1\uffff\6\54\1\52\13\54\1\52\1\116\1\120\1\52\4\uffff\1\127\1\uffff"+
+        "\1\133\3\uffff\1\54\1\uffff\1\141\3\52\4\uffff\1\54\1\uffff\5\54"+
+        "\1\156\3\54\3\uffff\4\54\1\172\1\173\12\54\1\u0088\16\uffff\1\141"+
+        "\14\uffff\6\54\1\uffff\2\54\1\uffff\3\54\2\uffff\6\54\2\uffff\10"+
+        "\54\1\u00aa\1\u00ab\1\u00ac\1\u00ad\4\uffff\2\54\1\u00b2\1\54\1"+
+        "\u00b5\1\u00b6\1\uffff\2\54\1\uffff\4\54\2\uffff\2\54\1\u00c6\7"+
+        "\54\1\u00ce\3\54\6\uffff\1\54\10\uffff\2\54\3\uffff\1\54\1\u00d8"+
+        "\1\54\3\uffff\2\54\1\uffff\4\54\1\u00e2\2\54\1\uffff\1\u00e5\1\u00e6"+
+        "\1\u00e7\4\uffff\2\54\4\uffff\2\54\1\uffff\1\54\1\uffff\1\u00f1"+
+        "\1\uffff\1\u00f2\1\u00f3\5\uffff\2\54\2\uffff\1\u00fb\1\54\1\u00fd"+
+        "\5\uffff\1\54\1\u0101\1\u0103\1\u0104\2\uffff\1\u0105\3\uffff\1"+
+        "\u0108\15\uffff\1\u0110\6\uffff";
+    static final String DFA23_eofS =
+        "\u0115\uffff";
+    static final String DFA23_minS =
+        "\1\0\1\111\1\122\1\105\1\116\1\117\1\101\1\0\2\105\1\122\1\116\1"+
         "\121\1\101\1\105\1\111\1\116\1\110\1\114\1\120\2\75\1\174\4\uffff"+
-        "\1\55\1\uffff\1\52\4\uffff\1\56\3\0\4\uffff\1\107\1\uffff\1\114"+
-        "\1\117\1\106\1\113\1\40\1\60\1\124\1\117\2\0\1\uffff\1\124\2\123"+
-        "\1\105\2\60\1\103\1\125\1\126\1\114\1\115\1\116\1\111\1\105\1\114"+
-        "\1\104\1\60\1\uffff\1\41\14\uffff\1\56\11\uffff\1\0\2\uffff\1\110"+
-        "\1\114\1\115\1\124\1\123\1\105\1\116\2\105\1\uffff\1\40\1\123\2"+
-        "\0\1\127\1\124\1\103\1\125\1\101\1\105\2\uffff\1\105\1\101\1\111"+
-        "\2\105\1\125\1\117\1\122\4\60\3\uffff\1\0\1\124\1\40\1\60\1\40\2"+
-        "\60\1\117\2\122\1\102\1\121\1\116\1\123\2\0\1\105\1\111\1\60\1\120"+
-        "\1\124\1\122\1\120\1\114\1\116\1\103\1\60\1\123\1\116\1\105\4\uffff"+
-        "\2\0\1\40\10\uffff\1\40\1\123\3\uffff\1\125\1\60\1\40\2\0\1\105"+
-        "\1\116\1\uffff\1\40\1\105\1\40\1\124\1\60\1\107\1\124\1\uffff\3"+
-        "\60\2\0\2\uffff\1\105\1\101\2\uffff\2\0\1\116\1\103\1\uffff\1\122"+
-        "\1\uffff\1\60\1\uffff\2\60\3\uffff\2\0\1\103\1\114\2\0\1\60\1\124"+
-        "\1\60\3\uffff\2\0\1\124\1\60\2\0\2\uffff\1\60\1\uffff\2\0\1\60\5"+
-        "\uffff\2\0\2\uffff\4\0\1\40\1\0\2\uffff\1\0\2\uffff";
-    static final String DFA22_maxS =
+        "\1\55\1\uffff\1\52\3\uffff\1\122\1\uffff\1\56\3\0\4\uffff\1\107"+
+        "\1\uffff\1\114\1\117\1\106\1\113\1\40\1\60\1\124\1\117\1\123\2\0"+
+        "\1\uffff\1\124\2\123\1\105\2\60\1\103\1\125\1\126\1\114\1\115\1"+
+        "\116\1\111\1\105\1\114\1\104\1\60\1\uffff\1\41\14\uffff\1\56\11"+
+        "\uffff\1\0\2\uffff\1\110\1\114\1\115\1\124\1\123\1\105\1\116\2\105"+
+        "\1\uffff\1\40\1\123\1\105\2\0\1\127\1\124\1\103\1\125\1\101\1\105"+
+        "\2\uffff\1\105\1\101\1\111\2\105\1\125\1\117\1\122\4\60\3\uffff"+
+        "\1\0\1\124\1\40\1\60\1\40\2\60\1\117\2\122\1\102\1\121\1\116\1\123"+
+        "\1\40\2\0\1\105\1\111\1\60\1\120\1\124\1\122\1\120\1\114\1\116\1"+
+        "\103\1\60\1\123\1\116\1\105\4\uffff\2\0\1\40\10\uffff\1\40\1\123"+
+        "\3\uffff\1\125\1\60\1\40\1\uffff\2\0\1\105\1\116\1\uffff\1\40\1"+
+        "\105\1\40\1\124\1\60\1\107\1\124\1\uffff\3\60\2\0\2\uffff\1\105"+
+        "\1\101\2\uffff\2\0\1\116\1\103\1\uffff\1\122\1\uffff\1\60\1\uffff"+
+        "\2\60\3\uffff\2\0\1\103\1\114\2\0\1\60\1\124\1\60\3\uffff\2\0\1"+
+        "\124\1\60\2\0\2\uffff\1\60\1\uffff\2\0\1\60\5\uffff\2\0\2\uffff"+
+        "\4\0\1\40\1\0\2\uffff\1\0\2\uffff";
+    static final String DFA23_maxS =
         "\1\uffff\1\151\1\165\1\151\1\163\1\157\1\162\1\uffff\1\145\1\151"+
         "\2\162\1\170\1\141\1\157\1\151\1\156\1\150\1\163\1\170\1\76\1\75"+
-        "\1\174\4\uffff\1\71\1\uffff\1\57\4\uffff\1\71\3\uffff\4\uffff\1"+
-        "\147\1\uffff\1\154\1\157\1\163\1\153\1\40\1\172\1\164\1\157\2\uffff"+
-        "\1\uffff\1\164\2\163\1\157\2\172\1\143\1\165\1\166\1\154\1\155\1"+
-        "\156\1\151\1\145\1\154\1\171\1\172\1\uffff\1\173\14\uffff\1\71\11"+
-        "\uffff\1\uffff\2\uffff\1\150\1\154\1\155\1\164\1\163\1\145\1\156"+
-        "\2\145\1\uffff\1\151\1\163\2\uffff\1\167\1\164\1\143\1\165\1\141"+
-        "\1\145\2\uffff\1\145\1\141\1\151\2\145\1\165\1\157\1\162\4\172\3"+
-        "\uffff\1\uffff\1\164\1\40\1\172\1\40\2\172\1\165\2\162\1\154\1\161"+
-        "\1\156\1\163\2\uffff\1\145\1\151\1\172\1\160\1\164\1\162\1\160\1"+
-        "\154\1\156\1\143\1\172\1\163\1\156\1\145\4\uffff\2\uffff\1\40\10"+
-        "\uffff\1\40\1\163\3\uffff\1\165\1\172\1\40\2\uffff\1\145\1\156\1"+
-        "\uffff\1\40\1\145\1\40\1\164\1\172\1\147\1\164\1\uffff\3\172\2\uffff"+
-        "\2\uffff\1\145\1\141\2\uffff\2\uffff\1\156\1\143\1\uffff\1\162\1"+
-        "\uffff\1\172\1\uffff\2\172\3\uffff\2\uffff\1\143\1\154\2\uffff\1"+
-        "\172\1\164\1\172\3\uffff\2\uffff\1\164\1\172\2\uffff\2\uffff\1\172"+
-        "\1\uffff\2\uffff\1\172\5\uffff\2\uffff\2\uffff\4\uffff\1\40\1\uffff"+
-        "\2\uffff\1\uffff\2\uffff";
-    static final String DFA22_acceptS =
+        "\1\174\4\uffff\1\71\1\uffff\1\57\3\uffff\1\162\1\uffff\1\71\3\uffff"+
+        "\4\uffff\1\147\1\uffff\1\154\1\157\1\163\1\153\1\40\1\172\1\164"+
+        "\1\157\1\123\2\uffff\1\uffff\1\164\2\163\1\157\2\172\1\143\1\165"+
+        "\1\166\1\154\1\155\1\156\1\151\1\145\1\154\1\171\1\172\1\uffff\1"+
+        "\173\14\uffff\1\71\11\uffff\1\uffff\2\uffff\1\150\1\154\1\155\1"+
+        "\164\1\163\1\145\1\156\2\145\1\uffff\1\151\1\163\1\105\2\uffff\1"+
+        "\167\1\164\1\143\1\165\1\141\1\145\2\uffff\1\145\1\141\1\151\2\145"+
+        "\1\165\1\157\1\162\4\172\3\uffff\1\uffff\1\164\1\40\1\172\1\40\2"+
+        "\172\1\165\2\162\1\154\1\161\1\156\1\163\1\40\2\uffff\1\145\1\151"+
+        "\1\172\1\160\1\164\1\162\1\160\1\154\1\156\1\143\1\172\1\163\1\156"+
+        "\1\145\4\uffff\2\uffff\1\40\10\uffff\1\40\1\163\3\uffff\1\165\1"+
+        "\172\1\40\1\uffff\2\uffff\1\145\1\156\1\uffff\1\40\1\145\1\40\1"+
+        "\164\1\172\1\147\1\164\1\uffff\3\172\2\uffff\2\uffff\1\145\1\141"+
+        "\2\uffff\2\uffff\1\156\1\143\1\uffff\1\162\1\uffff\1\172\1\uffff"+
+        "\2\172\3\uffff\2\uffff\1\143\1\154\2\uffff\1\172\1\164\1\172\3\uffff"+
+        "\2\uffff\1\164\1\172\2\uffff\2\uffff\1\172\1\uffff\2\uffff\1\172"+
+        "\5\uffff\2\uffff\2\uffff\4\uffff\1\40\1\uffff\2\uffff\1\uffff\2"+
+        "\uffff";
+    static final String DFA23_acceptS =
         "\27\uffff\1\61\1\62\1\63\1\64\1\uffff\1\66\1\uffff\1\71\1\73\1\74"+
-        "\1\77\4\uffff\1\107\1\110\1\112\1\113\1\uffff\1\107\12\uffff\1\106"+
-        "\21\uffff\1\50\1\uffff\1\51\1\52\1\70\1\53\1\72\1\60\1\61\1\62\1"+
-        "\63\1\64\1\110\1\65\1\uffff\1\66\1\111\1\67\1\71\1\73\1\74\1\77"+
-        "\1\100\1\104\1\uffff\1\105\1\112\11\uffff\1\55\12\uffff\1\57\1\56"+
-        "\14\uffff\1\54\1\75\1\76\36\uffff\1\44\1\45\1\46\1\47\3\uffff\1"+
-        "\2\1\40\1\3\1\32\1\41\1\42\1\4\1\24\2\uffff\1\5\1\15\1\27\7\uffff"+
-        "\1\37\7\uffff\1\43\5\uffff\1\1\1\7\2\uffff\1\34\1\6\4\uffff\1\14"+
-        "\1\uffff\1\17\1\uffff\1\31\2\uffff\1\33\1\35\1\36\11\uffff\1\25"+
-        "\1\26\1\30\6\uffff\1\12\1\22\1\uffff\1\23\3\uffff\1\16\1\11\1\20"+
-        "\1\21\1\13\2\uffff\1\10\1\11\6\uffff\1\102\1\101\1\uffff\2\103";
-    static final String DFA22_specialS =
-        "\1\17\6\uffff\1\44\33\uffff\1\41\1\43\1\32\16\uffff\1\40\1\6\52"+
-        "\uffff\1\45\16\uffff\1\37\1\10\27\uffff\1\46\15\uffff\1\34\1\11"+
-        "\22\uffff\1\2\1\16\21\uffff\1\33\1\12\16\uffff\1\0\1\26\6\uffff"+
-        "\1\36\1\13\14\uffff\1\1\1\25\2\uffff\1\35\1\14\6\uffff\1\5\1\30"+
-        "\2\uffff\1\42\1\20\4\uffff\1\7\1\27\6\uffff\1\3\1\22\2\uffff\1\4"+
-        "\1\21\1\15\1\24\1\uffff\1\23\2\uffff\1\31\2\uffff}>";
-    static final String[] DFA22_transitionS = {
-            "\11\51\2\50\2\51\1\50\22\51\1\50\1\51\1\44\1\47\1\23\2\51\1"+
-            "\43\1\27\1\30\1\41\1\31\1\32\1\33\1\34\1\35\12\42\2\51\1\24"+
-            "\1\36\1\25\2\51\1\22\1\10\1\6\1\11\1\14\1\2\1\12\1\15\1\4\2"+
-            "\46\1\3\1\17\1\5\1\13\2\46\1\1\1\16\1\46\1\20\1\46\1\21\3\46"+
-            "\1\7\3\51\1\46\1\45\1\22\1\10\1\6\1\11\1\14\1\2\1\12\1\15\1"+
-            "\4\2\46\1\3\1\17\1\5\1\13\2\46\1\1\1\16\1\46\1\20\1\46\1\21"+
-            "\3\46\1\37\1\26\1\40\uff82\51",
-            "\1\52\37\uffff\1\52",
-            "\1\55\2\uffff\1\54\34\uffff\1\55\2\uffff\1\54",
-            "\1\56\3\uffff\1\57\33\uffff\1\56\3\uffff\1\57",
-            "\1\61\4\uffff\1\60\32\uffff\1\61\4\uffff\1\60",
-            "\1\62\37\uffff\1\62",
+        "\1\uffff\1\100\4\uffff\1\110\1\111\1\113\1\114\1\uffff\1\110\13"+
+        "\uffff\1\107\21\uffff\1\50\1\uffff\1\51\1\52\1\70\1\53\1\72\1\60"+
+        "\1\61\1\62\1\63\1\64\1\111\1\65\1\uffff\1\66\1\112\1\67\1\71\1\73"+
+        "\1\74\1\100\1\105\1\101\1\uffff\1\106\1\113\11\uffff\1\55\13\uffff"+
+        "\1\57\1\56\14\uffff\1\54\1\75\1\76\37\uffff\1\44\1\45\1\46\1\47"+
+        "\3\uffff\1\2\1\40\1\3\1\32\1\41\1\42\1\4\1\24\2\uffff\1\5\1\15\1"+
+        "\27\3\uffff\1\77\4\uffff\1\37\7\uffff\1\43\5\uffff\1\1\1\7\2\uffff"+
+        "\1\34\1\6\4\uffff\1\14\1\uffff\1\17\1\uffff\1\31\2\uffff\1\33\1"+
+        "\35\1\36\11\uffff\1\25\1\26\1\30\6\uffff\1\12\1\22\1\uffff\1\23"+
+        "\3\uffff\1\16\1\11\1\20\1\21\1\13\2\uffff\1\10\1\11\6\uffff\1\103"+
+        "\1\102\1\uffff\2\104";
+    static final String DFA23_specialS =
+        "\1\46\6\uffff\1\14\34\uffff\1\1\1\4\1\0\17\uffff\1\37\1\10\52\uffff"+
+        "\1\2\17\uffff\1\44\1\7\27\uffff\1\3\16\uffff\1\43\1\12\22\uffff"+
+        "\1\15\1\32\22\uffff\1\42\1\11\16\uffff\1\13\1\34\6\uffff\1\41\1"+
+        "\6\14\uffff\1\17\1\33\2\uffff\1\40\1\5\6\uffff\1\16\1\36\2\uffff"+
+        "\1\24\1\45\4\uffff\1\21\1\35\6\uffff\1\20\1\26\2\uffff\1\23\1\25"+
+        "\1\22\1\30\1\uffff\1\27\2\uffff\1\31\2\uffff}>";
+    static final String[] DFA23_transitionS = {
+            "\11\52\2\51\2\52\1\51\22\52\1\51\1\52\1\45\1\50\1\23\2\52\1"+
+            "\44\1\27\1\30\1\42\1\31\1\32\1\33\1\34\1\35\12\43\2\52\1\24"+
+            "\1\36\1\25\2\52\1\22\1\10\1\6\1\11\1\14\1\2\1\12\1\15\1\4\2"+
+            "\47\1\3\1\17\1\5\1\13\2\47\1\1\1\16\1\47\1\20\1\47\1\21\3\47"+
+            "\1\7\3\52\1\47\1\46\1\22\1\10\1\41\1\11\1\14\1\2\1\12\1\15\1"+
+            "\4\2\47\1\3\1\17\1\5\1\13\2\47\1\1\1\16\1\47\1\20\1\47\1\21"+
+            "\3\47\1\37\1\26\1\40\uff82\52",
+            "\1\53\37\uffff\1\53",
+            "\1\56\2\uffff\1\55\34\uffff\1\56\2\uffff\1\55",
+            "\1\57\3\uffff\1\60\33\uffff\1\57\3\uffff\1\60",
+            "\1\62\4\uffff\1\61\32\uffff\1\62\4\uffff\1\61",
             "\1\63\37\uffff\1\63",
-            "\102\66\1\64\4\66\1\65\32\66\1\64\4\66\1\65\uff98\66",
-            "\1\67\37\uffff\1\67",
-            "\1\71\3\uffff\1\70\33\uffff\1\71\3\uffff\1\70",
-            "\1\72\37\uffff\1\72",
-            "\1\74\3\uffff\1\73\33\uffff\1\74\3\uffff\1\73",
-            "\1\76\6\uffff\1\75\30\uffff\1\76\6\uffff\1\75",
-            "\1\77\37\uffff\1\77",
-            "\1\100\11\uffff\1\101\25\uffff\1\100\11\uffff\1\101",
-            "\1\102\37\uffff\1\102",
-            "\1\103\37\uffff\1\103",
+            "\1\65\20\uffff\1\64\37\uffff\1\64",
+            "\102\70\1\66\4\70\1\67\32\70\1\66\4\70\1\67\uff98\70",
+            "\1\71\37\uffff\1\71",
+            "\1\73\3\uffff\1\72\33\uffff\1\73\3\uffff\1\72",
+            "\1\74\37\uffff\1\74",
+            "\1\76\3\uffff\1\75\33\uffff\1\76\3\uffff\1\75",
+            "\1\100\6\uffff\1\77\30\uffff\1\100\6\uffff\1\77",
+            "\1\101\37\uffff\1\101",
+            "\1\102\11\uffff\1\103\25\uffff\1\102\11\uffff\1\103",
             "\1\104\37\uffff\1\104",
-            "\1\105\1\uffff\1\106\4\uffff\1\107\30\uffff\1\105\1\uffff\1"+
-            "\106\4\uffff\1\107",
-            "\1\111\7\uffff\1\110\37\uffff\1\110",
-            "\1\112\1\113",
-            "\1\115",
+            "\1\105\37\uffff\1\105",
+            "\1\106\37\uffff\1\106",
+            "\1\107\1\uffff\1\110\4\uffff\1\111\30\uffff\1\107\1\uffff\1"+
+            "\110\4\uffff\1\111",
+            "\1\113\7\uffff\1\112\37\uffff\1\112",
+            "\1\114\1\115",
             "\1\117",
+            "\1\121",
             "",
             "",
             "",
             "",
-            "\1\124\2\uffff\12\126",
+            "\1\126\2\uffff\12\130",
             "",
-            "\1\130\4\uffff\1\124",
-            "",
-            "",
-            "",
-            "",
-            "\1\137\1\uffff\12\126",
-            "\60\141\12\140\uffc6\141",
-            "\0\141",
-            "\0\66",
+            "\1\132\4\uffff\1\126",
             "",
             "",
             "",
+            "\1\64\37\uffff\1\64",
             "",
-            "\1\143\37\uffff\1\143",
+            "\1\140\1\uffff\12\130",
+            "\60\143\12\142\uffc6\143",
+            "\0\143",
+            "\0\70",
             "",
-            "\1\144\37\uffff\1\144",
+            "",
+            "",
+            "",
             "\1\145\37\uffff\1\145",
-            "\1\146\14\uffff\1\147\22\uffff\1\146\14\uffff\1\147",
-            "\1\150\37\uffff\1\150",
-            "\1\151",
-            "\12\53\7\uffff\15\53\1\152\5\53\1\153\6\53\4\uffff\1\53\1\uffff"+
-            "\15\53\1\152\5\53\1\153\6\53",
-            "\1\155\37\uffff\1\155",
-            "\1\156\37\uffff\1\156",
-            "\105\66\1\157\37\66\1\157\uff9a\66",
-            "\122\66\1\160\37\66\1\160\uff8d\66",
             "",
-            "\1\161\37\uffff\1\161",
-            "\1\162\37\uffff\1\162",
-            "\1\163\37\uffff\1\163",
-            "\1\165\11\uffff\1\164\25\uffff\1\165\11\uffff\1\164",
-            "\12\53\7\uffff\3\53\1\166\26\53\4\uffff\1\53\1\uffff\3\53\1"+
-            "\166\26\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\171\37\uffff\1\171",
-            "\1\172\37\uffff\1\172",
-            "\1\173\37\uffff\1\173",
+            "\1\146\37\uffff\1\146",
+            "\1\147\37\uffff\1\147",
+            "\1\150\14\uffff\1\151\22\uffff\1\150\14\uffff\1\151",
+            "\1\152\37\uffff\1\152",
+            "\1\153",
+            "\12\54\7\uffff\15\54\1\154\5\54\1\155\6\54\4\uffff\1\54\1\uffff"+
+            "\15\54\1\154\5\54\1\155\6\54",
+            "\1\157\37\uffff\1\157",
+            "\1\160\37\uffff\1\160",
+            "\1\161",
+            "\105\70\1\162\37\70\1\162\uff9a\70",
+            "\122\70\1\163\37\70\1\163\uff8d\70",
+            "",
+            "\1\164\37\uffff\1\164",
+            "\1\165\37\uffff\1\165",
+            "\1\166\37\uffff\1\166",
+            "\1\170\11\uffff\1\167\25\uffff\1\170\11\uffff\1\167",
+            "\12\54\7\uffff\3\54\1\171\26\54\4\uffff\1\54\1\uffff\3\54\1"+
+            "\171\26\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "\1\174\37\uffff\1\174",
             "\1\175\37\uffff\1\175",
             "\1\176\37\uffff\1\176",
             "\1\177\37\uffff\1\177",
             "\1\u0080\37\uffff\1\u0080",
             "\1\u0081\37\uffff\1\u0081",
-            "\1\u0082\24\uffff\1\u0083\12\uffff\1\u0082\24\uffff\1\u0083",
-            "\12\53\7\uffff\2\53\1\u0084\27\53\4\uffff\1\53\1\uffff\2\53"+
-            "\1\u0084\27\53",
+            "\1\u0082\37\uffff\1\u0082",
+            "\1\u0083\37\uffff\1\u0083",
+            "\1\u0084\37\uffff\1\u0084",
+            "\1\u0085\24\uffff\1\u0086\12\uffff\1\u0085\24\uffff\1\u0086",
+            "\12\54\7\uffff\2\54\1\u0087\27\54\4\uffff\1\54\1\uffff\2\54"+
+            "\1\u0087\27\54",
             "",
-            "\1\u0087\131\uffff\1\u0086",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "\1\137\1\uffff\12\126",
+            "\1\u008a\131\uffff\1\u0089",
             "",
             "",
             "",
@@ -5421,705 +5499,723 @@ public class InternalSqlLexer extends Lexer {
             "",
             "",
             "",
-            "\60\141\12\u0088\uffc6\141",
             "",
             "",
-            "\1\u0089\37\uffff\1\u0089",
-            "\1\u008a\37\uffff\1\u008a",
-            "\1\u008b\37\uffff\1\u008b",
+            "",
+            "\1\140\1\uffff\12\130",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\60\143\12\u008b\uffc6\143",
+            "",
+            "",
             "\1\u008c\37\uffff\1\u008c",
             "\1\u008d\37\uffff\1\u008d",
             "\1\u008e\37\uffff\1\u008e",
             "\1\u008f\37\uffff\1\u008f",
             "\1\u0090\37\uffff\1\u0090",
             "\1\u0091\37\uffff\1\u0091",
+            "\1\u0092\37\uffff\1\u0092",
+            "\1\u0093\37\uffff\1\u0093",
+            "\1\u0094\37\uffff\1\u0094",
             "",
-            "\1\u0092\44\uffff\1\u0093\3\uffff\1\u0094\33\uffff\1\u0093"+
-            "\3\uffff\1\u0094",
-            "\1\u0095\37\uffff\1\u0095",
-            "\124\66\1\u0096\37\66\1\u0096\uff8b\66",
-            "\105\66\1\u0097\37\66\1\u0097\uff9a\66",
+            "\1\u0095\44\uffff\1\u0096\3\uffff\1\u0097\33\uffff\1\u0096"+
+            "\3\uffff\1\u0097",
             "\1\u0098\37\uffff\1\u0098",
-            "\1\u0099\37\uffff\1\u0099",
-            "\1\u009a\37\uffff\1\u009a",
-            "\1\u009b\37\uffff\1\u009b",
+            "\1\u0099",
+            "\124\70\1\u009a\37\70\1\u009a\uff8b\70",
+            "\105\70\1\u009b\37\70\1\u009b\uff9a\70",
             "\1\u009c\37\uffff\1\u009c",
             "\1\u009d\37\uffff\1\u009d",
-            "",
-            "",
             "\1\u009e\37\uffff\1\u009e",
             "\1\u009f\37\uffff\1\u009f",
             "\1\u00a0\37\uffff\1\u00a0",
             "\1\u00a1\37\uffff\1\u00a1",
+            "",
+            "",
             "\1\u00a2\37\uffff\1\u00a2",
             "\1\u00a3\37\uffff\1\u00a3",
             "\1\u00a4\37\uffff\1\u00a4",
             "\1\u00a5\37\uffff\1\u00a5",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00a6\37\uffff\1\u00a6",
+            "\1\u00a7\37\uffff\1\u00a7",
+            "\1\u00a8\37\uffff\1\u00a8",
+            "\1\u00a9\37\uffff\1\u00a9",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "",
             "",
             "",
-            "\60\141\12\u00aa\1\u00ab\uffc5\141",
-            "\1\u00ac\37\uffff\1\u00ac",
-            "\1\u00ad",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00af",
-            "\12\53\7\uffff\32\53\2\uffff\1\u00b0\1\uffff\1\53\1\uffff\32"+
-            "\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00b3\5\uffff\1\u00b4\31\uffff\1\u00b3\5\uffff\1\u00b4",
-            "\1\u00b5\37\uffff\1\u00b5",
-            "\1\u00b6\37\uffff\1\u00b6",
-            "\1\u00b7\6\uffff\1\u00b9\2\uffff\1\u00b8\25\uffff\1\u00b7\6"+
-            "\uffff\1\u00b9\2\uffff\1\u00b8",
+            "\60\143\12\u00ae\1\u00af\uffc5\143",
+            "\1\u00b0\37\uffff\1\u00b0",
+            "\1\u00b1",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\1\u00b3",
+            "\12\54\7\uffff\32\54\2\uffff\1\u00b4\1\uffff\1\54\1\uffff\32"+
+            "\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\1\u00b7\5\uffff\1\u00b8\31\uffff\1\u00b7\5\uffff\1\u00b8",
+            "\1\u00b9\37\uffff\1\u00b9",
             "\1\u00ba\37\uffff\1\u00ba",
-            "\1\u00bb\37\uffff\1\u00bb",
-            "\1\u00bc\37\uffff\1\u00bc",
-            "\127\66\1\u00bd\37\66\1\u00bd\uff88\66",
-            "\101\66\1\u00be\37\66\1\u00be\uff9e\66",
+            "\1\u00bb\6\uffff\1\u00bd\2\uffff\1\u00bc\25\uffff\1\u00bb\6"+
+            "\uffff\1\u00bd\2\uffff\1\u00bc",
+            "\1\u00be\37\uffff\1\u00be",
             "\1\u00bf\37\uffff\1\u00bf",
             "\1\u00c0\37\uffff\1\u00c0",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00c2\37\uffff\1\u00c2",
-            "\1\u00c3\37\uffff\1\u00c3",
+            "\1\u00c1",
+            "\127\70\1\u00c2\37\70\1\u00c2\uff88\70",
+            "\101\70\1\u00c3\37\70\1\u00c3\uff9e\70",
             "\1\u00c4\37\uffff\1\u00c4",
             "\1\u00c5\37\uffff\1\u00c5",
-            "\1\u00c6\37\uffff\1\u00c6",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "\1\u00c7\37\uffff\1\u00c7",
             "\1\u00c8\37\uffff\1\u00c8",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\1\u00c9\37\uffff\1\u00c9",
             "\1\u00ca\37\uffff\1\u00ca",
             "\1\u00cb\37\uffff\1\u00cb",
             "\1\u00cc\37\uffff\1\u00cc",
-            "",
-            "",
-            "",
-            "",
-            "\60\141\12\u00cd\uffc6\141",
-            "\60\141\12\u00ce\uffc6\141",
-            "\1\u00cf",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "\1\u00d0",
+            "\1\u00cd\37\uffff\1\u00cd",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\1\u00cf\37\uffff\1\u00cf",
+            "\1\u00d0\37\uffff\1\u00d0",
             "\1\u00d1\37\uffff\1\u00d1",
             "",
             "",
             "",
-            "\1\u00d2\37\uffff\1\u00d2",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "",
+            "\60\143\12\u00d2\uffc6\143",
+            "\60\143\12\u00d3\uffc6\143",
             "\1\u00d4",
-            "\105\66\1\u00d5\37\66\1\u00d5\uff9a\66",
-            "\124\66\1\u00d6\37\66\1\u00d6\uff8b\66",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\u00d5",
+            "\1\u00d6\37\uffff\1\u00d6",
+            "",
+            "",
+            "",
             "\1\u00d7\37\uffff\1\u00d7",
-            "\1\u00d8\37\uffff\1\u00d8",
-            "",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "\1\u00d9",
-            "\1\u00da\37\uffff\1\u00da",
-            "\1\u00db",
+            "",
+            "\105\70\1\u00da\37\70\1\u00da\uff9a\70",
+            "\124\70\1\u00db\37\70\1\u00db\uff8b\70",
             "\1\u00dc\37\uffff\1\u00dc",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\1\u00de\37\uffff\1\u00de",
+            "\1\u00dd\37\uffff\1\u00dd",
+            "",
+            "\1\u00de",
             "\1\u00df\37\uffff\1\u00df",
+            "\1\u00e0",
+            "\1\u00e1\37\uffff\1\u00e1",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\1\u00e3\37\uffff\1\u00e3",
+            "\1\u00e4\37\uffff\1\u00e4",
             "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\55\141\1\u00e3\uffd2\141",
-            "\60\141\12\u00e4\uffc6\141",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\55\143\1\u00e8\uffd2\143",
+            "\60\143\12\u00e9\uffc6\143",
             "",
             "",
-            "\1\u00e5\37\uffff\1\u00e5",
-            "\1\u00e6\37\uffff\1\u00e6",
-            "",
-            "",
-            "\105\66\1\u00e7\37\66\1\u00e7\uff9a\66",
-            "\105\66\1\u00e8\37\66\1\u00e8\uff9a\66",
-            "\1\u00e9\37\uffff\1\u00e9",
             "\1\u00ea\37\uffff\1\u00ea",
-            "",
             "\1\u00eb\37\uffff\1\u00eb",
             "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
             "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\105\70\1\u00ec\37\70\1\u00ec\uff9a\70",
+            "\105\70\1\u00ed\37\70\1\u00ed\uff9a\70",
+            "\1\u00ee\37\uffff\1\u00ee",
+            "\1\u00ef\37\uffff\1\u00ef",
+            "",
+            "\1\u00f0\37\uffff\1\u00f0",
+            "",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "",
             "",
             "",
-            "\60\141\2\u00ef\uffce\141",
-            "\72\141\1\u00f0\uffc5\141",
-            "\1\u00f1\37\uffff\1\u00f1",
-            "\1\u00f2\37\uffff\1\u00f2",
-            "\116\66\1\u00f3\37\66\1\u00f3\uff91\66",
-            "\122\66\1\u00f4\37\66\1\u00f4\uff8d\66",
-            "\12\53\7\uffff\32\53\2\uffff\1\u00f5\1\uffff\1\53\1\uffff\32"+
-            "\53",
+            "\60\143\2\u00f4\uffce\143",
+            "\72\143\1\u00f5\uffc5\143",
+            "\1\u00f6\37\uffff\1\u00f6",
             "\1\u00f7\37\uffff\1\u00f7",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\116\70\1\u00f8\37\70\1\u00f8\uff91\70",
+            "\122\70\1\u00f9\37\70\1\u00f9\uff8d\70",
+            "\12\54\7\uffff\32\54\2\uffff\1\u00fa\1\uffff\1\54\1\uffff\32"+
+            "\54",
+            "\1\u00fc\37\uffff\1\u00fc",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "",
             "",
             "",
-            "\60\141\12\u00f9\uffc6\141",
-            "\60\141\2\u00fa\uffce\141",
-            "\1\u00fb\37\uffff\1\u00fb",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "\135\66\1\u00fd\uffa2\66",
-            "\0\66",
+            "\60\143\12\u00fe\uffc6\143",
+            "\60\143\2\u00ff\uffce\143",
+            "\1\u0100\37\uffff\1\u0100",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
+            "\135\70\1\u0102\uffa2\70",
+            "\0\70",
             "",
             "",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "",
-            "\55\141\1\u0101\uffd2\141",
-            "\60\141\12\u0102\uffc6\141",
-            "\12\53\7\uffff\32\53\4\uffff\1\53\1\uffff\32\53",
-            "",
-            "",
+            "\55\143\1\u0106\uffd2\143",
+            "\60\143\12\u0107\uffc6\143",
+            "\12\54\7\uffff\32\54\4\uffff\1\54\1\uffff\32\54",
             "",
             "",
             "",
-            "\60\141\4\u0105\uffcc\141",
-            "\56\141\1\u0106\uffd1\141",
             "",
             "",
-            "\60\141\12\u0107\uffc6\141",
-            "\60\141\12\u0108\uffc6\141",
-            "\47\141\1\u0109\uffd8\141",
-            "\60\141\12\u010a\uffc6\141",
-            "\1\u010c",
-            "\60\141\12\u010d\uffc6\141",
+            "\60\143\4\u010a\uffcc\143",
+            "\56\143\1\u010b\uffd1\143",
             "",
             "",
-            "\47\141\1\u010e\uffd8\141",
+            "\60\143\12\u010c\uffc6\143",
+            "\60\143\12\u010d\uffc6\143",
+            "\47\143\1\u010e\uffd8\143",
+            "\60\143\12\u010f\uffc6\143",
+            "\1\u0111",
+            "\60\143\12\u0112\uffc6\143",
+            "",
+            "",
+            "\47\143\1\u0113\uffd8\143",
             "",
             ""
     };
 
-    static final short[] DFA22_eot = DFA.unpackEncodedString(DFA22_eotS);
-    static final short[] DFA22_eof = DFA.unpackEncodedString(DFA22_eofS);
-    static final char[] DFA22_min = DFA.unpackEncodedStringToUnsignedChars(DFA22_minS);
-    static final char[] DFA22_max = DFA.unpackEncodedStringToUnsignedChars(DFA22_maxS);
-    static final short[] DFA22_accept = DFA.unpackEncodedString(DFA22_acceptS);
-    static final short[] DFA22_special = DFA.unpackEncodedString(DFA22_specialS);
-    static final short[][] DFA22_transition;
+    static final short[] DFA23_eot = DFA.unpackEncodedString(DFA23_eotS);
+    static final short[] DFA23_eof = DFA.unpackEncodedString(DFA23_eofS);
+    static final char[] DFA23_min = DFA.unpackEncodedStringToUnsignedChars(DFA23_minS);
+    static final char[] DFA23_max = DFA.unpackEncodedStringToUnsignedChars(DFA23_maxS);
+    static final short[] DFA23_accept = DFA.unpackEncodedString(DFA23_acceptS);
+    static final short[] DFA23_special = DFA.unpackEncodedString(DFA23_specialS);
+    static final short[][] DFA23_transition;
 
     static {
-        int numStates = DFA22_transitionS.length;
-        DFA22_transition = new short[numStates][];
+        int numStates = DFA23_transitionS.length;
+        DFA23_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA22_transition[i] = DFA.unpackEncodedString(DFA22_transitionS[i]);
+            DFA23_transition[i] = DFA.unpackEncodedString(DFA23_transitionS[i]);
         }
     }
 
-    class DFA22 extends DFA {
+    class DFA23 extends DFA {
 
-        public DFA22(BaseRecognizer recognizer) {
+        public DFA23(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 22;
-            this.eot = DFA22_eot;
-            this.eof = DFA22_eof;
-            this.min = DFA22_min;
-            this.max = DFA22_max;
-            this.accept = DFA22_accept;
-            this.special = DFA22_special;
-            this.transition = DFA22_transition;
+            this.decisionNumber = 23;
+            this.eot = DFA23_eot;
+            this.eof = DFA23_eof;
+            this.min = DFA23_min;
+            this.max = DFA23_max;
+            this.accept = DFA23_accept;
+            this.special = DFA23_special;
+            this.transition = DFA23_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( KEYWORD_60 | KEYWORD_58 | KEYWORD_59 | KEYWORD_56 | KEYWORD_57 | KEYWORD_54 | KEYWORD_55 | KEYWORD_52 | KEYWORD_53 | KEYWORD_44 | KEYWORD_45 | KEYWORD_46 | KEYWORD_47 | KEYWORD_48 | KEYWORD_49 | KEYWORD_50 | KEYWORD_51 | KEYWORD_41 | KEYWORD_42 | KEYWORD_43 | KEYWORD_37 | KEYWORD_38 | KEYWORD_39 | KEYWORD_40 | KEYWORD_31 | KEYWORD_32 | KEYWORD_33 | KEYWORD_34 | KEYWORD_35 | KEYWORD_36 | KEYWORD_26 | KEYWORD_27 | KEYWORD_28 | KEYWORD_29 | KEYWORD_30 | KEYWORD_22 | KEYWORD_23 | KEYWORD_24 | KEYWORD_25 | KEYWORD_13 | KEYWORD_14 | KEYWORD_15 | KEYWORD_16 | KEYWORD_17 | KEYWORD_18 | KEYWORD_19 | KEYWORD_20 | KEYWORD_21 | KEYWORD_1 | KEYWORD_2 | KEYWORD_3 | KEYWORD_4 | KEYWORD_5 | KEYWORD_6 | KEYWORD_7 | KEYWORD_8 | KEYWORD_9 | KEYWORD_10 | KEYWORD_11 | KEYWORD_12 | RULE_JRPARAM | RULE_JRNPARAM | RULE_STAR | RULE_INT | RULE_TIMESTAMP | RULE_DATE | RULE_TIME | RULE_SIGNED_DOUBLE | RULE_STRING | RULE_DBNAME | RULE_ID | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_WS | RULE_ANY_OTHER );";
+            return "1:1: Tokens : ( KEYWORD_60 | KEYWORD_58 | KEYWORD_59 | KEYWORD_56 | KEYWORD_57 | KEYWORD_54 | KEYWORD_55 | KEYWORD_52 | KEYWORD_53 | KEYWORD_44 | KEYWORD_45 | KEYWORD_46 | KEYWORD_47 | KEYWORD_48 | KEYWORD_49 | KEYWORD_50 | KEYWORD_51 | KEYWORD_41 | KEYWORD_42 | KEYWORD_43 | KEYWORD_37 | KEYWORD_38 | KEYWORD_39 | KEYWORD_40 | KEYWORD_31 | KEYWORD_32 | KEYWORD_33 | KEYWORD_34 | KEYWORD_35 | KEYWORD_36 | KEYWORD_26 | KEYWORD_27 | KEYWORD_28 | KEYWORD_29 | KEYWORD_30 | KEYWORD_22 | KEYWORD_23 | KEYWORD_24 | KEYWORD_25 | KEYWORD_13 | KEYWORD_14 | KEYWORD_15 | KEYWORD_16 | KEYWORD_17 | KEYWORD_18 | KEYWORD_19 | KEYWORD_20 | KEYWORD_21 | KEYWORD_1 | KEYWORD_2 | KEYWORD_3 | KEYWORD_4 | KEYWORD_5 | KEYWORD_6 | KEYWORD_7 | KEYWORD_8 | KEYWORD_9 | KEYWORD_10 | KEYWORD_11 | KEYWORD_12 | RULE_JRPARAM | RULE_JRNPARAM | RULE_SQLCASE | RULE_STAR | RULE_INT | RULE_TIMESTAMP | RULE_DATE | RULE_TIME | RULE_SIGNED_DOUBLE | RULE_STRING | RULE_DBNAME | RULE_ID | RULE_SL_COMMENT | RULE_ML_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA22_205 = input.LA(1);
+                        int LA23_38 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_205=='-') ) {s = 227;}
+                        if ( ((LA23_38>='\u0000' && LA23_38<='\uFFFF')) ) {s = 56;}
 
-                        else if ( ((LA22_205>='\u0000' && LA22_205<=',')||(LA22_205>='.' && LA22_205<='\uFFFF')) ) {s = 97;}
+                        else s = 42;
 
                         if ( s>=0 ) return s;
                         break;
                     case 1 : 
-                        int LA22_227 = input.LA(1);
+                        int LA23_36 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_227>='0' && LA22_227<='1')) ) {s = 239;}
+                        if ( ((LA23_36>='0' && LA23_36<='9')) ) {s = 98;}
 
-                        else if ( ((LA22_227>='\u0000' && LA22_227<='/')||(LA22_227>='2' && LA22_227<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_36>='\u0000' && LA23_36<='/')||(LA23_36>=':' && LA23_36<='\uFFFF')) ) {s = 99;}
+
+                        else s = 42;
 
                         if ( s>=0 ) return s;
                         break;
                     case 2 : 
-                        int LA22_170 = input.LA(1);
+                        int LA23_98 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_170>='0' && LA22_170<='9')) ) {s = 205;}
+                        if ( ((LA23_98>='0' && LA23_98<='9')) ) {s = 139;}
 
-                        else if ( ((LA22_170>='\u0000' && LA22_170<='/')||(LA22_170>=':' && LA22_170<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_98>='\u0000' && LA23_98<='/')||(LA23_98>=':' && LA23_98<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 3 : 
-                        int LA22_257 = input.LA(1);
+                        int LA23_139 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_257>='0' && LA22_257<='3')) ) {s = 261;}
+                        if ( ((LA23_139>='0' && LA23_139<='9')) ) {s = 174;}
 
-                        else if ( ((LA22_257>='\u0000' && LA22_257<='/')||(LA22_257>='4' && LA22_257<='\uFFFF')) ) {s = 97;}
+                        else if ( (LA23_139==':') ) {s = 175;}
+
+                        else if ( ((LA23_139>='\u0000' && LA23_139<='/')||(LA23_139>=';' && LA23_139<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 4 : 
-                        int LA22_261 = input.LA(1);
+                        int LA23_37 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_261>='0' && LA22_261<='9')) ) {s = 263;}
+                        if ( ((LA23_37>='\u0000' && LA23_37<='\uFFFF')) ) {s = 99;}
 
-                        else if ( ((LA22_261>='\u0000' && LA22_261<='/')||(LA22_261>=':' && LA22_261<='\uFFFF')) ) {s = 97;}
+                        else s = 42;
 
                         if ( s>=0 ) return s;
                         break;
                     case 5 : 
-                        int LA22_239 = input.LA(1);
+                        int LA23_237 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_239>='0' && LA22_239<='9')) ) {s = 249;}
+                        if ( (LA23_237=='R'||LA23_237=='r') ) {s = 249;}
 
-                        else if ( ((LA22_239>='\u0000' && LA22_239<='/')||(LA22_239>=':' && LA22_239<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_237>='\u0000' && LA23_237<='Q')||(LA23_237>='S' && LA23_237<='q')||(LA23_237>='s' && LA23_237<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 6 : 
-                        int LA22_53 = input.LA(1);
+                        int LA23_219 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_53=='R'||LA22_53=='r') ) {s = 112;}
+                        if ( (LA23_219=='E'||LA23_219=='e') ) {s = 237;}
 
-                        else if ( ((LA22_53>='\u0000' && LA22_53<='Q')||(LA22_53>='S' && LA22_53<='q')||(LA22_53>='s' && LA22_53<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_219>='\u0000' && LA23_219<='D')||(LA23_219>='F' && LA23_219<='d')||(LA23_219>='f' && LA23_219<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 7 : 
-                        int LA22_249 = input.LA(1);
+                        int LA23_115 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_249=='-') ) {s = 257;}
+                        if ( (LA23_115=='E'||LA23_115=='e') ) {s = 155;}
 
-                        else if ( ((LA22_249>='\u0000' && LA22_249<=',')||(LA22_249>='.' && LA22_249<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_115>='\u0000' && LA23_115<='D')||(LA23_115>='F' && LA23_115<='d')||(LA23_115>='f' && LA23_115<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 8 : 
-                        int LA22_112 = input.LA(1);
+                        int LA23_55 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_112=='E'||LA22_112=='e') ) {s = 151;}
+                        if ( (LA23_55=='R'||LA23_55=='r') ) {s = 115;}
 
-                        else if ( ((LA22_112>='\u0000' && LA22_112<='D')||(LA22_112>='F' && LA22_112<='d')||(LA22_112>='f' && LA22_112<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_55>='\u0000' && LA23_55<='Q')||(LA23_55>='S' && LA23_55<='q')||(LA23_55>='s' && LA23_55<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 9 : 
-                        int LA22_151 = input.LA(1);
+                        int LA23_195 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_151=='A'||LA22_151=='a') ) {s = 190;}
+                        if ( (LA23_195=='T'||LA23_195=='t') ) {s = 219;}
 
-                        else if ( ((LA22_151>='\u0000' && LA22_151<='@')||(LA22_151>='B' && LA22_151<='`')||(LA22_151>='b' && LA22_151<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_195>='\u0000' && LA23_195<='S')||(LA23_195>='U' && LA23_195<='s')||(LA23_195>='u' && LA23_195<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 10 : 
-                        int LA22_190 = input.LA(1);
+                        int LA23_155 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_190=='T'||LA22_190=='t') ) {s = 214;}
+                        if ( (LA23_155=='A'||LA23_155=='a') ) {s = 195;}
 
-                        else if ( ((LA22_190>='\u0000' && LA22_190<='S')||(LA22_190>='U' && LA22_190<='s')||(LA22_190>='u' && LA22_190<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_155>='\u0000' && LA23_155<='@')||(LA23_155>='B' && LA23_155<='`')||(LA23_155>='b' && LA23_155<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 11 : 
-                        int LA22_214 = input.LA(1);
+                        int LA23_210 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_214=='E'||LA22_214=='e') ) {s = 232;}
+                        if ( (LA23_210=='-') ) {s = 232;}
 
-                        else if ( ((LA22_214>='\u0000' && LA22_214<='D')||(LA22_214>='F' && LA22_214<='d')||(LA22_214>='f' && LA22_214<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_210>='\u0000' && LA23_210<=',')||(LA23_210>='.' && LA23_210<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 12 : 
-                        int LA22_232 = input.LA(1);
+                        int LA23_7 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_232=='R'||LA22_232=='r') ) {s = 244;}
+                        if ( (LA23_7=='B'||LA23_7=='b') ) {s = 54;}
 
-                        else if ( ((LA22_232>='\u0000' && LA22_232<='Q')||(LA22_232>='S' && LA22_232<='q')||(LA22_232>='s' && LA22_232<='\uFFFF')) ) {s = 54;}
+                        else if ( (LA23_7=='G'||LA23_7=='g') ) {s = 55;}
+
+                        else if ( ((LA23_7>='\u0000' && LA23_7<='A')||(LA23_7>='C' && LA23_7<='F')||(LA23_7>='H' && LA23_7<='a')||(LA23_7>='c' && LA23_7<='f')||(LA23_7>='h' && LA23_7<='\uFFFF')) ) {s = 56;}
+
+                        else s = 42;
 
                         if ( s>=0 ) return s;
                         break;
                     case 13 : 
-                        int LA22_263 = input.LA(1);
+                        int LA23_174 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_263=='\'') ) {s = 265;}
+                        if ( ((LA23_174>='0' && LA23_174<='9')) ) {s = 210;}
 
-                        else if ( ((LA22_263>='\u0000' && LA22_263<='&')||(LA22_263>='(' && LA22_263<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_174>='\u0000' && LA23_174<='/')||(LA23_174>=':' && LA23_174<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 14 : 
-                        int LA22_171 = input.LA(1);
+                        int LA23_244 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_171>='0' && LA22_171<='9')) ) {s = 206;}
+                        if ( ((LA23_244>='0' && LA23_244<='9')) ) {s = 254;}
 
-                        else if ( ((LA22_171>='\u0000' && LA22_171<='/')||(LA22_171>=':' && LA22_171<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_244>='\u0000' && LA23_244<='/')||(LA23_244>=':' && LA23_244<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 15 : 
-                        int LA22_0 = input.LA(1);
+                        int LA23_232 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_0=='R'||LA22_0=='r') ) {s = 1;}
+                        if ( ((LA23_232>='0' && LA23_232<='1')) ) {s = 244;}
 
-                        else if ( (LA22_0=='F'||LA22_0=='f') ) {s = 2;}
-
-                        else if ( (LA22_0=='L'||LA22_0=='l') ) {s = 3;}
-
-                        else if ( (LA22_0=='I'||LA22_0=='i') ) {s = 4;}
-
-                        else if ( (LA22_0=='N'||LA22_0=='n') ) {s = 5;}
-
-                        else if ( (LA22_0=='C'||LA22_0=='c') ) {s = 6;}
-
-                        else if ( (LA22_0=='[') ) {s = 7;}
-
-                        else if ( (LA22_0=='B'||LA22_0=='b') ) {s = 8;}
-
-                        else if ( (LA22_0=='D'||LA22_0=='d') ) {s = 9;}
-
-                        else if ( (LA22_0=='G'||LA22_0=='g') ) {s = 10;}
-
-                        else if ( (LA22_0=='O'||LA22_0=='o') ) {s = 11;}
-
-                        else if ( (LA22_0=='E'||LA22_0=='e') ) {s = 12;}
-
-                        else if ( (LA22_0=='H'||LA22_0=='h') ) {s = 13;}
-
-                        else if ( (LA22_0=='S'||LA22_0=='s') ) {s = 14;}
-
-                        else if ( (LA22_0=='M'||LA22_0=='m') ) {s = 15;}
-
-                        else if ( (LA22_0=='U'||LA22_0=='u') ) {s = 16;}
-
-                        else if ( (LA22_0=='W'||LA22_0=='w') ) {s = 17;}
-
-                        else if ( (LA22_0=='A'||LA22_0=='a') ) {s = 18;}
-
-                        else if ( (LA22_0=='$') ) {s = 19;}
-
-                        else if ( (LA22_0=='<') ) {s = 20;}
-
-                        else if ( (LA22_0=='>') ) {s = 21;}
-
-                        else if ( (LA22_0=='|') ) {s = 22;}
-
-                        else if ( (LA22_0=='(') ) {s = 23;}
-
-                        else if ( (LA22_0==')') ) {s = 24;}
-
-                        else if ( (LA22_0=='+') ) {s = 25;}
-
-                        else if ( (LA22_0==',') ) {s = 26;}
-
-                        else if ( (LA22_0=='-') ) {s = 27;}
-
-                        else if ( (LA22_0=='.') ) {s = 28;}
-
-                        else if ( (LA22_0=='/') ) {s = 29;}
-
-                        else if ( (LA22_0=='=') ) {s = 30;}
-
-                        else if ( (LA22_0=='{') ) {s = 31;}
-
-                        else if ( (LA22_0=='}') ) {s = 32;}
-
-                        else if ( (LA22_0=='*') ) {s = 33;}
-
-                        else if ( ((LA22_0>='0' && LA22_0<='9')) ) {s = 34;}
-
-                        else if ( (LA22_0=='\'') ) {s = 35;}
-
-                        else if ( (LA22_0=='\"') ) {s = 36;}
-
-                        else if ( (LA22_0=='`') ) {s = 37;}
-
-                        else if ( ((LA22_0>='J' && LA22_0<='K')||(LA22_0>='P' && LA22_0<='Q')||LA22_0=='T'||LA22_0=='V'||(LA22_0>='X' && LA22_0<='Z')||LA22_0=='_'||(LA22_0>='j' && LA22_0<='k')||(LA22_0>='p' && LA22_0<='q')||LA22_0=='t'||LA22_0=='v'||(LA22_0>='x' && LA22_0<='z')) ) {s = 38;}
-
-                        else if ( (LA22_0=='#') ) {s = 39;}
-
-                        else if ( ((LA22_0>='\t' && LA22_0<='\n')||LA22_0=='\r'||LA22_0==' ') ) {s = 40;}
-
-                        else if ( ((LA22_0>='\u0000' && LA22_0<='\b')||(LA22_0>='\u000B' && LA22_0<='\f')||(LA22_0>='\u000E' && LA22_0<='\u001F')||LA22_0=='!'||(LA22_0>='%' && LA22_0<='&')||(LA22_0>=':' && LA22_0<=';')||(LA22_0>='?' && LA22_0<='@')||(LA22_0>='\\' && LA22_0<='^')||(LA22_0>='~' && LA22_0<='\uFFFF')) ) {s = 41;}
+                        else if ( ((LA23_232>='\u0000' && LA23_232<='/')||(LA23_232>='2' && LA23_232<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 16 : 
-                        int LA22_244 = input.LA(1);
+                        int LA23_262 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_244>='\u0000' && LA22_244<='\uFFFF')) ) {s = 54;}
+                        if ( ((LA23_262>='0' && LA23_262<='3')) ) {s = 266;}
 
-                        else s = 255;
+                        else if ( ((LA23_262>='\u0000' && LA23_262<='/')||(LA23_262>='4' && LA23_262<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 17 : 
-                        int LA22_262 = input.LA(1);
+                        int LA23_254 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_262>='0' && LA22_262<='9')) ) {s = 264;}
+                        if ( (LA23_254=='-') ) {s = 262;}
 
-                        else if ( ((LA22_262>='\u0000' && LA22_262<='/')||(LA22_262>=':' && LA22_262<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_254>='\u0000' && LA23_254<=',')||(LA23_254>='.' && LA23_254<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 18 : 
-                        int LA22_258 = input.LA(1);
+                        int LA23_268 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_258=='.') ) {s = 262;}
+                        if ( (LA23_268=='\'') ) {s = 270;}
 
-                        else if ( ((LA22_258>='\u0000' && LA22_258<='-')||(LA22_258>='/' && LA22_258<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_268>='\u0000' && LA23_268<='&')||(LA23_268>='(' && LA23_268<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 19 : 
-                        int LA22_266 = input.LA(1);
+                        int LA23_266 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_266>='0' && LA22_266<='9')) ) {s = 269;}
+                        if ( ((LA23_266>='0' && LA23_266<='9')) ) {s = 268;}
 
-                        else if ( ((LA22_266>='\u0000' && LA22_266<='/')||(LA22_266>=':' && LA22_266<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_266>='\u0000' && LA23_266<='/')||(LA23_266>=':' && LA23_266<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 20 : 
-                        int LA22_264 = input.LA(1);
+                        int LA23_248 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_264>='0' && LA22_264<='9')) ) {s = 266;}
+                        if ( (LA23_248==']') ) {s = 258;}
 
-                        else if ( ((LA22_264>='\u0000' && LA22_264<='/')||(LA22_264>=':' && LA22_264<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_248>='\u0000' && LA23_248<='\\')||(LA23_248>='^' && LA23_248<='\uFFFF')) ) {s = 56;}
+
+                        else s = 259;
 
                         if ( s>=0 ) return s;
                         break;
                     case 21 : 
-                        int LA22_228 = input.LA(1);
+                        int LA23_267 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_228==':') ) {s = 240;}
+                        if ( ((LA23_267>='0' && LA23_267<='9')) ) {s = 269;}
 
-                        else if ( ((LA22_228>='\u0000' && LA22_228<='9')||(LA22_228>=';' && LA22_228<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_267>='\u0000' && LA23_267<='/')||(LA23_267>=':' && LA23_267<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 22 : 
-                        int LA22_206 = input.LA(1);
+                        int LA23_263 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_206>='0' && LA22_206<='9')) ) {s = 228;}
+                        if ( (LA23_263=='.') ) {s = 267;}
 
-                        else if ( ((LA22_206>='\u0000' && LA22_206<='/')||(LA22_206>=':' && LA22_206<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_263>='\u0000' && LA23_263<='-')||(LA23_263>='/' && LA23_263<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 23 : 
-                        int LA22_250 = input.LA(1);
+                        int LA23_271 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_250>='0' && LA22_250<='9')) ) {s = 258;}
+                        if ( ((LA23_271>='0' && LA23_271<='9')) ) {s = 274;}
 
-                        else if ( ((LA22_250>='\u0000' && LA22_250<='/')||(LA22_250>=':' && LA22_250<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_271>='\u0000' && LA23_271<='/')||(LA23_271>=':' && LA23_271<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 24 : 
-                        int LA22_240 = input.LA(1);
+                        int LA23_269 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_240>='0' && LA22_240<='1')) ) {s = 250;}
+                        if ( ((LA23_269>='0' && LA23_269<='9')) ) {s = 271;}
 
-                        else if ( ((LA22_240>='\u0000' && LA22_240<='/')||(LA22_240>='2' && LA22_240<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_269>='\u0000' && LA23_269<='/')||(LA23_269>=':' && LA23_269<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 25 : 
-                        int LA22_269 = input.LA(1);
+                        int LA23_274 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_269=='\'') ) {s = 270;}
+                        if ( (LA23_274=='\'') ) {s = 275;}
 
-                        else if ( ((LA22_269>='\u0000' && LA22_269<='&')||(LA22_269>='(' && LA22_269<='\uFFFF')) ) {s = 97;}
+                        else if ( ((LA23_274>='\u0000' && LA23_274<='&')||(LA23_274>='(' && LA23_274<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 26 : 
-                        int LA22_37 = input.LA(1);
+                        int LA23_175 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_37>='\u0000' && LA22_37<='\uFFFF')) ) {s = 54;}
+                        if ( ((LA23_175>='0' && LA23_175<='9')) ) {s = 211;}
 
-                        else s = 41;
+                        else if ( ((LA23_175>='\u0000' && LA23_175<='/')||(LA23_175>=':' && LA23_175<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 27 : 
-                        int LA22_189 = input.LA(1);
+                        int LA23_233 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_189=='E'||LA22_189=='e') ) {s = 213;}
+                        if ( (LA23_233==':') ) {s = 245;}
 
-                        else if ( ((LA22_189>='\u0000' && LA22_189<='D')||(LA22_189>='F' && LA22_189<='d')||(LA22_189>='f' && LA22_189<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_233>='\u0000' && LA23_233<='9')||(LA23_233>=';' && LA23_233<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 28 : 
-                        int LA22_150 = input.LA(1);
+                        int LA23_211 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_150=='W'||LA22_150=='w') ) {s = 189;}
+                        if ( ((LA23_211>='0' && LA23_211<='9')) ) {s = 233;}
 
-                        else if ( ((LA22_150>='\u0000' && LA22_150<='V')||(LA22_150>='X' && LA22_150<='v')||(LA22_150>='x' && LA22_150<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_211>='\u0000' && LA23_211<='/')||(LA23_211>=':' && LA23_211<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 29 : 
-                        int LA22_231 = input.LA(1);
+                        int LA23_255 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_231=='N'||LA22_231=='n') ) {s = 243;}
+                        if ( ((LA23_255>='0' && LA23_255<='9')) ) {s = 263;}
 
-                        else if ( ((LA22_231>='\u0000' && LA22_231<='M')||(LA22_231>='O' && LA22_231<='m')||(LA22_231>='o' && LA22_231<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_255>='\u0000' && LA23_255<='/')||(LA23_255>=':' && LA23_255<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 30 : 
-                        int LA22_213 = input.LA(1);
+                        int LA23_245 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_213=='E'||LA22_213=='e') ) {s = 231;}
+                        if ( ((LA23_245>='0' && LA23_245<='1')) ) {s = 255;}
 
-                        else if ( ((LA22_213>='\u0000' && LA22_213<='D')||(LA22_213>='F' && LA22_213<='d')||(LA22_213>='f' && LA22_213<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_245>='\u0000' && LA23_245<='/')||(LA23_245>='2' && LA23_245<='\uFFFF')) ) {s = 99;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 31 : 
-                        int LA22_111 = input.LA(1);
+                        int LA23_54 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_111=='T'||LA22_111=='t') ) {s = 150;}
+                        if ( (LA23_54=='E'||LA23_54=='e') ) {s = 114;}
 
-                        else if ( ((LA22_111>='\u0000' && LA22_111<='S')||(LA22_111>='U' && LA22_111<='s')||(LA22_111>='u' && LA22_111<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_54>='\u0000' && LA23_54<='D')||(LA23_54>='F' && LA23_54<='d')||(LA23_54>='f' && LA23_54<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 32 : 
-                        int LA22_52 = input.LA(1);
+                        int LA23_236 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_52=='E'||LA22_52=='e') ) {s = 111;}
+                        if ( (LA23_236=='N'||LA23_236=='n') ) {s = 248;}
 
-                        else if ( ((LA22_52>='\u0000' && LA22_52<='D')||(LA22_52>='F' && LA22_52<='d')||(LA22_52>='f' && LA22_52<='\uFFFF')) ) {s = 54;}
+                        else if ( ((LA23_236>='\u0000' && LA23_236<='M')||(LA23_236>='O' && LA23_236<='m')||(LA23_236>='o' && LA23_236<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 33 : 
-                        int LA22_35 = input.LA(1);
+                        int LA23_218 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_35>='0' && LA22_35<='9')) ) {s = 96;}
+                        if ( (LA23_218=='E'||LA23_218=='e') ) {s = 236;}
 
-                        else if ( ((LA22_35>='\u0000' && LA22_35<='/')||(LA22_35>=':' && LA22_35<='\uFFFF')) ) {s = 97;}
-
-                        else s = 41;
+                        else if ( ((LA23_218>='\u0000' && LA23_218<='D')||(LA23_218>='F' && LA23_218<='d')||(LA23_218>='f' && LA23_218<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 34 : 
-                        int LA22_243 = input.LA(1);
+                        int LA23_194 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_243==']') ) {s = 253;}
+                        if ( (LA23_194=='E'||LA23_194=='e') ) {s = 218;}
 
-                        else if ( ((LA22_243>='\u0000' && LA22_243<='\\')||(LA22_243>='^' && LA22_243<='\uFFFF')) ) {s = 54;}
-
-                        else s = 254;
+                        else if ( ((LA23_194>='\u0000' && LA23_194<='D')||(LA23_194>='F' && LA23_194<='d')||(LA23_194>='f' && LA23_194<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 35 : 
-                        int LA22_36 = input.LA(1);
+                        int LA23_154 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_36>='\u0000' && LA22_36<='\uFFFF')) ) {s = 97;}
+                        if ( (LA23_154=='W'||LA23_154=='w') ) {s = 194;}
 
-                        else s = 41;
+                        else if ( ((LA23_154>='\u0000' && LA23_154<='V')||(LA23_154>='X' && LA23_154<='v')||(LA23_154>='x' && LA23_154<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 36 : 
-                        int LA22_7 = input.LA(1);
+                        int LA23_114 = input.LA(1);
 
                         s = -1;
-                        if ( (LA22_7=='B'||LA22_7=='b') ) {s = 52;}
+                        if ( (LA23_114=='T'||LA23_114=='t') ) {s = 154;}
 
-                        else if ( (LA22_7=='G'||LA22_7=='g') ) {s = 53;}
-
-                        else if ( ((LA22_7>='\u0000' && LA22_7<='A')||(LA22_7>='C' && LA22_7<='F')||(LA22_7>='H' && LA22_7<='a')||(LA22_7>='c' && LA22_7<='f')||(LA22_7>='h' && LA22_7<='\uFFFF')) ) {s = 54;}
-
-                        else s = 41;
+                        else if ( ((LA23_114>='\u0000' && LA23_114<='S')||(LA23_114>='U' && LA23_114<='s')||(LA23_114>='u' && LA23_114<='\uFFFF')) ) {s = 56;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 37 : 
-                        int LA22_96 = input.LA(1);
+                        int LA23_249 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_96>='0' && LA22_96<='9')) ) {s = 136;}
+                        if ( ((LA23_249>='\u0000' && LA23_249<='\uFFFF')) ) {s = 56;}
 
-                        else if ( ((LA22_96>='\u0000' && LA22_96<='/')||(LA22_96>=':' && LA22_96<='\uFFFF')) ) {s = 97;}
+                        else s = 260;
 
                         if ( s>=0 ) return s;
                         break;
                     case 38 : 
-                        int LA22_136 = input.LA(1);
+                        int LA23_0 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA22_136>='0' && LA22_136<='9')) ) {s = 170;}
+                        if ( (LA23_0=='R'||LA23_0=='r') ) {s = 1;}
 
-                        else if ( (LA22_136==':') ) {s = 171;}
+                        else if ( (LA23_0=='F'||LA23_0=='f') ) {s = 2;}
 
-                        else if ( ((LA22_136>='\u0000' && LA22_136<='/')||(LA22_136>=';' && LA22_136<='\uFFFF')) ) {s = 97;}
+                        else if ( (LA23_0=='L'||LA23_0=='l') ) {s = 3;}
+
+                        else if ( (LA23_0=='I'||LA23_0=='i') ) {s = 4;}
+
+                        else if ( (LA23_0=='N'||LA23_0=='n') ) {s = 5;}
+
+                        else if ( (LA23_0=='C') ) {s = 6;}
+
+                        else if ( (LA23_0=='[') ) {s = 7;}
+
+                        else if ( (LA23_0=='B'||LA23_0=='b') ) {s = 8;}
+
+                        else if ( (LA23_0=='D'||LA23_0=='d') ) {s = 9;}
+
+                        else if ( (LA23_0=='G'||LA23_0=='g') ) {s = 10;}
+
+                        else if ( (LA23_0=='O'||LA23_0=='o') ) {s = 11;}
+
+                        else if ( (LA23_0=='E'||LA23_0=='e') ) {s = 12;}
+
+                        else if ( (LA23_0=='H'||LA23_0=='h') ) {s = 13;}
+
+                        else if ( (LA23_0=='S'||LA23_0=='s') ) {s = 14;}
+
+                        else if ( (LA23_0=='M'||LA23_0=='m') ) {s = 15;}
+
+                        else if ( (LA23_0=='U'||LA23_0=='u') ) {s = 16;}
+
+                        else if ( (LA23_0=='W'||LA23_0=='w') ) {s = 17;}
+
+                        else if ( (LA23_0=='A'||LA23_0=='a') ) {s = 18;}
+
+                        else if ( (LA23_0=='$') ) {s = 19;}
+
+                        else if ( (LA23_0=='<') ) {s = 20;}
+
+                        else if ( (LA23_0=='>') ) {s = 21;}
+
+                        else if ( (LA23_0=='|') ) {s = 22;}
+
+                        else if ( (LA23_0=='(') ) {s = 23;}
+
+                        else if ( (LA23_0==')') ) {s = 24;}
+
+                        else if ( (LA23_0=='+') ) {s = 25;}
+
+                        else if ( (LA23_0==',') ) {s = 26;}
+
+                        else if ( (LA23_0=='-') ) {s = 27;}
+
+                        else if ( (LA23_0=='.') ) {s = 28;}
+
+                        else if ( (LA23_0=='/') ) {s = 29;}
+
+                        else if ( (LA23_0=='=') ) {s = 30;}
+
+                        else if ( (LA23_0=='{') ) {s = 31;}
+
+                        else if ( (LA23_0=='}') ) {s = 32;}
+
+                        else if ( (LA23_0=='c') ) {s = 33;}
+
+                        else if ( (LA23_0=='*') ) {s = 34;}
+
+                        else if ( ((LA23_0>='0' && LA23_0<='9')) ) {s = 35;}
+
+                        else if ( (LA23_0=='\'') ) {s = 36;}
+
+                        else if ( (LA23_0=='\"') ) {s = 37;}
+
+                        else if ( (LA23_0=='`') ) {s = 38;}
+
+                        else if ( ((LA23_0>='J' && LA23_0<='K')||(LA23_0>='P' && LA23_0<='Q')||LA23_0=='T'||LA23_0=='V'||(LA23_0>='X' && LA23_0<='Z')||LA23_0=='_'||(LA23_0>='j' && LA23_0<='k')||(LA23_0>='p' && LA23_0<='q')||LA23_0=='t'||LA23_0=='v'||(LA23_0>='x' && LA23_0<='z')) ) {s = 39;}
+
+                        else if ( (LA23_0=='#') ) {s = 40;}
+
+                        else if ( ((LA23_0>='\t' && LA23_0<='\n')||LA23_0=='\r'||LA23_0==' ') ) {s = 41;}
+
+                        else if ( ((LA23_0>='\u0000' && LA23_0<='\b')||(LA23_0>='\u000B' && LA23_0<='\f')||(LA23_0>='\u000E' && LA23_0<='\u001F')||LA23_0=='!'||(LA23_0>='%' && LA23_0<='&')||(LA23_0>=':' && LA23_0<=';')||(LA23_0>='?' && LA23_0<='@')||(LA23_0>='\\' && LA23_0<='^')||(LA23_0>='~' && LA23_0<='\uFFFF')) ) {s = 42;}
 
                         if ( s>=0 ) return s;
                         break;
             }
             NoViableAltException nvae =
-                new NoViableAltException(getDescription(), 22, _s, input);
+                new NoViableAltException(getDescription(), 23, _s, input);
             error(nvae);
             throw nvae;
         }

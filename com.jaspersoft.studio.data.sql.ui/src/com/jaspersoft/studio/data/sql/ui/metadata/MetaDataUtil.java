@@ -51,18 +51,22 @@ public class MetaDataUtil {
 	}
 
 	public static void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
-		ResultSet rs;
+		ResultSet rs = null;
 		try {
-			rs = meta.getSchemas(schema.getTableCatalog(), schema.getValue());
+			rs = meta.getSchemas();
 			while (rs.next()) {
-				schema.removeChildren();
-				schema.setNotInMetadata(false);
+				if (rs.getString("TABLE_SCHEM").equals(schema.getValue())) {
+					schema.removeChildren();
+					schema.setNotInMetadata(false);
 
-				for (String ttype : tableTypes)
-					new MTables(schema, ttype);
+					for (String ttype : tableTypes)
+						new MTables(schema, ttype);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			SchemaUtil.close(rs);
 		}
 	}
 
@@ -97,7 +101,7 @@ public class MetaDataUtil {
 		ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mtable.getValue(), "%");
 		while (rs.next())
 			new MSQLColumn(mtable, rs.getString("COLUMN_NAME"), rs);
-		rs.close();
+		SchemaUtil.close(rs);
 	}
 
 	public static void readTableKeys(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
@@ -126,7 +130,7 @@ public class MetaDataUtil {
 			if (monitor.isCanceled())
 				break;
 		}
-		rs.close();
+		SchemaUtil.close(rs);
 		if (pk != null)
 			pk.setColumns(cols.toArray(new MSQLColumn[cols.size()]));
 	}
@@ -172,7 +176,7 @@ public class MetaDataUtil {
 			if (monitor.isCanceled())
 				break;
 		}
-		rs.close();
+		SchemaUtil.close(rs);
 		if (fk != null)
 			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
 	}
@@ -183,7 +187,7 @@ public class MetaDataUtil {
 			MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
 			while (rs.next())
 				new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
-			rs.close();
+			SchemaUtil.close(rs);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -194,7 +198,7 @@ public class MetaDataUtil {
 			MDBObjects mfunct = new MDBObjects(schema, "Functions", "icons/function.png");
 			while (rs.next())
 				new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
-			rs.close();
+			SchemaUtil.close(rs);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

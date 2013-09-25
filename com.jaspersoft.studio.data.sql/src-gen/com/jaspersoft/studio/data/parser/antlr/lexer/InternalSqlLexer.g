@@ -142,6 +142,8 @@ RULE_JRPARAM : '$P{' ( options {greedy=false;} : . )*'}';
 
 RULE_JRNPARAM : '$P!{' ( options {greedy=false;} : . )*'}';
 
+RULE_SQLCASE : 'CASE ' ( options {greedy=false;} : . )*' END';
+
 RULE_STAR : '*';
 
 RULE_INT : '-'? ('0'..'9')+;

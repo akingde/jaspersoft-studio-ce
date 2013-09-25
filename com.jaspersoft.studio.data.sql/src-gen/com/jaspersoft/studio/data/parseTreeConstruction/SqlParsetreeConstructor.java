@@ -6576,11 +6576,12 @@ protected class Operand_RightAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule OperandFragment ****************
  *
  * OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
- * 	subq=SubQueryOperand | func=OperandFunction;
+ * 	subq=SubQueryOperand | func=OperandFunction | sqlcase=SQLCASE;
  *
  **/
 
-// / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction
+// / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction |
+// sqlcase=SQLCASE
 protected class OperandFragment_Alternatives extends AlternativesToken {
 
 	public OperandFragment_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -6599,6 +6600,7 @@ protected class OperandFragment_Alternatives extends AlternativesToken {
 			case 1: return new OperandFragment_XopAssignment_1(lastRuleCallOrigin, this, 1, inst);
 			case 2: return new OperandFragment_SubqAssignment_2(lastRuleCallOrigin, this, 2, inst);
 			case 3: return new OperandFragment_FuncAssignment_3(lastRuleCallOrigin, this, 3, inst);
+			case 4: return new OperandFragment_SqlcaseAssignment_4(lastRuleCallOrigin, this, 4, inst);
 			default: return null;
 		}	
 	}
@@ -6790,6 +6792,39 @@ protected class OperandFragment_FuncAssignment_3 extends AssignmentToken  {
 			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
 		}	
 	}	
+}
+
+// sqlcase=SQLCASE
+protected class OperandFragment_SqlcaseAssignment_4 extends AssignmentToken  {
+	
+	public OperandFragment_SqlcaseAssignment_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getOperandFragmentAccess().getSqlcaseAssignment_4();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("sqlcase",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("sqlcase");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0();
+			return obj;
+		}
+		return null;
+	}
+
 }
 
 

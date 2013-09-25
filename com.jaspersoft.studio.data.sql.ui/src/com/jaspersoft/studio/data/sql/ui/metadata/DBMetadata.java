@@ -330,7 +330,7 @@ public class DBMetadata {
 			updateItermediateUI(false);
 			if (monitor.isCanceled())
 				return;
-			if (!schema.isNotInMetadata())
+			if (schema.isNotInMetadata())
 				return;
 			MetaDataUtil.readSchemaTables(meta, schema, getTables(), monitor);
 			updateItermediateUI();

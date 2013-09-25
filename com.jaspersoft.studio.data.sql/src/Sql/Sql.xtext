@@ -100,9 +100,10 @@ Operand returns Operands:
 	{Div.left=current} '/' | {Concat.left=current} '||') right=OperandFragment)*;
 
 OperandFragment returns Operand:
-/*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction;
+/*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction |
+	sqlcase=SQLCASE;
 
-//OperandGroup returns OpGroup:
+	//OperandGroup returns OpGroup:
 //	{OpGroup} '(' op=Operand ')';
 
 OperandFunction returns OpFunction:
@@ -152,6 +153,9 @@ terminal JRPARAM:
 
 terminal JRNPARAM:
 	'$P!{'->'}';
+
+terminal SQLCASE:
+	'CASE '->' END';
 
 terminal STAR:
 	"*";

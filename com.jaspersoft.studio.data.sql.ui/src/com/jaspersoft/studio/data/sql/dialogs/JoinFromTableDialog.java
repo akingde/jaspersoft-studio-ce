@@ -110,9 +110,11 @@ public class JoinFromTableDialog extends ATitledDialog {
 
 	private int getFromTablesIndex() {
 		String[] fromTables = getFromTables();
-		for (int i = 0; i < fromTables.length; i++)
-			if (fromTables.equals(fromTable))
+		String ftbl = fromTable.replace(",", "").trim();
+		for (int i = 0; i < fromTables.length; i++) {
+			if (fromTables[i].equals(ftbl))
 				return i;
+		}
 		return 0;
 	}
 

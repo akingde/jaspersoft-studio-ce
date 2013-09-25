@@ -1392,12 +1392,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cSubqSubQueryOperandParserRuleCall_2_0 = (RuleCall)cSubqAssignment_2.eContents().get(0);
 		private final Assignment cFuncAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
 		private final RuleCall cFuncOperandFunctionParserRuleCall_3_0 = (RuleCall)cFuncAssignment_3.eContents().get(0);
+		private final Assignment cSqlcaseAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
+		private final RuleCall cSqlcaseSQLCASETerminalRuleCall_4_0 = (RuleCall)cSqlcaseAssignment_4.eContents().get(0);
 		
 		//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
-		//	subq=SubQueryOperand | func=OperandFunction;
+		//	subq=SubQueryOperand | func=OperandFunction | sqlcase=SQLCASE;
 		public ParserRule getRule() { return rule; }
 
-		/// *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction
+		/// *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction |
+		//sqlcase=SQLCASE
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		/// *opGroup=OperandGroup |* / column=ColumnOperand
@@ -1423,6 +1426,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//OperandFunction
 		public RuleCall getFuncOperandFunctionParserRuleCall_3_0() { return cFuncOperandFunctionParserRuleCall_3_0; }
+
+		//sqlcase=SQLCASE
+		public Assignment getSqlcaseAssignment_4() { return cSqlcaseAssignment_4; }
+
+		//SQLCASE
+		public RuleCall getSqlcaseSQLCASETerminalRuleCall_4_0() { return cSqlcaseSQLCASETerminalRuleCall_4_0; }
 	}
 
 	public class OperandFunctionElements extends AbstractParserRuleElementFinder {
@@ -1951,6 +1960,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private FNAMEElements pFNAME;
 	private TerminalRule tJRPARAM;
 	private TerminalRule tJRNPARAM;
+	private TerminalRule tSQLCASE;
 	private TerminalRule tSTAR;
 	private TerminalRule tINT;
 	private TerminalRule tTIMESTAMP;
@@ -2313,7 +2323,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
-	//	subq=SubQueryOperand | func=OperandFunction;
+	//	subq=SubQueryOperand | func=OperandFunction | sqlcase=SQLCASE;
 	public OperandFragmentElements getOperandFragmentAccess() {
 		return (pOperandFragment != null) ? pOperandFragment : (pOperandFragment = new OperandFragmentElements());
 	}
@@ -2466,6 +2476,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	//	"$P!{"->"}";
 	public TerminalRule getJRNPARAMRule() {
 		return (tJRNPARAM != null) ? tJRNPARAM : (tJRNPARAM = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "JRNPARAM"));
+	} 
+
+	//terminal SQLCASE:
+	//	"CASE "->" END";
+	public TerminalRule getSQLCASERule() {
+		return (tSQLCASE != null) ? tSQLCASE : (tSQLCASE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SQLCASE"));
 	} 
 
 	//terminal STAR:

@@ -2567,6 +2567,25 @@ ruleOperandFragment returns [EObject current=null]
 	    }
 
 )
+)
+    |(
+(
+		lv_sqlcase_4_0=RULE_SQLCASE
+		{
+			newLeafNode(lv_sqlcase_4_0, grammarAccess.getOperandFragmentAccess().getSqlcaseSQLCASETerminalRuleCall_4_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getOperandFragmentRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"sqlcase",
+        		lv_sqlcase_4_0, 
+        		"SQLCASE");
+	    }
+
+)
 ))
 ;
 

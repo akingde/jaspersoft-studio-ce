@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getSubq <em>Subq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getFunc <em>Func</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getScalar <em>Scalar</em>}</li>
@@ -131,6 +132,32 @@ public interface Operand extends EObject
    * @generated
    */
   void setFunc(OpFunction value);
+
+  /**
+   * Returns the value of the '<em><b>Sqlcase</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Sqlcase</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Sqlcase</em>' attribute.
+   * @see #setSqlcase(String)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Sqlcase()
+   * @model
+   * @generated
+   */
+  String getSqlcase();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Sqlcase</em>' attribute.
+   * @see #getSqlcase()
+   * @generated
+   */
+  void setSqlcase(String value);
 
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.

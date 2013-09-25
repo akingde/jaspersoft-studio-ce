@@ -1313,13 +1313,22 @@ public interface SqlPackage extends EPackage
   int OPERAND__FUNC = 3;
 
   /**
+   * The feature id for the '<em><b>Sqlcase</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPERAND__SQLCASE = 4;
+
+  /**
    * The feature id for the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OPERAND__PARAM = 4;
+  int OPERAND__PARAM = 5;
 
   /**
    * The feature id for the '<em><b>Eparam</b></em>' containment reference.
@@ -1328,7 +1337,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OPERAND__EPARAM = 5;
+  int OPERAND__EPARAM = 6;
 
   /**
    * The feature id for the '<em><b>Scalar</b></em>' containment reference.
@@ -1337,7 +1346,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OPERAND__SCALAR = 6;
+  int OPERAND__SCALAR = 7;
 
   /**
    * The number of structural features of the '<em>Operand</em>' class.
@@ -1346,7 +1355,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OPERAND_FEATURE_COUNT = 7;
+  int OPERAND_FEATURE_COUNT = 8;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OpFunctionImpl <em>Op Function</em>}' class.
@@ -2993,6 +3002,17 @@ public interface SqlPackage extends EPackage
   EReference getOperand_Func();
 
   /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Sqlcase</em>'.
+   * @see com.jaspersoft.studio.data.sql.Operand#getSqlcase()
+   * @see #getOperand()
+   * @generated
+   */
+  EAttribute getOperand_Sqlcase();
+
+  /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4255,6 +4275,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference OPERAND__FUNC = eINSTANCE.getOperand_Func();
+
+    /**
+     * The meta object literal for the '<em><b>Sqlcase</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute OPERAND__SQLCASE = eINSTANCE.getOperand_Sqlcase();
 
     /**
      * The meta object literal for the '<em><b>Param</b></em>' containment reference feature.

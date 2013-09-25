@@ -112,6 +112,8 @@ public class ConvertSelectColumns {
 			mscol = getColumnUnknown(msel, op.getEparam().getPrm());
 		else if (op.getScalar() != null)
 			mscol = getColumnUnknown(msel, getScalarString(op.getScalar()));
+		else if (op.getSqlcase() != null)
+			mscol = getColumnUnknown(msel, op.getSqlcase());
 		else if (op.getXop() != null)
 			mscol = getMSelectColumn(designer, (OperandImpl) op.getXop(), msel);
 		return mscol;
@@ -134,6 +136,8 @@ public class ConvertSelectColumns {
 			return oper.getEparam().getPrm();
 		if (oper.getScalar() != null)
 			return getScalarString(oper.getScalar());
+		if (oper.getSqlcase() != null)
+			return "CASE " + oper.getSqlcase() + " END";
 		if (oper.getXop() != null)
 			return operand2String(oper.getXop(), msel);
 		return "";

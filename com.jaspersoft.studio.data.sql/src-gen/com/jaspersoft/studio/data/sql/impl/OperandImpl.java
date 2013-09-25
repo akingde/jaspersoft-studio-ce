@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getSubq <em>Subq</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getFunc <em>Func</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getSqlcase <em>Sqlcase</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getParam <em>Param</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getEparam <em>Eparam</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OperandImpl#getScalar <em>Scalar</em>}</li>
@@ -80,6 +81,26 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
    * @ordered
    */
   protected OpFunction func;
+
+  /**
+   * The default value of the '{@link #getSqlcase() <em>Sqlcase</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSqlcase()
+   * @generated
+   * @ordered
+   */
+  protected static final String SQLCASE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getSqlcase() <em>Sqlcase</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSqlcase()
+   * @generated
+   * @ordered
+   */
+  protected String sqlcase = SQLCASE_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getParam() <em>Param</em>}' containment reference.
@@ -329,6 +350,29 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getSqlcase()
+  {
+    return sqlcase;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setSqlcase(String newSqlcase)
+  {
+    String oldSqlcase = sqlcase;
+    sqlcase = newSqlcase;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.OPERAND__SQLCASE, oldSqlcase, sqlcase));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public POperand getParam()
   {
     return param;
@@ -514,6 +558,8 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return getSubq();
       case SqlPackage.OPERAND__FUNC:
         return getFunc();
+      case SqlPackage.OPERAND__SQLCASE:
+        return getSqlcase();
       case SqlPackage.OPERAND__PARAM:
         return getParam();
       case SqlPackage.OPERAND__EPARAM:
@@ -545,6 +591,9 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return;
       case SqlPackage.OPERAND__FUNC:
         setFunc((OpFunction)newValue);
+        return;
+      case SqlPackage.OPERAND__SQLCASE:
+        setSqlcase((String)newValue);
         return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)newValue);
@@ -581,6 +630,9 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
       case SqlPackage.OPERAND__FUNC:
         setFunc((OpFunction)null);
         return;
+      case SqlPackage.OPERAND__SQLCASE:
+        setSqlcase(SQLCASE_EDEFAULT);
+        return;
       case SqlPackage.OPERAND__PARAM:
         setParam((POperand)null);
         return;
@@ -612,6 +664,8 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return subq != null;
       case SqlPackage.OPERAND__FUNC:
         return func != null;
+      case SqlPackage.OPERAND__SQLCASE:
+        return SQLCASE_EDEFAULT == null ? sqlcase != null : !SQLCASE_EDEFAULT.equals(sqlcase);
       case SqlPackage.OPERAND__PARAM:
         return param != null;
       case SqlPackage.OPERAND__EPARAM:
@@ -620,6 +674,23 @@ public class OperandImpl extends MinimalEObjectImpl.Container implements Operand
         return scalar != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (sqlcase: ");
+    result.append(sqlcase);
+    result.append(')');
+    return result.toString();
   }
 
 } //OperandImpl

@@ -49,7 +49,8 @@ public class JoinTable extends AAction {
 	}
 
 	protected boolean isColumn(ANode element) {
-		boolean b = element instanceof MFromTable && !(element instanceof MFromTableJoin);
+		boolean b = element instanceof MFromTable;// && !(element instanceof
+																							// MFromTableJoin);
 		if (b) {
 			MFrom mfrom = null;
 			if (element instanceof MFromTable && element.getValue() instanceof MQueryTable)
@@ -72,8 +73,13 @@ public class JoinTable extends AAction {
 		}
 		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer, true);
 		dialog.setValue(mfromTable);
-		if (dialog.open() == Dialog.OK)
-			doRun(null, mfromTable, null, getFromTable(mfromTable, dialog));
+		if (dialog.open() == Dialog.OK) {
+			MFromTable srcTbl = mfromTable;
+			if (mfromTable instanceof MFromTableJoin)
+				srcTbl = (MFromTable) mfromTable.getParent();
+			MFromTable destTbl = getFromTable(mfromTable, dialog);
+			doRun(null, srcTbl, null, destTbl);
+		}
 	}
 
 	public void doRun(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl) {
@@ -108,17 +114,21 @@ public class JoinTable extends AAction {
 	}
 
 	public static MFromTable getFromTable(MFromTable mcol, JoinFromTableDialog dialog) {
-		ANode p = mcol.getParent();
-		if (p instanceof MFromTableJoin)
-			p = p.getParent();
 		String ft = dialog.getFromTable().replace(",", "").trim();
-		MFromTable mtab = null;
-		for (INode n : p.getChildren()) {
-			if (n instanceof MFromTable && ((MFromTable) n).getDisplayText().equals(ft)) {
-				mtab = (MFromTable) n;
+		MFromTable mFromTable = null;
+		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol, MFrom.class))) {
+			if (mft == mcol)
+				continue;
+			String alias = "";
+			if (mft.getAlias() != null)
+				alias = mft.getAliasKeyString() + mft.getAlias();
+			if ((mft.getValue().getDisplayText() + alias).trim().equals(ft)) {
+				mFromTable = mft;
 				break;
 			}
 		}
-		return mtab;
+		if (mFromTable instanceof MFromTableJoin)
+			mFromTable = (MFromTable) mFromTable.getParent();
+		return mFromTable;
 	}
 }
