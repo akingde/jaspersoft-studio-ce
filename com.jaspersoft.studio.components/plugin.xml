@@ -593,6 +593,14 @@
             </input>
          </propertySection>
          <propertySection
+        		class="com.jaspersoft.studio.components.map.property.MapPathAndStyleSection"
+        		id="com.jaspersoft.studio.components.map.property.MapPathAndStyleSection"
+               	tab="com.jaspersoft.studio.components.map.pathsAndStyles">
+         	<input
+         		type="com.jaspersoft.studio.components.map.model.MMap">
+         	</input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.components.chart.property.section.ChartAxisSection"
                id="com.jaspersoft.studio.components.chart.property.section.ChartAxisSection"
                tab="com.jaspersoft.studio.components.chartaxis">
@@ -805,6 +813,13 @@
                id="com.jaspersoft.studio.components.map"
                image="icons/map-16.png"
                label="%labelMarkers">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.components.map"
+               category="element"
+               id="com.jaspersoft.studio.components.map.pathsAndStyles"
+               image="icons/paths_styles-16.png"
+               label="Paths and styles">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"

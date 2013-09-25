@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.map.Item;
+import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
@@ -46,8 +47,12 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
 import com.jaspersoft.studio.components.map.messages.Messages;
+import com.jaspersoft.studio.components.map.model.itemdata.ElementDataHelper;
+import com.jaspersoft.studio.components.map.model.itemdata.dto.MapDataElementsConfiguration;
 import com.jaspersoft.studio.components.map.model.marker.MarkerDescriptor;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
+import com.jaspersoft.studio.components.map.model.path.MapPathsDescriptor;
+import com.jaspersoft.studio.components.map.model.style.MapStylesDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.model.ANode;
@@ -249,6 +254,14 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		mapVersionD.setDescription(Messages.MMap_VersionDescription);
 		desc.add(mapVersionD);
 		
+		MapPathsDescriptor mapPathsD = new MapPathsDescriptor(StandardMapComponent.PROPERTY_PATH_DATA_LIST, "Map Paths");
+		mapPathsD.setDescription("Various locations on a given map can be connected to form a path. A map can have multiple paths or none.");
+		desc.add(mapPathsD);
+		
+		MapStylesDescriptor mapPathStylesD = new MapStylesDescriptor(StandardMapComponent.PROPERTY_PATH_STYLE_LIST, "Map Styles");
+		mapPathStylesD.setDescription("A style element groups common style properties for a given path, so that individual items (points) in the path have to remember only the name of the path style");
+		desc.add(mapPathStylesD);
+		
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#"); //$NON-NLS-1$
 
 		markersD.setCategory(Messages.MMap_common_map_properties);
@@ -268,6 +281,9 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		mapClientIdD.setCategory(Messages.MMap_Category_Authentication);
 		mapClientSignatureD.setCategory(Messages.MMap_Category_Authentication);
 		mapVersionD.setCategory(Messages.MMap_Category_Authentication);
+		
+		mapPathStylesD.setCategory("Paths and Styles");
+		mapPathsD.setCategory("Paths and Styles");
 
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapTypeEnum.ROADMAP);
 		defaultsMap.put(StandardMapComponent.PROPERTY_MAP_TYPE, MapScaleEnum.ONE);
@@ -352,6 +368,28 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		}
 		else if (id.equals(MapComponent.PROPERTY_VERSION)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_VERSION);
+		}
+		
+		if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)){
+			List<ItemData> pathDataList = component.getPathDataList();
+			if(pathDataList == null) {
+				pathDataList = new ArrayList<ItemData>();
+			}
+			else {
+				pathDataList = JRCloneUtils.cloneList(pathDataList);
+			}
+			return ElementDataHelper.convertFromElementDataInformation(pathDataList,"Path");
+		}
+		
+		if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)){
+			List<ItemData> pathStylesList = component.getPathStyleList();
+			if(pathStylesList == null) {
+				pathStylesList = new ArrayList<ItemData>();
+			}
+			else {
+				pathStylesList = JRCloneUtils.cloneList(pathStylesList);
+			}
+			return ElementDataHelper.convertFromElementDataInformation(pathStylesList,"Style");
 		}
 		
 		return super.getPropertyValue(id);
@@ -446,6 +484,26 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			}
 			else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_VERSION);
+			}
+		}
+		else if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)) {
+			List<ItemData> pathDataList = ElementDataHelper.convertToElementDataInformation((MapDataElementsConfiguration) value);
+			Object[] existingPaths = component.getPathDataList().toArray();
+			for(Object p : existingPaths) {
+				component.removePathData((ItemData) p);
+			}
+			for(ItemData n : pathDataList){
+				component.addPathData(n);
+			}
+		}
+		else if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)) {
+			List<ItemData> pathStyleList = ElementDataHelper.convertToElementDataInformation((MapDataElementsConfiguration) value);
+			Object[] existingStyles = component.getPathStyleList().toArray();
+			for(Object p : existingStyles) {
+				component.removePathStyle((ItemData) p);
+			}
+			for(ItemData n : pathStyleList){
+				component.addPathStyle(n);
 			}
 		}
 		else
