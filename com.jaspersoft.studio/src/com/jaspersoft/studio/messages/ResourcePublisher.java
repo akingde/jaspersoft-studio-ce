@@ -29,7 +29,7 @@ import com.jaspersoft.translation.resources.PackageResourceDefinition;
  * @author Orlandin Marco
  *
  */
-public class ResourcePublisher implements IResourcesInput{
+public class ResourcePublisher extends IResourcesInput{
 
 	protected static HashMap<String,List<AbstractResourceDefinition>> propertiesCache = new HashMap<String, List<AbstractResourceDefinition>>();
 	

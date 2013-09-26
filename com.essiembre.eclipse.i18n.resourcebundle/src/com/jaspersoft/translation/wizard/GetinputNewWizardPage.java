@@ -17,6 +17,7 @@ package com.jaspersoft.translation.wizard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -185,6 +186,7 @@ public class GetinputNewWizardPage extends HelpWizardPage {
 				e.printStackTrace();
 			}
 		}
+		Collections.sort(loadedElementsList);
 	}
 	
 	@Override

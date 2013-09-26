@@ -28,7 +28,7 @@ import com.jaspersoft.translation.resources.PackageResourceDefinition;
  * @author Orlandin Marco
  *
  */
-public final class ResourcePublisher implements IResourcesInput{
+public final class ResourcePublisher extends IResourcesInput{
 
 	protected static List<AbstractResourceDefinition> propertiesCache = null;
 	
