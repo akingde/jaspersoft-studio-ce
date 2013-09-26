@@ -32,6 +32,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
@@ -70,16 +71,6 @@ public class SelectableComposite extends ScrolledComposite {
 	 * color used as background for the selected element
 	 */
 	private Color selectedColor = new Color(null, new RGB(51,153,255));
-	
-	/**
-	 * font used in the title label
-	 */
-	private Font boldFont = new Font(UIUtils.getDisplay(),"Arial", 9, SWT.BOLD );
-	
-	/**
-	 * font used in the description styled text
-	 */
-	private Font descFont = new Font(UIUtils.getDisplay(),"Arial", 8 , SWT.NORMAL );
 	
 	/**
 	 * adapter used to define what action must be done when the user double click an element
@@ -217,7 +208,12 @@ public class SelectableComposite extends ScrolledComposite {
 			comp.setBackground(unselectedColor);
 			
 			Label titleLabel = new Label(comp,SWT.NONE);
-			titleLabel.setFont(boldFont);
+
+			FontData[] fD = titleLabel.getFont().getFontData();
+			fD[0].setStyle(SWT.BOLD | SWT.ITALIC);
+			fD[0].setHeight(fD[0].getHeight()+1);
+			titleLabel.setFont( new Font(UIUtils.getDisplay(),fD[0]));
+			
 			titleLabel.setText(item.getName());
 			titleLabel.addMouseListener(compositeMouseAction);
 			
@@ -239,7 +235,6 @@ public class SelectableComposite extends ScrolledComposite {
 
 	private void createDescription(String text, Composite comp, StyleRange[] styles){
 		final StyledText descLabel = new StyledText(comp,SWT.MULTI | SWT.WRAP );
-		descLabel.setFont(descFont);
 		descLabel.setRightMargin(10);
 		descLabel.setEditable(false);
 		descLabel.setText(text);
@@ -262,8 +257,6 @@ public class SelectableComposite extends ScrolledComposite {
 		super.dispose();
 		selectedColor.dispose();
 		unselectedColor.dispose();
-		boldFont.dispose();
-		descFont.dispose();
 	}
 	
 }
