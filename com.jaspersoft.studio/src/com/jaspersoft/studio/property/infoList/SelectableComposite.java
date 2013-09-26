@@ -210,8 +210,8 @@ public class SelectableComposite extends ScrolledComposite {
 			Label titleLabel = new Label(comp,SWT.NONE);
 
 			FontData[] fD = titleLabel.getFont().getFontData();
-			fD[0].setStyle(SWT.BOLD | SWT.ITALIC);
-			fD[0].setHeight(fD[0].getHeight()+1);
+			fD[0].setStyle(SWT.BOLD);
+			//fD[0].setHeight(fD[0].getHeight()+1);
 			titleLabel.setFont( new Font(UIUtils.getDisplay(),fD[0]));
 			
 			titleLabel.setText(item.getName());
