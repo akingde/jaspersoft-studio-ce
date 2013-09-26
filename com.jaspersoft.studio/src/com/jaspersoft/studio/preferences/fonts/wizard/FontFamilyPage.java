@@ -11,17 +11,16 @@
 package com.jaspersoft.studio.preferences.fonts.wizard;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.fonts.FontFace;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -29,7 +28,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -48,10 +46,10 @@ public class FontFamilyPage extends WizardPage {
 	private Text dsname;
 	private Button embedepdf;
 	private Combo pdfenc;
-	private Text bold;
-	private Text italic;
-	private Text bolditalic;
-	private Text normal;
+	private FontFaceFragment bold;
+	private FontFaceFragment italic;
+	private FontFaceFragment bolditalic;
+	private FontFaceFragment normal;
 
 	public FontFamilyPage(FontFamily fontFamily) {
 		super("fontfamilypage"); //$NON-NLS-1$
@@ -92,23 +90,13 @@ public class FontFamilyPage extends WizardPage {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		gr.setLayoutData(gd);
-		gr.setLayout(new GridLayout(3, false));
+		gr.setLayout(new GridLayout(1, false));
 
-		normal = createFileField(gr, Messages.FontFamilyPage_normalLabel, NORMAL);
-		normal.addModifyListener(new ModifyListener() {
+		CTabFolder tabFolder = new CTabFolder(gr, SWT.FLAT | SWT.BOTTOM);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-			public void modifyText(ModifyEvent e) {
-				String dstext = normal.getText();
-				if (dstext == null || dstext.trim().equals("")) {//$NON-NLS-1$
-					setErrorMessage(Messages.WizardDatasetNewPage_validation_not_null);
-					setPageComplete(false);
-				} else {
-					setPageComplete(true);
-					setErrorMessage(null);
-					setMessage(getDescription());
-				}
-			}
-		});
+		normal = createFileField(tabFolder, Messages.FontFamilyPage_normalLabel, NORMAL);
+		tabFolder.setSelection(0);
 
 		// put a label here
 		new Label(gr, SWT.NONE);
@@ -121,9 +109,9 @@ public class FontFamilyPage extends WizardPage {
 
 		new Label(gr, SWT.NONE);
 
-		bold = createFileField(gr, Messages.FontFamilyPage_boldLabel, BOLD);
-		italic = createFileField(gr, Messages.FontFamilyPage_italicLabel, ITALIC);
-		bolditalic = createFileField(gr, Messages.FontFamilyPage_boldItalicLabel, BOLDITALIC);
+		bold = createFileField(tabFolder, Messages.FontFamilyPage_boldLabel, BOLD);
+		italic = createFileField(tabFolder, Messages.FontFamilyPage_italicLabel, ITALIC);
+		bolditalic = createFileField(tabFolder, Messages.FontFamilyPage_boldItalicLabel, BOLDITALIC);
 
 		gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.FontFamilyPage_pdfGroup);
@@ -182,78 +170,29 @@ public class FontFamilyPage extends WizardPage {
 		fillWidgets();
 	}
 
-	private Text createFileField(Composite composite, String name, final String type) {
-		new Label(composite, SWT.NONE).setText(name);
+	private FontFaceFragment createFileField(CTabFolder tabFolder, String name, final String type) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText(name);
 
-		final Text txt = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		SimpleFontFace fontFace = new SimpleFontFace(DefaultJasperReportsContext.getInstance());
+		if (type.equals(NORMAL))
+			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getNormalFace(), fontFace);
+		else if (type.equals(BOLD))
+			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getBoldFace(), fontFace);
+		else if (type.equals(ITALIC))
+			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getItalicFace(), fontFace);
+		else if (type.equals(BOLDITALIC))
+			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getBoldItalicFace(), fontFace);
+		FontFaceFragment fontFaceDialog = new FontFaceFragment(fontFace);
+		Composite cmp = fontFaceDialog.createDialogArea(tabFolder);
 
-		Button button = new Button(composite, SWT.PUSH);
-		button.setText(Messages.FontFamilyPage_browseButton);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SimpleFontFace fontFace = new SimpleFontFace(DefaultJasperReportsContext.getInstance());
-				if (type.equals(NORMAL))
-					copyValues((SimpleFontFace) fontFamily.getNormalFace(), fontFace);
-				else if (type.equals(BOLD))
-					copyValues((SimpleFontFace) fontFamily.getBoldFace(), fontFace);
-				else if (type.equals(ITALIC))
-					copyValues((SimpleFontFace) fontFamily.getItalicFace(), fontFace);
-				else if (type.equals(BOLDITALIC))
-					copyValues((SimpleFontFace) fontFamily.getBoldItalicFace(), fontFace);
-
-				FontFaceDialog ffd = new FontFaceDialog(Display.getDefault().getActiveShell(), fontFace);
-				if (ffd.open() == Dialog.OK) {
-					if (type.equals(NORMAL))
-						fontFamily.setNormalFace(fontFace);
-					else if (type.equals(BOLD))
-						fontFamily.setBoldFace(fontFace);
-					else if (type.equals(ITALIC))
-						fontFamily.setItalicFace(fontFace);
-					else if (type.equals(BOLDITALIC))
-						fontFamily.setBoldItalicFace(fontFace);
-				}
-				String str = Misc.nvl(fontFace.getTtf());
-				str += (str.isEmpty() ? "" : ";") + Misc.nvl(fontFace.getEot());
-				str += (str.isEmpty() || fontFace.getEot() == null ? "" : ";") + Misc.nvl(fontFace.getSvg());
-				str += (str.isEmpty() || fontFace.getSvg() == null ? "" : ";") + Misc.nvl(fontFace.getWoff());
-
-				txt.setText(fontFace.getName());
-				txt.setToolTipText(str);
-			}
-		});
-		return txt;
-	}
-
-	private static void copyValues(SimpleFontFace src, SimpleFontFace dest) {
-		if (src == null)
-			return;
-		dest.setTtf(src.getTtf());
-		dest.setEot(src.getEot());
-		dest.setSvg(src.getSvg());
-		dest.setWoff(src.getWoff());
+		bptab.setControl(cmp);
+		return fontFaceDialog;
 	}
 
 	private void fillWidgets() {
 		dsname.setText(fontFamily.getName());
 		setPageComplete(fontFamily.getName() != null);
-
-		FontFace normalFace = fontFamily.getNormalFace();
-		if (normalFace != null)
-			normal.setText(normalFace.getName());
-		else
-			setPageComplete(false);
-
-		FontFace boldFace = fontFamily.getBoldFace();
-		if (boldFace != null)
-			bold.setText(boldFace.getName());
-		FontFace italicFace = fontFamily.getItalicFace();
-		if (italicFace != null)
-			italic.setText(italicFace.getName());
-		FontFace boldItalicFace = fontFamily.getBoldItalicFace();
-		if (boldItalicFace != null)
-			bolditalic.setText(boldItalicFace.getName());
 
 		String pdfEncoding = fontFamily.getPdfEncoding();
 		int pdfEncodingIndex = ModelUtils.getPDFEncodingIndex(ModelUtils.getKey4PDFEncoding(pdfEncoding));

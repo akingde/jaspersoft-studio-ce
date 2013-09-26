@@ -67,7 +67,7 @@ public final class ImageConverter extends ElementConverter {
 	}
 
 	private CacheMap<JRElement, Renderable> cache = new CacheMap<JRElement, Renderable>(3000000);
-	private CacheMap<JRElement, KeyValue<String, Long>> running = new CacheMap<JRElement, KeyValue<String, Long>>(3000);
+	private CacheMap<JRElement, KeyValue<String, Long>> running = new CacheMap<JRElement, KeyValue<String, Long>>(3000000);
 
 	/**
 	 *
@@ -79,8 +79,8 @@ public final class ImageConverter extends ElementConverter {
 		if (image.getExpression() != null) {
 			String expr = image.getExpression().getText();
 			KeyValue<String, Long> last = running.get(element);
-			if (cacheRenderer == null || last == null || !last.key.equals(expr)
-					|| (last.value != null && System.currentTimeMillis() - last.value.longValue() > 1000)) {
+			if (cacheRenderer == null || last == null || !last.key.equals(expr)) {
+				// || (last.value != null && System.currentTimeMillis() - last.value.longValue() > 1000)) {
 				final KeyValue<String, Long> kv = new KeyValue<String, Long>(expr, null);
 				Job job = new Job("load image") {
 					protected IStatus run(IProgressMonitor monitor) {
@@ -96,6 +96,7 @@ public final class ImageConverter extends ElementConverter {
 							}
 
 						});
+						running.remove(element);
 						return Status.OK_STATUS;
 					}
 				};

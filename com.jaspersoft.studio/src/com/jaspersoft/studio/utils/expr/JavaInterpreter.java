@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.utils.expr;
 
@@ -23,6 +18,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 
 import bsh.Interpreter;
 
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JavaInterpreter extends AInterpreter {
@@ -47,6 +43,8 @@ public class JavaInterpreter extends AInterpreter {
 			if (javaProject != null) {
 				String[] cpaths = JavaRuntime.computeDefaultRuntimeClassPath(javaProject);
 				for (String p : cpaths) {
+					if (Misc.isNullOrEmpty(p))
+						continue;
 					interpreter.set("tmp", p);
 					interpreter.eval("addClassPath(tmp);");
 				}
