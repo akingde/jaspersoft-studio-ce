@@ -137,7 +137,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		List<JRDataset> ds = new ArrayList<JRDataset>();
 		ds.add(jasper.getMainDataset());
 		List<JRDataset> datasetsList = jasper.getDatasetsList();
-		if (datasetsList != null && datasetsList.isEmpty())
+		if (datasetsList != null && !datasetsList.isEmpty())
 			ds.addAll(datasetsList);
 		for (JRDataset d : ds) {
 			String dapath = d.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
