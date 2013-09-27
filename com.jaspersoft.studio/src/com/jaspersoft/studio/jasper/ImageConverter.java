@@ -68,6 +68,8 @@ public final class ImageConverter extends ElementConverter {
 
 	private CacheMap<JRElement, Renderable> cache = new CacheMap<JRElement, Renderable>(3000000);
 	private CacheMap<JRElement, KeyValue<String, Long>> running = new CacheMap<JRElement, KeyValue<String, Long>>(3000000);
+	private static CacheMap<KeyValue<JasperReportsContext, String>, Renderable> imgCache = new CacheMap<KeyValue<JasperReportsContext, String>, Renderable>(
+			10000);
 
 	/**
 	 *
@@ -101,20 +103,23 @@ public final class ImageConverter extends ElementConverter {
 		try {
 			cacheRenderer = cache.get(element);
 			if (image.getExpression() != null) {
-				final String expr = image.getExpression().getText();
-				final KeyValue<String, Long> last = running.get(element);
+				String expr = image.getExpression().getText();
+				KeyValue<String, Long> last = running.get(element);
+				Renderable r = null;
 				if (cacheRenderer == null) {
 					cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
 					cache.put(element, cacheRenderer);
 					if (last == null)
-						doFindImage(reportConverter, element, image, printImage, expr, last);
+						r = doFindImage(reportConverter, element, image, printImage, expr, last, cacheRenderer);
 				}
 				if (last != null
 						&& (!last.key.equals(expr) || (last.value != null && System.currentTimeMillis() - last.value.longValue() > 2000))) {
-					doFindImage(reportConverter, element, image, printImage, expr, last);
+					r = doFindImage(reportConverter, element, image, printImage, expr, last, cacheRenderer);
 				}
 				if (last == null)
-					doFindImage(reportConverter, element, image, printImage, expr, last);
+					r = doFindImage(reportConverter, element, image, printImage, expr, last, cacheRenderer);
+				if (r != null)
+					cacheRenderer = r;
 			} else {
 				running.remove(element);
 				cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
@@ -126,14 +131,23 @@ public final class ImageConverter extends ElementConverter {
 		return cacheRenderer;
 	}
 
-	protected void doFindImage(final ReportConverter reportConverter, final JRElement element, final JRImage image,
-			final JRBasePrintImage printImage, final String expr, final KeyValue<String, Long> last) {
+	protected Renderable doFindImage(final ReportConverter reportConverter, final JRElement element, final JRImage image,
+			final JRBasePrintImage printImage, final String expr, final KeyValue<String, Long> last, Renderable cacheRenderer) {
+		final JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
+		final KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, expr);
+		Renderable r = imgCache.get(key);
+		if (r != null) {
+			cache.put(element, r);
+			return r;
+		}
+		imgCache.put(key, cacheRenderer);
+
 		final KeyValue<String, Long> kv = new KeyValue<String, Long>(expr, null);
 		running.put(element, kv);
 		Job job = new Job("load image") {
 			protected IStatus run(IProgressMonitor monitor) {
-				final JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
-				final Renderable r = getRenderable(jrContext, image, printImage);
+
+				final Renderable r = getRenderable(jrContext, image, printImage, key);
 				Display.getDefault().asyncExec(new Runnable() {
 
 					@Override
@@ -150,20 +164,24 @@ public final class ImageConverter extends ElementConverter {
 		job.setSystem(true);
 		job.setPriority(Job.SHORT);
 		job.schedule();
+		return null;
 	}
 
 	/**
 	 * 
 	 */
 	private Renderable getRenderable(JasperReportsContext jasperReportsContext, JRImage imageElement,
-			JRPrintImage printImage) {
+			JRPrintImage printImage, KeyValue<JasperReportsContext, String> key) {
+		// long ctime = System.currentTimeMillis();
 		Renderable r = null;
 		String location = ExpressionUtil.eval(imageElement.getExpression(),
 				(JasperReportsConfiguration) jasperReportsContext);
 		// JRExpressionUtil.getSimpleExpressionText(imageElement.getExpression());
+		// long etime = System.currentTimeMillis();
 		if (location != null) {
 			try {
 				r = RenderableUtil.getInstance(jasperReportsContext).getRenderable(location, OnErrorTypeEnum.ERROR, false);
+				imgCache.put(key, r);
 			} catch (JRException e) {
 				if (log.isDebugEnabled())
 					log.debug("Creating location renderer for converted image failed.", e);
@@ -171,21 +189,25 @@ public final class ImageConverter extends ElementConverter {
 		}
 		if (r == null)
 			r = getRenderableNoImage(jasperReportsContext, imageElement, printImage);
+		// long ftime = System.currentTimeMillis();
+		// System.out.println("GetRenderable: " + (ftime - ctime) + " : " + (ftime - etime) + " " + location);
 		return r;
 	}
 
+	private static Renderable noImage;
+
 	private Renderable getRenderableNoImage(JasperReportsContext jasperReportsContext, JRImage imageElement,
 			JRPrintImage printImage) {
-		Renderable r = null;
 		try {
 			printImage.setScaleImage(ScaleImageEnum.CLIP);
-			r = RenderableUtil.getInstance(jasperReportsContext).getRenderable(JRImageLoader.NO_IMAGE_RESOURCE,
-					imageElement.getOnErrorTypeValue(), false);
+			if (noImage == null)
+				noImage = RenderableUtil.getInstance(jasperReportsContext).getRenderable(JRImageLoader.NO_IMAGE_RESOURCE,
+						imageElement.getOnErrorTypeValue(), false);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Creating icon renderer for converted image failed.", e);
 		}
-		return r;
+		return noImage;
 	}
 
 }
