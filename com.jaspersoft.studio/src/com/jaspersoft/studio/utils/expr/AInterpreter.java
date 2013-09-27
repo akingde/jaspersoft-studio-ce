@@ -109,7 +109,9 @@ public abstract class AInterpreter {
 				baseName = jasperDesign.getMainDataset().getResourceBundle();
 			if (!Misc.isNullOrEmpty(baseName)) {
 				Locale locale = Locale.getDefault();
-				Object obj = jConfig.getJRParameters().get(JRParameter.REPORT_LOCALE);
+				Object obj = null;
+				if (jConfig.getJRParameters() != null)
+					obj = jConfig.getJRParameters().get(JRParameter.REPORT_LOCALE);
 				if (obj != null && obj instanceof Locale)
 					locale = (Locale) obj;
 				ResourceBundle rb = JRResourcesUtil.loadResourceBundle(baseName, locale, jConfig.getClassLoader());

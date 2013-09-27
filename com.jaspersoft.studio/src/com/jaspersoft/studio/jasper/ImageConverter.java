@@ -11,6 +11,9 @@
 
 package com.jaspersoft.studio.jasper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
@@ -158,6 +161,9 @@ public final class ImageConverter extends ElementConverter {
 					}
 
 				});
+				Set<KeyValue<JasperReportsContext, String>> set = new HashSet<KeyValue<JasperReportsContext, String>>();
+				for (KeyValue<JasperReportsContext, String> k : set)
+					imgCache.get(k);
 				return Status.OK_STATUS;
 			}
 		};
