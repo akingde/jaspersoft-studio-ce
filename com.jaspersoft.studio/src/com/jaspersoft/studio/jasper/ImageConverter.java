@@ -73,46 +73,9 @@ public final class ImageConverter extends ElementConverter {
 	 *
 	 */
 	public JRPrintElement convert(final ReportConverter reportConverter, final JRElement element) {
-		final JRImage image = (JRImage) element;
-		final JRBasePrintImage printImage = new JRBasePrintImage(reportConverter.getDefaultStyleProvider());
-		Renderable cacheRenderer = cache.get(element);
-		if (image.getExpression() != null) {
-			String expr = image.getExpression().getText();
-			KeyValue<String, Long> last = running.get(element);
-			if (cacheRenderer == null || last == null || !last.key.equals(expr)) {
-				// || (last.value != null && System.currentTimeMillis() - last.value.longValue() > 1000)) {
-				final KeyValue<String, Long> kv = new KeyValue<String, Long>(expr, null);
-				Job job = new Job("load image") {
-					protected IStatus run(IProgressMonitor monitor) {
-						final JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
-						final Renderable r = getRenderable(jrContext, image, printImage);
-						Display.getDefault().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								cache.put(element, r);
-								kv.value = System.currentTimeMillis();
-								AMultiEditor.refresh(jrContext);
-							}
-
-						});
-						running.remove(element);
-						return Status.OK_STATUS;
-					}
-				};
-				job.setSystem(true);
-				job.setPriority(Job.SHORT);
-				job.schedule();
-				running.put(element, kv);
-			}
-		} else {
-			KeyValue<String, Long> last = running.get(element);
-			if (last != null && last.key != null) {
-				cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
-				cache.put(element, cacheRenderer);
-				last.key = null;
-			}
-		}
+		JRImage image = (JRImage) element;
+		JRBasePrintImage printImage = new JRBasePrintImage(reportConverter.getDefaultStyleProvider());
+		Renderable cacheRenderer = getRenderable(reportConverter, element, image, printImage);
 		copyGraphicElement(reportConverter, image, printImage);
 
 		printImage.copyBox(image.getLineBox());
@@ -130,6 +93,63 @@ public final class ImageConverter extends ElementConverter {
 		printImage.setScaleImage(image.getOwnScaleImageValue());
 
 		return printImage;
+	}
+
+	protected Renderable getRenderable(final ReportConverter reportConverter, final JRElement element,
+			final JRImage image, final JRBasePrintImage printImage) {
+		Renderable cacheRenderer = null;
+		try {
+			cacheRenderer = cache.get(element);
+			if (image.getExpression() != null) {
+				final String expr = image.getExpression().getText();
+				final KeyValue<String, Long> last = running.get(element);
+				if (cacheRenderer == null) {
+					cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
+					cache.put(element, cacheRenderer);
+					if (last == null)
+						doFindImage(reportConverter, element, image, printImage, expr, last);
+				}
+				if (last != null
+						&& (!last.key.equals(expr) || (last.value != null && System.currentTimeMillis() - last.value.longValue() > 2000))) {
+					doFindImage(reportConverter, element, image, printImage, expr, last);
+				}
+				if (last == null)
+					doFindImage(reportConverter, element, image, printImage, expr, last);
+			} else {
+				running.remove(element);
+				cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
+				cache.put(element, cacheRenderer);
+			}
+		} catch (Throwable e) {
+			return getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
+		}
+		return cacheRenderer;
+	}
+
+	protected void doFindImage(final ReportConverter reportConverter, final JRElement element, final JRImage image,
+			final JRBasePrintImage printImage, final String expr, final KeyValue<String, Long> last) {
+		final KeyValue<String, Long> kv = new KeyValue<String, Long>(expr, null);
+		running.put(element, kv);
+		Job job = new Job("load image") {
+			protected IStatus run(IProgressMonitor monitor) {
+				final JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
+				final Renderable r = getRenderable(jrContext, image, printImage);
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						cache.put(element, r);
+						kv.value = System.currentTimeMillis();
+						AMultiEditor.refresh(jrContext);
+					}
+
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		job.schedule();
 	}
 
 	/**
