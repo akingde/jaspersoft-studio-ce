@@ -23,6 +23,7 @@ public class Messages extends NLS {
 	public static String JavaJRExpressionJavaValidator_FunctionLibraryAsConstructorError;
 	public static String JavaJRExpressionJavaValidator_FunctionNotFoundError;
 	public static String JavaJRExpressionJavaValidator_ParameterNotFoundInContextError;
+	public static String JavaJRExpressionJavaValidator_RBKNotFoundInContextError;
 	public static String JavaJRExpressionJavaValidator_VariableNotFoundInContextError;
 	static {
 		// initialize resource bundle

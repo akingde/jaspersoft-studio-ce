@@ -676,12 +676,13 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cJRFieldObjParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cJRParameterObjParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final RuleCall cJRVariableObjParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final RuleCall cJRResourceBundleKeyObjParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
 		//BaseJRExpression returns JasperReportsExpression:
-		//	JRFieldObj | JRParameterObj | JRVariableObj;
+		//	JRFieldObj | JRParameterObj | JRVariableObj | JRResourceBundleKeyObj;
 		public ParserRule getRule() { return rule; }
 
-		//JRFieldObj | JRParameterObj | JRVariableObj
+		//JRFieldObj | JRParameterObj | JRVariableObj | JRResourceBundleKeyObj
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//JRFieldObj
@@ -692,6 +693,9 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 
 		//JRVariableObj
 		public RuleCall getJRVariableObjParserRuleCall_2() { return cJRVariableObjParserRuleCall_2; }
+
+		//JRResourceBundleKeyObj
+		public RuleCall getJRResourceBundleKeyObjParserRuleCall_3() { return cJRResourceBundleKeyObjParserRuleCall_3; }
 	}
 
 	public class JRFieldObjElements extends AbstractParserRuleElementFinder {
@@ -770,6 +774,34 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 
 		//"$V"
 		public Keyword getVKeyword_1() { return cVKeyword_1; }
+
+		//bracedIdentifier=BRACED_IDENTIFIER
+		public Assignment getBracedIdentifierAssignment_2() { return cBracedIdentifierAssignment_2; }
+
+		//BRACED_IDENTIFIER
+		public RuleCall getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0() { return cBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0; }
+	}
+
+	public class JRResourceBundleKeyObjElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "JRResourceBundleKeyObj");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cJRResourceBundleKeyObjAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cRKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cBracedIdentifierAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0 = (RuleCall)cBracedIdentifierAssignment_2.eContents().get(0);
+		
+		//JRResourceBundleKeyObj returns JasperReportsExpression:
+		//	{JRResourceBundleKeyObj} "$R" bracedIdentifier=BRACED_IDENTIFIER;
+		public ParserRule getRule() { return rule; }
+
+		//{JRResourceBundleKeyObj} "$R" bracedIdentifier=BRACED_IDENTIFIER
+		public Group getGroup() { return cGroup; }
+
+		//{JRResourceBundleKeyObj}
+		public Action getJRResourceBundleKeyObjAction_0() { return cJRResourceBundleKeyObjAction_0; }
+
+		//"$R"
+		public Keyword getRKeyword_1() { return cRKeyword_1; }
 
 		//bracedIdentifier=BRACED_IDENTIFIER
 		public Assignment getBracedIdentifierAssignment_2() { return cBracedIdentifierAssignment_2; }
@@ -1831,6 +1863,7 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	private JRFieldObjElements pJRFieldObj;
 	private JRParameterObjElements pJRParameterObj;
 	private JRVariableObjElements pJRVariableObj;
+	private JRResourceBundleKeyObjElements pJRResourceBundleKeyObj;
 	private MethodsExpressionElements pMethodsExpression;
 	private LiteralExpressionElements pLiteralExpression;
 	private IntLiteralElements pIntLiteral;
@@ -2064,7 +2097,7 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//BaseJRExpression returns JasperReportsExpression:
-	//	JRFieldObj | JRParameterObj | JRVariableObj;
+	//	JRFieldObj | JRParameterObj | JRVariableObj | JRResourceBundleKeyObj;
 	public BaseJRExpressionElements getBaseJRExpressionAccess() {
 		return (pBaseJRExpression != null) ? pBaseJRExpression : (pBaseJRExpression = new BaseJRExpressionElements());
 	}
@@ -2101,6 +2134,16 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	
 	public ParserRule getJRVariableObjRule() {
 		return getJRVariableObjAccess().getRule();
+	}
+
+	//JRResourceBundleKeyObj returns JasperReportsExpression:
+	//	{JRResourceBundleKeyObj} "$R" bracedIdentifier=BRACED_IDENTIFIER;
+	public JRResourceBundleKeyObjElements getJRResourceBundleKeyObjAccess() {
+		return (pJRResourceBundleKeyObj != null) ? pJRResourceBundleKeyObj : (pJRResourceBundleKeyObj = new JRResourceBundleKeyObjElements());
+	}
+	
+	public ParserRule getJRResourceBundleKeyObjRule() {
+		return getJRResourceBundleKeyObjAccess().getRule();
 	}
 
 	//MethodsExpression returns JasperReportsExpression: // arrayIndexes feature allows MethodExpression to support arrays

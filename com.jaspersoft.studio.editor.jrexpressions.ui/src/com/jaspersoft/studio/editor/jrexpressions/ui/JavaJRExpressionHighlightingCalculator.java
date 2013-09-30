@@ -32,6 +32,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodNam
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
@@ -69,6 +70,9 @@ public class JavaJRExpressionHighlightingCalculator implements ISemanticHighligh
 			}
 			else if(semanticElement instanceof JRFieldObj){
 				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.FIELD_TOKEN);
+			}
+			else if(semanticElement instanceof JRResourceBundleKeyObj) {
+				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.RESOURCE_BUNDLE_KEY);
 			}
 			else if(semanticElement instanceof FullMethodName){
 				if(JRExpressionsModelUtil.isFunctionLibrary((FullMethodName)semanticElement)){

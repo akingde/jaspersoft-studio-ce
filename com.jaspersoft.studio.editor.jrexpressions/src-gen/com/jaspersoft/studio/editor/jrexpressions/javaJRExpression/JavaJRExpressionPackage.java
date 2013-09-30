@@ -676,6 +676,34 @@ public interface JavaJRExpressionPackage extends EPackage
   int JR_VARIABLE_OBJ_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JRResourceBundleKeyObjImpl <em>JR Resource Bundle Key Obj</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JRResourceBundleKeyObjImpl
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getJRResourceBundleKeyObj()
+   * @generated
+   */
+  int JR_RESOURCE_BUNDLE_KEY_OBJ = 18;
+
+  /**
+   * The feature id for the '<em><b>Braced Identifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JR_RESOURCE_BUNDLE_KEY_OBJ__BRACED_IDENTIFIER = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>JR Resource Bundle Key Obj</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JR_RESOURCE_BUNDLE_KEY_OBJ_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl <em>Methods Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -683,7 +711,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getMethodsExpression()
    * @generated
    */
-  int METHODS_EXPRESSION = 18;
+  int METHODS_EXPRESSION = 19;
 
   /**
    * The feature id for the '<em><b>Include Object Instatiation</b></em>' attribute.
@@ -738,7 +766,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getIntLiteral()
    * @generated
    */
-  int INT_LITERAL = 19;
+  int INT_LITERAL = 20;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -766,7 +794,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getLongLiteral()
    * @generated
    */
-  int LONG_LITERAL = 20;
+  int LONG_LITERAL = 21;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -794,7 +822,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getFloatLiteral()
    * @generated
    */
-  int FLOAT_LITERAL = 21;
+  int FLOAT_LITERAL = 22;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -822,7 +850,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getDoubleLiteral()
    * @generated
    */
-  int DOUBLE_LITERAL = 22;
+  int DOUBLE_LITERAL = 23;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -850,7 +878,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getCharLiteral()
    * @generated
    */
-  int CHAR_LITERAL = 23;
+  int CHAR_LITERAL = 24;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -878,7 +906,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getStringLiteral()
    * @generated
    */
-  int STRING_LITERAL = 24;
+  int STRING_LITERAL = 25;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -906,7 +934,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getBooleanLiteral()
    * @generated
    */
-  int BOOLEAN_LITERAL = 25;
+  int BOOLEAN_LITERAL = 26;
 
   /**
    * The feature id for the '<em><b>Is True</b></em>' attribute.
@@ -934,7 +962,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getNullLiteral()
    * @generated
    */
-  int NULL_LITERAL = 26;
+  int NULL_LITERAL = 27;
 
   /**
    * The number of structural features of the '<em>Null Literal</em>' class.
@@ -953,7 +981,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getCastedExpression()
    * @generated
    */
-  int CASTED_EXPRESSION = 27;
+  int CASTED_EXPRESSION = 28;
 
   /**
    * The feature id for the '<em><b>Cast Type</b></em>' containment reference.
@@ -990,7 +1018,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getArrayCreator()
    * @generated
    */
-  int ARRAY_CREATOR = 28;
+  int ARRAY_CREATOR = 29;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1036,7 +1064,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getJvmGenericArrayTypeReference()
    * @generated
    */
-  int JVM_GENERIC_ARRAY_TYPE_REFERENCE = 29;
+  int JVM_GENERIC_ARRAY_TYPE_REFERENCE = 30;
 
   /**
    * The feature id for the '<em><b>Component Type</b></em>' containment reference.
@@ -1555,6 +1583,27 @@ public interface JavaJRExpressionPackage extends EPackage
    * @generated
    */
   EAttribute getJRVariableObj_BracedIdentifier();
+
+  /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj <em>JR Resource Bundle Key Obj</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>JR Resource Bundle Key Obj</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj
+   * @generated
+   */
+  EClass getJRResourceBundleKeyObj();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj#getBracedIdentifier <em>Braced Identifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Braced Identifier</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj#getBracedIdentifier()
+   * @see #getJRResourceBundleKeyObj()
+   * @generated
+   */
+  EAttribute getJRResourceBundleKeyObj_BracedIdentifier();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression <em>Methods Expression</em>}'.
@@ -2297,6 +2346,24 @@ public interface JavaJRExpressionPackage extends EPackage
      * @generated
      */
     EAttribute JR_VARIABLE_OBJ__BRACED_IDENTIFIER = eINSTANCE.getJRVariableObj_BracedIdentifier();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JRResourceBundleKeyObjImpl <em>JR Resource Bundle Key Obj</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JRResourceBundleKeyObjImpl
+     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getJRResourceBundleKeyObj()
+     * @generated
+     */
+    EClass JR_RESOURCE_BUNDLE_KEY_OBJ = eINSTANCE.getJRResourceBundleKeyObj();
+
+    /**
+     * The meta object literal for the '<em><b>Braced Identifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JR_RESOURCE_BUNDLE_KEY_OBJ__BRACED_IDENTIFIER = eINSTANCE.getJRResourceBundleKeyObj_BracedIdentifier();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl <em>Methods Expression</em>}' class.

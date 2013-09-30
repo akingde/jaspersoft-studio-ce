@@ -39,6 +39,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRExpressionModel;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionFactory;
@@ -190,6 +191,13 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * @generated
    */
   private EClass jrVariableObjEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass jrResourceBundleKeyObjEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -816,6 +824,26 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getJRResourceBundleKeyObj()
+  {
+    return jrResourceBundleKeyObjEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getJRResourceBundleKeyObj_BracedIdentifier()
+  {
+    return (EAttribute)jrResourceBundleKeyObjEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getMethodsExpression()
   {
     return methodsExpressionEClass;
@@ -1196,6 +1224,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     jrVariableObjEClass = createEClass(JR_VARIABLE_OBJ);
     createEAttribute(jrVariableObjEClass, JR_VARIABLE_OBJ__BRACED_IDENTIFIER);
 
+    jrResourceBundleKeyObjEClass = createEClass(JR_RESOURCE_BUNDLE_KEY_OBJ);
+    createEAttribute(jrResourceBundleKeyObjEClass, JR_RESOURCE_BUNDLE_KEY_OBJ__BRACED_IDENTIFIER);
+
     methodsExpressionEClass = createEClass(METHODS_EXPRESSION);
     createEAttribute(methodsExpressionEClass, METHODS_EXPRESSION__INCLUDE_OBJECT_INSTATIATION);
     createEReference(methodsExpressionEClass, METHODS_EXPRESSION__METHOD_INVOCATIONS);
@@ -1278,6 +1309,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     jrFieldObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jrParameterObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jrVariableObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
+    jrResourceBundleKeyObjEClass.getESuperTypes().add(this.getJasperReportsExpression());
     methodsExpressionEClass.getESuperTypes().add(this.getJasperReportsExpression());
     intLiteralEClass.getESuperTypes().add(this.getJasperReportsExpression());
     longLiteralEClass.getESuperTypes().add(this.getJasperReportsExpression());
@@ -1356,6 +1388,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
 
     initEClass(jrVariableObjEClass, JRVariableObj.class, "JRVariableObj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getJRVariableObj_BracedIdentifier(), ecorePackage.getEString(), "bracedIdentifier", null, 0, 1, JRVariableObj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(jrResourceBundleKeyObjEClass, JRResourceBundleKeyObj.class, "JRResourceBundleKeyObj", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getJRResourceBundleKeyObj_BracedIdentifier(), ecorePackage.getEString(), "bracedIdentifier", null, 0, 1, JRResourceBundleKeyObj.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(methodsExpressionEClass, MethodsExpression.class, "MethodsExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getMethodsExpression_IncludeObjectInstatiation(), ecorePackage.getEBoolean(), "includeObjectInstatiation", null, 0, 1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

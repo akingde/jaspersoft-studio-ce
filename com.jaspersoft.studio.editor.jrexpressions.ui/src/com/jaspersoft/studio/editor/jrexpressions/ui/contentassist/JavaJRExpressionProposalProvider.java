@@ -80,6 +80,18 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	}
 	
 	@Override
+	public void complete_JRResourceBundleKeyObj(EObject model, RuleCall ruleCall, ContentAssistContext context,	ICompletionProposalAcceptor acceptor) {
+		ExpressionContext exprContext=(ExpressionContext) ((XtextSourceViewer) context.getViewer()).getData(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT);
+		if(exprContext!=null) {
+			List<String> rbKeys = ExpressionContextUtils.getResourceBundleKeys(exprContext);
+			for(String k : rbKeys) {
+				acceptor.accept(createCompletionProposal(
+						"$R{" + k + "}", "$R{" + k + "}", getResourceBundleKeyIconImg(), context));   //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			}
+		}
+	}
+	
+	@Override
 	public void complete_FullMethodName(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		List<JRExprFunctionBean> allFunctions = FunctionsLibraryUtil.getAllFunctions();
 		Collections.sort(allFunctions);
@@ -109,6 +121,13 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	 */
 	private Image getFieldIconImg(){
 		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/fields-16.png"); //$NON-NLS-1$
+	}
+	
+	/*
+	 * Get JRResourceBundleKey icon image.
+	 */
+	private Image getResourceBundleKeyIconImg(){
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/resourcebundles-16-icon.png"); //$NON-NLS-1$
 	}
 	
 	/*

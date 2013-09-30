@@ -68,31 +68,32 @@ protected class ThisRootNode extends RootToken {
 			case 15: return new JRFieldObj_Group(this, this, 15, inst);
 			case 16: return new JRParameterObj_Group(this, this, 16, inst);
 			case 17: return new JRVariableObj_Group(this, this, 17, inst);
-			case 18: return new MethodsExpression_Group(this, this, 18, inst);
-			case 19: return new LiteralExpression_Alternatives(this, this, 19, inst);
-			case 20: return new IntLiteral_Group(this, this, 20, inst);
-			case 21: return new LongLiteral_Group(this, this, 21, inst);
-			case 22: return new FloatLiteral_Group(this, this, 22, inst);
-			case 23: return new DoubleLiteral_Group(this, this, 23, inst);
-			case 24: return new CharLiteral_Group(this, this, 24, inst);
-			case 25: return new StringLiteral_Group(this, this, 25, inst);
-			case 26: return new BooleanLiteral_Group(this, this, 26, inst);
-			case 27: return new NullLiteral_Group(this, this, 27, inst);
-			case 28: return new ParExpression_Group(this, this, 28, inst);
-			case 29: return new CastedExpression_Group(this, this, 29, inst);
-			case 30: return new Type_Group(this, this, 30, inst);
-			case 31: return new ArrayCreator_Group(this, this, 31, inst);
-			case 32: return new ArrayInitializer_Group(this, this, 32, inst);
-			case 33: return new MethodInvocation_Group(this, this, 33, inst);
-			case 34: return new FullMethodName_Group(this, this, 34, inst);
-			case 35: return new Arguments_Group(this, this, 35, inst);
-			case 36: return new ExpressionList_Group(this, this, 36, inst);
-			case 37: return new JvmTypeReference_Group(this, this, 37, inst);
-			case 38: return new JvmParameterizedTypeReference_Group(this, this, 38, inst);
-			case 39: return new JvmArgumentTypeReference_Alternatives(this, this, 39, inst);
-			case 40: return new JvmWildcardTypeReference_Group(this, this, 40, inst);
-			case 41: return new JvmUpperBound_Group(this, this, 41, inst);
-			case 42: return new JvmLowerBound_Group(this, this, 42, inst);
+			case 18: return new JRResourceBundleKeyObj_Group(this, this, 18, inst);
+			case 19: return new MethodsExpression_Group(this, this, 19, inst);
+			case 20: return new LiteralExpression_Alternatives(this, this, 20, inst);
+			case 21: return new IntLiteral_Group(this, this, 21, inst);
+			case 22: return new LongLiteral_Group(this, this, 22, inst);
+			case 23: return new FloatLiteral_Group(this, this, 23, inst);
+			case 24: return new DoubleLiteral_Group(this, this, 24, inst);
+			case 25: return new CharLiteral_Group(this, this, 25, inst);
+			case 26: return new StringLiteral_Group(this, this, 26, inst);
+			case 27: return new BooleanLiteral_Group(this, this, 27, inst);
+			case 28: return new NullLiteral_Group(this, this, 28, inst);
+			case 29: return new ParExpression_Group(this, this, 29, inst);
+			case 30: return new CastedExpression_Group(this, this, 30, inst);
+			case 31: return new Type_Group(this, this, 31, inst);
+			case 32: return new ArrayCreator_Group(this, this, 32, inst);
+			case 33: return new ArrayInitializer_Group(this, this, 33, inst);
+			case 34: return new MethodInvocation_Group(this, this, 34, inst);
+			case 35: return new FullMethodName_Group(this, this, 35, inst);
+			case 36: return new Arguments_Group(this, this, 36, inst);
+			case 37: return new ExpressionList_Group(this, this, 37, inst);
+			case 38: return new JvmTypeReference_Group(this, this, 38, inst);
+			case 39: return new JvmParameterizedTypeReference_Group(this, this, 39, inst);
+			case 40: return new JvmArgumentTypeReference_Alternatives(this, this, 40, inst);
+			case 41: return new JvmWildcardTypeReference_Group(this, this, 41, inst);
+			case 42: return new JvmUpperBound_Group(this, this, 42, inst);
+			case 43: return new JvmLowerBound_Group(this, this, 43, inst);
 			default: return null;
 		}	
 	}	
@@ -195,6 +196,7 @@ protected class JasperReportsExpression_ConditionalExpressionParserRuleCall exte
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -260,6 +262,7 @@ protected class ConditionalExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -593,6 +596,7 @@ protected class ConditionalOrExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -870,6 +874,7 @@ protected class ConditionalAndExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -1147,6 +1152,7 @@ protected class EqualityExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -1429,6 +1435,7 @@ protected class InstanceofExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -1705,6 +1712,7 @@ protected class RelationalExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -1982,6 +1990,7 @@ protected class AdditiveExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -2264,6 +2273,7 @@ protected class MultiplicativeExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -2553,6 +2563,7 @@ protected class UnaryExpression_Alternatives extends AlternativesToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -2808,6 +2819,7 @@ protected class UnaryExpressionNotPlusMinus_Alternatives extends AlternativesTok
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -3103,6 +3115,7 @@ protected class PrimaryExpression_Alternatives extends AlternativesToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 
@@ -3254,6 +3267,7 @@ protected class PrimaryExpression_BaseJRExpressionParserRuleCall_3 extends RuleC
 	public IEObjectConsumer tryConsume() {
 		if(getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier())
 			return null;
 		if(checkForRecursion(BaseJRExpression_Alternatives.class, eObjectConsumer)) return null;
@@ -3540,11 +3554,11 @@ protected class StaticField_FieldNameAssignment_2 extends AssignmentToken  {
 /************ begin Rule BaseJRExpression ****************
  *
  * BaseJRExpression returns JasperReportsExpression:
- * 	JRFieldObj | JRParameterObj | JRVariableObj;
+ * 	JRFieldObj | JRParameterObj | JRVariableObj | JRResourceBundleKeyObj;
  *
  **/
 
-// JRFieldObj | JRParameterObj | JRVariableObj
+// JRFieldObj | JRParameterObj | JRVariableObj | JRResourceBundleKeyObj
 protected class BaseJRExpression_Alternatives extends AlternativesToken {
 
 	public BaseJRExpression_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -3562,6 +3576,7 @@ protected class BaseJRExpression_Alternatives extends AlternativesToken {
 			case 0: return new BaseJRExpression_JRFieldObjParserRuleCall_0(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new BaseJRExpression_JRParameterObjParserRuleCall_1(lastRuleCallOrigin, this, 1, inst);
 			case 2: return new BaseJRExpression_JRVariableObjParserRuleCall_2(lastRuleCallOrigin, this, 2, inst);
+			case 3: return new BaseJRExpression_JRResourceBundleKeyObjParserRuleCall_3(lastRuleCallOrigin, this, 3, inst);
 			default: return null;
 		}	
 	}
@@ -3570,6 +3585,7 @@ protected class BaseJRExpression_Alternatives extends AlternativesToken {
 	public IEObjectConsumer tryConsume() {
 		if(getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier())
 			return null;
 		return eObjectConsumer;
@@ -3674,6 +3690,42 @@ protected class BaseJRExpression_JRVariableObjParserRuleCall_2 extends RuleCallT
 		if(getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier())
 			return null;
 		if(checkForRecursion(JRVariableObj_Group.class, eObjectConsumer)) return null;
+		return eObjectConsumer;
+	}
+	
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, inst);
+		}	
+	}	
+}
+
+// JRResourceBundleKeyObj
+protected class BaseJRExpression_JRResourceBundleKeyObjParserRuleCall_3 extends RuleCallToken {
+	
+	public BaseJRExpression_JRResourceBundleKeyObjParserRuleCall_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getBaseJRExpressionAccess().getJRResourceBundleKeyObjParserRuleCall_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new JRResourceBundleKeyObj_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier())
+			return null;
+		if(checkForRecursion(JRResourceBundleKeyObj_Group.class, eObjectConsumer)) return null;
 		return eObjectConsumer;
 	}
 	
@@ -4053,6 +4105,128 @@ protected class JRVariableObj_BracedIdentifierAssignment_2 extends AssignmentTok
 
 
 /************ end Rule JRVariableObj ****************/
+
+
+/************ begin Rule JRResourceBundleKeyObj ****************
+ *
+ * JRResourceBundleKeyObj returns JasperReportsExpression:
+ * 	{JRResourceBundleKeyObj} "$R" bracedIdentifier=BRACED_IDENTIFIER;
+ *
+ **/
+
+// {JRResourceBundleKeyObj} "$R" bracedIdentifier=BRACED_IDENTIFIER
+protected class JRResourceBundleKeyObj_Group extends GroupToken {
+	
+	public JRResourceBundleKeyObj_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getJRResourceBundleKeyObjAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new JRResourceBundleKeyObj_BracedIdentifierAssignment_2(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// {JRResourceBundleKeyObj}
+protected class JRResourceBundleKeyObj_JRResourceBundleKeyObjAction_0 extends ActionToken  {
+
+	public JRResourceBundleKeyObj_JRResourceBundleKeyObjAction_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Action getGrammarElement() {
+		return grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(!eObjectConsumer.isConsumed()) return null;
+		return eObjectConsumer;
+	}
+}
+
+// "$R"
+protected class JRResourceBundleKeyObj_RKeyword_1 extends KeywordToken  {
+	
+	public JRResourceBundleKeyObj_RKeyword_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getJRResourceBundleKeyObjAccess().getRKeyword_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new JRResourceBundleKeyObj_JRResourceBundleKeyObjAction_0(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// bracedIdentifier=BRACED_IDENTIFIER
+protected class JRResourceBundleKeyObj_BracedIdentifierAssignment_2 extends AssignmentToken  {
+	
+	public JRResourceBundleKeyObj_BracedIdentifierAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierAssignment_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new JRResourceBundleKeyObj_RKeyword_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("bracedIdentifier",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("bracedIdentifier");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+
+/************ end Rule JRResourceBundleKeyObj ****************/
 
 
 /************ begin Rule MethodsExpression ****************
@@ -5850,6 +6024,7 @@ protected class ParExpression_Group extends GroupToken {
 		   getEObject().eClass() != grammarAccess.getIntLiteralAccess().getIntLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRFieldObjAccess().getJRFieldObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRParameterObjAccess().getJRParameterObjAction_0().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getJRVariableObjAccess().getJRVariableObjAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getLongLiteralAccess().getLongLiteralAction_0().getType().getClassifier() && 
 		   getEObject().eClass() != grammarAccess.getMethodsExpressionAccess().getMethodsExpressionAction_0().getType().getClassifier() && 

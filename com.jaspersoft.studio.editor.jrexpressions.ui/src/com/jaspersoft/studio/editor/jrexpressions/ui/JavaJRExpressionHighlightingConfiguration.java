@@ -33,6 +33,7 @@ public class JavaJRExpressionHighlightingConfiguration extends DefaultHighlighti
 	public static final String PARAM_TOKEN="Parameter"; //$NON-NLS-1$
 	public static final String VARIABLE_TOKEN="Variable"; //$NON-NLS-1$
 	public static final String FUNCTION_METHOD="Library function"; //$NON-NLS-1$
+	public static final String RESOURCE_BUNDLE_KEY="ResourceBundle Key"; //$NON-NLS-1$
 	
 	@Override
 	public void configure(IHighlightingConfigurationAcceptor acceptor) {
@@ -41,6 +42,7 @@ public class JavaJRExpressionHighlightingConfiguration extends DefaultHighlighti
 		addElementConfiguration(acceptor, VARIABLE_TOKEN, 0, 0, 255, SWT.BOLD);
 		addElementConfiguration(acceptor, FIELD_TOKEN, 0, 178, 0, SWT.BOLD);
 		addElementConfiguration(acceptor, FUNCTION_METHOD, 0, 0, 0, SWT.ITALIC);
+		addElementConfiguration(acceptor, RESOURCE_BUNDLE_KEY, 102, 46, 153, SWT.BOLD);
 	}
 
 	public void addElementConfiguration(IHighlightingConfigurationAcceptor acceptor, String s,

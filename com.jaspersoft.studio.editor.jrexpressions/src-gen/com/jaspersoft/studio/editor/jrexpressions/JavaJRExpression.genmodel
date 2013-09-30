@@ -88,6 +88,9 @@
     <genClasses ecoreClass="JavaJRExpression.ecore#//JRVariableObj">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//JRVariableObj/bracedIdentifier"/>
     </genClasses>
+    <genClasses ecoreClass="JavaJRExpression.ecore#//JRResourceBundleKeyObj">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//JRResourceBundleKeyObj/bracedIdentifier"/>
+    </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//MethodsExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//MethodsExpression/includeObjectInstatiation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/methodInvocations"/>

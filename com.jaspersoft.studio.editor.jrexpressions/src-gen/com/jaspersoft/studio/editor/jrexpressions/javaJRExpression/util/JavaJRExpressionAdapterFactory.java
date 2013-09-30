@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRExpressionModel;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
@@ -207,6 +208,11 @@ public class JavaJRExpressionAdapterFactory extends AdapterFactoryImpl
       public Adapter caseJRVariableObj(JRVariableObj object)
       {
         return createJRVariableObjAdapter();
+      }
+      @Override
+      public Adapter caseJRResourceBundleKeyObj(JRResourceBundleKeyObj object)
+      {
+        return createJRResourceBundleKeyObjAdapter();
       }
       @Override
       public Adapter caseMethodsExpression(MethodsExpression object)
@@ -561,6 +567,21 @@ public class JavaJRExpressionAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createJRVariableObjAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj <em>JR Resource Bundle Key Obj</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj
+   * @generated
+   */
+  public Adapter createJRResourceBundleKeyObjAdapter()
   {
     return null;
   }

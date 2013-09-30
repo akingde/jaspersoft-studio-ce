@@ -37,6 +37,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRExpressionModel;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
@@ -248,6 +249,14 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
         JRVariableObj jrVariableObj = (JRVariableObj)theEObject;
         T result = caseJRVariableObj(jrVariableObj);
         if (result == null) result = caseJasperReportsExpression(jrVariableObj);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case JavaJRExpressionPackage.JR_RESOURCE_BUNDLE_KEY_OBJ:
+      {
+        JRResourceBundleKeyObj jrResourceBundleKeyObj = (JRResourceBundleKeyObj)theEObject;
+        T result = caseJRResourceBundleKeyObj(jrResourceBundleKeyObj);
+        if (result == null) result = caseJasperReportsExpression(jrResourceBundleKeyObj);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -635,6 +644,22 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseJRVariableObj(JRVariableObj object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>JR Resource Bundle Key Obj</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>JR Resource Bundle Key Obj</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseJRResourceBundleKeyObj(JRResourceBundleKeyObj object)
   {
     return null;
   }

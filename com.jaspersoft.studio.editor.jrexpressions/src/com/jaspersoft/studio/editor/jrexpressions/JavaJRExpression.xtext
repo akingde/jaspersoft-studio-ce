@@ -74,7 +74,7 @@ StaticField returns JasperReportsExpression:
 ;
 
 BaseJRExpression returns JasperReportsExpression:
-	JRFieldObj | JRParameterObj | JRVariableObj;
+	JRFieldObj | JRParameterObj | JRVariableObj | JRResourceBundleKeyObj;
 
 JRFieldObj returns JasperReportsExpression:
 	{JRFieldObj} '$F' bracedIdentifier=BRACED_IDENTIFIER
@@ -86,6 +86,10 @@ JRParameterObj returns JasperReportsExpression:
 
 JRVariableObj returns JasperReportsExpression:
 	{JRVariableObj} '$V' bracedIdentifier=BRACED_IDENTIFIER
+;
+
+JRResourceBundleKeyObj returns JasperReportsExpression:
+	{JRResourceBundleKeyObj} '$R' bracedIdentifier=BRACED_IDENTIFIER
 ;
 
 MethodsExpression returns JasperReportsExpression:

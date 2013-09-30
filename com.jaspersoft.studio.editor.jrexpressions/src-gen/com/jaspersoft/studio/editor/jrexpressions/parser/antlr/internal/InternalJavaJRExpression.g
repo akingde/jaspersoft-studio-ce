@@ -1152,6 +1152,16 @@ ruleBaseJRExpression returns [EObject current=null]
         $current = $this_JRVariableObj_2.current; 
         afterParserOrEnumRuleCall();
     }
+
+    |
+    { 
+        newCompositeNode(grammarAccess.getBaseJRExpressionAccess().getJRResourceBundleKeyObjParserRuleCall_3()); 
+    }
+    this_JRResourceBundleKeyObj_3=ruleJRResourceBundleKeyObj
+    { 
+        $current = $this_JRResourceBundleKeyObj_3.current; 
+        afterParserOrEnumRuleCall();
+    }
 )
 ;
 
@@ -1290,6 +1300,55 @@ ruleJRVariableObj returns [EObject current=null]
 		{
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getJRVariableObjRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"bracedIdentifier",
+        		lv_bracedIdentifier_2_0, 
+        		"BRACED_IDENTIFIER");
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleJRResourceBundleKeyObj
+entryRuleJRResourceBundleKeyObj returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getJRResourceBundleKeyObjRule()); }
+	 iv_ruleJRResourceBundleKeyObj=ruleJRResourceBundleKeyObj 
+	 { $current=$iv_ruleJRResourceBundleKeyObj.current; } 
+	 EOF 
+;
+
+// Rule JRResourceBundleKeyObj
+ruleJRResourceBundleKeyObj returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0(),
+            $current);
+    }
+)	otherlv_1='$R' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getJRResourceBundleKeyObjAccess().getRKeyword_1());
+    }
+(
+(
+		lv_bracedIdentifier_2_0=RULE_BRACED_IDENTIFIER
+		{
+			newLeafNode(lv_bracedIdentifier_2_0, grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getJRResourceBundleKeyObjRule());
 	        }
        		setWithLastConsumed(
        			$current, 

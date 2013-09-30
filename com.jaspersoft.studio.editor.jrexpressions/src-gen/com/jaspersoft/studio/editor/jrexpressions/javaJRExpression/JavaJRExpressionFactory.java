@@ -200,6 +200,15 @@ public interface JavaJRExpressionFactory extends EFactory
   JRVariableObj createJRVariableObj();
 
   /**
+   * Returns a new object of class '<em>JR Resource Bundle Key Obj</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>JR Resource Bundle Key Obj</em>'.
+   * @generated
+   */
+  JRResourceBundleKeyObj createJRResourceBundleKeyObj();
+
+  /**
    * Returns a new object of class '<em>Methods Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

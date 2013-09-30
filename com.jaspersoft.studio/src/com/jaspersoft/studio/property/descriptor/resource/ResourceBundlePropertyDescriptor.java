@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.resource;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -84,11 +85,17 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 							IFile file = (IFile) dialog.getFirstResult();
 							if (file != null){
 								String fileName = convertFile2Value(file);
-								handleTextChanged(section, pDescriptor.getId(), fileName);
 								IPath path = file.getParent().getFullPath();
-								if (!hasEntry(path, openProject)){
+								String entryInClasspath = hasEntry(path, openProject);
+								if (entryInClasspath == null){
+									handleTextChanged(section, pDescriptor.getId(), fileName);
 									boolean answerYes = UIUtils.showConfirmation(Messages.SPResourceType_messageTitle, Messages.SPResourceType_messageDescription);
 									if (answerYes) addSourceFolder(path, openProject);
+								} else {
+									String parentPath = file.getParent().getFullPath().toOSString();
+									String pathNotInclassPath = parentPath.substring(entryInClasspath.length()+1);
+									pathNotInclassPath = pathNotInclassPath.replace(File.separator, ".");
+									handleTextChanged(section, pDescriptor.getId(), pathNotInclassPath+"."+fileName);
 								}
 							}
 						}
@@ -122,7 +129,7 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	private String convertFile2Value(IFile f) {
-		String fileName = f.getProjectRelativePath().toOSString().trim();
+		String fileName = f.getName().trim();
 		int propertiesIndex = fileName.toLowerCase().lastIndexOf(".properties"); //$NON-NLS-1$
 		if (propertiesIndex != -1) fileName = fileName.substring(0, propertiesIndex);
 		fileName = removeLocale(fileName);
@@ -203,18 +210,18 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 	 * @param openProject the project
 	 * @return true if the path is already included (directly or indirectly) in the classpath, otherwise false
 	 */
-	private boolean hasEntry(IPath path, IJavaProject openProject){
+	private String hasEntry(IPath path, IJavaProject openProject){
 		try {
 			IClasspathEntry[] entries = openProject.getRawClasspath();
 			for(IClasspathEntry entry : entries){
-				 if (entry.getPath().equals(path)) return true;
+				 if (entry.getPath().equals(path)) return entry.getPath().toOSString();
 				 else if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().isPrefixOf(path)){
-             	return true;
+             	return entry.getPath().toOSString();
          }
 			}
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 }

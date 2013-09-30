@@ -109,6 +109,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getJRFieldObjAccess().getGroup(), "rule__JRFieldObj__Group__0");
 					put(grammarAccess.getJRParameterObjAccess().getGroup(), "rule__JRParameterObj__Group__0");
 					put(grammarAccess.getJRVariableObjAccess().getGroup(), "rule__JRVariableObj__Group__0");
+					put(grammarAccess.getJRResourceBundleKeyObjAccess().getGroup(), "rule__JRResourceBundleKeyObj__Group__0");
 					put(grammarAccess.getMethodsExpressionAccess().getGroup(), "rule__MethodsExpression__Group__0");
 					put(grammarAccess.getMethodsExpressionAccess().getGroup_1_0(), "rule__MethodsExpression__Group_1_0__0");
 					put(grammarAccess.getMethodsExpressionAccess().getGroup_1_0_2(), "rule__MethodsExpression__Group_1_0_2__0");
@@ -171,6 +172,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getJRFieldObjAccess().getBracedIdentifierAssignment_2(), "rule__JRFieldObj__BracedIdentifierAssignment_2");
 					put(grammarAccess.getJRParameterObjAccess().getBracedIdentifierAssignment_2(), "rule__JRParameterObj__BracedIdentifierAssignment_2");
 					put(grammarAccess.getJRVariableObjAccess().getBracedIdentifierAssignment_2(), "rule__JRVariableObj__BracedIdentifierAssignment_2");
+					put(grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierAssignment_2(), "rule__JRResourceBundleKeyObj__BracedIdentifierAssignment_2");
 					put(grammarAccess.getMethodsExpressionAccess().getIncludeObjectInstatiationAssignment_1_0_0(), "rule__MethodsExpression__IncludeObjectInstatiationAssignment_1_0_0");
 					put(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_0_1(), "rule__MethodsExpression__MethodInvocationsAssignment_1_0_1");
 					put(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_0_2_1(), "rule__MethodsExpression__MethodInvocationsAssignment_1_0_2_1");

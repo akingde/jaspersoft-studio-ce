@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRExpressionModel;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionFactory;
@@ -126,6 +127,7 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
       case JavaJRExpressionPackage.JR_FIELD_OBJ: return createJRFieldObj();
       case JavaJRExpressionPackage.JR_PARAMETER_OBJ: return createJRParameterObj();
       case JavaJRExpressionPackage.JR_VARIABLE_OBJ: return createJRVariableObj();
+      case JavaJRExpressionPackage.JR_RESOURCE_BUNDLE_KEY_OBJ: return createJRResourceBundleKeyObj();
       case JavaJRExpressionPackage.METHODS_EXPRESSION: return createMethodsExpression();
       case JavaJRExpressionPackage.INT_LITERAL: return createIntLiteral();
       case JavaJRExpressionPackage.LONG_LITERAL: return createLongLiteral();
@@ -339,6 +341,17 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
   {
     JRVariableObjImpl jrVariableObj = new JRVariableObjImpl();
     return jrVariableObj;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public JRResourceBundleKeyObj createJRResourceBundleKeyObj()
+  {
+    JRResourceBundleKeyObjImpl jrResourceBundleKeyObj = new JRResourceBundleKeyObjImpl();
+    return jrResourceBundleKeyObj;
   }
 
   /**

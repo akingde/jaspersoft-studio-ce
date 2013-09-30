@@ -561,6 +561,34 @@ finally {
 
 
 
+// Entry rule entryRuleJRResourceBundleKeyObj
+entryRuleJRResourceBundleKeyObj 
+:
+{ before(grammarAccess.getJRResourceBundleKeyObjRule()); }
+	 ruleJRResourceBundleKeyObj
+{ after(grammarAccess.getJRResourceBundleKeyObjRule()); } 
+	 EOF 
+;
+
+// Rule JRResourceBundleKeyObj
+ruleJRResourceBundleKeyObj
+    @init {
+		int stackSize = keepStackSize();
+    }
+	:
+(
+{ before(grammarAccess.getJRResourceBundleKeyObjAccess().getGroup()); }
+(rule__JRResourceBundleKeyObj__Group__0)
+{ after(grammarAccess.getJRResourceBundleKeyObjAccess().getGroup()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
 // Entry rule entryRuleMethodsExpression
 entryRuleMethodsExpression 
 :
@@ -1589,6 +1617,12 @@ rule__BaseJRExpression__Alternatives
 { before(grammarAccess.getBaseJRExpressionAccess().getJRVariableObjParserRuleCall_2()); }
 	ruleJRVariableObj
 { after(grammarAccess.getBaseJRExpressionAccess().getJRVariableObjParserRuleCall_2()); }
+)
+
+    |(
+{ before(grammarAccess.getBaseJRExpressionAccess().getJRResourceBundleKeyObjParserRuleCall_3()); }
+	ruleJRResourceBundleKeyObj
+{ after(grammarAccess.getBaseJRExpressionAccess().getJRResourceBundleKeyObjParserRuleCall_3()); }
 )
 
 ;
@@ -4402,6 +4436,102 @@ rule__JRVariableObj__Group__2__Impl
 { before(grammarAccess.getJRVariableObjAccess().getBracedIdentifierAssignment_2()); }
 (rule__JRVariableObj__BracedIdentifierAssignment_2)
 { after(grammarAccess.getJRVariableObjAccess().getBracedIdentifierAssignment_2()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
+
+
+rule__JRResourceBundleKeyObj__Group__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__JRResourceBundleKeyObj__Group__0__Impl
+	rule__JRResourceBundleKeyObj__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__JRResourceBundleKeyObj__Group__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0()); }
+(
+
+)
+{ after(grammarAccess.getJRResourceBundleKeyObjAccess().getJRResourceBundleKeyObjAction_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__JRResourceBundleKeyObj__Group__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__JRResourceBundleKeyObj__Group__1__Impl
+	rule__JRResourceBundleKeyObj__Group__2
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__JRResourceBundleKeyObj__Group__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getJRResourceBundleKeyObjAccess().getRKeyword_1()); }
+
+	'$R' 
+
+{ after(grammarAccess.getJRResourceBundleKeyObjAccess().getRKeyword_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__JRResourceBundleKeyObj__Group__2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__JRResourceBundleKeyObj__Group__2__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__JRResourceBundleKeyObj__Group__2__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierAssignment_2()); }
+(rule__JRResourceBundleKeyObj__BracedIdentifierAssignment_2)
+{ after(grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierAssignment_2()); }
 )
 
 ;
@@ -7829,6 +7959,21 @@ rule__JRVariableObj__BracedIdentifierAssignment_2
 (
 { before(grammarAccess.getJRVariableObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); }
 	RULE_BRACED_IDENTIFIER{ after(grammarAccess.getJRVariableObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__JRResourceBundleKeyObj__BracedIdentifierAssignment_2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); }
+	RULE_BRACED_IDENTIFIER{ after(grammarAccess.getJRResourceBundleKeyObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); }
 )
 
 ;

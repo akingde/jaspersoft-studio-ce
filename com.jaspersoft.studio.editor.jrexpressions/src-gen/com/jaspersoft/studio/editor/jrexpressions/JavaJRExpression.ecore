@@ -103,6 +103,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="JRVariableObj" eSuperTypes="#//JasperReportsExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bracedIdentifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JRResourceBundleKeyObj" eSuperTypes="#//JasperReportsExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bracedIdentifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MethodsExpression" eSuperTypes="#//JasperReportsExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeObjectInstatiation"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

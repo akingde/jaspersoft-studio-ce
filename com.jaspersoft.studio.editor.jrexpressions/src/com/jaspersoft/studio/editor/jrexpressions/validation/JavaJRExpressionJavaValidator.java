@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRResourceBundleKeyObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRVariableObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
@@ -131,5 +132,21 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 		}
 		error(Messages.JavaJRExpressionJavaValidator_ParameterNotFoundInContextError, parameter,
 				JavaJRExpressionPackage.Literals.JR_PARAMETER_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_PARAMETER_OBJ__BRACED_IDENTIFIER);				
+	}
+	
+	/**
+	 * Checks if the resource bundle key is suitable for the current expression context.
+	 * 
+	 * @param parameter the resource bundle key to validate
+	 */
+	@Check
+	public void checkResourceBunleKey(JRResourceBundleKeyObj rbk) {
+		ExpressionContext currExpContext = ExpressionEditorSupportUtil.safeGetCurrentExpressionContext();
+		List<String> rbKeys = ExpressionContextUtils.getResourceBundleKeys(currExpContext);
+		for(String k : rbKeys) {
+			if(("{"+k+"}").equals(rbk.getBracedIdentifier())) return; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		error(Messages.JavaJRExpressionJavaValidator_RBKNotFoundInContextError, rbk,
+				JavaJRExpressionPackage.Literals.JR_RESOURCE_BUNDLE_KEY_OBJ__BRACED_IDENTIFIER, JavaJRExpressionPackage.JR_RESOURCE_BUNDLE_KEY_OBJ__BRACED_IDENTIFIER);				
 	}
 }

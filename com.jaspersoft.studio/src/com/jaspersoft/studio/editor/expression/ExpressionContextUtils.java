@@ -17,16 +17,26 @@ package com.jaspersoft.studio.editor.expression;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.util.JRResourcesUtil;
+
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Utility methods related to the {@link ExpressionContext} object.
@@ -202,5 +212,49 @@ public final class ExpressionContextUtils {
 		});
 		results.addAll(fields);
 		return new ArrayList<JRField>(results);
+	}
+	
+	/**
+	 * Returns the list of potential keys for the resource bundle visible
+	 * to the specified expression context.
+	 * 
+	 * @param expContext the expression context
+	 * @return
+	 */
+	public static List<String> getResourceBundleKeys(ExpressionContext expContext) {
+		Set<String> keys=new HashSet<String>();
+		for(JRDataset ds : expContext.getDatasets()) {
+			ResourceBundle rb = getResourceBundle(ds, expContext.getJasperReportsConfiguration());
+			if(rb!=null) {
+				keys.addAll(Collections.list(rb.getKeys()));
+			}
+		}
+		ArrayList<String> keysLst = new ArrayList<String>(keys);
+		Collections.sort(keysLst);
+		return keysLst;
+	}
+	
+	/**
+	 * Returns the {@link ResourceBundle} associated to the specified dataset.
+	 * As fallback solution we look in the main dataset.
+	 * 
+	 * @param dataset the dataset to look into
+	 * @param jconfig the {@link JasperReportsContext} instance
+	 * @return the {@link ResourceBundle} if any, <code>null</code> otherwise
+	 */
+	public static ResourceBundle getResourceBundle(JRDataset dataset, JasperReportsConfiguration jconfig) {
+		String baseName = dataset.getResourceBundle();
+		if(baseName==null) {
+			baseName = jconfig.getJasperDesign().getMainDataset().getResourceBundle();
+		}
+		if(!Misc.isNullOrEmpty(baseName)) {
+			Locale locale = Locale.getDefault();
+			Object obj = jconfig.getJRParameters().get(JRParameter.REPORT_LOCALE);
+			if (obj instanceof Locale) {
+				locale = (Locale) obj;
+			}
+			return JRResourcesUtil.loadResourceBundle(baseName, locale, jconfig.getClassLoader());
+		}
+		return null;
 	}
 }
