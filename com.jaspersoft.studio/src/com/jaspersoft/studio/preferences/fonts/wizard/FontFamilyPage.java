@@ -46,10 +46,6 @@ public class FontFamilyPage extends WizardPage {
 	private Text dsname;
 	private Button embedepdf;
 	private Combo pdfenc;
-	private FontFaceFragment bold;
-	private FontFaceFragment italic;
-	private FontFaceFragment bolditalic;
-	private FontFaceFragment normal;
 
 	public FontFamilyPage(FontFamily fontFamily) {
 		super("fontfamilypage"); //$NON-NLS-1$
@@ -99,7 +95,7 @@ public class FontFamilyPage extends WizardPage {
 		tabFolder.setLayoutData(gd);
 		tabFolder.setLayout(new GridLayout(1, false));
 
-		normal = createFileField(tabFolder, Messages.FontFamilyPage_normalLabel, NORMAL);
+		createFileField(tabFolder, Messages.FontFamilyPage_normalLabel, NORMAL);
 		tabFolder.setSelection(0);
 
 		// put a label here
@@ -113,9 +109,9 @@ public class FontFamilyPage extends WizardPage {
 
 		// new Label(gr, SWT.NONE);
 
-		bold = createFileField(tabFolder, Messages.FontFamilyPage_boldLabel, BOLD);
-		italic = createFileField(tabFolder, Messages.FontFamilyPage_italicLabel, ITALIC);
-		bolditalic = createFileField(tabFolder, Messages.FontFamilyPage_boldItalicLabel, BOLDITALIC);
+		createFileField(tabFolder, Messages.FontFamilyPage_boldLabel, BOLD);
+		createFileField(tabFolder, Messages.FontFamilyPage_italicLabel, ITALIC);
+		createFileField(tabFolder, Messages.FontFamilyPage_boldItalicLabel, BOLDITALIC);
 
 		Group gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.FontFamilyPage_pdfGroup);

@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.preferences.fonts.wizard;
 
+import java.io.File;
+
 import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -113,9 +115,9 @@ public class FontFaceFragment {
 	public static void setLastLocation(FileDialog dialog, String selected) {
 		System.out.println(selected);
 		if (!Misc.isNullOrEmpty(selected))
-			lastLocation = selected;
+			lastLocation = selected.substring(0, selected.lastIndexOf(File.separatorChar));
 		else if (!Misc.isNullOrEmpty(dialog.getFileName()))
 			lastLocation = dialog.getFileName();
-
+		System.out.println("set" + lastLocation);
 	}
 }
