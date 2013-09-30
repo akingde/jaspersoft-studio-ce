@@ -128,6 +128,7 @@ public class ObjectCategoryItem {
 		VARIABLES("Variables", ICON_FOLDER_VARIABLES), //$NON-NLS-1$
 		BUILT_IN_FUNCTIONS("Built-in Functions", ICON_FOLDER), //$NON-NLS-1$
 		FUNCTION_CATEGORY("Sub-category",ICON_FOLDER), //$NON-NLS-1$
+		STATIC_FUNCTION_CATEGORY("Static functions sub-category", ICON_FOLDER), //$NON-NLS-1$
 		USER_DEFINED_EXPRESSIONS("User Defined Expressions", ICON_FOLDER), //$NON-NLS-1$
 		RECENT_EXPRESSIONS("Recent Expressions", ICON_FOLDER), //$NON-NLS-1$
 		CROSSTAB("Crosstab", ICON_CROSSTAB); //$NON-NLS-1$

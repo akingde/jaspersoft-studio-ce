@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -66,6 +68,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
 import com.jaspersoft.studio.editor.expression.ExpressionStatus;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
+import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
@@ -374,6 +377,9 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 			functionCategories.add(objectCategoryItem);
 		}
 		
+		// Get all additional static functions
+		functionCategories.addAll(getAdditionalStaticFunctions());
+		
 		// Let's order alphabetically the categories
 		Collections.sort(functionCategories, new Comparator<ObjectCategoryItem>() {
 			@Override
@@ -399,6 +405,12 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				.toArray(new ObjectCategoryItem[rootCategories.size()]));
 		objectsNavigator.expandAll();
 		performCategorySelection(null);
+	}
+
+	private Collection<? extends ObjectCategoryItem> getAdditionalStaticFunctions() {
+		ObjectCategoryItem i18nFunctions = new ObjectCategoryItem(Category.STATIC_FUNCTION_CATEGORY, Messages.JavaExpressionEditorComposite_MessageBundlesCategory);
+		i18nFunctions.setData(AdditionalStaticFunctions.getMessageBundleFuntions());
+		return Arrays.asList(i18nFunctions);
 	}
 
 	public void addExpressionStatusChangeListener(

@@ -62,6 +62,7 @@ import com.jaspersoft.studio.editor.expression.CrosstabTotalVariable;
 import com.jaspersoft.studio.editor.expression.ExpObject;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
+import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.messages.Messages;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
@@ -322,6 +323,12 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				List<JRExprFunctionBean> allFunctionsLst=FunctionsLibraryUtil.getAllFunctions();
 				Collections.sort(allFunctionsLst);
 				categoryDetails.addAll(allFunctionsLst);
+				categoryDetails.addAll(AdditionalStaticFunctions.getAllFunctions());
+				((GridData)buttonsToolbar.getLayoutData()).exclude=true;
+				buttonsToolbar.getParent().layout();
+				break;
+			case STATIC_FUNCTION_CATEGORY:
+				categoryDetails.addAll((List<JRExprFunctionBean>) selItem.getData());
 				((GridData)buttonsToolbar.getLayoutData()).exclude=true;
 				buttonsToolbar.getParent().layout();
 				break;

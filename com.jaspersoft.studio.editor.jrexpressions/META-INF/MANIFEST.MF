@@ -12,6 +12,7 @@ Require-Bundle: org.eclipse.xtext.xbase;bundle-version="2.3.1";resolution:=optio
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.jaspersoft.studio.editor.jrexpressions,
  com.jaspersoft.studio.editor.jrexpressions.formatting,
+ com.jaspersoft.studio.editor.jrexpressions.functions,
  com.jaspersoft.studio.editor.jrexpressions.generator,
  com.jaspersoft.studio.editor.jrexpressions.javaJRExpression,
  com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl,

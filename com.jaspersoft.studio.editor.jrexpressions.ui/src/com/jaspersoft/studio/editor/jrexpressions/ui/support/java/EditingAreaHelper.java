@@ -27,6 +27,7 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
+import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Arguments;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ExpressionList;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
@@ -87,7 +88,8 @@ public class EditingAreaHelper {
 				FullMethodName fullyQualifiedMethodName = methodInv.getFullyQualifiedMethodName();
 				if(fullyQualifiedMethodName!=null){
 					String methodName = fullyQualifiedMethodName.getMethodName();
-					if(FunctionsLibraryUtil.existsFunction(methodName)){
+					if(FunctionsLibraryUtil.existsFunction(methodName) || 
+							AdditionalStaticFunctions.getAllNames().contains(methodName)){
 						return methodName;
 					}
 				}

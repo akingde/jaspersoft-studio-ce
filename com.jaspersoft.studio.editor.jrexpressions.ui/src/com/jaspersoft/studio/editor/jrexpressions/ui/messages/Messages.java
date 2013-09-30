@@ -26,6 +26,7 @@ public class Messages extends NLS {
 	public static String JavaExpressionEditorComposite_ClassTypeDialogTitle;
 	public static String JavaExpressionEditorComposite_ExpressionInvalidError;
 	public static String JavaExpressionEditorComposite_JobName;
+	public static String JavaExpressionEditorComposite_MessageBundlesCategory;
 	public static String JavaExpressionEditorComposite_NoValidationIssuesInfo;
 	public static String JavaExpressionEditorComposite_TaskName;
 	public static String JavaExpressionEditorComposite_ValueClassMessage;

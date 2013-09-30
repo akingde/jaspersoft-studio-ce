@@ -27,6 +27,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContextUtils;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
+import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRFieldObj;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JRParameterObj;
@@ -62,7 +63,8 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 					if(expression.getObjectExpression()==null && 
 							method.equals(expression.getMethodInvocations().get(0))){
 						// Look in the function library
-						if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
+						if(!FunctionsLibraryUtil.existsFunction(name.getMethodName()) &&
+								!AdditionalStaticFunctions.getAllNames().contains(name.getMethodName())){
 							error(Messages.JavaJRExpressionJavaValidator_FunctionNotFoundError, name,
 									JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);
 						}

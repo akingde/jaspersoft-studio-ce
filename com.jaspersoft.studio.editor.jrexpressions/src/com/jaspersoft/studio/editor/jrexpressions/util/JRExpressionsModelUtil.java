@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.editor.jrexpressions.util;
 
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
+import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
@@ -48,7 +49,8 @@ public class JRExpressionsModelUtil {
 					if(expression.getObjectExpression()==null && 
 							method.equals(expression.getMethodInvocations().get(0))){
 						// Look in the function library
-						if(!FunctionsLibraryUtil.existsFunction(name.getMethodName())){
+						if(!FunctionsLibraryUtil.existsFunction(name.getMethodName()) && 
+								!AdditionalStaticFunctions.getAllNames().contains(name.getMethodName())){
 							return false;
 						}
 						else{

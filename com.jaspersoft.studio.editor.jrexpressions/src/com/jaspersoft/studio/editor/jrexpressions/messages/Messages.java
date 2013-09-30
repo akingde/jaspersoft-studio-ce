@@ -19,6 +19,16 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.editor.jrexpressions.messages.messages"; //$NON-NLS-1$
+	public static String AdditionalStaticFunctions_MessageBundlesCategoryDescription;
+	public static String AdditionalStaticFunctions_MessageBundlesCategoryName;
+	public static String AdditionalStaticFunctions_msgFunctionDescription;
+	public static String AdditionalStaticFunctions_msgFunctionParam1Description;
+	public static String AdditionalStaticFunctions_msgFunctionParam1Name;
+	public static String AdditionalStaticFunctions_msgFunctionParam2Description;
+	public static String AdditionalStaticFunctions_msgFunctionParam2Name;
+	public static String AdditionalStaticFunctions_strFunctionDescription;
+	public static String AdditionalStaticFunctions_strFunctionParamDescription;
+	public static String AdditionalStaticFunctions_strFunctionParamName;
 	public static String JavaJRExpressionJavaValidator_FieldNotFoundInContextError;
 	public static String JavaJRExpressionJavaValidator_FunctionLibraryAsConstructorError;
 	public static String JavaJRExpressionJavaValidator_FunctionNotFoundError;
