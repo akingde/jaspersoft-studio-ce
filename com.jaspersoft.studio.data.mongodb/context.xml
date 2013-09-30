@@ -10,5 +10,7 @@
       <description>From this dialog you can change the dataset query, define new parameters or change the adapter used to retrive the data.</description>
       <topic href="http://docs.mongodb.org/manual/" label="The MongoDB Manual"/>
       <topic href="http://docs.mongodb.org/manual/core/read-operations/" label="Read Operations Reference"/>
+      <topic href="http://community.jaspersoft.com/wiki/jaspersoft-mongodb-query-language" label="MongoDB Query Language"/>
+      
    </context>
 </contexts>

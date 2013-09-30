@@ -8,7 +8,7 @@
    </context>
    <context id="query_HIVE" title="Dataset and query dialog">
       <description>From this dialog you can change the dataset query, define new parameters or change the adapter used to retrive the data.</description>
-      <topic href="https://cwiki.apache.org/Hive/tutorial.html" label="Hive Tutorial"/>
-      <topic href="https://cwiki.apache.org/Hive/languagemanual.html" label="HIVE Reference"/>
+      <topic href="https://cwiki.apache.org/confluence/display/Hive/Tutorial" label="Hive Tutorial"/>
+      <topic href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual" label="HIVE Reference"/>
    </context>
 </contexts>
