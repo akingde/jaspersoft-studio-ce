@@ -103,6 +103,7 @@ public class FontFaceFragment {
 	private static String lastLocation;
 
 	public static String setupLastLocation(FileDialog dialog) {
+		System.out.println("last: " + lastLocation);
 		if (lastLocation == null)
 			lastLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
 		dialog.setFilterPath(lastLocation);
@@ -110,6 +111,7 @@ public class FontFaceFragment {
 	}
 
 	public static void setLastLocation(FileDialog dialog, String selected) {
+		System.out.println(selected);
 		if (!Misc.isNullOrEmpty(selected))
 			lastLocation = selected;
 		else if (!Misc.isNullOrEmpty(dialog.getFileName()))

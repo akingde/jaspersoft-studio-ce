@@ -179,14 +179,19 @@ public class FontFamilyPage extends WizardPage {
 		bptab.setText(name);
 
 		SimpleFontFace fontFace = new SimpleFontFace(DefaultJasperReportsContext.getInstance());
-		if (type.equals(NORMAL))
+		if (type.equals(NORMAL)) {
 			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getNormalFace(), fontFace);
-		else if (type.equals(BOLD))
+			fontFamily.setNormalFace(fontFace);
+		} else if (type.equals(BOLD)) {
 			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getBoldFace(), fontFace);
-		else if (type.equals(ITALIC))
+			fontFamily.setBoldFace(fontFace);
+		} else if (type.equals(ITALIC)) {
 			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getItalicFace(), fontFace);
-		else if (type.equals(BOLDITALIC))
+			fontFamily.setItalicFace(fontFace);
+		} else if (type.equals(BOLDITALIC)) {
 			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getBoldItalicFace(), fontFace);
+			fontFamily.setBoldItalicFace(fontFace);
+		}
 		FontFaceFragment fontFaceDialog = new FontFaceFragment(fontFace);
 		Composite cmp = fontFaceDialog.createDialogArea(tabFolder);
 
