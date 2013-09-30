@@ -28,7 +28,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 public class XySerie implements ISeriesFactory<JRXySeries> {
 
 	public JRDesignXySeries createSerie() {
-		return createSerie(new JRDesignExpression("\"SERIE 1\""), null);
+		return createSerie(new JRDesignExpression("\"SERIES 1\""), null);
 	}
 
 	@Override
