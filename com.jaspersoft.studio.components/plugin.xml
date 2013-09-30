@@ -819,7 +819,7 @@
                category="element"
                id="com.jaspersoft.studio.components.map.pathsAndStyles"
                image="icons/paths_styles-16.png"
-               label="Paths and styles">
+               label="Paths">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
