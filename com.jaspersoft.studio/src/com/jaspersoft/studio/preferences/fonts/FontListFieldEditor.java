@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
@@ -129,14 +128,10 @@ public class FontListFieldEditor extends TableFieldEditor {
 			TableItem titem = table.getItem(index);
 			FontFamily font = fontFamily.get(index);
 			if (font != null) {
-				try {
-					font = runDialog((SimpleFontFamily) ((SimpleFontFamily) font).clone());
-					if (font != null) {
-						titem.setText(font.getName());
-						fontFamily.set(index, font);
-					}
-				} catch (CloneNotSupportedException e) {
-					UIUtils.showError(e);
+				font = runDialog((SimpleFontFamily) ((SimpleFontFamily) font).clone());
+				if (font != null) {
+					titem.setText(font.getName());
+					fontFamily.set(index, font);
 				}
 			}
 		}

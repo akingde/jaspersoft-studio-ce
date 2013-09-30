@@ -99,6 +99,17 @@ public class FontFaceFragment {
 				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
 				fd.setText(Messages.FontFamilyPage_browseDialogTitle);
 				setupLastLocation(fd);
+				String font = null;
+				if (type.equals("ttf"))
+					font = fontFace.getTtf();
+				else if (type.equals("eot"))
+					font = fontFace.getEot();
+				else if (type.equals("svg"))
+					font = fontFace.getSvg();
+				else if (type.equals("woff"))
+					font = fontFace.getWoff();
+				if (font != null)
+					fd.setFilterPath(font.substring(0, font.lastIndexOf(File.separatorChar)));
 				fd.setFilterExtensions(new String[] { "*." + type + ";*." + type.toUpperCase(), "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
 				String selected = fd.open();
 				setLastLocation(fd, selected);
@@ -111,9 +122,9 @@ public class FontFaceFragment {
 						fontFace.setSvg(selected);
 					else if (type.equals("woff"))
 						fontFace.setWoff(selected);
+					txt.setText(Misc.nvl(selected));
+					txt.setToolTipText(Misc.nvl(selected));
 				}
-				txt.setText(Misc.nvl(selected));
-				txt.setToolTipText(Misc.nvl(selected));
 			}
 		});
 		return txt;
