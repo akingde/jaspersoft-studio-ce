@@ -85,42 +85,46 @@ public class FontFamilyPage extends WizardPage {
 		});
 		dsname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Group gr = new Group(composite, SWT.NONE);
-		gr.setText(Messages.FontFamilyPage_fontDetailsGroup);
+		// Group gr = new Group(composite, SWT.NONE);
+		// gr.setText(Messages.FontFamilyPage_fontDetailsGroup);
+		// GridData gd = new GridData(GridData.FILL_BOTH);
+		// gd.horizontalSpan = 2;
+		// gr.setLayoutData(gd);
+		// gr.setLayout(new GridLayout(1, false));
+
+		CTabFolder tabFolder = new CTabFolder(composite, SWT.FLAT | SWT.TOP | SWT.BORDER);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
-		gr.setLayoutData(gd);
-		gr.setLayout(new GridLayout(1, false));
-
-		CTabFolder tabFolder = new CTabFolder(gr, SWT.FLAT | SWT.BOTTOM);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		tabFolder.setLayoutData(gd);
+		tabFolder.setLayout(new GridLayout(1, false));
 
 		normal = createFileField(tabFolder, Messages.FontFamilyPage_normalLabel, NORMAL);
 		tabFolder.setSelection(0);
 
 		// put a label here
-		new Label(gr, SWT.NONE);
-		Label label = new Label(gr, SWT.WRAP);
-		label.setText(Messages.FontFamilyPage_hintText);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.horizontalSpan = 2;
-		gd.widthHint = 300;
-		label.setLayoutData(gd);
+		// new Label(gr, SWT.NONE);
+		// Label label = new Label(gr, SWT.WRAP);
+		// label.setText(Messages.FontFamilyPage_hintText);
+		// gd = new GridData(GridData.FILL_HORIZONTAL);
+		// // gd.horizontalSpan = 2;
+		// gd.widthHint = 300;
+		// label.setLayoutData(gd);
 
-		new Label(gr, SWT.NONE);
+		// new Label(gr, SWT.NONE);
 
 		bold = createFileField(tabFolder, Messages.FontFamilyPage_boldLabel, BOLD);
 		italic = createFileField(tabFolder, Messages.FontFamilyPage_italicLabel, ITALIC);
 		bolditalic = createFileField(tabFolder, Messages.FontFamilyPage_boldItalicLabel, BOLDITALIC);
 
-		gr = new Group(composite, SWT.NONE);
+		Group gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.FontFamilyPage_pdfGroup);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		gr.setLayoutData(gd);
 		gr.setLayout(new GridLayout(2, false));
 
-		label = new Label(gr, SWT.NONE);
+		Label label = new Label(gr, SWT.NONE);
 		label.setText(Messages.FontFamilyPage_pdfHintText);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;

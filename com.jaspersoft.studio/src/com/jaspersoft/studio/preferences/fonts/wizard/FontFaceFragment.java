@@ -46,7 +46,7 @@ public class FontFaceFragment {
 		txt.setText(Misc.nvl(fontFace.getWoff()));
 		txt.setToolTipText(Misc.nvl(fontFace.getWoff()));
 
-		new Label(cmp, SWT.NONE).setText("PDF");
+		new Label(cmp, SWT.NONE).setText("PDF Font Name");
 
 		final Combo txtPdf = new Combo(cmp, SWT.BORDER);
 		txtPdf.setItems(new String[] { "Courier", "Courier-Bold", "Courier-BoldOblique", "Courier-Oblique", "Helvetica",
