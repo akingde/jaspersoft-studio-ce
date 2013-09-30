@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -46,6 +47,7 @@ public class FontFamilyPage extends WizardPage {
 	private Text dsname;
 	private Button embedepdf;
 	private Combo pdfenc;
+	private Button bIsVisible;
 
 	public FontFamilyPage(FontFamily fontFamily) {
 		super("fontfamilypage"); //$NON-NLS-1$
@@ -81,33 +83,27 @@ public class FontFamilyPage extends WizardPage {
 		});
 		dsname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		// Group gr = new Group(composite, SWT.NONE);
-		// gr.setText(Messages.FontFamilyPage_fontDetailsGroup);
-		// GridData gd = new GridData(GridData.FILL_BOTH);
-		// gd.horizontalSpan = 2;
-		// gr.setLayoutData(gd);
-		// gr.setLayout(new GridLayout(1, false));
+		bIsVisible = new Button(composite, SWT.CHECK);
+		bIsVisible.setText("Hidden");
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		bIsVisible.setLayoutData(gd);
+		bIsVisible.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fontFamily.setVisible(!bIsVisible.getSelection());
+			}
+		});
 
 		CTabFolder tabFolder = new CTabFolder(composite, SWT.FLAT | SWT.TOP | SWT.BORDER);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		tabFolder.setLayoutData(gd);
 		tabFolder.setLayout(new GridLayout(1, false));
 
 		createFileField(tabFolder, Messages.FontFamilyPage_normalLabel, NORMAL);
 		tabFolder.setSelection(0);
-
-		// put a label here
-		// new Label(gr, SWT.NONE);
-		// Label label = new Label(gr, SWT.WRAP);
-		// label.setText(Messages.FontFamilyPage_hintText);
-		// gd = new GridData(GridData.FILL_HORIZONTAL);
-		// // gd.horizontalSpan = 2;
-		// gd.widthHint = 300;
-		// label.setLayoutData(gd);
-
-		// new Label(gr, SWT.NONE);
 
 		createFileField(tabFolder, Messages.FontFamilyPage_boldLabel, BOLD);
 		createFileField(tabFolder, Messages.FontFamilyPage_italicLabel, ITALIC);
@@ -198,6 +194,7 @@ public class FontFamilyPage extends WizardPage {
 	private void fillWidgets() {
 		dsname.setText(fontFamily.getName());
 		setPageComplete(fontFamily.getName() != null);
+		bIsVisible.setSelection(!fontFamily.isVisible());
 
 		String pdfEncoding = fontFamily.getPdfEncoding();
 		int pdfEncodingIndex = ModelUtils.getPDFEncodingIndex(ModelUtils.getKey4PDFEncoding(pdfEncoding));

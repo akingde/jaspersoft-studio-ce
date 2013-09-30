@@ -69,10 +69,27 @@ public class FontFaceFragment {
 	private Text createFileField(Composite composite, String name, final String type) {
 		new Label(composite, SWT.NONE).setText(name + " (." + type + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final Text txt = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		final Text txt = new Text(composite, SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 300;
 		txt.setLayoutData(gd);
+		txt.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String selected = txt.getText();
+				if (selected.isEmpty())
+					selected = null;
+				if (type.equals("ttf"))
+					fontFace.setTtf(selected);
+				else if (type.equals("eot"))
+					fontFace.setEot(selected);
+				else if (type.equals("svg"))
+					fontFace.setSvg(selected);
+				else if (type.equals("woff"))
+					fontFace.setWoff(selected);
+			}
+		});
 
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText(Messages.FontFamilyPage_browseButton);
@@ -82,13 +99,13 @@ public class FontFaceFragment {
 				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
 				fd.setText(Messages.FontFamilyPage_browseDialogTitle);
 				setupLastLocation(fd);
-				fd.setFilterExtensions(new String[] { "*.*;*." + type + ";*." + type.toUpperCase() }); //$NON-NLS-1$ //$NON-NLS-2$  
+				fd.setFilterExtensions(new String[] { "*." + type + ";*." + type.toUpperCase(), "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
 				String selected = fd.open();
 				setLastLocation(fd, selected);
 				if (selected != null) {
 					if (type.equals("ttf"))
 						fontFace.setTtf(selected);
-					else if (type.equals("eof"))
+					else if (type.equals("eot"))
 						fontFace.setEot(selected);
 					else if (type.equals("svg"))
 						fontFace.setSvg(selected);
@@ -105,7 +122,6 @@ public class FontFaceFragment {
 	private static String lastLocation;
 
 	public static String setupLastLocation(FileDialog dialog) {
-		System.out.println("last: " + lastLocation);
 		if (lastLocation == null)
 			lastLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
 		dialog.setFilterPath(lastLocation);
@@ -113,11 +129,9 @@ public class FontFaceFragment {
 	}
 
 	public static void setLastLocation(FileDialog dialog, String selected) {
-		System.out.println(selected);
 		if (!Misc.isNullOrEmpty(selected))
 			lastLocation = selected.substring(0, selected.lastIndexOf(File.separatorChar));
 		else if (!Misc.isNullOrEmpty(dialog.getFileName()))
 			lastLocation = dialog.getFileName();
-		System.out.println("set" + lastLocation);
 	}
 }

@@ -94,20 +94,8 @@ public class FontListFieldEditor extends TableFieldEditor {
 						DefaultJasperReportsContext.getInstance(), new ByteArrayInputStream(string.getBytes()));
 
 				res = new String[fontFamily.size()][1];
-				for (int i = 0; i < fontFamily.size(); i++) {
+				for (int i = 0; i < fontFamily.size(); i++)
 					res[i][0] = fontFamily.get(i).getName();
-					// if (fontFamily instanceof SimpleFontFamily) {
-					// SimpleFontFamily sff = (SimpleFontFamily) fontFamily;
-					// if (sff.getNormalFace() != null)
-					// sff.setNormalFace(sff.getNormalFace() );
-					// if (sff.getBoldFace() != null)
-					// sff.setBoldPdfFont(sff.getBoldFace().getName());
-					// if (sff.getItalicFace() != null)
-					// sff.setItalicPdfFont(sff.getItalicFace().getName());
-					// if (sff.getBoldItalicFace() != null)
-					// sff.setBoldItalicPdfFont(sff.getBoldItalicFace().getName());
-					// }
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				fontFamily = new ArrayList<FontFamily>();
@@ -217,10 +205,10 @@ public class FontListFieldEditor extends TableFieldEditor {
 
 			List<FontFamily> newfonts = new ArrayList<FontFamily>(lst.size());
 			for (FontFamily f : lst) {
-				writeFont2zip(zipos, f.getNormalFace());
-				writeFont2zip(zipos, f.getBoldFace());
-				writeFont2zip(zipos, f.getItalicFace());
-				writeFont2zip(zipos, f.getBoldItalicFace());
+				writeFont2zip(zipos, f, f.getNormalFace());
+				writeFont2zip(zipos, f, f.getBoldFace());
+				writeFont2zip(zipos, f, f.getItalicFace());
+				writeFont2zip(zipos, f, f.getBoldItalicFace());
 
 				String pdfenc = f.getPdfEncoding();
 				if (ModelUtils.getKey4PDFEncoding(pdfenc) == null) {
@@ -242,21 +230,22 @@ public class FontListFieldEditor extends TableFieldEditor {
 		}
 	}
 
-	private void writeFont2zip(ZipOutputStream zipos, FontFace font) throws IOException {
+	private void writeFont2zip(ZipOutputStream zipos, FontFamily fontFamily, FontFace font) throws IOException {
 		if (font == null)
 			return;
-		writeFont(zipos, font.getTtf());
-		writeFont(zipos, font.getEot());
-		writeFont(zipos, font.getSvg());
-		writeFont(zipos, font.getWoff());
+		writeFont(zipos, fontFamily, font, font.getTtf());
+		writeFont(zipos, fontFamily, font, font.getEot());
+		writeFont(zipos, fontFamily, font, font.getSvg());
+		writeFont(zipos, fontFamily, font, font.getWoff());
 	}
 
-	private static void writeFont(ZipOutputStream zipos, String fontname) throws IOException {
+	private static void writeFont(ZipOutputStream zipos, FontFamily fontFamily, FontFace font, String fontname)
+			throws IOException {
 		if (Misc.isNullOrEmpty(fontname))
 			return;
 		File file = new File(fontname);
 		if (file.exists()) {
-			String name = "fonts/" + file.getName(); //$NON-NLS-1$
+			String name = "fonts/" + fontFamily.getName() + "/" + font.getName() + file.getName(); //$NON-NLS-1$
 			ZipEntry ttfZipEntry = new ZipEntry(name);
 			zipos.putNextEntry(ttfZipEntry);
 
