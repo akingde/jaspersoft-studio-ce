@@ -20,14 +20,25 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.Misc;
 
 public class Text2Model {
+	private static boolean isRunning = false;
 
 	public static void text2model(final SQLQueryDesigner designer, XtextDocument doc) {
 		try {
+			if (isRunning)
+				return;
+			isRunning = true;
 			designer.refreshViewer();
 			ConvertUtil.cleanDBMetadata(designer.getDbMetadata().getRoot());
 			System.out.println("convert the model");
 			doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 				public String exec(XtextResource resource) {
+					if (!resource.getErrors().isEmpty()) {
+						designer.showWarning("Parser is not able to convert Query to the model");
+						isRunning = false;
+						return "";
+					}
+					designer.showInfo("");
+
 					ANode root = designer.getRoot();
 					EList<?> list = resource.getContents();
 					if (list != null && !list.isEmpty()) {
@@ -55,6 +66,7 @@ public class Text2Model {
 							ConvertOrderBy.convertOrderBy(designer, ((ModelImpl) obj).getOrderByEntry());
 						}
 					}
+					isRunning = false;
 					return "";
 				}
 			});

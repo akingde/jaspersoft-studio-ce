@@ -87,7 +87,7 @@ public class SQLQuerySource {
 
 		Injector injector = getInjector();
 		EmbeddedEditorFactory factory = injector.getInstance(EmbeddedEditorFactory.class);
-		embeddedEditor = factory.newEditor(resourceProvider).showErrorAndWarningAnnotations().withParent(cmp);
+		embeddedEditor = factory.newEditor(resourceProvider).showErrorAndWarningAnnotations().withParent(cmp);// .showErrorAndWarningAnnotations()
 		EmbeddedEditorModelAccess partialEditorModelAccess = embeddedEditor.createPartialEditor();
 
 		viewer = embeddedEditor.getViewer();
@@ -147,7 +147,7 @@ public class SQLQuerySource {
 						obj = arr[0];
 				}
 				if (obj instanceof AMSQLObject) {
-					performCustomDropOperations((AMSQLObject)obj);
+					performCustomDropOperations((AMSQLObject) obj);
 					StringBuffer oldText = new StringBuffer(getQuery());
 					oldText.insert(viewer.getTextWidget().getCaretOffset(), " " + ((AMSQLObject) obj).toSQLString() + " ");
 					viewer.getDocument().set(oldText.toString());
@@ -160,14 +160,16 @@ public class SQLQuerySource {
 			}
 
 			/*
-			 * Should perform some custom drop operations here depending on
-			 * the specific type of AMSQLObject.
+			 * Should perform some custom drop operations here depending on the
+			 * specific type of AMSQLObject.
 			 */
 			private void performCustomDropOperations(AMSQLObject obj) {
-				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD REVIEW
-				// Forcing the loading of the tables information so the user can use smoothly
+				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD
+				// REVIEW
+				// Forcing the loading of the tables information so the user can use
+				// smoothly
 				// the graphical editor (Diagram Tab) without NPE.
-				if(obj instanceof MSqlTable) {
+				if (obj instanceof MSqlTable) {
 					designer.getDbMetadata().loadTable((MSqlTable) obj);
 				}
 			}
