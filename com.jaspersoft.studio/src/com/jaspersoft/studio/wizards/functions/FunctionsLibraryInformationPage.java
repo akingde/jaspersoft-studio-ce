@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.wizards.functions;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,8 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
+import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
+import org.eclipse.jdt.ui.wizards.NewContainerWizardPage;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -51,6 +54,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.swt.widgets.AutoCompletionHelper;
 
 /**
@@ -127,6 +131,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 	private void createLibraryNameControls(Composite parent, int cols) {
 		Label libraryNameLbl = new Label(parent, SWT.NONE);
 		libraryNameLbl.setText("Library Name:");
+		libraryNameLbl.setToolTipText("A class-name like identifier that will be used to generate the class file containing your functions");
 		libraryNameLbl.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 		libraryName = new Text(parent, SWT.BORDER);
 		libraryName.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
@@ -139,10 +144,23 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 			}
 		});
 	}
+	
+	@Override
+	protected void createContainerControls(Composite parent, int nColumns) {
+		super.createContainerControls(parent, nColumns);
+		setTooltipOnPrivateField(NewContainerWizardPage.class, "fContainerDialogField", "The chosen Build-Path entry");
+	}
 
+	@Override
+	protected void createPackageControls(Composite parent, int nColumns) {
+		super.createPackageControls(parent, nColumns);
+		setTooltipOnPrivateField(NewTypeWizardPage.class, "fPackageDialogField", "The Java package where most of the generated output files will be placed");
+	}
+	
 	private void createCategoryLabelAndDescControls(Composite parent, int cols) {
 		Label categoryLabelLbl = new Label(parent, SWT.NONE);
 		categoryLabelLbl.setText("Category Label:");
+		categoryLabelLbl.setToolTipText("The text shown in the Expression Editor categories list");
 		categoryLabelLbl.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 		categoryLabel = new Text(parent, SWT.BORDER);
 		categoryLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
@@ -166,6 +184,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		Label categoryDescriptionLbl = new Label(parent, SWT.NONE);
 		categoryDescriptionLbl.setText("Category Description:");
 		categoryDescriptionLbl.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
+		categoryDescriptionLbl.setToolTipText("Additional details regarding the category");
 		categoryDescription = new Text(parent, SWT.BORDER);
 		categoryDescription.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
 	}
@@ -174,6 +193,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		Label categoryClassLbl = new Label(parent, SWT.NONE);
 		categoryClassLbl.setText("Category Class:");
 		categoryClassLbl.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
+		categoryClassLbl.setToolTipText("The class that will represent the category. Usually automatically suggested");
 		categoryClass = new Text(parent, 	SWT.BORDER);
 		categoryClass.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
 		categoryClass.addModifyListener(new ModifyListener() {
@@ -198,6 +218,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		
 		createSampleFunctions = new Button(parent, SWT.CHECK);
 		createSampleFunctions.setText("Some example methods");
+		createSampleFunctions.setToolTipText("Will create some example methods in the generated function class");
 		createSampleFunctions.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
 		createSampleFunctions.setSelection(true);
 		createSampleFunctions.addSelectionListener(new SelectionAdapter() {
@@ -212,6 +233,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		
 		createSampleJRXML = new Button(parent, SWT.CHECK);
 		createSampleJRXML.setText("A sample report that uses the example functions");
+		createSampleJRXML.setToolTipText("Creates an example JRXML that will use the newly created sample functions");
 		createSampleJRXML.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
 		createSampleJRXML.setSelection(true);
 	}
@@ -315,12 +337,26 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 	 */
 	public String getCategoryLabel() {
 		return categoryLabel.getText();
-	}
+	}	
 	
 	/**
 	 * @return the category description
 	 */
 	public String getCategoryDescription() {
 		return categoryDescription.getText();
+	}
+	
+	@SuppressWarnings("restriction")
+	private void setTooltipOnPrivateField(Class<?> targetClazz, String fieldName, String tooltip) {
+		try {
+			Field containerWidget = targetClazz.getDeclaredField(fieldName);
+			containerWidget.setAccessible(true);
+			Object obj = containerWidget.get(this);
+			if(obj instanceof DialogField) {
+				((DialogField)obj).getLabelControl(null).setToolTipText(tooltip);
+			}
+		} catch (Exception e) {
+			JaspersoftStudioPlugin.getInstance().logError("Unable to set the tooltip on the label control", e);
+		}
 	}
 }
