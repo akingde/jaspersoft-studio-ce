@@ -62,6 +62,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -186,7 +187,9 @@ public abstract class AFileResourcePageContent extends APageContent {
 	 */
 	protected List<ComboItem> getItemsList(){
 		List<ComboItem> itemsList = new ArrayList<ComboItem>();
-		itemsList.add(new ComboItem(Messages.AFileResourcePage_downloadfilebutton, true, Activator.getDefault().getImage("icons/drive-download.png"),0, 0, 0)); //$NON-NLS-2$
+		//The doSaveFile method require that the root of the resource is an MserverProfile (this is true when we see the properties of an element but not when we create a new one
+		//so we hide the download option is hidden when we are creating an elemen
+		if (res.getRoot() instanceof MServerProfile) itemsList.add(new ComboItem(Messages.AFileResourcePage_downloadfilebutton, true, Activator.getDefault().getImage("icons/drive-download.png"),0, 0, 0)); //$NON-NLS-2$
 		itemsList.add(new ComboItem(Messages.AFileResourcePageContent_uploadFromFS, true,  Activator.getDefault().getImage("icons/drive-upload.png"),1, 1, 1)); //$NON-NLS-2$
 		itemsList.add(new ComboItem(Messages.JrxmlPageContent_uploadFromRepo, true,  Activator.getDefault().getImage("icons/drive-upload.png"),2, 2, 2)); //$NON-NLS-2$
 		return itemsList;
