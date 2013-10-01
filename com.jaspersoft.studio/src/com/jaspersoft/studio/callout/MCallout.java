@@ -368,7 +368,7 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		properties = getProperities(getParent());
 
 		properties.setProperty("callouts." + i + ".bounds", x + "," + y + "," + w + "," + h);
-		properties.setProperty("callouts." + i + ".text", text.replace("\n", "\\n"));
+		properties.setProperty("callouts." + i + ".text", text);// .replace("\n", "\\n"));
 		properties.setProperty("callouts." + i + ".bg", StringConverter.asString(bg.getRGB()));
 		properties.setProperty("callouts." + i + ".fg", StringConverter.asString(fg.getRGB()));
 
