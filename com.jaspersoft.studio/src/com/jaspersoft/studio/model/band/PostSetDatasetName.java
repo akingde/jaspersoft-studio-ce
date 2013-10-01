@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -94,11 +93,8 @@ public class PostSetDatasetName implements IPostSetValue {
 			//Get all the references to this dataset
 			List<IDatasetContainer> references = DeleteDatasetCommand.getDatasetUsage(((MDataset)target).getRoot().getChildren(), oldValue.toString());
 			if (references.size()>0){
-				MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.PostSetDatasetName_title, null,
-						Messages.PostSetDatasetName_message, MessageDialog.WARNING, new String[] { Messages.DeleteDatasetCommand_yesOption,Messages.DeleteDatasetCommand_noOption}, 1); 
-				int selection = dialog.open();
-				if (selection == 0){
-					
+				boolean selectedYes = UIUtils.showConfirmation(Messages.PostSetDatasetName_title, Messages.PostSetDatasetName_message);
+				if (selectedYes){
 					for(IDatasetContainer datasetRun : references){
 						List<MDatasetRun> datasetList = datasetRun.getDatasetRunList();
 						for (MDatasetRun actualDataset : datasetList){
