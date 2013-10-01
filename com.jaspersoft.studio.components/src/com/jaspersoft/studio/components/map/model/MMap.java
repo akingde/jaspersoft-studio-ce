@@ -585,11 +585,42 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 				"map")); //$NON-NLS-1$
 		return designMap;
 	}
+	
+	/**
+	 * The table dataset update the value of the inner JRDesignDatasetRun only when a 
+	 * set of the property of the datasetrun is done directly on the map element.
+	 * If the set of the value is done only on the inner dataset run model
+	 * then the change will be overwritten on the first get property value of the dataset
+	 * run property
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class MapDatasetRun extends MDatasetRun{
+
+		private static final long serialVersionUID = -7526842349391237513L;
+		private MMap mapModel;
+		
+		public MapDatasetRun(JRDatasetRun value, MMap mapModel) {
+			super(value, mapModel.getJasperDesign());
+			this.mapModel = mapModel;
+		}
+		
+		@Override
+		public void setPropertyValue(Object id, Object value) {
+			if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)){
+				super.setPropertyValue(id, value);
+				mapModel.setPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN, this);
+			} else super.setPropertyValue(id, value);
+		}
+		
+	}
 
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-		datasetList.add((MDatasetRun) getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN));
+		MDatasetRun datasetRun = (MDatasetRun) getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		datasetList.add(new MapDatasetRun(datasetRun.getValue(),this));
 		return datasetList;
 	}
 
