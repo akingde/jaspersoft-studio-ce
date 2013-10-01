@@ -31,7 +31,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * Wizard page that allows to add additional categories for the new library
@@ -101,7 +104,8 @@ public class AdditionalFunctionsCategoriesPage extends WizardPage {
 			}
 		});
 			
-		setControl(mainCmp);		
+		setControl(mainCmp);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,ContextHelpIDs.WIZARD_NEW_FUNCTIONS_LIBRARY);
 	}
 	
 	public java.util.List<String> getAdditionalCategories() {

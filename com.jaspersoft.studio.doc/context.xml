@@ -150,7 +150,7 @@
 		<topic href="html/wizard/createreport/addfolder.html" label="Create a Project Folder" /> 
    </context>
    <context id="select_expression" title="Compose your expression">
-      <description>Here you can define an expression and use it inside your report. This powerfull expression editor allows the edit and composing an expression with a graphical interface that suggest the available fields, variables, function and their parameters.</description>
+      <description>Here you can define an expression and use it inside your report. This powerful expression editor allows the edit and composing an expression with a graphical interface that suggest the available fields, variables, function and their parameters.</description>
 		<topic href="html/wizard/expressioneditor/useexpressioneditor.html" label="Expression Editor: what it is and how it works" />
 		<topic href="html/wizard/expressioneditor/extendeditor.html" label="Expression Editor: how to extend it and contribute your own functions" />
    </context>
@@ -336,6 +336,10 @@
    </context>
    <context id="wizard_import_select_properties" title="Select the Properties to import">
       <description>Here you can see all the properties that can be automatically imported into JasperSoft Studio (existing properties will be replaced), select one or more of them and press Finish to import all the selected data into Jaspersoft Studio</description>
+   </context>
+   <context id="wizard_functionslibrary" title="Create a new Functions Library for the Expression Editor">
+      <description>The wizard will guide you through the creation of a Functions Library that can be used to extend the Expression Editor.</description>
+		<topic href="html/wizard/expressioneditor/extendeditor.html" label="Expression Editor: how to extend it and contribute your own functions" />
    </context>
    <context id="editInputControl" title="Edit Input Control">
       <description>Input controls are graphical widgets the server displays with the report. Input controls can be used to Prompt the user for input, validate the format of the input, pass the input to the report.Based on the input, the server modifies the WHERE filter clauses in SQL parametrized queries. Input controls correspond to the parameters defined in JRXML reports, such as $P{name}. The server maps the value that the user enters for the input control to the parameter of the same name. If you define an input control in the JasperReport and the server can’t find a parameter by the same name in the JRXML, the input control doesn’t function when the report runs.</description>

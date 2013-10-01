@@ -94,4 +94,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_IMPORT_SELECT_ADAPTERS = PREFIX.concat("wizard_import_select_dataadapters");
 	
 	public static final String WIZARD_IMPORT_SELECT_PROPERTIES = PREFIX.concat("wizard_import_select_properties");
+	
+	public static final String WIZARD_NEW_FUNCTIONS_LIBRARY = PREFIX.concat("wizard_functionslibrary");
 }

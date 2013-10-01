@@ -10,7 +10,7 @@
 			<screenshot>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="1.png" format="PNG"/>
+						<imagedata fileref="img/useExpEditor_01.png" format="PNG"/>
 					</imageobject>
 				</mediaobject>
 			</screenshot>
@@ -34,7 +34,7 @@
 			<screenshot>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="2.png" format="PNG" />
+						<imagedata fileref="img/useExpEditor_02.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</screenshot>
@@ -67,7 +67,7 @@
 			<screenshot>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="3.png" format="PNG" />
+						<imagedata fileref="img/useExpEditor_03.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</screenshot>
@@ -82,7 +82,7 @@
 			<screenshot>
 				<mediaobject>
 					<imageobject>
-						<imagedata fileref="4.png" format="PNG" />
+						<imagedata fileref="img/useExpEditor_04.png" format="PNG" />
 					</imageobject>
 				</mediaobject>
 			</screenshot>

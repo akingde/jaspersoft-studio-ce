@@ -53,9 +53,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.swt.widgets.AutoCompletionHelper;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 /**
  * 
@@ -124,6 +126,7 @@ public class FunctionsLibraryInformationPage extends NewTypeWizardPage {
 		createSeparator(composite, cols);
 		createSamplesControls(composite,cols);
 		setControl(composite);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,ContextHelpIDs.WIZARD_NEW_FUNCTIONS_LIBRARY);
 	}
 
 	// UI related methods
