@@ -598,6 +598,9 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		table.setY(tableY);
 		summaryBand.addElement(table);
 		
+		//Remove the main dataset query
+		((JRDesignQuery)jd.getMainDataset().getQuery()).setText("");
+		
 		return reportBundle;
 	}
 	
