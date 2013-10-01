@@ -298,7 +298,7 @@ public abstract class SPMapDataElementsList extends ASPropertyWidget {
 		public void run() {
 			boolean deleteElement = MessageDialog.openQuestion(
 					UIUtils.getShell(), NLS.bind(Messages.SPMapDataElementsList_DeleteElement,widgetConfig.getElementTxt()), 
-					NLS.bind(Messages.SPMapDataElementsList_ConfirmElementDelete,widgetConfig));
+					NLS.bind(Messages.SPMapDataElementsList_ConfirmElementDelete,widgetConfig.getElementTxt()));
 			if(deleteElement){
 				IStructuredSelection selection = (IStructuredSelection) elementsTV.getSelection();
 		        Object selObj = selection.getFirstElement();
