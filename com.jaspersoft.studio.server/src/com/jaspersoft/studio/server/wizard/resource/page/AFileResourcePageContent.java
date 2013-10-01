@@ -30,6 +30,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -37,6 +38,7 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationUpdater;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,6 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 
 import com.jaspersoft.studio.model.ANode;
@@ -183,8 +186,9 @@ public abstract class AFileResourcePageContent extends APageContent {
 	 */
 	protected List<ComboItem> getItemsList(){
 		List<ComboItem> itemsList = new ArrayList<ComboItem>();
-		itemsList.add(new ComboItem(Messages.AFileResourcePage_downloadfilebutton, true, Activator.getDefault().getImage("icons/drive-download.png"),0, 0, 0)); //$NON-NLS-2$ //$NON-NLS-1$
+		itemsList.add(new ComboItem(Messages.AFileResourcePage_downloadfilebutton, true, Activator.getDefault().getImage("icons/drive-download.png"),0, 0, 0)); //$NON-NLS-2$
 		itemsList.add(new ComboItem(Messages.AFileResourcePageContent_uploadFromFS, true,  Activator.getDefault().getImage("icons/drive-upload.png"),1, 1, 1)); //$NON-NLS-2$
+		itemsList.add(new ComboItem(Messages.JrxmlPageContent_uploadFromRepo, true,  Activator.getDefault().getImage("icons/drive-upload.png"),2, 2, 2)); //$NON-NLS-2$
 		return itemsList;
 	}
 	
@@ -219,7 +223,32 @@ public abstract class AFileResourcePageContent extends APageContent {
 			if (filename != null)
 				((AFileResource) res).setFile(new File(filename));
 			handleFileChange();
+		} else if (selectionValue.equals(2)){
+			String filename = getResourceDialog();
+			if (filename != null)
+				((AFileResource) res).setFile(new File(filename));
+			handleFileChange();
 		}
+	}
+	
+	protected String getIntialPattern(){
+		return "*";
+	}
+	
+	/**
+	 * Return a resource by selecting it from the workspace
+	 * 
+	 * @return the path of the resource
+	 */
+	protected String getResourceDialog() {
+		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(trefuri.getShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+		dialog.setTitle("");
+		dialog.setInitialPattern(getIntialPattern()); //$NON-NLS-1$
+		if (dialog.open() == Window.OK) {
+			IFile file = (IFile) dialog.getFirstResult();
+			return file.getLocation().toPortableString();
+		}
+		return null;
 	}
 
 	public Control createContent(Composite parent) {

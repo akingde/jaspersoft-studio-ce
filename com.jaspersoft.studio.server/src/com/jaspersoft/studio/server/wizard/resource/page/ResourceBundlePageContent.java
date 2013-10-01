@@ -66,6 +66,11 @@ public class ResourceBundlePageContent extends AFileResourcePageContent {
 		gd.horizontalSpan = 3;
 		txt.setLayoutData(gd);
 	}
+	
+	@Override
+	protected String getIntialPattern() {
+		return "*.properties";
+	}
 
 	@Override
 	protected void handleFileChange() {
