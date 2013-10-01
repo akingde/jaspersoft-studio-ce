@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.data.sql.text2model;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
@@ -12,6 +14,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.union.CreateUnion;
 import com.jaspersoft.studio.data.sql.impl.ModelImpl;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
@@ -23,21 +26,27 @@ public class Text2Model {
 	private static boolean isRunning = false;
 
 	public static void text2model(final SQLQueryDesigner designer, XtextDocument doc) {
+		text2model(designer, doc, false);
+	}
+
+	public static void text2model(final SQLQueryDesigner designer, XtextDocument doc, final boolean showWarning) {
 		try {
 			if (isRunning)
 				return;
 			isRunning = true;
 			designer.refreshViewer();
 			ConvertUtil.cleanDBMetadata(designer.getDbMetadata().getRoot());
-			System.out.println("convert the model");
+			System.out.println("convert the model"); //$NON-NLS-1$
 			doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 				public String exec(XtextResource resource) {
 					if (!resource.getErrors().isEmpty()) {
-						designer.showWarning("Parser is not able to convert Query to the model");
+						if (showWarning)
+							UIUtils.showWarning(Messages.Text2Model_warn);
+						// designer.showWarning("Parser is not able to convert Query to the model");
 						isRunning = false;
-						return "";
+						return ""; //$NON-NLS-1$
 					}
-					designer.showInfo("");
+					designer.showInfo(""); //$NON-NLS-1$
 
 					ANode root = designer.getRoot();
 					EList<?> list = resource.getContents();
@@ -55,7 +64,7 @@ public class Text2Model {
 												munion = CreateUnion.createUnion(root);
 												String setop = sss.getOp().toUpperCase();
 												if (setop.equals(AMKeyword.SET_OPERATOR_UNION) && sss.getAll() != null)
-													setop += " ALL";
+													setop += " ALL"; //$NON-NLS-1$
 												munion.setValue(setop);
 											}
 											convertSelect(designer, Misc.nvl(munion, root), (SelectImpl) sss.getQuery());
@@ -67,7 +76,7 @@ public class Text2Model {
 						}
 					}
 					isRunning = false;
-					return "";
+					return ""; //$NON-NLS-1$
 				}
 			});
 		} catch (Throwable e) {

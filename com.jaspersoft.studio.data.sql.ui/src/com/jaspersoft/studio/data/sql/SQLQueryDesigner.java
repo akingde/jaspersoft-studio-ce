@@ -88,8 +88,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (source.isDirty())
-					Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument());
+				if (source.isDirty()) {
+					Text2Model.text2model(SQLQueryDesigner.this, source.getXTextDocument(), true);
+				}
 				switch (tabFolder.getSelectionIndex()) {
 				case 1:
 					outline.scheduleRefresh();
