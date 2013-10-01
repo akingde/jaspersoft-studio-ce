@@ -232,7 +232,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 	}
 	
 	protected String getIntialPattern(){
-		return "*";
+		return ".*";
 	}
 	
 	/**
