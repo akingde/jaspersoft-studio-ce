@@ -80,6 +80,8 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 		gl_composite.marginHeight = 0;
 		composite.setLayout(gl_composite);
 
+		createFileNameWidgets(composite);
+
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
