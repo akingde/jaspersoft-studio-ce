@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
@@ -151,13 +152,15 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		List<JRDataset> ds = new ArrayList<JRDataset>();
 		ds.add(jasper.getMainDataset());
 		List<JRDataset> datasetsList = jasper.getDatasetsList();
-		if (datasetsList != null && datasetsList.isEmpty())
+		if (datasetsList != null && !datasetsList.isEmpty())
 			ds.addAll(datasetsList);
 		for (JRDataset d : ds) {
 			String dapath = d.getResourceBundle();
 			if (dapath == null || dapath.isEmpty())
 				continue;
 			impBundle.publish(jrConfig, jasper, dapath, mrunit, monitor, fileset, file);
+			for (Locale l : Locale.getAvailableLocales())
+				impBundle.publish(jrConfig, jasper, dapath + "_" + l.toString(), mrunit, monitor, fileset, file);
 		}
 	}
 
