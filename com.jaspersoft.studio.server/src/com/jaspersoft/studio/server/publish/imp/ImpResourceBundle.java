@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Set;
 
@@ -38,14 +39,11 @@ public class ImpResourceBundle extends AImpObject {
 		super(jrConfig);
 	}
 
-	public File publish(JasperReportsConfiguration jConfig, JasperDesign jd,
-			String dpath, MReportUnit mrunit, IProgressMonitor monitor,
-			Set<String> fileset, IFile file) throws Exception {
+	public File publish(JasperReportsConfiguration jConfig, JasperDesign jd, String dpath, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
 		File f = null;
-		URL resource = jConfig.getClassLoader().getResource(
-				dpath + ".properties");
-		if (resource != null)
-			f = new File(resource.toURI());
+		URL url = jConfig.getClassLoader().getResource(dpath + ".properties");
+		if (url != null)
+			f = new File(new URI(url.getProtocol(), url.getAuthority(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
 		else
 			f = findFile(file, dpath + ".properties");
 		if (f != null && f.exists()) {
@@ -61,9 +59,7 @@ public class ImpResourceBundle extends AImpObject {
 	}
 
 	@Override
-	public AFileResource publish(JasperDesign jd, JRDesignElement img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
 		return null;
 	}
 
