@@ -30,7 +30,7 @@ public class DownloadFileAction extends OpenInEditorAction {
 	// private TreeViewer treeViewer;
 
 	public DownloadFileAction(TreeViewer treeViewer) {
-		super(treeViewer, false);
+		super(treeViewer, true);
 		setId(ID);
 		setText("Do&wnload To File");
 		setDescription("Download File");
