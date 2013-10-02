@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -24,6 +23,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -35,23 +35,23 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.export.ImageExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
-import com.jaspersoft.studio.server.export.ResourceBundleExporter;
-import com.jaspersoft.studio.server.export.StyleTemplateExporter;
-import com.jaspersoft.studio.server.export.XmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MJrxml;
-import com.jaspersoft.studio.server.model.MRImage;
-import com.jaspersoft.studio.server.model.MRStyleTemplate;
-import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.model.MResourceBundle;
-import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class OpenInEditorAction extends Action {
 	private static final String ID = "OPENINEDITOR"; //$NON-NLS-1$
-	private TreeViewer treeViewer;
+	protected TreeViewer treeViewer;
+	private boolean openInEditor = true;
+
+	public OpenInEditorAction(TreeViewer treeViewer, boolean openInEditor) {
+		this(treeViewer);
+		this.openInEditor = openInEditor;
+
+	}
 
 	public OpenInEditorAction(TreeViewer treeViewer) {
 		super();
@@ -77,8 +77,12 @@ public class OpenInEditorAction extends Action {
 		return true;
 	}
 
-	private boolean isFileResource(Object obj) {
-		return (obj != null && (obj instanceof MJrxml || obj instanceof MXmlFile || obj instanceof MRImage || obj instanceof MResourceBundle || obj instanceof MRStyleTemplate));
+	protected boolean isFileResource(Object obj) {
+		return (obj != null && (obj instanceof AFileResource));
+	}
+
+	protected boolean preDownload(AFileResource fres) {
+		return true;
 	}
 
 	@Override
@@ -87,53 +91,34 @@ public class OpenInEditorAction extends Action {
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource) {
-				WorkspaceJob job = new WorkspaceJob("Open File In Editor") {
-					public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-						try {
-							monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
-							dorun(obj, monitor);
-						} catch (Throwable e) {
-							UIUtils.showError(e);
-						} finally {
-							monitor.done();
+			if (isFileResource(obj)) {
+				if (preDownload((AFileResource) obj)) {
+					WorkspaceJob job = new WorkspaceJob("Open File In Editor") {
+						public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+							try {
+								monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
+								dorun(obj, monitor);
+							} catch (Throwable e) {
+								UIUtils.showError(e);
+							} finally {
+								monitor.done();
+							}
+							return Status.OK_STATUS;
 						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setUser(true);
-				job.schedule();
-
-				// ProgressMonitorDialog pm = new
-				// ProgressMonitorDialog(Display.getDefault().getActiveShell());
-				// try {
-				// pm.run(true, true, new IRunnableWithProgress() {
-				// public void run(IProgressMonitor monitor) throws
-				// InvocationTargetException, InterruptedException {
-				// try {
-				// monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
-				// dorun(obj, monitor);
-				// } catch (Throwable e) {
-				// throw new InvocationTargetException(e);
-				// } finally {
-				// monitor.done();
-				// }
-				// }
-				//
-				// });
-				// } catch (InvocationTargetException e) {
-				// UIUtils.showError(e.getCause());
-				// } catch (InterruptedException e) {
-				// UIUtils.showError(e);
-				// }
+					};
+					job.setUser(true);
+					job.schedule();
+				}
 				break;
 			}
 		}
 	}
 
+	protected IPath path;
+
 	protected void dorun(final Object obj, IProgressMonitor monitor) throws Exception, FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
-			MResource res = (MResource) obj;
+			AFileResource res = (AFileResource) obj;
 			ResourceDescriptor rd = res.getValue();
 
 			String fkeyname = ServerManager.getKey(res);
@@ -142,33 +127,24 @@ public class OpenInEditorAction extends Action {
 			String type = rd.getWsType();
 			IFile f = null;
 			if (type.equals(ResourceDescriptor.TYPE_JRXML)) {
-				IFile file = new JrxmlExporter().exportToIFile(res, rd, fkeyname, monitor);
+				IFile file = new JrxmlExporter(path).exportToIFile(res, rd, fkeyname, monitor);
 				if (file != null)
 					openEditor(file);
 				return;
 			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
-				f = new ImageExporter().exportToIFile(res, rd, fkeyname, monitor);
-			else if (type.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
-				f = new ResourceBundleExporter().exportToIFile(res, rd, fkeyname, monitor);
-			else if (type.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
-				f = new StyleTemplateExporter().exportToIFile(res, rd, fkeyname, monitor);
-			else if (type.equals(ResourceDescriptor.TYPE_XML_FILE))
-				f = new XmlExporter().exportToIFile(res, rd, fkeyname, monitor);
+				f = new ImageExporter(path).exportToIFile(res, rd, fkeyname, monitor);
+			else
+				f = new AExporter(path).exportToIFile(res, rd, fkeyname, monitor);
+
 			if (f != null)
 				openEditor(f);
+			path = null;
 		}
 	}
 
 	private void openEditor(final IFile f) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			public void run() {
-				SelectionHelper.openEditor(f);
-			}
-		});
-	}
-
-	private void openEditor(final File f) {
+		if (!openInEditor)
+			return;
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {

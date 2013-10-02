@@ -20,17 +20,22 @@ import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.AFileResource;
 
 public class ImageExporter extends AExporter {
 
+	public ImageExporter(IPath path) {
+		super(path);
+	}
+
 	@Override
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(AFileResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
-		if (f != null) {
+		if (path == null && f != null) {
 			String filename = f.getFullPath().toPortableString();
 			int dotPos = filename.lastIndexOf(".");
 			if (dotPos >= 0)
@@ -53,7 +58,7 @@ public class ImageExporter extends AExporter {
 	}
 
 	@Override
-	public String getExtension() {
+	public String getExtension(AFileResource res) {
 		return "";
 	}
 

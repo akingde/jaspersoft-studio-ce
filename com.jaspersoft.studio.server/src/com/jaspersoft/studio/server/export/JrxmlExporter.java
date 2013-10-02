@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 
@@ -33,6 +34,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -42,8 +44,12 @@ public class JrxmlExporter extends AExporter {
 	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
 	public static final QualifiedName KEY_REPORT_ISMAIN = new QualifiedName(Activator.PLUGIN_ID, PROP_REPORT_ISMAIN);
 
+	public JrxmlExporter(IPath path) {
+		super(path);
+	}
+
 	@Override
-	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(AFileResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
 			try {
@@ -64,7 +70,7 @@ public class JrxmlExporter extends AExporter {
 		return f;
 	}
 
-	protected void setPropServerURL(MResource res, JasperDesign jd) {
+	protected void setPropServerURL(AFileResource res, JasperDesign jd) {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile server = (MServerProfile) n;
@@ -82,11 +88,6 @@ public class JrxmlExporter extends AExporter {
 				jd.setProperty(AExporter.PROP_REPORTUNIT, runit.getUriString());
 		} else
 			jd.getPropertiesMap().removeProperty(AExporter.PROP_REPORTUNIT);
-	}
-
-	@Override
-	public String getExtension() {
-		return ".jrxml";
 	}
 
 	private void getResources(MResource res, JasperDesign jd) throws Exception {
