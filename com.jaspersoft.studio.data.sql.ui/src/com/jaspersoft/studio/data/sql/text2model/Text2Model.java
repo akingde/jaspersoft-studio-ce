@@ -29,7 +29,7 @@ public class Text2Model {
 		text2model(designer, doc, false);
 	}
 
-	public static void text2model(final SQLQueryDesigner designer, XtextDocument doc, final boolean showWarning) {
+	public static void text2model(final SQLQueryDesigner designer, final XtextDocument doc, final boolean showWarning) {
 		try {
 			if (isRunning)
 				return;
@@ -40,7 +40,7 @@ public class Text2Model {
 			doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 				public String exec(XtextResource resource) {
 					if (!resource.getErrors().isEmpty()) {
-						if (showWarning)
+						if (showWarning && !doc.get().isEmpty())
 							UIUtils.showWarning(Messages.Text2Model_warn);
 						// designer.showWarning("Parser is not able to convert Query to the model");
 						isRunning = false;
