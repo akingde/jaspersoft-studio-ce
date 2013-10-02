@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
@@ -35,6 +36,9 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.util.JRResourcesUtil;
 
+import org.eclipse.osgi.util.NLS;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -244,6 +248,7 @@ public final class ExpressionContextUtils {
 	 */
 	public static ResourceBundle getResourceBundle(JRDataset dataset, JasperReportsConfiguration jconfig) {
 		String baseName = dataset.getResourceBundle();
+		ResourceBundle loadedBundle = null;
 		if(baseName==null) {
 			baseName = jconfig.getJasperDesign().getMainDataset().getResourceBundle();
 		}
@@ -253,8 +258,14 @@ public final class ExpressionContextUtils {
 			if (obj instanceof Locale) {
 				locale = (Locale) obj;
 			}
-			return JRResourcesUtil.loadResourceBundle(baseName, locale, jconfig.getClassLoader());
+			try {
+				loadedBundle = JRResourcesUtil.loadResourceBundle(baseName, locale, jconfig.getClassLoader());
+			}
+			catch (MissingResourceException e) {
+				JaspersoftStudioPlugin.getInstance().logError(
+						NLS.bind("Unable to get the resource bundle with base name {0}.",baseName), e);
+			}
 		}
-		return null;
+		return loadedBundle;
 	}
 }
