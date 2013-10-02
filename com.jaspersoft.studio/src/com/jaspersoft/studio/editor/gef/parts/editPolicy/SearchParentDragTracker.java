@@ -27,7 +27,7 @@ import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 
-import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
@@ -164,7 +164,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			port.translateToAbsolute(rect);
 			Point loc = port.getViewLocation();
 			Point targetloc = port.getViewLocation();
-			Rectangle dragSize = ((FigureEditPart)getSourceEditPart()).getFigure().getBounds();
+			Rectangle dragSize = ((AJDEditPart) getSourceEditPart()).getFigure().getBounds();
 			//The autoscroll bounds are calculated on the size of the element dragged
 			int elementSizeOffset = (dragSize.x + dragSize.y)*2;
 			if (needToWait())
