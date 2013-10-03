@@ -44,6 +44,7 @@ import org.eclipse.ui.internal.handlers.RestartWorkbenchHandler;
 import org.eclipse.ui.menus.UIElement;
 import org.eclipse.ui.services.ISourceProviderService;
 
+import com.jaspersoft.studio.ConfigurationPathProvider;
 import com.jaspersoft.studio.messages.Messages;
 
 /**

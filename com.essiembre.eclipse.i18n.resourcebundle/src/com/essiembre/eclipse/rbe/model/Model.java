@@ -40,14 +40,14 @@ public abstract class Model {
      * https://bugs.eclipse.org/bugs/show_bug.cgi?format=multiple&id=94156
      */
     /** Listeners for this object. */
-    private final List listeners = new ArrayList();
+    private final List<Object> listeners = new ArrayList<Object>();
     
     /**
      * Fires an "add" event.
      * @param added object added
      */
     protected void fireAdd(Object added) {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+        for (Iterator<?> iter = listeners.iterator(); iter.hasNext();) {
             IDeltaListener listener = (IDeltaListener) iter.next();
             listener.add(new DeltaEvent(added));
         }
@@ -58,7 +58,7 @@ public abstract class Model {
      * @param removed object removed
      */
     protected void fireRemove(Object removed) {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+        for (Iterator<?> iter = listeners.iterator(); iter.hasNext();) {
             IDeltaListener listener = (IDeltaListener) iter.next();
             listener.remove(new DeltaEvent(removed));
         }
@@ -69,7 +69,7 @@ public abstract class Model {
      * @param modified object modified
      */
     protected void fireModify(Object modified) {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+        for (Iterator<?> iter = listeners.iterator(); iter.hasNext();) {
             IDeltaListener listener = (IDeltaListener) iter.next();
             listener.modify(new DeltaEvent(modified));
         }
@@ -80,7 +80,7 @@ public abstract class Model {
      * @param selected the selected object.
      */
     protected void fireSelect(Object selected) {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+        for (Iterator<?> iter = listeners.iterator(); iter.hasNext();) {
             IDeltaListener listener = (IDeltaListener) iter.next();
             listener.select(new DeltaEvent(selected));
         }

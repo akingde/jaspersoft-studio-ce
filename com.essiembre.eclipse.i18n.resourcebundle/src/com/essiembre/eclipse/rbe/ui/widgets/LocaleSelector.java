@@ -55,13 +55,13 @@ public class LocaleSelector extends Composite {
             + RBEPlugin.getString("editor.default") //$NON-NLS-1$ 
             + "]"; //$NON-NLS-1$
     
-    /*default*/ Locale[] availableLocales;
+    protected Locale[] availableLocales;
+    protected Combo localesCombo;
+    protected Text langText;
+    protected Text countryText;
+    protected Text variantText;
 
-    /*default*/ Combo localesCombo;
-    /*default*/ Text langText;
-    /*default*/ Text countryText;
-    /*default*/ Text variantText;
-
+    protected Group selectionGroup;
     
     /**
      * Constructor.
@@ -72,11 +72,11 @@ public class LocaleSelector extends Composite {
 
         // Init available locales
         availableLocales = Locale.getAvailableLocales();
-        Arrays.sort(availableLocales, new Comparator() {
-            public int compare(Object locale1, Object locale2) {
-                return Collator.getInstance().compare(
-                        ((Locale) locale1).getDisplayName(),
-                        ((Locale) locale2).getDisplayName());
+        Arrays.sort(availableLocales, new Comparator<Locale>() {
+            
+        	@Override
+        	public int compare(Locale locale1, Locale locale2) {
+                return Collator.getInstance().compare(locale1.getDisplayName(), locale2.getDisplayName());
             }
         });
         
@@ -87,12 +87,11 @@ public class LocaleSelector extends Composite {
         layout.verticalSpacing = 20;
         
         // Group settings
-        Group selectionGroup = new Group(this, SWT.NULL);
+        selectionGroup = new Group(this, SWT.NULL);
         layout = new GridLayout(3, false);
         selectionGroup.setLayout(layout);
         selectionGroup.setText(RBEPlugin.getString(
                 "selector.title")); //$NON-NLS-1$
-        
         // Set locales drop-down
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.horizontalSpan = 3;
@@ -118,9 +117,9 @@ public class LocaleSelector extends Composite {
         });
 
         // Language field
-        gd = new GridData();
         langText = new Text(selectionGroup, SWT.BORDER);
         langText.setTextLimit(3);
+        gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.widthHint = UIUtils.getWidthInChars(langText, 4);
         langText.setLayoutData(gd);
         langText.addFocusListener(new FocusAdapter() {
@@ -131,9 +130,9 @@ public class LocaleSelector extends Composite {
         });
 
         // Country field
-        gd = new GridData();
         countryText = new Text(selectionGroup, SWT.BORDER);
         countryText.setTextLimit(2);
+        gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.widthHint = UIUtils.getWidthInChars(countryText, 4);
         countryText.setLayoutData(gd);
         countryText.addFocusListener(new FocusAdapter() {
@@ -145,8 +144,8 @@ public class LocaleSelector extends Composite {
         });
 
         // Variant field
-        gd = new GridData();
         variantText = new Text(selectionGroup, SWT.BORDER);
+        gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.widthHint = UIUtils.getWidthInChars(variantText, 4);
         variantText.setLayoutData(gd);
         variantText.addFocusListener(new FocusAdapter() {
@@ -156,25 +155,19 @@ public class LocaleSelector extends Composite {
         });
         
         // Labels
-        gd = new GridData();
-        gd.horizontalAlignment = GridData.CENTER;
         Label lblLang = new Label(selectionGroup, SWT.NULL);
         lblLang.setText(RBEPlugin.getString("selector.language")); //$NON-NLS-1$
-        lblLang.setLayoutData(gd);
+        lblLang.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 
-        gd = new GridData();
-        gd.horizontalAlignment = GridData.CENTER;
         Label lblCountry = new Label(selectionGroup, SWT.NULL);
         lblCountry.setText(RBEPlugin.getString(
                 "selector.country")); //$NON-NLS-1$
-        lblCountry.setLayoutData(gd);
+        lblCountry.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 
-        gd = new GridData();
-        gd.horizontalAlignment = GridData.CENTER;
         Label lblVariant = new Label(selectionGroup, SWT.NULL);
         lblVariant.setText(RBEPlugin.getString(
                 "selector.variant")); //$NON-NLS-1$
-        lblVariant.setLayoutData(gd);
+        lblVariant.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
     }
 
     /**

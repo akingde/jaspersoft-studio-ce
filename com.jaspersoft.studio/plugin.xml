@@ -1457,6 +1457,10 @@
          id="com.jaspersoft.studio.command.exportAsTemplate"
          name="%ExportTemplate">
    </command>
+   <command
+         id="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand"
+         name="CreateTranslationFragmentCommand">
+   </command>
 	</extension>
     <extension 
           point="org.eclipse.ui.bindings">
@@ -2096,14 +2100,13 @@
 		<handler commandId="com.jaspersoft.studio.command.exportAsTemplate"
 			class="com.jaspersoft.studio.handlers.ExportAsTemplateHandler">
 		</handler>
+  <handler
+        class="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand"
+        commandId="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand">
+  </handler>
 	</extension>
 	<extension id="com.jaspersoft.studio.menus.saveReportTo" point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:file?after=export">
-			<command commandId="com.jaspersoft.studio.command.exportFilesTo"
-				icon="icons/eclipseicons/save.gif" label="%ExportFiles" style="push">
-			</command>
-		</menuContribution>
-		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=export">
 			<command commandId="com.jaspersoft.studio.command.exportFilesTo"
 				icon="icons/eclipseicons/save.gif" label="%ExportFiles" style="push">
 			</command>
@@ -2113,6 +2116,34 @@
 				icon="icons/eclipseicons/save.gif" label="%ExportTemplate" style="push">
 			</command>
 		</menuContribution>
+  <menuContribution
+        locationURI="popup:org.eclipse.ui.popup.any?after=export">
+     <command
+           commandId="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand"
+           icon="icons/resources/installLanguageIcon.png"
+           id="com.jaspersoft.studio.installTranslationAction"
+           label="Install Translation Locally"
+           style="push">
+        <visibleWhen
+              checkEnabled="false">
+           <and>
+              <test
+                    forcePluginActivation="true"
+                    property="com.jaspersoft.translation.action.checkNature">
+              </test>
+           </and>
+        </visibleWhen>
+     </command>
+  </menuContribution>
+  <menuContribution
+        locationURI="popup:org.eclipse.ui.popup.any?after=export">
+     <command
+           commandId="com.jaspersoft.studio.command.exportFilesTo"
+           icon="icons/eclipseicons/save.gif"
+           label="%ExportFiles"
+           style="push">
+     </command>
+  </menuContribution>
 	</extension>
 	
 	<extension

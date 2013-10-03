@@ -26,6 +26,8 @@ import java.util.Map;
 
 import org.eclipse.ui.AbstractSourceProvider;
 
+import com.jaspersoft.studio.ConfigurationPathProvider;
+
 /**
  * This class provide and environment variable with the locale language
  * that can be used directly from the plugin.xml. Even if it actually

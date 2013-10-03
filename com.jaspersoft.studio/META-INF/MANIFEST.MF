@@ -793,6 +793,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
  com.jaspersoft.studio.swt.widgets.table;uses:="org.eclipse.jface.viewers,org.eclipse.swt.widgets",
  com.jaspersoft.studio.templates,
  com.jaspersoft.studio.templates.engine,
+ com.jaspersoft.studio.translation,
  com.jaspersoft.studio.utils;
   uses:="org.eclipse.core.runtime,
    net.sf.jasperreports.engine.type,

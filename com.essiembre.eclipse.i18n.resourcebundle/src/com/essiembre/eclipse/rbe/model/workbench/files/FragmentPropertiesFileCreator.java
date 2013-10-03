@@ -83,7 +83,7 @@ public class FragmentPropertiesFileCreator extends PropertiesFileCreator {
 		IResource resource = project.findMember(targetDir);
 		if (resource == null || !resource.exists()) {
 			final IPath path = new Path(targetDir);			
-			final List paths = new ArrayList();
+			final List<Object> paths = new ArrayList<Object>();
 			IPath parent = path;
 			do {
 				paths.add(parent);
