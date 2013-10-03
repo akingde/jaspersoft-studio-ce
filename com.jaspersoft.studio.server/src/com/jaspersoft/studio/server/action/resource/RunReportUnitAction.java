@@ -40,10 +40,8 @@ public class RunReportUnitAction extends Action {
 		setText("Run Report Unit");
 		setDescription("Run Report Unit");
 		setToolTipText("Run the report unit");
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -63,8 +61,7 @@ public class RunReportUnitAction extends Action {
 	}
 
 	private boolean isInReportUnit(Object obj) {
-		return (obj != null && obj instanceof MReportUnit || ((ANode) obj)
-				.getParent() instanceof MReportUnit);
+		return (obj != null && obj instanceof MReportUnit || ((ANode) obj).getParent() instanceof MReportUnit);
 	}
 
 	@Override
@@ -81,9 +78,7 @@ public class RunReportUnitAction extends Action {
 						Display.getDefault().asyncExec(new Runnable() {
 
 							public void run() {
-								SelectionHelper.openEditor(key,
-										ReportUnitEditor.ID);
-
+								SelectionHelper.openEditor(key, ReportUnitEditor.ID);
 							}
 						});
 				}
