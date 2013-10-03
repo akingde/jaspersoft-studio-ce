@@ -92,7 +92,7 @@ public class PResourceDescriptor implements IParameter {
 			if (rdtype != null) {
 				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_DATE)
 					return Date.class;
-				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_DATE)
+				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_DATE_TIME)
 					return Timestamp.class;
 				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_TEXT)
 					return String.class;

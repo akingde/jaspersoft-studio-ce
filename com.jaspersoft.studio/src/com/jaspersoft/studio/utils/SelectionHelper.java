@@ -157,7 +157,7 @@ public class SelectionHelper {
 			window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
 		IWorkbenchPage page = window.getActivePage();
 		try {
-			IEditorReference[] er = page.findEditors(input, name, IWorkbenchPage.MATCH_ID);
+			IEditorReference[] er = page.findEditors(input, name, IWorkbenchPage.MATCH_INPUT);
 			if (er != null)
 				page.closeEditors(er, false);
 
