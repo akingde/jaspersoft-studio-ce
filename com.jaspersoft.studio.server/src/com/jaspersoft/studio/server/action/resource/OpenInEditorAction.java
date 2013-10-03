@@ -40,6 +40,7 @@ import com.jaspersoft.studio.server.export.ImageExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class OpenInEditorAction extends Action {
@@ -78,7 +79,7 @@ public class OpenInEditorAction extends Action {
 	}
 
 	protected boolean isFileResource(Object obj) {
-		return (obj != null && (obj instanceof AFileResource));
+		return (obj != null && (obj instanceof AFileResource && !(obj instanceof MReportUnit)));
 	}
 
 	protected boolean preDownload(AFileResource fres) {

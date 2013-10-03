@@ -67,7 +67,7 @@ public class AExporter {
 	}
 
 	protected String getExtension(AFileResource res) {
-		return res.getDefaultFileExtension();
+		return "." + res.getDefaultFileExtension();
 	}
 
 	protected IFile getTempFile(AFileResource res, ResourceDescriptor rd, String fkeyname, String dextention, IProgressMonitor monitor) throws Exception {
