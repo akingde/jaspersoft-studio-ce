@@ -16,9 +16,8 @@
 package com.jaspersoft.studio.translation.wizard;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,117 +37,208 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.essiembre.eclipse.rbe.ui.widgets.LocaleSelector;
 import com.jaspersoft.studio.ConfigurationPathProvider;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.translation.ExtendedTranslationInformation;
+import com.jaspersoft.studio.translation.FlagLocaleSelector;
 import com.jaspersoft.studio.translation.ImageLocale;
-import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
+import com.jaspersoft.translation.resources.ITranslationResource;
 
+/**
+ * In this step the user can specify the languages that the translation project
+ * provide. 
+ * He can also specify the path where the exported fragment will be placed. 
+ * Both this fields are initialized, the first with the languages found by
+ * inspecting the translation project. The second one by searching the directory
+ * of Jaspersoft Studio where the files should be placed. This can be found
+ * only in the rcp version of the product, so in case of the plugin version this
+ * field is empty
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 
-	protected LocalesTranslationWizardPage() {
-		super("Define the destination and the locales provided");
-	}
+	/**
+	 * String to identify the  default locale
+	 */
+	public static final String DEFAULT_LOCALE = "[Default]"; //$NON-NLS-1$
 
-
-	public static final String DEFAULT_LOCALE = "[default]";
-
+	/**
+	 * Text area where the destination path can be placed
+	 */
 	private Text filePath;
 
+	/**
+	 * Button used to add a new locale to the exported list
+	 */
 	private Button addButton;
 
+	/**
+	 * Button used to remove a locale from the exported list
+	 */
 	private Button removeButton;
 
+	/**
+	 * List with all the exported locales
+	 */
 	private Table bundleLocalesList;
 
+	/**
+	 * Component used to select the locale from a combo with all the available locales
+	 */
 	private FlagLocaleSelector localeSelector;
 	
-	private String destinationPath = "";
+	/**
+	 * Variable where the destination path is saved before the component is disposed
+	 */
+	private String destinationPath = ""; //$NON-NLS-1$
 	
+	/**
+	 * Variable where the languages selected by the user are saved before the list component is disposed
+	 */
 	private List<ImageLocale> selectedLanguages = new ArrayList<ImageLocale>();
+	
+	public LocalesTranslationWizardPage() {
+		super(Messages.LocalesTranslationWizardPage_dialogTitle);
+		setTitle(Messages.LocalesTranslationWizardPage_pageTitle);
+		setMessage(Messages.LocalesTranslationWizardPage_pageMessage);
+	}
 
+	/**
+	 * Search for the directory where the fragments should be placed to allow JSS to load
+	 * them. The path should be something like JSS installation folder\dropins\eclipse\plugins.
+	 * The path can be retrieved automatically only on the rcp version of jss
+	 * 
+	 * @return the folder path where to place the plugins to allow jss to load them if it 
+	 * can be retrieved, otherwise an empty string
+	 */
 	private String getPluginsFolder() {
-		String separator =  System.getProperty("file.separator");
+		String separator =  System.getProperty("file.separator");//$NON-NLS-1$
 		String path = ConfigurationPathProvider.getPath();
 		File destination = new File(path).getParentFile();
-		destination = new File(destination.getAbsolutePath() + separator + "droping" + separator + "eclipse" + "plugins");
+		destination = new File(destination.getAbsolutePath() + separator + "dropins" + separator + "eclipse" + separator + "plugins"); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 		if (destination.exists()) return destination.getAbsolutePath();
-		else return "";
+		else return ""; //$NON-NLS-1$
 	}
 	
-	@Override
-	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(1,false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		createLocalesSection(container);
-		
-		createPathSection(container);
-		
-		setControl(container);
-	}
-
-	@Override
-	protected String getContextName() {
-		return null;
-	}
-	
-	private void createPathSection(Composite parent){
-		Composite container = new Composite(parent,SWT.NONE);
-		container.setLayout(new GridLayout(3,false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		Label label = new Label(container, SWT.NONE);
-		label.setText("Destination Path");
-		
-		filePath = new Text(container, SWT.BORDER);
-		filePath.setText(getPluginsFolder());
-		filePath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		filePath.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
+	/**
+	 * Check if the filename has a locale as terminal part, in this 
+	 * case the locale is returned. Otherwise it will return the default locale
+	 * 
+	 * @param fileName original filename
+	 * @return a Locale that can be the one identified on the file name, or the default 
+	 * one if the filename has no locale in it
+	 */
+	private Locale getLocaleFromFilename(String fileName){
+		if (fileName.endsWith(".properties")) {//$NON-NLS-1$
+			int propertiesIndex = fileName.toLowerCase().lastIndexOf(".properties");//$NON-NLS-1$
+			fileName = fileName.substring(0, propertiesIndex);
+		}
+		for (Locale loc : Locale.getAvailableLocales()){
+			if (fileName.endsWith("_"+loc.toString())) { //$NON-NLS-1$
+				return loc;
 			}
-		});
-		
-		Button browseButton = new Button(container, SWT.NONE);
-		browseButton.setText("Browse");
-		browseButton.addSelectionListener(new SelectionAdapter() {
-      public void widgetSelected(SelectionEvent event) {
-        DirectoryDialog dlg = new DirectoryDialog(UIUtils.getShell());
-
-        // Set the initial filter path according
-        // to anything they've selected or typed in
-        dlg.setFilterPath(filePath.getText());
-
-        // Change the title bar text
-        dlg.setText("Select the destination directory");
-
-        // Customizable message displayed in the dialog
-        dlg.setMessage("Directory where the plugins will be placed");
-
-        // Calling open() will open and run the dialog.
-        // It will return the selected directory, or
-        // null if user cancels
-        String dir = dlg.open();
-        if (dir != null) {
-          // Set the text box to the new selection
-        	filePath.setText(dir);
-        }
-      }
-    });
+		}
+		return Locale.getDefault();
 	}
 	
+	/**
+	 * Given a locale search if there is an icon image that represent it. If an image 
+	 * is found it is returned, otherwise return null. the icon is searched using
+	 * the locale country and language (first the language, and if it is not found it use
+	 * the country)
+	 * 
+	 * @param loc locale used to search an associated icon
+	 * @return image that represent the locale, or null if it is not found
+	 */
+	private Image getImageForLocale(Locale loc){
+		String newLocaleLang = loc.getLanguage();
+		String newLocaleCountry = loc.getCountry();
+		ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleLang+".png"); //$NON-NLS-1$//$NON-NLS-2$
+		if (descriptor == null) {
+			descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleCountry+".png"); //$NON-NLS-1$//$NON-NLS-2$
+		}
+		if (descriptor == null) return null;
+		else return new Image(null, descriptor.getImageData());
+	}
+	
+	/**
+	 * Search recursively a resource and its children to found all the locales used inside the resources, basing the 
+	 * search on the name of the file resources. It keep two has set to avoid to reanalyze files with the same name
+	 * and to avoid to found more than once the same locale.
+	 * 
+	 * @param analyzedFiles hash set containing the analyzed filenames, a name is analyzed only if it isn't into this set
+	 * @param foundedLocales locales found, using an hashset instead of a list is useful to efficiently avoid to add more times the same locale 
+	 * @param actualResource resource actually analyzed, if it is a file it's name use used the find a locale, otherwise the method is called 
+	 * recursively on all the children of the resource
+	 */
+	private void recursiveResourceExplorer(HashSet<String> analyzedFiles, HashSet<Locale> foundedLocales, ITranslationResource actualResource){
+		if (actualResource.isFile() && !analyzedFiles.contains(actualResource.getResourceName())){
+			Locale fileLocale = getLocaleFromFilename(actualResource.getResourceName());
+			analyzedFiles.add(actualResource.getResourceName());
+			if (!foundedLocales.contains(fileLocale)) foundedLocales.add(fileLocale);
+		} else {
+			for (ITranslationResource child : actualResource.getChildren())
+				recursiveResourceExplorer(analyzedFiles, foundedLocales, child);
+		}
+	}
+	
+	/**
+	 * Get a list of the image locales that are used from the resources actually selected
+	 * by the user to be exported. The search of the locale is based on the filename of 
+	 * the exported file resources
+	 * 
+	 * @return a not null list of image locale
+	 */
+	private List<ImageLocale> getSelectedLocales(){
+		HashSet<String> analyzedFiles = new HashSet<String>();
+		HashSet<Locale> foundedLocales = new HashSet<Locale>();
+		List<ExtendedTranslationInformation> selectedInfos = ((GenerateFragmentWizard)getWizard()).getSelectedResources();
+		//For every plugin translation
+		for(ExtendedTranslationInformation info : selectedInfos){
+			//and for every resource inside the plugin translation
+			for(ITranslationResource resource : info.getResources()){
+				recursiveResourceExplorer(analyzedFiles, foundedLocales, resource);
+			}
+		}
+		
+		List<ImageLocale> result = new ArrayList<ImageLocale>();
+		for (Locale locale : foundedLocales){
+			result.add(new ImageLocale(locale, getImageForLocale(locale)));
+		}
+		return result;	
+	}
+	
+	/**
+	 * Method used to initialize the locales list by identifying the locales from the actually
+	 * selected resources. 
+	 */
+	public void initializeSelectedLocales(){
+		bundleLocalesList.removeAll();
+		List<ImageLocale> alreadySelectedLocales = getSelectedLocales();
+		for(ImageLocale loc : alreadySelectedLocales){
+			TableItem item = new TableItem(bundleLocalesList, SWT.NONE);
+			item.setText(loc.getLocale().toString());
+			item.setData(loc.getLocale());
+			item.setImage(loc.getImage());
+		}
+		setAddButtonState();
+	}
+	
+	/**
+	 * When the user advance to the next page the info into the widgets are stored 
+	 * so the can be recovered by the parent wizard and used to do the finish phase, even
+	 * if the widgets of the page are disposed
+	 */
 	@Override
 	public IWizardPage getNextPage() {
 		destinationPath = filePath.getText();
@@ -160,19 +250,140 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		return super.getNextPage();
 	}
 	
+	/**
+	 * Return the path where the fragment should be placed
+	 * 
+	 * @return a not null string representing a valid filesystem path
+	 */
 	public String getDestinationPath(){
 		return destinationPath;
 	}
 	
+	/**
+	 * Return a list of locale with images that are the entry for the language switcher essentially
+	 * 
+	 * @return a not null and not void list of selected languages
+	 */
 	public List<ImageLocale> getSelectedLanguages(){
 		return selectedLanguages;
 	}
 	
+	@Override
+	protected String getContextName() {
+		return null;
+	}
+	
 	/**
-	 * Creates the bottom part of this wizard, which is the locales to add.
+	 * Ensures that list of locales is not void and the the path is a valid and existing path
+	 */
+	protected void dialogChanged() {
+		String fileName = filePath.getText();
+		if (fileName.length() == 0 || !(new File(fileName).exists())) {
+			updateStatus(Messages.LocalesTranslationWizardPage_errorFolder, IMessageProvider.ERROR);
+			return;
+		}
+		if (bundleLocalesList.getItems().length==0) {
+			updateStatus(Messages.LocalesTranslationWizardPage_errorLocales, IMessageProvider.ERROR);  
+			return;
+		}
+		updateStatus(Messages.LocalesTranslationWizardPage_pageMessage, IMessageProvider.NONE);
+	}
+	
+	/**
+	 * Update the page complete status only if ther'arent error messages
 	 * 
-	 * @param parent
-	 *            parent container
+	 * @param message message to set in the page
+	 * @param messageType type of the message
+	 */
+	protected void updateStatus(String message, int messageType) {
+		setMessage(message, messageType);
+		setPageComplete(messageType != IMessageProvider.ERROR);
+	}
+	
+	/**
+	 * Disable the add button when the sleected locale is already on the list
+	 */
+	protected void setAddButtonState() {
+		int index = -1;
+		for(int i=0; i<bundleLocalesList.getItemCount() && index == -1; i++){
+			if (bundleLocalesList.getItem(i).getText().equals(getSelectedLocaleAsString())) index = i;
+		}
+		addButton.setEnabled(index == -1);
+	}
+	
+	/**
+	 * Gets a string representation of selected locale.
+	 * 
+	 * @return string representation of selected locale
+	 */
+	public String getSelectedLocaleAsString() {
+		Locale selectedLocale = localeSelector.getSelectedLocale();
+		if (selectedLocale != null) {
+			return selectedLocale.toString();
+		}
+		return DEFAULT_LOCALE;
+	}
+	
+	@Override
+	public void createControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new GridLayout(1,false));
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		createLocalesSection(container);
+		createPathSection(container);
+		setControl(container);
+		
+		dialogChanged();
+	}
+
+
+	/**
+	 * Create the text for the path and the button to open 
+	 * the browse dialog 
+	 * 
+	 */
+	private void createPathSection(Composite parent){
+		Composite container = new Composite(parent,SWT.NONE);
+		container.setLayout(new GridLayout(3,false));
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Label label = new Label(container, SWT.NONE);
+		label.setText(Messages.LocalesTranslationWizardPage_destinationLabel);
+		
+		filePath = new Text(container, SWT.BORDER);
+		filePath.setText(getPluginsFolder());
+		filePath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		filePath.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
+		
+		Button browseButton = new Button(container, SWT.NONE);
+		browseButton.setText(Messages.LocalesTranslationWizardPage_browseButton);
+		browseButton.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(SelectionEvent event) {
+        DirectoryDialog dlg = new DirectoryDialog(UIUtils.getShell());
+        dlg.setFilterPath(filePath.getText());
+        dlg.setText(Messages.LocalesTranslationWizardPage_browseDialogTitle);
+        dlg.setMessage(Messages.LocalesTranslationWizardPage_browseDialogMessage);
+        String dir = dlg.open();
+        //it is not necessary to call the dialog changed method since this is 
+        //called by the modify listener of the file path Text are if the text is set
+        if (dir != null) {
+        	filePath.setText(dir);
+        }
+      }
+    });
+	}
+	
+
+	/**
+	 * Creates the part of this page that can be used to add a locale
+	 * 
+	 * @param parent parent container
 	 */
 	private void createLocalesSection(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
@@ -194,13 +405,11 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * Creates the bottom part of this wizard where selected locales are stored.
+	 * Creates the part of this page where there is the list where selected locales are stored.
 	 * 
-	 * @param parent
-	 *            parent container
+	 * @param parent parent container
 	 */
 	private void createBottomSelectedLocalesComposite(Composite parent) {
-
 		// Selected locales Group
 		Group selectedGroup = new Group(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
@@ -220,6 +429,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 			}
 		});
 	}
+	
 
 	/**
 	 * Creates the bottom part of this wizard where buttons to add/remove
@@ -263,138 +473,6 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		});
 	}
 
-	/**
-	 * Ensures that both text fields are set.
-	 */
-	protected void dialogChanged() {
-		String fileName = filePath.getText();
-		if (fileName.length() == 0 || !(new File(fileName).exists())) {
-			updateStatus("The selected folder dosen't exist", IMessageProvider.ERROR); //$NON-NLS-1$
-			return;
-		}
-		if (bundleLocalesList.getItems().length==0) {
-			updateStatus("You must select at least an exported language", IMessageProvider.ERROR);  //$NON-NLS-1$
-			return;
-		}
-		updateStatus(null, IMessageProvider.NONE);
-	}
-	
-	protected void updateStatus(String message, int messageType) {
-		setMessage(message, messageType);
-		setPageComplete(messageType != IMessageProvider.ERROR);
-	}
-	
-	
-	/**
-	 * Sets the "add" button state.
-	 */
-	protected void setAddButtonState() {
-		int index = -1;
-		for(int i=0; i<bundleLocalesList.getItemCount() && index == -1; i++){
-			if (bundleLocalesList.getItem(i).getText().equals(getSelectedLocaleAsString())) index = i;
-		}
-		addButton.setEnabled(index == -1);
-	}
-	
-	/**
-	 * Gets a string representation of selected locale.
-	 * 
-	 * @return string representation of selected locale
-	 */
-	public String getSelectedLocaleAsString() {
-		Locale selectedLocale = localeSelector.getSelectedLocale();
-		if (selectedLocale != null) {
-			return selectedLocale.toString();
-		}
-		return DEFAULT_LOCALE;
-	}
-
-	
-	private class FlagLocaleSelector extends LocaleSelector{
-
-		private Label flagImage;
-		
-		private Button changeFlagImage;
-		
-		private String actualLocaleImage = null;
-		
-		public FlagLocaleSelector(Composite parent) {
-			super(parent);
-			selectionGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-			Composite flagComposite = new Composite(selectionGroup, SWT.NONE);
-			flagComposite.setLayout(new GridLayout(2,false));
-			flagComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 3, 1));
-			
-			flagImage = new Label(flagComposite, SWT.NONE);
-			
-			changeFlagImage = new Button(flagComposite, SWT.NONE);
-			changeFlagImage.setText("Set Flag Icon");
-			changeFlagImage.addSelectionListener(new SelectionAdapter(){
-				
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-		        FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN);
-		        fd.setText("Save");
-		        String[] filterExt = { "*.jpg", "*.png", ".gif" };
-		        fd.setFilterExtensions(filterExt);
-		        String selected = fd.open();
-		        if (selected != null){
-		        	try {
-		        		Image loadedImage = new Image(null, new FileInputStream(new File(selected)));
-		        		int width = loadedImage.getImageData().width;
-		        		int height = loadedImage.getImageData().height;
-		        		if (width > 16){
-		        			int scaleFactor = width/16;
-		        			width = width/scaleFactor;
-		        			height = height / scaleFactor;
-		        		}
-		        		if (height > 11){
-		        			int scaleFactor = height/11;
-		        			width = width/scaleFactor;
-		        			height = height / scaleFactor;
-		        		}
-		        		if (width != loadedImage.getImageData().width || height != loadedImage.getImageData().height){
-		        			loadedImage = ImageUtils.resize(loadedImage, width, height);
-		        		}
-		        		
-								flagImage.setImage(loadedImage);
-								changeFlagImage.setText("Change flag image");
-								flagImage.getParent().layout(true,true);
-							} catch (FileNotFoundException e1) {
-								e1.printStackTrace();
-							}
-		        }
-				}
-				
-			});
-			
-		}
-		
-		public void updateImage(Image image, String actualLocale){
-			flagImage.setImage(image);
-			actualLocaleImage = actualLocale;
-			if (image == null) changeFlagImage.setText("Set flag image");
-			else changeFlagImage.setText("Change flag image");
-			flagImage.getParent().layout(true,true);
-		}
-		
-		public Image getActualImage(){
-			return flagImage.getImage();
-		}
-		
-		public String getLangText(){
-			return langText.getText();
-		}
-		
-		public String getCountryText(){
-			return countryText.getText();
-		}
-		
-		public String getActualLocaleImage(){
-			return actualLocaleImage;
-		}
-		
-	}
 
 	/**
 	 * Creates the bottom part of this wizard where locales can be chosen or
@@ -414,10 +492,10 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 				String newLocaleCountry = localeSelector.getCountryText();
 				String actualLocale = localeSelector.getActualLocaleImage();
 				if (!(newLocaleLang.equals(actualLocale) || newLocaleCountry.equals(actualLocale))){
-					ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleLang+".png");
+					ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleLang+".png"); //$NON-NLS-1$ //$NON-NLS-2$
 					actualLocale = newLocaleLang;
 					if (descriptor == null) {
-						descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleCountry+".png");
+						descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleCountry+".png"); //$NON-NLS-1$ //$NON-NLS-2$
 						actualLocale = newLocaleCountry;
 					}
 					if (descriptor == null) localeSelector.updateImage(null, actualLocale);

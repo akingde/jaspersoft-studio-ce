@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.translation;
 
 import java.io.File;
@@ -25,24 +40,55 @@ import org.eclipse.swt.graphics.ImageLoader;
 import com.jaspersoft.translation.resources.ITranslationResource;
 import com.jaspersoft.translation.resources.TranslationInformation;
 
+/**
+ * Class that provides the methods to convert one or more extended translation informations
+ * into a series of fragments that can be used with jaspersoft studio 
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class FragmentCreationUtil {
 	
+	/**
+	 * String used as file separator in the current os
+	 */
 	public final static String SEPARATOR =  System.getProperty("file.separator");
 	
+	/**
+	 * Location of the templates to generate the manifest, build file.... of the fragments
+	 */
 	private static final String TEMPLATES_LOCATION_PREFIX = "com/jaspersoft/studio/translation/templates/";
 	
+	/**
+	 * Location of the template to generate the manifest for the fragment
+	 */
 	private static final String MANIFEST_TEMPLATE = TEMPLATES_LOCATION_PREFIX + "manifestFile.vm";
 	
+	/**
+	 * Location of the template to generate the build file for the fragment
+	 */
 	private static final String BUILD_TEMPLATE = TEMPLATES_LOCATION_PREFIX + "buildFile.vm";
 	
+	/**
+	 * Location of the template to generate a single command for the fragment.xml of the rcp fragment
+	 */
 	private static final String FRAGMENT_COMMAND_TEMPLATE = TEMPLATES_LOCATION_PREFIX + "fragmentCommandFile.vm";
 	
+	/**
+	 * Location of the template to generate the fragment.xml of the rcp fragment
+	 */
 	private static final String FRAGMENT_XML_FILE = TEMPLATES_LOCATION_PREFIX + "fragmentXmlFile.vm";
 	
-
-	
-	public static String generateManifest(ExtendedTranslationInformation pluginInfo, boolean isSingleton){
-			// Configure the Velocity Engine
+	/**
+	 * Generate the manifest for a single ExtendedTranslationInformation and so for a fragment since
+	 * to each ExtendedTranslationInformation correspond a fragment
+	 * 
+	 * @param pluginInfo The ExtendedTranslationInformation used to generate the fragment where this manifest goes
+	 * @param isSingleton True if the fragment has a fragment.xml file, false otherwise
+	 * @return all the text inside the manifest for the fragment
+	 */
+	public static String generateManifest(ExtendedTranslationInformation pluginInfo, boolean isSingleton)
+	{
 			VelocityEngine ve = new VelocityEngine();
 			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
 			ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
@@ -63,7 +109,44 @@ public class FragmentCreationUtil {
 			functionTemplate.merge( functionContext, fsw );
 			return fsw.toString();
 	}
+
+	/**
+	 * Generate the build file for a single TranslationInformation and so for a fragment since
+	 * to each TranslationInformation correspond a fragment
+	 * 
+	 * @param pluginInfo The TranslationInformation used to generate the fragment where this build goes
+	 * @param pluginDir folder where the build file will be placed
+	 * @param rootFileNames list of folder and files that are in the root of the fragment and so need to be added to the build file
+	 */
+	public static void createBuildFile(TranslationInformation pluginInfo, File pluginDir, List<String> rootFileNames){	
+		String buildInclusion = "";
+		if (rootFileNames.size()>0){
+			for(int i=0; i<rootFileNames.size(); i++){
+				buildInclusion += ",\\\n"+rootFileNames.get(i);
+			}
+		}
+		VelocityEngine ve = new VelocityEngine();
+		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
+		ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		ve.init();
+		VelocityContext functionContext = new VelocityContext();
+		functionContext.put("rootFiles", buildInclusion);
+		Template functionTemplate = ve.getTemplate(BUILD_TEMPLATE);
+		StringWriter fsw = new StringWriter();
+		functionTemplate.merge( functionContext, fsw );
+		try {
+			FileUtils.writeFile(new File(pluginDir.getAbsolutePath() + SEPARATOR + "build.properties"), fsw.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * Create the fragment.xml file to contribute to the language switch menu of the rcp plugin
+	 * 
+	 * @param destinationDir  destination of the fragment
+	 * @param locales entries that will be contribute the switch language menu
+	 */
 	public static void createFragmentXml(File destinationDir, List<ImageLocale> locales){
 		String commands = "";
 		File iconDir = new File(destinationDir.getAbsolutePath() + SEPARATOR + "icons");
@@ -114,61 +197,13 @@ public class FragmentCreationUtil {
 		}
 	}
 	
-	public static String generateQualifier(){
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
-		Date date = new Date();
-		return dateFormat.format(date);
-	}
-	
-	public static void createBuildFile(TranslationInformation pluginInfo, File pluginDir, List<String> rootFileNames){	
-		String buildInclusion = "";
-		if (rootFileNames.size()>0){
-			for(int i=0; i<rootFileNames.size(); i++){
-				buildInclusion += ",\\\n"+rootFileNames.get(i);
-			}
-		}
-		// Configure the Velocity Engine
-		VelocityEngine ve = new VelocityEngine();
-		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
-		ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-		ve.init();
-		VelocityContext functionContext = new VelocityContext();
-		functionContext.put("rootFiles", buildInclusion);
-		Template functionTemplate = ve.getTemplate(BUILD_TEMPLATE);
-		StringWriter fsw = new StringWriter();
-		functionTemplate.merge( functionContext, fsw );
-		try {
-			FileUtils.writeFile(new File(pluginDir.getAbsolutePath() + SEPARATOR + "build.properties"), fsw.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private static String getPathFromPackageName(String name){
-		String[] names = name.split("\\.");
-		String path = "";
-		for(String packageName : names){
-			path += packageName + System.getProperty("file.separator");
-		}
-		return path;
-	}
-	
-
-	private static void createPackages(File srcFolder, TranslationInformation plugin){
-		for(ITranslationResource resource : plugin.getResources()){
-			if (!resource.isFile()){
-				String packageFolderPath = srcFolder.getAbsolutePath()+  FragmentCreationUtil.SEPARATOR + getPathFromPackageName(resource.getResourceName());
-				File packageFolder = new File(packageFolderPath);
-				packageFolder.mkdirs();
-				for(ITranslationResource packageContent : resource.getChildren()){
-					if (packageContent.isFile()){
-						JarFileUtils.copyFile(new File(packageContent.getResourcePath()), packageFolder);
-					}
-				}
-			} 
-		}
-	}
-	
+	/**
+	 * Even if the RCP plugin is not translated it is generated a fragment for it to contribute 
+	 * the language switch menu
+	 * 
+	 * @param destinationPath destination of the fragment
+	 * @param languagesProvided entries that will be contribute the switch language menu
+	 */
 	private static void forceCreateFragmentRcp(String destinationPath, List<ImageLocale> languagesProvided){
 		String tmpDirectory = System.getProperty("java.io.tmpdir"); 
 		List<String> rootFileNames = new ArrayList<String>();
@@ -191,6 +226,65 @@ public class FragmentCreationUtil {
 		JarFileUtils.createJar(destinationPath, pluginDir, jarName, manifest);
 	}
 	
+	/**
+	 * Generate the qualifier for a fragment using the eclipse style. 
+	 * So a concatenation of the actuals year,mont,day,hour and minute
+	 * 
+	 * @return an eclipse style qualifier
+	 */
+	public static String generateQualifier(){
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+		Date date = new Date();
+		return dateFormat.format(date);
+	}
+	
+	/**
+	 * Split a package name into a path structure, so change every dot
+	 * with the system file path separator symbol
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private static String getPathFromPackageName(String name){
+		String[] names = name.split("\\.");
+		String path = "";
+		for(String packageName : names){
+			path += packageName + SEPARATOR;
+		}
+		return path;
+	}
+	
+	/**
+	 * Create the packages structure on the folder that will be compressed into a jar 
+	 * to create the fragment
+	 * 
+	 * @param srcFolder folder where the package structure will be created
+	 * @param plugin plugin informations from where the package structure and the path of the files inside the packages are read
+	 */
+	private static void createPackages(File srcFolder, TranslationInformation plugin){
+		for(ITranslationResource resource : plugin.getResources()){
+			if (!resource.isFile()){
+				String packageFolderPath = srcFolder.getAbsolutePath() + FragmentCreationUtil.SEPARATOR + getPathFromPackageName(resource.getResourceName());
+				File packageFolder = new File(packageFolderPath);
+				packageFolder.mkdirs();
+				for(ITranslationResource packageContent : resource.getChildren()){
+					if (packageContent.isFile()){
+						JarFileUtils.copyFile(new File(packageContent.getResourcePath()), packageFolder);
+					}
+				}
+			} 
+		}
+	}
+	
+
+	/**
+	 * Create the fragments for the TranslationInformation provided (one for each translation) that will add
+	 * the translation to JSS and will provide entry for the new languages on the switch language menu
+	 * 
+	 * @param destinationPath folder where the fragment will be placed
+	 * @param translations Translations of plugins that will be converted into fragments for JSS
+	 * @param languagesProvided entries that will be contribute the switch language menu
+	 */
 	public static void createFragment(String destinationPath, List<ExtendedTranslationInformation> translations, List<ImageLocale> languagesProvided)
 	{
 		boolean rcpPluginFound = false;

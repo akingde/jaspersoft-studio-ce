@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.translation.ExtendedTranslationInformation;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -130,9 +131,9 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 	 * @param resources list of the resources that the user can select to became a fragment
 	 */
 	public ExportedResourcesWizardPage(List<ExtendedTranslationInformation> resources) {
-		super("Select Resources");
-		setTitle("Select the resources that will be exported");
-		setMessage("Select the plugins to export and optionally provide additional information. If you are unser leave every field as it is, since it is preconfigured to work with your actual Jaspersot Studio installation");
+		super(Messages.ExportedResourcesWizardPage_dialogName);
+		setTitle(Messages.ExportedResourcesWizardPage_pageTitle);
+		setMessage(Messages.ExportedResourcesWizardPage_pageMessage);
 		this.resources = resources;
 	}
 
@@ -157,7 +158,7 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 		}
 		
 		Group infoGroup = new Group(container, SWT.NONE);
-		infoGroup.setText("Selected plugin information");
+		infoGroup.setText(Messages.ExportedResourcesWizardPage_selectedGroupTitle);
 		GridData infoData = new GridData(GridData.FILL_BOTH);
 		infoData.heightHint = 100;
 		infoData.minimumHeight = 100;
@@ -165,31 +166,31 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 		infoGroup.setLayout(new GridLayout(4,false));
 		
 		Label pluginNameLabel = new Label(infoGroup, SWT.NONE);
-		pluginNameLabel.setText("Plugin Name");
+		pluginNameLabel.setText(Messages.ExportedResourcesWizardPage_pluginNameLabel);
 		pluginName = new Text(infoGroup, SWT.BORDER);
 		pluginName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		pluginName.addModifyListener(modListener);
 		
 		Label pluginVersionLabel = new Label(infoGroup, SWT.NONE);
-		pluginVersionLabel.setText("Plugin Version");
+		pluginVersionLabel.setText(Messages.ExportedResourcesWizardPage_pluginVersion);
 		pluginVersion = new Text(infoGroup, SWT.BORDER);
 		pluginVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		pluginVersion.addModifyListener(modListener);
 		
 		Label hostPluginNameLabel = new Label(infoGroup, SWT.NONE);
-		hostPluginNameLabel.setText("Host Plugin Name");
+		hostPluginNameLabel.setText(Messages.ExportedResourcesWizardPage_hostPlaginNameLabel);
 		hostPluginName = new Text(infoGroup, SWT.BORDER);
 		hostPluginName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		hostPluginName.addModifyListener(modListener);
 		
 		Label hostPluginVersionLabel = new Label(infoGroup, SWT.NONE);
-		hostPluginVersionLabel.setText("Host Plugin Version");
+		hostPluginVersionLabel.setText(Messages.ExportedResourcesWizardPage_hostPluginVersion);
 		hostPluginVersion = new Text(infoGroup, SWT.BORDER);
 		hostPluginVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		hostPluginVersion.addModifyListener(modListener);
 		
 		Label pluginProducerLabel = new Label(infoGroup, SWT.NONE);
-		pluginProducerLabel.setText("Plugin Producer");
+		pluginProducerLabel.setText(Messages.ExportedResourcesWizardPage_pluginProducer);
 		pluginProducer = new Text(infoGroup, SWT.BORDER);
 		pluginProducer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		pluginProducer.addModifyListener(modListener);
@@ -224,7 +225,9 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 	/**
 	 * When the user advance to the next page the list of resources selected is populated, 
 	 * by doing this we avoid to read from a disposed widget because on the finish the 
-	 * wizard pages are already disposed
+	 * wizard pages are already disposed. Other then this when advancing the following 
+	 * page, if it is a LocalesTranslationWizard page, will be initialized to have 
+	 * selected by default the locales of the resources in the project
 	 */
 	@Override
 	public IWizardPage getNextPage() {
@@ -234,7 +237,11 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 				selectedResources.add((ExtendedTranslationInformation)item.getData());
 			}
 		}
-		return super.getNextPage();
+		IWizardPage page = super.getNextPage();
+		if (page instanceof LocalesTranslationWizardPage){
+			((LocalesTranslationWizardPage)page).initializeSelectedLocales();
+		}
+		return page;
 	}
 	
 	/**
@@ -247,7 +254,7 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 	}
 	
 	/**
-	 * Put in the information panel the information about the resource acutally selected
+	 * Put in the information panel the information about the resource actually selected
 	 */
 	private void updateSelection(){
 		if (selectedItem != null){
