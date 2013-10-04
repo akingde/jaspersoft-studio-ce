@@ -23,9 +23,6 @@
             ClassFactory="com.jaspersoft.studio.components.map.MapComponentFactory">
       </component>
       <component
-            ClassFactory="com.jaspersoft.studio.components.sort.SortComponentFactory">
-      </component>
-      <component
             ClassFactory="com.jaspersoft.studio.components.chartspider.SpiderChartComponentFactory">
       </component>
    </extension>
@@ -836,14 +833,6 @@
                label="%labelAxis">
          </propertyTab>
       </propertyTabs>
-   </extension>
-   <extension
-         point="com.jaspersoft.studio.palette">
-      <group
-            Name="Web Components"
-            afterGroup="com.jaspersoft.studio.COMMON_CONTAINER"
-            id="com.jaspersoft.studio.components.WEBCOMPONENTS">
-      </group>
    </extension>
    <extension
          point="com.jaspersoft.studio.postsetvalue">
