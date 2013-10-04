@@ -264,7 +264,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
                             if (firstFileCreated == null) firstFileCreated = file;
                         }
                     }
-                    getShell().getDisplay().asyncExec(new Runnable() {
+                    /*getShell().getDisplay().asyncExec(new Runnable() {
                         public void run() {
                             IWorkbenchPage wbPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
                             try {
@@ -272,7 +272,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
                             } catch (PartInitException e) {
                             }
                         }
-                    });
+                    });*/
                     monitor.worked(1);
                 } catch (CoreException e) {
                     throw new InvocationTargetException(e);

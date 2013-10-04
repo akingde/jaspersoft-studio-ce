@@ -85,9 +85,10 @@ public class FragmentCreationUtil {
 	 * 
 	 * @param pluginInfo The ExtendedTranslationInformation used to generate the fragment where this manifest goes
 	 * @param isSingleton True if the fragment has a fragment.xml file, false otherwise
+	 * @param a string that identify the language provided by the fragment, used in the bundle name
 	 * @return all the text inside the manifest for the fragment
 	 */
-	public static String generateManifest(ExtendedTranslationInformation pluginInfo, boolean isSingleton)
+	public static String generateManifest(ExtendedTranslationInformation pluginInfo, String languagesCodes, boolean isSingleton)
 	{
 			VelocityEngine ve = new VelocityEngine();
 			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
@@ -96,7 +97,7 @@ public class FragmentCreationUtil {
 			
 			VelocityContext functionContext = new VelocityContext();
 			functionContext.put("hostPlugin", pluginInfo.getHostPluginName());
-			functionContext.put("bundleName", pluginInfo.getBundleName());
+			functionContext.put("bundleName", pluginInfo.getBundleName()+languagesCodes);
 			functionContext.put("qualifier", pluginInfo.getBundleVersion());
 			functionContext.put("pluginVersion", pluginInfo.getHostPluginVersion());
 			functionContext.put("vendor", pluginInfo.getBundleProducer());
@@ -198,6 +199,21 @@ public class FragmentCreationUtil {
 	}
 	
 	/**
+	 * Convert a series of locales into a string the can be used as identifier
+	 * in the file name or in the bundle name
+	 * 
+	 * @param languagesProvided list of langage provided by the fragment
+	 * @return identifier of the languages
+	 */
+	private static String getCodesFromLanguage(List<ImageLocale> languagesProvided){
+		String languagesCodes = "";
+		for(ImageLocale locale : languagesProvided){
+			languagesCodes += "_"+locale.getLocale().toString();
+		}
+		return languagesCodes;
+	}
+	
+	/**
 	 * Even if the RCP plugin is not translated it is generated a fragment for it to contribute 
 	 * the language switch menu
 	 * 
@@ -222,7 +238,7 @@ public class FragmentCreationUtil {
 		
 		String jarName = rcpPlugin.getBundleName() + "_" + rcpPlugin.getBundleVersion() + ".jar";
 		FragmentCreationUtil.createBuildFile(rcpPlugin, pluginDir, rootFileNames);
-		String manifest = FragmentCreationUtil.generateManifest(rcpPlugin, true);
+		String manifest = FragmentCreationUtil.generateManifest(rcpPlugin, getCodesFromLanguage(languagesProvided), true);
 		JarFileUtils.createJar(destinationPath, pluginDir, jarName, manifest);
 	}
 	
@@ -289,6 +305,7 @@ public class FragmentCreationUtil {
 	{
 		boolean rcpPluginFound = false;
 		String tmpDirectory = System.getProperty("java.io.tmpdir"); 
+		String languageProvidedIds = getCodesFromLanguage(languagesProvided);
 		for(ExtendedTranslationInformation plugin : translations){
 			List<String> rootFileNames = new ArrayList<String>();
 			boolean hasPackage = false;
@@ -312,12 +329,12 @@ public class FragmentCreationUtil {
 				FragmentCreationUtil.createFragmentXml(pluginDir, languagesProvided);
 				rootFileNames.add("fragment.xml");
 				rootFileNames.add("icons/");
-				manifest = FragmentCreationUtil.generateManifest(plugin, true);
+				manifest = FragmentCreationUtil.generateManifest(plugin, languageProvidedIds, true);
 			} else {
-				manifest = FragmentCreationUtil.generateManifest(plugin, false);
+				manifest = FragmentCreationUtil.generateManifest(plugin, languageProvidedIds, false);
 			}
 			
-			String jarName = plugin.getBundleName() + "_" + plugin.getBundleVersion() + ".jar";
+			String jarName = plugin.getBundleName() + languageProvidedIds + "_" + plugin.getBundleVersion() + ".jar";
 			FragmentCreationUtil.createBuildFile(plugin, pluginDir, rootFileNames);
 			JarFileUtils.createJar(destinationPath, pluginDir, jarName, manifest);
 		}

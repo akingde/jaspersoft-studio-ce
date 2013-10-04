@@ -126,6 +126,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		String path = ConfigurationPathProvider.getPath();
 		File destination = new File(path).getParentFile();
 		destination = new File(destination.getAbsolutePath() + separator + "dropins" + separator + "eclipse" + separator + "plugins"); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+		JaspersoftStudioPlugin.getInstance().logInfo(destination.getAbsolutePath());
 		if (destination.exists()) return destination.getAbsolutePath();
 		else return ""; //$NON-NLS-1$
 	}
