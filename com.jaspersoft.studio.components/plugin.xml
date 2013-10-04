@@ -23,6 +23,9 @@
             ClassFactory="com.jaspersoft.studio.components.map.MapComponentFactory">
       </component>
       <component
+            ClassFactory="com.jaspersoft.studio.components.sort.SortComponentFactory">
+      </component>
+      <component
             ClassFactory="com.jaspersoft.studio.components.chartspider.SpiderChartComponentFactory">
       </component>
    </extension>

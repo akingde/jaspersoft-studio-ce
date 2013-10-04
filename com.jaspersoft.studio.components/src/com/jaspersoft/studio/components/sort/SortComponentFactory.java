@@ -41,7 +41,6 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
-import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SortComponentFactory implements IComponentFactory {
@@ -67,9 +66,10 @@ public class SortComponentFactory implements IComponentFactory {
 	}
 
 	public IPaletteContributor getPaletteEntries() {
-		PaletteContributor pc = new PaletteContributor();
-		pc.add("com.jaspersoft.studio.components.WEBCOMPONENTS", MSort.class);
-		return pc;
+		// PaletteContributor pc = new PaletteContributor();
+		// pc.add("com.jaspersoft.studio.components.WEBCOMPONENTS", MSort.class);
+		// return pc;
+		return null;
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child,
