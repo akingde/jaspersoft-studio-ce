@@ -160,8 +160,8 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 		Group infoGroup = new Group(container, SWT.NONE);
 		infoGroup.setText(Messages.ExportedResourcesWizardPage_selectedGroupTitle);
 		GridData infoData = new GridData(GridData.FILL_BOTH);
-		infoData.heightHint = 100;
-		infoData.minimumHeight = 100;
+		infoData.heightHint = 120;
+		infoData.minimumHeight = 120;
 		infoGroup.setLayoutData(infoData);
 		infoGroup.setLayout(new GridLayout(4,false));
 		
