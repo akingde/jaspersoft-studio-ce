@@ -45,8 +45,7 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	 * @see org.eclipse.ui.views.properties.tabbed.ISection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
-	public void createControls(Composite parent,
-			final TabbedPropertySheetPage atabbedPropertySheetPage) {
+	public void createControls(Composite parent, final TabbedPropertySheetPage atabbedPropertySheetPage) {
 		super.createControls(parent, atabbedPropertySheetPage);
 
 		parent.setLayout(new RowLayout());
@@ -85,16 +84,15 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 		setupComposite(atabbedPropertySheetPage, composite);
 	}
 
-	protected void setupComposite(
-			TabbedPropertySheetPage atabbedPropertySheetPage,
-			Composite composite) {
-		Point size = atabbedPropertySheetPage.getTabbedPropertyComposite()
-				.getTabComposite().getSize();
+	protected void setupComposite(TabbedPropertySheetPage atabbedPropertySheetPage, Composite composite) {
+		Point size = composite.getParent().getSize();
+		if (size.x == 0 && size.y == 0){
+			size = atabbedPropertySheetPage.getTabbedPropertyComposite().getTabComposite().getSize();
+		}
 		RowData rd = new RowData();
 		rd.width = size.x;
-		rd.height = size.y - 15;
 		composite.setLayoutData(rd);
-		composite.getParent().layout();
+		composite.getParent().layout(true,true);
 	}
 
 	/**
