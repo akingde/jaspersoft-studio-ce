@@ -47,7 +47,7 @@ public class CreateTranslationFragmentCommand implements IHandler {
 	 * is used as base version the one of the main plugin, since it is always available and the
 	 * version of the other plugins are aligned
 	 */
-	private static String baseVersion = Platform.getBundle("com.jaspersoft.studio").getHeaders().get("Bundle-Version");
+	private static String baseVersion = Platform.getBundle("com.jaspersoft.studio").getHeaders().get("Bundle-Version").toString();
 	
 	/**
 	 * Generate an extended translation information starting from a standard 
@@ -65,7 +65,7 @@ public class CreateTranslationFragmentCommand implements IHandler {
 		String qualifiedName = baseInfo.getPluginName()+"_translation";
 		Bundle bundle = Platform.getBundle(baseInfo.getPluginName()); 
 		String version = "";
-		if (bundle != null) version = bundle.getHeaders().get("Bundle-Version");
+		if (bundle != null) version = bundle.getHeaders().get("Bundle-Version").toString();
 		else version = new String(baseVersion);
 		version = version.replaceAll("\\.qualifier", "");
 		extendedInfo.setBundleVersion(qualifiedVersion);

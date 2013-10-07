@@ -233,7 +233,7 @@ public class FragmentCreationUtil {
 		
 		TranslationInformation baseInfo = new TranslationInformation(rcpPluginName);
 		String qualifiedName = baseInfo.getPluginName()+"_translation";
-		String version = Platform.getBundle(baseInfo.getPluginName()).getHeaders().get("Bundle-Version");
+		String version = Platform.getBundle(baseInfo.getPluginName()).getHeaders().get("Bundle-Version").toString();
 		ExtendedTranslationInformation rcpPlugin = CreateTranslationFragmentCommand.generateExtendedInfo(baseInfo, qualifiedName, version);
 		
 		String jarName = rcpPlugin.getBundleName() + "_" + rcpPlugin.getBundleVersion() + ".jar";
