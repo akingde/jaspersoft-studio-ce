@@ -71,7 +71,6 @@ import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.editor.java2d.figure.ScrollableThumbnail;
 import com.jaspersoft.studio.editor.java2d.figure.Thumbnail;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
-import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
@@ -263,7 +262,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						if (part != null && part.getModel() instanceof MRoot) {
 							EditPart translatedPart = getViewer().findObjectAt(new Point(mousePosition.x + 10, mousePosition.y));
 							if (translatedPart != null && translatedPart.getModel() != part.getModel()) {
-								TreeItem item = (TreeItem) ((NotDragableTreeEditPart) translatedPart).getWidget();
+								TreeItem item = (TreeItem) ((TreeEditPart) translatedPart).getWidget();
 								item.setExpanded(!item.getExpanded());
 							}
 						}
