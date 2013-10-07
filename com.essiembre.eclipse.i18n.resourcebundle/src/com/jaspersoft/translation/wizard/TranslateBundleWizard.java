@@ -49,15 +49,9 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.undo.CreateFolderOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
-import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.bundle.PropertiesGenerator;
@@ -152,8 +146,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
 	 * @see #createFolder
 	 */
 	protected IFolder createFolderHandle(IPath folderPath) {
-		return IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getFolder(
-				folderPath);
+		return ResourcesPlugin.getWorkspace().getRoot().getFolder(folderPath);
 	}
     
 	/**
@@ -182,9 +175,10 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
 		// create the new folder and cache it if successful
 		final IPath containerPath = new Path(containerName);
 		IPath newFolderPath = containerPath.append(folderName);
+	
 		final IFolder newFolderHandle = createFolderHandle(newFolderPath);
 			AbstractOperation op;
-			op = new CreateFolderOperation(newFolderHandle, null, false, null, IDEWorkbenchMessages.WizardNewFolderCreationPage_title);
+			op = new CreateFolderOperation(newFolderHandle, null, false, null, "New Folder");
 			try {
 				op.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 			} catch (final ExecutionException e) {
@@ -192,10 +186,9 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
 						new Runnable() {
 							public void run() {
 								if (e.getCause() instanceof CoreException) {
-									ErrorDialog.openError(getContainer().getShell(), IDEWorkbenchMessages.WizardNewFolderCreationPage_errorTitle, null, ((CoreException) e.getCause()).getStatus());
+									ErrorDialog.openError(getContainer().getShell(), "Creation Problems", null, ((CoreException) e.getCause()).getStatus());
 								} else {
-									IDEWorkbenchPlugin.log(getClass(), "createNewFolder()", e.getCause()); //$NON-NLS-1$
-									MessageDialog.openError(getContainer().getShell(), IDEWorkbenchMessages.WizardNewFolderCreationPage_internalErrorTitle, NLS.bind(IDEWorkbenchMessages.WizardNewFolder_internalError, e.getCause().getMessage()));
+									MessageDialog.openError(getContainer().getShell(), "Creation problems", NLS.bind("Eclipse Internal error: {0}", e.getCause().getMessage()));
 								}
 							}
 						});

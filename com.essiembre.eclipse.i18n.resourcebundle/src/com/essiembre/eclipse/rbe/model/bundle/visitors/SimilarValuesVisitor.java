@@ -39,7 +39,7 @@ import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 public class SimilarValuesVisitor extends BundleVisitorAdapter {
 
     /** Holder for bundle entries having similars values. */
-    private final Collection similars = new ArrayList();
+    private final Collection<BundleEntry> similars = new ArrayList<BundleEntry>();
 
     /** Proximity analyzer used to find similarities. */
     private ProximityAnalyzer analyzer = WordCountAnalyzer.getInstance();
@@ -92,7 +92,7 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
      * Gets a collection of similar <code>BundleEntry</code> instance.
      * @return bundle entries with similar values
      */
-    public Collection getSimilars() {
+    public Collection<BundleEntry> getSimilars() {
         return similars;
     }
     

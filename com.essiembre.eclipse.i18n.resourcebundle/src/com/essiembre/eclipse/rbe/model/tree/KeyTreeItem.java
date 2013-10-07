@@ -43,6 +43,8 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
     /** Child items. */
     private final SortedSet<KeyTreeItem> children = new TreeSet<KeyTreeItem>();
     
+    private boolean matchCaseSensitive = false;
+    
     /**
      * Constructor.
      * @param keyTree associated key tree
@@ -195,7 +197,7 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
     
     /**
      * Returns whether this node while be visible under the given <code>filter</code> string. To determine this, 
-     * a simple substring-check on the id is applied.<br />
+     * a pattern substring-check on the id is applied.<br />
      * A node is marked visible if either its <code>id</code> contains the filter string or at least one of its child
      * nodes is visible. The visibility information is saved until the next call to {@link #applyFilter(String)} and can
      * be retrieved using {@link #isVisible()}.
@@ -205,13 +207,22 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
      */
     public boolean applyFilter(String filter) {
         visible = false;
-        if (id.indexOf(filter) != -1) {
-            visible = true;
+        String matchId;
+        String matchFilterString;
+        if (matchCaseSensitive){
+        	matchId = id;
+        	matchFilterString = filter;
+        } else {
+        	matchId = id.toLowerCase();
+        	matchFilterString = filter.toLowerCase();
         }
-        for (KeyTreeItem child : children) {
-            if (child.applyFilter(filter)) {
-                visible = true;
-            }
+        if (matchId.contains(matchFilterString)) visible = true;
+        else {
+	        for (KeyTreeItem child : children) {
+	            if (child.applyFilter(filter)) {
+	                visible = true;
+	            }
+	        }
         }
         return visible;
     }

@@ -45,7 +45,6 @@ import com.essiembre.eclipse.rbe.model.workbench.files.NLPropertiesFileCreator;
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: fleque $ $Revision: 1.9 $ $Date: 2007/09/30 14:22:04 $
  */
-@SuppressWarnings("unchecked")
 public class NLResourceFactory extends ResourceFactory {
 
 //    /**
@@ -203,10 +202,10 @@ public class NLResourceFactory extends ResourceFactory {
         if (!(nlDir instanceof IFolder))
         	throw new CoreException(new Status(IStatus.ERROR, RBEPlugin.ID, 0, "no 'nl'-folder found", null)); //$NON-NLS-1$
         
-        List editors = new ArrayList();
+        List<SourceEditor> editors = new ArrayList<SourceEditor>();
         loadEditors(site, editors, file, nlDir);
-        for (Iterator it = editors.iterator(); it.hasNext();) {
-			SourceEditor editor = (SourceEditor) it.next();
+        for (Iterator<SourceEditor> it = editors.iterator(); it.hasNext();) {
+			SourceEditor editor = it.next();
 			addSourceEditor(editor.getLocale(), editor);
 		}
         IResource resource = nlDir.getParent().findMember(filename);
@@ -217,7 +216,7 @@ public class NLResourceFactory extends ResourceFactory {
     }
     
     
-	protected void loadEditors(IEditorSite site, List editors, IFile file, IResource nlDir)
+	protected void loadEditors(IEditorSite site, List<SourceEditor> editors, IFile file, IResource nlDir)
 	throws CoreException {
 //		Load "language" matching files in "nl" tree.
 		SourceEditor sourceEditor = null;
@@ -228,10 +227,7 @@ public class NLResourceFactory extends ResourceFactory {
 			if (langResource instanceof IFolder) {
 				IFolder langFolder = (IFolder) langResource;
 				language = langFolder.getName();
-				sourceEditor = createEditor(
-						site, 
-						langFolder.findMember(file.getName()),
-						new Locale(language));
+				sourceEditor = createEditor(site, langFolder.findMember(file.getName()), new Locale(language));
 				if (sourceEditor != null) {
 					editors.add(sourceEditor);
 				}

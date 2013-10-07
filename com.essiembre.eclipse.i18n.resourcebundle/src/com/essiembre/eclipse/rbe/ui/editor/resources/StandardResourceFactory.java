@@ -59,16 +59,13 @@ public class StandardResourceFactory extends ResourceFactory {
              throws CoreException {
         this.site = site;
         String bundleName = getBundleName(file);
-        String regex = ResourceFactory.getPropertiesFileRegEx(file);
         IResource[] resources = StandardResourceFactory.getResources(file);
 
         for (int i = 0; i < resources.length; i++) {
             IResource resource = resources[i];
-            String resourceName = resource.getName();
             // Build local title
             Locale locale = parseBundleName(resource);            
-            SourceEditor sourceEditor = 
-                    createEditor(site, resource, locale);
+            SourceEditor sourceEditor = createEditor(this.site, resource, locale);
             if (sourceEditor != null) {
             	addSourceEditor(sourceEditor.getLocale(), sourceEditor);
             }
@@ -100,14 +97,14 @@ public class StandardResourceFactory extends ResourceFactory {
              //      "Can't initialize resource bundle editor.", e); //$NON-NLS-1$
         	return new IFile[0];
         }
-        Collection validResources = new ArrayList();
+        Collection<IFile> validResources = new ArrayList<IFile>();
         for (int i = 0; i < resources.length; i++) {
             IResource resource = resources[i];
             String resourceName = resource.getName();
             if (resource instanceof IFile && resourceName.matches(regex)) {
-                validResources.add(resource);
+                validResources.add((IFile)resource);
             }
         }
-        return (IFile[]) validResources.toArray(new IFile[]{});
+        return validResources.toArray(new IFile[validResources.size()]);
     }
 }

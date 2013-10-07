@@ -58,10 +58,10 @@ public class IsCommentedVisitor extends KeyTreeVisitorAdapter {
         String key = item.getId();
         BundleGroup bundleGroup = item.getKeyTree().getBundleGroup();
         if (bundleGroup.isKey(key)) {
-            Collection entries = bundleGroup.getBundleEntries(key);
+            Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
             int commentedCount = 0;
-            for (Iterator iter = entries.iterator(); iter.hasNext();) {
-                BundleEntry entry = (BundleEntry) iter.next();
+            for (Iterator<BundleEntry> iter = entries.iterator(); iter.hasNext();) {
+                BundleEntry entry = iter.next();
                 if (entry != null && entry.isCommented()) {
                     hasOneCommented = true;
                     commentedCount++;

@@ -20,6 +20,7 @@
  */
 package com.essiembre.eclipse.rbe.ui.preferences;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -60,7 +61,7 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
      *         org.eclipse.swt.widgets.Composite)
      */
     protected Control createContents(Composite parent) {
-        IPreferenceStore prefs = getPreferenceStore();
+  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
         Composite field = null;
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
@@ -74,24 +75,21 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
         // Report missing values?
         field = createFieldComposite(composite);
         reportMissingVals = new Button(field, SWT.CHECK);
-        reportMissingVals.setSelection(
-                prefs.getBoolean(RBEPreferences.REPORT_MISSING_VALUES));
+        reportMissingVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_MISSING_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         new Label(field, SWT.NONE).setText(
                 RBEPlugin.getString("prefs.perform.missingVals")); //$NON-NLS-1$
 
         // Report duplicate values?
         field = createFieldComposite(composite);
         reportDuplVals = new Button(field, SWT.CHECK);
-        reportDuplVals.setSelection(
-                prefs.getBoolean(RBEPreferences.REPORT_DUPL_VALUES));
+        reportDuplVals.setSelection( prefs.getBoolean(RBEPreferences.REPORT_DUPL_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         new Label(field, SWT.NONE).setText(
                 RBEPlugin.getString("prefs.perform.duplVals")); //$NON-NLS-1$
         
         // Report similar values?
         field = createFieldComposite(composite);
         reportSimVals = new Button(field, SWT.CHECK);
-        reportSimVals.setSelection(
-                prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES));
+        reportSimVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         new Label(field, SWT.NONE).setText(
                 RBEPlugin.getString("prefs.perform.simVals")); //$NON-NLS-1$
         reportSimVals.addSelectionListener(new SelectionAdapter() {
@@ -109,15 +107,13 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
         
         // Report similar values: word count
         reportSimValsMode[0] = new Button(simValModeGroup, SWT.RADIO);
-        reportSimValsMode[0].setSelection(prefs.getBoolean(
-                RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE));
+        reportSimValsMode[0].setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         new Label(simValModeGroup, SWT.NONE).setText(RBEPlugin.getString(
                 "prefs.perform.simVals.wordCount")); //$NON-NLS-1$
         
         // Report similar values: Levensthein
         reportSimValsMode[1] = new Button(simValModeGroup, SWT.RADIO);
-        reportSimValsMode[1].setSelection(prefs.getBoolean(
-                RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN));
+        reportSimValsMode[1].setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         new Label(simValModeGroup, SWT.NONE).setText(RBEPlugin.getString(
                 "prefs.perform.simVals.levensthein")); //$NON-NLS-1$
         
@@ -126,14 +122,11 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
         new Label(field, SWT.NONE).setText(RBEPlugin.getString(
                 "prefs.perform.simVals.precision")); //$NON-NLS-1$
         reportSimPrecision = new Text(field, SWT.BORDER);
-        reportSimPrecision.setText(
-                prefs.getString(RBEPreferences.REPORT_SIM_VALUES_PRECISION));
+        reportSimPrecision.setText(Double.toString(prefs.getDouble(RBEPreferences.REPORT_SIM_VALUES_PRECISION, IPreferenceStore.DOUBLE_DEFAULT_DEFAULT)));
         reportSimPrecision.setTextLimit(6);
         setWidthInChars(reportSimPrecision, 6);
         reportSimPrecision.addKeyListener(new DoubleTextValidatorKeyListener(
-                RBEPlugin.getString(
-                        "prefs.perform.simVals.precision.error"), //$NON-NLS-1$
-                0, 1));
+                RBEPlugin.getString("prefs.perform.simVals.precision.error"),0, 1));//$NON-NLS-1$
         
         refreshEnabledStatuses();
         
@@ -145,18 +138,18 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.IPreferencePage#performOk()
      */
     public boolean performOk() {
-        IPreferenceStore prefs = getPreferenceStore();
-        prefs.setValue(RBEPreferences.REPORT_MISSING_VALUES,
+  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+        prefs.putBoolean(RBEPreferences.REPORT_MISSING_VALUES,
                 reportMissingVals.getSelection());
-        prefs.setValue(RBEPreferences.REPORT_DUPL_VALUES,
+        prefs.putBoolean(RBEPreferences.REPORT_DUPL_VALUES,
                 reportDuplVals.getSelection());
-        prefs.setValue(RBEPreferences.REPORT_SIM_VALUES,
+        prefs.putBoolean(RBEPreferences.REPORT_SIM_VALUES,
                 reportSimVals.getSelection());
-        prefs.setValue(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE,
+        prefs.putBoolean(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE,
                 reportSimValsMode[0].getSelection());
-        prefs.setValue(RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN,
+        prefs.putBoolean(RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN,
                 reportSimValsMode[1].getSelection());
-        prefs.setValue(RBEPreferences.REPORT_SIM_VALUES_PRECISION,
+        prefs.putDouble(RBEPreferences.REPORT_SIM_VALUES_PRECISION,
                 Double.parseDouble(reportSimPrecision.getText()));
         refreshEnabledStatuses();
         return super.performOk();
@@ -167,19 +160,13 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
     protected void performDefaults() {
-        IPreferenceStore prefs = getPreferenceStore();
-        reportMissingVals.setSelection(prefs.getDefaultBoolean(
-                RBEPreferences.REPORT_MISSING_VALUES));
-        reportDuplVals.setSelection(prefs.getDefaultBoolean(
-                RBEPreferences.REPORT_DUPL_VALUES));
-        reportSimVals.setSelection(prefs.getDefaultBoolean(
-                RBEPreferences.REPORT_SIM_VALUES));
-        reportSimValsMode[0].setSelection(prefs.getDefaultBoolean(
-                RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE));
-        reportSimValsMode[1].setSelection(prefs.getDefaultBoolean(
-                RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN));
-        reportSimPrecision.setText(Double.toString(prefs.getDefaultDouble(
-                RBEPreferences.REPORT_SIM_VALUES_PRECISION)));
+  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+        reportMissingVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_MISSING_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
+        reportDuplVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_DUPL_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
+        reportSimVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
+        reportSimValsMode[0].setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
+        reportSimValsMode[1].setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
+        reportSimPrecision.setText(Double.toString(prefs.getDouble(RBEPreferences.REPORT_SIM_VALUES_PRECISION, IPreferenceStore.DOUBLE_DEFAULT_DEFAULT)));
         refreshEnabledStatuses();
         super.performDefaults();
     }

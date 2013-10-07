@@ -41,7 +41,7 @@ import com.essiembre.eclipse.rbe.model.Model;
 public class BundleGroup extends Model implements IBundleVisitable {
 
     /** Bundles forming the group (key=Locale; value=Bundle). */
-    private final Map<Locale, Bundle> bundles = new HashMap();
+    private final Map<Locale, Bundle> bundles = new HashMap<Locale, Bundle>();
     
     //TODO tentative:
     private final SortedSet<String> keys = new TreeSet<String>();
@@ -59,9 +59,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
      */
     public void accept(IBundleVisitor visitor, Object passAlongArgument) {
         for (Bundle bundle : bundles.values()) {
-            for (Iterator j = bundle.iterator(); j.hasNext();) {
-                visitor.visitBundleEntry(
-                        (BundleEntry) j.next(), passAlongArgument);
+            for (Iterator<BundleEntry> j = bundle.iterator(); j.hasNext();) {
+                visitor.visitBundleEntry(j.next(), passAlongArgument);
             }
             visitor.visitBundle(bundle, passAlongArgument);
         }
@@ -132,8 +131,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * @param key
      */
     public void addKey(String key) {
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             BundleEntry entry = new BundleEntry(key, null, null);
             addBundleEntry(locale, entry);
         }
@@ -149,8 +148,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
         if (oldKey.equals(newKey)) {
             return;
         }
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             Bundle bundle = getBundle(locale);
             BundleEntry entry = getBundleEntry(locale, oldKey);
             if (entry != null) {
@@ -168,8 +167,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * @param key key to comment
      */
     public void commentKey(String key) {
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             Bundle bundle = getBundle(locale);
             BundleEntry entry = getBundleEntry(locale, key);
             if (entry != null) {
@@ -184,8 +183,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * @param key key to comment
      */
     public void uncommentKey(String key) {
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             Bundle bundle = getBundle(locale);
             BundleEntry entry = getBundleEntry(locale, key);
             if (entry != null) {
@@ -205,8 +204,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
         if (origKey.equals(newKey)) {
             return;
         }
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             Bundle bundle = getBundle(locale);
             BundleEntry origEntry = getBundleEntry(locale, origKey);
             if (origEntry != null) {
@@ -223,8 +222,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * @param key key to remove
      */
     public void removeKey(String key) {
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             Bundle bundle = getBundle(locale);
             BundleEntry entry = getBundleEntry(locale, key);
             if (entry != null) {
@@ -255,10 +254,10 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * @param key key of entries to retreive
      * @return a collection of <code>BundleEntry</code> objects
      */
-    public Collection getBundleEntries(String key) {
-        Collection entries = new ArrayList();
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+    public Collection<BundleEntry> getBundleEntries(String key) {
+        Collection<BundleEntry> entries = new ArrayList<BundleEntry>();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             BundleEntry entry = getBundleEntry(locale, key);
             if (entry != null) {
                 entries.add(entry);
@@ -275,8 +274,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * @return  true <=> The key is already existing.
      */
     public boolean containsKey(String key) {
-        for (Iterator iter = bundles.keySet().iterator(); iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+        for (Iterator<Locale> iter = bundles.keySet().iterator(); iter.hasNext();) {
+            Locale locale = iter.next();
             BundleEntry entry = getBundleEntry(locale, key);
             if (entry != null) {
                 return (true);
@@ -298,7 +297,7 @@ public class BundleGroup extends Model implements IBundleVisitable {
      * Iterates through all bundles in this group.
      * @return iterator.
      */
-    public Iterator iterator() {
+    public Iterator<Bundle> iterator() {
         return bundles.values().iterator();
     }
 
@@ -318,8 +317,8 @@ public class BundleGroup extends Model implements IBundleVisitable {
     private Set<String> refreshKeys() {
         //Set keys = new TreeSet();
         keys.clear();
-        for (Iterator iter = iterator(); iter.hasNext();) {
-            keys.addAll(((Bundle) iter.next()).getKeys());
+        for (Iterator<Bundle> iter = iterator(); iter.hasNext();) {
+            keys.addAll(iter.next().getKeys());
         }
         return keys;
 //        return Collections.unmodifiableSet(keys);

@@ -23,6 +23,8 @@ package com.essiembre.eclipse.rbe.ui.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -50,7 +52,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
     protected final int indentPixels = 20;
     
     /** Controls with errors in them. */
-    protected final Map errors = new HashMap();
+    protected final Map<Text,String> errors = new HashMap<Text,String>();
     
     /**
      * Constructor.
@@ -64,8 +66,6 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
      *      #init(org.eclipse.ui.IWorkbench)
      */
     public void init(IWorkbench workbench) {
-        setPreferenceStore(
-                RBEPlugin.getDefault().getPreferenceStore());
     }
 
     protected Composite createFieldComposite(Composite parent) {
@@ -107,8 +107,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
                     setErrorMessage(null);
                     setValid(true);
                 } else {
-                    setErrorMessage(
-                            (String) errors.values().iterator().next());
+                    setErrorMessage(errors.values().iterator().next());
                 }
             } else {
                 errors.put(text, errMsg);
@@ -168,8 +167,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
                     setErrorMessage(null);
                     setValid(true);
                 } else {
-                    setErrorMessage(
-                            (String) errors.values().iterator().next());
+                    setErrorMessage(errors.values().iterator().next());
                 }
             } else {
                 errors.put(text, errMsg);
@@ -178,6 +176,12 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
             }
         }
     }
+    
+
+    protected IEclipsePreferences getEclipsePreferenceStore() {
+ 	   return InstanceScope.INSTANCE.getNode(RBEPlugin.ID);
+    }
+
     
     protected void setWidthInChars(Control field, int widthInChars) {
         GridData gd = new GridData();

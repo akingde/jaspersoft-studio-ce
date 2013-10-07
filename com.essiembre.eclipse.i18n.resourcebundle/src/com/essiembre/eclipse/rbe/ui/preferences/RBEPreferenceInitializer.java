@@ -20,8 +20,10 @@
  */
 package com.essiembre.eclipse.rbe.ui.preferences;
 
-import org.eclipse.core.runtime.Preferences;
+
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
@@ -47,49 +49,50 @@ public class RBEPreferenceInitializer extends AbstractPreferenceInitializer {
     */
    @Override
    public void initializeDefaultPreferences() {
-      Preferences prefs = RBEPlugin.getDefault().getPluginPreferences();
+	   
+	  IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(RBEPlugin.ID); // does all the above behind the scene
 
       //General
-      prefs.setDefault(RBEPreferences.CONVERT_ENCODED_TO_UNICODE, true);
-      prefs.setDefault(RBEPreferences.FIELD_TAB_INSERTS, true);
-      prefs.setDefault(RBEPreferences.KEY_TREE_HIERARCHICAL, true);
-      prefs.setDefault(RBEPreferences.KEY_TREE_EXPANDED, true);
-      prefs.setDefault(RBEPreferences.SUPPORT_FRAGMENTS, true);
-      prefs.setDefault(RBEPreferences.LOAD_ONLY_FRAGMENT_RESOURCES, false);
+      prefs.putBoolean(RBEPreferences.CONVERT_ENCODED_TO_UNICODE, true);
+      prefs.putBoolean(RBEPreferences.FIELD_TAB_INSERTS, true);
+      prefs.putBoolean(RBEPreferences.KEY_TREE_HIERARCHICAL, true);
+      prefs.putBoolean(RBEPreferences.KEY_TREE_EXPANDED, true);
+      prefs.putBoolean(RBEPreferences.SUPPORT_FRAGMENTS, true);
+      prefs.putBoolean(RBEPreferences.LOAD_ONLY_FRAGMENT_RESOURCES, false);
 
       //Formatting
-      prefs.setDefault(RBEPreferences.CONVERT_UNICODE_TO_ENCODED, true);
-      prefs.setDefault(RBEPreferences.CONVERT_UNICODE_TO_ENCODED_UPPER, true);
+      prefs.putBoolean(RBEPreferences.CONVERT_UNICODE_TO_ENCODED, true);
+      prefs.putBoolean(RBEPreferences.CONVERT_UNICODE_TO_ENCODED_UPPER, true);
 
-      prefs.setDefault(RBEPreferences.SPACES_AROUND_EQUAL_SIGNS, true);
+      prefs.putBoolean(RBEPreferences.SPACES_AROUND_EQUAL_SIGNS, true);
 
-      prefs.setDefault(RBEPreferences.KEY_GROUP_SEPARATOR, "."); //$NON-NLS-1$
-      prefs.setDefault(RBEPreferences.ALIGN_EQUAL_SIGNS, true);
-      prefs.setDefault(RBEPreferences.SHOW_GENERATOR, true);
-      prefs.setDefault(RBEPreferences.KEY_TREE_HIERARCHICAL, true);
+      prefs.put(RBEPreferences.KEY_GROUP_SEPARATOR, "."); //$NON-NLS-1$
+      prefs.putBoolean(RBEPreferences.ALIGN_EQUAL_SIGNS, true);
+      prefs.putBoolean(RBEPreferences.SHOW_GENERATOR, true);
+      prefs.putBoolean(RBEPreferences.KEY_TREE_HIERARCHICAL, true);
 
-      prefs.setDefault(RBEPreferences.GROUP_KEYS, true);
-      prefs.setDefault(RBEPreferences.GROUP_LEVEL_DEEP, 1);
-      prefs.setDefault(RBEPreferences.GROUP_LINE_BREAKS, 1);
-      prefs.setDefault(RBEPreferences.GROUP_ALIGN_EQUAL_SIGNS, true);
+      prefs.putBoolean(RBEPreferences.GROUP_KEYS, true);
+      prefs.putInt(RBEPreferences.GROUP_LEVEL_DEEP, 1);
+      prefs.putInt(RBEPreferences.GROUP_LINE_BREAKS, 1);
+      prefs.putBoolean(RBEPreferences.GROUP_ALIGN_EQUAL_SIGNS, true);
 
-      prefs.setDefault(RBEPreferences.WRAP_CHAR_LIMIT, 80);
-      prefs.setDefault(RBEPreferences.WRAP_INDENT_SPACES, 8);
+      prefs.putInt(RBEPreferences.WRAP_CHAR_LIMIT, 80);
+      prefs.putInt(RBEPreferences.WRAP_INDENT_SPACES, 8);
 
-      prefs.setDefault(RBEPreferences.NEW_LINE_TYPE, RBEPreferences.NEW_LINE_UNIX);
+      prefs.putInt(RBEPreferences.NEW_LINE_TYPE, RBEPreferences.NEW_LINE_UNIX);
 
-      prefs.setDefault(RBEPreferences.KEEP_EMPTY_FIELDS, false);
+      prefs.putBoolean(RBEPreferences.KEEP_EMPTY_FIELDS, false);
 
       // Reporting/Performance
-      prefs.setDefault(RBEPreferences.REPORT_MISSING_VALUES, true);
-      prefs.setDefault(RBEPreferences.REPORT_DUPL_VALUES, true);
-      prefs.setDefault(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE, true);
-      prefs.setDefault(RBEPreferences.REPORT_SIM_VALUES_PRECISION, 0.75d);
+      prefs.putBoolean(RBEPreferences.REPORT_MISSING_VALUES, true);
+      prefs.putBoolean(RBEPreferences.REPORT_DUPL_VALUES, true);
+      prefs.putBoolean(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE, true);
+      prefs.putDouble(RBEPreferences.REPORT_SIM_VALUES_PRECISION, 0.75d);
 
-      prefs.setDefault(RBEPreferences.NO_TREE_IN_EDITOR, false);
+      prefs.putBoolean(RBEPreferences.NO_TREE_IN_EDITOR, false);
 
-      prefs.setDefault(RBEPreferences.MIN_HEIGHT, 80);
-      prefs.setDefault(RBEPreferences.AUTO_ADJUST, true);
+      prefs.putInt(RBEPreferences.MIN_HEIGHT, 80);
+      prefs.putBoolean(RBEPreferences.AUTO_ADJUST, true);
 
    }
 

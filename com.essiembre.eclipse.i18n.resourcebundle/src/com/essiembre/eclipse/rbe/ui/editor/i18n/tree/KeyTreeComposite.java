@@ -197,11 +197,11 @@ public class KeyTreeComposite extends Composite {
         msgBox.setText(msgHead);
         if (msgBox.open() == SWT.OK) {
             BundleGroup bundleGroup = keyTree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 bundleGroup.removeKey(item.getId());
             }
         }

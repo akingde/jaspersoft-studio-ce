@@ -35,7 +35,7 @@ import com.essiembre.eclipse.rbe.model.bundle.BundleVisitorAdapter;
 public class DuplicateValuesVisitor extends BundleVisitorAdapter {
 
     /** Holder for bundle entries having duplicate values. */
-    private final Collection duplicates = new ArrayList();
+    private final Collection<BundleEntry> duplicates = new ArrayList<BundleEntry>();
     
     /**
      * Constructor.
@@ -51,7 +51,6 @@ public class DuplicateValuesVisitor extends BundleVisitorAdapter {
      *                 java.lang.Object)
      */
     public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-        
         BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
         if (entry != entryToMatch
                 && entry != null && entryToMatch != null
@@ -65,7 +64,7 @@ public class DuplicateValuesVisitor extends BundleVisitorAdapter {
      * Gets a collection of duplicate <code>BundleEntry</code> instance.
      * @return bundle entries with duplicate values
      */
-    public Collection getDuplicates() {
+    public Collection<BundleEntry> getDuplicates() {
         return duplicates;
     }
     

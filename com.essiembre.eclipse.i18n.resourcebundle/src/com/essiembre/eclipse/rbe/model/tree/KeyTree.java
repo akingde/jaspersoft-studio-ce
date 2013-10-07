@@ -80,8 +80,8 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
                 // do nothing
             }
         });
-        for (Iterator iter = bundleGroup.iterator(); iter.hasNext();) {
-            initBundle((Bundle) iter.next());
+        for (Iterator<Bundle> iter = bundleGroup.iterator(); iter.hasNext();) {
+            initBundle(iter.next());
         }
         // Initial tree creation
         load();
@@ -101,7 +101,7 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
             }
             public void remove(DeltaEvent event) {
                 String key = ((BundleEntry) event.receiver()).getKey();
-                Collection entries = bundleGroup.getBundleEntries(key);
+                Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
                 if (entries.size() == 0) {
                     removeKey(((BundleEntry) event.receiver()).getKey());
                 }
@@ -139,7 +139,7 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
      * Gets the key tree item cache.
      * @return key tree item cache.
      */
-    public Map getKeyItemsCache() {
+    public Map<String, KeyTreeItem> getKeyItemsCache() {
         return keyItemsCache;
     }
     
@@ -147,7 +147,7 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
      * Gets all items contained a the root level of this tree.
      * @return a collection of <code>KeyTreeItem</code> objects.
      */
-    public Set getRootKeyItems() {
+    public Set<KeyTreeItem> getRootKeyItems() {
         return rootKeyItems;
     }
     
@@ -230,9 +230,8 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
      *         java.lang.Object)
      */
     public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
-        for (Iterator iter = keyItemsCache.values().iterator(); iter.hasNext();) {
-            visitor.visitKeyTreeItem(
-                    (KeyTreeItem) iter.next(), passAlongArgument);
+        for (Iterator<KeyTreeItem> iter = keyItemsCache.values().iterator(); iter.hasNext();) {
+            visitor.visitKeyTreeItem(iter.next(), passAlongArgument);
         }
         visitor.visitKeyTree(this, passAlongArgument);
     }
@@ -249,15 +248,14 @@ public class KeyTree extends Model implements IKeyTreeVisitable {
      * Loads all key tree items, base on bundle group.
      */
     private final void load() {
-        for (Iterator iter = bundleGroup.getKeys().iterator();
-                iter.hasNext();) {
+        for (Iterator<String> iter = bundleGroup.getKeys().iterator(); iter.hasNext();) {
             /*
              * Do not call "fireAdd" method from here for extreme performance
              * improvement.  This is not an addition in the sense that we are
              * laying out existing keys, not adding any new ones.  We will
              * refresh the whole tree after we are done looping.
              */
-            updater.addKey(this, (String) iter.next());
+            updater.addKey(this, iter.next());
         }
         if (getFilter() != null)
             filterKeyItems(getFilter());

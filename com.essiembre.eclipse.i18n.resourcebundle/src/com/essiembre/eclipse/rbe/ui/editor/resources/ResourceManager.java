@@ -26,16 +26,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.essiembre.eclipse.rbe.model.DeltaEvent;
 import com.essiembre.eclipse.rbe.model.IDeltaListener;
@@ -61,8 +57,8 @@ public class ResourceManager {
     private final BundleGroup bundleGroup;
     private final KeyTree keyTree;
     /** key=Locale;value=SourceEditor */
-    /*default*/ final Map sourceEditors = new HashMap();
-    private final Collection locales = new ArrayList();
+    /*default*/ final Map<Locale, SourceEditor> sourceEditors = new HashMap<Locale, SourceEditor>();
+    private final Collection<Locale> locales = new ArrayList<Locale>();
     
     /**
      * Constructor.
@@ -81,16 +77,14 @@ public class ResourceManager {
             Locale locale = sourceEditor.getLocale();
             sourceEditors.put(locale, sourceEditor);
             locales.add(locale);
-            bundleGroup.addBundle(
-                    locale, PropertiesParser.parse(sourceEditor.getContent()));			
+            bundleGroup.addBundle(locale, PropertiesParser.parse(sourceEditor.getContent()));			
         }
         bundleGroup.addListener(new IDeltaListener() {
             public void add(DeltaEvent event) {}    // do nothing
             public void remove(DeltaEvent event) {} // do nothing
             public void modify(DeltaEvent event) {
                 final Bundle bundle = (Bundle) event.receiver();
-                final SourceEditor editor = 
-                        (SourceEditor) sourceEditors.get(bundle.getLocale());
+                final SourceEditor editor = sourceEditors.get(bundle.getLocale());
                 String editorContent = PropertiesGenerator.generate(bundle);
                 editor.setContent(editorContent);
             }
@@ -119,7 +113,7 @@ public class ResourceManager {
      * Gets all locales in this bundle.
      * @return locales
      */
-    public Collection getLocales() {
+    public Collection<Locale> getLocales() {
         return locales;
     }
     /**

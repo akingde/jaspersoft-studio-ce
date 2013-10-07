@@ -52,8 +52,8 @@ public abstract class KeyTreeUpdater {
      * @param key key to remove
      */
     public void removeKey(KeyTree keyTree, String key) {
-        Map keyCache = keyTree.getKeyItemsCache();
-        KeyTreeItem item = (KeyTreeItem) keyCache.get(key);
+        Map<String, KeyTreeItem> keyCache = keyTree.getKeyItemsCache();
+        KeyTreeItem item = keyCache.get(key);
         if (item != null) {
             Object parent = item.getParent();
             if (parent instanceof KeyTree) {

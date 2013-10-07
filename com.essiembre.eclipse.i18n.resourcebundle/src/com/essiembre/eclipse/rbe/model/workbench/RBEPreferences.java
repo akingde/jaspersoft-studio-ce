@@ -20,7 +20,9 @@
  */
 package com.essiembre.eclipse.rbe.model.workbench;
 
-import org.eclipse.core.runtime.Preferences;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 
@@ -152,9 +154,7 @@ public final class RBEPreferences {
 
     
     /** RBEPreferences. */
-    private static final Preferences PREFS = 
-            RBEPlugin.getDefault().getPluginPreferences();
-    
+    private static final IEclipsePreferences PREFS = InstanceScope.INSTANCE.getNode(RBEPlugin.ID);
     /**
      * Constructor.
      */
@@ -167,7 +167,7 @@ public final class RBEPreferences {
      * @return key group separator.
      */
     public static String getKeyGroupSeparator() {
-        return PREFS.getString(KEY_GROUP_SEPARATOR);
+        return PREFS.get(KEY_GROUP_SEPARATOR, ".");
     }
 
     /**
@@ -175,7 +175,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if pressing tab inserts a tab in a field
      */
     public static boolean getFieldTabInserts() {
-        return PREFS.getBoolean(FIELD_TAB_INSERTS);
+        return PREFS.getBoolean(FIELD_TAB_INSERTS, true);
     }
     
     /**
@@ -183,7 +183,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if equals signs should be aligned
      */
     public static boolean getAlignEqualSigns() {
-        return PREFS.getBoolean(ALIGN_EQUAL_SIGNS);
+        return PREFS.getBoolean(ALIGN_EQUAL_SIGNS, true);
     }
 
     /**
@@ -192,7 +192,7 @@ public final class RBEPreferences {
      * @return <code>true</code> there if should be spaces around equals signs
      */
     public static boolean getSpacesAroundEqualSigns() {
-        return PREFS.getBoolean(SPACES_AROUND_EQUAL_SIGNS);
+        return PREFS.getBoolean(SPACES_AROUND_EQUAL_SIGNS, true);
     }
 
     /**
@@ -200,7 +200,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if keys should be grouped
      */
     public static boolean getGroupKeys() {
-        return PREFS.getBoolean(GROUP_KEYS);
+        return PREFS.getBoolean(GROUP_KEYS, true);
     }
 
     /**
@@ -208,7 +208,7 @@ public final class RBEPreferences {
      * @return how many level deep
      */
     public static int getGroupLevelDeepness() {
-        return PREFS.getInt(GROUP_LEVEL_DEEP);
+        return PREFS.getInt(GROUP_LEVEL_DEEP, 1);
     }
     
     /**
@@ -216,7 +216,7 @@ public final class RBEPreferences {
      * @return how many blank lines between groups
      */
     public static int getGroupLineBreaks() {
-        return PREFS.getInt(GROUP_LINE_BREAKS);
+        return PREFS.getInt(GROUP_LINE_BREAKS, 1);
     }
 
     /**
@@ -225,7 +225,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if equal signs should be aligned within groups
      */
     public static boolean getGroupAlignEqualSigns() {
-        return PREFS.getBoolean(GROUP_ALIGN_EQUAL_SIGNS);
+        return PREFS.getBoolean(GROUP_ALIGN_EQUAL_SIGNS, true);
     }
 
     /**
@@ -233,14 +233,14 @@ public final class RBEPreferences {
      * @return <code>true</code> if hierarchical
      */
     public static boolean getKeyTreeHierarchical() {
-        return PREFS.getBoolean(KEY_TREE_HIERARCHICAL);
+        return PREFS.getBoolean(KEY_TREE_HIERARCHICAL, true);
     }
     /**
      * Gets whether key tree should be show expaned by default.
      * @return <code>true</code> if expanded
      */
     public static boolean getKeyTreeExpanded() {
-        return PREFS.getBoolean(KEY_TREE_EXPANDED);
+        return PREFS.getBoolean(KEY_TREE_EXPANDED, true);
     }
 
     /**
@@ -248,7 +248,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if we print it
      */
     public static boolean getShowGenerator() {
-        return PREFS.getBoolean(SHOW_GENERATOR);
+        return PREFS.getBoolean(SHOW_GENERATOR, true);
     }
 
     /**
@@ -256,7 +256,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if supported
      */
     public static boolean getSupportNL() {
-        return PREFS.getBoolean(SUPPORT_NL);
+        return PREFS.getBoolean(SUPPORT_NL, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
     
     /**
@@ -264,7 +264,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if supported
      */
     public static boolean getLoadOnlyFragmentResources() {
-        return PREFS.getBoolean(LOAD_ONLY_FRAGMENT_RESOURCES);
+        return PREFS.getBoolean(LOAD_ONLY_FRAGMENT_RESOURCES, false);
     }
     
     /**
@@ -272,7 +272,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if supported
      */
     public static boolean getSupportFragments() {
-        return PREFS.getBoolean(SUPPORT_FRAGMENTS);
+        return PREFS.getBoolean(SUPPORT_FRAGMENTS, true);
     }
     
     /**
@@ -280,7 +280,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if wrapped
      */
     public static boolean getWrapLines() {
-        return PREFS.getBoolean(WRAP_LINES);
+        return PREFS.getBoolean(WRAP_LINES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
     
     /**
@@ -289,7 +289,7 @@ public final class RBEPreferences {
      * @return number of characters
      */
     public static int getWrapCharLimit() {
-        return PREFS.getInt(WRAP_CHAR_LIMIT);
+        return PREFS.getInt(WRAP_CHAR_LIMIT, 80);
     }
 
     /**
@@ -298,7 +298,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if aligned
      */
     public static boolean getWrapAlignEqualSigns() {
-        return PREFS.getBoolean(WRAP_ALIGN_EQUAL_SIGNS);
+        return PREFS.getBoolean(WRAP_ALIGN_EQUAL_SIGNS, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
 
     /**
@@ -307,7 +307,7 @@ public final class RBEPreferences {
      * @return number of spaces
      */
     public static int getWrapIndentSpaces() {
-        return PREFS.getInt(WRAP_INDENT_SPACES);
+        return PREFS.getInt(WRAP_INDENT_SPACES, 8);
     }
 
     /**
@@ -316,7 +316,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if converting
      */
     public static boolean getConvertEncodedToUnicode() {
-        return PREFS.getBoolean(CONVERT_ENCODED_TO_UNICODE);
+        return PREFS.getBoolean(CONVERT_ENCODED_TO_UNICODE, true);
     }
 
     /**
@@ -324,7 +324,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if escaping
      */
     public static boolean getConvertUnicodeToEncoded() {
-        return PREFS.getBoolean(CONVERT_UNICODE_TO_ENCODED);
+        return PREFS.getBoolean(CONVERT_UNICODE_TO_ENCODED, true);
     }
     /**
      * Gets whether escaped unicode "alpha" characters should be uppercase
@@ -332,7 +332,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if uppercase
      */
     public static boolean getConvertUnicodeToEncodedUpper() {
-        return PREFS.getBoolean(CONVERT_UNICODE_TO_ENCODED_UPPER);
+        return PREFS.getBoolean(CONVERT_UNICODE_TO_ENCODED_UPPER, true);
     }
 
     /**
@@ -341,7 +341,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if overwriting
      */
     public static boolean getForceNewLineType() {
-        return PREFS.getBoolean(FORCE_NEW_LINE_TYPE);
+        return PREFS.getBoolean(FORCE_NEW_LINE_TYPE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
 
     /**
@@ -351,7 +351,7 @@ public final class RBEPreferences {
      * @return new line type
      */
     public static int getNewLineType() {
-        return PREFS.getInt(NEW_LINE_TYPE);
+        return PREFS.getInt(NEW_LINE_TYPE, RBEPreferences.NEW_LINE_UNIX);
     }
     
     /**
@@ -359,7 +359,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if printed as is.
      */
     public static boolean getNewLineNice() {
-        return PREFS.getBoolean(NEW_LINE_NICE);
+        return PREFS.getBoolean(NEW_LINE_NICE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
 
     /**
@@ -367,7 +367,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if reporting
      */
     public static boolean getReportMissingValues() {
-        return PREFS.getBoolean(REPORT_MISSING_VALUES);
+        return PREFS.getBoolean(REPORT_MISSING_VALUES, true);
     }
     
     /**
@@ -375,7 +375,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if reporting
      */
     public static boolean getReportDuplicateValues() {
-        return PREFS.getBoolean(REPORT_DUPL_VALUES);
+        return PREFS.getBoolean(REPORT_DUPL_VALUES, true);
     }
     
     /**
@@ -383,7 +383,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if reporting
      */
     public static boolean getReportSimilarValues() {
-        return PREFS.getBoolean(REPORT_SIM_VALUES);
+        return PREFS.getBoolean(REPORT_SIM_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
 
     /**
@@ -392,7 +392,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if using "word compare" method
      */
     public static boolean getReportSimilarValuesWordCompare() {
-        return PREFS.getBoolean(REPORT_SIM_VALUES_WORD_COMPARE);
+        return PREFS.getBoolean(REPORT_SIM_VALUES_WORD_COMPARE, true);
     }
 
     /**
@@ -401,7 +401,7 @@ public final class RBEPreferences {
      * @return <code>true</code> if using Levensthein method
      */
     public static boolean getReportSimilarValuesLevensthein() {
-        return PREFS.getBoolean(REPORT_SIM_VALUES_LEVENSTHEIN);
+        return PREFS.getBoolean(REPORT_SIM_VALUES_LEVENSTHEIN, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT);
     }
 
     /**
@@ -410,7 +410,7 @@ public final class RBEPreferences {
      * @return precision
      */
     public static double getReportSimilarValuesPrecision() {
-        return PREFS.getDouble(REPORT_SIM_VALUES_PRECISION);
+        return PREFS.getDouble(REPORT_SIM_VALUES_PRECISION, 0.75d);
     }
 
     /**
@@ -418,7 +418,7 @@ public final class RBEPreferences {
      * @return <code>true</code> A tree shall not be displayed.
      */
     public static boolean getNoTreeInEditor() {
-        return PREFS.getBoolean(NO_TREE_IN_EDITOR);
+        return PREFS.getBoolean(NO_TREE_IN_EDITOR, false);
     }
     
     /**
@@ -426,16 +426,16 @@ public final class RBEPreferences {
      * @return <code>true</code> if empty fields are to be kept.
      */
     public static boolean getKeepEmptyFields() {
-        return PREFS.getBoolean(KEEP_EMPTY_FIELDS);
+        return PREFS.getBoolean(KEEP_EMPTY_FIELDS, false);
     }
 
     
     public static boolean getAutoAdjust() {
-       return PREFS.getBoolean(AUTO_ADJUST);
+       return PREFS.getBoolean(AUTO_ADJUST, true);
     }
  
     public static int getMinHeight() {
-       return PREFS.getInt(MIN_HEIGHT);
+       return PREFS.getInt(MIN_HEIGHT, IPreferenceStore.INT_DEFAULT_DEFAULT);
     }
 
 }

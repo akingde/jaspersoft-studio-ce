@@ -53,21 +53,23 @@ public class ResourceFactoryDescriptor {
 	 */
 	public static IResourceFactory[] getContributedResourceFactories() throws CoreException {
 		ResourceFactoryDescriptor[] descriptors = getContributedResourceFactoryDescriptors();
-		SortedMap factories = new TreeMap();
+		SortedMap<Integer, IResourceFactory> factories = new TreeMap<Integer, IResourceFactory>();
 		for (int i = 0, lastOrder = 0; i < descriptors.length; i++) {
 			Object factory = descriptors[i].fElement.createExecutableExtension("class"); //$NON-NLS-1$
-			String attribute = descriptors[i].fElement.getAttribute("order"); //$NON-NLS-1$
-			Integer order = null;
-			try {
-				order = new Integer(attribute);
-			} catch (Exception e) {
-				order = new Integer(++lastOrder);
+			if (factory instanceof IResourceFactory){
+				String attribute = descriptors[i].fElement.getAttribute("order"); //$NON-NLS-1$
+				Integer order = null;
+				try {
+					order = new Integer(attribute);
+				} catch (Exception e) {
+					order = new Integer(++lastOrder);
+				}
+				while (factories.containsKey(order))
+					order = new Integer(lastOrder = order.intValue());
+				factories.put(order, (IResourceFactory)factory);
 			}
-			while (factories.containsKey(order))
-				order = new Integer(lastOrder = order.intValue());
-			factories.put(order, factory);
 		}
-		return (IResourceFactory[]) factories.values().toArray(new IResourceFactory[factories.values().size()]);
+		return factories.values().toArray(new IResourceFactory[factories.values().size()]);
 	}
 
 	private static ResourceFactoryDescriptor[] getContributedResourceFactoryDescriptors() {
@@ -77,7 +79,7 @@ public class ResourceFactoryDescriptor {
 	}
 
 	private static ResourceFactoryDescriptor[] createDescriptors(IConfigurationElement[] elements) {
-		List list = new ArrayList(elements.length);
+		List<ResourceFactoryDescriptor> list = new ArrayList<ResourceFactoryDescriptor>(elements.length);
 		for (int i = 0; i < elements.length; i++) {
 			IConfigurationElement element = elements[i];
 			if (TAG_FACTORY.equals(element.getName())) {
@@ -85,7 +87,7 @@ public class ResourceFactoryDescriptor {
 				list.add(descriptor);
 			}
 		}
-		return (ResourceFactoryDescriptor[]) list.toArray(new ResourceFactoryDescriptor[list.size()]);
+		return list.toArray(new ResourceFactoryDescriptor[list.size()]);
 	}
 
 }

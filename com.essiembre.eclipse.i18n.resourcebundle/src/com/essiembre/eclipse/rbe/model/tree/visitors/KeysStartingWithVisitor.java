@@ -36,7 +36,7 @@ import com.essiembre.eclipse.rbe.model.tree.KeyTreeVisitorAdapter;
 public class KeysStartingWithVisitor extends KeyTreeVisitorAdapter {
 
     /** Holder for matching keys. */
-    List items = new ArrayList();
+    List<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
     
     /**
      * Constructor.
@@ -62,7 +62,7 @@ public class KeysStartingWithVisitor extends KeyTreeVisitorAdapter {
      * Gets matching key tree items.
      * @return matching key tree items
      */
-    public Collection getKeyTreeItems() {
+    public Collection<KeyTreeItem> getKeyTreeItems() {
         return items;
     }
     

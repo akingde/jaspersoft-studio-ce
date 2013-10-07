@@ -35,8 +35,8 @@ import java.util.Iterator;
 public class IncompletionUpdater extends KeyTreeUpdater {
 
     
-    private KeyTreeUpdater   delegation  ;
-    private BundleGroup      bundlegroup ;
+    private KeyTreeUpdater delegation  ;
+    private BundleGroup bundlegroup ;
     
 
     /**
@@ -57,17 +57,14 @@ public class IncompletionUpdater extends KeyTreeUpdater {
      * {@inheritDoc}
      */
     public void addKey(KeyTree keytree, String key) {
-        Collection entries  = bundlegroup.getBundleEntries(key);
-        int        count    = 0;
-        Iterator   iterator = entries.iterator();
+        Collection<BundleEntry> entries = bundlegroup.getBundleEntries(key);
+        int count = 0;
+        Iterator<BundleEntry> iterator = entries.iterator();
         while(iterator.hasNext()) {
-            Object val = iterator.next();
-            if(val instanceof BundleEntry) {
-                BundleEntry entry = (BundleEntry) val;
-                String      value = entry.getValue();
-                if((value != null) && (value.length() > 0)) {
-                    count++;
-                }
+        	BundleEntry entry = iterator.next();
+            String value = entry.getValue();
+            if((value != null) && (value.length() > 0)) {
+                count++;
             }
         }
         // we only delegate entries in case there are some incomplete ones

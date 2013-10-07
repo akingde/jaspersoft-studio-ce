@@ -202,7 +202,8 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     /**
      * {@inheritDoc}
      */
-    public Object getAdapter(Class adapter) {
+    @SuppressWarnings("rawtypes")
+	public Object getAdapter(Class adapter) {
         Object obj = super.getAdapter(adapter);
         if (obj == null) {
             if (IContentOutlinePage.class.equals(adapter)) {

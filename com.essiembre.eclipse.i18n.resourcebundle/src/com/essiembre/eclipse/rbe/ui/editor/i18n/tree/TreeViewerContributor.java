@@ -37,7 +37,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
@@ -283,11 +282,11 @@ public class TreeViewerContributor {
         if (dialog.getReturnCode() == Window.OK ) {
             String newKey = dialog.getValue();
             BundleGroup bundleGroup = tree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 String oldItemKey = item.getId();
                 if (oldItemKey.startsWith(key)) {
                     String newItemKey = newKey + oldItemKey.substring(key.length());
@@ -304,11 +303,11 @@ public class TreeViewerContributor {
     protected void uncommentKey() {
         KeyTreeItem selectedItem = getSelection();
         BundleGroup bundleGroup = tree.getBundleGroup();
-        Collection items = new ArrayList();
+        Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
         items.add(selectedItem);
         items.addAll(selectedItem.getNestedChildren());
-        for (Iterator iter = items.iterator(); iter.hasNext();) {
-            KeyTreeItem item = (KeyTreeItem) iter.next();
+        for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+            KeyTreeItem item = iter.next();
             bundleGroup.uncommentKey(item.getId());
         }
     }
@@ -339,11 +338,11 @@ public class TreeViewerContributor {
         msgBox.setText(msgHead);
         if (msgBox.open() == SWT.OK) {
             BundleGroup bundleGroup = tree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 bundleGroup.removeKey(item.getId());
             }
         }
@@ -356,11 +355,11 @@ public class TreeViewerContributor {
     protected void commentKey() {
         KeyTreeItem selectedItem = getSelection();
         BundleGroup bundleGroup = tree.getBundleGroup();
-        Collection items = new ArrayList();
+        Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
         items.add(selectedItem);
         items.addAll(selectedItem.getNestedChildren());
-        for (Iterator iter = items.iterator(); iter.hasNext();) {
-            KeyTreeItem item = (KeyTreeItem) iter.next();
+        for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+            KeyTreeItem item = iter.next();
             bundleGroup.commentKey(item.getId());
         }
         
@@ -393,11 +392,11 @@ public class TreeViewerContributor {
         if (dialog.getReturnCode() == Window.OK ) {
             String newKey = dialog.getValue();
             BundleGroup bundleGroup = tree.getBundleGroup();
-            Collection items = new ArrayList();
+            Collection<KeyTreeItem> items = new ArrayList<KeyTreeItem>();
             items.add(selectedItem);
             items.addAll(selectedItem.getNestedChildren());
-            for (Iterator iter = items.iterator(); iter.hasNext();) {
-                KeyTreeItem item = (KeyTreeItem) iter.next();
+            for (Iterator<KeyTreeItem> iter = items.iterator(); iter.hasNext();) {
+                KeyTreeItem item = iter.next();
                 String origItemKey = item.getId();
                 if (origItemKey.startsWith(key)) {
                     String newItemKey = 

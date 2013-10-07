@@ -92,8 +92,8 @@ public final class PropertiesGenerator {
         // Format
         String group = null;
         int equalIndex = -1;
-        for (Iterator iter = bundle.getKeys().iterator(); iter.hasNext();) {
-            BundleEntry bundleEntry = bundle.getEntry((String) iter.next());
+        for (Iterator<String> iter = bundle.getKeys().iterator(); iter.hasNext();) {
+            BundleEntry bundleEntry = bundle.getEntry(iter.next());
             String key = bundleEntry.getKey();
             String value = bundleEntry.getValue(); 
             String comment = bundleEntry.getComment();    
@@ -365,8 +365,8 @@ public final class PropertiesGenerator {
         }
         
         // Get equal index
-        for (Iterator iter = bundle.getKeys().iterator(); iter.hasNext();) {
-            String iterKey = (String) iter.next();
+        for (Iterator<String> iter = bundle.getKeys().iterator(); iter.hasNext();) {
+            String iterKey = iter.next();
             if (!groupKeys || groupAlignEquals && iterKey.startsWith(group)) {
                 int index = iterKey.length();
                 if (index > equalIndex) {

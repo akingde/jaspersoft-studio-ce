@@ -44,7 +44,7 @@ public class Bundle extends Model implements IBundleVisitable {
     /** Bundle locale. */
     private Locale locale;
     /** Bundle entries (key=key value=BundleEntry). */
-    private final Map entries = new HashMap();
+    private final Map<String, BundleEntry> entries = new HashMap<String, BundleEntry>();
     /** Bundle group (parent). */
     private BundleGroup bundleGroup;
     
@@ -59,9 +59,8 @@ public class Bundle extends Model implements IBundleVisitable {
      * @see IBundleVisitable#accept(IBundleVisitor, Object)
      */
     public void accept(IBundleVisitor visitor, Object passAlongArgument) {
-        for (Iterator iter = entries.values().iterator(); iter.hasNext();) {
-            visitor.visitBundleEntry(
-                    (BundleEntry) iter.next(), passAlongArgument);
+        for (Iterator<BundleEntry> iter = entries.values().iterator(); iter.hasNext();) {
+            visitor.visitBundleEntry(iter.next(), passAlongArgument);
         }
         visitor.visitBundle(this, passAlongArgument);
         visitor.visitBundleGroup(bundleGroup, passAlongArgument);
@@ -103,7 +102,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @return the matching bundle entry, or <code>null</code>
      */
     public BundleEntry getEntry(String key) {
-        return (BundleEntry) entries.get(key);    
+        return entries.get(key);    
     }
     
     /**
@@ -111,7 +110,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @param entry the bundle entry to add
      */
     protected void addEntry(BundleEntry entry) {
-        BundleEntry oldEntry = (BundleEntry) entries.get(entry.getKey());
+        BundleEntry oldEntry = entries.get(entry.getKey());
         if (oldEntry != null) {
             if (!oldEntry.equals(entry)) {
                 entries.put(entry.getKey(), entry);
@@ -132,7 +131,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @param entry the bundle entry to remove
      */
     protected void removeEntry(BundleEntry entry) {
-        BundleEntry removedEntry = (BundleEntry) entries.get(entry.getKey());
+        BundleEntry removedEntry = entries.get(entry.getKey());
         entries.remove(entry.getKey());
         fireRemove(removedEntry);
     }
@@ -143,7 +142,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @param newKey the new name for the bundle entry
      */
     protected void renameKey(String oldKey, String newKey) {
-        BundleEntry oldEntry = (BundleEntry) entries.get(oldKey);
+        BundleEntry oldEntry = entries.get(oldKey);
         if (oldEntry != null) {
             BundleEntry newEntry = new BundleEntry(
                     newKey, oldEntry.getValue(), oldEntry.getComment());
@@ -157,7 +156,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @param key key of bundle entry to be commented
      */
     protected void commentKey(String key) {
-        BundleEntry entry = (BundleEntry) entries.get(key);
+        BundleEntry entry = entries.get(key);
         if (entry != null) {
             BundleEntry newEntry = new BundleEntry(
                     key, entry.getValue(), entry.getComment(), true);
@@ -169,7 +168,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @param key key of bundle entry to be uncommented
      */
     protected void uncommentKey(String key) {
-        BundleEntry entry = (BundleEntry) entries.get(key);
+        BundleEntry entry = entries.get(key);
         if (entry != null) {
             BundleEntry newEntry = new BundleEntry(
                     key, entry.getValue(), entry.getComment(), false);
@@ -183,7 +182,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * @param newKey key for the copied bundle entry
      */
     protected void copyKey(String origKey, String newKey) {
-        BundleEntry origEntry = (BundleEntry) entries.get(origKey);
+        BundleEntry origEntry = entries.get(origKey);
         if (origEntry != null) {
             BundleEntry newEntry = new BundleEntry(
                     newKey, origEntry.getValue(), origEntry.getComment());
@@ -195,7 +194,7 @@ public class Bundle extends Model implements IBundleVisitable {
      * Iterates through the <code>BundleEntry</code> objects in this bundle.
      * @return an iterator
      */
-    public Iterator iterator() {
+    public Iterator<BundleEntry> iterator() {
         return entries.values().iterator();
     }
 
@@ -233,22 +232,22 @@ public class Bundle extends Model implements IBundleVisitable {
         setComment(bundle.getComment());
         // Remove deleted entries
         synchronized (entries) {
-            List entriesToRemove = new ArrayList();
-            for (Iterator iter = iterator(); iter.hasNext();) {
-                BundleEntry localEntry = (BundleEntry) iter.next();
+            List<BundleEntry> entriesToRemove = new ArrayList<BundleEntry>();
+            for (Iterator<BundleEntry> iter = iterator(); iter.hasNext();) {
+                BundleEntry localEntry = iter.next();
                 if (bundle.getEntry(localEntry.getKey()) == null) {
                     entriesToRemove.add(localEntry);
                 }
             }    
-            for (Iterator iter = entriesToRemove.iterator(); iter.hasNext();) {
-                BundleEntry entry = (BundleEntry) iter.next();
+            for (Iterator<BundleEntry> iter = entriesToRemove.iterator(); iter.hasNext();) {
+                BundleEntry entry = iter.next();
                 removeEntry(entry);
             }        
         }
         
         // Add existing/new entries
-        for (Iterator iter = bundle.iterator(); iter.hasNext();) {
-            BundleEntry entry = (BundleEntry) iter.next();
+        for (Iterator<BundleEntry> iter = bundle.iterator(); iter.hasNext();) {
+            BundleEntry entry = iter.next();
             addEntry(entry);
         }
     }

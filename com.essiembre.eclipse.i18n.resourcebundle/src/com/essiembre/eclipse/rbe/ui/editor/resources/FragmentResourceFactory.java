@@ -56,17 +56,16 @@ public class FragmentResourceFactory extends NLResourceFactory {
 	 */
     public void init(IEditorSite site, IFile file) throws CoreException {
     	setSite(site);
-        List editors = new ArrayList();
+        List<SourceEditor> editors = new ArrayList<SourceEditor>();
     	loadEditors(site, editors, file, null);
-    	for (Iterator it = editors.iterator(); it.hasNext();) {
-			SourceEditor editor = (SourceEditor) it.next();
+    	for (Iterator<SourceEditor> it = editors.iterator(); it.hasNext();) {
+			SourceEditor editor = it.next();
 			addSourceEditor(editor.getLocale(), editor);
 		}
     	setDisplayName(getDisplayName(file));
 	}
 
-    protected void loadEditors(IEditorSite site, List editors, IFile file, IResource nlDir)
-    		throws CoreException {
+    protected void loadEditors(IEditorSite site, List<SourceEditor> editors, IFile file, IResource nlDir) throws CoreException {
     	
     	/*
     	 * check again and load the fragment
@@ -90,12 +89,12 @@ public class FragmentResourceFactory extends NLResourceFactory {
 
 		 // load editors from the nl-folder, if present
 		nlDir = lookupNLDir(fragment);
-		List nlEditors = new ArrayList();
+		List<SourceEditor> nlEditors = new ArrayList<SourceEditor>();
 		if (nlDir != null && nlDir.exists())
 			super.loadEditors(site, nlEditors, file, nlDir);
 
 		// load editors from the same folder as the base file
-    	List fragmentEditors = loadFragmentEditors(site, regex, folder);
+    	List<SourceEditor> fragmentEditors = loadFragmentEditors(site, regex, folder);
 
 		// Load root file, if exists.
     	IProject hostProject = PDEUtils.getFragmentHost(fragment);
@@ -154,9 +153,8 @@ public class FragmentResourceFactory extends NLResourceFactory {
 		}
 	}
 
-	private List loadFragmentEditors(IEditorSite site, final String regex,
-			IResource folder) throws CoreException, PartInitException {
-		List fragmentEditors = new ArrayList();
+	private List<SourceEditor> loadFragmentEditors(IEditorSite site, final String regex, IResource folder) throws CoreException, PartInitException {
+		List<SourceEditor> fragmentEditors = new ArrayList<SourceEditor>();
 		if (folder.exists()) {
 			IResource[] members = ((IContainer) folder).members();
 			for (int j = 0; j < members.length; j++) {

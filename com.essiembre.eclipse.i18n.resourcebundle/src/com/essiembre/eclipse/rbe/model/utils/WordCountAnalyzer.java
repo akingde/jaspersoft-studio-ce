@@ -64,10 +64,8 @@ public class WordCountAnalyzer implements ProximityAnalyzer {
             return 0;
         }
         
-        Collection str1 = new ArrayList(
-                Arrays.asList(obj1.toString().split(WORD_SPLIT_PATTERN)));
-        Collection str2 = new ArrayList(
-                Arrays.asList(obj2.toString().split(WORD_SPLIT_PATTERN)));
+        Collection<String> str1 = new ArrayList<String>(Arrays.asList(obj1.toString().split(WORD_SPLIT_PATTERN)));
+        Collection<String> str2 = new ArrayList<String>(Arrays.asList(obj2.toString().split(WORD_SPLIT_PATTERN)));
         
         int maxWords = Math.max(str1.size(), str2.size());
         if (maxWords == 0) {
@@ -75,8 +73,8 @@ public class WordCountAnalyzer implements ProximityAnalyzer {
         }
         
         int matchedWords = 0;
-        for (Iterator iter = str1.iterator(); iter.hasNext();) {
-            String str = (String) iter.next();
+        for (Iterator<String> iter = str1.iterator(); iter.hasNext();) {
+            String str = iter.next();
             if (str2.remove(str)) {
                 matchedWords++;
             }
