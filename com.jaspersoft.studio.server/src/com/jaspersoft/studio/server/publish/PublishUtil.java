@@ -17,6 +17,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -77,7 +78,7 @@ public class PublishUtil {
 		return mainr;
 	}
 
-	public static void initRUnitName(MReportUnit runit, JasperDesign jd) {
+	public static void initRUnitName(AMJrxmlContainer runit, JasperDesign jd) {
 		if (runit == null || jd == null)
 			return;
 		ResourceDescriptor rd = runit.getValue();

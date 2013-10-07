@@ -56,6 +56,7 @@ import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -209,9 +210,13 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 								if (hasDepResources)
 									page1.fillData();
 								else {
-									IWizardContainer container = getContainer();
-									container.showPage(getNextPage(page1));
-									container.updateButtons();
+									if (page0.getSelectedNode() instanceof MReportUnit) {
+										IWizardContainer container = getContainer();
+										container.showPage(getNextPage(page1));
+										container.updateButtons();
+									} else if (page0.getSelectedNode() instanceof MJrxml) {
+										doFinish();
+									}
 								}
 							}
 						});

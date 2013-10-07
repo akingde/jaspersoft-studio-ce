@@ -22,10 +22,12 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class Publish {
@@ -78,11 +80,13 @@ public class Publish {
 		} else if (parent.getParent() instanceof MReportUnit) {
 			jrxml = (MJrxml) parent;
 			mrunit = (MReportUnit) parent.getParent();
+		} else if (parent.getParent() instanceof MFolder) {
+			jrxml = (MJrxml) parent;
 		} else
 			return Status.CANCEL_STATUS;
 
 		File file = FileUtils.createTempFile("jrsres", FileExtension.PointJRXML); //$NON-NLS-1$ 
-		String version = ServerManager.getVersion(mrunit);
+		String version = ServerManager.getVersion(Misc.nvl(mrunit, jrxml));
 
 		List<MResource> files = ((JasperReportsConfiguration) jrConfig).get(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		for (MResource f : files) {
@@ -98,11 +102,12 @@ public class Publish {
 		}
 		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
 		jrxml.setFile(file);
-		mrunit.setFile(file);
-		mrunit.getValue().getChildren().add(jrxml.getValue());
-		if (parent instanceof MReportUnit)
-			mrunit.setValue(saveResource(monitor, mrunit));
-
+		if (mrunit != null) {
+			mrunit.setFile(file);
+			mrunit.getValue().getChildren().add(jrxml.getValue());
+			if (parent instanceof MReportUnit)
+				mrunit.setValue(saveResource(monitor, mrunit));
+		}
 		jrxml.setValue(saveResource(monitor, jrxml));
 
 		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
@@ -150,7 +155,7 @@ public class Publish {
 		String uri = mres.getValue().getUriString();
 		ResourceDescriptor rd = WSClientHelper.save(monitor, mres);
 		if (rd != null)
-			resources.add(uri);
+			resources.add(Misc.nvl(uri, rd.getUriString()));
 		return rd;
 	}
 

@@ -39,8 +39,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -113,13 +113,13 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		Object obj = ts.getFirstElement();
 		if (obj != null) {
 			if (obj instanceof MFolder)
-				return newrunit;
+				return reportUnit;
 			return (AMJrxmlContainer) obj;
 		}
 		if (n instanceof AMJrxmlContainer)
 			return (AMJrxmlContainer) n;
-		newrunit.setJasperConfiguration(jConfig);
-		return newrunit;
+		reportUnit.setJasperConfiguration(jConfig);
+		return reportUnit;
 	}
 
 	/**
@@ -144,8 +144,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		Object firstElement = ts.getFirstElement();
 		isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
 		if (isC && firstElement instanceof MFolder) {
-			MReportUnit runit = getReportUnit();
-			isC = runit instanceof MReportUnit && runit.getParent() != null;
+			AMJrxmlContainer runit = getReportUnit();
+			isC = runit instanceof AMJrxmlContainer && runit.getParent() != null;
 		}
 		return isC;
 	}
@@ -200,31 +200,30 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		});
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
+
 		bnRunit = new Button(composite, SWT.CHECK);
 		bnRunit.setText(Messages.RUnitLocationPage_addreportunit_button);
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 2;
 		bnRunit.setLayoutData(gd);
-		bnRunit.addSelectionListener(new SelectionListener() {
-
+		bnRunit.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				boolean selected = bnRunit.getSelection();
 				// Enable/Disable the detail textboxes
-				ruLabel.setEnabled(selected);
-				ruID.setEnabled(selected);
-				ruDescription.setEnabled(selected);
+				// ruLabel.setEnabled(selected);
+				// ruID.setEnabled(selected);
+				// ruDescription.setEnabled(selected);
 
-				if (selected) {
-					performPageChecks();
-				} else {
-					// Clean error message and disable page complete enablement
-					setErrorMessage(null);
-					setPageComplete(false);
+				reportUnit = selected ? getNewRunit() : getNewJrxml();
+				if (reportUnit.getParent() == null) {
+					TreeSelection ts = (TreeSelection) treeViewer.getSelection();
+					Object obj = ts.getFirstElement();
+					if (obj instanceof ANode)
+						reportUnit.setParent((ANode) obj, -1);
 				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
+				performPageChecks();
+				setPageComplete(isPageComplete());
 			}
 		});
 
@@ -401,8 +400,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		fillInput();
 	}
 
-	private MReportUnit reportUnit;
+	private AMJrxmlContainer reportUnit;
 	private MReportUnit newrunit;
+	private MJrxml newjrxml;
 
 	private MReportUnit getNewRunit() {
 		if (newrunit == null) {
@@ -414,7 +414,17 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		return newrunit;
 	}
 
-	private MReportUnit getReportUnit() {
+	private MJrxml getNewJrxml() {
+		if (newjrxml == null) {
+			ResourceDescriptor rd = MJrxml.createDescriptor(null);
+			rd.setName(null);
+			newjrxml = new MJrxml(null, rd, -1);
+		}
+		PublishUtil.initRUnitName(newjrxml, jDesign);
+		return newjrxml;
+	}
+
+	private AMJrxmlContainer getReportUnit() {
 		PublishUtil.initRUnitName(reportUnit, jDesign);
 		return reportUnit;
 	}
@@ -434,12 +444,23 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 		reportUnit = getNewRunit();
 		if (obj instanceof MReportUnit) {
+			reportUnit = getNewRunit();
 			reportUnit = (MReportUnit) obj;
 			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
 			ruID.setText(Misc.nvl(reportUnit.getValue().getName()));
 			ruDescription.setText(Misc.nvl(reportUnit.getValue().getDescription()));
 		} else if (obj instanceof MFolder) {
-			reportUnit.setParent((ANode) obj, -1);
+			newrunit = getNewRunit();
+			newrunit.setParent((ANode) obj, -1);
+
+			newjrxml = getNewJrxml();
+			newjrxml.setParent((ANode) obj, -1);
+
+			if (bnRunit.getSelection())
+				reportUnit = newrunit;
+			else
+				reportUnit = newjrxml;
+
 			ResourceDescriptor nrd = reportUnit.getValue();
 			nrd.setName(ruID.getText());
 			nrd.setLabel(ruLabel.getText());
@@ -447,9 +468,16 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			String uri = ((MFolder) obj).getValue().getUriString();
 			nrd.setParentFolder(uri);
 			nrd.setUriString(uri + "/" + nrd.getName()); //$NON-NLS-1$
+		} else if (obj instanceof MJrxml) {
+			reportUnit = getNewJrxml();
+			reportUnit = (MJrxml) obj;
+			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
+			ruID.setText(Misc.nvl(reportUnit.getValue().getName()));
+			ruDescription.setText(Misc.nvl(reportUnit.getValue().getDescription()));
 		} else if (obj instanceof MResource) {
-			if (n != null)
-				treeViewer.setSelection(new StructuredSelection(n), true);
+			ANode mparent = ((MResource) obj).getParent();
+			treeViewer.setSelection(new StructuredSelection(mparent), true);
+			handleSelectionChanged(mparent);
 		} else
 			setPageComplete(false);
 		performPageChecks();
@@ -507,14 +535,15 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					ANode node = FindResources.findReportUnit(mres, monitor, jDesign);
+					IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+					ANode node = FindResources.findReportUnit(mres, monitor, jDesign, file);
 					if (monitor.isCanceled())
 						return;
 					if (n != mres)
 						return;
 					n = node;
 					try {
-						if (n instanceof MReportUnit && !ResourceDescriptorUtil.isReportMain((IFile) jConfig.get(FileUtils.KEY_FILE))) {
+						if (n instanceof MReportUnit && !ResourceDescriptorUtil.isReportMain(file)) {
 							MReportUnit mReportUnit = (MReportUnit) n;
 							String res = jDesign.getProperty(AExporter.PROP_REPORTRESOURCE);
 							if (!Misc.isNullOrEmpty(res)) {

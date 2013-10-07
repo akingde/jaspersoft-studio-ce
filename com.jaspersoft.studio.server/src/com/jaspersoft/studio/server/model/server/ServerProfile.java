@@ -31,7 +31,7 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	private String user;
 	private String organisation;
 	private String jrVersion = JRXmlWriterHelper.LAST_VERSION;
-	private int timeout = 300000;
+	private int timeout = 60000;
 	private boolean chunked;
 	private String projectPath;
 

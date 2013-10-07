@@ -8,7 +8,6 @@ import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
 import com.jaspersoft.studio.server.protocol.soap.SoapConnection;
 
 public class ProxyConnection implements IConnection {

@@ -227,7 +227,7 @@ public class WSClientHelper {
 			MServerProfile sp = (MServerProfile) n;
 			rd = res.getValue();
 			if (rd.getIsNew()) {
-				rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
+				rd.setUriString(getParentFolder(rd) + rd.getName());
 			}
 			File file = null;
 			if (res instanceof AFileResource)
@@ -278,7 +278,12 @@ public class WSClientHelper {
 				MServerProfile sp = (MServerProfile) f.getRoot();
 				MReportUnit n = f.getReportUnit();
 				IConnection wsClient = sp.getWsClient();
-				if (!(f instanceof MReportUnit || f instanceof MRDataAdapter || f instanceof MRDataAdapterFile)) {
+				if (f.getParent() instanceof MFolder && !(f instanceof MReportUnit)) {
+					ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
+					ResourceDescriptor v = f.getValue();
+					v.setParentFolder(getParentFolder(prd) + prd.getName());//$NON-NLS-1$    
+					v.setUriString(getParentFolder(v) + f.getValue().getName());//$NON-NLS-1$
+				} else if (!(f instanceof MReportUnit || f instanceof MRDataAdapter || f instanceof MRDataAdapterFile)) {
 					ResourceDescriptor prd = ((MResource) f.getParent()).getValue();
 					ResourceDescriptor v = f.getValue();
 					v.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");//$NON-NLS-1$    
@@ -301,6 +306,13 @@ public class WSClientHelper {
 			}
 			throw e;
 		}
+	}
+
+	private static String getParentFolder(ResourceDescriptor rd) {
+		String pfd = rd.getParentFolder();
+		if (!pfd.equals("/"))
+			pfd += "/";
+		return pfd;
 	}
 
 	public static void deleteResource(MResource res) throws Exception {

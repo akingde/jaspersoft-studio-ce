@@ -24,8 +24,10 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.QualifiedName;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
@@ -53,10 +55,15 @@ public class FindResources {
 		return r != null && r instanceof List && ((List<?>) r).size() > 0;
 	}
 
-	public static ANode findReportUnit(MServerProfile mserv, IProgressMonitor monitor, JasperDesign jd) {
+	public static ANode findReportUnit(MServerProfile mserv, IProgressMonitor monitor, JasperDesign jd, IFile file) {
 		try {
 			if (mserv != null) {
 				String prunit = jd.getProperty(AExporter.PROP_REPORTUNIT);
+				if (prunit == null)
+					prunit = jd.getProperty(AExporter.PROP_REPORTRESOURCE);
+				if (prunit == null)
+					prunit = file.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_REPORTRESOURCE));
+
 				String srvURL = jd.getProperty(AExporter.PROP_SERVERURL);
 				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
 					WSClientHelper.connect(mserv, monitor);
