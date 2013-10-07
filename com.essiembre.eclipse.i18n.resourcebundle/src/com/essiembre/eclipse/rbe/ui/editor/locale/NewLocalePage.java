@@ -89,6 +89,7 @@ public class NewLocalePage extends Composite {
         gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;
         localeSelector.setLayoutData(gridData);
+        localeSelector.selectLocale(Locale.getDefault());
         
         // Create button
         Button createButton = new Button(block, SWT.NULL);

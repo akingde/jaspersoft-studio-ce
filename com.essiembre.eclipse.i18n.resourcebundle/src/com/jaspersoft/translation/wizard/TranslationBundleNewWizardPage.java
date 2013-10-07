@@ -44,6 +44,12 @@ import com.jaspersoft.translation.resources.TranslationProjectNature;
 public class TranslationBundleNewWizardPage extends ResourceBundleNewWizardPage {
 
 	/**
+	 * Flag to auto add the default locale to the selected locales list when the selection
+	 * is shown
+	 */
+	protected boolean autoAddFefaultLocale = false;
+	
+	/**
 	 * Boolean flag that is used to know if the new file should be saved into 
 	 * an appropriate folder structure (created if not present) or just inside the project
 	 */
@@ -163,6 +169,17 @@ public class TranslationBundleNewWizardPage extends ResourceBundleNewWizardPage 
 	@Override
 	protected String getContextName() {
 		return "com.essiembre.eclipse.i18n.resourcebundle.defineStructureHelp";
+	}
+	
+	/**
+	 * Add the default locale to the selection list if it has a language different
+	 * from every entry of an exclusion set, but only if the associated 
+	 * flag is eneabled
+	 * 
+	 * @param exclusionLanguages language code exclude by the locale
+	 */
+	public void addDefaultLocale(String[] exclusionLanguages){
+		if (autoAddFefaultLocale) addDefaultLocale(exclusionLanguages);
 	}
 	
 	/**

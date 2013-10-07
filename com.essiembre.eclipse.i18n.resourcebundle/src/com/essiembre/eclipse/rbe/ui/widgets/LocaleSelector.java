@@ -190,6 +190,32 @@ public class LocaleSelector extends Composite {
             return null;
         }
     }
+    
+    private int getLocaleIndex(Locale locale){
+    	for (int i=0; i<availableLocales.length; i++){
+    		if (availableLocales[i].equals(locale)){
+    	        return i;
+    		}
+    	}
+    	return -1;
+    }
+    
+    /**
+     * Set the selected locale in the combo
+     * 
+     * @param locale locale to select
+     */
+    public void selectLocale(Locale locale){
+    	int localeIndex = getLocaleIndex(locale);
+    	//If the locale is not found i do a less restrictive research based only on the language
+    	if (localeIndex == -1) localeIndex = getLocaleIndex(new Locale(locale.getLanguage()));
+    	if (localeIndex != -1) {
+    		localesCombo.select(localeIndex+1);
+    		Locale foundLocale = availableLocales[localeIndex];
+            langText.setText(foundLocale.getLanguage());
+            countryText.setText(foundLocale.getCountry());
+    	}
+    }
 
     /**
      * Sets an available locale on the available locales combo box.

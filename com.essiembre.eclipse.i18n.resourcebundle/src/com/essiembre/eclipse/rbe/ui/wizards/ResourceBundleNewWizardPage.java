@@ -111,6 +111,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 
 		initialize();
 		dialogChanged();
+		addDefaultLocale(new String[]{"en"});
 		setControl(container);
 	}
 
@@ -168,6 +169,28 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 		});
 	}
 
+	/**
+	 * Add the default locale to the selection list if it has a language different
+	 * from every entry of an exclusion set
+	 * 
+	 * @param exclusionLanguages language code exclude by the locale
+	 */
+	public void addDefaultLocale(String[] exclusionLanguages){
+		Locale defaultLocale = Locale.getDefault();
+		boolean found = false;
+		for(String language : exclusionLanguages){
+			if (defaultLocale.getLanguage().contains(language)){
+				found = true;
+				break;
+			}
+		}
+		if (!found){
+			bundleLocalesList.add(getLocaleAsString(defaultLocale));
+			setAddButtonState();
+			dialogChanged();
+		}
+	}
+	
 	/**
 	 * Creates the bottom part of this wizard where buttons to add/remove
 	 * locales are located.
@@ -397,10 +420,23 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 	 */
 	public String getSelectedLocaleAsString() {
 		Locale selectedLocale = localeSelector.getSelectedLocale();
+		String stringLocale = getLocaleAsString(selectedLocale);
+		if (stringLocale != null) {
+			return stringLocale;
+		}
+		return DEFAULT_LOCALE;
+	}
+	
+	/**
+	 * Gets a string representation of a locale.
+	 * 
+	 * @return string representation of a locale
+	 */
+	public String getLocaleAsString(Locale selectedLocale) {
 		if (selectedLocale != null) {
 			return selectedLocale.toString();
 		}
-		return DEFAULT_LOCALE;
+		return null;
 	}
 
 	@Override
