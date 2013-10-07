@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.translation.wizard;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -123,11 +125,15 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 	 */
 	private String getPluginsFolder() {
 		String separator =  System.getProperty("file.separator");//$NON-NLS-1$
-		String path = ConfigurationPathProvider.getPath();
-		File destination = new File(path).getParentFile();
-		destination = new File(destination.toString() + separator + "dropins" + separator + "eclipse" + separator + "plugins"); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
-		if (destination.exists()) return destination.getAbsolutePath();
-		else return ""; //$NON-NLS-1$
+		try {
+			String path = new URL(ConfigurationPathProvider.getPath()).getFile();
+			File destination = new File(path).getParentFile();
+			destination = new File(destination.toString() + separator + "dropins" + separator + "eclipse" + separator + "plugins"); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+			if (destination.exists()) return destination.getAbsolutePath();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return ""; //$NON-NLS-1$
 	}
 	
 	/**
