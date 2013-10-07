@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline;
 
-import java.awt.MouseInfo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +31,6 @@ import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.action.Action;
@@ -81,6 +79,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The Class JDReportOutlineView.
@@ -113,13 +112,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 	/** The dispose listener. */
 	private DisposeListener disposeListener;
-	
+
 	private Point mousePosition = new Point(-1, -1);
-	
+
 	/**
-	 * On linux the click event on the arrow to expand a tree node is not catched
-	 * if the tree element hasen't the focus. So we need a trick to have here the same
-	 * behavior of the others operative systems
+	 * On linux the click event on the arrow to expand a tree node is not catched if the tree element hasen't the focus.
+	 * So we need a trick to have here the same behavior of the others operative systems
 	 */
 	private boolean enableFocusFix = Util.isLinux();
 
@@ -250,22 +248,22 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		setContents(editor.getModel());
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
-			
+
 			tree.addFocusListener(new FocusListener() {
-				
+
 				@Override
 				public void focusLost(FocusEvent e) {
 					mousePosition.setLocation(-1, -1);
 				}
-				
+
 				@Override
 				public void focusGained(FocusEvent e) {
-					if (enableFocusFix && mousePosition.x != -1){
+					if (enableFocusFix && mousePosition.x != -1) {
 						EditPart part = getViewer().findObjectAt(mousePosition);
-						if (part != null && part.getModel() instanceof MRoot){
-							EditPart translatedPart = getViewer().findObjectAt(new Point(mousePosition.x+10, mousePosition.y));
+						if (part != null && part.getModel() instanceof MRoot) {
+							EditPart translatedPart = getViewer().findObjectAt(new Point(mousePosition.x + 10, mousePosition.y));
 							if (translatedPart != null && translatedPart.getModel() != part.getModel()) {
-								TreeItem item = (TreeItem)((NotDragableTreeEditPart)translatedPart).getWidget();
+								TreeItem item = (TreeItem) ((NotDragableTreeEditPart) translatedPart).getWidget();
 								item.setExpanded(!item.getExpanded());
 							}
 						}
@@ -318,7 +316,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					Tree t = (Tree) e.getSource();
 					if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)) {
 						Object model = part.getModel();
-						String text = ((ANode) model).getToolTip();
+						String text = Misc.nvl(((ANode) model).getToolTip());
+						if (!text.isEmpty())
+							text += "\n";
+						text += Misc.nvl(((ANode) model).getDisplayText());
 						t.setToolTipText(text);
 						return;
 					}
