@@ -80,7 +80,7 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
      *         org.eclipse.swt.widgets.Composite)
      */
     protected Control createContents(Composite parent) {
-  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+  	  	IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
         Composite field = null;
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
@@ -275,7 +275,7 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.IPreferencePage#performOk()
      */
     public boolean performOk() {
-  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+  	  	IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
         prefs.putBoolean(RBEPreferences.SHOW_GENERATOR, showGeneratedBy.getSelection());
         prefs.putBoolean(RBEPreferences.CONVERT_UNICODE_TO_ENCODED,
                 convertUnicodeToEncoded.getSelection());
@@ -321,7 +321,7 @@ public class RBEFormattingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
     protected void performDefaults() {
-    	IEclipsePreferences prefs = getEclipsePreferenceStore();
+    	IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
         showGeneratedBy.setSelection(prefs.getBoolean(RBEPreferences.SHOW_GENERATOR, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         convertUnicodeToEncoded.setSelection(prefs.getBoolean(RBEPreferences.CONVERT_UNICODE_TO_ENCODED, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         convertUnicodeToEncoded.setSelection(prefs.getBoolean(RBEPreferences.CONVERT_UNICODE_TO_ENCODED_UPPER, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));

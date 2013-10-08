@@ -85,7 +85,7 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage {
     */
    @Override
    public boolean performOk() {
-	  IEclipsePreferences prefs = getEclipsePreferenceStore();
+	  IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
       prefs.put(RBEPreferences.KEY_GROUP_SEPARATOR, keyGroupSeparator.getText());
       prefs.putBoolean(RBEPreferences.CONVERT_ENCODED_TO_UNICODE, convertEncodedToUnicode.getSelection());
       prefs.putBoolean(RBEPreferences.SUPPORT_NL, supportNL.getSelection());
@@ -106,7 +106,7 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage {
     */
    @Override
    protected Control createContents( Composite parent ) {
-	  IEclipsePreferences prefs = getEclipsePreferenceStore();
+	  IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
       Composite field = null;
       Composite composite = new Composite(parent, SWT.NONE);
       composite.setLayout(new GridLayout(1, false));
@@ -197,7 +197,7 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage {
     */
    @Override
    protected void performDefaults() {
-	  IEclipsePreferences prefs = getEclipsePreferenceStore();
+	  IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
       keyGroupSeparator.setText(prefs.get(RBEPreferences.KEY_GROUP_SEPARATOR, IPreferenceStore.STRING_DEFAULT_DEFAULT));
       convertEncodedToUnicode.setSelection(prefs.getBoolean(RBEPreferences.CONVERT_ENCODED_TO_UNICODE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
       supportNL.setSelection(prefs.getBoolean(RBEPreferences.SUPPORT_NL, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));

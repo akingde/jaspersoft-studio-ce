@@ -23,9 +23,7 @@ package com.essiembre.eclipse.rbe.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 
 
@@ -50,7 +48,7 @@ public class RBEPreferenceInitializer extends AbstractPreferenceInitializer {
    @Override
    public void initializeDefaultPreferences() {
 	   
-	  IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(RBEPlugin.ID); // does all the above behind the scene
+	  IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore(); // does all the above behind the scene
 
       //General
       prefs.putBoolean(RBEPreferences.CONVERT_ENCODED_TO_UNICODE, true);

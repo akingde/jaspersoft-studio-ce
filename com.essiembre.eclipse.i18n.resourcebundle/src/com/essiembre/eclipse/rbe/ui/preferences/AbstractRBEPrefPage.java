@@ -23,8 +23,6 @@ package com.essiembre.eclipse.rbe.ui.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -37,7 +35,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.ui.UIUtils;
 
 /**
@@ -47,7 +44,7 @@ import com.essiembre.eclipse.rbe.ui.UIUtils;
  */
 public abstract class AbstractRBEPrefPage extends PreferencePage implements
         IWorkbenchPreferencePage {
-
+	
     /** Number of pixels per field indentation  */
     protected final int indentPixels = 20;
     
@@ -178,9 +175,7 @@ public abstract class AbstractRBEPrefPage extends PreferencePage implements
     }
     
 
-    protected IEclipsePreferences getEclipsePreferenceStore() {
- 	   return InstanceScope.INSTANCE.getNode(RBEPlugin.ID);
-    }
+
 
     
     protected void setWidthInChars(Control field, int widthInChars) {

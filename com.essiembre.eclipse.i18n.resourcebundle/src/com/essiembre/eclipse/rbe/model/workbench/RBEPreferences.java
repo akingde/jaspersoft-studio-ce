@@ -154,7 +154,11 @@ public final class RBEPreferences {
 
     
     /** RBEPreferences. */
-    private static final IEclipsePreferences PREFS = InstanceScope.INSTANCE.getNode(RBEPlugin.ID);
+    
+	private final static InstanceScope INSTANCE = new InstanceScope(); 
+    
+    private static final IEclipsePreferences PREFS = getEclipsePreferenceStore();
+	
     /**
      * Constructor.
      */
@@ -437,5 +441,9 @@ public final class RBEPreferences {
     public static int getMinHeight() {
        return PREFS.getInt(MIN_HEIGHT, IPreferenceStore.INT_DEFAULT_DEFAULT);
     }
+    
+    public static IEclipsePreferences getEclipsePreferenceStore() {
+  	   return INSTANCE.getNode(RBEPlugin.ID);
+     }
 
 }

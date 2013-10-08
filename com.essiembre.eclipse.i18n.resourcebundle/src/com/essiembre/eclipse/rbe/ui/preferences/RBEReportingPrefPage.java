@@ -61,7 +61,7 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
      *         org.eclipse.swt.widgets.Composite)
      */
     protected Control createContents(Composite parent) {
-  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+  	  	IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
         Composite field = null;
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
@@ -138,7 +138,7 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.IPreferencePage#performOk()
      */
     public boolean performOk() {
-  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+  	  	IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
         prefs.putBoolean(RBEPreferences.REPORT_MISSING_VALUES,
                 reportMissingVals.getSelection());
         prefs.putBoolean(RBEPreferences.REPORT_DUPL_VALUES,
@@ -160,7 +160,7 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
     protected void performDefaults() {
-  	  	IEclipsePreferences prefs = getEclipsePreferenceStore();
+  	  	IEclipsePreferences prefs = RBEPreferences.getEclipsePreferenceStore();
         reportMissingVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_MISSING_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         reportDuplVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_DUPL_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
         reportSimVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
