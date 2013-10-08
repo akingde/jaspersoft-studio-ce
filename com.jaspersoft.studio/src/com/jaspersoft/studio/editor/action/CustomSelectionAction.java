@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.editor.action;
 
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -11,7 +10,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Orlandin Marco
  *
  */
-public abstract class CustomSelectionAction extends SelectionAction {
+public abstract class CustomSelectionAction extends ACachedSelectionAction {
 
 	public CustomSelectionAction(IWorkbenchPart part) {
 		super(part);

@@ -71,7 +71,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 	}
 
 	@Override
-	public Command createCreateCommand(List<?> objects) {
+	public Command createCommand(List<?> objects) {
 		if (objects.isEmpty())
 			return null;
 		// if (objects.size() == 1)
@@ -79,12 +79,12 @@ public class CreateColumnGroupAction extends ACreateAction {
 		List<MColumn> columns = new ArrayList<MColumn>();
 		for (Object obj : objects) {
 			if (!(obj instanceof EditPart))
-				return super.createCreateCommand(objects);
+				return super.createCommand(objects);
 			EditPart ep = (EditPart) obj;
 			if (ep.getModel() instanceof MColumn)
 				columns.add((MColumn) ep.getModel());
 			else
-				return super.createCreateCommand(objects);
+				return super.createCommand(objects);
 		}
 		CompoundCommand c = new CompoundCommand("New Column Group");
 

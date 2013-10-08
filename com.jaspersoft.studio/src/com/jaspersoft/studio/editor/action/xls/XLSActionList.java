@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.xls;
 
@@ -47,13 +42,13 @@ public class XLSActionList extends CustomSelectionAction {
 	 * Ids of the attributes to set
 	 */
 	private String[] attributeIds;
-	
+
 	private int actionCheckId;
 
 	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String value, String actionName) {
 		this(part, actionId, attributeIds, initializeValuesArray(value, attributeIds.length), actionName);
 	}
-	
+
 	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String[] values, String actionName) {
 		super(part);
 		this.attributeIds = attributeIds;
@@ -64,8 +59,9 @@ public class XLSActionList extends CustomSelectionAction {
 		this.values = values;
 		actionCheckId = -1;
 	}
-	
-	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String[] values, String actionName, int actionCheckId) {
+
+	public XLSActionList(IWorkbenchPart part, String actionId, String[] attributeIds, String[] values, String actionName,
+			int actionCheckId) {
 		super(part, IAction.AS_CHECK_BOX);
 		this.attributeIds = attributeIds;
 		setId(actionId);
@@ -74,38 +70,41 @@ public class XLSActionList extends CustomSelectionAction {
 		this.values = values;
 		this.actionCheckId = actionCheckId;
 	}
-	
+
 	public boolean isChecked() {
 		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || actionCheckId == -1){
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || actionCheckId == -1) {
 			return false;
-		} 
+		}
 		String attributeId = attributeIds[actionCheckId];
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement){
-				MGraphicElement model = (MGraphicElement)editpart.getModel();
-				JRPropertiesMap v = (JRPropertiesMap)model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
-				if (v == null) return false;
+			if (editpart.getModel() instanceof MGraphicElement) {
+				MGraphicElement model = (MGraphicElement) editpart.getModel();
+				JRPropertiesMap v = (JRPropertiesMap) model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
+				if (v == null)
+					return false;
 				else {
-					 Object oldValue = v.getProperty(attributeId);
-					 if (oldValue == null || !oldValue.equals(values[actionCheckId])) return false;
+					Object oldValue = v.getProperty(attributeId);
+					if (oldValue == null || !oldValue.equals(values[actionCheckId]))
+						return false;
 				}
 			}
 		}
 		return true;
 	}
 
-	
-	
 	/**
 	 * Inizialize the values array with a single value
-	 * @param value the value to put into the array
-	 * @param lenght the lenght of the array
+	 * 
+	 * @param value
+	 *          the value to put into the array
+	 * @param lenght
+	 *          the lenght of the array
 	 */
-	private static String[] initializeValuesArray(String value, int lenght){
+	private static String[] initializeValuesArray(String value, int lenght) {
 		String[] result = new String[lenght];
-		for(int i=0; i<lenght; i++)
+		for (int i = 0; i < lenght; i++)
 			result[i] = value;
 		return result;
 	}
@@ -124,15 +123,16 @@ public class XLSActionList extends CustomSelectionAction {
 		JRPropertiesMap v = (JRPropertiesMap) model.getPropertyValue(MGraphicElement.PROPERTY_MAP);
 		if (v == null) {
 			v = new JRPropertiesMap();
-			for (int i=0; i<attributeIds.length; i++)
+			for (int i = 0; i < attributeIds.length; i++)
 				v.setProperty(attributeIds[i], values[i]);
 		} else {
-			for (int i=0; i<attributeIds.length; i++) {
+			for (int i = 0; i < attributeIds.length; i++) {
 				String name = attributeIds[i];
 				String value = values[i];
 				v.removeProperty(name);
-				//Add the property only if it has a value
-				if (value != null) v.setProperty(name, value);
+				// Add the property only if it has a value
+				if (value != null)
+					v.setProperty(name, value);
 			}
 		}
 		cmd.setPropertyValue(v);
@@ -144,36 +144,20 @@ public class XLSActionList extends CustomSelectionAction {
 	 */
 	@Override
 	public void run() {
-		execute(createAlignmentCommand());
+		execute(createCommand4Execute(getSelectedObjects()));
 	}
 
-	/**
-	 * Returns the list of editparts which will participate in PDF Editing.
-	 * 
-	 * @return the list of parts which will be aligned
-	 */
-	private Command createAlignmentCommand() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)) {
+	protected Command createCommand4Execute(List<?> editparts) {
+		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
 			return null;
-		}
 		CompoundCommand command = new CompoundCommand();
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement) {
+			if (editpart.getModel() instanceof MGraphicElement)
 				command.add(createCommand((MGraphicElement) editpart.getModel()));
-			}
 		}
 		return command;
-	}
-
-	@Override
-	protected boolean calculateEnabled() {
-		Command cmd = createAlignmentCommand();
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
 	}
 
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.csv;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.commands.Command;
@@ -99,7 +101,7 @@ public class CSVRootAction extends CSVAction {
 	}
 	
 	@Override
-	protected Command createAlignmentCommand() {
+	protected Command createCommand(List<?> selectedObjects) {
 		return createAlignmentCommand(""); //$NON-NLS-1$
 	}
 	

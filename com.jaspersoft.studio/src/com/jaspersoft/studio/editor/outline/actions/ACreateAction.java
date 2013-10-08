@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
@@ -25,13 +20,14 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
+
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 
 /*
  * The Class ACreateAction.
  */
-public abstract class ACreateAction extends SelectionAction {
+public abstract class ACreateAction extends ACachedSelectionAction {
 
 	/** The creation factory. */
 	private CreationFactory creationFactory;
@@ -61,27 +57,14 @@ public abstract class ACreateAction extends SelectionAction {
 	}
 
 	/**
-	 * Returns <code>true</code> if the selected objects can be created. Returns <code>false</code> if there are no
-	 * objects selected or the selected objects are not {@link EditPart}s.
-	 * 
-	 * @return if the command should be enabled
-	 */
-	@Override
-	protected boolean calculateEnabled() {
-		Command cmd = createCreateCommand(getSelectedObjects());
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
-	}
-
-	/**
 	 * Create a command to create the selected objects.
 	 * 
 	 * @param objects
 	 *          The objects to be deleted.
 	 * @return The command to remove the selected objects.
 	 */
-	public Command createCreateCommand(List<?> objects) {
+	@Override
+	public Command createCommand(List<?> objects) {
 		if (objects.isEmpty())
 			return null;
 		if (!(objects.get(0) instanceof EditPart))
@@ -117,7 +100,7 @@ public abstract class ACreateAction extends SelectionAction {
 	 */
 	@Override
 	public void run() {
-		execute(createCreateCommand(getSelectedObjects()));
+		execute(createCommand(getSelectedObjects()));
 	}
 
 }

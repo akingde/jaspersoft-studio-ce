@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.text;
 
@@ -22,26 +17,18 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 
-public abstract class ABooleanPropertyAction extends SelectionAction {
+public abstract class ABooleanPropertyAction extends ACachedSelectionAction {
 
 	public ABooleanPropertyAction(IWorkbenchPart part) {
 		super(part, AS_CHECK_BOX);
-	}
-
-	@Override
-	protected boolean calculateEnabled() {
-		Command cmd = getCommand();
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
 	}
 
 	@Override
@@ -58,12 +45,11 @@ public abstract class ABooleanPropertyAction extends SelectionAction {
 	}
 
 	public void run() {
-		execute(getCommand());
+		execute(createCommand(getSelectedObjects()));
 		setChecked(!isChecked());
 	}
 
-	private Command getCommand() {
-		List<?> editparts = getSelectedObjects();
+	protected Command createCommand(List<?> editparts) {
 		if (editparts.isEmpty())
 			return null;
 		boolean checked = !isChecked();

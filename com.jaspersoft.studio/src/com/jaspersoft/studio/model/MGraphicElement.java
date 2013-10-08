@@ -502,9 +502,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			return jrElement.getKey();
-		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
-		}
 		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
 			if (jrElement.getStyleNameReference() != null)
 				return jrElement.getStyleNameReference();
@@ -565,6 +564,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (propertiesMap != null)
 			propertiesMap = propertiesMap.cloneProperties();
 		return propertiesMap;
+	}
+
+	public JRPropertiesMap getPropertiesMap() {
+		JRDesignElement jrElement = (JRDesignElement) getValue();
+		return jrElement.getPropertiesMap();
 	}
 
 	public Object getPropertyActualValue(Object id) {
