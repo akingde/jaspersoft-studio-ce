@@ -183,9 +183,9 @@ public class I18nPage extends ScrolledComposite {
         }
         _rightComposite.setLayout(new GridLayout(1, false));
         entryComposites.clear();
-        for (Iterator iter = resourceMediator.getLocales().iterator();
+        for (Iterator<Locale> iter = resourceMediator.getLocales().iterator();
                 iter.hasNext();) {
-            Locale locale = (Locale) iter.next();
+            Locale locale = iter.next();
             BundleEntryComposite entryComposite = new BundleEntryComposite(
                     _rightComposite, resourceMediator, locale, this);
             entryComposite.addFocusListener(localBehaviour);
@@ -301,9 +301,8 @@ public class I18nPage extends ScrolledComposite {
      */
     public void refreshTextBoxes() {
         String key = getSelectedKey();
-        for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
-            BundleEntryComposite entryComposite = 
-                    (BundleEntryComposite) iter.next();
+        for (Iterator<BundleEntryComposite> iter = entryComposites.iterator(); iter.hasNext();) {
+            BundleEntryComposite entryComposite = iter.next();
             entryComposite.refresh(key);
         }
     }
@@ -325,8 +324,8 @@ public class I18nPage extends ScrolledComposite {
         if(keysComposite != null) {
             keysComposite.dispose();
         }
-        for (Iterator iter = entryComposites.iterator(); iter.hasNext();) {
-            ((BundleEntryComposite) iter.next()).dispose();
+        for (Iterator<BundleEntryComposite> iter = entryComposites.iterator(); iter.hasNext();) {
+            iter.next().dispose();
         }
         _autoMouseWheelAdapter.dispose();
         super.dispose();
@@ -433,7 +432,7 @@ public class I18nPage extends ScrolledComposite {
             String activeKey = lastActiveEntry != null ? lastActiveEntry.activeKey : keys.get(0);
             int activeKeyIndex = Math.max(keys.indexOf(activeKey), 0);
 
-            List<Locale> locales = (List)resourceMediator.getLocales();
+            List<Locale> locales = new ArrayList<Locale>(resourceMediator.getLocales());
             Locale activeLocale = lastActiveEntry != null ? lastActiveEntry.locale : locales.get(0);
             int activeLocaleIndex = locales.indexOf(activeLocale) + (searchForward?1:-1);
 

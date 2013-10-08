@@ -60,7 +60,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.internal.Workbench;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
@@ -190,8 +190,8 @@ public class BundleEntryComposite extends Composite {
         smallFont.dispose();
 
         //Addition by Eric Fettweis
-        for(Iterator it = swtFontCache.values().iterator();it.hasNext();){
-            Font font = (Font) it.next();
+        for(Iterator<Font> it = swtFontCache.values().iterator();it.hasNext();){
+            Font font = it.next();
             font.dispose();
         }
         swtFontCache.clear();
@@ -344,10 +344,10 @@ public class BundleEntryComposite extends Composite {
                         "dialog.similar.body", activeKey, //$NON-NLS-1$
                         UIUtils.getDisplayName(locale));
                 body += "\n\n"; //$NON-NLS-1$
-                for (Iterator iter = similarVisitor.getSimilars().iterator();
+                for (Iterator<BundleEntry> iter = similarVisitor.getSimilars().iterator();
                 iter.hasNext();) {
                     body += "        " //$NON-NLS-1$
-                        + ((BundleEntry) iter.next()).getKey()
+                        + iter.next().getKey()
                         + "\n"; //$NON-NLS-1$
                 }
                 MessageDialog.openInformation(getShell(), head, body); 
@@ -372,10 +372,10 @@ public class BundleEntryComposite extends Composite {
                         "dialog.identical.body", activeKey, //$NON-NLS-1$
                         UIUtils.getDisplayName(locale));
                 body += "\n\n"; //$NON-NLS-1$
-                for (Iterator iter = duplVisitor.getDuplicates().iterator();
+                for (Iterator<BundleEntry> iter = duplVisitor.getDuplicates().iterator();
                 iter.hasNext();) {
                     body += "        " //$NON-NLS-1$
-                        + ((BundleEntry) iter.next()).getKey()
+                        + iter.next().getKey()
                         + "\n"; //$NON-NLS-1$
                 }
                 MessageDialog.openInformation(getShell(), head, body); 
@@ -551,7 +551,7 @@ public class BundleEntryComposite extends Composite {
         //Note that this does not seem to work... It would however be usefull for arabic and some other languages  
         textBox.setOrientation(getOrientation(locale));
         
-        FontRegistry fontRegistry = Workbench.getInstance().getThemeManager().getCurrentTheme().getFontRegistry();
+        FontRegistry fontRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getFontRegistry(); 
         Font font = fontRegistry.get("com.essiembre.eclipse.rbe.ui.preferences.fontDefinition");
         if ( font != null ) {
            textBox.setFont(font);
@@ -724,7 +724,7 @@ public class BundleEntryComposite extends Composite {
     /**
      * Holds swt fonts used for the textBox. 
      */
-    private Map swtFontCache = new HashMap();
+    private Map<String, Font> swtFontCache = new HashMap<String, Font>();
 
     /**
      * Gets a font by its name. The resulting font is build based on the baseFont parameter.
@@ -736,7 +736,7 @@ public class BundleEntryComposite extends Composite {
      * @return a font with the same style and size as the original.
      */
     private Font getSWTFont(Font baseFont, String name){
-        Font font = (Font) swtFontCache.get(name);
+        Font font = swtFontCache.get(name);
         if(font==null){
             font = createFont(baseFont, getDisplay(), name);
             swtFontCache.put(name, font);
@@ -782,7 +782,7 @@ public class BundleEntryComposite extends Composite {
    /**
      * A cache holding an instance of every AWT font tested.
      */
-    private static Map awtFontCache = new HashMap();
+    private static Map<String, java.awt.Font> awtFontCache = new HashMap<String, java.awt.Font>();
     private static String[] _fontFamilyNames;
 
     /**
@@ -827,7 +827,7 @@ public class BundleEntryComposite extends Composite {
      * @return an AWT Font
      */
     private static java.awt.Font getAWTFont(String name){
-        java.awt.Font font = (java.awt.Font) awtFontCache.get(name);
+        java.awt.Font font = awtFontCache.get(name);
         if(font==null){
             font = new java.awt.Font(name, java.awt.Font.PLAIN, 12);
             awtFontCache.put(name, font);

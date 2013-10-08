@@ -62,6 +62,7 @@ public class I18nPageEditor extends AbstractTextEditor {
       _findPreviousAction.setActionDefinitionId(IWorkbenchActionDefinitionIds.FIND_PREVIOUS);
    }
    
+   @SuppressWarnings("rawtypes")
    @Override
    public Object getAdapter( Class required ) {
       if ( required.equals(IFindReplaceTarget.class) ) {

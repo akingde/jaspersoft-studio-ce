@@ -20,7 +20,6 @@
  */
 package com.essiembre.eclipse.rbe.ui.editor.i18n;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.eclipse.swt.SWT;
