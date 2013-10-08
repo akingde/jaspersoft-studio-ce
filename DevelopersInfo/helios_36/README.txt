@@ -44,3 +44,6 @@ will not differences from the original, and in the 3.6 there is the same behavio
 bug on the library method ToolUtilities:getSelectionWithoutDependants, since it try to cast always to graphical edit part 
 the received parameter content. This was resolved in the next version but to assure back compatibility and avoid class 
 cast exception we imported it.
+
+10. Inside the resource bundle plugin, in the class RBEPreferences an eclipse preferences store is created with a 
+new InstanceScope(). This in the newer version of eclipse is deprecated and should be done like InstanceScope.INSTANCE
