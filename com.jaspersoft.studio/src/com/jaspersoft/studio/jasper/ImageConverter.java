@@ -113,14 +113,14 @@ public final class ImageConverter extends ElementConverter {
 					cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), image, printImage);
 					cache.put(element, cacheRenderer);
 					if (last == null)
-						r = doFindImage(reportConverter, element, image, printImage, expr, last, cacheRenderer);
+						r = doFindImage(reportConverter, element, image, printImage, expr, cacheRenderer);
 				}
 				if (last != null
 						&& (!last.key.equals(expr) || (last.value != null && System.currentTimeMillis() - last.value.longValue() > 2000))) {
-					r = doFindImage(reportConverter, element, image, printImage, expr, last, cacheRenderer);
+					r = doFindImage(reportConverter, element, image, printImage, expr, cacheRenderer);
 				}
 				if (last == null)
-					r = doFindImage(reportConverter, element, image, printImage, expr, last, cacheRenderer);
+					r = doFindImage(reportConverter, element, image, printImage, expr, cacheRenderer);
 				if (r != null)
 					cacheRenderer = r;
 			} else {
@@ -135,7 +135,7 @@ public final class ImageConverter extends ElementConverter {
 	}
 
 	protected Renderable doFindImage(final ReportConverter reportConverter, final JRElement element, final JRImage image,
-			final JRBasePrintImage printImage, final String expr, final KeyValue<String, Long> last, Renderable cacheRenderer) {
+			final JRBasePrintImage printImage, final String expr, Renderable cacheRenderer) {
 		final JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
 		final KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, expr);
 		Renderable r = imgCache.get(key);
@@ -149,21 +149,24 @@ public final class ImageConverter extends ElementConverter {
 		running.put(element, kv);
 		Job job = new Job("load image") {
 			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					final Renderable r = getRenderable(jrContext, image, printImage, key);
+					Display.getDefault().asyncExec(new Runnable() {
 
-				final Renderable r = getRenderable(jrContext, image, printImage, key);
-				Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							cache.put(element, r);
+							kv.value = System.currentTimeMillis();
+							AMultiEditor.refresh(jrContext);
+						}
 
-					@Override
-					public void run() {
-						cache.put(element, r);
-						kv.value = System.currentTimeMillis();
-						AMultiEditor.refresh(jrContext);
-					}
-
-				});
-				Set<KeyValue<JasperReportsContext, String>> set = new HashSet<KeyValue<JasperReportsContext, String>>();
-				for (KeyValue<JasperReportsContext, String> k : set)
-					imgCache.get(k);
+					});
+					Set<KeyValue<JasperReportsContext, String>> set = new HashSet<KeyValue<JasperReportsContext, String>>();
+					for (KeyValue<JasperReportsContext, String> k : set)
+						imgCache.get(k);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
 				return Status.OK_STATUS;
 			}
 		};

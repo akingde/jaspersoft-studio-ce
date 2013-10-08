@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.jasper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.type.MapImageTypeEnum;
 import net.sf.jasperreports.components.map.type.MapScaleEnum;
@@ -8,9 +11,10 @@ import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementDataset;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPrintElement;
+import net.sf.jasperreports.engine.JRPrintImage;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.Renderable;
 import net.sf.jasperreports.engine.RenderableUtil;
 import net.sf.jasperreports.engine.base.JRBasePrintImage;
@@ -66,76 +70,17 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 
 	private CacheMap<JRComponentElement, Renderable> cache = new CacheMap<JRComponentElement, Renderable>(3000000);
 	private CacheMap<JRElement, KeyValue<String, Long>> running = new CacheMap<JRElement, KeyValue<String, Long>>(3000);
+	private static CacheMap<KeyValue<JasperReportsContext, String>, Renderable> imgCache = new CacheMap<KeyValue<JasperReportsContext, String>, Renderable>(
+			10000);
 
 	/**
 	 *
 	 */
 	public JRPrintElement convert(final ReportConverter reportConverter, final JRComponentElement element) {
-		Renderable cacheRenderer = cache.get(element);
-		KeyValue<String, Long> last = running.get(element);
-		if (cacheRenderer == null || last == null
-				|| (last.value != null && System.currentTimeMillis() - last.value.longValue() > 1000)) {
-			final KeyValue<String, Long> kv = new KeyValue<String, Long>(null, null);
-			Job job = new Job("load map") {
-				protected IStatus run(IProgressMonitor monitor) {
-					try {
-						MapComponent map = (MapComponent) element.getComponent();
-						final JasperReportsConfiguration jConfig = (JasperReportsConfiguration) reportConverter
-								.getJasperReportsContext();
-						JasperDesign jd = jConfig.getJasperDesign();
-						JRDataset jrd = jd.getMainDataset();
-						JRElementDataset dataset = null;
-						if (map.getMarkerData() != null) {
-							dataset = map.getMarkerData().getDataset();
-						}
-						if (dataset != null && dataset.getDatasetRun() != null) {
-							String dname = dataset.getDatasetRun().getDatasetName();
-							if (dname != null)
-								jrd = jd.getDatasetMap().get(dname);
-						}
-						Float latitude = evaluate(map.getLatitudeExpression(), jrd, jConfig, DEFAULT_LATITUDE);
-						Float longitude = evaluate(map.getLongitudeExpression(), jrd, jConfig, DEFAULT_LONGITUDE);
-
-						Integer zoom = evaluate(map.getZoomExpression(), jrd, jConfig, MapComponent.DEFAULT_ZOOM);
-
-						String mapType = map.getMapType() != null ? map.getMapType().getName() : MapTypeEnum.ROADMAP.getName();
-						String mapScale = map.getMapScale() != null ? map.getMapScale().getName() : MapScaleEnum.ONE.getName();
-						String mapFormat = MapImageTypeEnum.PNG.getName();
-						String language = evaluate(map.getLanguageExpression(), jrd, jConfig, "");
-						String markers = "";
-
-						String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude
-								+ "&size=" + element.getWidth() + "x" + element.getHeight() + "&zoom=" + zoom
-								+ (mapType == null ? "" : "&maptype=" + mapType) + (mapFormat == null ? "" : "&format=" + mapFormat)
-								+ (mapScale == null ? "" : "&scale=" + mapScale) + markers + "&sensor=false"
-								+ (language == null ? "" : "&language=" + language);
-						kv.key = imageLocation;
-						final Renderable r = RenderableUtil.getInstance(jConfig).getRenderable(imageLocation,
-								OnErrorTypeEnum.ICON, false);
-						r.getImageData(jConfig);
-						Display.getDefault().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-								cache.put(element, r);
-								kv.value = System.currentTimeMillis();
-								AMultiEditor.refresh(jConfig);
-							}
-
-						});
-					} catch (JRException e) {
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setSystem(true);
-			job.setPriority(Job.SHORT);
-			job.schedule();
-			running.put(element, kv);
-			if (cacheRenderer == null)
-				return convert(reportConverter, (JRElement) element);
-		}
+		MapComponent map = (MapComponent) element.getComponent();
 		JRBasePrintImage printImage = new JRBasePrintImage(element.getDefaultStyleProvider());
+		Renderable cacheRenderer = getRenderable(reportConverter, element, map, printImage);
+
 		printImage.setUUID(element.getUUID());
 		printImage.setX(element.getX());
 		printImage.setY(element.getY());
@@ -156,6 +101,125 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 		return printImage;
 	}
 
+	protected Renderable getRenderable(final ReportConverter reportConverter, final JRComponentElement element,
+			MapComponent map, final JRBasePrintImage printImage) {
+		Renderable cacheRenderer = null;
+		try {
+			cacheRenderer = cache.get(element);
+			String expr = "" + element.getWidth() + element.getHeight();
+			if (map.getLongitudeExpression() != null)
+				expr += map.getLongitudeExpression().getText();
+			if (map.getLatitudeExpression() != null)
+				expr += map.getLatitudeExpression().getText();
+			if (map.getLanguageExpression() != null)
+				expr += map.getLanguageExpression().getText();
+			if (map.getZoomExpression() != null)
+				expr += map.getZoomExpression().getText();
+			if (map.getMapType() != null)
+				expr += map.getMapType().getName();
+			if (map.getMapScale() != null)
+				expr += map.getMapScale().getName();
+			if (!expr.isEmpty()) {
+				KeyValue<String, Long> last = running.get(element);
+				Renderable r = null;
+				if (cacheRenderer == null) {
+					cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), map, printImage);
+					cache.put(element, cacheRenderer);
+					if (last == null)
+						r = doFindImage(reportConverter, element, map, expr, cacheRenderer);
+				}
+				if (last != null
+						&& (!last.key.equals(expr) || (last.value != null && System.currentTimeMillis() - last.value.longValue() > 2000))) {
+					r = doFindImage(reportConverter, element, map, expr, cacheRenderer);
+				}
+				if (last == null)
+					r = doFindImage(reportConverter, element, map, expr, cacheRenderer);
+				if (r != null)
+					cacheRenderer = r;
+			} else {
+				running.remove(element);
+				cacheRenderer = getRenderableNoImage(reportConverter.getJasperReportsContext(), map, printImage);
+				cache.put(element, cacheRenderer);
+			}
+		} catch (Throwable e) {
+			return getRenderableNoImage(reportConverter.getJasperReportsContext(), map, printImage);
+		}
+		return cacheRenderer;
+	}
+
+	protected Renderable doFindImage(final ReportConverter reportConverter, final JRComponentElement element,
+			final MapComponent map, final String expr, Renderable cacheRenderer) {
+		final JasperReportsConfiguration jrContext = (JasperReportsConfiguration) reportConverter.getJasperReportsContext();
+		final KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, expr);
+		Renderable r = imgCache.get(key);
+		if (r != null) {
+			cache.put(element, r);
+			return r;
+		}
+		imgCache.put(key, cacheRenderer);
+
+		final KeyValue<String, Long> kv = new KeyValue<String, Long>(null, null);
+		running.put(element, kv);
+		Job job = new Job("load map") {
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					JasperDesign jd = jrContext.getJasperDesign();
+					JRDataset jrd = jd.getMainDataset();
+					JRElementDataset dataset = null;
+					if (map.getMarkerData() != null) {
+						dataset = map.getMarkerData().getDataset();
+					}
+					if (dataset != null && dataset.getDatasetRun() != null) {
+						String dname = dataset.getDatasetRun().getDatasetName();
+						if (dname != null)
+							jrd = jd.getDatasetMap().get(dname);
+					}
+					Float latitude = evaluate(map.getLatitudeExpression(), jrd, jrContext, DEFAULT_LATITUDE);
+					Float longitude = evaluate(map.getLongitudeExpression(), jrd, jrContext, DEFAULT_LONGITUDE);
+
+					Integer zoom = evaluate(map.getZoomExpression(), jrd, jrContext, MapComponent.DEFAULT_ZOOM);
+
+					String mapType = map.getMapType() != null ? map.getMapType().getName() : MapTypeEnum.ROADMAP.getName();
+					String mapScale = map.getMapScale() != null ? map.getMapScale().getName() : MapScaleEnum.ONE.getName();
+					String mapFormat = MapImageTypeEnum.PNG.getName();
+					String language = evaluate(map.getLanguageExpression(), jrd, jrContext, "");
+					String markers = "";
+
+					String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude
+							+ "&size=" + element.getWidth() + "x" + element.getHeight() + "&zoom=" + zoom
+							+ (mapType == null ? "" : "&maptype=" + mapType) + (mapFormat == null ? "" : "&format=" + mapFormat)
+							+ (mapScale == null ? "" : "&scale=" + mapScale) + markers + "&sensor=false"
+							+ (language == null ? "" : "&language=" + language);
+					kv.key = imageLocation;
+					final Renderable r = RenderableUtil.getInstance(jrContext).getRenderable(imageLocation,
+							OnErrorTypeEnum.ERROR, false);
+					imgCache.put(key, r);
+					r.getImageData(jrContext);
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							cache.put(element, r);
+							kv.value = System.currentTimeMillis();
+							AMultiEditor.refresh(jrContext);
+						}
+
+					});
+					Set<KeyValue<JasperReportsContext, String>> set = new HashSet<KeyValue<JasperReportsContext, String>>();
+					for (KeyValue<JasperReportsContext, String> k : set)
+						imgCache.get(k);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		job.schedule();
+		return null;
+	}
+
 	private <T> T evaluate(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, T def) {
 		if (expr != null) {
 			Object l = ExpressionUtil.eval(expr, jrd, jConfig);
@@ -167,5 +231,20 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 				}
 		}
 		return def;
+	}
+
+	private static Renderable noImage;
+
+	private Renderable getRenderableNoImage(JasperReportsContext jasperReportsContext, MapComponent map,
+			JRPrintImage printImage) {
+		try {
+			printImage.setScaleImage(ScaleImageEnum.CLIP);
+			if (noImage == null)
+				noImage = RenderableUtil.getInstance(jasperReportsContext).getRenderable(JRImageLoader.NO_IMAGE_RESOURCE,
+						map.getOnErrorType(), false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return noImage;
 	}
 }

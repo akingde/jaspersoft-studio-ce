@@ -1,22 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.execution;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRParameter;
@@ -34,14 +28,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VirtualizerHelper {
 	public static void setVirtualizer(JasperDesign jd, JasperReportsConfiguration jContext, Map<String, Object> parammap) {
-		if (jContext.getPropertyBoolean(ReportExecutionPreferencePage.JSS_VIRTUALIZER_USE, false)) {
-			List<JRParameter> params = jd.getParametersList();
-			for (JRParameter p : params) {
-				if (p.getValueClassName().equals(JRVirtualizer.class.getName())) {
-					parammap.put(p.getName(), createVirtualizer(jContext));
-				}
-			}
-		}
+		if (jContext.getPropertyBoolean(ReportExecutionPreferencePage.JSS_VIRTUALIZER_USE, false))
+			parammap.put(JRParameter.REPORT_VIRTUALIZER, createVirtualizer(jContext));
 	}
 
 	private static JRVirtualizer createVirtualizer(JasperReportsConfiguration jContext) {
@@ -56,7 +44,8 @@ public class VirtualizerHelper {
 				v = new JRGzipVirtualizer(maxSize);
 			} else if (vtype.equals(JRSwapFileVirtualizer.class.getName())) {
 				int blockSize = jContext.getPropertyInteger(ReportExecutionPreferencePage.JSS_VIRTUALIZER_BLOCK_SIZE, 100);
-				int minGrowCount = jContext.getPropertyInteger(ReportExecutionPreferencePage.JSS_VIRTUALIZER_MIN_GROW_COUNT, 100);
+				int minGrowCount = jContext.getPropertyInteger(ReportExecutionPreferencePage.JSS_VIRTUALIZER_MIN_GROW_COUNT,
+						100);
 				String directory = jContext.getProperty(ReportExecutionPreferencePage.JSS_VIRTUALIZER_TMP);
 				if (directory != null && !directory.trim().equals("")) {
 					// check if exists

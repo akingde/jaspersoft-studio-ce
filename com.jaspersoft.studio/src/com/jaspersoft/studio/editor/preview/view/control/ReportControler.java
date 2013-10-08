@@ -76,7 +76,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.preferences.execution.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportControler {
@@ -325,7 +324,7 @@ public class ReportControler {
 
 					setupFileRezolver(monitor, file);
 
-					JasperDesign jd = ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
+					JasperDesign jd = jrContext.getJasperDesign();// ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
 
 					JasperReport jasperReport = compileJasperDesign(file, jd);
 
