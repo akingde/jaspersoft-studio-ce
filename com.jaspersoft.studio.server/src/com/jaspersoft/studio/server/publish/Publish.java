@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -45,8 +46,7 @@ public class Publish {
 				return Status.CANCEL_STATUS;
 			// UIUtils.showInformation(Messages.JrxmlPublishAction_successpublishing);
 
-			String str = "Success!\n";
-			str += "The following resources where published on the JasperReports Server:\n";
+			String str = "Success!\nThe following resources where published on the JasperReports Server:\n";
 			for (String mres : resources)
 				str += mres + "\n";
 			UIUtils.showInformation(str);
@@ -96,6 +96,18 @@ public class Publish {
 					popt.getjExpression().setText(popt.getRepoExpression());
 				else if (popt.getPublishMethod() == ResourcePublishMethod.LOCAL)
 					popt.getjExpression().setText(popt.getExpression());
+			} else if (popt.isOverwrite() && popt.getDataset() != null) {
+				String dauri = f.getValue().getUriString();
+				if (popt.getPublishMethod() != null)
+					if (popt.getPublishMethod() == ResourcePublishMethod.REFERENCE) {
+						dauri = popt.getReferencedResource().getUriString();
+					} else if (popt.getPublishMethod() == ResourcePublishMethod.RESOURCE) {
+						if (popt.getReferencedResource() == null)
+							continue;
+						ResourceDescriptor rd = f.getValue();
+						dauri = popt.getReferencedResource().getUriString() + rd.getName();
+					}
+				popt.getDataset().setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "repo:" + dauri);
 			}
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;

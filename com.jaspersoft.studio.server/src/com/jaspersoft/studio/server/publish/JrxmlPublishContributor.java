@@ -27,6 +27,7 @@ import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -144,7 +145,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			String dapath = d.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
 			if (dapath == null || dapath.isEmpty())
 				continue;
-			impDa.publish(jasper, dapath, mrunit, monitor, fileset, file);
+			impDa.publish((JRDesignDataset) d, dapath, mrunit, monitor, fileset, file);
 		}
 	}
 

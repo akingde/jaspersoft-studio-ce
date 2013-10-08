@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish;
 
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -27,6 +29,15 @@ public class PublishOptions {
 	private boolean isOverwrite = true;
 	private JRDesignExpression jExpression;
 	private String expression;
+	private JRDesignDataset dataset;
+
+	public void setDataset(JRDesignDataset dataset) {
+		this.dataset = dataset;
+	}
+
+	public JRDesignDataset getDataset() {
+		return dataset;
+	}
 
 	public boolean isOverwrite() {
 		return isOverwrite;

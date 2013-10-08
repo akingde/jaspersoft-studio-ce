@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
@@ -33,6 +32,7 @@ import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -61,12 +61,15 @@ public class ImpDataAdapter extends AImpObject {
 		super(jrConfig);
 	}
 
-	public File publish(JasperDesign jd, String dpath, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
+	public File publish(JRDesignDataset jd, String dpath, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
-			AFileResource fr = addResource(mrunit, fileset, f, new PublishOptions());
-			jd.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "repo:" + fr.getValue().getUriString());
+			PublishOptions popt = new PublishOptions();
+			popt.setDataset(jd);
+			AFileResource fr = addResource(mrunit, fileset, f, popt);
+			// jd.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+			// "repo:" + fr.getValue().getUriString());
 		}
 		return f;
 	}
