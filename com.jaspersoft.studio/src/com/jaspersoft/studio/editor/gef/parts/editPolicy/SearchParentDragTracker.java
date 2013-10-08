@@ -230,6 +230,8 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	private EditPart searchParent(EditPart child) {
 		if (child != null) {
 			ANode parentModel = ((ANode) child.getModel()).getParent();
+			if (parentModel == null)
+				return null;
 			//I search the first container of the target element that it's not in the exclusion set
 			while (selectionHierarchy.contains(parentModel)){
 				parentModel = parentModel.getParent();
