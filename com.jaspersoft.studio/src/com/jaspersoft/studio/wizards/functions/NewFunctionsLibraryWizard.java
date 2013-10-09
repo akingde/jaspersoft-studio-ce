@@ -22,8 +22,6 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -33,6 +31,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+
+import com.jaspersoft.studio.utils.VelocityUtils;
 
 /**
  * Wizard for the new functions library creation.
@@ -100,10 +100,7 @@ public class NewFunctionsLibraryWizard extends Wizard implements INewWizard {
 						IPackageFragment pFragment = packageFragmentRoot.createPackageFragment(packageName, true, monitor);
 
 						// Configure the Velocity Engine
-						VelocityEngine ve = new VelocityEngine();
-						ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
-						ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-						ve.init();
+						VelocityEngine ve = VelocityUtils.getConfiguredVelocityEngine();
 						
 						GenerationInfo config = new GenerationInfo(javaProject, packageFragmentRoot, pFragment, libraryName, packageName);
 						FunctionsLibraryGenerationUtil generationUtil = new FunctionsLibraryGenerationUtil(config, ve, monitor);

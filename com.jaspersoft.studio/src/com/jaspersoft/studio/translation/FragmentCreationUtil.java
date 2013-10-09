@@ -37,6 +37,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 
+import com.jaspersoft.studio.utils.VelocityUtils;
 import com.jaspersoft.translation.resources.ITranslationResource;
 import com.jaspersoft.translation.resources.TranslationInformation;
 
@@ -90,10 +91,7 @@ public class FragmentCreationUtil {
 	 */
 	public static String generateManifest(ExtendedTranslationInformation pluginInfo, String languagesCodes, boolean isSingleton)
 	{
-			VelocityEngine ve = new VelocityEngine();
-			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
-			ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-			ve.init();
+			VelocityEngine ve = VelocityUtils.getConfiguredVelocityEngine();
 			
 			VelocityContext functionContext = new VelocityContext();
 			functionContext.put("hostPlugin", pluginInfo.getHostPluginName());
@@ -126,10 +124,7 @@ public class FragmentCreationUtil {
 				buildInclusion += ",\\\n"+rootFileNames.get(i);
 			}
 		}
-		VelocityEngine ve = new VelocityEngine();
-		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
-		ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-		ve.init();
+		VelocityEngine ve = VelocityUtils.getConfiguredVelocityEngine();
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("rootFiles", buildInclusion);
 		Template functionTemplate = ve.getTemplate(BUILD_TEMPLATE);
@@ -163,10 +158,7 @@ public class FragmentCreationUtil {
 		    imagePath = "icons/"+imageName;
 			}
 	    
-	    VelocityEngine ve = new VelocityEngine();
-			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
-			ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-			ve.init();
+	    VelocityEngine ve = VelocityUtils.getConfiguredVelocityEngine();
 			
 			VelocityContext commandContext = new VelocityContext();
 			commandContext.put("iconpath", imagePath);
