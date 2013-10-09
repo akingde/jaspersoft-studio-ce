@@ -39,6 +39,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public abstract class ADataInput implements IDataInput {
@@ -114,7 +115,7 @@ public abstract class ADataInput implements IDataInput {
 	public static void setMandatory(IParameter prm, Control num) {
 		if (prm.isMandatory()) {
 			ControlDecoration controlDecoration = new ControlDecoration(num, SWT.LEFT | SWT.TOP);
-			controlDecoration.setDescriptionText("this field is mandatory");
+			controlDecoration.setDescriptionText(Messages.ADataInput_mandatory);
 			controlDecoration.setImage(FieldDecorationRegistry.getDefault()
 					.getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED).getImage());
 		}
@@ -123,7 +124,7 @@ public abstract class ADataInput implements IDataInput {
 	protected void setNullable(final IParameter prm, Control num) {
 		Menu menu = new Menu(num);
 		MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText("&Remove Parameter Value");
+		item.setText(Messages.ADataInput_removeparam);
 		item.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				ADataInput.this.params.remove(prm.getName());
@@ -131,7 +132,7 @@ public abstract class ADataInput implements IDataInput {
 			}
 		});
 		item = new MenuItem(menu, SWT.PUSH);
-		item.setText("&Set To NULL");
+		item.setText(Messages.ADataInput_settonull);
 		item.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				ADataInput.this.params.put(prm.getName(), null);
@@ -150,7 +151,7 @@ public abstract class ADataInput implements IDataInput {
 		if (params.containsKey(prm.getName())) {
 			if (params.get(prm.getName()) == null) {
 				nullDecoration
-						.setDescriptionText("The actual value is NULL.\n\nHINT: You can set to null or remove parameter, using context menu.");
+						.setDescriptionText(Messages.ADataInput_settonull_explain);
 				nullDecoration.setImage(FieldDecorationRegistry.getDefault()
 						.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
 			} else {
@@ -159,7 +160,7 @@ public abstract class ADataInput implements IDataInput {
 			}
 		} else {
 			nullDecoration
-					.setDescriptionText("This parameter will be not transmited to the engine.\n\nHINT: You can set to null or remove parameter, using context menu.");
+					.setDescriptionText(Messages.ADataInput_removeparam_explain);
 			nullDecoration.setImage(FieldDecorationRegistry.getDefault()
 					.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
 		}

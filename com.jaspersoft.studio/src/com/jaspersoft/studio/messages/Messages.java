@@ -172,6 +172,11 @@ public class Messages extends NLS {
 	public static String common_xpath_locale;
 	public static String common_xpath_select;
 	public static String common_xpath_timezone;
+	public static String ADataInput_mandatory;
+	public static String ADataInput_removeparam;
+	public static String ADataInput_removeparam_explain;
+	public static String ADataInput_settonull;
+	public static String ADataInput_settonull_explain;
 	public static String ADatasetObjectDeleteCommand_confirmationquestion;
 	public static String ADatasetObjectDeleteCommand_confirmationtitle;
 	public static String ADatasourcePage_datasource_editor_description;
