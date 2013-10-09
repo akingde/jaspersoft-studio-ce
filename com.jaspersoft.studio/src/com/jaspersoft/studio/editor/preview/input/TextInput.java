@@ -48,6 +48,7 @@ public class TextInput extends ADataInput {
 			};
 			txt.addModifyListener(listener);
 			updateInput();
+			setNullable(param, txt);
 		}
 	}
 
@@ -55,5 +56,6 @@ public class TextInput extends ADataInput {
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof String)
 			txt.setText((String) value);
+		setDecoratorNullable(param);
 	}
 }

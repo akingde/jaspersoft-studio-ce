@@ -49,6 +49,7 @@ public class LocaleInput extends ADataInput {
 					updateInput();
 				}
 			});
+			setNullable(param, wlocal);
 		}
 	}
 
@@ -59,5 +60,6 @@ public class LocaleInput extends ADataInput {
 			wlocal.setSelection(locale);
 			wlocal.setToolTipText(tooltip + locale.toString());
 		}
+		setDecoratorNullable(param);
 	}
 }

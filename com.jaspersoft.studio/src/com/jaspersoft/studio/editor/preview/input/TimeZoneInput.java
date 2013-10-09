@@ -47,6 +47,7 @@ public class TimeZoneInput extends ADataInput {
 
 			});
 			updateInput();
+			setNullable(param, txt);
 		}
 	}
 
@@ -54,5 +55,6 @@ public class TimeZoneInput extends ADataInput {
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof TimeZone)
 			txt.setSelection((TimeZone) params.get(param.getName()));
+		setDecoratorNullable(param);
 	}
 }

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input;
 
@@ -35,13 +30,12 @@ import com.jaspersoft.studio.utils.Misc;
 
 /**
  * 
- * This is a custom DataInput control done for edit the maximum number of record to display.
- * This combine a checkbox to say if or not consider this maximum, and a spinner that can
- * be used if the checkbox is selected, to choose the maximum amount of record to display.
- * When the checkbox is not selected all the available records are show
+ * This is a custom DataInput control done for edit the maximum number of record to display. This combine a checkbox to
+ * say if or not consider this maximum, and a spinner that can be used if the checkbox is selected, to choose the
+ * maximum amount of record to display. When the checkbox is not selected all the available records are show
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class BooleanNumericInput extends ADataInput {
 	private Button bbuton;
@@ -59,21 +53,21 @@ public class BooleanNumericInput extends ADataInput {
 		if (Number.class.isAssignableFrom(param.getValueClass())) {
 			min = 0;
 			max = Integer.MAX_VALUE;
-			
+
 			Composite container = new Composite(parent, SWT.NONE);
-			container.setLayout(new GridLayout(2,false));
+			container.setLayout(new GridLayout(2, false));
 			bbuton = new Button(container, SWT.CHECK);
 			bbuton.setText("Limit the number of records to");
-			
+
 			num = new Spinner(container, SWT.BORDER);
 			num.addFocusListener(focusListener);
 			num.setToolTipText(VParameters.createToolTip(param));
 			updateInput();
-			
+
 			final SelectionAdapter adapter1 = new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if (!bbuton.getSelection()){
+					if (!bbuton.getSelection()) {
 						params.remove(param.getName());
 						num.setEnabled(false);
 					} else {
@@ -81,10 +75,11 @@ public class BooleanNumericInput extends ADataInput {
 						updateModel(n);
 						num.setEnabled(true);
 					}
+					setDecoratorNullable(param);
 				}
 			};
 			bbuton.addSelectionListener(adapter1);
-			
+
 			final ModifyListener listener2 = new ModifyListener() {
 
 				public void modifyText(ModifyEvent e) {
@@ -116,10 +111,11 @@ public class BooleanNumericInput extends ADataInput {
 			num.setLayoutData(gd);
 
 			setMandatory(param, num);
+			setNullable(param, bbuton);
 		}
 	}
-	
-	private Number getNumber(){
+
+	private Number getNumber() {
 		Number n = null;
 		String text = num.getText();
 		if (!text.trim().isEmpty()) {
@@ -134,14 +130,14 @@ public class BooleanNumericInput extends ADataInput {
 		return n;
 	}
 
-	private void textModifyEvent(){
+	private void textModifyEvent() {
 		Number n = getNumber();
-		if (n!=null){
+		if (n != null) {
 			updateModel(n);
 		}
 		updateInput();
 	}
-	
+
 	protected int compareTo(Number n1, Number n2) {
 		if (param.getValueClass().equals(Long.class)) {
 			return ((Long) n1).compareTo((Long) n2);
@@ -187,7 +183,7 @@ public class BooleanNumericInput extends ADataInput {
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof Number) {
-			if (!value.equals(getNumber())){
+			if (!value.equals(getNumber())) {
 				int val = ((Number) value).intValue();
 				num.setValues(val, min, max, 0, 1, 10);
 				num.setSelection(num.getText().length());
@@ -198,6 +194,7 @@ public class BooleanNumericInput extends ADataInput {
 			bbuton.setSelection(false);
 			num.setEnabled(false);
 		}
+		setDecoratorNullable(param);
 	}
 
 }

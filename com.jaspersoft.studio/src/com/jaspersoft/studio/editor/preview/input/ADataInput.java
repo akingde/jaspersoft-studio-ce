@@ -25,6 +25,10 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewSite;
@@ -107,13 +111,60 @@ public abstract class ADataInput implements IDataInput {
 		updateInput();
 	}
 
-	public static void setMandatory(IParameter param, Control num) {
-		if (param.isMandatory()) {
+	public static void setMandatory(IParameter prm, Control num) {
+		if (prm.isMandatory()) {
 			ControlDecoration controlDecoration = new ControlDecoration(num, SWT.LEFT | SWT.TOP);
 			controlDecoration.setDescriptionText("this field is mandatory");
 			controlDecoration.setImage(FieldDecorationRegistry.getDefault()
 					.getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED).getImage());
 		}
+	}
+
+	protected void setNullable(final IParameter prm, Control num) {
+		Menu menu = new Menu(num);
+		MenuItem item = new MenuItem(menu, SWT.PUSH);
+		item.setText("&Remove Parameter Value");
+		item.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				ADataInput.this.params.remove(prm.getName());
+				ADataInput.this.updateInput();
+			}
+		});
+		item = new MenuItem(menu, SWT.PUSH);
+		item.setText("&Set To NULL");
+		item.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				ADataInput.this.params.put(prm.getName(), null);
+				ADataInput.this.updateInput();
+			}
+		});
+
+		num.setMenu(menu);
+
+		nullDecoration = new ControlDecoration(num, SWT.LEFT | SWT.BOTTOM);
+	}
+
+	protected void setDecoratorNullable(IParameter prm) {
+		if (nullDecoration == null)
+			return;
+		if (params.containsKey(prm.getName())) {
+			if (params.get(prm.getName()) == null) {
+				nullDecoration
+						.setDescriptionText("The actual value is NULL.\n\nHINT: You can set to null or remove parameter, using context menu.");
+				nullDecoration.setImage(FieldDecorationRegistry.getDefault()
+						.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
+			} else {
+				nullDecoration.hide();
+				return;
+			}
+		} else {
+			nullDecoration
+					.setDescriptionText("This parameter will be not transmited to the engine.\n\nHINT: You can set to null or remove parameter, using context menu.");
+			nullDecoration.setImage(FieldDecorationRegistry.getDefault()
+					.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
+		}
+		nullDecoration.show();
+		return;
 	}
 
 	public static void setError(Control num, String message) {
@@ -170,6 +221,7 @@ public abstract class ADataInput implements IDataInput {
 	}
 
 	private static int defCharWidth = -1;
+	private ControlDecoration nullDecoration;
 
 	public static int getCharWidth(Control c) {
 		if (defCharWidth < 0)
