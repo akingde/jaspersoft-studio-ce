@@ -16,12 +16,13 @@ import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AExportXlsAction extends AbstractExportAction {
 
-	public AExportXlsAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public AExportXlsAction(IReportViewer viewer, JasperReportsConfiguration jContext, ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 	}
 
 	@Override

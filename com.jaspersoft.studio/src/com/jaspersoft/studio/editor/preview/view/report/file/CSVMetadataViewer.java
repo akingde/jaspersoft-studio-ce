@@ -33,7 +33,7 @@ public class CSVMetadataViewer extends AFileViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsCsvMetadataAction(rptv, jContext);
+		return new ExportAsCsvMetadataAction(rptv, jContext, null);
 	}
 
 	@Override

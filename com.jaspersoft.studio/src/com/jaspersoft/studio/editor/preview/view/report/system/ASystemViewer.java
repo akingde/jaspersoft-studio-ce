@@ -13,7 +13,6 @@ package com.jaspersoft.studio.editor.preview.view.report.system;
 import java.io.File;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.viewer.ReportViewer;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.swt.program.Program;
@@ -31,8 +30,6 @@ public abstract class ASystemViewer extends SWTViewer {
 		super(parent, jContext);
 	}
 
-	protected abstract AbstractExportAction createExporter(ReportViewer rptv);
-
 	protected abstract String getExtension(JasperPrint jrprint);
 
 	private boolean lastError = false;
@@ -45,7 +42,7 @@ public abstract class ASystemViewer extends SWTViewer {
 			try {
 				String ext = getExtension(jrprint);
 				File tmpFile = File.createTempFile("report", ext);
-				AbstractExportAction exp = createExporter(rptviewer);
+				AbstractExportAction exp = createExporterAction(rptviewer);
 				stats.startCount(ReportControler.ST_EXPORTTIME);
 				exp.export(tmpFile);
 				stats.endCount(ReportControler.ST_EXPORTTIME);

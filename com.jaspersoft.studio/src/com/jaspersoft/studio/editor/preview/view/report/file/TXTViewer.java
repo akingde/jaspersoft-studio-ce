@@ -33,7 +33,7 @@ public class TXTViewer extends AFileViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsTextAction(rptv, jContext);
+		return new ExportAsTextAction(rptv, jContext, null);
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public class XlsxViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsXlsxAction(rptv, jContext);
+		return new ExportAsXlsxAction(rptv, jContext, null);
 	}
 
 	@Override

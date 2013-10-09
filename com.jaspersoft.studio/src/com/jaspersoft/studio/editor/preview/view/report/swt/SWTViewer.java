@@ -29,6 +29,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportAsJasperReportsAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
@@ -48,6 +51,18 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 
 	public SWTViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
+	}
+
+	private AbstractExportAction expAction;
+
+	protected AbstractExportAction createExporterAction(ReportViewer rptv) {
+		if (expAction == null)
+			expAction = createExporter(rptv);
+		return expAction;
+	}
+
+	protected AbstractExportAction createExporter(ReportViewer rptv) {
+		return new ExportAsJasperReportsAction(rptviewer, jContext, null);
 	}
 
 	@Override
@@ -86,7 +101,9 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 		tmanager.add(new ExportImageAction(rptviewer));
 		tmanager.add(new Separator());
 
-		tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
+		ExportMenuAction exportMenu = ExportMenu.getExportMenu(rptviewer, jContext);
+		setDefaultExporter(exportMenu, createExporterAction(rptviewer));
+		tmanager.add(exportMenu);
 	}
 
 	protected JasperPrint jrprint;

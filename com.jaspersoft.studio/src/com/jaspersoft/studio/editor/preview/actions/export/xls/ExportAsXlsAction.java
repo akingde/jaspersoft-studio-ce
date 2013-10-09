@@ -14,13 +14,14 @@ import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsXlsAction extends AExportXlsAction {
 
-	public ExportAsXlsAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public ExportAsXlsAction(IReportViewer viewer, JasperReportsConfiguration jContext, ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 
 		setText(Messages.ExportAsXlsAction_title);
 		setToolTipText(Messages.ExportAsXlsAction_tooltip);

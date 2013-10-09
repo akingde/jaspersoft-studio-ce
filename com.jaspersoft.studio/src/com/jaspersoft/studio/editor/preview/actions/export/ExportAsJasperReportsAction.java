@@ -25,8 +25,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsJasperReportsAction extends AbstractExportAction {
 
-	public ExportAsJasperReportsAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public ExportAsJasperReportsAction(IReportViewer viewer, JasperReportsConfiguration jContext,
+			ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 
 		setText(Messages.ExportAsJasperReportsAction_title);
 		setToolTipText(Messages.ExportAsJasperReportsAction_tooltip);

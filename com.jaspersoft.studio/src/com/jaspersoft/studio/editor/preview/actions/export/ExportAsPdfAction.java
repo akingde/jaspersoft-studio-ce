@@ -26,8 +26,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsPdfAction extends AbstractExportAction {
 
-	public ExportAsPdfAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public ExportAsPdfAction(IReportViewer viewer, JasperReportsConfiguration jContext, ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 
 		setText(Messages.ExportAsPdfAction_title);
 		setToolTipText(Messages.ExportAsPdfAction_tooltip);

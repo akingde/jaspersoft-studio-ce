@@ -25,7 +25,7 @@ public class LayeredHTMLViewer extends HTMLViewer {
 	}
 
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsLHtmlAction(rptv, jContext);
+		return new ExportAsLHtmlAction(rptv, jContext, null);
 	}
 
 }

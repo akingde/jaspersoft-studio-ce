@@ -32,7 +32,7 @@ public class PowerPointViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsPptxAction(rptv, jContext);
+		return new ExportAsPptxAction(rptv, jContext, null);
 	}
 
 	@Override

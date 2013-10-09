@@ -42,34 +42,34 @@ public class ExportMenu {
 		ExportMenuAction exportMenu = new ExportMenuAction(rptviewer);
 
 		MenuManager mm = exportMenu.getMenuManager();
-		mm.add(new ExportAsJasperReportsAction(rptviewer, jContext));
+		mm.add(new ExportAsJasperReportsAction(rptviewer, jContext, exportMenu));
 		mm.add(new Separator());
 
-		mm.add(new ExportAsPdfAction(rptviewer, jContext));
-		mm.add(new ExportAsLHtmlAction(rptviewer, jContext));
-		mm.add(new ExportAsHtmlAction(rptviewer, jContext));
-		mm.add(new ExportAsXHtmlAction(rptviewer, jContext));
+		mm.add(new ExportAsPdfAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsLHtmlAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsHtmlAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsXHtmlAction(rptviewer, jContext, exportMenu));
 		mm.add(new Separator());
 
-		mm.add(new ExportAsRtfAction(rptviewer, jContext));
-		mm.add(new ExportAsDocxAction(rptviewer, jContext));
-		mm.add(new ExportAsOdtAction(rptviewer, jContext));
-		mm.add(new ExportAsOdsAction(rptviewer, jContext));
-		mm.add(new ExportAsPptxAction(rptviewer, jContext));
-		mm.add(new ExportAsTextAction(rptviewer, jContext));
+		mm.add(new ExportAsRtfAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsDocxAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsOdtAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsOdsAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsPptxAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsTextAction(rptviewer, jContext, exportMenu));
 
 		mm.add(new Separator());
-		mm.add(new ExportAsXlsAction(rptviewer, jContext));
-		mm.add(new ExportAsXlsMetadataAction(rptviewer, jContext));
-		mm.add(new ExportAsXlsxAction(rptviewer, jContext));
-		mm.add(new ExportAsExcelAPIAction(rptviewer, jContext));
+		mm.add(new ExportAsXlsAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsXlsMetadataAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsXlsxAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsExcelAPIAction(rptviewer, jContext, exportMenu));
 
-		mm.add(new ExportAsCsvAction(rptviewer, jContext));
-		mm.add(new ExportAsCsvMetadataAction(rptviewer, jContext));
+		mm.add(new ExportAsCsvAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsCsvMetadataAction(rptviewer, jContext, exportMenu));
 
 		mm.add(new Separator());
-		mm.add(new ExportAsXmlAction(rptviewer, jContext));
-		mm.add(new ExportAsXmlWithImagesAction(rptviewer, jContext));
+		mm.add(new ExportAsXmlAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsXmlWithImagesAction(rptviewer, jContext, exportMenu));
 		// exportMenu.setDefaultAction(pdfAction);
 
 		return exportMenu;

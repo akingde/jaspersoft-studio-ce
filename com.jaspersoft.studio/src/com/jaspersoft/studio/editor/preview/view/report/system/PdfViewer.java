@@ -34,7 +34,7 @@ public class PdfViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsPdfAction(rptv, jContext);
+		return new ExportAsPdfAction(rptv, jContext, null);
 	}
 
 	@Override

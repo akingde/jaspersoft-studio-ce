@@ -29,7 +29,7 @@ public class ExcelAPIViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsExcelAPIAction(rptv, jContext);
+		return new ExportAsExcelAPIAction(rptv, jContext, null);
 	}
 
 	@Override

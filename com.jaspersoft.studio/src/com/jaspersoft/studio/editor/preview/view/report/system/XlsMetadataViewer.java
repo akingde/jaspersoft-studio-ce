@@ -29,7 +29,7 @@ public class XlsMetadataViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsXlsMetadataAction(rptv, jContext);
+		return new ExportAsXlsMetadataAction(rptv, jContext, null);
 	}
 
 	@Override

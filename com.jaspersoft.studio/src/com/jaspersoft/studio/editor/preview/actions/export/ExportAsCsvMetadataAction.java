@@ -25,8 +25,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsCsvMetadataAction extends AbstractExportAction {
 
-	public ExportAsCsvMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public ExportAsCsvMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext,
+			ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 
 		setText(Messages.ExportAsCsvMetadataAction_title);
 		setToolTipText(Messages.ExportAsCsvMetadataAction_tooltip);

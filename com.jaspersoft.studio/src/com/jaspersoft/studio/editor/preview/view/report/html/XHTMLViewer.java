@@ -30,7 +30,7 @@ public class XHTMLViewer extends HTMLViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsXHtmlAction(rptv, jContext);
+		return new ExportAsXHtmlAction(rptv, jContext, null);
 	}
 
 }

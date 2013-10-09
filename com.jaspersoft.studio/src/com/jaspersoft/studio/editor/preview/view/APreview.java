@@ -1,24 +1,23 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view;
 
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class APreview {
@@ -48,4 +47,15 @@ public abstract class APreview {
 
 	}
 
+	protected void setDefaultExporter(ExportMenuAction exmenu, AbstractExportAction expAction) {
+		if (expAction == null)
+			return;
+		for (IContributionItem ic : exmenu.getMenuManager().getItems()) {
+			if (ic instanceof ActionContributionItem) {
+				ActionContributionItem aic = (ActionContributionItem) ic;
+				if (aic.getAction().getClass().equals(expAction.getClass()))
+					exmenu.setDefaultAction(aic.getAction());
+			}
+		}
+	}
 }

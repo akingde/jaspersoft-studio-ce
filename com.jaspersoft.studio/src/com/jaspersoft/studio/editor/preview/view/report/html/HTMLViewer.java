@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
@@ -48,8 +49,11 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		super.contribute2ToolBar(tmanager);
-		if (jrprint != null)
-			tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
+		if (jrprint != null) {
+			ExportMenuAction exportMenu = ExportMenu.getExportMenu(rptviewer, jContext);
+			setDefaultExporter(exportMenu, createExporter(rptviewer));
+			tmanager.add(exportMenu);
+		}
 	}
 
 	private JasperPrint jrprint;
@@ -80,8 +84,12 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 		return ".html";
 	}
 
+	private AbstractExportAction expAction;
+
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsHtmlAction(rptv, jContext);
+		if (expAction == null)
+			expAction = new ExportAsHtmlAction(rptv, jContext, null);
+		return expAction;
 	}
 
 	private File tmpDir;

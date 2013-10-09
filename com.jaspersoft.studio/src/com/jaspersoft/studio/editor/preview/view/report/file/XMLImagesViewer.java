@@ -33,7 +33,7 @@ public class XMLImagesViewer extends AFileViewer {
 	}
 
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsXmlWithImagesAction(rptv, jContext);
+		return new ExportAsXmlWithImagesAction(rptv, jContext, null);
 	}
 
 	protected String getExtension() {

@@ -29,7 +29,7 @@ public class OdsViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsOdsAction(rptv, jContext);
+		return new ExportAsOdsAction(rptv, jContext, null);
 	}
 
 	@Override

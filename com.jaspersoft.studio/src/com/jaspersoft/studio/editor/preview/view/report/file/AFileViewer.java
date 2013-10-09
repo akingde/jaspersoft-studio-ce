@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
@@ -42,14 +43,25 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 		super(parent, jContext);
 	}
 
+	private AbstractExportAction expAction;
+
+	protected AbstractExportAction createExporterAction(ReportViewer rptv) {
+		if (expAction == null)
+			expAction = createExporter(rptv);
+		return expAction;
+	}
+
 	protected abstract AbstractExportAction createExporter(ReportViewer rptv);
 
 	protected abstract String getExtension();
 
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
-		if (jrprint != null)
-			tmanager.add(ExportMenu.getExportMenu(rptviewer, jContext));
+		if (jrprint != null) {
+			ExportMenuAction exportMenu = ExportMenu.getExportMenu(rptviewer, jContext);
+			setDefaultExporter(exportMenu, createExporterAction(rptviewer));
+			tmanager.add(exportMenu);
+		}
 	}
 
 	@Override
@@ -79,7 +91,7 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 
 			File tmpFile = File.createTempFile("report", getExtension());
 
-			AbstractExportAction exp = createExporter(rptviewer);
+			AbstractExportAction exp = createExporterAction(rptviewer);
 			stats.startCount(ReportControler.ST_EXPORTTIME);
 			exp.export(tmpFile);
 			stats.endCount(ReportControler.ST_EXPORTTIME);

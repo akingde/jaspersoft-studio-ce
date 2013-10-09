@@ -58,6 +58,7 @@ public class ExportMenuAction extends AReportViewerAction implements IMenuCreato
 
 	@Override
 	public void run() {
+
 		if (defaultAction != null && defaultAction.isEnabled())
 			defaultAction.run();
 	}

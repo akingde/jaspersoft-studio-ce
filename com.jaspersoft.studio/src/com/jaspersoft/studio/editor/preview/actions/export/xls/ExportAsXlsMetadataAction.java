@@ -15,13 +15,15 @@ import net.sf.jasperreports.engine.export.JExcelApiMetadataExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractMetadataExporterParameter;
 
+import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsXlsMetadataAction extends AExportXlsAction {
 
-	public ExportAsXlsMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public ExportAsXlsMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext,
+			ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 
 		setText("Export As XLS With Metadata");
 		setToolTipText("Export As XLS With Metadata");

@@ -32,7 +32,7 @@ public class RTFViewer extends ASystemViewer {
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsRtfAction(rptv, jContext);
+		return new ExportAsRtfAction(rptv, jContext, null);
 	}
 
 	@Override

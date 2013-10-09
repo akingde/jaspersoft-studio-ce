@@ -24,8 +24,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsOdtAction extends AbstractExportAction {
 
-	public ExportAsOdtAction(IReportViewer viewer, JasperReportsConfiguration jContext) {
-		super(viewer, jContext);
+	public ExportAsOdtAction(IReportViewer viewer, JasperReportsConfiguration jContext, ExportMenuAction parentMenu) {
+		super(viewer, jContext, parentMenu);
 
 		setText(Messages.ExportAsOdtAction_title);
 		setToolTipText(Messages.ExportAsOdtAction_tooltips);

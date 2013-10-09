@@ -33,7 +33,7 @@ public class CSVViewer extends AFileViewer {
 	}
 
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsCsvAction(rptv, jContext);
+		return new ExportAsCsvAction(rptv, jContext, null);
 	}
 
 	protected String getExtension() {
