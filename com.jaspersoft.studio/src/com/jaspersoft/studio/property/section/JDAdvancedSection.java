@@ -21,8 +21,9 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
@@ -51,6 +52,13 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	private APropertyNode element;
 	protected TabbedPropertySheetPage atabbedPropertySheetPage;
 
+	private ControlAdapter viewResize = new ControlAdapter() {
+
+		public void controlResized(ControlEvent e) {
+			if (!composite.isDisposed()) setupComposite();
+			else getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite().removeControlListener(this);
+		}
+	};
 
 	public JDAdvancedSection() {
 		super();
@@ -60,12 +68,12 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void createControls(Composite parent, final TabbedPropertySheetPage atabbedPropertySheetPage) {
 		super.createControls(parent, atabbedPropertySheetPage);
 
-		FormData data = new FormData();
+		/*FormData data = new FormData();
 		data.left = new FormAttachment(0, 0);
 		data.right = new FormAttachment(100, -20);
 		data.top = new FormAttachment(0, 0);
 		data.bottom = new FormAttachment(100, 0);
-		page.getControl().setLayoutData(data);
+		page.getControl().setLayoutData(data);*/
 		UpdatePageContent();
 	}
 	
@@ -109,6 +117,9 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeShown()
 	 */
 	public void aboutToBeShown() {
+		ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
+		if (!comp.isDisposed()) comp.addControlListener(viewResize);
+		
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 		if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
@@ -125,6 +136,9 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeHidden()
 	 */
 	public void aboutToBeHidden() {
+		ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
+		if (!comp.isDisposed()) comp.removeControlListener(viewResize);
+		
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 		if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {

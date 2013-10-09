@@ -91,6 +91,10 @@ public abstract class AbstractPropertySection implements ISection {
 		this.selection = selection;
 		this.part = part;
 	}
+	
+	public TabbedPropertySheetPage getTabbedPropertySheetPage(){
+		return tabbedPropertySheetPage;
+	}
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ISection#aboutToBeShown()

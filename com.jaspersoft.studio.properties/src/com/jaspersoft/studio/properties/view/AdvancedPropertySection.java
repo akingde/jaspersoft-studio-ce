@@ -16,12 +16,12 @@
 package com.jaspersoft.studio.properties.view;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +40,8 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	 * The Property Sheet Page.
 	 */
 	protected PropertySheetPage page;
+	
+	protected Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ISection#createControls(org.eclipse.swt.widgets.Composite,
@@ -50,27 +52,27 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 
 		parent.setLayout(new RowLayout());
 
-		final Composite composite = getWidgetFactory().createComposite(parent);
-		FormLayout layout = new FormLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		layout.spacing = 0;
-		composite.setLayout(layout);
+		composite = getWidgetFactory().createComposite(parent);
+		composite.setLayout(new GridLayout(1,false));
 
 		page = new PropertySheetPage();
 
 		page.createControl(composite);
-		FormData data = new FormData();
-		data.left = new FormAttachment(0, 0);
-		data.right = new FormAttachment(100, 0);
-		data.top = new FormAttachment(0, 0);
-		data.bottom = new FormAttachment(100, 0);
+		GridData data = new GridData();
+		data.grabExcessHorizontalSpace = true;
+		data.grabExcessVerticalSpace = true;
+		data.minimumHeight = 1;
+		data.minimumWidth = 1;
+		data.widthHint = SWT.DEFAULT;
+		data.heightHint = SWT.DEFAULT;
+		data.horizontalAlignment = SWT.FILL;
+		data.verticalAlignment = SWT.FILL;
 		page.getControl().setLayoutData(data);
-
+		
 		page.getControl().addControlListener(new ControlAdapter() {
 
 			public void controlResized(ControlEvent e) {
-				setupComposite(atabbedPropertySheetPage, composite);
+				setupComposite();
 				atabbedPropertySheetPage.resizeScrolledComposite();
 			}
 		});
@@ -78,21 +80,21 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 		parent.getParent().addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				setupComposite(atabbedPropertySheetPage, composite);
+				setupComposite();
 			}
 		});
-		setupComposite(atabbedPropertySheetPage, composite);
+		setupComposite();
 	}
 
-	protected void setupComposite(TabbedPropertySheetPage atabbedPropertySheetPage, Composite composite) {
-		Point size = composite.getParent().getSize();
-		if (size.x == 0 && size.y == 0){
-			size = atabbedPropertySheetPage.getTabbedPropertyComposite().getTabComposite().getSize();
+	protected void setupComposite() {
+		if (!composite.isDisposed()){
+			Point size = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite().getSize();
+			RowData rd = new RowData();
+			rd.width = size.x;
+			rd.height = size.y - 25;
+			composite.setLayoutData(rd);
+			composite.getParent().layout();
 		}
-		RowData rd = new RowData();
-		rd.width = size.x;
-		composite.setLayoutData(rd);
-		composite.getParent().layout(true,true);
 	}
 
 	/**
