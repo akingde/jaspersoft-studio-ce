@@ -49,8 +49,8 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
  * 
  */
 public class NewIssueDetailsPage extends JSSHelpWizardPage {
-	private static final int SHELL_INITIAL_HEIGHT = 470;
-	private static final int SHELL_INITIAL_WIDTH = 610;
+	private static final int SHELL_INITIAL_HEIGHT = 550;
+	private static final int SHELL_INITIAL_WIDTH = 650;
 	private Text title;
 	private Text description;
 	private Combo category;
