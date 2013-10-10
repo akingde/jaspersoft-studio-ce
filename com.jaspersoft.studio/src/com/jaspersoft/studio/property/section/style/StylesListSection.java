@@ -884,7 +884,7 @@ public class StylesListSection extends AbstractSection {
 	 * Add not only this node to the notify handler but all it's root, so even change in it's styles will be notified
 	 */
 	public void aboutToBeHidden() {
-		if (getElement() != null) {
+		if (getElement() != null && getElement().getRoot() != null) {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
 			ANode styles = getStylesRoot(getElement());
 			//check in case the selected element was deleted
