@@ -19,8 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -48,6 +50,7 @@ import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
@@ -229,11 +232,19 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		// settings with the key "new_file_path"...
 		IProject selectedProject = null;
 
-		if (getSettings() != null && getSettings().containsKey(JSSWizard.FILE_PATH)) {
-			IResource resource = ResourcesPlugin.getWorkspace().getRoot()
-					.findMember(((IPath) getSettings().get(JSSWizard.FILE_PATH)).toOSString());
-			if (resource != null && resource.getProject() != null) {
-				selectedProject = resource.getProject();
+		if (getSettings() != null) {
+			if (getSettings().containsKey(JSSWizard.FILE_PATH)) {
+				IResource resource = ResourcesPlugin.getWorkspace().getRoot()
+						.findMember(((IPath) getSettings().get(JSSWizard.FILE_PATH)).toOSString());
+				if (resource != null && resource.getProject() != null) {
+					selectedProject = resource.getProject();
+				}
+			} else if (getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION) != null) {
+				JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings().get(
+						JSSWizard.JASPERREPORTS_CONFIGURATION);
+				IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+				if (f != null)
+					selectedProject = f.getProject();
 			}
 		}
 		cleanDataAdapterStorageListeners();
