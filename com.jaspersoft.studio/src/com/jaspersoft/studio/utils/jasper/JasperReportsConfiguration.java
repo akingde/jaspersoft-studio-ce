@@ -125,7 +125,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			try {
 				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
 				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
-				ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
+				if (ExtensionsEnvironment.getThreadExtensionsRegistry() != null)
+					ExtensionsEnvironment.setThreadExtensionsRegistry(extensionsRegistry);
 			} catch (Throwable e) {
 				JaspersoftStudioPlugin.getInstance().logError(
 						"Cannot complete operations successfully after a classpath change occurred.", e);
