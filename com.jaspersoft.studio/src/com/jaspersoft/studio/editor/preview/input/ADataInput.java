@@ -150,8 +150,7 @@ public abstract class ADataInput implements IDataInput {
 			return;
 		if (params.containsKey(prm.getName())) {
 			if (params.get(prm.getName()) == null) {
-				nullDecoration
-						.setDescriptionText(Messages.ADataInput_settonull_explain);
+				nullDecoration.setDescriptionText(Messages.ADataInput_settonull_explain);
 				nullDecoration.setImage(FieldDecorationRegistry.getDefault()
 						.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
 			} else {
@@ -159,8 +158,7 @@ public abstract class ADataInput implements IDataInput {
 				return;
 			}
 		} else {
-			nullDecoration
-					.setDescriptionText(Messages.ADataInput_removeparam_explain);
+			nullDecoration.setDescriptionText(Messages.ADataInput_removeparam_explain);
 			nullDecoration.setImage(FieldDecorationRegistry.getDefault()
 					.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage());
 		}
@@ -180,7 +178,8 @@ public abstract class ADataInput implements IDataInput {
 	}
 
 	public static void hideError(Control num) {
-		errControlDeco.hide();
+		if (errControlDeco != null)
+			errControlDeco.hide();
 	}
 
 	protected FocusListener focusListener = new FocusListener() {
