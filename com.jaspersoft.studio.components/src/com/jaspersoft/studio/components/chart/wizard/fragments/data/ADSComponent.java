@@ -54,7 +54,7 @@ import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class ADSComponent implements IExpressionContextSetter{
+public abstract class ADSComponent implements IExpressionContextSetter {
 	private Control control;
 	protected Label imgLabel;
 	private FrameFigure chartFigure;
@@ -73,9 +73,7 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 
 	public abstract String getName();
 
-	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart,
-			JRDesignElementDataset eDataset,
-			JasperReportsConfiguration jrContext) {
+	public void setData(JSSDrawVisitor drawVisitor, JRDesignElement jrChart, JRDesignElementDataset eDataset, JasperReportsConfiguration jrContext) {
 		this.jrElement = jrChart;
 		this.eDataset = eDataset;
 		jrElement.setWidth(canvasChart.getSize().x);
@@ -108,31 +106,21 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 				if (jrElement instanceof JRDesignChart) {
 					JRDesignChart jrDChart = (JRDesignChart) jrElement;
 					if (jrDChart.getChartType() == JRChart.CHART_TYPE_XYBAR) {
-						map.put(JRDesignTimePeriodDataset.class, dsWidget
-								.getName(JRDesignTimePeriodDataset.class));
-						map.put(JRDesignTimeSeriesDataset.class, dsWidget
-								.getName(JRDesignTimeSeriesDataset.class));
-						map.put(JRDesignXyDataset.class,
-								dsWidget.getName(JRDesignXyDataset.class));
+						map.put(JRDesignTimePeriodDataset.class, dsWidget.getName(JRDesignTimePeriodDataset.class));
+						map.put(JRDesignTimeSeriesDataset.class, dsWidget.getName(JRDesignTimeSeriesDataset.class));
+						map.put(JRDesignXyDataset.class, dsWidget.getName(JRDesignXyDataset.class));
 
 					}
 					if (!map.isEmpty()) {
-						Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrDChart
-								.getDataset().getClass();
-						ChartDatasetDialog dialog = new ChartDatasetDialog(
-								btDatasetType.getShell(), map, selclass);
+						Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrDChart.getDataset().getClass();
+						ChartDatasetDialog dialog = new ChartDatasetDialog(btDatasetType.getShell(), map, selclass);
 						if (dialog.open() == Window.OK) {
-							Class<? extends JRDesignElementDataset> newselclass = dialog
-									.getSelection();
+							Class<? extends JRDesignElementDataset> newselclass = dialog.getSelection();
 							if (!selclass.equals(newselclass))
 								try {
-									JRChartDataset jrded = (JRChartDataset) newselclass
-											.getConstructor(
-													JRChartDataset.class)
-											.newInstance(jrDChart.getDataset());
+									JRChartDataset jrded = (JRChartDataset) newselclass.getConstructor(JRChartDataset.class).newInstance(jrDChart.getDataset());
 									jrDChart.setDataset(jrded);
-									dsWidget.setDataset(null, jrElement,
-											eDataset);
+									dsWidget.setDataset(null, jrElement, eDataset);
 								} catch (Exception e1) {
 									UIUtils.showError(e1);
 								}
@@ -147,8 +135,7 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 		});
 
 		createChartTop(composite);
-		new Label(composite, SWT.NONE).setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		createChartLeft(composite);
 
@@ -156,8 +143,7 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 
 		createChartRight(composite);
 
-		new Label(composite, SWT.NONE).setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		createChartBottom(composite);
 
@@ -172,9 +158,8 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 
 	protected abstract Control createChartBottom(Composite parent);
 
-	protected Control createChartPreview(Composite composite) {
-		canvasChart = new Canvas(composite, SWT.NO_REDRAW_RESIZE
-				| SWT.NO_BACKGROUND);
+	protected Control createChartPreview(final Composite composite) {
+		canvasChart = new Canvas(composite, SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 200;
 		gd.widthHint = 250;
@@ -189,6 +174,8 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 					jrElement.setWidth(canvasChart.getSize().x);
 					jrElement.setHeight(canvasChart.getSize().y);
 				}
+				canvasChart.redraw();
+				composite.layout(true);
 			}
 
 			public void controlMoved(ControlEvent e) {
@@ -212,8 +199,8 @@ public abstract class ADSComponent implements IExpressionContextSetter{
 			chartFigure = new JRComponentFigure();
 		lws.setContents(chartFigure);
 	}
-	
-	public void setExpressionContext(ExpressionContext expContext){
-		this.expContext=expContext;
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext = expContext;
 	}
 }
