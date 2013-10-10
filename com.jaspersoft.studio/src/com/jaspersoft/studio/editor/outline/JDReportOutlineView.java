@@ -246,7 +246,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		hookOutlineViewer();
 		setContents(editor.getModel());
 		if (outline instanceof Tree) {
-			Tree tree = (Tree) outline;
+			final Tree tree = (Tree) outline;
 
 			tree.addFocusListener(new FocusListener() {
 
@@ -264,6 +264,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							if (translatedPart != null && translatedPart.getModel() != part.getModel()) {
 								TreeItem item = (TreeItem) ((TreeEditPart) translatedPart).getWidget();
 								item.setExpanded(!item.getExpanded());
+								tree.deselectAll();
+								tree.select(item);
+								tree.layout(true);
+								
 							}
 						}
 					}
