@@ -61,6 +61,7 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.editor.expression.CrosstabTotalVariable;
 import com.jaspersoft.studio.editor.expression.ExpObject;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.FunctionsLibraryUtil;
 import com.jaspersoft.studio.editor.jrexpressions.functions.AdditionalStaticFunctions;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
@@ -94,8 +95,6 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	// Support data structures
 	private ExpressionContext exprContext;
 	private Map<String, Control> additionalDetailControls=new HashMap<String, Control>(); // cache map of the details controls
-	private boolean showBuiltinParams=true;
-	private boolean showBuiltinVars=true;
 	private ObjectCategoryItem selItem;
 	private List<Object> categoryDetails;
 	private boolean functionMode=false;
@@ -180,12 +179,18 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		hideBuiltinParams.setImage(
 				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-parameters.png")); //$NON-NLS-1$
 		hideBuiltinParams.setEnabled(false);
+		hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
 		hideBuiltinParams.addSelectionListener(new SelectionAdapter() {
 			 
 			public void widgetSelected(SelectionEvent e) {
-				showBuiltinParams=!showBuiltinParams;
-				additionalDetailsStackLayout.topControl.setVisible(showBuiltinParams);
-				refreshPanelUI(selItem);
+				if(additionalDetailsStackLayout.topControl!=null) {
+					additionalDetailsStackLayout.topControl.setVisible(ExpressionEditorSupportUtil.toggleShowBuiltInParameters());
+					refreshPanelUI(selItem);
+				}
+				else {
+					ExpressionEditorSupportUtil.toggleShowBuiltInParameters();
+					refreshPanelUI(selItem);
+				}
 			}
 		});
 		hideBuiltinParams.setToolTipText("Hide built-in parameters"); //$NON-NLS-1$
@@ -193,12 +198,18 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		hideBuiltinVariables.setImage(
 				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-variables.png")); //$NON-NLS-1$
 		hideBuiltinVariables.setEnabled(false);
+		hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
 		hideBuiltinVariables.addSelectionListener(new SelectionAdapter() {
 			 
 			public void widgetSelected(SelectionEvent e) {
-				showBuiltinVars=!showBuiltinVars;
-				additionalDetailsStackLayout.topControl.setVisible(showBuiltinVars);
-				refreshPanelUI(selItem);
+				if(additionalDetailsStackLayout.topControl!=null) {
+					additionalDetailsStackLayout.topControl.setVisible(ExpressionEditorSupportUtil.toggleShowBuiltInVariables());
+					refreshPanelUI(selItem);
+				}
+				else {
+					ExpressionEditorSupportUtil.toggleShowBuiltInVariables();
+					refreshPanelUI(selItem);
+				}
 			}
 		});
 		hideBuiltinVariables.setToolTipText(Messages.ObjectCategoryDetailsPanel_HideBuiltinVars);
@@ -229,7 +240,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	            List<ExpObject> tmpParamList=new ArrayList<ExpObject>();
 	            while (parameters.hasNext()) {
 	                JRParameter parameter = (JRParameter) parameters.next();
-	                if(!showBuiltinParams && parameter.isSystemDefined()){
+	                if(!ExpressionEditorSupportUtil.isShowBuiltInParameters() && parameter.isSystemDefined()){
 	                	continue;
 	                }
 	                tmpParamList.add(new ExpObject(parameter));
@@ -243,7 +254,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	            List<ExpObject> tmpVarList=new ArrayList<ExpObject>();
 	            while (variables.hasNext()) {
 	                JRVariable variable = (JRVariable) variables.next();
-	                if(!showBuiltinVars && variable.isSystemDefined()){
+	                if(!ExpressionEditorSupportUtil.isShowBuiltInVariables() && variable.isSystemDefined()){
 	                	continue;
 	                }
 	                tmpVarList.add(new ExpObject(variable));

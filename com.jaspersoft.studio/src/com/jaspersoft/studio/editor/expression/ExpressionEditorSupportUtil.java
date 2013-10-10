@@ -55,6 +55,8 @@ public class ExpressionEditorSupportUtil {
 	private static final Map<String, ExpressionEditorSupport> editorSupports;
 	private static ExpressionContext currentContext;
 	private static Boolean isExpressionEditorDialogOpen=Boolean.FALSE;
+	private static boolean showBuiltInParameters=true;
+	private static boolean showBuiltInVariables=true;
 
 	static {
 		supportFactory = JaspersoftStudioPlugin.getExtensionManager().getExpressionEditorSupportFactory();
@@ -359,4 +361,44 @@ public class ExpressionEditorSupportUtil {
 	public static boolean isExpressionEditorDialogOpen(){
 		return isExpressionEditorDialogOpen.booleanValue();
 	}
+
+	/**
+	 * @return <code>true</code> if the built-in parameters should be shown in the expression editor,
+	 * 				<code>false</code> otherwise.
+	 */
+	public static synchronized boolean isShowBuiltInParameters() {
+		return showBuiltInParameters;
+	}
+
+	/**
+	 * Changes the flag that decides if built-in parameters should be shown in the expression editor.
+	 * It returns the status just set.
+	 * 
+	 * @return the new status
+	 */
+	public static synchronized boolean toggleShowBuiltInParameters() {
+		showBuiltInParameters = !showBuiltInParameters;
+		return showBuiltInParameters;
+	}
+
+	/**
+	 * @return <code>true</code> if the built-in variables should be shown in the expression editor,
+	 * 				<code>false</code> otherwise.
+	 */
+	public static synchronized boolean isShowBuiltInVariables() {
+		return showBuiltInVariables;
+	}
+
+	/**
+	 * Changes the flag that decides if built-in variables should be shown in the expression editor.
+	 * It returns the status just set.
+	 * 
+	 * @return the new status
+	 */
+	public static synchronized boolean toggleShowBuiltInVariables() {
+		showBuiltInVariables = !showBuiltInVariables;
+		return showBuiltInVariables;
+	}
+	
+	
 }
