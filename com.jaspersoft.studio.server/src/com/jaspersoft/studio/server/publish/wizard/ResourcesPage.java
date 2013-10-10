@@ -200,7 +200,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
 				if (s != null) {
 					MResource mres = (MResource) s.getFirstElement();
-					if (mres.getPublishOptions().isOverwrite()) {
+					if (mres != null && mres.getPublishOptions().isOverwrite()) {
 						if (sresource.calculateEnabled(mres))
 							menu.add(sresource);
 						if (sres.calculateEnabled(mres))
