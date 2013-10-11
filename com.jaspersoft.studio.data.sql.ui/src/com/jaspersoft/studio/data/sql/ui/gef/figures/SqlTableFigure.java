@@ -23,6 +23,7 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class SqlTableFigure extends Figure {
 	public static final Insets INSETS = new Insets(3, 3, 3, 3);
@@ -39,7 +40,7 @@ public class SqlTableFigure extends Figure {
 		}
 	}
 
-	public static Color classColor = new Color(null, 255, 255, 206);
+	public static Color classColor = SWTResourceManager.getColor(255, 255, 206);
 	private Label lblName;
 	private ColumnsFigure attributeFigure = new ColumnsFigure();
 	private LineBorder border = new LineBorder(ColorConstants.black, 1);
