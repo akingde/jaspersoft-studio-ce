@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -223,12 +225,19 @@ public class ColorStyledText {
 		textData.verticalAlignment = SWT.CENTER;
 		textData.horizontalAlignment = SWT.LEFT;
 		textArea = new StyledText(paintArea, SWT.SINGLE);
+		//When the text area is disposed also the actual color is disposed as well
+		textArea.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				disposeColor();
+				disposeProvider();
+			}
+		});
 		textArea.setLayoutData(textData);
 		textArea.setAlignment(SWT.LEFT);
 		textArea.addModifyListener(new EditListener());
 		textArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		
 	}
 	
 	/**
@@ -345,13 +354,28 @@ public class ColorStyledText {
 	  */
 	 public void setColor(RGB newColor, boolean callListener){
 		 raiseEvents = callListener;
-		 color = new Color(null,newColor);
+		 //dispose the old color before to create the new one
+		 disposeColor();
+		 color =  new Color(null,newColor);
 		 lastValidText = getHexFromRGB(color);
 		 textArea.setText(lastValidText);
 		 raiseEvents = true;
 	 }
 	 
-	 
+	 /**
+	  * Dispose the color if it is different from null
+	  */
+		private void disposeColor(){
+			if (color != null) color.dispose();
+		}
+		
+		/**
+		 * dispose the color label provider
+		 */
+		private void disposeProvider(){
+			if (provider != null) provider.dispose();
+		}
+		
 	 /**
 	  * Set the color of element, either it's representation and it's textual value. this method
 	  * dosen't call the edit listeners

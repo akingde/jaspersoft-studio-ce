@@ -11,6 +11,8 @@
 package com.jaspersoft.studio.property.descriptor.color;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.jasperreports.chartthemes.simple.ColorProvider;
 import net.sf.jasperreports.chartthemes.simple.GradientPaintProvider;
@@ -35,6 +37,8 @@ import com.jaspersoft.studio.utils.Colors;
 public class ColorLabelProvider extends LabelProvider {
 	private NullEnum canBeNull;
 
+	private Map<String, Image> cachedImages = new HashMap<String, Image>();
+	
 	public ColorLabelProvider(NullEnum canBeNull) {
 		super();
 		this.canBeNull = canBeNull;
@@ -55,21 +59,27 @@ public class ColorLabelProvider extends LabelProvider {
 			element = ((AlfaRGB) element).getRgb();
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
-			RGB black = new RGB(0, 0, 0);
-			PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });
+			String key = rgb.toString()+Integer.toString(width)+Integer.toString(height);
+			Image result = cachedImages.get(key);
+			if (result == null) {
+				RGB black = new RGB(0, 0, 0);
+				PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });
+				ImageData data = new ImageData(width, height, 4, dataPalette);
 
-			ImageData data = new ImageData(width, height, 4, dataPalette);
-			data.transparentPixel = 0;
-			data.transparentPixel = 0;
-			for (int y = 0; y < data.height; y++) {
-				for (int x = 0; x < data.width; x++) {
-					if (x == 0 || y == 0 || x == data.width - 1 || y == data.height - 1)
-						data.setPixel(x, y, 1);
-					else
-						data.setPixel(x, y, 2);
+				data.transparentPixel = 0;
+				data.transparentPixel = 0;
+				for (int y = 0; y < data.height; y++) {
+					for (int x = 0; x < data.width; x++) {
+						if (x == 0 || y == 0 || x == data.width - 1 || y == data.height - 1)
+							data.setPixel(x, y, 1);
+						else
+							data.setPixel(x, y, 2);
+					}
 				}
+				result = new Image(display, data);
+				cachedImages.put(key, result);
 			}
-			return new Image(display, data);
+			return result;
 		} else if (element instanceof GradientPaintProvider) {
 			Image newImage = new Image(display, width, height);
 			GC gc = new GC(newImage);
@@ -101,6 +111,15 @@ public class ColorLabelProvider extends LabelProvider {
 			return getText(((GradientPaintProvider) element).getColor1()) + " - " //$NON-NLS-1$
 					+ getText(((GradientPaintProvider) element).getColor2());
 		return "";
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		for (Image img : cachedImages.values()){
+			img.dispose();
+		}
+		cachedImages.clear();
 	}
 
 }
