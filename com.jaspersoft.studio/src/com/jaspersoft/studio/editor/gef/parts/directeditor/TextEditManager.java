@@ -77,6 +77,10 @@ public class TextEditManager extends DirectEditManager {
 		return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
 	}
 
+	public void dispose() {
+		disposeScaledFont();
+	}
+
 	private void disposeScaledFont() {
 		if (scaledFont != null) {
 			scaledFont.dispose();
@@ -163,8 +167,7 @@ public class TextEditManager extends DirectEditManager {
 			public void keyPressed(KeyEvent e) {
 				// Keep old iReport behavior:
 				// Hitting ENTER will confirm the value
-				if(e.keyCode == '\r' && 
-						(e.stateMask & SWT.SHIFT) == 0){
+				if (e.keyCode == '\r' && (e.stateMask & SWT.SHIFT) == 0) {
 					e.doit = false;
 					commit();
 				}

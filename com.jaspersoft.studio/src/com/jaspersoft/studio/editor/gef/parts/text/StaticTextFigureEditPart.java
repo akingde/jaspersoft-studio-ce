@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts.text;
 
@@ -23,13 +18,13 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.directeditor.TextEditManager;
 import com.jaspersoft.studio.property.SetValueCommand;
+
 /*
  * The Class FigureEditPart.
  */
@@ -62,35 +57,36 @@ public class StaticTextFigureEditPart extends FigureEditPart {
 		});
 	}
 
-	protected DirectEditManager manager;
+	@Override
+	public void deactivate() {
+		if (manager != null) {
+			manager.dispose();
+			manager = null;
+		}
+		super.deactivate();
+	}
+
+	protected TextEditManager manager;
 
 	public void performRequest(Request request) {
-		
-		
-		if (request.getType() == RequestConstants.REQ_OPEN) {
-			
-			if (manager == null) {
-				manager = new TextEditManager(this, new LabelCellEditorLocator(getFigure()) );
-			}
-			manager.show();
-		}
-		
-		/*
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
-			if (manager == null) {
-				manager = new DirectEditManager(this, TextCellEditor.class, new LabelCellEditorLocator(getFigure()), null) {
 
-					@Override
-					protected void initCellEditor() {
-						MStaticText model = (MStaticText) getModel();
-						getCellEditor().setValue(model.getPropertyValue(JRBaseStaticText.PROPERTY_TEXT));
-						getCellEditor().getControl().setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-					}
-				};
+		if (request.getType() == RequestConstants.REQ_OPEN) {
+
+			if (manager == null) {
+				manager = new TextEditManager(this, new LabelCellEditorLocator(getFigure()));
 			}
 			manager.show();
 		}
-		*/
+
+		/*
+		 * if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) { if (manager == null) { manager = new
+		 * DirectEditManager(this, TextCellEditor.class, new LabelCellEditorLocator(getFigure()), null) {
+		 * 
+		 * @Override protected void initCellEditor() { MStaticText model = (MStaticText) getModel();
+		 * getCellEditor().setValue(model.getPropertyValue(JRBaseStaticText.PROPERTY_TEXT));
+		 * getCellEditor().getControl().setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE)); } }; }
+		 * manager.show(); }
+		 */
 	}
 
 }

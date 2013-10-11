@@ -78,6 +78,10 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 	public void deactivate() {
 		if (preferenceListener != null)
 			JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
+		if (manager != null) {
+			manager.dispose();
+			manager = null;
+		}
 		super.deactivate();
 	}
 

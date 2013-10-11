@@ -16,8 +16,6 @@ package com.jaspersoft.studio.property.infoList;
 
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyleRange;
@@ -31,8 +29,6 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
@@ -41,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * create a scrollable composite that emulate a list of elements. the elements can be selected and an action can
@@ -208,11 +205,7 @@ public class SelectableComposite extends ScrolledComposite {
 			comp.setBackground(unselectedColor);
 			
 			Label titleLabel = new Label(comp,SWT.NONE);
-
-			FontData[] fD = titleLabel.getFont().getFontData();
-			fD[0].setStyle(SWT.BOLD);
-			//fD[0].setHeight(fD[0].getHeight()+1);
-			titleLabel.setFont( new Font(UIUtils.getDisplay(),fD[0]));
+			titleLabel.setFont(SWTResourceManager.getBoldFont(titleLabel.getFont()));
 			
 			titleLabel.setText(item.getName());
 			titleLabel.addMouseListener(compositeMouseAction);
