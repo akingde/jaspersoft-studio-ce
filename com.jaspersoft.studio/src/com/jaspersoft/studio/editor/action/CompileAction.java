@@ -54,10 +54,12 @@ public class CompileAction extends SelectionAction {
 			Job job = new Job("Building report") {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					return doRun(jConfig, monitor, true);
+					IStatus status = doRun(jConfig, monitor, true);
+					return status;
 				}
 			};
-			job.setUser(true);
+			job.setPriority(Job.SHORT);
+			job.setSystem(true);
 			job.schedule();
 		}
 	}
