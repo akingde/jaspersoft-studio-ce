@@ -196,7 +196,12 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tbtmNewItem_1.setControl(composite);
 
-		cpath = new ClasspathComponent(composite);
+		cpath = new ClasspathComponent(composite) {
+			@Override
+			protected void handleClasspathChanged() {
+				pchangesuport.firePropertyChange("dirty", false, true);
+			}
+		};
 		cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
@@ -376,8 +381,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 		if (jdbcDataAdapter.getDriver() == null)
 			btnWizardActionPerformed();
-		
-		if(!textPassword.isWidgetConfigured()) {
+
+		if (!textPassword.isWidgetConfigured()) {
 			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
 		}
 	}
@@ -457,7 +462,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	public void performAdditionalUpdates() {
 		textPassword.persistSecret();
-		// update the "password" replacing it with the UUID key saved in secure preferences
+		// update the "password" replacing it with the UUID key saved in secure
+		// preferences
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
 		jdbcDataAdapter.setPassword(textPassword.getUUIDKey());
 	}
