@@ -362,23 +362,24 @@ public class UIUtil {
 	 * Creates a new SWT {@link Browser} widget.
 	 * <p>
 	 * 
-	 * It takes care to detect the usage of a custom XULRunner installation,
-	 * in order to create the widget with the dedicated {@link SWT#MOZILLA} style bit constant.
+	 * It takes care to detect the usage of a custom XULRunner installation, in order to create the widget with the
+	 * dedicated {@link SWT#MOZILLA} style bit constant.
 	 * 
-	 * @param parent the browser parent
-	 * @param style the initial style
+	 * @param parent
+	 *          the browser parent
+	 * @param style
+	 *          the initial style
 	 * @return the newly created SWT {@link Browser} widget
 	 */
-	public static Browser getSWTBrowserWidget(Composite parent, int style){
+	public static Browser getSWTBrowserWidget(Composite parent, int style) {
 		// Detect if the information on XULRunner is set
 		// If it is, then we will create the browser using SWT.MOZILLA style bit
 		String xulRunnerLocation = System.getProperty(SWT_BROWSER_XUL_RUNNER_PATH);
-		if(xulRunnerLocation!=null && !xulRunnerLocation.isEmpty()){
+		if (xulRunnerLocation != null && !xulRunnerLocation.isEmpty()) {
 			return new Browser(parent, style | SWT.MOZILLA);
-		}
-		else {
-			return new Browser(parent,style);
+		} else {
+			return new Browser(parent, style);
 		}
 	}
-	
+
 }

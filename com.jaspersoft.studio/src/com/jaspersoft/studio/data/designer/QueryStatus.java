@@ -123,7 +123,11 @@ public class QueryStatus extends AQueryStatus {
 		if (endIndex > 0) {
 			int w = toolBar.getBounds().width - 70;
 			GC gc = new GC(toolBar);
-			endIndex = Math.max(w / gc.getFontMetrics().getAverageCharWidth(), 0);
+			try {
+				endIndex = Math.max(w / gc.getFontMetrics().getAverageCharWidth(), 0);
+			} finally {
+				gc.dispose();
+			}
 			if (str.contains("\n")) {
 				// avoid new line
 				endIndex = Math.min(str.indexOf('\n'), endIndex);

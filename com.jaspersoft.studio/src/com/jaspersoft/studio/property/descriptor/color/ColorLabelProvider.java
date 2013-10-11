@@ -38,7 +38,7 @@ public class ColorLabelProvider extends LabelProvider {
 	private NullEnum canBeNull;
 
 	private Map<String, Image> cachedImages = new HashMap<String, Image>();
-	
+
 	public ColorLabelProvider(NullEnum canBeNull) {
 		super();
 		this.canBeNull = canBeNull;
@@ -59,7 +59,7 @@ public class ColorLabelProvider extends LabelProvider {
 			element = ((AlfaRGB) element).getRgb();
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
-			String key = rgb.toString()+Integer.toString(width)+Integer.toString(height);
+			String key = rgb.toString() + Integer.toString(width) + Integer.toString(height);
 			Image result = cachedImages.get(key);
 			if (result == null) {
 				RGB black = new RGB(0, 0, 0);
@@ -83,12 +83,15 @@ public class ColorLabelProvider extends LabelProvider {
 		} else if (element instanceof GradientPaintProvider) {
 			Image newImage = new Image(display, width, height);
 			GC gc = new GC(newImage);
-			gc.setForeground(Colors.getSWT4AWTColor(((GradientPaintProvider) element).getColor1()));
-			gc.setBackground(Colors.getSWT4AWTColor(((GradientPaintProvider) element).getColor2()));
-			gc.fillGradientRectangle(0, 0, width, height, false);
-			gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-			gc.drawRectangle(0, 0, width - 1, height - 1);
-			gc.dispose();
+			try {
+				gc.setForeground(Colors.getSWT4AWTColor(((GradientPaintProvider) element).getColor1()));
+				gc.setBackground(Colors.getSWT4AWTColor(((GradientPaintProvider) element).getColor2()));
+				gc.fillGradientRectangle(0, 0, width, height, false);
+				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+				gc.drawRectangle(0, 0, width - 1, height - 1);
+			} finally {
+				gc.dispose();
+			}
 			return newImage;
 		}
 		return super.getImage(element);
@@ -112,11 +115,11 @@ public class ColorLabelProvider extends LabelProvider {
 					+ getText(((GradientPaintProvider) element).getColor2());
 		return "";
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
-		for (Image img : cachedImages.values()){
+		for (Image img : cachedImages.values()) {
 			img.dispose();
 		}
 		cachedImages.clear();

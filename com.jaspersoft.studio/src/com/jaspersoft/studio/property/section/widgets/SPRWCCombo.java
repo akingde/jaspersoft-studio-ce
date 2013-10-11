@@ -1,20 +1,14 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
-
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -45,28 +39,31 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RWCComboPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
+
 public class SPRWCCombo extends ASPropertyWidget {
 	protected CCombo combo;
 
-	 
-   private static class ComboAction extends Action {
-   	/**
-   	 * element that this entry represent
-   	 */
-   	
-   	/**
-   	 * Create a new entry for the menu
-   	 * @param name Name of the entry
-   	 * @param style Style of the entry
-   	 * @param item element that this entry represent
-   	 */
-   	public ComboAction(String name, int style){
-   		super(name,style);
-   	}
-   	
-   	
-   }
-	
+	private static class ComboAction extends Action {
+		/**
+		 * element that this entry represent
+		 */
+
+		/**
+		 * Create a new entry for the menu
+		 * 
+		 * @param name
+		 *          Name of the entry
+		 * @param style
+		 *          Style of the entry
+		 * @param item
+		 *          element that this entry represent
+		 */
+		public ComboAction(String name, int style) {
+			super(name, style);
+		}
+
+	}
+
 	public SPRWCCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -86,8 +83,8 @@ public class SPRWCCombo extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				if (refresh)
 					return;
-				if(combo.getSelectionIndex()>=0){
-					section.changeProperty(pDescriptor.getId(), combo.getItem(combo.getSelectionIndex()));					
+				if (combo.getSelectionIndex() >= 0) {
+					section.changeProperty(pDescriptor.getId(), combo.getItem(combo.getSelectionIndex()));
 				}
 			}
 
@@ -131,46 +128,44 @@ public class SPRWCCombo extends ASPropertyWidget {
 		combo.setSelection(new Point(stringLength, stringLength));
 		refresh = false;
 	}
-	
-	private Image createImage(final String fontName){
 
-    Display display = Display.getCurrent();
-    Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
-    Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
-    PaletteData paletteData = new PaletteData( new RGB[]{
-    	   TRANSPARENT_COLOR.getRGB(),
-    	   DRAWING_COLOR.getRGB()
-    	   });
-    	 
-    ImageData imageData = new ImageData( 55, 15, 4, paletteData);
-    imageData.transparentPixel = 0; // index of the palette
-  
-    Image stringImage = new Image( display, imageData);
-    GC stringGc = new GC(stringImage);
+	private Image createImage(final String fontName) {
 
-    stringGc.setForeground(DRAWING_COLOR);
-    stringGc.setBackground(TRANSPARENT_COLOR);
-    stringGc.setFont(new Font(null, fontName, 10, 0));
+		Display display = Display.getCurrent();
+		Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
+		Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
+		PaletteData paletteData = new PaletteData(new RGB[] { TRANSPARENT_COLOR.getRGB(), DRAWING_COLOR.getRGB() });
 
-    stringGc.drawText("Sample", 0, 0);
+		ImageData imageData = new ImageData(55, 15, 4, paletteData);
+		imageData.transparentPixel = 0; // index of the palette
 
-    stringGc.dispose();
-    return stringImage;
+		Image stringImage = new Image(display, imageData);
+		GC stringGc = new GC(stringImage);
+		try {
+			stringGc.setForeground(DRAWING_COLOR);
+			stringGc.setBackground(TRANSPARENT_COLOR);
+			stringGc.setFont(new Font(null, fontName, 10, 0));
+
+			stringGc.drawText("Sample", 0, 0);
+		} finally {
+			stringGc.dispose();
+		}
+		return stringImage;
 	}
 
 	public void setNewItems(final RWCComboPropertyDescriptor pd) {
 		MenuManager manager = new MenuManager("#PopUpMenu");
-				for(String element : pd.getItems()){
-				ComboAction action = new ComboAction(element, SWT.NONE);
-				action.setImageDescriptor(ImageDescriptor.createFromImage(createImage(element)));
-				manager.add(action);
-				manager.add(new Separator());
-			}
-			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS +"-end"));
-	//	}
-	//	});
-		Menu menu =	manager.createContextMenu(combo);
+		for (String element : pd.getItems()) {
+			ComboAction action = new ComboAction(element, SWT.NONE);
+			action.setImageDescriptor(ImageDescriptor.createFromImage(createImage(element)));
+			manager.add(action);
+			manager.add(new Separator());
+		}
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS + "-end"));
+		// }
+		// });
+		Menu menu = manager.createContextMenu(combo);
 		combo.setMenu(menu);
-		//combo.setItems(pd.getItems());
+		// combo.setItems(pd.getItems());
 	}
 }

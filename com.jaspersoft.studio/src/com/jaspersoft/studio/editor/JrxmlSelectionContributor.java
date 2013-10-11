@@ -70,16 +70,20 @@ public class JrxmlSelectionContributor {
 				if (ictb instanceof IToolBarContributionItem) {
 					IToolBarManager tbmanager = ((IToolBarContributionItem) ictb).getToolBarManager();
 					for (IContributionItem ci : tbmanager.getItems()) {
-						if (ci.equals(bt[1]))
+						if (ci.equals(bt[1])) {
 							tbmanager.remove(ci);
+							ci.dispose();
+						}
 					}
 					tbmanager.update(true);
 				}
 			}
 			for (String id : cbarID) {
 				IContributionItem ic = ToolItemsManager.findToolbar(cbm2, id);
-				if (ic != null)
+				if (ic != null) {
 					cbm2.remove(ic);
+					ic.dispose();
+				}
 			}
 			cbm2.refresh();
 			cbm2.update(true);

@@ -49,11 +49,11 @@ import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 
 /**
- * Extension to show inside a gallery a list of TableStyle that can be drag and dropped 
- * on a Table to apply them
+ * Extension to show inside a gallery a list of TableStyle that can be drag and
+ * dropped on a Table to apply them
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class TableStyleView extends CommonViewProvider {
 
@@ -61,66 +61,65 @@ public class TableStyleView extends CommonViewProvider {
 	 * Height of every image in the gallery
 	 */
 	private static final int GALLERY_HEIGHT = 100;
-	
+
 	/**
 	 * Width of every image in the gallery
 	 */
 	private static final int GALLERY_WIDTH = 100;
-	
+
 	/**
 	 * The gallery root item
 	 */
 	private GalleryItem tableGroup;
-	
 
 	/**
 	 * Create a gallery with inside all the table styles with their previews
 	 */
 	@Override
 	public void createControls(Composite parent) {
-	    super.createControls(parent, GALLERY_WIDTH, GALLERY_HEIGHT, Messages.TableStyleView_labelText);
-	    addDragSupport();
+		super.createControls(parent, GALLERY_WIDTH, GALLERY_HEIGHT, Messages.TableStyleView_labelText);
+		addDragSupport();
 	}
-	
-	public List<TemplateStyle> getStylesList(){
+
+	public List<TemplateStyle> getStylesList() {
 		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
 		Collection<TemplateStyle> savedStyles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors();
 		for (TemplateStyle style : savedStyles)
-			if (style instanceof TableStyle) result.add(style);
+			if (style instanceof TableStyle)
+				result.add(style);
 		return result;
 	}
-	
+
 	/**
 	 * Open the TableStyle wizard to create a style
 	 */
-	protected void doCreate(){
+	protected void doCreate() {
 		TableStyleWizard wizard = new TableStyleWizard(true, null);
 		WizardDialog dialog = getEditorDialog(wizard);
-		if (dialog.open() == Dialog.OK){
+		if (dialog.open() == Dialog.OK) {
 			TableStyle newStyle = wizard.getTableStyle();
 			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
-			//getItem(newStyle, tableGroup);
-			//checkedGallery.redraw();
+			// getItem(newStyle, tableGroup);
+			// checkedGallery.redraw();
 		}
 	}
-	
+
 	/**
 	 * Open the style dialog to edit the selected Template Style
 	 */
 	@Override
-	protected void doEdit(){
+	protected void doEdit() {
 		GalleryItem selectedItem = checkedGallery.getSelection()[0];
-		TemplateStyle oldStyle = (TemplateStyle)selectedItem.getData();
+		TemplateStyle oldStyle = (TemplateStyle) selectedItem.getData();
 		TableStyleWizard wizard = new TableStyleWizard(true, oldStyle);
 		WizardDialog dialog = getEditorDialog(wizard);
-		if (dialog.open() == Dialog.OK){
+		if (dialog.open() == Dialog.OK) {
 			TableStyle newStyle = wizard.getTableStyle();
-			TemplateStyleView.getTemplateStylesStorage().editStyle(oldStyle, newStyle) ;
-			//updateItem(newStyle, selectedItem);
-			//checkedGallery.redraw();
+			TemplateStyleView.getTemplateStylesStorage().editStyle(oldStyle, newStyle);
+			// updateItem(newStyle, selectedItem);
+			// checkedGallery.redraw();
 		}
 	}
-	
 
 	/**
 	 * The name of the tab
@@ -133,24 +132,27 @@ public class TableStyleView extends CommonViewProvider {
 	}
 
 	/**
-	 * Called when the styles need to be inserted in the gallery. Here are passed all the template styles read from
-	 * the properties file, so only the one with type TableStyle will be shown
+	 * Called when the styles need to be inserted in the gallery. Here are passed
+	 * all the template styles read from the properties file, so only the one with
+	 * type TableStyle will be shown
 	 * 
-	 * @param styles a list of all the TemplateStyles read from the properties file
+	 * @param styles
+	 *          a list of all the TemplateStyles read from the properties file
 	 */
 	@Override
 	public void fillStyles(Collection<TemplateStyle> styles) {
 		tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
 		checkedGallery.setRedraw(false);
-		for(TemplateStyle style : styles)
-			if (style instanceof TableStyle) getItem(style, tableGroup);
+		for (TemplateStyle style : styles)
+			if (style instanceof TableStyle)
+				getItem(style, tableGroup);
 		checkedGallery.setRedraw(true);
 	}
-	
+
 	/**
 	 * Add the drag support
 	 */
-	private void addDragSupport(){
+	private void addDragSupport() {
 		int operations = DND.DROP_MOVE;
 		final Transfer[] types = new Transfer[] { TableRestrictedTransferType.getInstance() };
 		DragSource source = new DragSource(checkedGallery, operations);
@@ -161,118 +163,118 @@ public class TableStyleView extends CommonViewProvider {
 	/**
 	 * Build a preview image of a Table
 	 * 
-	 * @param style the style of the table
+	 * @param style
+	 *          the style of the table
 	 * @return a preview SWT image of the table
 	 */
-	public Image generatePreviewFigure(final TemplateStyle style){
-		String key = "tableTemplates_"+style.toString(); //$NON-NLS-1$
+	public Image generatePreviewFigure(final TemplateStyle style) {
+		String key = "tableTemplates_" + style.toString(); //$NON-NLS-1$
 		Image image = ResourceManager.getImage(key);
-		if (image == null && style instanceof TableStyle){
-			TableStyle tableStyle = (TableStyle)style;
-			image = new Image(null,new org.eclipse.swt.graphics.Rectangle(0, 0, GALLERY_WIDTH, GALLERY_HEIGHT));
+		if (image == null && style instanceof TableStyle) {
+			TableStyle tableStyle = (TableStyle) style;
+			image = new Image(null, new org.eclipse.swt.graphics.Rectangle(0, 0, GALLERY_WIDTH, GALLERY_HEIGHT));
 			GC graphics = new GC(image);
-			int y = 1;
-		    int x = 1;
-		    int w = GALLERY_WIDTH-6;
-		    int h = GALLERY_HEIGHT-6;
-	        int rowHeight = h/7;
-	        
-		    //Draw the shadow
-		    Rectangle bounds = new Rectangle(x,y,w,h);
-		    fillRoundRectangleDropShadow(graphics, bounds, 6, 4, 4); 
-	        
-	        Rectangle row_bounds = new Rectangle(x,y + rowHeight*2, w, rowHeight);
-		    Display disp = PlatformUI.getWorkbench().getDisplay();
-		    
-	        Color swtColorDetail = new Color(disp,style.getColor(TableStyle.STANDARD_COLOR_DETAIL));
-	        graphics.setBackground(swtColorDetail);
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
-		    row_bounds = new Rectangle(x,y + rowHeight*3, w, rowHeight);
-		    
-		    RGB c = null;
-		    Color swtColor = null;
-		    if (tableStyle.hasAlternateColor())
-		    {
-		    	c = style.getColor(TableStyle.COLOR_DETAIL);
-		    	swtColor = new Color(disp,c);
-		    	graphics.setBackground(swtColor);
-		    }
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
-		    row_bounds = new Rectangle(x,y + rowHeight*4, w, rowHeight);
-		    if (swtColor != null) swtColor.dispose();
-		    graphics.setBackground(swtColorDetail);
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
-		    swtColorDetail.dispose();
-		    
-		    // TABLE HEADER
-		    row_bounds = new Rectangle(x,y + rowHeight*0, w, rowHeight);
-		    c = style.getColor(TableStyle.COLOR_TABLE_HEADER);
-		    swtColor = new Color(disp,c);
-		    graphics.setBackground(swtColor);
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+			try {
+				int y = 1;
+				int x = 1;
+				int w = GALLERY_WIDTH - 6;
+				int h = GALLERY_HEIGHT - 6;
+				int rowHeight = h / 7;
 
-		    // TABLE FOOTER
-		    row_bounds = new Rectangle(x,y + rowHeight*6, w, rowHeight);
-		    swtColor.dispose();
-		    swtColor = new Color(disp,c);
-		    graphics.setBackground(swtColor);
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+				// Draw the shadow
+				Rectangle bounds = new Rectangle(x, y, w, h);
+				fillRoundRectangleDropShadow(graphics, bounds, 6, 4, 4);
 
+				Rectangle row_bounds = new Rectangle(x, y + rowHeight * 2, w, rowHeight);
+				Display disp = PlatformUI.getWorkbench().getDisplay();
 
-		    // COLUMN HEADER
-		    row_bounds = new Rectangle(x,y + rowHeight*1, w, rowHeight);
-		    swtColor.dispose();
-		    c = style.getColor(TableStyle.COLOR_COL_HEADER);
-		    swtColor = new Color(disp,c);
-		    graphics.setBackground(swtColor);
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+				Color swtColorDetail = new Color(disp, style.getColor(TableStyle.STANDARD_COLOR_DETAIL));
+				graphics.setBackground(swtColorDetail);
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+				row_bounds = new Rectangle(x, y + rowHeight * 3, w, rowHeight);
 
-		    // COLUMN FOOTER
-		    row_bounds = new Rectangle(x,y + rowHeight*5, w, rowHeight);
-		    swtColor.dispose();
-		    swtColor = new Color(disp,c);
-		    graphics.setBackground(swtColor);
-		    graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
-		    swtColor.dispose();
-		    
-		    c = tableStyle.getRGBBorderColor();
-		    swtColor = new Color(disp,c);
-		    graphics.setForeground(swtColor);
-		    // Draw border...
-		    for (int i=0; i<8; ++i)
-		    {
-		    	graphics.drawLine(x, y+rowHeight*i, x+w, y+rowHeight*i);
-		    }
+				RGB c = null;
+				Color swtColor = null;
+				if (tableStyle.hasAlternateColor()) {
+					c = style.getColor(TableStyle.COLOR_DETAIL);
+					swtColor = new Color(disp, c);
+					graphics.setBackground(swtColor);
+				}
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+				row_bounds = new Rectangle(x, y + rowHeight * 4, w, rowHeight);
+				if (swtColor != null)
+					swtColor.dispose();
+				graphics.setBackground(swtColorDetail);
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+				swtColorDetail.dispose();
 
-		    h = rowHeight*7;
-		    if (tableStyle.getBorderStyle() == BorderStyleEnum.FULL)
-		    {
-		        for (int i=0; i<3; ++i)
-		        {
-		        	graphics.drawLine(x+(i*(w/3)), y, x+(i*(w/3)), y+h);
-		        }
-		        graphics.drawLine(x+w, y, x+w, y+h-1);
-		    }
-		    if (tableStyle.getBorderStyle() == BorderStyleEnum.ONLY_HORIZONTAL)
-		    {
-		    	graphics.drawLine(x, y, x, y+h);
-		    	graphics.drawLine(x+w, y, x+w, y+h-1);
-		    }
-		    swtColor.dispose();
-			graphics.dispose();
+				// TABLE HEADER
+				row_bounds = new Rectangle(x, y + rowHeight * 0, w, rowHeight);
+				c = style.getColor(TableStyle.COLOR_TABLE_HEADER);
+				swtColor = new Color(disp, c);
+				graphics.setBackground(swtColor);
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+
+				// TABLE FOOTER
+				row_bounds = new Rectangle(x, y + rowHeight * 6, w, rowHeight);
+				swtColor.dispose();
+				swtColor = new Color(disp, c);
+				graphics.setBackground(swtColor);
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+
+				// COLUMN HEADER
+				row_bounds = new Rectangle(x, y + rowHeight * 1, w, rowHeight);
+				swtColor.dispose();
+				c = style.getColor(TableStyle.COLOR_COL_HEADER);
+				swtColor = new Color(disp, c);
+				graphics.setBackground(swtColor);
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+
+				// COLUMN FOOTER
+				row_bounds = new Rectangle(x, y + rowHeight * 5, w, rowHeight);
+				swtColor.dispose();
+				swtColor = new Color(disp, c);
+				graphics.setBackground(swtColor);
+				graphics.fillRectangle(row_bounds.x, row_bounds.y, row_bounds.width, row_bounds.height);
+				swtColor.dispose();
+
+				c = tableStyle.getRGBBorderColor();
+				swtColor = new Color(disp, c);
+				graphics.setForeground(swtColor);
+				// Draw border...
+				for (int i = 0; i < 8; ++i) {
+					graphics.drawLine(x, y + rowHeight * i, x + w, y + rowHeight * i);
+				}
+
+				h = rowHeight * 7;
+				if (tableStyle.getBorderStyle() == BorderStyleEnum.FULL) {
+					for (int i = 0; i < 3; ++i) {
+						graphics.drawLine(x + (i * (w / 3)), y, x + (i * (w / 3)), y + h);
+					}
+					graphics.drawLine(x + w, y, x + w, y + h - 1);
+				}
+				if (tableStyle.getBorderStyle() == BorderStyleEnum.ONLY_HORIZONTAL) {
+					graphics.drawLine(x, y, x, y + h);
+					graphics.drawLine(x + w, y, x + w, y + h - 1);
+				}
+				swtColor.dispose();
+			} finally {
+				graphics.dispose();
+			}
 			ResourceManager.addImage(key, image);
-			
+
 		}
 		return image;
 	}
 
-
 	/**
-	 * Return the drop listener to handle the drag and drop of an element from the tab to the editor, it can be null
-	 * if the drag operation is not wanted
+	 * Return the drop listener to handle the drag and drop of an element from the
+	 * tab to the editor, it can be null if the drag operation is not wanted
 	 * 
-	 * @param viewer the viewer of the editor
-	 * @return the drop listener that will be added to the editor, it will handle the drag of a tablestyle on a table
+	 * @param viewer
+	 *          the viewer of the editor
+	 * @return the drop listener that will be added to the editor, it will handle
+	 *         the drag of a tablestyle on a table
 	 */
 	@Override
 	public AbstractTransferDropTargetListener getDropListener(EditPartViewer viewer) {
@@ -280,8 +282,8 @@ public class TableStyleView extends CommonViewProvider {
 	}
 
 	/**
-	 * Return an empty table style that can be used to build a real TableStyle starting from the XML reperesentation
-	 * of a table Style
+	 * Return an empty table style that can be used to build a real TableStyle
+	 * starting from the XML reperesentation of a table Style
 	 */
 	@Override
 	public TemplateStyle getBuilder() {
@@ -296,7 +298,7 @@ public class TableStyleView extends CommonViewProvider {
 	@Override
 	public Image getTabImage() {
 		Image image = ResourceManager.getImage("table-style-16"); //$NON-NLS-1$
-		if (image == null){
+		if (image == null) {
 			image = Activator.getDefault().getImageDescriptor("icons/table-style-16.png").createImage(); //$NON-NLS-1$
 			ResourceManager.addImage("table-style-16", image); //$NON-NLS-1$
 		}
@@ -306,20 +308,22 @@ public class TableStyleView extends CommonViewProvider {
 	@Override
 	public List<TemplateStyle> getStylesList(List<TemplateStyle> mixedList) {
 		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
-		for(TemplateStyle style: mixedList){
-			if (style instanceof TableStyle) result.add(style);
+		for (TemplateStyle style : mixedList) {
+			if (style instanceof TableStyle)
+				result.add(style);
 		}
 		return result;
 	}
 
 	@Override
 	public void notifyChange(PropertyChangeEvent e) {
-		if (e.getNewValue() instanceof TableStyle){
+		if (e.getNewValue() instanceof TableStyle) {
 			checkedGallery.clearAll();
 			tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
 			checkedGallery.setRedraw(false);
-			for(TemplateStyle style : getStylesList())
-				if (style instanceof TableStyle) getItem(style, tableGroup);
+			for (TemplateStyle style : getStylesList())
+				if (style instanceof TableStyle)
+					getItem(style, tableGroup);
 			checkedGallery.setRedraw(true);
 		}
 	}

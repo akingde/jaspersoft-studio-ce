@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.checkbox;
 
@@ -64,12 +59,15 @@ public class CheckBoxLabelProvider2 extends LabelProvider {
 		button.setSize(bsize);
 		shell.setSize(bsize);
 
+		Image image = new Image(display, bsize.x, bsize.y);
 		shell.open();
 		GC gc = new GC(shell);
-		Image image = new Image(display, bsize.x, bsize.y);
-		gc.copyArea(image, 0, 0);
-		gc.dispose();
-		shell.close();
+		try {
+			gc.copyArea(image, 0, 0);
+		} finally {
+			gc.dispose();
+			shell.close();
+		}
 
 		ImageData imageData = image.getImageData();
 		imageData.transparentPixel = imageData.palette.getPixel(greenScreen.getRGB());
