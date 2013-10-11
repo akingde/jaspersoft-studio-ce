@@ -10,8 +10,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils.parameter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
@@ -69,8 +74,16 @@ public class ParameterUtil {
 			return new Long(0);
 		if (p.getValueClass().isAssignableFrom(Double.class))
 			return new Double(0);
+		if (p.getValueClass().isAssignableFrom(List.class))
+			return new ArrayList();
+		if (p.getValueClass().isAssignableFrom(Set.class))
+			return new HashSet();
+		if (p.getValueClass().isAssignableFrom(Map.class))
+			return new HashMap();
+		if (p.getValueClass().isAssignableFrom(Collection.class))
+			return new ArrayList();
 
-		return "";
+		return null;
 	}
 
 	public static Map<String, JRValueParameter> convertMap(Map<String, ?> inmap, JRDataset dataset) {
