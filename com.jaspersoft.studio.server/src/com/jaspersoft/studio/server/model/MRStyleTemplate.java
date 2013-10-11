@@ -46,6 +46,6 @@ public class MRStyleTemplate extends AFileResource {
 
 	@Override
 	public String getDefaultFileExtension() {
-		return ".jrctx";
+		return "jrtx";
 	}
 }
