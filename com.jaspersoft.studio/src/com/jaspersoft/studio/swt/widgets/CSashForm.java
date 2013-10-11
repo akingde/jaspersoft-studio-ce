@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
@@ -41,6 +36,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Sash;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class CSashForm extends SashForm {
 
@@ -102,7 +98,8 @@ public class CSashForm extends SashForm {
 	// These are for the up/down arrow. Just swap them for left/right arrow.
 	protected static final int ARROW_WIDTH = 8, ARROW_HEIGHT = 8, ARROW_MARGIN = 3; // Margin on each side of arrow
 
-	protected Color arrowColor, borderColor;
+	private static Color arrowColor = SWTResourceManager.getColor(99, 101, 156);
+	private static Color borderColor = SWTResourceManager.getColor(132, 130, 132);
 
 	/**
 	 * Constructor for CustomSashForm.
@@ -134,21 +131,6 @@ public class CSashForm extends SashForm {
 			return; // If you can't hide up or down, there there is no need for arrows.
 
 		SASH_WIDTH = 3 + getOrientation() == SWT.VERTICAL ? ARROW_HEIGHT : ARROW_WIDTH;
-
-		arrowColor = new Color(parent.getDisplay(), 99, 101, 156);
-		borderColor = new Color(parent.getDisplay(), 132, 130, 132);
-
-		addDisposeListener(new DisposeListener() {
-			/**
-			 * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(DisposeEvent)
-			 */
-			public void widgetDisposed(DisposeEvent e) {
-				arrowColor.dispose();
-				borderColor.dispose();
-				arrowColor = borderColor = null;
-			}
-
-		});
 	}
 
 	/**
