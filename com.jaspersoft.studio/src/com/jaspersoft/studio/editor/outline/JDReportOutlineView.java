@@ -319,10 +319,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					Tree t = (Tree) e.getSource();
 					if (part != null && part.getModel() != null && !(part.getModel() instanceof MRoot)) {
 						Object model = part.getModel();
-						String text = Misc.nvl(((ANode) model).getToolTip());
-						if (!text.isEmpty())
-							text += "\n";
-						text += Misc.nvl(((ANode) model).getDisplayText());
+						String toolTipText = Misc.nvl(((ANode) model).getToolTip());
+						String displayText = Misc.nvl(((ANode) model).getDisplayText());
+						String text = "";
+						if (!toolTipText.isEmpty() && !toolTipText.equals(displayText))
+							text = toolTipText + "\n";
+						text += displayText;
 						t.setToolTipText(text);
 						return;
 					}
