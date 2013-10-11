@@ -27,6 +27,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
@@ -55,7 +56,7 @@ public class XMLACreator implements IDataAdapterCreator {
 				if (paramName.equals("SavePassword")) result.setSavePassword(node.getTextContent().equals("true"));
 				if (paramName.equals("catalog")) result.setCatalog(node.getTextContent());
 				if (paramName.equals("cube")) result.setCube(node.getTextContent());
-				if (paramName.equals("Password")) result.setPassword(getSecretStorageKey(node.getTextContent()));
+				if (paramName.equals("Password")) result.setPassword(getPasswordValue(node.getTextContent()));
 				if (paramName.equals("Username")) result.setUsername(node.getTextContent());
 				if (paramName.equals("datasource")) result.setDatasource(node.getTextContent());
 				if (paramName.equals("url")) result.setXmlaUrl(node.getTextContent());
@@ -69,6 +70,14 @@ public class XMLACreator implements IDataAdapterCreator {
 	@Override
 	public String getID() {
 		return "com.jaspersoft.ireport.designer.connection.JRXMLADataSourceConnection";
+	}
+	
+	/* 
+	 * Gets the secret storage key or the plain text password value.
+	 */
+	private String getPasswordValue(String passwordFieldTxt) {
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() 
+				? getSecretStorageKey(passwordFieldTxt) : passwordFieldTxt;
 	}
 	
 	/*

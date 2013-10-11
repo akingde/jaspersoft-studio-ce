@@ -19,6 +19,8 @@ import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.eclipse.secret.EclipseSecretsProvider;
 import net.sf.jasperreports.util.SecretsProvider;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+
 /**
  * {@link SecretsProvider} for the Data Adapters sensitive information.
  * 
@@ -38,5 +40,10 @@ public class DataAdaptersSecretsProvider extends EclipseSecretsProvider {
 	@Override
 	public String getSecretNodeId() {
 		return SECRET_NODE_ID;
+	}
+	
+	@Override
+	public String getSecret(String key) {
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() ? super.getSecret(key) : key;
 	}
 }

@@ -23,6 +23,7 @@ import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
@@ -183,4 +184,12 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		info.setProductMainBundleID(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_MAINBUNDLE));
 		return info;
 	}
+	
+	/**
+	 * @return <code>true</code> if we should use the Eclipse Secure Storage feature,<code>false</code> otherwise
+	 */
+	public static boolean shouldUseSecureStorage(){ 
+		return getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_USE_SECURE_STORAGE);
+	}
+	
 }

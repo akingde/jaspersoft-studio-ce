@@ -38,6 +38,7 @@ import rex.graphics.datasourcetree.elements.CubeElement;
 import rex.graphics.datasourcetree.elements.DataSourceTreeElement;
 import rex.metadata.ServerMetadata;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
@@ -253,9 +254,11 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	
 	@Override
 	public void performAdditionalUpdates() {
-		textPassword.persistSecret();
-		// update the "password" replacing it with the UUID key saved in secure preferences
-		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
-		dataAdapter.setPassword(textPassword.getUUIDKey());
+		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+			textPassword.persistSecret();
+			// update the "password" replacing it with the UUID key saved in secure preferences
+			XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
+			dataAdapter.setPassword(textPassword.getUUIDKey());
+		}
 	}
 }

@@ -28,6 +28,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.wizard.ListInstallationPage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -102,7 +103,7 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 		//Create every server and if the repository view is open add also the nodes to the tree view
 		List<ServerProfile> servers = page1.getSelectedServers();
 		for(ServerProfile srv : servers){
-			srv.setPass(getSecretStorageKey(srv.getPass()));
+			srv.setPass(getPasswordValue(srv.getPass()));
 			MServerProfile mservprof = new MServerProfile(null, srv);
 			if (serversNode == null) ServerManager.addServerProfile(mservprof);
 			else {
@@ -128,6 +129,14 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 		return true;
 	}
 
+	/* 
+	 * Gets the secret storage key or the plain text password value.
+	 */
+	private String getPasswordValue(String passwordFieldTxt) {
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() 
+				? getSecretStorageKey(passwordFieldTxt) : passwordFieldTxt;
+	}
+	
 	/*
 	 * Returns the key that will be used to retrieve the information from 
 	 * the secure preferences.

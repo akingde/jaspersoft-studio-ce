@@ -22,6 +22,7 @@ import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.community.messages.Messages;
 import com.jaspersoft.studio.community.utils.CommunityUser;
 
@@ -92,15 +93,21 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 	 *            the community user
 	 */
 	public void storeCommunityUserInformation(CommunityUser user){
-		try {
-			SecureStorageUtils.saveToDefaultSecurePreferences(
-					CommunityConstants.SECURE_PREFSTORE_PATHNAME, USERNAME_KEY, user.getUsername());
-			SecureStorageUtils.saveToDefaultSecurePreferences(
-					CommunityConstants.SECURE_PREFSTORE_PATHNAME, PASSWORD_KEY, user.getPassword());
+		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+			try {
+				SecureStorageUtils.saveToDefaultSecurePreferences(
+						CommunityConstants.SECURE_PREFSTORE_PATHNAME, USERNAME_KEY, user.getUsername());
+				SecureStorageUtils.saveToDefaultSecurePreferences(
+						CommunityConstants.SECURE_PREFSTORE_PATHNAME, PASSWORD_KEY, user.getPassword());
+			}
+			catch (StorageException ex){
+				logError(Messages.JSSCommunityActivator_CredentialsStoreError, ex);
+				UIUtils.showError(ex);
+			}
 		}
-		catch (StorageException ex){
-			logError(Messages.JSSCommunityActivator_CredentialsStoreError, ex);
-			UIUtils.showError(ex);
+		else {
+			getDefault().getPreferenceStore().putValue(USERNAME_KEY, user.getUsername());
+			getDefault().getPreferenceStore().putValue(PASSWORD_KEY, user.getPassword());
 		}
 	}
 	
@@ -109,19 +116,37 @@ public class JSSCommunityActivator extends AbstractJRUIPlugin {
 	 *         preferences store, <code>null</code> otherwise
 	 */
 	public CommunityUser getCommunityUserInformation() {
-	     try {
-	 		String username = SecureStorageUtils.readFromDefaultSecurePreferences(
-					CommunityConstants.SECURE_PREFSTORE_PATHNAME, USERNAME_KEY, NOT_AVAILABLE_VALUE);
-			String password = SecureStorageUtils.readFromDefaultSecurePreferences(
-					CommunityConstants.SECURE_PREFSTORE_PATHNAME, PASSWORD_KEY, NOT_AVAILABLE_VALUE);
-			if(username!=null && !NOT_AVAILABLE_VALUE.equals(username) && 
-					password!=null && !NOT_AVAILABLE_VALUE.equals(password)) {
+		if (JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+			try {
+				String username = SecureStorageUtils.readFromDefaultSecurePreferences(
+								CommunityConstants.SECURE_PREFSTORE_PATHNAME, USERNAME_KEY, NOT_AVAILABLE_VALUE);
+				String password = SecureStorageUtils.readFromDefaultSecurePreferences(
+								CommunityConstants.SECURE_PREFSTORE_PATHNAME, PASSWORD_KEY, NOT_AVAILABLE_VALUE);
+				if (username != null && !NOT_AVAILABLE_VALUE.equals(username)
+						&& password != null
+						&& !NOT_AVAILABLE_VALUE.equals(password)) {
+					return new CommunityUser(username, password);
+				}
+			} catch (StorageException ex) {
+				logError(Messages.JSSCommunityActivator_CredentialsRecoveringError, ex);
+				UIUtils.showError(ex);
+			}
+			return null;
+		} else {
+			String username=null;
+			if(getDefault().getPreferenceStore().contains(USERNAME_KEY)){
+				username=getDefault().getPreferenceStore().getString(USERNAME_KEY);
+			}
+			String password=null;
+			if(getDefault().getPreferenceStore().contains(PASSWORD_KEY)){
+				password=getDefault().getPreferenceStore().getString(PASSWORD_KEY);
+			}
+			if(username!=null && password!=null) {
 				return new CommunityUser(username,password);
 			}
-	     } catch (StorageException ex) {
-	    	 logError(Messages.JSSCommunityActivator_CredentialsRecoveringError, ex);
-	    	 UIUtils.showError(ex);	 
-	     }
-         return null;
+			else {
+				return null;
+			}
+		}
 	}
 }

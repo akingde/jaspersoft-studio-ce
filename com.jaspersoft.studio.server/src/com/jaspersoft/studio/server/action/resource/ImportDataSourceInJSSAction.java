@@ -107,7 +107,7 @@ public class ImportDataSourceInJSSAction extends Action {
 					"JDBC")); //$NON-NLS-1$
 			jdbcDataAdapter.setDriver(jdbcDS.getValue().getDriverClass());
 			jdbcDataAdapter.setUsername(jdbcDS.getValue().getUsername());
-			jdbcDataAdapter.setPassword(getSecretStorageKey(jdbcDS.getValue().getPassword()));
+			jdbcDataAdapter.setPassword(getPasswordValue(jdbcDS.getValue().getPassword()));
 			jdbcDataAdapter.setUrl(jdbcDS.getValue().getConnectionUrl());
 			jdbcDataAdapter.setSavePassword(true);
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
@@ -160,6 +160,14 @@ public class ImportDataSourceInJSSAction extends Action {
 			throw new RuntimeException(
 					Messages.ImportDataSourceInJSSAction_UnableToGetNameError);
 		}
+	}
+	
+	/* 
+	 * Gets the secret storage key or the plain text password value.
+	 */
+	private String getPasswordValue(String passwordFieldTxt) {
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() 
+				? getSecretStorageKey(passwordFieldTxt) : passwordFieldTxt;
 	}
 	
 	/*

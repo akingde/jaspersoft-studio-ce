@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.secret;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+
 import net.sf.jasperreports.eclipse.secret.EclipseSecretsProvider;
 import net.sf.jasperreports.util.SecretsProvider;
 
@@ -37,5 +39,10 @@ public class JRServerSecretsProvider extends EclipseSecretsProvider {
 	@Override
 	public String getSecretNodeId() {
 		return SECRET_NODE_ID;
+	}
+	
+	@Override
+	public String getSecret(String key) {
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() ? super.getSecret(key) : key;
 	}
 }

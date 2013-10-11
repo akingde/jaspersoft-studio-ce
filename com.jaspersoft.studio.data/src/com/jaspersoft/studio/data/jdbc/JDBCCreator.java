@@ -26,6 +26,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
@@ -58,7 +59,7 @@ public class JDBCCreator implements IDataAdapterCreator {
 				if (paramName.equals("SavePassword")) result.setSavePassword(node.getTextContent().equals("true")); //$NON-NLS-1$ //$NON-NLS-2$
 				if (paramName.equals("Url")) result.setUrl(node.getTextContent()); //$NON-NLS-1$
 				if (paramName.equals("Database")) result.setDatabase(node.getTextContent()); //$NON-NLS-1$
-				if (paramName.equals("Password")) result.setPassword(getSecretStorageKey(node.getTextContent())); //$NON-NLS-1$
+				if (paramName.equals("Password")) result.setPassword(getPasswordValue(node.getTextContent())); //$NON-NLS-1$
 				if (paramName.equals("Username")) result.setUsername(node.getTextContent()); //$NON-NLS-1$
 				if (paramName.equals("JDBCDriver")) result.setDriver(node.getTextContent()); //$NON-NLS-1$
 			}
@@ -66,6 +67,14 @@ public class JDBCCreator implements IDataAdapterCreator {
 		JDBCDataAdapterDescriptor desc = new JDBCDataAdapterDescriptor();
 		desc.setDataAdapter(result);
 		return desc;
+	}
+
+	/* 
+	 * Gets the secret storage key or the plain text password value.
+	 */
+	private String getPasswordValue(String passwordFieldTxt) {
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() 
+				? getSecretStorageKey(passwordFieldTxt) : passwordFieldTxt;
 	}
 
 	@Override

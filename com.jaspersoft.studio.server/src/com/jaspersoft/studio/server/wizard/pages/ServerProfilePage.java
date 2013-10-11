@@ -49,6 +49,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.dialog.VersionCombo;
 import com.jaspersoft.studio.server.ServerManager;
@@ -259,8 +260,10 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 	@Override
 	public void performFinishInvoked() {
-		tpass.persistSecret();
-		sprofile.getValue().setPass(tpass.getUUIDKey());
+		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+			tpass.persistSecret();
+			sprofile.getValue().setPass(tpass.getUUIDKey());
+		}
 	}
 
 	@Override

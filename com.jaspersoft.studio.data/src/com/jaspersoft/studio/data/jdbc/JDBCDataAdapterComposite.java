@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
@@ -461,10 +462,12 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	public void performAdditionalUpdates() {
-		textPassword.persistSecret();
-		// update the "password" replacing it with the UUID key saved in secure
-		// preferences
-		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
-		jdbcDataAdapter.setPassword(textPassword.getUUIDKey());
+		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+			textPassword.persistSecret();
+			// update the "password" replacing it with the UUID key saved in secure
+			// preferences
+			JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc.getDataAdapter();
+			jdbcDataAdapter.setPassword(textPassword.getUUIDKey());
+		}
 	}
 }

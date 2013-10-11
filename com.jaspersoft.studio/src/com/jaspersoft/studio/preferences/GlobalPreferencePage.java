@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -29,6 +30,7 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class GlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	public static final String JSS_JETTY_PORT = "com.jaspersoft.studio.jetty.port"; //$NON-NLS-1$
+	public static final String JSS_USE_SECURE_STORAGE = "com.jaspersoft.studio.secure.storage"; //$NON-NLS-1$
 
 	public GlobalPreferencePage() {
 		super(GRID);
@@ -39,17 +41,26 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	protected void createFieldEditors() {
 		Label lbl = new Label(getFieldEditorParent(), SWT.NONE);
 		lbl.setText(Messages.GlobalPreferencePage_jettyServerTitle);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		lbl.setLayoutData(gd);
+		lbl.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 
 		IntegerFieldEditor port = new IntegerFieldEditor(JSS_JETTY_PORT, Messages.GlobalPreferencePage_port, getFieldEditorParent());
 		port.setValidRange(0, 49151);
 		addField(port);
+		
+		Label separator = new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL);
+		separator.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
+		
+		Label securityTitle = new Label(getFieldEditorParent(), SWT.NONE);
+		securityTitle.setText("Security related preferences");
+		securityTitle.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
+		
+		BooleanFieldEditor useSecStorage = new BooleanFieldEditor(JSS_USE_SECURE_STORAGE, "Use the Secure Storage to save credentials",getFieldEditorParent());
+		addField(useSecStorage);
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JSS_JETTY_PORT, 0);
+		store.setDefault(JSS_USE_SECURE_STORAGE, true);
 	}
 
 	@Override
