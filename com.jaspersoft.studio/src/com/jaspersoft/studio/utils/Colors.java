@@ -81,7 +81,7 @@ public class Colors {
 	 */
 	public static java.awt.Color getAWT4SWTRGBColor(RGB color) {
 		if (color != null)
-			return new java.awt.Color(color.red, color.green, color.blue, alfa);
+			return new java.awt.Color(color.red, color.green, color.blue);
 		return null;
 	}
 
