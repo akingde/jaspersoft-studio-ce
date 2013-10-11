@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section;
 
@@ -56,14 +51,15 @@ import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
 /*
  * Abstract class for a section in a tab in the properties view.
  */
-public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener, IWidgetsProviderSection {
+public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener,
+		IWidgetsProviderSection {
 	protected Map<Object, ASPropertyWidget> widgets = new HashMap<Object, ASPropertyWidget>();
 
 	protected JasperReportsContext jasperReportsContext;
 	private List<APropertyNode> elements;
 	private APropertyNode element;
 	private EditDomain editDomain;
-	
+
 	protected HashMap<Object, WidgetDescriptor> providedProperties = null;
 
 	/**
@@ -129,7 +125,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Object getSelectedElement() {
 		return element;
@@ -220,7 +216,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public boolean isDisposed() {
-		return parent.isDisposed();
+		if (parent != null)
+			return parent.isDisposed();
+		return true;
 	}
 
 	@Override
@@ -338,36 +336,38 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 		return lbl;
 	}
-	
+
 	/**
 	 * Create the map of the provided properties, empty
 	 */
-	protected void initializeProvidedProperties(){
+	protected void initializeProvidedProperties() {
 		providedProperties = new HashMap<Object, WidgetDescriptor>();
 	}
-	
+
 	/**
 	 * Return a list of all the properties in the map
 	 */
-	public List<Object> getHandledProperties(){
-		if (providedProperties == null) initializeProvidedProperties();
+	public List<Object> getHandledProperties() {
+		if (providedProperties == null)
+			initializeProvidedProperties();
 		return new ArrayList<Object>(providedProperties.keySet());
 	}
-	
-	public WidgetDescriptor getPropertyInfo(Object propertyId){
-		if (providedProperties == null) initializeProvidedProperties();
+
+	public WidgetDescriptor getPropertyInfo(Object propertyId) {
+		if (providedProperties == null)
+			initializeProvidedProperties();
 		return providedProperties.get(propertyId);
 	}
-	
-	protected void addProvidedProperties(Object id, String propertyName){
+
+	protected void addProvidedProperties(Object id, String propertyName) {
 		providedProperties.put(id, new WidgetDescriptor(propertyName));
 	}
-	
+
 	@Override
-	public void expandForProperty(Object propertyId) {	
+	public void expandForProperty(Object propertyId) {
 	}
-	
-	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId){
+
+	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
 		return widgets.get(propertyId);
 	}
 }
