@@ -175,7 +175,7 @@ public abstract class ADSComponent implements IExpressionContextSetter {
 					jrElement.setHeight(canvasChart.getSize().y);
 				}
 				canvasChart.redraw();
-				composite.layout(true);
+				// composite.layout(true);
 			}
 
 			public void controlMoved(ControlEvent e) {
