@@ -163,7 +163,15 @@ public class StyledTextXtextAdapter {
 		// add JDT Style code completion hint decoration
 		createContentAssistDecoration(styledText);
 
-		initSelectionProvider();
+		// FIX for Community Bug #3200:
+		// Overriding the SelectionProvider causes the problem, because looking at 
+		// XtextStyledTextSelectionProvider#getSelection() the following set of instructions:
+		// ...
+		// 	if (styledText.isDisposed())
+		//		return StructuredSelection.EMPTY;
+		// ...
+		// will end-up losing the selection after closing our Expression Editor.
+		//initSelectionProvider();
 	}
 
 	protected void initSelectionProvider() {
