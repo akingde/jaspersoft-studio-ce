@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -73,6 +72,7 @@ import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -642,9 +642,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
 			jrstyle.setMarkup((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR))
-			jrstyle.setForecolor(Colors.getAWT4SWTRGBColor((RGB) value));
+			jrstyle.setForecolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
-			jrstyle.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
+			jrstyle.setBackcolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 
 		else if (id.equals(JRBaseStyle.PROPERTY_FILL))
 			jrstyle.setFill((FillEnum) fillD.getEnumValue(value));

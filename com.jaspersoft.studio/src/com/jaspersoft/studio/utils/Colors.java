@@ -66,9 +66,9 @@ public class Colors {
 	 *          the color
 	 * @return the sWTRG b4 awtgb color
 	 */
-	public static RGB getSWTRGB4AWTGBColor(java.awt.Color color) {
+	public static AlfaRGB getSWTRGB4AWTGBColor(java.awt.Color color) {
 		if (color != null)
-			return new RGB(color.getRed(), color.getGreen(), color.getBlue());
+			return new AlfaRGB(new RGB(color.getRed(), color.getGreen(), color.getBlue()), color.getAlpha());
 		return null;
 	}
 
@@ -79,9 +79,9 @@ public class Colors {
 	 *          the color
 	 * @return the aW t4 swtrgb color
 	 */
-	public static java.awt.Color getAWT4SWTRGBColor(RGB color) {
-		if (color != null)
-			return new java.awt.Color(color.red, color.green, color.blue);
+	public static java.awt.Color getAWT4SWTRGBColor(AlfaRGB color) {
+		if (color != null && color.getRgb() != null)
+			return new java.awt.Color(color.getRgb().red, color.getRgb().green, color.getRgb().blue, color.getAlfa());
 		return null;
 	}
 
@@ -149,7 +149,7 @@ public class Colors {
 		if (rgbColor == null) {
 			return ""; //$NON-NLS-1$
 		}
-		return getHexEncodedAWTColor(getAWT4SWTRGBColor(rgbColor));
+		return getHexEncodedAWTColor(getAWT4SWTRGBColor(new AlfaRGB(rgbColor, 255)));
 	}
 
 	/**
@@ -188,8 +188,8 @@ public class Colors {
 				}
 			}
 		} else {
-			RGB rgb = getSWTRGB4AWTGBColor(color);
-			PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });
+			AlfaRGB rgb = getSWTRGB4AWTGBColor(color);
+			PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb.getRgb() });
 			data = new ImageData(width, height, 4, dataPalette);
 			data.transparentPixel = 0;
 			for (int y = 0; y < data.height; y++) {
@@ -253,7 +253,7 @@ public class Colors {
 	public static java.awt.Color decodeHexStringAsAWTColor(String hexColorString) {
 		RGB decodedRGB = decodeHexStringAsSWTRGB(hexColorString);
 		if (decodedRGB != null) {
-			return getAWT4SWTRGBColor(decodedRGB);
+			return getAWT4SWTRGBColor(new AlfaRGB(decodedRGB, 255));
 		} else {
 			return null;
 		}

@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.wb.swt.ResourceManager;
@@ -39,6 +38,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSPopupPropertyDescriptor;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MLinePen extends APropertyNode implements IPropertySource {
@@ -173,8 +173,8 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
 				if (value == null)
 					linePen.setLineColor(null);
-				else if (value instanceof RGB)
-					linePen.setLineColor(Colors.getAWT4SWTRGBColor((RGB) value));
+				else if (value instanceof AlfaRGB)
+					linePen.setLineColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
 				linePen.setLineStyle((LineStyleEnum) penLineStyleD.getEnumValue(value));
 		}

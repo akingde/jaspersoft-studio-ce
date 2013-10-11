@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -29,6 +24,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 public class SPColor extends ASPropertyWidget {
 	private ToolItem foreButton;
@@ -52,10 +48,11 @@ public class SPColor extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(toolBar.getShell());
 				cd.setText(pDescriptor.getDisplayName());
-				cd.setRGB((RGB) section.getElement().getPropertyValue(pDescriptor.getId()));
+				AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyValue(pDescriptor.getId());
+				cd.setRGB(rgb == null ? null : rgb.getRgb());
 				RGB newColor = cd.open();
 				if (newColor != null)
-					changeProperty(section, pDescriptor.getId(), newColor);
+					changeProperty(section, pDescriptor.getId(), new AlfaRGB(newColor, rgb == null ? 255 : rgb.getAlfa()));
 			}
 		});
 		foreButton.setToolTipText(pDescriptor.getDescription());
@@ -65,16 +62,16 @@ public class SPColor extends ASPropertyWidget {
 	private APropertyNode parent;
 	private ToolBar toolBar;
 
-	public void setData(APropertyNode parent, RGB b) {
+	public void setData(APropertyNode parent, AlfaRGB b) {
 		this.parent = parent;
 		foreButton.setImage(colorLabelProvider.getImage(b));
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
-		setData(null, (RGB) b);
+		setData(null, (AlfaRGB) b);
 	}
 
-	private void changeProperty(final AbstractSection section, final Object property, RGB newColor) {
+	private void changeProperty(final AbstractSection section, final Object property, AlfaRGB newColor) {
 		if (parent == null)
 			section.changeProperty(property, newColor);
 		else

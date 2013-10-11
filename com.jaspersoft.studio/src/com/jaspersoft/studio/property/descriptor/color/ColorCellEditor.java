@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.color;
 
@@ -26,6 +21,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 public class ColorCellEditor extends DialogCellEditor {
 
@@ -89,7 +86,7 @@ public class ColorCellEditor extends DialogCellEditor {
 	 */
 	public ColorCellEditor(Composite parent, int style) {
 		super(parent, style);
-		doSetValue(new RGB(0, 0, 0));
+		doSetValue(new AlfaRGB(new RGB(0, 0, 0), 255));
 	}
 
 	@Override
@@ -107,22 +104,25 @@ public class ColorCellEditor extends DialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		ColorDialog dialog = new ColorDialog(cellEditorWindow.getShell());
-		Object value = getValue();
-		if (value != null) {
-			dialog.setRGB((RGB) value);
-		}
-		value = dialog.open();
-		return dialog.getRGB();
+		AlfaRGB argb = (AlfaRGB) getValue();
+		if (argb != null)
+			dialog.setRGB(argb.getRgb());
+		RGB rgb = dialog.open();
+		if (rgb != null)
+			return new AlfaRGB(rgb, argb != null ? argb.getAlfa() : 255);
+		return argb;
 	}
 
 	@Override
 	protected void updateContents(Object value) {
-		RGB rgb = (RGB) value;
+		AlfaRGB argb = (AlfaRGB) value;
 		// XXX: We don't have a value the first time this method is called".
-		if (rgb == null) {
+		if (argb == null) {
 			rgbLabel.setText(""); //$NON-NLS-1$
 			// rgb = new RGB(0, 0, 0);
-		} else
-			rgbLabel.setText("RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ")");//$NON-NLS-4$//$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$
+		} else {
+			RGB rgb = argb.getRgb();
+			rgbLabel.setText("RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ") Transparency: " + argb.getAlfa());//$NON-NLS-4$//$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$
+		}
 	}
 }

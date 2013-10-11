@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
 /*
@@ -50,6 +51,8 @@ public class ColorLabelProvider extends LabelProvider {
 		Display display = Display.getCurrent();
 		if (element instanceof ColorProvider)
 			element = Colors.getRGB4AWTColor(((ColorProvider) element).getColor());
+		if (element instanceof AlfaRGB)
+			element = ((AlfaRGB) element).getRgb();
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
 			RGB black = new RGB(0, 0, 0);
@@ -89,6 +92,8 @@ public class ColorLabelProvider extends LabelProvider {
 			element = Colors.getRGB4AWTColor((Color) element);
 		if (element instanceof ColorProvider)
 			element = Colors.getRGB4AWTColor(((ColorProvider) element).getColor());
+		if (element instanceof AlfaRGB)
+			element = ((AlfaRGB) element).getRgb();
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
 			return rgb.red + "," + rgb.green + "," + rgb.blue; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$

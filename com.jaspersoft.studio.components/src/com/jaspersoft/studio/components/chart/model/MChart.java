@@ -70,7 +70,6 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
@@ -113,6 +112,7 @@ import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
@@ -287,12 +287,12 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		legendPositionD.setDescription(Messages.MChart_legend_position_description);
 		legendPositionD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chartLegend_position"));
 		desc.add(legendPositionD);
-		
+
 		JRExpressionPropertyDescriptor anchorNameExp = new JRExpressionPropertyDescriptor(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION, com.jaspersoft.studio.messages.Messages.MTextField_anchorNameLabel);
 		anchorNameExp.setHelpRefBuilder(new HelpReferenceBuilder("http://127.0.0.1:55429/help/topic/net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#anchorNameExpression")); //$NON-NLS-1$
 		anchorNameExp.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_anchorNameDescription);
 		desc.add(anchorNameExp);
-		
+
 		SpinnerPropertyDescriptor bookmarkLevel = new SpinnerPropertyDescriptor(JRDesignChart.PROPERTY_BOOKMARK_LEVEL, com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelLabel);
 		bookmarkLevel.setDescription(com.jaspersoft.studio.messages.Messages.MTextField_bookmarkLevelDescription);
 		bookmarkLevel.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#chart_bookmarkLevel")); //$NON-NLS-1$
@@ -420,13 +420,13 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkWhenExpression());
 		}
-		if (id.equals(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION)){
+		if (id.equals(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getAnchorNameExpression());
 		}
-		if (id.equals(JRDesignChart.PROPERTY_BOOKMARK_LEVEL)){
+		if (id.equals(JRDesignChart.PROPERTY_BOOKMARK_LEVEL)) {
 			return jrElement.getBookmarkLevel();
 		}
-		
+
 		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
 			if (mChartPlot == null) {
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
@@ -516,17 +516,17 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		}
 
 		else if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR)) {
-			if (value instanceof RGB)
-				jrElement.setTitleColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			if (value instanceof AlfaRGB)
+				jrElement.setTitleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR)) {
-			if (value instanceof RGB)
-				jrElement.setSubtitleColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			if (value instanceof AlfaRGB)
+				jrElement.setSubtitleColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else if (id.equals(JRBaseChart.PROPERTY_LEGEND_COLOR)) {
-			if (value instanceof RGB)
-				jrElement.setLegendColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			if (value instanceof AlfaRGB)
+				jrElement.setLegendColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else if (id.equals(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR)) {
-			if (value instanceof RGB)
-				jrElement.setLegendBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			if (value instanceof AlfaRGB)
+				jrElement.setLegendBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS)) {
 			value = Misc.nullValue((String) value);
 			jrElement.setCustomizerClass((String) value);
@@ -901,10 +901,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		JRChart oldObject = (JRChart) getValue();
-		if (oldObject != null && oldObject.getDataset() != null){
+		if (oldObject != null && oldObject.getDataset() != null) {
 			List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 			datasetList.add(new MDatasetRun(oldObject.getDataset().getDatasetRun(), getJasperDesign()));
 			return datasetList;
-		} else return null;
+		} else
+			return null;
 	}
 }

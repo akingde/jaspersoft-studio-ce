@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -43,6 +42,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -237,7 +237,7 @@ public class MSort extends MGraphicElement {
 		SortComponent component = (SortComponent) jrElement.getComponent();
 
 		if (id.equals(SortComponent.PROPERTY_HANDLER_COLOR))
-			component.setHandlerColor(Colors.getAWT4SWTRGBColor((RGB) value));
+			component.setHandlerColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_NAME))
 			component.setSortFieldName((String) value);
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))

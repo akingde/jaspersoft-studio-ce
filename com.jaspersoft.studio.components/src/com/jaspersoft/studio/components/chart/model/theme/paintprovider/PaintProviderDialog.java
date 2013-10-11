@@ -27,7 +27,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,6 +35,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
 public class PaintProviderDialog extends Dialog {
@@ -85,7 +85,7 @@ public class PaintProviderDialog extends Dialog {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent arg0) {
-				c1 = Colors.getAWT4SWTRGBColor((RGB) arg0.getNewValue());
+				c1 = Colors.getAWT4SWTRGBColor((AlfaRGB) arg0.getNewValue());
 				if (gpp == null && cp == null) {
 					cp = new ColorProvider(c1);
 					value = cp;
@@ -112,7 +112,7 @@ public class PaintProviderDialog extends Dialog {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent arg0) {
-				c2 = Colors.getAWT4SWTRGBColor((RGB) arg0.getNewValue());
+				c2 = Colors.getAWT4SWTRGBColor((AlfaRGB) arg0.getNewValue());
 				gpp.setColor2(c2);
 			}
 		});

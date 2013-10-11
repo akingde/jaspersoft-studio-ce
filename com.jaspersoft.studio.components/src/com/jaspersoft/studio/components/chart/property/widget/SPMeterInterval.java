@@ -33,7 +33,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -56,6 +55,7 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -241,7 +241,7 @@ public class SPMeterInterval extends ASPropertyWidget {
 					mi.setLabel((String) value);
 				}
 				if (property.equals("COLOR")) {//$NON-NLS-1$
-					mi.setBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
+					mi.setBackgroundColor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 				}
 				if (property.equals("ALPHA")) {//$NON-NLS-1$
 					try {

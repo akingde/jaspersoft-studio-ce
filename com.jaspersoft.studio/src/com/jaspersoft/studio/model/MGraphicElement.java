@@ -34,7 +34,6 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
@@ -58,6 +57,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -650,9 +650,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else
 		// colors
 		if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR)) {
-			jrElement.setForecolor(Colors.getAWT4SWTRGBColor((RGB) value));
+			jrElement.setForecolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)) {
-			jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
+			jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 		} else
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))

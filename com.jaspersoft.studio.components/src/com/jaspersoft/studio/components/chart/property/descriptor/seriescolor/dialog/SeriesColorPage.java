@@ -33,7 +33,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -50,19 +49,18 @@ import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
 public class SeriesColorPage extends WizardPage {
-	private final class TLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
+	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 		ColorLabelProvider clb = new ColorLabelProvider(NullEnum.NOTNULL);
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			SeriesColorDTO dto = (SeriesColorDTO) element;
 			switch (columnIndex) {
 			case 0:
-				return clb
-						.getImage(Colors.getSWTRGB4AWTGBColor(dto.getValue()));
+				return clb.getImage(Colors.getSWTRGB4AWTGBColor(dto.getValue()));
 			}
 			return null;
 		}
@@ -124,18 +122,14 @@ public class SeriesColorPage extends WizardPage {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(composite.getBackground());
 
-		new NewButton().createNewButtons(bGroup, tableViewer,
-				new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-					public Object newElement(List<?> input, int pos) {
-						SeriesColorDTO jrm = new SeriesColorDTO(new Color(
-								(int) (Math.random() * 255), (int) (Math
-										.random() * 255),
-								(int) (Math.random() * 255)));
-						return jrm;
-					}
+			public Object newElement(List<?> input, int pos) {
+				SeriesColorDTO jrm = new SeriesColorDTO(new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
+				return jrm;
+			}
 
-				});
+		});
 
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 
@@ -145,8 +139,7 @@ public class SeriesColorPage extends WizardPage {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 200;
 		gd.widthHint = 580;
@@ -200,7 +193,7 @@ public class SeriesColorPage extends WizardPage {
 				SeriesColorDTO mi = (SeriesColorDTO) ti.getData();
 
 				if (property.equals("COLOR")) {//$NON-NLS-1$
-					mi.setValue(Colors.getAWT4SWTRGBColor((RGB) value));
+					mi.setValue(Colors.getAWT4SWTRGBColor((AlfaRGB) value));
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
