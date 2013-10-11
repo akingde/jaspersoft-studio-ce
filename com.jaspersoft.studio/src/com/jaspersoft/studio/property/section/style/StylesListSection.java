@@ -56,6 +56,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
@@ -142,7 +143,16 @@ public class StylesListSection extends AbstractSection {
 	 * Boolean flag to take trace it the tab is shown
 	 */
 	private boolean shown = false;
-
+	
+	/**
+	 * Color used from the label as background
+	 */
+	private static final Color labelBackgroundColor = SWTResourceManager.getColor(240,240,240);;
+	
+	/**
+	 * map cache of the colors, they are disposed when the section is disposed
+	 */
+	private Map<String, Color> cacheColor = new HashMap<String, Color>();
 	/**
 	 * Class to manage the events of the mouse click, used to remove an attribute from an element or one of it's styles
 	 * 
@@ -611,7 +621,7 @@ public class StylesListSection extends AbstractSection {
 			java.awt.Color valImage = (java.awt.Color) value;
 			Control label = paintColor(
 					parent,
-					ModelUtils.getSWTColorFromAWT(valImage),
+				  getSWTColorFromAWT(valImage),
 					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
@@ -684,7 +694,7 @@ public class StylesListSection extends AbstractSection {
 		gridData.widthHint = SWT.FILL;
 		gridData.heightHint = 20;
 		label.setLayoutData(gridData);
-		label.setBackground(new Color(null, 240, 240, 240));
+		label.setBackground(labelBackgroundColor);
 		label.setText(" " + value); //$NON-NLS-1$
 		return label;
 	}
@@ -945,6 +955,16 @@ public class StylesListSection extends AbstractSection {
 			isRefreshing = false;
 		}
 	}
+	
+	private Color getSWTColorFromAWT(java.awt.Color awtColor) {
+		String key = awtColor.toString();
+		Color result = cacheColor.get(key);
+		if (result == null){
+			result = ModelUtils.getSWTColorFromAWT(awtColor);
+			cacheColor.put(key, result);
+		}
+		return result;
+	}
 
 	private void printWindowTitle(Composite parent) {
 		StyledText label = new StyledText(parent, SWT.WRAP);
@@ -1013,6 +1033,15 @@ public class StylesListSection extends AbstractSection {
 			}
 		}
 		return stylesClass;
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		for(Color color : cacheColor.values()){
+			color.dispose();
+		}
+		cacheColor.clear();
 	}
 
 	/**

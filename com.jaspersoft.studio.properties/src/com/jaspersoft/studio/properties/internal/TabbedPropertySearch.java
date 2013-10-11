@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormColors;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.properties.messages.Messages;
 import com.jaspersoft.studio.properties.view.ISection;
@@ -87,7 +88,7 @@ public class TabbedPropertySearch extends Composite {
 	/**
 	 * Color used for the arrow of the fake button
 	 */
-	private Color arrowColor = new Color(null, 0, 0, 0);
+	private static final Color arrowColor = SWTResourceManager.getColor(0,0,0);
 	
 	/**
 	 * The autocomplete object for the text element
@@ -227,7 +228,7 @@ public class TabbedPropertySearch extends Composite {
 	 */
 	private void createFakeButton(Composite containerComp){
 		Canvas openIcon = new Canvas(containerComp, SWT.NONE);
-		openIcon.setBackground(new Color(null,255,255,255));
+		openIcon.setBackground(SWTResourceManager.getColor(255,255,255));
 		openIcon.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
