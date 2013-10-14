@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.report;
 
@@ -146,13 +141,13 @@ public final class PageFormatDialog extends FormDialog {
 		int pagespace = pwidth.getValue() - lmargin.getValue() - rmargin.getValue();
 		int nrcolspace = cols.getSelection() - 1;
 		int colspace = nrcolspace * space.getValue();
-		int mspace = nrcolspace > 0 ? colspace / nrcolspace : pagespace;
-		int maxspace = nrcolspace > 0 ? pagespace / nrcolspace : pagespace;
+		int mspace = Math.max(0, nrcolspace > 0 ? colspace / nrcolspace : pagespace);
+		int maxspace = Math.max(0, nrcolspace > 0 ? pagespace / nrcolspace : pagespace);
 		if (mspace > maxspace)
 			mspace = maxspace;
 
 		if (mspace < space.getValue() && !ignoreEvents)
-			space.setValue(mspace); 
+			space.setValue(mspace);
 		space.setMax(maxspace);
 
 		int cw = (int) Math.floor((double) (pagespace - nrcolspace * space.getValue()) / (cols.getSelection()));
@@ -310,11 +305,10 @@ public final class PageFormatDialog extends FormDialog {
 			public void widgetSelected(SelectionEvent e) {
 				Point p = PageSize.getFormatSize(PageSize.getFormats()[pformat.getSelectionIndex()]);
 				// Standard measures are for portrait: should switch if landascape
-				if(portrait.getSelection()) {
+				if (portrait.getSelection()) {
 					pwidth.setValue(p.x);
 					pheigh.setValue(p.y);
-				}
-				else {
+				} else {
 					pwidth.setValue(p.y);
 					pheigh.setValue(p.x);
 				}
