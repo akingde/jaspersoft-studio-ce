@@ -3,9 +3,8 @@ package com.jaspersoft.studio.preferences.fonts.utils;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.StyledString.Styler;
-import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.TextStyle;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class BoldStyler extends Styler {
@@ -19,7 +18,9 @@ public class BoldStyler extends Styler {
 
 	@Override
 	public void applyStyles(TextStyle textStyle) {
-		textStyle.font = SWTResourceManager.getBoldFont(new Font(Display.getDefault(), FontUtils.getTextEditorFontData()));
+		FontData fd = FontUtils.getTextEditorFontData();
+		textStyle.font = SWTResourceManager.getBoldFont(SWTResourceManager.getFont(fd.getName(), fd.getHeight(),
+				fd.getStyle()));
 		ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
 		if (fForegroundColorName != null)
 			textStyle.foreground = colorRegistry.get(fForegroundColorName);
