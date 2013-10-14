@@ -133,48 +133,50 @@ public class ResourceBundleEditor extends MultiPageEditorPart
     protected void createPages() {
        // Create I18N page
         int index;
-        try {
-           I18nPageEditor i18PageEditor = new I18nPageEditor(resourceMediator);
-           index = addPage(i18PageEditor, null);
-           i18nPage = i18PageEditor.getI18nPage();
-           setPageText(index, RBEPlugin.getString("editor.properties")); //$NON-NLS-1$
-           setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
+        if (resourceMediator != null){
+	        try {
+	           I18nPageEditor i18PageEditor = new I18nPageEditor(resourceMediator);
+	           index = addPage(i18PageEditor, null);
+	           i18nPage = i18PageEditor.getI18nPage();
+	           setPageText(index, RBEPlugin.getString("editor.properties")); //$NON-NLS-1$
+	           setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
+	        }
+	        catch ( PartInitException argh ) {
+	           ErrorDialog.openError(getSite().getShell(), "Error creating i18PageEditor page.", //$NON-NLS-1$
+	              null, argh.getStatus());
+	        }
+	        
+	        // Create text editor pages for each locales
+	        try {
+	            SourceEditor[] sourceEditors = resourceMediator.getSourceEditors();
+	            for (int i = 0; i < sourceEditors.length; i++) {
+	                SourceEditor sourceEditor = sourceEditors[i];
+	                index = addPage(
+	                   sourceEditor.getEditor(), 
+	                   sourceEditor.getEditor().getEditorInput());
+	                setPageText(index, UIUtils.getDisplayName(
+	                        sourceEditor.getLocale()));
+	                setPageImage(index, 
+	                        UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
+	                
+	                _paths.add( sourceEditor.getFile().getFullPath() );
+	            }
+	            outline = new ResourceBundleOutline(resourceMediator.getKeyTree());
+	            
+	            
+	        } catch (PartInitException e) {
+	            ErrorDialog.openError(getSite().getShell(), 
+	                "Error creating text editor page.", //$NON-NLS-1$
+	                null, e.getStatus());
+	        }
+	        
+	        // Add "new locale" page
+	        newLocalePage = new NewLocalePage(getContainer(), resourceMediator, this);
+	        index = addPage(newLocalePage);
+	        setPageText(index, RBEPlugin.getString("editor.new.tab")); //$NON-NLS-1$
+	        setPageImage(
+	                index, UIUtils.getImage(UIUtils.IMAGE_NEW_PROPERTIES_FILE));
         }
-        catch ( PartInitException argh ) {
-           ErrorDialog.openError(getSite().getShell(), "Error creating i18PageEditor page.", //$NON-NLS-1$
-              null, argh.getStatus());
-        }
-        
-        // Create text editor pages for each locales
-        try {
-            SourceEditor[] sourceEditors = resourceMediator.getSourceEditors();
-            for (int i = 0; i < sourceEditors.length; i++) {
-                SourceEditor sourceEditor = sourceEditors[i];
-                index = addPage(
-                   sourceEditor.getEditor(), 
-                   sourceEditor.getEditor().getEditorInput());
-                setPageText(index, UIUtils.getDisplayName(
-                        sourceEditor.getLocale()));
-                setPageImage(index, 
-                        UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
-                
-                _paths.add( sourceEditor.getFile().getFullPath() );
-            }
-            outline = new ResourceBundleOutline(resourceMediator.getKeyTree());
-            
-            
-        } catch (PartInitException e) {
-            ErrorDialog.openError(getSite().getShell(), 
-                "Error creating text editor page.", //$NON-NLS-1$
-                null, e.getStatus());
-        }
-        
-        // Add "new locale" page
-        newLocalePage = new NewLocalePage(getContainer(), resourceMediator, this);
-        index = addPage(newLocalePage);
-        setPageText(index, RBEPlugin.getString("editor.new.tab")); //$NON-NLS-1$
-        setPageImage(
-                index, UIUtils.getImage(UIUtils.IMAGE_NEW_PROPERTIES_FILE));
     }
     
     public void addResource(IFile resource, Locale locale) {
@@ -356,21 +358,24 @@ public class ResourceBundleEditor extends MultiPageEditorPart
      */
     public void dispose() {
        
-        i18nPage.dispose();
-        newLocalePage.dispose();
+    	//The check of null avoid to dispose the page if for some reason it was not opened (like in the case of resource 
+    	//out of sync, its colosed before it is opened)
+        if (i18nPage != null) {
+        	i18nPage.dispose();
+        	newLocalePage.dispose();
         
-        /* fix for a weird memory leak: unless we remove the selectionProvider from our editor, 
-         * nothing get's GCed. */
-        getSite().setSelectionProvider(null);
-        SourceEditor[] sourceEditors = resourceMediator.getSourceEditors();
-        for ( int i = 0; i < sourceEditors.length; i++ ) {
-           SourceEditor editor = sourceEditors[i];
-           editor.getEditor().getSite().setSelectionProvider(null);
+	        /* fix for a weird memory leak: unless we remove the selectionProvider from our editor, 
+	         * nothing get's GCed. */
+	        getSite().setSelectionProvider(null);
+	        SourceEditor[] sourceEditors = resourceMediator.getSourceEditors();
+	        for ( int i = 0; i < sourceEditors.length; i++ ) {
+	           SourceEditor editor = sourceEditors[i];
+	           editor.getEditor().getSite().setSelectionProvider(null);
+	        }
+	
+	        ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
         }
-
-        ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
-
-        super.dispose();
+	    super.dispose();
     }
     
 

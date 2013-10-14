@@ -158,6 +158,7 @@ public class ImagePageContent extends AFileResourcePageContent {
 						WSClientHelper.getResource(res, res.getValue(), f);
 					}
 					if (f != null && f.exists()) {
+						if (img != null) img.dispose();
 						img = new Image(Display.getDefault(), f.getAbsolutePath());
 						resizeListener.handleEvent(null);
 
@@ -167,6 +168,12 @@ public class ImagePageContent extends AFileResourcePageContent {
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (img != null) img.dispose();
 	}
 
 	@Override

@@ -11,7 +11,6 @@
 package com.jaspersoft.studio.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -72,8 +71,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 	private Scale scale;
 
-	private List<Image> templateImages;
-
 	/**
 	 * Hashmap to cache the created gallery for a category
 	 */
@@ -120,7 +117,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		super("templatenewreportwizardPage"); //$NON-NLS-1$
 		setTitle(Messages.ReportTemplatesWizardPage_title);
 		setDescription(Messages.ReportTemplatesWizardPage_description);
-		templateImages = new ArrayList<Image>();
 	}
 
 	/**
@@ -236,21 +232,28 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 											item.setData("template", b);
 
 											if (b instanceof JrxmlTemplateBundle) {
-												Image itemImage = ((JrxmlTemplateBundle) b).getIcon();
+												//itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
+												JrxmlTemplateBundle jrxmlBundle = (JrxmlTemplateBundle)b;
+												Image itemImage = jrxmlBundle.getIcon();
 
 												if (itemImage != null) {
 													// Add viewer required effects to the images shown...
-													Image selectedImg = new Image(itemImage.getDevice(), SWTImageEffects.extendArea(
-															itemImage.getImageData(), 40, null));
-													Image standardShadowedImg = new Image(itemImage.getDevice(), Glow.glow(
-															itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 40, 0, 255));
+													String selectedImageKey = jrxmlBundle.getTemplateURL().toExternalForm()+"selectedImage";
+													Image selectedImg = ResourceManager.getImage(selectedImageKey);
+													if (selectedImg == null){
+														selectedImg = new Image(UIUtils.getDisplay(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
+														ResourceManager.addImage(selectedImageKey, selectedImg);
+													}
+													String standardShadowedImgeKey = jrxmlBundle.getTemplateURL().toExternalForm()+"standardShadowedImg";
+													Image standardShadowedImg = ResourceManager.getImage(standardShadowedImgeKey);
+													if (standardShadowedImg == null){
+														standardShadowedImg = new Image(UIUtils.getDisplay(), Glow.glow(itemImage.getImageData(), ResourceManager.getColor(SWT.COLOR_GRAY), 40, 0, 255));
+														ResourceManager.addImage(standardShadowedImgeKey, standardShadowedImg);
+													}
 													item.setSelectedImage(selectedImg);
 													item.setStandardImage(standardShadowedImg);
 													item.setImage(standardShadowedImg);
-
-													// Save image references, so they can later be disposed
-													templateImages.add(selectedImg);
-													templateImages.add(standardShadowedImg);
+													//The images are cached into the ResourceManager and disposed at the end
 												}
 												item.setText(b.getLabel());
 											}
@@ -375,6 +378,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		table.setSelection(0);
 	}
 
+	@SuppressWarnings("unused")
 	private void initializeBackgroundData() {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
@@ -449,17 +453,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 		return s;
 
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		// Dispose all images used for template thumbnails
-		for (Image img : templateImages) {
-			img.dispose();
-		}
-		templateImages.clear();
-		templateImages = null;
 	}
 
 	/**

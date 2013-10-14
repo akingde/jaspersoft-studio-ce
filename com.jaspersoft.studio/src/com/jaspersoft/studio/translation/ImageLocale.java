@@ -17,7 +17,7 @@ package com.jaspersoft.studio.translation;
 
 import java.util.Locale;
 
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 
 /**
  * Simple container to bind a Locale to an image that represent that locale.
@@ -36,7 +36,7 @@ public class ImageLocale {
 	/**
 	 * The image to associate to the locale
 	 */
-	private Image image;
+	private ImageData image;
 	
 	/**
 	 * Create an instance of the class
@@ -44,7 +44,7 @@ public class ImageLocale {
 	 * @param locale The locale
 	 * @param image image to associate to the locale
 	 */
-	public ImageLocale(Locale locale, Image image){
+	public ImageLocale(Locale locale, ImageData image){
 		this.locale = locale;
 		this.image = image;
 	}
@@ -54,7 +54,7 @@ public class ImageLocale {
 	 * 
 	 * @return an swt image, could be null
 	 */
-	public Image getImage(){
+	public ImageData getImage(){
 		return image;
 	}
 	

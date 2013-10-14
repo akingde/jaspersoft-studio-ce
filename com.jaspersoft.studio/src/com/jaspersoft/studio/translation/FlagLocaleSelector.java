@@ -25,6 +25,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -102,9 +103,11 @@ public class FlagLocaleSelector extends LocaleSelector{
 	        			height = height / scaleFactor;
 	        		}
 	        		if (width != loadedImage.getImageData().width || height != loadedImage.getImageData().height){
+	        			Image biggerImage = loadedImage;
 	        			loadedImage = ImageUtils.resize(loadedImage, width, height);
+	        			biggerImage.dispose();
 	        		}
-	        		
+	        		disposeOldFlagImage();
 							flagImage.setImage(loadedImage);
 							changeFlagImage.setText("Change flag image");
 							flagImage.getParent().layout(true,true);
@@ -118,14 +121,27 @@ public class FlagLocaleSelector extends LocaleSelector{
 		
 	}
 	
+	private void disposeOldFlagImage(){
+		Image flag = flagImage.getImage();
+		if (flag != null) flag.dispose();
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		disposeOldFlagImage();
+	}
+	
 	/**
 	 * Change the actually displayed image
 	 * 
 	 * @param image the new image
 	 * @param actualLocale locale associated with the new image
 	 */
-	public void updateImage(Image image, String actualLocale){
-		flagImage.setImage(image);
+	public void updateImage(ImageData image, String actualLocale){
+		disposeOldFlagImage();
+		if (image != null) flagImage.setImage(new Image(UIUtils.getDisplay(), image));
+		else flagImage.setImage(null);
 		actualLocaleImage = actualLocale;
 		if (image == null) changeFlagImage.setText("Set flag image");
 		else changeFlagImage.setText("Change flag image");
@@ -137,8 +153,9 @@ public class FlagLocaleSelector extends LocaleSelector{
 	 * 
 	 * @return the actual locale image, can be null
 	 */
-	public Image getActualImage(){
-		return flagImage.getImage();
+	public ImageData getActualImage(){
+		if (flagImage.getImage() == null) return null;
+		return flagImage.getImage().getImageData();
 	}
 	
 	/**

@@ -94,7 +94,6 @@ public class GenerateFragmentWizard extends JSSWizard {
 		return step1.getSelectedResources();
 	}
 	
-	
 	@Override
 	public boolean performFinish() {
 		 List<ExtendedTranslationInformation> selectedResources = step1.getSelectedResources();

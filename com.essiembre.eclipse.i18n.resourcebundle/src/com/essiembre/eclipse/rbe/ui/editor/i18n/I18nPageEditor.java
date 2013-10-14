@@ -33,33 +33,35 @@ public class I18nPageEditor extends AbstractTextEditor {
    
    @Override
    public void createPartControl( Composite parent ) {
-      _i18nPage = new I18nPage(parent, SWT.NONE, _resourceMediator);
+	   if (_resourceMediator != null){
+		   _i18nPage = new I18nPage(parent, SWT.NONE, _resourceMediator);
       
-      _findReplaceAction = new FindReplaceAction(RBEPlugin.getDefault().getResourceBundle(), null, _i18nPage.getShell(), _i18nPage.getReplaceTarget()) {
-         @Override
-         public void run() {
-            _i18nPage.findActionStart();
-            super.run();
-         }
-      };
-      
-      _findNextAction = new FindNextAction(RBEPlugin.getDefault().getResourceBundle(), null, this, true){
-         @Override
-         public void run() {
-            _i18nPage.findActionStart();
-            super.run();
-         }
-      };
-      _findNextAction.setActionDefinitionId(IWorkbenchActionDefinitionIds.FIND_NEXT);
-      
-      _findPreviousAction = new FindNextAction(RBEPlugin.getDefault().getResourceBundle(), null, this, false){
-         @Override
-         public void run() {
-            _i18nPage.findActionStart();
-            super.run();
-         }
-      };
-      _findPreviousAction.setActionDefinitionId(IWorkbenchActionDefinitionIds.FIND_PREVIOUS);
+	      _findReplaceAction = new FindReplaceAction(RBEPlugin.getDefault().getResourceBundle(), null, _i18nPage.getShell(), _i18nPage.getReplaceTarget()) {
+	         @Override
+	         public void run() {
+	            _i18nPage.findActionStart();
+	            super.run();
+	         }
+	      };
+	      
+	      _findNextAction = new FindNextAction(RBEPlugin.getDefault().getResourceBundle(), null, this, true){
+	         @Override
+	         public void run() {
+	            _i18nPage.findActionStart();
+	            super.run();
+	         }
+	      };
+	      _findNextAction.setActionDefinitionId(IWorkbenchActionDefinitionIds.FIND_NEXT);
+	      
+	      _findPreviousAction = new FindNextAction(RBEPlugin.getDefault().getResourceBundle(), null, this, false){
+	         @Override
+	         public void run() {
+	            _i18nPage.findActionStart();
+	            super.run();
+	         }
+	      };
+	      _findPreviousAction.setActionDefinitionId(IWorkbenchActionDefinitionIds.FIND_PREVIOUS);
+	   }
    }
    
    @SuppressWarnings("rawtypes")

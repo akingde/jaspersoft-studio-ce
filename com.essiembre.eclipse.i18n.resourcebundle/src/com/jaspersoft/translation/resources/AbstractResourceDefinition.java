@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
@@ -102,7 +103,31 @@ public abstract class AbstractResourceDefinition {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * Return the map that contains all the pairs key\value inside 
+	 * the properties file. When this method is called the first time
+	 * the map is created and initialized from the file then cached.
+	 * The following times the cached one is returned
+	 * 
+	 * @param loc the requested language
+	 * @return a not null map  that contains all the pairs key\value inside 
+	 * the properties file. The map is void if the specified language can not
+	 * be found
+	 */
+	public Hashtable<Object,Object> getLocalizedProerties(Locale loc){
+		InputStream is = getLocalizedInput(loc);
+		Hashtable<Object,Object> result = new Properties();		
+		if (is == null) return result;
+		else {
+			try {
+					((Properties)result).load(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return result;
+		}
+	}
 
 	/**
 	 * Return the value of a specific key inside the properties file
@@ -143,6 +168,15 @@ public abstract class AbstractResourceDefinition {
 	 * key\value are read
 	 */
 	protected abstract InputStream getFileInput();
+	
+	/**
+	 * Return an inputstram to the properties source file of a specific language
+	 * 
+	 * @return a not null inputstream from where the pairs
+	 * key\value are read if it can be found in the specific language
+	 * null otherwise
+	 */
+	protected abstract InputStream getLocalizedInput(Locale loc);
 	
 	/**
 	 * Return the description of the file

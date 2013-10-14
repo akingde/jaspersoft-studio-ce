@@ -33,7 +33,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.ResourceCache;
 
 import com.jaspersoft.studio.ConfigurationPathProvider;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -109,6 +110,11 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 	 */
 	private List<ImageLocale> selectedLanguages = new ArrayList<ImageLocale>();
 	
+	/**
+	 * Cache where the images used by the items are stored and disposed at the end
+	 */
+	private ResourceCache imagesCache = new ResourceCache();
+	
 	public LocalesTranslationWizardPage() {
 		super(Messages.LocalesTranslationWizardPage_dialogTitle);
 		setTitle(Messages.LocalesTranslationWizardPage_pageTitle);
@@ -157,6 +163,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		return Locale.getDefault();
 	}
 	
+	
 	/**
 	 * Given a locale search if there is an icon image that represent it. If an image 
 	 * is found it is returned, otherwise return null. the icon is searched using
@@ -166,15 +173,19 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 	 * @param loc locale used to search an associated icon
 	 * @return image that represent the locale, or null if it is not found
 	 */
-	private Image getImageForLocale(Locale loc){
+	private ImageData getImageForLocale(Locale loc){
 		String newLocaleLang = loc.getLanguage();
 		String newLocaleCountry = loc.getCountry();
-		ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleLang+".png"); //$NON-NLS-1$//$NON-NLS-2$
+		String key = "icons/flags/"+newLocaleLang+".png";
+		ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor(key); //$NON-NLS-1$//$NON-NLS-2$
 		if (descriptor == null) {
-			descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleCountry+".png"); //$NON-NLS-1$//$NON-NLS-2$
+			key = "icons/flags/"+newLocaleCountry+".png";
+			descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor(key);
 		}
 		if (descriptor == null) return null;
-		else return new Image(null, descriptor.getImageData());
+		else {
+			return descriptor.getImageData();
+		}
 	}
 	
 	/**
@@ -235,7 +246,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 			TableItem item = new TableItem(bundleLocalesList, SWT.NONE);
 			item.setText(loc.getLocale().toString());
 			item.setData(loc.getLocale());
-			item.setImage(loc.getImage());
+			item.setImage(imagesCache.getImage(loc.getImage()));
 		}
 		setAddButtonState();
 	}
@@ -250,7 +261,9 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		destinationPath = filePath.getText();
 		selectedLanguages = new ArrayList<ImageLocale>();
 		for(TableItem item : bundleLocalesList.getItems()){
-			ImageLocale exportedLocale = new ImageLocale((Locale)item.getData(), item.getImage());
+			ImageData itemImageData = null;
+			if (item.getImage() != null) itemImageData = item.getImage().getImageData();
+			ImageLocale exportedLocale = new ImageLocale((Locale)item.getData(), itemImageData);
 			selectedLanguages.add(exportedLocale);
 		}
 		return super.getNextPage();
@@ -458,7 +471,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 				TableItem item = new TableItem(bundleLocalesList, SWT.NONE);
 				item.setText(getSelectedLocaleAsString());
 				item.setData(localeSelector.getSelectedLocale());
-				item.setImage(localeSelector.getActualImage());
+				item.setImage(imagesCache.getImage(localeSelector.getActualImage()));
 				setAddButtonState();
 				dialogChanged();
 			}
@@ -491,24 +504,42 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		localeSelector = new FlagLocaleSelector(parent);
 		localeSelector.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		localeSelector.addModifyListener(new ModifyListener() {
+			
+			private String actualLocale;
+			
+			private ImageData getImage(String newLocaleLang, String newLocaleCountry){
+				actualLocale = newLocaleLang;
+				String key = "icons/flags/"+newLocaleLang+".png";
+				ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor(key); 
+				if (descriptor == null) {
+					actualLocale = newLocaleCountry;
+					key = "icons/flags/"+newLocaleCountry+".png";
+					descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor(key);
+					actualLocale = newLocaleCountry;
+				}
+				if (descriptor != null){
+					return descriptor.getImageData();
+				}
+				return null;
+			}
+			
 			public void modifyText(ModifyEvent e) {
 				setAddButtonState();
-				
 				String newLocaleLang = localeSelector.getLangText();
 				String newLocaleCountry = localeSelector.getCountryText();
-				String actualLocale = localeSelector.getActualLocaleImage();
+				actualLocale = localeSelector.getActualLocaleImage();
 				if (!(newLocaleLang.equals(actualLocale) || newLocaleCountry.equals(actualLocale))){
-					ImageDescriptor descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleLang+".png"); //$NON-NLS-1$ //$NON-NLS-2$
-					actualLocale = newLocaleLang;
-					if (descriptor == null) {
-						descriptor = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/flags/"+newLocaleCountry+".png"); //$NON-NLS-1$ //$NON-NLS-2$
-						actualLocale = newLocaleCountry;
-					}
-					if (descriptor == null) localeSelector.updateImage(null, actualLocale);
-					else localeSelector.updateImage(new Image(null, descriptor.getImageData()),actualLocale);
+					localeSelector.updateImage(getImage(newLocaleLang, newLocaleCountry), actualLocale);
 				}
 			}
 		});
 	}
-
+	
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		imagesCache.dispose();
+	}
+	
 }

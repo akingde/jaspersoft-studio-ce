@@ -16,9 +16,7 @@
 package com.jaspersoft.translation.resources;
 
 import java.io.InputStream;
-
-import com.jaspersoft.translation.resources.AbstractResourceDefinition;
-import com.jaspersoft.translation.resources.IResourcesInput;
+import java.util.Locale;
 
 /**
  * This class define a file resource that can recovered from the translation editor
@@ -168,6 +166,20 @@ public class PackageResourceDefinition extends AbstractResourceDefinition{
 	@Override
 	protected InputStream getFileInput() {
 		return propertiesLoader.getResourceAsStream(filePath);
+	}
+	
+	protected InputStream getLocalizedInput(Locale loc){
+		String locName = new String(fileName);
+		if (locName.endsWith(".properties")){
+			locName = locName.substring(0,locName.length()-11);
+			for(Locale searchedLoc : Locale.getAvailableLocales()){
+				if (searchedLoc.getLanguage().equals(loc.getLanguage())){
+					InputStream stream = propertiesLoader.getResourceAsStream(locName + "_" + searchedLoc.toString() + ".properties");
+					if (stream != null) return stream;
+				}
+			}
+		} 
+		return null;
 	}
 	
 	/**

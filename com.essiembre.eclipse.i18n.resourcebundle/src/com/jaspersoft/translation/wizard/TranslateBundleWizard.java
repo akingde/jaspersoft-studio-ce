@@ -20,8 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -83,11 +84,6 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
      * Eventually can contain the selected project
      */
     private ISelection selection;
-    
-    /**
-     * The reference to the first file created, that will be opened in the editor
-     */
-    private IFile firstFileCreated;
 
     /**
      * Constructor for ResourceBundleWizard.
@@ -109,31 +105,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
         addPage(page1);
     }
     
-    /**
-     * Fill a just created properties file with all the element inside the properties
-     * source. In short it mirror the original source
-     * 
-     * @param file the just created properties file
-     * @param sourceResource the source of all the properties
-     */
-    private void fillFile(IFile file, AbstractResourceDefinition sourceResource){
-    	Properties languageFile = new Properties();
-    	URL propertiesFile;
-		try {
-			propertiesFile = file.getLocation().toFile().toURI().toURL();
-	    	languageFile.load(propertiesFile.openStream());
-	    	String[] keys = sourceResource.getKeys();
-	    	for(String key : keys){
-	    		languageFile.put(key, sourceResource.getValue(key));
-	    	}
-			String packageName = sourceResource.getPackageName() != null ? sourceResource.getPackageName() + ":" : ""; 
-	    	String comment = "source="+packageName+sourceResource.getFileName();
-	    	languageFile.store(new FileOutputStream(file.getLocation().toFile()), comment);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-    }
     
 	/**
 	 * Creates a folder resource handle for the folder with the given workspace
@@ -203,7 +175,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
 	 * @param projectName name of the project
 	 * @param monitor
 	 */
-	private void checkAndCreatePrject(String projectName, IProgressMonitor monitor){
+	private IProject checkAndCreatePrject(String projectName, IProgressMonitor monitor){
 		IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		if (!prj.exists()){
 			IProjectDescription desc = prj.getWorkspace().newProjectDescription(prj.getName());
@@ -215,6 +187,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
 				e.printStackTrace();
 			}
 		}
+		return prj;
 	}
 
     /**
@@ -225,7 +198,6 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
      */
     public boolean performFinish() {
         final String containerName = page1.getContainerName();
-        //final String baseName = page1.getFileName();
         final String[] locales = page1.getLocaleStrings();
         IRunnableWithProgress op = new IRunnableWithProgress() {
             public void run(IProgressMonitor monitor) throws InvocationTargetException {
@@ -233,16 +205,14 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
                     monitor.worked(1);
                     monitor.setTaskName(RBEPlugin.getString("editor.wiz.creating")); //$NON-NLS-1$
                     //Check if the selected project exist, otherwise it is created
-                    checkAndCreatePrject(containerName, monitor);
-                    firstFileCreated = null;
+                    IProject prj = checkAndCreatePrject(containerName, monitor);
                     for(AbstractResourceDefinition resource : getSelectedResource()){
-                        IFile file = null;
-                        for (int i = 0; i <  locales.length; i++) {
+                        for (String locale : locales) {
                             String fileName = resource.getFileNameWithoutExtension();
-                            if (locales[i].equals(ResourceBundleNewWizardPage.DEFAULT_LOCALE)) {
+                            if (locale.equals(ResourceBundleNewWizardPage.DEFAULT_LOCALE)) {
                                 fileName += ".properties"; //$NON-NLS-1$
                             } else {
-                                fileName += "_" + locales[i] + ".properties";  //$NON-NLS-1$
+                                fileName += "_" + locale + ".properties";  //$NON-NLS-1$
                             } 
                             if (page1.needToCreateFolder()){
                             	String pluginName = resource.getPluginName();
@@ -252,20 +222,23 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
                             	if (resource.getPackageName() != null){
                             		folder = createNewFolder(folder.getFullPath().toString(), resource.getPackageName(), monitor);
                             	}
-                            	file = createFile(folder.getFullPath(), fileName, resource, monitor);
-                            } else file = createFile(containerName, fileName, resource, monitor);
-                            if (firstFileCreated == null) firstFileCreated = file;
-                        }
-                    }
-                    /*getShell().getDisplay().asyncExec(new Runnable() {
-                        public void run() {
-                            IWorkbenchPage wbPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                            try {
-                            	IDE.openEditor(wbPage, firstFileCreated, "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor",true);
-                            } catch (PartInitException e) {
+                                monitor.beginTask(RBEPlugin.getString("editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
+                                IResource containerResource =  ResourcesPlugin.getWorkspace().getRoot().findMember(folder.getFullPath());
+                                if (!containerResource.exists() || !(containerResource instanceof IContainer)) {
+                                    throwCoreException("Container \"" + folder.getFullPath().toString() + "\" does not exist."); //$NON-NLS-1$
+                                }
+                            	createFile(containerResource, fileName, resource, locale, monitor);                             
+                            } else {
+                                IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+                                IResource containerResource = root.findMember(new Path(containerName));
+                                if (!containerResource.exists() || !(containerResource instanceof IContainer)) {
+                                    throwCoreException("Container \"" + containerName  + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-1$
+                                }
+                            	createFile(containerResource, fileName, resource, locale, monitor);
                             }
                         }
-                    });*/
+                    }
+                    prj.refreshLocal(IResource.DEPTH_INFINITE, monitor);
                     monitor.worked(1);
                 } catch (CoreException e) {
                     throw new InvocationTargetException(e);
@@ -288,60 +261,60 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
         }
         return true;
     }
+
     
     /**
      * The worker method. It will find the container, create the
      * file if missing or just replace its contents, and open
      * the editor on the newly created file.
      */
-    protected IFile createFile(IPath parentPath, String fileName, AbstractResourceDefinition sourceResource, IProgressMonitor monitor) throws CoreException {
+    protected IFile createFile(IResource containerResource, String fileName, AbstractResourceDefinition sourceResource, String locale, IProgressMonitor monitor) throws CoreException {     
         monitor.beginTask(RBEPlugin.getString("editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
-        IResource resource =  ResourcesPlugin.getWorkspace().getRoot().findMember(parentPath);
-        if (!resource.exists() || !(resource instanceof IContainer)) {
-            throwCoreException("Container \"" + parentPath.toString() + "\" does not exist."); //$NON-NLS-1$
-        }
-        IContainer container = (IContainer) resource;
+        IContainer container = (IContainer) containerResource;
         final IFile file = container.getFile(new Path(fileName));
         try {
             InputStream stream = openContentStream();
-            if (file.exists()) {
-                file.setContents(stream, true, true, monitor);
-            } else {
-                file.create(stream, true, monitor);
-            }
+            if (!file.exists()) file.create(stream, true, monitor);
+            Properties languageFile = fillFile(stream, sourceResource, locale);
+			String packageName = sourceResource.getPackageName() != null ? sourceResource.getPackageName() + ":" : ""; 
+	    	String comment = "source="+packageName+sourceResource.getFileName();
+	    	FileOutputStream outStream = new FileOutputStream(file.getLocation().toFile());
+	    	languageFile.store(outStream, comment);
             stream.close();
-            fillFile(file, sourceResource);
+            outStream.close();
+            file.refreshLocal(IResource.DEPTH_INFINITE, monitor);
         } catch (IOException e) {
+        	e.printStackTrace();
         }
         return file;
     }
     
+    
     /**
-     * The worker method. It will find the container, create the
-     * file if missing or just replace its contents, and open
-     * the editor on the newly created file.
+     * Fill a just created properties file with all the element inside the properties
+     * source. In short it mirror the original source
+     * 
+     * @param file the just created properties file
+     * @param sourceResource the source of all the properties
      */
-    protected IFile createFile(String containerName, String fileName, AbstractResourceDefinition sourceResource, IProgressMonitor monitor) throws CoreException {     
-        monitor.beginTask(RBEPlugin.getString("editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        IResource resource = root.findMember(new Path(containerName));
-        if (!resource.exists() || !(resource instanceof IContainer)) {
-            throwCoreException("Container \"" + containerName  + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-1$
-        }
-        IContainer container = (IContainer) resource;
-        final IFile file = container.getFile(new Path(fileName));
-        try {
-            InputStream stream = openContentStream();
-            if (file.exists()) {
-                file.setContents(stream, true, true, monitor);
-            } else {
-                file.create(stream, true, monitor);
-            }
-            stream.close();
-            fillFile(file, sourceResource);
-        } catch (IOException e) {
-        }
-        return file;
+    private Properties fillFile(InputStream file, AbstractResourceDefinition sourceResource, String locale){
+    	Properties languageFile = new Properties();
+		try {
+	    	languageFile.load(file);
+	    	String[] keys = sourceResource.getKeys();
+	    	for(String key : keys){
+	    		languageFile.put(key, sourceResource.getValue(key));
+	    	}
+	    	//If we are creating a file of already existing locale then we replace the default string with the localized ones
+	    	Locale actualLocale = new Locale(locale.split("_")[0]);
+	    	Hashtable<Object,Object> alreadyLocProperties = sourceResource.getLocalizedProerties(actualLocale);
+	    	for(Object key : alreadyLocProperties.keySet()){
+	    		languageFile.put(key, alreadyLocProperties.get(key));
+	    	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return languageFile;
     }
     
     /**

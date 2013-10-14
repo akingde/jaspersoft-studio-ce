@@ -21,12 +21,15 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wb.swt.ResourceCache;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class CheckBoxLabelProvider2 extends LabelProvider {
 
 	private static final String CHECKED_KEY = "CHECKED"; //$NON-NLS-1$
 	private static final String UNCHECK_KEY = "UNCHECKED"; //$NON-NLS-1$
+	
+	private ResourceCache cache = new ResourceCache();
 
 	public CheckBoxLabelProvider2() {
 		if (JFaceResources.getImageRegistry().getDescriptor(CHECKED_KEY) == null) {
@@ -72,8 +75,9 @@ public class CheckBoxLabelProvider2 extends LabelProvider {
 
 		ImageData imageData = image.getImageData();
 		imageData.transparentPixel = imageData.palette.getPixel(greenScreen.getRGB());
-
-		return new Image(display, imageData);
+		image.dispose();
+		Image resultImage = cache.getImage(imageData);
+		return resultImage;
 	}
 
 	public Image getImage(Object element) {
@@ -82,6 +86,12 @@ public class CheckBoxLabelProvider2 extends LabelProvider {
 		} else {
 			return JFaceResources.getImageRegistry().get(UNCHECK_KEY);
 		}
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		cache.dispose();
 	}
 
 }

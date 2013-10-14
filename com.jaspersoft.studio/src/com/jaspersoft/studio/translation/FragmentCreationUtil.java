@@ -152,7 +152,7 @@ public class FragmentCreationUtil {
 			String imagePath = "";
 			if (loc.getImage() != null){ 
 				ImageLoader loader = new ImageLoader();
-		    loader.data = new ImageData[] {loc.getImage().getImageData()};
+		    loader.data = new ImageData[] {loc.getImage()};
 		    String imageName = loc.getLocale().toString()+".png";
 		    loader.save(iconDir.getAbsolutePath() + SEPARATOR + imageName, SWT.IMAGE_PNG);
 		    imagePath = "icons/"+imageName;

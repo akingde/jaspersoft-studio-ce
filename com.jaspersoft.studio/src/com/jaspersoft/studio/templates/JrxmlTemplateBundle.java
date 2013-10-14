@@ -390,7 +390,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 	/**
 	 * @return the templateURL
 	 */
-	protected URL getTemplateURL() {
+	public URL getTemplateURL() {
 		return templateURL;
 	}
 
