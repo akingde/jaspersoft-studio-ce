@@ -96,6 +96,8 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
+		super.setDataAdapter(dataAdapterDescriptor);
+
 		this.dataAdapterDescriptor = (CassandraDataAdapterDescriptor) dataAdapterDescriptor;
 		CassandraDataAdapter dataAdapter = (CassandraDataAdapter) dataAdapterDescriptor
 				.getDataAdapter();

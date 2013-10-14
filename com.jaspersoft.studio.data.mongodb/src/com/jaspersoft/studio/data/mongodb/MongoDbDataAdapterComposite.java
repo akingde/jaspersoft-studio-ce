@@ -37,68 +37,67 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
  * 
  */
 public class MongoDbDataAdapterComposite extends ADataAdapterComposite {
-    private Text mongoUriField;
+	private Text mongoUriField;
 
-    private Text usernameField;
+	private Text usernameField;
 
-    private Text passwordField;
+	private Text passwordField;
 
-    private MongoDbDataAdapterDescriptor dataAdapterDescriptor;
+	private MongoDbDataAdapterDescriptor dataAdapterDescriptor;
 
 	public MongoDbDataAdapterComposite(Composite parent, int style, JasperReportsContext jrContext) {
 		super(parent, style, jrContext);
-        initComponents();
-    }
+		initComponents();
+	}
 
-    private void initComponents() {
-        setLayout(new GridLayout(2, false));
+	private void initComponents() {
+		setLayout(new GridLayout(2, false));
 
-        createLabel("Mongo URI");
-        mongoUriField = createTextField(false);
-        createLabel("Username");
-        usernameField = createTextField(false);
-        createLabel("Password");
-        passwordField = createTextField(true);
-    }
+		createLabel("Mongo URI");
+		mongoUriField = createTextField(false);
+		createLabel("Username");
+		usernameField = createTextField(false);
+		createLabel("Password");
+		passwordField = createTextField(true);
+	}
 
-    private void createLabel(String text) {
-        Label label = new Label(this, SWT.NONE);
-        label.setText(text);
-        label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-    }
+	private void createLabel(String text) {
+		Label label = new Label(this, SWT.NONE);
+		label.setText(text);
+		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+	}
 
-    private Text createTextField(boolean password) {
-        Text textField = new Text(this, !password ? SWT.BORDER : SWT.BORDER | SWT.PASSWORD);
-        textField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        return textField;
-    }
+	private Text createTextField(boolean password) {
+		Text textField = new Text(this, !password ? SWT.BORDER : SWT.BORDER | SWT.PASSWORD);
+		textField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		return textField;
+	}
 
-    public DataAdapterDescriptor getDataAdapter() {
-        if (dataAdapterDescriptor == null) {
-            dataAdapterDescriptor = new MongoDbDataAdapterDescriptor();
-        }
-        return dataAdapterDescriptor;
-    }
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDescriptor == null) {
+			dataAdapterDescriptor = new MongoDbDataAdapterDescriptor();
+		}
+		return dataAdapterDescriptor;
+	}
 
-    @Override
-    public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
-        this.dataAdapterDescriptor = (MongoDbDataAdapterDescriptor) dataAdapterDescriptor;
-        MongoDbDataAdapter dataAdapter = (MongoDbDataAdapter) dataAdapterDescriptor.getDataAdapter();
-        bindWidgets(dataAdapter);
-    }
+	@Override
+	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
+		super.setDataAdapter(dataAdapterDescriptor);
 
-    @Override
-    protected void bindWidgets(DataAdapter dataAdapter) {
-        bindingContext.bindValue(SWTObservables.observeText(mongoUriField, SWT.Modify),
-                PojoObservables.observeValue(dataAdapter, "mongoURI"));
-        bindingContext.bindValue(SWTObservables.observeText(usernameField, SWT.Modify),
-                PojoObservables.observeValue(dataAdapter, "username"));
-        bindingContext.bindValue(SWTObservables.observeText(passwordField, SWT.Modify),
-                PojoObservables.observeValue(dataAdapter, "password"));
-    }
-    
-    @Override
-    public String getHelpContextId() {
-    	return PREFIX.concat("adapter_mongodb");
-    }
+		this.dataAdapterDescriptor = (MongoDbDataAdapterDescriptor) dataAdapterDescriptor;
+		MongoDbDataAdapter dataAdapter = (MongoDbDataAdapter) dataAdapterDescriptor.getDataAdapter();
+		bindWidgets(dataAdapter);
+	}
+
+	@Override
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(SWTObservables.observeText(mongoUriField, SWT.Modify), PojoObservables.observeValue(dataAdapter, "mongoURI"));
+		bindingContext.bindValue(SWTObservables.observeText(usernameField, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username"));
+		bindingContext.bindValue(SWTObservables.observeText(passwordField, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password"));
+	}
+
+	@Override
+	public String getHelpContextId() {
+		return PREFIX.concat("adapter_mongodb");
+	}
 }
