@@ -18,4 +18,12 @@ public class AlfaRGB {
 	public int getAlfa() {
 		return alfa;
 	}
+	
+	public static AlfaRGB getFullyOpaque(RGB rgb) {
+		return new AlfaRGB(rgb, 255);
+	}
+	
+	public static AlfaRGB getFullyTransparent(RGB rgb) {
+		return new AlfaRGB(rgb, 0);
+	}
 }

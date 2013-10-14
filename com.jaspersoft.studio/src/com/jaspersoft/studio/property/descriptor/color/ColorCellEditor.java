@@ -86,7 +86,7 @@ public class ColorCellEditor extends DialogCellEditor {
 	 */
 	public ColorCellEditor(Composite parent, int style) {
 		super(parent, style);
-		doSetValue(new AlfaRGB(new RGB(0, 0, 0), 255));
+		doSetValue(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
 	}
 
 	@Override

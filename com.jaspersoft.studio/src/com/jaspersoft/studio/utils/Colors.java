@@ -149,9 +149,24 @@ public class Colors {
 		if (rgbColor == null) {
 			return ""; //$NON-NLS-1$
 		}
-		return getHexEncodedAWTColor(getAWT4SWTRGBColor(new AlfaRGB(rgbColor, 255)));
+		return getHexEncodedAWTColor(getAWT4SWTRGBColor(AlfaRGB.getFullyOpaque(rgbColor)));
 	}
-
+	
+	/**
+	 * Gets the encoded value of a {@link AlfaRGB} instance.<br>
+	 * The output is the hexadecimal conversion (i.e: #00FFFF).
+	 * The alpha channel is not considered.
+	 * 
+	 * @param alfaRgbColor
+	 *          the color to encode
+	 * @return color value as encoded string
+	 */
+	public static String getHexEncodedRGBColor(AlfaRGB alfaRgbColor) {
+		if (alfaRgbColor == null) {
+			return ""; //$NON-NLS-1$
+		}
+		return getHexEncodedAWTColor(getAWT4SWTRGBColor(alfaRgbColor));
+	}
 	/**
 	 * Gets an SWT image representing a preview of the specified AWT color. The output image has size according to the
 	 * specified width and height in pixels.
@@ -253,7 +268,7 @@ public class Colors {
 	public static java.awt.Color decodeHexStringAsAWTColor(String hexColorString) {
 		RGB decodedRGB = decodeHexStringAsSWTRGB(hexColorString);
 		if (decodedRGB != null) {
-			return getAWT4SWTRGBColor(new AlfaRGB(decodedRGB, 255));
+			return getAWT4SWTRGBColor(AlfaRGB.getFullyOpaque(decodedRGB));
 		} else {
 			return null;
 		}

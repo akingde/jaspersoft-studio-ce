@@ -99,7 +99,7 @@ public class WColorPicker extends Composite {
 		gridData2.widthHint = textColorValue.computeSize(averageCharWidth * 10, SWT.DEFAULT).x;
 		gridData2.heightHint = charHeight;
 		textColorValue.setLayoutData(gridData2);
-		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB.getRgb()));
+		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB));
 
 		ToolBar toolBar = new ToolBar(this, SWT.NONE);
 		toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -111,9 +111,14 @@ public class WColorPicker extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(getShell());
 				cd.setText(Messages.ColorsSection_element_forecolor);
-				cd.setRGB(selectedRGB.getRgb());
+				cd.setRGB(selectedRGB!=null ? selectedRGB.getRgb() : null);
 				RGB newColor = cd.open();
-				setColor(new AlfaRGB(newColor, selectedRGB.getAlfa()));
+				if(selectedRGB!=null){
+					setColor(new AlfaRGB(newColor, selectedRGB.getAlfa()));
+				}
+				else{
+					setColor(AlfaRGB.getFullyOpaque(newColor));
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -142,7 +147,7 @@ public class WColorPicker extends Composite {
 	public void setColor(AlfaRGB newColor) {
 		// Updates color information
 		selectedRGB = newColor;
-		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB.getRgb()));
+		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB));
 		updatePreviewImage(isEnabled());
 		notifyColorSelection();
 	}
