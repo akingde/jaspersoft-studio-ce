@@ -11,8 +11,6 @@
 package com.jaspersoft.studio.property.descriptor.color;
 
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.sf.jasperreports.chartthemes.simple.ColorProvider;
 import net.sf.jasperreports.chartthemes.simple.GradientPaintProvider;
@@ -25,6 +23,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.wb.swt.ResourceCache;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -37,7 +36,7 @@ import com.jaspersoft.studio.utils.Colors;
 public class ColorLabelProvider extends LabelProvider {
 	private NullEnum canBeNull;
 
-	private Map<String, Image> cachedImages = new HashMap<String, Image>();
+	private ResourceCache imagesCache = new ResourceCache();
 
 	public ColorLabelProvider(NullEnum canBeNull) {
 		super();
@@ -60,7 +59,7 @@ public class ColorLabelProvider extends LabelProvider {
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
 			String key = rgb.toString() + Integer.toString(width) + Integer.toString(height);
-			Image result = cachedImages.get(key);
+			Image result = imagesCache.getImage(key);
 			if (result == null) {
 				RGB black = new RGB(0, 0, 0);
 				PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });
@@ -77,7 +76,7 @@ public class ColorLabelProvider extends LabelProvider {
 					}
 				}
 				result = new Image(display, data);
-				cachedImages.put(key, result);
+				imagesCache.storeImage(key, result);
 			}
 			return result;
 		} else if (element instanceof GradientPaintProvider) {
@@ -119,10 +118,7 @@ public class ColorLabelProvider extends LabelProvider {
 	@Override
 	public void dispose() {
 		super.dispose();
-		for (Image img : cachedImages.values()) {
-			img.dispose();
-		}
-		cachedImages.clear();
+		imagesCache.dispose();
 	}
 
 }

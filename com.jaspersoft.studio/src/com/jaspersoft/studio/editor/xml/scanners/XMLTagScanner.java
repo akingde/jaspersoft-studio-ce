@@ -22,8 +22,8 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
+import org.eclipse.wb.swt.ColorManager;
 
-import com.jaspersoft.studio.editor.xml.ColorManager;
 import com.jaspersoft.studio.editor.xml.IXMLColorConstants;
 import com.jaspersoft.studio.editor.xml.XMLWhitespaceDetector;
 

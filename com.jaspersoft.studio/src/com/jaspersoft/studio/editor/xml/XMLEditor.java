@@ -19,6 +19,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.TextOperationAction;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.wb.swt.ColorManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.xml.outline.EditorContentOutlinePage;

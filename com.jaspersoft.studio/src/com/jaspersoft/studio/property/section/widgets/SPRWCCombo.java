@@ -16,12 +16,13 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.wb.swt.ResourceCache;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.combo.RWCComboPropertyDescriptor;
@@ -41,7 +43,10 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPRWCCombo extends ASPropertyWidget {
+	
 	protected CCombo combo;
+	
+	private ResourceCache cache = new ResourceCache();
 
 	private static class ComboAction extends Action {
 		/**
@@ -100,6 +105,13 @@ public class SPRWCCombo extends ASPropertyWidget {
 			}
 		});
 		combo.setToolTipText(pDescriptor.getDescription());
+		combo.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+					cache.dispose();
+			}
+		});
 	}
 
 	protected APropertyNode pnode;
@@ -131,28 +143,31 @@ public class SPRWCCombo extends ASPropertyWidget {
 
 	private Image createImage(final String fontName) {
 
-		Display display = Display.getCurrent();
-		Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
-		Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
-		PaletteData paletteData = new PaletteData(new RGB[] { TRANSPARENT_COLOR.getRGB(), DRAWING_COLOR.getRGB() });
-
-		ImageData imageData = new ImageData(55, 15, 4, paletteData);
-		imageData.transparentPixel = 0; // index of the palette
-
-		Image stringImage = new Image(display, imageData);
-		GC stringGc = new GC(stringImage);
-		try {
-			stringGc.setForeground(DRAWING_COLOR);
-			stringGc.setBackground(TRANSPARENT_COLOR);
-			stringGc.setFont(new Font(null, fontName, 10, 0));
-
-			stringGc.drawText("Sample", 0, 0);
-		} finally {
-			stringGc.dispose();
+		Image stringImage = cache.getImage(fontName);
+		if (stringImage == null){
+			Display display = Display.getCurrent();
+			Color TRANSPARENT_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
+			Color DRAWING_COLOR = display.getSystemColor(SWT.COLOR_BLACK);
+			PaletteData paletteData = new PaletteData(new RGB[] { TRANSPARENT_COLOR.getRGB(), DRAWING_COLOR.getRGB() });
+			ImageData imageData = new ImageData(55, 15, 4, paletteData);
+			imageData.transparentPixel = 0; // index of the palette
+	
+			stringImage = new Image(display, imageData);
+			GC stringGc = new GC(stringImage);
+			try {
+				stringGc.setForeground(DRAWING_COLOR);
+				stringGc.setBackground(TRANSPARENT_COLOR);
+				stringGc.setFont(cache.getFont(fontName, 10, 0));
+				stringGc.drawText("Sample", 0, 0);
+			} finally {
+				stringGc.dispose();
+				cache.storeImage(fontName, stringImage);
+			}
 		}
 		return stringImage;
 	}
 
+	
 	public void setNewItems(final RWCComboPropertyDescriptor pd) {
 		MenuManager manager = new MenuManager("#PopUpMenu");
 		for (String element : pd.getItems()) {

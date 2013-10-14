@@ -20,8 +20,8 @@ import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.wb.swt.ColorManager;
 
-import com.jaspersoft.studio.editor.xml.ColorManager;
 import com.jaspersoft.studio.editor.xml.IXMLColorConstants;
 import com.jaspersoft.studio.editor.xml.rules.CDataRule;
 
