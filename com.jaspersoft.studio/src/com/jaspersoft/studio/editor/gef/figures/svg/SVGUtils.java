@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures.svg;
 
@@ -19,7 +14,7 @@ import org.apache.batik.svggen.SVGColor;
 import org.apache.batik.svggen.SVGGeneratorContext;
 import org.apache.batik.svggen.SVGPaintDescriptor;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.wb.swt.SWTResourceManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.css.CSSStyleDeclaration;
@@ -50,7 +45,7 @@ public class SVGUtils {
 			float red = rgb.getRed().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE);
 			float green = rgb.getGreen().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE);
 			float blue = rgb.getBlue().getFloatValue(CSSValue.CSS_PRIMITIVE_VALUE);
-			return new Color(Display.getCurrent(), (int) red, (int) green, (int) blue);
+			return SWTResourceManager.getColor((int) red, (int) green, (int) blue);
 		}
 		return null;
 	}

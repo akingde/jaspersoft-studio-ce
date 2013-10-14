@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.style;
 
@@ -98,7 +93,8 @@ public class StylesListSection extends AbstractSection {
 	 * Image show to remove an attribute
 	 */
 
-	private static Image image = ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "icons/resources/remove-16.png"); //$NON-NLS-1$
+	private static Image image = ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID,
+			"icons/resources/remove-16.png"); //$NON-NLS-1$
 
 	/**
 	 * Map of all the styles, where the name of the style is it's key
@@ -143,16 +139,17 @@ public class StylesListSection extends AbstractSection {
 	 * Boolean flag to take trace it the tab is shown
 	 */
 	private boolean shown = false;
-	
+
 	/**
 	 * Color used from the label as background
 	 */
-	private static final Color labelBackgroundColor = SWTResourceManager.getColor(240,240,240);;
-	
+	private static final Color labelBackgroundColor = SWTResourceManager.getColor(240, 240, 240);;
+
 	/**
 	 * map cache of the colors, they are disposed when the section is disposed
 	 */
 	private Map<String, Color> cacheColor = new HashMap<String, Color>();
+
 	/**
 	 * Class to manage the events of the mouse click, used to remove an attribute from an element or one of it's styles
 	 * 
@@ -192,15 +189,17 @@ public class StylesListSection extends AbstractSection {
 		 */
 		public void mouseUp(MouseEvent e) {
 			boolean executeCommand = true;
-			if (!targetElement.isEditable()){
-				MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+			if (!targetElement.isEditable()) {
+				MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_QUESTION | SWT.YES
+						| SWT.NO);
 				messageBox.setText(Messages.StylesListSection_NotEditable_Title);
 				messageBox.setMessage(Messages.StylesListSection_NotEditable_Message);
 				int response = messageBox.open();
 				executeCommand = false;
-				if (response == SWT.YES){
-					StyleContainer styleReference = styleMaps.get(((JRStyle)targetElement.getValue()).getName());
-					EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain)getEditDomain()).getEditorPart(), styleReference.getTemplate());
+				if (response == SWT.YES) {
+					StyleContainer styleReference = styleMaps.get(((JRStyle) targetElement.getValue()).getName());
+					EditableFigureEditPart.openEditor(styleReference.getTemplateValue(),
+							((DefaultEditDomain) getEditDomain()).getEditorPart(), styleReference.getTemplate());
 				}
 			} else if (!isTargetMain) {
 				MessageBox messageBox = new MessageBox(e.widget.getDisplay().getActiveShell(), SWT.ICON_WARNING | SWT.YES
@@ -236,80 +235,89 @@ public class StylesListSection extends AbstractSection {
 
 		}
 	}
-	
+
 	/**
-	 * This class encapsulate a style and eventually its external reference, used to handle easly the 
-	 * external styles
+	 * This class encapsulate a style and eventually its external reference, used to handle easly the external styles
+	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	private class StyleContainer{
-		
+	private class StyleContainer {
+
 		/**
 		 * The style
 		 */
 		private MStyle style;
-		
+
 		/**
 		 * True if the style come from an external reference
 		 */
 		private boolean external;
-		
+
 		/**
 		 * A reference to the external reference
 		 */
 		private MStyleTemplate externalTemplate;
-		
+
 		/**
 		 * Encapsulate a local style
-		 * @param style the style model
+		 * 
+		 * @param style
+		 *          the style model
 		 */
-		public StyleContainer(MStyle style){
+		public StyleContainer(MStyle style) {
 			external = false;
 			externalTemplate = null;
 			this.style = style;
 		}
-		
+
 		/**
 		 * Encapsulate an external style with its container
-		 * @param style the style
-		 * @param reference the container
+		 * 
+		 * @param style
+		 *          the style
+		 * @param reference
+		 *          the container
 		 */
-		public StyleContainer(MStyle style, MStyleTemplate reference){
+		public StyleContainer(MStyle style, MStyleTemplate reference) {
 			external = true;
 			externalTemplate = reference;
 			this.style = style;
 		}
-		
+
 		/**
 		 * Return if the style is external
+		 * 
 		 * @return true if the style it's external, false otherwise
 		 */
-		public boolean isExternal(){
+		public boolean isExternal() {
 			return external;
 		}
-		
+
 		/**
 		 * Return the style
+		 * 
 		 * @return the model of the style
 		 */
-		public MStyle getStyle(){
+		public MStyle getStyle() {
 			return style;
 		}
-		
+
 		/**
 		 * Return the template
+		 * 
 		 * @return the template of the style
 		 */
-		public MStyleTemplate getTemplate(){
+		public MStyleTemplate getTemplate() {
 			return externalTemplate;
 		}
-		
+
 		/**
 		 * Return the value of the template
+		 * 
 		 * @return the JRElement of the template
 		 */
-		public JRDesignReportTemplate getTemplateValue(){
+		public JRDesignReportTemplate getTemplateValue() {
 			return (JRDesignReportTemplate) externalTemplate.getValue();
 		}
 	}
@@ -378,7 +386,6 @@ public class StylesListSection extends AbstractSection {
 		}
 
 	}
-	
 
 	/**
 	 * Build the hierarchy of styles of an element
@@ -391,17 +398,19 @@ public class StylesListSection extends AbstractSection {
 	private LinkedList<MStyle> buildStylesGerarchy(APropertyNode element) {
 		LinkedList<MStyle> result = new LinkedList<MStyle>();
 		Object styleName;
-		if (element instanceof MConditionalStyle) styleName = ((MStyle)element.getParent()).getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
-		else styleName = element.getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
+		if (element instanceof MConditionalStyle)
+			styleName = ((MStyle) element.getParent()).getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
+		else
+			styleName = element.getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
 		StyleContainer styleContainer = styleMaps.get(styleName.toString());
-		if (styleContainer != null){
+		if (styleContainer != null) {
 			MStyle styleModel = styleContainer.getStyle();
 			result.addLast(styleModel);
-			JRStyle nextStyle =  ((JRStyle)styleModel.getValue()).getStyle();
-			while (nextStyle != null){
+			JRStyle nextStyle = ((JRStyle) styleModel.getValue()).getStyle();
+			while (nextStyle != null) {
 				styleModel = styleMaps.get(nextStyle.getName()).getStyle();
 				result.addLast(styleModel);
-				nextStyle =  ((JRStyle)styleModel.getValue()).getStyle();
+				nextStyle = ((JRStyle) styleModel.getValue()).getStyle();
 			}
 
 		}
@@ -494,7 +503,7 @@ public class StylesListSection extends AbstractSection {
 		valueText.setEditable(false);
 		valueText.setEnabled(true);
 		RowData valueText_RD = new RowData();
-		valueText_RD.height=15;
+		valueText_RD.height = 15;
 		valueText.setLayoutData(valueText_RD);
 		if (addLine) {
 			strikeStyledText(valueText);
@@ -621,7 +630,7 @@ public class StylesListSection extends AbstractSection {
 			java.awt.Color valImage = (java.awt.Color) value;
 			Control label = paintColor(
 					parent,
-				  getSWTColorFromAWT(valImage),
+					getSWTColorFromAWT(valImage),
 					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
@@ -747,20 +756,23 @@ public class StylesListSection extends AbstractSection {
 			HashMap<String, Object> localElementAttributes, boolean addHandler) {
 		if (titleValue != null) {
 			Label titleLabel = printTitle(parent, titleValue);
-			final StyleContainer styleReference = styleMaps.get(((JRStyle)element.getValue()).getName());
-			if (styleReference.isExternal()){
-				//If the style is external i made its editor open by double clicking on the style title
+			final StyleContainer styleReference = styleMaps.get(((JRStyle) element.getValue()).getName());
+			if (styleReference.isExternal()) {
+				// If the style is external i made its editor open by double clicking on the style title
 				titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
 				titleLabel.addMouseListener(new MouseListener() {
 					@Override
-					public void mouseUp(MouseEvent e) {}
-					
+					public void mouseUp(MouseEvent e) {
+					}
+
 					@Override
-					public void mouseDown(MouseEvent e) {}
-					
+					public void mouseDown(MouseEvent e) {
+					}
+
 					@Override
 					public void mouseDoubleClick(MouseEvent e) {
-						EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain)getEditDomain()).getEditorPart(), styleReference.getTemplate());
+						EditableFigureEditPart.openEditor(styleReference.getTemplateValue(),
+								((DefaultEditDomain) getEditDomain()).getEditorPart(), styleReference.getTemplate());
 					}
 				});
 			}
@@ -808,19 +820,21 @@ public class StylesListSection extends AbstractSection {
 					Messages.StylesListSection_Inherited_From_Default_Style.concat(defaultStyle.getPropertyValue(
 							JRDesignStyle.PROPERTY_NAME).toString()), "", elementAttributes, true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	/**
 	 * Add the external list to the styles map, but only those with a different name from the one already added
+	 * 
 	 * @param stylesList
 	 */
-	private void recursiveReadStyles(List<INode> stylesList, MStyleTemplate parentReference){
-		for(INode style : stylesList){
+	private void recursiveReadStyles(List<INode> stylesList, MStyleTemplate parentReference) {
+		for (INode style : stylesList) {
 			if (style instanceof MStyle) {
 				MStyle element = (MStyle) style;
 				String name = element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString();
-				if (!styleMaps.containsKey(name)) styleMaps.put(name, new StyleContainer(element,parentReference));
-			} else if (style instanceof MStyleTemplate){
-				recursiveReadStyles(style.getChildren(), (MStyleTemplate)style);
+				if (!styleMaps.containsKey(name))
+					styleMaps.put(name, new StyleContainer(element, parentReference));
+			} else if (style instanceof MStyleTemplate) {
+				recursiveReadStyles(style.getChildren(), (MStyleTemplate) style);
 			}
 		}
 	}
@@ -832,17 +846,17 @@ public class StylesListSection extends AbstractSection {
 		styleMaps = new HashMap<String, StyleContainer>();
 		ovverridenAttributes = new HashSet<String>();
 		if (leftStringColor == null) {
-			leftStringColor = new Color(null, 42, 96, 213);
+			leftStringColor = SWTResourceManager.getColor(42, 96, 213);
 		}
 		List<INode> list = getStylesRoot(getElement()).getChildren();
 		List<INode> externalList = new ArrayList<INode>();
-		for(INode style : list){
+		for (INode style : list) {
 			if (style instanceof MStyle) {
 				MStyle element = (MStyle) style;
 				styleMaps.put(element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString(), new StyleContainer(element));
 				if ((Boolean) element.getPropertyValue(JRDesignStyle.PROPERTY_DEFAULT))
 					defaultStyle = element;
-			} else if (style instanceof MStyleTemplate){
+			} else if (style instanceof MStyleTemplate) {
 				externalList.add(style);
 			}
 		}
@@ -897,8 +911,8 @@ public class StylesListSection extends AbstractSection {
 		if (getElement() != null && getElement().getRoot() != null) {
 			getElement().getRoot().getPropertyChangeSupport().removePropertyChangeListener(this);
 			ANode styles = getStylesRoot(getElement());
-			//check in case the selected element was deleted
-			if (styles != null){
+			// check in case the selected element was deleted
+			if (styles != null) {
 				for (INode style : styles.getChildren()) {
 					style.getPropertyChangeSupport().removePropertyChangeListener(this);
 				}
@@ -955,11 +969,11 @@ public class StylesListSection extends AbstractSection {
 			isRefreshing = false;
 		}
 	}
-	
+
 	private Color getSWTColorFromAWT(java.awt.Color awtColor) {
 		String key = awtColor.toString();
 		Color result = cacheColor.get(key);
-		if (result == null){
+		if (result == null) {
 			result = ModelUtils.getSWTColorFromAWT(awtColor);
 			cacheColor.put(key, result);
 		}
@@ -1007,7 +1021,7 @@ public class StylesListSection extends AbstractSection {
 		printStyles(styles, parent);
 		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
 		ovverridenAttributes = null;
-		//styleMaps = null;
+		// styleMaps = null;
 		parent.layout();
 		isRefreshing = false;
 	}
@@ -1025,7 +1039,7 @@ public class StylesListSection extends AbstractSection {
 		while (it.hasNext() && stylesClass == null) {
 			INode childElement = it.next();
 			if (childElement instanceof MStyles || childElement instanceof MStylesTemplate)
-				stylesClass = (ANode)childElement;
+				stylesClass = (ANode) childElement;
 			// The root is a subreport or a table, i need to move into an upper level
 			if (childElement instanceof MPage) {
 				children = childElement.getChildren();
@@ -1034,11 +1048,11 @@ public class StylesListSection extends AbstractSection {
 		}
 		return stylesClass;
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
-		for(Color color : cacheColor.values()){
+		for (Color color : cacheColor.values()) {
 			color.dispose();
 		}
 		cacheColor.clear();
@@ -1067,6 +1081,6 @@ public class StylesListSection extends AbstractSection {
 		printStyles(styles, parent);
 		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
 		ovverridenAttributes = null;
-		//styleMaps = null;
+		// styleMaps = null;
 	}
 }

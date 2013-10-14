@@ -38,7 +38,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.wb.swt.ColorManager;
 
 /*
  * A J2DGraphics is a draw2d Graphics that delegates all its calls to a Java2D Graphics2D object. All the draw2d
@@ -398,6 +398,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#dispose()
 	 */
 	public void dispose() {
+		colorManager.dispose();
 		_g2d.dispose();
 		_g2d = null;
 		// if (!_stack.isEmpty() && J2DRegistry.DEBUG) {
@@ -962,6 +963,8 @@ public class J2DGraphics extends Graphics {
 		return new java.awt.Color(c.getRed(), c.getGreen(), c.getBlue());
 	}
 
+	private ColorManager colorManager = new ColorManager();
+
 	/**
 	 * A utility method to convert an AWT Color to an SWT one. The default display is used. Resource disposal should be
 	 * performed by the caller.
@@ -970,8 +973,8 @@ public class J2DGraphics extends Graphics {
 	 *          The AWT Color
 	 * @return An equivalent SWT Color
 	 */
-	public static Color toSWTColor(java.awt.Color c) {
-		return new Color(Display.getDefault(), c.getRed(), c.getGreen(), c.getBlue());
+	public Color toSWTColor(java.awt.Color c) {
+		return colorManager.getColor(new RGB(c.getRed(), c.getGreen(), c.getBlue()));
 	}
 
 	// 3.5 compatibility methods -------------------------------

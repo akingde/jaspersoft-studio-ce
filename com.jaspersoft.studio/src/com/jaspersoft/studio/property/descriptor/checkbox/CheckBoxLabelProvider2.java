@@ -21,6 +21,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class CheckBoxLabelProvider2 extends LabelProvider {
 
@@ -38,7 +39,7 @@ public class CheckBoxLabelProvider2 extends LabelProvider {
 		// Hopefully no platform uses exactly this color because we'll make
 		// it transparent in the image.
 		Display display = Display.getCurrent();
-		Color greenScreen = new Color(display, 222, 223, 224);
+		Color greenScreen = SWTResourceManager.getColor(222, 223, 224);
 
 		Shell shell = new Shell(display.getActiveShell(), SWT.NO_TRIM);
 

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.java2d;
 
@@ -44,7 +39,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.wb.swt.ColorManager;
 
 /*
  * A J2DGraphics is a draw2d Graphics that delegates all its calls to a Java2D Graphics2D object. All the draw2d
@@ -404,6 +399,7 @@ public class J2DScaledGraphics extends ScaledGraphics {
 	 * @see org.eclipse.draw2d.Graphics#dispose()
 	 */
 	public void dispose() {
+		colorManager.dispose();
 		_g2d.dispose();
 		_g2d = null;
 		// if (!_stack.isEmpty() && J2DRegistry.DEBUG) {
@@ -966,6 +962,8 @@ public class J2DScaledGraphics extends ScaledGraphics {
 		return new java.awt.Color(c.getRed(), c.getGreen(), c.getBlue());
 	}
 
+	private ColorManager colorManager = new ColorManager();
+
 	/**
 	 * A utility method to convert an AWT Color to an SWT one. The default display is used. Resource disposal should be
 	 * performed by the caller.
@@ -974,8 +972,8 @@ public class J2DScaledGraphics extends ScaledGraphics {
 	 *          The AWT Color
 	 * @return An equivalent SWT Color
 	 */
-	public static Color toSWTColor(java.awt.Color c) {
-		return new Color(Display.getDefault(), c.getRed(), c.getGreen(), c.getBlue());
+	public Color toSWTColor(java.awt.Color c) {
+		return colorManager.getColor(new RGB(c.getRed(), c.getGreen(), c.getBlue()));
 	}
 
 	// 3.5 compatibility methods -------------------------------
