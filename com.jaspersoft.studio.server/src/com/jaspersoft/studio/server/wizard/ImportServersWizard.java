@@ -110,7 +110,11 @@ public class ImportServersWizard extends Wizard implements IImportWizard {
 				MServerProfile newprofile = new MServerProfile(serversNode, mservprof.getValue());
 				for (INode cn : mservprof.getChildren())
 					newprofile.addChild((ANode) cn);
-				newprofile.setWsClient(mservprof.getWsClient());
+				try {
+					newprofile.setWsClient(mservprof.getWsClient());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				ServerManager.addServerProfile(newprofile);
 				EditServerAction.fillServerProfile(newprofile, treeViewer);
 			}

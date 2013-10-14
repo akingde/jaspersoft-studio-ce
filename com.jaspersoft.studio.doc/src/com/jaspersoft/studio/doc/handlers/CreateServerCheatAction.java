@@ -70,7 +70,11 @@ public class CreateServerCheatAction extends AsyncAction {
 							(MServers) n, mservprof.getValue());
 					for (INode cn : mservprof.getChildren())
 						newprofile.addChild((ANode) cn);
-					newprofile.setWsClient(mservprof.getWsClient());
+					try {
+						newprofile.setWsClient(mservprof.getWsClient());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					ServerManager.addServerProfile(newprofile);
 					EditServerAction.fillServerProfile(newprofile, treeViewer);
 				}
@@ -87,7 +91,11 @@ public class CreateServerCheatAction extends AsyncAction {
 					(MServers) selectedElement, mservprof.getValue());
 			for (INode cn : mservprof.getChildren())
 				newprofile.addChild((ANode) cn);
-			newprofile.setWsClient(mservprof.getWsClient());
+			try {
+				newprofile.setWsClient(mservprof.getWsClient());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			ServerManager.addServerProfile(newprofile);
 			EditServerAction.fillServerProfile(newprofile, treeViewer);
 		}

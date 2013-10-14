@@ -80,7 +80,11 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 					MServerProfile newprofile = new MServerProfile((MServers) n, mservprof.getValue());
 					for (INode cn : mservprof.getChildren())
 						newprofile.addChild((ANode) cn);
-					newprofile.setWsClient(mservprof.getWsClient());
+					try {
+						newprofile.setWsClient(mservprof.getWsClient());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					ServerManager.addServerProfile(newprofile);
 
 					EditServerAction.fillServerProfile(newprofile, treeViewer);
@@ -101,21 +105,19 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		run();
 		notifyResult(true);
 	}
-	
+
 	private String getJRSProposedURL() {
-		if(BrandingInfo.isProfessionalEdition()){
+		if (BrandingInfo.isProfessionalEdition()) {
 			return "http://localhost:8080/jasperserver-pro/"; //$NON-NLS-1$
-		}
-		else {
+		} else {
 			return "http://localhost:8080/jasperserver/"; //$NON-NLS-1$
 		}
 	}
-	
+
 	private String getJRSProposedName() {
-		if(BrandingInfo.isProfessionalEdition()){
+		if (BrandingInfo.isProfessionalEdition()) {
 			return Messages.CreateServerAction_name + " Pro"; //$NON-NLS-1$
-		}
-		else {
+		} else {
 			return Messages.CreateServerAction_name;
 		}
 	}

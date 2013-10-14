@@ -391,7 +391,7 @@ public class WSClientHelper {
 		return uri.substring(uri.indexOf(":") + 1);
 	}
 
-	public static IConnection getClient(String uri) {
+	public static IConnection getClient(String uri) throws Exception {
 		MServerProfile sp = ServerManager.getServerProfile(uri);
 		return sp.getWsClient();
 	}
@@ -493,8 +493,9 @@ public class WSClientHelper {
 	 *          the remote resource
 	 * @return a valid {@link IConnection} if any associated, <code>null</code>
 	 *         otherwise
+	 * @throws Exception
 	 */
-	public static IConnection getClient(MResource resource) {
+	public static IConnection getClient(MResource resource) throws Exception {
 		INode root = resource.getRoot();
 		if (root instanceof MServerProfile) {
 			return ((MServerProfile) root).getWsClient();

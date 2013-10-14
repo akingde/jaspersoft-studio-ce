@@ -69,10 +69,11 @@ public class ReportRunControler {
 	public void setReportUnit(String key) {
 		this.reportUnit = key;
 		if (viewmap != null && prmInput == null) {
-			cli = WSClientHelper.getClient(reportUnit);
-			icm = new InputControlsManager(reportUnit);
-			ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 			try {
+				cli = WSClientHelper.getClient(reportUnit);
+				icm = new InputControlsManager(reportUnit);
+				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
@@ -102,6 +103,8 @@ public class ReportRunControler {
 				UIUtils.showError(e.getCause());
 			} catch (InterruptedException e) {
 				UIUtils.showError(e);
+			} catch (Exception e1) {
+				UIUtils.showError(e1);
 			}
 		} else {
 			runReport();

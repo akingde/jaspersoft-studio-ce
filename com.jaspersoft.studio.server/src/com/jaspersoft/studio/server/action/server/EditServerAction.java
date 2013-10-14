@@ -76,7 +76,11 @@ public class EditServerAction extends Action {
 				if (dialog.open() == Dialog.OK) {
 					MServerProfile msprof = wizard.getServerProfile();
 					mspold.setValue(msprof.getValue());
-					mspold.setWsClient(msprof.getWsClient());
+					try {
+						mspold.setWsClient(msprof.getWsClient());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					mspold.removeChildren();
 					for (INode cn : msprof.getChildren())
 						mspold.addChild((ANode) cn);

@@ -207,15 +207,22 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			qStatus.showInfo("");
 			String lang = langCombo.getText();
 			((JRDesignQuery) newdataset.getQuery()).setLanguage(lang);
-			IQueryDesigner designer = qdfactory.getDesigner(lang);
+			final IQueryDesigner designer = qdfactory.getDesigner(lang);
 			langLayout.topControl = designer.getControl();
 			tbLayout.topControl = designer.getToolbarControl();
 			tbCompo.layout();
 			langComposite.layout();
-			designer.setQuery(jDesign, newdataset, jConfig);
-
 			currentDesigner = designer;
-			currentDesigner.setDataAdapter(dscombo.getSelected());
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					designer.setQuery(jDesign, newdataset, jConfig);
+
+					currentDesigner = designer;
+					currentDesigner.setDataAdapter(dscombo.getSelected());
+				}
+			});
 		}
 	}
 

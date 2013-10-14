@@ -50,59 +50,70 @@ import com.jaspersoft.studio.server.wizard.pages.ShowServersPage;
  * Wizard to import one of more connections to JRS from other workspaces of JSS
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 
 	/**
-	 * Page that allow to select a workspace with inside a JSS configuration folder
+	 * Page that allow to select a workspace with inside a JSS configuration
+	 * folder
 	 */
 	ListInstallationPage page0 = new SelectWorkspacePage();
-	
+
 	/**
 	 * Page that list the available connection into a precise configurations
 	 */
 	ListJSSServer page1 = new ListJSSServer();
-	
+
 	/**
-	 * Extends ShowServersPage and redefine the createCheckBoxData to build a ServerProfile list
-	 * from a JSS configuration file
+	 * Extends ShowServersPage and redefine the createCheckBoxData to build a
+	 * ServerProfile list from a JSS configuration file
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	private class ListJSSServer extends ShowServersPage{
-		
-		protected List<ServerProfile> createCheckBoxData(Properties prop){
+	private class ListJSSServer extends ShowServersPage {
+
+		protected List<ServerProfile> createCheckBoxData(Properties prop) {
 			List<ServerProfile> result = new ArrayList<ServerProfile>();
 			String xmlString = prop.getProperty("serverprofiles");
-			if (xmlString == null) return result;
-			
+			if (xmlString == null)
+				return result;
+
 			Document document;
 			try {
 				document = JRXmlUtils.parse(new InputSource(new StringReader(xmlString)));
 				Node actualNode = document.getFirstChild();
-				if (actualNode.hasChildNodes()) actualNode = actualNode.getFirstChild();
-				else actualNode = null;
-				while(actualNode != null){
-					if (actualNode.getNodeName().equals("serverProfile")){
+				if (actualNode.hasChildNodes())
+					actualNode = actualNode.getFirstChild();
+				else
+					actualNode = null;
+				while (actualNode != null) {
+					if (actualNode.getNodeName().equals("serverProfile")) {
 						Node child = actualNode.getFirstChild();
 						ServerProfile srv = new ServerProfile();
-						while(child != null){
-							if (child.getNodeName().equals("name")) srv.setName(child.getTextContent());
-							if (child.getNodeName().equals("jrVersion")) srv.setJrVersion(child.getTextContent());
+						while (child != null) {
+							if (child.getNodeName().equals("name"))
+								srv.setName(child.getTextContent());
+							if (child.getNodeName().equals("jrVersion"))
+								srv.setJrVersion(child.getTextContent());
 							if (child.getNodeName().equals("url")) {
 								String connectionString = child.getTextContent();
-								if (connectionString.endsWith("/services/repository")){ //$NON-NLS-1$
+								if (connectionString.endsWith("/services/repository")) { //$NON-NLS-1$
 									connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository")); //$NON-NLS-1$
 								}
 								srv.setUrl(connectionString);
 							}
-							if (child.getNodeName().equals("user")) srv.setUser(child.getTextContent());
-							if (child.getNodeName().equals("pass")) srv.setPass(child.getTextContent());
-							if (child.getNodeName().equals("supportsDateRanges")) srv.setSupportsDateRanges(child.getTextContent().equals("true"));
-							if (child.getNodeName().equals("chunked")) srv.setChunked(child.getTextContent().equals("true"));
-							if (child.getNodeName().equals("timeout")) srv.setTimeout(Integer.parseInt(child.getTextContent()));
+							if (child.getNodeName().equals("user"))
+								srv.setUser(child.getTextContent());
+							if (child.getNodeName().equals("pass"))
+								srv.setPass(child.getTextContent());
+							if (child.getNodeName().equals("supportsDateRanges"))
+								srv.setSupportsDateRanges(child.getTextContent().equals("true"));
+							if (child.getNodeName().equals("chunked"))
+								srv.setChunked(child.getTextContent().equals("true"));
+							if (child.getNodeName().equals("timeout"))
+								srv.setTimeout(Integer.parseInt(child.getTextContent()));
 							child = child.getNextSibling();
 						}
 						result.add(srv);
@@ -115,54 +126,62 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 			return result;
 		}
 	}
-	
+
 	@Override
 	public void addPages() {
 		addPage(page0);
 		addPage(page1);
 	}
-	
+
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {}
-	
-	private RepositoryView getRepositoryView(){
-		return (RepositoryView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.jaspersoft.studio.Repository");
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
+
+	private RepositoryView getRepositoryView() {
+		return (RepositoryView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.jaspersoft.studio.Repository");
 	}
 
 	/**
-	 * Get the ServerProfile for the connections selected into the page 1
-	 * and add them to the configuration, and also to the treeview of the repository
+	 * Get the ServerProfile for the connections selected into the page 1 and add
+	 * them to the configuration, and also to the treeview of the repository
 	 * explorer, if this view is opened
 	 */
 	@Override
 	public boolean performFinish() {
 
-		//Get the treeview and the MServers node from the repository view if it is available
+		// Get the treeview and the MServers node from the repository view if it is
+		// available
 		RepositoryView view = getRepositoryView();
 		TreeViewer treeViewer = null;
 		MServers serversNode = null;
-		if (view != null){
+		if (view != null) {
 			treeViewer = view.getTreeViewer();
 			MRoot root = (MRoot) treeViewer.getInput();
 			List<INode> lst = root.getChildren();
 			for (INode n : lst) {
 				if (n instanceof MServers) {
-					serversNode = (MServers)n;
+					serversNode = (MServers) n;
 					break;
 				}
 			}
 		}
-			
-		//Create every server and if the repository view is open add also the nodes to the tree view
+
+		// Create every server and if the repository view is open add also the nodes
+		// to the tree view
 		List<ServerProfile> servers = page1.getSelectedServers();
-		for(ServerProfile srv : servers){
+		for (ServerProfile srv : servers) {
 			MServerProfile mservprof = new MServerProfile(null, srv);
-			if (serversNode == null) ServerManager.addServerProfile(mservprof);
+			if (serversNode == null)
+				ServerManager.addServerProfile(mservprof);
 			else {
 				MServerProfile newprofile = new MServerProfile(serversNode, mservprof.getValue());
 				for (INode cn : mservprof.getChildren())
 					newprofile.addChild((ANode) cn);
-				newprofile.setWsClient(mservprof.getWsClient());
+				try {
+					newprofile.setWsClient(mservprof.getWsClient());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				ServerManager.addServerProfile(newprofile);
 				EditServerAction.fillServerProfile(newprofile, treeViewer);
 			}

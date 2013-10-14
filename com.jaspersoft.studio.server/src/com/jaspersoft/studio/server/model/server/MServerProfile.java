@@ -129,12 +129,12 @@ public class MServerProfile extends ANode {
 
 	private transient IConnection wsClient;
 
-	public IConnection getWsClient() {
+	public IConnection getWsClient() throws Exception {
 		if (wsClient == null)
 			try {
 				WSClientHelper.connect(this, new NullProgressMonitor());
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw e;
 				// UIUtils.showError(e);
 			}
 		return wsClient;

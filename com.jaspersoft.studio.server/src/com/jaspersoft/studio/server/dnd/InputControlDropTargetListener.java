@@ -130,15 +130,20 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 	}
 
 	protected IConnection doGetFullResources(MReportUnit mrunit, List<MInputControl> ics) {
-		IConnection c = ((MServerProfile) mrunit.getRoot()).getWsClient();
-		for (MInputControl n : ics) {
-			try {
-				ResourceDescriptor rd = n.getValue();
-				n.setValue(WSClientHelper.getResource(c, rd, null));
-				c.delete(rd, mrunit.getValue().getUriString());
-			} catch (Exception e) {
-				e.printStackTrace();
+		IConnection c = null;
+		try {
+			c = ((MServerProfile) mrunit.getRoot()).getWsClient();
+			for (MInputControl n : ics) {
+				try {
+					ResourceDescriptor rd = n.getValue();
+					n.setValue(WSClientHelper.getResource(c, rd, null));
+					c.delete(rd, mrunit.getValue().getUriString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 		return c;
 	}

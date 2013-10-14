@@ -189,7 +189,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					if (node.getChildren() != null && node.getChildren().size() > 0) {
 						List<INode> children = new ArrayList<INode>();
 						for (INode n : node.getChildren()) {
-							if (n != newrunit)
+							if (n != newrunit && n != newjrxml)
 								children.add(n);
 						}
 						return children.toArray();
@@ -367,6 +367,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 											if (n instanceof MReportUnit) {
 												if (((MReportUnit) n).getValue().getName().equals(nm)) {
 													reportUnit = (MReportUnit) n;
+													isnew = false;
+													break;
+												}
+											} else if (n instanceof MJrxml) {
+												if (((MJrxml) n).getValue().getName().equals(nm)) {
+													reportUnit = (MJrxml) n;
 													isnew = false;
 													break;
 												}
