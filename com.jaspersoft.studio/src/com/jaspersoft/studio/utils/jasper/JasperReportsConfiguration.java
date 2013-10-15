@@ -52,7 +52,6 @@ import net.sf.jasperreports.repo.RepositoryService;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
@@ -318,13 +317,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (file != null) {
 			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
 			val = t != null && t.isEmpty() ? null : t;
-			if (val == null) {
-				IResource project = file.getProject();
-				if (project != null) {
-					t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
-					val = t != null && t.isEmpty() ? null : t;
-				}
-			}
+			// if (val == null) {
+			// IResource project = file.getProject();
+			// if (project != null) {
+			// t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
+			// val = t != null && t.isEmpty() ? null : t;
+			// }
+			// }
 		}
 		if (val != null)
 			return val;
