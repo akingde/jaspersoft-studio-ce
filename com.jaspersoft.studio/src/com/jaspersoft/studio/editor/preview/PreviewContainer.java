@@ -13,6 +13,7 @@ package com.jaspersoft.studio.editor.preview;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -262,7 +264,28 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				dataAdapterDesc = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget().getSelected();
 			}
 
+			fixHighchartProperties();
 			reportControler.runReport();
+		}
+	}
+	
+	/*
+	 * FIXME - Temporary fix. Should refactor and remove from here in next release.
+	 */
+	private void fixHighchartProperties() {
+		if (RunStopAction.MODERUN_JIVE.equals(this.runMode)) {
+			PreferencesUtils.storeJasperReportsProperty("com.jaspersoft.jasperreports.highcharts.html.export.type", "viewer");
+			DefaultJasperReportsContext.getInstance().getProperties().put("com.jaspersoft.jasperreports.highcharts.html.export.type", "viewer");
+			PreferencesUtils.storeJasperReportsProperty("com.jaspersoft.jasperreports.highcharts.interactive", "true");
+			DefaultJasperReportsContext.getInstance().getProperties().put("com.jaspersoft.jasperreports.highcharts.interactive", "true");
+			getRightContainer().switchView(null, jiveViewer);
+		}
+		else if (RunStopAction.MODERUN_LOCAL.equals(this.runMode)) {
+			PreferencesUtils.storeJasperReportsProperty("com.jaspersoft.jasperreports.highcharts.html.export.type", "standalone");
+			DefaultJasperReportsContext.getInstance().getProperties().put("com.jaspersoft.jasperreports.highcharts.html.export.type", "standalone");
+			PreferencesUtils.storeJasperReportsProperty("com.jaspersoft.jasperreports.highcharts.interactive", "false");
+			DefaultJasperReportsContext.getInstance().getProperties().put("com.jaspersoft.jasperreports.highcharts.interactive", "false");
+			getRightContainer().switchView(null, getDefaultViewerKey());
 		}
 	}
 
@@ -334,10 +357,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	public void setMode(String mode) {
 		this.runMode = mode;
-		if (mode.equals(RunStopAction.MODERUN_JIVE))
+		if (mode.equals(RunStopAction.MODERUN_JIVE)) {
 			getRightContainer().switchView(null, jiveViewer);
-		else if (mode.equals(RunStopAction.MODERUN_LOCAL))
+		}
+		else if (mode.equals(RunStopAction.MODERUN_LOCAL)) {
 			getRightContainer().switchView(null, getDefaultViewerKey());
+		}
 	}
 
 	public String getMode() {
