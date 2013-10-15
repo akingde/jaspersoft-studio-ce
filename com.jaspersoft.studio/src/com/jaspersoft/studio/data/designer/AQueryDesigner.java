@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -95,5 +96,19 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 
 	public void setParameters(List<JRDesignParameter> params) {
 		container.setParameters(params);
+	}
+
+	public static void showError(IRunnableContext container, Throwable e) {
+		if (container instanceof AQueryDesigner)
+			((AQueryDesigner) container).showError(e);
+		else
+			UIUtils.showError(e);
+	}
+
+	public static void showInfo(IRunnableContext container, String msg) {
+		if (container instanceof AQueryDesigner)
+			((AQueryDesigner) container).showInfo(msg);
+		else
+			UIUtils.showInformation(msg);
 	}
 }
