@@ -313,7 +313,7 @@ public class TableWizardLayoutPage extends JSSHelpWizardPage {
 		secondLabel.setText(Messages.TableWizardLayoutPage_borders_style_label);
 		
 		borderColor = new ColorStyledText(group);
-		borderColor.setColor(ColorConstants.black);
+		borderColor.setColor(ColorConstants.black.getRGB());
 		GridData borderColorData = new GridData();
 		borderColorData.minimumWidth = 50;
 		borderColor.setLayoutData(borderColorData);

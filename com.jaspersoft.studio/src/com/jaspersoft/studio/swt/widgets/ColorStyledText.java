@@ -55,7 +55,7 @@ public class ColorStyledText {
 	/**
 	 * The color represented
 	 */
-	private Color color = null;
+	private RGB color = null;
 
 	/**
 	 * The text area
@@ -122,7 +122,7 @@ public class ColorStyledText {
 				String text = textArea.getText();
 				// Convert the text into color only if there are exactly seven chars, a # symbol followed by
 				// three pair of hex values
-				Color newColor = null;
+				RGB newColor = null;
 				try {
 					if (text.startsWith("[") && text.endsWith("]")) {
 						int index1 = text.indexOf("[") + 1;
@@ -132,13 +132,11 @@ public class ColorStyledText {
 						int redCompontent = Integer.valueOf(text.substring(index1, index2));
 						int greenCompontent = Integer.valueOf(text.substring(index2 + 1, index3));
 						int blueCompontent = Integer.valueOf(text.substring(index3 + 1, index4));
-						newColor = colorManager.getColor(new RGB(redCompontent, greenCompontent, blueCompontent));
+						newColor = new RGB(redCompontent, greenCompontent, blueCompontent);
 					} else if (text.startsWith("#") && text.length() == 7) {
-						newColor = colorManager.getColor(new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(
-								text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16)));
+						newColor = new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16));
 					} else if (!text.startsWith("#") && text.length() == 6) {
-						newColor = colorManager.getColor(new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(
-								text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16)));
+						newColor = new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16));
 					}
 				} catch (NumberFormatException ex) {
 				} catch (IllegalArgumentException ex) {
@@ -148,9 +146,9 @@ public class ColorStyledText {
 					color = newColor;
 					textArea.setText(getHexFromRGB(color));
 					if (colorButton != null)
-						colorButton.setImage(provider.getImage(color.getRGB(), 18, 14));
+						colorButton.setImage(provider.getImage(color, 18, 14));
 					if (lineColor != null)
-						lineColor.setImage(provider.getImage(color.getRGB(), 18, 14));
+						lineColor.setImage(provider.getImage(color, 18, 14));
 					if (raiseEvents)
 						for (ModifyListener element : listener) {
 							element.modifyText(e);
@@ -331,29 +329,13 @@ public class ColorStyledText {
 	 *          The color
 	 * @return The color hexadecimal representation
 	 */
-	private String getHexFromRGB(Color color) {
-		int r = color.getRed();
-		int g = color.getGreen();
-		int b = color.getBlue();
+	private String getHexFromRGB(RGB color) {
+		int r = color.red;
+		int g = color.green;
+		int b = color.blue;
 		String s = leftPadWithZero(Integer.toHexString(r)) + leftPadWithZero(Integer.toHexString(g))
 				+ leftPadWithZero(Integer.toHexString(b));
 		return "#".concat(s.toUpperCase()); //$NON-NLS-1$ 
-	}
-
-	/**
-	 * Set the color of element, either it's representation and it's textual value
-	 * 
-	 * @param newColor
-	 *          the new color
-	 * @param callListener
-	 *          true to call the edit listener after the editing
-	 */
-	protected void setColor(Color newColor, boolean callListener) {
-		raiseEvents = callListener;
-		color = newColor;
-		lastValidText = getHexFromRGB(newColor);
-		textArea.setText(lastValidText);
-		raiseEvents = true;
 	}
 
 	/**
@@ -368,7 +350,7 @@ public class ColorStyledText {
 		raiseEvents = callListener;
 		// dispose the old color before to create the new one
 		disposeColor();
-		color = colorManager.getColor(newColor);
+		color = newColor;
 		lastValidText = getHexFromRGB(color);
 		textArea.setText(lastValidText);
 		raiseEvents = true;
@@ -396,20 +378,10 @@ public class ColorStyledText {
 	 * @param newColor
 	 *          the new color
 	 */
-	public void setColor(Color newColor) {
-		setColor(newColor, false);
-	}
-
-	/**
-	 * Set the color of element, either it's representation and it's textual value. this method dosen't call the edit
-	 * listeners
-	 * 
-	 * @param newColor
-	 *          the new color
-	 */
 	public void setColor(RGB newColor) {
 		setColor(newColor, false);
 	}
+
 
 	/**
 	 * Add a new listener for the editing of the color
@@ -427,7 +399,7 @@ public class ColorStyledText {
 	 * @return the color in RGB format
 	 */
 	public RGB getColor() {
-		return color.getRGB();
+		return color;
 	}
 
 	/**
