@@ -32,6 +32,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -336,6 +337,18 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 		sashForm.setWeights(new int[] { 20, 80 });
 
+		container.addMouseWheelListener(new MouseWheelListener() {
+			
+			@Override
+			public void mouseScrolled(MouseEvent e) {
+				if ((e.stateMask & SWT.CTRL) != 0){
+					int direction = (e.count > 0) ? 1 : -1;
+					scale.setSelection(scale.getSelection()+direction);
+					zoomModified();
+				}
+			}
+		});
+		
 		scale.addListener(SWT.Selection, new Listener() {
 
 			public void handleEvent(Event event) {
