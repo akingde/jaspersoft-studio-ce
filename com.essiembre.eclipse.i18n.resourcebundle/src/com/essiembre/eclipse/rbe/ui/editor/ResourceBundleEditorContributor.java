@@ -70,8 +70,25 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
      *         #setActivePage(org.eclipse.ui.IEditorPart)
      */
     public void setActivePage(IEditorPart part) {
-        if (activeEditorPart == part)
-            return;
+    	
+    	/**
+    	 * On some platform when the editor is activated the project explorer dosen't lose the focus
+    	 * Doing this the global action of the project explorer are substituted from the one of the ResoruceBundleEditor
+    	 * (since the bundle editor has gained the focus) but when the user select something from the project explorer 
+    	 * since it has never loose the focus (it's like two element has the focus) its part is not activated and it 
+    	 * global action not loaded. This bring to situation with a click on the project explorer dosen't do anything.
+    	 * For this reason we force the focuse on the search bar of the resourceeditor, to make the project explorer to 
+    	 * loose the focus
+    	 */
+    	if (part != null && part instanceof I18nPageEditor){
+    		I18nPageEditor editor = (I18nPageEditor) part;
+    		if (editor.getI18nPage() != null)
+    			editor.getI18nPage().setSearchBarFocus();
+    	}
+    
+        if (activeEditorPart == part){
+        	return;
+        }
 
         activeEditorPart = part;
 
@@ -83,7 +100,7 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
                                
              if(editor instanceof I18nPageEditor) {
                 actionBars.clearGlobalActionHandlers();
-                
+          
                 actionBars.setGlobalActionHandler(
                    ActionFactory.FIND.getId(),
                    ((I18nPageEditor)editor).getFindReplaceAction());
@@ -94,6 +111,7 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
                    IWorkbenchActionDefinitionIds.FIND_PREVIOUS,
                    ((I18nPageEditor)editor).getFindPreviousAction());
                    
+               // actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, new );
                 actionBars.updateActionBars();
                 return;
              }
@@ -131,6 +149,9 @@ public class ResourceBundleEditorContributor extends MultiPageEditorActionBarCon
             actionBars.setGlobalActionHandler(
                 IDEActionFactory.BOOKMARK.getId(),
                 getAction(editor, IDEActionFactory.BOOKMARK.getId()));
+            actionBars.setGlobalActionHandler(
+                    IDEActionFactory.BOOKMARK.getId(),
+                    getAction(editor, IDEActionFactory.BOOKMARK.getId()));
             actionBars.updateActionBars();
         }
     }

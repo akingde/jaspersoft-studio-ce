@@ -143,6 +143,14 @@ public class I18nPage extends ScrolledComposite {
         }
     }
     
+    /**
+     * If the composite with the search bar is defined this will given the focus
+     * to the search bar. Otherwise the focus will be given to this composite
+     */
+    public void setSearchBarFocus(){
+    	if (keysComposite != null) keysComposite.setSearchBarFocus();
+    	else this.forceFocus();
+    }
     
     /**
      * Gets selected key.

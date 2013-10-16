@@ -133,6 +133,13 @@ public class KeyTreeComposite extends Composite {
     }
     
     /**
+     * Force the focus to the search bar
+     */
+    public void setSearchBarFocus(){
+    	filterTextBox.forceFocus();
+    }
+    
+    /**
      * Gets the selected key tree item.
      * @return key tree item
      */
@@ -469,6 +476,7 @@ public class KeyTreeComposite extends Composite {
     public void selectKeyTreeItem(String key) { 
         selectKeyTreeItem(keyTree.getKeyTreeItem(key));
     }
+
     
     /**
      * Selected the key tree item matching given key tree item.
