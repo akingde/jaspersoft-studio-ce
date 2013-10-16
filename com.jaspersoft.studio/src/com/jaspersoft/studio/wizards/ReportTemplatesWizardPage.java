@@ -106,6 +106,22 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	 * The template bundle actually selected
 	 */
 	private TemplateBundle selectedTemplate = null;
+	
+	/**
+	 * Mouse wheel listener used to change the zoomfactor when the 
+	 * mouse wheel is used when the ctrl key is pressed
+	 */
+	MouseWheelListener scaleListener = new MouseWheelListener() {
+		
+		@Override
+		public void mouseScrolled(MouseEvent e) {
+			if ((e.stateMask & SWT.CTRL) != 0){
+				int direction = (e.count > 0) ? 1 : -1;
+				scale.setSelection(scale.getSelection()+direction);
+				zoomModified();
+			}
+		}
+	};
 
 	public TemplateBundle getTemplateBundle() {
 		return selectedTemplate;
@@ -192,7 +208,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 				setPageComplete(validatePage());
 			}
 		});
-
+		gal.addMouseWheelListener(scaleListener);
 		gal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -336,18 +352,8 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		// initializeBackgroundData();
 
 		sashForm.setWeights(new int[] { 20, 80 });
-
-		container.addMouseWheelListener(new MouseWheelListener() {
-			
-			@Override
-			public void mouseScrolled(MouseEvent e) {
-				if ((e.stateMask & SWT.CTRL) != 0){
-					int direction = (e.count > 0) ? 1 : -1;
-					scale.setSelection(scale.getSelection()+direction);
-					zoomModified();
-				}
-			}
-		});
+		
+		
 		
 		scale.addListener(SWT.Selection, new Listener() {
 
@@ -355,6 +361,9 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 				zoomModified();
 			}
 		});
+
+		container.addMouseWheelListener(scaleListener);
+		//galleryComposite.addMouseWheelListener(scaleListener);
 
 		scale.setSelection(6);
 		// Manually fire the event because the invocation
