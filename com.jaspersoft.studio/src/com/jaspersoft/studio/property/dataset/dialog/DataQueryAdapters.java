@@ -150,7 +150,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		label.setText(Messages.DataQueryAdapters_languagetitle);
 
 		langCombo = new Combo(sectionClient, SWT.SINGLE | SWT.BORDER);
-		languages = ModelUtils.getQueryLanguages();
+		languages = ModelUtils.getQueryLanguages(jConfig);
 		langCombo.setItems(languages);
 		langCombo.addSelectionListener(new SelectionListener() {
 
@@ -306,8 +306,10 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 		int langindex = Misc.indexOf(languages, query.getLanguage());
 		if (langindex >= 0)
 			langCombo.select(langindex);
-		else
+		else {
 			langCombo.setItem(0, Misc.nvl(query.getLanguage()));
+			langCombo.select(0);
+		}
 		isRefresh = false;
 		changeLanguage();
 
