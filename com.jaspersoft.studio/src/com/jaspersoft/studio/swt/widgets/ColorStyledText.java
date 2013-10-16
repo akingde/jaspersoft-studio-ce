@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.wb.swt.ColorManager;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
@@ -96,7 +95,7 @@ public class ColorStyledText {
 	 * Guard that block the modify event when another is already going
 	 */
 	private boolean refreshingGuard;
-	private ColorManager colorManager = new ColorManager();
+
 	/**
 	 * Area where the component is placed
 	 */
@@ -230,7 +229,6 @@ public class ColorStyledText {
 
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				disposeColor();
 				disposeProvider();
 			}
 		});
@@ -349,18 +347,10 @@ public class ColorStyledText {
 	public void setColor(RGB newColor, boolean callListener) {
 		raiseEvents = callListener;
 		// dispose the old color before to create the new one
-		disposeColor();
 		color = newColor;
 		lastValidText = getHexFromRGB(color);
 		textArea.setText(lastValidText);
 		raiseEvents = true;
-	}
-
-	/**
-	 * Dispose the color if it is different from null
-	 */
-	private void disposeColor() {
-		colorManager.dispose();
 	}
 
 	/**
