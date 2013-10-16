@@ -39,7 +39,7 @@ public class QuerySection extends ASection {
 				.createLabel(parent, getWidgetFactory(), "Language", 120);
 
 		clang = getWidgetFactory().createCombo(parent, SWT.BORDER);
-		clang.setItems(ModelUtils.getQueryLanguages());
+		// clang.setItems(ModelUtils.getQueryLanguages());
 
 		AbstractSection.createLabel(parent, getWidgetFactory(), "Query", 120);
 

@@ -35,6 +35,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
@@ -52,6 +53,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -70,7 +72,6 @@ import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
-import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -467,18 +468,19 @@ public class ModelUtils {
 
 		return bands;
 	}
-	
+
 	/**
 	 * Returns the list of all crosstabs contained the specified report.
 	 * 
-	 * @param jrDesign the jasper design of the report
+	 * @param jrDesign
+	 *          the jasper design of the report
 	 * @return the list of crosstabs
 	 */
 	public static List<JRCrosstab> getAllCrosstabs(JasperDesign jrDesign) {
 		List<JRDesignElement> allElements = getAllElements(jrDesign);
 		List<JRCrosstab> allCrosstabs = new ArrayList<JRCrosstab>();
-		for(JRDesignElement el : allElements) {
-			if(el instanceof JRCrosstab){
+		for (JRDesignElement el : allElements) {
+			if (el instanceof JRCrosstab) {
 				allCrosstabs.add((JRCrosstab) el);
 			}
 		}
@@ -906,8 +908,10 @@ public class ModelUtils {
 		return name + "_" + index;
 	}
 
-	public static String[] getQueryLanguages() {
-		String[] langs = getQueryLanguagesOnly();
+	public static String[] getQueryLanguages(JasperReportsContext context) {
+		if (context == null)
+			context = DefaultJasperReportsContext.getInstance();
+		String[] langs = getQueryLanguagesOnly(context);
 		String[] res = new String[langs.length + 1];
 		res[0] = "";
 		System.arraycopy(langs, 0, res, 1, langs.length);
@@ -922,11 +926,10 @@ public class ModelUtils {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static String[] getQueryLanguagesOnly() {
+	public static String[] getQueryLanguagesOnly(JasperReportsContext context) {
 		Set<String> langs = new HashSet<String>();
-		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(JRQueryExecuterFactoryBundle.class);
-		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
-			JRQueryExecuterFactoryBundle bundle = (JRQueryExecuterFactoryBundle) it.next();
+		List<JRQueryExecuterFactoryBundle> bundles = context.getExtensions(JRQueryExecuterFactoryBundle.class);
+		for (JRQueryExecuterFactoryBundle bundle : bundles) {
 			String[] languages = bundle.getLanguages();
 			for (String l : languages) {
 				if (!langs.contains(l)) {
@@ -942,9 +945,8 @@ public class ModelUtils {
 				}
 			}
 		}
-		bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(QueryExecuterFactoryBundle.class);
-		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
-			QueryExecuterFactoryBundle bundle = (QueryExecuterFactoryBundle) it.next();
+		List<QueryExecuterFactoryBundle> oldbundles = context.getExtensions(QueryExecuterFactoryBundle.class);
+		for (QueryExecuterFactoryBundle bundle : oldbundles) {
 			String[] languages = bundle.getLanguages();
 			for (String l : languages) {
 				if (!langs.contains(l)) {
@@ -1222,11 +1224,11 @@ public class ModelUtils {
 	 * @see IComponentFactory#getElementExpressionContext(Object)
 	 */
 	public static ExpressionContext getElementExpressionContext(JRDesignElement element, ANode node) {
-		// Pre-check to possibly retrieve the JRDesignElement 
-		if(element==null && node!=null && node.getValue() instanceof JRDesignElement) {
+		// Pre-check to possibly retrieve the JRDesignElement
+		if (element == null && node != null && node.getValue() instanceof JRDesignElement) {
 			element = (JRDesignElement) node.getValue();
 		}
-		
+
 		if (element != null) {
 			JRElementGroup group = getTopElementGroup(element);
 			if (group instanceof JRDesignCellContents) {
@@ -1404,40 +1406,39 @@ public class ModelUtils {
 		}
 		return markerData;
 	}
-	
+
 	/**
-	 * Return a list of sortfield, that are on the same level of the node passed
-	 * as parameter (so if the node is fore example a field of a subdataset then 
-	 * only the sortfield defined inside the subdataset will be returned)
+	 * Return a list of sortfield, that are on the same level of the node passed as parameter (so if the node is fore
+	 * example a field of a subdataset then only the sortfield defined inside the subdataset will be returned)
 	 * 
-	 * @param node node used to retrieve the sortfields
-	 * @return a list of sortfield or null if from the passed node wasn't possibile to reach
-	 * the sortfields
+	 * @param node
+	 *          node used to retrieve the sortfields
+	 * @return a list of sortfield or null if from the passed node wasn't possibile to reach the sortfields
 	 */
 	public static List<INode> getSortFields(ANode node) {
 		ANode n = node.getParent();
 		while (n != null) {
-			if (n instanceof MDataset || n instanceof MReport) return findSortFieldsNode(n);
+			if (n instanceof MDataset || n instanceof MReport)
+				return findSortFieldsNode(n);
 			n = n.getParent();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Given a root node, like a MReport or an MDataset, search a node 
-	 * MSortFields inside its children and return the sortfields defined 
-	 * under it
+	 * Given a root node, like a MReport or an MDataset, search a node MSortFields inside its children and return the
+	 * sortfields defined under it
 	 * 
-	 * @param parent and MReport or MDataset node
-	 * @return all the sortfields defined on the same level of the passed node,
-	 * it will never be null
+	 * @param parent
+	 *          and MReport or MDataset node
+	 * @return all the sortfields defined on the same level of the passed node, it will never be null
 	 */
-	private static List<INode> findSortFieldsNode(ANode parent){
-		for(INode node : parent.getChildren()){
-			if (node instanceof MSortFields) return node.getChildren();
+	private static List<INode> findSortFieldsNode(ANode parent) {
+		for (INode node : parent.getChildren()) {
+			if (node instanceof MSortFields)
+				return node.getChildren();
 		}
 		return new ArrayList<INode>();
 	}
 
-	
 }

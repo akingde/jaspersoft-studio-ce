@@ -50,14 +50,20 @@ public class MQuery extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		languageD.setItems(ModelUtils.getQueryLanguages(getJasperConfiguration()));
+	}
+
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
 		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignQuery.PROPERTY_TEXT, Messages.common_text);
 		textD.setDescription(Messages.MQuery_text_description);
 		desc.add(textD);
 
-		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JRDesignQuery.PROPERTY_LANGUAGE,
-				Messages.common_language, ModelUtils.getQueryLanguages(), NullEnum.NOTNULL);
+		languageD = new RWComboBoxPropertyDescriptor(JRDesignQuery.PROPERTY_LANGUAGE, Messages.common_language,
+				ModelUtils.getQueryLanguages(getJasperConfiguration()), NullEnum.NOTNULL);
 		languageD.setDescription(Messages.MQuery_language_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
@@ -67,6 +73,8 @@ public class MQuery extends APropertyNode implements IPropertySource {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+
+	private RWComboBoxPropertyDescriptor languageD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {

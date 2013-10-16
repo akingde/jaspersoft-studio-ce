@@ -29,8 +29,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorJrxml;
 
 public class ReportUnitQueryContent extends APageContent {
 
-	public ReportUnitQueryContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ReportUnitQueryContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -61,8 +60,7 @@ public class ReportUnitQueryContent extends APageContent {
 		for (Object obj : rd.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) {
-				return QueryPageContent.createContentComposite(parent,
-						bindingContext, r);
+				return QueryPageContent.createContentComposite(parent, bindingContext, r, res);
 			}
 		}
 		return null;

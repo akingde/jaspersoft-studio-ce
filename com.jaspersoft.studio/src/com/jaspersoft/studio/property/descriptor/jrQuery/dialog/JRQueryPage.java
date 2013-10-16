@@ -83,7 +83,7 @@ public class JRQueryPage extends WizardPage {
 		lbl1.setText(Messages.common_language + ":"); //$NON-NLS-1$
 
 		langCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
-		langCombo.setItems(ModelUtils.getQueryLanguages());
+		langCombo.setItems(ModelUtils.getQueryLanguages(value.getJasperConfiguration()));
 		langCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// set value into the MQuery, attention, thru commands!

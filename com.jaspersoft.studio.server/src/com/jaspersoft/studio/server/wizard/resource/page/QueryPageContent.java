@@ -36,8 +36,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class QueryPageContent extends APageContent {
 
-	public QueryPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public QueryPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -56,18 +55,17 @@ public class QueryPageContent extends APageContent {
 	}
 
 	public Control createContent(Composite parent) {
-		return createContentComposite(parent, bindingContext, res.getValue());
+		return createContentComposite(parent, bindingContext, res.getValue(), res);
 	}
 
-	public static Control createContentComposite(Composite parent,
-			DataBindingContext bindingContext, ResourceDescriptor r) {
+	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
 		UIUtil.createLabel(composite, Messages.RDQueryPage_language);
 
 		Combo clang = new Combo(composite, SWT.BORDER);
-		clang.setItems(ModelUtils.getQueryLanguages());
+		clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
 
 		UIUtil.createLabel(composite, Messages.RDQueryPage_query);
 
@@ -77,10 +75,8 @@ public class QueryPageContent extends APageContent {
 		gd.widthHint = 400;
 		tsql.setLayoutData(gd);
 
-		bindingContext.bindValue(SWTObservables.observeText(clang),
-				PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify),
-				PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 
 		return composite;
 	}
@@ -105,8 +101,7 @@ public class QueryPageContent extends APageContent {
 		}
 
 		public String getLanguage() {
-			return rd
-					.getResourcePropertyValue(ResourceDescriptor.PROP_QUERY_LANGUAGE);
+			return rd.getResourcePropertyValue(ResourceDescriptor.PROP_QUERY_LANGUAGE);
 		}
 	}
 }
