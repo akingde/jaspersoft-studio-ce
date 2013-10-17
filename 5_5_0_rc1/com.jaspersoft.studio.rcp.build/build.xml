@@ -1,0 +1,336 @@
+<project default="buildAndPackageConsole">
+	<property name="baseLocation" value="${eclipse.home}" />
+	<!-- by default, check for deltapack co-located with eclipse -->
+	<property name="deltapack" value="${eclipse.home}/deltapack/eclipse" />
+	<property name="buildDirectory" value="${basedir}/buildDirectory" />
+	<property name="builder" value="${basedir}" />
+	<property name="pluginPath" value="${basedir}/..${path.separator}${deltapack}" />
+	<property name="buildTempFolder" value="${buildDirectory}" />
+	<property file="build.properties" />
+		
+	<!-- ================================= 
+          target: buildAndPackageConsole
+         ================================= -->
+    <target name="buildAndPackageConsole" description="Invoke the main building task and then all packaging-tasks. Should be used when launching outside IDE">
+    	<echo message="Executing 'buildAndPackageConsole' task"/>
+    	<antcall>
+    		<target name="main"/>
+    		<target name="linux-x86-installer"/>
+    		<target name="linux-x86_64-installer"/>
+    		<target name="mac-x86_64-installer"/>
+    		<target name="windows-x86-installer"/>
+    		<target name="windows-x86_64-installer"/>
+    		<target name="cleanJSSFiles" />
+    	</antcall>
+    </target>
+	
+	<!-- ================================= 
+          target: buildAndPackageIDE
+         ================================= -->
+    <target name="buildAndPackageIDE" description="Invoke the main building task and then all packaging-tasks. Should be used when launching inside IDE">
+    	<echo message="Executing 'buildAndPackageIDE' task"/>
+    	<property name="idelaunch" value="true" />
+    	<antcall>
+    		<target name="main"/>
+    		<target name="linux-x86-installer"/>
+    		<target name="linux-x86_64-installer"/>
+    		<target name="mac-x86_64-installer"/>
+    		<target name="windows-x86-installer"/>
+    		<target name="windows-x86_64-installer"/>
+    		<target name="cleanJSSFiles" />
+    		<target name="refreshWorkspace" />
+    	</antcall>
+    </target>	
+	
+	<!-- ================================= 
+          target: main
+         ================================= -->
+	<target name="main" description="Product creation (packaging as zip files)" depends="readProductManifest">
+		<property file="jss.properties"/>
+		<echo message="Executing 'main' task"/>
+		<echo message="Delta pack location: ${deltapack}" />
+		<!-- Check that we have a deltapack -->
+		<available property="haveDeltaPack" file="${deltapack}" />
+		<fail unless="haveDeltaPack" message="The deltapack is required to build this product.  Please edit buildProduct.xml or set the &quot;deltapack&quot; property." />
+
+		<!-- Clenup the build environment first -->
+		<delete dir="${buildDirectory}" />
+
+		<ant antfile="${eclipse.pdebuild.scripts}/productBuild/productBuild.xml" />
+
+		<move todir="${basedir}">
+			<fileset dir="${buildDirectory}/${buildLabel}" includes="*.zip" />
+		</move>
+	</target>	
+	
+	<!-- ================================= 
+          target: refreshWorkspace
+         ================================= -->
+    <target name="refreshWorkspace" if="${idelaunch}" description="Need to refresh the workspace only when run from IDE">
+    	<echo message="Executing 'refreshWorkspace' task"/>
+		<eclipse.convertPath fileSystemPath="${basedir}" property="resourcePath" />
+		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite" />            
+    </target>
+
+	<!-- ================================= 
+          target: windows-x86-installer
+         ================================= -->
+	<target name="windows-x86-installer" description="Create the win32 x86 installer using NSIS script (NSIS required)" if="jss.version">
+		<echo message="Executing 'windows-x86-installer' task"/>
+		<property name="dist" value="${basedir}/dist" />
+		<property name="zipfile.win32.x86" value="${buildId}-win32.win32.x86" />
+		<property name="zipdir.win32.x86" value="${dist}/${zipfile.win32.x86}" />
+
+		<echo message="${basedir}/${buildId}-win32.win32.x86.zip" />
+		<!-- cleanup the previous directory (if any) -->
+		<mkdir dir="${dist}" />
+
+		<delete dir="${zipdir.win32.x86}" />
+
+		<!-- Decompressing the archive created by the Eclipse build -->
+		<unzip src="${basedir}/${zipfile.win32.x86}.zip" dest="${zipdir.win32.x86}" />
+		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.8)
+		     improved with Jaspersoft Studio icons -->
+		<copy file="${basedir}/resources/Jaspersoft Studio.exe" tofile="${zipdir.win32.x86}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
+		<copy file="${basedir}/resources/jaspersoftstudio.ico" tofile="${zipdir.win32.x86}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
+
+		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+		<copy file="${basedir}/resources/notice.txt" todir="${zipdir.win32.x86}/jaspersoftstudio" />
+		<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir.win32.x86}/jaspersoftstudio" />
+
+		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${basedir}/lib/nsisant-1.1.jar" />
+		<nsisant script="${basedir}/resources/JaspersoftStudioInstaller.nsi">
+			<define name="PRDUCT_ARCH" value="x86" />
+			<define name="PRODUCT_VERSION" value="${jss.version}" />
+			<define name="PRODUCT_WEB_SITE" value="http://community.jaspersoft.com/project/jaspersoft-studio" />
+			<define name="INSTALLER_FILES_DIR" value="${zipdir.win32.x86}/jaspersoftstudio" />
+			<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86.installer}" />
+		</nsisant>
+
+		<!-- remove the directory used to create the installer -->
+		<delete dir="${zipdir.win32.x86}" />
+
+	</target>
+	
+	<!-- ================================= 
+          target: windows-x86_64-installer
+         ================================= -->
+	<target name="windows-x86_64-installer" description="Create the win64 installer using NSIS script (NSIS required)" if="jss.version">
+		<echo message="Executing 'windows-x86_64-installer' task"/>
+		<property name="dist" value="${basedir}/dist" />
+		<property name="zipfile.win32.x86_64" value="${buildId}-win32.win32.x86_64" />
+		<property name="zipdir.win32.x86_64" value="${dist}/${zipfile.win32.x86_64}" />
+
+		<echo message="${basedir}/${buildId}-win32.win32.x86_64.zip" />
+		<!-- cleanup the previous directory (if any) -->
+		<mkdir dir="${dist}" />
+
+		<delete dir="${zipdir.win32.x86_64}" />
+
+		<!-- Decompressing the archive created by the Eclipse build -->
+		<unzip src="${basedir}/${zipfile.win32.x86_64}.zip" dest="${zipdir.win32.x86_64}" />
+		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.6.2)
+			     improved with Jaspersoft Studio icons -->
+		<copy file="${basedir}/resources/Jaspersoft Studio64.exe" tofile="${zipdir.win32.x86_64}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
+		<copy file="${basedir}/resources/jaspersoftstudio.ico" tofile="${zipdir.win32.x86_64}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
+
+		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+		<copy file="${basedir}/resources/notice.txt" todir="${zipdir.win32.x86_64}/jaspersoftstudio" />
+		<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir.win32.x86_64}/jaspersoftstudio" />
+
+		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${basedir}/lib/nsisant-1.1.jar" />
+		<nsisant script="${basedir}/resources/JaspersoftStudioInstaller64.nsi">
+			<define name="PRDUCT_ARCH" value="x86_64" />
+			<define name="PRODUCT_VERSION" value="${jss.version}" />
+			<define name="PRODUCT_WEB_SITE" value="http://community.jaspersoft.com/project/jaspersoft-studio" />
+			<define name="INSTALLER_FILES_DIR" value="${zipdir.win32.x86_64}/jaspersoftstudio" />
+			<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86_64.installer}" />
+		</nsisant>
+
+		<!-- remove the directory used to create the installer -->
+		<delete dir="${zipdir.win32.x86_64}" />
+
+	</target>
+	
+	<target name = "createDeb" description = "Create a deb file with the binary inside">
+		<!-- ================================= 
+	          target: createDeb
+	         ================================= -->
+			<path id="ant-deb.classpath">
+				<fileset dir="${basedir}/lib" includes="ant-deb.jar"/>
+			</path>
+			<echo> ${basedir}/lib</echo>
+			<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpathref="ant-deb.classpath"/>
+			<taskdef name="desktopEntry" classname="com.googlecode.ant_deb_task.DesktopEntry" classpathref="ant-deb.classpath"/>
+
+			<mkdir dir="${dist}/debian/usr/share/applications" />
+			<mkdir dir="${dist}/debian/opt/jaspersoft" />
+		    <copy todir="${dist}/debian/opt/jaspersoft" >  
+			        <fileset dir="${zipdir.linux}" includes="**"/>  
+			 </copy>
+			<echo file="${dist}/debian/postinst" append="false">#! /bin/sh
+chmod +x "/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio"
+exit 0;</echo>
+			<echo> ${jss.distro.folder}   ${zipdir.linux.x86_64}</echo>
+			<desktopEntry 
+				toFile="${dist}/debian/usr/share/applications/jasperstudio.desktop" 
+				path="/opt/jaspersoft/${jss.distro.folder}" 
+				icon="/opt/jaspersoft/${jss.distro.folder}/icon.xpm" 
+				name="JasperSoft studio" 
+				exec="&quot;/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio&quot;"
+				categories="Office"/>
+			<deb 
+				todir="${dist}" 
+				package="jaspersoftstudio"
+				section="editors" 
+				postinst="${dist}/debian/postinst" 
+				architecture="${architecture}"
+				homepage="http://community.jaspersoft.com/project/jaspersoft-studio"
+				depends="openjdk-6-jre">
+				<version upstream="${jss.version}" debian="" />
+			    <maintainer name="Jaspersoft Studio Team" email="giulio@jaspersoft.com"/>
+			    <description synopsis="An open-source Eclipse-based report designer for JasperReports and JasperReports Server.">
+	Jaspersoft Studio is a new, free, open source report designer for JasperReports. 
+	Jaspersoft Studio is a port of iReport on top of the Eclipse platform and its core is JasperReports.
+			    </description>
+				<tarfileset dir="${dist}/debian">
+					<include name="usr/**" />
+					<include name="opt/**" />
+				</tarfileset>
+			 </deb>
+
+			<delete dir="${dist}/debian" />
+			<!-- END DEB CREATION -->
+		</target>
+	
+	<!-- ================================= 
+          target: linux-x86-installer
+         ================================= -->
+	<target name="linux-x86-installer" description="Create the Linux (x86) tgz package (Unix system required)" if="jss.version">
+		<echo message="Executing 'linux-x86-installer' task"/>
+		<property name="dist" value="${basedir}/dist" />
+		<property name="zipfile.linux.x86" value="${buildId}-linux.gtk.x86" />
+		<property name="zipdir.linux.x86" value="${dist}/${zipfile.linux.x86}" />
+
+		<!-- cleanup the previous directory (if any) -->
+		<mkdir dir="${dist}" />
+
+		<delete dir="${zipdir.linux.x86}" />
+
+		<!-- Decompressing the archive created by the Eclipse build -->
+		<unzip src="${basedir}/${zipfile.linux.x86}.zip" dest="${zipdir.linux.x86}" />
+		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+		<copy file="${basedir}/resources/notice.txt" todir="${zipdir.linux.x86}/jaspersoftstudio" />
+		<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir.linux.x86}/jaspersoftstudio" />
+		<chmod file="${zipdir.linux.x86}/jaspersoftstudio/Jaspersoft Studio" perm="ugo+x" />
+		<!-- rename the folder -->
+		<move file="${zipdir.linux.x86}/jaspersoftstudio" tofile="${zipdir.linux.x86}/${jss.distro.folder}" />
+
+		<tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${zipdir.linux.x86}" compression="gzip" longfile="gnu" />
+		<antcall target="createDeb">
+			 <param name="architecture" value="i386"/>
+			<param name= "zipdir.linux" value = "${zipdir.linux.x86}"/>
+		</antcall>
+		<!-- remove the temp extraction directory -->
+		<delete dir="${zipdir.linux.x86}" />
+	</target>
+
+	<!-- ================================= 
+          target: linux-x86_64-installer
+         ================================= -->
+	<target name="linux-x86_64-installer" description="Create the Linux (x86_64) tgz package (Unix system required)" if="jss.version">
+		<echo message="Executing 'linux-x86_64-installer' task"/>
+		<property name="dist" value="${basedir}/dist" />
+		<property name="zipfile.linux.x86_64" value="${buildId}-linux.gtk.x86_64" />
+		<property name="zipdir.linux.x86_64" value="${dist}/${zipfile.linux.x86_64}" />
+
+		<!-- cleanup the previous directory (if any) -->
+		<mkdir dir="${dist}" />
+
+		<delete dir="${zipdir.linux.x86_64}" />
+
+		<!-- Decompressing the archive created by the Eclipse build -->
+		<unzip src="${basedir}/${zipfile.linux.x86_64}.zip" dest="${zipdir.linux.x86_64}" />
+		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+		<copy file="${basedir}/resources/notice.txt" todir="${zipdir.linux.x86_64}/jaspersoftstudio" />
+		<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir.linux.x86_64}/jaspersoftstudio" />
+		<chmod file="${zipdir.linux.x86_64}/jaspersoftstudio/Jaspersoft Studio" perm="ugo+x" />
+		<!-- rename the folder -->
+		<move file="${zipdir.linux.x86_64}/jaspersoftstudio" tofile="${zipdir.linux.x86_64}/${jss.distro.folder}" />
+
+		<tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${zipdir.linux.x86_64}" compression="gzip" longfile="gnu">
+			<tarfileset dir="${jss.distro.folder}/.." filemode="755">
+				<include name="${jss.distro.folder}/Jaspersoft*" />
+			</tarfileset>
+			<tarfileset dir="${jss.distro.folder}/..">
+				<include name="${jss.distro.folder}/**" />
+				<exclude name="${jss.distro.folder}/Jaspersoft*" />
+			</tarfileset>
+		</tar>
+		<antcall target="createDeb">
+			 <param name="architecture" value="amd64"/>
+			 <param name= "zipdir.linux" value = "${zipdir.linux.x86_64}"/>
+		</antcall>
+		<!-- remove the temp extraction directory -->
+		<delete dir="${zipdir.linux.x86_64}" />
+	</target>
+
+	<!-- ================================= 
+          target: mac-x86_64-installer
+         ================================= -->
+	<target name="mac-x86_64-installer" description="Create DMG installer for Mac x86_64 using a remote Mac server (uses ssh.properties)" if="jss.version">
+		<echo message="Executing 'mac-x86_x64-installer' task"/>
+		<property file="ssh.properties" />
+		<property name="dist" value="${basedir}/dist" />
+		<property name="zipfile.mac.x86_64" value="${buildId}-macosx.cocoa.x86_64" />
+		<property name="zipdir.mac.x86_64" value="${dist}/${zipfile.mac.x86_64}" />
+
+		<sshexec host="${sshhost}" username="${sshuser}" password="${sshpass}" command="rm -Rf ${sshroot}/tmp-jssbuild" />
+		<sshexec host="${sshhost}" username="${sshuser}" password="${sshpass}" command="mkdir ${sshroot}/tmp-jssbuild" />
+		<scp file="${basedir}/resources/jss-package-template.tgz" todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" password="${sshpass}" />
+		<scp file="${basedir}/resources/mac_distro.sh" todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" password="${sshpass}" />
+		<scp file="${basedir}/${zipfile.mac.x86_64}.zip" todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" password="${sshpass}" />
+		<sshexec host="${sshhost}" username="${sshuser}" password="${sshpass}" command="cd '${sshroot}/tmp-jssbuild'; chmod +x mac_distro.sh; ./mac_distro.sh ${jss.version}" />
+		<scp file="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild/jaspersoftstudio.dmg" localTofile="${dist}/${jss.mac.x86_64}" password="${sshpass}" />
+	</target>
+	
+	<!-- ================================= 
+          target: readProductManifest                      
+         ================================= -->
+    <target name="readProductManifest" description="Read the version for the product to be packed directly from the product plugin manifest.">
+    	<property name="manifestFilePosition" value="${basedir}/../${productPluginName}/META-INF/MANIFEST.MF"/>
+    	<readBundleVersion fileposition="${manifestFilePosition}"/>
+    	<property name="jss.version" value="${Bundle-Version}"/>
+    </target>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: readBundleVersion          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="readBundleVersion">
+        <attribute name="fileposition"/>
+        <sequential>
+            <loadproperties srcfile="@{fileposition}">
+        		<filterchain>
+        			<linecontains>
+        			<contains value="Bundle-Version:"/>
+        			</linecontains>
+        		</filterchain>
+			</loadproperties>
+        </sequential>
+    </macrodef>
+	
+	<!-- ================================= 
+          target: cleanJSSFiles              
+         ================================= -->
+    <target name="cleanJSSFiles" description="Clean projects from no more used files created during the building phase">
+    	<!-- remove all zip file produced by the product build -->
+    	<delete>
+			<fileset dir="${basedir}">
+			    <include name="${buildId}-*.zip"/>
+			</fileset>
+		</delete>
+    	<!-- remove build directory -->
+    	<delete dir="${buildDirectory}" />
+    </target>
+	
+</project>
