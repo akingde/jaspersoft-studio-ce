@@ -52,7 +52,8 @@ public class MQuery extends APropertyNode implements IPropertySource {
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		languageD.setItems(ModelUtils.getQueryLanguages(getJasperConfiguration()));
+		if (languageD != null)
+			languageD.setItems(ModelUtils.getQueryLanguages(getJasperConfiguration()));
 	}
 
 	@Override
