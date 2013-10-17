@@ -24,7 +24,6 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -134,54 +133,37 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			}
 		});
 
-		datasource.addSelectionListener(new SelectionListener() {
-
+		datasource.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleDatasourceChanged();
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
 
-		catalog.addSelectionListener(new SelectionListener() {
-
+		catalog.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleCatalogChanged();
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
 			}
 		});
 	}
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(
-				SWTObservables.observeText(xmlaUri, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "xmlaUrl")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(datasource),
-				PojoObservables.observeValue(dataAdapter, "datasource")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(catalog),
-				PojoObservables.observeValue(dataAdapter, "catalog")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(cube),
-				PojoObservables.observeValue(dataAdapter, "cube")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textUsername, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textPassword, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(xmlaUri, SWT.Modify), PojoObservables.observeValue(dataAdapter, "xmlaUrl")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(datasource), PojoObservables.observeValue(dataAdapter, "datasource")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(catalog), PojoObservables.observeValue(dataAdapter, "catalog")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(cube), PojoObservables.observeValue(dataAdapter, "cube")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textUsername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textPassword, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDesc == null)
 			dataAdapterDesc = new XmlaDataAdapterDescriptor();
 
-		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
 
 		dataAdapter.setXmlaUrl(xmlaUri.getText());
 		dataAdapter.setDatasource(datasource.getText());
@@ -190,19 +172,46 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
 		dataAdapter.setUsername(textUsername.getText());
 		// configure widget if not done yet
-		if(!textPassword.isWidgetConfigured()) {
+		if (!textPassword.isWidgetConfigured()) {
 			textPassword.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, textPassword.getText());
-		}
-		else {
+		} else {
 			// rely on back-compatibility and use clear text
 			dataAdapter.setPassword(textPassword.getText());
 		}
-		
 
 		return dataAdapterDesc;
 	}
 
+	@Override
+	public void setDataAdapter(DataAdapterDescriptor dataAdapterDesc) {
+		super.setDataAdapter(dataAdapterDesc);
+
+		removeDirtyListenersToContext();
+
+		String url = xmlaUri.getText();
+		ServerMetadata smd = new ServerMetadata(url);
+
+		handleMetaDataChanged(smd);
+		if (dstes == null) {
+			XmlaDataAdapterDescriptor xmlda = (XmlaDataAdapterDescriptor) dataAdapterDesc;
+
+			datasource.setItems(new String[] { xmlda.getDataAdapter().getDatasource() });
+			datasource.select(0);
+
+			catalog.setItems(new String[] { xmlda.getDataAdapter().getCatalog() });
+			catalog.select(0);
+
+			cube.setItems(new String[] { xmlda.getDataAdapter().getCube() });
+			cube.select(0);
+		} else
+			handleDatasourceChanged();
+
+		addDirtyListenersToContext();
+	}
+
 	protected void handleDatasourceChanged() {
+		if (dstes == null)
+			return;
 		catalog.removeAll();
 		cube.removeAll();
 		int ind = datasource.getSelectionIndex();
@@ -219,6 +228,8 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	}
 
 	protected void handleCatalogChanged() {
+		if (dstes == null)
+			return;
 		cube.removeAll();
 		int ind = catalog.getSelectionIndex();
 		DataSourceTreeElement[] cubes = catalogs[ind].getChildren();
@@ -246,17 +257,18 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		datasource.setItems(dsources);
 		datasource.select(0);
 	}
-	
+
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat("adapter_xmla");
 	}
-	
+
 	@Override
 	public void performAdditionalUpdates() {
-		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+		if (JaspersoftStudioPlugin.shouldUseSecureStorage()) {
 			textPassword.persistSecret();
-			// update the "password" replacing it with the UUID key saved in secure preferences
+			// update the "password" replacing it with the UUID key saved in secure
+			// preferences
 			XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc.getDataAdapter();
 			dataAdapter.setPassword(textPassword.getUUIDKey());
 		}
