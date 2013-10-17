@@ -269,7 +269,15 @@ public class JRPropertyDialog extends Dialog {
 
 	private void fillValue(PropertyDTO value) {
 		cprop.setText(Misc.nvl(value.getProperty()));
-		tvalue.setText(Misc.nvl((String) value.getValue()));
+		tvalue.setText(getValueText(value.getValue()));
+	}
+
+	private String getValueText(Object value) {
+		if(value instanceof String) {
+			// here we care only about strings
+			return (String) value;
+		}
+		return "";
 	}
 
 }
