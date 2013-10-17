@@ -36,7 +36,6 @@ import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -57,6 +56,7 @@ import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * Component that represent a combo with inside the preview of some border presets. This component should 
@@ -142,7 +142,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * image will be used
 		 */
 		protected void setCorrectValue(){
-			if (!combo.isDisposed() && model != null){
+			if (combo != null && !combo.isDisposed() && model != null){
 				TemplateBorder actualBorder = getElementAttributes();
 				int index = exampleImages.indexOf(actualBorder);
 					if (index != -1) combo.select(index);
@@ -178,7 +178,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * @param lp element to change
 		 */
 		private void changeAllProperties(CompoundCommand cc, TemplateBorder selectedElement, MLinePen lp){
-			Command c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_COLOR, selectedElement.getColor(), lp);
+			Command c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(selectedElement.getColor(),255), lp);
 			if (c != null) cc.add(c);
 			c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_STYLE, selectedElement.getStyle(), lp);
 			if (c != null) cc.add(c);
@@ -191,8 +191,8 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			Integer lineStyleNum = ((Integer)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE))-1;
 			LineStyleEnum lineStyle = LineStyleEnum.getByValue(lineStyleNum.byteValue());
 			Float lineWidth = (Float)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-			RGB lineColor = (RGB)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
-			TemplateBorder result =  new TemplateBorder(lineWidth, lineStyle, lineColor);
+			AlfaRGB lineColor = (AlfaRGB)lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
+			TemplateBorder result =  new TemplateBorder(lineWidth, lineStyle, lineColor != null ? lineColor.getRgb() : null);
 			return result;
 		}
 		

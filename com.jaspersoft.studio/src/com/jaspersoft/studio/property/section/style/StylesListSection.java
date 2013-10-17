@@ -42,6 +42,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -50,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.wb.swt.ResourceCache;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -72,7 +74,6 @@ import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.GridDataUtil;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
@@ -148,7 +149,7 @@ public class StylesListSection extends AbstractSection {
 	/**
 	 * map cache of the colors, they are disposed when the section is disposed
 	 */
-	private Map<String, Color> cacheColor = new HashMap<String, Color>();
+	private ResourceCache colorCache = new ResourceCache();
 
 	/**
 	 * Class to manage the events of the mouse click, used to remove an attribute from an element or one of it's styles
@@ -438,10 +439,10 @@ public class StylesListSection extends AbstractSection {
 	 *          The color
 	 * @return The color hexadecimal representation
 	 */
-	private String getHexFromRGB(Color color) {
-		int r = color.getRed();
-		int g = color.getGreen();
-		int b = color.getBlue();
+	private String getHexFromRGB(RGB color) {
+		int r = color.red;
+		int g = color.green;
+		int b = color.blue;
 		String s = Integer.toHexString(r) + Integer.toHexString(g) + Integer.toHexString(b);
 		return "#" + StringUtils.rightPad(s, 6, "0").toUpperCase(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
@@ -464,7 +465,7 @@ public class StylesListSection extends AbstractSection {
 	 *          tooltip text of the element name label
 	 * @return The button where the click handle will be added
 	 */
-	private Control paintColor(Composite parent, final Color colorValue, String colorName, GridData gData,
+	private Control paintColor(Composite parent, final RGB colorValue, String colorName, GridData gData,
 			boolean addLine, String toolTip) {
 		String stringValue = getHexFromRGB(colorValue);
 		Composite nameComp = new Composite(parent, SWT.NONE);
@@ -491,7 +492,7 @@ public class StylesListSection extends AbstractSection {
 		StyledText valueText = new StyledText(valueComp, SWT.NONE);
 		valueText.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
-				e.gc.setBackground(colorValue);
+				e.gc.setBackground(colorCache.getColor(colorValue));
 				e.gc.drawRectangle(0, 0, 13, 13);
 				e.gc.fillRectangle(1, 1, 12, 12);
 
@@ -616,7 +617,7 @@ public class StylesListSection extends AbstractSection {
 	private void printObject(String namePrefix, String name, Object value, Composite parent, GridData gData,
 			boolean printLine, APropertyNode actualElement, boolean addListener, HashMap<String, Object> localContext) {
 		if (value instanceof Color) {
-			Color valImage = (Color) value;
+			RGB valImage = ((Color) value).getRGB();
 			Control label = paintColor(
 					parent,
 					valImage,
@@ -970,14 +971,8 @@ public class StylesListSection extends AbstractSection {
 		}
 	}
 
-	private Color getSWTColorFromAWT(java.awt.Color awtColor) {
-		String key = awtColor.toString();
-		Color result = cacheColor.get(key);
-		if (result == null) {
-			result = ModelUtils.getSWTColorFromAWT(awtColor);
-			cacheColor.put(key, result);
-		}
-		return result;
+	private RGB getSWTColorFromAWT(java.awt.Color awtColor) {
+		return new RGB(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
 	}
 
 	private void printWindowTitle(Composite parent) {
@@ -1052,10 +1047,7 @@ public class StylesListSection extends AbstractSection {
 	@Override
 	public void dispose() {
 		super.dispose();
-		for (Color color : cacheColor.values()) {
-			color.dispose();
-		}
-		cacheColor.clear();
+		colorCache.dispose();
 	}
 
 	/**
