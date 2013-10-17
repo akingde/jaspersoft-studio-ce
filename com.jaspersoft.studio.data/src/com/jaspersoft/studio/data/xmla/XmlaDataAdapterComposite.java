@@ -43,6 +43,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
+import com.jaspersoft.studio.utils.Misc;
 
 public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
@@ -195,13 +196,13 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		if (dstes == null) {
 			XmlaDataAdapterDescriptor xmlda = (XmlaDataAdapterDescriptor) dataAdapterDesc;
 
-			datasource.setItems(new String[] { xmlda.getDataAdapter().getDatasource() });
+			datasource.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getDatasource()) });
 			datasource.select(0);
 
-			catalog.setItems(new String[] { xmlda.getDataAdapter().getCatalog() });
+			catalog.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getCatalog()) });
 			catalog.select(0);
 
-			cube.setItems(new String[] { xmlda.getDataAdapter().getCube() });
+			cube.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getCube()) });
 			cube.select(0);
 		} else
 			handleDatasourceChanged();
