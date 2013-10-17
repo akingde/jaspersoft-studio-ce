@@ -249,11 +249,12 @@ public class VErrorPreview extends APreview {
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
 			if (expr.getId() == exp.getId()) {
-				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setExpressionContext(new ExpressionContext(dataset, jContext));
 					wizard.setValue(exp);
-					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(Display.getDefault().getActiveShell(), wizard);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(Display.getDefault()
+							.getActiveShell(), wizard);
 					if (dialog.open() == Dialog.OK) {
 						JRExpression e = wizard.getValue();
 						IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
@@ -262,7 +263,8 @@ public class VErrorPreview extends APreview {
 							CommandStack cs = (CommandStack) editor.getAdapter(CommandStack.class);
 							if (cs != null) {
 								cs.execute(new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(), e.getValueClassName()));
-								jContext.getJasperDesign().getEventSupport().firePropertyChange(JasperDesign.PROPERTY_NAME, true, false);
+								jContext.getJasperDesign().getEventSupport()
+										.firePropertyChange(JasperDesign.PROPERTY_NAME, true, false);
 							}
 						}
 					}
@@ -395,9 +397,9 @@ public class VErrorPreview extends APreview {
 	}
 
 	protected void refreshErrorTable() {
-		if (errorList.size() > 0)
+		if (getErrorList().size() > 0)
 			errAction.run();
-		errAction.setText(Messages.VErrorPreview_errorsFoundLabel + errorList.size() + ")"); //$NON-NLS-2$
+		errAction.setText(Messages.VErrorPreview_errorsFoundLabel + getErrorList().size() + ")"); //$NON-NLS-2$
 		errorViewer.refresh();
 	}
 
@@ -428,7 +430,15 @@ public class VErrorPreview extends APreview {
 		if (lines.length > 0)
 			message = lines[0];
 
-		errorList.add(message);
+		getErrorList().add(message);
+	}
+
+	private List<String> getErrorList() {
+		if (errorList == null) {
+			errorList = new ArrayList<String>();
+			errorViewer.setInput(errorList);
+		}
+		return errorList;
 	}
 
 	public void clear() {
