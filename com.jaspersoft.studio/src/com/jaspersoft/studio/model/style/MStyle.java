@@ -11,7 +11,6 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -175,27 +175,22 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
+	private String[] styleitems;
+	
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		if (styleD != null && getValue() instanceof JRDesignStyle) {
-			JRDesignStyle jrElement = (JRDesignStyle) getValue();
-			JasperDesign jasperDesign = getJasperDesign();
-			if (jasperDesign != null) {
-				JRStyle[] styles = jasperDesign.getStyles();
-				ArrayList<String> stylesList = new ArrayList<String>();
-				if (styles.length > 0) {
-					stylesList.add(jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""); //$NON-NLS-1$
-					for (JRStyle style : styles) {
-						if (jrElement != style)
-							stylesList.add(style.getName());
-					}
+		// initialize style
+		JasperDesign jd = getJasperDesign();
+		if (jd != null && styleD != null && getValue() != null) {
+				String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), (JRBaseStyle)getValue());
+				if (styleitems == null || newitems != styleitems) {
+					styleitems = newitems;
+					styleD.setItems(newitems);
 				}
-				styleD.setItems(stylesList.toArray(new String[stylesList.size()]));
-			}
 		}
 	}
-
+	
 	public HashMap<String, Object> getStylesDescriptors() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (getValue() == null)
@@ -240,6 +235,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MStyle_parent_style_description);
+		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
 		desc.add(styleD);
 
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.common_name);
@@ -435,8 +432,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	private MLinePen linePen;
 	private MLineBox lineBox;
-	private RWComboBoxPropertyDescriptor styleD;
 	private MParagraph mParagraph;
+	private static RWComboBoxPropertyDescriptor styleD;
 	private static JSSEnumPropertyDescriptor fillD;
 	private static JSSEnumPropertyDescriptor scaleD;
 	private static JSSEnumPropertyDescriptor halignD;
@@ -444,6 +441,22 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private static JSSEnumPropertyDescriptor rotationD;
 	private static JSSEnumPropertyDescriptor modeD;
 
+	/**
+	 * Return the internal style used. If the internal style is a reference to a removed style
+	 * then it is also removed from the element
+	 */
+	public JRStyle getActualStyle(){
+		JRDesignStyle jrElement = (JRDesignStyle) getValue();
+		//Check if the used style is valid otherwise set it to null
+		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())){
+			setPropertyValue(JRDesignStyle.PROPERTY_PARENT_STYLE, null);
+		}
+		if (jrElement.getStyle() != null){
+			return jrElement.getStyle();
+		}
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -461,9 +474,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
 				if (jrstyle.getStyleNameReference() != null)
 					return jrstyle.getStyleNameReference();
-				if (jrstyle.getStyle() != null)
-					return jrstyle.getStyle().getName();
-				return ""; //$NON-NLS-1$
+				JRStyle actualStyle = getActualStyle();
+				return actualStyle != null ? actualStyle.getName() : ""; //$NON-NLS-1$
 			}
 			if (id.equals(PARAGRAPH)) {
 				if (mParagraph == null) {
@@ -570,10 +582,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getRotationValue());
 		if (id.equals(JRBaseStyle.PROPERTY_MODE)) {
-			if (modeD == null)
+			if (modeD == null){
 				modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
 						NullEnum.INHERITED);
-			return modeD.getEnumValue(jrstyle.getModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
+			}
+			if (jrstyle.getModeValue() == null) return true; //By default the style is transparent
+			else return modeD.getEnumValue(jrstyle.getModeValue()).equals(modeD.getEnumValue(ModeEnum.TRANSPARENT));
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrstyle.isBlankWhenNull();
@@ -612,9 +626,11 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return;
 		if (getValue() instanceof JRDesignStyle) {
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
-			if (id.equals(JRDesignStyle.PROPERTY_NAME))
+			if (id.equals(JRDesignStyle.PROPERTY_NAME)){
 				jrstyle.setName((String) value);
-			if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+				getJasperDesign().getStylesMap().remove(jrstyle.getName());
+				getJasperDesign().getStylesMap().put(jrstyle.getName(), jrstyle);
+			} else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 				jrstyle.setPattern((String) value);
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
 				// getJasperDesign().resetDefaultStyle();

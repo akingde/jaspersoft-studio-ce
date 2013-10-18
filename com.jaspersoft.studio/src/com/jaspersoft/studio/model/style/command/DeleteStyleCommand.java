@@ -15,7 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -23,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.utils.ModelUtils;
 /*/*
  * link nodes & together.
  * 
@@ -39,6 +45,15 @@ public class DeleteStyleCommand extends Command {
 	/** The element position. */
 	private int elementPosition = 0;
 
+	/**
+	 * When a style is removed is keeped trace of the element and styles
+	 * that was using that style. So on the undo it is possibile to restore their
+	 * values
+	 */
+	private List<JRDesignElement> elementsUsingStyle = null;
+	
+	private List<JRDesignStyle> stylesUsingStyle = null;
+	
 	/**
 	 * Instantiates a new delete style command.
 	 * 
@@ -67,6 +82,21 @@ public class DeleteStyleCommand extends Command {
 	public void execute() {
 		elementPosition = jrDesign.getStylesList().indexOf(jrStyle);
 		jrDesign.removeStyle(jrStyle);
+		elementsUsingStyle = new ArrayList<JRDesignElement>();
+		for(JRDesignElement element : ModelUtils.getAllElements(jrDesign)){
+			if (jrStyle.equals(element.getStyle())){
+				elementsUsingStyle.add(element);
+				element.setStyle(null);
+			}
+		}
+		stylesUsingStyle = new ArrayList<JRDesignStyle>();
+		for(JRStyle style : jrDesign.getStyles()){
+			if (jrStyle.equals(style.getStyle()) && style instanceof JRDesignStyle){
+				JRDesignStyle baseStyle = (JRDesignStyle)style;
+				stylesUsingStyle.add(baseStyle);
+				baseStyle.setParentStyle(null);
+			}
+		}
 	}
 
 	/*
@@ -76,7 +106,7 @@ public class DeleteStyleCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrDesign == null || jrStyle == null)
+		if (jrDesign == null || jrStyle == null || elementsUsingStyle == null || stylesUsingStyle == null)
 			return false;
 		return true;
 	}
@@ -93,6 +123,13 @@ public class DeleteStyleCommand extends Command {
 				jrDesign.addStyle(jrStyle);
 			else
 				jrDesign.addStyle(elementPosition, jrStyle);
+			for(JRDesignElement element : elementsUsingStyle){
+				element.setStyle(jrStyle);
+			}
+			for(JRDesignStyle style : stylesUsingStyle){
+				style.setParentStyle(jrStyle);
+			}
+			elementsUsingStyle = null;
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

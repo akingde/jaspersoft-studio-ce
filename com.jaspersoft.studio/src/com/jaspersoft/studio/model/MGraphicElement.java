@@ -493,6 +493,22 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	private static JSSEnumPropertyDescriptor opaqueD;
 	private static JSSEnumPropertyDescriptor stretchTypeD;
 
+	/**
+	 * Return the internal style used. If the internal style is a reference to a removed style
+	 * then it is also removed from the element
+	 */
+	public JRStyle getActualStyle(){
+		JRDesignElement jrElement = (JRDesignElement) getValue();
+		//Check if the used style is valid otherwise set it to null
+		if (jrElement.getStyle() != null && !getJasperDesign().getStylesMap().containsKey(jrElement.getStyle().getName())){
+			setPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE, null);
+		}
+		if (jrElement.getStyle() != null){
+			return jrElement.getStyle();
+		}
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -507,9 +523,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
 			if (jrElement.getStyleNameReference() != null)
 				return jrElement.getStyleNameReference();
-			if (jrElement.getStyle() != null)
-				return jrElement.getStyle().getName();
-			return ""; //$NON-NLS-1$
+			JRStyle actualStyle = getActualStyle();
+			return actualStyle != null ? actualStyle.getName() : ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
 			if (jrElement.getPrintWhenGroupChanges() != null)
@@ -693,4 +708,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return true;
 		return false;
 	}
+
+
 }

@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -184,6 +185,22 @@ public class StyleTemplateFactory {
 			cstyles.put(jd, items);
 		}
 		return items;
+	}
+	
+	public static String[] getAllStyles(JasperReportsConfiguration jConf, JRBaseStyle jrStyle) {
+		JasperDesign jd = jConf.getJasperDesign();
+		//If i have not a JD i return an empty array to avoid exception
+		if (jd == null) return new String[]{};
+		JRStyle[] styles = jd.getStyles();
+		List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
+		String actualStyleName = jrStyle.getName();
+		List<String> availableStyles = new ArrayList<String>();
+		availableStyles.add("");
+		for (JRStyle style : styles)
+			if (!style.getName().equals(actualStyleName)) availableStyles.add(style.getName());
+		for(JRStyle style : slist)
+			availableStyles.add(style.getName());
+		return availableStyles.toArray(new String[availableStyles.size()]);
 	}
 
 	private static List<JRStyle> getStyles(JasperReportsConfiguration jConfig, JasperDesign jd, IFile file) {
