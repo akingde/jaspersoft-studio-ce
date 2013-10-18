@@ -33,6 +33,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -135,8 +136,14 @@ public class MaximizeContainerAction extends SelectionAction {
 		Object val = n.getValue();
 		if (n instanceof IGroupElement)
 			return (APropertyNode) n;
-		if (val instanceof JRElementGroup)
-			return (APropertyNode) n;
+		if (val instanceof JRElementGroup) {
+			if(n instanceof MElementGroup) {
+				return getContainerNode(n.getParent());
+			}
+			else {
+				return (APropertyNode) n;
+			}
+		}
 		if (val instanceof JRDesignElement)
 			return getContainerNode(n.getParent());
 		return null;

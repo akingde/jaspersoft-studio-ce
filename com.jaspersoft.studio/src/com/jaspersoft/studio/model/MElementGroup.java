@@ -17,12 +17,16 @@ package com.jaspersoft.studio.model;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
@@ -31,7 +35,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * 
  * @author Chicu Veaceslav
  */
-public class MElementGroup extends ANode implements IContainerEditPart {
+public class MElementGroup extends ANode implements IContainerEditPart, IContainer, IGraphicElementContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -110,4 +114,39 @@ public class MElementGroup extends ANode implements IContainerEditPart {
 	public JRDesignElementGroup createJRElementGroup() {
 		return new JRDesignElementGroup();
 	}
+
+	@Override
+	public int getTopPadding() {
+		ANode parent = getParent();
+		if (parent instanceof IGraphicElementContainer) {
+			return ((IGraphicElementContainer) parent).getTopPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public int getLeftPadding() {
+		ANode parent = getParent();
+		if (parent instanceof IGraphicElementContainer) {
+			return ((IGraphicElementContainer) parent).getLeftPadding();
+		}
+		return 0;
+	}
+
+	@Override
+	public Dimension getSize() {
+		ANode parent = getParent();
+		if (parent instanceof MBand) {
+			// height of band, width of Report - margins
+			int h = ((JRDesignBand) ((MBand) parent).getValue()).getHeight();
+			JasperDesign jasperDesign = getJasperDesign();
+			int w = jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin();
+			return new Dimension(w, h);
+		} else if (parent instanceof IGraphicElementContainer) {
+			return ((IGraphicElementContainer) parent).getSize();
+		}
+		return new Dimension(0,0);
+	}
+	
+	
 }
