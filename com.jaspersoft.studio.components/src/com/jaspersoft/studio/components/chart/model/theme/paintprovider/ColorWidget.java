@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 public class ColorWidget extends Composite {
 	public static ColorLabelProvider cprovider = new ColorLabelProvider(NullEnum.NULL);
@@ -78,7 +79,7 @@ public class ColorWidget extends Composite {
 					RGB oldColor = color;
 					color = newColor;
 					setupWidgets(newColor);
-					psuport.firePropertyChange("color", oldColor, newColor);
+					psuport.firePropertyChange("color", oldColor, new AlfaRGB(newColor, 255));
 				}
 			}
 		});
