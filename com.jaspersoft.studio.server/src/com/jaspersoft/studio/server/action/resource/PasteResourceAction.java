@@ -17,7 +17,9 @@ package com.jaspersoft.studio.server.action.resource;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -40,6 +42,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -99,7 +102,29 @@ public class PasteResourceAction extends Action {
 			pm.run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
+						INode root = parent.getRoot();
+						final String puri = parent instanceof MResource ? ((MResource) parent).getValue().getUriString() : "";
 						doWork(monitor, parent, list);
+						ANode p = parent;
+						if (parent instanceof MResource)
+							p = new ModelVisitor<ANode>(root) {
+
+								@Override
+								public boolean visit(INode n) {
+									if (n instanceof MResource) {
+										MResource mres = (MResource) n;
+										if (mres.getValue() != null && mres.getValue().getUriString().equals(puri)) {
+											setObject(mres);
+											stop();
+										}
+									}
+									return true;
+								}
+							}.getObject();
+						if (!p.getChildren().isEmpty())
+							p = (ANode) p.getChildren().get(0);
+						s = new TreeSelection(new TreePath(new Object[] { p }));
+
 						Display.getDefault().asyncExec(new Runnable() {
 
 							public void run() {
@@ -126,12 +151,15 @@ public class PasteResourceAction extends Action {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((MResource) parent).getValue().getUriString();
 		IConnection ws = sp.getWsClient();
+		Set<ANode> toRefresh = new HashSet<ANode>();
 
 		monitor.beginTask("Paste elements to: " + dURI, list.size());
 		for (Object obj : list) {
 			if (obj instanceof MResource && obj instanceof ICopyable) {
 				MResource m = (MResource) obj;
 				if (m.isCopyable2(parent)) {
+					if (m.isCut())
+						toRefresh.add(m.getParent());
 					ResourceDescriptor origin = m.getValue();
 					String newname = dURI + "/" + origin.getName();
 					if (parent instanceof MFolder) {
@@ -186,7 +214,9 @@ public class PasteResourceAction extends Action {
 			if (monitor.isCanceled())
 				break;
 		}
-		refreshNode(parent, monitor);
+		toRefresh.add(parent);
+		for (ANode n : toRefresh)
+			refreshNode(n, monitor);
 	}
 
 	private String getRName(String name, List<?> children) {
