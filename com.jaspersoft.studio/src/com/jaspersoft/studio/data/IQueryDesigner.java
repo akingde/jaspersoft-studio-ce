@@ -49,4 +49,6 @@ public interface IQueryDesigner {
 
 	public String getContextHelpId();
 
+	public void setJasperConfiguration(JasperReportsConfiguration jConfig);
+
 }

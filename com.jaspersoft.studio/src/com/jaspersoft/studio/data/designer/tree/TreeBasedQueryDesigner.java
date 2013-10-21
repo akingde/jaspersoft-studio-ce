@@ -196,7 +196,6 @@ public abstract class TreeBasedQueryDesigner extends AQueryDesigner {
 	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
 		super.setQuery(jDesign, jDataset, jConfig);
 		queryTextArea.setText(jDataset.getQuery().getText());
-		refreshTreeViewerContent(this.container.getDataAdapter());
 	}
 	
 	public Control getToolbarControl() {

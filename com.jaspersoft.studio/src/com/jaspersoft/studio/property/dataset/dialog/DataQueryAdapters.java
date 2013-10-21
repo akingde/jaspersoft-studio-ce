@@ -213,13 +213,12 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			tbCompo.layout();
 			langComposite.layout();
 			currentDesigner = designer;
+			currentDesigner.setJasperConfiguration(jConfig);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					designer.setQuery(jDesign, newdataset, jConfig);
-
-					currentDesigner = designer;
+					currentDesigner.setQuery(jDesign, newdataset, jConfig);
 					currentDesigner.setDataAdapter(dscombo.getSelected());
 				}
 			});
