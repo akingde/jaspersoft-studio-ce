@@ -227,6 +227,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	 * 
 	 * @param selItem the new category selected
 	 */
+	@SuppressWarnings("unchecked")
 	public void refreshPanelUI(ObjectCategoryItem selItem) {
 		this.selItem=selItem;
 		categoryContentLblProvider.setCategory(this.selItem.getCategory());
@@ -234,43 +235,44 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		categoryContent.getTree().clearAll(true);
 		categoryDetails = new ArrayList<Object>();		
 		switch (selItem.getCategory()) {
+			case PDATASET: 
 			case PARAMETERS:
+				hideBuiltinVariables.setEnabled(false);
+				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
 				hideBuiltinParams.setEnabled(true);
-	            Iterator<JRParameter> parameters = ((List<JRParameter>)selItem.getData()).iterator();
-	            List<ExpObject> tmpParamList=new ArrayList<ExpObject>();
-	            while (parameters.hasNext()) {
-	                JRParameter parameter = (JRParameter) parameters.next();
-	                if(!ExpressionEditorSupportUtil.isShowBuiltInParameters() && parameter.isSystemDefined()){
-	                	continue;
-	                }
-	                tmpParamList.add(new ExpObject(parameter));
+				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+	            List<ExpObject> paramsList = new ArrayList<ExpObject>();
+	            Object paramsNodedata = selItem.getData();
+	            if(paramsNodedata instanceof List<?>) {
+	            	paramsList.addAll(getParametersDTOList(((List<JRParameter>)paramsNodedata).iterator()));
 	            }
-	            Collections.sort(tmpParamList);
-	            categoryDetails.addAll(tmpParamList);
+	            categoryDetails.addAll(paramsList);
 				break;
+			case VDATASET:
 			case VARIABLES:
 				hideBuiltinVariables.setEnabled(true);
-	            Iterator<JRVariable> variables = ((List<JRVariable>)selItem.getData()).iterator();
-	            List<ExpObject> tmpVarList=new ArrayList<ExpObject>();
-	            while (variables.hasNext()) {
-	                JRVariable variable = (JRVariable) variables.next();
-	                if(!ExpressionEditorSupportUtil.isShowBuiltInVariables() && variable.isSystemDefined()){
-	                	continue;
-	                }
-	                tmpVarList.add(new ExpObject(variable));
+				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
+				hideBuiltinParams.setEnabled(false);
+				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+	            List<ExpObject> variablesList=new ArrayList<ExpObject>();
+	            Object variablesNodeData = selItem.getData();
+	            if(variablesNodeData instanceof List<?>){
+	            	variablesList.addAll(getVariablesDTOList(((List<JRVariable>)variablesNodeData).iterator()));
 	            }
-	            Collections.sort(tmpVarList);
-	            categoryDetails.addAll(tmpVarList);
+	            categoryDetails.addAll(variablesList);
 	            break;
+			case FDATASET:
 			case FIELDS:
-	            Iterator<JRField> fields = ((List<JRField>)selItem.getData()).iterator();
-	            List<ExpObject> tmpFieldList=new ArrayList<ExpObject>();
-	            while (fields.hasNext()) {
-	                ExpObject eo = new ExpObject(fields.next());
-	                tmpFieldList.add(eo);
+				hideBuiltinVariables.setEnabled(false);
+				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
+				hideBuiltinParams.setEnabled(false);
+				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+	            List<ExpObject> fieldsList=new ArrayList<ExpObject>();
+	            Object fieldsNodeData = selItem.getData();
+	            if(fieldsNodeData instanceof List<?>){
+	            	fieldsList.addAll(getFieldsDTOList(((List<JRField>)fieldsNodeData).iterator()));
 	            }
-	            Collections.sort(tmpFieldList);
-	            categoryDetails.addAll(tmpFieldList);
+	            categoryDetails.addAll(fieldsList);
 	            break;
 			case FUNCTION_CATEGORY:
 				List<JRExprFunctionBean> categoryFunctions = FunctionsLibraryUtil.getFunctionsByCategory((String)selItem.getData());
@@ -585,6 +587,42 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		}
 		
 		return methodFirms;
+	}
+	
+	private List<ExpObject> getParametersDTOList(Iterator<JRParameter> parameters){
+		List<ExpObject> tmpParamList=new ArrayList<ExpObject>();
+        while (parameters.hasNext()) {
+            JRParameter parameter = (JRParameter) parameters.next();
+            if(!ExpressionEditorSupportUtil.isShowBuiltInParameters() && parameter.isSystemDefined()){
+            	continue;
+            }
+            tmpParamList.add(new ExpObject(parameter));
+        }
+        Collections.sort(tmpParamList);
+		return tmpParamList;
+	}
+	
+	private List<ExpObject> getVariablesDTOList(Iterator<JRVariable> variables){
+        List<ExpObject> tmpVarList=new ArrayList<ExpObject>();
+        while (variables.hasNext()) {
+            JRVariable variable = (JRVariable) variables.next();
+            if(!ExpressionEditorSupportUtil.isShowBuiltInVariables() && variable.isSystemDefined()){
+            	continue;
+            }
+            tmpVarList.add(new ExpObject(variable));
+        }
+        Collections.sort(tmpVarList);
+		return tmpVarList;
+	}
+	
+	private List<ExpObject> getFieldsDTOList(Iterator<JRField> fields){
+        List<ExpObject> tmpFieldList=new ArrayList<ExpObject>();
+        while (fields.hasNext()) {
+            ExpObject eo = new ExpObject(fields.next());
+            tmpFieldList.add(eo);
+        }
+        Collections.sort(tmpFieldList);
+		return tmpFieldList;
 	}
 	
 }

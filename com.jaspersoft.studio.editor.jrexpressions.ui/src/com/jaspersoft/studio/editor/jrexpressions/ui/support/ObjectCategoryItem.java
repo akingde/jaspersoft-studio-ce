@@ -40,6 +40,7 @@ public class ObjectCategoryItem {
 	public static final String ICON_FOLDER_RECENT_EXPRESSIONS = ICON_FOLDER;
 	public static final String ICON_FOLDER_FORMULAS = ICON_FOLDER;
 	public static final String ICON_CROSSTAB = "/resources/icons/crosstab-16.png"; //$NON-NLS-1$
+	public static final String ICON_DATASET = "/resources/icons/dataset-16.png"; //$NON-NLS-1$
 
 	// Attributes
 	private String displayName = null;
@@ -131,7 +132,10 @@ public class ObjectCategoryItem {
 		STATIC_FUNCTION_CATEGORY("Static functions sub-category", ICON_FOLDER), //$NON-NLS-1$
 		USER_DEFINED_EXPRESSIONS("User Defined Expressions", ICON_FOLDER), //$NON-NLS-1$
 		RECENT_EXPRESSIONS("Recent Expressions", ICON_FOLDER), //$NON-NLS-1$
-		CROSSTAB("Crosstab", ICON_CROSSTAB); //$NON-NLS-1$
+		CROSSTAB("Crosstab", ICON_CROSSTAB), //$NON-NLS-1$
+		PDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
+		VDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
+		FDATASET("Dataset", ICON_DATASET); //$NON-NLS-1$
 		
 		private String dislayName;
 		private String iconPath;

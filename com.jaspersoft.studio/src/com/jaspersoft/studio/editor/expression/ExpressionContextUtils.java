@@ -268,4 +268,62 @@ public final class ExpressionContextUtils {
 		}
 		return loadedBundle;
 	}
+
+	/**
+	 * Returns the list of parameters that are related to the specified dataset.
+	 * The list is populated only if the dataset is itself used in the input expression context.
+	 * 
+	 * @param exprContext the expression context to look into
+	 * @param ds the dataset
+	 * @return the list of parameters
+	 */
+	public static List<JRParameter> getDatasetParameters(ExpressionContext exprContext, JRDesignDataset ds) {
+		List<JRParameter> parameters = new ArrayList<JRParameter>();
+		for(JRDesignDataset d : exprContext.getDatasets()){
+			if(d == ds) {
+				parameters.addAll(d.getParametersList());
+				break;
+			}
+		}
+		return parameters;
+	}
+	
+	/**
+	 * Returns the list of variables that are related to the specified dataset.
+	 * The list is populated only if the dataset is itself used in the input expression context.
+	 * 
+	 * @param exprContext the expression context to look into
+	 * @param ds the dataset
+	 * @return the list of variables
+	 */
+	public static List<JRVariable> getDatasetVariables(ExpressionContext exprContext, JRDesignDataset ds) {
+		List<JRVariable> variables = new ArrayList<JRVariable>();
+		for(JRDesignDataset d : exprContext.getDatasets()){
+			if(d == ds) {
+				variables.addAll(d.getVariablesList());
+				break;
+			}
+		}
+		return variables;
+	}
+
+	/**
+	 * Returns the list of fields that are related to the specified dataset.
+	 * The list is populated only if the dataset is itself used in the input expression context.
+	 * 
+	 * @param exprContext the expression context to look into
+	 * @param ds the dataset
+	 * @return the list of fields
+	 */
+	public static List<JRField> getDatasetFields(ExpressionContext exprContext, JRDesignDataset ds) {
+		List<JRField> fields = new ArrayList<JRField>();
+		for(JRDesignDataset d : exprContext.getDatasets()){
+			if(d == ds) {
+				fields.addAll(d.getFieldsList());
+				break;
+			}
+		}
+		return fields;
+	}
+		
 }

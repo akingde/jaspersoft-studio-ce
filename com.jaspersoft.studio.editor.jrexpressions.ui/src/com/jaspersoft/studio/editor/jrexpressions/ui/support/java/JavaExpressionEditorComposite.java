@@ -26,6 +26,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionCategoryBean;
 
@@ -332,7 +333,8 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		// Builds the list of main categories
 		rootCategories = new ArrayList<ObjectCategoryItem>();
 		if (exprContext != null) {
-			if (exprContext.getDatasets().size() > 0) {
+			List<JRDesignDataset> contextDatasets = exprContext.getDatasets();
+			if (contextDatasets.size() == 1) {
 				parametersCategoryItem = new ObjectCategoryItem(
 						Category.PARAMETERS);
 				parametersCategoryItem.setData(ExpressionContextUtils
@@ -344,6 +346,38 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 						Category.VARIABLES);
 				variablesCategoryItem.setData(ExpressionContextUtils
 						.getAllDatasetsVariables(exprContext));
+				rootCategories.add(parametersCategoryItem);
+				rootCategories.add(fieldsCategoryItem);
+				rootCategories.add(variablesCategoryItem);
+			}
+			else if(contextDatasets.size() > 1){
+				List<ObjectCategoryItem> paramsDatasets = new ArrayList<ObjectCategoryItem>();
+				List<ObjectCategoryItem> fieldsDatasets = new ArrayList<ObjectCategoryItem>();
+				List<ObjectCategoryItem> variablesDatasets = new ArrayList<ObjectCategoryItem>();
+				for(JRDesignDataset ds : contextDatasets) {
+					String dsname = ds.getName();
+					if(ds.isMainDataset()){
+						dsname = "Main Dataset";
+					}
+					// all parameters for the dataset
+					ObjectCategoryItem pItems = new ObjectCategoryItem(Category.PDATASET, dsname);
+					pItems.setData(ExpressionContextUtils.getDatasetParameters(exprContext,ds));
+					paramsDatasets.add(pItems);
+					// all fields for the dataset
+					ObjectCategoryItem fItems = new ObjectCategoryItem(Category.FDATASET, dsname);
+					fItems.setData(ExpressionContextUtils.getDatasetFields(exprContext,ds));
+					fieldsDatasets.add(fItems);
+					// all variables for the dataset
+					ObjectCategoryItem vItems = new ObjectCategoryItem(Category.VDATASET, dsname);
+					vItems.setData(ExpressionContextUtils.getDatasetVariables(exprContext,ds));
+					variablesDatasets.add(vItems);
+				}
+				parametersCategoryItem = new ObjectCategoryItem(Category.PARAMETERS);
+				parametersCategoryItem.setData(paramsDatasets.toArray(new ObjectCategoryItem[paramsDatasets.size()]));
+				fieldsCategoryItem = new ObjectCategoryItem(Category.FIELDS);
+				fieldsCategoryItem.setData(fieldsDatasets.toArray(new ObjectCategoryItem[fieldsDatasets.size()]));
+				variablesCategoryItem = new ObjectCategoryItem(Category.VARIABLES);
+				variablesCategoryItem.setData(variablesDatasets.toArray(new ObjectCategoryItem[variablesDatasets.size()]));
 				rootCategories.add(parametersCategoryItem);
 				rootCategories.add(fieldsCategoryItem);
 				rootCategories.add(variablesCategoryItem);
@@ -403,7 +437,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 		objectsNavigator.setInput(rootCategories
 				.toArray(new ObjectCategoryItem[rootCategories.size()]));
-		objectsNavigator.expandAll();
+		objectsNavigator.expandToLevel(builtinFunctionsItem,1);
 		performCategorySelection(null);
 	}
 
@@ -502,15 +536,19 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private void performCategorySelection(Category category) {
 		if (category == null) {
 			if (ExpressionContextUtils.getAllDatasetsFields(exprContext).size() > 0) {
+				objectsNavigator.expandToLevel(fieldsCategoryItem,1);
 				objectsNavigator.setSelection(new StructuredSelection(
 						fieldsCategoryItem), true);
 			} else if (ExpressionContextUtils.getAllDatasetsVariables(exprContext).size()>0) {
+				objectsNavigator.expandToLevel(variablesCategoryItem, 1);
 				objectsNavigator.setSelection(new StructuredSelection(
 						variablesCategoryItem), true);
 			} else if (ExpressionContextUtils.getAllDatasetsParameters(exprContext).size()>0){
+				objectsNavigator.expandToLevel(parametersCategoryItem, 1);
 				objectsNavigator.setSelection(new StructuredSelection(
 						parametersCategoryItem), true);
 			} else {
+				objectsNavigator.expandToLevel(rootCategories.get(0), 1);
 				objectsNavigator.setSelection(new StructuredSelection(rootCategories.get(0)),true);
 			}
 			return;
