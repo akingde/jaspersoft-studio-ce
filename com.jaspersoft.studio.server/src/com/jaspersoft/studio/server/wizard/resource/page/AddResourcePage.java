@@ -18,6 +18,8 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import java.text.MessageFormat;
 
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
@@ -111,6 +113,13 @@ public class AddResourcePage extends WizardPage {
 		});
 		setControl(treeViewer.getControl());
 		treeViewer.setSelection(new TreeSelection(new TreePath(new Object[] { resource })), true);
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (canFlipToNextPage()) getContainer().showPage(getNextPage());
+			}
+		});
 	}
 
 	private boolean dsonly = false;
