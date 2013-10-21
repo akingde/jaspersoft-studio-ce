@@ -126,12 +126,17 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	@Override
 	public void activate() {
 		super.activate();
+		ANode node = (ANode) getModel();
+		node.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) this);
+
 		preferenceListener = new PreferenceListener();
 		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
 
 	@Override
 	public void deactivate() {
+		ANode node = (ANode) getModel();
+		node.getPropertyChangeSupport().removePropertyChangeListener((PropertyChangeListener) this);
 		if (preferenceListener != null)
 			JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		super.deactivate();

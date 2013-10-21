@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -277,5 +278,17 @@ public class MFont extends APropertyNode {
 			jrElement.setPdfFontName((String) value);
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			jrElement.setPdfEncoding(ModelUtils.getPDFEncoding2key((String) value));
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		String name = evt.getPropertyName();
+		if (name.equals(JRBaseFont.PROPERTY_BOLD) || name.equals(JRBaseFont.PROPERTY_UNDERLINE)
+				|| name.equals(JRBaseFont.PROPERTY_ITALIC) || name.equals(JRBaseFont.PROPERTY_STRIKE_THROUGH)
+				|| name.equals(JRBaseFont.PROPERTY_PDF_EMBEDDED) || name.equals(JRBaseFont.PROPERTY_FONT_NAME)
+				|| name.equals(JRBaseFont.PROPERTY_FONT_SIZE) || name.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME)
+				|| name.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
+			super.propertyChange(evt);
+
 	}
 }

@@ -242,8 +242,16 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!isDisposed()) {
+			String n = evt.getPropertyName();
 			isRefreshing = true;
-			refresh();
+			APropertyNode element = getElement();
+			if (element != null) {
+				element.getPropertyDescriptors();
+				for (Object key : widgets.keySet()) {
+					if (n.equals(key))
+						widgets.get(key).setData(element, element.getPropertyValue(key));
+				}
+			}
 			isRefreshing = false;
 		}
 	}

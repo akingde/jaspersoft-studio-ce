@@ -97,8 +97,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#textElement");
 
-		tFont = new MFont((JRFont) getValue());
-		tFont.setJasperConfiguration(getJasperConfiguration());
+		tFont = getMFont();
 		tFont.createPropertyDescriptors(desc, defaultsMap);
 
 		paragraph.setCategory(Messages.MTextElement_text_properties_category);

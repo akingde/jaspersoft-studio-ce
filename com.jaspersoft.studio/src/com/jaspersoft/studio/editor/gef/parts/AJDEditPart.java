@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.parts;
 
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
@@ -21,7 +19,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -50,8 +47,8 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 	public void activate() {
 		super.activate();
 
-		ANode node = (ANode) getModel();
-		node.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) this);
+		// ANode node = (ANode) getModel();
+		// node.getPropertyChangeSupport().addPropertyChangeListener((PropertyChangeListener) this);
 	}
 
 	/*
@@ -62,8 +59,8 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		ANode node = (ANode) getModel();
-		node.getPropertyChangeSupport().removePropertyChangeListener((PropertyChangeListener) this);
+		// ANode node = (ANode) getModel();
+		// node.getPropertyChangeSupport().removePropertyChangeListener((PropertyChangeListener) this);
 	}
 
 	@Override
