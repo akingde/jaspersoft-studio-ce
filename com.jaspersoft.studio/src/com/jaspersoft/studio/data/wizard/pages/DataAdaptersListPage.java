@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.data.wizard.pages;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
@@ -80,6 +82,14 @@ public class DataAdaptersListPage extends WizardPage {
 		tviewer = new TableViewer(wtable);
 		tviewer.setContentProvider(new ListContentProvider());
 		tviewer.setLabelProvider(new LLabelProvider());
+		tviewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (canFlipToNextPage()) {
+					getContainer().showPage(getNextPage());
+				}
+			}
+		});
 		wtable.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
