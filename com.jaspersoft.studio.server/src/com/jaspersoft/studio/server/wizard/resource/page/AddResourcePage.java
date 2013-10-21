@@ -17,6 +17,9 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 
 import java.text.MessageFormat;
 
+import net.sf.jasperreports.engine.JRConstants;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -33,6 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.Activator;
@@ -91,7 +95,7 @@ public class AddResourcePage extends WizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.BORDER);
+		final TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.heightHint = 300;
@@ -108,18 +112,30 @@ public class AddResourcePage extends WizardPage {
 				Object obj = ts.getFirstElement();
 				if (obj != null && obj instanceof MResource) {
 					resource = (MResource) obj;
+				} else
+					resource = null;
+
+				setPageComplete(canFlipToNextPage());
+			}
+		});
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (canFlipToNextPage())
+					getContainer().showPage(getNextPage());
+				else {
+					TreeSelection s = (TreeSelection) treeViewer.getSelection();
+					Object fe = s.getFirstElement();
+					if (treeViewer.getExpandedState(fe))
+						treeViewer.collapseToLevel(fe, 1);
+					else
+						treeViewer.expandToLevel(fe, 1);
 				}
 			}
 		});
 		setControl(treeViewer.getControl());
 		treeViewer.setSelection(new TreeSelection(new TreePath(new Object[] { resource })), true);
-		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				if (canFlipToNextPage()) getContainer().showPage(getNextPage());
-			}
-		});
 	}
 
 	private boolean dsonly = false;
@@ -136,8 +152,9 @@ public class AddResourcePage extends WizardPage {
 
 	private MRoot getInput() {
 		MRoot root = new MRoot(null, null);
+		MRoot mroot = null;
 		if (dsonly) {
-			createDatasources(root);
+			mroot = createDatasources(root);
 		} else if (ruOnly) {
 			createReportUnit(root);
 		} else {
@@ -145,16 +162,31 @@ public class AddResourcePage extends WizardPage {
 				new MFolder(root, MFolder.createDescriptor(parent), -1);
 				createReportUnit(root);
 
-				createDatasources(root);
+				mroot = createDatasources(root);
 
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
 
 				new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
-				new MRMondrianSchema(root, MRMondrianSchema.createDescriptor(parent), -1);
-				new MROlapMondrianConnection(root, MROlapMondrianConnection.createDescriptor(parent), -1);
-				new MROlapXmlaConnection(root, MROlapXmlaConnection.createDescriptor(parent), -1);
-				new MROlapUnit(root, MROlapUnit.createDescriptor(parent), -1);
+
+				MRoot oroot = new MRoot(root, null) {
+					public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
+					@Override
+					public String getDisplayText() {
+						return "OLAP";
+					}
+
+					@Override
+					public ImageDescriptor getImagePath() {
+						return MROlapMondrianConnection.getIconDescriptor().getIcon16();
+					}
+				};
+
+				new MRMondrianSchema(oroot, MRMondrianSchema.createDescriptor(parent), -1);
+				new MROlapMondrianConnection(oroot, MROlapMondrianConnection.createDescriptor(parent), -1);
+				new MROlapXmlaConnection(oroot, MROlapXmlaConnection.createDescriptor(parent), -1);
+				new MROlapUnit(oroot, MROlapUnit.createDescriptor(parent), -1);
 				new MRAccessGrantSchema(root, MRAccessGrantSchema.createDescriptor(parent), -1);
 			}
 			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
@@ -180,16 +212,22 @@ public class AddResourcePage extends WizardPage {
 					}
 				}
 				if (!dsexists)
-					createDatasources(root);
+					mroot = createDatasources(root);
 			}
 
 			Activator.getExtManager().createNewResource(root, parent);
 
 			// new MUnknown(root, MUnknown.createDescriptor(parent), -1);
 		}
-		for (INode n : root.getChildren()) {
-			((MResource) n).setEditMode(true);
-		}
+		new ModelVisitor<ANode>(root) {
+
+			@Override
+			public boolean visit(INode n) {
+				if (n instanceof MResource)
+					((MResource) n).setEditMode(true);
+				return true;
+			}
+		};
 		if (root.getChildren() != null && !root.getChildren().isEmpty())
 			resource = (MResource) root.getChildren().get(0);
 		return root;
@@ -199,17 +237,31 @@ public class AddResourcePage extends WizardPage {
 		new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
 	}
 
-	protected void createDatasources(MRoot root) {
-		new MRDatasourceBean(root, MRDatasourceBean.createDescriptor(parent), -1);
-		new MRDatasourceJDBC(root, MRDatasourceJDBC.createDescriptor(parent), -1);
-		new MRDatasourceJNDI(root, MRDatasourceJNDI.createDescriptor(parent), -1);
-		new MRDatasourceCustom(root, MRDatasourceCustom.createDescriptor(parent), -1);
-		new MRDatasourceVDS(root, MRDatasourceVDS.createDescriptor(parent), -1);
-		new MRDatasourceDiagnostic(root, MRDatasourceDiagnostic.createDescriptor(parent), -1);
+	protected MRoot createDatasources(MRoot root) {
+		MRoot mroot = new MRoot(root, null) {
+			public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-		new MRDatasourceAWS(root, MRDatasourceAWS.createDescriptor(parent), -1);
+			@Override
+			public String getDisplayText() {
+				return "Data Sources";
+			}
 
-		Activator.getExtManager().createNewDatasource(root, parent);
+			@Override
+			public ImageDescriptor getImagePath() {
+				return MRDatasourceJDBC.getIconDescriptor().getIcon16();
+			}
+		};
+		new MRDatasourceBean(mroot, MRDatasourceBean.createDescriptor(parent), -1);
+		new MRDatasourceJDBC(mroot, MRDatasourceJDBC.createDescriptor(parent), -1);
+		new MRDatasourceJNDI(mroot, MRDatasourceJNDI.createDescriptor(parent), -1);
+		new MRDatasourceCustom(mroot, MRDatasourceCustom.createDescriptor(parent), -1);
+		new MRDatasourceVDS(mroot, MRDatasourceVDS.createDescriptor(parent), -1);
+		new MRDatasourceDiagnostic(mroot, MRDatasourceDiagnostic.createDescriptor(parent), -1);
+
+		new MRDatasourceAWS(mroot, MRDatasourceAWS.createDescriptor(parent), -1);
+
+		Activator.getExtManager().createNewDatasource(mroot, parent);
+		return mroot;
 	}
 
 	@Override
