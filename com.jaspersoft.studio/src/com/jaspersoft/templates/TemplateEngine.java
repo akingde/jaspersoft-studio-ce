@@ -17,6 +17,8 @@ package com.jaspersoft.templates;
 
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 /**
  * A TemplateEngine produces a ReportBundle starting from a TemplateBundle and a set of user settings provided
  * trough a Map.
@@ -36,6 +38,7 @@ public interface TemplateEngine {
 	 * @return
 	 * @throws TemplateEngineException
 	 */
-	public ReportBundle generateReportBundle(TemplateBundle template,  Map<String, Object> settings) throws TemplateEngineException;
+	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings,
+			JasperReportsContext jContext) throws TemplateEngineException;
 	
 }

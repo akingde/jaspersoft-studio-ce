@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -28,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetNewPage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 
 /**
@@ -53,11 +55,11 @@ public class WizardUtils {
 	 * @return JRDesignDataset
 	 */
 	@SuppressWarnings("unchecked")
-	public static JRDesignDataset createDataset(boolean isMain, Map<String,Object> settings)
+	public static JRDesignDataset createDataset(JasperReportsContext jContext, boolean isMain, Map<String,Object> settings)
 	{
 		
 		// Create a new dataset
-			JRDesignDataset dataset = new JRDesignDataset(isMain);
+			JRDesignDataset dataset = new JRDesignDataset(jContext, isMain);
 			JRDesignQuery query = new JRDesignQuery();
 			dataset.setQuery(query);
 			

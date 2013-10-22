@@ -23,6 +23,7 @@ import java.util.Map;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -167,10 +168,10 @@ public class JasperServerTemplateEngine extends DefaultTemplateEngine {
 	 * Create the report with the table inside
 	 */
 	@Override
-	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings)
+	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings, JasperReportsContext jContext)
 			throws TemplateEngineException {
 		//Generate the base report bundle
-		ReportBundle reportBundle = super.generateReportBundle(template, settings);
+		ReportBundle reportBundle = super.generateReportBundle(template, settings, jContext);
 		
 		return reportBundle;
 	}

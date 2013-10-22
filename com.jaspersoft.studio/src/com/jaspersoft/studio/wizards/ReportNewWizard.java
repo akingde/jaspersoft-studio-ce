@@ -221,7 +221,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 		TemplateBundle templateBundle = step0.getTemplateBundle();
 
-		JRDesignDataset dataset = WizardUtils.createDataset(true, getSettings());
+		JRDesignDataset dataset = WizardUtils.createDataset(getConfig(), true, getSettings());
 
 		templateSettings.put(DefaultTemplateEngine.DATASET, dataset);
 
@@ -247,7 +247,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
 		ByteArrayInputStream stream = null;
 		try {
-			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings);
+			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings, getConfig());
 
 			// Save the data adapter used...
 			if (step2.getDataAdapter() != null) {

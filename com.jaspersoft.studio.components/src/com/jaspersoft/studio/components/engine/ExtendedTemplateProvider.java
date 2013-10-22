@@ -33,6 +33,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
 import com.jaspersoft.studio.templates.TemplateProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
 
@@ -67,7 +68,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 			while (en.hasMoreElements()) {
 				URL templateURL = (URL) en.nextElement();
 				try {
-					TemplateBundle bundle = new TableTemplateBunlde(templateURL);
+					TemplateBundle bundle = new TableTemplateBunlde(templateURL, JasperReportsConfiguration.getDefaultJRConfig());
 					if (bundle != null)
 					{
 						cache.add(bundle);
@@ -109,7 +110,7 @@ public class ExtendedTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						TemplateBundle bundle =  new TableTemplateBunlde(f.toURI().toURL(),true);
+						TemplateBundle bundle = new TableTemplateBunlde(f.toURI().toURL(), true, JasperReportsConfiguration.getDefaultJRConfig());
 						if (bundle != null && tableTemplateKey.equals(bundle.getProperty(BuiltInCategories.ENGINE_KEY))) {
 							templates.add(bundle);
 						}

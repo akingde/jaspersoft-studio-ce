@@ -32,6 +32,6 @@ public abstract class AContributorAction extends Action {
 	}
 
 	protected JasperDesign getJasperDesignCopy() throws JRException {
-		return ModelUtils.copyJasperDesign(jrConfig.getJasperDesign());
+		return ModelUtils.copyJasperDesign(jrConfig, jrConfig.getJasperDesign());
 	}
 }

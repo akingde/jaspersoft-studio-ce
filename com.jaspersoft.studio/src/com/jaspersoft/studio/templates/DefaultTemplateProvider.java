@@ -33,6 +33,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.templates.TemplateLocationsPreferencePage;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateBundle;
 
@@ -68,7 +69,8 @@ public class DefaultTemplateProvider implements TemplateProvider {
 					
 					try {
 	
-						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle( templateURL );
+					JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(templateURL,
+							JasperReportsConfiguration.getDefaultJRConfig());
 						
 						if (bundle != null)
 						{
@@ -115,7 +117,8 @@ public class DefaultTemplateProvider implements TemplateProvider {
 			if (files != null) {
 				for (File f : files) {
 					try {
-						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(),true);
+						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(f.toURI().toURL(), true,
+								JasperReportsConfiguration.getDefaultJRConfig());
 						Object engine = bundle.getProperty(BuiltInCategories.ENGINE_KEY);
 						if (bundle != null && (engine == null || defaultEngineKey.equals(engine.toString().toLowerCase()))) {
 							templates.add(bundle);

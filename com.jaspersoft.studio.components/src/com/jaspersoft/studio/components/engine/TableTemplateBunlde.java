@@ -17,6 +17,8 @@ package com.jaspersoft.studio.components.engine;
 
 import java.net.URL;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 
@@ -28,12 +30,12 @@ import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
  */
 public class TableTemplateBunlde extends JrxmlTemplateBundle {
 
-	public TableTemplateBunlde(URL url) throws Exception {
-		super(url);
+	public TableTemplateBunlde(URL url, JasperReportsContext jrContext) throws Exception {
+		super(url, jrContext);
 	}
 	
-	public TableTemplateBunlde(URL url, boolean isExternal) throws Exception {
-		super(url, isExternal);
+	public TableTemplateBunlde(URL url, boolean isExternal, JasperReportsContext jrContext) throws Exception {
+		super(url, isExternal, jrContext);
 	}
 
 	/**

@@ -32,6 +32,7 @@ import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -512,14 +513,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings)
+	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings, JasperReportsContext jContext)
 			throws TemplateEngineException {
 		//Generate the base report bundle
-		ReportBundle reportBundle = super.generateReportBundle(template, settings);
+		ReportBundle reportBundle = super.generateReportBundle(template, settings, jContext);
 		//The fields that will be added to the table
 		tableFields = (List<Object>)settings.get(DefaultTemplateEngine.FIELDS);
 		//Create the dataset, by default we set the dataset run to use the report connection...
-		JRDesignDataset tableDataset = new JRDesignDataset(false);
+		JRDesignDataset tableDataset = new JRDesignDataset(jContext, false);
 		tableDataset.setName("tableDataset"); //$NON-NLS-1$
 		//Create the dataset query
 		JRDesignDataset dataset = (JRDesignDataset)settings.get(DefaultTemplateEngine.DATASET);

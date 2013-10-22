@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSubreport;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -36,6 +37,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.templates.TemplateEngine;
 
@@ -286,7 +288,7 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 		InputStream is = null;
 		try {
 			is = templateURL.openStream();
-			this.jasperDesign = JRXmlLoader.load(is);
+			this.jasperDesign = JRXmlLoader.load(jrContext, is);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -294,14 +296,15 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 		}
 	}
 
+	private JasperReportsContext jrContext;
 	/**
 	 * Creates a template bundle from a file.
 	 * 
 	 * @param file
 	 * @throws Exception
 	 */
-	public JrxmlTemplateBundle(URL url) throws Exception {
-		this(url, false);
+	public JrxmlTemplateBundle(URL url, JasperReportsContext jrContext) throws Exception {
+		this(url, false, jrContext);
 	}
 
 	/**
@@ -310,7 +313,10 @@ public class JrxmlTemplateBundle implements IconedTemplateBundle {
 	 * @param file
 	 * @throws Exception
 	 */
-	public JrxmlTemplateBundle(URL url, boolean isExternal) throws Exception {
+	public JrxmlTemplateBundle(URL url, boolean isExternal, JasperReportsContext jrContext) throws Exception {
+		if (jrContext == null)
+			jrContext = JasperReportsConfiguration.getDefaultJRConfig();
+		this.jrContext = jrContext;
 		this.templateURL = url;
 		this.isExternal = isExternal;
 		String urlPath = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");

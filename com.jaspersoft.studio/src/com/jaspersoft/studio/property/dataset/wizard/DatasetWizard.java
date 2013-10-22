@@ -94,7 +94,7 @@ public class DatasetWizard extends JSSWizard {
 	 * @throws JRException
 	 */
 	public JRDesignDataset getDataset() {
-		JRDesignDataset ds = WizardUtils.createDataset(false, getSettings());
+		JRDesignDataset ds = WizardUtils.createDataset(getConfig(), false, getSettings());
 		if (step2 != null && step2.getDataAdapter() != null) {
 			// Save the information on the default data adapter
 			// to propose selected for this specific dataset

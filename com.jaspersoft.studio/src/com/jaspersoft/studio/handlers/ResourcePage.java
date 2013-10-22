@@ -142,8 +142,8 @@ public class ResourcePage extends JSSHelpWizardPage {
 		setPageComplete(false);
 		try{
 			//Build the bundle and the jasper configuration
-			this.bundle = new JrxmlTemplateBundle(reportFile.getLocationURI().toURL(),true);
 			this.jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), reportFile);
+			this.bundle = new JrxmlTemplateBundle(reportFile.getLocationURI().toURL(), true, jrContext);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

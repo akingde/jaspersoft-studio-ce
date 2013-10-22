@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -69,13 +70,14 @@ public class DefaultTemplateEngine implements TemplateEngine {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings)
+	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings,
+			JasperReportsContext jContext)
 			throws TemplateEngineException {
 
 		JasperDesign jdCopy = null;
 		try {
 			// N.B: We need a fresh new copy of the jasper design!
-			jdCopy = ModelUtils.copyJasperDesign(template.getJasperDesign());
+			jdCopy = ModelUtils.copyJasperDesign(jContext, template.getJasperDesign());
 		} catch (JRException e) {
 			UIUtils.showError(e);
 			return null;

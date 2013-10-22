@@ -52,6 +52,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -121,10 +122,10 @@ public class ModelUtils {
 		return null;
 	}
 
-	public static JasperDesign copyJasperDesign(JasperDesign jrd) throws JRException {
+	public static JasperDesign copyJasperDesign(JasperReportsContext jContext, JasperDesign jrd) throws JRException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		JRSaver.saveObject(jrd, out);
-		JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
+		JasperDesign jd = (JasperDesign) JRLoader.loadObject(jContext, new ByteArrayInputStream(out.toByteArray()));
 		return jd;
 	}
 
