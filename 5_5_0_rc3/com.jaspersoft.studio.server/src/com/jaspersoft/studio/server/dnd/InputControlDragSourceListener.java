@@ -1,0 +1,59 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
+package com.jaspersoft.studio.server.dnd;
+
+import org.eclipse.jface.util.TransferDragSourceListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.Transfer;
+
+import com.jaspersoft.studio.dnd.NodeDragListener;
+import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.server.model.MInputControl;
+import com.jaspersoft.studio.server.model.MReportUnit;
+
+/**
+ * 
+ * Drag listener for the report unit type, it generate and event serializing an
+ * list of string with some informations of the dragged unit (its uri and the
+ * name of its Resources descriptor).
+ * 
+ * @author Orlandin Marco
+ * 
+ */
+public class InputControlDragSourceListener extends NodeDragListener implements TransferDragSourceListener {
+
+	public InputControlDragSourceListener(TreeViewer viewer) {
+		super(viewer);
+	}
+
+	/**
+	 * Valid only if it is selected a a MReportUnit
+	 */
+	@Override
+	public void dragStart(DragSourceEvent event) {
+		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		Object fe = selection.getFirstElement();
+		event.doit = !viewer.getSelection().isEmpty() && (fe instanceof MInputControl && ((MInputControl) fe).getParent() instanceof MReportUnit);
+	}
+
+	@Override
+	public Transfer getTransfer() {
+		return NodeTransfer.getInstance();
+	}
+
+}
