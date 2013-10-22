@@ -269,7 +269,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 			return ((JSSWizard) getPage().getWizard()).getConfig();
 		}
 
-		return null;
+		return JasperReportsConfiguration.getDefaultJRConfig();
 	}
 
 	/**
@@ -294,7 +294,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	 */
 	public JRDesignDataset getDataset() {
 		if (dataset == null) {
-			dataset = new JRDesignDataset(true);
+			dataset = new JRDesignDataset(getJasperReportsConfiguration(), true);
 			JRDesignQuery query = new JRDesignQuery();
 			query.setLanguage(getQueryLanguage());
 			dataset.setQuery(query);

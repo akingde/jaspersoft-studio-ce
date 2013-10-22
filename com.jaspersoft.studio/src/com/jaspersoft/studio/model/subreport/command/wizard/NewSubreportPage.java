@@ -51,6 +51,7 @@ import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
 import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.AWizardNode;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
@@ -414,12 +415,12 @@ public class NewSubreportPage extends JSSWizardSelectionPage implements IExpress
 
 			if (f.exists()) {
 				try {
-
+					JasperReportsConfiguration jConfig = ((JSSWizard) getWizard()).getConfig();
 					if (f.getName().endsWith(".jasper")) { //$NON-NLS-1$
-						JasperReport report = (JasperReport) JRLoader.loadObject(f);
+						JasperReport report = (JasperReport) JRLoader.loadObject(jConfig, f);
 						getSettings().put(SUBREPORT_PARAMETERS, report.getParameters());
 					} else if (f.getName().endsWith(".jrxml")) { //$NON-NLS-1$
-						JasperDesign jd = JRXmlLoader.load(f);
+						JasperDesign jd = JRXmlLoader.load(jConfig, f);
 						getSettings().put(SUBREPORT_PARAMETERS, jd.getParameters());
 					}
 

@@ -35,7 +35,6 @@ import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
@@ -53,7 +52,6 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -908,9 +906,9 @@ public class ModelUtils {
 		return name + "_" + index;
 	}
 
-	public static String[] getQueryLanguages(JasperReportsContext context) {
+	public static String[] getQueryLanguages(JasperReportsConfiguration context) {
 		if (context == null)
-			context = DefaultJasperReportsContext.getInstance();
+			context = JasperReportsConfiguration.getDefaultJRConfig();
 		String[] langs = getQueryLanguagesOnly(context);
 		String[] res = new String[langs.length + 1];
 		res[0] = "";
@@ -926,41 +924,48 @@ public class ModelUtils {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static String[] getQueryLanguagesOnly(JasperReportsContext context) {
+	public static String[] getQueryLanguagesOnly(JasperReportsConfiguration context) {
 		Set<String> langs = new HashSet<String>();
 		List<JRQueryExecuterFactoryBundle> bundles = context.getExtensions(JRQueryExecuterFactoryBundle.class);
-		for (JRQueryExecuterFactoryBundle bundle : bundles) {
-			String[] languages = bundle.getLanguages();
-			for (String l : languages) {
-				if (!langs.contains(l)) {
-					boolean exists = false;
-					for (String item : langs) {
-						if (item.equalsIgnoreCase(l.trim())) {
-							exists = true;
-							break;
+
+		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+		try {
+			Thread.currentThread().setContextClassLoader(context.getClassLoader());
+			for (JRQueryExecuterFactoryBundle bundle : bundles) {
+				String[] languages = bundle.getLanguages();
+				for (String l : languages) {
+					if (!langs.contains(l)) {
+						boolean exists = false;
+						for (String item : langs) {
+							if (item.equalsIgnoreCase(l.trim())) {
+								exists = true;
+								break;
+							}
 						}
+						if (!exists)
+							langs.add(l);
 					}
-					if (!exists)
-						langs.add(l);
 				}
 			}
-		}
-		List<QueryExecuterFactoryBundle> oldbundles = context.getExtensions(QueryExecuterFactoryBundle.class);
-		for (QueryExecuterFactoryBundle bundle : oldbundles) {
-			String[] languages = bundle.getLanguages();
-			for (String l : languages) {
-				if (!langs.contains(l)) {
-					boolean exists = false;
-					for (String item : langs) {
-						if (item.equalsIgnoreCase(l.trim())) {
-							exists = true;
-							break;
+			List<QueryExecuterFactoryBundle> oldbundles = context.getExtensions(QueryExecuterFactoryBundle.class);
+			for (QueryExecuterFactoryBundle bundle : oldbundles) {
+				String[] languages = bundle.getLanguages();
+				for (String l : languages) {
+					if (!langs.contains(l)) {
+						boolean exists = false;
+						for (String item : langs) {
+							if (item.equalsIgnoreCase(l.trim())) {
+								exists = true;
+								break;
+							}
 						}
+						if (!exists)
+							langs.add(l);
 					}
-					if (!exists)
-						langs.add(l);
 				}
 			}
+		} finally {
+			Thread.currentThread().setContextClassLoader(oldCL);
 		}
 		String[] languages = langs.toArray(new String[langs.size()]);
 		Arrays.sort(languages, Collator.getInstance());

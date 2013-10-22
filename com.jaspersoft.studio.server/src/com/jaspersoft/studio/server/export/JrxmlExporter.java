@@ -53,7 +53,7 @@ public class JrxmlExporter extends AExporter {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
 			try {
-				JasperDesign jd = JRXmlLoader.load(f.getContents());
+				JasperDesign jd = JRXmlLoader.load(res.getJasperConfiguration(), f.getContents());
 				setPropServerURL(res, jd);
 				setPropReportUnit(res, jd);
 				getResources(res, jd);

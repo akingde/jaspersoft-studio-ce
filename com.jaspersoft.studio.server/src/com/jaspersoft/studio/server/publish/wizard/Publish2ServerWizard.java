@@ -105,7 +105,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 					jrConfig.init(file);
 				String fext = file.getFileExtension();
 				if (jDesign == null && fext.equalsIgnoreCase(FileExtension.JRXML) || fext.equalsIgnoreCase(FileExtension.JASPER)) {
-					jDesign = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(file.getContents());
+					jDesign = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester()).loadXML(file.getContents());
 					jrConfig.setJasperDesign(jDesign);
 				}
 			}

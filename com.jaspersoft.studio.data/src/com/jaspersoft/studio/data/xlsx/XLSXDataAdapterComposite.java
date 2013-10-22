@@ -627,7 +627,7 @@ public class XLSXDataAdapterComposite extends AFileDataAdapterComposite {
 			XlsxDataAdapter xlsAdapter = (XlsxDataAdapter)da.getDataAdapter();
 			boolean useRowHeader = xlsAdapter.isUseFirstRowAsHeader();
 			xlsAdapter.setUseFirstRowAsHeader(true);
-			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, new JRDesignDataset(false));
+			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, new JRDesignDataset(jConfig, false));
 			
 			xlsAdapter.setUseFirstRowAsHeader(useRowHeader);
 			rows.clear();

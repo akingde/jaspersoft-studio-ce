@@ -96,7 +96,7 @@ public class EmptyWizardDataEditorComposite extends AWizardDataEditorComposite {
 		if (getPage() != null && getPage().getWizard() != null && getPage().getWizard() instanceof JSSWizard) {
 			return ((JSSWizard) getPage().getWizard()).getConfig();
 		}
-		return null;
+		return JasperReportsConfiguration.getDefaultJRConfig();
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class EmptyWizardDataEditorComposite extends AWizardDataEditorComposite {
 	 */
 	public JRDesignDataset getDataset() {
 		if (dataset == null) {
-			dataset = new JRDesignDataset(true);
+			dataset = new JRDesignDataset(getJasperReportsConfiguration(), true);
 		}
 		return dataset;
 	}

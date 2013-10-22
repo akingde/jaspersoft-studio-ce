@@ -49,6 +49,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MDataset.
@@ -332,8 +333,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 *          the jr design
 	 * @return the jR design dataset
 	 */
-	public static JRDesignDataset createJRDataset(JasperDesign jrDesign) {
-		JRDesignDataset jrDesignDataset = new JRDesignDataset(false);
+	public static JRDesignDataset createJRDataset(JasperReportsConfiguration jConfig, JasperDesign jrDesign) {
+		JRDesignDataset jrDesignDataset = new JRDesignDataset(jConfig, false);
 		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset")); //$NON-NLS-1$
 		JRDesignQuery jrDesignQuery = new JRDesignQuery();
 		jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$

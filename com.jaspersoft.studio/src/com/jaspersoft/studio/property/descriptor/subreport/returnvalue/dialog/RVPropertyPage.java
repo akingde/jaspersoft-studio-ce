@@ -403,7 +403,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
 			if (in != null) {
 				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
-				jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+				jd = new JRXmlLoader(dto.getjConfig(), JRXmlDigesterFactory.createDigester()).loadXML(is);
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();

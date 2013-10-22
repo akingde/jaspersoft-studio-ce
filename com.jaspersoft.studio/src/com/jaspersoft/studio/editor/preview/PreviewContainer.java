@@ -91,7 +91,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				}
 				in = JrxmlEditor.getXML(jrContext, input, file.getCharset(true), in, null);
 				getJrContext(file);
-				jrContext.setJasperDesign(JRXmlLoader.load(in));
+				jrContext.setJasperDesign(JRXmlLoader.load(jrContext, in));
 				setJasperDesign(jrContext);
 			} catch (Exception e) {
 				throw new PartInitException(e.getMessage(), e);

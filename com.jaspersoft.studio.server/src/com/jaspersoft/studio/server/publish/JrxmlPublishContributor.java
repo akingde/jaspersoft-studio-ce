@@ -111,7 +111,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		if (fs != null && fs.length > 0) {
 			InputStream jrxmlInputStream = JRXMLUtils.getJRXMLInputStream(jrConfig, fs[0].getContents(), fs[0].getFileExtension(), fs[0].getCharset(true), version);
 			InputSource is = new InputSource(new InputStreamReader(jrxmlInputStream, "UTF-8"));
-			JasperDesign jrd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+			JasperDesign jrd = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester()).loadXML(is);
 			if (jrd != null) {
 				fres.setJd(jrd);
 				publishJrxml(fres, monitor, jrd, fileset, fs[0]);

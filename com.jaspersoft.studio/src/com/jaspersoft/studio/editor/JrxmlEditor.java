@@ -566,7 +566,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
 
-			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
+			JasperDesign jd = new JRXmlLoader(jrContext, JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(in));
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
 			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
@@ -833,7 +833,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			in = new ByteArrayInputStream(doc.get().getBytes("UTF-8"));
 
-			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(in);
+			JasperDesign jd = new JRXmlLoader(jrContext, JRXmlDigesterFactory.createDigester()).loadXML(in);
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
 		} finally {

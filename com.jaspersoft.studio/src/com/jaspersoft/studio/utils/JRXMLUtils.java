@@ -72,7 +72,7 @@ public class JRXMLUtils {
 		if (fileExtension.equals(FileExtension.JASPER))
 			return (JasperDesign) JRLoader.loadObject(in);
 		if (fileExtension.equals(FileExtension.JRXML))
-			return JRXmlLoader.load(in);
+			return JRXmlLoader.load(jrContext, in);
 		return null;
 	}
 

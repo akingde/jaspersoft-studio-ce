@@ -30,6 +30,7 @@ import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.ResourceScope;
+import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentManager;
@@ -37,6 +38,7 @@ import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
+import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
@@ -106,6 +108,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				refreshFonts = true;
 				refreshBundles = true;
 				fontList = null;
+				props = null;
+				qExecutors = null;
 			}
 		}
 	}
@@ -286,9 +290,20 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 		if (map == null)
 			map = new HashMap<String, String>();
+		getJRProperties();
+		if (!isPropsCached) {
+			for (Object key : props.keySet()) {
+				if (!(key instanceof String))
+					continue;
+				String val = getProperty((String) key);
+				if (val != null)
+					map.put((String) key, val);
+			}
+			isPropsCached = true;
+		}
 
 		for (String key : map.keySet()) {
-			String val = service.getString(qualifier, key, null, contexts);
+			String val = getProperty((String) key);
 			if (val != null)
 				map.put(key, val);
 		}
@@ -296,20 +311,27 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return map;
 	}
 
+	private boolean isPropsCached = false;
 	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
 	private Properties props;
 
-	@Override
-	public String getProperty(String key) {
-		if (props == null)
-			props = new Properties();
-		if (refreshFonts) {
+	private Properties getJRProperties() {
+		if (props == null) {
+			isPropsCached = false;
 			try {
-				props = FileUtils.load(service.getString(qualifier, "net.sf.jasperreports.JRPROPERTIES", null, contexts));
+				props = FileUtils.load(service.getString(qualifier, PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES,
+						null, contexts));
 			} catch (IOException e) {
 				e.printStackTrace();
+				props = new Properties();
 			}
 		}
+		return props;
+	}
+
+	@Override
+	public String getProperty(String key) {
+		getJRProperties();
 		String val = super.getProperty(key);
 		if (val != null)
 			return val;
@@ -338,10 +360,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		val = t != null && t.isEmpty() ? null : t;
 		if (val != null)
 			return val;
-		val = props.getProperty(key);
-		if (val != null)
-			return val;
-		val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
+		if (props != null) {
+			val = props.getProperty(key);
+			if (val != null)
+				return val;
+			val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
+		}
 		return val;
 	}
 
@@ -477,6 +501,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					refreshFunctionsBundles = false;
 				}
 				result = (List<T>) Collections.singletonList(messageProviderFactory);
+			} else if (extensionType == JRQueryExecuterFactoryBundle.class) {
+				try {
+					if (qExecutors == null) {
+						qExecutors = new ArrayList<JRQueryExecuterFactoryBundle>();
+						qExecutors.add(EmptyQueryExecuterFactoryBundle.getInstance(this));
+					}
+					result = (List<T>) qExecutors;
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
 			} else {
 				try {
 					result = super.getExtensions(extensionType);
@@ -490,6 +524,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return result;
 	}
 
+	private List<JRQueryExecuterFactoryBundle> qExecutors;
 	private Map<Object, Object> map;
 
 	public Map<Object, Object> getMap() {

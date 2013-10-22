@@ -19,6 +19,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRField;
@@ -31,6 +32,8 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+
+import org.eclipse.core.resources.IFile;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -101,7 +104,7 @@ public class DatasetReader {
 			String reportLocation = JaspersoftStudioPlugin.getInstance().getFileLocation(
 					DataPreviewScriptlet.PREVIEW_REPORT_PATH);
 			is = new FileInputStream(reportLocation);
-			JasperDesign dataJD = JRXmlLoader.load(is);
+			JasperDesign dataJD = JRXmlLoader.load(jConfig, is);
 
 			// 2. Set query information
 			JRDesignQuery query = new JRDesignQuery();
@@ -147,7 +150,14 @@ public class DatasetReader {
 			}
 
 			// 6. Compile report
-			JasperReport jrobj = JasperCompileManager.compileReport(dataJD);
+			JasperReport jrobj = null;
+			IFile f = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			if (f != null) {
+				JasperReportCompiler compiler = new JasperReportCompiler();
+				compiler.setProject(f.getProject());
+				jrobj = compiler.compileReport(jConfig, dataJD);
+			} else
+				jrobj = JasperCompileManager.getInstance(jConfig).compile(dataJD);
 
 			// 7. Prepare parameters
 			Map<String, Object> hm = new HashMap<String, Object>();
