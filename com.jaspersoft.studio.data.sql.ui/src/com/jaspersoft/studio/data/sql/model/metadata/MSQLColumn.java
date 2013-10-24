@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.metadata.keys.ForeignKey;
 import com.jaspersoft.studio.data.sql.model.metadata.keys.PrimaryKey;
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 
@@ -69,7 +70,7 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 
 	@Override
 	public String getToolTip() {
-		String tt = super.getToolTip();
+		String tt = ConvertUtil.cleanDbNameFull(super.getToolTip());
 		if (primaryKey != null)
 			tt += "\n" + primaryKey.toSqlString();
 		if (foreignKeys != null) {

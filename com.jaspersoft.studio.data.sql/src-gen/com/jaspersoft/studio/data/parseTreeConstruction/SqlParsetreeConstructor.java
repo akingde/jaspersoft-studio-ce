@@ -8156,7 +8156,6 @@ protected class ScalarOperand_SodtAssignment_5 extends AssignmentToken  {
 /************ end Rule ScalarOperand ****************/
 
 
-
 /************ begin Rule SQLCASE ****************
  *
  * SQLCASE returns SQLCaseOperand:
@@ -8782,6 +8781,7 @@ protected class SqlCaseWhen_EexpAssignment_4_1 extends AssignmentToken  {
 
 
 /************ end Rule SqlCaseWhen ****************/
+
 
 
 

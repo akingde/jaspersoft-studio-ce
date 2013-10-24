@@ -25,6 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 
 public class MFromTable extends AMQueryAliased<MSqlTable> {
@@ -49,7 +50,7 @@ public class MFromTable extends AMQueryAliased<MSqlTable> {
 	@Override
 	public String getToolTip() {
 		MSqlTable mc = getValue();
-		String tooltip = mc.toSQLString();
+		String tooltip = ConvertUtil.cleanDbNameFull(mc.toSQLString());
 		tooltip += addAlias();
 		if (getValue().getRemarks() != null)
 			tooltip += "\n" + mc.getRemarks();

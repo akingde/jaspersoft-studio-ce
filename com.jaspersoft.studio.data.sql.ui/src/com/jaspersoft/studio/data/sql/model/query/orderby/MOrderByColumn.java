@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.StyledString;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 
@@ -71,7 +72,7 @@ public class MOrderByColumn extends AMOrderByMember<MSQLColumn> {
 			if (mfTable.getAlias() != null)
 				ss.append(mfTable.getAlias());
 			else
-				ss.append(mfTable.getValue().toSQLString());
+				ss.append(ConvertUtil.cleanDbNameFull(mfTable.getValue().toSQLString()));
 			ss.append("." + getValue().getDisplayText());
 			ss.append(addDirection(), FontUtils.KEYWORDS_STYLER);
 		} else
@@ -87,7 +88,7 @@ public class MOrderByColumn extends AMOrderByMember<MSQLColumn> {
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
-			ss.append("." + getValue().getDisplayText());
+			ss.append(".\"" + getValue().getDisplayText() + "\"");
 			ss.append(addDirection());
 		} else
 			ss.append(msColumn.getAlias());

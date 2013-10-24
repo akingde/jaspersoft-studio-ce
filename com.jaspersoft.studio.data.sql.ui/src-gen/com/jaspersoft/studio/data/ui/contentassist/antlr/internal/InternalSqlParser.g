@@ -1272,34 +1272,6 @@ finally {
 
 
 
-// Entry rule entryRuleStringOperand
-entryRuleStringOperand 
-:
-{ before(grammarAccess.getStringOperandRule()); }
-	 ruleStringOperand
-{ after(grammarAccess.getStringOperandRule()); } 
-	 EOF 
-;
-
-// Rule StringOperand
-ruleStringOperand 
-    @init {
-		int stackSize = keepStackSize();
-    }
-    :
-(
-{ before(grammarAccess.getStringOperandAccess().getSTRINGTerminalRuleCall()); }
-	RULE_STRING
-{ after(grammarAccess.getStringOperandAccess().getSTRINGTerminalRuleCall()); }
-)
-
-;
-finally {
-	restoreStackSize(stackSize);
-}
-
-
-
 // Entry rule entryRuleSQLCASE
 entryRuleSQLCASE 
 :
@@ -1403,6 +1375,34 @@ ruleDBID
 { before(grammarAccess.getDBIDAccess().getAlternatives()); }
 (rule__DBID__Alternatives)
 { after(grammarAccess.getDBIDAccess().getAlternatives()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+// Entry rule entryRuleStringOperand
+entryRuleStringOperand 
+:
+{ before(grammarAccess.getStringOperandRule()); }
+	 ruleStringOperand
+{ after(grammarAccess.getStringOperandRule()); } 
+	 EOF 
+;
+
+// Rule StringOperand
+ruleStringOperand 
+    @init {
+		int stackSize = keepStackSize();
+    }
+    :
+(
+{ before(grammarAccess.getStringOperandAccess().getSTRING_TerminalRuleCall()); }
+	RULE_STRING_
+{ after(grammarAccess.getStringOperandAccess().getSTRING_TerminalRuleCall()); }
 )
 
 ;
@@ -2116,6 +2116,12 @@ rule__DBID__Alternatives
 { before(grammarAccess.getDBIDAccess().getDBNAMETerminalRuleCall_1()); }
 	RULE_DBNAME
 { after(grammarAccess.getDBIDAccess().getDBNAMETerminalRuleCall_1()); }
+)
+
+    |(
+{ before(grammarAccess.getDBIDAccess().getSTRINGTerminalRuleCall_2()); }
+	RULE_STRING
+{ after(grammarAccess.getDBIDAccess().getSTRINGTerminalRuleCall_2()); }
 )
 
 ;

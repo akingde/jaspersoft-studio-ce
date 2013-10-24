@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -77,7 +78,7 @@ public abstract class AMQueryObject<T> extends ANode implements IQueryString {
 	@Override
 	public String getDisplayText() {
 		if (getValue() instanceof IQueryString)
-			return ((IQueryString) getValue()).toSQLString();
+			return ConvertUtil.cleanDbNameFull(((IQueryString) getValue()).toSQLString());
 		else if (getValue() instanceof String)
 			return (String) getValue();
 		return null;
@@ -96,6 +97,11 @@ public abstract class AMQueryObject<T> extends ANode implements IQueryString {
 
 	@Override
 	public String toSQLString() {
-		return (isFirst() ? getDisplayText() : ",\n\t" + getDisplayText());
+		String sql = "";
+		if (getValue() instanceof IQueryString)
+			sql = ((IQueryString) getValue()).toSQLString();
+		else if (getValue() instanceof String)
+			sql = (String) getValue();
+		return (isFirst() ? sql : ",\n\t" + sql);
 	}
 }

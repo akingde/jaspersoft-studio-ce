@@ -23,6 +23,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryObject;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 
 public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
@@ -66,7 +67,7 @@ public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 
 	@Override
 	public String getDisplayText() {
-		return getValue().toSQLString();
+		return ConvertUtil.cleanDbNameFull(getValue().toSQLString());
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 			if (mfTable.getAlias() != null)
 				ss.append(mfTable.getAlias());
 			else
-				ss.append(mfTable.getValue().toSQLString());
+				ss.append(ConvertUtil.cleanDbNameFull(mfTable.getValue().toSQLString()));
 			ss.append("." + getValue().getDisplayText());
 		} else
 			ss.append(msColumn.getAlias());
@@ -91,7 +92,7 @@ public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
-			ss.append("." + getValue().getDisplayText());
+			ss.append(".\"" + getValue().getDisplayText() + "\"");
 		} else
 			ss.append(msColumn.getAlias());
 		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();

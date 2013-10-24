@@ -133,9 +133,6 @@ SubQueryOperand returns SubQueryOperand:
 ScalarOperand returns ScalarOperand:
 	soint=INT | sostr=StringOperand | sodbl=SIGNED_DOUBLE | sodate=DATE | sotime=TIME | sodt=TIMESTAMP;
 
-StringOperand:
-	STRING;
-
 SQLCASE returns SQLCaseOperand:
 	'CASE' (expr=FullExpression)? when=SQLCaseWhens 'END';
 
@@ -155,7 +152,10 @@ enum JoinType:
 	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
 DBID:
-	ID | DBNAME;
+	ID | DBNAME | STRING;
+
+StringOperand:
+	  STRING_;
 
 FNAME:
 	ID '(';
@@ -184,9 +184,11 @@ terminal TIME returns ecore::EDate:
 terminal SIGNED_DOUBLE returns ecore::EBigDecimal:
 	'-'? ('0'..'9')+ ('.' ('0'..'9')+)?;
 
-terminal STRING:
-	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"' |
+terminal STRING_:
 	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
+
+terminal STRING:
+	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"';
 
 terminal DBNAME:
 	'`' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '`'))* '`' |

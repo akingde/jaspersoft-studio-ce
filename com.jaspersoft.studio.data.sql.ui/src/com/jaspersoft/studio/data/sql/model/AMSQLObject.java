@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.query.IQueryString;
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -31,7 +32,7 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 
 	@Override
 	public String getToolTip() {
-		String name = toSQLString();
+		String name = ConvertUtil.cleanDbNameFull(toSQLString());
 		if (tooltip != null)
 			name += tooltip;
 		return name;
@@ -42,15 +43,19 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 		ANode p = getParent();
 		while (p != null) {
 			if (p instanceof AMSQLObject) {
-				if (p instanceof MSqlSchema && (((MSqlSchema) p).isCurrent()))
-					return getValue();
+				if (p instanceof MSqlSchema) {
+					if ((((MSqlSchema) p).isCurrent()))
+						return "\"" + getValue() + "\"";
+				}
 				String s = ((AMSQLObject) p).toSQLString();
 				if (Misc.isNullOrEmpty(s))
 					return getValue();
-				return s + "." + getValue();
+				return s + ".\"" + getValue() + "\"";
 			}
 			p = p.getParent();
 		}
+		if (this instanceof MSqlSchema)
+			return "\"" + getValue() + "\"";
 		return str;
 	}
 

@@ -44,6 +44,7 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectExpression;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.BottomAnchor;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.TopAnchor;
@@ -86,7 +87,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 		MFromTable fromTable = getModel();
 		MSqlTable table = fromTable.getValue();
-		String tblName = table.getValue();
+		String tblName = ConvertUtil.cleanDbNameFull(table.getValue());
 		if (fromTable.getAlias() != null)
 			tblName += fromTable.getAliasKeyString() + fromTable.getAlias();
 

@@ -25,6 +25,8 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
+
 public class ColumnFigure extends Figure {
 	private CheckBox checkbox;
 
@@ -47,7 +49,7 @@ public class ColumnFigure extends Figure {
 			}
 		});
 		add(checkbox);
-		Label lbl = new Label(text, image);
+		Label lbl = new Label(ConvertUtil.cleanDbNameFull(text), image);
 		lbl.setTextPlacement(PositionConstants.WEST);
 		add(lbl);
 	}

@@ -1724,18 +1724,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getSodtTIMESTAMPTerminalRuleCall_5_0() { return cSodtTIMESTAMPTerminalRuleCall_5_0; }
 	}
 
-	public class StringOperandElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "StringOperand");
-		private final RuleCall cSTRINGTerminalRuleCall = (RuleCall)rule.eContents().get(1);
-		
-		//StringOperand:
-		//	STRING;
-		public ParserRule getRule() { return rule; }
-
-		//STRING
-		public RuleCall getSTRINGTerminalRuleCall() { return cSTRINGTerminalRuleCall; }
-	}
-
 	public class SQLCASEElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "SQLCASE");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -1861,12 +1849,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cDBNAMETerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		private final RuleCall cSTRINGTerminalRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
 		
 		//DBID:
-		//	ID | DBNAME;
+		//	ID | DBNAME | STRING;
 		public ParserRule getRule() { return rule; }
 
-		//ID | DBNAME
+		//ID | DBNAME | STRING
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//ID
@@ -1874,6 +1863,21 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//DBNAME
 		public RuleCall getDBNAMETerminalRuleCall_1() { return cDBNAMETerminalRuleCall_1; }
+
+		//STRING
+		public RuleCall getSTRINGTerminalRuleCall_2() { return cSTRINGTerminalRuleCall_2; }
+	}
+
+	public class StringOperandElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "StringOperand");
+		private final RuleCall cSTRING_TerminalRuleCall = (RuleCall)rule.eContents().get(1);
+		
+		//StringOperand:
+		//	STRING_;
+		public ParserRule getRule() { return rule; }
+
+		//STRING_
+		public RuleCall getSTRING_TerminalRuleCall() { return cSTRING_TerminalRuleCall; }
 	}
 
 	public class FNAMEElements extends AbstractParserRuleElementFinder {
@@ -2102,13 +2106,13 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private ColumnOperandElements pColumnOperand;
 	private SubQueryOperandElements pSubQueryOperand;
 	private ScalarOperandElements pScalarOperand;
-	private StringOperandElements pStringOperand;
 	private SQLCASEElements pSQLCASE;
 	private SQLCaseWhensElements pSQLCaseWhens;
 	private SqlCaseWhenElements pSqlCaseWhen;
 	private XFunctionElements unknownRuleXFunction;
 	private JoinTypeElements unknownRuleJoinType;
 	private DBIDElements pDBID;
+	private StringOperandElements pStringOperand;
 	private FNAMEElements pFNAME;
 	private TerminalRule tJRPARAM;
 	private TerminalRule tJRNPARAM;
@@ -2118,6 +2122,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private TerminalRule tDATE;
 	private TerminalRule tTIME;
 	private TerminalRule tSIGNED_DOUBLE;
+	private TerminalRule tSTRING_;
 	private TerminalRule tSTRING;
 	private TerminalRule tDBNAME;
 	private TerminalRule tID;
@@ -2575,16 +2580,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getScalarOperandAccess().getRule();
 	}
 
-	//StringOperand:
-	//	STRING;
-	public StringOperandElements getStringOperandAccess() {
-		return (pStringOperand != null) ? pStringOperand : (pStringOperand = new StringOperandElements());
-	}
-	
-	public ParserRule getStringOperandRule() {
-		return getStringOperandAccess().getRule();
-	}
-
 	//SQLCASE returns SQLCaseOperand:
 	//	"CASE" expr=FullExpression? when=SQLCaseWhens "END";
 	public SQLCASEElements getSQLCASEAccess() {
@@ -2638,13 +2633,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//DBID:
-	//	ID | DBNAME;
+	//	ID | DBNAME | STRING;
 	public DBIDElements getDBIDAccess() {
 		return (pDBID != null) ? pDBID : (pDBID = new DBIDElements());
 	}
 	
 	public ParserRule getDBIDRule() {
 		return getDBIDAccess().getRule();
+	}
+
+	//StringOperand:
+	//	STRING_;
+	public StringOperandElements getStringOperandAccess() {
+		return (pStringOperand != null) ? pStringOperand : (pStringOperand = new StringOperandElements());
+	}
+	
+	public ParserRule getStringOperandRule() {
+		return getStringOperandAccess().getRule();
 	}
 
 	//FNAME:
@@ -2705,9 +2710,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return (tSIGNED_DOUBLE != null) ? tSIGNED_DOUBLE : (tSIGNED_DOUBLE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "SIGNED_DOUBLE"));
 	} 
 
+	//terminal STRING_:
+	//	"\'" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\'"))* "\'";
+	public TerminalRule getSTRING_Rule() {
+		return (tSTRING_ != null) ? tSTRING_ : (tSTRING_ = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "STRING_"));
+	} 
+
 	//terminal STRING:
-	//	"\"" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\""))* "\"" | "\'" ("\\" ("b" | "t" |
-	//	"n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\'"))* "\'";
+	//	"\"" ("\\" ("b" | "t" | "n" | "f" | "r" | "u" | "\"" | "\'" | "\\") | !("\\" | "\""))* "\"";
 	public TerminalRule getSTRINGRule() {
 		return (tSTRING != null) ? tSTRING : (tSTRING = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "STRING"));
 	} 

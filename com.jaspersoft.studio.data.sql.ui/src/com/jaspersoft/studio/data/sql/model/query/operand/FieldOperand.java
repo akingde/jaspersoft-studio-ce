@@ -61,7 +61,7 @@ public class FieldOperand extends AOperand {
 			ss.append(fromTable.getAlias());
 		else
 			ss.append(fromTable.getValue().toSQLString());
-		ss.append("." + column.getDisplayText());
+		ss.append(".\"" + column.getDisplayText() + "\"");
 		return ss.toString();
 	}
 

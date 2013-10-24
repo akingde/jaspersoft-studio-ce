@@ -3166,35 +3166,6 @@ ruleScalarOperand returns [EObject current=null]
 
 
 
-// Entry rule entryRuleStringOperand
-entryRuleStringOperand returns [String current=null] 
-:
-	{ newCompositeNode(grammarAccess.getStringOperandRule()); } 
-	 iv_ruleStringOperand=ruleStringOperand 
-	 { $current=$iv_ruleStringOperand.current.getText(); }  
-	 EOF 
-;
-
-// Rule StringOperand
-ruleStringOperand returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] 
-    @init { enterRule(); 
-    }
-    @after { leaveRule();
-    }:
-    this_STRING_0=RULE_STRING    {
-		$current.merge(this_STRING_0);
-    }
-
-    { 
-    newLeafNode(this_STRING_0, grammarAccess.getStringOperandAccess().getSTRINGTerminalRuleCall()); 
-    }
-
-    ;
-
-
-
-
-
 // Entry rule entryRuleSQLCASE
 entryRuleSQLCASE returns [EObject current=null]
 	:
@@ -3436,7 +3407,44 @@ ruleDBID returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
     { 
     newLeafNode(this_DBNAME_1, grammarAccess.getDBIDAccess().getDBNAMETerminalRuleCall_1()); 
     }
+
+    |    this_STRING_2=RULE_STRING    {
+		$current.merge(this_STRING_2);
+    }
+
+    { 
+    newLeafNode(this_STRING_2, grammarAccess.getDBIDAccess().getSTRINGTerminalRuleCall_2()); 
+    }
 )
+    ;
+
+
+
+
+
+// Entry rule entryRuleStringOperand
+entryRuleStringOperand returns [String current=null] 
+:
+	{ newCompositeNode(grammarAccess.getStringOperandRule()); } 
+	 iv_ruleStringOperand=ruleStringOperand 
+	 { $current=$iv_ruleStringOperand.current.getText(); }  
+	 EOF 
+;
+
+// Rule StringOperand
+ruleStringOperand returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule();
+    }:
+    this_STRING__0=RULE_STRING_    {
+		$current.merge(this_STRING__0);
+    }
+
+    { 
+    newLeafNode(this_STRING__0, grammarAccess.getStringOperandAccess().getSTRING_TerminalRuleCall()); 
+    }
+
     ;
 
 
