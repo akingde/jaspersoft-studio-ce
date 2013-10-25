@@ -24,7 +24,7 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 
 public class MetaDataUtil {
-	public static List<MSqlSchema> readSchemas(IProgressMonitor monitor, MRoot root, DatabaseMetaData meta, String[] cschemas) throws SQLException {
+	public synchronized static List<MSqlSchema> readSchemas(IProgressMonitor monitor, MRoot root, DatabaseMetaData meta, String[] cschemas) throws SQLException {
 		List<MSqlSchema> mcurrent = new ArrayList<MSqlSchema>();
 		ResultSet schemas = meta.getSchemas();
 		while (schemas.next()) {
@@ -50,7 +50,7 @@ public class MetaDataUtil {
 		return mcurrent;
 	}
 
-	public static void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
+	public synchronized static void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
 		ResultSet rs = null;
 		try {
 			rs = meta.getSchemas();
@@ -70,7 +70,7 @@ public class MetaDataUtil {
 		}
 	}
 
-	public static void readSchemaTables(DatabaseMetaData meta, MSqlSchema schema, LinkedHashMap<String, MSqlTable> tables, IProgressMonitor monitor) {
+	public synchronized static void readSchemaTables(DatabaseMetaData meta, MSqlSchema schema, LinkedHashMap<String, MSqlTable> tables, IProgressMonitor monitor) {
 		try {
 			for (INode n : schema.getChildren())
 				MetaDataUtil.readTables(meta, schema.getValue(), schema.getTableCatalog(), (MTables) n, tables, monitor);
@@ -95,7 +95,7 @@ public class MetaDataUtil {
 		}
 	}
 
-	public static void readTableColumns(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
+	public synchronized static void readTableColumns(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
 		MTables tables = (MTables) mtable.getParent();
 		mtable.removeChildren();
 		ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mtable.getValue(), "%");
@@ -104,7 +104,7 @@ public class MetaDataUtil {
 		SchemaUtil.close(rs);
 	}
 
-	public static void readTableKeys(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
+	public synchronized static void readTableKeys(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
 		MetaDataUtil.readPrimaryKeys(meta, mtable, monitor);
 		if (!monitor.isCanceled())
 			MetaDataUtil.readForeignKeys(meta, mtable, monitor);
@@ -181,7 +181,7 @@ public class MetaDataUtil {
 			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
 	}
 
-	public static void readProcedures(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor) {
+	public synchronized static void readProcedures(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor) {
 		try {
 			ResultSet rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
 			MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
