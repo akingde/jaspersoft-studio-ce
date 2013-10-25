@@ -89,6 +89,14 @@ public class MResource extends APropertyNode implements ICopyable {
 			String tip = "name: " + getValue().getName();
 			tip += "\nuri: " + getValue().getUriString();
 			tip += "\ntype: " + getValue().getWsType();
+			if (getParent() instanceof MReportUnit) {
+				MReportUnit mrunit = (MReportUnit) getParent();
+				if (mrunit.getValue() != null && getValue() != null) {
+					String par = mrunit.getValue().getUriString() + "_files";
+					if (!par.equals(getValue().getParentFolder()))
+						tip += " - Referenced";
+				}
+			}
 			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
 			return tip;
 		}
