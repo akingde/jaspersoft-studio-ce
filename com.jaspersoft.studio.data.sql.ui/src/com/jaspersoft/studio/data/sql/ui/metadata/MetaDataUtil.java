@@ -79,7 +79,7 @@ public class MetaDataUtil {
 		}
 	}
 
-	public static void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MTables mview, LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
+	private static void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MTables mview, LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
 		try {
 			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { mview.getValue() });
 			while (rs.next()) {
@@ -110,7 +110,7 @@ public class MetaDataUtil {
 			MetaDataUtil.readForeignKeys(meta, mtable, monitor);
 	}
 
-	public static void readPrimaryKeys(DatabaseMetaData meta, MSqlTable mt, IProgressMonitor monitor) throws SQLException {
+	private static void readPrimaryKeys(DatabaseMetaData meta, MSqlTable mt, IProgressMonitor monitor) throws SQLException {
 		MTables tables = (MTables) mt.getParent();
 		ResultSet rs = meta.getPrimaryKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
 		PrimaryKey pk = null;
@@ -135,7 +135,7 @@ public class MetaDataUtil {
 			pk.setColumns(cols.toArray(new MSQLColumn[cols.size()]));
 	}
 
-	public static void readForeignKeys(DatabaseMetaData meta, MSqlTable mt, IProgressMonitor monitor) throws SQLException {
+	private static void readForeignKeys(DatabaseMetaData meta, MSqlTable mt, IProgressMonitor monitor) throws SQLException {
 		MTables tables = (MTables) mt.getParent();
 		ResultSet rs = meta.getImportedKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
 		ForeignKey fk = null;
@@ -202,14 +202,5 @@ public class MetaDataUtil {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static List<String> readTableTypes(DatabaseMetaData meta) throws SQLException {
-		List<String> tableTypes = new ArrayList<String>();
-		ResultSet rs = meta.getTableTypes();
-		while (rs.next())
-			tableTypes.add(rs.getString("TABLE_TYPE"));
-		rs.close();
-		return tableTypes;
 	}
 }

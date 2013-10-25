@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.sql.widgets;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -24,6 +25,7 @@ import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 public abstract class AOperandWidget<T extends AOperand> extends Composite {
 	private T value;
 	private boolean exludeField = false;
+	private Set<Class<? extends AOperand>> menuOperands;
 
 	public AOperandWidget(Composite parent, int style, T operand) {
 		super(parent, style);
@@ -31,6 +33,20 @@ public abstract class AOperandWidget<T extends AOperand> extends Composite {
 		createWidget(parent);
 	}
 
+	public boolean isMenuOperands(Class<? extends AOperand> op) {
+		if (menuOperands != null) {
+			return menuOperands.contains(op);
+		}
+		return true;
+	}
+
+	public void setMenuOperands(Set<Class<? extends AOperand>> menuOperands) {
+		this.menuOperands = menuOperands;
+	}
+
+	public Set<Class<? extends AOperand>> getMenuOperands() {
+		return menuOperands;
+	}
 	public void setExludeField(boolean exludeField) {
 		this.exludeField = exludeField;
 	}

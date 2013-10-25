@@ -119,7 +119,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="XExpr">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="xf" eType="#//XFunction"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//ColumnFull"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//Operands"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="prm" eType="#//Prms" containment="true"/>
   </eClassifiers>

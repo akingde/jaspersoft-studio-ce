@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,7 +34,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
-import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterNotPOperand;
@@ -52,11 +52,11 @@ public class Factory {
 	public static final String OPERANDS = "OPERANDS";
 	public static final String OPERANDS_INDEX = "OPERANDS_INDEX";
 
-	public static Control createWidget(Composite parent, List<AOperand> operands, int index, MExpression mexpr) {
+	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		return createWidget(parent, operands, index, mexpr, false);
 	}
 
-	public static Control createWidget(Composite parent, List<AOperand> operands, int index, MExpression mexpr, boolean exludeField) {
+	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr, boolean exludeField) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new FillLayout());
 
@@ -68,6 +68,22 @@ public class Factory {
 
 		AOperandWidget<?> w = createWidget(cmp, op);
 		w.setExludeField(exludeField);
+		createWidgetMenu(w, operands, index, mexpr);
+		return cmp;
+	}
+
+	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr, Set<Class<? extends AOperand>> menuOperand) {
+		Composite cmp = new Composite(parent, SWT.NONE);
+		cmp.setLayout(new FillLayout());
+
+		AOperand op = null;
+		if (index >= 0 && index < operands.size())
+			op = operands.get(index);
+		else
+			op = new FieldOperand(null, null, mexpr);
+
+		AOperandWidget<?> w = createWidget(cmp, op);
+		w.setMenuOperands(menuOperand);
 		createWidgetMenu(w, operands, index, mexpr);
 		return cmp;
 	}
@@ -113,6 +129,8 @@ public class Factory {
 		for (String key : opMap.keySet()) {
 			MenuItem mi1 = null;
 			AOperand aOperand = opMap.get(key);
+			if (!w.isMenuOperands(aOperand.getClass()))
+				continue;
 			if (aOperand instanceof FieldOperand && w.isExludeField())
 				continue;
 			if (aOperand instanceof ScalarOperand) {
@@ -160,6 +178,7 @@ public class Factory {
 
 			AOperandWidget<?> neww = createWidget(parent, operands.get(index));
 			neww.setOperandMap(w.getOperandMap());
+			neww.setMenuOperands(w.getMenuOperands());
 			createWidgetMenu(neww, operands, index, op.getExpression());
 			parent.layout(true);
 		}

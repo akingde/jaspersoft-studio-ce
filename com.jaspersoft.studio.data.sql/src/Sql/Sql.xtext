@@ -63,13 +63,16 @@ ExpressionFragmentSecond returns FullExpression:
 	c=('AND' | 'OR') efrag=ExpressionFragment;
 
 ExpressionFragment returns FullExpression:
-	expgroup=ExpressionGroup | exp=Expression | xexp=XExpression;
+	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);
 
 ExpressionGroup returns ExprGroup:
 	{ExprGroup} '(' expr=FullExpression ')';
 
 XExpression returns XExpr:
-	'$X' {XExpr} '{' xf=XFunction "," col=ColumnFull ("," prm=XExpressionParams)? '}';
+	'$X' {XExpr} '{' xf=XFunction "," col=Operand ("," prm=XExpressionParams)? '}';
+	
+XExpression_ returns XExpr:
+	'$X' {XExpr} '{' xf=XFunction "|" col=Operand ("|" prm=XExpressionParams)? '}';
 
 XExpressionParams returns Prms:
 	JRParameter ({Prms.entries+=current} ("," entries+=JRParameter)+)?;

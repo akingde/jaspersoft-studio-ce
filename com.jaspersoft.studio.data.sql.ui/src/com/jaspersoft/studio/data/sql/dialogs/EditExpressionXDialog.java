@@ -17,7 +17,9 @@ package com.jaspersoft.studio.data.sql.dialogs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 
@@ -47,8 +49,8 @@ import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.ParameterPOperand;
+import com.jaspersoft.studio.data.sql.model.query.operand.UnknownOperand;
 import com.jaspersoft.studio.data.sql.widgets.Factory;
-import com.jaspersoft.studio.data.sql.widgets.FieldWidget;
 
 public class EditExpressionXDialog extends ATitledDialog {
 	private MExpressionX value;
@@ -123,21 +125,14 @@ public class EditExpressionXDialog extends ATitledDialog {
 
 			new Label(c, SWT.NONE).setText(" this one.");
 
-			bindingContext.bindValue(
-					SWTObservables.observeSelection(prevoperator),
-					PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeSelection(prevoperator), PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
 		} else {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 5;
 			new Label(cmp, SWT.NONE).setLayoutData(gd);
 		}
 
-		Composite c = new Composite(cmp, SWT.NONE);
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		c.setLayout(layout);
-		new FieldWidget(c, (FieldOperand) operands.get(0));
+		createSQLWidget(cmp);
 
 		Combo operator = new Combo(cmp, SWT.READ_ONLY);
 		operator.setItems(MExpressionX.FUNCTIONS);
@@ -162,9 +157,20 @@ public class EditExpressionXDialog extends ATitledDialog {
 		rcmp.setLayoutData(gd);
 
 		showRight();
-		bindingContext.bindValue(SWTObservables.observeSelection(operator),
-				PojoObservables.observeValue(this, "function")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(operator), PojoObservables.observeValue(this, "function")); //$NON-NLS-1$
 		return cmp;
+	}
+
+	protected void createSQLWidget(Composite cmp) {
+		Composite parent = new Composite(cmp, SWT.NONE);
+		GridLayout gd = new GridLayout(2, false);
+		gd.marginHeight = 0;
+		// gd.marginWidth = 0;
+		parent.setLayout(gd);
+		Set<Class<? extends AOperand>> mop = new HashSet<Class<? extends AOperand>>();
+		mop.add(FieldOperand.class);
+		mop.add(UnknownOperand.class);
+		Factory.createWidget(parent, operands, 0, value, mop);
 	}
 
 	private Map<String, Composite> map = new HashMap<String, Composite>();
@@ -229,28 +235,17 @@ public class EditExpressionXDialog extends ATitledDialog {
 	}
 
 	protected boolean isThreeOperands() {
-		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN)
-				|| function
-						.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED)
-				|| function
-						.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED)
-				|| function
-						.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED);
+		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_CLOSED)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_LEFT_CLOSED) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_BETWEEN_RIGHT_CLOSED);
 	}
 
 	protected boolean isTwoOperands() {
-		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_EQUAL)
-				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_NOTEQUAL)
-				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER)
-				|| function
-						.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER_OR_EQUAL)
-				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS)
-				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS_OR_EQUAL);
+		return function.equals(JRJdbcQueryExecuter.CLAUSE_ID_EQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_NOTEQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER)
+				|| function.equals(JRJdbcQueryExecuter.CLAUSE_ID_GREATER_OR_EQUAL) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS) || function.equals(JRJdbcQueryExecuter.CLAUSE_ID_LESS_OR_EQUAL);
 	}
 
 	protected void createInList(Composite cmp) {
-		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY
-				| SWT.BORDER);
+		final List inlist = new List(cmp, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 3;
 		gd.widthHint = 200;
@@ -280,8 +275,7 @@ public class EditExpressionXDialog extends ATitledDialog {
 
 		op3 = new Button(cmp, SWT.PUSH);
 		op3.setText("&Delete");
-		gd = new GridData(GridData.FILL_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_BEGINNING);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		op3.setLayoutData(gd);
 		op3.addSelectionListener(new SelectionAdapter() {
 			@Override

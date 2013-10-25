@@ -43,6 +43,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOrderByColumnFullAccess().getDirectionAlternatives_1_0(), "rule__OrderByColumnFull__DirectionAlternatives_1_0");
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAlternatives_0_0(), "rule__ExpressionFragmentSecond__CAlternatives_0_0");
 					put(grammarAccess.getExpressionFragmentAccess().getAlternatives(), "rule__ExpressionFragment__Alternatives");
+					put(grammarAccess.getExpressionFragmentAccess().getXexpAlternatives_2_0(), "rule__ExpressionFragment__XexpAlternatives_2_0");
 					put(grammarAccess.getExpressionAccess().getAlternatives_1(), "rule__Expression__Alternatives_1");
 					put(grammarAccess.getExpressionAccess().getIsnullAlternatives_1_0_0(), "rule__Expression__IsnullAlternatives_1_0_0");
 					put(grammarAccess.getComparisonAccess().getOperatorAlternatives_0_0(), "rule__Comparison__OperatorAlternatives_0_0");
@@ -97,6 +98,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionGroupAccess().getGroup(), "rule__ExpressionGroup__Group__0");
 					put(grammarAccess.getXExpressionAccess().getGroup(), "rule__XExpression__Group__0");
 					put(grammarAccess.getXExpressionAccess().getGroup_6(), "rule__XExpression__Group_6__0");
+					put(grammarAccess.getXExpression_Access().getGroup(), "rule__XExpression___Group__0");
+					put(grammarAccess.getXExpression_Access().getGroup_6(), "rule__XExpression___Group_6__0");
 					put(grammarAccess.getXExpressionParamsAccess().getGroup(), "rule__XExpressionParams__Group__0");
 					put(grammarAccess.getXExpressionParamsAccess().getGroup_1(), "rule__XExpressionParams__Group_1__0");
 					put(grammarAccess.getXExpressionParamsAccess().getGroup_1_1(), "rule__XExpressionParams__Group_1_1__0");
@@ -171,6 +174,9 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getXExpressionAccess().getXfAssignment_3(), "rule__XExpression__XfAssignment_3");
 					put(grammarAccess.getXExpressionAccess().getColAssignment_5(), "rule__XExpression__ColAssignment_5");
 					put(grammarAccess.getXExpressionAccess().getPrmAssignment_6_1(), "rule__XExpression__PrmAssignment_6_1");
+					put(grammarAccess.getXExpression_Access().getXfAssignment_3(), "rule__XExpression___XfAssignment_3");
+					put(grammarAccess.getXExpression_Access().getColAssignment_5(), "rule__XExpression___ColAssignment_5");
+					put(grammarAccess.getXExpression_Access().getPrmAssignment_6_1(), "rule__XExpression___PrmAssignment_6_1");
 					put(grammarAccess.getXExpressionParamsAccess().getEntriesAssignment_1_1_1(), "rule__XExpressionParams__EntriesAssignment_1_1_1");
 					put(grammarAccess.getJRParameterAccess().getJrprmAssignment(), "rule__JRParameter__JrprmAssignment");
 					put(grammarAccess.getExpressionAccess().getOp1Assignment_0(), "rule__Expression__Op1Assignment_0");

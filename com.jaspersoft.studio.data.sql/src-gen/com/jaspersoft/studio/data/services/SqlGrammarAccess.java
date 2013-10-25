@@ -773,13 +773,15 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExpAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cExpExpressionParserRuleCall_1_0 = (RuleCall)cExpAssignment_1.eContents().get(0);
 		private final Assignment cXexpAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final RuleCall cXexpXExpressionParserRuleCall_2_0 = (RuleCall)cXexpAssignment_2.eContents().get(0);
+		private final Alternatives cXexpAlternatives_2_0 = (Alternatives)cXexpAssignment_2.eContents().get(0);
+		private final RuleCall cXexpXExpressionParserRuleCall_2_0_0 = (RuleCall)cXexpAlternatives_2_0.eContents().get(0);
+		private final RuleCall cXexpXExpression_ParserRuleCall_2_0_1 = (RuleCall)cXexpAlternatives_2_0.eContents().get(1);
 		
 		//ExpressionFragment returns FullExpression:
-		//	expgroup=ExpressionGroup | exp=Expression | xexp=XExpression;
+		//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);
 		public ParserRule getRule() { return rule; }
 
-		//expgroup=ExpressionGroup | exp=Expression | xexp=XExpression
+		//expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_)
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//expgroup=ExpressionGroup
@@ -794,11 +796,17 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//Expression
 		public RuleCall getExpExpressionParserRuleCall_1_0() { return cExpExpressionParserRuleCall_1_0; }
 
-		//xexp=XExpression
+		//xexp=(XExpression | XExpression_)
 		public Assignment getXexpAssignment_2() { return cXexpAssignment_2; }
 
+		//XExpression | XExpression_
+		public Alternatives getXexpAlternatives_2_0() { return cXexpAlternatives_2_0; }
+
 		//XExpression
-		public RuleCall getXexpXExpressionParserRuleCall_2_0() { return cXexpXExpressionParserRuleCall_2_0; }
+		public RuleCall getXexpXExpressionParserRuleCall_2_0_0() { return cXexpXExpressionParserRuleCall_2_0_0; }
+
+		//XExpression_
+		public RuleCall getXexpXExpression_ParserRuleCall_2_0_1() { return cXexpXExpression_ParserRuleCall_2_0_1; }
 	}
 
 	public class ExpressionGroupElements extends AbstractParserRuleElementFinder {
@@ -843,7 +851,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cXfXFunctionEnumRuleCall_3_0 = (RuleCall)cXfAssignment_3.eContents().get(0);
 		private final Keyword cCommaKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		private final Assignment cColAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final RuleCall cColColumnFullParserRuleCall_5_0 = (RuleCall)cColAssignment_5.eContents().get(0);
+		private final RuleCall cColOperandParserRuleCall_5_0 = (RuleCall)cColAssignment_5.eContents().get(0);
 		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
 		private final Keyword cCommaKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
 		private final Assignment cPrmAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
@@ -851,10 +859,10 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
 		//XExpression returns XExpr:
-		//	"$X" {XExpr} "{" xf=XFunction "," col=ColumnFull ("," prm=XExpressionParams)? "}";
+		//	"$X" {XExpr} "{" xf=XFunction "," col=Operand ("," prm=XExpressionParams)? "}";
 		public ParserRule getRule() { return rule; }
 
-		//"$X" {XExpr} "{" xf=XFunction "," col=ColumnFull ("," prm=XExpressionParams)? "}"
+		//"$X" {XExpr} "{" xf=XFunction "," col=Operand ("," prm=XExpressionParams)? "}"
 		public Group getGroup() { return cGroup; }
 
 		//"$X"
@@ -875,17 +883,81 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//","
 		public Keyword getCommaKeyword_4() { return cCommaKeyword_4; }
 
-		//col=ColumnFull
+		//col=Operand
 		public Assignment getColAssignment_5() { return cColAssignment_5; }
 
-		//ColumnFull
-		public RuleCall getColColumnFullParserRuleCall_5_0() { return cColColumnFullParserRuleCall_5_0; }
+		//Operand
+		public RuleCall getColOperandParserRuleCall_5_0() { return cColOperandParserRuleCall_5_0; }
 
 		//("," prm=XExpressionParams)?
 		public Group getGroup_6() { return cGroup_6; }
 
 		//","
 		public Keyword getCommaKeyword_6_0() { return cCommaKeyword_6_0; }
+
+		//prm=XExpressionParams
+		public Assignment getPrmAssignment_6_1() { return cPrmAssignment_6_1; }
+
+		//XExpressionParams
+		public RuleCall getPrmXExpressionParamsParserRuleCall_6_1_0() { return cPrmXExpressionParamsParserRuleCall_6_1_0; }
+
+		//"}"
+		public Keyword getRightCurlyBracketKeyword_7() { return cRightCurlyBracketKeyword_7; }
+	}
+
+	public class XExpression_Elements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "XExpression_");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cXKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Action cXExprAction_1 = (Action)cGroup.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cXfAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cXfXFunctionEnumRuleCall_3_0 = (RuleCall)cXfAssignment_3.eContents().get(0);
+		private final Keyword cVerticalLineKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cColAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cColOperandParserRuleCall_5_0 = (RuleCall)cColAssignment_5.eContents().get(0);
+		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
+		private final Keyword cVerticalLineKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final Assignment cPrmAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cPrmXExpressionParamsParserRuleCall_6_1_0 = (RuleCall)cPrmAssignment_6_1.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		
+		//XExpression_ returns XExpr:
+		//	"$X" {XExpr} "{" xf=XFunction "|" col=Operand ("|" prm=XExpressionParams)? "}";
+		public ParserRule getRule() { return rule; }
+
+		//"$X" {XExpr} "{" xf=XFunction "|" col=Operand ("|" prm=XExpressionParams)? "}"
+		public Group getGroup() { return cGroup; }
+
+		//"$X"
+		public Keyword getXKeyword_0() { return cXKeyword_0; }
+
+		//{XExpr}
+		public Action getXExprAction_1() { return cXExprAction_1; }
+
+		//"{"
+		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
+
+		//xf=XFunction
+		public Assignment getXfAssignment_3() { return cXfAssignment_3; }
+
+		//XFunction
+		public RuleCall getXfXFunctionEnumRuleCall_3_0() { return cXfXFunctionEnumRuleCall_3_0; }
+
+		//"|"
+		public Keyword getVerticalLineKeyword_4() { return cVerticalLineKeyword_4; }
+
+		//col=Operand
+		public Assignment getColAssignment_5() { return cColAssignment_5; }
+
+		//Operand
+		public RuleCall getColOperandParserRuleCall_5_0() { return cColOperandParserRuleCall_5_0; }
+
+		//("|" prm=XExpressionParams)?
+		public Group getGroup_6() { return cGroup_6; }
+
+		//"|"
+		public Keyword getVerticalLineKeyword_6_0() { return cVerticalLineKeyword_6_0; }
 
 		//prm=XExpressionParams
 		public Assignment getPrmAssignment_6_1() { return cPrmAssignment_6_1; }
@@ -2087,6 +2159,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private ExpressionFragmentElements pExpressionFragment;
 	private ExpressionGroupElements pExpressionGroup;
 	private XExpressionElements pXExpression;
+	private XExpression_Elements pXExpression_;
 	private XExpressionParamsElements pXExpressionParams;
 	private JRParameterElements pJRParameter;
 	private ExpressionElements pExpression;
@@ -2358,7 +2431,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionFragment returns FullExpression:
-	//	expgroup=ExpressionGroup | exp=Expression | xexp=XExpression;
+	//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);
 	public ExpressionFragmentElements getExpressionFragmentAccess() {
 		return (pExpressionFragment != null) ? pExpressionFragment : (pExpressionFragment = new ExpressionFragmentElements());
 	}
@@ -2378,13 +2451,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//XExpression returns XExpr:
-	//	"$X" {XExpr} "{" xf=XFunction "," col=ColumnFull ("," prm=XExpressionParams)? "}";
+	//	"$X" {XExpr} "{" xf=XFunction "," col=Operand ("," prm=XExpressionParams)? "}";
 	public XExpressionElements getXExpressionAccess() {
 		return (pXExpression != null) ? pXExpression : (pXExpression = new XExpressionElements());
 	}
 	
 	public ParserRule getXExpressionRule() {
 		return getXExpressionAccess().getRule();
+	}
+
+	//XExpression_ returns XExpr:
+	//	"$X" {XExpr} "{" xf=XFunction "|" col=Operand ("|" prm=XExpressionParams)? "}";
+	public XExpression_Elements getXExpression_Access() {
+		return (pXExpression_ != null) ? pXExpression_ : (pXExpression_ = new XExpression_Elements());
+	}
+	
+	public ParserRule getXExpression_Rule() {
+		return getXExpression_Access().getRule();
 	}
 
 	//XExpressionParams returns Prms:

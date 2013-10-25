@@ -18,6 +18,8 @@ package com.jaspersoft.studio.data.sql.ui.metadata;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -243,7 +245,7 @@ public class DBMetadata {
 		if (connection != null)
 			try {
 				DatabaseMetaData meta = connection.getMetaData();
-				tableTypes = MetaDataUtil.readTableTypes(meta);
+				tableTypes = DBMetadata.readTableTypes(meta);
 				List<MSqlSchema> mcurrent = MetaDataUtil.readSchemas(monitor, root, meta, schema);
 				updateUI(root);
 				for (MSqlSchema mcs : mcurrent)
@@ -452,6 +454,15 @@ public class DBMetadata {
 			designer.showInfo("");
 			designer.updateMetadata();
 		}
+	}
+
+	public static List<String> readTableTypes(DatabaseMetaData meta) throws SQLException {
+		List<String> tableTypes = new ArrayList<String>();
+		ResultSet rs = meta.getTableTypes();
+		while (rs.next())
+			tableTypes.add(rs.getString("TABLE_TYPE"));
+		rs.close();
+		return tableTypes;
 	}
 
 }

@@ -37,7 +37,7 @@ public class NumberWidget extends AScalarWidget {
 	@Override
 	protected void createWidget(Composite parent) {
 		GridLayout layout = new GridLayout(2, false);
-		layout.marginHeight = 0;
+		layout.marginHeight = 2;
 		layout.marginWidth = 0;
 		layout.horizontalSpacing = 0;
 		layout.verticalSpacing = 0;

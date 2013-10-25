@@ -78,7 +78,7 @@ public class ConvertSelectColumns {
 		}
 	}
 
-	protected static String operands2String(SQLQueryDesigner designer, ANode qroot, ANode parent, Operands ops, MSelect msel) {
+	public static String operands2String(SQLQueryDesigner designer, ANode qroot, ANode parent, Operands ops, MSelect msel) {
 		Operand op = ops.getOp1();
 		if (op == null && ops.getLeft() != null)
 			op = ops.getLeft().getOp1();
