@@ -100,7 +100,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		/**
 		 * The model of the selected element
 		 */
-		protected MGraphicElementLineBox model;
+		protected List<MGraphicElementLineBox> models = new ArrayList<MGraphicElementLineBox>();
 		
 		/**
 		 * A listener to uniform in the toolbar change done by the property tab
@@ -142,7 +142,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * image will be used
 		 */
 		protected void setCorrectValue(){
-			if (combo != null && !combo.isDisposed() && model != null){
+			if (combo != null && !combo.isDisposed() && models != null && !models.isEmpty()){
 				TemplateBorder actualBorder = getElementAttributes();
 				int index = exampleImages.indexOf(actualBorder);
 					if (index != -1) combo.select(index);
@@ -202,6 +202,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * @return
 		 */
 		private TemplateBorder getElementAttributes(){
+			MGraphicElementLineBox model = models.get(0);
 			MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
 			TemplateBorder top = getElementAttribute(MLineBox.LINE_PEN_TOP, lb);
 			TemplateBorder left = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
@@ -219,22 +220,23 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 */
 		private void changeProperty() {
 			  if (combo.getSelectionIndex()<exampleImages.size()){
-					TemplateBorder selectedElement = exampleImages.get(combo.getSelectionIndex());
 					CompoundCommand cc = new CompoundCommand("Change border"); //$NON-NLS-1$
-					MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-					
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
-					changeAllProperties(cc,selectedElement,lp);
-					
-					lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
-					changeAllProperties(cc,selectedElement,lp);
-					
-					lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
-					changeAllProperties(cc,selectedElement,lp);
-					
-					lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-					changeAllProperties(cc,selectedElement,lp);
-	
+			  	for(MGraphicElementLineBox model : models){
+						TemplateBorder selectedElement = exampleImages.get(combo.getSelectionIndex());
+						MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+						
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
+						changeAllProperties(cc,selectedElement,lp);
+						
+						lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
+						changeAllProperties(cc,selectedElement,lp);
+						
+						lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
+						changeAllProperties(cc,selectedElement,lp);
+						
+						lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
+						changeAllProperties(cc,selectedElement,lp);
+			  	}
 					CommandStack cs = getCommandStack();
 					cs.execute(cc);
 			  }
@@ -287,7 +289,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			comboData.minimumWidth = 130;
 			comboData.minimumHeight = 20;
 			combo.setLayoutData(comboData);
-			
+			models.clear();
 			if (selection != null) {
 				StructuredSelection ss = (StructuredSelection) selection;
 				for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
@@ -295,8 +297,9 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 					if (obj instanceof EditPart)
 						obj = ((EditPart) obj).getModel();
 					if (obj instanceof MGraphicElementLineBox) {
-						model = (MGraphicElementLineBox) obj;
+						MGraphicElementLineBox model = (MGraphicElementLineBox) obj;
 						model.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+						models.add(model);
 					}
 				}
 			}
@@ -352,15 +355,15 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		@Override
 		public void setSelection(ISelection selection) {
 			this.selection = selection;
-			if (model != null) {
-				model.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
-				model = null;
+			if (models != null) {
+				for (MGraphicElementLineBox model : models)
+					model.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
 			}
-			
+			models.clear();
 		}
 		
 		/**
-		 * Load the imege for every preset and insert them into the combo element
+		 * Load the image for every preset and insert them into the combo element
 		 */
 		private void loadImages() {
 			TemplateBorder.setWidth(100);
