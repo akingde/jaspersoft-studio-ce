@@ -48,6 +48,7 @@ import com.jaspersoft.studio.server.action.resource.DownloadFileAction;
 import com.jaspersoft.studio.server.action.resource.ImportDataSourceInJSSAction;
 import com.jaspersoft.studio.server.action.resource.OpenInEditorAction;
 import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
+import com.jaspersoft.studio.server.action.resource.PasteResourceAsLinkAction;
 import com.jaspersoft.studio.server.action.resource.PropertiesAction;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.action.resource.RunReportUnitAction;
@@ -81,6 +82,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private CutResourceAction cutAction;
 	private CopyResourceAction copyAction;
 	private PasteResourceAction pasteAction;
+	private PasteResourceAsLinkAction pasteLinkAction;
 
 	private AddResourceAction addAction;
 
@@ -115,6 +117,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 			copyAction = new CopyResourceAction(treeViewer);
 		if (pasteAction == null)
 			pasteAction = new PasteResourceAction(treeViewer);
+		if (pasteLinkAction == null)
+			pasteLinkAction = new PasteResourceAsLinkAction(treeViewer);
 
 		if (addAction == null)
 			addAction = new AddResourceAction(treeViewer);
@@ -147,6 +151,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 			if (pasteAction.isEnabled())
 				lst.add(pasteAction);
+			if (pasteLinkAction.isEnabled())
+				lst.add(pasteLinkAction);
 			lst.add(new Separator());
 
 			if (editServerAction.isEnabled())
@@ -184,6 +190,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 				lst.add(copyAction);
 			if (pasteAction.isEnabled())
 				lst.add(pasteAction);
+			if (pasteLinkAction.isEnabled())
+				lst.add(pasteLinkAction);
 
 			if (deleteAction.isEnabled())
 				lst.add(deleteAction);

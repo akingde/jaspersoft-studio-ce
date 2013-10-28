@@ -53,6 +53,7 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 public class PasteResourceAction extends Action {
 	private TreeViewer treeViewer;
 	private TreeSelection s;
+	protected Object contents;
 
 	public PasteResourceAction(TreeViewer treeViewer) {
 		super();
@@ -68,8 +69,9 @@ public class PasteResourceAction extends Action {
 	@Override
 	public boolean isEnabled() {
 		boolean res = super.isEnabled();
-		if (res && Clipboard.getDefault().getContents() != null && Clipboard.getDefault().getContents() instanceof List<?>) {
-			List<?> list = (List<?>) Clipboard.getDefault().getContents();
+		contents = Clipboard.getDefault().getContents();
+		if (res && contents != null && contents instanceof List<?>) {
+			List<?> list = (List<?>) contents;
 			ANode parent = getSelected();
 			for (Object obj : list)
 				if (obj instanceof MResource && obj instanceof ICopyable) {
@@ -81,14 +83,13 @@ public class PasteResourceAction extends Action {
 		return false;
 	}
 
-	private ANode getSelected() {
+	protected ANode getSelected() {
 		s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
-			final Object obj = p[i].getLastSegment();
-			if (obj instanceof MResource || obj instanceof MServerProfile) {
+			Object obj = p[i].getLastSegment();
+			if (obj instanceof MResource || obj instanceof MServerProfile)
 				return (ANode) obj;
-			}
 		}
 		return null;
 	}
@@ -181,23 +182,21 @@ public class PasteResourceAction extends Action {
 					} else if (parent instanceof MReportUnit) {
 						ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
 
-						String ruuri = prd.getUriString();
-						origin.setParentFolder(ruuri + "_files/" + origin.getName());
-						origin.setIsNew(true);
 						String oldName = origin.getName();
 						String oldLabel = origin.getLabel();
 
-						origin.setName(getRName(oldName, prd.getChildren()));
-						origin.setLabel(origin.getName());
+						origin = doPasteIntoReportUnit(parent, m, prd, origin);
 
 						prd.getChildren().add(origin);
 						File file = FileUtils.createTempFile("tmp", "file");
 						try {
 							ws.get(origin, file);
-						} catch (Exception e) {
-							e.printStackTrace();
+						} catch (Throwable e) {
+							// e.printStackTrace();
 							file = null;
 						}
+						// WSClientHelper.saveResource((MReportUnit) parent, monitor,
+						// false);
 						ws.modifyReportUnitResource(prd.getUriString(), origin, file);
 
 						origin.setName(oldName);
@@ -217,6 +216,16 @@ public class PasteResourceAction extends Action {
 		toRefresh.add(parent);
 		for (ANode n : toRefresh)
 			refreshNode(n, monitor);
+	}
+
+	protected ResourceDescriptor doPasteIntoReportUnit(ANode parent, MResource m, ResourceDescriptor prd, ResourceDescriptor origin) {
+		String ruuri = prd.getUriString();
+		origin.setParentFolder(ruuri + "_files/" + origin.getName());
+		origin.setIsNew(true);
+
+		origin.setName(getRName(origin.getName(), prd.getChildren()));
+		origin.setLabel(origin.getName());
+		return origin;
 	}
 
 	private String getRName(String name, List<?> children) {
