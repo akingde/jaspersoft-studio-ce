@@ -115,8 +115,8 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 			mrunit.addChild(tm.get(i), i + indx);
 
 		List<MInputControl> ics = doBuildICList(mrunit);
-		IConnection c = doGetFullResources(mrunit, ics);
-		doSaveBack(c, mrunit.getValue().getUriString(), ics);
+		IConnection c = doGetFullResources(monitor, mrunit, ics);
+		doSaveBack(monitor, c, mrunit.getValue().getUriString(), ics);
 		ServerManager.selectIfExists(monitor, mrunit);
 		return Status.OK_STATUS;
 	}
@@ -129,15 +129,15 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 		return ics;
 	}
 
-	protected IConnection doGetFullResources(MReportUnit mrunit, List<MInputControl> ics) {
+	protected IConnection doGetFullResources(IProgressMonitor monitor, MReportUnit mrunit, List<MInputControl> ics) {
 		IConnection c = null;
 		try {
 			c = ((MServerProfile) mrunit.getRoot()).getWsClient();
 			for (MInputControl n : ics) {
 				try {
 					ResourceDescriptor rd = n.getValue();
-					n.setValue(WSClientHelper.getResource(c, rd, null));
-					c.delete(rd, mrunit.getValue().getUriString());
+					n.setValue(WSClientHelper.getResource(monitor, c, rd, null));
+					c.delete(monitor, rd, mrunit.getValue().getUriString());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -148,11 +148,11 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 		return c;
 	}
 
-	protected void doSaveBack(IConnection c, String ruuri, List<MInputControl> ics) {
+	protected void doSaveBack(IProgressMonitor monitor, IConnection c, String ruuri, List<MInputControl> ics) {
 		for (MInputControl n : ics) {
 			try {
 				n.getValue().setIsNew(true);
-				c.modifyReportUnitResource(ruuri, n.getValue(), null);
+				c.modifyReportUnitResource(monitor, ruuri, n.getValue(), null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

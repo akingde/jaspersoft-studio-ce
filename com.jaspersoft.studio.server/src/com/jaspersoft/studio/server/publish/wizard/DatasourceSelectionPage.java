@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -68,7 +69,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 			try {
 				ResourceDescriptor oldru = ((MReportUnit) resource).getValue();
 				if (SelectorDatasource.getDatasource(oldru) == null) {
-					ResourceDescriptor ru = WSClientHelper.getResource(resource, oldru);
+					ResourceDescriptor ru = WSClientHelper.getResource(new NullProgressMonitor(), resource, oldru);
 					oldru.getChildren().add(SelectorDatasource.getDatasource(ru));
 				}
 			} catch (Exception e) {

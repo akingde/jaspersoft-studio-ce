@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -99,24 +100,25 @@ public class JSFileResolver extends SimpleFileResolver {
 				return f;
 			String objectUri = fileName.substring(5);
 			try {
+				IProgressMonitor monitor = new NullProgressMonitor();
 				if (objectUri.contains("/")) {
 					// Locate the resource inside the repository...
 					ResourceDescriptor r = new ResourceDescriptor();
 					r.setUriString(objectUri);
-					r = c.get(r, null);
+					r = c.get(monitor, r, null);
 					if (r.getIsReference())
 						r = ReferenceResolver.resolveReference(c, r, null);
 
 					f = File.createTempFile("jrsfr", r.getName());
-					c.get(r, f);
+					c.get(monitor, r, f);
 				} else if (runitUri != null) {
 					// Locate the resource inside the report unit, if any...
 					if (reportUnitResources == null) {
 						ResourceDescriptor rd = new ResourceDescriptor();
 						rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 						rd.setUriString(runitUri);
-						rd = c.get(rd, null);
-						reportUnitResources = c.list(rd);
+						rd = c.get(monitor, rd, null);
+						reportUnitResources = c.list(monitor, rd);
 						if (reportUnitResources == null) {
 							reportUnitResources = new ArrayList<ResourceDescriptor>();
 						}
@@ -130,7 +132,7 @@ public class JSFileResolver extends SimpleFileResolver {
 							r = ReferenceResolver.resolveReference(c, r, null);
 						if (isFileResource(r)) {
 							f = File.createTempFile("jrsfr", r.getName());
-							c.get(r, f);
+							c.get(monitor, r, f);
 							break;
 						}
 					}

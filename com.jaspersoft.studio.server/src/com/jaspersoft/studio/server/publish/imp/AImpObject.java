@@ -56,12 +56,12 @@ public abstract class AImpObject {
 				popt.setExpression("\"repo:" + f.getName() + "\"");
 			fileset.add(str);
 
-			return addResource(mrunit, fileset, f, popt);
+			return addResource(monitor, mrunit, fileset, f, popt);
 		}
 		return null;
 	}
 
-	protected AFileResource addResource(MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		ResourceDescriptor rd = null;
@@ -85,7 +85,7 @@ public abstract class AImpObject {
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
-		PublishUtil.getResources(jrConfig).add(mres);
+		PublishUtil.getResources(monitor, jrConfig).add(mres);
 		return mres;
 	}
 

@@ -20,6 +20,7 @@ import java.io.File;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -66,7 +67,7 @@ public class ResourceBundlePageContent extends AFileResourcePageContent {
 		gd.horizontalSpan = 3;
 		txt.setLayoutData(gd);
 	}
-	
+
 	@Override
 	protected String getIntialPattern() {
 		return "*.properties";
@@ -84,7 +85,7 @@ public class ResourceBundlePageContent extends AFileResourcePageContent {
 						f = File.createTempFile("jrsimgfile", ".properties"); //$NON-NLS-1$ //$NON-NLS-2$
 						f.deleteOnExit();
 						f.createNewFile();
-						WSClientHelper.getResource(res, res.getValue(), f);
+						WSClientHelper.getResource(new NullProgressMonitor(), res, res.getValue(), f);
 					}
 					if (f != null && f.exists()) {
 						txt.setText(FileUtils.readFileAsAString(f));

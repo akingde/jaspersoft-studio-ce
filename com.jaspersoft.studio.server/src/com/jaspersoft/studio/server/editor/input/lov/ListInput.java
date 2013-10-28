@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -82,7 +83,7 @@ public class ListInput implements IInput {
 			ResourceDescriptor tmpRd = new ResourceDescriptor();
 			tmpRd.setUriString(rd2.getReferenceUri());
 			try {
-				tmpRd = rdprm.getWsClient().get(tmpRd, null);
+				tmpRd = rdprm.getWsClient().get(new NullProgressMonitor(), tmpRd, null);
 				items = tmpRd.getListOfValues();
 			} catch (Exception ex) {
 				UIUtils.showError(ex);

@@ -24,6 +24,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -64,7 +65,7 @@ public class PropertiesAction extends Action {
 			if (obj instanceof MResource) {
 				try {
 					MResource mres = (MResource) obj;
-					mres.setValue(WSClientHelper.getResource(mres, mres.getValue()));
+					mres.setValue(WSClientHelper.getResource(new NullProgressMonitor(), mres, mres.getValue()));
 
 					ResourceWizard wizard = new ResourceWizard(mres, mres);
 					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);

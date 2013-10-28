@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationUpdater;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -311,7 +312,7 @@ public abstract class AFileResourcePageContent extends APageContent {
 	protected void doSaveFile(String filename) {
 		if (filename != null) {
 			try {
-				WSClientHelper.getResource(AFileResourcePageContent.this.res, res.getValue(), filename);
+				WSClientHelper.getResource(new NullProgressMonitor(), AFileResourcePageContent.this.res, res.getValue(), filename);
 				File file = new File(filename);
 				int dotPos = filename.lastIndexOf("."); //$NON-NLS-1$
 				String strFilename = filename.substring(0, dotPos);

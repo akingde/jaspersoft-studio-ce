@@ -553,7 +553,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 							MReportUnit mReportUnit = (MReportUnit) n;
 							String res = jDesign.getProperty(AExporter.PROP_REPORTRESOURCE);
 							if (!Misc.isNullOrEmpty(res)) {
-								mReportUnit.setValue(WSClientHelper.getResource(n, mReportUnit.getValue()));
+								mReportUnit.setValue(WSClientHelper.getResource(monitor, n, mReportUnit.getValue()));
 								List<ResourceDescriptor> children = mReportUnit.getValue().getChildren();
 								ResourceDescriptor rd = null;
 								for (ResourceDescriptor c : children) {

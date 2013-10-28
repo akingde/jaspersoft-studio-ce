@@ -112,7 +112,7 @@ public class AExporter {
 
 	private IFile downloadFile(AFileResource res, ResourceDescriptor rd, IFile f, IProgressMonitor monitor) {
 		try {
-			WSClientHelper.getResource(res, rd, new File(f.getRawLocationURI()));
+			WSClientHelper.getResource(monitor, res, rd, new File(f.getRawLocationURI()));
 			f.refreshLocal(1, monitor);
 		} catch (Exception e) {
 			UIUtils.showError(e);

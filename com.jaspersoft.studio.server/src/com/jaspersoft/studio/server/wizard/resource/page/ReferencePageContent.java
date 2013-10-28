@@ -22,6 +22,7 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -50,8 +51,7 @@ import com.jaspersoft.studio.server.wizard.resource.APageContent;
 
 public class ReferencePageContent extends APageContent {
 
-	public ReferencePageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ReferencePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -73,8 +73,7 @@ public class ReferencePageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(composite,
-				Messages.RDReferencePage_referencedesc);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(composite, Messages.RDReferencePage_referencedesc);
 
 		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -85,10 +84,7 @@ public class ReferencePageContent extends APageContent {
 
 			public void widgetSelected(SelectionEvent e) {
 				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell,
-						ServerManager
-								.getMServerProfileCopy((MServerProfile) pnode
-										.getRoot())) {
+				RepositoryDialog rd = new RepositoryDialog(shell, ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot())) {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
@@ -99,8 +95,7 @@ public class ReferencePageContent extends APageContent {
 				if (rd.open() == Dialog.OK) {
 					MResource rs = rd.getResource();
 					if (rs != null) {
-						res.getValue().setReferenceUri(
-								rs.getValue().getUriString());
+						res.getValue().setReferenceUri(rs.getValue().getUriString());
 						loadReference(res.getValue());
 						bindingContext.updateTargets();
 					}
@@ -115,38 +110,32 @@ public class ReferencePageContent extends APageContent {
 		gd.horizontalSpan = 3;
 		cmp.setLayoutData(gd);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
-				Messages.RDReferencePage_parentfolder);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_parentfolder);
 		tparent = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tparent.setEnabled(false);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
-				Messages.RDReferencePage_type);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_type);
 		ttype = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ttype.setEnabled(false);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
-				Messages.RDReferencePage_creationdate);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_creationdate);
 		tcdate = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tcdate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tcdate.setEnabled(false);
 
 		com.jaspersoft.studio.utils.UIUtil.createSeparator(cmp, 2);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
-				Messages.RDReferencePage_refid);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refid);
 		tid = new Text(cmp, SWT.BORDER);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
-				Messages.RDReferencePage_refname);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refname);
 		tname = new Text(cmp, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp,
-				Messages.RDReferencePage_refdesc);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refdesc);
 		tdesc = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
@@ -164,39 +153,20 @@ public class ReferencePageContent extends APageContent {
 			bindingContext.removeBinding(b);
 			b.dispose();
 		}
-		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
-				PojoObservables.observeValue(res.getValue(), "referenceUri")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE), PojoObservables.observeValue(res.getValue(), "referenceUri")); //$NON-NLS-1$
 		if (ref != null) {
-			bindingContext.bindValue(
-					SWTObservables.observeText(tparent, SWT.NONE),
-					PojoObservables.observeValue(ref, "parentFolder")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(ref, "parentFolder")); //$NON-NLS-1$
 
-			bindingContext.bindValue(
-					SWTObservables.observeText(tcdate, SWT.NONE),
-					PojoObservables.observeValue(ref, "creationDate")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(ref, "creationDate")); //$NON-NLS-1$
 
-			bindingContext.bindValue(
-					SWTObservables.observeText(ttype, SWT.NONE),
-					PojoObservables.observeValue(ref, "wsType")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(ref, "wsType")); //$NON-NLS-1$
 
-			bindingContext
-					.bindValue(
-							SWTObservables.observeText(tid, SWT.Modify),
-							PojoObservables.observeValue(ref, "name"), //$NON-NLS-1$
-							new UpdateValueStrategy()
-									.setAfterConvertValidator(new EmptyStringValidator()),
-							null);
+			bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify), PojoObservables.observeValue(ref, "name"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
 
-			bindingContext
-					.bindValue(
-							SWTObservables.observeText(tname, SWT.Modify),
-							PojoObservables.observeValue(ref, "label"), //$NON-NLS-1$
-							new UpdateValueStrategy()
-									.setAfterConvertValidator(new EmptyStringValidator()),
-							null);
-			bindingContext.bindValue(
-					SWTObservables.observeText(tdesc, SWT.Modify),
-					PojoObservables.observeValue(ref, "description")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(ref, "label"), //$NON-NLS-1$
+					new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
+			bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(ref, "description")); //$NON-NLS-1$
 		}
 		bindingContext.updateTargets();
 	}
@@ -212,7 +182,7 @@ public class ReferencePageContent extends APageContent {
 
 	private void loadReference(ResourceDescriptor rd) {
 		try {
-			ref = WSClientHelper.getReference(pnode, rd);
+			ref = WSClientHelper.getReference(new NullProgressMonitor(), pnode, rd);
 			if (ref != null) {
 				bind();
 				bindingContext.updateTargets();

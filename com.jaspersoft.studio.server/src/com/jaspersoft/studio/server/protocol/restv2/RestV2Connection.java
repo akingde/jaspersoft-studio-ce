@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
@@ -21,7 +22,7 @@ public class RestV2Connection implements IConnection {
 	private ServerProfile sp;
 
 	@Override
-	public boolean connect(ServerProfile sp) throws Exception {
+	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		this.sp = sp;
 		client = new HttpClient();
 		getServerInfo();
@@ -37,86 +38,75 @@ public class RestV2Connection implements IConnection {
 		if (serverInfo != null)
 			return serverInfo;
 
-		HttpMethod m = HttpUtils.get(client, sp.getUrl() + SUFFIX
-				+ "serverInfo");
+		HttpMethod m = HttpUtils.get(client, sp.getUrl() + SUFFIX + "serverInfo");
 		ObjectMapper mapper = new ObjectMapper();
-		serverInfo = mapper.readValue(m.getResponseBodyAsStream(),
-				ServerInfo.class);
+		serverInfo = mapper.readValue(m.getResponseBodyAsStream(), ServerInfo.class);
 
 		return serverInfo;
 	}
 
 	@Override
-	public ResourceDescriptor get(ResourceDescriptor rd, File f)
-			throws Exception {
+	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ResourceDescriptor> list(ResourceDescriptor rd)
-			throws Exception {
+	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResourceDescriptor get(ResourceDescriptor rd, File outFile,
-			List<Argument> args) throws Exception {
+	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File outFile, List<Argument> args) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void move(ResourceDescriptor rd, String destFolderURI)
-			throws Exception {
+	public void move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ResourceDescriptor copy(ResourceDescriptor rd, String destFolderURI)
-			throws Exception {
+	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(ResourceDescriptor rd,
-			File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(String rUnitUri,
-			ResourceDescriptor rd, File inFile) throws Exception {
+	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, String rUnitUri, ResourceDescriptor rd, File inFile) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(ResourceDescriptor rd) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void delete(ResourceDescriptor rd, String reportUnitUri)
-			throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, String reportUnitUri) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(ResourceDescriptor rd,
-			Map<String, Object> prm, List<Argument> args) throws Exception {
+	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources() throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

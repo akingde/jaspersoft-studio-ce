@@ -67,7 +67,7 @@ public class ImpDataAdapter extends AImpObject {
 			fileset.add(f.getAbsolutePath());
 			PublishOptions popt = new PublishOptions();
 			popt.setDataset(jd);
-			AFileResource fr = addResource(mrunit, fileset, f, popt);
+			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
 			// jd.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
 			// "repo:" + fr.getValue().getUriString());
 		}
@@ -90,7 +90,7 @@ public class ImpDataAdapter extends AImpObject {
 	}
 
 	@Override
-	protected AFileResource addResource(MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		ResourceDescriptor rd = createResource(mrunit);
@@ -104,7 +104,7 @@ public class ImpDataAdapter extends AImpObject {
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
-		PublishUtil.getResources(jrConfig).add(mres);
+		PublishUtil.getResources(monitor, jrConfig).add(mres);
 		if (true) {
 			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject();
 			InputStream is = null;
@@ -141,7 +141,7 @@ public class ImpDataAdapter extends AImpObject {
 								mdaf.setFile(file);
 								mdaf.setPublishOptions(new PublishOptions());
 
-								PublishUtil.getResources(jrConfig).add(mdaf);
+								PublishUtil.getResources(monitor, jrConfig).add(mdaf);
 
 								setFileName(da, "repo:" + rd.getUriString());
 								f = FileUtils.createTempFile("tmp", "");

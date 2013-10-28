@@ -17,6 +17,7 @@ package com.jaspersoft.studio.server.publish.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -266,7 +267,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 	}
 
 	public void fillData() {
-		tableViewer.setInput(PublishUtil.getResources(jConfig));
+		tableViewer.setInput(PublishUtil.getResources(new NullProgressMonitor(), jConfig));
 		tableViewer.refresh();
 	}
 

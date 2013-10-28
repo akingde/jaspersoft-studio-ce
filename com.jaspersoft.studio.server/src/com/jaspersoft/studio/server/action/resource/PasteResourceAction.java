@@ -165,16 +165,16 @@ public class PasteResourceAction extends Action {
 					String newname = dURI + "/" + origin.getName();
 					if (parent instanceof MFolder) {
 						if (m.isCut()) {
-							ws.move(origin, dURI);
+							ws.move(monitor, origin, dURI);
 							m.setCut(false);
 						} else {
-							ResourceDescriptor newrd = ws.copy(origin, newname);
+							ResourceDescriptor newrd = ws.copy(monitor, origin, newname);
 							try {
 								newrd.setLabel(newrd.getName());
 								String newuri = dURI + (dURI.endsWith("/") ? "" : "/") + newrd.getName();
 								newrd.setUriString(newuri);
 
-								ws.addOrModifyResource(newrd, null);
+								ws.addOrModifyResource(monitor, newrd, null);
 							} catch (Exception ex) {
 								ex.printStackTrace();
 							}
@@ -190,21 +190,21 @@ public class PasteResourceAction extends Action {
 						prd.getChildren().add(origin);
 						File file = FileUtils.createTempFile("tmp", "file");
 						try {
-							ws.get(origin, file);
+							ws.get(monitor, origin, file);
 						} catch (Throwable e) {
 							// e.printStackTrace();
 							file = null;
 						}
 						// WSClientHelper.saveResource((MReportUnit) parent, monitor,
 						// false);
-						ws.modifyReportUnitResource(prd.getUriString(), origin, file);
+						ws.modifyReportUnitResource(monitor, prd.getUriString(), origin, file);
 
 						origin.setName(oldName);
 						origin.setLabel(oldLabel);
 
 						if (m.isCut()) {
 							m.setCut(false);
-							WSClientHelper.deleteResource(m);
+							WSClientHelper.deleteResource(monitor, m);
 						}
 					}
 				}

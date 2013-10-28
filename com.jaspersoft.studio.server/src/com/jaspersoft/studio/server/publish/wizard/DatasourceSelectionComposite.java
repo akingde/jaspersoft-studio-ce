@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -277,7 +278,7 @@ public class DatasourceSelectionComposite extends Composite {
 				ResourceDescriptor runit = res.getValue();
 				try {
 					ResourceDescriptor ref = rs.getValue();
-					ref = WSClientHelper.getResource(parent, ref);
+					ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
 					ref.setIsReference(true);
 					ref.setReferenceUri(ref.getUriString());
 					ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$

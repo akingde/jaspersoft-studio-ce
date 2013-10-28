@@ -77,8 +77,8 @@ public class ReportRunControler {
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
-							rdrepunit = WSClientHelper.getReportUnit(reportUnit);
-							List<ResourceDescriptor> list = cli.list(rdrepunit);
+							rdrepunit = WSClientHelper.getReportUnit(monitor, reportUnit);
+							List<ResourceDescriptor> list = cli.list(monitor, rdrepunit);
 							icm.getInputControls(list, cli);
 
 							// TODO search all the repository
@@ -168,7 +168,7 @@ public class ReportRunControler {
 						}
 					}
 
-					Map<String, FileContent> files = WSClientHelper.runReportUnit(reportUnit, prmcopy);
+					Map<String, FileContent> files = WSClientHelper.runReportUnit(monitor, reportUnit, prmcopy);
 					stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
 					for (String key : files.keySet()) {
 						FileContent fc = (FileContent) files.get(key);

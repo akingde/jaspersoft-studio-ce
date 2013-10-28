@@ -78,7 +78,7 @@ public class DeleteResourceAction extends Action {
 								throws InvocationTargetException,
 								InterruptedException {
 							try {
-								WSClientHelper.deleteResource((MResource) obj);
+								WSClientHelper.deleteResource(monitor, (MResource) obj);
 								Display.getDefault().asyncExec(new Runnable() {
 
 									public void run() {

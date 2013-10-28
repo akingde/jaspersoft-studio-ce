@@ -48,7 +48,7 @@ public class ImpResourceBundle extends AImpObject {
 			f = findFile(file, dpath + ".properties");
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
-			addResource(mrunit, fileset, f, new PublishOptions());
+			addResource(monitor, mrunit, fileset, f, new PublishOptions());
 		}
 		return f;
 	}

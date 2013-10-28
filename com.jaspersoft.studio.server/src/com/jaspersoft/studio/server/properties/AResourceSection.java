@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,8 +47,7 @@ public abstract class AResourceSection extends ASection {
 	private Button bexport;
 
 	@Override
-	protected void createSectionControls(Composite parent,
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+	protected void createSectionControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayout(new GridLayout(3, false));
@@ -60,21 +60,18 @@ public abstract class AResourceSection extends ASection {
 		bexport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.SAVE);
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.SAVE);
 				fd.setFilterExtensions(getFilter());
 				fd.setText("Save Resource To File ...");
 				String filename = fd.open();
 				if (filename != null) {
 					try {
-						WSClientHelper.getResource(res, res.getValue(),
-								filename);
+						WSClientHelper.getResource(new NullProgressMonitor(), res, res.getValue(), filename);
 						File file = new File(filename);
 						int dotPos = filename.lastIndexOf(".");
 						String strFilename = filename.substring(0, dotPos);
 
-						ImageTypeEnum itype = JRTypeSniffer
-								.getImageTypeValue(FileUtils.getBytes(file));
+						ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils.getBytes(file));
 						if (itype == ImageTypeEnum.GIF) {
 							fileRenamed(file, strFilename, ".gif");
 						} else if (itype == ImageTypeEnum.JPEG) {
@@ -93,8 +90,7 @@ public abstract class AResourceSection extends ASection {
 			private void fileRenamed(File file, String strFilename, String ext) {
 				String fname = strFilename + ext;
 				file.renameTo(new File(fname));
-				UIUtils.showWarning("Attention! file type is different, so it was renamed to:\n "
-						+ fname);
+				UIUtils.showWarning("Attention! file type is different, so it was renamed to:\n " + fname);
 			}
 
 		});
@@ -105,8 +101,7 @@ public abstract class AResourceSection extends ASection {
 		bimport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.OPEN);
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
 				fd.setFilterExtensions(getFilter());
 				fd.setText("Select Resource File ...");
 				String filename = fd.open();
@@ -118,8 +113,7 @@ public abstract class AResourceSection extends ASection {
 
 		});
 
-		trefuri = getWidgetFactory().createText(cmp, "",
-				SWT.BORDER | SWT.READ_ONLY);
+		trefuri = getWidgetFactory().createText(cmp, "", SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
@@ -131,8 +125,7 @@ public abstract class AResourceSection extends ASection {
 
 	@Override
 	protected void bind() {
-		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
-				PojoObservables.observeValue(res, "fileName"));
+		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE), PojoObservables.observeValue(res, "fileName"));
 	}
 
 	protected abstract String[] getFilter();
