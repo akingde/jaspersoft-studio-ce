@@ -41,16 +41,14 @@ public class IssueSubmissionHandler extends AbstractHandler {
 		IssueCreationWizard newWizard = IssueCreationWizard.createWizard();
 		if(newWizard!=null){
 			newWizard.setNeedsProgressMonitor(true);
-			Shell newShell = new Shell(UIUtils.getDisplay());
-			WizardDialog issueCreationDialog = new WizardDialog(newShell, newWizard){
+			Shell mainShell = UIUtils.getShell();
+			WizardDialog issueCreationDialog = new WizardDialog(mainShell, newWizard){
 				@Override
 				protected void setShellStyle(int newShellStyle) {
 					super.setShellStyle(SWT.SHELL_TRIM | SWT.MODELESS);
 				}
 			};
 			issueCreationDialog.open();
-			// Dispose the shell after the dialog has been closed
-			newShell.dispose();
 		}
 		else {
 			MessageDialog.openWarning(UIUtils.getShell(),
