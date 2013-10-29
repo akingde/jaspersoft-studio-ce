@@ -38,6 +38,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
+import com.jaspersoft.studio.editor.preview.PreviewModeDetails;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
@@ -420,4 +421,36 @@ public class ExtensionManager {
 		return null;
 	}
 
+	/**
+	 * Looks for contributions related to the specified preview mode ID.
+	 * 
+	 * @param previewModeID the preview mode identifier
+	 * @return the list of contributed information
+	 */
+	public List<PreviewModeDetails> getAllPreviewModeDetails(String previewModeID) {
+		IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				JaspersoftStudioPlugin.PLUGIN_ID, PreviewModeDetails.EXTENSION_POINT_ID); //$NON-NLS-1$
+		List<PreviewModeDetails> allDetails = new ArrayList<PreviewModeDetails>();
+		for(IConfigurationElement ce : elements) {
+			if(previewModeID.equals(ce.getAttribute("modeID")) || previewModeID == null) {
+				Object clazz;
+				try {
+					clazz = ce.createExecutableExtension("class");
+					if (clazz instanceof PreviewModeDetails) {
+						allDetails.add((PreviewModeDetails) clazz);
+					}
+				} catch (CoreException e) {
+					JaspersoftStudioPlugin.getInstance().logError("An error occurred while trying to create the new class.", e);
+				}
+			}
+		}
+		return allDetails;
+	}
+
+	/**
+	 * @return all the contributions for all the possible preview modes.
+	 */
+	public List<PreviewModeDetails> getAllPreviewModeDetails() {
+		return getAllPreviewModeDetails(null);
+	}
 }
