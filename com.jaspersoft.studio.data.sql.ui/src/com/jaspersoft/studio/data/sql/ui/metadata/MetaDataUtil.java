@@ -26,18 +26,19 @@ import com.jaspersoft.studio.model.MRoot;
 public class MetaDataUtil {
 	public synchronized static List<MSqlSchema> readSchemas(IProgressMonitor monitor, MRoot root, DatabaseMetaData meta, String[] cschemas) throws SQLException {
 		List<MSqlSchema> mcurrent = new ArrayList<MSqlSchema>();
-		ResultSet schemas = meta.getSchemas();
-		while (schemas.next()) {
-			String tableSchema = schemas.getString("TABLE_SCHEM");
-			String tableCatalog = null;
-			if (meta.supportsCatalogsInTableDefinitions())
-				tableCatalog = schemas.getString("TABLE_CATALOG");
+
+		boolean isSchema = meta.supportsSchemasInTableDefinitions();
+		boolean isCatalog = meta.supportsCatalogsInTableDefinitions();
+		ResultSet rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
+		while (rs.next()) {
+			String tableCatalog = isCatalog ? rs.getString("TABLE_CAT") : rs.getString("TABLE_CATALOG");
+			String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
 			MSqlSchema mschema = new MSqlSchema(root, tableSchema, tableCatalog);
 			new MDummy(mschema);
 			if (monitor.isCanceled())
 				break;
 		}
-		schemas.close();
+		rs.close();
 		if (cschemas != null)
 			for (String s : cschemas) {
 				for (INode n : root.getChildren()) {
@@ -53,9 +54,14 @@ public class MetaDataUtil {
 	public synchronized static void readSchema(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor, List<String> tableTypes) {
 		ResultSet rs = null;
 		try {
-			rs = meta.getSchemas();
+			boolean isSchema = meta.supportsSchemasInTableDefinitions();
+			boolean isCatalog = meta.supportsCatalogsInTableDefinitions();
+			rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
 			while (rs.next()) {
-				if (rs.getString("TABLE_SCHEM").equals(schema.getValue())) {
+				String tableCatalog = isCatalog ? rs.getString("TABLE_CAT") : rs.getString("TABLE_CATALOG");
+				String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
+
+				if (tableSchema.equals(schema.getValue())) {
 					schema.removeChildren();
 					schema.setNotInMetadata(false);
 
