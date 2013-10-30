@@ -391,7 +391,7 @@ public class DBMetadata {
 				treeViewer.setInput(DBMetadata.this.root);
 				designer.refreshQueryModel();
 				setFirstSelection();
-				if (root.getChildren().isEmpty()) {
+				if (isEmptySchema(root)) {
 					msg.setText("No Metadata.\nDouble click to refresh.");
 					stackLayout.topControl = mcmp;
 				} else
@@ -399,6 +399,15 @@ public class DBMetadata {
 				composite.layout(true);
 			}
 		});
+	}
+
+	public static boolean isEmptySchema(MRoot root) {
+		if (root.getChildren().isEmpty())
+			return true;
+		for (INode n : root.getChildren())
+			if (n instanceof MSqlSchema && !((MSqlSchema) n).isNotInMetadata())
+				return false;
+		return true;
 	}
 
 	protected void updateItermediateUI() {
