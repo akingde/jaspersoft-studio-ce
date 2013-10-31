@@ -63,6 +63,14 @@ public class SPColor extends ASPropertyWidget {
 				RGB newColor = cd.open();
 				if (newColor != null)
 					changeProperty(section, pDescriptor.getId(), new AlfaRGB(newColor, rgb == null ? 255 : rgb.getAlfa()));
+				/*com.jaspersoft.studio.property.color.chooser.ColorDialog cd = 
+						new com.jaspersoft.studio.property.color.chooser.ColorDialog(toolBar.getShell());
+				cd.setText(pDescriptor.getDisplayName());
+				AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
+				cd.setRGB(rgb == null ? null : rgb);
+				AlfaRGB newColor = cd.openAlfaRGB();
+				if (newColor != null)
+					changeProperty(section, pDescriptor.getId(), newColor);*/
 			}
 		});
 		foreButton.setToolTipText(pDescriptor.getDescription());
