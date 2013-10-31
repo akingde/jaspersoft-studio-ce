@@ -31,7 +31,9 @@ public class ColorsSelectorWidget extends Composite {
 	
 	private Point circlePosition = new Point(0, 0);
 	
-	private RGB selectedColor = null;
+	private RGB selectedColorRGB = null;
+	
+	private float[] selectedColorHSB = new float[3];
 	
 	private Composite colorComposite;
 	
@@ -75,11 +77,7 @@ public class ColorsSelectorWidget extends Composite {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				cachedSlider = null;
-				updatePosition(e);
-				paintPad();
-				paintSlider();
-      	callSelectionListeners();
+				padClicked(e);
 			}
 
 		});
@@ -89,11 +87,7 @@ public class ColorsSelectorWidget extends Composite {
 			@Override
 			public void mouseMove(MouseEvent e) {
 				if ((e.stateMask & SWT.BUTTON1) != 0){
-					cachedSlider = null;
-					updatePosition(e);
-					paintPad();
-					paintSlider();
-	      	callSelectionListeners();
+					padClicked(e);
 				}
 			}
 		});
@@ -108,11 +102,7 @@ public class ColorsSelectorWidget extends Composite {
 		slider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				cachedPad = null;
-				updateSlider(e);
-				paintPad();
-      	paintSlider();
-      	callSelectionListeners();
+				sliderClicked(e);
 			}
 		});
 		
@@ -121,21 +111,35 @@ public class ColorsSelectorWidget extends Composite {
 			@Override
 			public void mouseMove(MouseEvent e) {
 				if ((e.stateMask & SWT.BUTTON1) != 0){
-					cachedPad = null;
-					updateSlider(e);
-					paintPad();
-	      	paintSlider();
-	      	callSelectionListeners();
+					sliderClicked(e);
 				}
 			}
 		});
+	}
+	
+	private void padClicked(MouseEvent e){
+		cachedSlider = null;
+		updatePosition(e);
+		paintPad();
+		paintSlider();
+		setSelectedColorFromImage();
+  	callSelectionListeners();
+	}
+	
+	private void sliderClicked(MouseEvent e){
+		cachedPad = null;
+		updateSlider(e);
+  	paintSlider();
+		paintPad();
+		setSelectedColorFromImage();
+  	callSelectionListeners();
 	}
 	
 	private void callSelectionListeners(){
 		Event e = new Event();
 		e.widget = this;
 		SelectionEvent event = new SelectionEvent(e);
-		event.data = selectedColor;
+		event.data = selectedColorRGB;
 		for(SelectionListener listener : selListeners){
 			listener.widgetSelected(event);
 		}
@@ -225,29 +229,50 @@ public class ColorsSelectorWidget extends Composite {
     return imageData;
 	}
 	
+	public void setSelectedColor(float h, float s, float b, boolean callListener){
+		if (h < 0 || h > 360 || s < 0 || s > 1 || b < 0 || b > 1) return;
+		RGB color = new RGB(h,s,b);
+		int[] relativePositions = governor.getXYSlider(new float[]{h,s,b});
+		int relativeSlide = relativePositions[2];
+		int newSliderPosition = getAbsoluteSliderFromRelative(relativeSlide);
+		if (sliderPosition != newSliderPosition){
+			sliderPosition = newSliderPosition;
+			cachedPad = null;
+		}
+		int relativeX = relativePositions[0];
+		int relativeY = relativePositions[1];
+		Point newCirclePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
+		if (circlePosition != newCirclePosition){
+			circlePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
+			cachedSlider = null;
+		}
+		paintSlider();
+		paintPad();
+		selectedColorRGB = color;
+		selectedColorHSB = new float[]{h,s,b};
+  	if (callListener) callSelectionListeners();
+	}
+	
 	public void setSelectedColor(RGB color, boolean callListener){
-		if (color != null){
-			int relativeSlide = governor.getSlider(color);
-			int newSliderPosition = getAbsoluteSliderFromRelative(relativeSlide);
-			if (sliderPosition != newSliderPosition){
-				sliderPosition = newSliderPosition;
-				cachedPad = null;
-			}
+		if (color == null) return;
+		int[] relativePositions = governor.getXYSlider(color);
+		int relativeSlide = relativePositions[2];
+		int newSliderPosition = getAbsoluteSliderFromRelative(relativeSlide);
+		if (sliderPosition != newSliderPosition){
+			sliderPosition = newSliderPosition;
+			cachedPad = null;
 		}
-	  if (color != null){
-			int relativeX = governor.getX(color);
-			int relativeY = governor.getY(color);
-			Point newCirclePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
-			if (circlePosition != newCirclePosition){
-				circlePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
-				cachedSlider = null;
-			}
+		int relativeX = relativePositions[0];
+		int relativeY = relativePositions[1];
+		Point newCirclePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
+		if (circlePosition != newCirclePosition){
+			circlePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
+			cachedSlider = null;
 		}
-	  RGB oldSelectedColor = selectedColor;
   	paintSlider();
 		paintPad();
-		if (selectedColor == null || selectedColor.equals(oldSelectedColor))
-			selectedColor = color;
+		selectedColorRGB = color;
+		selectedColorHSB = color.getHSB();
   	if (callListener) callSelectionListeners();
 	}
 	
@@ -306,9 +331,6 @@ public class ColorsSelectorWidget extends Composite {
     }
     oldImage = newImage;
     if (circlePosition != null){
-      int pixelValue = newImage.getImageData().getPixel(circlePosition.x, circlePosition.y);
-      PaletteData palette =  newImage.getImageData().palette;
-      selectedColor = palette.getRGB(pixelValue);
     	gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
     	gc.setAntialias(SWT.ON);
     	gc.drawOval(circlePosition.x-2, circlePosition.y-2, 8, 8);
@@ -319,8 +341,21 @@ public class ColorsSelectorWidget extends Composite {
     colorComposite.setBackgroundImage(newImage);
 	}
 	
-	public RGB getSelectedColor(){
-		return selectedColor;
+	private void setSelectedColorFromImage(){
+		if (cachedPad != null){
+			ImageData data = cachedPad;
+			int pixelValue = data.getPixel(circlePosition.x, circlePosition.y);
+			selectedColorRGB = data.palette.getRGB(pixelValue);
+			selectedColorHSB = selectedColorRGB.getHSB();
+		}
+	}
+	
+	public RGB getSelectedColorRGB(){
+		return selectedColorRGB;
+	}
+	
+	public float[] getSelectedColorHSB(){
+		return selectedColorHSB;
 	}
 	
 	public void setSlider(int slider){

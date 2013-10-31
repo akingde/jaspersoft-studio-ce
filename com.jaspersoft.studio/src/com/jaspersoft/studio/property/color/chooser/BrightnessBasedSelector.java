@@ -46,29 +46,17 @@ public class BrightnessBasedSelector implements IWidgetGovernor{
 	public RGB getSliderColor(int x, int y, int sliderPosition) {
 		return getPadColor(x, y, sliderPosition);
 	}
-
-
-	@Override
-	public int getX(RGB color) {
-		return Math.round(color.getHSB()[0]);
-	}
-
-	@Override
-	public int getY(RGB color) {
-		return Math.abs(Math.round(100-color.getHSB()[1]*100));
-	}
-
-	@Override
-	public int getSlider(RGB color) {
-		return Math.abs(Math.round(100-color.getHSB()[2]*100));
-	}
-
-	@Override
-	public int[] getXYSlider(RGB color) {
-		float[] hsb = color.getHSB();
-		return new int[]{Math.round(hsb[1]*100), Math.round(hsb[2]*100), Math.round(hsb[0])};
-	}
 	
-	
+	@Override
+	public int[] getXYSlider(Object color) {
+		float[] hsb = null;
+		if (color instanceof RGB){
+			hsb = ((RGB)color).getHSB();
+		} else if (color instanceof float[]){
+			hsb = (float[])color;
+		}
+		if (hsb == null) return new int[]{0,0,0};
+		return new int[]{Math.round(Math.abs(360-hsb[0])), Math.abs(Math.round(100-hsb[1]*100)), Math.abs(Math.round(100-hsb[2]*100))};
+	}
 
 }

@@ -91,18 +91,17 @@ public class ColorDialog extends Dialog{
 						float h = (float)hue.getSelection();
 						float s = (float)saturation.getSelection()/100;
 						float b = (float)brightness.getSelection()/100;
-						RGB rgbColor = new RGB(h,s,b);
-						colorsSelector.setSelectedColor(rgbColor, false);
+						colorsSelector.setSelectedColor(h, s, b, false);
 						updateText(h,s,b);
 					} else if (e.widget == red || e.widget == green || e.widget == blue){
 						RGB rgbColor = new RGB(red.getSelection(),green.getSelection(),blue.getSelection());
 						colorsSelector.setSelectedColor(rgbColor, false);
-						updateText(rgbColor);
+						updateText(rgbColor, rgbColor.getHSB());
 					} else if (e.widget == hex){
 						RGB rgbColor = hexParser(hex.getText());
 						if (rgbColor != null){
 							colorsSelector.setSelectedColor(rgbColor, false);
-							updateText(rgbColor);
+							updateText(rgbColor, rgbColor.getHSB());
 						}
 					}
 					hue.getParent().getParent().setRedraw(true);
@@ -164,11 +163,10 @@ public class ColorDialog extends Dialog{
 	}
 	
 	private void updateText(){
-		RGB color = colorsSelector.getSelectedColor();
-		updateText(color);
+		updateText(colorsSelector.getSelectedColorRGB(), colorsSelector.getSelectedColorHSB());
 	}
 	
-	private void updateText(RGB color){
+	private void updateText(RGB color, float[] hsb){
 		synchronized (modfiedGuard) {
 			modfiedGuard = false;
 			hue.getParent().getParent().setRedraw(false);
@@ -176,7 +174,6 @@ public class ColorDialog extends Dialog{
 			green.setSelection(color.green);
 			blue.setSelection(color.blue);
 			hex.setText(getHexFromRGB(color));
-			float[] hsb = color.getHSB();
 			int h = Math.round(hsb[0]);
 			int s = Math.round(hsb[1]*100);
 			int b = Math.round(hsb[2]*100);
@@ -221,13 +218,13 @@ public class ColorDialog extends Dialog{
     	gc.setBackground(colorsSelector.getDisplay().getSystemColor(SWT.COLOR_WHITE));
       gc.fillRectangle(0, 0, imageData.width, imageData.height/2);
       gc.setAlpha(alpha);
-      gc.setBackground(ResourceManager.getColor(colorsSelector.getSelectedColor()));
+      gc.setBackground(ResourceManager.getColor(colorsSelector.getSelectedColorRGB()));
       gc.fillRectangle(0, 0, imageData.width, imageData.height/2);
       gc.setAlpha(255);
       gc.setBackground(ResourceManager.getColor(currentColor));
       gc.fillRectangle(0, imageData.height/2, imageData.width, imageData.height);
     } else {
-      gc.setBackground(ResourceManager.getColor(colorsSelector.getSelectedColor()));
+      gc.setBackground(ResourceManager.getColor(colorsSelector.getSelectedColorRGB()));
       gc.fillRectangle(0, 0, imageData.width, imageData.height);
     }
     if (actualPreviewImage != null){
@@ -243,7 +240,7 @@ public class ColorDialog extends Dialog{
 			currentColor = color;
 			alpha = 255;
 			if (alphaSlider != null) alphaSlider.setSelection(alpha);
-			if (previewComposite != null) updateText(currentColor);
+			if (previewComposite != null) updateText(currentColor, currentColor.getHSB());
 		}
 	}
 	
@@ -252,7 +249,7 @@ public class ColorDialog extends Dialog{
 			currentColor = color.getRgb();
 			alpha = color.getAlfa();
 			if (alphaSlider != null) alphaSlider.setSelection(alpha);
-			if (previewComposite != null) updateText(currentColor);
+			if (previewComposite != null) updateText(currentColor, currentColor.getHSB());
 		}
 	}
 	
@@ -354,7 +351,7 @@ public class ColorDialog extends Dialog{
 		rightPart.setLayout(new GridLayout(3,false));
 		rightPart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		hue = createRadio(leftPart, "H:", "°", new HueBasedSelector(), true, 0, 360);
+		hue = createRadio(leftPart, "H:", "ï¿½", new HueBasedSelector(), true, 0, 360);
 		saturation = createRadio(leftPart, "S:", "%", new SaturationBasedSelector(), false, 0, 100);
 		brightness = createRadio(leftPart, "B:", "%", new BrightnessBasedSelector(), false, 0, 100);
 		red = createRadio(rightPart, "R:", " ", new RedBasedSelector(), false, 0, 255);
@@ -427,7 +424,7 @@ public class ColorDialog extends Dialog{
 		int returnCode = super.open();
 		actualPreviewImage.dispose();
 		if (returnCode == Dialog.CANCEL) return null;
-		else return new AlfaRGB(colorsSelector.getSelectedColor(), alpha);
+		else return new AlfaRGB(colorsSelector.getSelectedColorRGB(), alpha);
 	}
 	
 	
@@ -435,7 +432,7 @@ public class ColorDialog extends Dialog{
 		int returnCode = super.open();
 		actualPreviewImage.dispose();
 		if (returnCode == Dialog.CANCEL) return null;
-		else return colorsSelector.getSelectedColor();
+		else return colorsSelector.getSelectedColorRGB();
 	}
 	
 	

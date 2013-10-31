@@ -44,24 +44,29 @@ public class RedBasedSelector implements IWidgetGovernor{
 		return getPadColor(x, y, sliderPosition);
 	}
 
-	@Override
 	public int getX(RGB color) {
 		return color.blue;
 	}
 
-	@Override
 	public int getY(RGB color) {
 		return Math.abs(255-color.green);
 	}
 
-	@Override
 	public int getSlider(RGB color) {
 		return Math.abs(255-color.red);
 	}
-
+	
 	@Override
-	public int[] getXYSlider(RGB color) {
-		return new int[]{getX(color), getY(color), getSlider(color)};
+	public int[] getXYSlider(Object color) {
+		if (color instanceof RGB){
+			RGB rgbColor = (RGB) color;
+			return new int[]{getX(rgbColor), getY(rgbColor), getSlider(rgbColor)};
+		} else if (color instanceof float[]){
+			float[] hsb = (float[])color;
+			RGB rgbColor = new RGB(hsb[0], hsb[1], hsb[2]);
+			return new int[]{getX(rgbColor), getY(rgbColor), getSlider(rgbColor)};
+		}
+		return new int[]{0,0,0};
 	}
 	
 }

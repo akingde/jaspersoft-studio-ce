@@ -20,12 +20,6 @@ public interface IWidgetGovernor {
 	
 	public RGB getPadColor(int x, int y, int sliderPosition);
 	
-	public int getX(RGB color);
-	
-	public int getY(RGB color);
-	
-	public int getSlider(RGB color);
-	
-	public int[] getXYSlider(RGB color);
+	public int[] getXYSlider(Object color);
 	
 }
