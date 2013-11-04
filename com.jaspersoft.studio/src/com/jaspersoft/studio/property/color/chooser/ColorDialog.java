@@ -1,6 +1,22 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.property.color.chooser;
 
-
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +27,12 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -22,17 +40,29 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
+/**
+ * An advanced color dialog that offers more functionalities towards the default one,
+ * like the transparency. It also provide a system independent way to choose the color. 
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class ColorDialog extends Dialog{
 
+	
 	private ColorsSelectorWidget colorsSelector;
 	
 	private String shellTitle = null;
@@ -61,23 +91,51 @@ public class ColorDialog extends Dialog{
 	
 	private Spinner blue = null;
 	
-	/*private Text l = null;
-	
-	private Text a = null;
-	
-	private Text b = null;
-	
-	private Text c = null;
-	
-	private Text m = null;
-	
-	private Text y = null;
-	
-	private Text k = null;*/
-	
 	private Text hex = null;
 	
 	private Boolean modfiedGuard = true;
+	
+	private Button pickColorButton;
+
+	private Font buttonFont = ResourceManager.getFont("Arial",10,SWT.BOLD);
+
+  /** timer interval for checking color */
+  private static final int TIMER_INTERVAL = 50;
+	
+	private class ColorPickerThreadClass implements Runnable {
+		
+		private Boolean stopThread = false;
+		
+		public boolean getStop(){
+			synchronized (stopThread) {
+				return stopThread;
+			}
+		}
+		
+		private void setStop(boolean value){
+			synchronized (stopThread) {
+				stopThread = value;
+			}
+		}
+		
+	  @Override
+	  public void run() {
+	    checkColorPicker();
+	    if (!getStop()) Display.getCurrent().timerExec(TIMER_INTERVAL, this);
+	  }
+	};
+	
+	private ColorPickerThreadClass colorPickerThread = new ColorPickerThreadClass();
+	
+	private Listener getColor = new Listener() {
+		
+		@Override
+		public void handleEvent(Event event) {
+			if (event.keyCode == SWT.SPACE){
+				stopPickerThread();
+			}	
+		}
+	};
 	
 	private ModifyListener valueModifedListener = new ModifyListener(){
 		
@@ -277,7 +335,12 @@ public class ColorDialog extends Dialog{
 		 Composite righSide = new Composite(container, SWT.NONE);
 		 righSide.setLayout(new GridLayout(1,false));
 		 righSide.setLayoutData(new GridData(GridData.FILL_BOTH));
-		 Composite colorPreview = new Composite(righSide, SWT.NONE);
+		 
+		 Composite previewContainer = new Composite(righSide, SWT.NONE);
+		 previewContainer.setLayout(new GridLayout(2,false));
+		 previewContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		 
+		 Composite colorPreview = new Composite(previewContainer, SWT.NONE);
 		 colorPreview.setLayout(new GridLayout(1,false));
 		 Label newColorLabel = new Label(colorPreview, SWT.NONE);
 		 newColorLabel.setText("New color");
@@ -295,11 +358,41 @@ public class ColorDialog extends Dialog{
 		 previewData.verticalAlignment = SWT.TOP;
 		 colorPreview.setLayoutData(previewData);
 		 
+		 createColorPicker(previewContainer);
+		 
 		 createSlider(righSide);
 		 createTextArea(righSide);
-		 //UIUtils.resizeAndCenterShell(getShell(),350,300);		 
 		 updateText();
 		 return container;
+	}
+	
+	private void createColorPicker(Composite parent){
+		 Composite colorPickerComposite = new Composite(parent, SWT.NONE);
+		 colorPickerComposite.setLayout(new GridLayout(1,false));
+		 colorPickerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		 pickColorButton = new Button(colorPickerComposite, SWT.NONE);
+		 pickColorButton.setImage(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.png"));
+		 pickColorButton.setToolTipText("Press this button to get the color from an element on the screen");
+		 pickColorButton.setFont(buttonFont);
+		 GridData buttonData = new GridData();
+		 buttonData.widthHint = 50;
+		 buttonData.heightHint = 100;
+		 pickColorButton.setLayoutData(buttonData);
+		 
+		 pickColorButton.addSelectionListener(new SelectionAdapter() {
+			 @Override
+			public void widgetSelected(SelectionEvent e) {
+				colorPickerThread.setStop(false);
+				Display.getCurrent().timerExec(TIMER_INTERVAL, colorPickerThread);
+        Display.getCurrent().addFilter(SWT.KeyDown, getColor);
+        pickColorButton.setImage(null);
+        pickColorButton.setText("press SPACE to stop the color picking");
+        pickColorButton.setEnabled(false);
+        pickColorButton.setLayoutData(new GridData(GridData.FILL_BOTH));
+        pickColorButton.getParent().layout();
+        getShell().forceFocus();
+			}
+		 });
 	}
 	
 	private void createSlider(Composite parent){
@@ -315,7 +408,7 @@ public class ColorDialog extends Dialog{
 		final Spinner alphaText = new Spinner(container, SWT.BORDER);
 		alphaText.setMinimum(0);
 		alphaText.setMaximum(255);
-		alphaText.setSelection(255);
+		alphaText.setSelection(alpha);
 		
 		
 		alphaSlider.addSelectionListener(new SelectionAdapter() {
@@ -351,24 +444,13 @@ public class ColorDialog extends Dialog{
 		rightPart.setLayout(new GridLayout(3,false));
 		rightPart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		hue = createRadio(leftPart, "H:", "�", new HueBasedSelector(), true, 0, 360);
+		hue = createRadio(leftPart, "H:", "\u030a", new HueBasedSelector(), true, 0, 360);
 		saturation = createRadio(leftPart, "S:", "%", new SaturationBasedSelector(), false, 0, 100);
 		brightness = createRadio(leftPart, "B:", "%", new BrightnessBasedSelector(), false, 0, 100);
 		red = createRadio(rightPart, "R:", " ", new RedBasedSelector(), false, 0, 255);
 		green = createRadio(rightPart, "G:", " ", new GreenBasedSelector(), false, 0, 255);
 		blue = createRadio(rightPart, "B:", " ", new BluBasedSelector(), false, 0, 255);
 		hex = createText(leftPart, "#", "");
-		
-
-		
-		/*l = createRadio(rightPart, "L:", "", new LBasedSelector(), false);
-		a = createText(rightPart, "a:", "");
-		b = createText(rightPart, "b:", "");
-		
-		c = createText(rightPart, "C:", "%");
-		m = createText(rightPart, "M:", "%");
-		y = createText(rightPart, "Y:", "%");
-		k = createText(rightPart, "K:", "%");*/
 	}
 	
 	private Text createText(Composite parent, String title, String suffix){
@@ -423,18 +505,48 @@ public class ColorDialog extends Dialog{
 	public AlfaRGB openAlfaRGB(){
 		int returnCode = super.open();
 		actualPreviewImage.dispose();
+		stopPickerThread();
 		if (returnCode == Dialog.CANCEL) return null;
 		else return new AlfaRGB(colorsSelector.getSelectedColorRGB(), alpha);
+	}
+	
+	private void stopPickerThread(){
+		colorPickerThread.setStop(true);
+    Display.getCurrent().removeFilter(SWT.KeyDown, getColor);
+    if (!pickColorButton.isDisposed()){
+	    pickColorButton.setText(null);
+	    pickColorButton.setImage(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.png"));
+	    pickColorButton.setEnabled(true);
+			GridData buttonData = new GridData();
+			buttonData.widthHint = 50;
+			buttonData.heightHint = 50;
+			pickColorButton.setLayoutData(buttonData);
+			pickColorButton.getParent().layout();
+    }
 	}
 	
 	
 	public RGB openRGB(){
 		int returnCode = super.open();
 		actualPreviewImage.dispose();
+    stopPickerThread();
 		if (returnCode == Dialog.CANCEL) return null;
 		else return colorsSelector.getSelectedColorRGB();
 	}
 	
+  private void checkColorPicker() {
+		Robot robot;
+		try {
+			robot = new Robot();
+			Point pos = Display.getCurrent().getCursorLocation();
+			java.awt.Color color = robot.getPixelColor(pos.x, pos.y);
+			RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
+			colorsSelector.setSelectedColor(rgbColor, false);
+			updateText(rgbColor, rgbColor.getHSB());
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+  }
 	
 	public void setText(String title){
 		shellTitle = title;
