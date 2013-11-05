@@ -4,7 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="lib/hadoop-core-1.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.9.0-snapshot-javadoc.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.9.0-snapshot-test.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.9.0-snapshot.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hbase-0.94.12.jar"/>
