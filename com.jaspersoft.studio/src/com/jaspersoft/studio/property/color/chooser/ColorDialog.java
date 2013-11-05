@@ -339,11 +339,7 @@ public class ColorDialog extends Dialog{
 		 righSide.setLayout(new GridLayout(1,false));
 		 righSide.setLayoutData(new GridData(GridData.FILL_BOTH));
 		 
-		 Composite previewContainer = new Composite(righSide, SWT.NONE);
-		 previewContainer.setLayout(new GridLayout(2,false));
-		 previewContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		 
-		 Composite colorPreview = new Composite(previewContainer, SWT.NONE);
+		 Composite colorPreview = new Composite(righSide, SWT.NONE);
 		 colorPreview.setLayout(new GridLayout(2,false));
 		 colorPreview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		 
@@ -365,9 +361,9 @@ public class ColorDialog extends Dialog{
 		 }
 		 GridData previewData = new GridData();
 		 previewData.widthHint = 120;
-		 previewData.heightHint = 100;
+		 previewData.heightHint = 50;
 		 previewData.verticalAlignment = SWT.TOP;
-		 colorPreview.setLayoutData(previewData);
+		 previewComposite.setLayoutData(previewData);
 		 
 		 createSlider(righSide);
 		 createTextArea(righSide);
