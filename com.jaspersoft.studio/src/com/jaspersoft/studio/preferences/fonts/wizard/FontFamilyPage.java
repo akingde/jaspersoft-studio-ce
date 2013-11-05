@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.fonts.wizard;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
@@ -37,6 +36,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FontFamilyPage extends WizardPage {
 	private static final String BOLDITALIC = "BOLDITALIC"; //$NON-NLS-1$
@@ -170,7 +170,7 @@ public class FontFamilyPage extends WizardPage {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(name);
 
-		SimpleFontFace fontFace = new SimpleFontFace(DefaultJasperReportsContext.getInstance());
+		SimpleFontFace fontFace = new SimpleFontFace(JasperReportsConfiguration.getDefaultJRConfig());
 		if (type.equals(NORMAL)) {
 			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getNormalFace(), fontFace);
 			fontFamily.setNormalFace(fontFace);

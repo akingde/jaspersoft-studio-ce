@@ -39,20 +39,20 @@ public class ParameterUtil {
 					}
 				}
 
-				if (p.getDefaultValueExpression() != null) {
-					try {
-						Object val = p.getValueClass().newInstance();
-						inmap.put(p.getName(), val);
-					} catch (InstantiationException e) {
-						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
-					} catch (IllegalAccessException e) {
-						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
-					}
-				} else {
-					// Even if no default value expression was specified, tries
-					// to provide a default value based on class type of the parameter.
-					inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
-				}
+				// if (p.getDefaultValueExpression() != null) {
+				// try {
+				// Object val = p.getValueClass().newInstance();
+				// inmap.put(p.getName(), val);
+				// } catch (InstantiationException e) {
+				// inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				// } catch (IllegalAccessException e) {
+				// inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				// }
+				// } else {
+				// Even if no default value expression was specified, tries
+				// to provide a default value based on class type of the parameter.
+				inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+				// }
 			}
 		}
 	}
@@ -60,6 +60,12 @@ public class ParameterUtil {
 	private static Object getDefaultInstance(JRParameter p, JasperReportsConfiguration jConfig, JRDataset dataset) {
 		if (p.getDefaultValueExpression() != null) {
 			return ExpressionUtil.eval(p.getDefaultValueExpression(), dataset, jConfig);
+		} else {
+			try {
+				return p.getValueClass().newInstance();
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
+			}
 		}
 
 		if (p.getValueClass().isAssignableFrom(Integer.class))

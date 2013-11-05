@@ -19,7 +19,6 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.fonts.FontFamily;
@@ -30,6 +29,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JSSFontExtensionRegistry implements ExtensionsRegistry {
 	private List<FontFamily> lst;
@@ -50,7 +50,7 @@ public class JSSFontExtensionRegistry implements ExtensionsRegistry {
 	public JSSFontExtensionRegistry(JRPropertiesMap properties) {
 		preferenceListener = new PreferenceListener();
 		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
-		setJrContext(DefaultJasperReportsContext.getInstance());
+		setJrContext(JasperReportsConfiguration.getDefaultJRConfig());
 	}
 
 	public void setJrContext(JasperReportsContext jrContext) {

@@ -23,7 +23,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.fonts.FontFace;
 import net.sf.jasperreports.engine.fonts.FontFamily;
@@ -57,6 +56,7 @@ import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.wizard.FontConfigWizard;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class FontListFieldEditor extends TableFieldEditor {
 
@@ -91,7 +91,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 		if (string != null && !string.isEmpty()) {
 			try {
 				fontFamily = SimpleFontExtensionHelper.getInstance().loadFontFamilies(
-						DefaultJasperReportsContext.getInstance(), new ByteArrayInputStream(string.getBytes()));
+						JasperReportsConfiguration.getDefaultJRConfig(), new ByteArrayInputStream(string.getBytes()));
 
 				res = new String[fontFamily.size()][1];
 				for (int i = 0; i < fontFamily.size(); i++)
