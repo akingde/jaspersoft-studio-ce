@@ -22,10 +22,8 @@ import net.sf.jasperreports.engine.util.JRSingletonCache;
 
 import com.jaspersoft.hadoop.hive.HiveDataSource;
 
-public class HiveQueryExecuterFactoryBundle implements
-		JRQueryExecuterFactoryBundle {
-	private static final JRSingletonCache<QueryExecuterFactory> cache = new JRSingletonCache<QueryExecuterFactory>(
-			QueryExecuterFactory.class);
+public class HiveQueryExecuterFactoryBundle implements JRQueryExecuterFactoryBundle {
+	private static final JRSingletonCache<QueryExecuterFactory> cache = new JRSingletonCache<QueryExecuterFactory>(QueryExecuterFactory.class);
 
 	private static final HiveQueryExecuterFactoryBundle instance = new HiveQueryExecuterFactoryBundle();
 
@@ -42,12 +40,9 @@ public class HiveQueryExecuterFactoryBundle implements
 		return languages;
 	}
 
-	public QueryExecuterFactory getQueryExecuterFactory(String language)
-			throws JRException {
-		if (HiveDataSource.QUERY_LANGUAGE.equals(language)) {
-			return (QueryExecuterFactory) cache
-					.getCachedInstance(HiveQueryExecuterFactory.class.getName());
-		}
+	public QueryExecuterFactory getQueryExecuterFactory(String language) throws JRException {
+		if (HiveDataSource.QUERY_LANGUAGE.equals(language))
+			return (QueryExecuterFactory) cache.getCachedInstance(HiveQueryExecuterFactory.class.getName());
 		return null;
 	}
 }

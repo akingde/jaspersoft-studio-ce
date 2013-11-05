@@ -42,26 +42,18 @@ public class HiveFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService dataAdapterService,
-			JasperReportsConfiguration jasperReportsConfiguration,
-			JRDataset dataset) throws JRException,
+	public List<JRDesignField> getFields(DataAdapterService dataAdapterService, JasperReportsConfiguration jasperReportsConfiguration, JRDataset dataset) throws JRException,
 			UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
 		dataAdapterService.contributeParameters(parameters);
-		ParameterUtil.setParameters(jasperReportsConfiguration, dataset,
-				parameters);
+		ParameterUtil.setParameters(jasperReportsConfiguration, dataset, parameters);
 
-		JRField[] fields = com.jaspersoft.hadoop.hive.HiveFieldsProvider
-				.getInstance().getFields(
-						jasperReportsConfiguration,
-						(HiveConnection) parameters
-								.get(JRParameter.REPORT_CONNECTION), dataset,
-						parameters);
+		JRField[] fields = com.jaspersoft.hadoop.hive.HiveFieldsProvider.getInstance().getFields(jasperReportsConfiguration, (HiveConnection) parameters.get(JRParameter.REPORT_CONNECTION), dataset,
+				parameters);
 		List<JRDesignField> designFields = new ArrayList<JRDesignField>();
-		for (int index = 0; index < fields.length; index++) {
+		for (int index = 0; index < fields.length; index++)
 			designFields.add((JRDesignField) fields[index]);
-		}
 		return designFields;
 	}
 }

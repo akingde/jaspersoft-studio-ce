@@ -42,19 +42,13 @@ public class CassandraFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService dataAdapterService,
-			JasperReportsConfiguration jasperReportsConfiguration,
-			JRDataset dataset) throws JRException,
+	public List<JRDesignField> getFields(DataAdapterService dataAdapterService, JasperReportsConfiguration jasperReportsConfiguration, JRDataset dataset) throws JRException,
 			UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
 		dataAdapterService.contributeParameters(parameters);
-		ParameterUtil.setParameters(jasperReportsConfiguration, dataset,
-				parameters);
-		JRField[] fields = com.jaspersoft.cassandra.CassandraFieldsProvider
-				.getFields((CassandraConnection) parameters
-						.get(JRParameter.REPORT_CONNECTION), dataset,
-						parameters);
+		ParameterUtil.setParameters(jasperReportsConfiguration, dataset, parameters);
+		JRField[] fields = com.jaspersoft.cassandra.CassandraFieldsProvider.getFields((CassandraConnection) parameters.get(JRParameter.REPORT_CONNECTION), dataset, parameters);
 		List<JRDesignField> newFields = new ArrayList<JRDesignField>();
 		for (JRField field : fields) {
 			newFields.add((JRDesignField) field);

@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.hive.messages.Messages;
@@ -59,9 +58,8 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (dataAdapterDescriptor == null) {
+		if (dataAdapterDescriptor == null)
 			dataAdapterDescriptor = new HiveDataAdapterDescriptor();
-		}
 		return dataAdapterDescriptor;
 	}
 
@@ -69,8 +67,7 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
 		super.setDataAdapter(dataAdapterDescriptor);
 		this.dataAdapterDescriptor = (HiveDataAdapterDescriptor) dataAdapterDescriptor;
-		HiveDataAdapter dataAdapter = (HiveDataAdapter) dataAdapterDescriptor.getDataAdapter();
-		bindWidgets(dataAdapter);
+		bindWidgets(dataAdapterDescriptor.getDataAdapter());
 	}
 
 	@Override

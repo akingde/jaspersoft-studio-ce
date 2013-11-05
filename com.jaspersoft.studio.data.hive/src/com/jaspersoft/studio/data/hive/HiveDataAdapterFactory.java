@@ -17,7 +17,6 @@ package com.jaspersoft.studio.data.hive;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -28,6 +27,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.hive.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author gtoffoli
@@ -42,8 +42,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public DataAdapterDescriptor createDataAdapter() {
 		HiveDataAdapterDescriptor descriptor = new HiveDataAdapterDescriptor();
-		descriptor.getDataAdapter().setUrl(
-				"jdbc:hive://localhost:10000/default"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setUrl("jdbc:hive://localhost:10000/default"); //$NON-NLS-1$
 		return descriptor;
 	}
 
@@ -81,17 +80,14 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	public Image getIcon(int size) {
-		if (size == 16) {
-			return Activator.getDefault().getImage("icons/hive.png"); //$NON-NLS-1$
-		}
+		if (size == 16)
+			return Activator.getDefault().getImage("icons/hive.png"); //$NON-NLS-1$ 
 		return null;
 	}
 
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		if (dataAdapter instanceof HiveDataAdapter)
-			return new HiveDataAdapterService(
-					DefaultJasperReportsContext.getInstance(),
-					(HiveDataAdapter) dataAdapter);
+			return new HiveDataAdapterService(JasperReportsConfiguration.getDefaultJRConfig(), (HiveDataAdapter) dataAdapter);
 		return null;
 	}
 

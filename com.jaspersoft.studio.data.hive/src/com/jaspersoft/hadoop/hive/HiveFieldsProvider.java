@@ -61,9 +61,7 @@ public class HiveFieldsProvider {
 		}
 	}
 
-	public JRField[] getFields(JasperReportsContext jasperReportsContext,
-			HiveConnection connection, JRDataset reportDataset,
-			Map<String, Object> parameters) throws JRException,
+	public JRField[] getFields(JasperReportsContext jasperReportsContext, HiveConnection connection, JRDataset reportDataset, Map<String, Object> parameters) throws JRException,
 			UnsupportedOperationException {
 		HiveQueryExecuter queryExecuter = null;
 		HiveDataSource datasource = null;
@@ -71,40 +69,28 @@ public class HiveFieldsProvider {
 			Map<String, JRValueParameter> newValueParameters = new HashMap<String, JRValueParameter>();
 			for (String parameterName : parameters.keySet()) {
 				Object parameterValue = parameters.get(parameterName);
-				if (parameterValue == null
-						&& parameterName
-								.equals(JRParameter.REPORT_PARAMETERS_MAP)) {
+				if (parameterValue == null && parameterName.equals(JRParameter.REPORT_PARAMETERS_MAP)) {
 					parameterValue = new HashMap<String, Object>();
 				}
-				HiveParameter newParameter = new HiveParameter(parameterName,
-						parameterValue);
+				HiveParameter newParameter = new HiveParameter(parameterName, parameterValue);
 				newValueParameters.put(parameterName, newParameter);
 			}
 			parameters.put(JRParameter.REPORT_CONNECTION, connection);
-			if (!newValueParameters
-					.containsKey(JRParameter.REPORT_PARAMETERS_MAP)) {
-				newValueParameters.put(JRParameter.REPORT_PARAMETERS_MAP,
-						new HiveParameter(JRParameter.REPORT_PARAMETERS_MAP,
-								parameters));
+			if (!newValueParameters.containsKey(JRParameter.REPORT_PARAMETERS_MAP)) {
+				newValueParameters.put(JRParameter.REPORT_PARAMETERS_MAP, new HiveParameter(JRParameter.REPORT_PARAMETERS_MAP, parameters));
 			}
-			newValueParameters
-					.put(JRParameter.REPORT_CONNECTION, new HiveParameter(
-							JRParameter.REPORT_CONNECTION, connection));
+			newValueParameters.put(JRParameter.REPORT_CONNECTION, new HiveParameter(JRParameter.REPORT_CONNECTION, connection));
 			if (!newValueParameters.containsKey(JRParameter.REPORT_MAX_COUNT)) {
-				newValueParameters.put(JRParameter.REPORT_MAX_COUNT,
-						new HiveParameter(JRParameter.REPORT_MAX_COUNT, null));
+				newValueParameters.put(JRParameter.REPORT_MAX_COUNT, new HiveParameter(JRParameter.REPORT_MAX_COUNT, null));
 			}
-			queryExecuter = new HiveQueryExecuter(jasperReportsContext,
-					reportDataset, newValueParameters);
+			queryExecuter = new HiveQueryExecuter(jasperReportsContext, reportDataset, newValueParameters);
 			datasource = (HiveDataSource) queryExecuter.createDatasource();
-			ResultSetMetaData resultSetMetaData = datasource.getResultSet()
-					.getMetaData();
+			ResultSetMetaData resultSetMetaData = datasource.getResultSet().getMetaData();
 			List<JRDesignField> columns = new ArrayList<JRDesignField>();
 			for (int index = 1; index <= resultSetMetaData.getColumnCount(); ++index) {
 				JRDesignField field = new JRDesignField();
 				field.setName(resultSetMetaData.getColumnLabel(index));
-				field.setValueClassName(HiveConnection.getJdbcTypeClass(
-						resultSetMetaData, index));
+				field.setValueClassName(HiveConnection.getJdbcTypeClass(resultSetMetaData, index));
 				field.setDescription(null);
 				columns.add(field);
 			}

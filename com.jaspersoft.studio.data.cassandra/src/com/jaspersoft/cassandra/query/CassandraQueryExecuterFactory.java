@@ -53,7 +53,7 @@ public class CassandraQueryExecuterFactory implements QueryExecuterFactory {
 			Map<String, ? extends JRValueParameter> parameters)
 			throws JRException {
 		return new CassandraQueryExecuter(
-				DefaultJasperReportsContext.getInstance(), dataset, parameters);
+DefaultJasperReportsContext.getInstance(), dataset, parameters);
 	}
 
 	/**

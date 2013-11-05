@@ -45,15 +45,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-
 	private IFieldsProvider fieldsProvider;
-
-	@Override
-	public HiveDataAdapter getDataAdapter() {
-		if (dataAdapter == null)
-			dataAdapter = new HiveDataAdapterImplementation();
-		return (HiveDataAdapter) dataAdapter;
-	}
 
 	@Override
 	public HiveDataAdapterEditor getEditor() {
@@ -62,9 +54,8 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements 
 
 	@Override
 	public Image getIcon(int size) {
-		if (size == 16) {
+		if (size == 16)
 			return Activator.getDefault().getImage("icons/hive.png");
-		}
 		return null;
 	}
 
@@ -76,6 +67,13 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	private void getFieldProvider() {
 		if (fieldsProvider == null)
 			fieldsProvider = new HiveFieldsProvider();
+	}
+
+	@Override
+	public HiveDataAdapter getDataAdapter() {
+		if (dataAdapter == null)
+			dataAdapter = new HiveDataAdapterImplementation();
+		return (HiveDataAdapter) dataAdapter;
 	}
 
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {

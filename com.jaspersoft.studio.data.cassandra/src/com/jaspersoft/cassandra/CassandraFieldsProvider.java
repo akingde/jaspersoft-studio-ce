@@ -44,15 +44,11 @@ import com.jaspersoft.cassandra.connection.CassandraConnection;
 public class CassandraFieldsProvider {
 
 	@SuppressWarnings("unchecked")
-	public static JRField[] getFields(CassandraConnection connection,
-			JRDataset reportDataset, Map<String, Object> parameters)
-			throws JRException, UnsupportedOperationException {
+	public static JRField[] getFields(CassandraConnection connection, JRDataset reportDataset, Map<String, Object> parameters) throws JRException, UnsupportedOperationException {
 		String query = "";
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
-		if (reportDataset.getQuery() == null
-				|| reportDataset.getQuery().getText() == null
-				|| reportDataset.getQuery().getText().length() == 0) {
+		if (reportDataset.getQuery() == null || reportDataset.getQuery().getText() == null || reportDataset.getQuery().getText().length() == 0) {
 			return new JRField[0];
 		}
 		try {
@@ -70,15 +66,12 @@ public class CassandraFieldsProvider {
 					String paramName = chunks[index].getText();
 
 					if (!parameters.containsKey(paramName)) {
-						throw new IllegalArgumentException("The parameter '"
-								+ paramName + "' is not defined.");
+						throw new IllegalArgumentException("The parameter '" + paramName + "' is not defined.");
 					}
 
 					Object defValue = parameters.get(paramName);
 					if (defValue == null) {
-						throw new IllegalArgumentException("Please set a "
-								+ "default value for the parameter '"
-								+ paramName + "'");
+						throw new IllegalArgumentException("Please set a " + "default value for the parameter '" + paramName + "'");
 					}
 					queryBuf.append(defValue.toString());
 					break;
@@ -88,23 +81,20 @@ public class CassandraFieldsProvider {
 					String paramName = chunks[index].getText();
 
 					if (!parameters.containsKey(paramName)) {
-						throw new IllegalArgumentException("The parameter '"
-								+ paramName + "' is not defined.");
+						throw new IllegalArgumentException("The parameter '" + paramName + "' is not defined.");
 					}
 
 					Object defValue = parameters.get(paramName);
 					queryBuf.append("?");
 					queryParams.add(defValue);
-					queryParamsClass.add(findParameterClass(paramName,
-							reportDataset));
+					queryParamsClass.add(findParameterClass(paramName, reportDataset));
 					break;
 				}
 				case JRQueryChunk.TYPE_CLAUSE_TOKENS: {
 					String[] tokens = chunks[index].getTokens();
 					if (tokens.length == 3) {
 						String clauseText = "";
-						clauseText = tokens[1].trim() + " " + tokens[0].trim()
-								+ " (";
+						clauseText = tokens[1].trim() + " " + tokens[0].trim() + " (";
 						String paramName = tokens[2].trim();
 						if (parameters.containsKey(paramName)) {
 							Object defValue = parameters.get(paramName);
@@ -139,13 +129,10 @@ public class CassandraFieldsProvider {
 							}
 							queryBuf.append(clauseText);
 						} else {
-							throw new IllegalArgumentException(
-									"The parameter '" + paramName
-											+ "' is not defined.");
+							throw new IllegalArgumentException("The parameter '" + paramName + "' is not defined.");
 						}
 					} else {
-						throw new IllegalArgumentException(
-								"Invalid $X{} clause");
+						throw new IllegalArgumentException("Invalid $X{} clause");
 					}
 					break;
 				}
@@ -153,136 +140,86 @@ public class CassandraFieldsProvider {
 			}
 
 			query = queryBuf.toString();
-			prepareStatement = connection.getSqlConnection().prepareStatement(
-					query);
-			for (int parametersCounter = 0; parametersCounter < queryParams
-					.size(); parametersCounter++) {
-				Class<?> parameterType = (queryParams.get(parametersCounter) == null) ? queryParamsClass
-						.get(parametersCounter) : queryParams.get(
-						parametersCounter).getClass();
+			prepareStatement = connection.getSqlConnection().prepareStatement(query);
+			for (int parametersCounter = 0; parametersCounter < queryParams.size(); parametersCounter++) {
+				Class<?> parameterType = (queryParams.get(parametersCounter) == null) ? queryParamsClass.get(parametersCounter) : queryParams.get(parametersCounter).getClass();
 				if (java.lang.Boolean.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.BIT);
+						prepareStatement.setNull(parametersCounter + 1, Types.BIT);
 					} else {
-						prepareStatement.setBoolean(parametersCounter + 1,
-								((Boolean) queryParams.get(parametersCounter))
-										.booleanValue());
+						prepareStatement.setBoolean(parametersCounter + 1, ((Boolean) queryParams.get(parametersCounter)).booleanValue());
 					}
 				} else if (java.lang.Byte.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.TINYINT);
+						prepareStatement.setNull(parametersCounter + 1, Types.TINYINT);
 					} else {
-						prepareStatement.setByte(parametersCounter + 1,
-								((Byte) queryParams.get(parametersCounter))
-										.byteValue());
+						prepareStatement.setByte(parametersCounter + 1, ((Byte) queryParams.get(parametersCounter)).byteValue());
 					}
-				} else if (java.lang.Double.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.lang.Double.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.DOUBLE);
+						prepareStatement.setNull(parametersCounter + 1, Types.DOUBLE);
 					} else {
-						prepareStatement.setDouble(parametersCounter + 1,
-								((Double) queryParams.get(parametersCounter))
-										.doubleValue());
+						prepareStatement.setDouble(parametersCounter + 1, ((Double) queryParams.get(parametersCounter)).doubleValue());
 					}
-				} else if (java.lang.Float.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.lang.Float.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.FLOAT);
+						prepareStatement.setNull(parametersCounter + 1, Types.FLOAT);
 					} else {
-						prepareStatement.setFloat(parametersCounter + 1,
-								((Float) queryParams.get(parametersCounter))
-										.floatValue());
+						prepareStatement.setFloat(parametersCounter + 1, ((Float) queryParams.get(parametersCounter)).floatValue());
 					}
-				} else if (java.lang.Integer.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.lang.Integer.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.INTEGER);
+						prepareStatement.setNull(parametersCounter + 1, Types.INTEGER);
 					} else {
-						prepareStatement.setInt(parametersCounter + 1,
-								((Integer) queryParams.get(parametersCounter))
-										.intValue());
+						prepareStatement.setInt(parametersCounter + 1, ((Integer) queryParams.get(parametersCounter)).intValue());
 					}
 				} else if (java.lang.Long.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.BIGINT);
+						prepareStatement.setNull(parametersCounter + 1, Types.BIGINT);
 					} else {
-						prepareStatement.setLong(parametersCounter + 1,
-								((Long) queryParams.get(parametersCounter))
-										.longValue());
+						prepareStatement.setLong(parametersCounter + 1, ((Long) queryParams.get(parametersCounter)).longValue());
 					}
-				} else if (java.lang.Short.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.lang.Short.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.SMALLINT);
+						prepareStatement.setNull(parametersCounter + 1, Types.SMALLINT);
 					} else {
-						prepareStatement.setShort(parametersCounter + 1,
-								((Short) queryParams.get(parametersCounter))
-										.shortValue());
+						prepareStatement.setShort(parametersCounter + 1, ((Short) queryParams.get(parametersCounter)).shortValue());
 					}
-				} else if (java.math.BigDecimal.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.math.BigDecimal.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.DECIMAL);
+						prepareStatement.setNull(parametersCounter + 1, Types.DECIMAL);
 					} else {
-						prepareStatement
-								.setBigDecimal(parametersCounter + 1,
-										(BigDecimal) queryParams
-												.get(parametersCounter));
+						prepareStatement.setBigDecimal(parametersCounter + 1, (BigDecimal) queryParams.get(parametersCounter));
 					}
-				} else if (java.lang.String.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.lang.String.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.VARCHAR);
+						prepareStatement.setNull(parametersCounter + 1, Types.VARCHAR);
 					} else {
-						prepareStatement.setString(parametersCounter + 1,
-								queryParams.get(parametersCounter).toString());
+						prepareStatement.setString(parametersCounter + 1, queryParams.get(parametersCounter).toString());
 					}
-				} else if (java.sql.Timestamp.class
-						.isAssignableFrom(parameterType)) {
+				} else if (java.sql.Timestamp.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.TIMESTAMP);
+						prepareStatement.setNull(parametersCounter + 1, Types.TIMESTAMP);
 					} else {
-						prepareStatement.setTimestamp(parametersCounter + 1,
-								(java.sql.Timestamp) queryParams
-										.get(parametersCounter));
+						prepareStatement.setTimestamp(parametersCounter + 1, (java.sql.Timestamp) queryParams.get(parametersCounter));
 					}
 				} else if (java.sql.Time.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.TIME);
+						prepareStatement.setNull(parametersCounter + 1, Types.TIME);
 					} else {
-						prepareStatement.setTime(parametersCounter + 1,
-								(java.sql.Time) queryParams
-										.get(parametersCounter));
+						prepareStatement.setTime(parametersCounter + 1, (java.sql.Time) queryParams.get(parametersCounter));
 					}
 				} else if (java.util.Date.class.isAssignableFrom(parameterType)) {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.DATE);
+						prepareStatement.setNull(parametersCounter + 1, Types.DATE);
 					} else {
-						prepareStatement.setDate(
-								parametersCounter + 1,
-								new java.sql.Date(((java.util.Date) queryParams
-										.get(parametersCounter)).getTime()));
+						prepareStatement.setDate(parametersCounter + 1, new java.sql.Date(((java.util.Date) queryParams.get(parametersCounter)).getTime()));
 					}
 				} else {
 					if (queryParams.get(parametersCounter) == null) {
-						prepareStatement.setNull(parametersCounter + 1,
-								Types.JAVA_OBJECT);
+						prepareStatement.setNull(parametersCounter + 1, Types.JAVA_OBJECT);
 					} else {
-						prepareStatement.setObject(parametersCounter + 1,
-								queryParams.get(parametersCounter));
+						prepareStatement.setObject(parametersCounter + 1, queryParams.get(parametersCounter));
 					}
 				}
 			}
@@ -299,8 +236,7 @@ public class CassandraFieldsProvider {
 			for (int index = 1; index <= resultSetMetaData.getColumnCount(); ++index) {
 				JRDesignField field = new JRDesignField();
 				field.setName(resultSetMetaData.getColumnLabel(index));
-				field.setValueClassName(CassandraConnection.getJdbcTypeClass(
-						resultSetMetaData, index));
+				field.setValueClassName(CassandraConnection.getJdbcTypeClass(resultSetMetaData, index));
 				field.setDescription(null);
 				columns.add(field);
 			}
@@ -338,8 +274,7 @@ public class CassandraFieldsProvider {
 		}
 	}
 
-	private static Class<?> findParameterClass(String parameterName,
-			JRDataset reportDataset) {
+	private static Class<?> findParameterClass(String parameterName, JRDataset reportDataset) {
 		JRParameter[] parameters = reportDataset.getParameters();
 		for (JRParameter parameter : parameters) {
 			if (parameter.getName().equals(parameterName)) {
