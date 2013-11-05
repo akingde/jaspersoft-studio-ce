@@ -52,6 +52,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.utils.AlfaRGB;
+import com.jaspersoft.studio.utils.ImageUtils;
 
 /**
  * An advanced color dialog that offers more functionalities towards the default one,
@@ -98,7 +99,7 @@ public class ColorDialog extends Dialog{
 	private Button pickColorButton;
 
 	private Font buttonFont = ResourceManager.getFont("Arial",10,SWT.BOLD);
-
+	
   /** timer interval for checking color */
   private static final int TIMER_INTERVAL = 50;
 	
@@ -107,21 +108,23 @@ public class ColorDialog extends Dialog{
 		private Boolean stopThread = false;
 		
 		public boolean getStop(){
-			synchronized (stopThread) {
+			synchronized (this) {
 				return stopThread;
 			}
 		}
 		
 		private void setStop(boolean value){
-			synchronized (stopThread) {
+			synchronized (this) {
 				stopThread = value;
 			}
 		}
 		
 	  @Override
 	  public void run() {
-	    checkColorPicker();
-	    if (!getStop()) Display.getCurrent().timerExec(TIMER_INTERVAL, this);
+	  	if (!getStop()) {
+	  		checkColorPicker();
+	  		Display.getCurrent().timerExec(TIMER_INTERVAL, this);
+	  	}
 	  }
 	};
 	
@@ -341,24 +344,30 @@ public class ColorDialog extends Dialog{
 		 previewContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		 
 		 Composite colorPreview = new Composite(previewContainer, SWT.NONE);
-		 colorPreview.setLayout(new GridLayout(1,false));
+		 colorPreview.setLayout(new GridLayout(2,false));
+		 colorPreview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		 
 		 Label newColorLabel = new Label(colorPreview, SWT.NONE);
 		 newColorLabel.setText("New color");
 		 newColorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, false, false));
+		 new Label(colorPreview, SWT.NONE);
+		 
 		 previewComposite = new Composite(colorPreview, SWT.BORDER);
 		 previewComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		 
+		 createColorPicker(colorPreview);
+		 
+		 
 		 if (currentColor != null){
 			 Label oldColorLabel = new Label(colorPreview, SWT.NONE);
 			 oldColorLabel.setText("Actual color");
 			 oldColorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
 		 }
 		 GridData previewData = new GridData();
-		 previewData.widthHint = 90;
+		 previewData.widthHint = 120;
 		 previewData.heightHint = 100;
 		 previewData.verticalAlignment = SWT.TOP;
 		 colorPreview.setLayoutData(previewData);
-		 
-		 createColorPicker(previewContainer);
 		 
 		 createSlider(righSide);
 		 createTextArea(righSide);
@@ -367,17 +376,16 @@ public class ColorDialog extends Dialog{
 	}
 	
 	private void createColorPicker(Composite parent){
-		 Composite colorPickerComposite = new Composite(parent, SWT.NONE);
-		 colorPickerComposite.setLayout(new GridLayout(1,false));
-		 colorPickerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		 pickColorButton = new Button(colorPickerComposite, SWT.NONE);
-		 pickColorButton.setImage(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.png"));
+		 pickColorButton = new Button(parent, SWT.WRAP);
 		 pickColorButton.setToolTipText("Press this button to get the color from an element on the screen");
 		 pickColorButton.setFont(buttonFont);
+		 pickColorButton.setAlignment(SWT.CENTER);
 		 GridData buttonData = new GridData();
 		 buttonData.widthHint = 50;
-		 buttonData.heightHint = 100;
+		 buttonData.heightHint = 50;
+		 buttonData.verticalAlignment = SWT.CENTER;
 		 pickColorButton.setLayoutData(buttonData);
+	   pickColorButton.setImage(getPickerImage(40));
 		 
 		 pickColorButton.addSelectionListener(new SelectionAdapter() {
 			 @Override
@@ -389,7 +397,7 @@ public class ColorDialog extends Dialog{
         pickColorButton.setText("press SPACE to stop the color picking");
         pickColorButton.setEnabled(false);
         pickColorButton.setLayoutData(new GridData(GridData.FILL_BOTH));
-        pickColorButton.getParent().layout();
+        pickColorButton.getParent().layout(true, true);
         getShell().forceFocus();
 			}
 		 });
@@ -444,7 +452,7 @@ public class ColorDialog extends Dialog{
 		rightPart.setLayout(new GridLayout(3,false));
 		rightPart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		hue = createRadio(leftPart, "H:", "\u030a", new HueBasedSelector(), true, 0, 360);
+		hue = createRadio(leftPart, "H:", "\u030A", new HueBasedSelector(), true, 0, 360);
 		saturation = createRadio(leftPart, "S:", "%", new SaturationBasedSelector(), false, 0, 100);
 		brightness = createRadio(leftPart, "B:", "%", new BrightnessBasedSelector(), false, 0, 100);
 		red = createRadio(rightPart, "R:", " ", new RedBasedSelector(), false, 0, 255);
@@ -510,22 +518,6 @@ public class ColorDialog extends Dialog{
 		else return new AlfaRGB(colorsSelector.getSelectedColorRGB(), alpha);
 	}
 	
-	private void stopPickerThread(){
-		colorPickerThread.setStop(true);
-    Display.getCurrent().removeFilter(SWT.KeyDown, getColor);
-    if (!pickColorButton.isDisposed()){
-	    pickColorButton.setText(null);
-	    pickColorButton.setImage(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.png"));
-	    pickColorButton.setEnabled(true);
-			GridData buttonData = new GridData();
-			buttonData.widthHint = 50;
-			buttonData.heightHint = 50;
-			pickColorButton.setLayoutData(buttonData);
-			pickColorButton.getParent().layout();
-    }
-	}
-	
-	
 	public RGB openRGB(){
 		int returnCode = super.open();
 		actualPreviewImage.dispose();
@@ -534,19 +526,58 @@ public class ColorDialog extends Dialog{
 		else return colorsSelector.getSelectedColorRGB();
 	}
 	
+	private boolean checkControlFocused(Control[] controls){
+		for(Control control : controls){
+			if (control.isFocusControl()) return true;
+			if (control instanceof Composite){
+				Composite comp = (Composite)control;
+				boolean childrenFocused = checkControlFocused(comp.getChildren());
+				if (childrenFocused) return true;
+			}
+		}
+		return false;
+	}
+	
   private void checkColorPicker() {
-		Robot robot;
-		try {
-			robot = new Robot();
-			Point pos = Display.getCurrent().getCursorLocation();
-			java.awt.Color color = robot.getPixelColor(pos.x, pos.y);
-			RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
-			colorsSelector.setSelectedColor(rgbColor, false);
-			updateText(rgbColor, rgbColor.getHSB());
-		} catch (AWTException e) {
-			e.printStackTrace();
+		if (getShell().isFocusControl() || checkControlFocused(getShell().getChildren())){
+	  	Robot robot;
+			try {
+				robot = new Robot();
+				Point pos = Display.getCurrent().getCursorLocation();
+				java.awt.Color color = robot.getPixelColor(pos.x, pos.y);
+				RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
+				colorsSelector.setSelectedColor(rgbColor, false);
+				updateText(rgbColor, rgbColor.getHSB());
+			} catch (AWTException e) {
+				e.printStackTrace();
+			}
 		}
   }
+  
+  private Image getPickerImage(int size){
+  	String key = "pickerIcon"+String.valueOf(size);
+  	Image result = ResourceManager.getImage(key);
+  	if (result == null){
+  		result = ImageUtils.resize(ResourceManager.getPluginImage(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/picker.png"), size, size);
+  		ResourceManager.addImage(key, result);
+  	}
+  	return result;
+  }
+  
+  private void stopPickerThread(){
+		colorPickerThread.setStop(true);
+    Display.getCurrent().removeFilter(SWT.KeyDown, getColor);
+    if (!pickColorButton.isDisposed()){
+	    pickColorButton.setText("");
+	    pickColorButton.setEnabled(true);
+			GridData buttonData = new GridData();
+			buttonData.widthHint = 50;
+		  buttonData.heightHint = 50;
+	    pickColorButton.setImage(getPickerImage(40));
+			pickColorButton.setLayoutData(buttonData);
+			pickColorButton.getParent().layout(true, true);
+    }
+	}
 	
 	public void setText(String title){
 		shellTitle = title;
