@@ -34,9 +34,10 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.apache.log4j.Logger;
 
 import com.jaspersoft.mongodb.connection.MongoDbConnection;
-import com.jaspersoft.mongodb.query.MongoDbParameter;
 import com.jaspersoft.mongodb.query.MongoDbQueryExecuter;
 import com.jaspersoft.mongodb.query.MongoDbQueryWrapper;
+import com.jaspersoft.studio.utils.parameter.ParameterUtil;
+import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -76,16 +77,21 @@ public class MongoDbFieldsProvider {
         MongoDbQueryExecuter queryExecuter = null;
         MongoDbQueryWrapper wrapper = null;
         try {
-            Map<String, JRValueParameter> newValueParameters = new HashMap<String, JRValueParameter>();
-            for (String parameterName : parameters.keySet()) {
-                Object parameterValue = parameters.get(parameterName);
-                MongoDbParameter newParameter = new MongoDbParameter(parameterName, parameterValue);
-                newValueParameters.put(parameterName, newParameter);
-            }
-            parameters.clear();
-            newValueParameters.put(JRParameter.REPORT_PARAMETERS_MAP, new MongoDbParameter(
-                    JRParameter.REPORT_PARAMETERS_MAP, parameters));
-            queryExecuter = new MongoDbQueryExecuter(context, dataset, newValueParameters, true);
+//            Map<String, JRValueParameter> newValueParameters = new HashMap<String, JRValueParameter>();
+//            for (String parameterName : parameters.keySet()) {
+//                Object parameterValue = parameters.get(parameterName);
+//                MongoDbParameter newParameter = new MongoDbParameter(parameterName, parameterValue);
+//                newValueParameters.put(parameterName, newParameter);
+//            }
+//            parameters.clear();
+//            newValueParameters.put(JRParameter.REPORT_PARAMETERS_MAP, new MongoDbParameter(
+//                    JRParameter.REPORT_PARAMETERS_MAP, parameters));
+            
+            Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(parameters, dataset);
+      			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String, JRValueParameter>()));
+
+            
+            queryExecuter = new MongoDbQueryExecuter(context, dataset, tmpMap, true);
             wrapper = new MongoDbQueryWrapper(queryExecuter.getProcessedQueryString(), connection,
                     queryExecuter.getParameters());
             logger.info("FieldsProvider will find fields from the first " + wrapper.rowsToProcess + " records.");

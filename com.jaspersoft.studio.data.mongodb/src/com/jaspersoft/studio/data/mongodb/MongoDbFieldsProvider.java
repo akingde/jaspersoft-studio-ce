@@ -36,19 +36,16 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
  * 
  */
 public class MongoDbFieldsProvider implements IFieldsProvider {
-    public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
-        return true;
-    }
+	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
+		return true;
+	}
 
-    public List<JRDesignField> getFields(DataAdapterService dataAdapterService,
-            JasperReportsConfiguration jasperReportsConfiguration, JRDataset dataset) throws JRException,
-            UnsupportedOperationException {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
-        dataAdapterService.contributeParameters(parameters);
-        ParameterUtil.setParameters(jasperReportsConfiguration, dataset, parameters);
+	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset dataset) throws JRException, UnsupportedOperationException {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		con.contributeParameters(parameters);
+		ParameterUtil.setParameters(jConfig, dataset, parameters);
+		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
 
-        return com.jaspersoft.mongodb.MongoDbFieldsProvider.getInstance().getFields(jasperReportsConfiguration, dataset, parameters,
-                (MongoDbConnection) parameters.get(JRParameter.REPORT_CONNECTION));
-    }
+		return com.jaspersoft.mongodb.MongoDbFieldsProvider.getInstance().getFields(jConfig, dataset, parameters, (MongoDbConnection) parameters.get(JRParameter.REPORT_CONNECTION));
+	}
 }

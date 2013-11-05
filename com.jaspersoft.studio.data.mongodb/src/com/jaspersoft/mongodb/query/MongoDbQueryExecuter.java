@@ -41,8 +41,7 @@ import com.jaspersoft.mongodb.connection.MongoDbConnection;
  * 
  */
 public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
-	private final static Logger logger = Logger
-			.getLogger(MongoDbQueryExecuter.class);
+	private final static Logger logger = Logger.getLogger(MongoDbQueryExecuter.class);
 
 	private Map<String, ? extends JRValueParameter> reportParameters;
 
@@ -52,17 +51,11 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 
 	private boolean directParameters;
 
-	public MongoDbQueryExecuter(JasperReportsContext jasperReportsContext,
-			JRDataset dataset,
-			Map<String, ? extends JRValueParameter> parameters)
-			throws JRException {
+	public MongoDbQueryExecuter(JasperReportsContext jasperReportsContext, JRDataset dataset, Map<String, ? extends JRValueParameter> parameters) throws JRException {
 		this(jasperReportsContext, dataset, parameters, false);
 	}
 
-	public MongoDbQueryExecuter(JasperReportsContext jasperReportsContext,
-			JRDataset dataset,
-			Map<String, ? extends JRValueParameter> parameters,
-			boolean directParameters) {
+	public MongoDbQueryExecuter(JasperReportsContext jasperReportsContext, JRDataset dataset, Map<String, ? extends JRValueParameter> parameters, boolean directParameters) {
 		super(jasperReportsContext, dataset, parameters);
 		this.directParameters = directParameters;
 		this.reportParameters = parameters;
@@ -84,8 +77,7 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 		wrapper = null;
 	}
 
-	private MongoDbConnection processConnection(JRValueParameter valueParameter)
-			throws JRException {
+	private MongoDbConnection processConnection(JRValueParameter valueParameter) throws JRException {
 		if (valueParameter == null) {
 			throw new JRException("No MongoDB connection");
 		}
@@ -93,29 +85,24 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 	}
 
 	/**
-	 * Creates a new {@link MongoDbDataSource} from the report parameters and
-	 * the query string
+	 * Creates a new {@link MongoDbDataSource} from the report parameters and the
+	 * query string
 	 */
 	public JRDataSource createDatasource() throws JRException {
-		MongoDbConnection connection = (MongoDbConnection) ((Map<?, ?>) getParameterValue(JRParameter.REPORT_PARAMETERS_MAP))
-				.get(JRParameter.REPORT_CONNECTION);
+		MongoDbConnection connection = (MongoDbConnection) ((Map<?, ?>) getParameterValue(JRParameter.REPORT_PARAMETERS_MAP)).get(JRParameter.REPORT_CONNECTION);
 		if (connection == null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("REPORT_PARAMETERS_MAP: "
-						+ ((Map<?, ?>) getParameterValue(JRParameter.REPORT_PARAMETERS_MAP))
-								.keySet());
+				logger.debug("REPORT_PARAMETERS_MAP: " + ((Map<?, ?>) getParameterValue(JRParameter.REPORT_PARAMETERS_MAP)).keySet());
 			}
 			if (logger.isDebugEnabled()) {
 				logger.debug("Direct parameters: " + reportParameters.keySet());
 			}
-			connection = processConnection(reportParameters
-					.get(JRParameter.REPORT_CONNECTION));
+			connection = processConnection(reportParameters.get(JRParameter.REPORT_CONNECTION));
 			if (connection == null) {
 				throw new JRException("No MongoDB connection");
 			}
 		}
-		wrapper = new MongoDbQueryWrapper(getQueryString(), connection,
-				parameters);
+		wrapper = new MongoDbQueryWrapper(getQueryString(), connection, parameters);
 		return new MongoDbDataSource(wrapper);
 	}
 
@@ -126,8 +113,7 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 	protected String getParameterReplacement(String parameterName) {
 		Object parameterValue = reportParameters.get(parameterName);
 		if (parameterValue == null) {
-			throw new JRRuntimeException("Parameter \"" + parameterName
-					+ "\" does not exist.");
+			throw new JRRuntimeException("Parameter \"" + parameterName + "\" does not exist.");
 		}
 		if (parameterValue instanceof JRValueParameter) {
 			parameterValue = ((JRValueParameter) parameterValue).getValue();
@@ -156,10 +142,15 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 			return builder.toString();
 		}
 		parameters.put(parameterName, parameterValue);
-		return generateParameterObject(parameterName);
+		return generateParameterObject(parameterName, parameterValue);
 	}
 
-	private String generateParameterObject(String parameterName) {
+	private String generateParameterObject(String parameterName, Object parameterValue) {
+		if (parameterValue != null) {
+			if (parameterValue instanceof String)
+				return "'" + parameterValue + "'";
+			return parameterValue.toString();
+		}
 		return "{'" + parameterName + "':null}";
 	}
 
@@ -168,15 +159,11 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 	}
 
 	@Override
-	protected Object getParameterValue(String parameterName,
-			boolean ignoreMissing) {
+	protected Object getParameterValue(String parameterName, boolean ignoreMissing) {
 		try {
 			return super.getParameterValue(parameterName, ignoreMissing);
 		} catch (Exception e) {
-			if (e.getMessage()
-					.endsWith(
-							"cannot be cast to net.sf.jasperreports.engine.JRValueParameter")
-					&& directParameters) {
+			if (e.getMessage().endsWith("cannot be cast to net.sf.jasperreports.engine.JRValueParameter") && directParameters) {
 				return reportParameters.get(parameterName);
 			}
 		}
