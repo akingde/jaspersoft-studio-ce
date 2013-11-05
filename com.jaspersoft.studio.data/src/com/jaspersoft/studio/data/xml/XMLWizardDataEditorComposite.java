@@ -22,7 +22,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -56,8 +55,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class XMLWizardDataEditorComposite extends
-		ATreeWizardDataEditorComposite {
+public class XMLWizardDataEditorComposite extends ATreeWizardDataEditorComposite {
 
 	private static final int JOB_DELAY = 300;
 	private XMLDocumentManager documentManager;
@@ -65,8 +63,7 @@ public class XMLWizardDataEditorComposite extends
 	private NodeBoldStyledLabelProvider<XMLNode> treeLabelProvider;
 	private XPathTreeViewerContentProvider treeContentProvider;
 
-	public XMLWizardDataEditorComposite(Composite parent, WizardPage page,
-			DataAdapterDescriptor dataAdapterDescriptor) {
+	public XMLWizardDataEditorComposite(Composite parent, WizardPage page, DataAdapterDescriptor dataAdapterDescriptor) {
 		super(parent, page, dataAdapterDescriptor);
 	}
 
@@ -96,20 +93,17 @@ public class XMLWizardDataEditorComposite extends
 			Display.getCurrent().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
-							DefaultJasperReportsContext.getInstance(), null);
+					JasperReportsConfiguration jConfig = JasperReportsConfiguration.getDefaultJRConfig();
 					try {
 						documentManager.setDocument(getXMLDocument(da));
 						documentManager.setJasperConfiguration(jConfig);
-						treeViewer.setInput(documentManager
-								.getXMLDocumentModel());
+						treeViewer.setInput(documentManager.getXMLDocumentModel());
 						treeViewer.expandToLevel(2);
 						decorateTreeUsingQueryText();
 					} catch (Exception e) {
 						getStatusBar().showError(e);
 						treeViewer.getTree().removeAll();
-						treeViewer
-								.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+						treeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
 					} finally {
 						jConfig.dispose();
 					}
@@ -138,11 +132,8 @@ public class XMLWizardDataEditorComposite extends
 				TreeSelection s = (TreeSelection) treeViewer.getSelection();
 				if (s.getFirstElement() instanceof XMLNode) {
 					XMLNode xmlNode = (XMLNode) s.getFirstElement();
-					String xPathExpression = documentManager
-							.getXPathExpression(null, xmlNode);
-					queryTextArea
-							.setText((xPathExpression != null) ? xPathExpression
-									: ""); //$NON-NLS-1$
+					String xPathExpression = documentManager.getXPathExpression(null, xmlNode);
+					queryTextArea.setText((xPathExpression != null) ? xPathExpression : ""); //$NON-NLS-1$
 				}
 			}
 		});
@@ -157,8 +148,8 @@ public class XMLWizardDataEditorComposite extends
 	}
 
 	/*
-	 * Job that is responsible to update the treeviewer presentation depending
-	 * on the nodes selected by the XPath query.
+	 * Job that is responsible to update the treeviewer presentation depending on
+	 * the nodes selected by the XPath query.
 	 */
 	private final class DecorateTreeViewerJob extends WorkbenchJob {
 
@@ -170,12 +161,9 @@ public class XMLWizardDataEditorComposite extends
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			if (!isDisposed()) {
-				monitor.beginTask(
-						Messages.XPathWizardDataEditorComposite_TaskName,
-						IProgressMonitor.UNKNOWN);
+				monitor.beginTask(Messages.XPathWizardDataEditorComposite_TaskName, IProgressMonitor.UNKNOWN);
 				String query = queryTextArea.getText();
-				treeLabelProvider.setSelectedNodes(documentManager
-						.getSelectableNodes(query));
+				treeLabelProvider.setSelectedNodes(documentManager.getSelectableNodes(query));
 				treeViewer.refresh();
 				monitor.done();
 				return Status.OK_STATUS;
@@ -210,11 +198,9 @@ public class XMLWizardDataEditorComposite extends
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 */
-	protected Document getXMLDocument(final DataAdapterDescriptor da)
-			throws SAXException, IOException, ParserConfigurationException {
+	protected Document getXMLDocument(final DataAdapterDescriptor da) throws SAXException, IOException, ParserConfigurationException {
 		String fileName = ((XmlDataAdapter) da.getDataAdapter()).getFileName();
 		File in = new File(fileName);
-		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(in);
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 	}
 }
