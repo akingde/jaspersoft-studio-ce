@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -89,7 +88,7 @@ public class JRXmlWriterHelper {
 		if (!writers.contains(version))
 			version = LAST_VERSION;
 		if (jrContext == null)
-			jrContext = DefaultJasperReportsContext.getInstance();
+			jrContext = JasperReportsConfiguration.getDefaultJRConfig();
 		jrContext.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
 		if (writers.contains(version))
 			jrContext.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
