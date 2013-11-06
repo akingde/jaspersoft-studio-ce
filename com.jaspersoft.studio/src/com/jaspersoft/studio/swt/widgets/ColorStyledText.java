@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -101,6 +100,11 @@ public class ColorStyledText {
 	 * Area where the component is placed
 	 */
 	private Composite paintArea;
+	
+	/**
+	 * Flag used to know if show or not the controls to define the color alpha
+	 */
+	private boolean disableAlphaSelection = false;
 
 	/**
 	 * Class that handle the editing of the textual value of the color, if the textual value is in the expected format the
@@ -166,6 +170,18 @@ public class ColorStyledText {
 
 	public void setLayoutData(Object data) {
 		paintArea.setLayoutData(data);
+	}
+	
+	/**
+	 * When the color dialog is opened to select the color 
+	 * this flag is used to determinate if the control 
+	 * to define the alpha should be shown.
+	 * 
+	 * @param value true if the control to change the alpha should not be shown
+	 * otherwise false
+	 */
+	public void DisableAlphaSelection(boolean value){
+		disableAlphaSelection = value;
 	}
 
 	/**
@@ -239,6 +255,20 @@ public class ColorStyledText {
 		textArea.addModifyListener(new EditListener());
 		textArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
+	
+	/**
+	 * Center to the screen the passed shell
+	 * @param shell
+	 */
+	private Shell centeredShell(Shell shell){
+		Shell result = new Shell(shell);
+		Rectangle bounds = result.getDisplay().getBounds();
+		Rectangle rect = result.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		result.setLocation(x, y);
+		return result;
+	}
 
 	/**
 	 * Create the label to open the dialog of selection color. The label has painted inside a preview of the color. Now it
@@ -262,9 +292,14 @@ public class ColorStyledText {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
+				ColorDialog cd = new ColorDialog(centeredShell(colorButton.getShell()));
 				cd.setText(Messages.common_line_color);
-				AlfaRGB newColor = cd.openAlfaRGB();
+				if (getColor() != null) cd.setRGB(getColor());
+				AlfaRGB newColor = null;
+				if (disableAlphaSelection) {
+					RGB rgbColor = cd.openRGB();
+					if (rgbColor != null) newColor = AlfaRGB.getFullyOpaque(rgbColor);
+				} else newColor = cd.openAlfaRGB();
 				if (newColor != null) {
 					setColor(newColor, true);
 				}
@@ -294,12 +329,14 @@ public class ColorStyledText {
 		// Open the color selection window when the button is pushed
 		lineColor.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Shell centerShell = new Shell(paintArea.getDisplay().getActiveShell(), SWT.NO_TRIM);
-				Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-				centerShell.setLocation(mouseLocation.x, mouseLocation.y);
-				ColorDialog cd = new ColorDialog(centerShell);
+				ColorDialog cd = new ColorDialog(centeredShell(paintArea.getShell()));
 				cd.setText(Messages.common_line_color);
-				AlfaRGB newColor = cd.openAlfaRGB();
+				if (getColor() != null) cd.setRGB(getColor());
+				AlfaRGB newColor = null;
+				if (disableAlphaSelection) {
+					RGB rgbColor = cd.openRGB();
+					if (rgbColor != null) newColor = AlfaRGB.getFullyOpaque(rgbColor);
+				} else newColor = cd.openAlfaRGB();
 				if (newColor != null) {
 					lineColor.setSelection(false);
 					setColor(newColor, true);
