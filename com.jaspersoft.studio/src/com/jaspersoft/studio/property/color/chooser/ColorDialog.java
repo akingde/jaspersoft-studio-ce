@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -285,6 +287,10 @@ public class ColorDialog extends Dialog{
       gc.setBackground(ResourceManager.getColor(currentColor));
       gc.fillRectangle(0, imageData.height/2, imageData.width, imageData.height);
     } else {
+    	gc.setAlpha(255);
+    	gc.setBackground(colorsSelector.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+      gc.fillRectangle(0, 0, imageData.width, imageData.height);
+      gc.setAlpha(alpha);
       gc.setBackground(ResourceManager.getColor(colorsSelector.getSelectedColorRGB()));
       gc.fillRectangle(0, 0, imageData.width, imageData.height);
     }
@@ -350,6 +356,12 @@ public class ColorDialog extends Dialog{
 		 
 		 previewComposite = new Composite(colorPreview, SWT.BORDER);
 		 previewComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		 previewComposite.addControlListener(new ControlAdapter(){
+			 @Override
+			public void controlResized(ControlEvent e) {
+				updatePreview();
+			}
+		 });
 		 
 		 createColorPicker(colorPreview);
 		 
@@ -515,6 +527,13 @@ public class ColorDialog extends Dialog{
 	}
 	
 	public RGB openRGB(){
+		//When a simple RGB is requested hide the alpha control
+		Composite alphaContainer = alphaSlider.getParent();
+		alphaContainer.setVisible(false);
+		GridData data = (GridData)alphaContainer.getLayoutData();
+		data.exclude = true;
+		alphaContainer.getParent().layout();
+		
 		int returnCode = super.open();
 		actualPreviewImage.dispose();
     stopPickerThread();

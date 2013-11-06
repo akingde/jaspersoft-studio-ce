@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -59,9 +61,21 @@ public class ColorsSelectorWidget extends Composite {
 		setLayout(new GridLayout(2,false));
 		
 		colorComposite = new Composite(this, SWT.BORDER);
+		
 		colorComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		slider = new Composite(this, SWT.NONE);
+		slider.addControlListener(new ControlListener() {
+			
+			@Override
+			public void controlResized(ControlEvent e) {
+				 setSelectedColor(getSelectedColorRGB(),false);
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {	
+			}
+		});
 		GridData rangeData = new GridData(SWT.LEFT, SWT.FILL, false, true);
 		rangeData.widthHint = 30;
 		slider.setLayoutData(rangeData);
@@ -250,7 +264,7 @@ public class ColorsSelectorWidget extends Composite {
 		paintPad();
 		selectedColorRGB = color;
 		selectedColorHSB = new float[]{h,s,b};
-  	if (callListener) callSelectionListeners();
+  		if (callListener) callSelectionListeners();
 	}
 	
 	public void setSelectedColor(RGB color, boolean callListener){
@@ -269,17 +283,17 @@ public class ColorsSelectorWidget extends Composite {
 			circlePosition = new Point(getAbsoluteXFromRelative(relativeX), getAbsoluteYFromRelative(relativeY));
 			cachedSlider = null;
 		}
-  	paintSlider();
+  		paintSlider();
 		paintPad();
 		selectedColorRGB = color;
 		selectedColorHSB = color.getHSB();
-  	if (callListener) callSelectionListeners();
+  		if (callListener) callSelectionListeners();
 	}
 	
 	private int getSliderHeight(){
 		if (cachedSlider != null) return cachedSlider.height;
-  	Rectangle sliderRect = slider.getClientArea();
-  	return sliderRect.height;
+	  	Rectangle sliderRect = slider.getClientArea();
+	  	return sliderRect.height;
 	}
 	
 	private int getPadWidth(){
@@ -294,28 +308,28 @@ public class ColorsSelectorWidget extends Composite {
 		return padRect.height;
 	}
 	
-	private void paintSlider(){
-
+	private void paintSlider()
+	{
 		Rectangle rect = slider.getClientArea();
 		if (rect.height == 0) return;
 		if (cachedSlider == null) cachedSlider = createSliderImage(rect);
 		
 		ImageData imageData = (ImageData)cachedSlider.clone();
 		Image newImage = new Image(getDisplay(), imageData);
-    GC gc = new GC(newImage);
-    gc.setAntialias(SWT.ON);
-    gc.setForeground(borderColor);
-    gc.drawRectangle(arrowWidth, 0, imageData.width-arrowWidth*2, imageData.height-1);
-    
-    gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
-    gc.fillPolygon(new int[]{0, sliderPosition-3, arrowWidth,sliderPosition,0,sliderPosition+3});
-    gc.fillPolygon(new int[]{imageData.width, sliderPosition-3, imageData.width-arrowWidth,sliderPosition,imageData.width,sliderPosition+3});
-    if (oldHueImage != null){
-    	oldHueImage.dispose();
-    }
-    oldHueImage = newImage;
-    gc.dispose();
-    slider.setBackgroundImage(newImage);
+    	GC gc = new GC(newImage);
+	    gc.setAntialias(SWT.ON);
+	    gc.setForeground(borderColor);
+	    gc.drawRectangle(arrowWidth, 0, imageData.width-arrowWidth*2, imageData.height-1);
+	    
+	    gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+	    gc.fillPolygon(new int[]{0, sliderPosition-3, arrowWidth,sliderPosition,0,sliderPosition+3});
+	    gc.fillPolygon(new int[]{imageData.width, sliderPosition-3, imageData.width-arrowWidth,sliderPosition,imageData.width,sliderPosition+3});
+	    if (oldHueImage != null){
+	    	oldHueImage.dispose();
+	    }
+	    oldHueImage = newImage;
+	    gc.dispose();
+	    slider.setBackgroundImage(newImage);
 	}
 	
 	private void paintPad(){
