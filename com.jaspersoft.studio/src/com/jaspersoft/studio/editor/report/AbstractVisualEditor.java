@@ -191,7 +191,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		 */
 		@Override
 		public void keyUp(KeyEvent keyEvent, EditPartViewer viewer) {
-			super.keyDown(keyEvent, viewer);
+			super.keyUp(keyEvent, viewer);
 			keyMap.put(keyEvent.keyCode, false);
 		}
 
