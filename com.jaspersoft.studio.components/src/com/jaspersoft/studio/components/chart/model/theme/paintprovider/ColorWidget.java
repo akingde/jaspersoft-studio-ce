@@ -27,11 +27,11 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -74,7 +74,7 @@ public class ColorWidget extends Composite {
 				ColorDialog cd = new ColorDialog(b.getShell());
 				cd.setText(Messages.common_color);
 				cd.setRGB(color);
-				RGB newColor = cd.open();
+				RGB newColor = cd.openRGB();
 				if (newColor != null) {
 					RGB oldColor = color;
 					color = newColor;

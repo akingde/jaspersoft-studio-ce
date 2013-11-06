@@ -31,15 +31,16 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.help.HelpSystem;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * This class is used to paint a "Color TextBox", a label where a color is expressed in hex value, with a representation
@@ -54,7 +55,7 @@ public class ColorStyledText {
 	/**
 	 * The color represented
 	 */
-	private RGB color = null;
+	private AlfaRGB color = null;
 
 	/**
 	 * The text area
@@ -142,8 +143,9 @@ public class ColorStyledText {
 				}
 				// If the color has been changed and the event flag is open then fire the events
 				if (newColor != null) {
-					color = newColor;
-					textArea.setText(getHexFromRGB(color));
+					if (color != null) color = new AlfaRGB(newColor, color.getAlfa());
+					else color = AlfaRGB.getFullyOpaque(newColor);
+					textArea.setText(getHexFromRGB(color.getRgb()));
 					if (colorButton != null)
 						colorButton.setImage(provider.getImage(color, 18, 14));
 					if (lineColor != null)
@@ -262,7 +264,7 @@ public class ColorStyledText {
 			public void mouseDown(MouseEvent e) {
 				ColorDialog cd = new ColorDialog(colorButton.getDisplay().getActiveShell());
 				cd.setText(Messages.common_line_color);
-				RGB newColor = cd.open();
+				AlfaRGB newColor = cd.openAlfaRGB();
 				if (newColor != null) {
 					setColor(newColor, true);
 				}
@@ -297,7 +299,7 @@ public class ColorStyledText {
 				centerShell.setLocation(mouseLocation.x, mouseLocation.y);
 				ColorDialog cd = new ColorDialog(centerShell);
 				cd.setText(Messages.common_line_color);
-				RGB newColor = cd.open();
+				AlfaRGB newColor = cd.openAlfaRGB();
 				if (newColor != null) {
 					lineColor.setSelection(false);
 					setColor(newColor, true);
@@ -344,11 +346,11 @@ public class ColorStyledText {
 	 * @param callListener
 	 *          true to call the edit listener after the editing
 	 */
-	public void setColor(RGB newColor, boolean callListener) {
+	public void setColor(AlfaRGB newColor, boolean callListener) {
 		raiseEvents = callListener;
 		// dispose the old color before to create the new one
 		color = newColor;
-		lastValidText = getHexFromRGB(color);
+		lastValidText = getHexFromRGB(color.getRgb());
 		textArea.setText(lastValidText);
 		raiseEvents = true;
 	}
@@ -368,7 +370,7 @@ public class ColorStyledText {
 	 * @param newColor
 	 *          the new color
 	 */
-	public void setColor(RGB newColor) {
+	public void setColor(AlfaRGB newColor) {
 		setColor(newColor, false);
 	}
 
@@ -388,7 +390,7 @@ public class ColorStyledText {
 	 * 
 	 * @return the color in RGB format
 	 */
-	public RGB getColor() {
+	public AlfaRGB getColor() {
 		return color;
 	}
 

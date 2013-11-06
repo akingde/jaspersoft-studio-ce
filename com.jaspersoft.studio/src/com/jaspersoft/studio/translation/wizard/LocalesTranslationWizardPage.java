@@ -352,10 +352,16 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 		createLocalesSection(container);
 		createPathSection(container);
 		setControl(container);
-		
-		dialogChanged();
 	}
 
+	/**
+	 * Check for error when the dialog became visible
+	 */
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible) dialogChanged();
+	}
 
 	/**
 	 * Create the text for the path and the button to open 
@@ -397,6 +403,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
       }
     });
 	}
+	
 	
 
 	/**

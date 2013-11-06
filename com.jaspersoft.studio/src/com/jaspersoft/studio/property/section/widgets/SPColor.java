@@ -15,8 +15,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
@@ -24,6 +22,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -58,19 +57,11 @@ public class SPColor extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(toolBar.getShell());
 				cd.setText(pDescriptor.getDisplayName());
-				AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyValue(pDescriptor.getId());
-				cd.setRGB(rgb == null ? null : rgb.getRgb());
-				RGB newColor = cd.open();
-				if (newColor != null)
-					changeProperty(section, pDescriptor.getId(), new AlfaRGB(newColor, rgb == null ? 255 : rgb.getAlfa()));
-				/*com.jaspersoft.studio.property.color.chooser.ColorDialog cd = 
-						new com.jaspersoft.studio.property.color.chooser.ColorDialog(toolBar.getShell());
-				cd.setText(pDescriptor.getDisplayName());
 				AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
 				cd.setRGB(rgb == null ? null : rgb);
 				AlfaRGB newColor = cd.openAlfaRGB();
 				if (newColor != null)
-					changeProperty(section, pDescriptor.getId(), newColor);*/
+					changeProperty(section, pDescriptor.getId(), newColor);
 			}
 		});
 		foreButton.setToolTipText(pDescriptor.getDescription());

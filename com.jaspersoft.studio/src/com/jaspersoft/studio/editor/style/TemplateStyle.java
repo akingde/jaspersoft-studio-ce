@@ -10,6 +10,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * A template style are a series of attributes that can be applied to a wide range of objects (like tables, reports, crosstabs) 
@@ -35,7 +36,7 @@ public abstract class TemplateStyle implements Serializable {
 	/**
 	 * The base color of the style
 	 */
-	protected RGB baseColor;
+	protected AlfaRGB baseColor;
 	
 	/**
 	 * A key of a variation, for informations on the available variation look at the class 
@@ -46,18 +47,18 @@ public abstract class TemplateStyle implements Serializable {
 	/**
 	 * An has map to store color, with the pair key of the color and the SWT RGB of the color
 	 */
-	private HashMap<String, RGB> storedColor;
+	private HashMap<String, AlfaRGB> storedColor;
 	
 	/**
 	 * An hashmap to store generic properties, with the pair key of the property and value of the property
 	 */
 	private HashMap<String, Object> storedProperties;
 	
-	public TemplateStyle(RGB baseColor, ColorSchemaGenerator.SCHEMAS variation){
+	public TemplateStyle(AlfaRGB baseColor, ColorSchemaGenerator.SCHEMAS variation){
 		this.baseColor = baseColor;
 		this.variation = variation;
 		storedProperties = new HashMap<String, Object>();
-		storedColor = new HashMap<String, RGB>();
+		storedColor = new HashMap<String, AlfaRGB>();
 	}
 	
 	/**
@@ -65,7 +66,7 @@ public abstract class TemplateStyle implements Serializable {
 	 * 
 	 * @return an rgb representing the base color
 	 */
-	public RGB getBaseColor(){
+	public AlfaRGB getBaseColor(){
 		return baseColor;
 	}
 	
@@ -103,7 +104,7 @@ public abstract class TemplateStyle implements Serializable {
 	 * @param name the key of the color
 	 * @param color the RGB of the color
 	 */
-	public void storeColor(String name, RGB color){
+	public void storeColor(String name, AlfaRGB color){
 		storedColor.put(name, color);
 	}
 	
@@ -116,8 +117,8 @@ public abstract class TemplateStyle implements Serializable {
 	 * @param gradation gradation of the new color
 	 * @return the SWT RGB of generated color
 	 */
-	public RGB generateAndStoreColor(String name, int gradation){
-		RGB generatedColor = ColorSchemaGenerator.createColor(baseColor, gradation, variation);
+	public AlfaRGB generateAndStoreColor(String name, int gradation){
+		AlfaRGB generatedColor = ColorSchemaGenerator.createColor(baseColor, gradation, variation);
 		storedColor.put(name, generatedColor);
 		return generatedColor;
 	}
@@ -129,8 +130,8 @@ public abstract class TemplateStyle implements Serializable {
 	 * @param gradation gradation of the new color
 	 * @return the SWT RGB of generated color
 	 */
-	public RGB generateColor(int gradation){
-		RGB generatedColor = ColorSchemaGenerator.createColor(baseColor, gradation, variation);
+	public AlfaRGB generateColor(int gradation){
+		AlfaRGB generatedColor = ColorSchemaGenerator.createColor(baseColor, gradation, variation);
 		return generatedColor;
 	}
 	
@@ -196,7 +197,7 @@ public abstract class TemplateStyle implements Serializable {
 	 * @param name the key of the color
 	 * @return the SWT RGB value of the color, can be null if the color does not exist 
 	 */
-	public RGB getColor(String name){
+	public AlfaRGB getColor(String name){
 		return storedColor.get(name);
 	}
 	
@@ -230,13 +231,16 @@ public abstract class TemplateStyle implements Serializable {
 	 * @param color the color to convert
 	 * @return A string that contains the XML representation of the color as <tagName r="red_value" g="green_value" b="blue_value"/>
 	 */
-	public static String xmlColor(String tagName, RGB color){
+	public static String xmlColor(String tagName, AlfaRGB color){
+		RGB rgbColor = color.getRgb();
 		String colorString ="<".concat(tagName).concat(" r=\"");
-		colorString += color.red;
+		colorString += rgbColor.red;
 		colorString = colorString.concat("\" g=\"");
-		colorString += color.green;
+		colorString += rgbColor.green;
 		colorString = colorString.concat("\" b=\"");
-		colorString += color.blue;
+		colorString += rgbColor.blue;
+		colorString = colorString.concat("\" alpha=\"");
+		colorString += color.getAlfa();
 		colorString = colorString.concat("\"/>");
 		return colorString;
 	}
@@ -247,12 +251,13 @@ public abstract class TemplateStyle implements Serializable {
 	 * @param xmlColorNode  an xml node representation of a rgb color. This node must have three attribute named r, g and b
 	 * @return an rgb color
 	 */
-	public static RGB rgbColor(Node xmlColorNode){
+	public static AlfaRGB rgbColor(Node xmlColorNode){
 		NamedNodeMap colorAttributes = xmlColorNode.getAttributes();
 		int r = Integer.parseInt(colorAttributes.getNamedItem("r").getNodeValue());
 		int g = Integer.parseInt(colorAttributes.getNamedItem("g").getNodeValue());
 		int b = Integer.parseInt(colorAttributes.getNamedItem("b").getNodeValue());
-		return new RGB(r,g,b);
+		int alpha = Integer.parseInt(colorAttributes.getNamedItem("alpha").getNodeValue());
+		return new AlfaRGB(new RGB(r,g,b), alpha);
 	}
 	
 	/**

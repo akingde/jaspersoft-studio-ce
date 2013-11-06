@@ -1,9 +1,15 @@
 package com.jaspersoft.studio.utils;
 
+import java.io.Serializable;
+
 import org.eclipse.swt.graphics.RGB;
 
-public class AlfaRGB {
+public class AlfaRGB implements Serializable{
+
+	private static final long serialVersionUID = 1283053372093648788L;
+	
 	private RGB rgb;
+	
 	private int alfa;
 
 	public AlfaRGB(RGB rgb, int alfa) {

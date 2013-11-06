@@ -374,12 +374,12 @@ public class BordersSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
 		lineColor = new ColorStyledText(composite);
-		lineColor.setColor(new RGB(0, 0, 0));
+		lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
 		lineColor.setHelp(LINE_COLOR);
 		lineColor.addListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(lineColor.getColor(),255));	
+				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, lineColor.getColor());	
 			}
 		});
 
@@ -432,14 +432,14 @@ public class BordersSection extends AbstractSection {
 		noneBorder = new ToolItem(toolBar, SWT.PUSH);
 		noneBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				RGB beforeSelectionColor = lineColor.getColor();// lastColorSelected;
+				AlfaRGB beforeSelectionColor = lineColor.getColor();// lastColorSelected;
 				int selection = lineWidth.getSelection();
 				Object beforeSelectionStyle = lineStyle.getSelectedValue();
 				bd.setBorderSelected(Location.LEFT);
 				bd.setBorderSelected(Location.RIGHT);
 				bd.setBorderSelected(Location.TOP);
 				bd.setBorderSelected(Location.BOTTOM);
-				AlfaRGB color = new AlfaRGB(new RGB(0,0,0), 255);
+				AlfaRGB color = AlfaRGB.getFullyOpaque(new RGB(0,0,0));
 				Float newValue = new Float(0);
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, 1);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, color);
@@ -464,8 +464,7 @@ public class BordersSection extends AbstractSection {
 				int selection = lineWidth.getSelection();
 				int digits = lineWidth.getDigits();
 				Float newValue = new Float(selection / Math.pow(10, digits));
-				RGB rgbColor = lineColor.getColor();//lastColorSelected;
-				AlfaRGB color = new AlfaRGB(rgbColor, 255);
+				AlfaRGB color = lineColor.getColor();
 				Object style = lineStyle.getSelectedValue();
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, style);
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, color);
@@ -479,8 +478,7 @@ public class BordersSection extends AbstractSection {
 		leftRightBorder = new ToolItem(toolBar, SWT.PUSH);
 		leftRightBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				RGB beforeSelectionColorRGB = lineColor.getColor();//lastColorSelected;
-				AlfaRGB beforeSelectionColor = new AlfaRGB(beforeSelectionColorRGB, 255);
+				AlfaRGB beforeSelectionColor = lineColor.getColor();
 				int selection = lineWidth.getSelection();
 				int digits = lineWidth.getDigits();
 				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
@@ -501,7 +499,7 @@ public class BordersSection extends AbstractSection {
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
 				bd.unselectAll();
-				lineColor.setColor(beforeSelectionColor.getRgb());
+				lineColor.setColor(beforeSelectionColor);
 				lineWidth.setSelection(selection);
 				lineStyle.setData((Integer)beforeSelectionStyle);
 			}
@@ -512,8 +510,7 @@ public class BordersSection extends AbstractSection {
 		upDownBorder = new ToolItem(toolBar, SWT.PUSH);
 		upDownBorder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				RGB beforeSelectionColorRGB = lineColor.getColor();//lastColorSelected;
-				AlfaRGB beforeSelectionColor = new AlfaRGB(beforeSelectionColorRGB, 255);
+				AlfaRGB beforeSelectionColor = lineColor.getColor();
 				int selection = lineWidth.getSelection();
 				int digits = lineWidth.getDigits();
 				Float beforeSelectionWidth = new Float(selection / Math.pow(10, digits));
@@ -534,7 +531,7 @@ public class BordersSection extends AbstractSection {
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, beforeSelectionColor);
 				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, beforeSelectionWidth);
 				bd.unselectAll();
-				lineColor.setColor(beforeSelectionColor.getRgb());
+				lineColor.setColor(beforeSelectionColor);
 				lineWidth.setSelection(selection);
 				lineStyle.setData((Integer)beforeSelectionStyle);
 			}
@@ -653,7 +650,7 @@ public class BordersSection extends AbstractSection {
 			}
 			else {
 				//No border is selected, set the control to the default value
-				lineColor.setColor(new RGB(0, 0, 0));
+				lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
 				lineWidth.setValues(0, 0, 5000, 1, 1, 1);
 				lineStyle.setData(1);
 			}
@@ -737,7 +734,7 @@ public class BordersSection extends AbstractSection {
 	
 				AlfaRGB backcolor = (AlfaRGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);
 				if (lineColor != null){
-					lineColor.setColor(backcolor.getRgb());
+					lineColor.setColor(backcolor);
 				}
 			}
 		}

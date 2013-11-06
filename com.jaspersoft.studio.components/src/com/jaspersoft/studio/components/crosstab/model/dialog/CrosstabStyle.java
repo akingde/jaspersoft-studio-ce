@@ -24,6 +24,7 @@ import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * 
@@ -69,17 +70,17 @@ public class CrosstabStyle extends TemplateStyle {
 	 */
 	public final static String COLOR_MEASURES = "color_measures";
 	
-	public CrosstabStyle(RGB baseColor, SCHEMAS variation, boolean whiteGrid) {
+	public CrosstabStyle(AlfaRGB baseColor, SCHEMAS variation, boolean whiteGrid) {
 		super(baseColor, variation);
 		storePropertiy(WHITE_GRID, whiteGrid);
 		storePropertiy(SHOW_GRID, true);
 		generateAndStoreColor(COLOR_TOTAL, 1);
 		generateAndStoreColor(COLOR_GROUP, 2);
 		generateAndStoreColor(COLOR_MEASURES, 3);
-		storeColor(COLOR_DETAIL, ColorConstants.white.getRGB());
+		storeColor(COLOR_DETAIL, AlfaRGB.getFullyOpaque(ColorConstants.white.getRGB()));
 	}
 	
-	public CrosstabStyle(RGB colorTotal, RGB colorGroup, RGB colorMeasures, RGB colorDetail, boolean whiteGrid) {
+	public CrosstabStyle(AlfaRGB colorTotal, AlfaRGB colorGroup, AlfaRGB colorMeasures, AlfaRGB colorDetail, boolean whiteGrid) {
 		super(null, null);
 		storePropertiy(WHITE_GRID, whiteGrid);
 		storePropertiy(SHOW_GRID, true);
@@ -137,8 +138,9 @@ public class CrosstabStyle extends TemplateStyle {
 	 * @return the color read, in AWT.Color format
 	 */
 	public Color getColorValue(String name){
-		RGB rgbColor =  super.getColor(name);
-		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue);
+		AlfaRGB alphaColor =  super.getColor(name);
+		RGB rgbColor =  alphaColor.getRgb();
+		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue, alphaColor.getAlfa());
 	}
 	
 	/**
@@ -190,11 +192,11 @@ public class CrosstabStyle extends TemplateStyle {
 			Node firstChild = xmlNode.getFirstChild();
 			String description = null;
 			
-			RGB baseColor = null;
-			RGB colorTotal = null;
-			RGB colorGroup = null;
-			RGB colorMeasures = null;
-			RGB colorDetail = null;
+			AlfaRGB baseColor = null;
+			AlfaRGB colorTotal = null;
+			AlfaRGB colorGroup = null;
+			AlfaRGB colorMeasures = null;
+			AlfaRGB colorDetail = null;
 			while(firstChild!=null){
 				if (firstChild.getNodeName().equals("baseColor")){
 					baseColor = rgbColor(firstChild);

@@ -69,6 +69,7 @@ import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateEngineException;
@@ -353,8 +354,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		}
 		if (result[1] == null || result[2] == null || result[3] == null ) {
 			//Styles missing, generating default styles
-			TableStyle defaultPattern = new TableStyle(ColorConstants.white.getRGB(), ColorSchemaGenerator.SCHEMAS.PALE, 
-															BorderStyleEnum.FULL, ColorConstants.black.getRGB(), false);
+			TableStyle defaultPattern = new TableStyle(AlfaRGB.getFullyOpaque(ColorConstants.white.getRGB()), ColorSchemaGenerator.SCHEMAS.PALE, 
+															BorderStyleEnum.FULL, AlfaRGB.getFullyOpaque(ColorConstants.black.getRGB()), false);
 			ApplyTableStyleAction stylesGenerator = new ApplyTableStyleAction(defaultPattern, null);
 			List<JRDesignStyle> defaultStyles = stylesGenerator.createStyles(jd);
 			defaultStyles.get(1).setBackcolor(Color.white);

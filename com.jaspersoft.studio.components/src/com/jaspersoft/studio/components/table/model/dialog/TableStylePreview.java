@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * Generate a preview of a table with a table style applied on it
@@ -79,7 +80,9 @@ public class TableStylePreview extends Composite {
 	 */
 	public TableStylePreview(Composite parent, int style){
 		super(parent, style);
-		tableStyle = new TableStyle(ColorConstants.lightBlue.getRGB(), ColorSchemaGenerator.SCHEMAS.DEFAULT,BorderStyleEnum.FULL,ColorConstants.black.getRGB(),false);
+		AlfaRGB baseColor = AlfaRGB.getFullyOpaque(ColorConstants.lightBlue.getRGB());
+		AlfaRGB borderColor = AlfaRGB.getFullyOpaque(ColorConstants.black.getRGB());
+		tableStyle = new TableStyle(baseColor, ColorSchemaGenerator.SCHEMAS.DEFAULT,BorderStyleEnum.FULL,borderColor ,false);
 		createFigure();
 	}
 	

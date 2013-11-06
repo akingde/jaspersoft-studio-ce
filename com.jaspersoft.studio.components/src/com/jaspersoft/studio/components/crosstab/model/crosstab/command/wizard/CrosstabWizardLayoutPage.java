@@ -41,6 +41,7 @@ import com.jaspersoft.studio.components.widgets.ColorSelectionWidget;
 import com.jaspersoft.studio.components.widgets.ColorSelectionWidget.ColorInput;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -174,8 +175,8 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 		String colorName = selectionWidget.getSchemaSelected();
 		Color color = ColorSchemaGenerator.getColor(colorName);
 		ColorSchemaGenerator.SCHEMAS variantKey = selectionWidget.getVariantSelectedKey();
-		RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
-		CrosstabStyle tempStyle = new CrosstabStyle(rgbColor, variantKey, false);
+		AlfaRGB argbColor = new AlfaRGB(new RGB(color.getRed(), color.getGreen(), color.getBlue()), color.getAlpha());
+		CrosstabStyle tempStyle = new CrosstabStyle(argbColor, variantKey, false);
 
 		selectionWidget.setButtonData(totalColor, tempStyle.getColor(CrosstabStyle.COLOR_TOTAL));
 		selectionWidget.setButtonData(groupColor, tempStyle.getColor(CrosstabStyle.COLOR_GROUP));
@@ -345,10 +346,10 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	 * and request the redraw of the preview
 	 */
 	private void notifyChange(){
-		RGB colorTotal = selectionWidget.getButtonData(totalColor);
-		RGB colorGroup = selectionWidget.getButtonData(groupColor);
-		RGB colorDetail = selectionWidget.getButtonData(detailColor);
-		RGB colorMeasures = selectionWidget.getButtonData(measuresColor);
+		AlfaRGB colorTotal = selectionWidget.getButtonData(totalColor);
+		AlfaRGB colorGroup = selectionWidget.getButtonData(groupColor);
+		AlfaRGB colorDetail = selectionWidget.getButtonData(detailColor);
+		AlfaRGB colorMeasures = selectionWidget.getButtonData(measuresColor);
 		lastGeneratedStyle = new CrosstabStyle(colorTotal, colorGroup, colorMeasures, colorDetail, whiteGrid.getSelection());
 		lastGeneratedStyle.setShowGrid(showGrid.getSelection());
 		if (titleText != null) lastGeneratedStyle.setDescription(titleText.getText());
@@ -377,7 +378,7 @@ public class CrosstabWizardLayoutPage extends JSSHelpWizardPage {
 	public static CrosstabStyle getDefaultStyle(){
 		String firstColor = ColorSchemaGenerator.getColors().get(0);
 		Color color = ColorSchemaGenerator.getColor(firstColor);
-		RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
+		AlfaRGB rgbColor = new AlfaRGB(new RGB(color.getRed(), color.getGreen(), color.getBlue()), color.getAlpha());
 		CrosstabStyle style = new CrosstabStyle(rgbColor, ColorSchemaGenerator.SCHEMAS.DEFAULT, false);
 		return style;
 	}

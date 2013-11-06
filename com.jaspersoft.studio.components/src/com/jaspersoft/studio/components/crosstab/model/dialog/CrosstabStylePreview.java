@@ -39,6 +39,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * This class is used to generate a preview of the layout of a crosstab, 
@@ -79,7 +80,7 @@ public class CrosstabStylePreview extends Composite {
 	 */
 	public CrosstabStylePreview(Composite parent, int style){
 		super(parent, style);
-		crosstabStyle = new CrosstabStyle(ColorConstants.lightBlue.getRGB(), ColorSchemaGenerator.SCHEMAS.DEFAULT, false);
+		crosstabStyle = new CrosstabStyle(AlfaRGB.getFullyOpaque(ColorConstants.lightBlue.getRGB()), ColorSchemaGenerator.SCHEMAS.DEFAULT, false);
 		createFigure();
 	}
 	

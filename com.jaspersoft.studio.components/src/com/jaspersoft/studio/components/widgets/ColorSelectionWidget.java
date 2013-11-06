@@ -26,11 +26,9 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -43,7 +41,9 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.color.Tag;
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * This is a color selection widget that offer two method of inputs to provide
@@ -87,9 +87,9 @@ public class ColorSelectionWidget {
 		/**
 		 * The initial button color
 		 */
-		private RGB color;
+		private AlfaRGB color;
 		
-		public ButtonDescriptor(String id, String text, RGB color){
+		public ButtonDescriptor(String id, String text, AlfaRGB color){
 			this.id = id;
 			this.text = text;
 			this.color = color;
@@ -214,7 +214,7 @@ public class ColorSelectionWidget {
 	 * @param text The text to place before the button
 	 * @param initialColor The initial color of the button
 	 */
-	public void addButton(String id, String text, RGB initialColor){
+	public void addButton(String id, String text, AlfaRGB initialColor){
 		buttonToAdd.add(new ButtonDescriptor(id, text, initialColor));
 	}
 	
@@ -371,10 +371,10 @@ public class ColorSelectionWidget {
 	 * @param buttonId the button unique id
 	 * @return the color of the button, or null if the id is not valid
 	 */
-	public RGB getButtonData(String buttonId){
+	public AlfaRGB getButtonData(String buttonId){
 		ToolItem button = buttonsMap.get(buttonId);
 		if (button != null){
-			return (RGB)button.getData();
+			return (AlfaRGB)button.getData();
 		}
 		return null;
 	}
@@ -385,7 +385,7 @@ public class ColorSelectionWidget {
 	 * @param buttonId the button unique id 
 	 * @param newColor a not null RGB color
 	 */
-	public void setButtonData(String buttonId, RGB newColor){
+	public void setButtonData(String buttonId, AlfaRGB newColor){
 		ToolItem button = buttonsMap.get(buttonId);
 		if (button != null){
 			button.setImage(colorLabelProvider.getImage(newColor));
@@ -420,7 +420,7 @@ public class ColorSelectionWidget {
 	 * @param color the color used to initialize the control
 	 * @return the created toolitem
 	 */
-	private ToolItem createSingleColors(String text, Composite parent, RGB color){		
+	private ToolItem createSingleColors(String text, Composite parent, AlfaRGB color){		
 		new Label(parent, SWT.NONE).setText(text);
 		final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		toolBar.setBackground(parent.getBackground());
@@ -431,7 +431,8 @@ public class ColorSelectionWidget {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(toolBar.getShell());
 				cd.setText(Messages.TableWizardLayoutPage_colorSelectionDialog);
-				RGB newColor = cd.open();
+				if (foreButton.getData() instanceof AlfaRGB) cd.setRGB((AlfaRGB)foreButton.getData());
+				AlfaRGB newColor = cd.openAlfaRGB();
 				if (newColor != null) {
 					setButtonColor(newColor,foreButton);
 					selectionChangeButton.widgetSelected(e);
@@ -467,7 +468,7 @@ public class ColorSelectionWidget {
 	 * @param newColor color to show
 	 * @param button button where the color will be shown
 	 */
-	private void setButtonColor(RGB newColor, ToolItem button){
+	private void setButtonColor(AlfaRGB newColor, ToolItem button){
 		button.setImage(colorLabelProvider.getImage(newColor));
 		button.setData(newColor);
 	}

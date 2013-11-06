@@ -555,6 +555,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.properties.view,
    org.eclipse.swt.widgets",
  com.jaspersoft.studio.property.color,
+ com.jaspersoft.studio.property.color.chooser,
  com.jaspersoft.studio.property.combomenu,
  com.jaspersoft.studio.property.dataset;
   uses:="net.sf.jasperreports.engine.design,

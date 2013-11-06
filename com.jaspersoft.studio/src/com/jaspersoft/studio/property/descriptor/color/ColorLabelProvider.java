@@ -47,25 +47,39 @@ public class ColorLabelProvider extends LabelProvider {
 	public Image getImage(Object element) {
 		return getImage(element, 16, 16);
 	}
-
+	
+	/**
+	 * Generate a trasparency on the color assuming a white background
+	 */
+	private RGB getBlendedColor(RGB color, int alphaInt){
+		float alpha = (float)alphaInt/255;
+		int outRed = Math.round(alpha * color.red + (1 - alpha) * 255);
+		int outGreen = Math.round(alpha * color.green + (1 - alpha) * 255);
+		int outBlue = Math.round(alpha * color.blue + (1 - alpha) * 255);
+		return new RGB(outRed, outGreen, outBlue);
+	}
+	
 	public Image getImage(Object element, int width, int height) {
+		int alfa = 255;
 		if (element == null)
 			return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/nocolor.png");
 		Display display = Display.getCurrent();
 		if (element instanceof ColorProvider)
 			element = Colors.getRGB4AWTColor(((ColorProvider) element).getColor());
-		if (element instanceof AlfaRGB)
-			element = ((AlfaRGB) element).getRgb();
+		if (element instanceof AlfaRGB){
+			AlfaRGB alfaRGB = (AlfaRGB) element;
+			element = alfaRGB.getRgb();
+			alfa = alfaRGB.getAlfa();
+		}
 		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
-			String key = rgb.toString() + Integer.toString(width) + Integer.toString(height);
+			String key = rgb.toString() + Integer.toString(width) + "_" + Integer.toString(height)+ "_" + Integer.toString(alfa);
 			Image result = imagesCache.getImage(key);
 			if (result == null) {
 				RGB black = new RGB(0, 0, 0);
+				if (alfa < 255) rgb = getBlendedColor(rgb, alfa);
 				PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });
 				ImageData data = new ImageData(width, height, 4, dataPalette);
-
-				data.transparentPixel = 0;
 				data.transparentPixel = 0;
 				for (int y = 0; y < data.height; y++) {
 					for (int x = 0; x < data.width; x++) {

@@ -16,12 +16,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
 public class ColorCellEditor extends DialogCellEditor {
@@ -106,10 +106,10 @@ public class ColorCellEditor extends DialogCellEditor {
 		ColorDialog dialog = new ColorDialog(cellEditorWindow.getShell());
 		AlfaRGB argb = (AlfaRGB) getValue();
 		if (argb != null)
-			dialog.setRGB(argb.getRgb());
-		RGB rgb = dialog.open();
-		if (rgb != null)
-			return new AlfaRGB(rgb, argb != null ? argb.getAlfa() : 255);
+			dialog.setRGB(argb);
+		AlfaRGB newARGB = dialog.openAlfaRGB();
+		if (newARGB != null)
+			return newARGB;
 		return argb;
 	}
 

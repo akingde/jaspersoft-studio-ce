@@ -24,6 +24,7 @@ import org.w3c.dom.Node;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator.SCHEMAS;
+import com.jaspersoft.studio.utils.AlfaRGB;
 
 /**
  * 
@@ -101,7 +102,7 @@ public class TableStyle extends TemplateStyle {
 	 * @param borderColor color of the border
 	 * @param altenrateColor true if the color of the detail are alternated, false otherwise
 	 */
-	public TableStyle(RGB baseColor, ColorSchemaGenerator.SCHEMAS variation, BorderStyleEnum borderStyle, RGB borderColor, boolean altenrateColor) {
+	public TableStyle(AlfaRGB baseColor, ColorSchemaGenerator.SCHEMAS variation, BorderStyleEnum borderStyle, AlfaRGB borderColor, boolean altenrateColor) {
 		super(baseColor, variation);
 		setBorderStyle(borderStyle);
 		setAlternateRowColor(altenrateColor);
@@ -111,8 +112,8 @@ public class TableStyle extends TemplateStyle {
 		Color detail = getColorValue(COLOR_TABLE_HEADER);
 		detail = ColorSchemaGenerator.overlayWhite(detail);
 		detail = ColorSchemaGenerator.overlayWhite(detail);
-		storeColor (COLOR_DETAIL, new RGB(detail.getRed(), detail.getGreen(), detail.getBlue()));
-		storeColor(STANDARD_COLOR_DETAIL,new RGB(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue()));
+		storeColor(COLOR_DETAIL, new AlfaRGB(new RGB(detail.getRed(), detail.getGreen(), detail.getBlue()), detail.getAlpha()));
+		storeColor(STANDARD_COLOR_DETAIL, AlfaRGB.getFullyOpaque(new RGB(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue())));
 	}
 	
 	/**
@@ -126,7 +127,7 @@ public class TableStyle extends TemplateStyle {
 	 * @param borderColor color of the border
 	 * @param altenrateColor true if the color of the detail are alternated, false otherwise
 	 */
-	public TableStyle(RGB colorTHeader, RGB colorCheader, RGB colorDetail, RGB colorAlternateDetail, BorderStyleEnum borderStyle, RGB borderColor, boolean altenrateColor) {
+	public TableStyle(AlfaRGB colorTHeader, AlfaRGB colorCheader, AlfaRGB colorDetail, AlfaRGB colorAlternateDetail, BorderStyleEnum borderStyle, AlfaRGB borderColor, boolean altenrateColor) {
 		super(null, null);
 		setBorderStyle(borderStyle);
 		setAlternateRowColor(altenrateColor);
@@ -165,7 +166,7 @@ public class TableStyle extends TemplateStyle {
 	 * 
 	 * @param value an SWT RGB color
 	 */
-	public void setBorderColor(RGB value){
+	public void setBorderColor(AlfaRGB value){
 		storeColor(BORDER_COLOR_KEY, value);
 	}
 	
@@ -175,8 +176,9 @@ public class TableStyle extends TemplateStyle {
 	 * @return an AWT color
 	 */
 	public Color getBorderColor(){
-		RGB rgbColor =  super.getColor(BORDER_COLOR_KEY);
-		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue);
+		AlfaRGB alfaColor =  super.getColor(BORDER_COLOR_KEY);
+		RGB rgbColor = alfaColor.getRgb();
+		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue, alfaColor.getAlfa());
 	}
 	
 	/**
@@ -184,8 +186,8 @@ public class TableStyle extends TemplateStyle {
 	 * 
 	 * @return an AWT color
 	 */
-	public RGB getRGBBorderColor(){
-		RGB rgbColor =  super.getColor(BORDER_COLOR_KEY);
+	public AlfaRGB getRGBBorderColor(){
+		AlfaRGB rgbColor =  super.getColor(BORDER_COLOR_KEY);
 		return rgbColor;
 	}
 	
@@ -216,8 +218,9 @@ public class TableStyle extends TemplateStyle {
 	 * @return the color read, in AWT.Color format
 	 */
 	public Color getColorValue(String name){
-		RGB rgbColor =  super.getColor(name);
-		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue);
+		AlfaRGB alfaColor =  super.getColor(name);
+		RGB rgbColor = alfaColor.getRgb();
+		return new Color(rgbColor.red, rgbColor.green, rgbColor.blue, alfaColor.getAlfa());
 	}
 	
 	
@@ -274,12 +277,12 @@ public class TableStyle extends TemplateStyle {
 			BorderStyleEnum borderStyle = BorderStyleEnum.valueOf(rootAttributes.getNamedItem("borderStyle").getNodeValue());
 			Node firstChild = xmlNode.getFirstChild();
 			String description = null;
-			RGB baseColor = null;
-			RGB borderColor = null;
-			RGB colorTHeader = null;
-			RGB colorCHeader = null;
-			RGB colorDetail = null;
-			RGB colorAlternateDetail = null;
+			AlfaRGB baseColor = null;
+			AlfaRGB borderColor = null;
+			AlfaRGB colorTHeader = null;
+			AlfaRGB colorCHeader = null;
+			AlfaRGB colorDetail = null;
+			AlfaRGB colorAlternateDetail = null;
 			while(firstChild!=null){
 				if (firstChild.getNodeName().equals("baseColor")){
 					baseColor = rgbColor(firstChild);

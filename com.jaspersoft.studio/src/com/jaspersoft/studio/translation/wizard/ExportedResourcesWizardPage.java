@@ -108,7 +108,7 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 			//guard used to avoid infinite cycles of refresh, since the modify listener 
 			//is called also when the content of an element is set programatically
 			synchronized (updating) {
-				if (!updating){
+				if (!updating && selectedItem != null){
 					updating = true;
 					selectedItem.setBundleName(pluginName.getText());
 					selectedItem.setBundleVersion(pluginVersion.getText());
@@ -218,6 +218,24 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 				}
 			}
 		});
+		
+		//Select the first element if there is at least one, or disable the input controls otherwise
+		if (resources.size() == 0){
+			pluginName.setEnabled(false);
+			pluginVersion.setEnabled(false);
+			hostPluginName.setEnabled(false);
+			hostPluginVersion.setEnabled(false);
+			pluginProducer.setEnabled(false);
+		} else {
+			pluginTable.setSelection(0);
+			TableItem selectedEntry = pluginTable.getSelection()[0];
+			selectedItem = (ExtendedTranslationInformation) selectedEntry.getData();
+			synchronized (updating) {
+				updating = true;
+				updateSelection();
+				updating = false;
+			}
+		}
 		
 		setControl(container);
 	}
