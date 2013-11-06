@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>com.jaspersoft.studio.data.hive.hbase</name>
-  <comment></comment>
+	<name>com.jaspersoft.studio.data.hbase</name>
+	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
