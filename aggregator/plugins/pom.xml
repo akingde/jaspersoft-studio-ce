@@ -58,7 +58,7 @@
 		<module>../../com.jaspersoft.studio.data.cassandra</module>
 		<module>../../com.jaspersoft.studio.data.drivers</module>
 		<module>../../com.jaspersoft.studio.data.hive</module>
-		<module>../../com.jaspersoft.studio.data.hive.hbase</module>
+		<module>../../com.jaspersoft.studio.data.hbase</module>
 		<module>../../com.jaspersoft.studio.data.mongodb</module>
 		<module>../../com.jaspersoft.studio.data.sql</module>
 		<module>../../com.jaspersoft.studio.data.sql.ui</module>
