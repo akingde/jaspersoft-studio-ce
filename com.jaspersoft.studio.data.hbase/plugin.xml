@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
-<plugin
-   id="com.jaspersoft.studio.data.hbase"
-
-   class="com.jaspersoft.studio.data.hbase.Activator">
-   <requires>
-      <import plugin="com.jaspersoft.studio.data" version="5.5.0"/>
-   </requires>
+<plugin>
 	<extension point="com.jaspersoft.studio.dataAdapters">
 		<dataAdapter ClassFactory="com.jaspersoft.studio.data.hbase.HBaseDataAdapterFactory"/>
 		<dataAdapter ClassFactory="com.jaspersoft.studio.data.hbase.HBaseThriftDataAdapterFactory"/>
