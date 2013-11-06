@@ -20,6 +20,8 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -136,7 +138,7 @@ public class ColorDialog extends Dialog{
 		
 		@Override
 		public void handleEvent(Event event) {
-			if (event.keyCode == SWT.SPACE){
+			if (event.keyCode == UIUtils.SWT_SPACE){
 				stopPickerThread();
 			}	
 		}
