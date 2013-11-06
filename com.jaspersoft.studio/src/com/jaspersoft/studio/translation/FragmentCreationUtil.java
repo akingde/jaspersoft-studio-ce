@@ -32,7 +32,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -224,13 +223,13 @@ public class FragmentCreationUtil {
 		rootFileNames.add("icons/");
 		
 		TranslationInformation baseInfo = new TranslationInformation(rcpPluginName);
-		String qualifiedName = baseInfo.getPluginName()+"_translation";
-		String version = Platform.getBundle(baseInfo.getPluginName()).getHeaders().get("Bundle-Version").toString();
-		ExtendedTranslationInformation rcpPlugin = CreateTranslationFragmentCommand.generateExtendedInfo(baseInfo, qualifiedName, version);
+		String version = FragmentCreationUtil.generateQualifier();
+		ExtendedTranslationInformation rcpPlugin = CreateTranslationFragmentCommand.generateExtendedInfo(baseInfo,version,"JSSBuilder");
 		
-		String jarName = rcpPlugin.getBundleName() + "_" + rcpPlugin.getBundleVersion() + ".jar";
+		String languageProvidedIds = getCodesFromLanguage(languagesProvided);
+		String jarName = rcpPlugin.getBundleName() + languageProvidedIds + "_" + rcpPlugin.getBundleVersion() + ".jar";
 		FragmentCreationUtil.createBuildFile(rcpPlugin, pluginDir, rootFileNames);
-		String manifest = FragmentCreationUtil.generateManifest(rcpPlugin, getCodesFromLanguage(languagesProvided), true);
+		String manifest = FragmentCreationUtil.generateManifest(rcpPlugin, languageProvidedIds, true);
 		JarFileUtils.createJar(destinationPath, pluginDir, jarName, manifest);
 	}
 	
