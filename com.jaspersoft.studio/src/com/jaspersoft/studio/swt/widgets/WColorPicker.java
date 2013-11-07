@@ -23,7 +23,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -32,6 +31,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.swt.events.ColorSelectedEvent;
 import com.jaspersoft.studio.swt.events.ColorSelectionListener;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -111,14 +111,9 @@ public class WColorPicker extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(getShell());
 				cd.setText(Messages.ColorsSection_element_forecolor);
-				cd.setRGB(selectedRGB!=null ? selectedRGB.getRgb() : null);
-				RGB newColor = cd.open();
-				if(selectedRGB!=null){
-					setColor(new AlfaRGB(newColor, selectedRGB.getAlfa()));
-				}
-				else{
-					setColor(AlfaRGB.getFullyOpaque(newColor));
-				}
+				cd.setRGB(selectedRGB);
+				AlfaRGB newColor = cd.openAlfaRGB();
+				setColor(newColor);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
