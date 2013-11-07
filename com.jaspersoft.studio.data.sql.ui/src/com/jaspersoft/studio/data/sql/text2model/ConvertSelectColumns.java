@@ -56,7 +56,9 @@ public class ConvertSelectColumns {
 		try {
 			if (fcol.getAllCols() != null)
 				new MSelectExpression(msel, "*");
-			else {
+			else if (fcol.getDbAllCols() != null) {
+				new MSelectExpression(msel, fcol.getDbAllCols().getDbname() + ".*");
+			} else {
 				Operands ce = fcol.getCe();
 				if (ce != null) {
 					if (ce instanceof OperandImpl)

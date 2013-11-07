@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.sql;
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAlias <em>Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getColAlias <em>Col Alias</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getAllCols <em>All Cols</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getDbAllCols <em>Db All Cols</em>}</li>
  * </ul>
  * </p>
  *
@@ -127,5 +128,31 @@ public interface ColumnOrAlias extends OrColumn
    * @generated
    */
   void setAllCols(String value);
+
+  /**
+   * Returns the value of the '<em><b>Db All Cols</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Db All Cols</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Db All Cols</em>' containment reference.
+   * @see #setDbAllCols(DbObjectNameAll)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getColumnOrAlias_DbAllCols()
+   * @model containment="true"
+   * @generated
+   */
+  DbObjectNameAll getDbAllCols();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ColumnOrAlias#getDbAllCols <em>Db All Cols</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Db All Cols</em>' containment reference.
+   * @see #getDbAllCols()
+   * @generated
+   */
+  void setDbAllCols(DbObjectNameAll value);
 
 } // ColumnOrAlias

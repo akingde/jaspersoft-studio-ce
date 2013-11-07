@@ -85,6 +85,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTableFullAccess().getGroup(), "rule__TableFull__Group__0");
 					put(grammarAccess.getTableFullAccess().getGroup_1(), "rule__TableFull__Group_1__0");
 					put(grammarAccess.getTableFullAccess().getGroup_1_1(), "rule__TableFull__Group_1_1__0");
+					put(grammarAccess.getDbObjectNameAllAccess().getGroup(), "rule__DbObjectNameAll__Group__0");
 					put(grammarAccess.getOrderByColumnsAccess().getGroup(), "rule__OrderByColumns__Group__0");
 					put(grammarAccess.getOrderByColumnsAccess().getGroup_1(), "rule__OrderByColumns__Group_1__0");
 					put(grammarAccess.getOrderByColumnsAccess().getGroup_1_1(), "rule__OrderByColumns__Group_1_1__0");
@@ -146,6 +147,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getColumnOrAliasAccess().getAliasAssignment_0_1(), "rule__ColumnOrAlias__AliasAssignment_0_1");
 					put(grammarAccess.getColumnOrAliasAccess().getColAliasAssignment_0_2(), "rule__ColumnOrAlias__ColAliasAssignment_0_2");
 					put(grammarAccess.getColumnOrAliasAccess().getAllColsAssignment_1(), "rule__ColumnOrAlias__AllColsAssignment_1");
+					put(grammarAccess.getColumnOrAliasAccess().getDbAllColsAssignment_2(), "rule__ColumnOrAlias__DbAllColsAssignment_2");
 					put(grammarAccess.getColumnFullAccess().getEntriesAssignment_1_1_1(), "rule__ColumnFull__EntriesAssignment_1_1_1");
 					put(grammarAccess.getTablesAccess().getEntriesAssignment_1_1_1(), "rule__Tables__EntriesAssignment_1_1_1");
 					put(grammarAccess.getFromTableAccess().getTableAssignment_0(), "rule__FromTable__TableAssignment_0");
@@ -158,6 +160,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTableOrAliasAccess().getAliasAssignment_1(), "rule__TableOrAlias__AliasAssignment_1");
 					put(grammarAccess.getTableOrAliasAccess().getTblAliasAssignment_2(), "rule__TableOrAlias__TblAliasAssignment_2");
 					put(grammarAccess.getTableFullAccess().getEntriesAssignment_1_1_1(), "rule__TableFull__EntriesAssignment_1_1_1");
+					put(grammarAccess.getDbObjectNameAllAccess().getDbnameAssignment_0(), "rule__DbObjectNameAll__DbnameAssignment_0");
 					put(grammarAccess.getDbObjectNameAccess().getDbnameAssignment(), "rule__DbObjectName__DbnameAssignment");
 					put(grammarAccess.getOrderByColumnsAccess().getEntriesAssignment_1_1_1(), "rule__OrderByColumns__EntriesAssignment_1_1_1");
 					put(grammarAccess.getOrderByColumnFullAccess().getColOrderAssignment_0(), "rule__OrderByColumnFull__ColOrderAssignment_0");

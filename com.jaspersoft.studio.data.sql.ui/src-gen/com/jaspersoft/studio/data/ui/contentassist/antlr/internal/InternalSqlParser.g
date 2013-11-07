@@ -461,6 +461,34 @@ finally {
 
 
 
+// Entry rule entryRuleDbObjectNameAll
+entryRuleDbObjectNameAll 
+:
+{ before(grammarAccess.getDbObjectNameAllRule()); }
+	 ruleDbObjectNameAll
+{ after(grammarAccess.getDbObjectNameAllRule()); } 
+	 EOF 
+;
+
+// Rule DbObjectNameAll
+ruleDbObjectNameAll 
+    @init {
+		int stackSize = keepStackSize();
+    }
+    :
+(
+{ before(grammarAccess.getDbObjectNameAllAccess().getGroup()); }
+(rule__DbObjectNameAll__Group__0)
+{ after(grammarAccess.getDbObjectNameAllAccess().getGroup()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
 // Entry rule entryRuleDbObjectName
 entryRuleDbObjectName 
 :
@@ -1565,6 +1593,12 @@ rule__ColumnOrAlias__Alternatives
 { before(grammarAccess.getColumnOrAliasAccess().getAllColsAssignment_1()); }
 (rule__ColumnOrAlias__AllColsAssignment_1)
 { after(grammarAccess.getColumnOrAliasAccess().getAllColsAssignment_1()); }
+)
+
+    |(
+{ before(grammarAccess.getColumnOrAliasAccess().getDbAllColsAssignment_2()); }
+(rule__ColumnOrAlias__DbAllColsAssignment_2)
+{ after(grammarAccess.getColumnOrAliasAccess().getDbAllColsAssignment_2()); }
 )
 
 ;
@@ -4178,6 +4212,100 @@ rule__TableFull__Group_1_1__1__Impl
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+
+
+
+
+rule__DbObjectNameAll__Group__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__DbObjectNameAll__Group__0__Impl
+	rule__DbObjectNameAll__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__DbObjectNameAll__Group__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getDbObjectNameAllAccess().getDbnameAssignment_0()); }
+(rule__DbObjectNameAll__DbnameAssignment_0)
+{ after(grammarAccess.getDbObjectNameAllAccess().getDbnameAssignment_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__DbObjectNameAll__Group__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__DbObjectNameAll__Group__1__Impl
+	rule__DbObjectNameAll__Group__2
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__DbObjectNameAll__Group__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getDbObjectNameAllAccess().getFullStopKeyword_1()); }
+
+	KEYWORD_6 
+
+{ after(grammarAccess.getDbObjectNameAllAccess().getFullStopKeyword_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__DbObjectNameAll__Group__2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__DbObjectNameAll__Group__2__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__DbObjectNameAll__Group__2__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getDbObjectNameAllAccess().getSTARTerminalRuleCall_2()); }
+	RULE_STAR
+{ after(grammarAccess.getDbObjectNameAllAccess().getSTARTerminalRuleCall_2()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
 
 
 
@@ -8199,6 +8327,21 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+rule__ColumnOrAlias__DbAllColsAssignment_2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getColumnOrAliasAccess().getDbAllColsDbObjectNameAllParserRuleCall_2_0()); }
+	ruleDbObjectNameAll{ after(grammarAccess.getColumnOrAliasAccess().getDbAllColsDbObjectNameAllParserRuleCall_2_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 rule__ColumnFull__EntriesAssignment_1_1_1
     @init {
 		int stackSize = keepStackSize();
@@ -8380,6 +8523,21 @@ rule__TableFull__EntriesAssignment_1_1_1
 (
 { before(grammarAccess.getTableFullAccess().getEntriesDbObjectNameParserRuleCall_1_1_1_0()); }
 	ruleDbObjectName{ after(grammarAccess.getTableFullAccess().getEntriesDbObjectNameParserRuleCall_1_1_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__DbObjectNameAll__DbnameAssignment_0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getDbObjectNameAllAccess().getDbnameDBIDParserRuleCall_0_0()); }
+	ruleDBID{ after(grammarAccess.getDbObjectNameAllAccess().getDbnameDBIDParserRuleCall_0_0()); }
 )
 
 ;

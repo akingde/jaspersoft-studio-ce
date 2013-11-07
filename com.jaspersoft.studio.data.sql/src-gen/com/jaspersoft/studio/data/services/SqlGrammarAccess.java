@@ -277,12 +277,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cColAliasDbObjectNameParserRuleCall_0_2_0 = (RuleCall)cColAliasAssignment_0_2.eContents().get(0);
 		private final Assignment cAllColsAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cAllColsSTARTerminalRuleCall_1_0 = (RuleCall)cAllColsAssignment_1.eContents().get(0);
+		private final Assignment cDbAllColsAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cDbAllColsDbObjectNameAllParserRuleCall_2_0 = (RuleCall)cDbAllColsAssignment_2.eContents().get(0);
 		
 		//ColumnOrAlias:
-		//	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR;
+		//	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR | dbAllCols=DbObjectNameAll;
 		public ParserRule getRule() { return rule; }
 
-		//ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR
+		//ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR | dbAllCols=DbObjectNameAll
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//ce=Operand alias="AS"? colAlias=DbObjectName?
@@ -311,6 +313,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//STAR
 		public RuleCall getAllColsSTARTerminalRuleCall_1_0() { return cAllColsSTARTerminalRuleCall_1_0; }
+
+		//dbAllCols=DbObjectNameAll
+		public Assignment getDbAllColsAssignment_2() { return cDbAllColsAssignment_2; }
+
+		//DbObjectNameAll
+		public RuleCall getDbAllColsDbObjectNameAllParserRuleCall_2_0() { return cDbAllColsDbObjectNameAllParserRuleCall_2_0; }
 	}
 
 	public class ColumnFullElements extends AbstractParserRuleElementFinder {
@@ -547,6 +555,34 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//DbObjectName
 		public RuleCall getEntriesDbObjectNameParserRuleCall_1_1_1_0() { return cEntriesDbObjectNameParserRuleCall_1_1_1_0; }
+	}
+
+	public class DbObjectNameAllElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "DbObjectNameAll");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cDbnameAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cDbnameDBIDParserRuleCall_0_0 = (RuleCall)cDbnameAssignment_0.eContents().get(0);
+		private final Keyword cFullStopKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final RuleCall cSTARTerminalRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
+		
+		//DbObjectNameAll:
+		//	dbname=DBID "." STAR;
+		public ParserRule getRule() { return rule; }
+
+		//dbname=DBID "." STAR
+		public Group getGroup() { return cGroup; }
+
+		//dbname=DBID
+		public Assignment getDbnameAssignment_0() { return cDbnameAssignment_0; }
+
+		//DBID
+		public RuleCall getDbnameDBIDParserRuleCall_0_0() { return cDbnameDBIDParserRuleCall_0_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_1() { return cFullStopKeyword_1; }
+
+		//STAR
+		public RuleCall getSTARTerminalRuleCall_2() { return cSTARTerminalRuleCall_2; }
 	}
 
 	public class DbObjectNameElements extends AbstractParserRuleElementFinder {
@@ -2149,6 +2185,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private FromTableJoinElements pFromTableJoin;
 	private TableOrAliasElements pTableOrAlias;
 	private TableFullElements pTableFull;
+	private DbObjectNameAllElements pDbObjectNameAll;
 	private DbObjectNameElements pDbObjectName;
 	private OrderByColumnsElements pOrderByColumns;
 	private OrderByColumnFullElements pOrderByColumnFull;
@@ -2291,7 +2328,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ColumnOrAlias:
-	//	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR;
+	//	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR | dbAllCols=DbObjectNameAll;
 	public ColumnOrAliasElements getColumnOrAliasAccess() {
 		return (pColumnOrAlias != null) ? pColumnOrAlias : (pColumnOrAlias = new ColumnOrAliasElements());
 	}
@@ -2358,6 +2395,16 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getTableFullRule() {
 		return getTableFullAccess().getRule();
+	}
+
+	//DbObjectNameAll:
+	//	dbname=DBID "." STAR;
+	public DbObjectNameAllElements getDbObjectNameAllAccess() {
+		return (pDbObjectNameAll != null) ? pDbObjectNameAll : (pDbObjectNameAll = new DbObjectNameAllElements());
+	}
+	
+	public ParserRule getDbObjectNameAllRule() {
+		return getDbObjectNameAllAccess().getRule();
 	}
 
 	//DbObjectName:

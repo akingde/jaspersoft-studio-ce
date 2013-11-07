@@ -131,6 +131,15 @@ public interface SqlFactory extends EFactory
   TableFull createTableFull();
 
   /**
+   * Returns a new object of class '<em>Db Object Name All</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Db Object Name All</em>'.
+   * @generated
+   */
+  DbObjectNameAll createDbObjectNameAll();
+
+  /**
    * Returns a new object of class '<em>Db Object Name</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

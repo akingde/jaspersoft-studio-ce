@@ -77,6 +77,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.FROM_TABLE_JOIN: return createFromTableJoin();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
       case SqlPackage.TABLE_FULL: return createTableFull();
+      case SqlPackage.DB_OBJECT_NAME_ALL: return createDbObjectNameAll();
       case SqlPackage.DB_OBJECT_NAME: return createDbObjectName();
       case SqlPackage.OR_ORDER_BY_COLUMN: return createOrOrderByColumn();
       case SqlPackage.ORDER_BY_COLUMN_FULL: return createOrderByColumnFull();
@@ -289,6 +290,17 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     TableFullImpl tableFull = new TableFullImpl();
     return tableFull;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public DbObjectNameAll createDbObjectNameAll()
+  {
+    DbObjectNameAllImpl dbObjectNameAll = new DbObjectNameAllImpl();
+    return dbObjectNameAll;
   }
 
   /**

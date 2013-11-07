@@ -40,6 +40,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="colAlias" eType="#//DbObjectName"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allCols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dbAllCols" eType="#//DbObjectNameAll"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ColumnFull"/>
   <eClassifiers xsi:type="ecore:EClass" name="OrTable">
@@ -69,6 +71,9 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TableFull"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DbObjectNameAll">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull #//TableFull">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

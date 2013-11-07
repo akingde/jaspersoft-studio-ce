@@ -577,6 +577,25 @@ ruleColumnOrAlias returns [EObject current=null]
 	    }
 
 )
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getColumnOrAliasAccess().getDbAllColsDbObjectNameAllParserRuleCall_2_0()); 
+	    }
+		lv_dbAllCols_4_0=ruleDbObjectNameAll		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getColumnOrAliasRule());
+	        }
+       		set(
+       			$current, 
+       			"dbAllCols",
+        		lv_dbAllCols_4_0, 
+        		"DbObjectNameAll");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
 ))
 ;
 
@@ -984,6 +1003,54 @@ ruleTableFull returns [EObject current=null]
 
 )
 ))+)?)
+;
+
+
+
+
+
+// Entry rule entryRuleDbObjectNameAll
+entryRuleDbObjectNameAll returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getDbObjectNameAllRule()); }
+	 iv_ruleDbObjectNameAll=ruleDbObjectNameAll 
+	 { $current=$iv_ruleDbObjectNameAll.current; } 
+	 EOF 
+;
+
+// Rule DbObjectNameAll
+ruleDbObjectNameAll returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getDbObjectNameAllAccess().getDbnameDBIDParserRuleCall_0_0()); 
+	    }
+		lv_dbname_0_0=ruleDBID		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getDbObjectNameAllRule());
+	        }
+       		set(
+       			$current, 
+       			"dbname",
+        		lv_dbname_0_0, 
+        		"DBID");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+	otherlv_1=KEYWORD_6
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getDbObjectNameAllAccess().getFullStopKeyword_1());
+    }
+this_STAR_2=RULE_STAR
+    { 
+    newLeafNode(this_STAR_2, grammarAccess.getDbObjectNameAllAccess().getSTARTerminalRuleCall_2()); 
+    }
+)
 ;
 
 

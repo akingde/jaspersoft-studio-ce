@@ -21,7 +21,7 @@ Columns returns OrColumn:
 	ColumnOrAlias ({OrColumn.entries+=current} ("," entries+=ColumnOrAlias)+)?;
 
 ColumnOrAlias:
-	(ce=Operand alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR;
+	(ce=Operand alias=('AS')? (colAlias=DbObjectName)?) | allCols=STAR | dbAllCols=DbObjectNameAll;
 
 ColumnFull returns ColumnFull:
 	DbObjectName ({Col.entries+=current} ("." entries+=DbObjectName)+)?;
@@ -40,6 +40,9 @@ TableOrAlias:
 
 TableFull:
 	DbObjectName ({tbls.entries+=current} ("." entries+=DbObjectName)+)?;
+
+DbObjectNameAll:
+	dbname=DBID '.' STAR;
 
 DbObjectName:
 	dbname=DBID;
@@ -70,7 +73,7 @@ ExpressionGroup returns ExprGroup:
 
 XExpression returns XExpr:
 	'$X' {XExpr} '{' xf=XFunction "," col=Operand ("," prm=XExpressionParams)? '}';
-	
+
 XExpression_ returns XExpr:
 	'$X' {XExpr} '{' xf=XFunction "|" col=Operand ("|" prm=XExpressionParams)? '}';
 
@@ -158,7 +161,7 @@ DBID:
 	ID | DBNAME | STRING;
 
 StringOperand:
-	  STRING_;
+	STRING_;
 
 FNAME:
 	ID '(';

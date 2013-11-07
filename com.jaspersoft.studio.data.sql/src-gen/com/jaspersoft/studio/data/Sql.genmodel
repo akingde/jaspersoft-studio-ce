@@ -55,6 +55,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnOrAlias/alias"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOrAlias/colAlias"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnOrAlias/allCols"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOrAlias/dbAllCols"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ColumnFull"/>
     <genClasses ecoreClass="Sql.ecore#//OrTable">
@@ -76,6 +77,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tblAlias"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//TableFull"/>
+    <genClasses ecoreClass="Sql.ecore#//DbObjectNameAll">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//DbObjectNameAll/dbname"/>
+    </genClasses>
     <genClasses ecoreClass="Sql.ecore#//DbObjectName">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//DbObjectName/dbname"/>
     </genClasses>

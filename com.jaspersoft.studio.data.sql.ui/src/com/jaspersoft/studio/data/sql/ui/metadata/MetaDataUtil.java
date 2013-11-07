@@ -31,7 +31,7 @@ public class MetaDataUtil {
 		boolean isCatalog = meta.supportsCatalogsInTableDefinitions();
 		ResultSet rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
 		while (rs.next()) {
-			String tableCatalog = isCatalog ? rs.getString("TABLE_CAT") : rs.getString("TABLE_CATALOG");
+			String tableCatalog = isCatalog && !isSchema ? rs.getString("TABLE_CAT") : rs.getString("TABLE_CATALOG");
 			String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
 			MSqlSchema mschema = new MSqlSchema(root, tableSchema, tableCatalog);
 			new MDummy(mschema);
@@ -58,7 +58,7 @@ public class MetaDataUtil {
 			boolean isCatalog = meta.supportsCatalogsInTableDefinitions();
 			rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
 			while (rs.next()) {
-				String tableCatalog = isCatalog ? rs.getString("TABLE_CAT") : rs.getString("TABLE_CATALOG");
+				String tableCatalog = isCatalog && !isSchema ? rs.getString("TABLE_CAT") : rs.getString("TABLE_CATALOG");
 				String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
 
 				if (tableSchema.equals(schema.getValue())) {

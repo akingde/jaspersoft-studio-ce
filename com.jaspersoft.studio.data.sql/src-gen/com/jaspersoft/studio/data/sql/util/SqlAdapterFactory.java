@@ -135,6 +135,11 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createTableFullAdapter();
       }
       @Override
+      public Adapter caseDbObjectNameAll(DbObjectNameAll object)
+      {
+        return createDbObjectNameAllAdapter();
+      }
+      @Override
       public Adapter caseDbObjectName(DbObjectName object)
       {
         return createDbObjectNameAdapter();
@@ -527,6 +532,21 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTableFullAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.DbObjectNameAll <em>Db Object Name All</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.DbObjectNameAll
+   * @generated
+   */
+  public Adapter createDbObjectNameAllAdapter()
   {
     return null;
   }

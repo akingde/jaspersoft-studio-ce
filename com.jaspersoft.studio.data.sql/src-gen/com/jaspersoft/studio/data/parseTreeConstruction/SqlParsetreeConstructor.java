@@ -43,39 +43,40 @@ protected class ThisRootNode extends RootToken {
 			case 9: return new FromTableJoin_Group(this, this, 9, inst);
 			case 10: return new TableOrAlias_Group(this, this, 10, inst);
 			case 11: return new TableFull_Group(this, this, 11, inst);
-			case 12: return new DbObjectName_DbnameAssignment(this, this, 12, inst);
-			case 13: return new OrderByColumns_Group(this, this, 13, inst);
-			case 14: return new OrderByColumnFull_Group(this, this, 14, inst);
-			case 15: return new GroupByColumns_Group(this, this, 15, inst);
-			case 16: return new GroupByColumnFull_ColGrByAssignment(this, this, 16, inst);
-			case 17: return new FullExpression_Group(this, this, 17, inst);
-			case 18: return new ExpressionFragmentSecond_Group(this, this, 18, inst);
-			case 19: return new ExpressionFragment_Alternatives(this, this, 19, inst);
-			case 20: return new ExpressionGroup_Group(this, this, 20, inst);
-			case 21: return new XExpression_Group(this, this, 21, inst);
-			case 22: return new XExpression__Group(this, this, 22, inst);
-			case 23: return new XExpressionParams_Group(this, this, 23, inst);
-			case 24: return new JRParameter_JrprmAssignment(this, this, 24, inst);
-			case 25: return new Expression_Group(this, this, 25, inst);
-			case 26: return new Comparison_Group(this, this, 26, inst);
-			case 27: return new Like_Group(this, this, 27, inst);
-			case 28: return new LikeOperand_Alternatives(this, this, 28, inst);
-			case 29: return new Between_Group(this, this, 29, inst);
-			case 30: return new InOperator_Group(this, this, 30, inst);
-			case 31: return new OperandList_Group(this, this, 31, inst);
-			case 32: return new Operand_Group(this, this, 32, inst);
-			case 33: return new OperandFragment_Alternatives(this, this, 33, inst);
-			case 34: return new OperandFunction_Group(this, this, 34, inst);
-			case 35: return new OpFunctionArg_Group(this, this, 35, inst);
-			case 36: return new XOperandFragment_Alternatives(this, this, 36, inst);
-			case 37: return new ParameterOperand_PrmAssignment(this, this, 37, inst);
-			case 38: return new ExclamationParameterOperand_PrmAssignment(this, this, 38, inst);
-			case 39: return new ColumnOperand_CfullAssignment(this, this, 39, inst);
-			case 40: return new SubQueryOperand_Group(this, this, 40, inst);
-			case 41: return new ScalarOperand_Alternatives(this, this, 41, inst);
-			case 42: return new SQLCASE_Group(this, this, 42, inst);
-			case 43: return new SQLCaseWhens_Group(this, this, 43, inst);
-			case 44: return new SqlCaseWhen_Group(this, this, 44, inst);
+			case 12: return new DbObjectNameAll_Group(this, this, 12, inst);
+			case 13: return new DbObjectName_DbnameAssignment(this, this, 13, inst);
+			case 14: return new OrderByColumns_Group(this, this, 14, inst);
+			case 15: return new OrderByColumnFull_Group(this, this, 15, inst);
+			case 16: return new GroupByColumns_Group(this, this, 16, inst);
+			case 17: return new GroupByColumnFull_ColGrByAssignment(this, this, 17, inst);
+			case 18: return new FullExpression_Group(this, this, 18, inst);
+			case 19: return new ExpressionFragmentSecond_Group(this, this, 19, inst);
+			case 20: return new ExpressionFragment_Alternatives(this, this, 20, inst);
+			case 21: return new ExpressionGroup_Group(this, this, 21, inst);
+			case 22: return new XExpression_Group(this, this, 22, inst);
+			case 23: return new XExpression__Group(this, this, 23, inst);
+			case 24: return new XExpressionParams_Group(this, this, 24, inst);
+			case 25: return new JRParameter_JrprmAssignment(this, this, 25, inst);
+			case 26: return new Expression_Group(this, this, 26, inst);
+			case 27: return new Comparison_Group(this, this, 27, inst);
+			case 28: return new Like_Group(this, this, 28, inst);
+			case 29: return new LikeOperand_Alternatives(this, this, 29, inst);
+			case 30: return new Between_Group(this, this, 30, inst);
+			case 31: return new InOperator_Group(this, this, 31, inst);
+			case 32: return new OperandList_Group(this, this, 32, inst);
+			case 33: return new Operand_Group(this, this, 33, inst);
+			case 34: return new OperandFragment_Alternatives(this, this, 34, inst);
+			case 35: return new OperandFunction_Group(this, this, 35, inst);
+			case 36: return new OpFunctionArg_Group(this, this, 36, inst);
+			case 37: return new XOperandFragment_Alternatives(this, this, 37, inst);
+			case 38: return new ParameterOperand_PrmAssignment(this, this, 38, inst);
+			case 39: return new ExclamationParameterOperand_PrmAssignment(this, this, 39, inst);
+			case 40: return new ColumnOperand_CfullAssignment(this, this, 40, inst);
+			case 41: return new SubQueryOperand_Group(this, this, 41, inst);
+			case 42: return new ScalarOperand_Alternatives(this, this, 42, inst);
+			case 43: return new SQLCASE_Group(this, this, 43, inst);
+			case 44: return new SQLCaseWhens_Group(this, this, 44, inst);
+			case 45: return new SqlCaseWhen_Group(this, this, 45, inst);
 			default: return null;
 		}	
 	}	
@@ -1250,11 +1251,11 @@ protected class Columns_EntriesAssignment_1_1_1 extends AssignmentToken  {
 /************ begin Rule ColumnOrAlias ****************
  *
  * ColumnOrAlias:
- * 	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR;
+ * 	ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR | dbAllCols=DbObjectNameAll;
  *
  **/
 
-// ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR
+// ce=Operand alias="AS"? colAlias=DbObjectName? | allCols=STAR | dbAllCols=DbObjectNameAll
 protected class ColumnOrAlias_Alternatives extends AlternativesToken {
 
 	public ColumnOrAlias_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -1271,6 +1272,7 @@ protected class ColumnOrAlias_Alternatives extends AlternativesToken {
 		switch(index) {
 			case 0: return new ColumnOrAlias_Group_0(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new ColumnOrAlias_AllColsAssignment_1(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new ColumnOrAlias_DbAllColsAssignment_2(lastRuleCallOrigin, this, 2, inst);
 			default: return null;
 		}	
 	}
@@ -1466,6 +1468,51 @@ protected class ColumnOrAlias_AllColsAssignment_1 extends AssignmentToken  {
 		return null;
 	}
 
+}
+
+// dbAllCols=DbObjectNameAll
+protected class ColumnOrAlias_DbAllColsAssignment_2 extends AssignmentToken  {
+	
+	public ColumnOrAlias_DbAllColsAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getColumnOrAliasAccess().getDbAllColsAssignment_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new DbObjectNameAll_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("dbAllCols",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("dbAllCols");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getDbObjectNameAllRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getColumnOrAliasAccess().getDbAllColsDbObjectNameAllParserRuleCall_2_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
+		}	
+	}	
 }
 
 
@@ -2714,6 +2761,123 @@ protected class TableFull_EntriesAssignment_1_1_1 extends AssignmentToken  {
 
 
 /************ end Rule TableFull ****************/
+
+
+/************ begin Rule DbObjectNameAll ****************
+ *
+ * DbObjectNameAll:
+ * 	dbname=DBID "." STAR;
+ *
+ **/
+
+// dbname=DBID "." STAR
+protected class DbObjectNameAll_Group extends GroupToken {
+	
+	public DbObjectNameAll_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getDbObjectNameAllAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new DbObjectNameAll_STARTerminalRuleCall_2(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getDbObjectNameAllRule().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// dbname=DBID
+protected class DbObjectNameAll_DbnameAssignment_0 extends AssignmentToken  {
+	
+	public DbObjectNameAll_DbnameAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getDbObjectNameAllAccess().getDbnameAssignment_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("dbname",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("dbname");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getDbObjectNameAllAccess().getDbnameDBIDParserRuleCall_0_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getDbObjectNameAllAccess().getDbnameDBIDParserRuleCall_0_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// "."
+protected class DbObjectNameAll_FullStopKeyword_1 extends KeywordToken  {
+	
+	public DbObjectNameAll_FullStopKeyword_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getDbObjectNameAllAccess().getFullStopKeyword_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new DbObjectNameAll_DbnameAssignment_0(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// STAR
+protected class DbObjectNameAll_STARTerminalRuleCall_2 extends UnassignedTextToken {
+
+	public DbObjectNameAll_STARTerminalRuleCall_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getDbObjectNameAllAccess().getSTARTerminalRuleCall_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new DbObjectNameAll_FullStopKeyword_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+
+/************ end Rule DbObjectNameAll ****************/
 
 
 /************ begin Rule DbObjectName ****************

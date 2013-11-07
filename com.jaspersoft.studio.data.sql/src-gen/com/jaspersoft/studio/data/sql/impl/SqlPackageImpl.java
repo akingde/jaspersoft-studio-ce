@@ -10,6 +10,7 @@ import com.jaspersoft.studio.data.sql.ColumnOrAlias;
 import com.jaspersoft.studio.data.sql.Comparison;
 import com.jaspersoft.studio.data.sql.Concat;
 import com.jaspersoft.studio.data.sql.DbObjectName;
+import com.jaspersoft.studio.data.sql.DbObjectNameAll;
 import com.jaspersoft.studio.data.sql.Div;
 import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.ExprGroup;
@@ -157,6 +158,13 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass tableFullEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass dbObjectNameAllEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -743,6 +751,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getColumnOrAlias_DbAllCols()
+  {
+    return (EReference)columnOrAliasEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getColumnFull()
   {
     return columnFullEClass;
@@ -896,6 +914,26 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EClass getTableFull()
   {
     return tableFullEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDbObjectNameAll()
+  {
+    return dbObjectNameAllEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDbObjectNameAll_Dbname()
+  {
+    return (EAttribute)dbObjectNameAllEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2066,6 +2104,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(columnOrAliasEClass, COLUMN_OR_ALIAS__ALIAS);
     createEReference(columnOrAliasEClass, COLUMN_OR_ALIAS__COL_ALIAS);
     createEAttribute(columnOrAliasEClass, COLUMN_OR_ALIAS__ALL_COLS);
+    createEReference(columnOrAliasEClass, COLUMN_OR_ALIAS__DB_ALL_COLS);
 
     columnFullEClass = createEClass(COLUMN_FULL);
 
@@ -2088,6 +2127,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__TBL_ALIAS);
 
     tableFullEClass = createEClass(TABLE_FULL);
+
+    dbObjectNameAllEClass = createEClass(DB_OBJECT_NAME_ALL);
+    createEAttribute(dbObjectNameAllEClass, DB_OBJECT_NAME_ALL__DBNAME);
 
     dbObjectNameEClass = createEClass(DB_OBJECT_NAME);
     createEAttribute(dbObjectNameEClass, DB_OBJECT_NAME__DBNAME);
@@ -2323,6 +2365,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getColumnOrAlias_Alias(), ecorePackage.getEString(), "alias", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getColumnOrAlias_ColAlias(), this.getDbObjectName(), null, "colAlias", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getColumnOrAlias_AllCols(), ecorePackage.getEString(), "allCols", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getColumnOrAlias_DbAllCols(), this.getDbObjectNameAll(), null, "dbAllCols", null, 0, 1, ColumnOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(columnFullEClass, ColumnFull.class, "ColumnFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2345,6 +2388,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getTableOrAlias_TblAlias(), this.getDbObjectName(), null, "tblAlias", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(tableFullEClass, TableFull.class, "TableFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(dbObjectNameAllEClass, DbObjectNameAll.class, "DbObjectNameAll", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDbObjectNameAll_Dbname(), ecorePackage.getEString(), "dbname", null, 0, 1, DbObjectNameAll.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(dbObjectNameEClass, DbObjectName.class, "DbObjectName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDbObjectName_Dbname(), ecorePackage.getEString(), "dbname", null, 0, 1, DbObjectName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
