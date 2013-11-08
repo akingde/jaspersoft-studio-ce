@@ -103,6 +103,14 @@
    <anchor id="jasperreportsserver"/>
 		</topic>
   <anchor id="jsstutorials"/>
+  <topic label="Jaspersoft Studio Translation">
+     <topic href="html/wizard/translation/createtranslation.html" label="Create a Translation">
+     </topic>
+     <topic href="html/wizard/translation/exporttranslation.html" label="Upload a Translation">
+     </topic>
+     <topic href="html/wizard/translation/installtranslation.html" label="Install a Translation">
+     </topic>
+  </topic>
  </topic>
   <topic label="Developer Guide">
      <topic label="Extension Points">

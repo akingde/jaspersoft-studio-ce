@@ -477,6 +477,7 @@ public class ColorsSelectorWidget extends Composite {
 		ImageData image = new ImageData(Math.max(1, rect.width),Math.max(1, rect.height),32,new PaletteData(0xFF0000,0xFF00,0xFF));
 		int sliderHeight = governor.getSliderMax() - governor.getSliderMin();
 		
+		int backGroundPixel = image.palette.getPixel(slider.getParent().getBackground().getRGB());
 		for(int y = 0; y<image.height; y++){
 			float actaulSlider = ((float)sliderHeight / getSliderHeight()) * y;
 			RGB actualHueColor = governor.getSliderColor(Math.round(padX), Math.round(padY), Math.round(actaulSlider));
@@ -484,7 +485,7 @@ public class ColorsSelectorWidget extends Composite {
 				if (x > arrowWidth && x<image.width-arrowWidth)
 					image.setPixel(x,y,image.palette.getPixel(actualHueColor));
 				else 
-					image.setPixel(x,y,image.palette.getPixel(getBackground().getRGB()));
+					image.setPixel(x,y, backGroundPixel);
 			}
 		}
 		return image;

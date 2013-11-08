@@ -263,11 +263,13 @@ public class Messages extends NLS {
 	public static String CenterInParentAction_actionName;
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;
+	public static String ColorDialog_advancedColorsLabel;
 	public static String ColorDialog_newColorLabel;
 	public static String ColorDialog_oldColorLabel;
 	public static String ColorDialog_pickerButtonTooltip;
 	public static String ColorDialog_stopPickingActionText;
 	public static String ColorDialog_transparencyLabel;
+	public static String ColorDialog_webColorsLabel;
 	public static String ColorsSection_colorSectionTitle;
 	public static String ColorsSection_element_backcolor;
 	public static String ColorsSection_element_backcolor_tool_tip;
