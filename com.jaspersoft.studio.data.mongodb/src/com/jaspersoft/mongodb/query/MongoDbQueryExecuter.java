@@ -15,9 +15,13 @@
  ******************************************************************************/
 package com.jaspersoft.mongodb.query;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataset;
@@ -42,7 +46,10 @@ import com.jaspersoft.mongodb.connection.MongoDbConnection;
  */
 public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 	private final static Logger logger = Logger.getLogger(MongoDbQueryExecuter.class);
-
+	private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ");
+	static {
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 	private Map<String, ? extends JRValueParameter> reportParameters;
 
 	private Map<String, Object> parameters;
@@ -126,13 +133,16 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 			StringBuilder builder = new StringBuilder();
 			builder.append("[");
 			for (Object value : (Collection<?>) parameterValue) {
-				if (value instanceof String) {
-					builder.append("'");
-					builder.append(value);
-					builder.append("'");
-				} else {
-					builder.append(String.valueOf(value));
-				}
+				if (value != null)
+					builder.append(generateParameterObject(parameterName, value));
+
+				// if (value instanceof String) {
+				// builder.append("'");
+				// builder.append(value);
+				// builder.append("'");
+				// } else {
+				// builder.append(String.valueOf(value));
+				// }
 				builder.append(", ");
 			}
 			if (builder.length() > 2) {
@@ -149,6 +159,8 @@ public class MongoDbQueryExecuter extends JRAbstractQueryExecuter {
 		if (parameterValue != null) {
 			if (parameterValue instanceof String)
 				return "'" + parameterValue + "'";
+			if (parameterValue instanceof Date)
+				return "'" + df.format(new Date()) + "'";
 			return parameterValue.toString();
 		}
 		return "{'" + parameterName + "':null}";
