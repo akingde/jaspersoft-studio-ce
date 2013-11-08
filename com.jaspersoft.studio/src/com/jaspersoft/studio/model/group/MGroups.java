@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.INode;
@@ -167,5 +168,13 @@ public class MGroups extends ANode implements IPastable, IContainerEditPart {
 		if (!(evt.getSource() instanceof ANode))
 			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
+	}
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		if(getValue() instanceof JRDesignDataset) {
+			return new ExpressionContext((JRDesignDataset) getValue(),getJasperConfiguration());
+		}
+		return super.getAdapter(adapter);
 	}
 }

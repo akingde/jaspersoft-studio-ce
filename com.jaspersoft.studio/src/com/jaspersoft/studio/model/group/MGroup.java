@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.type.FooterPositionEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -282,4 +283,17 @@ public class MGroup extends APropertyNode implements ICopyable {
 		return false;
 	}
 
+	@Override
+	public Object getAdapter(Class adapter) {
+		if(ExpressionContext.class.equals(adapter)){			
+			if(getParent()!=null){
+				// Ideally parent should be an MGroups node
+				ExpressionContext expContext = (ExpressionContext) getParent().getAdapter(ExpressionContext.class);
+				if(expContext!=null) {
+					return expContext;
+				}
+			}
+		}
+		return super.getAdapter(adapter);
+	}
 }
