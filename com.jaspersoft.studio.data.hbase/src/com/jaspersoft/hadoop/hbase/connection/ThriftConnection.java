@@ -336,7 +336,7 @@ public class ThriftConnection implements Connection {
 		return null;
 	}
 
-	@Override
+	 
 	public void abort(Executor executor) throws SQLException {
 		// TODO Auto-generated method stub
 		
