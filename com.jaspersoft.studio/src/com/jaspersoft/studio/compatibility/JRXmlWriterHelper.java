@@ -55,6 +55,7 @@ public class JRXmlWriterHelper {
 				}
 		}
 		writers.add(VersionConstants.VERSION_5_1_0);
+		writers.add(VersionConstants.VERSION_5_2_0);
 	}
 
 	public static String[][] getVersions() {

@@ -19,5 +19,6 @@ public interface VersionConstants
 {
 	
 	public static final String VERSION_5_1_0 = "5.1.0";
+	public static final String VERSION_5_2_0 = "5.2.0";
 	
 }
