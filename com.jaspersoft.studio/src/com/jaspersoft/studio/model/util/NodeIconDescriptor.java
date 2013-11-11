@@ -216,22 +216,21 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	// the most general: fr_FR > fr > no suffix.
 	private String getLocale() {
 		String dLocale = Locale.getDefault().toString();
-		int charIndex = dLocale.indexOf("_");
-		String[] suffixes = { "", "_" + dLocale, "_" + dLocale.substring(0, charIndex) };
-		int suffixesIndex = 0;
-		URL url1 = plugin.getBundle().getResource("resources/icons" + suffixes[1] + ".properties");
-		URL url2 = plugin.getBundle().getResource("resources/icons" + suffixes[2] + ".properties");
-		try {
-			url1.getFile();
-			suffixesIndex = 1;
-		} catch (NullPointerException e1) {
-			try {
-				url2.getFile();
-				suffixesIndex = 2;
-			} catch (NullPointerException e2) {
-				// ignore
+		String fullLocaleSuffix="_"+dLocale;
+		int index = dLocale.indexOf("_");
+		if(index==-1){
+			index=dLocale.length();
+		}
+		String localeLanguageSuffix="_"+dLocale.substring(0,index);
+
+		String[] possibleLocales = new String[] {fullLocaleSuffix,localeLanguageSuffix};
+		for(String l : possibleLocales) {
+			URL resource = plugin.getBundle().getResource("resources/icons" + l + ".properties");
+			if(resource!=null) {
+				return l;
 			}
 		}
-		return suffixes[suffixesIndex];
+		
+		return "";
 	}
 }
