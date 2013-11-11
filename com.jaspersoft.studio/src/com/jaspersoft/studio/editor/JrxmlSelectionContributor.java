@@ -227,10 +227,12 @@ public class JrxmlSelectionContributor {
 		IContributionItem item = getToolbarContributionItem(cbm2, tbarid);
 		if (item != null && item instanceof IToolBarContributionItem) {
 			IToolBarContributionItem tbitem = (IToolBarContributionItem) item;
-			tbitem.getToolBarManager().add(action);
-			cbaritemID.add(tbarid + ";" + ti.getId());
+			if (tbitem.getToolBarManager() != null) {
+				tbitem.getToolBarManager().add(action);
+				cbaritemID.add(tbarid + ";" + ti.getId());
 
-			tbitem.getToolBarManager().update(true);
+				tbitem.getToolBarManager().update(true);
+			}
 		}
 	}
 
