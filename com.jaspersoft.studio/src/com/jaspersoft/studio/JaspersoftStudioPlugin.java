@@ -17,6 +17,7 @@ package com.jaspersoft.studio;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
@@ -66,6 +67,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		info.setProductVersion(getBundle().getVersion().toString());
 		info.setProductMainBundleID(PLUGIN_ID);
 		setBrandingInformation(info);
+		logInfo(NLS.bind("Starting JaspersoftStudio bundle - Version: {0}",info.getProductVersion()));
 	}
 
 	/**
