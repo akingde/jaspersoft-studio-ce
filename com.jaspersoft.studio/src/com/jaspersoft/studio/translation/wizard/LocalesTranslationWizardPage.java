@@ -52,6 +52,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.translation.ExtendedTranslationInformation;
 import com.jaspersoft.studio.translation.FlagLocaleSelector;
 import com.jaspersoft.studio.translation.ImageLocale;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 import com.jaspersoft.translation.resources.ITranslationResource;
 
@@ -289,7 +290,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 	
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_INSTALL_TRANSLATION_STEP1;
 	}
 	
 	/**

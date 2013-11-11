@@ -96,4 +96,8 @@ public class ContextHelpIDs {
 	public static final String WIZARD_IMPORT_SELECT_PROPERTIES = PREFIX.concat("wizard_import_select_properties");
 	
 	public static final String WIZARD_NEW_FUNCTIONS_LIBRARY = PREFIX.concat("wizard_functionslibrary");
+	
+	public static final String WIZARD_INSTALL_TRANSLATION_STEP1 = PREFIX.concat("createTranslationFragmentStep1");
+	
+	public static final String WIZARD_INSTALL_TRANSLATION_STEP2 = PREFIX.concat("createTranslationFragmentStep2");
 }

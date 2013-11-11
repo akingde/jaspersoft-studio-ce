@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.translation.ExtendedTranslationInformation;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 /**
@@ -286,7 +287,7 @@ public class ExportedResourcesWizardPage extends JSSHelpWizardPage {
 
 	@Override
 	protected String getContextName() {
-		return null;
+		return ContextHelpIDs.WIZARD_INSTALL_TRANSLATION_STEP1;
 	}
 
 }

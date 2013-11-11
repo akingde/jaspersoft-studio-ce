@@ -369,7 +369,7 @@
    <context id="editVirtualDatasource" title="Edit Virtual Datasource">
       <description>A virtual data source is an artifact that combines one or more physical data sources together to provide for easy data integration. The physical sources can be JDBC sources, delimited text files, spreadsheets, or even Web services. In this dialog you can add other datasources on the server inside the virtual datasource, or you can remove from the virtual datasource any datasource inside it</description>
    </context>
-      <context id="editVirtualDatasource" title="Edit Virtual Datasource">
+   <context id="editVirtualDatasource" title="Edit Virtual Datasource">
       <description>A virtual data source is an artifact that combines one or more physical data sources together to provide for easy data integration. The physical sources can be JDBC sources, delimited text files, spreadsheets, or even Web services. In this dialog you can add other datasources on the server inside the virtual datasource, or you can remove from the virtual datasource any datasource inside it</description>
    </context>   
    <context id="editOtherSection" title="Define the section Other">
@@ -377,5 +377,13 @@
    </context>
    <context id="createHyperlinkSection" title="Definition of an Hyperlink">
       <description>In this dialog you can set an Hyperlink to the value represented in the chart, allowing the user to click the chart to open a web page or drill down the report. The clickable area depends on the chart type.</description>
+   </context>
+   <context id="createTranslationFragmentStep1" title="Install the Translation">
+      <description>In this step you can define which components of Jaspersoft Studio will be translated. You can provide also advanced and technical informations, but if you are unsure of what this informations are and you need only to install the translation only on your Jaspersoft Studio then you can leave the default values.</description>
+      <topic href="html/wizard/translation/installtranslation.html" label="How install a Jaspersoft Studio translation" />
+   </context>
+   <context id="createTranslationFragmentStep2" title="Install the Translation">
+      <description>Here you can define the languages provided from the translation package and the translation destination. Both this fields are filled automatically, but the second one may need to run Jaspersoft Studio as Administrator on some operative systems (like Windows 7/8). In general if you are using a Windows system it is suggested to run Jaspersoft Studio as administrator when you want to install a new language or switch between the installed languages</description>
+      <topic href="html/wizard/translation/installtranslation.html" label="How install a Jaspersoft Studio translation" />
    </context>
 </contexts>
