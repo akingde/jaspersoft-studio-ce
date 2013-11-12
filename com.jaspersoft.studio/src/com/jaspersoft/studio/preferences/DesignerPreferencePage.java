@@ -75,6 +75,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
 	// editors font information
 	public static final String P_INTERNAL_EDITORS_FONT = "internalEditorsFont"; //$NON-NLS-1$
+	// specify whether to use the description or the name when dropping a field in the detail band	
+	public static final String P_USE_FIELD_DESCRIPTION = "useDescriptionOnFieldDrop"; //$NON-NLS-1$
 
 	public DesignerPreferencePage() {
 		super(GRID);
@@ -116,7 +118,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 				new String[][] { { Messages.DesignerPreferencePage_field_behavior_label, BEHAVIOR_CREATE_LABEL },
 						{ Messages.DesignerPreferencePage_field_behavior_nothing, BEHAVIOR_DO_NOTHING },
 						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } }, getFieldEditorParent()));
-
+		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION, Messages.DesignerPreferencePage_UseDescriptionForLabelText,
+				getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview,
 				getFieldEditorParent()));
 
@@ -140,6 +143,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, true);
 		store.setDefault(P_PAGE_BACKGROUND, DEFAULT_PAGE_BACKGROUND);
 		store.setDefault(BEHAVIOR_ON_FIELD_DROP, DEFAULT_BEHAVIOR);
+		store.setDefault(P_USE_FIELD_DESCRIPTION, false);
 		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 		store.setDefault(P_SAVE_ON_PREVIEW, false);
 	}

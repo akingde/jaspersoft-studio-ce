@@ -469,6 +469,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_show_band_names;
 	public static String DesignerPreferencePage_simple_shadow;
 	public static String DesignerPreferencePage_unit;
+	public static String DesignerPreferencePage_UseDescriptionForLabelText;
 	public static String DOCXExporterPreferencePage_3;
 	public static String DOCXExporterPreferencePage_4;
 	public static String DOCXExporterPreferencePage_title;

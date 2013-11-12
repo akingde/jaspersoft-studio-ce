@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
@@ -133,7 +134,15 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 					MStaticText newText = new MStaticText();
 					MField field = (MField) creatElementC.getChild();
 					JRDesignStaticText newTextElement = (JRDesignStaticText) newText.createJRElement(band.getJasperDesign());
-					newTextElement.setText(field.getDisplayText());
+					String labelText = field.getDisplayText();
+					Boolean useDescription = field.getJasperConfiguration().getPropertyBoolean(DesignerPreferencePage.P_USE_FIELD_DESCRIPTION,false);
+					if(useDescription){
+						Object description = field.getPropertyValue(JRDesignField.PROPERTY_DESCRIPTION);
+						if(description instanceof String) {
+							labelText = (String) description;
+						}
+					}
+					newTextElement.setText(labelText);
 					newText.setValue(newTextElement);
 					// Take the command of the text field to calculate the positions
 					Rectangle location = null;
