@@ -26,10 +26,16 @@ import com.jaspersoft.studio.property.section.widgets.SPColor;
 public class ColorPropertyDescriptor extends org.eclipse.ui.views.properties.ColorPropertyDescriptor implements
 		IPropertyDescriptorWidget, IHelp {
 	private NullEnum canBeNull;
+	private boolean useTransparency;
 
 	public ColorPropertyDescriptor(Object id, String displayName, NullEnum canBeNull) {
+		this(id,displayName,canBeNull,true);
+	}
+	
+	public ColorPropertyDescriptor(Object id, String displayName, NullEnum canBeNull, boolean useTransparency) {
 		super(id, displayName);
 		this.canBeNull = canBeNull;
+		this.useTransparency = useTransparency;
 	}
 
 	@Override
@@ -65,5 +71,9 @@ public class ColorPropertyDescriptor extends org.eclipse.ui.views.properties.Col
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	public boolean supportsTransparency() {
+		return this.useTransparency;
 	}
 }

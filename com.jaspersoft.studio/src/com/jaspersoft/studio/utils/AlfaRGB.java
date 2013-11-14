@@ -26,10 +26,14 @@ public class AlfaRGB implements Serializable{
 	}
 	
 	public static AlfaRGB getFullyOpaque(RGB rgb) {
-		return new AlfaRGB(rgb, 255);
+		return (rgb!=null) ? new AlfaRGB(rgb, 255) : null;
 	}
 	
 	public static AlfaRGB getFullyTransparent(RGB rgb) {
-		return new AlfaRGB(rgb, 0);
+		return (rgb!=null) ? new AlfaRGB(rgb, 0) : null;
+	}
+	
+	public static RGB safeGetRGB(AlfaRGB argb) {
+		return (argb!=null) ? argb.getRgb() : null;
 	}
 }

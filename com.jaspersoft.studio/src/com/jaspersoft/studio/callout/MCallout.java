@@ -34,7 +34,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -51,6 +50,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -239,12 +239,12 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		desc.add(textD);
 
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(PROP_BACKGROUND, Messages.common_backcolor,
-				NullEnum.NOTNULL);
+				NullEnum.NOTNULL,false);
 		backcolorD.setDescription("Background color of the callout");
 		desc.add(backcolorD);
 
 		ColorPropertyDescriptor foreColorD = new ColorPropertyDescriptor(PROP_FOREGROUND, Messages.common_forecolor,
-				NullEnum.NOTNULL);
+				NullEnum.NOTNULL,false);
 		foreColorD.setDescription("Foreground color of the callout");
 		desc.add(foreColorD);
 
@@ -341,9 +341,9 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		if (id.equals(PROP_TEXT))
 			return text;
 		if (id.equals(PROP_FOREGROUND))
-			return fg.getRGB();
+			return AlfaRGB.getFullyOpaque(fg.getRGB());
 		if (id.equals(PROP_BACKGROUND))
-			return bg.getRGB();
+			return AlfaRGB.getFullyOpaque(bg.getRGB());
 
 		return null;
 	}
@@ -361,9 +361,9 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		else if (id.equals(PROP_TEXT))
 			text = Misc.nvl(value, "");
 		else if (id.equals(PROP_FOREGROUND))
-			fg = SWTResourceManager.getColor((RGB) value);
+			fg = SWTResourceManager.getColor(AlfaRGB.safeGetRGB((AlfaRGB) value));
 		else if (id.equals(PROP_BACKGROUND))
-			bg = SWTResourceManager.getColor((RGB) value);
+			bg = SWTResourceManager.getColor(AlfaRGB.safeGetRGB((AlfaRGB) value));
 
 		properties = getProperities(getParent());
 

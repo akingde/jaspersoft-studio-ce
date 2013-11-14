@@ -15,6 +15,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
@@ -24,6 +25,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.color.chooser.ColorDialog;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
+import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.AlfaRGB;
 
@@ -59,9 +61,22 @@ public class SPColor extends ASPropertyWidget {
 				cd.setText(pDescriptor.getDisplayName());
 				AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
 				cd.setRGB(rgb == null ? null : rgb);
-				AlfaRGB newColor = cd.openAlfaRGB();
-				if (newColor != null)
-					changeProperty(section, pDescriptor.getId(), newColor);
+				boolean useTransparency = true;
+				if(pDescriptor instanceof ColorPropertyDescriptor) {
+					useTransparency = ((ColorPropertyDescriptor)pDescriptor).supportsTransparency();
+				}				
+				if(useTransparency) {
+					AlfaRGB newColor = cd.openAlfaRGB();
+					if (newColor != null) {
+						changeProperty(section, pDescriptor.getId(), newColor);
+					}
+				}
+				else {
+					RGB newColor = cd.openRGB();
+					if (newColor != null) {
+						changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
+					}
+				}
 			}
 		});
 		foreButton.setToolTipText(pDescriptor.getDescription());
