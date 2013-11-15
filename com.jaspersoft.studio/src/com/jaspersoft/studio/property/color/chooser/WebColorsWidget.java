@@ -44,7 +44,7 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  * @author Orlandin Marco
  *
  */
-public class WebColorsWidget extends Composite{
+public class WebColorsWidget extends Composite implements IColorProvider{
 	
 	/**
 	 * List of the web safe color RGB.
@@ -142,6 +142,7 @@ public class WebColorsWidget extends Composite{
 		if (oldColor != null){
 			previewArea.setOldColor(oldColor.getRgb(), oldColor.getAlfa());
 		}
+		previewArea.setNewColor(selectedColor.getRgb(), selectedColor.getAlfa());
 		
 		Composite textualInformation = new Composite(rightPanel, SWT.NONE);
 		textualInformation.setLayout(new GridLayout(4,false));
@@ -176,7 +177,7 @@ public class WebColorsWidget extends Composite{
 		float[] hsb = selectedRGB.getHSB();
 		hue.setText(String.valueOf(Math.round(hsb[0])));
 		saturation.setText(String.valueOf(Math.round(hsb[1]*100))+"%");
-		brightness.setText(String.valueOf(Math.round(hsb[1]*100))+"%");
+		brightness.setText(String.valueOf(Math.round(hsb[2]*100))+"%");
 	}
 
 	/**

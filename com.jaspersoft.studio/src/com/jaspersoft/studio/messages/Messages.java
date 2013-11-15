@@ -264,6 +264,7 @@ public class Messages extends NLS {
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;
 	public static String ColorDialog_advancedColorsLabel;
+	public static String ColorDialog_lastUserdColorLabel;
 	public static String ColorDialog_newColorLabel;
 	public static String ColorDialog_oldColorLabel;
 	public static String ColorDialog_pickerButtonTooltip;

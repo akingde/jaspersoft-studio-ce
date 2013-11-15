@@ -81,7 +81,7 @@ public class BandResizeHandle extends AbstractHandle {
 			shiftPressed = domain.isPressed(SWT.SHIFT);
 		}
 		if (getOwner().getFigure().getBounds().height == 1 && !shiftPressed) {
-			List children = getOwner().getParent().getChildren();
+			List<?> children = getOwner().getParent().getChildren();
 			int index = children.indexOf(actualChildren);
 			while(actualChildren.getFigure().getBounds().height == 1 && index != 0){
 				index--;

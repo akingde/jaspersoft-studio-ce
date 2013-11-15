@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.color.chooser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -54,6 +57,10 @@ public class ColorDialog extends Dialog{
 	 * Controls to define the color from a color palette
 	 */
 	private WebColorsWidget webColors  = null;
+	
+	private LastUsedColorsWidget lastColors = null;
+	
+	private List<IColorProvider> colorsWidgets = new ArrayList<IColorProvider>();
 	
   /**
    * Flag used to hide the alpha controls
@@ -103,9 +110,8 @@ public class ColorDialog extends Dialog{
 		int returnCode = super.open();
 		if (returnCode == Dialog.CANCEL) return null;
 		else {
-			AlfaRGB newColor = null;
-			if (selectedTab == 0) newColor = advancedColors.getSelectedColor();
-			else newColor = webColors.getSelectedColor();
+			AlfaRGB newColor = colorsWidgets.get(selectedTab).getSelectedColor();
+			LastUsedColorsWidget.addColor(newColor);
 			return newColor;
 		}
 	}
@@ -124,9 +130,8 @@ public class ColorDialog extends Dialog{
 		int returnCode = super.open();
 		if (returnCode == Dialog.CANCEL) return null;
 		else {
-			AlfaRGB newColor = null;
-			if (selectedTab == 0) newColor = advancedColors.getSelectedColor();
-			else newColor = webColors.getSelectedColor();
+			AlfaRGB newColor = colorsWidgets.get(selectedTab).getSelectedColor();
+			LastUsedColorsWidget.addColor(newColor);
 			return newColor != null ? newColor.getRgb() : null;
 		}
 	}
@@ -175,10 +180,23 @@ public class ColorDialog extends Dialog{
 		 TabItem tab1 = new TabItem(folder, SWT.NONE);
 		 tab1.setText(Messages.ColorDialog_advancedColorsLabel);
 		 tab1.setControl(advancedColors);
+		 colorsWidgets.add(advancedColors);
+		 
 		 TabItem tab2 = new TabItem(folder, SWT.NONE);
 		 tab2.setText(Messages.ColorDialog_webColorsLabel);
 		 webColors = new WebColorsWidget(folder, SWT.NONE, oldColor);
 		 tab2.setControl(webColors);
+		 colorsWidgets.add(webColors);
+		 
+		 if (LastUsedColorsWidget.hasColors()){
+			 lastColors = new LastUsedColorsWidget(folder, SWT.NONE, oldColor);
+			 TabItem tab3 = new TabItem(folder, SWT.NONE);
+			 tab3.setText(Messages.ColorDialog_lastUserdColorLabel);
+			 tab3.setControl(lastColors);
+			 colorsWidgets.add(lastColors);
+		 }
+		 
+		 
 		 folder.addSelectionListener(new SelectionAdapter() {
 			 @Override
 			public void widgetSelected(SelectionEvent e) {

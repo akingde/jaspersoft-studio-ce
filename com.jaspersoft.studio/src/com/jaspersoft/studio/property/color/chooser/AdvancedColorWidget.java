@@ -61,7 +61,7 @@ import com.jaspersoft.studio.utils.ImageUtils;
  * @author Orlandin Marco
  *
  */
-public class AdvancedColorWidget extends Composite {
+public class AdvancedColorWidget extends Composite implements IColorProvider{
 
 	/**
 	 * Widget where is shown the actual color space and the user can choose a color from that with a mouse click
@@ -78,6 +78,11 @@ public class AdvancedColorWidget extends Composite {
 	 * Control to define the alpha value by sliding a cursor
 	 */
 	private Scale alphaSlider = null;
+	
+	/**
+	 * Control to define the alpha value by a numeric spinner
+	 */
+	private Spinner alphaText = null;
 	
 	/**
 	 * Numeric value that represent the alpha transparency of the new color
@@ -157,6 +162,9 @@ public class AdvancedColorWidget extends Composite {
 	 */
 	private RGB oldColor = null;
 	
+	/**
+	 * The actually selected color
+	 */
 	private AlfaRGB newColor = null;
 	
   /**
@@ -252,10 +260,11 @@ public class AdvancedColorWidget extends Composite {
 						colorsSelector.setSelectedColor(rgbColor, false);
 						updateText(rgbColor, rgbColor.getHSB());
 					} else if (e.widget == hex){
-						RGB rgbColor = hexParser(hex.getText());
+						AlfaRGB rgbColor = hexParser(hex.getText());
 						if (rgbColor != null){
-							colorsSelector.setSelectedColor(rgbColor, false);
-							updateText(rgbColor, rgbColor.getHSB());
+							colorsSelector.setSelectedColor(rgbColor.getRgb(), false);
+							alphaText.setSelection(rgbColor.getAlfa());
+							updateText(rgbColor.getRgb(), rgbColor.getRgb().getHSB());
 						}
 					}
 					hue.getParent().getParent().setRedraw(true);
@@ -331,24 +340,37 @@ public class AdvancedColorWidget extends Composite {
 	}
 	
 	/**
-	 * Convert the text into a RGB color, but only if there are exactly seven chars, a # symbol followed by three pair of hex values
+	 * Convert the text into a alfa RGB color, but only if there are exactly seven chars, a # symbol followed by three pair of hex values
+	 * or if it a sequence of 3 integers separated by comma (read as rgb) or if it is a sequence of 4 integers separated by comma (read as rgba)
 	 * 
-	 * @param text a text representing a color as HexDecimal value
-	 * @return an RGB color
+	 * @param text a text representing a color as HexDecimal value, rgb value or alfa rgb value
+	 * @return an alfa RGB color. If the color is provided as hex or as rgb the alpha is 255
 	 */
-	private RGB hexParser(String text){
-		RGB newColor = null;
+	private AlfaRGB hexParser(String text){
+		AlfaRGB newColor = null;
 		try {
 			if (text.startsWith("#") && text.length() == 7) { //$NON-NLS-1$
-				newColor = new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16));
+				newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(1, 3), 16), Integer.valueOf(text.substring(3, 5), 16), Integer.valueOf(text.substring(5, 7), 16)));
 			} else if (!text.startsWith("#") && text.length() == 6) { //$NON-NLS-1$
-				newColor = new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16));
+				newColor = AlfaRGB.getFullyOpaque(new RGB(Integer.valueOf(text.substring(0, 2), 16), Integer.valueOf(text.substring(2, 4), 16), Integer.valueOf(text.substring(4, 6), 16)));
+			} else {
+				String[] components = text.split(",");
+				int[] resultComp = new int[]{0,0,0,255};
+				boolean colsedBars = (text.contains("[") && text.contains("]")) || (text.contains("(") && text.contains(")")) || (text.contains("{") && text.contains("}")) || (!text.contains("{") && !text.contains("[") && !text.contains("("));
+				if (components.length>2 && colsedBars){
+					for(int i=0; i<components.length && i<4; i++){
+						String component = components[i].replaceAll("[^\\d]", "");;
+						resultComp[i] = Integer.valueOf(component);
+					}
+					newColor = new AlfaRGB(new RGB(resultComp[0],resultComp[1],resultComp[2]), resultComp[3]);
+				}
 			}
 		} catch (NumberFormatException ex) {
 		} catch (IllegalArgumentException ex) {
 		}
 		return newColor;
 	}
+	
 
 	/**
 	 * Return the hexadecimal representation of a color
@@ -521,7 +543,7 @@ public class AdvancedColorWidget extends Composite {
 		alphaSlider.setMaximum(255);
 		alphaSlider.setSelection(alpha);
 		alphaSlider.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		final Spinner alphaText = new Spinner(container, SWT.BORDER);
+		alphaText = new Spinner(container, SWT.BORDER);
 		alphaText.setMinimum(0);
 		alphaText.setMaximum(255);
 		alphaText.setSelection(alpha);
