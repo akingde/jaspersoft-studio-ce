@@ -96,7 +96,7 @@ public class SPFontNameCombo extends ASPropertyWidget {
 				});
 				dataSetted = true;
 			}
-			combo.setText(b.toString());
+			if (b != null) combo.setText(b.toString());
 		}
 	}
 

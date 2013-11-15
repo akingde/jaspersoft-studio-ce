@@ -47,6 +47,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
+import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -146,6 +147,9 @@ public class ReportEditor extends AbstractVisualEditor {
 
 				id = CreateConditionalStyleAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
+				
+				id = ResetStyleAction.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
 
 				id = CreateStyleTemplateAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
@@ -207,6 +211,10 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new CreateConditionalStyleAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateConditionalStyleAction.ID);
+		
+		action = new ResetStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ResetStyleAction.ID);
 
 		action = new CreateStyleTemplateAction(this);
 		registry.registerAction(action);
