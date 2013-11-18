@@ -59,7 +59,6 @@ public class CompileAction extends SelectionAction {
 				}
 			};
 			job.setPriority(Job.SHORT);
-			job.setSystem(true);
 			job.schedule();
 		}
 	}
