@@ -12,5 +12,5 @@ Here is a set of basic step you can take to have a fully working IDE.
 	Select the "eclipse43x.p2f" file and follow the steps.
 4)	Next step after the restart is to import the needed SVN projects.
 	To do this just select the menu File->Import->Team->Team Project Set and use the
-	specified "jaspersoftStudioCE.psf" file.
+	specified "jaspersoftStudioCE-plugin.psf" file.
 5)	After import, just build and start coding!

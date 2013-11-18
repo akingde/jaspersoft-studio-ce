@@ -13,5 +13,5 @@ Here is a set of basic step you can take to have a fully working IDE.
 	N.B: You should also import the deltapack for 3.8.2 in you current platform in order to be able to build the JSS product.
 4)	Next step after the restart is to import the needed SVN projects.
 	To do this just select the menu File->Import->Team->Team Project Set and use the
-	specified "jaspersoftStudioCE.psf" file.
+	specified "jaspersoftStudioCE-rcp.psf" or "jaspersoftStudioCE-plugin.psf" file.
 5)	After import, just build and start coding!

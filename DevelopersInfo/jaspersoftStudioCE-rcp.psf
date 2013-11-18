@@ -20,6 +20,7 @@
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.editor.jrexpressions.ui,com.jaspersoft.studio.editor.jrexpressions.ui"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.feature,com.jaspersoft.studio.feature"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.html,com.jaspersoft.studio.html"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.i18n.feature,com.jaspersoft.studio.i18n.feature"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.jre.feature,com.jaspersoft.studio.jre.feature"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.properties,com.jaspersoft.studio.properties"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.rcp,com.jaspersoft.studio.rcp"/>
