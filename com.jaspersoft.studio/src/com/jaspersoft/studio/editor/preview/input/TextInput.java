@@ -56,6 +56,8 @@ public class TextInput extends ADataInput {
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof String)
 			txt.setText((String) value);
+		else
+			txt.setText("");
 		setDecoratorNullable(param);
 	}
 }
