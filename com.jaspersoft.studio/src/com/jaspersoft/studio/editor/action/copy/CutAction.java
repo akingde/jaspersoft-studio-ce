@@ -21,7 +21,6 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 
 public class CutAction extends ACachedSelectionAction {
@@ -55,9 +54,9 @@ public class CutAction extends ACachedSelectionAction {
 		for (Object it : selectedObjects) {
 			if (it instanceof EditPart) {
 				EditPart ep = (EditPart) it;
-				ANode node = (ANode) ep.getModel();
-				if (node instanceof ICopyable)
-					cmd.addElement((ICopyable) node);
+				Object modelObj = ep.getModel();
+				if (modelObj instanceof ICopyable)
+					cmd.addElement((ICopyable) modelObj);
 			}
 		}
 		return cmd;

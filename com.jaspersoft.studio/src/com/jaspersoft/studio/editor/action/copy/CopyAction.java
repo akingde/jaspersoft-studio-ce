@@ -22,7 +22,6 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
@@ -103,11 +102,11 @@ public class CopyAction extends ACachedSelectionAction {
 		for (Object it : selectedObjects) {
 			if (it instanceof EditPart) {
 				EditPart ep = (EditPart) it;
-				ANode node = (ANode) ep.getModel();
+				Object modelObj = ep.getModel();
 				// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
 				// it is also directly selected with also its container (ie a frame) selected
-				if (node instanceof ICopyable && !nestedElements.contains(node))
-					cmd.addElement((ICopyable) node);
+				if (modelObj instanceof ICopyable && !nestedElements.contains(modelObj))
+					cmd.addElement((ICopyable) modelObj);
 			}
 		}
 		return cmd;

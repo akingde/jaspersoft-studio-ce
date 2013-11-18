@@ -70,14 +70,18 @@ public class PasteAction extends ACachedSelectionAction {
 
 	private PasteCommand getPasteComand(Object selection) {
 		if (selection instanceof EditPart) {
-			ANode n = (ANode) ((EditPart) selection).getModel();
-			IPastable past = getParent2Paste(n);
-			if (past != null)
-				return new PasteCommand(past);
+			Object modelObj = ((EditPart) selection).getModel();
+			if(modelObj instanceof ANode) {
+				IPastable past = getParent2Paste((ANode) modelObj);
+				if (past != null){
+					return new PasteCommand(past);
+				}
+			}
 		} else if (selection instanceof ANode) {
 			IPastable past = getParent2Paste((ANode) selection);
-			if (past != null)
+			if (past != null){
 				return new PasteCommand(past);
+			}
 		}
 		return null;
 	}
