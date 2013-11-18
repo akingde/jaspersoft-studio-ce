@@ -18,6 +18,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.swt.widgets.WLocale;
 
@@ -49,7 +50,8 @@ public class LocaleInput extends ADataInput {
 					updateInput();
 				}
 			});
-			setNullable(param, wlocal);
+			for (Control c : wlocal.getChildren())
+				setNullable(param, c);
 		}
 	}
 

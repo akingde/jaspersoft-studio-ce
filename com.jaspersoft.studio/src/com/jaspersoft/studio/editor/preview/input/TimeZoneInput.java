@@ -18,6 +18,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.swt.widgets.WTimeZone;
 
@@ -47,7 +48,8 @@ public class TimeZoneInput extends ADataInput {
 
 			});
 			updateInput();
-			setNullable(param, txt);
+			for (Control c : txt.getChildren())
+				setNullable(param, c);
 		}
 	}
 
