@@ -33,8 +33,8 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -124,8 +124,8 @@ public class SPDatasetRun extends ASPropertyWidget {
 					prmDTO.setValue(datasetRun.getParameters());
 				}
 
-				ParameterEditor wizard = new ParameterEditor();
-				wizard.setValue(prmDTO);
+				ComboParameterEditor wizard = new ComboParameterEditor();
+				wizard.setValue(prmDTO,mDataSet);
 				WizardDialog dialog = new WizardDialog(params.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {

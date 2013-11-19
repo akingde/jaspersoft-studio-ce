@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
@@ -443,7 +444,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-		datasetList.add((MDatasetRun) getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET));
+		MCrosstabDataset crosstabDataset = (MCrosstabDataset) getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
+		datasetList.add((MDatasetRun)crosstabDataset.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN));
 		return datasetList;
 	}
 

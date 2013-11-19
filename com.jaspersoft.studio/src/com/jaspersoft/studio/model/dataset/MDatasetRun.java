@@ -188,19 +188,20 @@ public class MDatasetRun extends APropertyNode {
 				
 				for (JRDatasetParameter prm : internalDTO.getValue()){
 					jrElement.removeParameter(prm);
-					originalDataset.removeParameter(prm.getName());
 				}
 
-				for (JRDatasetParameter param : v.getValue())
+				for (JRDatasetParameter param : v.getValue()){
 					try {
 						jrElement.addParameter(param);
-						JRDesignParameter designParam = new JRDesignParameter();
-						designParam.setName(param.getName());
-						designParam.setDefaultValueExpression(param.getExpression());
-						originalDataset.addParameter(designParam);
+						if (!originalDataset.getParametersMap().containsKey(param.getName())){
+							JRDesignParameter designParam = new JRDesignParameter();
+							designParam.setName(param.getName());
+							originalDataset.addParameter(designParam);
+						}
 					} catch (JRException e) {
 						e.printStackTrace();
 					}
+				}
 				propertyDTO = v;
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
@@ -209,6 +210,15 @@ public class MDatasetRun extends APropertyNode {
 			else
 				jrElement.setDatasetName(null);
 		}
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		//The propertyDTO is a cache for the property of the JRDatasetRun. when the 
+		//JRDatasetRun change i need to clear the propertyDTO to avoid to have as 
+		//value a JRDatasetRun and as propertyDTO the properties of another JRDatasetRun
+		propertyDTO = null;
 	}
 
 	private JasperDesign jasperDesign;

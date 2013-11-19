@@ -110,10 +110,10 @@ public class DeleteDatasetCommand extends Command {
 		return result;
 	}
 	
-	public static MDatasetRun checkContains(List<MDatasetRun> availabeDatasets, String seachedName){
+	public static MDatasetRun checkContains(List<MDatasetRun> availabeDatasets, String searchedName){
 		if (availabeDatasets != null && !availabeDatasets.isEmpty()){
 			for (MDatasetRun actualDataset : availabeDatasets){
-				if (actualDataset != null && seachedName != null && seachedName.equals(actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME))){
+				if (actualDataset != null && searchedName != null && searchedName.equals(actualDataset.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME))){
 					return actualDataset;
 				}
 			}

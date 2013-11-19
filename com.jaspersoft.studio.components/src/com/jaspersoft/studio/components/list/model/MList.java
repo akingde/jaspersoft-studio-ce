@@ -248,8 +248,7 @@ public class MList extends MGraphicElement implements IPastable,
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			((DesignListContents) jrList.getContents())
 					.setWidth((Integer) value);
-		else if (id
-				.equals(PREFIX + JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
+		else if (id.equals(PREFIX + JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			if (value == null) {
 				jrList.setDatasetRun(null);
 			} else {
