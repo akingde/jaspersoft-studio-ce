@@ -19,15 +19,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 
 /**
- * Adapter factory for the AJDEditPart subclasses.
+ * Adapter factory for the {@link TreeEditPart} subclasses.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class JDEditPartAdapterFactory implements IAdapterFactory {
+public class TreeEditPartAdapterFactory implements IAdapterFactory {
 
 	/** The list of provided adapters. */
 	private static final Class<?>[] ADAPTER_LIST= new Class[] { IResource.class, IFile.class };
@@ -35,12 +35,12 @@ public class JDEditPartAdapterFactory implements IAdapterFactory {
 	@Override
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (IResource.class.equals(adapterType)
-				&& adaptableObject instanceof AJDEditPart) {
-			return ((AJDEditPart) adaptableObject).getAdapter(IResource.class);
+				&& adaptableObject instanceof TreeEditPart) {
+			return ((TreeEditPart) adaptableObject).getAdapter(IResource.class);
 		}
 		if (IFile.class.equals(adapterType)
-				&& adaptableObject instanceof AJDEditPart) {
-			return ((AJDEditPart) adaptableObject).getAdapter(IFile.class);
+				&& adaptableObject instanceof TreeEditPart) {
+			return ((TreeEditPart) adaptableObject).getAdapter(IFile.class);
 		}
 		return null;
 	}

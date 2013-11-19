@@ -20,23 +20,34 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
+import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * The Class ATreeEditPart.
  */
 public class TreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener {
+	
+	private IResource associatedFile;
+	
 	@Override
 	protected void addChild(EditPart child, int index) {
 		if (child != null)
@@ -143,6 +154,42 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
+	}
+	
+	@Override
+	public Object getAdapter(Class key) {
+		if (key == IResource.class || key == IFile.class) {
+			if (associatedFile == null) {
+				associatedFile = getAssociatedFile();
+			}
+			return associatedFile;
+		}
+		return super.getAdapter(key);
+	}
+	
+	/**
+	 * Returns the file associated.
+	 * <p>
+	 * Given the current edit part belonging to the active JRXML editor (report designer) the related file is returned.
+	 * 
+	 * @return the associated file resource
+	 */
+	public IResource getAssociatedFile() {
+		IEditorInput edinput = null;
+		if (getViewer() != null && getViewer().getEditDomain() instanceof DefaultEditDomain) {
+			IEditorPart ip = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
+			edinput = ip.getEditorInput();
+		} else {
+			IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
+			if (ep != null)
+				edinput = ep.getEditorInput();
+		}
+		if (edinput != null)
+			if (edinput instanceof IFileEditorInput)
+				return ((IFileEditorInput) edinput).getFile();
+			else if (edinput instanceof JarEntryEditorInput)
+				return null;
+		return null;
 	}
 
 }

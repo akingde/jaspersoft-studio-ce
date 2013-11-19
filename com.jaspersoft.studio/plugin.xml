@@ -2177,6 +2177,16 @@
              type="org.eclipse.core.resources.IFile">
        </adapter>
     </factory>
+    <factory
+          adaptableType="com.jaspersoft.studio.editor.outline.part.TreeEditPart"
+          class="com.jaspersoft.studio.runtime.adapters.TreeEditPartAdapterFactory">
+       <adapter
+             type="org.eclipse.core.resources.IResource">
+       </adapter>
+       <adapter
+             type="org.eclipse.core.resources.IFile">
+       </adapter>
+    </factory>    
  </extension>
  <extension
          point="org.eclipse.ui.importWizards">
