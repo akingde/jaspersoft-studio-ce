@@ -293,8 +293,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 			jrDataset.setResourceBundle(v);
 		} else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS)) {
 			String v = (String) value;
-			if (v.trim().isEmpty())
+			if (v!=null && v.trim().isEmpty()) {
 				v = null;
+			}
 			jrDataset.setScriptletClass(v);
 		} else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION))
 			jrDataset.setFilterExpression(ExprUtil.setValues(jrDataset.getFilterExpression(), value));
