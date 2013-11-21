@@ -170,8 +170,6 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 			rect.setBorder(new ElementLineBorder(fg));
 		else
 			rect.setBorder(new CornerBorder(fg, 5));
-
-		rect.repaint();
 	}
 
 	/**

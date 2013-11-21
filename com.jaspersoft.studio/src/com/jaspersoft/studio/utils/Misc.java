@@ -134,6 +134,10 @@ public class Misc {
 		return value == null || value.trim().isEmpty();
 	}
 
+	public static String nullIfEmpty(String value) {
+		return value != null && value.isEmpty() ? null : value;
+	}
+
 	public static String strReplace(String s1, String s2, String s3) {
 		String string = "";
 		if (s2 == null || s3 == null || isNullOrEmpty(s2))

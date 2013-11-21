@@ -29,7 +29,6 @@ import net.sf.jasperreports.components.ComponentsManager;
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.eclipse.util.ResourceScope;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -54,34 +53,31 @@ import net.sf.jasperreports.repo.RepositoryService;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
-	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
+	// public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
 
 	private ClasspathListener classpathlistener;
 	private PreferenceListener preferenceListener;
-	private IPreferencesService service;
+	// private IPreferencesService service;
 	private String qualifier;
-	private String[] lookupOrders;
-	private IScopeContext[] contexts;
+	// private String[] lookupOrders;
+	// private IScopeContext[] contexts;
 	private String[] fontList;
 	private boolean refreshFonts = true;
 	private boolean refreshBundles = true;
@@ -109,6 +105,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				refreshBundles = true;
 				fontList = null;
 				props = null;
+				getProperties();
 				qExecutors = null;
 			}
 		}
@@ -146,29 +143,37 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		init(file);
 	}
 
+	private ScopedPreferenceStore pstore;
+
+	public ScopedPreferenceStore getPrefStore() {
+		return pstore;
+	}
+
 	public void init(IFile file) {
 		IFile oldFile = (IFile) get(FileUtils.KEY_FILE);
 		if (oldFile != null && oldFile == file)
 			return;
-		if (service == null) {
-			service = Platform.getPreferencesService();
-			qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
-		}
+		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
+		pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier);
+		// if (service == null) {
+		// service = Platform.getPreferencesService();
+
+		// }
 		initClassloader(file);
 		IProject project = null;
 		if (file != null) {
 			put(FileUtils.KEY_FILE, file);
 			project = file.getProject();
 			if (project != null) {
-				lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE, InstanceScope.SCOPE };
-				contexts = new IScopeContext[] { new ResourceScope(file), new ProjectScope(project), INSTANCE_SCOPE };
+				// lookupOrders = new String[] { ResourceScope.SCOPE, ProjectScope.SCOPE, InstanceScope.SCOPE };
+				// contexts = new IScopeContext[] { new ResourceScope(file), new ProjectScope(project), INSTANCE_SCOPE };
 			}
 			initFileResolver(file);
 		} else {
-			lookupOrders = new String[] { InstanceScope.SCOPE };
-			contexts = new IScopeContext[] { INSTANCE_SCOPE };
+			// lookupOrders = new String[] { InstanceScope.SCOPE };
+			// contexts = new IScopeContext[] { INSTANCE_SCOPE };
 		}
-		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
+		// service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 		if (preferenceListener == null) {
 			preferenceListener = new PreferenceListener();
 			JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
@@ -190,7 +195,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				}
 			}
 			cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
-			cl = new CompositeClassloader(cl, this.getClass().getClassLoader());
+			cl = new CompositeClassloader(cl, this.getClass().getClassLoader()) {
+				@Override
+				protected Class findClass(String className) throws ClassNotFoundException {
+					if (className.endsWith("GroovyEvaluator"))
+						throw new ClassNotFoundException(className);
+					return super.findClass(className);
+				}
+			};
 			setClassLoader(cl);
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -287,9 +299,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	@Override
 	public Map<String, String> getProperties() {
 		Map<String, String> map = super.getProperties();
-
-		if (map == null)
+		if (map != null && isPropsCached)
+			return map;
+		if (map == null) {
 			map = new HashMap<String, String>();
+			setPropertiesMap(map);
+		}
 		getJRProperties();
 		if (!isPropsCached) {
 			for (Object key : props.keySet()) {
@@ -303,11 +318,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		}
 
 		for (String key : map.keySet()) {
-			String val = getProperty((String) key);
+			String val = Misc.nullIfEmpty(pstore.getString(key));
 			if (val != null)
 				map.put(key, val);
 		}
-
 		return map;
 	}
 
@@ -319,8 +333,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (props == null) {
 			isPropsCached = false;
 			try {
-				props = FileUtils.load(service.getString(qualifier, PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES,
-						null, contexts));
+				props = FileUtils.load(pstore.getString(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES));
 			} catch (IOException e) {
 				e.printStackTrace();
 				props = new Properties();
@@ -331,42 +344,19 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 	@Override
 	public String getProperty(String key) {
-		getJRProperties();
-		String val = super.getProperty(key);
+		String val = Misc.nullIfEmpty(pstore.getString(key));
 		if (val != null)
 			return val;
-		IFile file = (IFile) get(FileUtils.KEY_FILE);
-		if (file != null) {
-			String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier).getString(key);
-			val = t != null && t.isEmpty() ? null : t;
-			// if (val == null) {
-			// IResource project = file.getProject();
-			// if (project != null) {
-			// t = JaspersoftStudioPlugin.getInstance().getPreferenceStore(project, qualifier).getString(key);
-			// val = t != null && t.isEmpty() ? null : t;
-			// }
-			// }
-		}
-		if (val != null)
-			return val;
-		val = service.getString(qualifier, key, null, contexts);
-		if (val != null)
-			return val;
-		val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
-		if (val != null)
-			return val;
+		return super.getProperty(key);
 
-		String t = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getString(key);
-		val = t != null && t.isEmpty() ? null : t;
-		if (val != null)
-			return val;
-		if (props != null) {
-			val = props.getProperty(key);
-			if (val != null)
-				return val;
-			val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
-		}
-		return val;
+		// let's try with ireport prefix prefix ? why we need it?
+		// val = Misc.nullIfEmpty(pstore.getString(PROPERTY_JRPROPERTY_PREFIX + key));
+		// if (val != null)
+		// return val;
+		// val = props.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
+		// if (val != null)
+		// return val;
+		// return super.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
 	}
 
 	public String getProperty(String key, String def) {
@@ -456,13 +446,19 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 						lst.clear();
 						List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
 								new ByteArrayInputStream(strprop.getBytes()));
-						if (fonts != null && !fonts.isEmpty())
-							lst.addAll(fonts);
+						if (fonts != null && !fonts.isEmpty()) {
+							for (FontFamily f : fonts)
+								if (f != null)
+									lst.add(f);
+						}
 					}
 
 					List<FontFamily> superlist = (List<FontFamily>) super.getExtensions(extensionType);
-					if (superlist != null)
-						lst.addAll(superlist);
+					if (superlist != null) {
+						for (FontFamily f : superlist)
+							if (f != null)
+								lst.add(f);
+					}
 
 					refreshFonts = false;
 				}
