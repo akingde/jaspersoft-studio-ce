@@ -3,16 +3,23 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_activation-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_axis-1.4patched.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_commons-codec-1.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_commons-discovery-0.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_jaxrpc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_mail-1.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_saaj-api-1.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js_wsdl4j-1.5.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasperserver-common-ws-5.5.0-SNAPSHOT.jar" sourcepath="/jasperserver-common-ws"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasperserver-api-metadata-5.5.0-SNAPSHOT.jar" sourcepath="/jasperserver-api"/>
 	<classpathentry exported="true" kind="lib" path="lib/js-extra-classes.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jasperserver-common-ws-5.5.0-SNAPSHOT.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jasperserver-api-metadata-5.5.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-codec-1.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/fluent-hc-4.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpclient-cache-4.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpcore-4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpmime-4.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-jaxrs-json-provider-2.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-jaxrs-xml-provider-2.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-dataformat-xml-2.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/stax2-api-3.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/woodstox-core-asl-4.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-module-jaxb-annotations-2.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-json-org-2.3.0-rc1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-jsr310-2.3.0-rc1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-jsr353-2.3.0-rc1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
