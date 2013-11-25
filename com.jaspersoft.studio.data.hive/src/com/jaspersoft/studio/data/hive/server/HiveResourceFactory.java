@@ -24,22 +24,17 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 
 public class HiveResourceFactory implements IResourceFactory {
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
-			int index) {
-		if (resource.getWsType().equals(
-				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
-			ResourceProperty rp = ResourceDescriptorUtil.getProperty(
-					MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
-					resource.getProperties());
-			if (rp != null
-					&& rp.getValue()
-							.equals(MRDatasourceHadoopHive.CUSTOM_CLASS))
+	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
+		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
+			ResourceProperty rp = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
+			if (rp != null && rp.getValue().equals(MRDatasourceHadoopHive.CUSTOM_CLASS))
 				return new MRDatasourceHadoopHive(parent, resource, index);
 		}
 		return null;
@@ -47,9 +42,7 @@ public class HiveResourceFactory implements IResourceFactory {
 
 	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
 		if (resource instanceof MRDatasourceHadoopHive)
-			return APageContent.getPages(resource, new ResourcePageContent(
-					parent, resource), new DatasourceHivePageContent(parent,
-					resource));
+			return APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DatasourceHivePageContent(parent, resource));
 		return null;
 	}
 
@@ -59,8 +52,12 @@ public class HiveResourceFactory implements IResourceFactory {
 
 	@Override
 	public ANode createNewDatasource(MRoot root, ANode parent) {
-		return new MRDatasourceHadoopHive(root,
-				MRDatasourceHadoopHive.createDescriptor(parent), -1);
+		return new MRDatasourceHadoopHive(root, MRDatasourceHadoopHive.createDescriptor(parent), -1);
+	}
+
+	@Override
+	public void initWsTypes(WsTypes wsType) {
+
 	}
 
 }

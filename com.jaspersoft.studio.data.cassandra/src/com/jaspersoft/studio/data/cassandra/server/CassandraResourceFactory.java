@@ -24,22 +24,17 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 
 public class CassandraResourceFactory implements IResourceFactory {
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
-			int index) {
-		if (resource.getWsType().equals(
-				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
-			ResourceProperty rp = ResourceDescriptorUtil.getProperty(
-					MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
-					resource.getProperties());
-			if (rp != null
-					&& rp.getValue()
-							.equals(MRDatasourceCassandra.CUSTOM_CLASS))
+	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
+		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
+			ResourceProperty rp = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
+			if (rp != null && rp.getValue().equals(MRDatasourceCassandra.CUSTOM_CLASS))
 				return new MRDatasourceCassandra(parent, resource, index);
 		}
 		return null;
@@ -47,9 +42,7 @@ public class CassandraResourceFactory implements IResourceFactory {
 
 	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
 		if (resource instanceof MRDatasourceCassandra)
-			return APageContent.getPages(resource, new ResourcePageContent(
-					parent, resource), new DatasourceCassandraPageContent(parent,
-					resource));
+			return APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DatasourceCassandraPageContent(parent, resource));
 		return null;
 	}
 
@@ -59,8 +52,12 @@ public class CassandraResourceFactory implements IResourceFactory {
 
 	@Override
 	public ANode createNewDatasource(MRoot root, ANode parent) {
-		return new MRDatasourceCassandra(root,
-				MRDatasourceCassandra.createDescriptor(parent), -1);
+		return new MRDatasourceCassandra(root, MRDatasourceCassandra.createDescriptor(parent), -1);
+	}
+
+	@Override
+	public void initWsTypes(WsTypes wsType) {
+
 	}
 
 }
