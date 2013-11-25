@@ -9,12 +9,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 public interface IConnection {
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception;
 
-	public ServerInfo getServerInfo() throws Exception;
+	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception;
 
 	public String getWebservicesUri();
 

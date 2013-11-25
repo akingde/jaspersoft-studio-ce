@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.server.protocol;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,13 +10,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.server.protocol.soap.SoapConnection;
 
 public class ProxyConnection implements IConnection {
 
-	private IConnection[] cons = new IConnection[] { // new RestV2Connection(),
-	new SoapConnection() };
+	private IConnection[] cons = getConnections();
+
+	private IConnection[] getConnections() {
+		List<IConnection> c = new ArrayList<IConnection>();
+		// c.add(new RestV2Connection());
+
+		c.addAll(Activator.getExtManager().getProtocols());
+
+		return c.toArray(new IConnection[c.size()]);
+	}
 
 	private IConnection c;
 
@@ -29,7 +39,7 @@ public class ProxyConnection implements IConnection {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				if (co == cons[cons.length - 1])
+				if (co == cons[cons.length - 1] || monitor.isCanceled())
 					throw e;
 			}
 		}
@@ -37,8 +47,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ServerInfo getServerInfo() throws Exception {
-		return c.getServerInfo();
+	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception {
+		return c.getServerInfo(monitor);
 	}
 
 	@Override
