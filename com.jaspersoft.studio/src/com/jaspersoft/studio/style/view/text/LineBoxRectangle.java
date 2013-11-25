@@ -13,12 +13,12 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.property.section.graphic;
+package com.jaspersoft.studio.style.view.text;
 
 import java.awt.Graphics2D;
 
+import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPrintElement;
-import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBasePrintText;
 
 import org.eclipse.draw2d.Graphics;
@@ -26,8 +26,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
-import com.jaspersoft.studio.model.ILineBox;
-import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.property.section.graphic.LineBoxDrawer;
 
 /**
  * Widget that contains the method to represent the border of an element and permit to view or edit their properties
@@ -45,11 +44,11 @@ public class LineBoxRectangle extends RectangleFigure {
 	/**
 	 * The section of the element
 	 */
-	private BordersSection section;
+	private JRLineBox lineBox;
 
-	public LineBoxRectangle(LineBoxDrawer drawer, BordersSection section) {
+	public LineBoxRectangle(LineBoxDrawer drawer, JRLineBox lineBox) {
 		bd = drawer;
-		this.section = section;
+		this.lineBox = lineBox;
 	}
 
 	/**
@@ -68,12 +67,7 @@ public class LineBoxRectangle extends RectangleFigure {
 				pe.setY(b.y + 10);
 				pe.setWidth(b.width - 20);
 				pe.setHeight(b.height - 20);
-				if (section.getElement() instanceof ILineBox && section.getElement() != null)
-					bd.drawBox(g, ((ILineBox) section.getElement()).getBoxContainer().getLineBox(), pe);
-				else if (section.getElement() instanceof MStyle) {
-					MStyle styleModel = (MStyle) section.getElement();
-					bd.drawBox(g, ((JRStyle) styleModel.getValue()).getLineBox(), pe);
-				}
+				bd.drawBox(g, lineBox, pe);
 			} else {
 				graphics.drawRectangle(0, 0, 100, 100);
 			}

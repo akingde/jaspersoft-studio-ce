@@ -193,6 +193,7 @@ public class SelectableComposite extends ScrolledComposite {
 		mainCompLayout.marginHeight = 0;
 		mainComposite.setLayout(mainCompLayout);
 		setContent(mainComposite);
+		mainComposite.setRedraw(false);
 		for (ElementDescription item : items) {
 			Composite comp = new Composite(mainComposite, SWT.BORDER);
 			comp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -213,6 +214,7 @@ public class SelectableComposite extends ScrolledComposite {
 			comp.addMouseListener(compositeMouseAction);
 			setChildrenColor(comp, unselectedColor);
 		}
+		mainComposite.setRedraw(true);
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		addControlListener(new ControlAdapter() {
 			@Override

@@ -45,7 +45,7 @@ import org.eclipse.swt.widgets.Canvas;
  * @author Orlandin Marco
  *
  */
-class LineBoxDrawer extends BoxDrawer {
+public class LineBoxDrawer extends BoxDrawer {
 	
   private static final int selectionWidth = 9;
 	
@@ -85,7 +85,7 @@ class LineBoxDrawer extends BoxDrawer {
 	 * @author Orlandin Marco
 	 *
 	 */
-	class Border{
+	public class Border{
 		
 		/**
 		 * The border selection area

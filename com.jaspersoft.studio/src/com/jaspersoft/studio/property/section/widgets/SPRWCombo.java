@@ -43,7 +43,7 @@ public class SPRWCombo extends ASPropertyWidget {
 	private boolean refresh = false;
 
 	protected void createComponent(Composite parent) {
-		combo = section.getWidgetFactory().createCombo(parent, SWT.FLAT);
+		combo = new Combo(parent, SWT.FLAT);
 		if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData();
 			gd.minimumWidth = 100;

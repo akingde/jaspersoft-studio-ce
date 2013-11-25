@@ -2235,4 +2235,11 @@
              class="com.jaspersoft.studio.messages.ResourcePublisher">
        </input>
     </extension>
+    <extension
+          point="com.jaspersoft.studio.stylesViewContributor">
+       <styleViewProvider
+             id="com.jaspersoft.studio.style.view.text.TextStylesViewContributor"
+             providerClass="com.jaspersoft.studio.style.view.text.TextStyleView">
+       </styleViewProvider>
+    </extension>
 </plugin>

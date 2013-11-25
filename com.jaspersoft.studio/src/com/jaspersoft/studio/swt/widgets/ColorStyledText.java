@@ -242,6 +242,7 @@ public class ColorStyledText {
 		textData.verticalAlignment = SWT.CENTER;
 		textData.horizontalAlignment = SWT.LEFT;
 		textArea = new StyledText(paintArea, SWT.SINGLE);
+		textArea.setBackground(paintArea.getBackground());
 		// When the text area is disposed also the actual color is disposed as well
 		textArea.addDisposeListener(new DisposeListener() {
 

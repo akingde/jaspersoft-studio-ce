@@ -47,4 +47,10 @@ public class AlfaRGB implements Serializable{
 		}
 		return false;
 	}
+	
+	public AlfaRGB clone() {
+		RGB newRGB = null;
+		if (rgb != null) newRGB = new RGB(rgb.red, rgb.green, rgb.blue);
+		return new AlfaRGB(newRGB, alfa);
+	}
 }
