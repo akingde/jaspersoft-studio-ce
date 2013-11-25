@@ -24,6 +24,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MDummy;
+import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MInputControl;
@@ -144,6 +145,8 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new XmlPageContent(parent, resource));
 				else if (resource instanceof MUnknown)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
+				else if (resource instanceof MContentResource)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 				else if (resource instanceof MRStyleTemplate)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new StyleTemplatePageContent(parent, resource));
 				else if (resource instanceof MRDataAdapter)
@@ -215,6 +218,9 @@ public class ResourceFactory {
 
 		if (wstype.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
 			return new MRStyleTemplate(parent, resource, index);
+
+		if (wstype.equals(ResourceDescriptor.TYPE_CONTENT_RESOURCE))
+			return new MContentResource(parent, resource, index);
 
 		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE))
 			return new MRDatasource(parent, resource, index);

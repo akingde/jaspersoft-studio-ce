@@ -283,7 +283,13 @@ public class ServerProvider implements IRepositoryViewProvider {
 		Job job = new Job("Refreshing tree") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				return listServer(event, monitor);
+				IStatus status = Status.OK_STATUS;
+				try {
+					status = listServer(event, monitor);
+				} finally {
+					monitor.done();
+				}
+				return status;
 			}
 		};
 		job.setPriority(Job.SHORT);
@@ -330,7 +336,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 		return Status.CANCEL_STATUS;
 	}
 
-	private IStatus listServer(final TreeExpansionEvent event, IProgressMonitor monitor) {
+	private IStatus listServer(final TreeExpansionEvent event, final IProgressMonitor monitor) {
 		final TreeViewer tv = (TreeViewer) event.getTreeViewer();
 		final MServerProfile r = (MServerProfile) event.getElement();
 		try {
@@ -348,7 +354,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 				public void run() {
 					tv.collapseToLevel(r, 1);
-					UIUtils.showErrorDialog(e.getMessage(), e);
+					if (!monitor.isCanceled())
+						UIUtils.showErrorDialog(e.getMessage(), e);
 				}
 			});
 		}
