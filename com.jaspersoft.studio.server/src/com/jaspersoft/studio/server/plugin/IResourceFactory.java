@@ -21,14 +21,17 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 
 public interface IResourceFactory {
-	public MResource getResource(ANode parent, ResourceDescriptor resource,
-			int index);
+	public MResource getResource(ANode parent, ResourceDescriptor resource, int index);
 
 	public IWizardPage[] getResourcePage(ANode parent, MResource resource);
 
 	public ANode createNewResource(MRoot root, ANode parent);
 
 	public ANode createNewDatasource(MRoot root, ANode parent);
+
+	public void initWsTypes(WsTypes wsType);
+
 }

@@ -34,10 +34,12 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 
 public class ExtensionManager {
 	private List<IResourceFactory> resources = new ArrayList<IResourceFactory>();
-
+	private List<IConnection> protocols = new ArrayList<IConnection>();
 	private List<IPublishContributor> publisher = new ArrayList<IPublishContributor>();
 
 	public void init() {
@@ -58,6 +60,17 @@ public class ExtensionManager {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
 				if (o instanceof IPublishContributor)
 					publisher.add((IPublishContributor) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "protocols"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof IConnection)
+					protocols.add((IConnection) o);
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -92,6 +105,10 @@ public class ExtensionManager {
 		return null;
 	}
 
+	public List<IConnection> getProtocols() {
+		return protocols;
+	}
+
 	public ANode createNewResource(MRoot root, ANode parent) {
 		for (IResourceFactory r : resources)
 			r.createNewResource(root, parent);
@@ -102,5 +119,10 @@ public class ExtensionManager {
 		for (IResourceFactory r : resources)
 			r.createNewDatasource(root, parent);
 		return null;
+	}
+
+	public void initWsTypes(WsTypes wsType) {
+		for (IResourceFactory r : resources)
+			r.initWsTypes(wsType);
 	}
 }

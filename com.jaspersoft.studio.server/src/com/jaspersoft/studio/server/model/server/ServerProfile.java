@@ -16,6 +16,8 @@
 package com.jaspersoft.studio.server.model.server;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.repo.Resource;
@@ -75,8 +77,17 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 		return url;
 	}
 
+	private URL url_;
+
+	public URL getURL() throws MalformedURLException {
+		if (url_ == null)
+			url_ = new URL(getUrl());
+		return url_;
+	}
+
 	public void setUrl(String url) {
 		this.url = url;
+		this.url_ = null;
 	}
 
 	public String getUser() {
