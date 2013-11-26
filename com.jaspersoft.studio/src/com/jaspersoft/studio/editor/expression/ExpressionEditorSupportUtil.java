@@ -264,7 +264,7 @@ public class ExpressionEditorSupportUtil {
 		ExpressionEditorSupportUtil.removeFunctionsLibraryImports(jasperDesign);
 		// Add the imports needed for the functions library, if preference is set
 		boolean useImports = jrContext
-				.getPropertyBoolean(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS);
+				.getPropertyBoolean(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, false);
 		if (useImports && JRXmlWriterHelper.isCompatibleVersionMinor(jrContext, VersionConstants.VERSION_5_1_0, true)) {
 			ExpressionEditorSupportUtil.addFunctionsLibraryImports(jasperDesign, jrContext);
 		}
