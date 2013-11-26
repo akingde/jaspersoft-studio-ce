@@ -105,7 +105,7 @@ public class CSVAction extends CustomSelectionAction {
 			freshChecked = true;
 			ischecked = true;
 			APropertyNode model = getRoot();
-			if (model == null && !(model instanceof MGraphicElement)) {
+			if (model == null || !(model instanceof MGraphicElement)) {
 				ischecked = false;
 			} else {
 				JRPropertiesMap v = (JRPropertiesMap) ((MGraphicElement) model).getPropertiesMap();
