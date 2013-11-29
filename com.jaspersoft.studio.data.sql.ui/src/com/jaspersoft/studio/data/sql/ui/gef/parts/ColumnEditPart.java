@@ -51,9 +51,11 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 		ImageDescriptor imgd = getModel().getImagePath();
 		if (imgd != null)
 			image = JasperReportsPlugin.getDefault().getImage(imgd);
-		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
+		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(
+				SQLQueryDiagram.SQLQUERYDIAGRAM);
 		afactory = designer.getOutline().getAfactory();
-		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(), MSelect.class);
+		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(),
+				MSelect.class);
 		ColumnFigure cbfig = new ColumnFigure(colname, image) {
 			@Override
 			protected void handleSelectionChanged() {
@@ -71,7 +73,10 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 					if (ColumnEditPart.this.getParent().isAllstar()) {
 						// get all columns from tables
 						// remove *
+						boolean tmp = isRefreshing;
+						isRefreshing = true;
 						setSelected(true);
+						isRefreshing = tmp;
 						return;
 					}
 					DeleteColumn dc = afactory.getAction(DeleteColumn.class);
@@ -119,7 +124,8 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new ColumnLayoutEditPolicy());
+		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new
+		// ColumnLayoutEditPolicy());
 		// installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new
 		// TableNodeEditPolicy());
 	}

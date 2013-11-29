@@ -74,6 +74,7 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -640,7 +641,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				jrstyle.setDefault(((Boolean) value).booleanValue());
 				getJasperDesign().setDefaultStyle(jrstyle);
 			} else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
-				if (!value.equals("")) { //$NON-NLS-1$
+				if (!Misc.isNullOrEmpty((String) value)) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						jrstyle.setParentStyle(style);
