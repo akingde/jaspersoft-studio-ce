@@ -157,7 +157,7 @@ public class MStaticText extends MTextElement {
 	 */
 	@Override
 	public int getDefaultWidth() {
-		return 70;
+		return 100;
 	}
 
 	/*

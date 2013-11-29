@@ -120,8 +120,7 @@ public class PreviewGenerator {
       textElement.setWidth(width);
       textElement.setHeight(height);
       textElement.setText(style.getDescription());
-      UpdateStyleCommand command = new UpdateStyleCommand(textElement, style);
-      command.execute();
+      UpdateStyleCommand.applayStyleToTextElement(style,textElement);
       if (style.isTransparent()) {
       	textElement.setMode(ModeEnum.OPAQUE);
       	textElement.setBackcolor(new Color(containerBackground.red, containerBackground.green, containerBackground.blue));

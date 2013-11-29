@@ -19,11 +19,13 @@ import java.awt.Color;
 
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBoxPen;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
+import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
@@ -33,6 +35,7 @@ import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.utils.AlfaRGB;
+import com.jaspersoft.translation.resources.AbstractResourceDefinition;
 
 /**
  * 
@@ -64,6 +67,39 @@ public class TextStyle extends TemplateStyle {
 	
 	public TextStyle(){
 		super(null,null);
+	}
+	
+	public TextStyle(JRStyle style){
+		super(null,null);
+		setTransparent(ModeEnum.TRANSPARENT.equals(style.getOwnModeValue()));
+		setBackGround(style.getOwnBackcolor());
+		setForeGround(style.getOwnForecolor());
+		setVerticalAlignmen(style.getOwnVerticalAlignmentValue());
+		setHorizontalAlignmen(style.getOwnHorizontalAlignmentValue());
+		setRotation(style.getOwnRotationValue());
+		
+		JRFont font = new JRBaseFont();
+		font.setBold(style.isOwnBold());
+		font.setItalic(new Boolean(style.isOwnItalic()));
+		font.setUnderline(new Boolean(style.isOwnUnderline()));
+		font.setStrikeThrough(new Boolean(style.isOwnStrikeThrough()));
+		font.setFontName(new String(style.getOwnFontName()));
+		font.setFontSize(new Integer(style.getOwnFontSize()));
+		setFont(font);
+		
+		JRLineBox originBox = style.getLineBox();
+		JRBaseLineBox copyBox = new JRBaseLineBox(null);
+		copyBox.setPadding(originBox.getOwnPadding() != null ? new Integer(originBox.getOwnPadding()): null);
+		copyBox.setTopPadding(originBox.getOwnTopPadding() != null ? new Integer(originBox.getOwnTopPadding()): null);
+		copyBox.setBottomPadding(originBox.getOwnBottomPadding() != null ? new Integer(originBox.getOwnBottomPadding()): null);
+		copyBox.setLeftPadding(originBox.getOwnLeftPadding() != null ? new Integer(originBox.getOwnLeftPadding()): null);
+		copyBox.setRightPadding(originBox.getOwnRightPadding() != null ? new Integer(originBox.getOwnRightPadding()): null);
+		copyLinePen(originBox.getPen(), copyBox.getPen());
+		copyLinePen(originBox.getLeftPen(), copyBox.getLeftPen());
+		copyLinePen(originBox.getRightPen(), copyBox.getRightPen());
+		copyLinePen(originBox.getBottomPen(), copyBox.getBottomPen());
+		copyLinePen(originBox.getTopPen(), copyBox.getTopPen());
+		setBorders(copyBox);
 	}
 	
 	public Boolean isTransparent(){
@@ -388,6 +424,50 @@ public class TextStyle extends TemplateStyle {
 		copyLinePen(originBox.getTopPen(), copyBox.getTopPen());
 		copy.setBorders(copyBox);
 		return copy;
+	}
+	
+	private boolean equalsPen(JRBoxPen pen1, JRBoxPen pen2){
+		if (pen1 == null) return pen2 == null;
+		if (pen2 == null) return pen1 == null;
+		if (!AbstractResourceDefinition.safeEquals(pen1.getOwnLineColor(),pen2.getOwnLineColor())) return false;
+		if (!AbstractResourceDefinition.safeEquals(pen1.getOwnLineStyleValue(),pen2.getOwnLineStyleValue())) return false;
+		if (!AbstractResourceDefinition.safeEquals(pen1.getOwnLineWidth(), pen2.getOwnLineWidth())) return false;
+		return true;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof TextStyle){
+			TextStyle element2 = (TextStyle)obj;
+			if (!element2.isTransparent().equals(isTransparent())) return false;
+			if (!AbstractResourceDefinition.safeEquals(getBackGround(), element2.getBackGround())) return false;
+			if (!AbstractResourceDefinition.safeEquals(getForeGround(), element2.getForeGround())) return false;
+			if (!AbstractResourceDefinition.safeEquals(getHorizontalAlignmen(), element2.getHorizontalAlignmen())) return false;
+			if (!AbstractResourceDefinition.safeEquals(getVerticalAlignmen(), element2.getVerticalAlignmen())) return false;
+			if (!AbstractResourceDefinition.safeEquals(getRotation(), element2.getRotation())) return false;
+			JRFont font1 = getFont();
+			JRFont font2 = element2.getFont();
+			if (!AbstractResourceDefinition.safeEquals(font1.isOwnBold(), font2.isOwnBold())) return false;
+			if (!AbstractResourceDefinition.safeEquals(font1.isOwnItalic(), font2.isOwnItalic())) return false;
+			if (!AbstractResourceDefinition.safeEquals(font1.isOwnUnderline(), font2.isOwnUnderline())) return false;
+			if (!AbstractResourceDefinition.safeEquals(font1.isOwnStrikeThrough(), font2.isOwnStrikeThrough())) return false;
+			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontName(), font2.getOwnFontName())) return false;
+			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontSize(), font2.getOwnFontSize())) return false;
+			JRLineBox box1 = getBorders();
+			JRLineBox box2 = element2.getBorders();
+			if (!AbstractResourceDefinition.safeEquals(box1.getOwnPadding(), box2.getOwnPadding())) return false;
+			if (!AbstractResourceDefinition.safeEquals(box1.getOwnTopPadding(), box2.getOwnTopPadding())) return false;
+			if (!AbstractResourceDefinition.safeEquals(box1.getOwnBottomPadding(), box2.getOwnBottomPadding())) return false;
+			if (!AbstractResourceDefinition.safeEquals(box1.getOwnLeftPadding(), box2.getOwnLeftPadding())) return false;
+			if (!AbstractResourceDefinition.safeEquals(box1.getOwnRightPadding(), box2.getOwnRightPadding())) return false;
+			if (!equalsPen(box1.getPen(), box2.getPen())) return false;
+			if (!equalsPen(box1.getBottomPen(), box2.getBottomPen())) return false;
+			if (!equalsPen(box1.getTopPen(), box2.getTopPen())) return false;
+			if (!equalsPen(box1.getLeftPen(), box2.getLeftPen())) return false;
+			if (!equalsPen(box1.getRightPen(), box2.getRightPen())) return false;
+			return true;
+		}
+		return false;
 	}
 	
 	private void copyLinePen(JRBoxPen originPen, JRBoxPen destinationPen){
