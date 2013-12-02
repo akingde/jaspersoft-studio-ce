@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -196,6 +197,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 			cl = JaspersoftStudioPlugin.getDriversManager().getClassLoader(cl);
 			cl = new CompositeClassloader(cl, this.getClass().getClassLoader()) {
+				@Override
+				protected URL findResource(String name) {
+					if (name.endsWith("GroovyEvaluator.groovy"))
+						return null;
+					return super.findResource(name);
+				}
+
 				@Override
 				protected Class findClass(String className) throws ClassNotFoundException {
 					if (className.endsWith("GroovyEvaluator"))

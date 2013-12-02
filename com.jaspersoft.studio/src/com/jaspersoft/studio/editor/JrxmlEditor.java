@@ -517,7 +517,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			return;
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
-		editorInput = FileUtils.checkAndConvertEditorInput(editorInput, new NullProgressMonitor());
+		NullProgressMonitor monitor = new NullProgressMonitor();
+		editorInput = FileUtils.checkAndConvertEditorInput(editorInput, monitor);
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;
@@ -525,11 +526,14 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			if (editorInput instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) editorInput).getFile();
+				if(!file.getProject().isOpen()){
+					file.getProject().open(monitor);
+				}
 				if (!file.exists()) {
 					closeEditor();
 					return;
 				}
-				file.refreshLocal(0, new NullProgressMonitor());
+				file.refreshLocal(0, monitor);
 
 				in = file.getContents();
 			} else if (editorInput instanceof JarEntryEditorInput) {
@@ -546,7 +550,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// protected IStatus run(IProgressMonitor monitor) {
 				// monitor.beginTask("Initialising " + getPartName(), IProgressMonitor.UNKNOWN);
 				// try {
-				doInitModel(new NullProgressMonitor(), getEditorInput(), inp, ifile);
+				doInitModel(monitor, getEditorInput(), inp, ifile);
 				// } finally {
 				// monitor.done();
 				// }

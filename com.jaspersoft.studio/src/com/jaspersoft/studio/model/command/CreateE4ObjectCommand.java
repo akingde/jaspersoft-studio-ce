@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.command;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -24,13 +25,12 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.frame.MFrame;
 
 public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
 	protected ANode parent;
-	
-
 
 	public CreateE4ObjectCommand(ANode child, ANode parent, Rectangle location, int index) {
 		super();
@@ -40,14 +40,19 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		this.index = index;
 		this.jasperDesign = parent.getJasperDesign();
 	}
-	
-	public ANode getChild(){
+
+	public ANode getChild() {
 		return child;
 	}
 
 	@Override
 	protected void createObject() {
 		try {
+			if (child.getParent().getParent() instanceof MDataset) {
+				operationCancelled = true;
+				UIUtils.showInformation(Messages.CreateE4ObjectCommand_subdataseterror);
+				return;
+			}
 			Tag tag = Tag.getExpression(child);
 			ANode n = null;
 			if (parent instanceof MFrame) {
@@ -64,11 +69,11 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup(),
-					jasperDesign.getMainDesignDataset());
+							jasperDesign.getMainDesignDataset());
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupHeader) n).getJrGroup(),
-					jasperDesign.getMainDesignDataset());
+							jasperDesign.getMainDesignDataset());
 					srcNode = Tag.createTextField(tag.txt.replaceAll("%", tag.name), tag.classname); //$NON-NLS-1$
 				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					var = Tag.createVariable(tag, ResetTypeEnum.REPORT, null, jasperDesign.getMainDesignDataset());
@@ -97,13 +102,12 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 			JaspersoftStudioPlugin.getInstance().logError(Messages.CreateE4ObjectCommand_ErrorCreatingObject, e);
 		}
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return true;
 	}
 
-	
 	private JRDesignVariable var;
 
 	@Override

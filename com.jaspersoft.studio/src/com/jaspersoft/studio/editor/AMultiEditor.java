@@ -37,7 +37,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -252,7 +254,10 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		input = FileUtils.checkAndConvertEditorInput(input, new NullProgressMonitor());
+		if (closing)
+			return;
+		NullProgressMonitor monitor = new NullProgressMonitor();
+		input = FileUtils.checkAndConvertEditorInput(input, monitor);
 		super.init(site, input);
 		setSite(site);
 		setPartName(input.getName());
@@ -263,6 +268,14 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			IFile file = null;
 			if (input instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) input).getFile();
+				if (!file.getProject().isOpen()) {
+					file.getProject().open(monitor);
+				}
+				if (!file.exists()) {
+					closeEditor();
+					return;
+				}
+				file.refreshLocal(0, monitor);
 				in = file.getContents();
 			} else if (input instanceof JarEntryEditorInput) {
 				in = ((JarEntryEditorInput) input).getStorage().getContents();
@@ -283,6 +296,24 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 					setModel(null);
 					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
+		}
+	}
+
+	boolean closing = false;
+
+	private void closeEditor() {
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			final IWorkbenchPage apage = activeWorkbenchWindow.getActivePage();
+			if (apage != null)
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						closing = true;
+						apage.closeEditor(AMultiEditor.this, false);
+					}
+				});
 		}
 	}
 
