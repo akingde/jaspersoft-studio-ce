@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReports Server Integration
 Bundle-SymbolicName: com.jaspersoft.studio.server.soap;singleton:=true
-Bundle-Version: 5.5.1
+Bundle-Version: 5.5.1.qualifier
 Bundle-Activator: com.jaspersoft.studio.server.soap.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.apache.commons.httpclient;bundle-version="3.1.0",
@@ -13,9 +13,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.server
 Eclipse-BuddyPolicy: registered
-Bundle-ClassPath: lib/jasperserver-api-metadata-5.5.0-SNAPSHOT.jar,
- lib/js_axis-1.4patched.jar,
- .
 Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  javax.xml.rpc,
  javax.xml.rpc.encoding,
