@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JasperReports Server Integration
+Bundle-Name: JasperReports Server Integration with SOAP
 Bundle-SymbolicName: com.jaspersoft.studio.server.soap;singleton:=true
 Bundle-Version: 5.5.1.qualifier
 Bundle-Activator: com.jaspersoft.studio.server.soap.Activator
