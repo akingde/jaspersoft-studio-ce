@@ -125,7 +125,7 @@
 						
 						3. Comment lines below when performing official releases.
 					-->
-					<format>'v'yyyyMMddHHmm</format>
+					<format>'beta-v'yyyyMMddHHmm</format>
 					<finalName>${project.artifactId}_${project.version}.${buildQualifier}</finalName>
 				</configuration>
 			</plugin>
@@ -186,5 +186,7 @@
 		<module>product</module>
 		<!--  A P2-like repository -->
 		<module>repository</module>
+		<!-- Q7 Tests -->
+		<module>../com.jaspersoft.studio.tests.q7</module>
 	</modules>
 </project>
