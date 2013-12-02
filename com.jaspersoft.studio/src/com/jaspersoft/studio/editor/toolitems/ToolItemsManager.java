@@ -84,8 +84,10 @@ public class ToolItemsManager {
 			Object obj = sobjects.get(0);
 			if (obj instanceof APropertyNode) {
 				JasperReportsConfiguration jConfig = ((APropertyNode) obj).getJasperConfiguration();
-				if (jConfig != null)
-					return jConfig.getPropertyBoolean(ts.getId(), true);
+				if (jConfig != null){
+					boolean storeValue = JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ts.getId());
+					return jConfig.getPropertyBoolean(ts.getId(), storeValue);
+				}
 			}
 		}
 		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getBoolean(ts.getId());

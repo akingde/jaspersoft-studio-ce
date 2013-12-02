@@ -1918,6 +1918,14 @@
                 class="com.jaspersoft.studio.model.subreport.MSubreport">
           </selectedObject>
        </toolitems>
+       <toolitems
+             contributionItemClass="com.jaspersoft.studio.editor.action.text.TextAlignmentContributionItem"
+             id="com.jaspersoft.studio.editor.action.text.TextAlignment"
+             tooltip="Allow to select the vertical or horizontal alignment of the text">
+          <selectedObject
+                class="com.jaspersoft.studio.model.text.MTextElement">
+          </selectedObject>
+       </toolitems>
     </extension>
     <extension
           point="com.jaspersoft.studio.toolitemsets">
@@ -1960,10 +1968,7 @@
                 toolitemID="com.jaspersoft.studio.editor.action.text.italic">
           </toolitem>
           <toolitem
-                toolitemID="com.jaspersoft.studio.editor.action.text.underline">
-          </toolitem>
-          <toolitem
-                toolitemID="com.jaspersoft.studio.editor.action.text.strike">
+                toolitemID="com.jaspersoft.studio.editor.action.text.TextAlignment">
           </toolitem>
        </toolitemsets>
        <toolitemsets
