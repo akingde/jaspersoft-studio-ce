@@ -15,15 +15,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.mongodb.server;
 
+import java.text.ParseException;
+
 import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
+import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -58,6 +62,16 @@ public class MongoResourceFactory implements IResourceFactory {
 	@Override
 	public void initWsTypes(WsTypes wsType) {
 
+	}
+
+	@Override
+	public ResourceDescriptor getRD(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+		return null;
+	}
+
+	@Override
+	public ClientResource<?> getResource(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+		return null;
 	}
 
 }
