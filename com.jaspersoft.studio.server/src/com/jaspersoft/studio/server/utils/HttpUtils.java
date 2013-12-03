@@ -70,7 +70,7 @@ public class HttpUtils {
 
 	public static IProxyService getProxyService() {
 		BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
-		ServiceReference<?> serviceReference = bc.getServiceReference(IProxyService.class.getName());
+		ServiceReference serviceReference = bc.getServiceReference(IProxyService.class.getName());
 		IProxyService service = (IProxyService) bc.getService(serviceReference);
 		service.addProxyChangeListener(new IProxyChangeListener() {
 
