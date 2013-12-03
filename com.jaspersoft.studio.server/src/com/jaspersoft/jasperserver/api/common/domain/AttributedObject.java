@@ -20,6 +20,8 @@
  */
 package com.jaspersoft.jasperserver.api.common.domain;
 
+import com.jaspersoft.jasperserver.api.JasperServerAPI;
+
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ import java.util.List;
  * @version $Id: AttributedObject.java 19921 2010-12-11 14:52:49Z tmatyashovsky $
  * @since 1.0.1
  */
-
+@JasperServerAPI
 public interface AttributedObject {
 
 	/**

@@ -177,11 +177,9 @@ public class DatasourceVDSPageContent extends APageContent {
 								rdc.setLabel(rdc.getLabel());
 								rdc.setIsReference(true);
 								rdc.setReferenceUri(rd.getUriString());
-								rdc.setWsType("datasource"); //$NON-NLS-1$
+								rdc.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
 								rdc.setIsNew(true);
-								ResourceProperty rp = new ResourceProperty("PROP_DATASOURCE_SUB_DS_ID", //$NON-NLS-1$
-										rd.getName());
-								rdc.getProperties().add(rp);
+								rdc.setResourceProperty("PROP_DATASOURCE_SUB_DS_ID", rd.getName());//$NON-NLS-1$
 							}
 							right.add(new Proxy(rdc));
 							res.getValue().getChildren().add(rdc);

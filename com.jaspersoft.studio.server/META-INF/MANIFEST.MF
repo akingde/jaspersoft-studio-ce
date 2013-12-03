@@ -12,7 +12,6 @@ Require-Bundle: com.jaspersoft.studio;bundle-version="5.5.1";visibility:=reexpor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/jasperserver-common-ws-5.5.0-SNAPSHOT.jar,
- lib/jasperserver-api-metadata-5.5.0-SNAPSHOT.jar,
  lib/js-extra-classes.jar,
  lib/commons-codec-1.6.jar,
  lib/fluent-hc-4.3.1.jar,

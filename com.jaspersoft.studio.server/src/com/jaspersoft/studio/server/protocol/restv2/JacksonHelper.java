@@ -22,25 +22,8 @@ public class JacksonHelper {
 		ObjectMapper mapper = new ObjectMapper();
 		AnnotationIntrospector primary = new JaxbAnnotationIntrospector(mapper.getTypeFactory());
 		AnnotationIntrospector secondary = new JacksonAnnotationIntrospector();
-		AnnotationIntrospector pair = AnnotationIntrospector.pair(primary, secondary);
-		mapper.setAnnotationIntrospector(pair);
-		// Serialize dates using ISO8601 format
-		// Jackson uses timestamps by default, so use StdDateFormat to get ISO8601
-		mapper.getSerializationConfig().with(new StdDateFormat());
-		// Deserialize dates using ISO8601 format
-		mapper.getDeserializationConfig().with(new StdDateFormat());
-		// Prevent exceptions from being thrown for unknown properties
-		// mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
-		// false);
-		mapper.addHandler(new DeserializationProblemHandler() {
-			@Override
-			public boolean handleUnknownProperty(DeserializationContext ctxt, JsonParser jp, JsonDeserializer<?> deserializer, Object beanOrClass, String propertyName) throws IOException,
-					JsonProcessingException {
-				return true;
-			}
-		});
-		// ignore fields with null values
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		mapper.setAnnotationIntrospector(AnnotationIntrospector.pair(primary, secondary));
+		setupMapper(mapper);
 		return mapper;
 	}
 
@@ -48,8 +31,12 @@ public class JacksonHelper {
 		XmlMapper mapper = new XmlMapper();
 		AnnotationIntrospector primary = new XmlJaxbAnnotationIntrospector(mapper.getTypeFactory());
 		AnnotationIntrospector secondary = new JacksonAnnotationIntrospector();
-		AnnotationIntrospector pair = AnnotationIntrospector.pair(primary, secondary);
-		mapper.setAnnotationIntrospector(pair);
+		mapper.setAnnotationIntrospector(AnnotationIntrospector.pair(primary, secondary));
+		setupMapper(mapper);
+		return mapper;
+	}
+
+	private static void setupMapper(ObjectMapper mapper) {
 		// Serialize dates using ISO8601 format
 		// Jackson uses timestamps by default, so use StdDateFormat to get ISO8601
 		mapper.getSerializationConfig().with(new StdDateFormat());
@@ -67,7 +54,6 @@ public class JacksonHelper {
 		});
 		// ignore fields with null values
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		return mapper;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class RestV2Connection implements IConnection {
 						StatusLine statusLine = response.getStatusLine();
 						switch (statusLine.getStatusCode()) {
 						case 200:
-							if (entity == null)
+							if (in == null)
 								throw new ClientProtocolException("Response contains no content");
 							return mapper.readValue(in, clazz);
 						case 204:
@@ -74,7 +75,7 @@ public class RestV2Connection implements IConnection {
 						case 404:
 							ErrorDescriptor ed = mapper.readValue(in, ErrorDescriptor.class);
 							if (ed != null)
-								throw new ClientProtocolException(ed.getMessage());
+								throw new ClientProtocolException(MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters()));
 						default:
 							throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
 						}
