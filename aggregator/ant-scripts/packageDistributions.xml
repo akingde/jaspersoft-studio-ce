@@ -6,6 +6,8 @@
 	<property name="dist" value="${basedir}/../product/dist"/>
 	<property name="productRootFolder" value="jaspersoftstudio" />
 	<property name="productVersionFile" value="buildversion.properties" />
+	<property name="jre.location.linux32" value="features/jre.linux.gtk.x86.feature_1.7.0.u25/jre/bin" />
+	<property name="jre.location.linux64" value="features/jre.linux.gtk.x86_64.feature_1.7.0.u25/jre/bin" />
 	<!-- import properties for mac machine producing the DMG -->
 	<property file="authenticationInfo.properties"/>
 
@@ -112,6 +114,7 @@
 		<antcall target="createDeb">
 			<param name="architecture" value="i386"/>
 			<param name= "zipdir.linux" value = "${dirlocation.linux.x86}/"/>
+			<param name="jre.feature.location" value="${jre.location.linux32}"/>
 		</antcall>
 	</target>
 
@@ -146,6 +149,7 @@
 		<antcall target="createDeb">
 			<param name="architecture" value="amd64"/>
 			<param name= "zipdir.linux" value = "${dirlocation.linux.x86_64}/"/>
+			<param name="jre.feature.location" value="${jre.location.linux64}"/>
 		</antcall>
 	</target>
 
@@ -232,6 +236,7 @@
 		</copy>
 		<echo file="${dist}/debian/postinst" append="false">#! /bin/sh
 chmod +x "/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio"
+chmod +x "/opt/jaspersoft/${jss.distro.folder}/${jre.feature.location}/*"
 exit 0;</echo>
 		<desktopEntry 
 				toFile="${dist}/debian/usr/share/applications/jasperstudio.desktop" 
