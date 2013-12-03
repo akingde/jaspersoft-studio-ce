@@ -187,6 +187,6 @@
 		<!--  A P2-like repository -->
 		<module>repository</module>
 		<!-- Q7 Tests -->
-		<module>../com.jaspersoft.studio.tests.q7</module>
+		<!-- <module>../com.jaspersoft.studio.tests.q7</module> -->
 	</modules>
 </project>
