@@ -165,7 +165,7 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 			if (containerWidth<buttonsMinWidth) return;
 			Control [] children = composite.getChildren ();
 			int maximumColumns = containerWidth/buttonsMinWidth;
-			int fillWidth = (containerWidth / maximumColumns) - maximumColumns;
+			int fillWidth = (containerWidth / maximumColumns) - 1;
 			int actualRow = 0;
 			int actualCol = 0;
 			for (Control control : children) {
@@ -251,9 +251,9 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 			@Override
 			public void controlResized(ControlEvent e) {
 				if (controlList.isEmpty()) return;
+				mainContainer.layout();
 				int heightRequired = ((ButtonFillLayout)mainContainer.getLayout()).getHeight();
 				scrollComp.setMinHeight(heightRequired+10);
-				scrollComp.layout(true,true);
 			}
 		});
 		mainContainer = new Composite(scrollComp, SWT.BORDER);
