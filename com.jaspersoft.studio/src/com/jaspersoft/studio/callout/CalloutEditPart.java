@@ -37,6 +37,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.callout.pin.MPinConnection;
 import com.jaspersoft.studio.callout.pin.PinConnectorEditPart;
 import com.jaspersoft.studio.editor.gef.figures.FigureFactory;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
@@ -222,10 +223,9 @@ public class CalloutEditPart extends AJDEditPart implements PropertyChangeListen
 	}
 
 	@Override
-	protected List getModelTargetConnections() {
-		List sourceConnections = new ArrayList();
+	protected List<?> getModelTargetConnections() {
+		List<MPinConnection> sourceConnections = new ArrayList<MPinConnection>();
 		sourceConnections.addAll(getModel().getTargetConnections());
-
 		return sourceConnections;
 	}
 

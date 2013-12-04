@@ -26,14 +26,14 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementResizableEditPol
 
 public class CalloutElementResizableEditPolicy extends ElementResizableEditPolicy {
 	@Override
-	protected List createSelectionHandles() {
+	protected List<?> createSelectionHandles() {
 		if (getResizeDirections() == PositionConstants.NONE) {
 			// non resizable, so delegate to super implementation
 			return super.createSelectionHandles();
 		}
 
 		// resizable in at least one direction
-		List list = new ArrayList();
+		List<?> list = new ArrayList();
 		createMoveHandle(list);
 		createResizeHandle(list, PositionConstants.SOUTH_EAST);
 		return list;
