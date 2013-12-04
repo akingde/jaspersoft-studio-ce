@@ -1322,6 +1322,14 @@
             name="Template View"
             restorable="true">
       </view>
+      <view
+            category="net.sf.jasperreports"
+            class="com.jaspersoft.studio.style.view.FormattingToolsView"
+            icon="icons/resources/formatting/formattingtools.png"
+            id="com.jaspersoft.studio.FormattingToolsView"
+            name="%formatTools"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -2131,7 +2139,7 @@
            commandId="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand"
            icon="icons/resources/installLanguageIcon.png"
            id="com.jaspersoft.studio.installTranslationAction"
-           label="Install Translation Locally"
+           label="%installTranslationItem"
            style="push">
         <visibleWhen
               checkEnabled="false">
