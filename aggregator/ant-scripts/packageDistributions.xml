@@ -236,7 +236,7 @@
 		</copy>
 		<echo file="${dist}/debian/postinst" append="false">#! /bin/sh
 chmod +x "/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio"
-chmod +x "/opt/jaspersoft/${jss.distro.folder}/${jre.feature.location}/*"
+chmod -R +x "/opt/jaspersoft/${jss.distro.folder}/${jre.feature.location}/"
 exit 0;</echo>
 		<desktopEntry 
 				toFile="${dist}/debian/usr/share/applications/jasperstudio.desktop" 
