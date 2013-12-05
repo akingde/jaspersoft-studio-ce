@@ -117,10 +117,14 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 				// get the column header
 				MBand dest = ((MReport) band.getParent()).getBand(BandTypeEnum.COLUMN_HEADER);
 				//It is a creation request, into the detail, with one or more commands encapsulated into a compound one
-				int defaultHeight = new MTextField().getDefaultHeight();
+				int defaultHeight = new MStaticText().getDefaultHeight();
 				int defaultWidth = new MTextField().getDefaultWidth();
-				boolean placeinTheHedaer =  dest != null && dest.getValue() != null && dest.getValue().getHeight() > defaultHeight + 2;
-				if (!placeinTheHedaer) dest = band;
+				boolean placeinTheHedaer =  (dest != null) && (dest.getValue() != null) && (dest.getValue().getHeight() >= defaultHeight);
+				if (!placeinTheHedaer) {
+					dest = band;
+					//If it is placed at the right of the textfield it has it same height
+					defaultHeight = new MTextField().getDefaultHeight();
+				}
 				
 				List<CreateE4ObjectCommand> creationCommands = new ArrayList<CreateE4ObjectCommand>();
 				//Build a list of all the created fields
