@@ -136,6 +136,8 @@ public class TextStyleView implements TemplateViewProvider {
 	   	}
 	   });
 	   sampleComposite.setMenu(popupMenu);
+	   //sampleComposite.setBackground(ResourceManager.getColor(0, 255, 0));
+	   //createDropTarget(sampleComposite);
 	}
 	
 	private void addDragSupport(Control control) {
@@ -208,12 +210,12 @@ public class TextStyleView implements TemplateViewProvider {
 				sampleArea.addControlListener(new ControlAdapter() {
 					@Override
 					public void controlResized(ControlEvent e) {
-						Rectangle bounds = sampleArea.getBounds();
-						int width = bounds.width;
+ 						Rectangle bounds = sampleArea.getBounds();
+						int width = bounds.width-4;
 						int height = 40;
 						if (width < 1) {
-							width = sampleComposite.getBounds().x;
-							if (width == 0) width = 100;
+							width = sampleComposite.getBounds().x-4;
+							if (width <= 0) width = 100;
 						}
 						TextStyle originalStyle = (TextStyle)e.widget.getData();
 						TextStyle normalized = originalStyle.clone();
