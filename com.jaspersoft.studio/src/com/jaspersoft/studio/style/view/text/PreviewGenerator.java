@@ -78,12 +78,11 @@ public class PreviewGenerator {
 	 */
 	public static ImageData generatePreview(TextStyle style, int width, int height, RGB containerBackground){
 		if (jasperDesign == null) createDesign();
-		((JRDesignBand)jasperDesign.getTitle()).setHeight(height);
-		jasperDesign.setPageWidth(width);
-		jasperDesign.setPageHeight(height);
+		((JRDesignBand)jasperDesign.getTitle()).setHeight(height*2);
 		setDesignElement(style, width, height, containerBackground);
 		//If we have not a buffered image or the old one has a different size from what we need, the we create a new buffered image and the cache it
-		if (bi == null || bi.getWidth() != width || bi.getHeight() != height) createBufferedImage();
+		//if (bi == null || bi.getWidth() != width || bi.getHeight() != height) 
+			createBufferedImage();
     visitor.visitStaticText(textElement);
     return convertToSWT(bi);
 	}
@@ -98,8 +97,6 @@ public class PreviewGenerator {
        JRDesignBand jrBand = new JRDesignBand();
    		 jasperDesign.setTitle(jrBand);
        textElement = new JRDesignStaticText();
-       textElement.setX(0);
-       textElement.setY(0);
        jasperDesign.setLeftMargin(0);
        jasperDesign.setRightMargin(0);
        jasperDesign.setTopMargin(0);
@@ -117,8 +114,8 @@ public class PreviewGenerator {
 	  * @param containerBackground the background used then the style has a transparent background
 	  */
 	 private static void setDesignElement(TextStyle style, int width, int height, RGB containerBackground) {
-      textElement.setWidth(width);
-      textElement.setHeight(height);
+      textElement.setWidth(width-1);
+      textElement.setHeight(height-1);
       textElement.setText(style.getDescription());
       UpdateStyleCommand.applayStyleToTextElement(style,textElement);
       if (style.isTransparent()) {
@@ -142,7 +139,7 @@ public class PreviewGenerator {
 	  * Convert an AWT BufferedImage to an swt imagedata
 	  * 
 	  * @param bufferedImage the awt buffered image
-	  * @return and set image data
+	  * @return the converted image data
 	  */
 	private static ImageData convertToSWT(BufferedImage bufferedImage) {
 	  	if (bufferedImage.getColorModel() instanceof DirectColorModel) {

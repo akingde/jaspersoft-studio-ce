@@ -113,6 +113,11 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	}
 	
 	/**
+	 * The scrolled composite where the main composite is placed
+	 */
+	private ScrolledComposite scrollComp;
+	
+	/**
 	 * Composite where the buttons are placed
 	 */
   private Composite mainContainer;
@@ -242,7 +247,7 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 
 	@Override
 	public void createPartControl(Composite parent) {
-		final ScrolledComposite scrollComp = new ScrolledComposite(parent, SWT.V_SCROLL);
+		scrollComp = new ScrolledComposite(parent, SWT.V_SCROLL);
 		scrollComp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		scrollComp.setLayout(new GridLayout(1,false));
 		scrollComp.setExpandVertical(true);
@@ -250,10 +255,7 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		scrollComp.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				if (controlList.isEmpty()) return;
-				mainContainer.layout();
-				int heightRequired = ((ButtonFillLayout)mainContainer.getLayout()).getHeight();
-				scrollComp.setMinHeight(heightRequired+10);
+				refreshScrolledHeight();
 			}
 		});
 		mainContainer = new Composite(scrollComp, SWT.BORDER);
@@ -262,6 +264,17 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
     mainContainer.setLayout(new ButtonFillLayout());
 	  ISelectionService service = getSite().getWorkbenchWindow().getSelectionService();
     service.addSelectionListener(selectionListener);
+	}
+	
+	/**
+	 * Set the height of the scrolled composite, according to the one of its content, to 
+	 * show or not the scrollbar
+	 */
+	private void refreshScrolledHeight(){
+		if (controlList.isEmpty()) return;
+		mainContainer.layout();
+		int heightRequired = ((ButtonFillLayout)mainContainer.getLayout()).getHeight();
+		scrollComp.setMinHeight(heightRequired+10);
 	}
 	
 	/**
@@ -309,7 +322,8 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	    	generateButton(registry.getAction(Align2BorderAction.ID_ALIGN_MIDDLE),1);
 	    	generateButton(registry.getAction(CenterInParentAction.ID),1);
 	    	mainContainer.setRedraw(true);
-	    	mainContainer.getParent().layout(true,true);
+	    	scrollComp.layout(true, true);
+	    	refreshScrolledHeight();
 	    }
 		}
 	}
