@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.execution;
 
@@ -20,6 +15,7 @@ import java.util.TimeZone;
 
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
+import net.sf.jasperreports.engine.fill.JRFiller;
 import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
 import net.sf.jasperreports.engine.fill.JRSwapFileVirtualizer;
 
@@ -59,8 +55,8 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String JSS_IGNOREPAGINATION = JSS_EXECPREFIX + JRDesignParameter.IS_IGNORE_PAGINATION; //$NON-NLS-1$
 
-	public static final String JSS_REPORT_LOCALE = JSS_EXECPREFIX + JRDesignParameter.REPORT_LOCALE; //$NON-NLS-1$
-	public static final String JSS_REPORT_TIMEZONE = JSS_EXECPREFIX + JRDesignParameter.REPORT_TIME_ZONE; //$NON-NLS-1$
+	public static final String JSS_REPORT_LOCALE = JRFiller.PROPERTY_DEFAULT_LOCALE; //$NON-NLS-1$
+	public static final String JSS_REPORT_TIMEZONE = JRFiller.PROPERTY_DEFAULT_TIMEZONE; //$NON-NLS-1$
 
 	private BooleanFieldEditor bfeONEXIT;
 	private JSSComboFieldEditor cfeType;
@@ -81,24 +77,31 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new LocaleFieldEditor(JSS_REPORT_LOCALE, Messages.ReportExecutionPreferencePage_localeLabel, getFieldEditorParent()));
-		addField(new TimeZoneFieldEditor(JSS_REPORT_TIMEZONE, Messages.ReportExecutionPreferencePage_timeZoneLabel, getFieldEditorParent()));
+		addField(new LocaleFieldEditor(JSS_REPORT_LOCALE, Messages.ReportExecutionPreferencePage_localeLabel,
+				getFieldEditorParent()));
+		addField(new TimeZoneFieldEditor(JSS_REPORT_TIMEZONE, Messages.ReportExecutionPreferencePage_timeZoneLabel,
+				getFieldEditorParent()));
 
-		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel, getFieldEditorParent());
+		bLimRec = new BooleanFieldEditor(JSS_LIMIT_RECORDS, Messages.ReportExecutionPreferencePage_limitNumberLabel,
+				getFieldEditorParent());
 		addField(bLimRec);
-		mnumrec = new SpinnerFieldEditor(JSS_MAX_RECORDS, Messages.ReportExecutionPreferencePage_maxNumberLabel, getFieldEditorParent(), 0);
+		mnumrec = new SpinnerFieldEditor(JSS_MAX_RECORDS, Messages.ReportExecutionPreferencePage_maxNumberLabel,
+				getFieldEditorParent(), 0);
 		mnumrec.setMinimum(-1);
 		mnumrec.setMaximum(Integer.MAX_VALUE);
-		mnumrec.getLabelControl(getFieldEditorParent()).setToolTipText(Messages.ReportExecutionPreferencePage_maxNumberTooltip);
+		mnumrec.getLabelControl(getFieldEditorParent()).setToolTipText(
+				Messages.ReportExecutionPreferencePage_maxNumberTooltip);
 		addField(mnumrec);
 
-		addField(new BooleanFieldEditor(JSS_IGNOREPAGINATION, Messages.ReportExecutionPreferencePage_ignorePaginationLabel, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(JSS_IGNOREPAGINATION, Messages.ReportExecutionPreferencePage_ignorePaginationLabel,
+				getFieldEditorParent()));
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		new Label(getFieldEditorParent(), SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd);
 
-		bfeUSE = new BooleanFieldEditor(JSS_VIRTUALIZER_USE, Messages.ReportExecutionPreferencePage_useVritualizerLabel, getFieldEditorParent());
+		bfeUSE = new BooleanFieldEditor(JSS_VIRTUALIZER_USE, Messages.ReportExecutionPreferencePage_useVritualizerLabel,
+				getFieldEditorParent());
 		addField(bfeUSE);
 
 		bfeONEXIT = new BooleanFieldEditor(NSF_FILES_DELETE_ONEXIT, Messages.ReportExecutionPreferencePage_deleteTempLabel,
@@ -107,37 +110,44 @@ public class ReportExecutionPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(bfeONEXIT.getDescriptionControl(getFieldEditorParent()), StudioPreferencePage.REFERENCE_PREFIX
 				+ bfeONEXIT.getPreferenceName());
 
-		sfePAGEELSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE, Messages.ReportExecutionPreferencePage_pageElementSizeLabel,
-				getFieldEditorParent(), 0);
+		sfePAGEELSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE,
+				Messages.ReportExecutionPreferencePage_pageElementSizeLabel, getFieldEditorParent(), 0);
 		sfePAGEELSIZE.setMinimum(1);
 		sfePAGEELSIZE.setMaximum(Integer.MAX_VALUE);
 		addField(sfePAGEELSIZE);
 		HelpSystem.setHelp(sfePAGEELSIZE.getSpinnerControl(),
 				StudioPreferencePage.REFERENCE_PREFIX + sfePAGEELSIZE.getPreferenceName());
 
-		cfeType = new JSSComboFieldEditor(JSS_VIRTUALIZER_TYPE, Messages.ReportExecutionPreferencePage_typeLabel, new String[][] {
-				{ Messages.ReportExecutionPreferencePage_fileVritualizerEntry, JRFileVirtualizer.class.getName() },
-				{ Messages.ReportExecutionPreferencePage_gzipMemoryVirtualizer, JRGzipVirtualizer.class.getName() },
-				{ Messages.ReportExecutionPreferencePage_singleSwapFileVirtualizer, JRSwapFileVirtualizer.class.getName() } }, getFieldEditorParent());
+		cfeType = new JSSComboFieldEditor(
+				JSS_VIRTUALIZER_TYPE,
+				Messages.ReportExecutionPreferencePage_typeLabel,
+				new String[][] {
+						{ Messages.ReportExecutionPreferencePage_fileVritualizerEntry, JRFileVirtualizer.class.getName() },
+						{ Messages.ReportExecutionPreferencePage_gzipMemoryVirtualizer, JRGzipVirtualizer.class.getName() },
+						{ Messages.ReportExecutionPreferencePage_singleSwapFileVirtualizer, JRSwapFileVirtualizer.class.getName() } },
+				getFieldEditorParent());
 		addField(cfeType);
 
-		msfe = new SpinnerFieldEditor(JSS_VIRTUALIZER_MAX_SIZE, Messages.ReportExecutionPreferencePage_maxSizeLabel, getFieldEditorParent(), 0);
+		msfe = new SpinnerFieldEditor(JSS_VIRTUALIZER_MAX_SIZE, Messages.ReportExecutionPreferencePage_maxSizeLabel,
+				getFieldEditorParent(), 0);
 		msfe.setMinimum(0);
 		msfe.setMaximum(Integer.MAX_VALUE);
 		msfe.getLabelControl(getFieldEditorParent()).setToolTipText(
 				Messages.ReportExecutionPreferencePage_maximumSizeTooltip);
 		addField(msfe);
 
-		dfeTMP = new DirectoryFieldEditor(JSS_VIRTUALIZER_TMP, Messages.ReportExecutionPreferencePage_tempPathLabel, getFieldEditorParent());
+		dfeTMP = new DirectoryFieldEditor(JSS_VIRTUALIZER_TMP, Messages.ReportExecutionPreferencePage_tempPathLabel,
+				getFieldEditorParent());
 		addField(dfeTMP);
 
-		sfeBLOCKSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_BLOCK_SIZE, Messages.ReportExecutionPreferencePage_blockSizeLabel, getFieldEditorParent(), 0);
+		sfeBLOCKSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_BLOCK_SIZE,
+				Messages.ReportExecutionPreferencePage_blockSizeLabel, getFieldEditorParent(), 0);
 		sfeBLOCKSIZE.setMinimum(0);
 		sfeBLOCKSIZE.setMaximum(Integer.MAX_VALUE);
 		addField(sfeBLOCKSIZE);
 
-		sfeMINGROWCOUNT = new SpinnerFieldEditor(JSS_VIRTUALIZER_MIN_GROW_COUNT, Messages.ReportExecutionPreferencePage_minGrowLabel, getFieldEditorParent(),
-				0);
+		sfeMINGROWCOUNT = new SpinnerFieldEditor(JSS_VIRTUALIZER_MIN_GROW_COUNT,
+				Messages.ReportExecutionPreferencePage_minGrowLabel, getFieldEditorParent(), 0);
 		sfeMINGROWCOUNT.setMinimum(0);
 		sfeMINGROWCOUNT.setMaximum(Integer.MAX_VALUE);
 		addField(sfeMINGROWCOUNT);
