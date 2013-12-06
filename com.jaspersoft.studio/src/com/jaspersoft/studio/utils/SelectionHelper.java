@@ -79,12 +79,12 @@ public class SelectionHelper {
 				.getActiveWorkbenchWindow();
 		if (activeWorkbenchWindow != null && activeWorkbenchWindow.getActivePage() != null) {
 			IEditorPart p = activeWorkbenchWindow.getActivePage().getActiveEditor();
-			if(p == null) {
+			if (p == null) {
 				// look among the editor references
 				IEditorReference[] editorReferences = activeWorkbenchWindow.getActivePage().getEditorReferences();
-				if(editorReferences.length == 1){
+				if (editorReferences.length == 1) {
 					IWorkbenchPart part = editorReferences[0].getPart(false);
-					if(part instanceof IEditorPart) {
+					if (part instanceof IEditorPart) {
 						p = (IEditorPart) part;
 					}
 				}
@@ -222,7 +222,7 @@ public class SelectionHelper {
 			}));
 		else
 			fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
-					new File("."), //$NON-NLS-1$
+					//					new File("."), //$NON-NLS-1$
 					new File(file.getProject().getLocationURI()) }));
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;

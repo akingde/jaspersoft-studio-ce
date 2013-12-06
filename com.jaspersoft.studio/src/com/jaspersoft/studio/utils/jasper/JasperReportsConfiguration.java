@@ -223,7 +223,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			list = new ArrayList<RepositoryService>();
 		if (file != null) {
 			list.add(new FileRepositoryService(this, file.getParent().getLocation().toFile().getAbsolutePath(), true));
-			list.add(new FileRepositoryService(this, ".", true));
+			// list.add(new FileRepositoryService(this, ".", true));
 			list.add(new FileRepositoryService(this, file.getProject().getLocation().toFile().getAbsolutePath(), true));
 		}
 		setExtensions(RepositoryService.class, list);
