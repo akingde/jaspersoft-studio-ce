@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.UUID;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
@@ -32,7 +31,6 @@ import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.fill.FillListener;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
-import org.apache.commons.lang.LocaleUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -73,7 +71,6 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.execution.ReportExecutionPreferencePage;
 import com.jaspersoft.studio.preferences.execution.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -183,21 +180,10 @@ public class ReportControler {
 
 	private static void setDefaultParameterValues(Map<String, Object> jasperParameters,
 			JasperReportsConfiguration jrContext) {
-		Boolean b = jrContext.getPropertyBoolean(ReportExecutionPreferencePage.JSS_IGNOREPAGINATION);
-		if (b != null)
-			jasperParameters.put(JRDesignParameter.IS_IGNORE_PAGINATION, b);
-		b = jrContext.getPropertyBoolean(ReportExecutionPreferencePage.JSS_LIMIT_RECORDS, false);
-		if (b) {
-			Integer mr = jrContext.getPropertyInteger(ReportExecutionPreferencePage.JSS_MAX_RECORDS);
-			if (mr != null)
-				jasperParameters.put(JRDesignParameter.REPORT_MAX_COUNT, mr);
-		}
-		String str = jrContext.getProperty(ReportExecutionPreferencePage.JSS_REPORT_LOCALE);
-		if (str != null && !str.isEmpty())
-			jasperParameters.put(JRDesignParameter.REPORT_LOCALE, LocaleUtils.toLocale(str));
-		str = jrContext.getProperty(ReportExecutionPreferencePage.JSS_REPORT_TIMEZONE);
-		if (str != null && !str.isEmpty())
-			jasperParameters.put(JRDesignParameter.REPORT_TIME_ZONE, TimeZone.getTimeZone(str));
+		jasperParameters.remove(JRDesignParameter.IS_IGNORE_PAGINATION);
+		jasperParameters.remove(JRDesignParameter.REPORT_MAX_COUNT);
+		jasperParameters.remove(JRDesignParameter.REPORT_LOCALE);
+		jasperParameters.remove(JRDesignParameter.REPORT_TIME_ZONE);
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite) {
