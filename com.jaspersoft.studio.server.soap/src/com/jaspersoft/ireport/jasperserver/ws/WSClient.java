@@ -52,7 +52,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.OperationResult;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Request;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.ws.xml.Marshaller;
 import com.jaspersoft.jasperserver.ws.xml.Unmarshaller;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -80,7 +79,7 @@ public class WSClient {
 	private Marshaller marshaller = new Marshaller();
 
 	private String cachedServerVersion;
-	
+
 	private SecretsUtil secretsUtil;
 
 	public WSClient(JServer server) throws Exception {
@@ -239,17 +238,18 @@ public class WSClient {
 	public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile) throws Exception {
 		return get(descriptor, outputFile, null);
 	}
-	
+
 	/**
-	 * When the server return an error as result of an operation this function compose
-	 * the message to display to the user
+	 * When the server return an error as result of an operation this function
+	 * compose the message to display to the user
 	 * 
-	 * @param or the operation result
+	 * @param or
+	 *          the operation result
 	 * @return message to display to the user
 	 */
-	private String composeErrorMessage(OperationResult or){
-		if (or.getMessage() != null){
-			return NLS.bind(Messages.WSClient_errorWithMessage, new Object[]{or.getReturnCode(), or.getMessage()});
+	private String composeErrorMessage(OperationResult or) {
+		if (or.getMessage() != null) {
+			return NLS.bind(Messages.WSClient_errorWithMessage, new Object[] { or.getReturnCode(), or.getMessage() });
 		} else {
 			return NLS.bind(Messages.WSClient_errorWithoutMessage, or.getReturnCode());
 		}
@@ -283,17 +283,16 @@ public class WSClient {
 			if (outputFile == null) {
 				req.getArguments().add(new Argument(Argument.NO_RESOURCE_DATA_ATTACHMENT, null));
 			}
-			
-			/*if (descriptor.getWsType().equals("css")) {
-				for(int i=0; i<descriptor.getProperties().size();i++){
-					ResourceProperty prop = (ResourceProperty)descriptor.getProperties().get(i);
-					if (prop.getName().equals("PROP_IS_REFERENCE") || prop.getName().equals("PROP_HAS_DATA")){
-						descriptor.getProperties().remove(i);
-						i--;
-					}
-				}
-				descriptor.setWsType("unknow");
-			}*/
+
+			/*
+			 * if (descriptor.getWsType().equals("css")) { for(int i=0;
+			 * i<descriptor.getProperties().size();i++){ ResourceProperty prop =
+			 * (ResourceProperty)descriptor.getProperties().get(i); if
+			 * (prop.getName().equals("PROP_IS_REFERENCE") ||
+			 * prop.getName().equals("PROP_HAS_DATA")){
+			 * descriptor.getProperties().remove(i); i--; } }
+			 * descriptor.setWsType("unknow"); }
+			 */
 
 			String result = getManagementService().get(marshaller.marshal(req));
 
@@ -477,8 +476,8 @@ public class WSClient {
 	}
 
 	public String getPassword() {
-		if(secretsUtil==null){
-			secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
+		if (secretsUtil == null) {
+			secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultInstance());
 		}
 		return secretsUtil.getSecret(JRServerSecretsProvider.SECRET_NODE_ID, getServer().getPassword());
 	}
