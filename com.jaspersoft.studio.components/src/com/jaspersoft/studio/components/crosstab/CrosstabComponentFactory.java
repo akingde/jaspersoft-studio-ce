@@ -90,6 +90,7 @@ import com.jaspersoft.studio.components.crosstab.model.measure.MMeasure;
 import com.jaspersoft.studio.components.crosstab.model.measure.MMeasures;
 import com.jaspersoft.studio.components.crosstab.model.measure.action.CreateMeasureAction;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
+import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureFieldCommand;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.DeleteMeasureCommand;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.ReorderMeasureCommand;
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoData;
@@ -405,7 +406,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 		if (child instanceof MMeasure) {
 			if (parent instanceof MCell && ((MCell) parent).getMCrosstab() != null)
-				return new CreateMeasureCommand((MCell) parent, (MMeasure) child, newIndex);
+				return new CreateMeasureFieldCommand((MMeasure)child, (MCell) parent,location);
+				//return new CreateMeasureCommand((MCell) parent, (MMeasure) child, newIndex);
 			if (parent instanceof MCrosstab)
 				return new CreateMeasureCommand((MCrosstab) parent, (MMeasure) child, newIndex);
 			if (parent instanceof MMeasures)

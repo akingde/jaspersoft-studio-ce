@@ -228,6 +228,20 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				rect = rect.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
 				return super.getCreateCommand(parent, obj, rect, index);
 			}
+			
+			private MBand findHoveredBand(Rectangle rect){
+				for(Object node : getParent().getChildren()){
+					if (node instanceof BandEditPart){
+						Rectangle bandLocation = ((BandEditPart) node).getFigure().getBounds().getCopy();
+						bandLocation = bandLocation.getTranslated(-ReportPageFigure.PAGE_BORDER.left, -ReportPageFigure.PAGE_BORDER.right);
+						int bandHeight = bandLocation.y+bandLocation.height-1;
+						if (rect.x>=bandLocation.x && rect.x<(bandLocation.x+bandLocation.width) && rect.y>=bandLocation.y && rect.y<bandHeight){
+							return (MBand)((BandEditPart) node).getModel();
+						}
+					}
+				}
+				return null;
+			}
 
 			@Override
 			protected Command createAddCommand(EditPart child, Object constraint) {
@@ -236,6 +250,8 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
 					MBand mband = getModel();
+					MBand hoveredBand = findHoveredBand(rect);
+					if (hoveredBand != null) mband = hoveredBand;
 					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == mband) {
 						return super.createChangeConstraintCommand(child, rect);
 					} else {
