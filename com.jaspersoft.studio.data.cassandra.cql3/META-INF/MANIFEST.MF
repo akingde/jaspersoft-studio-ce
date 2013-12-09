@@ -1,0 +1,33 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cassandra Plugin CQL3
+Bundle-SymbolicName: com.jaspersoft.studio.data.cassandra.cql3;singleton:=true
+Bundle-Version: 5.6.0.qualifier
+Bundle-Activator: com.jaspersoft.studio.data.cassandra.cql3.Activator
+Bundle-Vendor: Jaspersoft Corporation
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.6.0";visibility:=reexport,
+ com.jaspersoft.studio.server;bundle-version="5.6.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Eclipse-RegisterBuddy: com.jaspersoft.studio.data
+Bundle-ClassPath: lib/astyanax-cassandra-1.56.42.jar,
+ lib/astyanax-core-1.56.42.jar,
+ lib/astyanax-thrift-1.56.42.jar,
+ lib/avro-1.4.0-cassandra-1.jar,
+ lib/cassandra-all-1.2.2.jar,
+ lib/cassandra-thrift-1.2.5.jar,
+ lib/concurrentlinkedhashmap-lru-1.3.jar,
+ lib/geronimo-stax-api_1.0_spec-1.0.jar,
+ lib/hamcrest-core-1.1.jar,
+ lib/high-scale-lib-1.1.2.jar,
+ lib/jettison-1.2.jar,
+ lib/js-cassandra-datasource-cql3-2.0.0.jar,
+ lib/libthrift-0.9.0.jar,
+ lib/netty-3.2.4.Final.jar,
+ lib/snakeyaml-1.6.jar,
+ lib/snappy-java-1.0.4.1.jar,
+ lib/snaptree-0.1.jar,
+ lib/uuid-3.2.jar,
+ lib/guava-14.0.1.jar,
+ .
+
