@@ -28,9 +28,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 /**
  * <p>
  * </p>
@@ -140,8 +137,6 @@ public abstract class AbstractClientReportUnit<BuilderType extends AbstractClien
 
 	@XmlJavaTypeAdapter(FilesMapXmlAdapter.class)
 	@XmlElement(name = "resources")
-	@JsonDeserialize(using = FilesMapXmlDeserializer.class)
-	@JsonSerialize(using = FilesMapXmlSerializer.class)
 	public Map<String, ClientReferenceableFile> getFiles() {
 		return files;
 	}
