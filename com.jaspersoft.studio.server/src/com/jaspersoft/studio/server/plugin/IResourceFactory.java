@@ -24,7 +24,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
+import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 
 public interface IResourceFactory {
@@ -38,7 +38,7 @@ public interface IResourceFactory {
 
 	public void initWsTypes(WsTypes wsType);
 
-	public ResourceDescriptor getRD(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException;
+	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException;
 
-	public ClientResource<?> getResource(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException;
+	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException;
 }

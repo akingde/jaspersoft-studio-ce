@@ -20,5 +20,30 @@
 	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-json-org-2.3.0-rc1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-jsr310-2.3.0-rc1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson-datatype-jsr353-2.3.0-rc1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/asm-all-repackaged-2.2.0-b24.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/cglib-2.2.0-b23.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/core-2.2.0-b24.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/guava-14.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/hk2-api-2.2.0-b24.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/hk2-locator-2.2.0-b19.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/hk2-utils-2.2.0-b24.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/html-json-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.annotation-api-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.inject-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.json-1.0.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.json-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/javax.ws.rs-api-2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-apache-connector-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-client-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-common-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-media-json-2.0-m05-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-media-json-jackson-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-media-json-processing-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jersey-media-multipart-2.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/json-20131018.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jsonp-jaxrs-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/jsr250-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

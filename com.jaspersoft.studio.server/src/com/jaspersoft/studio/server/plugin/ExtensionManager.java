@@ -37,7 +37,7 @@ import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.protocol.IConnection;
-import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
+import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 
 public class ExtensionManager {
@@ -129,7 +129,7 @@ public class ExtensionManager {
 			r.initWsTypes(wsType);
 	}
 
-	public ResourceDescriptor getRD(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ResourceDescriptor nrd = r.getRD(rc, cr, rd);
 			if (nrd != null)
@@ -138,7 +138,7 @@ public class ExtensionManager {
 		return null;
 	}
 
-	public ClientResource<?> getResource(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ClientResource<?> nrd = r.getResource(rc, cr, rd);
 			if (nrd != null)

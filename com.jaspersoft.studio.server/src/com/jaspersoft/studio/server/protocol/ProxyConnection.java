@@ -21,6 +21,7 @@ public class ProxyConnection implements IConnection {
 	private IConnection[] getConnections() {
 		List<IConnection> c = new ArrayList<IConnection>();
 		// c.add(new RestV2Connection());
+		// c.add(new RestV2ConnectionJersey());
 
 		c.addAll(Activator.getExtManager().getProtocols());
 

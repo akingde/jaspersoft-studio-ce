@@ -38,7 +38,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataso
 
 public class Soap2Rest {
 
-	public static ClientResource<?> getResource(RestV2Connection rc, ResourceDescriptor rd) throws ParseException {
+	public static ClientResource<?> getResource(ARestV2Connection rc, ResourceDescriptor rd) throws ParseException {
 		ClientResource<?> cr = WsTypes.INST().createResource(rd);
 		cr.setCreationDate(rc.timestamp2str(rd.getCreationDate()));
 		cr.setLabel(rd.getLabel());
@@ -86,7 +86,7 @@ public class Soap2Rest {
 		return cr;
 	}
 
-	private static void getLOV(RestV2Connection rc, ClientListOfValues cr, ResourceDescriptor rd) {
+	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr, ResourceDescriptor rd) {
 		List<ClientListOfValuesItem> lovs = new ArrayList<ClientListOfValuesItem>();
 		if (rd.getListOfValues() != null)
 			for (ListItem l : (List<ListItem>) rd.getListOfValues())
@@ -94,7 +94,7 @@ public class Soap2Rest {
 		rd.setListOfValues(lovs);
 	}
 
-	private static void getMondrianConnection(RestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
+	private static void getMondrianConnection(ARestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
 			if (SelectorDatasource.isDatasource(r))
 				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
@@ -103,7 +103,7 @@ public class Soap2Rest {
 		}
 	}
 
-	private static void getXmlaConnection(RestV2Connection rc, ClientXmlaConnection cr, ResourceDescriptor rd) {
+	private static void getXmlaConnection(ARestV2Connection rc, ClientXmlaConnection cr, ResourceDescriptor rd) {
 		cr.setUrl(DiffFields.getSoapValue(rd, DiffFields.URL));
 		cr.setDataSource(DiffFields.getSoapValue(rd, DiffFields.DATASOURCE));
 		cr.setCatalog(DiffFields.getSoapValue(rd, DiffFields.CATALOG));
@@ -111,7 +111,7 @@ public class Soap2Rest {
 		cr.setPassword(DiffFields.getSoapValue(rd, DiffFields.PASSWORD));
 	}
 
-	private static void getVirtualDataSource(RestV2Connection rc, ClientVirtualDataSource cr, ResourceDescriptor rd) {
+	private static void getVirtualDataSource(ARestV2Connection rc, ClientVirtualDataSource cr, ResourceDescriptor rd) {
 		List<ClientSubDataSourceReference> ds = new ArrayList<ClientSubDataSourceReference>();
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
 			ClientSubDataSourceReference d = new ClientSubDataSourceReference();
@@ -122,7 +122,7 @@ public class Soap2Rest {
 		cr.setSubDataSources(ds);
 	}
 
-	private static void getAWSDataSource(RestV2Connection rc, ClientAwsDataSource cr, ResourceDescriptor rd) {
+	private static void getAWSDataSource(ARestV2Connection rc, ClientAwsDataSource cr, ResourceDescriptor rd) {
 		cr.setAccessKey(DiffFields.getSoapValue(rd, DiffFields.ACCESSKEY));
 		cr.setSecretKey(DiffFields.getSoapValue(rd, DiffFields.SECRETKEY));
 		cr.setRoleArn(DiffFields.getSoapValue(rd, DiffFields.ROLEARN));
@@ -133,7 +133,7 @@ public class Soap2Rest {
 		cr.setTimezone(DiffFields.getSoapValue(rd, DiffFields.TIMEZONE));
 	}
 
-	private static void getCustomDataSource(RestV2Connection rc, ClientCustomDataSource cr, ResourceDescriptor rd) {
+	private static void getCustomDataSource(ARestV2Connection rc, ClientCustomDataSource cr, ResourceDescriptor rd) {
 		cr.setServiceClass(rd.getServiceClass());
 		cr.setDataSourceName(DiffFields.getSoapValue(rd, DiffFields.DATASOURCENAME));
 		Map<String, String> map = rd.getPropertyMap();
@@ -143,17 +143,17 @@ public class Soap2Rest {
 		cr.setProperties(props);
 	}
 
-	private static void getJndiDataSource(RestV2Connection rc, ClientJndiJdbcDataSource cr, ResourceDescriptor rd) {
+	private static void getJndiDataSource(ARestV2Connection rc, ClientJndiJdbcDataSource cr, ResourceDescriptor rd) {
 		cr.setJndiName(rd.getJndiName());
 		cr.setTimezone(DiffFields.getSoapValue(rd, DiffFields.TIMEZONE));
 	}
 
-	private static void getBeanDataSource(RestV2Connection rc, ClientBeanDataSource cr, ResourceDescriptor rd) {
+	private static void getBeanDataSource(ARestV2Connection rc, ClientBeanDataSource cr, ResourceDescriptor rd) {
 		cr.setBeanName(rd.getBeanName());
 		cr.setBeanMethod(rd.getBeanMethod());
 	}
 
-	private static void getJdbcDataSource(RestV2Connection rc, ClientJdbcDataSource cr, ResourceDescriptor rd) {
+	private static void getJdbcDataSource(ARestV2Connection rc, ClientJdbcDataSource cr, ResourceDescriptor rd) {
 		cr.setDriverClass(rd.getDriverClass());
 		cr.setPassword(rd.getPassword());
 		cr.setUsername(rd.getUsername());
@@ -161,7 +161,7 @@ public class Soap2Rest {
 		cr.setTimezone(DiffFields.getSoapValue(rd, DiffFields.TIMEZONE));
 	}
 
-	private static void getDataType(RestV2Connection rc, ClientDataType cr, ResourceDescriptor rd) {
+	private static void getDataType(ARestV2Connection rc, ClientDataType cr, ResourceDescriptor rd) {
 		switch (rd.getDataType()) {
 		case 1:
 			cr.setType(TypeOfDataType.text);
@@ -187,7 +187,7 @@ public class Soap2Rest {
 		cr.setMaxLength(DiffFields.getSoapValueInteger(rd, DiffFields.MAXLENGHT));
 	}
 
-	private static void getQuery(RestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
+	private static void getQuery(ARestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
 		cr.setValue(rd.getSql());
 		cr.setLanguage(rd.getResourcePropertyValue(ResourceDescriptor.PROP_QUERY_LANGUAGE));
 		List<ResourceDescriptor> children = rd.getChildren();
@@ -196,11 +196,11 @@ public class Soap2Rest {
 				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
 	}
 
-	private static void getImage(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) {
+	private static void getImage(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) {
 
 	}
 
-	private static void getInputControl(RestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
+	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
 		cr.setType(rd.getControlType());
 		cr.setValueColumn(rd.getQueryValueColumn());
 		if (rd.getQueryVisibleColumns() != null)
@@ -214,7 +214,7 @@ public class Soap2Rest {
 		}
 	}
 
-	private static void getReportUnit(RestV2Connection rc, ClientReportUnit cr, ResourceDescriptor rd) throws ParseException {
+	private static void getReportUnit(ARestV2Connection rc, ClientReportUnit cr, ResourceDescriptor rd) throws ParseException {
 		cr.setAlwaysPromptControls(rd.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS));
 		cr.setInputControlRenderingView(rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW));
 		cr.setReportRenderingView(rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW));

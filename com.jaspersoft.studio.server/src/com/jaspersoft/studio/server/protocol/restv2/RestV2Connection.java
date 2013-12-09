@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,17 +36,10 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.ConnectionManager;
-import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.HttpUtils;
+import com.jaspersoft.studio.server.utils.Pass;
 
-public class RestV2Connection implements IConnection {
-	public static final String SUFFIX = "rest_v2/";
-	public static final String FORMAT = "xml";
-	private ServerProfile sp;
-
-	private String url(String suffix) {
-		return sp.getUrl() + SUFFIX + suffix;
-	}
+public class RestV2Connection extends ARestV2Connection {
 
 	private <T> T toObj(Request req, final Class<T> clazz, IProgressMonitor monitor) throws IOException {
 		T obj = null;
@@ -60,19 +51,16 @@ public class RestV2Connection implements IConnection {
 					HttpEntity entity = response.getEntity();
 					InputStream in = null;
 					try {
-						in = entity.getContent();
 						StatusLine statusLine = response.getStatusLine();
 						switch (statusLine.getStatusCode()) {
 						case 200:
-							if (in == null)
-								throw new ClientProtocolException("Response contains no content");
+							in = getContent(entity);
 							return mapper.readValue(in, clazz);
 						case 204:
 							return null;
 						case 400:
-						case 401:
-						case 403:
 						case 404:
+							in = getContent(entity);
 							ErrorDescriptor ed = mapper.readValue(in, ErrorDescriptor.class);
 							if (ed != null)
 								throw new ClientProtocolException(MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters()));
@@ -84,6 +72,11 @@ public class RestV2Connection implements IConnection {
 					}
 				}
 
+				protected InputStream getContent(HttpEntity entity) throws ClientProtocolException, IOException {
+					if (entity == null)
+						throw new ClientProtocolException("Response contains no content");
+					return entity.getContent();
+				}
 			});
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -94,33 +87,6 @@ public class RestV2Connection implements IConnection {
 		return obj;
 	}
 
-	private SimpleDateFormat dateFormat;
-	private SimpleDateFormat timestampFormat;
-
-	public Date toDate(String sdate) throws ParseException {
-		if (sdate == null)
-			return null;
-		return dateFormat.parse(sdate);
-	}
-
-	public Date toTimestamp(String sdate) throws ParseException {
-		if (sdate == null)
-			return null;
-		return timestampFormat.parse(sdate);
-	}
-
-	public String date2str(Date d) throws ParseException {
-		if (d == null)
-			return null;
-		return dateFormat.format(d);
-	}
-
-	public String timestamp2str(Date d) throws ParseException {
-		if (d == null)
-			return null;
-		return timestampFormat.format(d);
-	}
-
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		this.sp = sp;
@@ -128,7 +94,7 @@ public class RestV2Connection implements IConnection {
 		URL url = sp.getURL();
 		HttpHost host = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
 
-		exec = Executor.newInstance().auth(host, sp.getUser(), sp.getUser());
+		exec = Executor.newInstance().auth(host, sp.getUser(), Pass.getPass(sp.getPass()));
 		exec.authPreemptive(host);
 		HttpUtils.setupProxy(exec, url.toURI());
 		getServerInfo(monitor);
@@ -137,7 +103,6 @@ public class RestV2Connection implements IConnection {
 	}
 
 	private ObjectMapper mapper = FORMAT.equals("xml") ? JacksonHelper.getXMLMapper() : JacksonHelper.getJSONMapper();
-	private ServerInfo serverInfo;
 	private Executor exec;
 
 	@Override
@@ -154,17 +119,22 @@ public class RestV2Connection implements IConnection {
 
 	@Override
 	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
-		URIBuilder ub = new URIBuilder(url("resources"));
-		ub.addParameter("folderUri", rd.getUriString());
-		ub.addParameter("recursive", "false");
-		ub.addParameter("sortBy", "label");
-		ub.addParameter("limit", Integer.toString(Integer.MAX_VALUE));
-
-		ClientResourceListWrapper resources = toObj(HttpUtils.get(ub.build().toASCIIString(), sp), ClientResourceListWrapper.class, monitor);
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
-		if (resources != null)
-			for (ClientResourceLookup crl : resources.getResourceLookups())
-				rds.add(Rest2Soap.getRDLookup(this, crl));
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+			rd = get(monitor, rd, null);
+			return rd.getChildren();
+		} else {
+			URIBuilder ub = new URIBuilder(url("resources"));
+			ub.addParameter("folderUri", rd.getUriString());
+			ub.addParameter("recursive", "false");
+			ub.addParameter("sortBy", "label");
+			ub.addParameter("limit", Integer.toString(Integer.MAX_VALUE));
+
+			ClientResourceListWrapper resources = toObj(HttpUtils.get(ub.build().toASCIIString(), sp), ClientResourceListWrapper.class, monitor);
+			if (resources != null)
+				for (ClientResourceLookup crl : resources.getResourceLookups())
+					rds.add(Rest2Soap.getRDLookup(this, crl));
+		}
 		return rds;
 	}
 
@@ -264,21 +234,6 @@ public class RestV2Connection implements IConnection {
 	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public String getWebservicesUri() {
-		return sp.getUrl();
-	}
-
-	@Override
-	public String getUsername() {
-		return sp.getUser();
-	}
-
-	@Override
-	public String getPassword() {
-		return sp.getPass();
 	}
 
 }
