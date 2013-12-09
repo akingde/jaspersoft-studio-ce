@@ -132,8 +132,8 @@ public class QueryStatus extends AQueryStatus {
 				// avoid new line
 				endIndex = Math.min(str.indexOf('\n'), endIndex);
 			}
-			if (endIndex < str.length()) {
-				msgItem.setText(str.substring(0, endIndex) + "...");
+			if (endIndex - 3 < str.length() && endIndex > 0) {
+				msgItem.setText(str.substring(0, endIndex - 3) + "...");
 				return;
 			}
 		}
