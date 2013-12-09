@@ -27,7 +27,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
-import com.jaspersoft.studio.server.protocol.restv2.RestV2Connection;
+import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -65,12 +65,12 @@ public class MongoResourceFactory implements IResourceFactory {
 	}
 
 	@Override
-	public ResourceDescriptor getRD(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		return null;
 	}
 
 	@Override
-	public ClientResource<?> getResource(RestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		return null;
 	}
 
