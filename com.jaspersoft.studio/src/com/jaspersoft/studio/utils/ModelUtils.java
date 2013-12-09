@@ -702,12 +702,12 @@ public class ModelUtils {
 	public static List<JRDesignElement> getGElements(JRElementGroup gr) {
 		List<JRDesignElement> res = new ArrayList<JRDesignElement>();
 		for (Object el : gr.getChildren()) {
-			if (el instanceof JRDesignElement) {
+			if (el instanceof JRElementGroup) {
+				res.addAll(getGElements((JRElementGroup) el));
+			} else if (el instanceof JRDesignElement) {
 				res.add((JRDesignElement) el);
 				if (el instanceof JRDesignCrosstab)
 					res.addAll(getCrosstabElements((JRDesignCrosstab) el));
-			} else if (el instanceof JRElementGroup) {
-				res.addAll(getGElements((JRElementGroup) el));
 			}
 		}
 		return res;

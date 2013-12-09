@@ -549,4 +549,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public static JasperReportsConfiguration getDefaultJRConfig() {
 		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 	}
+
+	private static JasperReportsConfiguration instance;
+
+	/**
+	 * @return a default {@link JasperReportsConfiguration} instance, based on the {@link DefaultJasperReportsContext}.
+	 */
+	public static JasperReportsConfiguration getDefaultInstance() {
+		if (instance == null)
+			instance = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
+		return instance;
+	}
 }

@@ -1,6 +1,8 @@
 package com.jaspersoft.studio.utils;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +41,14 @@ public class SubreportsUtil {
 		String expr = ExpressionUtil.eval(ele.getExpression(), jConfig, parent);
 		if (expr == null || expr.isEmpty())
 			return;
-		File f = FileUtils.findFile(file, expr.replaceAll(".jasper$", ".jrxml"));
+		expr = expr.replaceAll(".jasper$", ".jrxml");
+		File f = FileUtils.findFile(file, expr);
 		if (f == null)
-			return;
+			try {
+				f = new File(new URI(expr));
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
+			}
 		if (fmap.containsKey(f))
 			return;
 		if (f != null && f.exists()) {

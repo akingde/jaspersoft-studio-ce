@@ -526,7 +526,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			if (editorInput instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) editorInput).getFile();
-				if(!file.getProject().isOpen()){
+				if (!file.getProject().isOpen()) {
 					file.getProject().open(monitor);
 				}
 				if (!file.exists()) {
@@ -779,10 +779,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					model2xml(ver);
 					isRefresh = false;
 				}
-				Job job = new Job("Compiling Subreports") {
+				Job job = new Job("Switching to Preview") {
 					@Override
 					protected IStatus run(final IProgressMonitor monitor) {
-						monitor.beginTask("Compiling Subreports", IProgressMonitor.UNKNOWN);
+						monitor.beginTask("Compiling subreport", IProgressMonitor.UNKNOWN);
 						CompileAction.doRun(jrContext, monitor, false);
 						if (jrContext.getPropertyBoolean(DesignerPreferencePage.P_SAVE_ON_PREVIEW, Boolean.FALSE)) {
 							monitor.subTask("Saving Report");
