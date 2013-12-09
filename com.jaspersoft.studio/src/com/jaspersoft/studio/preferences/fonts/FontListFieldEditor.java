@@ -18,15 +18,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.fonts.FontFace;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
+import net.sf.jasperreports.engine.fonts.SimpleFontFace;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 
 import org.eclipse.core.commands.operations.OperationStatus;
@@ -137,18 +142,38 @@ public class FontListFieldEditor extends TableFieldEditor {
 		}
 	}
 
+	private static String lastLocation;
+
+	public static String setupLastLocation(FileDialog dialog) {
+		if (lastLocation == null)
+			lastLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
+		dialog.setFilterPath(lastLocation);
+		return lastLocation;
+	}
+
+	public static void setLastLocation(FileDialog dialog, String selected) {
+		if (!Misc.isNullOrEmpty(selected))
+			lastLocation = selected.substring(0, selected.lastIndexOf(File.separatorChar));
+		else if (!Misc.isNullOrEmpty(dialog.getFileName()))
+			lastLocation = dialog.getFileName();
+	}
+
 	protected void exportPressed() {
 		int[] selection = table.getSelectionIndices();
 		if (selection != null && selection.length > 0) {
 			final List<FontFamily> lst = new ArrayList<FontFamily>(selection.length);
-			for (int s : selection)
-				lst.add(fontFamily.get(s));
+			for (int s : selection) {
+				FontFamily font = fontFamily.get(s);
+				if (font instanceof JRCloneable)
+					lst.add((FontFamily) ((JRCloneable) font).clone());
+			}
 			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 			FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
 			fd.setText(Messages.FontListFieldEditor_exportToJar);
-			fd.setFilterPath(root.getLocation().toOSString());
+			setupLastLocation(fd);
 			fd.setFilterExtensions(new String[] { "*.jar", "*.zip" }); //$NON-NLS-1$ //$NON-NLS-2$
 			final String selected = fd.open();
+			setLastLocation(fd, selected);
 			if (selected != null) {
 				Job job = new Job(Messages.FontListFieldEditor_exportToJar) {
 					@Override
@@ -202,13 +227,13 @@ public class FontListFieldEditor extends TableFieldEditor {
 			pw.println("net.sf.jasperreports.extension.simple.font.families.ireport" + prefix + "=fonts/" + fontXmlFile); //$NON-NLS-1$ //$NON-NLS-2$
 
 			pw.flush();
-
+			Set<String> names = new HashSet<String>();
 			List<FontFamily> newfonts = new ArrayList<FontFamily>(lst.size());
 			for (FontFamily f : lst) {
-				writeFont2zip(zipos, f, f.getNormalFace());
-				writeFont2zip(zipos, f, f.getBoldFace());
-				writeFont2zip(zipos, f, f.getItalicFace());
-				writeFont2zip(zipos, f, f.getBoldItalicFace());
+				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getNormalFace());
+				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getBoldFace());
+				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getItalicFace());
+				writeFont2zip(names, zipos, f, (SimpleFontFace) f.getBoldItalicFace());
 
 				String pdfenc = f.getPdfEncoding();
 				if (ModelUtils.getKey4PDFEncoding(pdfenc) == null) {
@@ -230,35 +255,45 @@ public class FontListFieldEditor extends TableFieldEditor {
 		}
 	}
 
-	private void writeFont2zip(ZipOutputStream zipos, FontFamily fontFamily, FontFace font) throws IOException {
+	private void writeFont2zip(Set<String> names, ZipOutputStream zipos, FontFamily fontFamily, SimpleFontFace font)
+			throws IOException {
 		if (font == null)
 			return;
-		writeFont(zipos, fontFamily, font, font.getTtf());
-		writeFont(zipos, fontFamily, font, font.getEot());
-		writeFont(zipos, fontFamily, font, font.getSvg());
-		writeFont(zipos, fontFamily, font, font.getWoff());
+		try {
+			font.setTtf(writeFont(names, zipos, fontFamily, font, font.getTtf()));
+		} catch (JRRuntimeException r) {
+		}
+		font.setPdf(writeFont(names, zipos, fontFamily, font, font.getPdf()));
+		font.setEot(writeFont(names, zipos, fontFamily, font, font.getEot()));
+		font.setSvg(writeFont(names, zipos, fontFamily, font, font.getSvg()));
+		font.setWoff(writeFont(names, zipos, fontFamily, font, font.getWoff()));
 	}
 
-	private static void writeFont(ZipOutputStream zipos, FontFamily fontFamily, FontFace font, String fontname)
-			throws IOException {
+	private static String writeFont(Set<String> names, ZipOutputStream zipos, FontFamily fontFamily, FontFace font,
+			String fontname) throws IOException {
 		if (Misc.isNullOrEmpty(fontname))
-			return;
+			return fontname;
 		File file = new File(fontname);
 		if (file.exists()) {
-			String name = "fonts/" + fontFamily.getName() + "/" + font.getName() + file.getName(); //$NON-NLS-1$
-			ZipEntry ttfZipEntry = new ZipEntry(name);
-			zipos.putNextEntry(ttfZipEntry);
+			String name = "fonts/" + fontFamily.getName() + "/" + font.getName() + file.getName(); //$NON-NLS-1$ 
+			if (!names.contains(name)) {
+				ZipEntry ttfZipEntry = new ZipEntry(name);
+				zipos.putNextEntry(ttfZipEntry);
 
-			FileInputStream in = new FileInputStream(fontname); // Stream to read file
-			try {
-				byte[] buffer = new byte[4096]; // Create a buffer for copying
-				int bytesRead;
-				while ((bytesRead = in.read(buffer)) != -1)
-					zipos.write(buffer, 0, bytesRead);
-			} finally {
-				FileUtils.closeStream(in);
+				FileInputStream in = new FileInputStream(fontname); // Stream to read file
+				try {
+					byte[] buffer = new byte[4096]; // Create a buffer for copying
+					int bytesRead;
+					while ((bytesRead = in.read(buffer)) != -1)
+						zipos.write(buffer, 0, bytesRead);
+				} finally {
+					FileUtils.closeStream(in);
+				}
+				names.add(name);
 			}
+			fontname = name;
 		}
+		return fontname;
 	}
 
 	private FontFamily runDialog(FontFamily font) {
