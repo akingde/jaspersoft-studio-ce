@@ -88,6 +88,7 @@
       <import plugin="org.eclipse.jdt.ui" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.200" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.discovery" version="0.2.0" match="greaterOrEqual"/>
+      <import plugin="com.ibm.icu" version="4.4.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -225,6 +226,13 @@
 
    <plugin
          id="com.jaspersoft.studio.server.soap"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.data.cassandra.cql3"
          download-size="0"
          install-size="0"
          version="0.0.0"
