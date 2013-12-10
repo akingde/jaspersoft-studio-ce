@@ -11,6 +11,7 @@ import com.jaspersoft.cassandra.cql3.adapter.CassandraCQL3DataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+import com.jaspersoft.studio.data.cassandra.cql3.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -26,11 +27,11 @@ public class CassandraCQL3DataAdapterFactory implements DataAdapterFactory {
 	 */
 	public DataAdapterDescriptor createDataAdapter() {
 		CassandraCQL3DataAdapterDescriptor descriptor = new CassandraCQL3DataAdapterDescriptor();
-		descriptor.getDataAdapter().setHostname("localhost");
+		descriptor.getDataAdapter().setHostname("localhost"); //$NON-NLS-1$
 		descriptor.getDataAdapter().setPort(9160);		
-		descriptor.getDataAdapter().setKeyspace("keyspace");
-		descriptor.getDataAdapter().setCassandraVersion("1.2");
-		descriptor.getDataAdapter().setClustername("cluster");
+		descriptor.getDataAdapter().setKeyspace("keyspace"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setCassandraVersion("1.2"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setClustername("cluster"); //$NON-NLS-1$
 		return descriptor;
 	}
 
@@ -50,7 +51,7 @@ public class CassandraCQL3DataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
-		return "CassandraCQL3 Connection";
+		return Messages.CassandraCQL3DataAdapterFactory_Label;
 	}
 
 	/*
@@ -59,7 +60,7 @@ public class CassandraCQL3DataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use CQL3 queries to get data from Cassandra";
+		return Messages.CassandraCQL3DataAdapterFactory_Description;
 	}
 
 	/*
@@ -69,7 +70,7 @@ public class CassandraCQL3DataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/cassandracql3.png");
+			return Activator.getDefault().getImage("icons/cassandracql3.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

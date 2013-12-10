@@ -19,6 +19,6 @@ public class CassandraCQL3QLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	@Override
 	public String getContextHelpId() {
-		return ContextHelpIDs.PREFIX.concat("query_CQL3");
+		return ContextHelpIDs.PREFIX.concat("query_CQL3"); //$NON-NLS-1$
 	}
 }

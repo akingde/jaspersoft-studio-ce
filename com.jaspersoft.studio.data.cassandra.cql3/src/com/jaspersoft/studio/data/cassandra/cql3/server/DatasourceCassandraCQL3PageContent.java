@@ -45,15 +45,15 @@ public class DatasourceCassandraCQL3PageContent extends APageContent {
 		composite.setLayout(new GridLayout(2, false));
 
 		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapterComposite_labelhostname);
+				Messages.CassandraCQL3DataAdapter_labelhostname);
 		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapterComposite_labelport);
+				Messages.CassandraCQL3DataAdapter_labelport);
 		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapterComposite_labelkeyspace);
+				Messages.CassandraCQL3DataAdapter_labelkeyspace);
 		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapterComposite_labelcassandraVersion);
+				Messages.CassandraCQL3DataAdapter_labelcassandraVersion);
 		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapterComposite_labelclustername);
+				Messages.CassandraCQL3DataAdapter_labelclustername);
 
 		Text tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

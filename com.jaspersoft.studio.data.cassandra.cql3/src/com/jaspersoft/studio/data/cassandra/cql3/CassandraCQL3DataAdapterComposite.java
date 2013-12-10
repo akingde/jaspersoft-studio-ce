@@ -24,6 +24,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.jaspersoft.cassandra.cql3.adapter.CassandraCQL3DataAdapter;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.cassandra.cql3.messages.Messages;
 
 /**
  * 
@@ -47,15 +48,15 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 	private void initComponents() {
 		setLayout(new GridLayout(2, false));
 
-		createLabel("HOSTNAME");
+		createLabel(Messages.CassandraCQL3DataAdapter_labelhostname);
 		hostname = createTextField(false);
-		createLabel("PORT");
+		createLabel(Messages.CassandraCQL3DataAdapter_labelport);
 		port = createTextField(false);
-		createLabel("KEYSPACE");
+		createLabel(Messages.CassandraCQL3DataAdapter_labelkeyspace);
 		keyspace = createTextField(false);
-		createLabel("CASSANDRAVERSION");
+		createLabel(Messages.CassandraCQL3DataAdapter_labelcassandraVersion);
 		cassandraVersion = createTextField(false);
-		createLabel("CLUSTERNAME");
+		createLabel(Messages.CassandraCQL3DataAdapter_labelclustername);
 		clustername = createTextField(false);
 	}
 
@@ -89,7 +90,7 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(SWTObservables.observeText(hostname, SWT.Modify), PojoObservables.observeValue(dataAdapter, "hostname"));
+		bindingContext.bindValue(SWTObservables.observeText(hostname, SWT.Modify), PojoObservables.observeValue(dataAdapter, "hostname")); //$NON-NLS-1$
 		IValidator validator = new IValidator() {
 			public IStatus validate(Object value) {
 				String stringValue = (String) value;
@@ -97,7 +98,7 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 					new Integer(stringValue).intValue();
 					return Status.OK_STATUS;
 				} catch (NumberFormatException ex) {
-					return ValidationStatus.error("Not an integer");
+					return ValidationStatus.error(Messages.CassandraCQL3DataAdapterComposite_NotIntegerError);
 				}
 			}
 		};
@@ -105,15 +106,15 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 		numberFormat.setGroupingUsed(false);
 		IConverter targetToModelConverter = StringToNumberConverter.toInteger(numberFormat, true);
 		IConverter modelToTargetConverter = NumberToStringConverter.fromInteger(numberFormat, true);
-		bindingContext.bindValue(SWTObservables.observeText(port, SWT.Modify), PojoObservables.observeValue(dataAdapter, "port"),
+		bindingContext.bindValue(SWTObservables.observeText(port, SWT.Modify), PojoObservables.observeValue(dataAdapter, "port"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterGetValidator(validator).setConverter(targetToModelConverter), new UpdateValueStrategy().setConverter(modelToTargetConverter));
-		bindingContext.bindValue(SWTObservables.observeText(keyspace, SWT.Modify), PojoObservables.observeValue(dataAdapter, "keyspace"));
-		bindingContext.bindValue(SWTObservables.observeText(cassandraVersion, SWT.Modify), PojoObservables.observeValue(dataAdapter, "cassandraVersion"));
-		bindingContext.bindValue(SWTObservables.observeText(clustername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "clustername"));
+		bindingContext.bindValue(SWTObservables.observeText(keyspace, SWT.Modify), PojoObservables.observeValue(dataAdapter, "keyspace")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(cassandraVersion, SWT.Modify), PojoObservables.observeValue(dataAdapter, "cassandraVersion")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(clustername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "clustername")); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_cassandracql3");
+		return PREFIX.concat("adapter_cassandracql3"); //$NON-NLS-1$
 	}
 }

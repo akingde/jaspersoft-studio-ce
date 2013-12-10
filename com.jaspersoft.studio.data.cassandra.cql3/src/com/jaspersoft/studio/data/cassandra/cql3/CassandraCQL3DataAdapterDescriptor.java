@@ -46,7 +46,7 @@ public class CassandraCQL3DataAdapterDescriptor extends DataAdapterDescriptor im
 	@Override
 	public Image getIcon(int size) {
 		if (size == 16)
-			return Activator.getDefault().getImage("icons/cassandracql3.png");
+			return Activator.getDefault().getImage("icons/cassandracql3.png"); //$NON-NLS-1$
 		return null;
 	}
 

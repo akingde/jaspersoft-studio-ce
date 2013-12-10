@@ -15,17 +15,17 @@ public class ResourcePublisher extends com.jaspersoft.studio.messages.ResourcePu
 
 	@Override
 	public String getPluginName() {
-		return "com.jaspersoft.studio.data.cassandra.cql3";
+		return "com.jaspersoft.studio.data.cassandra.cql3"; //$NON-NLS-1$
 	}
 
 	protected List<AbstractResourceDefinition> initializeProperties(){
 		List<AbstractResourceDefinition> result = new ArrayList<AbstractResourceDefinition>();
-		result.add(new PackageResourceDefinition("en_EN", 
-												 "com.jaspersoft.studio.data.cassandra.cql3.messages", 
-												 "messages.properties", 
-												 "In this file there are the strings used by the CassandraCQL3 data adapter",
+		result.add(new PackageResourceDefinition("en_EN", //$NON-NLS-1$
+												 "com.jaspersoft.studio.data.cassandra.cql3.messages", //$NON-NLS-1$ 
+												 "messages.properties", //$NON-NLS-1$
+												 Messages.ResourcePublisher_Description,
 												 getClassLoader(),
-												 "com/jaspersoft/studio/data/cassandra/cql3/messages/messages.properties", this));
+												 "com/jaspersoft/studio/data/cassandra/cql3/messages/messages.properties", this)); //$NON-NLS-1$
 		
 		propertiesCache.put(getPluginName(), result);
 		return result;
