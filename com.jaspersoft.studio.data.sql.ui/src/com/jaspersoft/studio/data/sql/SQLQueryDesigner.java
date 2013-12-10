@@ -19,7 +19,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -106,14 +105,14 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return sf;
 	}
 
-	private boolean warned = false;
+	// private boolean warned = false;
 
-	private void showWarning() {
-		if (!warned && isQueryModelEmpty()) {
-			UIUtils.showWarning("Attention, SQL Query Builder will overwrite the existing query!");
-			warned = true;
-		}
-	}
+	// private void showWarning() {
+	// if (!warned && isQueryModelEmpty()) {
+	// UIUtils.showWarning("Attention, SQL Query Builder will overwrite the existing query!");
+	// warned = true;
+	// }
+	// }
 
 	protected void createDiagram(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
@@ -155,6 +154,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 
 	@Override
 	protected void setupSourceEditorFont() {
+		source.setupFont(jConfig);
 	}
 
 	private boolean isModelRefresh = false;

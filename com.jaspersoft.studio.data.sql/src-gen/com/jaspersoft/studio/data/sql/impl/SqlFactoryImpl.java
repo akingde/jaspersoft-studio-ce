@@ -134,8 +134,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     {
       case SqlPackage.XFUNCTION:
         return createXFunctionFromString(eDataType, initialValue);
-      case SqlPackage.JOIN_TYPE:
-        return createJoinTypeFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -153,8 +151,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
     {
       case SqlPackage.XFUNCTION:
         return convertXFunctionToString(eDataType, instanceValue);
-      case SqlPackage.JOIN_TYPE:
-        return convertJoinTypeToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -750,28 +746,6 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
    * @generated
    */
   public String convertXFunctionToString(EDataType eDataType, Object instanceValue)
-  {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public JoinType createJoinTypeFromString(EDataType eDataType, String initialValue)
-  {
-    JoinType result = JoinType.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    return result;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertJoinTypeToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

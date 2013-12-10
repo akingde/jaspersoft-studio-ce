@@ -55,7 +55,7 @@
         eType="#//FromTableJoin" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FromTableJoin">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="#//JoinType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="onTable" eType="#//TableOrAlias"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" eType="#//OrExpr"
@@ -248,13 +248,6 @@
     <eLiterals name="xbwnc" value="9" literal="[BETWEEN]"/>
     <eLiterals name="xbwnl" value="10" literal="[BETWEEN"/>
     <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
-    <eLiterals name="innerJoin" literal="INNER JOIN"/>
-    <eLiterals name="leftOuterJoin" value="1" literal="LEFT OUTER JOIN"/>
-    <eLiterals name="rightOuterJoin" value="2" literal="RIGHT OUTER JOIN"/>
-    <eLiterals name="fullOuterJoin" value="3" literal="FULL OUTER JOIN"/>
-    <eLiterals name="crossJoin" value="4" literal="CROSS JOIN"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"

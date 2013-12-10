@@ -20,7 +20,6 @@ import com.jaspersoft.studio.data.sql.FullExpression;
 import com.jaspersoft.studio.data.sql.GroupByColumnFull;
 import com.jaspersoft.studio.data.sql.InOper;
 import com.jaspersoft.studio.data.sql.JRParameter;
-import com.jaspersoft.studio.data.sql.JoinType;
 import com.jaspersoft.studio.data.sql.Like;
 import com.jaspersoft.studio.data.sql.LikeOperand;
 import com.jaspersoft.studio.data.sql.Minus;
@@ -445,13 +444,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EEnum xFunctionEEnum = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EEnum joinTypeEEnum = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -2041,16 +2033,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EEnum getJoinType()
-  {
-    return joinTypeEEnum;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public SqlFactory getSqlFactory()
   {
     return (SqlFactory)getEFactoryInstance();
@@ -2281,7 +2263,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     // Create enums
     xFunctionEEnum = createEEnum(XFUNCTION);
-    joinTypeEEnum = createEEnum(JOIN_TYPE);
   }
 
   /**
@@ -2377,7 +2358,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getFromTable_Fjoin(), this.getFromTableJoin(), null, "fjoin", null, 0, -1, FromTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(fromTableJoinEClass, FromTableJoin.class, "FromTableJoin", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFromTableJoin_Join(), this.getJoinType(), "join", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFromTableJoin_Join(), ecorePackage.getEString(), "join", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFromTableJoin_OnTable(), this.getTableOrAlias(), null, "onTable", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFromTableJoin_JoinExpr(), this.getOrExpr(), null, "joinExpr", null, 0, 1, FromTableJoin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -2554,13 +2535,6 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     addEEnumLiteral(xFunctionEEnum, XFunction.XBWNC);
     addEEnumLiteral(xFunctionEEnum, XFunction.XBWNL);
     addEEnumLiteral(xFunctionEEnum, XFunction.XBWNR);
-
-    initEEnum(joinTypeEEnum, JoinType.class, "JoinType");
-    addEEnumLiteral(joinTypeEEnum, JoinType.INNER_JOIN);
-    addEEnumLiteral(joinTypeEEnum, JoinType.LEFT_OUTER_JOIN);
-    addEEnumLiteral(joinTypeEEnum, JoinType.RIGHT_OUTER_JOIN);
-    addEEnumLiteral(joinTypeEEnum, JoinType.FULL_OUTER_JOIN);
-    addEEnumLiteral(joinTypeEEnum, JoinType.CROSS_JOIN);
 
     // Create resource
     createResource(eNS_URI);

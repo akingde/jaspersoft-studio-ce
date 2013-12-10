@@ -21,13 +21,6 @@
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnl"/>
       <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//XFunction/xbwnr"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//JoinType">
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//JoinType/innerJoin"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//JoinType/leftOuterJoin"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//JoinType/rightOuterJoin"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//JoinType/fullOuterJoin"/>
-      <genEnumLiterals ecoreEnumLiteral="Sql.ecore#//JoinType/crossJoin"/>
-    </genEnums>
     <genClasses ecoreClass="Sql.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/query"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Model/orderByEntry"/>

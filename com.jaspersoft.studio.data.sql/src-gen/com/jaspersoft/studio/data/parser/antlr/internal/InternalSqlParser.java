@@ -22,91 +22,94 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "KEYWORD_66", "KEYWORD_64", "KEYWORD_65", "KEYWORD_62", "KEYWORD_63", "KEYWORD_60", "KEYWORD_61", "KEYWORD_58", "KEYWORD_59", "KEYWORD_50", "KEYWORD_51", "KEYWORD_52", "KEYWORD_53", "KEYWORD_54", "KEYWORD_55", "KEYWORD_56", "KEYWORD_57", "KEYWORD_47", "KEYWORD_48", "KEYWORD_49", "KEYWORD_43", "KEYWORD_44", "KEYWORD_45", "KEYWORD_46", "KEYWORD_37", "KEYWORD_38", "KEYWORD_39", "KEYWORD_40", "KEYWORD_41", "KEYWORD_42", "KEYWORD_28", "KEYWORD_29", "KEYWORD_30", "KEYWORD_31", "KEYWORD_32", "KEYWORD_33", "KEYWORD_34", "KEYWORD_35", "KEYWORD_36", "KEYWORD_23", "KEYWORD_24", "KEYWORD_25", "KEYWORD_26", "KEYWORD_27", "KEYWORD_14", "KEYWORD_15", "KEYWORD_16", "KEYWORD_17", "KEYWORD_18", "KEYWORD_19", "KEYWORD_20", "KEYWORD_21", "KEYWORD_22", "KEYWORD_1", "KEYWORD_2", "KEYWORD_3", "KEYWORD_4", "KEYWORD_5", "KEYWORD_6", "KEYWORD_7", "KEYWORD_8", "KEYWORD_9", "KEYWORD_10", "KEYWORD_11", "KEYWORD_12", "KEYWORD_13", "RULE_JRPARAM", "RULE_JRNPARAM", "RULE_STAR", "RULE_INT", "RULE_DATE", "RULE_TIME", "RULE_TIMESTAMP", "RULE_SIGNED_DOUBLE", "RULE_STRING_", "RULE_STRING", "RULE_DBNAME", "RULE_ID", "RULE_SL_COMMENT", "RULE_ML_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "KEYWORD_68", "KEYWORD_69", "KEYWORD_66", "KEYWORD_67", "KEYWORD_58", "KEYWORD_59", "KEYWORD_60", "KEYWORD_61", "KEYWORD_62", "KEYWORD_63", "KEYWORD_64", "KEYWORD_65", "KEYWORD_54", "KEYWORD_55", "KEYWORD_56", "KEYWORD_57", "KEYWORD_50", "KEYWORD_51", "KEYWORD_52", "KEYWORD_53", "KEYWORD_40", "KEYWORD_41", "KEYWORD_42", "KEYWORD_43", "KEYWORD_44", "KEYWORD_45", "KEYWORD_46", "KEYWORD_47", "KEYWORD_48", "KEYWORD_49", "KEYWORD_28", "KEYWORD_29", "KEYWORD_30", "KEYWORD_31", "KEYWORD_32", "KEYWORD_33", "KEYWORD_34", "KEYWORD_35", "KEYWORD_36", "KEYWORD_37", "KEYWORD_38", "KEYWORD_39", "KEYWORD_23", "KEYWORD_24", "KEYWORD_25", "KEYWORD_26", "KEYWORD_27", "KEYWORD_14", "KEYWORD_15", "KEYWORD_16", "KEYWORD_17", "KEYWORD_18", "KEYWORD_19", "KEYWORD_20", "KEYWORD_21", "KEYWORD_22", "KEYWORD_1", "KEYWORD_2", "KEYWORD_3", "KEYWORD_4", "KEYWORD_5", "KEYWORD_6", "KEYWORD_7", "KEYWORD_8", "KEYWORD_9", "KEYWORD_10", "KEYWORD_11", "KEYWORD_12", "KEYWORD_13", "RULE_JRPARAM", "RULE_JRNPARAM", "RULE_STAR", "RULE_INT", "RULE_DATE", "RULE_TIME", "RULE_TIMESTAMP", "RULE_SIGNED_DOUBLE", "RULE_STRING_", "RULE_STRING", "RULE_DBNAME", "RULE_ID", "RULE_SL_COMMENT", "RULE_ML_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
     };
-    public static final int RULE_ID=81;
-    public static final int RULE_JRNPARAM=71;
-    public static final int RULE_DATE=74;
-    public static final int RULE_ANY_OTHER=85;
-    public static final int KEYWORD_56=19;
-    public static final int KEYWORD_19=53;
-    public static final int KEYWORD_55=18;
-    public static final int KEYWORD_54=17;
-    public static final int KEYWORD_17=51;
-    public static final int KEYWORD_53=16;
-    public static final int KEYWORD_18=52;
-    public static final int KEYWORD_52=15;
-    public static final int KEYWORD_15=49;
-    public static final int KEYWORD_51=14;
-    public static final int KEYWORD_16=50;
-    public static final int KEYWORD_13=69;
-    public static final int KEYWORD_50=13;
-    public static final int RULE_STRING_=78;
-    public static final int KEYWORD_14=48;
-    public static final int KEYWORD_11=67;
+    public static final int RULE_ID=84;
+    public static final int RULE_JRNPARAM=74;
+    public static final int RULE_DATE=77;
+    public static final int RULE_ANY_OTHER=88;
+    public static final int KEYWORD_56=18;
+    public static final int KEYWORD_19=56;
+    public static final int KEYWORD_55=17;
+    public static final int KEYWORD_54=16;
+    public static final int KEYWORD_17=54;
+    public static final int KEYWORD_53=23;
+    public static final int KEYWORD_18=55;
+    public static final int KEYWORD_52=22;
+    public static final int KEYWORD_15=52;
+    public static final int KEYWORD_51=21;
+    public static final int KEYWORD_16=53;
+    public static final int KEYWORD_13=72;
+    public static final int KEYWORD_50=20;
+    public static final int RULE_STRING_=81;
+    public static final int KEYWORD_14=51;
+    public static final int KEYWORD_11=70;
     public static final int EOF=-1;
-    public static final int KEYWORD_12=68;
-    public static final int KEYWORD_10=66;
-    public static final int KEYWORD_59=12;
-    public static final int KEYWORD_58=11;
-    public static final int KEYWORD_57=20;
-    public static final int KEYWORD_6=62;
-    public static final int KEYWORD_7=63;
-    public static final int KEYWORD_8=64;
-    public static final int KEYWORD_9=65;
-    public static final int RULE_TIME=75;
-    public static final int KEYWORD_65=6;
+    public static final int KEYWORD_12=71;
+    public static final int KEYWORD_10=69;
+    public static final int KEYWORD_59=9;
+    public static final int KEYWORD_58=8;
+    public static final int KEYWORD_57=19;
+    public static final int KEYWORD_6=65;
+    public static final int KEYWORD_7=66;
+    public static final int KEYWORD_8=67;
+    public static final int KEYWORD_9=68;
+    public static final int RULE_TIME=78;
+    public static final int KEYWORD_65=15;
     public static final int KEYWORD_28=34;
-    public static final int KEYWORD_64=5;
+    public static final int KEYWORD_64=14;
     public static final int KEYWORD_29=35;
-    public static final int RULE_SIGNED_DOUBLE=77;
-    public static final int RULE_TIMESTAMP=76;
-    public static final int RULE_INT=73;
-    public static final int KEYWORD_66=4;
-    public static final int KEYWORD_24=44;
-    public static final int KEYWORD_61=10;
-    public static final int KEYWORD_60=9;
-    public static final int KEYWORD_25=45;
-    public static final int RULE_DBNAME=80;
-    public static final int KEYWORD_63=8;
-    public static final int KEYWORD_26=46;
-    public static final int KEYWORD_62=7;
-    public static final int KEYWORD_27=47;
-    public static final int KEYWORD_20=54;
-    public static final int KEYWORD_21=55;
-    public static final int KEYWORD_22=56;
-    public static final int KEYWORD_23=43;
+    public static final int RULE_SIGNED_DOUBLE=80;
+    public static final int RULE_TIMESTAMP=79;
+    public static final int RULE_INT=76;
+    public static final int KEYWORD_67=7;
+    public static final int KEYWORD_66=6;
+    public static final int KEYWORD_61=11;
+    public static final int KEYWORD_24=47;
+    public static final int KEYWORD_60=10;
+    public static final int KEYWORD_25=48;
+    public static final int RULE_DBNAME=83;
+    public static final int KEYWORD_63=13;
+    public static final int KEYWORD_26=49;
+    public static final int KEYWORD_62=12;
+    public static final int KEYWORD_27=50;
+    public static final int KEYWORD_20=57;
+    public static final int KEYWORD_21=58;
+    public static final int KEYWORD_22=59;
+    public static final int KEYWORD_23=46;
+    public static final int KEYWORD_69=5;
+    public static final int KEYWORD_68=4;
     public static final int KEYWORD_30=36;
-    public static final int KEYWORD_1=57;
+    public static final int KEYWORD_1=60;
     public static final int KEYWORD_34=40;
-    public static final int KEYWORD_5=61;
+    public static final int KEYWORD_5=64;
     public static final int KEYWORD_33=39;
-    public static final int KEYWORD_4=60;
+    public static final int KEYWORD_4=63;
     public static final int KEYWORD_32=38;
-    public static final int KEYWORD_3=59;
+    public static final int KEYWORD_3=62;
     public static final int KEYWORD_31=37;
-    public static final int KEYWORD_2=58;
-    public static final int KEYWORD_38=29;
-    public static final int KEYWORD_37=28;
-    public static final int RULE_SL_COMMENT=82;
+    public static final int KEYWORD_2=61;
+    public static final int KEYWORD_38=44;
+    public static final int KEYWORD_37=43;
+    public static final int RULE_SL_COMMENT=85;
     public static final int KEYWORD_36=42;
     public static final int KEYWORD_35=41;
-    public static final int RULE_ML_COMMENT=83;
-    public static final int KEYWORD_39=30;
-    public static final int RULE_STRING=79;
-    public static final int RULE_STAR=72;
-    public static final int RULE_JRPARAM=70;
-    public static final int KEYWORD_41=32;
-    public static final int KEYWORD_40=31;
-    public static final int KEYWORD_43=24;
-    public static final int KEYWORD_42=33;
-    public static final int KEYWORD_45=26;
-    public static final int KEYWORD_44=25;
-    public static final int KEYWORD_47=21;
-    public static final int RULE_WS=84;
-    public static final int KEYWORD_46=27;
-    public static final int KEYWORD_49=23;
-    public static final int KEYWORD_48=22;
+    public static final int RULE_ML_COMMENT=86;
+    public static final int KEYWORD_39=45;
+    public static final int RULE_STRING=82;
+    public static final int RULE_STAR=75;
+    public static final int RULE_JRPARAM=73;
+    public static final int KEYWORD_41=25;
+    public static final int KEYWORD_40=24;
+    public static final int KEYWORD_43=27;
+    public static final int KEYWORD_42=26;
+    public static final int KEYWORD_45=29;
+    public static final int KEYWORD_44=28;
+    public static final int KEYWORD_47=31;
+    public static final int RULE_WS=87;
+    public static final int KEYWORD_46=30;
+    public static final int KEYWORD_49=33;
+    public static final int KEYWORD_48=32;
 
     // delegates
     // delegators
@@ -184,7 +187,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleModel"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:71:1: ruleModel returns [EObject current=null] : ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:71:1: ruleModel returns [EObject current=null] : ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? ) ;
     public final EObject ruleModel() throws RecognitionException {
         EObject current = null;
 
@@ -197,11 +200,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:74:28: ( ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:1: ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:74:28: ( ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:1: ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:1: ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:2: ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:1: ( ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:2: ( (lv_query_0_0= ruleSelectQuery ) ) (otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )?
             {
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:75:2: ( (lv_query_0_0= ruleSelectQuery ) )
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:76:1: (lv_query_0_0= ruleSelectQuery )
@@ -234,18 +237,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:93:2: (otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:93:2: (otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) ) )?
             int alt1=2;
             int LA1_0 = input.LA(1);
 
-            if ( (LA1_0==KEYWORD_55) ) {
+            if ( (LA1_0==KEYWORD_63) ) {
                 alt1=1;
             }
             switch (alt1) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:94:2: otherlv_1= KEYWORD_55 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:94:2: otherlv_1= KEYWORD_63 ( (lv_orderByEntry_2_0= ruleOrderByColumns ) )
                     {
-                    otherlv_1=(Token)match(input,KEYWORD_55,FOLLOW_KEYWORD_55_in_ruleModel137); 
+                    otherlv_1=(Token)match(input,KEYWORD_63,FOLLOW_KEYWORD_63_in_ruleModel137); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getModelAccess().getORDERBYKeyword_1_0());
                         
@@ -379,7 +382,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 int alt2=2;
                 int LA2_0 = input.LA(1);
 
-                if ( (LA2_0==KEYWORD_58||LA2_0==KEYWORD_43||LA2_0==KEYWORD_39||LA2_0==KEYWORD_41) ) {
+                if ( (LA2_0==KEYWORD_66||LA2_0==KEYWORD_50||LA2_0==KEYWORD_44||LA2_0==KEYWORD_48) ) {
                     alt2=1;
                 }
 
@@ -479,7 +482,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSelectSubSet"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:181:1: ruleSelectSubSet returns [EObject current=null] : ( ( ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:181:1: ruleSelectSubSet returns [EObject current=null] : ( ( ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) ) ;
     public final EObject ruleSelectSubSet() throws RecognitionException {
         EObject current = null;
 
@@ -494,37 +497,37 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:184:28: ( ( ( ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:1: ( ( ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:184:28: ( ( ( ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:1: ( ( ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:1: ( ( ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:2: ( ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:1: ( ( ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:2: ( ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) ) ) ( (lv_all_1_0= KEYWORD_23 ) )? ( (lv_query_2_0= ruleSelect ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:2: ( ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:186:1: ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:185:2: ( ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:186:1: ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:186:1: ( (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:187:1: (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:186:1: ( (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:187:1: (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:187:1: (lv_op_0_1= KEYWORD_41 | lv_op_0_2= KEYWORD_58 | lv_op_0_3= KEYWORD_39 | lv_op_0_4= KEYWORD_43 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:187:1: (lv_op_0_1= KEYWORD_48 | lv_op_0_2= KEYWORD_66 | lv_op_0_3= KEYWORD_44 | lv_op_0_4= KEYWORD_50 )
             int alt3=4;
             switch ( input.LA(1) ) {
-            case KEYWORD_41:
+            case KEYWORD_48:
                 {
                 alt3=1;
                 }
                 break;
-            case KEYWORD_58:
+            case KEYWORD_66:
                 {
                 alt3=2;
                 }
                 break;
-            case KEYWORD_39:
+            case KEYWORD_44:
                 {
                 alt3=3;
                 }
                 break;
-            case KEYWORD_43:
+            case KEYWORD_50:
                 {
                 alt3=4;
                 }
@@ -538,9 +541,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             switch (alt3) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:188:3: lv_op_0_1= KEYWORD_41
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:188:3: lv_op_0_1= KEYWORD_48
                     {
-                    lv_op_0_1=(Token)match(input,KEYWORD_41,FOLLOW_KEYWORD_41_in_ruleSelectSubSet363); 
+                    lv_op_0_1=(Token)match(input,KEYWORD_48,FOLLOW_KEYWORD_48_in_ruleSelectSubSet363); 
 
                             newLeafNode(lv_op_0_1, grammarAccess.getSelectSubSetAccess().getOpUNIONKeyword_0_0_0());
                         
@@ -554,9 +557,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:201:8: lv_op_0_2= KEYWORD_58
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:201:8: lv_op_0_2= KEYWORD_66
                     {
-                    lv_op_0_2=(Token)match(input,KEYWORD_58,FOLLOW_KEYWORD_58_in_ruleSelectSubSet391); 
+                    lv_op_0_2=(Token)match(input,KEYWORD_66,FOLLOW_KEYWORD_66_in_ruleSelectSubSet391); 
 
                             newLeafNode(lv_op_0_2, grammarAccess.getSelectSubSetAccess().getOpINTERSECTKeyword_0_0_1());
                         
@@ -570,9 +573,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:214:8: lv_op_0_3= KEYWORD_39
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:214:8: lv_op_0_3= KEYWORD_44
                     {
-                    lv_op_0_3=(Token)match(input,KEYWORD_39,FOLLOW_KEYWORD_39_in_ruleSelectSubSet419); 
+                    lv_op_0_3=(Token)match(input,KEYWORD_44,FOLLOW_KEYWORD_44_in_ruleSelectSubSet419); 
 
                             newLeafNode(lv_op_0_3, grammarAccess.getSelectSubSetAccess().getOpMINUSKeyword_0_0_2());
                         
@@ -586,9 +589,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:227:8: lv_op_0_4= KEYWORD_43
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:227:8: lv_op_0_4= KEYWORD_50
                     {
-                    lv_op_0_4=(Token)match(input,KEYWORD_43,FOLLOW_KEYWORD_43_in_ruleSelectSubSet447); 
+                    lv_op_0_4=(Token)match(input,KEYWORD_50,FOLLOW_KEYWORD_50_in_ruleSelectSubSet447); 
 
                             newLeafNode(lv_op_0_4, grammarAccess.getSelectSubSetAccess().getOpEXCEPTKeyword_0_0_3());
                         
@@ -731,7 +734,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSelect"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:294:1: ruleSelect returns [EObject current=null] : ( ( (lv_select_0_0= KEYWORD_46 ) ) (otherlv_1= KEYWORD_51 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:294:1: ruleSelect returns [EObject current=null] : ( ( (lv_select_0_0= KEYWORD_53 ) ) (otherlv_1= KEYWORD_59 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? ) ;
     public final EObject ruleSelect() throws RecognitionException {
         EObject current = null;
 
@@ -755,19 +758,19 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:297:28: ( ( ( (lv_select_0_0= KEYWORD_46 ) ) (otherlv_1= KEYWORD_51 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:1: ( ( (lv_select_0_0= KEYWORD_46 ) ) (otherlv_1= KEYWORD_51 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:297:28: ( ( ( (lv_select_0_0= KEYWORD_53 ) ) (otherlv_1= KEYWORD_59 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:1: ( ( (lv_select_0_0= KEYWORD_53 ) ) (otherlv_1= KEYWORD_59 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:1: ( ( (lv_select_0_0= KEYWORD_46 ) ) (otherlv_1= KEYWORD_51 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:2: ( (lv_select_0_0= KEYWORD_46 ) ) (otherlv_1= KEYWORD_51 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:1: ( ( (lv_select_0_0= KEYWORD_53 ) ) (otherlv_1= KEYWORD_59 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:2: ( (lv_select_0_0= KEYWORD_53 ) ) (otherlv_1= KEYWORD_59 )? ( (lv_cols_2_0= ruleColumns ) ) otherlv_3= KEYWORD_31 ( (lv_tbl_4_0= ruleTables ) ) (otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )? (otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )? (otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )?
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:2: ( (lv_select_0_0= KEYWORD_46 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:299:1: (lv_select_0_0= KEYWORD_46 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:298:2: ( (lv_select_0_0= KEYWORD_53 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:299:1: (lv_select_0_0= KEYWORD_53 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:299:1: (lv_select_0_0= KEYWORD_46 )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:300:3: lv_select_0_0= KEYWORD_46
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:299:1: (lv_select_0_0= KEYWORD_53 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:300:3: lv_select_0_0= KEYWORD_53
             {
-            lv_select_0_0=(Token)match(input,KEYWORD_46,FOLLOW_KEYWORD_46_in_ruleSelect602); 
+            lv_select_0_0=(Token)match(input,KEYWORD_53,FOLLOW_KEYWORD_53_in_ruleSelect602); 
 
                     newLeafNode(lv_select_0_0, grammarAccess.getSelectAccess().getSelectSELECTKeyword_0_0());
                 
@@ -783,18 +786,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:314:2: (otherlv_1= KEYWORD_51 )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:314:2: (otherlv_1= KEYWORD_59 )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
-            if ( (LA5_0==KEYWORD_51) ) {
+            if ( (LA5_0==KEYWORD_59) ) {
                 alt5=1;
             }
             switch (alt5) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:315:2: otherlv_1= KEYWORD_51
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:315:2: otherlv_1= KEYWORD_59
                     {
-                    otherlv_1=(Token)match(input,KEYWORD_51,FOLLOW_KEYWORD_51_in_ruleSelect627); 
+                    otherlv_1=(Token)match(input,KEYWORD_59,FOLLOW_KEYWORD_59_in_ruleSelect627); 
 
                         	newLeafNode(otherlv_1, grammarAccess.getSelectAccess().getDISTINCTKeyword_1());
                         
@@ -870,18 +873,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:360:2: (otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:360:2: (otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) ) )?
             int alt6=2;
             int LA6_0 = input.LA(1);
 
-            if ( (LA6_0==KEYWORD_42) ) {
+            if ( (LA6_0==KEYWORD_49) ) {
                 alt6=1;
             }
             switch (alt6) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:361:2: otherlv_5= KEYWORD_42 ( (lv_whereExpression_6_0= ruleFullExpression ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:361:2: otherlv_5= KEYWORD_49 ( (lv_whereExpression_6_0= ruleFullExpression ) )
                     {
-                    otherlv_5=(Token)match(input,KEYWORD_42,FOLLOW_KEYWORD_42_in_ruleSelect696); 
+                    otherlv_5=(Token)match(input,KEYWORD_49,FOLLOW_KEYWORD_49_in_ruleSelect696); 
 
                         	newLeafNode(otherlv_5, grammarAccess.getSelectAccess().getWHEREKeyword_5_0());
                         
@@ -922,18 +925,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:383:4: (otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:383:4: (otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) ) )?
             int alt7=2;
             int LA7_0 = input.LA(1);
 
-            if ( (LA7_0==KEYWORD_52) ) {
+            if ( (LA7_0==KEYWORD_60) ) {
                 alt7=1;
             }
             switch (alt7) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:384:2: otherlv_7= KEYWORD_52 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:384:2: otherlv_7= KEYWORD_60 ( (lv_groupByEntry_8_0= ruleGroupByColumns ) )
                     {
-                    otherlv_7=(Token)match(input,KEYWORD_52,FOLLOW_KEYWORD_52_in_ruleSelect732); 
+                    otherlv_7=(Token)match(input,KEYWORD_60,FOLLOW_KEYWORD_60_in_ruleSelect732); 
 
                         	newLeafNode(otherlv_7, grammarAccess.getSelectAccess().getGROUPBYKeyword_6_0());
                         
@@ -974,18 +977,18 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:406:4: (otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:406:4: (otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) ) )?
             int alt8=2;
             int LA8_0 = input.LA(1);
 
-            if ( (LA8_0==KEYWORD_44) ) {
+            if ( (LA8_0==KEYWORD_51) ) {
                 alt8=1;
             }
             switch (alt8) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:407:2: otherlv_9= KEYWORD_44 ( (lv_havingEntry_10_0= ruleFullExpression ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:407:2: otherlv_9= KEYWORD_51 ( (lv_havingEntry_10_0= ruleFullExpression ) )
                     {
-                    otherlv_9=(Token)match(input,KEYWORD_44,FOLLOW_KEYWORD_44_in_ruleSelect768); 
+                    otherlv_9=(Token)match(input,KEYWORD_51,FOLLOW_KEYWORD_51_in_ruleSelect768); 
 
                         	newLeafNode(otherlv_9, grammarAccess.getSelectAccess().getHAVINGKeyword_7_0());
                         
@@ -1289,17 +1292,14 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 {
                 int LA13_1 = input.LA(2);
 
-                if ( (LA13_1==EOF||LA13_1==KEYWORD_31||LA13_1==KEYWORD_18||(LA13_1>=KEYWORD_22 && LA13_1<=KEYWORD_1)||(LA13_1>=KEYWORD_3 && LA13_1<=KEYWORD_5)||LA13_1==KEYWORD_7||LA13_1==RULE_STAR||(LA13_1>=RULE_STRING && LA13_1<=RULE_ID)) ) {
-                    alt13=1;
-                }
-                else if ( (LA13_1==KEYWORD_6) ) {
+                if ( (LA13_1==KEYWORD_6) ) {
                     int LA13_6 = input.LA(3);
 
-                    if ( ((LA13_6>=RULE_STRING && LA13_6<=RULE_ID)) ) {
-                        alt13=1;
-                    }
-                    else if ( (LA13_6==RULE_STAR) ) {
+                    if ( (LA13_6==RULE_STAR) ) {
                         alt13=3;
+                    }
+                    else if ( ((LA13_6>=RULE_STRING && LA13_6<=RULE_ID)) ) {
+                        alt13=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -1307,6 +1307,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
                         throw nvae;
                     }
+                }
+                else if ( (LA13_1==EOF||LA13_1==KEYWORD_31||LA13_1==KEYWORD_18||(LA13_1>=KEYWORD_22 && LA13_1<=KEYWORD_1)||(LA13_1>=KEYWORD_3 && LA13_1<=KEYWORD_5)||LA13_1==KEYWORD_7||LA13_1==RULE_STAR||(LA13_1>=RULE_STRING && LA13_1<=RULE_ID)) ) {
+                    alt13=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -1323,11 +1326,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 if ( (LA13_2==KEYWORD_6) ) {
                     int LA13_6 = input.LA(3);
 
-                    if ( ((LA13_6>=RULE_STRING && LA13_6<=RULE_ID)) ) {
-                        alt13=1;
-                    }
-                    else if ( (LA13_6==RULE_STAR) ) {
+                    if ( (LA13_6==RULE_STAR) ) {
                         alt13=3;
+                    }
+                    else if ( ((LA13_6>=RULE_STRING && LA13_6<=RULE_ID)) ) {
+                        alt13=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -1354,11 +1357,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 if ( (LA13_3==KEYWORD_6) ) {
                     int LA13_6 = input.LA(3);
 
-                    if ( ((LA13_6>=RULE_STRING && LA13_6<=RULE_ID)) ) {
-                        alt13=1;
-                    }
-                    else if ( (LA13_6==RULE_STAR) ) {
+                    if ( (LA13_6==RULE_STAR) ) {
                         alt13=3;
+                    }
+                    else if ( ((LA13_6>=RULE_STRING && LA13_6<=RULE_ID)) ) {
+                        alt13=1;
                     }
                     else {
                         NoViableAltException nvae =
@@ -2064,7 +2067,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 int alt18=2;
                 int LA18_0 = input.LA(1);
 
-                if ( ((LA18_0>=KEYWORD_66 && LA18_0<=KEYWORD_65)||(LA18_0>=KEYWORD_60 && LA18_0<=KEYWORD_61)) ) {
+                if ( (LA18_0==KEYWORD_57||LA18_0==KEYWORD_40||LA18_0==KEYWORD_42||LA18_0==KEYWORD_47||(LA18_0>=KEYWORD_32 && LA18_0<=KEYWORD_34)) ) {
                     alt18=1;
                 }
 
@@ -2169,7 +2172,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
         EObject current = null;
 
         Token otherlv_2=null;
-        Enumerator lv_join_0_0 = null;
+        AntlrDatatypeRuleToken lv_join_0_0 = null;
 
         EObject lv_onTable_1_0 = null;
 
@@ -2192,7 +2195,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:797:3: lv_join_0_0= ruleJoinType
             {
              
-            	        newCompositeNode(grammarAccess.getFromTableJoinAccess().getJoinJoinTypeEnumRuleCall_0_0()); 
+            	        newCompositeNode(grammarAccess.getFromTableJoinAccess().getJoinJoinTypeParserRuleCall_0_0()); 
             	    
             pushFollow(FOLLOW_ruleJoinType_in_ruleFromTableJoin1612);
             lv_join_0_0=ruleJoinType();
@@ -3982,11 +3985,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 {
                 int LA34_1 = input.LA(2);
 
-                if ( (LA34_1==KEYWORD_46) ) {
-                    alt34=2;
-                }
-                else if ( (LA34_1==KEYWORD_28||LA34_1==KEYWORD_14||LA34_1==KEYWORD_1||(LA34_1>=RULE_JRPARAM && LA34_1<=RULE_JRNPARAM)||(LA34_1>=RULE_INT && LA34_1<=RULE_ID)) ) {
+                if ( (LA34_1==KEYWORD_28||LA34_1==KEYWORD_14||LA34_1==KEYWORD_1||(LA34_1>=RULE_JRPARAM && LA34_1<=RULE_JRNPARAM)||(LA34_1>=RULE_INT && LA34_1<=RULE_ID)) ) {
                     alt34=1;
+                }
+                else if ( (LA34_1==KEYWORD_53) ) {
+                    alt34=2;
                 }
                 else {
                     NoViableAltException nvae =
@@ -5074,7 +5077,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleExpression"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1922:1: ruleExpression returns [EObject current=null] : ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1922:1: ruleExpression returns [EObject current=null] : ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) ) ;
     public final EObject ruleExpression() throws RecognitionException {
         EObject current = null;
 
@@ -5094,11 +5097,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1925:28: ( ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:1: ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1925:28: ( ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:1: ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:1: ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:2: ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:1: ( ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:2: ( (lv_op1_0_0= ruleOperand ) ) ( ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) )
             {
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1926:2: ( (lv_op1_0_0= ruleOperand ) )
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1927:1: (lv_op1_0_0= ruleOperand )
@@ -5131,29 +5134,29 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1944:2: ( ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1944:2: ( ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) ) | ( (lv_in_2_0= ruleInOperator ) ) | ( (lv_between_3_0= ruleBetween ) ) | ( (lv_like_4_0= ruleLike ) ) | ( (lv_comp_5_0= ruleComparison ) ) )
             int alt40=5;
             switch ( input.LA(1) ) {
-            case KEYWORD_62:
-            case KEYWORD_49:
+            case KEYWORD_68:
+            case KEYWORD_56:
                 {
                 alt40=1;
                 }
                 break;
-            case KEYWORD_45:
+            case KEYWORD_52:
             case KEYWORD_19:
                 {
                 alt40=2;
                 }
                 break;
-            case KEYWORD_63:
-            case KEYWORD_47:
+            case KEYWORD_69:
+            case KEYWORD_54:
                 {
                 alt40=3;
                 }
                 break;
-            case KEYWORD_53:
-            case KEYWORD_33:
+            case KEYWORD_61:
+            case KEYWORD_36:
                 {
                 alt40=4;
                 }
@@ -5177,22 +5180,22 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             switch (alt40) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1944:3: ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1944:3: ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1944:3: ( ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) ) )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1945:1: ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1944:3: ( ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1945:1: ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1945:1: ( (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 ) )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1946:1: (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1945:1: ( (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1946:1: (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1946:1: (lv_isnull_1_1= KEYWORD_49 | lv_isnull_1_2= KEYWORD_62 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1946:1: (lv_isnull_1_1= KEYWORD_56 | lv_isnull_1_2= KEYWORD_68 )
                     int alt39=2;
                     int LA39_0 = input.LA(1);
 
-                    if ( (LA39_0==KEYWORD_49) ) {
+                    if ( (LA39_0==KEYWORD_56) ) {
                         alt39=1;
                     }
-                    else if ( (LA39_0==KEYWORD_62) ) {
+                    else if ( (LA39_0==KEYWORD_68) ) {
                         alt39=2;
                     }
                     else {
@@ -5203,9 +5206,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     switch (alt39) {
                         case 1 :
-                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1947:3: lv_isnull_1_1= KEYWORD_49
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1947:3: lv_isnull_1_1= KEYWORD_56
                             {
-                            lv_isnull_1_1=(Token)match(input,KEYWORD_49,FOLLOW_KEYWORD_49_in_ruleExpression4026); 
+                            lv_isnull_1_1=(Token)match(input,KEYWORD_56,FOLLOW_KEYWORD_56_in_ruleExpression4026); 
 
                                     newLeafNode(lv_isnull_1_1, grammarAccess.getExpressionAccess().getIsnullISNULLKeyword_1_0_0_0());
                                 
@@ -5219,9 +5222,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                             }
                             break;
                         case 2 :
-                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1960:8: lv_isnull_1_2= KEYWORD_62
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:1960:8: lv_isnull_1_2= KEYWORD_68
                             {
-                            lv_isnull_1_2=(Token)match(input,KEYWORD_62,FOLLOW_KEYWORD_62_in_ruleExpression4054); 
+                            lv_isnull_1_2=(Token)match(input,KEYWORD_68,FOLLOW_KEYWORD_68_in_ruleExpression4054); 
 
                                     newLeafNode(lv_isnull_1_2, grammarAccess.getExpressionAccess().getIsnullISNOTNULLKeyword_1_0_0_1());
                                 
@@ -5454,7 +5457,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleComparison"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2069:1: ruleComparison returns [EObject current=null] : ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2069:1: ruleComparison returns [EObject current=null] : ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) ) ;
     public final EObject ruleComparison() throws RecognitionException {
         EObject current = null;
 
@@ -5473,11 +5476,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2072:28: ( ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:1: ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2072:28: ( ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:1: ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:1: ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:2: ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) ) )? ( (lv_op2_2_0= ruleOperand ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:1: ( ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) ) )? ( (lv_op2_2_0= ruleOperand ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:2: ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) ) ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) ) )? ( (lv_op2_2_0= ruleOperand ) )
             {
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2073:2: ( ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) ) )
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2074:1: ( (lv_operator_0_1= KEYWORD_10 | lv_operator_0_2= KEYWORD_17 | lv_operator_0_3= KEYWORD_8 | lv_operator_0_4= KEYWORD_15 | lv_operator_0_5= KEYWORD_9 | lv_operator_0_6= KEYWORD_16 ) )
@@ -5631,21 +5634,21 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2157:2: ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2157:2: ( ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) ) )?
             int alt43=2;
             int LA43_0 = input.LA(1);
 
-            if ( (LA43_0==KEYWORD_34||LA43_0==KEYWORD_23||LA43_0==KEYWORD_25) ) {
+            if ( (LA43_0==KEYWORD_37||LA43_0==KEYWORD_23||LA43_0==KEYWORD_25) ) {
                 alt43=1;
             }
             switch (alt43) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2158:1: ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2158:1: ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2158:1: ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 ) )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2159:1: (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2158:1: ( (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 ) )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2159:1: (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2159:1: (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_34 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2159:1: (lv_subOperator_1_1= KEYWORD_25 | lv_subOperator_1_2= KEYWORD_23 | lv_subOperator_1_3= KEYWORD_37 )
                     int alt42=3;
                     switch ( input.LA(1) ) {
                     case KEYWORD_25:
@@ -5658,7 +5661,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         alt42=2;
                         }
                         break;
-                    case KEYWORD_34:
+                    case KEYWORD_37:
                         {
                         alt42=3;
                         }
@@ -5704,9 +5707,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                             }
                             break;
                         case 3 :
-                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2186:8: lv_subOperator_1_3= KEYWORD_34
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2186:8: lv_subOperator_1_3= KEYWORD_37
                             {
-                            lv_subOperator_1_3=(Token)match(input,KEYWORD_34,FOLLOW_KEYWORD_34_in_ruleComparison4499); 
+                            lv_subOperator_1_3=(Token)match(input,KEYWORD_37,FOLLOW_KEYWORD_37_in_ruleComparison4499); 
 
                                     newLeafNode(lv_subOperator_1_3, grammarAccess.getComparisonAccess().getSubOperatorSOMEKeyword_1_0_2());
                                 
@@ -5819,7 +5822,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleLike"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2237:1: ruleLike returns [EObject current=null] : ( ( ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2237:1: ruleLike returns [EObject current=null] : ( ( ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) ) ;
     public final EObject ruleLike() throws RecognitionException {
         EObject current = null;
 
@@ -5831,26 +5834,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2240:28: ( ( ( ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:1: ( ( ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2240:28: ( ( ( ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:1: ( ( ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:1: ( ( ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:2: ( ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:1: ( ( ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:2: ( ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) ) ) ( (lv_op2_1_0= ruleLikeOperand ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:2: ( ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2242:1: ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2241:2: ( ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2242:1: ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2242:1: ( (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2243:1: (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2242:1: ( (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2243:1: (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2243:1: (lv_opLike_0_1= KEYWORD_33 | lv_opLike_0_2= KEYWORD_53 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2243:1: (lv_opLike_0_1= KEYWORD_36 | lv_opLike_0_2= KEYWORD_61 )
             int alt44=2;
             int LA44_0 = input.LA(1);
 
-            if ( (LA44_0==KEYWORD_33) ) {
+            if ( (LA44_0==KEYWORD_36) ) {
                 alt44=1;
             }
-            else if ( (LA44_0==KEYWORD_53) ) {
+            else if ( (LA44_0==KEYWORD_61) ) {
                 alt44=2;
             }
             else {
@@ -5861,9 +5864,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
             switch (alt44) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2244:3: lv_opLike_0_1= KEYWORD_33
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2244:3: lv_opLike_0_1= KEYWORD_36
                     {
-                    lv_opLike_0_1=(Token)match(input,KEYWORD_33,FOLLOW_KEYWORD_33_in_ruleLike4626); 
+                    lv_opLike_0_1=(Token)match(input,KEYWORD_36,FOLLOW_KEYWORD_36_in_ruleLike4626); 
 
                             newLeafNode(lv_opLike_0_1, grammarAccess.getLikeAccess().getOpLikeLIKEKeyword_0_0_0());
                         
@@ -5877,9 +5880,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2257:8: lv_opLike_0_2= KEYWORD_53
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2257:8: lv_opLike_0_2= KEYWORD_61
                     {
-                    lv_opLike_0_2=(Token)match(input,KEYWORD_53,FOLLOW_KEYWORD_53_in_ruleLike4654); 
+                    lv_opLike_0_2=(Token)match(input,KEYWORD_61,FOLLOW_KEYWORD_61_in_ruleLike4654); 
 
                             newLeafNode(lv_opLike_0_2, grammarAccess.getLikeAccess().getOpLikeNOTLIKEKeyword_0_0_1());
                         
@@ -6152,7 +6155,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleBetween"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2366:1: ruleBetween returns [EObject current=null] : ( ( ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2366:1: ruleBetween returns [EObject current=null] : ( ( ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) ) ;
     public final EObject ruleBetween() throws RecognitionException {
         EObject current = null;
 
@@ -6167,26 +6170,26 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2369:28: ( ( ( ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:1: ( ( ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2369:28: ( ( ( ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:1: ( ( ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:1: ( ( ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:2: ( ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:1: ( ( ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:2: ( ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) ) ) ( (lv_op2_1_0= ruleOperand ) ) otherlv_2= KEYWORD_24 ( (lv_op3_3_0= ruleOperand ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:2: ( ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2371:1: ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2370:2: ( ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2371:1: ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2371:1: ( (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2372:1: (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2371:1: ( (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2372:1: (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2372:1: (lv_opBetween_0_1= KEYWORD_47 | lv_opBetween_0_2= KEYWORD_63 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2372:1: (lv_opBetween_0_1= KEYWORD_54 | lv_opBetween_0_2= KEYWORD_69 )
             int alt46=2;
             int LA46_0 = input.LA(1);
 
-            if ( (LA46_0==KEYWORD_47) ) {
+            if ( (LA46_0==KEYWORD_54) ) {
                 alt46=1;
             }
-            else if ( (LA46_0==KEYWORD_63) ) {
+            else if ( (LA46_0==KEYWORD_69) ) {
                 alt46=2;
             }
             else {
@@ -6197,9 +6200,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
             switch (alt46) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2373:3: lv_opBetween_0_1= KEYWORD_47
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2373:3: lv_opBetween_0_1= KEYWORD_54
                     {
-                    lv_opBetween_0_1=(Token)match(input,KEYWORD_47,FOLLOW_KEYWORD_47_in_ruleBetween4898); 
+                    lv_opBetween_0_1=(Token)match(input,KEYWORD_54,FOLLOW_KEYWORD_54_in_ruleBetween4898); 
 
                             newLeafNode(lv_opBetween_0_1, grammarAccess.getBetweenAccess().getOpBetweenBETWEENKeyword_0_0_0());
                         
@@ -6213,9 +6216,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2386:8: lv_opBetween_0_2= KEYWORD_63
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2386:8: lv_opBetween_0_2= KEYWORD_69
                     {
-                    lv_opBetween_0_2=(Token)match(input,KEYWORD_63,FOLLOW_KEYWORD_63_in_ruleBetween4926); 
+                    lv_opBetween_0_2=(Token)match(input,KEYWORD_69,FOLLOW_KEYWORD_69_in_ruleBetween4926); 
 
                             newLeafNode(lv_opBetween_0_2, grammarAccess.getBetweenAccess().getOpBetweenNOTBETWEENKeyword_0_0_1());
                         
@@ -6360,7 +6363,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleInOperator"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2460:1: ruleInOperator returns [EObject current=null] : ( () ( ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2460:1: ruleInOperator returns [EObject current=null] : ( () ( ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 ) ;
     public final EObject ruleInOperator() throws RecognitionException {
         EObject current = null;
 
@@ -6376,11 +6379,11 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2463:28: ( ( () ( ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:1: ( () ( ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2463:28: ( ( () ( ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:1: ( () ( ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:1: ( () ( ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:2: () ( ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:1: ( () ( ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:2: () ( ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) ) ) otherlv_2= KEYWORD_1 ( ( (lv_subquery_3_0= ruleSubQueryOperand ) ) | ( (lv_opList_4_0= ruleOperandList ) ) ) otherlv_5= KEYWORD_2
             {
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2464:2: ()
             // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2465:5: 
@@ -6393,17 +6396,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2470:2: ( ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2471:1: ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2470:2: ( ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2471:1: ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2471:1: ( (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2472:1: (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2471:1: ( (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2472:1: (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2472:1: (lv_op_1_1= KEYWORD_45 | lv_op_1_2= KEYWORD_19 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2472:1: (lv_op_1_1= KEYWORD_52 | lv_op_1_2= KEYWORD_19 )
             int alt47=2;
             int LA47_0 = input.LA(1);
 
-            if ( (LA47_0==KEYWORD_45) ) {
+            if ( (LA47_0==KEYWORD_52) ) {
                 alt47=1;
             }
             else if ( (LA47_0==KEYWORD_19) ) {
@@ -6417,9 +6420,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             }
             switch (alt47) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2473:3: lv_op_1_1= KEYWORD_45
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:2473:3: lv_op_1_1= KEYWORD_52
                     {
-                    lv_op_1_1=(Token)match(input,KEYWORD_45,FOLLOW_KEYWORD_45_in_ruleInOperator5094); 
+                    lv_op_1_1=(Token)match(input,KEYWORD_52,FOLLOW_KEYWORD_52_in_ruleInOperator5094); 
 
                             newLeafNode(lv_op_1_1, grammarAccess.getInOperatorAccess().getOpNOTINKeyword_1_0_0());
                         
@@ -7164,7 +7167,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                 {
                 int LA53_1 = input.LA(2);
 
-                if ( (LA53_1==EOF||(LA53_1>=KEYWORD_66 && LA53_1<=KEYWORD_58)||(LA53_1>=KEYWORD_52 && LA53_1<=KEYWORD_53)||LA53_1==KEYWORD_55||LA53_1==KEYWORD_47||(LA53_1>=KEYWORD_49 && LA53_1<=KEYWORD_45)||LA53_1==KEYWORD_39||(LA53_1>=KEYWORD_41 && LA53_1<=KEYWORD_42)||(LA53_1>=KEYWORD_30 && LA53_1<=KEYWORD_31)||LA53_1==KEYWORD_33||(LA53_1>=KEYWORD_35 && LA53_1<=KEYWORD_36)||LA53_1==KEYWORD_24||LA53_1==KEYWORD_27||(LA53_1>=KEYWORD_15 && LA53_1<=KEYWORD_19)||(LA53_1>=KEYWORD_21 && LA53_1<=KEYWORD_22)||(LA53_1>=KEYWORD_2 && LA53_1<=KEYWORD_10)||(LA53_1>=KEYWORD_12 && LA53_1<=KEYWORD_13)||LA53_1==RULE_STAR||(LA53_1>=RULE_STRING && LA53_1<=RULE_ID)) ) {
+                if ( (LA53_1==EOF||(LA53_1>=KEYWORD_68 && LA53_1<=KEYWORD_66)||(LA53_1>=KEYWORD_60 && LA53_1<=KEYWORD_61)||LA53_1==KEYWORD_63||LA53_1==KEYWORD_54||(LA53_1>=KEYWORD_56 && LA53_1<=KEYWORD_52)||LA53_1==KEYWORD_40||LA53_1==KEYWORD_42||LA53_1==KEYWORD_44||(LA53_1>=KEYWORD_47 && LA53_1<=KEYWORD_49)||(LA53_1>=KEYWORD_30 && LA53_1<=KEYWORD_34)||LA53_1==KEYWORD_36||(LA53_1>=KEYWORD_38 && LA53_1<=KEYWORD_39)||LA53_1==KEYWORD_24||LA53_1==KEYWORD_27||(LA53_1>=KEYWORD_15 && LA53_1<=KEYWORD_19)||(LA53_1>=KEYWORD_21 && LA53_1<=KEYWORD_22)||(LA53_1>=KEYWORD_2 && LA53_1<=KEYWORD_10)||(LA53_1>=KEYWORD_12 && LA53_1<=KEYWORD_13)||LA53_1==RULE_STAR||(LA53_1>=RULE_STRING && LA53_1<=RULE_ID)) ) {
                     alt53=1;
                 }
                 else if ( (LA53_1==KEYWORD_1) ) {
@@ -8954,7 +8957,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
             int alt61=2;
             int LA61_0 = input.LA(1);
 
-            if ( (LA61_0==KEYWORD_36) ) {
+            if ( (LA61_0==KEYWORD_39) ) {
                 alt61=1;
             }
             switch (alt61) {
@@ -8979,7 +8982,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                         int alt60=2;
                         int LA60_0 = input.LA(1);
 
-                        if ( (LA60_0==KEYWORD_36) ) {
+                        if ( (LA60_0==KEYWORD_39) ) {
                             alt60=1;
                         }
 
@@ -9089,7 +9092,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSqlCaseWhen"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3491:1: ruleSqlCaseWhen returns [EObject current=null] : (otherlv_0= KEYWORD_36 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_35 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3491:1: ruleSqlCaseWhen returns [EObject current=null] : (otherlv_0= KEYWORD_39 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_38 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? ) ;
     public final EObject ruleSqlCaseWhen() throws RecognitionException {
         EObject current = null;
 
@@ -9106,13 +9109,13 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3494:28: ( (otherlv_0= KEYWORD_36 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_35 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3495:1: (otherlv_0= KEYWORD_36 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_35 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3494:28: ( (otherlv_0= KEYWORD_39 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_38 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3495:1: (otherlv_0= KEYWORD_39 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_38 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3495:1: (otherlv_0= KEYWORD_36 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_35 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3496:2: otherlv_0= KEYWORD_36 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_35 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )?
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3495:1: (otherlv_0= KEYWORD_39 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_38 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )? )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3496:2: otherlv_0= KEYWORD_39 ( (lv_expr_1_0= ruleFullExpression ) ) otherlv_2= KEYWORD_38 ( (lv_texp_3_0= ruleOperand ) ) (otherlv_4= KEYWORD_30 ( (lv_eexp_5_0= ruleOperand ) ) )?
             {
-            otherlv_0=(Token)match(input,KEYWORD_36,FOLLOW_KEYWORD_36_in_ruleSqlCaseWhen7206); 
+            otherlv_0=(Token)match(input,KEYWORD_39,FOLLOW_KEYWORD_39_in_ruleSqlCaseWhen7206); 
 
                 	newLeafNode(otherlv_0, grammarAccess.getSqlCaseWhenAccess().getWHENKeyword_0());
                 
@@ -9147,7 +9150,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,KEYWORD_35,FOLLOW_KEYWORD_35_in_ruleSqlCaseWhen7239); 
+            otherlv_2=(Token)match(input,KEYWORD_38,FOLLOW_KEYWORD_38_in_ruleSqlCaseWhen7239); 
 
                 	newLeafNode(otherlv_2, grammarAccess.getSqlCaseWhenAccess().getTHENKeyword_2());
                 
@@ -9254,8 +9257,252 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     // $ANTLR end "ruleSqlCaseWhen"
 
 
+    // $ANTLR start "entryRuleJoinType"
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3572:1: entryRuleJoinType returns [String current=null] : iv_ruleJoinType= ruleJoinType EOF ;
+    public final String entryRuleJoinType() throws RecognitionException {
+        String current = null;
+
+        AntlrDatatypeRuleToken iv_ruleJoinType = null;
+
+
+        try {
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3573:1: (iv_ruleJoinType= ruleJoinType EOF )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3574:2: iv_ruleJoinType= ruleJoinType EOF
+            {
+             newCompositeNode(grammarAccess.getJoinTypeRule()); 
+            pushFollow(FOLLOW_ruleJoinType_in_entryRuleJoinType7331);
+            iv_ruleJoinType=ruleJoinType();
+
+            state._fsp--;
+
+             current =iv_ruleJoinType.getText(); 
+            match(input,EOF,FOLLOW_EOF_in_entryRuleJoinType7342); 
+
+            }
+
+        }
+         
+        	catch (RecognitionException re) { 
+        	    recover(input,re); 
+        	    appendSkippedTokens();
+        	}
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "entryRuleJoinType"
+
+
+    // $ANTLR start "ruleJoinType"
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3581:1: ruleJoinType returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= KEYWORD_57 )? (kw= KEYWORD_42 | ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? ) | kw= KEYWORD_40 )? kw= KEYWORD_33 ) ;
+    public final AntlrDatatypeRuleToken ruleJoinType() throws RecognitionException {
+        AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
+
+        Token kw=null;
+
+         enterRule(); 
+            
+        try {
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3585:6: ( ( (kw= KEYWORD_57 )? (kw= KEYWORD_42 | ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? ) | kw= KEYWORD_40 )? kw= KEYWORD_33 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:1: ( (kw= KEYWORD_57 )? (kw= KEYWORD_42 | ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? ) | kw= KEYWORD_40 )? kw= KEYWORD_33 )
+            {
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:1: ( (kw= KEYWORD_57 )? (kw= KEYWORD_42 | ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? ) | kw= KEYWORD_40 )? kw= KEYWORD_33 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:2: (kw= KEYWORD_57 )? (kw= KEYWORD_42 | ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? ) | kw= KEYWORD_40 )? kw= KEYWORD_33
+            {
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:2: (kw= KEYWORD_57 )?
+            int alt63=2;
+            int LA63_0 = input.LA(1);
+
+            if ( (LA63_0==KEYWORD_57) ) {
+                alt63=1;
+            }
+            switch (alt63) {
+                case 1 :
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3587:2: kw= KEYWORD_57
+                    {
+                    kw=(Token)match(input,KEYWORD_57,FOLLOW_KEYWORD_57_in_ruleJoinType7381); 
+
+                            current.merge(kw);
+                            newLeafNode(kw, grammarAccess.getJoinTypeAccess().getNATURALKeyword_0()); 
+                        
+
+                    }
+                    break;
+
+            }
+
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3592:3: (kw= KEYWORD_42 | ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? ) | kw= KEYWORD_40 )?
+            int alt66=4;
+            switch ( input.LA(1) ) {
+                case KEYWORD_42:
+                    {
+                    alt66=1;
+                    }
+                    break;
+                case KEYWORD_47:
+                case KEYWORD_32:
+                case KEYWORD_34:
+                    {
+                    alt66=2;
+                    }
+                    break;
+                case KEYWORD_40:
+                    {
+                    alt66=3;
+                    }
+                    break;
+            }
+
+            switch (alt66) {
+                case 1 :
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3593:2: kw= KEYWORD_42
+                    {
+                    kw=(Token)match(input,KEYWORD_42,FOLLOW_KEYWORD_42_in_ruleJoinType7397); 
+
+                            current.merge(kw);
+                            newLeafNode(kw, grammarAccess.getJoinTypeAccess().getINNERKeyword_1_0()); 
+                        
+
+                    }
+                    break;
+                case 2 :
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3599:6: ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? )
+                    {
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3599:6: ( (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )? )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3599:7: (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 ) (kw= KEYWORD_46 )?
+                    {
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3599:7: (kw= KEYWORD_34 | kw= KEYWORD_47 | kw= KEYWORD_32 )
+                    int alt64=3;
+                    switch ( input.LA(1) ) {
+                    case KEYWORD_34:
+                        {
+                        alt64=1;
+                        }
+                        break;
+                    case KEYWORD_47:
+                        {
+                        alt64=2;
+                        }
+                        break;
+                    case KEYWORD_32:
+                        {
+                        alt64=3;
+                        }
+                        break;
+                    default:
+                        NoViableAltException nvae =
+                            new NoViableAltException("", 64, 0, input);
+
+                        throw nvae;
+                    }
+
+                    switch (alt64) {
+                        case 1 :
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3600:2: kw= KEYWORD_34
+                            {
+                            kw=(Token)match(input,KEYWORD_34,FOLLOW_KEYWORD_34_in_ruleJoinType7418); 
+
+                                    current.merge(kw);
+                                    newLeafNode(kw, grammarAccess.getJoinTypeAccess().getLEFTKeyword_1_1_0_0()); 
+                                
+
+                            }
+                            break;
+                        case 2 :
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3607:2: kw= KEYWORD_47
+                            {
+                            kw=(Token)match(input,KEYWORD_47,FOLLOW_KEYWORD_47_in_ruleJoinType7437); 
+
+                                    current.merge(kw);
+                                    newLeafNode(kw, grammarAccess.getJoinTypeAccess().getRIGHTKeyword_1_1_0_1()); 
+                                
+
+                            }
+                            break;
+                        case 3 :
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3614:2: kw= KEYWORD_32
+                            {
+                            kw=(Token)match(input,KEYWORD_32,FOLLOW_KEYWORD_32_in_ruleJoinType7456); 
+
+                                    current.merge(kw);
+                                    newLeafNode(kw, grammarAccess.getJoinTypeAccess().getFULLKeyword_1_1_0_2()); 
+                                
+
+                            }
+                            break;
+
+                    }
+
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3619:2: (kw= KEYWORD_46 )?
+                    int alt65=2;
+                    int LA65_0 = input.LA(1);
+
+                    if ( (LA65_0==KEYWORD_46) ) {
+                        alt65=1;
+                    }
+                    switch (alt65) {
+                        case 1 :
+                            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3620:2: kw= KEYWORD_46
+                            {
+                            kw=(Token)match(input,KEYWORD_46,FOLLOW_KEYWORD_46_in_ruleJoinType7471); 
+
+                                    current.merge(kw);
+                                    newLeafNode(kw, grammarAccess.getJoinTypeAccess().getOUTERKeyword_1_1_1()); 
+                                
+
+                            }
+                            break;
+
+                    }
+
+
+                    }
+
+
+                    }
+                    break;
+                case 3 :
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3627:2: kw= KEYWORD_40
+                    {
+                    kw=(Token)match(input,KEYWORD_40,FOLLOW_KEYWORD_40_in_ruleJoinType7493); 
+
+                            current.merge(kw);
+                            newLeafNode(kw, grammarAccess.getJoinTypeAccess().getCROSSKeyword_1_2()); 
+                        
+
+                    }
+                    break;
+
+            }
+
+            kw=(Token)match(input,KEYWORD_33,FOLLOW_KEYWORD_33_in_ruleJoinType7508); 
+
+                    current.merge(kw);
+                    newLeafNode(kw, grammarAccess.getJoinTypeAccess().getJOINKeyword_2()); 
+                
+
+            }
+
+
+            }
+
+             leaveRule();
+                
+        }
+         
+        	catch (RecognitionException re) { 
+        	    recover(input,re); 
+        	    appendSkippedTokens();
+        	}
+        finally {
+        }
+        return current;
+    }
+    // $ANTLR end "ruleJoinType"
+
+
     // $ANTLR start "entryRuleDBID"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3572:1: entryRuleDBID returns [String current=null] : iv_ruleDBID= ruleDBID EOF ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3646:1: entryRuleDBID returns [String current=null] : iv_ruleDBID= ruleDBID EOF ;
     public final String entryRuleDBID() throws RecognitionException {
         String current = null;
 
@@ -9263,17 +9510,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3573:1: (iv_ruleDBID= ruleDBID EOF )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3574:2: iv_ruleDBID= ruleDBID EOF
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3647:1: (iv_ruleDBID= ruleDBID EOF )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3648:2: iv_ruleDBID= ruleDBID EOF
             {
              newCompositeNode(grammarAccess.getDBIDRule()); 
-            pushFollow(FOLLOW_ruleDBID_in_entryRuleDBID7331);
+            pushFollow(FOLLOW_ruleDBID_in_entryRuleDBID7548);
             iv_ruleDBID=ruleDBID();
 
             state._fsp--;
 
              current =iv_ruleDBID.getText(); 
-            match(input,EOF,FOLLOW_EOF_in_entryRuleDBID7342); 
+            match(input,EOF,FOLLOW_EOF_in_entryRuleDBID7559); 
 
             }
 
@@ -9291,7 +9538,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDBID"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3581:1: ruleDBID returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3655:1: ruleDBID returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING ) ;
     public final AntlrDatatypeRuleToken ruleDBID() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -9302,39 +9549,39 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3585:6: ( (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:1: (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3659:6: ( (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3660:1: (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:1: (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING )
-            int alt63=3;
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3660:1: (this_ID_0= RULE_ID | this_DBNAME_1= RULE_DBNAME | this_STRING_2= RULE_STRING )
+            int alt67=3;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
-                alt63=1;
+                alt67=1;
                 }
                 break;
             case RULE_DBNAME:
                 {
-                alt63=2;
+                alt67=2;
                 }
                 break;
             case RULE_STRING:
                 {
-                alt63=3;
+                alt67=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 63, 0, input);
+                    new NoViableAltException("", 67, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt63) {
+            switch (alt67) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3586:6: this_ID_0= RULE_ID
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3660:6: this_ID_0= RULE_ID
                     {
-                    this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleDBID7382); 
+                    this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleDBID7599); 
 
                     		current.merge(this_ID_0);
                         
@@ -9345,9 +9592,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3594:10: this_DBNAME_1= RULE_DBNAME
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3668:10: this_DBNAME_1= RULE_DBNAME
                     {
-                    this_DBNAME_1=(Token)match(input,RULE_DBNAME,FOLLOW_RULE_DBNAME_in_ruleDBID7408); 
+                    this_DBNAME_1=(Token)match(input,RULE_DBNAME,FOLLOW_RULE_DBNAME_in_ruleDBID7625); 
 
                     		current.merge(this_DBNAME_1);
                         
@@ -9358,9 +9605,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3602:10: this_STRING_2= RULE_STRING
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3676:10: this_STRING_2= RULE_STRING
                     {
-                    this_STRING_2=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleDBID7434); 
+                    this_STRING_2=(Token)match(input,RULE_STRING,FOLLOW_RULE_STRING_in_ruleDBID7651); 
 
                     		current.merge(this_STRING_2);
                         
@@ -9392,7 +9639,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleStringOperand"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3617:1: entryRuleStringOperand returns [String current=null] : iv_ruleStringOperand= ruleStringOperand EOF ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3691:1: entryRuleStringOperand returns [String current=null] : iv_ruleStringOperand= ruleStringOperand EOF ;
     public final String entryRuleStringOperand() throws RecognitionException {
         String current = null;
 
@@ -9400,17 +9647,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3618:1: (iv_ruleStringOperand= ruleStringOperand EOF )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3619:2: iv_ruleStringOperand= ruleStringOperand EOF
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3692:1: (iv_ruleStringOperand= ruleStringOperand EOF )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3693:2: iv_ruleStringOperand= ruleStringOperand EOF
             {
              newCompositeNode(grammarAccess.getStringOperandRule()); 
-            pushFollow(FOLLOW_ruleStringOperand_in_entryRuleStringOperand7479);
+            pushFollow(FOLLOW_ruleStringOperand_in_entryRuleStringOperand7696);
             iv_ruleStringOperand=ruleStringOperand();
 
             state._fsp--;
 
              current =iv_ruleStringOperand.getText(); 
-            match(input,EOF,FOLLOW_EOF_in_entryRuleStringOperand7490); 
+            match(input,EOF,FOLLOW_EOF_in_entryRuleStringOperand7707); 
 
             }
 
@@ -9428,7 +9675,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleStringOperand"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3626:1: ruleStringOperand returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_STRING__0= RULE_STRING_ ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3700:1: ruleStringOperand returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : this_STRING__0= RULE_STRING_ ;
     public final AntlrDatatypeRuleToken ruleStringOperand() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -9437,10 +9684,10 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3630:6: (this_STRING__0= RULE_STRING_ )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3631:5: this_STRING__0= RULE_STRING_
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3704:6: (this_STRING__0= RULE_STRING_ )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3705:5: this_STRING__0= RULE_STRING_
             {
-            this_STRING__0=(Token)match(input,RULE_STRING_,FOLLOW_RULE_STRING__in_ruleStringOperand7529); 
+            this_STRING__0=(Token)match(input,RULE_STRING_,FOLLOW_RULE_STRING__in_ruleStringOperand7746); 
 
             		current.merge(this_STRING__0);
                 
@@ -9466,7 +9713,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleFNAME"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3646:1: entryRuleFNAME returns [String current=null] : iv_ruleFNAME= ruleFNAME EOF ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3720:1: entryRuleFNAME returns [String current=null] : iv_ruleFNAME= ruleFNAME EOF ;
     public final String entryRuleFNAME() throws RecognitionException {
         String current = null;
 
@@ -9474,17 +9721,17 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3647:1: (iv_ruleFNAME= ruleFNAME EOF )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3648:2: iv_ruleFNAME= ruleFNAME EOF
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3721:1: (iv_ruleFNAME= ruleFNAME EOF )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3722:2: iv_ruleFNAME= ruleFNAME EOF
             {
              newCompositeNode(grammarAccess.getFNAMERule()); 
-            pushFollow(FOLLOW_ruleFNAME_in_entryRuleFNAME7573);
+            pushFollow(FOLLOW_ruleFNAME_in_entryRuleFNAME7790);
             iv_ruleFNAME=ruleFNAME();
 
             state._fsp--;
 
              current =iv_ruleFNAME.getText(); 
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFNAME7584); 
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFNAME7801); 
 
             }
 
@@ -9502,7 +9749,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleFNAME"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3655:1: ruleFNAME returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID kw= KEYWORD_1 ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3729:1: ruleFNAME returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID kw= KEYWORD_1 ) ;
     public final AntlrDatatypeRuleToken ruleFNAME() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -9512,20 +9759,20 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3659:6: ( (this_ID_0= RULE_ID kw= KEYWORD_1 ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3660:1: (this_ID_0= RULE_ID kw= KEYWORD_1 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3733:6: ( (this_ID_0= RULE_ID kw= KEYWORD_1 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3734:1: (this_ID_0= RULE_ID kw= KEYWORD_1 )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3660:1: (this_ID_0= RULE_ID kw= KEYWORD_1 )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3660:6: this_ID_0= RULE_ID kw= KEYWORD_1
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3734:1: (this_ID_0= RULE_ID kw= KEYWORD_1 )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3734:6: this_ID_0= RULE_ID kw= KEYWORD_1
             {
-            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleFNAME7624); 
+            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_RULE_ID_in_ruleFNAME7841); 
 
             		current.merge(this_ID_0);
                 
              
                 newLeafNode(this_ID_0, grammarAccess.getFNAMEAccess().getIDTerminalRuleCall_0()); 
                 
-            kw=(Token)match(input,KEYWORD_1,FOLLOW_KEYWORD_1_in_ruleFNAME7642); 
+            kw=(Token)match(input,KEYWORD_1,FOLLOW_KEYWORD_1_in_ruleFNAME7859); 
 
                     current.merge(kw);
                     newLeafNode(kw, grammarAccess.getFNAMEAccess().getLeftParenthesisKeyword_1()); 
@@ -9552,7 +9799,7 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleXFunction"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3681:1: ruleXFunction returns [Enumerator current=null] : ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_40 ) | (enumLiteral_2= KEYWORD_37 ) | (enumLiteral_3= KEYWORD_54 ) | (enumLiteral_4= KEYWORD_32 ) | (enumLiteral_5= KEYWORD_48 ) | (enumLiteral_6= KEYWORD_38 ) | (enumLiteral_7= KEYWORD_57 ) | (enumLiteral_8= KEYWORD_47 ) | (enumLiteral_9= KEYWORD_59 ) | (enumLiteral_10= KEYWORD_56 ) | (enumLiteral_11= KEYWORD_50 ) ) ;
+    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3755:1: ruleXFunction returns [Enumerator current=null] : ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_45 ) | (enumLiteral_2= KEYWORD_41 ) | (enumLiteral_3= KEYWORD_62 ) | (enumLiteral_4= KEYWORD_35 ) | (enumLiteral_5= KEYWORD_55 ) | (enumLiteral_6= KEYWORD_43 ) | (enumLiteral_7= KEYWORD_65 ) | (enumLiteral_8= KEYWORD_54 ) | (enumLiteral_9= KEYWORD_67 ) | (enumLiteral_10= KEYWORD_64 ) | (enumLiteral_11= KEYWORD_58 ) ) ;
     public final Enumerator ruleXFunction() throws RecognitionException {
         Enumerator current = null;
 
@@ -9571,87 +9818,87 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
          enterRule(); 
         try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3683:28: ( ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_40 ) | (enumLiteral_2= KEYWORD_37 ) | (enumLiteral_3= KEYWORD_54 ) | (enumLiteral_4= KEYWORD_32 ) | (enumLiteral_5= KEYWORD_48 ) | (enumLiteral_6= KEYWORD_38 ) | (enumLiteral_7= KEYWORD_57 ) | (enumLiteral_8= KEYWORD_47 ) | (enumLiteral_9= KEYWORD_59 ) | (enumLiteral_10= KEYWORD_56 ) | (enumLiteral_11= KEYWORD_50 ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3684:1: ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_40 ) | (enumLiteral_2= KEYWORD_37 ) | (enumLiteral_3= KEYWORD_54 ) | (enumLiteral_4= KEYWORD_32 ) | (enumLiteral_5= KEYWORD_48 ) | (enumLiteral_6= KEYWORD_38 ) | (enumLiteral_7= KEYWORD_57 ) | (enumLiteral_8= KEYWORD_47 ) | (enumLiteral_9= KEYWORD_59 ) | (enumLiteral_10= KEYWORD_56 ) | (enumLiteral_11= KEYWORD_50 ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3757:28: ( ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_45 ) | (enumLiteral_2= KEYWORD_41 ) | (enumLiteral_3= KEYWORD_62 ) | (enumLiteral_4= KEYWORD_35 ) | (enumLiteral_5= KEYWORD_55 ) | (enumLiteral_6= KEYWORD_43 ) | (enumLiteral_7= KEYWORD_65 ) | (enumLiteral_8= KEYWORD_54 ) | (enumLiteral_9= KEYWORD_67 ) | (enumLiteral_10= KEYWORD_64 ) | (enumLiteral_11= KEYWORD_58 ) ) )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3758:1: ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_45 ) | (enumLiteral_2= KEYWORD_41 ) | (enumLiteral_3= KEYWORD_62 ) | (enumLiteral_4= KEYWORD_35 ) | (enumLiteral_5= KEYWORD_55 ) | (enumLiteral_6= KEYWORD_43 ) | (enumLiteral_7= KEYWORD_65 ) | (enumLiteral_8= KEYWORD_54 ) | (enumLiteral_9= KEYWORD_67 ) | (enumLiteral_10= KEYWORD_64 ) | (enumLiteral_11= KEYWORD_58 ) )
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3684:1: ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_40 ) | (enumLiteral_2= KEYWORD_37 ) | (enumLiteral_3= KEYWORD_54 ) | (enumLiteral_4= KEYWORD_32 ) | (enumLiteral_5= KEYWORD_48 ) | (enumLiteral_6= KEYWORD_38 ) | (enumLiteral_7= KEYWORD_57 ) | (enumLiteral_8= KEYWORD_47 ) | (enumLiteral_9= KEYWORD_59 ) | (enumLiteral_10= KEYWORD_56 ) | (enumLiteral_11= KEYWORD_50 ) )
-            int alt64=12;
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3758:1: ( (enumLiteral_0= KEYWORD_19 ) | (enumLiteral_1= KEYWORD_45 ) | (enumLiteral_2= KEYWORD_41 ) | (enumLiteral_3= KEYWORD_62 ) | (enumLiteral_4= KEYWORD_35 ) | (enumLiteral_5= KEYWORD_55 ) | (enumLiteral_6= KEYWORD_43 ) | (enumLiteral_7= KEYWORD_65 ) | (enumLiteral_8= KEYWORD_54 ) | (enumLiteral_9= KEYWORD_67 ) | (enumLiteral_10= KEYWORD_64 ) | (enumLiteral_11= KEYWORD_58 ) )
+            int alt68=12;
             switch ( input.LA(1) ) {
             case KEYWORD_19:
                 {
-                alt64=1;
+                alt68=1;
                 }
                 break;
-            case KEYWORD_40:
+            case KEYWORD_45:
                 {
-                alt64=2;
+                alt68=2;
                 }
                 break;
-            case KEYWORD_37:
+            case KEYWORD_41:
                 {
-                alt64=3;
+                alt68=3;
+                }
+                break;
+            case KEYWORD_62:
+                {
+                alt68=4;
+                }
+                break;
+            case KEYWORD_35:
+                {
+                alt68=5;
+                }
+                break;
+            case KEYWORD_55:
+                {
+                alt68=6;
+                }
+                break;
+            case KEYWORD_43:
+                {
+                alt68=7;
+                }
+                break;
+            case KEYWORD_65:
+                {
+                alt68=8;
                 }
                 break;
             case KEYWORD_54:
                 {
-                alt64=4;
+                alt68=9;
                 }
                 break;
-            case KEYWORD_32:
+            case KEYWORD_67:
                 {
-                alt64=5;
+                alt68=10;
                 }
                 break;
-            case KEYWORD_48:
+            case KEYWORD_64:
                 {
-                alt64=6;
+                alt68=11;
                 }
                 break;
-            case KEYWORD_38:
+            case KEYWORD_58:
                 {
-                alt64=7;
-                }
-                break;
-            case KEYWORD_57:
-                {
-                alt64=8;
-                }
-                break;
-            case KEYWORD_47:
-                {
-                alt64=9;
-                }
-                break;
-            case KEYWORD_59:
-                {
-                alt64=10;
-                }
-                break;
-            case KEYWORD_56:
-                {
-                alt64=11;
-                }
-                break;
-            case KEYWORD_50:
-                {
-                alt64=12;
+                alt68=12;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 64, 0, input);
+                    new NoViableAltException("", 68, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt64) {
+            switch (alt68) {
                 case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3684:2: (enumLiteral_0= KEYWORD_19 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3758:2: (enumLiteral_0= KEYWORD_19 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3684:2: (enumLiteral_0= KEYWORD_19 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3684:7: enumLiteral_0= KEYWORD_19
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3758:2: (enumLiteral_0= KEYWORD_19 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3758:7: enumLiteral_0= KEYWORD_19
                     {
-                    enumLiteral_0=(Token)match(input,KEYWORD_19,FOLLOW_KEYWORD_19_in_ruleXFunction7699); 
+                    enumLiteral_0=(Token)match(input,KEYWORD_19,FOLLOW_KEYWORD_19_in_ruleXFunction7916); 
 
                             current = grammarAccess.getXFunctionAccess().getXinEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_0, grammarAccess.getXFunctionAccess().getXinEnumLiteralDeclaration_0()); 
@@ -9663,12 +9910,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3690:6: (enumLiteral_1= KEYWORD_40 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3764:6: (enumLiteral_1= KEYWORD_45 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3690:6: (enumLiteral_1= KEYWORD_40 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3690:11: enumLiteral_1= KEYWORD_40
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3764:6: (enumLiteral_1= KEYWORD_45 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3764:11: enumLiteral_1= KEYWORD_45
                     {
-                    enumLiteral_1=(Token)match(input,KEYWORD_40,FOLLOW_KEYWORD_40_in_ruleXFunction7721); 
+                    enumLiteral_1=(Token)match(input,KEYWORD_45,FOLLOW_KEYWORD_45_in_ruleXFunction7938); 
 
                             current = grammarAccess.getXFunctionAccess().getXnotinEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_1, grammarAccess.getXFunctionAccess().getXnotinEnumLiteralDeclaration_1()); 
@@ -9680,12 +9927,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3696:6: (enumLiteral_2= KEYWORD_37 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3770:6: (enumLiteral_2= KEYWORD_41 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3696:6: (enumLiteral_2= KEYWORD_37 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3696:11: enumLiteral_2= KEYWORD_37
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3770:6: (enumLiteral_2= KEYWORD_41 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3770:11: enumLiteral_2= KEYWORD_41
                     {
-                    enumLiteral_2=(Token)match(input,KEYWORD_37,FOLLOW_KEYWORD_37_in_ruleXFunction7743); 
+                    enumLiteral_2=(Token)match(input,KEYWORD_41,FOLLOW_KEYWORD_41_in_ruleXFunction7960); 
 
                             current = grammarAccess.getXFunctionAccess().getXeqEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_2, grammarAccess.getXFunctionAccess().getXeqEnumLiteralDeclaration_2()); 
@@ -9697,12 +9944,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3702:6: (enumLiteral_3= KEYWORD_54 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3776:6: (enumLiteral_3= KEYWORD_62 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3702:6: (enumLiteral_3= KEYWORD_54 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3702:11: enumLiteral_3= KEYWORD_54
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3776:6: (enumLiteral_3= KEYWORD_62 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3776:11: enumLiteral_3= KEYWORD_62
                     {
-                    enumLiteral_3=(Token)match(input,KEYWORD_54,FOLLOW_KEYWORD_54_in_ruleXFunction7765); 
+                    enumLiteral_3=(Token)match(input,KEYWORD_62,FOLLOW_KEYWORD_62_in_ruleXFunction7982); 
 
                             current = grammarAccess.getXFunctionAccess().getXnoteqEnumLiteralDeclaration_3().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_3, grammarAccess.getXFunctionAccess().getXnoteqEnumLiteralDeclaration_3()); 
@@ -9714,12 +9961,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3708:6: (enumLiteral_4= KEYWORD_32 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3782:6: (enumLiteral_4= KEYWORD_35 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3708:6: (enumLiteral_4= KEYWORD_32 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3708:11: enumLiteral_4= KEYWORD_32
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3782:6: (enumLiteral_4= KEYWORD_35 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3782:11: enumLiteral_4= KEYWORD_35
                     {
-                    enumLiteral_4=(Token)match(input,KEYWORD_32,FOLLOW_KEYWORD_32_in_ruleXFunction7787); 
+                    enumLiteral_4=(Token)match(input,KEYWORD_35,FOLLOW_KEYWORD_35_in_ruleXFunction8004); 
 
                             current = grammarAccess.getXFunctionAccess().getXlsEnumLiteralDeclaration_4().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_4, grammarAccess.getXFunctionAccess().getXlsEnumLiteralDeclaration_4()); 
@@ -9731,12 +9978,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3714:6: (enumLiteral_5= KEYWORD_48 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3788:6: (enumLiteral_5= KEYWORD_55 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3714:6: (enumLiteral_5= KEYWORD_48 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3714:11: enumLiteral_5= KEYWORD_48
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3788:6: (enumLiteral_5= KEYWORD_55 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3788:11: enumLiteral_5= KEYWORD_55
                     {
-                    enumLiteral_5=(Token)match(input,KEYWORD_48,FOLLOW_KEYWORD_48_in_ruleXFunction7809); 
+                    enumLiteral_5=(Token)match(input,KEYWORD_55,FOLLOW_KEYWORD_55_in_ruleXFunction8026); 
 
                             current = grammarAccess.getXFunctionAccess().getXgtEnumLiteralDeclaration_5().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_5, grammarAccess.getXFunctionAccess().getXgtEnumLiteralDeclaration_5()); 
@@ -9748,12 +9995,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 7 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3720:6: (enumLiteral_6= KEYWORD_38 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3794:6: (enumLiteral_6= KEYWORD_43 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3720:6: (enumLiteral_6= KEYWORD_38 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3720:11: enumLiteral_6= KEYWORD_38
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3794:6: (enumLiteral_6= KEYWORD_43 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3794:11: enumLiteral_6= KEYWORD_43
                     {
-                    enumLiteral_6=(Token)match(input,KEYWORD_38,FOLLOW_KEYWORD_38_in_ruleXFunction7831); 
+                    enumLiteral_6=(Token)match(input,KEYWORD_43,FOLLOW_KEYWORD_43_in_ruleXFunction8048); 
 
                             current = grammarAccess.getXFunctionAccess().getXlsrEnumLiteralDeclaration_6().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_6, grammarAccess.getXFunctionAccess().getXlsrEnumLiteralDeclaration_6()); 
@@ -9765,12 +10012,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 8 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3726:6: (enumLiteral_7= KEYWORD_57 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3800:6: (enumLiteral_7= KEYWORD_65 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3726:6: (enumLiteral_7= KEYWORD_57 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3726:11: enumLiteral_7= KEYWORD_57
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3800:6: (enumLiteral_7= KEYWORD_65 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3800:11: enumLiteral_7= KEYWORD_65
                     {
-                    enumLiteral_7=(Token)match(input,KEYWORD_57,FOLLOW_KEYWORD_57_in_ruleXFunction7853); 
+                    enumLiteral_7=(Token)match(input,KEYWORD_65,FOLLOW_KEYWORD_65_in_ruleXFunction8070); 
 
                             current = grammarAccess.getXFunctionAccess().getXgtlEnumLiteralDeclaration_7().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_7, grammarAccess.getXFunctionAccess().getXgtlEnumLiteralDeclaration_7()); 
@@ -9782,12 +10029,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 9 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3732:6: (enumLiteral_8= KEYWORD_47 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3806:6: (enumLiteral_8= KEYWORD_54 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3732:6: (enumLiteral_8= KEYWORD_47 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3732:11: enumLiteral_8= KEYWORD_47
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3806:6: (enumLiteral_8= KEYWORD_54 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3806:11: enumLiteral_8= KEYWORD_54
                     {
-                    enumLiteral_8=(Token)match(input,KEYWORD_47,FOLLOW_KEYWORD_47_in_ruleXFunction7875); 
+                    enumLiteral_8=(Token)match(input,KEYWORD_54,FOLLOW_KEYWORD_54_in_ruleXFunction8092); 
 
                             current = grammarAccess.getXFunctionAccess().getXbwnEnumLiteralDeclaration_8().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_8, grammarAccess.getXFunctionAccess().getXbwnEnumLiteralDeclaration_8()); 
@@ -9799,12 +10046,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 10 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3738:6: (enumLiteral_9= KEYWORD_59 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3812:6: (enumLiteral_9= KEYWORD_67 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3738:6: (enumLiteral_9= KEYWORD_59 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3738:11: enumLiteral_9= KEYWORD_59
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3812:6: (enumLiteral_9= KEYWORD_67 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3812:11: enumLiteral_9= KEYWORD_67
                     {
-                    enumLiteral_9=(Token)match(input,KEYWORD_59,FOLLOW_KEYWORD_59_in_ruleXFunction7897); 
+                    enumLiteral_9=(Token)match(input,KEYWORD_67,FOLLOW_KEYWORD_67_in_ruleXFunction8114); 
 
                             current = grammarAccess.getXFunctionAccess().getXbwncEnumLiteralDeclaration_9().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_9, grammarAccess.getXFunctionAccess().getXbwncEnumLiteralDeclaration_9()); 
@@ -9816,12 +10063,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 11 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3744:6: (enumLiteral_10= KEYWORD_56 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3818:6: (enumLiteral_10= KEYWORD_64 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3744:6: (enumLiteral_10= KEYWORD_56 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3744:11: enumLiteral_10= KEYWORD_56
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3818:6: (enumLiteral_10= KEYWORD_64 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3818:11: enumLiteral_10= KEYWORD_64
                     {
-                    enumLiteral_10=(Token)match(input,KEYWORD_56,FOLLOW_KEYWORD_56_in_ruleXFunction7919); 
+                    enumLiteral_10=(Token)match(input,KEYWORD_64,FOLLOW_KEYWORD_64_in_ruleXFunction8136); 
 
                             current = grammarAccess.getXFunctionAccess().getXbwnlEnumLiteralDeclaration_10().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_10, grammarAccess.getXFunctionAccess().getXbwnlEnumLiteralDeclaration_10()); 
@@ -9833,12 +10080,12 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 12 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3750:6: (enumLiteral_11= KEYWORD_50 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3824:6: (enumLiteral_11= KEYWORD_58 )
                     {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3750:6: (enumLiteral_11= KEYWORD_50 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3750:11: enumLiteral_11= KEYWORD_50
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3824:6: (enumLiteral_11= KEYWORD_58 )
+                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3824:11: enumLiteral_11= KEYWORD_58
                     {
-                    enumLiteral_11=(Token)match(input,KEYWORD_50,FOLLOW_KEYWORD_50_in_ruleXFunction7941); 
+                    enumLiteral_11=(Token)match(input,KEYWORD_58,FOLLOW_KEYWORD_58_in_ruleXFunction8158); 
 
                             current = grammarAccess.getXFunctionAccess().getXbwnrEnumLiteralDeclaration_11().getEnumLiteral().getInstance();
                             newLeafNode(enumLiteral_11, grammarAccess.getXFunctionAccess().getXbwnrEnumLiteralDeclaration_11()); 
@@ -9868,163 +10115,6 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     }
     // $ANTLR end "ruleXFunction"
 
-
-    // $ANTLR start "ruleJoinType"
-    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3760:1: ruleJoinType returns [Enumerator current=null] : ( (enumLiteral_0= KEYWORD_61 ) | (enumLiteral_1= KEYWORD_65 ) | (enumLiteral_2= KEYWORD_66 ) | (enumLiteral_3= KEYWORD_64 ) | (enumLiteral_4= KEYWORD_60 ) ) ;
-    public final Enumerator ruleJoinType() throws RecognitionException {
-        Enumerator current = null;
-
-        Token enumLiteral_0=null;
-        Token enumLiteral_1=null;
-        Token enumLiteral_2=null;
-        Token enumLiteral_3=null;
-        Token enumLiteral_4=null;
-
-         enterRule(); 
-        try {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3762:28: ( ( (enumLiteral_0= KEYWORD_61 ) | (enumLiteral_1= KEYWORD_65 ) | (enumLiteral_2= KEYWORD_66 ) | (enumLiteral_3= KEYWORD_64 ) | (enumLiteral_4= KEYWORD_60 ) ) )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3763:1: ( (enumLiteral_0= KEYWORD_61 ) | (enumLiteral_1= KEYWORD_65 ) | (enumLiteral_2= KEYWORD_66 ) | (enumLiteral_3= KEYWORD_64 ) | (enumLiteral_4= KEYWORD_60 ) )
-            {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3763:1: ( (enumLiteral_0= KEYWORD_61 ) | (enumLiteral_1= KEYWORD_65 ) | (enumLiteral_2= KEYWORD_66 ) | (enumLiteral_3= KEYWORD_64 ) | (enumLiteral_4= KEYWORD_60 ) )
-            int alt65=5;
-            switch ( input.LA(1) ) {
-            case KEYWORD_61:
-                {
-                alt65=1;
-                }
-                break;
-            case KEYWORD_65:
-                {
-                alt65=2;
-                }
-                break;
-            case KEYWORD_66:
-                {
-                alt65=3;
-                }
-                break;
-            case KEYWORD_64:
-                {
-                alt65=4;
-                }
-                break;
-            case KEYWORD_60:
-                {
-                alt65=5;
-                }
-                break;
-            default:
-                NoViableAltException nvae =
-                    new NoViableAltException("", 65, 0, input);
-
-                throw nvae;
-            }
-
-            switch (alt65) {
-                case 1 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3763:2: (enumLiteral_0= KEYWORD_61 )
-                    {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3763:2: (enumLiteral_0= KEYWORD_61 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3763:7: enumLiteral_0= KEYWORD_61
-                    {
-                    enumLiteral_0=(Token)match(input,KEYWORD_61,FOLLOW_KEYWORD_61_in_ruleJoinType7991); 
-
-                            current = grammarAccess.getJoinTypeAccess().getInnerJoinEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
-                            newLeafNode(enumLiteral_0, grammarAccess.getJoinTypeAccess().getInnerJoinEnumLiteralDeclaration_0()); 
-                        
-
-                    }
-
-
-                    }
-                    break;
-                case 2 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3769:6: (enumLiteral_1= KEYWORD_65 )
-                    {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3769:6: (enumLiteral_1= KEYWORD_65 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3769:11: enumLiteral_1= KEYWORD_65
-                    {
-                    enumLiteral_1=(Token)match(input,KEYWORD_65,FOLLOW_KEYWORD_65_in_ruleJoinType8013); 
-
-                            current = grammarAccess.getJoinTypeAccess().getLeftOuterJoinEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
-                            newLeafNode(enumLiteral_1, grammarAccess.getJoinTypeAccess().getLeftOuterJoinEnumLiteralDeclaration_1()); 
-                        
-
-                    }
-
-
-                    }
-                    break;
-                case 3 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3775:6: (enumLiteral_2= KEYWORD_66 )
-                    {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3775:6: (enumLiteral_2= KEYWORD_66 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3775:11: enumLiteral_2= KEYWORD_66
-                    {
-                    enumLiteral_2=(Token)match(input,KEYWORD_66,FOLLOW_KEYWORD_66_in_ruleJoinType8035); 
-
-                            current = grammarAccess.getJoinTypeAccess().getRightOuterJoinEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
-                            newLeafNode(enumLiteral_2, grammarAccess.getJoinTypeAccess().getRightOuterJoinEnumLiteralDeclaration_2()); 
-                        
-
-                    }
-
-
-                    }
-                    break;
-                case 4 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3781:6: (enumLiteral_3= KEYWORD_64 )
-                    {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3781:6: (enumLiteral_3= KEYWORD_64 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3781:11: enumLiteral_3= KEYWORD_64
-                    {
-                    enumLiteral_3=(Token)match(input,KEYWORD_64,FOLLOW_KEYWORD_64_in_ruleJoinType8057); 
-
-                            current = grammarAccess.getJoinTypeAccess().getFullOuterJoinEnumLiteralDeclaration_3().getEnumLiteral().getInstance();
-                            newLeafNode(enumLiteral_3, grammarAccess.getJoinTypeAccess().getFullOuterJoinEnumLiteralDeclaration_3()); 
-                        
-
-                    }
-
-
-                    }
-                    break;
-                case 5 :
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3787:6: (enumLiteral_4= KEYWORD_60 )
-                    {
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3787:6: (enumLiteral_4= KEYWORD_60 )
-                    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/internal/InternalSqlParser.g:3787:11: enumLiteral_4= KEYWORD_60
-                    {
-                    enumLiteral_4=(Token)match(input,KEYWORD_60,FOLLOW_KEYWORD_60_in_ruleJoinType8079); 
-
-                            current = grammarAccess.getJoinTypeAccess().getCrossJoinEnumLiteralDeclaration_4().getEnumLiteral().getInstance();
-                            newLeafNode(enumLiteral_4, grammarAccess.getJoinTypeAccess().getCrossJoinEnumLiteralDeclaration_4()); 
-                        
-
-                    }
-
-
-                    }
-                    break;
-
-            }
-
-
-            }
-
-             leaveRule(); 
-        }
-         
-        	catch (RecognitionException re) { 
-        	    recover(input,re); 
-        	    appendSkippedTokens();
-        	}
-        finally {
-        }
-        return current;
-    }
-    // $ANTLR end "ruleJoinType"
-
     // Delegated rules
 
 
@@ -10034,9 +10124,9 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     static final String DFA33_eofS =
         "\21\uffff";
     static final String DFA33_minS =
-        "\1\60\1\103\1\14\14\74\2\uffff";
+        "\1\63\1\106\1\7\14\77\2\uffff";
     static final String DFA33_maxS =
-        "\1\60\1\103\1\65\14\104\2\uffff";
+        "\1\63\1\106\1\70\14\107\2\uffff";
     static final String DFA33_acceptS =
         "\17\uffff\1\1\1\2";
     static final String DFA33_specialS =
@@ -10044,8 +10134,8 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     static final String[] DFA33_transitionS = {
             "\1\1",
             "\1\2",
-            "\1\14\1\16\3\uffff\1\6\1\uffff\1\15\1\12\1\13\1\10\5\uffff"+
-            "\1\5\1\11\1\uffff\1\4\6\uffff\1\7\16\uffff\1\3",
+            "\1\14\1\16\3\uffff\1\6\1\uffff\1\15\1\12\1\13\1\10\7\uffff"+
+            "\1\5\1\uffff\1\11\1\uffff\1\4\13\uffff\1\7\16\uffff\1\3",
             "\1\17\7\uffff\1\20",
             "\1\17\7\uffff\1\20",
             "\1\17\7\uffff\1\20",
@@ -10099,111 +10189,111 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
 
     public static final BitSet FOLLOW_ruleModel_in_entryRuleModel67 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleModel77 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleSelectQuery_in_ruleModel123 = new BitSet(new long[]{0x0000000000040002L});
-    public static final BitSet FOLLOW_KEYWORD_55_in_ruleModel137 = new BitSet(new long[]{0x0000000000000000L,0x0000000000038000L});
+    public static final BitSet FOLLOW_ruleSelectQuery_in_ruleModel123 = new BitSet(new long[]{0x0000000000002002L});
+    public static final BitSet FOLLOW_KEYWORD_63_in_ruleModel137 = new BitSet(new long[]{0x0000000000000000L,0x00000000001C0000L});
     public static final BitSet FOLLOW_ruleOrderByColumns_in_ruleModel157 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSelectQuery_in_entryRuleSelectQuery194 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSelectQuery204 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleSelect_in_ruleSelectQuery251 = new BitSet(new long[]{0x0000000141000802L});
-    public static final BitSet FOLLOW_ruleSelectSubSet_in_ruleSelectQuery271 = new BitSet(new long[]{0x0000000141000802L});
+    public static final BitSet FOLLOW_ruleSelect_in_ruleSelectQuery251 = new BitSet(new long[]{0x0000000110100042L});
+    public static final BitSet FOLLOW_ruleSelectSubSet_in_ruleSelectQuery271 = new BitSet(new long[]{0x0000000110100042L});
     public static final BitSet FOLLOW_ruleSelectSubSet_in_entryRuleSelectSubSet307 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSelectSubSet317 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_41_in_ruleSelectSubSet363 = new BitSet(new long[]{0x0000080008000000L});
-    public static final BitSet FOLLOW_KEYWORD_58_in_ruleSelectSubSet391 = new BitSet(new long[]{0x0000080008000000L});
-    public static final BitSet FOLLOW_KEYWORD_39_in_ruleSelectSubSet419 = new BitSet(new long[]{0x0000080008000000L});
-    public static final BitSet FOLLOW_KEYWORD_43_in_ruleSelectSubSet447 = new BitSet(new long[]{0x0000080008000000L});
-    public static final BitSet FOLLOW_KEYWORD_23_in_ruleSelectSubSet480 = new BitSet(new long[]{0x0000080008000000L});
+    public static final BitSet FOLLOW_KEYWORD_48_in_ruleSelectSubSet363 = new BitSet(new long[]{0x0000400000800000L});
+    public static final BitSet FOLLOW_KEYWORD_66_in_ruleSelectSubSet391 = new BitSet(new long[]{0x0000400000800000L});
+    public static final BitSet FOLLOW_KEYWORD_44_in_ruleSelectSubSet419 = new BitSet(new long[]{0x0000400000800000L});
+    public static final BitSet FOLLOW_KEYWORD_50_in_ruleSelectSubSet447 = new BitSet(new long[]{0x0000400000800000L});
+    public static final BitSet FOLLOW_KEYWORD_23_in_ruleSelectSubSet480 = new BitSet(new long[]{0x0000400000800000L});
     public static final BitSet FOLLOW_ruleSelect_in_ruleSelectSubSet513 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSelect_in_entryRuleSelect548 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSelect558 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_46_in_ruleSelect602 = new BitSet(new long[]{0x0200000400004000L,0x000000000003FFC0L});
-    public static final BitSet FOLLOW_KEYWORD_51_in_ruleSelect627 = new BitSet(new long[]{0x0200000400004000L,0x000000000003FFC0L});
+    public static final BitSet FOLLOW_KEYWORD_53_in_ruleSelect602 = new BitSet(new long[]{0x1000000400000200L,0x00000000001FFE00L});
+    public static final BitSet FOLLOW_KEYWORD_59_in_ruleSelect627 = new BitSet(new long[]{0x1000000400000200L,0x00000000001FFE00L});
     public static final BitSet FOLLOW_ruleColumns_in_ruleSelect649 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_KEYWORD_31_in_ruleSelect662 = new BitSet(new long[]{0x0200000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleTables_in_ruleSelect682 = new BitSet(new long[]{0x0000000202008002L});
-    public static final BitSet FOLLOW_KEYWORD_42_in_ruleSelect696 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSelect716 = new BitSet(new long[]{0x0000000002008002L});
-    public static final BitSet FOLLOW_KEYWORD_52_in_ruleSelect732 = new BitSet(new long[]{0x0000000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleGroupByColumns_in_ruleSelect752 = new BitSet(new long[]{0x0000000002000002L});
-    public static final BitSet FOLLOW_KEYWORD_44_in_ruleSelect768 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_KEYWORD_31_in_ruleSelect662 = new BitSet(new long[]{0x1000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleTables_in_ruleSelect682 = new BitSet(new long[]{0x0000000200200402L});
+    public static final BitSet FOLLOW_KEYWORD_49_in_ruleSelect696 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSelect716 = new BitSet(new long[]{0x0000000000200402L});
+    public static final BitSet FOLLOW_KEYWORD_60_in_ruleSelect732 = new BitSet(new long[]{0x0000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleGroupByColumns_in_ruleSelect752 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_KEYWORD_51_in_ruleSelect768 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleSelect788 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumns_in_entryRuleColumns825 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleColumns835 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnOrAlias_in_ruleColumns882 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleColumns905 = new BitSet(new long[]{0x0200000400004000L,0x000000000003FFC0L});
-    public static final BitSet FOLLOW_ruleColumnOrAlias_in_ruleColumns925 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleColumnOrAlias_in_ruleColumns882 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleColumns905 = new BitSet(new long[]{0x1000000400000200L,0x00000000001FFE00L});
+    public static final BitSet FOLLOW_ruleColumnOrAlias_in_ruleColumns925 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleColumnOrAlias_in_entryRuleColumnOrAlias964 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleColumnOrAlias974 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleColumnOrAlias1021 = new BitSet(new long[]{0x0010000000000002L,0x0000000000038000L});
-    public static final BitSet FOLLOW_KEYWORD_18_in_ruleColumnOrAlias1040 = new BitSet(new long[]{0x0000000000000002L,0x0000000000038000L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleColumnOrAlias1021 = new BitSet(new long[]{0x0080000000000002L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_KEYWORD_18_in_ruleColumnOrAlias1040 = new BitSet(new long[]{0x0000000000000002L,0x00000000001C0000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnOrAlias1073 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_STAR_in_ruleColumnOrAlias1098 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectNameAll_in_ruleColumnOrAlias1130 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumnFull_in_entryRuleColumnFull1165 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleColumnFull1175 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnFull1222 = new BitSet(new long[]{0x4000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_6_in_ruleColumnFull1245 = new BitSet(new long[]{0x0000000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnFull1265 = new BitSet(new long[]{0x4000000000000002L});
+    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnFull1222 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_6_in_ruleColumnFull1245 = new BitSet(new long[]{0x0000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleColumnFull1265 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000002L});
     public static final BitSet FOLLOW_ruleTables_in_entryRuleTables1304 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleTables1314 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFromTable_in_ruleTables1361 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleTables1384 = new BitSet(new long[]{0x0200000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleFromTable_in_ruleTables1404 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleFromTable_in_ruleTables1361 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleTables1384 = new BitSet(new long[]{0x1000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleFromTable_in_ruleTables1404 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleFromTable_in_entryRuleFromTable1443 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleFromTable1453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableOrAlias_in_ruleFromTable1499 = new BitSet(new long[]{0x0000000000000672L});
-    public static final BitSet FOLLOW_ruleFromTableJoin_in_ruleFromTable1520 = new BitSet(new long[]{0x0000000000000672L});
+    public static final BitSet FOLLOW_ruleTableOrAlias_in_ruleFromTable1499 = new BitSet(new long[]{0x000001C085080002L});
+    public static final BitSet FOLLOW_ruleFromTableJoin_in_ruleFromTable1520 = new BitSet(new long[]{0x000001C085080002L});
     public static final BitSet FOLLOW_ruleFromTableJoin_in_entryRuleFromTableJoin1556 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleFromTableJoin1566 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJoinType_in_ruleFromTableJoin1612 = new BitSet(new long[]{0x0200000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleTableOrAlias_in_ruleFromTableJoin1633 = new BitSet(new long[]{0x0040000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_20_in_ruleFromTableJoin1646 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_ruleJoinType_in_ruleFromTableJoin1612 = new BitSet(new long[]{0x1000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleTableOrAlias_in_ruleFromTableJoin1633 = new BitSet(new long[]{0x0200000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_20_in_ruleFromTableJoin1646 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleFullExpression_in_ruleFromTableJoin1666 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleTableOrAlias_in_entryRuleTableOrAlias1701 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleTableOrAlias1711 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleTableFull_in_ruleTableOrAlias1758 = new BitSet(new long[]{0x0010000000000002L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleSubQueryOperand_in_ruleTableOrAlias1785 = new BitSet(new long[]{0x0010000000000002L,0x0000000000038000L});
-    public static final BitSet FOLLOW_KEYWORD_18_in_ruleTableOrAlias1805 = new BitSet(new long[]{0x0000000000000002L,0x0000000000038000L});
+    public static final BitSet FOLLOW_ruleTableFull_in_ruleTableOrAlias1758 = new BitSet(new long[]{0x0080000000000002L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleSubQueryOperand_in_ruleTableOrAlias1785 = new BitSet(new long[]{0x0080000000000002L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_KEYWORD_18_in_ruleTableOrAlias1805 = new BitSet(new long[]{0x0000000000000002L,0x00000000001C0000L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableOrAlias1838 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleTableFull_in_entryRuleTableFull1874 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleTableFull1884 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableFull1931 = new BitSet(new long[]{0x4000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_6_in_ruleTableFull1954 = new BitSet(new long[]{0x0000000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableFull1974 = new BitSet(new long[]{0x4000000000000002L});
+    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableFull1931 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_6_in_ruleTableFull1954 = new BitSet(new long[]{0x0000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleDbObjectName_in_ruleTableFull1974 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectNameAll_in_entryRuleDbObjectNameAll2013 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleDbObjectNameAll2023 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDBID_in_ruleDbObjectNameAll2069 = new BitSet(new long[]{0x4000000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_6_in_ruleDbObjectNameAll2082 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_ruleDBID_in_ruleDbObjectNameAll2069 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_6_in_ruleDbObjectNameAll2082 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
     public static final BitSet FOLLOW_RULE_STAR_in_ruleDbObjectNameAll2092 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDbObjectName_in_entryRuleDbObjectName2126 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleDbObjectName2136 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleDBID_in_ruleDbObjectName2181 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOrderByColumns_in_entryRuleOrderByColumns2215 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByColumns2225 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOrderByColumnFull_in_ruleOrderByColumns2272 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOrderByColumns2295 = new BitSet(new long[]{0x0000000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleOrderByColumnFull_in_ruleOrderByColumns2315 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleOrderByColumnFull_in_ruleOrderByColumns2272 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOrderByColumns2295 = new BitSet(new long[]{0x0000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleOrderByColumnFull_in_ruleOrderByColumns2315 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleOrderByColumnFull_in_entryRuleOrderByColumnFull2354 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOrderByColumnFull2364 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleColumnFull_in_ruleOrderByColumnFull2410 = new BitSet(new long[]{0x0000400800000002L});
+    public static final BitSet FOLLOW_ruleColumnFull_in_ruleOrderByColumnFull2410 = new BitSet(new long[]{0x0002000800000002L});
     public static final BitSet FOLLOW_KEYWORD_26_in_ruleOrderByColumnFull2431 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_KEYWORD_29_in_ruleOrderByColumnFull2459 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleGroupByColumns_in_entryRuleGroupByColumns2509 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleGroupByColumns2519 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleGroupByColumnFull_in_ruleGroupByColumns2566 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleGroupByColumns2589 = new BitSet(new long[]{0x0000000000000000L,0x0000000000038000L});
-    public static final BitSet FOLLOW_ruleGroupByColumnFull_in_ruleGroupByColumns2609 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleGroupByColumnFull_in_ruleGroupByColumns2566 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleGroupByColumns2589 = new BitSet(new long[]{0x0000000000000000L,0x00000000001C0000L});
+    public static final BitSet FOLLOW_ruleGroupByColumnFull_in_ruleGroupByColumns2609 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleGroupByColumnFull_in_entryRuleGroupByColumnFull2648 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleGroupByColumnFull2658 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumnFull_in_ruleGroupByColumnFull2703 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFullExpression_in_entryRuleFullExpression2737 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleFullExpression2747 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionFragment_in_ruleFullExpression2794 = new BitSet(new long[]{0x0080100000000002L});
-    public static final BitSet FOLLOW_ruleExpressionFragmentSecond_in_ruleFullExpression2824 = new BitSet(new long[]{0x0080100000000002L});
+    public static final BitSet FOLLOW_ruleExpressionFragment_in_ruleFullExpression2794 = new BitSet(new long[]{0x0400800000000002L});
+    public static final BitSet FOLLOW_ruleExpressionFragmentSecond_in_ruleFullExpression2824 = new BitSet(new long[]{0x0400800000000002L});
     public static final BitSet FOLLOW_ruleExpressionFragmentSecond_in_entryRuleExpressionFragmentSecond2862 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionFragmentSecond2872 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_24_in_ruleExpressionFragmentSecond2918 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_21_in_ruleExpressionFragmentSecond2946 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_KEYWORD_24_in_ruleExpressionFragmentSecond2918 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_21_in_ruleExpressionFragmentSecond2946 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleExpressionFragment_in_ruleExpressionFragmentSecond2981 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpressionFragment_in_entryRuleExpressionFragment3016 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionFragment3026 = new BitSet(new long[]{0x0000000000000002L});
@@ -10213,62 +10303,62 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleXExpression__in_ruleExpressionFragment3147 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpressionGroup_in_entryRuleExpressionGroup3185 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpressionGroup3195 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleExpressionGroup3242 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleFullExpression_in_ruleExpressionGroup3262 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleExpressionGroup3242 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleFullExpression_in_ruleExpressionGroup3262 = new BitSet(new long[]{0x2000000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleExpressionGroup3275 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXExpression_in_entryRuleXExpression3309 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleXExpression3319 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_14_in_ruleXExpression3357 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_KEYWORD_11_in_ruleXExpression3378 = new BitSet(new long[]{0x00200040B07A3000L});
-    public static final BitSet FOLLOW_ruleXFunction_in_ruleXExpression3398 = new BitSet(new long[]{0x1000000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression3411 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleXExpression3431 = new BitSet(new long[]{0x1000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression3445 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020000L});
-    public static final BitSet FOLLOW_ruleXExpressionParams_in_ruleXExpression3465 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_14_in_ruleXExpression3357 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_KEYWORD_11_in_ruleXExpression3378 = new BitSet(new long[]{0x010002002A03D180L});
+    public static final BitSet FOLLOW_ruleXFunction_in_ruleXExpression3398 = new BitSet(new long[]{0x8000000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression3411 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleXExpression3431 = new BitSet(new long[]{0x8000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpression3445 = new BitSet(new long[]{0x0000000000000000L,0x0000000000100000L});
+    public static final BitSet FOLLOW_ruleXExpressionParams_in_ruleXExpression3465 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
     public static final BitSet FOLLOW_KEYWORD_13_in_ruleXExpression3480 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXExpression__in_entryRuleXExpression_3514 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleXExpression_3524 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_14_in_ruleXExpression_3562 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_KEYWORD_11_in_ruleXExpression_3583 = new BitSet(new long[]{0x00200040B07A3000L});
-    public static final BitSet FOLLOW_ruleXFunction_in_ruleXExpression_3603 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000010L});
-    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_3616 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleXExpression_3636 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000030L});
-    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_3650 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020000L});
-    public static final BitSet FOLLOW_ruleXExpressionParams_in_ruleXExpression_3670 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_KEYWORD_14_in_ruleXExpression_3562 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_KEYWORD_11_in_ruleXExpression_3583 = new BitSet(new long[]{0x010002002A03D180L});
+    public static final BitSet FOLLOW_ruleXFunction_in_ruleXExpression_3603 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_3616 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleXExpression_3636 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000180L});
+    public static final BitSet FOLLOW_KEYWORD_12_in_ruleXExpression_3650 = new BitSet(new long[]{0x0000000000000000L,0x0000000000100000L});
+    public static final BitSet FOLLOW_ruleXExpressionParams_in_ruleXExpression_3670 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
     public static final BitSet FOLLOW_KEYWORD_13_in_ruleXExpression_3685 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleXExpressionParams_in_entryRuleXExpressionParams3719 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleXExpressionParams3729 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJRParameter_in_ruleXExpressionParams3776 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpressionParams3799 = new BitSet(new long[]{0x0000000000000000L,0x0000000000020000L});
-    public static final BitSet FOLLOW_ruleJRParameter_in_ruleXExpressionParams3819 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleJRParameter_in_ruleXExpressionParams3776 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleXExpressionParams3799 = new BitSet(new long[]{0x0000000000000000L,0x0000000000100000L});
+    public static final BitSet FOLLOW_ruleJRParameter_in_ruleXExpressionParams3819 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleJRParameter_in_entryRuleJRParameter3858 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleJRParameter3868 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_ID_in_ruleJRParameter3909 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExpression_in_entryRuleExpression3948 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleExpression3958 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleExpression4004 = new BitSet(new long[]{0x002E008004A10180L,0x0000000000000007L});
-    public static final BitSet FOLLOW_KEYWORD_49_in_ruleExpression4026 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_62_in_ruleExpression4054 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleExpression4004 = new BitSet(new long[]{0x0170040000450830L,0x0000000000000038L});
+    public static final BitSet FOLLOW_KEYWORD_56_in_ruleExpression4026 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_68_in_ruleExpression4054 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleInOperator_in_ruleExpression4095 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleBetween_in_ruleExpression4122 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLike_in_ruleExpression4149 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleComparison_in_ruleExpression4176 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleComparison_in_entryRuleComparison4212 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleComparison4222 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_10_in_ruleComparison4268 = new BitSet(new long[]{0x0200290400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_17_in_ruleComparison4296 = new BitSet(new long[]{0x0200290400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_8_in_ruleComparison4324 = new BitSet(new long[]{0x0200290400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_15_in_ruleComparison4352 = new BitSet(new long[]{0x0200290400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_9_in_ruleComparison4380 = new BitSet(new long[]{0x0200290400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_16_in_ruleComparison4408 = new BitSet(new long[]{0x0200290400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_25_in_ruleComparison4443 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_23_in_ruleComparison4471 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_34_in_ruleComparison4499 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_KEYWORD_10_in_ruleComparison4268 = new BitSet(new long[]{0x1001480400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_17_in_ruleComparison4296 = new BitSet(new long[]{0x1001480400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_8_in_ruleComparison4324 = new BitSet(new long[]{0x1001480400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_15_in_ruleComparison4352 = new BitSet(new long[]{0x1001480400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_9_in_ruleComparison4380 = new BitSet(new long[]{0x1001480400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_16_in_ruleComparison4408 = new BitSet(new long[]{0x1001480400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_25_in_ruleComparison4443 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_23_in_ruleComparison4471 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_37_in_ruleComparison4499 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleOperand_in_ruleComparison4535 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLike_in_entryRuleLike4570 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLike4580 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_33_in_ruleLike4626 = new BitSet(new long[]{0x0000000000000000L,0x0000000000024000L});
-    public static final BitSet FOLLOW_KEYWORD_53_in_ruleLike4654 = new BitSet(new long[]{0x0000000000000000L,0x0000000000024000L});
+    public static final BitSet FOLLOW_KEYWORD_36_in_ruleLike4626 = new BitSet(new long[]{0x0000000000000000L,0x0000000000120000L});
+    public static final BitSet FOLLOW_KEYWORD_61_in_ruleLike4654 = new BitSet(new long[]{0x0000000000000000L,0x0000000000120000L});
     public static final BitSet FOLLOW_ruleLikeOperand_in_ruleLike4689 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleLikeOperand_in_entryRuleLikeOperand4724 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleLikeOperand4734 = new BitSet(new long[]{0x0000000000000002L});
@@ -10276,33 +10366,33 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleOperandFunction_in_ruleLikeOperand4807 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleBetween_in_entryRuleBetween4842 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleBetween4852 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_47_in_ruleBetween4898 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_63_in_ruleBetween4926 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleBetween4961 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_KEYWORD_24_in_ruleBetween4974 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_KEYWORD_54_in_ruleBetween4898 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_69_in_ruleBetween4926 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleBetween4961 = new BitSet(new long[]{0x0000800000000000L});
+    public static final BitSet FOLLOW_KEYWORD_24_in_ruleBetween4974 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleOperand_in_ruleBetween4994 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleInOperator_in_entryRuleInOperator5029 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleInOperator5039 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_45_in_ruleInOperator5094 = new BitSet(new long[]{0x0200000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_19_in_ruleInOperator5122 = new BitSet(new long[]{0x0200000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleInOperator5149 = new BitSet(new long[]{0x0200000000000000L,0x0000000000007EC0L});
-    public static final BitSet FOLLOW_ruleSubQueryOperand_in_ruleInOperator5170 = new BitSet(new long[]{0x0400000000000000L});
-    public static final BitSet FOLLOW_ruleOperandList_in_ruleInOperator5197 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_52_in_ruleInOperator5094 = new BitSet(new long[]{0x1000000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_19_in_ruleInOperator5122 = new BitSet(new long[]{0x1000000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleInOperator5149 = new BitSet(new long[]{0x1000000000000000L,0x000000000003F600L});
+    public static final BitSet FOLLOW_ruleSubQueryOperand_in_ruleInOperator5170 = new BitSet(new long[]{0x2000000000000000L});
+    public static final BitSet FOLLOW_ruleOperandList_in_ruleInOperator5197 = new BitSet(new long[]{0x2000000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleInOperator5211 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperandList_in_entryRuleOperandList5245 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandList5255 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleScalarOperand_in_ruleOperandList5302 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOperandList5325 = new BitSet(new long[]{0x0000000000000000L,0x0000000000007EC0L});
-    public static final BitSet FOLLOW_ruleScalarOperand_in_ruleOperandList5345 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleScalarOperand_in_ruleOperandList5302 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOperandList5325 = new BitSet(new long[]{0x0000000000000000L,0x000000000003F600L});
+    public static final BitSet FOLLOW_ruleScalarOperand_in_ruleOperandList5345 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleOperand_in_entryRuleOperand5384 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperand5394 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperandFragment_in_ruleOperand5440 = new BitSet(new long[]{0xA900000000000002L,0x0000000000000100L});
-    public static final BitSet FOLLOW_KEYWORD_3_in_ruleOperand5465 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_5_in_ruleOperand5494 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_RULE_STAR_in_ruleOperand5521 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_7_in_ruleOperand5550 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_KEYWORD_22_in_ruleOperand5579 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleOperandFragment_in_ruleOperand5601 = new BitSet(new long[]{0xA900000000000002L,0x0000000000000100L});
+    public static final BitSet FOLLOW_ruleOperandFragment_in_ruleOperand5440 = new BitSet(new long[]{0x4800000000000002L,0x0000000000000805L});
+    public static final BitSet FOLLOW_KEYWORD_3_in_ruleOperand5465 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_5_in_ruleOperand5494 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_RULE_STAR_in_ruleOperand5521 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_7_in_ruleOperand5550 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_KEYWORD_22_in_ruleOperand5579 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleOperandFragment_in_ruleOperand5601 = new BitSet(new long[]{0x4800000000000002L,0x0000000000000805L});
     public static final BitSet FOLLOW_ruleOperandFragment_in_entryRuleOperandFragment5638 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandFragment5648 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleColumnOperand_in_ruleOperandFragment5694 = new BitSet(new long[]{0x0000000000000002L});
@@ -10312,15 +10402,15 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleSQLCASE_in_ruleOperandFragment5802 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOperandFunction_in_entryRuleOperandFunction5837 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOperandFunction5847 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFNAME_in_ruleOperandFunction5902 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FFC0L});
-    public static final BitSet FOLLOW_RULE_STAR_in_ruleOperandFunction5914 = new BitSet(new long[]{0x0400000000000000L});
-    public static final BitSet FOLLOW_ruleOpFunctionArg_in_ruleOperandFunction5940 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_ruleFNAME_in_ruleOperandFunction5902 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FFE00L});
+    public static final BitSet FOLLOW_RULE_STAR_in_ruleOperandFunction5914 = new BitSet(new long[]{0x2000000000000000L});
+    public static final BitSet FOLLOW_ruleOpFunctionArg_in_ruleOperandFunction5940 = new BitSet(new long[]{0x2000000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleOperandFunction5954 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleOpFunctionArg_in_entryRuleOpFunctionArg5988 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleOpFunctionArg5998 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleOpFunctionArg6045 = new BitSet(new long[]{0x1000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOpFunctionArg6068 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleOperand_in_ruleOpFunctionArg6088 = new BitSet(new long[]{0x1000000000000002L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleOpFunctionArg6045 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_4_in_ruleOpFunctionArg6068 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleOperand_in_ruleOpFunctionArg6088 = new BitSet(new long[]{0x8000000000000002L});
     public static final BitSet FOLLOW_ruleXOperandFragment_in_entryRuleXOperandFragment6127 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleXOperandFragment6137 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleParameterOperand_in_ruleXOperandFragment6183 = new BitSet(new long[]{0x0000000000000002L});
@@ -10337,8 +10427,8 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleColumnFull_in_ruleColumnOperand6507 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSubQueryOperand_in_entryRuleSubQueryOperand6541 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSubQueryOperand6551 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleSubQueryOperand6598 = new BitSet(new long[]{0x0000080008000000L});
-    public static final BitSet FOLLOW_ruleSelectQuery_in_ruleSubQueryOperand6618 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleSubQueryOperand6598 = new BitSet(new long[]{0x0000400000800000L});
+    public static final BitSet FOLLOW_ruleSelectQuery_in_ruleSubQueryOperand6618 = new BitSet(new long[]{0x2000000000000000L});
     public static final BitSet FOLLOW_KEYWORD_2_in_ruleSubQueryOperand6631 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleScalarOperand_in_entryRuleScalarOperand6665 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleScalarOperand6675 = new BitSet(new long[]{0x0000000000000002L});
@@ -10350,50 +10440,55 @@ public class InternalSqlParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_RULE_TIMESTAMP_in_ruleScalarOperand6856 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSQLCASE_in_entryRuleSQLCASE6896 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSQLCASE6906 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_28_in_ruleSQLCASE6944 = new BitSet(new long[]{0x0201040400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSQLCASE6964 = new BitSet(new long[]{0x0201040400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleSQLCaseWhens_in_ruleSQLCASE6986 = new BitSet(new long[]{0x0000800000000000L});
+    public static final BitSet FOLLOW_KEYWORD_28_in_ruleSQLCASE6944 = new BitSet(new long[]{0x1008200400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSQLCASE6964 = new BitSet(new long[]{0x1008200400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleSQLCaseWhens_in_ruleSQLCASE6986 = new BitSet(new long[]{0x0004000000000000L});
     public static final BitSet FOLLOW_KEYWORD_27_in_ruleSQLCASE6999 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleSQLCaseWhens_in_entryRuleSQLCaseWhens7033 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSQLCaseWhens7043 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens7090 = new BitSet(new long[]{0x0201040400000002L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens7120 = new BitSet(new long[]{0x0201040400000002L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens7090 = new BitSet(new long[]{0x1008200400000002L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleSqlCaseWhen_in_ruleSQLCaseWhens7120 = new BitSet(new long[]{0x1008200400000002L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleSqlCaseWhen_in_entryRuleSqlCaseWhen7158 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleSqlCaseWhen7168 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_36_in_ruleSqlCaseWhen7206 = new BitSet(new long[]{0x0201000400000000L,0x000000000003FEC0L});
-    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSqlCaseWhen7226 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_KEYWORD_35_in_ruleSqlCaseWhen7239 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_KEYWORD_39_in_ruleSqlCaseWhen7206 = new BitSet(new long[]{0x1008000400000000L,0x00000000001FF600L});
+    public static final BitSet FOLLOW_ruleFullExpression_in_ruleSqlCaseWhen7226 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_KEYWORD_38_in_ruleSqlCaseWhen7239 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleOperand_in_ruleSqlCaseWhen7259 = new BitSet(new long[]{0x0000001000000002L});
-    public static final BitSet FOLLOW_KEYWORD_30_in_ruleSqlCaseWhen7273 = new BitSet(new long[]{0x0200000400000000L,0x000000000003FEC0L});
+    public static final BitSet FOLLOW_KEYWORD_30_in_ruleSqlCaseWhen7273 = new BitSet(new long[]{0x1000000400000000L,0x00000000001FF600L});
     public static final BitSet FOLLOW_ruleOperand_in_ruleSqlCaseWhen7293 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleDBID_in_entryRuleDBID7331 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleDBID7342 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_ruleDBID7382 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DBNAME_in_ruleDBID7408 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_ruleDBID7434 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleStringOperand_in_entryRuleStringOperand7479 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleStringOperand7490 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING__in_ruleStringOperand7529 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFNAME_in_entryRuleFNAME7573 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFNAME7584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_ID_in_ruleFNAME7624 = new BitSet(new long[]{0x0200000000000000L});
-    public static final BitSet FOLLOW_KEYWORD_1_in_ruleFNAME7642 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_19_in_ruleXFunction7699 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_40_in_ruleXFunction7721 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_37_in_ruleXFunction7743 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_54_in_ruleXFunction7765 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_32_in_ruleXFunction7787 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_48_in_ruleXFunction7809 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_38_in_ruleXFunction7831 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_57_in_ruleXFunction7853 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_47_in_ruleXFunction7875 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_59_in_ruleXFunction7897 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_56_in_ruleXFunction7919 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_50_in_ruleXFunction7941 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_61_in_ruleJoinType7991 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_65_in_ruleJoinType8013 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_66_in_ruleJoinType8035 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_64_in_ruleJoinType8057 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_KEYWORD_60_in_ruleJoinType8079 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJoinType_in_entryRuleJoinType7331 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleJoinType7342 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_57_in_ruleJoinType7381 = new BitSet(new long[]{0x000001C085000000L});
+    public static final BitSet FOLLOW_KEYWORD_42_in_ruleJoinType7397 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_KEYWORD_34_in_ruleJoinType7418 = new BitSet(new long[]{0x0000008040000000L});
+    public static final BitSet FOLLOW_KEYWORD_47_in_ruleJoinType7437 = new BitSet(new long[]{0x0000008040000000L});
+    public static final BitSet FOLLOW_KEYWORD_32_in_ruleJoinType7456 = new BitSet(new long[]{0x0000008040000000L});
+    public static final BitSet FOLLOW_KEYWORD_46_in_ruleJoinType7471 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_KEYWORD_40_in_ruleJoinType7493 = new BitSet(new long[]{0x0000008000000000L});
+    public static final BitSet FOLLOW_KEYWORD_33_in_ruleJoinType7508 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleDBID_in_entryRuleDBID7548 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleDBID7559 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_ruleDBID7599 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DBNAME_in_ruleDBID7625 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_ruleDBID7651 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleStringOperand_in_entryRuleStringOperand7696 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleStringOperand7707 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING__in_ruleStringOperand7746 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFNAME_in_entryRuleFNAME7790 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFNAME7801 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_ID_in_ruleFNAME7841 = new BitSet(new long[]{0x1000000000000000L});
+    public static final BitSet FOLLOW_KEYWORD_1_in_ruleFNAME7859 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_19_in_ruleXFunction7916 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_45_in_ruleXFunction7938 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_41_in_ruleXFunction7960 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_62_in_ruleXFunction7982 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_35_in_ruleXFunction8004 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_55_in_ruleXFunction8026 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_43_in_ruleXFunction8048 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_65_in_ruleXFunction8070 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_54_in_ruleXFunction8092 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_67_in_ruleXFunction8114 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_64_in_ruleXFunction8136 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_KEYWORD_58_in_ruleXFunction8158 = new BitSet(new long[]{0x0000000000000002L});
 
 }

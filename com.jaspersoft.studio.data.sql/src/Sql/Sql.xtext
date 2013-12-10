@@ -153,9 +153,10 @@ enum XFunction:
 	| xlsr='LESS]' | xgtl='[GREATER' | xbwn='BETWEEN' | xbwnc='[BETWEEN]' | xbwnl='[BETWEEN'
 	| xbwnr='BETWEEN]';
 
-enum JoinType:
-	innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
-	fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
+JoinType:
+	('NATURAL')? ('INNER' | ('LEFT' | 'RIGHT' | 'FULL') ('OUTER')? | 'CROSS')? 'JOIN';
+	//innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
+//fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 
 DBID:
 	ID | DBNAME | STRING;

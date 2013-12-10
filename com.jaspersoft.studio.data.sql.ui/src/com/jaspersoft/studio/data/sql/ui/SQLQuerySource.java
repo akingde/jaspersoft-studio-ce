@@ -42,6 +42,8 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SQLQuerySource {
 	private static final Color SRC_MARGINS_COLOR = SWTResourceManager.getColor(220, 220, 220);
@@ -237,5 +239,9 @@ public class SQLQuerySource {
 
 	public XtextDocument getXTextDocument() {
 		return (XtextDocument) viewer.getDocument();
+	}
+
+	public void setupFont(JasperReportsConfiguration jConfig) {
+		viewer.getTextWidget().setFont(FontUtils.getEditorsFont(jConfig));
 	}
 }

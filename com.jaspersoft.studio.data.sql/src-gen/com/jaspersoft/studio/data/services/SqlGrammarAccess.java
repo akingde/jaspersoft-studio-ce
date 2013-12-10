@@ -433,7 +433,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "FromTableJoin");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cJoinAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cJoinJoinTypeEnumRuleCall_0_0 = (RuleCall)cJoinAssignment_0.eContents().get(0);
+		private final RuleCall cJoinJoinTypeParserRuleCall_0_0 = (RuleCall)cJoinAssignment_0.eContents().get(0);
 		private final Assignment cOnTableAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cOnTableTableOrAliasParserRuleCall_1_0 = (RuleCall)cOnTableAssignment_1.eContents().get(0);
 		private final Keyword cONKeyword_2 = (Keyword)cGroup.eContents().get(2);
@@ -451,7 +451,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		public Assignment getJoinAssignment_0() { return cJoinAssignment_0; }
 
 		//JoinType
-		public RuleCall getJoinJoinTypeEnumRuleCall_0_0() { return cJoinJoinTypeEnumRuleCall_0_0; }
+		public RuleCall getJoinJoinTypeParserRuleCall_0_0() { return cJoinJoinTypeParserRuleCall_0_0; }
 
 		//onTable=TableOrAlias
 		public Assignment getOnTableAssignment_1() { return cOnTableAssignment_1; }
@@ -1952,6 +1952,62 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getEexpOperandParserRuleCall_4_1_0() { return cEexpOperandParserRuleCall_4_1_0; }
 	}
 
+	public class JoinTypeElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "JoinType");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cNATURALKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
+		private final Keyword cINNERKeyword_1_0 = (Keyword)cAlternatives_1.eContents().get(0);
+		private final Group cGroup_1_1 = (Group)cAlternatives_1.eContents().get(1);
+		private final Alternatives cAlternatives_1_1_0 = (Alternatives)cGroup_1_1.eContents().get(0);
+		private final Keyword cLEFTKeyword_1_1_0_0 = (Keyword)cAlternatives_1_1_0.eContents().get(0);
+		private final Keyword cRIGHTKeyword_1_1_0_1 = (Keyword)cAlternatives_1_1_0.eContents().get(1);
+		private final Keyword cFULLKeyword_1_1_0_2 = (Keyword)cAlternatives_1_1_0.eContents().get(2);
+		private final Keyword cOUTERKeyword_1_1_1 = (Keyword)cGroup_1_1.eContents().get(1);
+		private final Keyword cCROSSKeyword_1_2 = (Keyword)cAlternatives_1.eContents().get(2);
+		private final Keyword cJOINKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		//JoinType:
+		//	"NATURAL"? ("INNER" | ("LEFT" | "RIGHT" | "FULL") "OUTER"? | "CROSS")? "JOIN";
+		public ParserRule getRule() { return rule; }
+
+		//"NATURAL"? ("INNER" | ("LEFT" | "RIGHT" | "FULL") "OUTER"? | "CROSS")? "JOIN"
+		public Group getGroup() { return cGroup; }
+
+		//"NATURAL"?
+		public Keyword getNATURALKeyword_0() { return cNATURALKeyword_0; }
+
+		//("INNER" | ("LEFT" | "RIGHT" | "FULL") "OUTER"? | "CROSS")?
+		public Alternatives getAlternatives_1() { return cAlternatives_1; }
+
+		//"INNER"
+		public Keyword getINNERKeyword_1_0() { return cINNERKeyword_1_0; }
+
+		//("LEFT" | "RIGHT" | "FULL") "OUTER"?
+		public Group getGroup_1_1() { return cGroup_1_1; }
+
+		//"LEFT" | "RIGHT" | "FULL"
+		public Alternatives getAlternatives_1_1_0() { return cAlternatives_1_1_0; }
+
+		//"LEFT"
+		public Keyword getLEFTKeyword_1_1_0_0() { return cLEFTKeyword_1_1_0_0; }
+
+		//"RIGHT"
+		public Keyword getRIGHTKeyword_1_1_0_1() { return cRIGHTKeyword_1_1_0_1; }
+
+		//"FULL"
+		public Keyword getFULLKeyword_1_1_0_2() { return cFULLKeyword_1_1_0_2; }
+
+		//"OUTER"?
+		public Keyword getOUTERKeyword_1_1_1() { return cOUTERKeyword_1_1_1; }
+
+		//"CROSS"
+		public Keyword getCROSSKeyword_1_2() { return cCROSSKeyword_1_2; }
+
+		//"JOIN"
+		public Keyword getJOINKeyword_2() { return cJOINKeyword_2; }
+	}
+
 	public class DBIDElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "DBID");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -1959,6 +2015,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cDBNAMETerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final RuleCall cSTRINGTerminalRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
 		
+		////innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
+		////fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 		//DBID:
 		//	ID | DBNAME | STRING;
 		public ParserRule getRule() { return rule; }
@@ -2118,60 +2176,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"BETWEEN]"
 		public Keyword getXbwnrBETWEENKeyword_11_0() { return cXbwnrBETWEENKeyword_11_0; }
 	}
-
-	public class JoinTypeElements extends AbstractEnumRuleElementFinder {
-		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "JoinType");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final EnumLiteralDeclaration cInnerJoinEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
-		private final Keyword cInnerJoinINNERJOINKeyword_0_0 = (Keyword)cInnerJoinEnumLiteralDeclaration_0.eContents().get(0);
-		private final EnumLiteralDeclaration cLeftOuterJoinEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
-		private final Keyword cLeftOuterJoinLEFTOUTERJOINKeyword_1_0 = (Keyword)cLeftOuterJoinEnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cRightOuterJoinEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cRightOuterJoinRIGHTOUTERJOINKeyword_2_0 = (Keyword)cRightOuterJoinEnumLiteralDeclaration_2.eContents().get(0);
-		private final EnumLiteralDeclaration cFullOuterJoinEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
-		private final Keyword cFullOuterJoinFULLOUTERJOINKeyword_3_0 = (Keyword)cFullOuterJoinEnumLiteralDeclaration_3.eContents().get(0);
-		private final EnumLiteralDeclaration cCrossJoinEnumLiteralDeclaration_4 = (EnumLiteralDeclaration)cAlternatives.eContents().get(4);
-		private final Keyword cCrossJoinCROSSJOINKeyword_4_0 = (Keyword)cCrossJoinEnumLiteralDeclaration_4.eContents().get(0);
-		
-		//enum JoinType:
-		//	innerJoin="INNER JOIN" | leftOuterJoin="LEFT OUTER JOIN" | rightOuterJoin="RIGHT OUTER JOIN" |
-		//	fullOuterJoin="FULL OUTER JOIN" | crossJoin="CROSS JOIN";
-		public EnumRule getRule() { return rule; }
-
-		//innerJoin="INNER JOIN" | leftOuterJoin="LEFT OUTER JOIN" | rightOuterJoin="RIGHT OUTER JOIN" |
-		//fullOuterJoin="FULL OUTER JOIN" | crossJoin="CROSS JOIN"
-		public Alternatives getAlternatives() { return cAlternatives; }
-
-		//innerJoin="INNER JOIN"
-		public EnumLiteralDeclaration getInnerJoinEnumLiteralDeclaration_0() { return cInnerJoinEnumLiteralDeclaration_0; }
-
-		//"INNER JOIN"
-		public Keyword getInnerJoinINNERJOINKeyword_0_0() { return cInnerJoinINNERJOINKeyword_0_0; }
-
-		//leftOuterJoin="LEFT OUTER JOIN"
-		public EnumLiteralDeclaration getLeftOuterJoinEnumLiteralDeclaration_1() { return cLeftOuterJoinEnumLiteralDeclaration_1; }
-
-		//"LEFT OUTER JOIN"
-		public Keyword getLeftOuterJoinLEFTOUTERJOINKeyword_1_0() { return cLeftOuterJoinLEFTOUTERJOINKeyword_1_0; }
-
-		//rightOuterJoin="RIGHT OUTER JOIN"
-		public EnumLiteralDeclaration getRightOuterJoinEnumLiteralDeclaration_2() { return cRightOuterJoinEnumLiteralDeclaration_2; }
-
-		//"RIGHT OUTER JOIN"
-		public Keyword getRightOuterJoinRIGHTOUTERJOINKeyword_2_0() { return cRightOuterJoinRIGHTOUTERJOINKeyword_2_0; }
-
-		//fullOuterJoin="FULL OUTER JOIN"
-		public EnumLiteralDeclaration getFullOuterJoinEnumLiteralDeclaration_3() { return cFullOuterJoinEnumLiteralDeclaration_3; }
-
-		//"FULL OUTER JOIN"
-		public Keyword getFullOuterJoinFULLOUTERJOINKeyword_3_0() { return cFullOuterJoinFULLOUTERJOINKeyword_3_0; }
-
-		//crossJoin="CROSS JOIN"
-		public EnumLiteralDeclaration getCrossJoinEnumLiteralDeclaration_4() { return cCrossJoinEnumLiteralDeclaration_4; }
-
-		//"CROSS JOIN"
-		public Keyword getCrossJoinCROSSJOINKeyword_4_0() { return cCrossJoinCROSSJOINKeyword_4_0; }
-	}
 	
 	private ModelElements pModel;
 	private SelectQueryElements pSelectQuery;
@@ -2220,7 +2224,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private SQLCaseWhensElements pSQLCaseWhens;
 	private SqlCaseWhenElements pSqlCaseWhen;
 	private XFunctionElements unknownRuleXFunction;
-	private JoinTypeElements unknownRuleJoinType;
+	private JoinTypeElements pJoinType;
 	private DBIDElements pDBID;
 	private StringOperandElements pStringOperand;
 	private FNAMEElements pFNAME;
@@ -2751,17 +2755,18 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getXFunctionAccess().getRule();
 	}
 
-	//enum JoinType:
-	//	innerJoin="INNER JOIN" | leftOuterJoin="LEFT OUTER JOIN" | rightOuterJoin="RIGHT OUTER JOIN" |
-	//	fullOuterJoin="FULL OUTER JOIN" | crossJoin="CROSS JOIN";
+	//JoinType:
+	//	"NATURAL"? ("INNER" | ("LEFT" | "RIGHT" | "FULL") "OUTER"? | "CROSS")? "JOIN";
 	public JoinTypeElements getJoinTypeAccess() {
-		return (unknownRuleJoinType != null) ? unknownRuleJoinType : (unknownRuleJoinType = new JoinTypeElements());
+		return (pJoinType != null) ? pJoinType : (pJoinType = new JoinTypeElements());
 	}
 	
-	public EnumRule getJoinTypeRule() {
+	public ParserRule getJoinTypeRule() {
 		return getJoinTypeAccess().getRule();
 	}
 
+	////innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
+	////fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 	//DBID:
 	//	ID | DBNAME | STRING;
 	public DBIDElements getDBIDAccess() {

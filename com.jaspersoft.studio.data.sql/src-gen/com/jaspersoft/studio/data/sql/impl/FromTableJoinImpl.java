@@ -3,7 +3,6 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.FromTableJoin;
-import com.jaspersoft.studio.data.sql.JoinType;
 import com.jaspersoft.studio.data.sql.OrExpr;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.TableOrAlias;
@@ -42,7 +41,7 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
    * @generated
    * @ordered
    */
-  protected static final JoinType JOIN_EDEFAULT = JoinType.INNER_JOIN;
+  protected static final String JOIN_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getJoin() <em>Join</em>}' attribute.
@@ -52,7 +51,7 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
    * @generated
    * @ordered
    */
-  protected JoinType join = JOIN_EDEFAULT;
+  protected String join = JOIN_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getOnTable() <em>On Table</em>}' containment reference.
@@ -100,7 +99,7 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
-  public JoinType getJoin()
+  public String getJoin()
   {
     return join;
   }
@@ -110,10 +109,10 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setJoin(JoinType newJoin)
+  public void setJoin(String newJoin)
   {
-    JoinType oldJoin = join;
-    join = newJoin == null ? JOIN_EDEFAULT : newJoin;
+    String oldJoin = join;
+    join = newJoin;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FROM_TABLE_JOIN__JOIN, oldJoin, join));
   }
@@ -263,7 +262,7 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
     switch (featureID)
     {
       case SqlPackage.FROM_TABLE_JOIN__JOIN:
-        setJoin((JoinType)newValue);
+        setJoin((String)newValue);
         return;
       case SqlPackage.FROM_TABLE_JOIN__ON_TABLE:
         setOnTable((TableOrAlias)newValue);
@@ -309,7 +308,7 @@ public class FromTableJoinImpl extends MinimalEObjectImpl.Container implements F
     switch (featureID)
     {
       case SqlPackage.FROM_TABLE_JOIN__JOIN:
-        return join != JOIN_EDEFAULT;
+        return JOIN_EDEFAULT == null ? join != null : !JOIN_EDEFAULT.equals(join);
       case SqlPackage.FROM_TABLE_JOIN__ON_TABLE:
         return onTable != null;
       case SqlPackage.FROM_TABLE_JOIN__JOIN_EXPR:

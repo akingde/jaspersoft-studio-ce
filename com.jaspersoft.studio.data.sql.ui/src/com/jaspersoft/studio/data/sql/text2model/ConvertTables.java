@@ -53,7 +53,7 @@ public class ConvertTables {
 
 					if (onTbl.getTblAlias() != null)
 						mftj.setAlias(onTbl.getTblAlias().getDbname());
-					mftj.setJoin(ftj.getJoin().getLiteral());
+					mftj.setJoin(ftj.getJoin());
 					mftj.setAliasKeyword(Misc.nvl(onTbl.getAlias(), " "));
 
 					ConvertExpression.convertExpression(designer, mfrom.getParent(), mftj, ftj.getJoinExpr());

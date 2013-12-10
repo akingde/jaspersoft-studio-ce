@@ -2169,9 +2169,9 @@ protected class FromTableJoin_JoinAssignment_0 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("join",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("join");
-		if(enumLitSerializer.isValid(obj.getEObject(), grammarAccess.getFromTableJoinAccess().getJoinJoinTypeEnumRuleCall_0_0(), value, null)) { 
-			type = AssignmentType.ENUM_RULE_CALL;
-			element = grammarAccess.getFromTableJoinAccess().getJoinJoinTypeEnumRuleCall_0_0();
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getFromTableJoinAccess().getJoinJoinTypeParserRuleCall_0_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getFromTableJoinAccess().getJoinJoinTypeParserRuleCall_0_0();
 			return obj;
 		}
 		return null;
@@ -9282,6 +9282,7 @@ protected class SqlCaseWhen_EexpAssignment_4_1 extends AssignmentToken  {
 
 
 /************ end Rule SqlCaseWhen ****************/
+
 
 
 

@@ -2135,16 +2135,6 @@ public interface SqlPackage extends EPackage
    */
   int XFUNCTION = 52;
 
-  /**
-   * The meta object id for the '{@link com.jaspersoft.studio.data.sql.JoinType <em>Join Type</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see com.jaspersoft.studio.data.sql.JoinType
-   * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJoinType()
-   * @generated
-   */
-  int JOIN_TYPE = 53;
-
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Model <em>Model</em>}'.
@@ -3766,16 +3756,6 @@ public interface SqlPackage extends EPackage
   EEnum getXFunction();
 
   /**
-   * Returns the meta object for enum '{@link com.jaspersoft.studio.data.sql.JoinType <em>Join Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Join Type</em>'.
-   * @see com.jaspersoft.studio.data.sql.JoinType
-   * @generated
-   */
-  EEnum getJoinType();
-
-  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5119,16 +5099,6 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EEnum XFUNCTION = eINSTANCE.getXFunction();
-
-    /**
-     * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.JoinType <em>Join Type</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see com.jaspersoft.studio.data.sql.JoinType
-     * @see com.jaspersoft.studio.data.sql.impl.SqlPackageImpl#getJoinType()
-     * @generated
-     */
-    EEnum JOIN_TYPE = eINSTANCE.getJoinType();
 
   }
 

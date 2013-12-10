@@ -959,31 +959,25 @@
         </elements>
       </alternatives>
     </rules>
-    <rules xsi:type="xtext:EnumRule" name="JoinType">
-      <type metamodel="/0/@metamodelDeclarations.1">
-        <classifier xsi:type="ecore:EEnum" href="http://www.com.jaspersoft.studio.data.Sql#//JoinType"/>
+    <rules xsi:type="xtext:ParserRule" name="JoinType">
+      <type metamodel="/0/@metamodelDeclarations.0">
+        <classifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </type>
-      <alternatives xsi:type="xtext:Alternatives">
-        <elements xsi:type="xtext:EnumLiteralDeclaration">
-          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//JoinType/innerJoin"/>
-          <literal value="INNER JOIN"/>
+      <alternatives xsi:type="xtext:Group">
+        <elements xsi:type="xtext:Keyword" cardinality="?" value="NATURAL"/>
+        <elements xsi:type="xtext:Alternatives" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="INNER"/>
+          <elements xsi:type="xtext:Group">
+            <elements xsi:type="xtext:Alternatives">
+              <elements xsi:type="xtext:Keyword" value="LEFT"/>
+              <elements xsi:type="xtext:Keyword" value="RIGHT"/>
+              <elements xsi:type="xtext:Keyword" value="FULL"/>
+            </elements>
+            <elements xsi:type="xtext:Keyword" cardinality="?" value="OUTER"/>
+          </elements>
+          <elements xsi:type="xtext:Keyword" value="CROSS"/>
         </elements>
-        <elements xsi:type="xtext:EnumLiteralDeclaration">
-          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//JoinType/leftOuterJoin"/>
-          <literal value="LEFT OUTER JOIN"/>
-        </elements>
-        <elements xsi:type="xtext:EnumLiteralDeclaration">
-          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//JoinType/rightOuterJoin"/>
-          <literal value="RIGHT OUTER JOIN"/>
-        </elements>
-        <elements xsi:type="xtext:EnumLiteralDeclaration">
-          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//JoinType/fullOuterJoin"/>
-          <literal value="FULL OUTER JOIN"/>
-        </elements>
-        <elements xsi:type="xtext:EnumLiteralDeclaration">
-          <enumLiteral href="http://www.com.jaspersoft.studio.data.Sql#//JoinType/crossJoin"/>
-          <literal value="CROSS JOIN"/>
-        </elements>
+        <elements xsi:type="xtext:Keyword" value="JOIN"/>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="DBID">
