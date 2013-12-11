@@ -7,7 +7,7 @@
       <topic href="html/cassandracql3.html" label="CassandraCQL3 Data Adapter"/>
    </context>
    <context id="query_CQL3" title="Dataset and query dialog">
-      <description>From this dialog you can change the dataset query, define new parameters or change the adapter used to retrive the data.</description>
-      <topic href="http://cassandra.apache.org/doc/cql/CQL.html" label="CQL3 Reference"/>
+      <description>From this dialog you can change the dataset query, define new parameters or change the adapter used to retrieve the data.</description>
+      <topic href="http://www.datastax.com/docs/1.1/references/cql/index" label="CQL3 Reference"/>
    </context>
 </contexts>

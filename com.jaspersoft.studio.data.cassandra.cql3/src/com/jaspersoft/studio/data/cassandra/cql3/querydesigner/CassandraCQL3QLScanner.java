@@ -18,7 +18,7 @@ public class CassandraCQL3QLScanner extends SQLScanner {
 	@Override
 	protected List<String> getSQLKeywords() {
 		if (CQL3Keywords == null) {
-			CQL3Keywords = Arrays.asList(new String[] { "between", "class",
+			CQL3Keywords = Arrays.asList(new String[] { "class",
 					"delete", "desc", "distinct", "elements", "escape",
 					"exists", "false", "fetch", "from", "full", "group",
 					"having", "in", "indices", "inner", "insert", "into", "is",
@@ -33,8 +33,11 @@ public class CassandraCQL3QLScanner extends SQLScanner {
 					"rtrim", "regexp_replace", "size", "cast", "from_unixtime",
 					"to_date", "month", "year", "day",
 
+					// cql3 specific
+					"allow", "filtering", "using", "consistency", "limit", "asc",
+
 					// misc functions - based on oracle dialect
-					"get_json_object", "count", "sum", "avg", "min", "max",
+					"get_json_object", "count", "avg", "min", "max",
 					"min" });
 		}
 		return CQL3Keywords;
