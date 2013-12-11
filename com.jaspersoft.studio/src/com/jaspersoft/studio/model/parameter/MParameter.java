@@ -39,6 +39,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MParameter.
@@ -247,7 +248,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		for(IPropertyDescriptor d : descriptors) {
 			if(d.getId().equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
 				// fix the visibilities mask: allows only PARAMETERS
-				ExpressionContext expContext = ModelUtils.getElementExpressionContext(null, this);
+				ExpressionContext expContext = getExpressionContext();
 				if(expContext!=null){
 					expContext.setVisibilities(EnumSet.of(Visibility.SHOW_PARAMETERS));
 					((IExpressionContextSetter)d).setExpressionContext(expContext);
@@ -260,6 +261,22 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		if (parent instanceof MParameters)
 			return true;
 		return false;
+	}
+	
+	public ExpressionContext getExpressionContext() {
+		JRDesignDataset dataSet = ModelUtils.getDataset(this);
+		JasperReportsConfiguration conf = getJasperConfiguration();
+		if (dataSet != null && conf != null)
+			return new ExpressionContext(dataSet, conf);
+		return null;
+	}
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (ExpressionContext.class.equals(adapter)) {
+			return getExpressionContext();
+		}
+		return super.getAdapter(adapter);
 	}
 
 }

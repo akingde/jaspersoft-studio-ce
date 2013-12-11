@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -36,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MField.
@@ -242,4 +244,19 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		return false;
 	}
 
+	public ExpressionContext getExpressionContext() {
+		JRDesignDataset dataSet = ModelUtils.getDataset(this);
+		JasperReportsConfiguration conf = getJasperConfiguration();
+		if (dataSet != null && conf != null)
+			return new ExpressionContext(dataSet, conf);
+		return null;
+	}
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (ExpressionContext.class.equals(adapter)) {
+			return getExpressionContext();
+		}
+		return super.getAdapter(adapter);
+	}
 }
