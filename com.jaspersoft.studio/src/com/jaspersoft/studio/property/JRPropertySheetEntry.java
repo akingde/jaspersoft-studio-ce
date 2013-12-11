@@ -17,7 +17,9 @@ package com.jaspersoft.studio.property;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -26,13 +28,16 @@ import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * /* The Class JRPropertySheetEntry.
@@ -220,7 +225,8 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 * org.eclipse.ui.views.properties.PropertySheetEntry#valueChanged(org.eclipse.ui.views.properties.PropertySheetEntry)
 	 */
 	protected void valueChanged(PropertySheetEntry child) {
-		valueChanged((JRPropertySheetEntry) child, new ForwardUndoCompoundCommand());
+		StructuredSelection selections = (StructuredSelection)SelectionHelper.getActiveJRXMLEditor().getSite().getSelectionProvider().getSelection();
+		valueChanged((JRPropertySheetEntry) child, new ForwardUndoCompoundCommand(), selections.toList());
 	}
 
 	boolean isRefresh = false;
@@ -232,36 +238,45 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 *          the child
 	 * @param command
 	 *          the command
+	 * @param selections the actually selected elements
 	 */
-	void valueChanged(JRPropertySheetEntry child, final CompoundCommand command) {
-		if (!isRefresh) {
+	void valueChanged(JRPropertySheetEntry child, final CompoundCommand command, List<?> selections) {
+		if (!isRefresh && child.getValues().length>0) {
 			isRefresh = true;
-			for (int i = 0; i < getValues().length; i++) {
-				Object newval = child.getValues()[i];
-				Object propid = child.getDescriptor().getId();
-				IPropertySource propertySource = getPropertySource(getValues()[i]);
-				Object oldval = propertySource.getPropertyValue(propid);
-				if (newval instanceof Command) {
-					command.add((Command) newval);
-					continue;
+			//The value and the property is the same for all the selected elements, so i take it from the first one propertysheet
+			Object newval = child.getValues()[0];
+			Object propid = child.getDescriptor().getId();
+			List<Object> remainingSelection = new ArrayList<Object>(selections);
+			for (Object obj : selections) {
+				if (obj instanceof EditPart){
+					Object rawModel = ((EditPart)obj).getModel();
+					if (rawModel instanceof APropertyNode){
+						APropertyNode aNode = (APropertyNode)rawModel;
+						IPropertySource propertySource = getPropertySource(aNode);
+						Object oldval = aNode.getPropertyValue(propid);
+						if (newval instanceof Command) {
+							command.add((Command) newval);
+							continue;
+						}
+						if (!(oldval instanceof INode)) {
+							if (oldval != null && newval != null && oldval.equals(newval))
+								continue;
+							if (oldval == null && newval == null)
+								continue;
+						}
+						SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
+						setCommand.setTarget(propertySource);
+						setCommand.setPropertyId(propid);
+						setCommand.setPropertyValue(newval);
+						command.add(setCommand);
+						remainingSelection.remove(obj);
+					}
 				}
-				if (!(oldval instanceof INode)) {
-					if (oldval != null && newval != null && oldval.equals(newval))
-						continue;
-					if (oldval == null && newval == null)
-						continue;
-				}
-
-				SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
-				setCommand.setTarget(propertySource);
-				setCommand.setPropertyId(propid);
-				setCommand.setPropertyValue(newval);
-				command.add(setCommand);
 			}
-
+			
 			// inform our parent
 			if (getParent() != null) {
-				((JRPropertySheetEntry) getParent()).valueChanged(this, command);
+				((JRPropertySheetEntry) getParent()).valueChanged(this, command, remainingSelection);
 				isRefresh = false;
 			} else {
 				// I am the root entry
