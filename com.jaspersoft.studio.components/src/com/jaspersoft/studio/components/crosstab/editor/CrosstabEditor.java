@@ -46,6 +46,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateReferenceAction;
+import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
@@ -164,6 +165,10 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		action = new CreateConditionalStyleAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateConditionalStyleAction.ID);
+		
+		action = new ExportStyleAsTemplateAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ExportStyleAsTemplateAction.ID);
 	}
 
 	@Override

@@ -76,8 +76,8 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.StyleTemplateNewWizard";
 	private static final String NEW_STYLE_NAME = "NEW_STYLE";//$NON-NLS-1$
 	private static final String NEW_STYLE_EXT = ".jrtx";//$NON-NLS-1$
-	private static final String NEW_STYLE_JRTX = NEW_STYLE_NAME + NEW_STYLE_EXT;
-	private WizardNewFileCreationPage step1;
+	protected static final String NEW_STYLE_JRTX = NEW_STYLE_NAME + NEW_STYLE_EXT;
+	protected WizardNewFileCreationPage step1;
 	private ISelection selection;
 
 	/**
@@ -257,8 +257,7 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	/**
 	 * We will initialize file contents with a sample text.
 	 */
-
-	private InputStream openContentStream() {
+	protected InputStream openContentStream() {
 		try {
 			JRSimpleTemplate tmp = new JRSimpleTemplate();
 

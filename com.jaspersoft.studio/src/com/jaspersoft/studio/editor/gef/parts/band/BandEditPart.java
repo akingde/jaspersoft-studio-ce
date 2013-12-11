@@ -26,6 +26,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
@@ -250,7 +251,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				if (child.getModel() instanceof MGraphicElement) {
 					MGraphicElement cmodel = (MGraphicElement) child.getModel();
 					MBand mband = getModel();
-					MBand hoveredBand = findHoveredBand(rect);
+					MBand hoveredBand = ModelUtils.getBand4Point(mband.getRoot(),new Point(rect.x, rect.y));//findHoveredBand(rect);
 					if (hoveredBand != null) mband = hoveredBand;
 					if (cmodel.getParent() instanceof MBand && cmodel.getParent() == mband) {
 						return super.createChangeConstraintCommand(child, rect);

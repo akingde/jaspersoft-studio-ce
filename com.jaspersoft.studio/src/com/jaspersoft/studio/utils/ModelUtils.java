@@ -495,9 +495,9 @@ public class ModelUtils {
 	 *          the point
 	 * @return the band4 point
 	 */
-	public static MBand getBand4Point(ANode jd, Point point) {
-		ANode res = jd;
-		ANode rNode = jd; // root node from drag&drop operation
+	public static MBand getBand4Point(INode jd, Point point) {
+		INode res = jd;
+		INode rNode = jd; // root node from drag&drop operation
 		int xband = jd.getJasperDesign().getTopMargin();
 		// iterate IGraphicElements, and look at their position
 		// find the top level container for this element

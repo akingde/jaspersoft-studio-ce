@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.align;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -161,7 +160,7 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 	protected List<?> getOperationSet(Request request) {
 		if (operationSet != null)
 			return operationSet;
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+		List<?> editparts = getSelectedObjects();
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
 			return Collections.EMPTY_LIST;
 		Object primary = editparts.get(editparts.size() - 1);

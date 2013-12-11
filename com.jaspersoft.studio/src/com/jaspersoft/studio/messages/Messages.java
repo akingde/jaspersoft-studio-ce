@@ -626,6 +626,8 @@ public class Messages extends NLS {
 	public static String ExportImageAction_saveDialogTitle;
 	public static String ExportMenuAction_title;
 	public static String ExportMenuAction_tooltip;
+	public static String ExportStyleAsTemplateAction_actionName;
+	public static String ExportStyleAsTemplateAction_actionTooltip;
 	public static String ExpressionEditorPreferencePage_includeStatic;
 	public static String ExpressionEditorPreferencePage_subtitle;
 	public static String ExpressionEditorPreferencePage_userDefinedExpressions;
@@ -1611,6 +1613,8 @@ public class Messages extends NLS {
 	public static String StylesListSection_Warning_Box_Message;
 	public static String StylesSectionList_Element_Attributes;
 	public static String StylesSectionList_Inherited_From_Style;
+	public static String StyleTemplateImportWizard_description;
+	public static String StyleTemplateImportWizard_title;
 	public static String StyleTemplateNewWizard_description;
 	public static String StyleTemplateNewWizard_title;
 	public static String StyleTemplateNewWizard_wizardtitle;
