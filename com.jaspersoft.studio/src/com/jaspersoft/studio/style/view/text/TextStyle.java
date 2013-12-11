@@ -71,18 +71,19 @@ public class TextStyle extends TemplateStyle {
 	
 	public TextStyle(JRStyle style){
 		super(null,null);
-		setTransparent(ModeEnum.TRANSPARENT.equals(style.getOwnModeValue()));
+		setTransparent(style.getOwnModeValue() != null ? ModeEnum.TRANSPARENT.equals(style.getOwnModeValue()) : true);
 		setBackGround(style.getOwnBackcolor());
 		setForeGround(style.getOwnForecolor());
-		setVerticalAlignmen(style.getOwnVerticalAlignmentValue());
-		setHorizontalAlignmen(style.getOwnHorizontalAlignmentValue());
-		setRotation(style.getOwnRotationValue());
+		setVerticalAlignmen(style.getOwnVerticalAlignmentValue() != null ? style.getOwnVerticalAlignmentValue() : VerticalAlignEnum.TOP);
+		setHorizontalAlignmen(style.getOwnHorizontalAlignmentValue() != null ? style.getOwnHorizontalAlignmentValue() : HorizontalAlignEnum.LEFT);
+		setRotation(style.getOwnRotationValue() != null ? style.getOwnRotationValue() : RotationEnum.NONE);
 		
 		JRFont font = new JRBaseFont();
-		font.setBold(style.isOwnBold());
-		font.setItalic(new Boolean(style.isOwnItalic()));
-		font.setUnderline(new Boolean(style.isOwnUnderline()));
-		font.setStrikeThrough(new Boolean(style.isOwnStrikeThrough()));
+		font.setBold(style.isOwnBold() != null ? style.isOwnBold() : false);
+		font.setItalic(new Boolean(style.isOwnItalic() != null ? style.isOwnItalic() : false));
+		style.isItalic();
+		font.setUnderline(new Boolean(style.isOwnUnderline() != null ? style.isOwnUnderline() : false));
+		font.setStrikeThrough(new Boolean(style.isOwnStrikeThrough() != null ? style.isOwnStrikeThrough() : false));
 		font.setFontName(new String(style.getOwnFontName()));
 		font.setFontSize(new Integer(style.getOwnFontSize()));
 		setFont(font);
@@ -100,6 +101,9 @@ public class TextStyle extends TemplateStyle {
 		copyLinePen(originBox.getBottomPen(), copyBox.getBottomPen());
 		copyLinePen(originBox.getTopPen(), copyBox.getTopPen());
 		setBorders(copyBox);
+		
+		String name = style.getName();
+		if (name != null && !name.isEmpty()) setDescription(name);
 	}
 	
 	public Boolean isTransparent(){
@@ -328,8 +332,8 @@ public class TextStyle extends TemplateStyle {
 		result += "verticalAlignment=\""+getVerticalAlignmen().getValueByte()+"\" horizontalAlignment=\""+getHorizontalAlignmen().getValueByte()+"\" rotation=\""+getRotation().getValueByte()+"\" ";
 		result += "isTransparent=\""+isTransparent().toString()+"\">";
 		result += "<description>".concat(getDescription()).concat("</description>");
-		result += xmlColor("foreground",getForeGround());
-		result += xmlColor("background",getBackGround());
+		if (getForeGround() != null) result += xmlColor("foreground",getForeGround());
+		if (getBackGround() != null) result += xmlColor("background",getBackGround());
 		result += getFontXML(getFont());
 		result += getLineBoxXML(getBorders());
 		result += "</"+getTemplateName()+">";
@@ -394,8 +398,8 @@ public class TextStyle extends TemplateStyle {
 		
 	public TextStyle clone(){
 		TextStyle copy = new TextStyle();
-		copy.setBackGround(getBackGround().clone());
-		copy.setForeGround(getForeGround().clone());
+		copy.setBackGround(getBackGround() != null ? getBackGround().clone() : null);
+		copy.setForeGround(getForeGround() != null ? getForeGround().clone() : null);
 		copy.setTransparent(new Boolean(isTransparent()));
 		copy.setDescription(new String(getDescription()));
 		copy.setRotation(getRotation());

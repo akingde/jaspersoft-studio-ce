@@ -16,13 +16,17 @@
 package com.jaspersoft.studio.style.view.text;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBoxPen;
 import net.sf.jasperreports.engine.type.RotationEnum;
 
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
+import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -31,6 +35,9 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -58,6 +65,7 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.style.TemplateStyle;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.style.view.TemplateStyleView;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.IOUtils;
@@ -71,8 +79,14 @@ import com.jaspersoft.studio.wizards.JSSWizard;
  */
 public class TextStyleView implements TemplateViewProvider {
 
+	/**
+	 * Container of the styles entries
+	 */
 	private Composite sampleComposite;
 
+	/**
+	 * Cache where the images of the style are stored and disposed at the end
+	 */
 	private ResourceCache resourceCache = new ResourceCache();
 	
 	/**
@@ -136,10 +150,14 @@ public class TextStyleView implements TemplateViewProvider {
 	   	}
 	   });
 	   sampleComposite.setMenu(popupMenu);
-	   //sampleComposite.setBackground(ResourceManager.getColor(0, 255, 0));
-	   //createDropTarget(sampleComposite);
+	   createDropTarget(sampleComposite);
 	}
 	
+	/**
+	 * Add the drag support to move a text template on a textual element
+	 * 
+	 * @param control control where the drag operation where added
+	 */
 	private void addDragSupport(Control control) {
 		int operations = DND.DROP_MOVE;
 		final Transfer[] types = new Transfer[] { TextRestrictedTransferType.getInstance() };
@@ -148,6 +166,12 @@ public class TextStyleView implements TemplateViewProvider {
 		source.addDragListener(new StyleDragListener(control));
 	}
 	
+	/**
+	 * Listener for the drag of a text style on an element
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
 	protected class StyleDragListener implements DragSourceListener{
 		
 		private Control draggedElement;
@@ -179,16 +203,246 @@ public class TextStyleView implements TemplateViewProvider {
 		public void dragFinished(DragSourceEvent event) {	
 		}
 	}
-
-	@Override
-	public String getTabName() {
-		return Messages.TextStyleView_tabTitle;
-	}
 	
+	/**
+	 * Add the drop operation of a MStyle on the styles list, in this way
+	 * the user can create a textstyle from a JRstyle simply by dragging it
+	 * on the TextStyles list
+	 * 
+	 * @param targetText control where the drop listener will be added
+	 */
+	private void createDropTarget(final Composite targetText) {
+	    Transfer[] types = new Transfer[] { TemplateTransfer.getInstance()  };
+	    DropTarget dropTarget = new DropTarget(targetText, DND.DROP_MOVE);
+	    dropTarget.setTransfer(types);
+	    dropTarget.addDropListener(new DropTargetListener() {
+	    	
+	    	private List<MStyle> cachedStyles = null;
+	    	
+	    	/**
+	    	 * Return a list of MStyle elements dragged 
+	    	 * 
+	    	 * @param event the drop event
+	    	 * @return a not null list of MStyle
+	    	 */
+	    	private List<MStyle> getDraggedStyles(DropTargetEvent event){
+	    		List<MStyle> result = new ArrayList<MStyle>();
+	    		if (event.widget instanceof DropTarget){
+	    			DropTarget dropTarget = (DropTarget)event.widget;
+	    			for (Transfer transfer : dropTarget.getTransfer()){
+	    				if (transfer instanceof TemplateTransfer){
+	    					Object droppedObject = ((TemplateTransfer)((DropTarget)event.widget).getTransfer()[0]).getTemplate();
+	    					if (droppedObject instanceof List){
+	    						for(Object item : (List<?>)droppedObject){
+	    							if (item instanceof MStyle) result.add((MStyle)item);
+	    						}
+	    					}
+	    				}
+	    			}
+	    		}
+	    		return result;
+	    	}
+
+	    	/**
+	    	 * When the drag enter is check if between the dragged elements there is
+	    	 * exactly one MStyle, then it allow the drag operation, otherwise the 
+	    	 * feedback of the operation will be an invalid drag
+	    	 */
+	    	@Override
+	      public void dragEnter(DropTargetEvent event) {
+	      	cachedStyles = null;
+	      	List<MStyle> draggedStyles = getDraggedStyles(event);
+	      	if (draggedStyles.size() == 1){
+	      		cachedStyles = draggedStyles;
+	      	} else {
+		      	event.detail = DND.DROP_NONE;
+		      	event.feedback = DND.FEEDBACK_NONE;
+	      	}
+	      }
+
+	      public void drop(DropTargetEvent event) {
+	      	if (cachedStyles != null){
+	      		for(MStyle style : cachedStyles){
+	      			TextStyle newStyle = new TextStyle((JRStyle)style.getValue());
+	      			TextStyleWizard wizard = new TextStyleWizard(true, newStyle);
+	      			WizardDialog dialog = getEditorDialog(wizard);
+	      			if (dialog.open() == Dialog.OK) {
+	      				newStyle = wizard.getTableStyle();
+	      				TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
+	      			}
+	      		}
+	      	}
+	      	cachedStyles = null;
+	      }
+
+	      public void dropAccept(DropTargetEvent event) {}
+
+				@Override
+				public void dragLeave(DropTargetEvent event) {}
+
+				@Override
+				public void dragOperationChanged(DropTargetEvent event) {}
+
+				@Override
+				public void dragOver(DropTargetEvent event) {	}
+	    });
+	  }
+
+	
+	/**
+	 * If the line pen width is bigger than a maximum value the is is shown as 
+	 * if it has the maximum value
+	 * 
+	 * @param value linepen to normalize
+	 * @param max maximum value
+	 */
 	private void normalizeLinePen(JRBoxPen value, float max){
 		if (value != null && value.getLineWidth()>max) value.setLineWidth(max);
 	}
+	
+	/**
+	 * Edit operation for a TextStyle, open the dialog to edit the style
+	 * 
+	 * @param style TextStyle to edit
+	 */
+	private void doEdit(TextStyle style){
+		TextStyleWizard wizard = new TextStyleWizard(true, style);
+		WizardDialog dialog = getEditorDialog(wizard);
+		if (dialog.open() == Dialog.OK) {
+			TextStyle newStyle = wizard.getTableStyle();
+			TemplateStyleView.getTemplateStylesStorage().editStyle(style,newStyle);
+		}
+	}
+	
+	/**
+	 * Create operation for a TextStyle, open the dialog to set the style attributes
+	 * 
+	 */
+	private void doCreate(){
+		TextStyleWizard wizard = new TextStyleWizard(true, null);
+		WizardDialog dialog = getEditorDialog(wizard);
+		if (dialog.open() == Dialog.OK) {
+			TextStyle newStyle = wizard.getTableStyle();
+			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
+		}
+	}
+	
+	/**
+	 * Create the popoup menu with the edit, delete and new operation 
+	 * 
+	 * @param container control where the menu will be added
+	 * @return the menu
+	 */
+	private Menu createPopupMenu(final Control container){
+    Menu popupMenu = new Menu(container);
+    MenuItem createAction = new MenuItem(popupMenu, SWT.NONE);
+    createAction.setText(Messages.TextStyleView_createLabel); 
+    createAction.setImage(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/create-style.png")); //$NON-NLS-1$
+    createAction.addSelectionListener(new SelectionAdapter() {
+    	@Override
+    	public void widgetSelected(SelectionEvent e) {
+    		doCreate();
+    	}
+		});
+    MenuItem editAction = new MenuItem(popupMenu, SWT.NONE);
+    editAction.setText(Messages.TextStyleView_editLabel);
+    editAction.setImage(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-style.png")); //$NON-NLS-1$
+    editAction.addSelectionListener(new SelectionAdapter() {
+    	@Override
+    	public void widgetSelected(SelectionEvent e) {
+				TextStyle style = (TextStyle)container.getData();
+				doEdit(style);
+    	}
+		});
+    MenuItem deleteAction = new MenuItem(popupMenu, SWT.NONE);
+    deleteAction.setText(Messages.TextStyleView_deleteLabel);
+    deleteAction.setImage(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/delete_style.gif")); //$NON-NLS-1$
+    deleteAction.addSelectionListener(new SelectionAdapter() 
+    {
+    	@Override
+    	public void widgetSelected(SelectionEvent e) {
+  			TemplateStyleView.getTemplateStylesStorage().removeStyle((TemplateStyle)container.getData());
+    	}
+		});
+    return popupMenu;
+	}
+	
 
+	/**
+	 * Create a standard dialog from a wizard. It also substitute the ok button text of the dialog with
+	 * a finish text
+	 * 
+	 * @param wizardPage page to put inside the dialog
+	 * @return a dialog that can be opened
+	 */
+	protected WizardDialog getEditorDialog(JSSWizard wizardPage){
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizardPage){
+			//Ovverride this method to change the default text of the finish button with another text
+			@Override
+			protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
+				Button button = super.createButton(parent, id, label, defaultButton);
+				if (id == IDialogConstants.FINISH_ID) button.setText("Finish"); //$NON-NLS-1$
+				return button;
+			}
+		};
+		return dialog;
+	}
+	
+	/**
+	 * Crate the toolbar 
+	 * @param parent the container of the toolbar
+	 */
+	protected void createToolBar(Composite parent){
+		
+		ToolBar toolBar = new ToolBar (parent, SWT.FLAT);
+		createStyle = new ToolItem (toolBar, SWT.PUSH);
+		createStyle.setImage (getTabImage());
+		createStyle.setToolTipText(Messages.TextStyleView_createToolTip);
+		createStyle.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		doCreate();
+	    	}
+		});
+		
+		GridData toolButtonData = new GridData();
+		toolButtonData.horizontalAlignment = SWT.END;
+		toolBar.setLayoutData(toolButtonData);
+	}
+
+	@Override
+	public AbstractTransferDropTargetListener getDropListener(EditPartViewer viewer) {
+		return new TextStyleTransferDropListener(viewer);
+	}
+
+	@Override
+	public Image getTabImage() {
+		return JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/text-style.png"); //$NON-NLS-1$
+	}
+
+	@Override
+	public TemplateStyle getBuilder() {
+		return new TextStyle();
+	}
+	
+	private void clearContent(){
+		for(Control label : sampleComposite.getChildren()){
+			label.dispose();
+		}
+	}
+	
+	private void clearAndFillContent(){
+		clearContent();
+		fillStyles(TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors());
+	}
+
+	@Override
+	public void notifyChange(PropertyChangeEvent e) {
+		if (e.getNewValue() instanceof TextStyle) {
+			clearAndFillContent();
+		}
+	}
+	
 	@Override
 	public void fillStyles(Collection<TemplateStyle> styles) {
 		sampleComposite.setRedraw(false);
@@ -246,132 +500,10 @@ public class TextStyleView implements TemplateViewProvider {
 		sampleComposite.layout(true,true);
 	}
 	
-	private void doEdit(TextStyle style){
-		TextStyleWizard wizard = new TextStyleWizard(true, style);
-		WizardDialog dialog = getEditorDialog(wizard);
-		if (dialog.open() == Dialog.OK) {
-			TextStyle newStyle = wizard.getTableStyle();
-			TemplateStyleView.getTemplateStylesStorage().editStyle(style,newStyle);
-		}
-	}
-	
-	private Menu createPopupMenu(final Control container){
-    Menu popupMenu = new Menu(container);
-    MenuItem createAction = new MenuItem(popupMenu, SWT.NONE);
-    createAction.setText(Messages.TextStyleView_createLabel); 
-    createAction.setImage(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/create-style.png")); //$NON-NLS-1$
-    createAction.addSelectionListener(new SelectionAdapter() {
-    	@Override
-    	public void widgetSelected(SelectionEvent e) {
-    		doCreate();
-    	}
-		});
-    MenuItem editAction = new MenuItem(popupMenu, SWT.NONE);
-    editAction.setText(Messages.TextStyleView_editLabel);
-    editAction.setImage(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/edit-style.png")); //$NON-NLS-1$
-    editAction.addSelectionListener(new SelectionAdapter() {
-    	@Override
-    	public void widgetSelected(SelectionEvent e) {
-				TextStyle style = (TextStyle)container.getData();
-				doEdit(style);
-    	}
-		});
-    MenuItem deleteAction = new MenuItem(popupMenu, SWT.NONE);
-    deleteAction.setText(Messages.TextStyleView_deleteLabel);
-    deleteAction.setImage(JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/delete_style.gif")); //$NON-NLS-1$
-    deleteAction.addSelectionListener(new SelectionAdapter() 
-    {
-    	@Override
-    	public void widgetSelected(SelectionEvent e) {
-  			TemplateStyleView.getTemplateStylesStorage().removeStyle((TemplateStyle)container.getData());
-    	}
-		});
-    return popupMenu;
-	}
-
 	@Override
-	public AbstractTransferDropTargetListener getDropListener(EditPartViewer viewer) {
-		return new TextStyleTransferDropListener(viewer);
-	}
-
-	@Override
-	public Image getTabImage() {
-		return JaspersoftStudioPlugin.getInstance().getImage("/icons/resources/text-style.png"); //$NON-NLS-1$
-	}
-
-	@Override
-	public TemplateStyle getBuilder() {
-		return new TextStyle();
-	}
-	
-	private void clearContent(){
-		for(Control label : sampleComposite.getChildren()){
-			label.dispose();
-		}
-	}
-	
-	private void clearAndFillContent(){
-		clearContent();
-		fillStyles(TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors());
-	}
-
-	@Override
-	public void notifyChange(PropertyChangeEvent e) {
-		if (e.getNewValue() instanceof TextStyle) {
-			clearAndFillContent();
-		}
+	public String getTabName() {
+		return Messages.TextStyleView_tabTitle;
 	}
 	
 
-	/**
-	 * Create a standard dialog from a wizard. It also substitute the ok button text of the dialog with
-	 * a finish text
-	 * 
-	 * @param wizardPage page to put inside the dialog
-	 * @return a dialog that can be opened
-	 */
-	protected WizardDialog getEditorDialog(JSSWizard wizardPage){
-			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizardPage){
-			//Ovverride this method to change the default text of the finish button with another text
-			@Override
-			protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
-				Button button = super.createButton(parent, id, label, defaultButton);
-				if (id == IDialogConstants.FINISH_ID) button.setText("Finish"); //$NON-NLS-1$
-				return button;
-			}
-		};
-		return dialog;
-	}
-	
-
-	private void doCreate(){
-		TextStyleWizard wizard = new TextStyleWizard(true, null);
-		WizardDialog dialog = getEditorDialog(wizard);
-		if (dialog.open() == Dialog.OK) {
-			TextStyle newStyle = wizard.getTableStyle();
-			TemplateStyleView.getTemplateStylesStorage().addStyle(newStyle);
-		}
-	}
-	
-	/**
-	 * Crate the toolbar 
-	 * @param parent the container of the toolbar
-	 */
-	protected void createToolBar(Composite parent){
-		
-		ToolBar toolBar = new ToolBar (parent, SWT.FLAT);
-		createStyle = new ToolItem (toolBar, SWT.PUSH);
-		createStyle.setImage (getTabImage());
-		createStyle.setToolTipText(Messages.TextStyleView_createToolTip);
-		createStyle.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent e) {
-	    		doCreate();
-	    	}
-		});
-		
-		GridData toolButtonData = new GridData();
-		toolButtonData.horizontalAlignment = SWT.END;
-		toolBar.setLayoutData(toolButtonData);
-	}
 }

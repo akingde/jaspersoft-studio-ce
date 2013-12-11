@@ -81,6 +81,8 @@ public class TemplateStyleView extends ViewPart implements IContributedContentsV
 		folder.setMaximizeVisible(false);
 		folder.setBorderVisible(true);
 		
+		
+		
 		viewProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
 		Collection<TemplateStyle> savedStyles = savedStylesStorage.getStylesDescriptors();
 		for(TemplateViewProvider viewProvider : viewProviders){

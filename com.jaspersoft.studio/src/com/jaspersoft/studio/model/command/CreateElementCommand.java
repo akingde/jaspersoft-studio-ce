@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -46,7 +45,6 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -161,8 +159,7 @@ public class CreateElementCommand extends Command {
 			// fixLocation(location, (MBand) destNode);
 		} else if (destNode instanceof MFrame) {
 			setContext(destNode, srcNode, index);
-		} else
-			setContext(fixPosition(destNode, srcNode, position), srcNode, index);
+		} else setContext(null, srcNode, index);
 	}
 
 	private Object destValue;
@@ -218,43 +215,7 @@ public class CreateElementCommand extends Command {
 
 	private Dimension d;
 
-	/**
-	 * Fix position.
-	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
-	 * @param position
-	 *          the position
-	 * @return the a node
-	 */
-	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
-		if (position == null) {
-			if (jrElement != null)
-				position = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
-			else
-				position = new Rectangle(0, 0, 70, 30);
-		}
-		// calculate position, fix position relative to parent
-		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
-		// set proposed bounds
-		if (band == null) {
-			if (destNode instanceof MBand)
-				band = (MBand) destNode;
-			else {
-				do {
-					destNode = destNode.getParent();
-					if (destNode instanceof MBand) {
-						band = (MBand) destNode;
-						break;
-					}
-				} while (destNode != null);
-			}
-		}
-		fixLocation(position, band);
-		return band;
-	}
+
 
 	public void fixLocation(Rectangle position, MBand band) {
 		if (location == null) {
