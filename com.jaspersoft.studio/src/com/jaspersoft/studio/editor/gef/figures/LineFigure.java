@@ -94,7 +94,7 @@ public class LineFigure extends AHandleBoundsFigure {
 	protected int calcBorder(JRPen jrPen) {
 		if (jrPen == null)
 			return 0;
-		int offset = (int) Math.ceil(((double) jrPen.getLineWidth()) / 2);
+		int offset = (int) Math.ceil(((double) jrPen.getLineWidth()) / 2)+1;
 		return offset;
 	}
 }

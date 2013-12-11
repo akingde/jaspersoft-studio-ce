@@ -134,12 +134,10 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			bounds.height--;
 		}
 		Rectangle rect = new PrecisionRectangle(bounds);
-		Rectangle original = rect.getCopy();
 		figure.translateToAbsolute(rect);
 		rect = request.getTransformedRectangle(rect);
 		figure.translateToRelative(rect);
 		rect.translate(getLayoutOrigin().getNegated());
-
 		if (request.getSizeDelta().width == 0 && request.getSizeDelta().height == 0) {
 			Rectangle cons = getCurrentConstraintFor(child);
 			if (cons != null) // Bug 86473 allows for unintended use of this method
@@ -148,13 +146,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			Dimension minSize = getMinimumSizeFor(child);
 			if (rect.width < minSize.width) {
 				rect.width = minSize.width;
-				if (rect.x > (original.right() - minSize.width))
-					rect.x = original.right() - minSize.width;
 			}
 			if (rect.height < minSize.height) {
 				rect.height = minSize.height;
-				if (rect.y > (original.bottom() - minSize.height))
-					rect.y = original.bottom() - minSize.height;
 			}
 		}
 		return getConstraintFor(rect);
