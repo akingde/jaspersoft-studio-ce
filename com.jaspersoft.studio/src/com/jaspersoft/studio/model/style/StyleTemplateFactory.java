@@ -39,6 +39,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -206,7 +207,7 @@ public class StyleTemplateFactory {
 	private static List<JRStyle> getStyles(JasperReportsConfiguration jConfig, JasperDesign jd, IFile file) {
 		List<JRStyle> list = new ArrayList<JRStyle>();
 		for (JRReportTemplate t : jd.getTemplatesList())
-			getStylesReference(file, ExpressionUtil.eval(t.getSourceExpression(), jConfig), list, new HashSet<File>());
+			list.addAll(ExternalStylesManager.getStyles(t.getSourceExpression(), file, jConfig));
 		return list;
 	}
 
