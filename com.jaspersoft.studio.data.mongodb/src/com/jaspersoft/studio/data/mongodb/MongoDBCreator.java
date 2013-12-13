@@ -20,7 +20,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
+import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImpl;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 
@@ -34,7 +34,7 @@ public class MongoDBCreator implements IDataAdapterCreator {
 
 	@Override
 	public DataAdapterDescriptor buildFromXML(Document docXML) {
-		MongoDbDataAdapterImplementation result = new MongoDbDataAdapterImplementation();
+		MongoDbDataAdapterImpl result = new MongoDbDataAdapterImpl();
 		
 		NamedNodeMap rootAttributes = docXML.getChildNodes().item(0).getAttributes();
 		String connectionName = rootAttributes.getNamedItem("name").getTextContent();

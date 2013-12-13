@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.mongodb.MongoDbDataSource;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapter;
-import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
+import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImpl;
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
@@ -51,7 +51,7 @@ public class MongoDbDataAdapterDescriptor extends DataAdapterDescriptor implemen
 	@Override
 	public MongoDbDataAdapter getDataAdapter() {
 		if (dataAdapter == null)
-			dataAdapter = new MongoDbDataAdapterImplementation();
+			dataAdapter = new MongoDbDataAdapterImpl();
 		return (MongoDbDataAdapter) dataAdapter;
 	}
 

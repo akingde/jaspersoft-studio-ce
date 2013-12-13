@@ -21,12 +21,13 @@ import net.sf.jasperreports.data.DataAdapterService;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapter;
-import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImplementation;
+import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterImpl;
 import com.jaspersoft.mongodb.adapter.MongoDbDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.mongodb.messages.Messages;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author gtoffoli
@@ -54,7 +55,7 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
      * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
      */
     public String getDataAdapterClassName() {
-        return MongoDbDataAdapterImplementation.class.getName();
+        return MongoDbDataAdapterImpl.class.getName();
     }
 
     /*
@@ -89,7 +90,7 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
 
     public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
         if (dataAdapter instanceof MongoDbDataAdapter)
-            return new MongoDbDataAdapterService((MongoDbDataAdapter) dataAdapter);
+            return new MongoDbDataAdapterService(JasperReportsConfiguration.getDefaultJRConfig(), (MongoDbDataAdapter) dataAdapter);
         return null;
     }
 
