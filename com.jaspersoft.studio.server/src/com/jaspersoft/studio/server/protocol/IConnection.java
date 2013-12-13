@@ -29,7 +29,7 @@ public interface IConnection {
 
 	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception;
 
-	public void move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception;
+	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception;
 
 	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception;
 

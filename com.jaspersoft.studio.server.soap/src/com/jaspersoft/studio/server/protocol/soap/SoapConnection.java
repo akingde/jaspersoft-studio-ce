@@ -76,8 +76,9 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public void move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		client.move(rd, destFolderURI);
+		return rd;
 	}
 
 	@Override

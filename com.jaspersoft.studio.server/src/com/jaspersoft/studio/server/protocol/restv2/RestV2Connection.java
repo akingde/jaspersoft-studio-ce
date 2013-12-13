@@ -165,7 +165,7 @@ public class RestV2Connection extends ARestV2Connection {
 	}
 
 	@Override
-	public void move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		URIBuilder ub = new URIBuilder(url("resources" + destFolderURI));
 		ub.addParameter("overwrite", "true");
 		ub.addParameter("createFolders", "true");
@@ -174,7 +174,8 @@ public class RestV2Connection extends ARestV2Connection {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> crl = toObj(req, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
-			Rest2Soap.getRD(this, crl, rd);
+			return Rest2Soap.getRD(this, crl, rd);
+		return null;
 	}
 
 	@Override

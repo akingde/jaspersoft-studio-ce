@@ -2,6 +2,8 @@ package com.jaspersoft.studio.server.protocol.restv2;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Map;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
+import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientBeanDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientCustomDataSource;
@@ -32,6 +35,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientSubDataSourceReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.utils.RDUtil;
 
 public class Rest2Soap {
@@ -65,6 +69,10 @@ public class Rest2Soap {
 		// look recursively
 		if (cr instanceof ClientDataType)
 			getDataType(rc, (ClientDataType) cr, rd);
+
+		else if (cr instanceof ClientAdhocDataView)
+			getAdhocDataView(rc, (ClientAdhocDataView) cr, rd);
+
 		else if (cr instanceof ClientJdbcDataSource)
 			getJdbcDataSource(rc, (ClientJdbcDataSource) cr, rd);
 		else if (cr instanceof ClientJndiJdbcDataSource)
@@ -98,6 +106,11 @@ public class Rest2Soap {
 			rd = Activator.getExtManager().getRD(rc, cr, rd);
 
 		return rd;
+	}
+
+	private static void getAdhocDataView(ARestV2Connection rc, ClientAdhocDataView cr, ResourceDescriptor rd) throws ParseException {
+		if (cr.getDataSource() != null)
+			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getDataSource()));
 	}
 
 	private static void getQuery(ARestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
@@ -211,12 +224,17 @@ public class Rest2Soap {
 		if (cr.getControlsLayout() == ControlsLayoutType.inPage)
 			rd.setResourceProperty(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT, 4);
 
+		rd.getChildren().clear();
+
 		if (cr.getDataSource() != null)
 			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getDataSource()));
 		if (cr.getQuery() != null)
 			rd.getChildren().add(getRD(rc, (ClientQuery) cr.getQuery()));
-		if (cr.getJrxml() != null)
-			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getJrxml()));
+		if (cr.getJrxml() != null) {
+			ResourceDescriptor mjrxml = getRD(rc, (ClientResource<?>) cr.getJrxml());
+			mjrxml.setMainReport(true);
+			rd.getChildren().add(mjrxml);
+		}
 
 		if (cr.getInputControls() != null)
 			for (ClientReferenceableInputControl cric : cr.getInputControls())
@@ -224,6 +242,37 @@ public class Rest2Soap {
 		if (cr.getFiles() != null)
 			for (ClientReferenceableFile crf : cr.getFiles().values())
 				rd.getChildren().add(getRD(rc, (ClientResource<?>) crf));
+		Collections.sort(rd.getChildren(), new Comparator<ResourceDescriptor>() {
+
+			@Override
+			public int compare(ResourceDescriptor arg0, ResourceDescriptor arg1) {
+				if (arg0.getLabel() == null)
+					return -1;
+				if (arg1.getLabel() == null)
+					return 1;
+				String wsType0 = arg0.getWsType();
+				String wsType1 = arg1.getWsType();
+				if (wsType0.equals(wsType1))
+					return arg0.getLabel().compareTo(arg1.getLabel());
+				if (DatasourcesAllFilter.getTypes().contains(wsType0))
+					return -1;
+				if (DatasourcesAllFilter.getTypes().contains(wsType1))
+					return 1;
+				if (wsType0.equals(ResourceDescriptor.TYPE_JRXML))
+					return -1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_JRXML))
+					return 1;
+				if (wsType0.equals(ResourceDescriptor.TYPE_QUERY))
+					return -1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_QUERY))
+					return 1;
+				if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					return -1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					return 1;
+				return wsType0.compareTo(wsType1);
+			}
+		});
 	}
 
 	private static void getReference(ARestV2Connection rc, ClientReference cr, ResourceDescriptor rd) {

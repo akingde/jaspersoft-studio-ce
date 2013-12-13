@@ -9,6 +9,7 @@ import java.util.Map;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
+import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientBeanDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientCustomDataSource;
@@ -53,6 +54,9 @@ public class Soap2Rest {
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
 			getDataType(rc, (ClientDataType) cr, rd);
 
+		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW))
+			getAdhocDataView(rc, (ClientAdhocDataView) cr, rd);
+
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))
 			getJdbcDataSource(rc, (ClientJdbcDataSource) cr, rd);
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN))
@@ -84,6 +88,13 @@ public class Soap2Rest {
 		else
 			Activator.getExtManager().getResource(rc, cr, rd);
 		return cr;
+	}
+
+	private static void getAdhocDataView(ARestV2Connection rc, ClientAdhocDataView cr, ResourceDescriptor rd) throws ParseException {
+		List<ResourceDescriptor> children = rd.getChildren();
+		for (ResourceDescriptor r : children)
+			if (SelectorDatasource.isDatasource(r))
+				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
 	}
 
 	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr, ResourceDescriptor rd) {

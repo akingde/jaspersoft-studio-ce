@@ -68,8 +68,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
-		c.move(monitor, rd, destFolderURI);
+	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+		return c.move(monitor, rd, destFolderURI);
 	}
 
 	@Override
