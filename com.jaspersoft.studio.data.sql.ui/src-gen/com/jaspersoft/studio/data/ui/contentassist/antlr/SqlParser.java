@@ -56,6 +56,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOperandAccess().getAlternatives_1_0(), "rule__Operand__Alternatives_1_0");
 					put(grammarAccess.getOperandFragmentAccess().getAlternatives(), "rule__OperandFragment__Alternatives");
 					put(grammarAccess.getOperandFunctionAccess().getAlternatives_2(), "rule__OperandFunction__Alternatives_2");
+					put(grammarAccess.getOpFunctionArgOperandAccess().getOpAlternatives_0(), "rule__OpFunctionArgOperand__OpAlternatives_0");
+					put(grammarAccess.getOpFunctionArgAgregateAccess().getAlternatives_0(), "rule__OpFunctionArgAgregate__Alternatives_0");
 					put(grammarAccess.getXOperandFragmentAccess().getAlternatives(), "rule__XOperandFragment__Alternatives");
 					put(grammarAccess.getScalarOperandAccess().getAlternatives(), "rule__ScalarOperand__Alternatives");
 					put(grammarAccess.getJoinTypeAccess().getAlternatives_1(), "rule__JoinType__Alternatives_1");
@@ -124,6 +126,10 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOpFunctionArgAccess().getGroup(), "rule__OpFunctionArg__Group__0");
 					put(grammarAccess.getOpFunctionArgAccess().getGroup_1(), "rule__OpFunctionArg__Group_1__0");
 					put(grammarAccess.getOpFunctionArgAccess().getGroup_1_1(), "rule__OpFunctionArg__Group_1_1__0");
+					put(grammarAccess.getOpFunctionCastAccess().getGroup(), "rule__OpFunctionCast__Group__0");
+					put(grammarAccess.getOpFunctionCastAccess().getGroup_4(), "rule__OpFunctionCast__Group_4__0");
+					put(grammarAccess.getOpFunctionCastAccess().getGroup_4_2(), "rule__OpFunctionCast__Group_4_2__0");
+					put(grammarAccess.getOpFunctionArgAgregateAccess().getGroup(), "rule__OpFunctionArgAgregate__Group__0");
 					put(grammarAccess.getSubQueryOperandAccess().getGroup(), "rule__SubQueryOperand__Group__0");
 					put(grammarAccess.getSQLCASEAccess().getGroup(), "rule__SQLCASE__Group__0");
 					put(grammarAccess.getSQLCaseWhensAccess().getGroup(), "rule__SQLCaseWhens__Group__0");
@@ -198,6 +204,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLikeAccess().getOp2Assignment_1(), "rule__Like__Op2Assignment_1");
 					put(grammarAccess.getLikeOperandAccess().getOp2Assignment_0(), "rule__LikeOperand__Op2Assignment_0");
 					put(grammarAccess.getLikeOperandAccess().getFop2Assignment_1(), "rule__LikeOperand__Fop2Assignment_1");
+					put(grammarAccess.getLikeOperandAccess().getFcastAssignment_2(), "rule__LikeOperand__FcastAssignment_2");
 					put(grammarAccess.getBetweenAccess().getOpBetweenAssignment_0(), "rule__Between__OpBetweenAssignment_0");
 					put(grammarAccess.getBetweenAccess().getOp2Assignment_1(), "rule__Between__Op2Assignment_1");
 					put(grammarAccess.getBetweenAccess().getOp3Assignment_3(), "rule__Between__Op3Assignment_3");
@@ -210,11 +217,17 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOperandFragmentAccess().getColumnAssignment_0(), "rule__OperandFragment__ColumnAssignment_0");
 					put(grammarAccess.getOperandFragmentAccess().getXopAssignment_1(), "rule__OperandFragment__XopAssignment_1");
 					put(grammarAccess.getOperandFragmentAccess().getSubqAssignment_2(), "rule__OperandFragment__SubqAssignment_2");
-					put(grammarAccess.getOperandFragmentAccess().getFuncAssignment_3(), "rule__OperandFragment__FuncAssignment_3");
-					put(grammarAccess.getOperandFragmentAccess().getSqlcaseAssignment_4(), "rule__OperandFragment__SqlcaseAssignment_4");
+					put(grammarAccess.getOperandFragmentAccess().getFcastAssignment_3(), "rule__OperandFragment__FcastAssignment_3");
+					put(grammarAccess.getOperandFragmentAccess().getFuncAssignment_4(), "rule__OperandFragment__FuncAssignment_4");
+					put(grammarAccess.getOperandFragmentAccess().getSqlcaseAssignment_5(), "rule__OperandFragment__SqlcaseAssignment_5");
 					put(grammarAccess.getOperandFunctionAccess().getFnameAssignment_1(), "rule__OperandFunction__FnameAssignment_1");
 					put(grammarAccess.getOperandFunctionAccess().getArgsAssignment_2_1(), "rule__OperandFunction__ArgsAssignment_2_1");
 					put(grammarAccess.getOpFunctionArgAccess().getEntriesAssignment_1_1_1(), "rule__OpFunctionArg__EntriesAssignment_1_1_1");
+					put(grammarAccess.getOpFunctionArgOperandAccess().getOpAssignment(), "rule__OpFunctionArgOperand__OpAssignment");
+					put(grammarAccess.getOpFunctionCastAccess().getOpAssignment_1(), "rule__OpFunctionCast__OpAssignment_1");
+					put(grammarAccess.getOpFunctionCastAccess().getTypeAssignment_3(), "rule__OpFunctionCast__TypeAssignment_3");
+					put(grammarAccess.getOpFunctionCastAccess().getPAssignment_4_1(), "rule__OpFunctionCast__PAssignment_4_1");
+					put(grammarAccess.getOpFunctionCastAccess().getP2Assignment_4_2_1(), "rule__OpFunctionCast__P2Assignment_4_2_1");
 					put(grammarAccess.getXOperandFragmentAccess().getParamAssignment_0(), "rule__XOperandFragment__ParamAssignment_0");
 					put(grammarAccess.getXOperandFragmentAccess().getEparamAssignment_1(), "rule__XOperandFragment__EparamAssignment_1");
 					put(grammarAccess.getXOperandFragmentAccess().getScalarAssignment_2(), "rule__XOperandFragment__ScalarAssignment_2");

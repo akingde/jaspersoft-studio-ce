@@ -24,7 +24,7 @@ public interface OpFList extends OpFunctionArg
 {
   /**
    * Returns the value of the '<em><b>Entries</b></em>' containment reference list.
-   * The list contents are of type {@link com.jaspersoft.studio.data.sql.Operands}.
+   * The list contents are of type {@link com.jaspersoft.studio.data.sql.OpFunctionArgOperand}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Entries</em>' containment reference list isn't clear,
@@ -36,6 +36,6 @@ public interface OpFList extends OpFunctionArg
    * @model containment="true"
    * @generated
    */
-  EList<Operands> getEntries();
+  EList<OpFunctionArgOperand> getEntries();
 
 } // OpFList

@@ -12,6 +12,7 @@ import com.jaspersoft.studio.data.sql.ExpOperand;
 import com.jaspersoft.studio.data.sql.Minus;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionArg;
+import com.jaspersoft.studio.data.sql.OpFunctionCast;
 import com.jaspersoft.studio.data.sql.Operand;
 import com.jaspersoft.studio.data.sql.Operands;
 import com.jaspersoft.studio.data.sql.OrColumn;
@@ -113,6 +114,9 @@ public class ConvertSelectColumns {
 		else if (op.getFunc() != null) {
 			mscol = getColumnUnknown(msel, "");
 			mscol.setValue(getFunctionString(designer, qroot, mscol, op.getFunc(), msel));
+		} else if (op.getFcast() != null) {
+			mscol = getColumnUnknown(msel, "");
+			mscol.setValue(getFunctionString(designer, qroot, mscol, op.getFcast(), msel));
 		} else if (op.getParam() != null)
 			mscol = getColumnUnknown(msel, op.getParam().getPrm());
 		else if (op.getEparam() != null)
@@ -160,6 +164,8 @@ public class ConvertSelectColumns {
 			return getColumn(oper.getColumn().getCfull(), msel);
 		if (oper.getFunc() != null)
 			return getFunctionString(designer, qroot, parent, oper.getFunc(), msel);
+		if (oper.getFcast() != null)
+			return getFunctionString(designer, qroot, parent, oper.getFcast(), msel);
 		if (oper.getParam() != null)
 			return oper.getParam().getPrm();
 		if (oper.getEparam() != null)
@@ -196,6 +202,34 @@ public class ConvertSelectColumns {
 			}
 		}
 		return f.getFname() + sargs + ")";
+	}
+
+	public static String getFunctionString(SQLQueryDesigner designer, ANode qroot, ANode parent, OpFunctionCast f, MSelect msel) {
+		String sargs = "";
+
+		EObject eobj = f.getOp();
+		if (eobj instanceof OperandImpl)
+			sargs += operand2String(designer, qroot, parent, (OperandImpl) eobj, msel);
+		else if (eobj instanceof ColumnOperand)
+			sargs += getColumn(((ColumnOperand) eobj).getCfull(), msel);
+		else if (eobj instanceof POperand)
+			sargs += ((POperand) eobj).getPrm();
+		else if (eobj instanceof ExpOperand)
+			sargs += ((ExpOperand) eobj).getPrm();
+		else if (eobj instanceof ScalarOperand)
+			sargs += eobj.toString();
+		else if (eobj instanceof Operands)
+			sargs += operands2String(designer, qroot, parent, (Operands) eobj, msel);
+
+		if (f.getType() != null)
+			sargs += " AS " + f.getType();
+		if (f.getP() > 0) {
+			sargs += "(" + f.getP();
+			if (f.getP2() > 0)
+				sargs += "," + f.getP2();
+			sargs += ")";
+		}
+		return "CAST(" + sargs + ")";
 	}
 
 	private static String getScalarString(ScalarOperand sc) {

@@ -150,6 +150,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fop2" eType="#//OpFunction"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fcast" eType="#//OpFunctionCast"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Between">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="opBetween" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -166,7 +168,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OperandList"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Operands" eSuperTypes="#//OpFunctionArg">
+  <eClassifiers xsi:type="ecore:EClass" name="Operands" eSuperTypes="#//OpFunctionArgAgregate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Operands"
@@ -180,6 +182,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="xop" eType="#//Operand"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subq" eType="#//SubQueryOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fcast" eType="#//OpFunctionCast"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="func" eType="#//OpFunction"
         containment="true"/>
@@ -198,6 +202,18 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArg"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArgOperand" eSuperTypes="#//OpFunctionArg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//OpFunctionArgAgregate"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionCast">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="p" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="p2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArgAgregate"/>
   <eClassifiers xsi:type="ecore:EClass" name="POperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -268,7 +284,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Concat" eSuperTypes="#//Operands"/>
   <eClassifiers xsi:type="ecore:EClass" name="OpFList" eSuperTypes="#//OpFunctionArg">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        eType="#//Operands" containment="true"/>
+        eType="#//OpFunctionArgOperand" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WhenList" eSuperTypes="#//SQLCaseWhens">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"

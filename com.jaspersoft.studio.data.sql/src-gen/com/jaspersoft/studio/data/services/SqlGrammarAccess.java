@@ -1248,12 +1248,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cOp2StringOperandParserRuleCall_0_0 = (RuleCall)cOp2Assignment_0.eContents().get(0);
 		private final Assignment cFop2Assignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cFop2OperandFunctionParserRuleCall_1_0 = (RuleCall)cFop2Assignment_1.eContents().get(0);
+		private final Assignment cFcastAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cFcastOpFunctionCastParserRuleCall_2_0 = (RuleCall)cFcastAssignment_2.eContents().get(0);
 		
 		//LikeOperand:
-		//	op2=StringOperand | fop2=OperandFunction;
+		//	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
 		public ParserRule getRule() { return rule; }
 
-		//op2=StringOperand | fop2=OperandFunction
+		//op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//op2=StringOperand
@@ -1267,6 +1269,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//OperandFunction
 		public RuleCall getFop2OperandFunctionParserRuleCall_1_0() { return cFop2OperandFunctionParserRuleCall_1_0; }
+
+		//fcast=OpFunctionCast
+		public Assignment getFcastAssignment_2() { return cFcastAssignment_2; }
+
+		//OpFunctionCast
+		public RuleCall getFcastOpFunctionCastParserRuleCall_2_0() { return cFcastOpFunctionCastParserRuleCall_2_0; }
 	}
 
 	public class BetweenElements extends AbstractParserRuleElementFinder {
@@ -1526,20 +1534,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cXopXOperandFragmentParserRuleCall_1_0 = (RuleCall)cXopAssignment_1.eContents().get(0);
 		private final Assignment cSubqAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cSubqSubQueryOperandParserRuleCall_2_0 = (RuleCall)cSubqAssignment_2.eContents().get(0);
-		private final Assignment cFuncAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
-		private final RuleCall cFuncOperandFunctionParserRuleCall_3_0 = (RuleCall)cFuncAssignment_3.eContents().get(0);
-		private final Assignment cSqlcaseAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
-		private final RuleCall cSqlcaseSQLCASEParserRuleCall_4_0 = (RuleCall)cSqlcaseAssignment_4.eContents().get(0);
+		private final Assignment cFcastAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cFcastOpFunctionCastParserRuleCall_3_0 = (RuleCall)cFcastAssignment_3.eContents().get(0);
+		private final Assignment cFuncAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
+		private final RuleCall cFuncOperandFunctionParserRuleCall_4_0 = (RuleCall)cFuncAssignment_4.eContents().get(0);
+		private final Assignment cSqlcaseAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
+		private final RuleCall cSqlcaseSQLCASEParserRuleCall_5_0 = (RuleCall)cSqlcaseAssignment_5.eContents().get(0);
 		
-		//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
-		//	subq=SubQueryOperand | func=OperandFunction | sqlcase=SQLCASE;
+		/// *|opGroup=OperandGroup * / OperandFragment returns Operand:
+		//	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast | func=OperandFunction |
+		//	sqlcase=SQLCASE;
 		public ParserRule getRule() { return rule; }
 
-		/// *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction |
+		//column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast | func=OperandFunction |
 		//sqlcase=SQLCASE
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		/// *opGroup=OperandGroup |* / column=ColumnOperand
+		//column=ColumnOperand
 		public Assignment getColumnAssignment_0() { return cColumnAssignment_0; }
 
 		//ColumnOperand
@@ -1557,17 +1568,23 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//SubQueryOperand
 		public RuleCall getSubqSubQueryOperandParserRuleCall_2_0() { return cSubqSubQueryOperandParserRuleCall_2_0; }
 
+		//fcast=OpFunctionCast
+		public Assignment getFcastAssignment_3() { return cFcastAssignment_3; }
+
+		//OpFunctionCast
+		public RuleCall getFcastOpFunctionCastParserRuleCall_3_0() { return cFcastOpFunctionCastParserRuleCall_3_0; }
+
 		//func=OperandFunction
-		public Assignment getFuncAssignment_3() { return cFuncAssignment_3; }
+		public Assignment getFuncAssignment_4() { return cFuncAssignment_4; }
 
 		//OperandFunction
-		public RuleCall getFuncOperandFunctionParserRuleCall_3_0() { return cFuncOperandFunctionParserRuleCall_3_0; }
+		public RuleCall getFuncOperandFunctionParserRuleCall_4_0() { return cFuncOperandFunctionParserRuleCall_4_0; }
 
 		//sqlcase=SQLCASE
-		public Assignment getSqlcaseAssignment_4() { return cSqlcaseAssignment_4; }
+		public Assignment getSqlcaseAssignment_5() { return cSqlcaseAssignment_5; }
 
 		//SQLCASE
-		public RuleCall getSqlcaseSQLCASEParserRuleCall_4_0() { return cSqlcaseSQLCASEParserRuleCall_4_0; }
+		public RuleCall getSqlcaseSQLCASEParserRuleCall_5_0() { return cSqlcaseSQLCASEParserRuleCall_5_0; }
 	}
 
 	public class OperandFunctionElements extends AbstractParserRuleElementFinder {
@@ -1619,41 +1636,168 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	public class OpFunctionArgElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OpFunctionArg");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cOperandParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final RuleCall cOpFunctionArgOperandParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Action cOpFListEntriesAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
 		private final Keyword cCommaKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
 		private final Assignment cEntriesAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
-		private final RuleCall cEntriesOperandParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
+		private final RuleCall cEntriesOpFunctionArgOperandParserRuleCall_1_1_1_0 = (RuleCall)cEntriesAssignment_1_1_1.eContents().get(0);
 		
 		//OpFunctionArg:
-		//	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
+		//	OpFunctionArgOperand ({OpFList.entries+=current} ("," entries+=OpFunctionArgOperand)+)?;
 		public ParserRule getRule() { return rule; }
 
-		//Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?
+		//OpFunctionArgOperand ({OpFList.entries+=current} ("," entries+=OpFunctionArgOperand)+)?
 		public Group getGroup() { return cGroup; }
 
-		//Operand
-		public RuleCall getOperandParserRuleCall_0() { return cOperandParserRuleCall_0; }
+		//OpFunctionArgOperand
+		public RuleCall getOpFunctionArgOperandParserRuleCall_0() { return cOpFunctionArgOperandParserRuleCall_0; }
 
-		//({OpFList.entries+=current} ("," entries+=Operand)+)?
+		//({OpFList.entries+=current} ("," entries+=OpFunctionArgOperand)+)?
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{OpFList.entries+=current}
 		public Action getOpFListEntriesAction_1_0() { return cOpFListEntriesAction_1_0; }
 
-		//("," entries+=Operand)+
+		//("," entries+=OpFunctionArgOperand)+
 		public Group getGroup_1_1() { return cGroup_1_1; }
 
 		//","
 		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
 
-		//entries+=Operand
+		//entries+=OpFunctionArgOperand
 		public Assignment getEntriesAssignment_1_1_1() { return cEntriesAssignment_1_1_1; }
 
+		//OpFunctionArgOperand
+		public RuleCall getEntriesOpFunctionArgOperandParserRuleCall_1_1_1_0() { return cEntriesOpFunctionArgOperandParserRuleCall_1_1_1_0; }
+	}
+
+	public class OpFunctionArgOperandElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OpFunctionArgOperand");
+		private final Assignment cOpAssignment = (Assignment)rule.eContents().get(1);
+		private final Alternatives cOpAlternatives_0 = (Alternatives)cOpAssignment.eContents().get(0);
+		private final RuleCall cOpOpFunctionArgAgregateParserRuleCall_0_0 = (RuleCall)cOpAlternatives_0.eContents().get(0);
+		private final RuleCall cOpOperandParserRuleCall_0_1 = (RuleCall)cOpAlternatives_0.eContents().get(1);
+		
+		//OpFunctionArgOperand: / *fa=OpFunctionArgAgregate | fc=OpFunctionArgCast |* / op=(OpFunctionArgAgregate | Operand);
+		public ParserRule getRule() { return rule; }
+
+		/// *fa=OpFunctionArgAgregate | fc=OpFunctionArgCast |* / op=(OpFunctionArgAgregate | Operand)
+		public Assignment getOpAssignment() { return cOpAssignment; }
+
+		//OpFunctionArgAgregate | Operand
+		public Alternatives getOpAlternatives_0() { return cOpAlternatives_0; }
+
+		//OpFunctionArgAgregate
+		public RuleCall getOpOpFunctionArgAgregateParserRuleCall_0_0() { return cOpOpFunctionArgAgregateParserRuleCall_0_0; }
+
 		//Operand
-		public RuleCall getEntriesOperandParserRuleCall_1_1_1_0() { return cEntriesOperandParserRuleCall_1_1_1_0; }
+		public RuleCall getOpOperandParserRuleCall_0_1() { return cOpOperandParserRuleCall_0_1; }
+	}
+
+	public class OpFunctionCastElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OpFunctionCast");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cCASTKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cOpAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cOpOperandParserRuleCall_1_0 = (RuleCall)cOpAssignment_1.eContents().get(0);
+		private final Keyword cASKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cTypeAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cTypeIDTerminalRuleCall_3_0 = (RuleCall)cTypeAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cLeftParenthesisKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cPAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cPINTTerminalRuleCall_4_1_0 = (RuleCall)cPAssignment_4_1.eContents().get(0);
+		private final Group cGroup_4_2 = (Group)cGroup_4.eContents().get(2);
+		private final Keyword cCommaKeyword_4_2_0 = (Keyword)cGroup_4_2.eContents().get(0);
+		private final Assignment cP2Assignment_4_2_1 = (Assignment)cGroup_4_2.eContents().get(1);
+		private final RuleCall cP2INTTerminalRuleCall_4_2_1_0 = (RuleCall)cP2Assignment_4_2_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4_3 = (Keyword)cGroup_4.eContents().get(3);
+		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		
+		//OpFunctionCast:
+		//	"CAST(" op=Operand "AS" type=ID ("(" p=INT ("," p2=INT)? ")")? ")";
+		public ParserRule getRule() { return rule; }
+
+		//"CAST(" op=Operand "AS" type=ID ("(" p=INT ("," p2=INT)? ")")? ")"
+		public Group getGroup() { return cGroup; }
+
+		//"CAST("
+		public Keyword getCASTKeyword_0() { return cCASTKeyword_0; }
+
+		//op=Operand
+		public Assignment getOpAssignment_1() { return cOpAssignment_1; }
+
+		//Operand
+		public RuleCall getOpOperandParserRuleCall_1_0() { return cOpOperandParserRuleCall_1_0; }
+
+		//"AS"
+		public Keyword getASKeyword_2() { return cASKeyword_2; }
+
+		//type=ID
+		public Assignment getTypeAssignment_3() { return cTypeAssignment_3; }
+
+		//ID
+		public RuleCall getTypeIDTerminalRuleCall_3_0() { return cTypeIDTerminalRuleCall_3_0; }
+
+		//("(" p=INT ("," p2=INT)? ")")?
+		public Group getGroup_4() { return cGroup_4; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_4_0() { return cLeftParenthesisKeyword_4_0; }
+
+		//p=INT
+		public Assignment getPAssignment_4_1() { return cPAssignment_4_1; }
+
+		//INT
+		public RuleCall getPINTTerminalRuleCall_4_1_0() { return cPINTTerminalRuleCall_4_1_0; }
+
+		//("," p2=INT)?
+		public Group getGroup_4_2() { return cGroup_4_2; }
+
+		//","
+		public Keyword getCommaKeyword_4_2_0() { return cCommaKeyword_4_2_0; }
+
+		//p2=INT
+		public Assignment getP2Assignment_4_2_1() { return cP2Assignment_4_2_1; }
+
+		//INT
+		public RuleCall getP2INTTerminalRuleCall_4_2_1_0() { return cP2INTTerminalRuleCall_4_2_1_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_4_3() { return cRightParenthesisKeyword_4_3; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
+	}
+
+	public class OpFunctionArgAgregateElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OpFunctionArgAgregate");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Keyword cALLKeyword_0_0 = (Keyword)cAlternatives_0.eContents().get(0);
+		private final Keyword cDISTINCTKeyword_0_1 = (Keyword)cAlternatives_0.eContents().get(1);
+		private final RuleCall cOperandParserRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
+		
+		//OpFunctionArgAgregate:
+		//	("ALL" | "DISTINCT") Operand;
+		public ParserRule getRule() { return rule; }
+
+		//("ALL" | "DISTINCT") Operand
+		public Group getGroup() { return cGroup; }
+
+		//"ALL" | "DISTINCT"
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+
+		//"ALL"
+		public Keyword getALLKeyword_0_0() { return cALLKeyword_0_0; }
+
+		//"DISTINCT"
+		public Keyword getDISTINCTKeyword_0_1() { return cDISTINCTKeyword_0_1; }
+
+		//Operand
+		public RuleCall getOperandParserRuleCall_1() { return cOperandParserRuleCall_1; }
 	}
 
 	public class XOperandFragmentElements extends AbstractParserRuleElementFinder {
@@ -2015,8 +2159,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cDBNAMETerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final RuleCall cSTRINGTerminalRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
 		
-		////innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
-		////fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 		//DBID:
 		//	ID | DBNAME | STRING;
 		public ParserRule getRule() { return rule; }
@@ -2214,6 +2356,9 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	private OperandFragmentElements pOperandFragment;
 	private OperandFunctionElements pOperandFunction;
 	private OpFunctionArgElements pOpFunctionArg;
+	private OpFunctionArgOperandElements pOpFunctionArgOperand;
+	private OpFunctionCastElements pOpFunctionCast;
+	private OpFunctionArgAgregateElements pOpFunctionArgAgregate;
 	private XOperandFragmentElements pXOperandFragment;
 	private ParameterOperandElements pParameterOperand;
 	private ExclamationParameterOperandElements pExclamationParameterOperand;
@@ -2572,7 +2717,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LikeOperand:
-	//	op2=StringOperand | fop2=OperandFunction;
+	//	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
 	public LikeOperandElements getLikeOperandAccess() {
 		return (pLikeOperand != null) ? pLikeOperand : (pLikeOperand = new LikeOperandElements());
 	}
@@ -2622,8 +2767,9 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getOperandAccess().getRule();
 	}
 
-	//OperandFragment returns Operand: / *opGroup=OperandGroup |* / column=ColumnOperand | xop=XOperandFragment |
-	//	subq=SubQueryOperand | func=OperandFunction | sqlcase=SQLCASE;
+	/// *|opGroup=OperandGroup * / OperandFragment returns Operand:
+	//	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast | func=OperandFunction |
+	//	sqlcase=SQLCASE;
 	public OperandFragmentElements getOperandFragmentAccess() {
 		return (pOperandFragment != null) ? pOperandFragment : (pOperandFragment = new OperandFragmentElements());
 	}
@@ -2645,13 +2791,42 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//OpFunctionArg:
-	//	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
+	//	OpFunctionArgOperand ({OpFList.entries+=current} ("," entries+=OpFunctionArgOperand)+)?;
 	public OpFunctionArgElements getOpFunctionArgAccess() {
 		return (pOpFunctionArg != null) ? pOpFunctionArg : (pOpFunctionArg = new OpFunctionArgElements());
 	}
 	
 	public ParserRule getOpFunctionArgRule() {
 		return getOpFunctionArgAccess().getRule();
+	}
+
+	//OpFunctionArgOperand: / *fa=OpFunctionArgAgregate | fc=OpFunctionArgCast |* / op=(OpFunctionArgAgregate | Operand);
+	public OpFunctionArgOperandElements getOpFunctionArgOperandAccess() {
+		return (pOpFunctionArgOperand != null) ? pOpFunctionArgOperand : (pOpFunctionArgOperand = new OpFunctionArgOperandElements());
+	}
+	
+	public ParserRule getOpFunctionArgOperandRule() {
+		return getOpFunctionArgOperandAccess().getRule();
+	}
+
+	//OpFunctionCast:
+	//	"CAST(" op=Operand "AS" type=ID ("(" p=INT ("," p2=INT)? ")")? ")";
+	public OpFunctionCastElements getOpFunctionCastAccess() {
+		return (pOpFunctionCast != null) ? pOpFunctionCast : (pOpFunctionCast = new OpFunctionCastElements());
+	}
+	
+	public ParserRule getOpFunctionCastRule() {
+		return getOpFunctionCastAccess().getRule();
+	}
+
+	//OpFunctionArgAgregate:
+	//	("ALL" | "DISTINCT") Operand;
+	public OpFunctionArgAgregateElements getOpFunctionArgAgregateAccess() {
+		return (pOpFunctionArgAgregate != null) ? pOpFunctionArgAgregate : (pOpFunctionArgAgregate = new OpFunctionArgAgregateElements());
+	}
+	
+	public ParserRule getOpFunctionArgAgregateRule() {
+		return getOpFunctionArgAgregateAccess().getRule();
 	}
 
 	//XOperandFragment returns Operand:
@@ -2765,8 +2940,6 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		return getJoinTypeAccess().getRule();
 	}
 
-	////innerJoin='INNER JOIN' | leftOuterJoin='LEFT OUTER JOIN' | rightOuterJoin='RIGHT OUTER JOIN' |
-	////fullOuterJoin='FULL OUTER JOIN' | crossJoin='CROSS JOIN';
 	//DBID:
 	//	ID | DBNAME | STRING;
 	public DBIDElements getDBIDAccess() {

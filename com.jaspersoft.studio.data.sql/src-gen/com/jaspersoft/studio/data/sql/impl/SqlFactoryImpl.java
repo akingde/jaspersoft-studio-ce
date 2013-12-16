@@ -99,6 +99,9 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.OPERAND: return createOperand();
       case SqlPackage.OP_FUNCTION: return createOpFunction();
       case SqlPackage.OP_FUNCTION_ARG: return createOpFunctionArg();
+      case SqlPackage.OP_FUNCTION_ARG_OPERAND: return createOpFunctionArgOperand();
+      case SqlPackage.OP_FUNCTION_CAST: return createOpFunctionCast();
+      case SqlPackage.OP_FUNCTION_ARG_AGREGATE: return createOpFunctionArgAgregate();
       case SqlPackage.POPERAND: return createPOperand();
       case SqlPackage.EXP_OPERAND: return createExpOperand();
       case SqlPackage.COLUMN_OPERAND: return createColumnOperand();
@@ -528,6 +531,39 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     OpFunctionArgImpl opFunctionArg = new OpFunctionArgImpl();
     return opFunctionArg;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpFunctionArgOperand createOpFunctionArgOperand()
+  {
+    OpFunctionArgOperandImpl opFunctionArgOperand = new OpFunctionArgOperandImpl();
+    return opFunctionArgOperand;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpFunctionCast createOpFunctionCast()
+  {
+    OpFunctionCastImpl opFunctionCast = new OpFunctionCastImpl();
+    return opFunctionCast;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OpFunctionArgAgregate createOpFunctionArgAgregate()
+  {
+    OpFunctionArgAgregateImpl opFunctionArgAgregate = new OpFunctionArgAgregateImpl();
+    return opFunctionArgAgregate;
   }
 
   /**

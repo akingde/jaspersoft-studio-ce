@@ -131,6 +131,7 @@
     <genClasses ecoreClass="Sql.ecore#//LikeOperand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//LikeOperand/op2"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//LikeOperand/fop2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//LikeOperand/fcast"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Between">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Between/opBetween"/>
@@ -152,6 +153,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/column"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/xop"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/subq"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/fcast"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/func"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/sqlcase"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//Operand/param"/>
@@ -163,6 +165,16 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunction/args"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OpFunctionArg"/>
+    <genClasses ecoreClass="Sql.ecore#//OpFunctionArgOperand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunctionArgOperand/op"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OpFunctionCast">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OpFunctionCast/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunctionCast/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunctionCast/p"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OpFunctionCast/p2"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//OpFunctionArgAgregate"/>
     <genClasses ecoreClass="Sql.ecore#//POperand">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//POperand/prm"/>
     </genClasses>

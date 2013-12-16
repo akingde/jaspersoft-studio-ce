@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getColumn <em>Column</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getXop <em>Xop</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getSubq <em>Subq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getFcast <em>Fcast</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getFunc <em>Func</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getSqlcase <em>Sqlcase</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.Operand#getParam <em>Param</em>}</li>
@@ -106,6 +107,32 @@ public interface Operand extends EObject
    * @generated
    */
   void setSubq(SubQueryOperand value);
+
+  /**
+   * Returns the value of the '<em><b>Fcast</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Fcast</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Fcast</em>' containment reference.
+   * @see #setFcast(OpFunctionCast)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getOperand_Fcast()
+   * @model containment="true"
+   * @generated
+   */
+  OpFunctionCast getFcast();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.Operand#getFcast <em>Fcast</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Fcast</em>' containment reference.
+   * @see #getFcast()
+   * @generated
+   */
+  void setFcast(OpFunctionCast value);
 
   /**
    * Returns the value of the '<em><b>Func</b></em>' containment reference.

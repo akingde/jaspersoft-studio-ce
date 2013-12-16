@@ -3,7 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.OpFList;
-import com.jaspersoft.studio.data.sql.Operands;
+import com.jaspersoft.studio.data.sql.OpFunctionArgOperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import java.util.Collection;
@@ -41,7 +41,7 @@ public class OpFListImpl extends OpFunctionArgImpl implements OpFList
    * @generated
    * @ordered
    */
-  protected EList<Operands> entries;
+  protected EList<OpFunctionArgOperand> entries;
 
   /**
    * <!-- begin-user-doc -->
@@ -69,11 +69,11 @@ public class OpFListImpl extends OpFunctionArgImpl implements OpFList
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<Operands> getEntries()
+  public EList<OpFunctionArgOperand> getEntries()
   {
     if (entries == null)
     {
-      entries = new EObjectContainmentEList<Operands>(Operands.class, this, SqlPackage.OP_FLIST__ENTRIES);
+      entries = new EObjectContainmentEList<OpFunctionArgOperand>(OpFunctionArgOperand.class, this, SqlPackage.OP_FLIST__ENTRIES);
     }
     return entries;
   }
@@ -123,7 +123,7 @@ public class OpFListImpl extends OpFunctionArgImpl implements OpFList
     {
       case SqlPackage.OP_FLIST__ENTRIES:
         getEntries().clear();
-        getEntries().addAll((Collection<? extends Operands>)newValue);
+        getEntries().addAll((Collection<? extends OpFunctionArgOperand>)newValue);
         return;
     }
     super.eSet(featureID, newValue);

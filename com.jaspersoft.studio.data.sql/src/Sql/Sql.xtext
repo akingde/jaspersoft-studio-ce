@@ -93,7 +93,7 @@ Like:
 	opLike=('LIKE' | 'NOT LIKE') op2=LikeOperand;
 
 LikeOperand returns LikeOperand:
-	op2=StringOperand | fop2=OperandFunction;
+	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
 
 Between:
 	opBetween=('BETWEEN' | 'NOT BETWEEN') op2=Operand 'AND' op3=Operand;
@@ -109,17 +109,25 @@ Operand returns Operands:
 	{Div.left=current} '/' | {Concat.left=current} '||') right=OperandFragment)*;
 
 OperandFragment returns Operand:
-/*opGroup=OperandGroup |*/ column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | func=OperandFunction |
-	sqlcase=SQLCASE;
+	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast |
+	func=OperandFunction | sqlcase=SQLCASE /*|opGroup=OperandGroup */;
 
 	//OperandGroup returns OpGroup:
 //	{OpGroup} '(' op=Operand ')';
-
 OperandFunction returns OpFunction:
 	{OpFunction} fname=FNAME (STAR | args=OpFunctionArg) ')';
 
 OpFunctionArg:
-	Operand ({OpFList.entries+=current} ("," entries+=Operand)+)?;
+	OpFunctionArgOperand ({OpFList.entries+=current} ("," entries+=OpFunctionArgOperand)+)?;
+
+OpFunctionArgOperand returns OpFunctionArgOperand:
+/*fa=OpFunctionArgAgregate | fc=OpFunctionArgCast |*/ op=(OpFunctionArgAgregate | Operand);
+
+OpFunctionCast:
+	'CAST(' op=Operand 'AS' type=ID ('(' p=INT (',' p2=INT)? ')')? ')';
+
+OpFunctionArgAgregate:
+	('ALL' | 'DISTINCT') Operand;
 
 XOperandFragment returns Operand:
 	param=ParameterOperand | eparam=ExclamationParameterOperand | scalar=ScalarOperand;

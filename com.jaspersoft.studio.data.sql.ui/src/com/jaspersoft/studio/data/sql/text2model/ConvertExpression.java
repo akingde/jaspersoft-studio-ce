@@ -99,6 +99,8 @@ public class ConvertExpression {
 						opds.add(new ScalarOperand<String>(me, op2.getOp2()));
 					else if (op2.getFop2() != null)
 						opds.add(new UnknownOperand(me, ConvertSelectColumns.getFunctionString(designer, msel, parent, op2.getFop2(), msel)));
+					else if (op2.getFcast() != null)
+						opds.add(new UnknownOperand(me, ConvertSelectColumns.getFunctionString(designer, msel, parent, op2.getFcast(), msel)));
 				} else if (tf.getIn() != null) {
 					me.setOperator(Operator.getOperator(tf.getIn().getOp().replace("(", "").trim()));
 					if (tf.getIn().getSubquery() != null) {

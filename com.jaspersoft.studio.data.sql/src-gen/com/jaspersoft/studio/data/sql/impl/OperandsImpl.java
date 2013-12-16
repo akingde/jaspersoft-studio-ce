@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class OperandsImpl extends OpFunctionArgImpl implements Operands
+public class OperandsImpl extends OpFunctionArgAgregateImpl implements Operands
 {
   /**
    * The cached value of the '{@link #getOp1() <em>Op1</em>}' containment reference.

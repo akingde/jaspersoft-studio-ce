@@ -329,6 +329,33 @@ public interface SqlFactory extends EFactory
   OpFunctionArg createOpFunctionArg();
 
   /**
+   * Returns a new object of class '<em>Op Function Arg Operand</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Op Function Arg Operand</em>'.
+   * @generated
+   */
+  OpFunctionArgOperand createOpFunctionArgOperand();
+
+  /**
+   * Returns a new object of class '<em>Op Function Cast</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Op Function Cast</em>'.
+   * @generated
+   */
+  OpFunctionCast createOpFunctionCast();
+
+  /**
+   * Returns a new object of class '<em>Op Function Arg Agregate</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Op Function Arg Agregate</em>'.
+   * @generated
+   */
+  OpFunctionArgAgregate createOpFunctionArgAgregate();
+
+  /**
    * Returns a new object of class '<em>POperand</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
