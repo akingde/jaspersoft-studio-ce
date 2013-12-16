@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
@@ -78,6 +79,7 @@ import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -192,6 +194,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
 				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+		ExternalStylesManager.initListeners();
 	}
 
 	/**
@@ -998,6 +1001,21 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	public void openEditor(Object obj, ANode node) {
 		reportContainer.openEditor(obj, node);
+	}
+	
+	public void refreshExternalStyles(HashSet<String> removedStyles){
+		//Very very heavy method, leave commented for future improovments
+		/*
+		JasperDesign jrDesign = getMReport().getJasperDesign();
+		for(JRDesignElement element : ModelUtils.getAllElements(jrDesign)){
+			if (element.getStyleNameReference() != null && removedStyles.contains(element.getStyleNameReference())){
+				String styleName = element.getStyleNameReference();
+				element.setStyleNameReference(null);
+				element.setStyleNameReference(styleName);
+			}
+		}
+		StyleHandlingReportConverter reportConverter = ((AEditPartFactory)reportContainer.getMainEditor().getGraphicalViewer().getEditPartFactory()).getReportConverter();
+		if (reportConverter != null) reportConverter.resetStyles(jrDesign);*/
 	}
 
 }

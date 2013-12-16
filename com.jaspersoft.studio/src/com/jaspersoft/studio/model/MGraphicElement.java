@@ -305,14 +305,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		super.postDescriptors(descriptors);
 		// initialize style
 		JasperDesign jd = getJasperDesign();
-		if (jd != null) {
-			if (styleD != null) {
-				String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), getValue());
-				if (styleitems == null || newitems != styleitems) {
-					styleD.setItems(newitems);
-					styleitems = newitems;
-				}
+		if (jd != null && getValue() != null) {
+			String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), getValue());
+			if (styleitems == null || newitems != styleitems) {
+				styleitems = newitems;
 			}
+			if (styleD != null ) {
+					styleD.setItems(newitems);
+			}
+			
 			// initialize groups
 			JRGroup[] groups = jd.getGroups();
 			String[] items = new String[groups.length + 1];
@@ -612,8 +613,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
-						jrElement.setStyle(style);
 						jrElement.setStyleNameReference(null);
+						jrElement.setStyle(style);
 					} else {
 						jrElement.setStyleNameReference((String) value);
 						// The local style is set to null so the external one will be used

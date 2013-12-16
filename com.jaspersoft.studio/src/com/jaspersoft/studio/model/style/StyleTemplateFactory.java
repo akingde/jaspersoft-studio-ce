@@ -172,17 +172,15 @@ public class StyleTemplateFactory {
 			if (jd == null) return new String[]{};
 			JRStyle[] styles = jd.getStyles();
 			List<JRStyle> slist = getStyles(jConf, jd, (IFile) jConf.get(FileUtils.KEY_FILE));
-			int size = 1;
-			if (styles != null)
-				size += styles.length;
-			if (slist != null)
-				size += slist.size();
-			items = new String[size];
-			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
-			for (int j = 0; j < styles.length; j++)
-				items[j + 1] = styles[j].getName();
-			for (int j = 0; j < slist.size(); j++)
-				items[styles.length + j + 1] = slist.get(j).getName();
+			List<String> itemsList = new ArrayList<String>();
+			itemsList.add("");
+			for(JRStyle style : styles){
+				itemsList.add(style.getName());
+			}
+			for(JRStyle style : slist){
+				itemsList.add(style.getName());
+			}
+			items = itemsList.toArray(new String[itemsList.size()]);
 			cstyles.put(jd, items);
 		}
 		return items;
@@ -215,6 +213,27 @@ public class StyleTemplateFactory {
 		if (location == null)
 			return;
 		File fileToBeOpened = getFile(location, file);
+		if (files.contains(fileToBeOpened))
+			return;
+		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
+			files.add(fileToBeOpened);
+			JRSimpleTemplate jrst = (JRSimpleTemplate) JRXmlTemplateLoader.load(fileToBeOpened);
+			list.addAll(jrst.getStylesList());
+			List<JRTemplateReference> tlist = jrst.getIncludedTemplatesList();
+			if (tlist != null && !tlist.isEmpty()) {
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
+				if (fs != null && fs[0] != null)
+					for (JRTemplateReference tr : tlist)
+						getStylesReference(fs[0], tr.getLocation(), list, files);
+			}
+		}
+	}
+	
+	public static void getStylesReference(String absoulteLocation, List<JRStyle> list, Set<File> files) {
+		if (absoulteLocation == null)
+			return;
+		File fileToBeOpened = new File(absoulteLocation);
 		if (files.contains(fileToBeOpened))
 			return;
 		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
