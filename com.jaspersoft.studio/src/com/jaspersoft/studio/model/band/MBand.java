@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -65,6 +67,11 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	/**
+	 * Number of the band that will be shown for the detail band after their name
+	 */
+	private int bandIndex = -1;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -94,6 +101,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public MBand() {
 		super();
 	}
+	
 
 	/**
 	 * Instantiates a new m band.
@@ -111,8 +119,69 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		super(parent, newIndex);
 		setValue(jrband);
 		this.bandType = bandtype;
+		refreshIndex();
+	}
+	
+	/**
+	 * Return the index of the band
+	 * 
+	 * @return detail index for the band
+	 */
+	public int getDetailIndex(){
+		return bandIndex;
 	}
 
+	/**
+	 * Set the index of the band
+	 * 
+	 * @param detailIndex number to use as index for the band
+	 */
+	public void setDetailIndex(int detailIndex){
+		bandIndex = detailIndex;
+	}
+	
+	/**
+	 * Refresh the index of the band with the current number returned by getDesignIndex
+	 */
+	public void refreshIndex(){
+		bandIndex =  getDesignIndex();
+	}
+	
+	/**
+	 * Return the first not used and gretest index number of all the other bands
+	 * 
+	 * @return -1 if the band is not a detail band otherwise a number >0 not used by 
+	 * any other detail band
+	 */
+	@SuppressWarnings("unused")
+	private int getFreeIndex(){
+		if (!BandTypeEnum.DETAIL.equals(bandType)) return -1;
+		int actualIndex = 1;
+		if (getParent() instanceof MReport){
+			for(INode node : getParent().getChildren()){
+				if (node instanceof MBand){
+					MBand band = (MBand)node;
+					if (BandTypeEnum.DETAIL.equals(band.getBandType()) && band.getDetailIndex()>=actualIndex){
+						actualIndex = band.getDetailIndex()+1;
+					}
+				}
+			}
+		}
+		return actualIndex;
+	}
+	
+	
+	/**
+	 * Return the index of the band in the detailSection  of the jasper design +1 . This only if 
+	 * the band is a detail band, otherwise it return -1 
+	 * @return a number > 0 if the band is a detail band, -1 otherwise;
+	 */
+	private int getDesignIndex(){
+		if (!BandTypeEnum.DETAIL.equals(bandType)) return -1;
+		return ((JRDesignSection)getJasperDesign().getDetailSection()).getBandsList().indexOf(getValue())+1;
+	}
+	
+	
 	@Override
 	public JRDesignBand getValue() {
 		return (JRDesignBand) super.getValue();
@@ -126,10 +195,12 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public String getDisplayText() {
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (bandType.equals(BandTypeEnum.DETAIL)) {
+			String index = "";
+			if (bandIndex != -1) index = " " + String.valueOf(bandIndex);
 			if (value != null)
-				return Messages.MBand_detail + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
+				return Messages.MBand_detail + index + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
 			else
-				return Messages.MBand_detail + " "; //$NON-NLS-1$
+				return Messages.MBand_detail + index + " "; //$NON-NLS-1$
 		}
 		if (value == null)
 			return Messages.getString(bandType.getName());
@@ -145,7 +216,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public String getSimpleDisplayName() {
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (bandType.equals(BandTypeEnum.DETAIL) || value == null) {
-			return Messages.getString(bandType.getName());
+			String index = "";
+			if (bandIndex != -1) index = " " + String.valueOf(bandIndex);
+			return Messages.getString(bandType.getName())+index;
 		}
 		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
 	}

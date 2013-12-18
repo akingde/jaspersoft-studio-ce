@@ -15,12 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.dnd;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -38,17 +40,24 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
 import com.jaspersoft.studio.editor.palette.JDCreationTool;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.band.command.CreateBandDetailCommand;
+import com.jaspersoft.studio.model.band.command.DeleteBandDetailCommand;
 import com.jaspersoft.studio.model.command.CreateE4ObjectCommand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.field.MField;
@@ -221,11 +230,138 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		return target;
 	}
 	
+	
+  private int getItemIndex(TreeItem item){
+  	TreeItem parent = item.getParentItem();
+    TreeItem[] items = parent.getItems();
+    int index = 0;
+    for (int i = 0; i < items.length; i++) {
+      if (items[i] == item) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+  
+  
+  /**
+   * Generate the commands to move the selected bands into a specific location
+   * 
+   * @param moved list of the bands to move
+   * @param location new position o the bands
+   * @param parentPart root node of the report tree, used to refresh its children
+   * @return a list of command
+   */
+  private CompoundCommand moveBandsCommand(List<MBand> moved, int location, final EditPart parentPart){
+ 	  final ANode report = moved.get(0).getParent(); 
+  	
+ 	  /**
+ 	   * Customized compound command that after the execute and undo force a refresh of the editor and outline
+ 	   */
+ 	  CompoundCommand cmd = new CompoundCommand(){
+ 	  	
+      //I create a fake command to force the refresh of the editor and outline panels
+  		private void refreshVisuals(){
+	 			 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), "refresh", null, null);
+	 			 report.propertyChange(event);
+					 for(Object part : parentPart.getChildren()){
+						 ((EditPart)part).refresh();
+					 }
+  		}
+  		
+  		private void refreshBandNumbers(){
+  			for(INode node : report.getChildren()){
+  				if (node instanceof MBand){
+  					((MBand)node).refreshIndex();
+  				}
+  			}
+  		}
+  		
+  		 @Override
+  		public void execute() {
+  			 super.execute();
+  			 refreshBandNumbers();
+  			 refreshVisuals();
+  		}
+  		 
+  		 @Override
+  		public void undo() {
+  			 super.undo();
+  			 refreshBandNumbers();
+  			 refreshVisuals();
+  		}
+  	 };
+     for (MBand bandNode : moved){
+    	 //cmd.add(new SetDetailNumberCommand((MReport)bandNode.getParent(), bandNode.getDetailIndex(), bandNode.getValue(), true));
+	     DeleteBandDetailCommand deleteBand = new DeleteBandDetailCommand(bandNode.getParent(), bandNode);
+		   cmd.add(deleteBand);
+		 	 CreateBandDetailCommand createBand = new CreateBandDetailCommand((MBand)bandNode, (MBand)bandNode,location);
+		 	 cmd.add(createBand); 
+		 	 //cmd.add(new SetDetailNumberCommand((MReport)bandNode.getParent(), bandNode.getDetailIndex(), bandNode.getValue(), false));
+     }
+     return cmd;
+  }
+	
+  /**
+   * Check if the user is dragging a detail band to move it before or after another detail band. In this
+   * case it return the command to do this operation, otherwise null
+   * 
+   * @return command to move the detail band or null if the user is not moving the band
+   */
+	private CompoundCommand dropDetailBands(){
+		if (getCurrentEvent().detail != DND.DROP_MOVE) return null;
+		if (getCurrentEvent().item == null || !(getCurrentEvent().item instanceof TreeItem)) return null;
+		Tree tree = ((TreeItem)getCurrentEvent().item).getParent();
+		List<MBand> movedBands = new ArrayList<MBand>();
+		for (TreeItem item : tree.getSelection()){
+			NotDragableContainerTreeEditPart draggetItem = (NotDragableContainerTreeEditPart)item.getData();
+			if (draggetItem.getModel() instanceof MBand){
+				movedBands.add((MBand)draggetItem.getModel());
+			}
+		}
+		if (movedBands.size() == 0) return null;
+		TreeItem destinationItem = (TreeItem)getCurrentEvent().item;
+    Point pt = tree.getDisplay().map(null, tree, getCurrentEvent().x, getCurrentEvent().y);
+		org.eclipse.swt.graphics.Rectangle destinationBounds = destinationItem.getBounds();
+		TreeItem firstItem = null;
+		TreeItem secondItem = null;
+		if (pt.y > (destinationBounds.y + destinationBounds.height/2)){
+			firstItem = destinationItem;
+			int destinationIndex = getItemIndex(destinationItem);
+			secondItem = destinationItem.getParentItem().getItem(destinationIndex+1);
+		} else {
+			secondItem = destinationItem;
+			int destinationIndex = getItemIndex(destinationItem);
+			firstItem = destinationItem.getParentItem().getItem(destinationIndex-1);
+		}
+		Object model1 = ((NotDragableContainerTreeEditPart)firstItem.getData()).getModel();
+		Object model2 = ((NotDragableContainerTreeEditPart)secondItem.getData()).getModel();
+		MBand band1 = null;
+		MBand band2 = null;
+		if (model1 instanceof MBand) band1 = (MBand)model1;
+		if (model2 instanceof MBand) band2 = (MBand)model2;
+		if (band1 == null && band2 == null) return null;
+		int destinationIndex = -1;
+		//CASE: destination between two details, the index is the same of the second band
+		if (band1 != null && band1.getBandType() == BandTypeEnum.DETAIL && band2 != null && band2.getBandType() == BandTypeEnum.DETAIL ) {
+			destinationIndex = ((JRDesignSection)band2.getJasperDesign().getDetailSection()).getBandsList().indexOf(band2.getValue())-1;
+		} else if (band2 != null && band2.getBandType() == BandTypeEnum.DETAIL ) { //CASE: only band 2 is a detail band, so i'm putting something at the top
+			destinationIndex = 0;
+		} else if (band1 != null && band1.getBandType() == BandTypeEnum.DETAIL){//CASE: only band 2 is a detail band, so i'm putting something at the bottom
+			destinationIndex = ((JRDesignSection)band1.getJasperDesign().getDetailSection()).getBandsList().indexOf(band1.getValue())+1;
+		}
+	  return moveBandsCommand(movedBands, destinationIndex, ((NotDragableContainerTreeEditPart)firstItem.getData()).getParent());
+	}
+	
 	@Override
 	protected void handleDrop() {
 		updateTargetRequest();
 		updateTargetEditPart();
-		if (getTargetEditPart() != null) {
+		CompoundCommand movingDetails = dropDetailBands();
+		if (movingDetails != null){
+			getViewer().getEditDomain().getCommandStack().execute(movingDetails);
+		} else if (getTargetEditPart() != null) {
 			Command command = getCommand();
 			
 			createLabelForField(command);
