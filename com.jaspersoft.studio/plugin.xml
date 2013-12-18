@@ -480,7 +480,7 @@
          </enabledWhen>
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
             class="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage"
             id="com.jaspersoft.studio.preferences.theme.ThemesPreferencePage.property"
             name="Report Designer Themes">
@@ -524,7 +524,7 @@
             </enabledWhen>
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
             class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
             id="com.jaspersoft.studio.preferences.RulersGridPreferencePage.property"
             name="Rulers And Grid Preferences">
@@ -535,7 +535,7 @@
          </enabledWhen>
       </page>
       <page
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
             class="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage"
             id="com.jaspersoft.studio.editor.toolitems.ToolItemsPreferencePage.property"
             name="Toolbars">
