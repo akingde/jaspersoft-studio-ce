@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.error;
 
@@ -56,7 +51,7 @@ public class PositionErrorDecorator implements IElementDecorator {
 		fig.removeDecorator(decorator);
 		// check if we should show this decorator
 
-		if (editPart.getjConfig().getPropertyBoolean(ShowErrorsAction.ID, false)) {
+		if (editPart.getjConfig().getPropertyBooleanDef(ShowErrorsAction.ID, false)) {
 			if (decorator == null) {
 				decorator = new ErrorDecorator();
 			}
@@ -96,17 +91,17 @@ public class PositionErrorDecorator implements IElementDecorator {
 				JRDesignBand band = ((MBand) itemModel.getParent()).getValue();
 				fh = band.getHeight();
 				fw = itemModel.getJasperDesign().getPageWidth();
-			} else if  (itemModel.getParent() instanceof MPage){
-				//I'm into a separate editor, here the relative dimensions inside the band dosen't count
+			} else if (itemModel.getParent() instanceof MPage) {
+				// I'm into a separate editor, here the relative dimensions inside the band dosen't count
 				x = 0;
 				y = 0;
-				if (fig.getParent() != null){
+				if (fig.getParent() != null) {
 					Rectangle r = fig.getParent().getBounds();
-				  fh = r.height;
+					fh = r.height;
 					fw = r.width;
 				} else {
 					MPage ge = (MPage) itemModel.getParent();
-					JasperDesign jd = (JasperDesign)ge.getValue();
+					JasperDesign jd = (JasperDesign) ge.getValue();
 					fh = jd.getPageHeight();
 					fw = jd.getPageWidth();
 				}

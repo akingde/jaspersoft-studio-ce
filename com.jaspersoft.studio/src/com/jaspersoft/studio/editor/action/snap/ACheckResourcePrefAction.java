@@ -29,7 +29,7 @@ public abstract class ACheckResourcePrefAction extends AResourcePreferenceAction
 	 */
 	public boolean isChecked() {
 		String p = getProperty();
-		return jrConfig.getPropertyBoolean(p, getStore().getDefaultBoolean(p));
+		return jrConfig.getPropertyBooleanDef(p, false);
 	};
 
 	@Override

@@ -63,7 +63,7 @@ public class XLSElementDecorator extends TextElementDecorator {
 		super.setupFigure(fig, editPart);
 		TextDecorator dec = getDecorator();
 		dec.removeDecorator(decorator);
-		if (editPart.getjConfig().getPropertyBoolean(ShowXLSTagsAction.ID, false))
+		if (editPart.getjConfig().getPropertyBooleanDef(ShowXLSTagsAction.ID, false))
 			dec.addDecorator(decorator);
 	}
 

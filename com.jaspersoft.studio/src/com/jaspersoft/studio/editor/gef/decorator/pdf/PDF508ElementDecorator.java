@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.decorator.pdf;
 
@@ -53,7 +48,7 @@ public class PDF508ElementDecorator extends TextElementDecorator {
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
 		getDecorator().removeDecorator(decorator);
-		if (editPart.getjConfig().getPropertyBoolean(ShowPDFTagsAction.ID, false)) {
+		if (editPart.getjConfig().getPropertyBooleanDef(ShowPDFTagsAction.ID, false)) {
 			getDecorator().addDecorator(decorator);
 		}
 	}
@@ -185,8 +180,7 @@ public class PDF508ElementDecorator extends TextElementDecorator {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}
-	
-	
+
 	public void registerActions(ActionRegistry registry, List<String> selectionActions, IWorkbenchPart part) {
 		registerHeading(registry, part, selectionActions);
 		registerTable(registry, part, selectionActions);
@@ -201,10 +195,10 @@ public class PDF508ElementDecorator extends TextElementDecorator {
 		gviewer.setProperty(ShowPDFTagsAction.ID, true);
 		IAction action = new ShowPDFTagsAction(gviewer, part.getJrContext());
 		registry.registerAction(action);
-		registerActions(registry,selectionActions,part);
+		registerActions(registry, selectionActions, part);
 	}
-	
-	public void fillContextMenu(ActionRegistry registry, IMenuManager menu){
+
+	public void fillContextMenu(ActionRegistry registry, IMenuManager menu) {
 		MenuManager submenu = new MenuManager(Messages.PDF508ElementDecorator_Menu_PDF508Tags);
 		MenuManager submenuHeading = new MenuManager(Messages.PDF508ElementDecorator_Menu_Heading);
 		MenuManager submenuHeading1 = new MenuManager(Messages.PDF508ElementDecorator_Menu_Heading1);

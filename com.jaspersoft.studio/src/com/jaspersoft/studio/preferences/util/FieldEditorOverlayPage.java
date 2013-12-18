@@ -307,6 +307,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				if (confPrjButton != null)
 					confPrjButton.setEnabled(button == useProjectSettingsButton);
 				updateFieldEditors();
+				FieldEditorOverlayPage.super.performDefaults();
 			}
 		});
 		return button;
@@ -318,8 +319,15 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * @see org.eclipse.jface.preference.PreferencePage#getPreferenceStore()
 	 */
 	public IPreferenceStore getPreferenceStore() {
-		if (isPropertyPage())
-			return overlayStore;
+		if (getElement() != null) {
+			IResource r = getResource();
+			if (useProjectSettingsButton != null && useProjectSettingsButton.getSelection()) {
+				if (r instanceof IFile)
+					r = r.getProject();
+				return JaspersoftStudioPlugin.getInstance().getPreferenceStore(r, pageId);
+			} else if (useResourceSettingsButton != null && useResourceSettingsButton.getSelection())
+				return JaspersoftStudioPlugin.getInstance().getPreferenceStore(r, pageId);
+		}
 		return super.getPreferenceStore();
 	}
 
@@ -327,6 +335,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * Enables or disables the field editors and buttons of this page
 	 */
 	private void updateFieldEditors() {
+		initialize();
 		// We iterate through all field editors
 		// setupWPREnabled();
 		boolean enabled = false;
@@ -335,20 +344,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		else if (isPropertyPage())
 			enabled = useProjectSettingsButton.getSelection();
 
-		updateFieldEditors(enabled);
-
-	}
-
-	/**
-	 * Enables or disables the field editors and buttons of this page Subclasses may override.
-	 * 
-	 * @param enabled
-	 *          - true if enabled
-	 */
-	protected void updateFieldEditors(boolean enabled) {
-		Composite parent = getFieldEditorParent();
-
-		enableComposite(parent, enabled);
+		enableComposite(getFieldEditorParent(), enabled);
 	}
 
 	private void enableComposite(Composite parent, boolean enabled) {
@@ -369,7 +365,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		boolean result = super.performOk();
 		if (result && isPropertyPage()) {
 			IResource resource = JDTUtils.getAdaptedObject(getElement(), IResource.class);
-			if(resource!=null) {
+			if (resource != null) {
 				try {
 					String value = "workspace";
 					if (useProjectSettingsButton.getSelection())
@@ -377,7 +373,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 					if (useResourceSettingsButton != null && useResourceSettingsButton.getSelection())
 						value = RESOURCE;
 					resource.setPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS), value);
-	
+
 					for (IEclipsePreferences ep : overlayStore.getPreferenceNodes(true)) {
 						try {
 							if (useResourceSettingsButton != null && !useResourceSettingsButton.getSelection()

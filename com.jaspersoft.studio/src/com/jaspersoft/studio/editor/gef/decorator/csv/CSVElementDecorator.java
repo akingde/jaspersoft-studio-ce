@@ -59,7 +59,7 @@ public class CSVElementDecorator extends TextElementDecorator {
 	public void setupFigure(ComponentFigure fig, FigureEditPart editPart) {
 		super.setupFigure(fig, editPart);
 		getDecorator().removeDecorator(decorator);
-		if (editPart.getjConfig().getPropertyBoolean(ShowCSVTagsAction.ID, false)) {
+		if (editPart.getjConfig().getPropertyBooleanDef(ShowCSVTagsAction.ID, false)) {
 			getDecorator().addDecorator(decorator);
 		}
 	}

@@ -28,6 +28,7 @@ import java.util.Set;
 import net.sf.jasperreports.components.ComponentsExtensionsRegistryFactory;
 import net.sf.jasperreports.components.ComponentsManager;
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
+import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
@@ -144,7 +145,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		init(file);
 	}
 
-	private ScopedPreferenceStore pstore;
+	private MScopedPreferenceStore pstore;
 
 	public ScopedPreferenceStore getPrefStore() {
 		return pstore;
@@ -155,7 +156,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (oldFile != null && oldFile == file)
 			return;
 		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
-		pstore = JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier);
+		pstore = (MScopedPreferenceStore) JaspersoftStudioPlugin.getInstance().getPreferenceStore(file, qualifier);
 		// if (service == null) {
 		// service = Platform.getPreferencesService();
 
@@ -324,12 +325,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			}
 			isPropsCached = true;
 		}
-
+		pstore.setWithDefault(false);
 		for (String key : map.keySet()) {
 			String val = Misc.nullIfEmpty(pstore.getString(key));
 			if (val != null)
 				map.put(key, val);
 		}
+		pstore.setWithDefault(true);
 		return map;
 	}
 
@@ -341,10 +343,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (props == null) {
 			isPropsCached = false;
 			try {
+				pstore.setWithDefault(false);
 				props = FileUtils.load(pstore.getString(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES));
 			} catch (IOException e) {
 				e.printStackTrace();
 				props = new Properties();
+			} finally {
+				pstore.setWithDefault(true);
 			}
 		}
 		return props;
@@ -352,11 +357,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 
 	@Override
 	public String getProperty(String key) {
+		pstore.setWithDefault(false);
 		String val = Misc.nullIfEmpty(pstore.getString(key));
-		if (val != null )
-			return val;
-		val = Misc.nullIfEmpty(pstore.getDefaultString(key));
-		if (val != null )
+		pstore.setWithDefault(true);
+		if (val != null)
 			return val;
 		return super.getProperty(key);
 
@@ -370,10 +374,38 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		// return super.getProperty(PROPERTY_JRPROPERTY_PREFIX + key);
 	}
 
+	public String getPropertyDef(String key, String def) {
+		String p = getProperty(key);
+		if (p == null)
+			p = pstore.getDefaultString(key);
+		if (p == null)
+			p = def;
+		return p;
+	}
+
 	public String getProperty(String key, String def) {
 		String p = getProperty(key);
 		if (p == null)
 			return def;
+		return p;
+	}
+
+	public Character getPropertyCharacterDef(String key, Character def) {
+		Character p = getPropertyCharacter(key);
+		if (p == null) {
+			String v = pstore.getDefaultString(key);
+			if (v != null && !v.isEmpty())
+				return new Character(v.charAt(0));
+		}
+		if (p == null)
+			p = def;
+		return p;
+	}
+
+	public Character getPropertyCharacter(String key, Character def) {
+		Character p = getPropertyCharacter(key);
+		if (p == null)
+			p = def;
 		return p;
 	}
 
@@ -398,6 +430,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return p;
 	}
 
+	public Boolean getPropertyBooleanDef(String key, boolean def) {
+		Boolean p = getPropertyBoolean(key);
+		if (p == null)
+			p = pstore.getDefaultBoolean(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
 	public Integer getPropertyInteger(String key) {
 		String p = getProperty(key);
 		if (p != null)
@@ -412,11 +453,29 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return p;
 	}
 
+	public Integer getPropertyIntegerDef(String key, int def) {
+		Integer p = getPropertyInteger(key);
+		if (p == null)
+			p = pstore.getDefaultInt(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
 	public Long getPropertyLong(String key) {
 		String p = getProperty(key);
 		if (p != null)
 			return Long.valueOf(p);
 		return null;
+	}
+
+	public Long getPropertyIntegerDef(String key, long def) {
+		Long p = getPropertyLong(key);
+		if (p == null)
+			p = pstore.getDefaultLong(key);
+		if (p == null)
+			return def;
+		return p;
 	}
 
 	public Float getPropertyFloat(String key) {
@@ -433,8 +492,26 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return null;
 	}
 
+	public Double getPropertyDoubleDef(String key, double def) {
+		Double p = getPropertyDouble(key);
+		if (p == null)
+			p = pstore.getDefaultDouble(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
 	public Float getPropertyFloat(String key, float def) {
 		Float p = getPropertyFloat(key);
+		if (p == null)
+			return def;
+		return p;
+	}
+
+	public Float getPropertyFloatDef(String key, float def) {
+		Float p = getPropertyFloat(key);
+		if (p == null)
+			p = pstore.getDefaultFloat(key);
 		if (p == null)
 			return def;
 		return p;
