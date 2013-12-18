@@ -28,6 +28,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.dataset.command.PasteDatasetCommand;
 
 public class PasteAction extends ACachedSelectionAction {
 
@@ -71,7 +72,10 @@ public class PasteAction extends ACachedSelectionAction {
 	private PasteCommand getPasteComand(Object selection) {
 		if (selection instanceof EditPart) {
 			Object modelObj = ((EditPart) selection).getModel();
-			if(modelObj instanceof ANode) {
+			PasteDatasetCommand pasteDataset = null;
+			if (modelObj instanceof ANode) pasteDataset = new PasteDatasetCommand(((ANode)modelObj).getJasperDesign());
+			if (pasteDataset != null && pasteDataset.canExecute()) return pasteDataset;
+			else if(modelObj instanceof ANode) {
 				IPastable past = getParent2Paste((ANode) modelObj);
 				if (past != null){
 					return new PasteCommand(past);

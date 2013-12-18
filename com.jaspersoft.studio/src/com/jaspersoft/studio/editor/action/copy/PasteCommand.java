@@ -30,9 +30,9 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 public class PasteCommand extends Command {
-	private Map<ANode, Command> list;
-	private IPastable parent;
-	private int createdNodes;
+	protected Map<ANode, Command> list;
+	protected IPastable parent;
+	protected int createdNodes;
 
 	public PasteCommand(IPastable parent) {
 		super();
