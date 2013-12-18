@@ -30,7 +30,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -114,12 +116,16 @@ public class ExternalStylesManager {
 	 * @param removedStyles name of the Styles that were updated in the cache
 	 */
 	private static void refreshStyles(HashSet<String> changedStyles){
-		IEditorReference[] openEditors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-		for(IEditorReference editor : openEditors){
-			IWorkbenchPart part = editor.getPart(false);
-			if (part instanceof JrxmlEditor){
-				JrxmlEditor jrxmlEditor = (JrxmlEditor)part;
-				jrxmlEditor.refreshExternalStyles(changedStyles);
+		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow == null || activeWorkbenchWindow.getPages() == null) return;
+		for(IWorkbenchPage page : activeWorkbenchWindow.getPages()){
+			IEditorReference[] openEditors = page.getEditorReferences();
+			for(IEditorReference editor : openEditors){
+				IWorkbenchPart part = editor.getPart(false);
+				if (part instanceof JrxmlEditor){
+					JrxmlEditor jrxmlEditor = (JrxmlEditor)part;
+					jrxmlEditor.refreshExternalStyles(changedStyles);
+				}
 			}
 		}
 	}
