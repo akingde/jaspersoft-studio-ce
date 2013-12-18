@@ -353,7 +353,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	@Override
 	public String getProperty(String key) {
 		String val = Misc.nullIfEmpty(pstore.getString(key));
-		if (val != null)
+		if (val != null )
+			return val;
+		val = Misc.nullIfEmpty(pstore.getDefaultString(key));
+		if (val != null )
 			return val;
 		return super.getProperty(key);
 
