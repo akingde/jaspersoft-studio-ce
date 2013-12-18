@@ -12,7 +12,6 @@ package com.jaspersoft.studio.model.command;
 
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRCommonElement;
 import net.sf.jasperreports.engine.JRElement;
@@ -29,7 +28,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
@@ -194,7 +192,7 @@ public class CreateElementCommand extends Command {
 				pholder = ((IContainerLayout) destNode).getPropertyHolder();
 		} else {
 			this.destNode = null;
-			MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the element", "The element can not be created because there aren't containers where it can be placed");
+			//MessageDialog.openInformation(UIUtils.getShell(), "Unable to create the element", "The element can not be created because there aren't containers where it can be placed");
 		}
 	}
 	
