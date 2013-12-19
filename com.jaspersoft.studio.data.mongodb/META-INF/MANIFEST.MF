@@ -11,5 +11,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
 Bundle-ClassPath: lib/js-mongodb-datasource-1.0.2.jar,
- lib/mongo-java-driver-2.9.3.jar,
+ lib/mongo-java-driver-2.11.3.jar,
  .
