@@ -386,4 +386,7 @@
       <description>Here you can define the languages provided from the translation package and the translation destination. Both this fields are filled automatically, but the second one may need to run Jaspersoft Studio as Administrator on some operative systems (like Windows 7/8). In general if you are using a Windows system it is suggested to run Jaspersoft Studio as administrator when you want to install a new language or switch between the installed languages</description>
       <topic href="html/wizard/translation/installtranslation.html" label="How install a Jaspersoft Studio translation" />
    </context>
+   <context id="createMeterSeries" title="Create a series for the meter chart">
+      <description>In this dialog you can define all the attributes of a series for the meter chart. These attributes are the name of the series (optional), the color and its transparency and the expressions for the bound of the series. The last two values are mandatory.</description>
+   </context>
 </contexts>
