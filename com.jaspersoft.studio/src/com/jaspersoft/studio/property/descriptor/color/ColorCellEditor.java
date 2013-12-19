@@ -39,7 +39,7 @@ public class ColorCellEditor extends DialogCellEditor {
 	/**
 	 * The label widget showing the RGB values.
 	 */
-	private Label rgbLabel;
+	protected Label rgbLabel;
 
 	/**
 	 * Internal class for laying out this cell editor.

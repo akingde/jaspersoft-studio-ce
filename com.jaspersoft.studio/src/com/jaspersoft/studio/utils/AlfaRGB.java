@@ -39,6 +39,19 @@ public class AlfaRGB implements Serializable{
 		return (argb!=null) ? argb.getRgb() : null;
 	}
 	
+	public void setAlfa(int alfa){
+		if (alfa>=0 && alfa<=255){
+			this.alfa = alfa;
+		}
+	}
+	
+	public void setAlfa(double alfa){
+		int value =  new Long(Math.round(255*alfa)).intValue();
+		if (value < 0) value = 0;
+		if (value > 255) value = 255;
+		this.alfa = value;
+	}
+	
 	@Override
 	public boolean equals(Object arg0) {
 		if (arg0 != null && arg0 instanceof AlfaRGB){

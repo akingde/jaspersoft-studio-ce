@@ -684,6 +684,15 @@ public class Messages extends NLS {
 	public static String MXYZSeries_y_value_expression_description;
 	public static String MXYZSeries_z_value_expression;
 	public static String MXYZSeries_z_value_expression_description;
+	public static String NewMeterIntervalPage_1;
+	public static String NewMeterIntervalPage_10;
+	public static String NewMeterIntervalPage_11;
+	public static String NewMeterIntervalPage_2;
+	public static String NewMeterIntervalPage_3;
+	public static String NewMeterIntervalPage_4;
+	public static String NewMeterIntervalPage_5;
+	public static String NewMeterIntervalPage_7;
+	public static String NewMeterIntervalPage_9;
 	public static String OtherSectionPage_dialogText;
 	public static String OtherSectionPage_dialogTitle;
 	public static String OtherSectionPage_groupHyperlink;
