@@ -39,7 +39,6 @@ import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
-import net.sf.jasperreports.engine.query.JRQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
@@ -107,7 +106,14 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				refreshFonts = true;
 				refreshBundles = true;
 				fontList = null;
+				if (props != null) {
+					for (Object obj : props.keySet()) {
+						if (obj instanceof String)
+							removeProperty((String) obj);
+					}
+				}
 				props = null;
+				isPropsCached = false;
 				getProperties();
 				qExecutors = null;
 			}
@@ -596,8 +602,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
-			} else if (extensionType == JRQueryExecuterFactory.class) {
-				System.out.println("Hello");
 			} else {
 				try {
 					result = super.getExtensions(extensionType);

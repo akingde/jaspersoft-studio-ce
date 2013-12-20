@@ -11,10 +11,9 @@
 package com.jaspersoft.studio.preferences.editor.properties;
 
 import java.io.IOException;
-import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -142,13 +141,18 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	 */
 	protected void doLoad() {
 		if (getTable() != null) {
-			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
-			Collections.sort(lst, new PropertyComparator());
+			//			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
+			// Collections.sort(lst, new PropertyComparator());
 			Properties props = null;
 			try {
 				props = FileUtils.load(getPreferenceStore().getString(NET_SF_JASPERREPORTS_JRPROPERTIES));
-				for (Object key : props.keySet()) {
-					String value = props.getProperty((String) key);
+				List<String> keys = new ArrayList<String>();
+				for (Object key : props.keySet())
+					keys.add((String) key);
+				Collections.sort(keys);
+
+				for (String key : keys) {
+					String value = props.getProperty(key);
 					TableItem tableItem = new TableItem(getTable(), SWT.NONE);
 					tableItem.setText(new String[] { (String) key, value });
 				}
@@ -156,30 +160,30 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (props != null)
-				for (PropertySuffix ps : lst) {
-					if (props.getProperty(ps.getKey()) == null) {
-						TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-						tableItem.setText(new String[] { ps.getKey(), ps.getValue() });
-					}
-				}
+			// if (props != null)
+			// for (PropertySuffix ps : lst) {
+			// if (props.getProperty(ps.getKey()) == null) {
+			// TableItem tableItem = new TableItem(getTable(), SWT.NONE);
+			// tableItem.setText(new String[] { ps.getKey(), ps.getValue() });
+			// }
+			// }
 
-			TableItem[] items = table.getItems();
-			Collator collator = Collator.getInstance(Locale.getDefault());
-			for (int i = 1; i < items.length; i++) {
-				String value1 = items[i].getText(0);
-				for (int j = 0; j < i; j++) {
-					String value2 = items[j].getText(0);
-					if (collator.compare(value1, value2) < 0) {
-						String[] values = { items[i].getText(0), items[i].getText(1) };
-						items[i].dispose();
-						TableItem item = new TableItem(table, SWT.NONE, j);
-						item.setText(values);
-						items = table.getItems();
-						break;
-					}
-				}
-			}
+			// TableItem[] items = table.getItems();
+			// Collator collator = Collator.getInstance(Locale.getDefault());
+			// for (int i = 1; i < items.length; i++) {
+			// String value1 = items[i].getText(0);
+			// for (int j = 0; j < i; j++) {
+			// String value2 = items[j].getText(0);
+			// if (collator.compare(value1, value2) < 0) {
+			// String[] values = { items[i].getText(0), items[i].getText(1) };
+			// items[i].dispose();
+			// TableItem item = new TableItem(table, SWT.NONE, j);
+			// item.setText(values);
+			// items = table.getItems();
+			// break;
+			// }
+			// }
+			// }
 			// Add an help listener to the table
 			TableHelpListener.setTableHelp(getTable());
 		}
