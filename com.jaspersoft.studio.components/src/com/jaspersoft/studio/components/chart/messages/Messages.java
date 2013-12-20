@@ -398,6 +398,11 @@ public class Messages extends NLS {
 	public static String MChartTimeSeriesDataset_time_period_description;
 	public static String MChartValueDataset_chart_value_dataset_category;
 	public static String MChartValueDataset_value_expression_description;
+	public static String MeterIntervalsDialog_background;
+	public static String MeterIntervalsDialog_dialogTitle;
+	public static String MeterIntervalsDialog_highExpression;
+	public static String MeterIntervalsDialog_label;
+	public static String MeterIntervalsDialog_lowExpression;
 	public static String MGanttSeries_end_date_expression_description;
 	public static String MGanttSeries_item_hyperlink_description;
 	public static String MGanttSeries_label_expression_description;
@@ -706,6 +711,8 @@ public class Messages extends NLS {
 	public static String SeriesColorPage_move_down;
 	public static String SeriesColorPage_move_up;
 	public static String SeriesColorPage_table_is_empty;
+	public static String SPMeterInterval_intervalsNumber;
+	public static String SPMeterInterval_sectionTitle;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
