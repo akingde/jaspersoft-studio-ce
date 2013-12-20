@@ -39,6 +39,7 @@ import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
+import net.sf.jasperreports.engine.query.JRQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
@@ -319,7 +320,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			for (Object key : props.keySet()) {
 				if (!(key instanceof String))
 					continue;
-				String val = getProperty((String) key);
+				String val = props.getProperty((String) key);
 				if (val != null)
 					map.put((String) key, val);
 			}
@@ -595,6 +596,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
+			} else if (extensionType == JRQueryExecuterFactory.class) {
+				System.out.println("Hello");
 			} else {
 				try {
 					result = super.getExtensions(extensionType);
