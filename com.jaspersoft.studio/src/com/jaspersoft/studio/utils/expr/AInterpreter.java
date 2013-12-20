@@ -76,7 +76,7 @@ public abstract class AInterpreter {
 			if (dataset != null)
 				expression = prepareExpression(expression, 0);
 			return eval(expression);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		return null;
