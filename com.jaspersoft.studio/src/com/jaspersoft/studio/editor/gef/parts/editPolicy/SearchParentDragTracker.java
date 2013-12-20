@@ -25,9 +25,12 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.DragEditPartsTracker;
+import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor.KeyPressedEventDomain;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
@@ -88,6 +91,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		 * 
 		 * @param port
 		 */
+		@SuppressWarnings("unused")
 		public DragAutoExpose(Viewport port) {
 			this(port, DEFAULT_EXPOSE_THRESHOLD);
 		}
@@ -186,7 +190,21 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		}
 
 	}
-
+	
+	/**
+	 * Enumeration to store the mouse movement main direction, it can be
+	 * horizontal or vertical or undefined if was not still defined
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private enum MOUSE_DIRECTION {HORIZONTAL, VERTICAL, UNDEFINED};
+	
+	/**
+	 * variable to store the mouse direction during the drag
+	 */
+	private MOUSE_DIRECTION firstMovment = MOUSE_DIRECTION.UNDEFINED;
+	
 	public SearchParentDragTracker(EditPart sourceEditPart) {
 		super(sourceEditPart);
 	}
@@ -313,6 +331,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 * This avoid that the move operations are done on the frame and also on his descendants, that may 
 	 * create error like the change of parent or a wrong position for the children of the frame 
 	 */
+	@SuppressWarnings("rawtypes")
 	protected List createOperationSet() {
 		ArrayList<EditPart> selectedElements = new  ArrayList<EditPart>();
 		//Need to copy the list because the one from getCurrentViewer().getSelectedEditParts() is not editable
@@ -348,8 +367,11 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	protected void performDrag() {
 		super.performDrag();
 		selectionHierarchy = null;
+		//At the end of the drag operation the mouse direction reseted
+		firstMovment = MOUSE_DIRECTION.UNDEFINED;
 	}
 	
+
 	/**
 	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
 	 * one of his descendant. To avoid excessive calculations this variable is initialized ad the drag start and 
@@ -370,6 +392,40 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			//near valid parent of the target is searched
 			parent = searchParent(target);
 		return parent != null ? parent : target;
+	}
+	
+
+	
+	
+	/**
+	 * Modify the drag behavior when the shift key is pressed. when it is pressed if the mouse
+	 * if moved over an offset (actually ten pixel) in horizontal or in vertical then the element
+	 * will be moved only on the horizontal or vertical axis, with all the snap deactivated 
+	 */
+	@Override
+	protected void snapPoint(ChangeBoundsRequest request) {
+		boolean shiftPressed = false;
+		if (getCurrentViewer().getEditDomain() instanceof KeyPressedEventDomain){
+			KeyPressedEventDomain domain = (KeyPressedEventDomain)getCurrentViewer().getEditDomain();
+			shiftPressed = domain.isPressed(SWT.SHIFT);
+		}
+		if (!shiftPressed) {
+			//Shift was released so use the default snap hander and reset the mouse direction
+			firstMovment = MOUSE_DIRECTION.UNDEFINED;
+			super.snapPoint(request);
+		}
+		else {
+			Point moveDelta = request.getMoveDelta();
+			int x = Math.abs(moveDelta.x);
+			int y = Math.abs(moveDelta.y);
+			//check if the offset threshold is passed
+			if (x>10 && x>y && firstMovment == MOUSE_DIRECTION.UNDEFINED) firstMovment = MOUSE_DIRECTION.HORIZONTAL;
+			if (y>10 && y>x && firstMovment == MOUSE_DIRECTION.UNDEFINED) firstMovment = MOUSE_DIRECTION.VERTICAL;
+			if (firstMovment != MOUSE_DIRECTION.UNDEFINED){
+				if (firstMovment == MOUSE_DIRECTION.VERTICAL) moveDelta.x = 0;
+				else moveDelta.y = 0;
+			}
+		}
 	}
 
 };
