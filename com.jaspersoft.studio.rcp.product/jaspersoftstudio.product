@@ -20,7 +20,7 @@ Special thanks to all people who support this software.
    </configIni>
 
    <launcherArgs>
-      <programArgs>-data @noDefault -clean</programArgs>
+      <programArgs>-data @noDefault</programArgs>
       <vmArgs>-Xms128m
 -Xmx1024m
 -XX:PermSize=128M
