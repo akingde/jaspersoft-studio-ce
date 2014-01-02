@@ -8,9 +8,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.plugin.IResourceFactory;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -22,7 +20,7 @@ public class CassandraCQL3ResourceFactory implements IResourceFactory {
 
 	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
-			ResourceProperty rp = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
+			ResourceProperty rp = ResourceDescriptorUtil.getProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
 			if (rp != null && rp.getValue().equals(MRDatasourceCassandraCQL3.CUSTOM_CLASS))
 				return new MRDatasourceCassandraCQL3(parent, resource, index);
 		}
@@ -35,12 +33,12 @@ public class CassandraCQL3ResourceFactory implements IResourceFactory {
 		return null;
 	}
 
-	public ANode createNewResource(MRoot root, ANode parent) {
+	public ANode createNewResource(ANode root, ANode parent) {
 		return null;
 	}
 
 	@Override
-	public ANode createNewDatasource(MRoot root, ANode parent) {
+	public ANode createNewDatasource(ANode root, ANode parent) {
 		return new MRDatasourceCassandraCQL3(root, MRDatasourceCassandraCQL3.createDescriptor(parent), -1);
 	}
 

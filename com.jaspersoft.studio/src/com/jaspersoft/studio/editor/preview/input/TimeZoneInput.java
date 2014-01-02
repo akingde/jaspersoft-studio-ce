@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -47,6 +49,15 @@ public class TimeZoneInput extends ADataInput {
 				}
 
 			});
+			txt.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					updateModel(txt.getTimeZone());
+					updateInput();
+				}
+			});
+
 			updateInput();
 			for (Control c : txt.getChildren())
 				setNullable(param, c);

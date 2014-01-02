@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.Activator;
@@ -78,13 +77,13 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 				if (dialog.open() == Dialog.OK) {
 					mservprof = wizard.getServerProfile();
 					MServerProfile newprofile = new MServerProfile((MServers) n, mservprof.getValue());
-					for (INode cn : mservprof.getChildren())
-						newprofile.addChild((ANode) cn);
-					try {
-						newprofile.setWsClient(mservprof.getWsClient());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					// for (INode cn : mservprof.getChildren())
+					// newprofile.addChild((ANode) cn);
+					// try {
+					// newprofile.setWsClient(mservprof.getWsClient());
+					// } catch (Exception e) {
+					// e.printStackTrace();
+					// }
 					ServerManager.addServerProfile(newprofile);
 
 					EditServerAction.fillServerProfile(newprofile, treeViewer);

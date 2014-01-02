@@ -29,7 +29,7 @@ public class ReferenceResolver {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) res.getRoot();
-			return resolveReference(sp.getWsClient(), reference, monitor);
+			return resolveReference(sp.getWsClient(monitor), reference, monitor);
 		}
 		return null;
 	}
@@ -38,7 +38,7 @@ public class ReferenceResolver {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) res.getRoot();
-			return resolveReference(sp.getWsClient(), res.getValue(), monitor);
+			return resolveReference(sp.getWsClient(monitor), res.getValue(), monitor);
 		}
 		return null;
 	}

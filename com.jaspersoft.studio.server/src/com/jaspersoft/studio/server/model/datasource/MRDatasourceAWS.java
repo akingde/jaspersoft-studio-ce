@@ -58,17 +58,13 @@ public class MRDatasourceAWS extends MResource {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(MRDatasourceAWS.TYPE_AWS);
 
-		ResourceProperty rp = new ResourceProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
+		ResourceProperty rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, "");
 		rd.getProperties().add(rp);
-		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME,
-				"");
+		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, "");
 		rd.getProperties().add(rp);
-		rp = new ResourceProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
+		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, "");
 		rd.getProperties().add(rp);
-		rp = new ResourceProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
+		rp = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, "");
 		rd.getProperties().add(rp);
 		return rd;
 	}

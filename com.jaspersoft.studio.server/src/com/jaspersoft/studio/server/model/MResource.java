@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.ResourceManager;
@@ -37,6 +38,8 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -181,6 +184,25 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	public boolean isInsideReportUnit() {
 		return getReportUnit() != null;
+	}
+
+	public IConnection getWsClient() {
+		Object obj = getRoot();
+		if (obj instanceof MServerProfile) {
+			try {
+				return ((MServerProfile) obj).getWsClient(new NullProgressMonitor());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	public boolean isSupported(Feature f) {
+		IConnection c = getWsClient();
+		if (c != null)
+			return c.isSupported(f);
+		return false;
 	}
 
 	public MReportUnit getReportUnit() {

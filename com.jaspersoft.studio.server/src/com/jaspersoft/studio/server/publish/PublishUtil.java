@@ -55,7 +55,7 @@ public class PublishUtil {
 					rd.setIsReference(false);
 					rd.setHasData(true);
 					try {
-						rd = sp.getWsClient().get(monitor, rd, null);
+						rd = sp.getWsClient(monitor).get(monitor, rd, null);
 						rd.setHasData(true);
 						if (rd != null)
 							return rd;

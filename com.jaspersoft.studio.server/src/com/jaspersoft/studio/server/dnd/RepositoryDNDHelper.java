@@ -52,10 +52,10 @@ import com.jaspersoft.studio.utils.Misc;
  * Helper class to manage DND operations related to the Server Repository.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- *
+ * 
  */
 public final class RepositoryDNDHelper {
-	
+
 	private static final String JRML_EXTENSION = "jrxml"; //$NON-NLS-1$
 	private static final String XML_EXTENSION = "xml"; //$NON-NLS-1$
 	private static final String DATA_ADAPTER_EXTENSION = "xml"; //$NON-NLS-1$
@@ -64,7 +64,7 @@ public final class RepositoryDNDHelper {
 	private static final String FONT_EXTENSION = "ttf"; //$NON-NLS-1$
 	private static final String TEMPLATE_EXTENSION = "jrtx"; //$NON-NLS-1$
 	private static final List<String> ALLOWED_EXTENSIONS;
-	
+
 	static {
 		ALLOWED_EXTENSIONS = new ArrayList<String>();
 		ALLOWED_EXTENSIONS.add(JRML_EXTENSION);
@@ -76,50 +76,54 @@ public final class RepositoryDNDHelper {
 		ALLOWED_EXTENSIONS.add(TEMPLATE_EXTENSION);
 		ALLOWED_EXTENSIONS.addAll(ImageUtils.getAllowedImageFileExtensions());
 	}
-	
-	private RepositoryDNDHelper(){
+
+	private RepositoryDNDHelper() {
 		// Prevent instantiation
 	}
-	
+
 	/**
-	 * Checks if the specified extension is allowed for the DROP operation on the JRS tree
+	 * Checks if the specified extension is allowed for the DROP operation on the
+	 * JRS tree
 	 * 
-	 * @param extension file extension
-	 * @return <code>true</code> if the element can be dropped, <code>false</code> otherwise
+	 * @param extension
+	 *          file extension
+	 * @return <code>true</code> if the element can be dropped, <code>false</code>
+	 *         otherwise
 	 */
-	public static boolean isDropOperationAllowed(String extension){
+	public static boolean isDropOperationAllowed(String extension) {
 		Assert.isNotNull(extension);
-		return ALLOWED_EXTENSIONS.contains(extension.toLowerCase());		
+		return ALLOWED_EXTENSIONS.contains(extension.toLowerCase());
 	}
 
-	public static void performDropOperation(MResource targetParentResource, final String fullFilename){
-		File file = new File(fullFilename);
-		String suggestedId = FilenameUtils.removeExtension(file.getName());
-		String suggestedName = FilenameUtils.removeExtension(file.getName());
-		String fileExt = Misc.nvl(FilenameUtils.getExtension(fullFilename)).toLowerCase();
-		
+	public static void performDropOperation(final MResource targetParentResource, final String fullFilename) {
+		final File file = new File(fullFilename);
+		final String suggestedId = FilenameUtils.removeExtension(file.getName());
+		final String suggestedName = FilenameUtils.removeExtension(file.getName());
+		final String fileExt = Misc.nvl(FilenameUtils.getExtension(fullFilename)).toLowerCase();
+
 		try {
-			// Gets a list of all siblings of the future resource
-			// This will allow to compute correct ID and NAME information for the ResourceDescriptor
-			List<ResourceDescriptor> childrenDescriptors = WSClientHelper.listFolder(
-					targetParentResource, WSClientHelper.getClient(targetParentResource), 
-					targetParentResource.getValue().getUriString(), new NullProgressMonitor(), 0);
-			// Create the ResourceDescriptor depending on this kind (use file extension)
-			ResourceDescriptor newRD = getResourceDescriptor(targetParentResource,fileExt);
-			// Update the NAME and ID for the ResourceDescriptor
-			ResourceDescriptorUtil.setProposedResourceDescriptorIDAndName(
-					childrenDescriptors, newRD, suggestedId, suggestedName);
-			// Create and save the resource
-			final AFileResource fileResource = createNewFileResource(targetParentResource,newRD, fileExt);
-			fileResource.setFile(file);
 			ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
-						monitor.beginTask(
-								NLS.bind(Messages.RepositoryDNDHelper_SavingResourceTask,fullFilename), IProgressMonitor.UNKNOWN);
-						WSClientHelper.saveResource(fileResource, new NullProgressMonitor());
+						monitor.beginTask(NLS.bind(Messages.RepositoryDNDHelper_SavingResourceTask, fullFilename), IProgressMonitor.UNKNOWN);
+						// Gets a list of all siblings of the future resource
+						// This will allow to compute correct ID and NAME information for
+						// the
+						// ResourceDescriptor
+						List<ResourceDescriptor> childrenDescriptors = WSClientHelper.listFolder(targetParentResource, WSClientHelper.getClient(monitor, targetParentResource), targetParentResource.getValue()
+								.getUriString(), new NullProgressMonitor(), 0);
+						// Create the ResourceDescriptor depending on this kind (use file
+						// extension)
+						ResourceDescriptor newRD = getResourceDescriptor(targetParentResource, fileExt);
+						// Update the NAME and ID for the ResourceDescriptor
+						ResourceDescriptorUtil.setProposedResourceDescriptorIDAndName(childrenDescriptors, newRD, suggestedId, suggestedName);
+						// Create and save the resource
+						final AFileResource fileResource = createNewFileResource(targetParentResource, newRD, fileExt);
+						fileResource.setFile(file);
+
+						monitor.setTaskName(NLS.bind(Messages.RepositoryDNDHelper_SavingResourceTask, fullFilename));
+						WSClientHelper.saveResource(fileResource, monitor);
 					} catch (Throwable e) {
 						throw new InvocationTargetException(e);
 					} finally {
@@ -133,90 +137,81 @@ public final class RepositoryDNDHelper {
 		}
 	}
 
-
 	/*
 	 * Creates a FileResource instance for the specific resource kind.
 	 */
-	private static AFileResource createNewFileResource(
-			MResource targetParentResource, ResourceDescriptor rd, String fileExt) {
+	private static AFileResource createNewFileResource(MResource targetParentResource, ResourceDescriptor rd, String fileExt) {
 		// Image file
-		if(ImageUtils.hasValidFileImageExtension(fileExt)){
+		if (ImageUtils.hasValidFileImageExtension(fileExt)) {
 			return new MRImage(targetParentResource, rd, -1);
 		}
 		// Jrxml file
-		if(JRML_EXTENSION.equals(fileExt)){
+		if (JRML_EXTENSION.equals(fileExt)) {
 			return new MJrxml(targetParentResource, rd, -1);
 		}
 		// XML file
-		if(XML_EXTENSION.equals(fileExt)){
+		if (XML_EXTENSION.equals(fileExt)) {
 			return new MXmlFile(targetParentResource, rd, -1);
 		}
 		// Data Adapter file
-		if(DATA_ADAPTER_EXTENSION.equals(fileExt)){
+		if (DATA_ADAPTER_EXTENSION.equals(fileExt)) {
 			return new MRDataAdapter(targetParentResource, rd, -1);
 		}
 		// Resource bundle file
-		if(RESOURCE_BUNDLE_EXTENSION.equals(fileExt)){
+		if (RESOURCE_BUNDLE_EXTENSION.equals(fileExt)) {
 			return new MResourceBundle(targetParentResource, rd, -1);
 		}
 		// Jar file
-		if(JAR_EXTENSION.equals(fileExt)){
+		if (JAR_EXTENSION.equals(fileExt)) {
 			return new MJar(targetParentResource, rd, -1);
 		}
 		// Font file
-		if(FONT_EXTENSION.equals(fileExt)){
+		if (FONT_EXTENSION.equals(fileExt)) {
 			return new MRFont(targetParentResource, rd, -1);
 		}
 		// Style Template file
-		if(TEMPLATE_EXTENSION.equals(fileExt)){
+		if (TEMPLATE_EXTENSION.equals(fileExt)) {
 			return new MRStyleTemplate(targetParentResource, rd, -1);
 		}
-		throw new UnsupportedOperationException(
-				MessageFormat.format(
-						Messages.RepositoryDNDHelper_NewFileResourceErrMsg, 
-						new Object[]{fileExt}));
+		throw new UnsupportedOperationException(MessageFormat.format(Messages.RepositoryDNDHelper_NewFileResourceErrMsg, new Object[] { fileExt }));
 	}
 
 	/*
 	 * Creates a ResourceDescriptor instance for the specific resource kind.
 	 */
-	private static ResourceDescriptor getResourceDescriptor(
-			MResource targetParentResource, String fileExt) {
+	private static ResourceDescriptor getResourceDescriptor(MResource targetParentResource, String fileExt) {
 		// Image file
-		if(ImageUtils.hasValidFileImageExtension(fileExt)){
+		if (ImageUtils.hasValidFileImageExtension(fileExt)) {
 			return MRImage.createDescriptor(targetParentResource);
 		}
 		// Jrxml file
-		if(JRML_EXTENSION.equals(fileExt)){
+		if (JRML_EXTENSION.equals(fileExt)) {
 			return MJrxml.createDescriptor(targetParentResource);
 		}
 		// XML file
-		if(XML_EXTENSION.equals(fileExt)){
+		if (XML_EXTENSION.equals(fileExt)) {
 			return MXmlFile.createDescriptor(targetParentResource);
 		}
 		// Data Adapter file
-		if(DATA_ADAPTER_EXTENSION.equals(fileExt)){
+		if (DATA_ADAPTER_EXTENSION.equals(fileExt)) {
 			return MRDataAdapter.createDescriptor(targetParentResource);
 		}
 		// Resource bundle file
-		if(RESOURCE_BUNDLE_EXTENSION.equals(fileExt)){
+		if (RESOURCE_BUNDLE_EXTENSION.equals(fileExt)) {
 			return MResourceBundle.createDescriptor(targetParentResource);
 		}
 		// Jar file
-		if(JAR_EXTENSION.equals(fileExt)){
+		if (JAR_EXTENSION.equals(fileExt)) {
 			return MJar.createDescriptor(targetParentResource);
 		}
 		// Font file
-		if(FONT_EXTENSION.equals(fileExt)){
+		if (FONT_EXTENSION.equals(fileExt)) {
 			return MRFont.createDescriptor(targetParentResource);
 		}
 		// Style Template file
-		if(TEMPLATE_EXTENSION.equals(fileExt)){
+		if (TEMPLATE_EXTENSION.equals(fileExt)) {
 			return MRStyleTemplate.createDescriptor(targetParentResource);
 		}
-		throw new UnsupportedOperationException(
-				MessageFormat.format(
-						Messages.RepositoryDNDHelper_NewResourceDescriptorErrMsg, 
-						new Object[]{fileExt}));
+		throw new UnsupportedOperationException(MessageFormat.format(Messages.RepositoryDNDHelper_NewResourceDescriptorErrMsg, new Object[] { fileExt }));
 	}
 }

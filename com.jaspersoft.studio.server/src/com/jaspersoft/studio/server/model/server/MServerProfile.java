@@ -17,6 +17,7 @@ package com.jaspersoft.studio.server.model.server;
 
 import java.io.IOException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.util.CastorUtil;
@@ -26,7 +27,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
@@ -35,6 +38,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.protocol.Callback;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -129,14 +133,39 @@ public class MServerProfile extends ANode {
 
 	private transient IConnection wsClient;
 
-	public IConnection getWsClient() throws Exception {
+	public IConnection getWsClient(final Callback<IConnection> c) {
+		if (wsClient == null) {
+			Job job = new Job("Building report") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					monitor.beginTask("", IProgressMonitor.UNKNOWN);
+					try {
+						getWsClient(monitor);
+					} catch (Exception e) {
+						// UIUtils.showError(e);
+					} finally {
+						if (c != null) {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+									c.completed(wsClient);
+								}
+							});
+						}
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.SHORT);
+			job.schedule();
+		}
+		return wsClient;
+	}
+
+	public IConnection getWsClient(IProgressMonitor monitor) throws Exception {
 		if (wsClient == null)
-			try {
-				WSClientHelper.connect(this, new NullProgressMonitor());
-			} catch (Exception e) {
-				throw e;
-				// UIUtils.showError(e);
-			}
+			WSClientHelper.connect(this, monitor);
 		return wsClient;
 	}
 

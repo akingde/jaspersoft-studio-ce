@@ -1,11 +1,19 @@
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public abstract class ARestV2Connection implements IConnection {
@@ -17,8 +25,21 @@ public abstract class ARestV2Connection implements IConnection {
 		return sp.getUrl() + SUFFIX + suffix;
 	}
 
-	protected SimpleDateFormat dateFormat;
-	protected SimpleDateFormat timestampFormat;
+	public Format getDateFormat() {
+		return dateFormat;
+	}
+
+	public Format getTimestampFormat() {
+		return timestampFormat;
+	}
+
+	public Format getNumberFormat() {
+		return numberFormat;
+	}
+
+	protected DateFormat dateFormat = DateFormat.getDateInstance();
+	protected DateFormat timestampFormat = DateFormat.getTimeInstance();
+	protected NumberFormat numberFormat = NumberFormat.getInstance();
 
 	public Date toDate(String sdate) throws ParseException {
 		if (sdate == null)
@@ -44,6 +65,16 @@ public abstract class ARestV2Connection implements IConnection {
 		return timestampFormat.format(d);
 	}
 
+	public String toRestString(Object obj) {
+		if (obj instanceof java.sql.Date)
+			return dateFormat.format(obj);
+		if (obj instanceof Date)
+			return timestampFormat.format(obj);
+		if (obj instanceof Number)
+			return numberFormat.format(obj);
+		return obj.toString();
+	}
+
 	protected ServerInfo serverInfo;
 
 	@Override
@@ -61,4 +92,17 @@ public abstract class ARestV2Connection implements IConnection {
 		return sp.getPass();
 	}
 
+	@Override
+	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest) throws Exception {
+		return Rest2Soap.getRD(this, rest);
+	}
+
+	@Override
+	public boolean isSupported(Feature f) {
+		return false;
+	}
+
+	protected RESTv2ExceptionHandler eh;
+
+	public abstract void getBundle(Map<String, String> map, String name, IProgressMonitor monitor);
 }

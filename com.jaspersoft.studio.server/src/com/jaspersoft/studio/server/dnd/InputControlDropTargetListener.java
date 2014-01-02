@@ -132,7 +132,7 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 	protected IConnection doGetFullResources(IProgressMonitor monitor, MReportUnit mrunit, List<MInputControl> ics) {
 		IConnection c = null;
 		try {
-			c = ((MServerProfile) mrunit.getRoot()).getWsClient();
+			c = ((MServerProfile) mrunit.getRoot()).getWsClient(monitor);
 			for (MInputControl n : ics) {
 				try {
 					ResourceDescriptor rd = n.getValue();

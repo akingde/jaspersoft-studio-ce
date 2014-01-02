@@ -246,6 +246,8 @@ public class Messages extends NLS {
 	public static String ResourceDescriptorPage_description;
 	public static String ResourceDescriptorPage_id;
 	public static String ResourceDescriptorPage_title;
+	public static String ResourcePageContent_isReference;
+	public static String ResourcePageContent_UpdateDate;
 	public static String ResourcesPage_description;
 	public static String ResourcesPage_table_overwrite;
 	public static String ResourcesPage_table_resource;

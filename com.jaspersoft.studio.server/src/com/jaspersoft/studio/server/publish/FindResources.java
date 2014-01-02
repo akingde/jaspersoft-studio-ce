@@ -71,7 +71,7 @@ public class FindResources {
 					// We can try to locate a previous existing Report Unit.
 					// If not possible we will popup the selection tree as
 					// usual.
-					MResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(), monitor, prunit, mserv.getWsClient());
+					MResource selectedRepoUnit = WSClientHelper.findSelected(mserv.getChildren(), monitor, prunit, mserv.getWsClient(monitor));
 					if (selectedRepoUnit != null)
 						return selectedRepoUnit;
 				}

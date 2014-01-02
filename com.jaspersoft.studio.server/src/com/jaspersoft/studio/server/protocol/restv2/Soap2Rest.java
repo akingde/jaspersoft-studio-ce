@@ -36,6 +36,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
+import com.jaspersoft.studio.utils.Misc;
 
 public class Soap2Rest {
 
@@ -102,7 +103,7 @@ public class Soap2Rest {
 		if (rd.getListOfValues() != null)
 			for (ListItem l : (List<ListItem>) rd.getListOfValues())
 				lovs.add(new ClientListOfValuesItem(l.getLabel(), (String) l.getValue()));
-		rd.setListOfValues(lovs);
+		cr.setItems(lovs);
 	}
 
 	private static void getMondrianConnection(ARestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
@@ -149,8 +150,11 @@ public class Soap2Rest {
 		cr.setDataSourceName(DiffFields.getSoapValue(rd, DiffFields.DATASOURCENAME));
 		Map<String, String> map = rd.getPropertyMap();
 		List<ClientProperty> props = new ArrayList<ClientProperty>();
-		for (String key : map.keySet())
+		for (String key : map.keySet()) {
+			if (key.equals("password") && Misc.isNullOrEmpty(map.get(key)))
+				continue;
 			props.add(new ClientProperty(key, map.get(key)));
+		}
 		cr.setProperties(props);
 	}
 

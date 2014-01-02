@@ -37,6 +37,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -65,7 +67,12 @@ public class PropertiesAction extends Action {
 			if (obj instanceof MResource) {
 				try {
 					MResource mres = (MResource) obj;
-					mres.setValue(WSClientHelper.getResource(new NullProgressMonitor(), mres, mres.getValue()));
+					ResourceDescriptor rd = WSClientHelper.getResource(new NullProgressMonitor(), mres, mres.getValue());
+					ANode parent = mres.getParent();
+					int index = parent.getChildren().indexOf(mres);
+					parent.removeChild(mres);
+					mres = ResourceFactory.getResource(parent, rd, index);
+					WSClientHelper.fireResourceChanged(mres);
 
 					ResourceWizard wizard = new ResourceWizard(mres, mres);
 					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
@@ -116,7 +123,6 @@ public class PropertiesAction extends Action {
 					}
 					for (ResourceDescriptor rd : toremove)
 						res.getValue().getChildren().remove(rd);
-
 				}
 				WSClientHelper.saveResource(res, monitor);
 			} finally {

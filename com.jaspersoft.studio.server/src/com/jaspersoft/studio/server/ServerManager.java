@@ -189,7 +189,7 @@ public class ServerManager {
 	public static IConnection getServer(String url, IProgressMonitor monitor) throws Exception {
 		for (MServerProfile sp : serverProfiles) {
 			if (sp.getValue().getUrl().equals(url))
-				return sp.getWsClient();
+				return sp.getWsClient(monitor);
 		}
 		return null;
 	}

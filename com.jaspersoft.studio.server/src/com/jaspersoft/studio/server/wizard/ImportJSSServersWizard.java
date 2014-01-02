@@ -35,7 +35,6 @@ import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.data.wizard.ListInstallationPage;
 import com.jaspersoft.studio.data.wizard.SelectWorkspacePage;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.repository.RepositoryView;
@@ -175,13 +174,13 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 				ServerManager.addServerProfile(mservprof);
 			else {
 				MServerProfile newprofile = new MServerProfile(serversNode, mservprof.getValue());
-				for (INode cn : mservprof.getChildren())
-					newprofile.addChild((ANode) cn);
-				try {
-					newprofile.setWsClient(mservprof.getWsClient());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				// for (INode cn : mservprof.getChildren())
+				// newprofile.addChild((ANode) cn);
+				// try {
+				newprofile.setWsClient(null);
+				// } catch (Exception e) {
+				// e.printStackTrace();
+				// }
 				ServerManager.addServerProfile(newprofile);
 				EditServerAction.fillServerProfile(newprofile, treeViewer);
 			}

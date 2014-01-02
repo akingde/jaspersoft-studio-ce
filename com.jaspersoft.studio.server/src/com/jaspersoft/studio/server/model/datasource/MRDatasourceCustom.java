@@ -26,7 +26,6 @@ import com.jaspersoft.studio.server.model.MResource;
 public class MRDatasourceCustom extends MResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String PROP_DATASOURCE_CUSTOM_PROPERTY_MAP = "PROP_DATASOURCE_CUSTOM_PROPERTY_MAP";
-	public static final String PROP_DATASOURCE_CUSTOM_SERVICE_CLASS = "PROP_DATASOURCE_CUSTOM_SERVICE_CLASS";
 
 	public MRDatasourceCustom(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);

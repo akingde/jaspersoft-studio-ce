@@ -53,8 +53,7 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 	private Button ec2Cred;
 	private Button awsCred;
 
-	public DatasourceAWSPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public DatasourceAWSPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -105,19 +104,13 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 				if (awsCred.getSelection()) {
 					ResourceDescriptor rd = res.getValue();
 					if (pAccessKey == null)
-						pAccessKey = new ResourceProperty(
-								MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY,
-								"");
+						pAccessKey = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, "");
 					rd.getProperties().add(pAccessKey);
 					if (pSecretKey == null)
-						pSecretKey = new ResourceProperty(
-								MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY,
-								"");
+						pSecretKey = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, "");
 					rd.getProperties().add(pSecretKey);
 					if (pArn == null)
-						pArn = new ResourceProperty(
-								MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN,
-								"");
+						pArn = new ResourceProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, "");
 					rd.getProperties().add(pArn);
 
 					bindAWS();
@@ -169,38 +162,24 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 		List<ResourceProperty> props = res.getValue().getProperties();
 
 		bindAWS();
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
+		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
 		setEC2Settings(resprop == null);
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, props);
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_REGION, props);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(awsRegion, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsRegion, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, props);
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_SERVICE, props);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(awsService, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsService, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER,
-				props);
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, props);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(awsDBInstance, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsDBInstance, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, props);
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_DB_NAME, props);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(awsDSDBName, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(awsDSDBName, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 		return composite;
 	}
 
@@ -216,27 +195,18 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 	private void bindAWS() {
 		List<ResourceProperty> props = res.getValue().getProperties();
 
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
+		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ACCESS_KEY, props);
 		if (resprop != null)
-			bAccessKey = bindingContext.bindValue(
-					SWTObservables.observeText(awsAccessKey, SWT.Modify),
-					PojoObservables.observeValue(resprop, "value"));
+			bAccessKey = bindingContext.bindValue(SWTObservables.observeText(awsAccessKey, SWT.Modify), PojoObservables.observeValue(resprop, "value"));
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, props);
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_SECRET_KEY, props);
 		if (resprop != null)
-			bSecretKey = bindingContext.bindValue(
-					SWTObservables.observeText(awsSecretKey, SWT.Modify),
-					PojoObservables.observeValue(resprop, "value"));
+			bSecretKey = bindingContext.bindValue(SWTObservables.observeText(awsSecretKey, SWT.Modify), PojoObservables.observeValue(resprop, "value"));
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, props);
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceAWS.PROP_DATASOURCE_AWS_ROLE_ARN, props);
 
 		if (resprop != null)
-			bArn = bindingContext.bindValue(
-					SWTObservables.observeText(awsArn, SWT.Modify),
-					PojoObservables.observeValue(resprop, "value"));
+			bArn = bindingContext.bindValue(SWTObservables.observeText(awsArn, SWT.Modify), PojoObservables.observeValue(resprop, "value"));
 	}
 
 	private void unbindAWS() {
@@ -249,7 +219,6 @@ public class DatasourceAWSPageContent extends DatasourceJDBCPageContent {
 	}
 
 	@Override
-	protected void createImportButton(Composite composite, Text tdriver,
-			Text turl, Text tuser, Text tpass) {
+	protected void createImportButton(Composite composite, Text tdriver, Text turl, Text tuser, Text tpass) {
 	}
 }

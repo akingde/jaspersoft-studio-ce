@@ -1,14 +1,17 @@
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.collections.bidimap.DualHashBidiMap;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.ClientUnknown;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
@@ -37,6 +40,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.MRCSS;
+import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.utils.Misc;
 
 public class WsTypes {
@@ -76,7 +80,7 @@ public class WsTypes {
 		setRestType(ResourceMediaType.JNDI_JDBC_DATA_SOURCE_CLIENT_TYPE, ResourceDescriptor.TYPE_DATASOURCE_JNDI);
 		setRestType(ResourceMediaType.LIST_OF_VALUES_CLIENT_TYPE, ResourceDescriptor.TYPE_LOV);
 		setRestType(ResourceMediaType.MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
-		setRestType(ResourceMediaType.MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE, ResourceDescriptor.TYPE_UNKNOW);
+		setRestType(ResourceMediaType.MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE, ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE);
 		setRestType(ResourceMediaType.OLAP_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAPUNIT);
 		setRestType(ResourceMediaType.QUERY_CLIENT_TYPE, ResourceDescriptor.TYPE_QUERY);
 		setRestType(ResourceMediaType.REPORT_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_REPORTUNIT);
@@ -106,6 +110,7 @@ public class WsTypes {
 		setSoapType(ResourceDescriptor.TYPE_JRXML, ResourceMediaType.FILE_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_LOV, ResourceMediaType.LIST_OF_VALUES_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA, ResourceMediaType.FILE_CLIENT_TYPE);
+		setSoapType(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE, ResourceMediaType.MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION, ResourceMediaType.MONDRIAN_CONNECTION_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION, ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_OLAPUNIT, ResourceMediaType.OLAP_UNIT_CLIENT_TYPE);
@@ -189,7 +194,7 @@ public class WsTypes {
 			return toSoapType(((ClientResourceLookup) cr).getResourceType());
 		if (cr instanceof ClientFile)
 			return toSoapFileType(((ClientFile) cr).getType());
-		return toSoapType((String) types.getKey(cr.getClass()));
+		return toSoapType(types.inverse().get(cr.getClass()));
 	}
 
 	public void setSoapType(String stype, String rtype) {
@@ -208,15 +213,22 @@ public class WsTypes {
 		return Misc.nvl(soapMap.get(stype), stype);
 	}
 
-	private static final BidiMap types = new DualHashBidiMap();
+	private static final BiMap<String, Class<? extends ClientResource<?>>> types = HashBiMap.create();
 
 	public void setType(Class<? extends ClientResource<?>> type) {
 		types.put(getType(type), type);
 	}
 
-	@SuppressWarnings("unchecked")
+	private static List<String> tlist;
+
+	public List<String> getRestTypes() {
+		if (tlist == null)
+			tlist = new ArrayList<String>(types.keySet());
+		return tlist;
+	}
+
 	public Class<? extends ClientResource<?>> getType(String type) {
-		return (Class<? extends ClientResource<?>>) types.get(type);
+		return types.get(type);
 	}
 
 	private static String getType(Class<? extends ClientResource<?>> clientObjectClass) {
@@ -238,7 +250,7 @@ public class WsTypes {
 
 	public ClientResource<?> createResource(ResourceDescriptor rd) {
 		ClientResource<?> cr = null;
-		Class<? extends ClientResource<?>> clazz = (Class<? extends ClientResource<?>>) types.get(toRestType(rd.getWsType()));
+		Class<? extends ClientResource<?>> clazz = types.get(toRestType(rd.getWsType()));
 		try {
 			cr = clazz.newInstance();
 			if (cr instanceof ClientFile)
@@ -253,4 +265,12 @@ public class WsTypes {
 		return cr;
 	}
 
+	private static final Set<String> dsTypes = new HashSet<String>();
+
+	public Set<String> getDatasources() {
+		if (dsTypes.isEmpty())
+			for (String s : DatasourcesAllFilter.getTypes())
+				dsTypes.add(WsTypes.INST().toRestType(s));
+		return dsTypes;
+	}
 }

@@ -87,4 +87,31 @@ public class ErrorDescriptor {
 		}
 	}
 
+	public static class Builder {
+		private ErrorDescriptor errorDescriptor = new ErrorDescriptor();
+
+		public Builder setMessage(String message) {
+			this.errorDescriptor.setMessage(message);
+			return this;
+		}
+
+		public Builder setErrorCode(String errorCode) {
+			this.errorDescriptor.setErrorCode(errorCode);
+			return this;
+		}
+
+		public Builder setParameters(String... parameters) {
+			this.errorDescriptor.setParameters(parameters);
+			return this;
+		}
+
+		public Builder setParameters(Object... args) {
+			this.errorDescriptor.setParameters(args);
+			return this;
+		}
+
+		public ErrorDescriptor getErrorDescriptor() {
+			return errorDescriptor;
+		}
+	}
 }

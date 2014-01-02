@@ -20,7 +20,6 @@
  */
 package com.jaspersoft.jasperserver.api;
 
-import org.apache.log4j.Logger;
 
 /**
  * Runtime Exception for security validation errors

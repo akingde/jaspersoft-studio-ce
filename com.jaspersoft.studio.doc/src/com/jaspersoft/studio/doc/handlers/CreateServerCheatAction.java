@@ -6,7 +6,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.ServerManager;
@@ -18,9 +17,9 @@ import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
 import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
 
 public class CreateServerCheatAction extends AsyncAction {
-	
+
 	private ServerProfileWizard wizardDialog;
-	
+
 	private INode selectedElement;
 
 	@Override
@@ -34,11 +33,9 @@ public class CreateServerCheatAction extends AsyncAction {
 				srv.setName("JasperReports Server");
 				srv.setUrl("http://localhost:8080/jasperserver/services/repository");
 				srv.setUser("username");
-				ServerProfileWizard wizard = new ServerProfileWizard(
-						new MServerProfile(null, srv));
-				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
-						Display.getDefault().getActiveShell(), wizard);
-				wizard.bindTestButton(dialog);			
+				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, srv));
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(Display.getDefault().getActiveShell(), wizard);
+				wizard.bindTestButton(dialog);
 				dialog.create();
 				dialogToOpen = dialog;
 				wizardDialog = wizard;
@@ -47,7 +44,7 @@ public class CreateServerCheatAction extends AsyncAction {
 			}
 		}
 	}
-	
+
 	public void run() {
 		TreeViewer treeViewer = HandlersUtil.getRepositoryView().getTreeViewer();
 		MRoot root = (MRoot) treeViewer.getInput();
@@ -58,44 +55,40 @@ public class CreateServerCheatAction extends AsyncAction {
 				srv.setName("JasperReports Server");
 				srv.setUrl("http://localhost:8080/jasperserver/services/repository");
 				srv.setUser("username");
-				ServerProfileWizard wizard = new ServerProfileWizard(
-						new MServerProfile(null, srv));
-				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
-						Display.getDefault().getActiveShell(), wizard);
-				wizard.bindTestButton(dialog);			
+				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, srv));
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(Display.getDefault().getActiveShell(), wizard);
+				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					MServerProfile mservprof = wizard.getServerProfile();
-					MServerProfile newprofile = new MServerProfile(
-							(MServers) n, mservprof.getValue());
-					for (INode cn : mservprof.getChildren())
-						newprofile.addChild((ANode) cn);
-					try {
-						newprofile.setWsClient(mservprof.getWsClient());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					MServerProfile newprofile = new MServerProfile((MServers) n, mservprof.getValue());
+					// for (INode cn : mservprof.getChildren())
+					// newprofile.addChild((ANode) cn);
+					// try {
+					// newprofile.setWsClient(mservprof.getWsClient());
+					// } catch (Exception e) {
+					// e.printStackTrace();
+					// }
 					ServerManager.addServerProfile(newprofile);
 					EditServerAction.fillServerProfile(newprofile, treeViewer);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void doAction() {
 		TreeViewer treeViewer = HandlersUtil.getRepositoryView().getTreeViewer();
 		if (dialogToOpen.open() == Dialog.OK) {
 			MServerProfile mservprof = wizardDialog.getServerProfile();
-			MServerProfile newprofile = new MServerProfile(
-					(MServers) selectedElement, mservprof.getValue());
-			for (INode cn : mservprof.getChildren())
-				newprofile.addChild((ANode) cn);
-			try {
-				newprofile.setWsClient(mservprof.getWsClient());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			MServerProfile newprofile = new MServerProfile((MServers) selectedElement, mservprof.getValue());
+			// for (INode cn : mservprof.getChildren())
+			// newprofile.addChild((ANode) cn);
+			// try {
+			// newprofile.setWsClient(mservprof.getWsClient());
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
 			ServerManager.addServerProfile(newprofile);
 			EditServerAction.fillServerProfile(newprofile, treeViewer);
 		}

@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.server.protocol;
 
 import java.io.File;
+import java.text.Format;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +10,19 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 public interface IConnection {
+
+	public Format getDateFormat();
+
+	public Format getTimestampFormat();
+
+	public Format getNumberFormat();
+
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception;
 
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception;
@@ -44,4 +54,10 @@ public interface IConnection {
 	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, java.util.Map<String, Object> prm, List<Argument> args) throws Exception;
 
 	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception;
+
+	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception;
+
+	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest) throws Exception;
+
+	public boolean isSupported(Feature f);
 }

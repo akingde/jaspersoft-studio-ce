@@ -1,6 +1,10 @@
 package com.jaspersoft.studio.server.protocol.soap;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +17,30 @@ import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class SoapConnection implements IConnection {
+	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
+	protected DateFormat timestampFormat = SimpleDateFormat.getTimeInstance();
+	protected NumberFormat numberFormat = NumberFormat.getInstance();
+
+	public Format getDateFormat() {
+		return dateFormat;
+	}
+
+	public Format getTimestampFormat() {
+		return timestampFormat;
+	}
+
+	public Format getNumberFormat() {
+		return numberFormat;
+	}
+
 	private WSClient client;
 	private ServerInfo serverInfo;
 
@@ -129,5 +152,20 @@ public class SoapConnection implements IConnection {
 	@Override
 	public String getPassword() {
 		return client.getPassword();
+	}
+
+	@Override
+	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
+		throw new UnsupportedOperationException("Search not implemented for SOAP protocol.");
+	}
+
+	@Override
+	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean isSupported(Feature f) {
+		return false;
 	}
 }

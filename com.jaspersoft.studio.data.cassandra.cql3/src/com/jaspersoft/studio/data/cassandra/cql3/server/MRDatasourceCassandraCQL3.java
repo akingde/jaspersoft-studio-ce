@@ -43,21 +43,18 @@ public class MRDatasourceCassandraCQL3 extends MRDatasourceCustom {
 
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MRDatasourceCustom.createDescriptor(parent);
-		ResourceProperty rp = new ResourceProperty(
-				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
+		ResourceProperty rp = new ResourceProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 		List<ResourceProperty> props = new ArrayList<ResourceProperty>();
-		props.add(new ResourceProperty(HOSTNAME,"localhost"));
+		props.add(new ResourceProperty(HOSTNAME, "localhost"));
 		props.add(new ResourceProperty(PORT, "9160"));
 		props.add(new ResourceProperty(KEYSPACE, "keyspace"));
 		props.add(new ResourceProperty(CASSANDRAVERSION, "1.2"));
 		props.add(new ResourceProperty(CLUSTERNAME, "cluster"));
 		props.add(new ResourceProperty(ISFRAMED, "false"));
 		rp.setProperties(props);
-		rd.getProperties().add(rp);
-		rp = new ResourceProperty(
-				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS,
-				CUSTOM_CLASS);
-		rd.getProperties().add(rp);
+		rd.setResourceProperty(rp);
+		rp = new ResourceProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, CUSTOM_CLASS);
+		rd.setResourceProperty(rp);
 		return rd;
 	}
 }

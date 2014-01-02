@@ -32,7 +32,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -112,13 +111,13 @@ public class ExtensionManager {
 		return protocols;
 	}
 
-	public ANode createNewResource(MRoot root, ANode parent) {
+	public ANode createNewResource(ANode root, ANode parent) {
 		for (IResourceFactory r : resources)
 			r.createNewResource(root, parent);
 		return null;
 	}
 
-	public ANode createNewDatasource(MRoot root, ANode parent) {
+	public ANode createNewDatasource(ANode root, ANode parent) {
 		for (IResourceFactory r : resources)
 			r.createNewDatasource(root, parent);
 		return null;

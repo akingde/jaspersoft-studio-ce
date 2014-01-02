@@ -17,7 +17,9 @@ import java.util.List;
 
 import org.eclipse.gef.dnd.DelegatingDragAdapter;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -148,6 +150,14 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			public void selectionChanged(SelectionChangedEvent event) {
+				for (IContributionItem ci : topToolbarManager.getItems()) {
+					if (ci instanceof ActionContributionItem) {
+						IAction action = ((ActionContributionItem) ci).getAction();
+						action.setEnabled(action.isEnabled());
+					}
+				}
+				getViewSite().getActionBars().updateActionBars();
+
 				IActionBars actionBars = getViewSite().getActionBars();
 				actionBars.clearGlobalActionHandlers();
 
@@ -186,6 +196,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 
 	private List<IRepositoryViewProvider> rprovs;
 	private ExtensionManager extensionManager;
+	private IToolBarManager topToolbarManager;
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -219,14 +230,14 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	 * Create toolbar.
 	 */
 	private void createToolbar() {
-		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+		topToolbarManager = getViewSite().getActionBars().getToolBarManager();
 
 		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
 			Action[] actions = rp.getActions(treeViewer);
 			if (actions != null) {
 				for (Action a : actions)
-					mgr.add(a);
+					topToolbarManager.add(a);
 			}
 		}
 	}

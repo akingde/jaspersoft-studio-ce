@@ -70,13 +70,13 @@ public class ReportRunControler {
 		this.reportUnit = key;
 		if (viewmap != null && prmInput == null) {
 			try {
-				cli = WSClientHelper.getClient(reportUnit);
 				icm = new InputControlsManager(reportUnit);
 				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
+							cli = WSClientHelper.getClient(monitor, reportUnit);
 							rdrepunit = WSClientHelper.getReportUnit(monitor, reportUnit);
 							List<ResourceDescriptor> list = cli.list(monitor, rdrepunit);
 							icm.getInputControls(list, cli);

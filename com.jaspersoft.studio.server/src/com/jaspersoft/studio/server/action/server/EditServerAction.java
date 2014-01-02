@@ -30,8 +30,6 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
@@ -76,14 +74,8 @@ public class EditServerAction extends Action {
 				if (dialog.open() == Dialog.OK) {
 					MServerProfile msprof = wizard.getServerProfile();
 					mspold.setValue(msprof.getValue());
-					try {
-						mspold.setWsClient(msprof.getWsClient());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					mspold.removeChildren();
-					for (INode cn : msprof.getChildren())
-						mspold.addChild((ANode) cn);
+					mspold.setWsClient(null);
+
 					ServerManager.saveServerProfile(mspold);
 					fillServerProfile(mspold, treeViewer);
 

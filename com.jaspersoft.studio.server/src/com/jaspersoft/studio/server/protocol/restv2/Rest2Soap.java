@@ -4,12 +4,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
@@ -35,6 +34,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientSubDataSourceReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.utils.RDUtil;
 
@@ -155,10 +155,12 @@ public class Rest2Soap {
 	private static void getCustomDataSource(ARestV2Connection rc, ClientCustomDataSource cr, ResourceDescriptor rd) throws ParseException {
 		rd.setServiceClass(cr.getServiceClass());
 		if (cr.getProperties() != null) {
-			Map<String, String> map = new HashMap<String, String>();
+			ResourceProperty rp = new ResourceProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
+			List<ResourceProperty> props = new ArrayList<ResourceProperty>();
 			for (ClientProperty cp : cr.getProperties())
-				map.put(cp.getKey(), cp.getValue());
-			rd.setPropertyMap(map);
+				props.add(new ResourceProperty(cp.getKey(), cp.getValue()));
+			rp.setProperties(props);
+			rd.setResourceProperty(rp);
 		}
 		DiffFields.setSoapValue(rd, DiffFields.DATASOURCENAME, cr.getDataSourceName());
 	}

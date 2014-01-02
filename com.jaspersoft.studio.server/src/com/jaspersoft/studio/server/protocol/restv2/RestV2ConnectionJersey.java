@@ -1,14 +1,16 @@
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,18 +19,17 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.CredentialsProvider;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
-import org.glassfish.jersey.apache.connector.ApacheConnector;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
@@ -36,14 +37,21 @@ import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
+import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.report.ReportExecutionRequest;
+import com.jaspersoft.jasperserver.remote.services.ExportExecution;
+import com.jaspersoft.jasperserver.remote.services.ReportExecution;
+import com.jaspersoft.jasperserver.remote.services.ReportOutputResource;
+import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -57,18 +65,8 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 				r = res.readEntity(clazz);
 			case 204:
 				break;
-			case 400:
-			case 403:
-			case 404:
-			case 409:
-			case 500:
-				if (res.getHeaderString("Content-Type").equals(MediaType.APPLICATION_XML_TYPE)) {
-					ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-					if (ed != null)
-						throw new ClientProtocolException(MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters()));
-				}
 			default:
-				throw new HttpResponseException(res.getStatus(), res.getStatusInfo().getReasonPhrase());
+				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -79,33 +77,44 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		return r;
 	}
 
-	private void readFile(Response res, File f) throws IOException {
+	private <T> T toObj(Response res, final GenericType<T> type, IProgressMonitor monitor) throws IOException {
+		T r = null;
 		try {
 			switch (res.getStatus()) {
 			case 200:
-				InputStream obj = res.readEntity(InputStream.class);
-				if (obj != null) {
+				r = res.readEntity(type);
+			case 204:
+				break;
+			default:
+				eh.handleException(res, monitor);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			res.close();
+		}
+		return r;
+	}
+
+	private void readFile(Response res, File f, IProgressMonitor monitor) throws IOException {
+		try {
+			switch (res.getStatus()) {
+			case 200:
+				InputStream in = res.readEntity(InputStream.class);
+				if (in != null) {
 					OutputStream out = new FileOutputStream(f);
 					try {
-						IOUtils.copy((InputStream) obj, out);
+						IOUtils.copy(in, out);
 					} finally {
 						FileUtils.closeStream(out);
+						FileUtils.closeStream(in);
 					}
 				}
 			case 204:
 				break;
-			case 400:
-			case 403:
-			case 404:
-			case 409:
-			case 500:
-				if (res.getHeaderString("Content-Type").equals(MediaType.APPLICATION_XML_TYPE)) {
-					ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-					if (ed != null)
-						throw new ClientProtocolException(MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters()));
-				}
 			default:
-				throw new HttpResponseException(res.getStatus(), res.getStatusInfo().getReasonPhrase());
+				eh.handleException(res, monitor);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,25 +124,49 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		}
 	}
 
-	private void writeFile(Response res, InputStream in) throws IOException {
+	private byte[] readFile(Response res, IProgressMonitor monitor) throws IOException {
+		byte[] b = null;
+		try {
+			switch (res.getStatus()) {
+			case 200:
+				InputStream in = res.readEntity(InputStream.class);
+				if (in != null) {
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					try {
+						byte[] data = new byte[1000];
+						int bytesRead;
+						while ((bytesRead = in.read(data)) != -1)
+							out.write(data, 0, bytesRead);
+
+						b = out.toByteArray();
+					} finally {
+						FileUtils.closeStream(out);
+						FileUtils.closeStream(in);
+					}
+				}
+			case 204:
+				break;
+			default:
+				eh.handleException(res, monitor);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			res.close();
+		}
+		return b;
+	}
+
+	private void writeFile(Response res, InputStream in, IProgressMonitor monitor) throws IOException {
 		try {
 			switch (res.getStatus()) {
 			case 200:
 				res.readEntity(String.class);
 			case 204:
 				break;
-			case 400:
-			case 403:
-			case 404:
-			case 409:
-			case 500:
-				if (res.getHeaderString("Content-Type").equals(MediaType.APPLICATION_XML_TYPE)) {
-					ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-					if (ed != null)
-						throw new ClientProtocolException(MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters()));
-				}
 			default:
-				throw new HttpResponseException(res.getStatus(), res.getStatusInfo().getReasonPhrase());
+				eh.handleException(res, monitor);
 			}
 		} finally {
 			FileUtils.closeStream(in);
@@ -143,24 +176,32 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+		this.eh = new RESTv2ExceptionHandler(this);
 		this.sp = sp;
 
 		ClientConfig clientConfig = new ClientConfig();
 		// values are in milliseconds
-		clientConfig.property(ClientProperties.READ_TIMEOUT, sp.getTimeout());
+		// clientConfig.property(ClientProperties.READ_TIMEOUT, sp.getTimeout());
 		clientConfig.property(ClientProperties.CONNECT_TIMEOUT, sp.getTimeout());
-
+		if (sp.isChunked())
+			clientConfig.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024);
 		clientConfig.property(ApacheClientProperties.PREEMPTIVE_BASIC_AUTHENTICATION, true);
 
 		// config your ssl for apache connector
 		SslConfigurator sslConfig = SslConfigurator.newInstance(true);
 		clientConfig.property(ApacheClientProperties.SSL_CONFIG, sslConfig);
 
-		ApacheConnector connector = new ApacheConnector(clientConfig);
+		connector = new JSSApacheConnector(clientConfig);
 		clientConfig.connector(connector);
+		// connector.getHttpClient().getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+		// proxy);
+
+		CredentialsProvider cp = (CredentialsProvider) clientConfig.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
+
+		// cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
+		// credentials);
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
-
 		String user = sp.getUser();
 		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
 			user += "|" + sp.getOrganisation();
@@ -172,12 +213,14 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 	}
 
 	private WebTarget target;
+	private JSSApacheConnector connector;
 
 	@Override
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception {
 		if (serverInfo != null)
 			return serverInfo;
-		serverInfo = toObj(target.path("serverInfo").request().get(), ServerInfo.class, monitor);
+		Builder req = target.path("serverInfo").request();
+		serverInfo = toObj(connector.get(req, monitor), ServerInfo.class, monitor);
 		if (serverInfo != null) {
 			dateFormat = new SimpleDateFormat(serverInfo.getDateFormatPattern());
 			timestampFormat = new SimpleDateFormat(serverInfo.getDatetimeFormatPattern());
@@ -198,8 +241,8 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 			tgt = tgt.queryParam("sortBy", "label");
 			tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
 
-			System.out.println(tgt.getUri());
-			ClientResourceListWrapper resources = toObj(tgt.request().get(), ClientResourceListWrapper.class, monitor);
+			Builder req = tgt.request();
+			ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
 			if (resources != null) {
 				boolean isPublic = false;
 				for (ClientResourceLookup crl : resources.getResourceLookups()) {
@@ -244,15 +287,16 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		WebTarget tgt = target.path("resources" + rd.getUriString());
 		tgt = tgt.queryParam("expanded", "true");
 
-		System.out.println(tgt.getUri());
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
-		ClientResource<?> crl = toObj(tgt.request("application/repository." + rtype + "+" + FORMAT).get(), WsTypes.INST().getType(rtype), monitor);
+		Builder req = tgt.request("application/repository." + rtype + "+" + FORMAT);
+		ClientResource<?> crl = toObj(connector.get(req, monitor), WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {
 			if (f != null && crl instanceof ClientFile) {
 				ClientFile cf = (ClientFile) crl;
 				tgt = target.path("resources" + rd.getUriString());
 
-				readFile(tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType()).get(), f);
+				req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
+				readFile(connector.get(req, monitor), f, monitor);
 			}
 			return Rest2Soap.getRD(this, crl, rd);
 		}
@@ -272,7 +316,8 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Response r = tgt.request().header("Content-Location", rd.getUriString()).put(Entity.entity("", MediaType.APPLICATION_XML_TYPE));
+		Builder req = tgt.request().header("Content-Location", rd.getUriString());
+		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
 			return Rest2Soap.getRD(this, crl, rd);
@@ -287,7 +332,8 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Response r = tgt.request().header("Content-Location", rd.getUriString()).post(Entity.entity("", MediaType.APPLICATION_XML_TYPE));
+		Builder req = tgt.request().header("Content-Location", rd.getUriString());
+		Response r = connector.post(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
 			return Rest2Soap.getRD(this, crl, rd);
@@ -303,21 +349,30 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		tgt = tgt.queryParam("createFolders", "true");
 		tgt = tgt.queryParam("overwrite", "true");
 
-		Response r = tgt.request().put(Entity.entity(cr, "application/repository." + rtype + "+" + FORMAT));
+		Builder req = tgt.request();
+		Response r = connector.put(req, Entity.entity(cr, "application/repository." + rtype + "+" + FORMAT), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {
+			boolean refresh = false;
 			if (crl instanceof ClientFile && inputFile != null) {
 				ClientFile cf = (ClientFile) crl;
 				tgt = target.path("resources" + rd.getUriString());
 
-				Builder h = tgt.request().header("Content-Description", cf.getLabel());
-				h = h.header("Content-Disposition", "attachment; filename=" + inputFile.getName());
+				req = req.header("Content-Description", cf.getLabel());
+				req = req.header("Content-Disposition", "attachment; filename=" + inputFile.getName());
 				InputStream in = new FileInputStream(inputFile);
-				writeFile(h.put(Entity.entity(in, cf.getType().getMimeType())), in);
+				writeFile(connector.put(req, Entity.entity(in, cf.getType().getMimeType()), monitor), in, monitor);
+				refresh = true;
 			}
-			return Rest2Soap.getRD(this, crl, rd);
+			List<ResourceDescriptor> children = rd.getChildren();
+			for (ResourceDescriptor child : children)
+				addOrModifyResource(monitor, child, null);
+			if (refresh)
+				rd = get(monitor, rd, null);
+			else
+				rd = Rest2Soap.getRD(this, crl, rd);
 		}
-		return null;
+		return rd;
 	}
 
 	@Override
@@ -328,7 +383,7 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 	@Override
 	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		WebTarget tgt = target.path("resources" + rd.getUriString());
-		if (tgt.request().delete().getStatus() == 204)
+		if (connector.delete(tgt.request(), monitor).getStatus() == 204)
 			System.out.println("Deleted");
 	}
 
@@ -339,8 +394,71 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 
 	@Override
 	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, FileContent> map = new HashMap<String, FileContent>();
+
+		ReportExecutionRequest rer = new ReportExecutionRequest();
+		rer.setReportUnitUri(rd.getUriString());
+		rer.setAsync(false);
+		rer.setFreshData(true);
+		rer.setIgnorePagination(false);
+		rer.setInteractive(false);
+		String ouput = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
+		rer.setOutputFormat(ouput);
+		// rer.setTransformerKey(transformerKey);
+		rer.setSaveDataSnapshot(false);
+		if (prm != null && !prm.isEmpty()) {
+			List<ReportParameter> list = new ArrayList<ReportParameter>();
+			for (String key : prm.keySet()) {
+				ReportParameter rprm = new ReportParameter();
+				rprm.setName(key);
+				Object item = prm.get(key);
+				List<String> vals = new ArrayList<String>();
+				if (item instanceof Collection<?>) {
+					Collection<?> c = (Collection<?>) item;
+					for (Object obj : c)
+						vals.add(toRestString(obj));
+				} else
+					vals.add(toRestString(item));
+				rprm.setValues(vals);
+				list.add(rprm);
+			}
+			rer.setParameters(new ReportParameters(list));
+		}
+		WebTarget tgt = target.path("reportExecutions");
+
+		Builder req = tgt.request();
+		Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
+		ReportExecution res = toObj(r, ReportExecution.class, monitor);
+		if (res != null && res.getErrorDescriptor() == null) {
+			if (res.getExportsSet() != null) {
+				int i = 0;
+				for (ExportExecution ee : res.getExportsSet()) {
+					tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
+					req = tgt.request(ee.getOutputResource().getContentType());
+					byte[] d = readFile(connector.get(req, monitor), monitor);
+					addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
+					if (ee.getAttachmentsSet() != null)
+						for (ReportOutputResource ror : ee.getAttachmentsSet()) {
+							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
+							req = tgt.request(ror.getContentType());
+							d = readFile(connector.get(req, monitor), monitor);
+							addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
+						}
+				}
+			}
+		}
+		return map;
+	}
+
+	private void addFileContent(byte[] d, Map<String, FileContent> map, ReportOutputResource r, String id, String key) {
+		if (d != null) {
+			FileContent content = new FileContent();
+			content.setData(d);
+			content.setMimeType(r.getContentType());
+			content.setName(Misc.nvl(r.getFileName(), id));
+
+			map.put(key, content);
+		}
 	}
 
 	@Override
@@ -349,15 +467,65 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		WebTarget tgt = target.path("resources");
 		for (String type : DatasourcesAllFilter.getTypes())
 			tgt = tgt.queryParam("type", type);
-		tgt = tgt.queryParam("recursive", "false");
 		tgt = tgt.queryParam("sortBy", "label");
 		tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
 
-		ClientResourceListWrapper resources = toObj(tgt.request().get(), ClientResourceListWrapper.class, monitor);
+		Builder req = tgt.request();
+		ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
 		if (resources != null)
 			for (ClientResourceLookup crl : resources.getResourceLookups())
 				rds.add(Rest2Soap.getRDLookup(this, crl));
 		return rds;
+	}
+
+	@Override
+	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
+		connector.closeLastRequest();
+		if (callback.getText() == null) {
+			callback.showResults(null);
+			return;
+		}
+		WebTarget tgt = target.path("resources");
+		tgt = tgt.queryParam("q", callback.getText());
+		for (String type : callback.getTypes())
+			tgt = tgt.queryParam("type", type);
+		tgt = tgt.queryParam("sortBy", "label");
+		tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
+
+		Builder req = tgt.request();
+		ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
+		callback.showResults(resources != null ? resources.getResourceLookups() : null);
+	}
+
+	@Override
+	public boolean isSupported(Feature f) {
+		switch (f) {
+		case SEARCHREPOSITORY:
+			return true;
+		case UPDATEDATE:
+			return true;
+		case TIMEZONE:
+			return true;
+		case PERMISSION:
+			return true;
+		case DATASOURCENAME:
+			return true;
+		}
+		return super.isSupported(f);
+	}
+
+	@Override
+	public void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) {
+		Builder req = target.path("bundles/" + name).request(MediaType.APPLICATION_JSON_TYPE);
+		try {
+			GenericType<Map<String, String>> type = new GenericType<Map<String, String>>() {
+			};
+			Map<String, String> m = toObj(connector.get(req, monitor), type, monitor);
+			if (m != null)
+				map.putAll(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

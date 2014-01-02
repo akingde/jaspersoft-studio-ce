@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
@@ -19,6 +14,7 @@ import java.util.Arrays;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -44,6 +40,14 @@ public class WTimeZone extends Composite {
 	public void setToolTipText(String string) {
 		super.setToolTipText(string);
 		combo.setToolTipText(string);
+	}
+
+	public void addModifyListener(ModifyListener m) {
+		combo.addModifyListener(m);
+	}
+
+	public void removeModifyListener(ModifyListener m) {
+		combo.removeModifyListener(m);
 	}
 
 	public void addSelectionListener(SelectionListener m) {
@@ -73,6 +77,6 @@ public class WTimeZone extends Composite {
 	public TimeZone getTimeZone() {
 		if (combo.getSelectionIndex() >= 0 && combo.getSelectionIndex() < timezones.length)
 			return TimeZone.getTimeZone(timezones[combo.getSelectionIndex()]);
-		return TimeZone.getDefault();
+		return null;
 	}
 }

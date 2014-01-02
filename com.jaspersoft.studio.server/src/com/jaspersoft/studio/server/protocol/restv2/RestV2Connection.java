@@ -34,6 +34,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
+import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.ConnectionManager;
 import com.jaspersoft.studio.server.utils.HttpUtils;
@@ -235,6 +236,16 @@ public class RestV2Connection extends ARestV2Connection {
 	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
+		throw new UnsupportedOperationException("Search not implemented for SOAP protocol.");
+	}
+
+	@Override
+	public void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) {
+
 	}
 
 }

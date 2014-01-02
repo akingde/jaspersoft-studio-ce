@@ -15,12 +15,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.ParseException;
+import java.util.Date;
+
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.conversion.Converter;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -36,6 +43,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -55,7 +65,7 @@ public class ResourcePageContent extends APageContent {
 
 	@Override
 	public String getPageName() {
-		return "com.jaspersoft.studio.server.page.resource";
+		return "com.jaspersoft.studio.server.page.resource"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -80,7 +90,7 @@ public class ResourcePageContent extends APageContent {
 		// ttype.setEnabled(false);
 
 		Button bisRef = new Button(composite, SWT.CHECK);
-		bisRef.setText("is Reference");
+		bisRef.setText(Messages.ResourcePageContent_isReference);
 		bisRef.setEnabled(false);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_creationdate);
@@ -89,6 +99,18 @@ public class ResourcePageContent extends APageContent {
 		gd.horizontalSpan = 2;
 		tcdate.setLayoutData(gd);
 		// tcdate.setEnabled(false);
+
+		ResourceDescriptor rd = res.getValue();
+		Proxy proxy = new Proxy(rd);
+		if (res.isSupported(Feature.UPDATEDATE)) {
+			UIUtil.createLabel(composite, Messages.ResourcePageContent_UpdateDate);
+			Text tudate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			tudate.setLayoutData(gd);
+
+			bindingContext.bindValue(SWTObservables.observeText(tudate, SWT.NONE), PojoObservables.observeValue(proxy, "updateDate")); //$NON-NLS-1$
+		}
 
 		UIUtil.createSeparator(composite, 3);
 
@@ -111,10 +133,31 @@ public class ResourcePageContent extends APageContent {
 		gd.horizontalSpan = 2;
 		tdesc.setLayoutData(gd);
 
-		final ResourceDescriptor rd = res.getValue();
-		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(rd, "parentFolder")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(proxy, "parentFolder")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate")); //$NON-NLS-1$
+		IConnection c = res.getWsClient();
+		final Format f = (c != null ? c.getTimestampFormat() : DateFormat.getTimeInstance());
+
+		IConverter t2mConv = new Converter(String.class, Date.class) {
+
+			public Object convert(Object fromObject) {
+				try {
+					if (fromObject != null && fromObject instanceof String && !((String) fromObject).isEmpty())
+						return f.parseObject((String) fromObject);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		};
+		IConverter m2tConv = new Converter(Date.class, String.class) {
+
+			public Object convert(Object fromObject) {
+				return f.format(fromObject);
+			}
+		};
+		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv),
+				new UpdateValueStrategy().setConverter(m2tConv));
 
 		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
 
@@ -147,11 +190,11 @@ public class ResourcePageContent extends APageContent {
 
 	@Override
 	public String getHelpContext() {
-		return "com.jaspersoft.studio.doc.editResource";
+		return "com.jaspersoft.studio.doc.editResource"; //$NON-NLS-1$
 	}
 
 	public static String safeChar(String input) {
-		char[] allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_./".toCharArray();
+		char[] allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_./".toCharArray(); //$NON-NLS-1$
 		char[] charArray = input.toString().toCharArray();
 		StringBuilder result = new StringBuilder();
 		for (char c : charArray) {
@@ -169,5 +212,35 @@ public class ResourcePageContent extends APageContent {
 			return false;
 		}
 		return super.isPageComplete();
+	}
+
+	class Proxy {
+		private ResourceDescriptor rd;
+
+		public Proxy(ResourceDescriptor rd) {
+			this.rd = rd;
+		}
+
+		public ResourceDescriptor getResourceDescriptor() {
+			return rd;
+		}
+
+		public String getUpdateDate() {
+			return DiffFields.getSoapValue(rd, DiffFields.UPDATEDATE);
+		}
+
+		public void setUpdateDate(String name) {
+		}
+
+		public String getParentFolder() {
+			String p = rd.getParentFolder();
+			if (Misc.isNullOrEmpty(p))
+				p = "/";
+			return p;
+		}
+
+		public void setParentFolder(String p) {
+			rd.setParentFolder(p);
+		}
 	}
 }

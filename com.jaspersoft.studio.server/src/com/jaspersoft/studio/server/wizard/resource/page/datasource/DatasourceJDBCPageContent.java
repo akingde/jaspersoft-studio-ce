@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
@@ -43,8 +44,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasourceJDBCPageContent extends APageContent {
 
-	public DatasourceJDBCPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public DatasourceJDBCPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -86,34 +86,27 @@ public class DatasourceJDBCPageContent extends APageContent {
 		final Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		createImportButton(composite, tdriver, turl, tuser, tpass);
+		TimeZoneProperty.addTimeZone(res, composite);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(tdriver, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "driverClass")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "connectionUrl")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "username")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "password")); //$NON-NLS-1$
+		createImportButton(composite, tdriver, turl, tuser, tpass);
+		ResourceDescriptor rd = res.getValue();
+		bindingContext.bindValue(SWTObservables.observeText(tdriver, SWT.Modify), PojoObservables.observeValue(rd, "driverClass")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(rd, "connectionUrl")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(rd, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(rd, "password")); //$NON-NLS-1$
 
 		return composite;
 	}
 
-	protected void createImportButton(Composite composite, final Text tdriver,
-			final Text turl, final Text tuser, final Text tpass) {
+	protected void createImportButton(Composite composite, final Text tdriver, final Text turl, final Text tuser, final Text tpass) {
 		Button importDA = new Button(composite, SWT.NONE);
 		importDA.setText(Messages.RDDatasourceJDBCPage_ImportButton);
 		importDA.setToolTipText(Messages.RDDatasourceJDBCPage_ImportButtonTooltip);
-		importDA.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false, 2,
-				1));
+		importDA.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false, 2, 1));
 		importDA.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ImportDataSourceInfoFromDA<JdbcDataAdapter> dialog = new ImportDataSourceInfoFromDA<JdbcDataAdapter>(
-						Display.getDefault().getActiveShell(),
-						"JDBC", JdbcDataAdapter.class); //$NON-NLS-1$
+				ImportDataSourceInfoFromDA<JdbcDataAdapter> dialog = new ImportDataSourceInfoFromDA<JdbcDataAdapter>(Display.getDefault().getActiveShell(), "JDBC", JdbcDataAdapter.class); //$NON-NLS-1$
 				if (dialog.open() == Window.OK) {
 					// get information from the selected DA
 					JdbcDataAdapter da = dialog.getSelectedDataAdapter();
@@ -132,16 +125,17 @@ public class DatasourceJDBCPageContent extends APageContent {
 			}
 		});
 	}
-	
+
 	/*
-	 * Password could be stored in the secure preferences, therefore it tries to decode it.
-	 * Fallback case will return the same password, ensuring back-compatibility. 
+	 * Password could be stored in the secure preferences, therefore it tries to
+	 * decode it. Fallback case will return the same password, ensuring
+	 * back-compatibility.
 	 */
 	private String getDecodedPassword(String encodedPasswd) {
 		SecretsUtil secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultJRConfig());
 		return secretsUtil.getSecret(AbstractDataAdapterService.SECRETS_CATEGORY, encodedPasswd);
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.adapter_JDBC";

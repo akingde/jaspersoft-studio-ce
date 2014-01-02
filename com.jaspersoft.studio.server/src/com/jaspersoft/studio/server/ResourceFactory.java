@@ -16,14 +16,19 @@
 package com.jaspersoft.studio.server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MDummy;
+import com.jaspersoft.studio.server.model.MAdHocDataView;
 import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MFolder;
@@ -55,10 +60,12 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 import com.jaspersoft.studio.server.model.datasource.MRMondrianSchema;
+import com.jaspersoft.studio.server.model.datasource.MRMondrianXmlaDefinitionClientType;
 import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.CSSPageContent;
@@ -78,6 +85,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.XmlPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DataAdapterPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceAWSPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceBeanPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceCustomPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJDBCPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJndiPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceVDSPageContent;
@@ -87,6 +95,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasou
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitInputControlContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitOptionsContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitQueryContent;
+import com.jaspersoft.studio.utils.Misc;
 
 public class ResourceFactory {
 
@@ -122,7 +131,9 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DatasourceJDBCPageContent(parent, resource));
 				else if (resource instanceof MRDatasourceBean)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DatasourceBeanPageContent(parent, resource));
-				else if (resource instanceof MRDatasourceCustom || resource instanceof MRDatasource || resource instanceof MFolder)
+				else if (resource instanceof MRDatasourceCustom)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DatasourceCustomPageContent(parent, resource));
+				else if (resource instanceof MRDatasource || resource instanceof MFolder)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 				else if (resource instanceof MReportUnit)
 					if (ReportUnitQueryContent.hasTypeQuery(resource))
@@ -229,7 +240,7 @@ public class ResourceFactory {
 			return new MRDatasourceBean(parent, resource, index);
 
 		if (wstype.equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM)) {
-			ResourceProperty rp = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
+			ResourceProperty rp = ResourceDescriptorUtil.getProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, resource.getProperties());
 			if (rp != null) {
 				if (rp.getValue().equals(MRDatasourceDiagnostic.CUSTOM_CLASS))
 					return new MRDatasourceDiagnostic(parent, resource, index);
@@ -246,7 +257,7 @@ public class ResourceFactory {
 		if (wstype.equals(MRDatasourceAWS.TYPE_AWS))
 			return new MRDatasourceAWS(parent, resource, index);
 
-		if (wstype.equals("ReportOptionsResource"))
+		if (wstype.equals(ResourceDescriptor.TYPE_REPORT_OPTIONS) || wstype.equals("ReportOptionsResource"))
 			return new MReportUnitOptions(parent, resource, index);
 
 		if (wstype.equals(ResourceDescriptor.TYPE_XML_FILE))
@@ -254,8 +265,12 @@ public class ResourceFactory {
 
 		if (wstype.equals(ResourceDescriptor.TYPE_DASHBOARD))
 			return new MRDashboard(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW))
+			return new MAdHocDataView(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
 			return new MRMondrianSchema(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
+			return new MRMondrianXmlaDefinitionClientType(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
 			return new MROlapMondrianConnection(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
@@ -270,9 +285,61 @@ public class ResourceFactory {
 		return new MUnknown(parent, resource, index);
 	}
 
-	public static boolean isFileResourceType(ResourceDescriptor ref) {
-		String t = ref.getWsType();
-		return t.equals(ResourceDescriptor.TYPE_IMAGE) || t.equals(ResourceDescriptor.TYPE_FONT) || t.equals(ResourceDescriptor.TYPE_JRXML) || t.equals(ResourceDescriptor.TYPE_CLASS_JAR)
-				|| t.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE) || t.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE) || t.equals(ResourceDescriptor.TYPE_XML_FILE);
+	private static Set<String> fileTypes = new HashSet<String>();
+	static {
+		fileTypes.add(ResourceDescriptor.TYPE_IMAGE);
+		fileTypes.add(ResourceDescriptor.TYPE_FONT);
+		fileTypes.add(ResourceDescriptor.TYPE_JRXML);
+		fileTypes.add(ResourceDescriptor.TYPE_CLASS_JAR);
+		fileTypes.add(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
+		fileTypes.add(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
+		fileTypes.add(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
+		fileTypes.add(ResourceDescriptor.TYPE_XML_FILE);
+	}
+
+	public static boolean isFileResourceType(ResourceDescriptor r) {
+		return fileTypes.contains(r.getWsType());
+	}
+
+	private static Map<String, ImageDescriptor> tIcons = new HashMap<String, ImageDescriptor>();
+	private static Map<String, String> tName = new HashMap<String, String>();
+
+	public static Image getIcon(String rtype) {
+		ImageDescriptor id = tIcons.get(rtype);
+		if (id == null) {
+			initType(rtype);
+			id = tIcons.get(rtype);
+		}
+		return Activator.getDefault().getImage(id);
+	}
+
+	protected static void initType(String rtype) {
+		ResourceDescriptor rd = new ResourceDescriptor();
+		rd.setWsType(WsTypes.INST().toSoapType(rtype));
+		MResource r = getResource(null, rd, -1);
+		tIcons.put(rtype, r.getThisIconDescriptor().getIcon16());
+		tName.put(rtype, r.getThisIconDescriptor().getTitle());
+		System.out.println(rtype + ":" + r.getThisIconDescriptor().getTitle());
+	}
+
+	public static String getName(String rtype) {
+		String id = tName.get(rtype);
+		if (id == null) {
+			initType(rtype);
+			id = tName.get(rtype);
+		}
+		return id;
+	}
+
+	private static Map<String, String> typeNames;
+
+	public static Map<String, String> getTypeNames() {
+		if (typeNames == null) {
+			typeNames = new HashMap<String, String>();
+			for (String rtype : WsTypes.INST().getRestTypes())
+				typeNames.put(rtype, getName(rtype));
+			typeNames = Misc.sortByValues(typeNames);
+		}
+		return typeNames;
 	}
 }

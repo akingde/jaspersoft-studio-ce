@@ -151,7 +151,7 @@ public class PasteResourceAction extends Action {
 	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((MResource) parent).getValue().getUriString();
-		IConnection ws = sp.getWsClient();
+		IConnection ws = sp.getWsClient(monitor);
 		Set<ANode> toRefresh = new HashSet<ANode>();
 
 		monitor.beginTask("Paste elements to: " + dURI, list.size());
@@ -246,7 +246,7 @@ public class PasteResourceAction extends Action {
 		if (p instanceof MResource)
 			WSClientHelper.refreshResource((MResource) p, monitor);
 		else if (p instanceof MServerProfile) {
-			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(), "/", monitor, 2);
+			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(monitor), "/", monitor, 2);
 		}
 	}
 }

@@ -72,6 +72,8 @@ import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.Callback;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class AddResourcePage extends WizardPage {
@@ -150,11 +152,14 @@ public class AddResourcePage extends WizardPage {
 		this.ruOnly = ruOnly;
 	}
 
-	private MRoot getInput() {
-		MRoot root = new MRoot(null, null);
-		MRoot mroot = null;
+	private ANode getInput() {
+		MServerProfile root = new MServerProfile(null, null);
+		if (parent instanceof MResource)
+			root.setWsClient(((MResource) parent).getWsClient());
+		if (parent instanceof MServerProfile)
+			root.setWsClient(((MServerProfile) parent).getWsClient((Callback<IConnection>) null));
 		if (dsonly) {
-			mroot = createDatasources(root);
+			createDatasources(root);
 		} else if (ruOnly) {
 			createReportUnit(root);
 		} else {
@@ -162,7 +167,7 @@ public class AddResourcePage extends WizardPage {
 				new MFolder(root, MFolder.createDescriptor(parent), -1);
 				createReportUnit(root);
 
-				mroot = createDatasources(root);
+				createDatasources(root);
 
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
@@ -212,7 +217,7 @@ public class AddResourcePage extends WizardPage {
 					}
 				}
 				if (!dsexists)
-					mroot = createDatasources(root);
+					createDatasources(root);
 			}
 
 			Activator.getExtManager().createNewResource(root, parent);
@@ -233,11 +238,11 @@ public class AddResourcePage extends WizardPage {
 		return root;
 	}
 
-	protected void createReportUnit(MRoot root) {
+	protected void createReportUnit(ANode root) {
 		new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
 	}
 
-	protected MRoot createDatasources(MRoot root) {
+	protected MRoot createDatasources(ANode root) {
 		MRoot mroot = new MRoot(root, null) {
 			public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -249,6 +254,10 @@ public class AddResourcePage extends WizardPage {
 			@Override
 			public ImageDescriptor getImagePath() {
 				return MRDatasourceJDBC.getIconDescriptor().getIcon16();
+			}
+
+			public INode getRoot() {
+				return parent.getRoot();
 			}
 		};
 		new MRDatasourceBean(mroot, MRDatasourceBean.createDescriptor(parent), -1);

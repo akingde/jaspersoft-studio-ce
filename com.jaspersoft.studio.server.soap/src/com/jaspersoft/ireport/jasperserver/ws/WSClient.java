@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.util.SecretsUtil;
 
 import org.apache.axis.EngineConfiguration;
@@ -420,16 +421,19 @@ public class WSClient {
 
 				InputStream is = actualDH.getInputStream();
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
 				byte[] data = new byte[1000];
-				int bytesRead;
+				try {
+					int bytesRead;
 
-				while ((bytesRead = is.read(data)) != -1) {
-					bos.write(data, 0, bytesRead);
+					while ((bytesRead = is.read(data)) != -1) {
+						bos.write(data, 0, bytesRead);
+					}
+
+					data = bos.toByteArray();
+				} finally {
+					FileUtils.closeStream(is);
+					FileUtils.closeStream(bos);
 				}
-
-				data = bos.toByteArray();
-
 				String contentType = actualDH.getContentType();
 
 				FileContent content = new FileContent();

@@ -10,6 +10,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.sf.jasperreports.engine.JRExpression;
 
 public class Misc {
@@ -134,6 +142,10 @@ public class Misc {
 		return value == null || value.trim().isEmpty();
 	}
 
+	public static boolean isNullOrEmpty(Collection<?> value) {
+		return value == null || value.isEmpty();
+	}
+
 	public static String nullIfEmpty(String value) {
 		return value != null && value.isEmpty() ? null : value;
 	}
@@ -176,5 +188,18 @@ public class Misc {
 	public static String extract(String expr, String start, String end) {
 		int sindx = expr.indexOf(start) + start.length();
 		return expr.substring(sindx, expr.indexOf(end, sindx));
+	}
+
+	public static <K extends Comparable<K>, V extends Comparable<V>> LinkedHashMap<K, V> sortByValues(Map<K, V> map) {
+		List<Map.Entry<K, V>> entries = new ArrayList<Map.Entry<K, V>>(map.entrySet());
+		Collections.sort(entries, new Comparator<Map.Entry<K, V>>() {
+			public int compare(Map.Entry<K, V> a, Map.Entry<K, V> b) {
+				return a.getValue().compareTo(b.getValue());
+			}
+		});
+		LinkedHashMap<K, V> sortedMap = new LinkedHashMap<K, V>();
+		for (Map.Entry<K, V> entry : entries)
+			sortedMap.put(entry.getKey(), entry.getValue());
+		return sortedMap;
 	}
 }

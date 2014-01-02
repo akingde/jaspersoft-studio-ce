@@ -23,7 +23,7 @@ import com.jaspersoft.studio.server.model.datasource.MRDatasourceAWS;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceVDS;
 
 public class DatasourcesAllFilter implements IDatasourceFilter {
-	private static Set<String> types = new HashSet<String>();
+	private final static Set<String> types = new HashSet<String>();
 	static {
 		types.add(ResourceDescriptor.TYPE_DATASOURCE);
 		types.add(ResourceDescriptor.TYPE_DATASOURCE_BEAN);
@@ -33,7 +33,7 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 		types.add(MRDatasourceVDS.TYPE_DATASOURCE_VDS);
 		types.add(MRDatasourceAWS.TYPE_AWS);
 		types.add(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW);
-		types.add("Domain");
+		types.add(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN);
 	}
 
 	public static Set<String> getTypes() {

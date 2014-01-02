@@ -11,7 +11,7 @@ Require-Bundle: com.jaspersoft.studio;bundle-version="5.6.0";visibility:=reexpor
  com.jaspersoft.studio.data;bundle-version="5.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/jasperserver-common-ws-5.5.0-SNAPSHOT.jar,
+Bundle-ClassPath: lib/js_axis-1.4patched.jar,
  lib/js-extra-classes.jar,
  lib/commons-codec-1.6.jar,
  lib/fluent-hc-4.3.1.jar,
@@ -84,4 +84,17 @@ Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  com.jaspersoft.studio.server.wizard.resource,
  com.jaspersoft.studio.server.wizard.resource.page,
  com.jaspersoft.studio.server.wizard.resource.page.selector,
- com.jaspersoft.studio.server.wizard.validator
+ com.jaspersoft.studio.server.wizard.validator,
+ org.apache.axis,
+ org.apache.axis.attachments,
+ org.apache.axis.client,
+ org.apache.axis.components.net,
+ org.apache.axis.configuration,
+ org.apache.axis.constants,
+ org.apache.axis.description,
+ org.apache.axis.encoding,
+ org.apache.axis.encoding.ser,
+ org.apache.axis.soap,
+ org.apache.axis.transport.http,
+ org.apache.axis.utils
+

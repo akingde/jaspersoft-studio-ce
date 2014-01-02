@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.pages;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
 
@@ -37,7 +38,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -124,7 +124,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		expcmp.setLayoutData(gd);
-		expcmp.setExpanded(true);
+		expcmp.setExpanded(false);
 
 		Composite cmp = new Composite(expcmp, SWT.NONE);
 		cmp.setLayout(new GridLayout(3, false));
@@ -132,14 +132,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		expcmp.setClient(cmp);
 		expcmp.addExpansionListener(new ExpansionAdapter() {
 			public void expansionStateChanged(ExpansionEvent e) {
-				parent.getParent().layout(true);
-			}
-		});
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				expcmp.setExpanded(false);
+				UIUtils.relayoutDialog(getShell(), 0, -1);
 			}
 		});
 
@@ -260,7 +253,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 	@Override
 	public void performFinishInvoked() {
-		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+		if (JaspersoftStudioPlugin.shouldUseSecureStorage()) {
 			tpass.persistSecret();
 			sprofile.getValue().setPass(tpass.getUUIDKey());
 		}
@@ -270,4 +263,5 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	public void performCancelInvoked() {
 
 	}
+
 }
