@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
@@ -34,7 +35,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.export.ImageExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
@@ -120,7 +124,12 @@ public class OpenInEditorAction extends Action {
 	protected void dorun(final Object obj, IProgressMonitor monitor) throws Exception, FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
 			AFileResource res = (AFileResource) obj;
-			ResourceDescriptor rd = res.getValue();
+			ResourceDescriptor rd = WSClientHelper.getResource(new NullProgressMonitor(), res, res.getValue());
+			ANode parent = res.getParent();
+			int index = parent.getChildren().indexOf(res);
+			parent.removeChild(res);
+			res = (AFileResource) ResourceFactory.getResource(parent, rd, index);
+			WSClientHelper.fireResourceChanged(res);
 
 			String fkeyname = ServerManager.getKey(res);
 			if (fkeyname == null)
