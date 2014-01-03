@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.palette.JDCreationTool;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
@@ -315,7 +316,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		Tree tree = ((TreeItem)getCurrentEvent().item).getParent();
 		List<MBand> movedBands = new ArrayList<MBand>();
 		for (TreeItem item : tree.getSelection()){
-			NotDragableContainerTreeEditPart draggetItem = (NotDragableContainerTreeEditPart)item.getData();
+			TreeEditPart draggetItem = (TreeEditPart)item.getData();
 			if (draggetItem.getModel() instanceof MBand){
 				movedBands.add((MBand)draggetItem.getModel());
 			}

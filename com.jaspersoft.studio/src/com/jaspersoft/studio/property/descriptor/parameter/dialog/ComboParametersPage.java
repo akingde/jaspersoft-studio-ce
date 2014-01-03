@@ -23,13 +23,10 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
-import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -38,7 +35,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableCursor;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -47,6 +44,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
@@ -60,7 +58,6 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 
 /**
  * Page used to add a parameter to a dataset run. The parameter can only be choosed between
@@ -111,17 +108,30 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 	private ExpressionContext expContext;
 	
 	/**
-	 * Viewer for the combo where the user can select the value of a single datasetrun parameter.
-	 * The combo is filled with the names of the parameters already present in the original dataset (the 
-	 * one referenced by the datasetrun), excluded the ones that has been already added into this dataset run
+	 * Button used to edit a parameter inside the dataset run
 	 */
-	private ComboBoxViewerCellEditor nameCellEditor ;
+	private Button editButton;
+	
+	/**
+	 * Button used to delete a parameter inside the dataset run
+	 */
+	private Button deleteButton;
+	
+	/**
+	 * Button used to create a new parameter inside the dataset run
+	 */
+	private Button addButton;
 	
 	/**
 	 * Parameters inside the original dataset referenced by the dataset run
 	 */
 	private JRParameter[] datasetParameters;
 
+	/**
+	 * Input of the table
+	 */
+	private List<JRDatasetParameter> input;
+	
 	/**
 	 * Create an instance of the pace
 	 * @param pageName
@@ -149,9 +159,8 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 	public void dispose() {
 		value = new ParameterDTO();
 		value.setJasperDesign(value.getJasperDesign());
-		List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
 		List<JRDatasetParameter> returnValues = new ArrayList<JRDatasetParameter>();
-		for(JRDatasetParameter param : list){
+		for(JRDatasetParameter param : input){
 			if (param.getName() != null && !param.getName().isEmpty()) returnValues.add(param);
 		}
 		value.setValue(returnValues.toArray(new JRDatasetParameter[returnValues.size()]));
@@ -187,12 +196,15 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
+		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
 		setControl(composite);
 
 		buildTable(composite);
 
+		//Create the buttons
+		buildButtons(composite);
+		
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalAlignment = GridData.FILL;
 		gd.grabExcessHorizontalSpace = true;
@@ -203,6 +215,91 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 		gd.widthHint = 600;
 		table.setLayoutData(gd);
 	}
+	
+	/**
+	 * Create the buttons to add, delete or edit a parameter 
+	 * 
+	 * @param composite parent where the button will be placed
+	 */
+	private void buildButtons(Composite composite){
+		Composite buttonComposite = new Composite(composite, SWT.NONE);
+		buttonComposite.setLayout(new GridLayout(1,false));
+		buttonComposite.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		addButton = new Button(buttonComposite, SWT.NONE);
+		addButton.setText(Messages.common_add);
+		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		addButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				CreateParameterDialog paramteterDialog = new CreateParameterDialog(getShell(), createNameComboInput());
+				paramteterDialog.setExpressionContext(expContext);
+				if (paramteterDialog.open() == Dialog.OK){
+					JRDesignDatasetParameter newParam = new JRDesignDatasetParameter();
+					newParam.setExpression(paramteterDialog.getSelectedExpression());
+					newParam.setName(paramteterDialog.getSelectedParamName());
+					input.add(newParam);
+					tableViewer.refresh();
+					checkButtonState();
+				}
+			}
+		});
+		deleteButton = new Button(buttonComposite, SWT.NONE);
+		deleteButton.setEnabled(false);
+		deleteButton.setText(Messages.common_delete);
+		deleteButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		deleteButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = table.getSelectionIndex();
+				if (index != -1){
+					List<?> list = (List<?>) tableViewer.getInput();
+					list.remove(index);
+					tableViewer.refresh();
+					checkButtonState();
+				}
+			}
+		});
+		
+		editButton = new Button(buttonComposite, SWT.NONE);
+		editButton.setEnabled(false);
+		editButton.setText(Messages.common_edit);
+		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		editButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = table.getSelectionIndex();
+				if (index != -1){
+					List<?> list = (List<?>) tableViewer.getInput();
+					JRDesignDatasetParameter selectedItem = (JRDesignDatasetParameter)list.get(index);
+					CreateParameterDialog paramteterDialog = new CreateParameterDialog(getShell(), createNameComboInput(), selectedItem);
+					paramteterDialog.setExpressionContext(expContext);
+					if (paramteterDialog.open() == Dialog.OK){
+						selectedItem.setExpression(paramteterDialog.getSelectedExpression());
+						selectedItem.setName(paramteterDialog.getSelectedParamName());
+						tableViewer.refresh();
+						checkButtonState();
+					}
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Called when a parameter is deleted, added or edited. Disable the 
+	 * edit and delete button if nothing inside is selected. This is done
+	 * to avoid to do an edit or a delete operation without parameters
+	 */
+	private void checkButtonState(){
+		int index = table.getSelectionIndex();
+		if (index != -1){
+			editButton.setEnabled(true);
+			deleteButton.setEnabled(true);
+		} else {
+			editButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+		}
+	}
+	
 
 	/**
 	 * Create the table control and add to it its viewer
@@ -217,7 +314,6 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 		tableViewer = new TableViewer(table);
 		attachContentProvider(tableViewer);
 		attachLabelProvider(tableViewer);
-		attachCellEditors(tableViewer, table);
 
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
@@ -242,6 +338,8 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item instanceof TableItem) {
 					setMessage(getDescription(((TableItem) e.item)));
+					editButton.setEnabled(true);
+					deleteButton.setEnabled(true);
 				}
 			}
 
@@ -250,15 +348,6 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 		});
 	}
 
-	/**
-	 * @param tableViewer
-	 * @param cursor
-	 */
-	/*static void editCell(final TableViewer tableViewer, final TableCursor cursor) {
-		tableViewer.editElement(cursor.getRow().getData(), cursor.getColumn());
-		// hide cursor only f there is an editor active on the cell
-		cursor.setVisible(!tableViewer.isCellEditorActive());
-	}*/
 
 	/**
 	 * Add to the table a content provider that simply convert a list of elements to an array
@@ -291,95 +380,6 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 		viewer.setLabelProvider(new TLabelProvider());
 	}
 
-	/**
-	 * Add the cell editor to the table, a combo cell editor for the column where the user can
-	 * select the parameter name, and and expression cell editor where the user can specify the expression
-	 * 
-	 * @param viewer viewer of the table
-	 * @param parent the table
-	 */
-	//deprecation due to the eclipse 3.6 support
-	@SuppressWarnings("deprecation")
-	private void attachCellEditors(final TableViewer viewer, Composite parent) {
-		viewer.setCellModifier(new ICellModifier() {
-			public boolean canModify(Object element, String property) {
-				if (property.equals("VALUE")) //$NON-NLS-1$
-					return true;
-				if (property.equals("NAME")) //$NON-NLS-1$
-					return true;
-				return false;
-			}
-
-			public Object getValue(Object element, String property) {
-				JRDatasetParameter prop = (JRDatasetParameter) element;
-				if ("VALUE".equals(property)) //$NON-NLS-1$
-					if (prop.getExpression() != null)
-						return prop.getExpression();
-				if ("NAME".equals(property)) { //$NON-NLS-1$
-					return prop.getName();
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			public void modify(Object element, String property, Object value) {
-				TableItem tableItem = (TableItem) element;
-				setMessage(getDescription(tableItem));
-				JRDesignDatasetParameter data = (JRDesignDatasetParameter) tableItem.getData();
-				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof JRExpression) {
-						data.setExpression((JRExpression) value);
-					}
-				}
-				if ("NAME".equals(property) && value != null) { //$NON-NLS-1$
-					data.setName((String) value);
-				}
-				tableViewer.update(element, new String[] { property });
-				tableViewer.refresh();
-				//When a parameter value change the combo viewer need to update its available value
-				nameCellEditor.setInput(createNameComboInput());
-			}
-		});
-
-		JRExpressionCellEditor exprCellEditor = new JRExpressionCellEditor(parent, expContext);
-		nameCellEditor = new ComboBoxViewerCellEditor(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
-		nameCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-		//set a default label provider that take as content an array of string and simply print them
-		nameCellEditor.setLabelProvider( new LabelProvider() );
-		nameCellEditor.setContenProvider(new ComboContentProvider());
-		viewer.setCellEditors(new CellEditor[] { nameCellEditor, exprCellEditor });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-	
-	/**
-	 * Simple content provider for the combo, assume that the input is an array of 
-	 * string so return it converted
-	 * 
-	 * @author Orlandin Marco
-	 *
-	 */
-	private class ComboContentProvider implements IStructuredContentProvider
-	{
-		@Override
-		public Object[] getElements(Object inputElement)
-		{
-			Object[] result = null;
-			if( inputElement instanceof String[] )
-			{
-				result = (String[])inputElement; 
-			}
-			return result;
-		}
-
-		@Override
-		public void dispose()
-		{
-		}
-
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
-		{
-		}
-	}
 	
 	/**
 	 * Return the input of the combo, a list of the parameter name of the original dataset
@@ -390,10 +390,9 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 	 */
 	private String[] createNameComboInput(){
 		List<String> result = new ArrayList<String>();
-		List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
 		HashSet<String> usedParams = new HashSet<String>();
-		if (list != null){
-			for(JRDatasetParameter param : list)
+		if (input != null){
+			for(JRDatasetParameter param : input)
 				usedParams.add(param.getName());
 		}
 		for (JRParameter param : datasetParameters){
@@ -402,7 +401,6 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 			}
 		}
 		Collections.sort(result);
-		result.add(0, "");
 		return result.toArray(new String[result.size()]);
 	}
 
@@ -414,7 +412,7 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 	 */
 	private void fillTable(Table table) {
 		List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(value.getValue()));
-		List<JRDatasetParameter> input = new ArrayList<JRDatasetParameter>();
+		input = new ArrayList<JRDatasetParameter>();
 		for(JRDatasetParameter param : lst){
 			JRDesignDatasetParameter newParam = new JRDesignDatasetParameter();
 			newParam.setExpression(param.getExpression() != null ? (JRExpression)param.getExpression().clone() : null);
@@ -422,13 +420,6 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 			input.add(newParam);
 		}
 
-		int missingItems =datasetParameters.length-input.size();
-		for(int i=0; i<missingItems;i++){
-			JRDesignDatasetParameter newParam = new JRDesignDatasetParameter();
-			newParam.setExpression(new JRDesignExpression());
-			newParam.setName("");
-			input.add(newParam);
-		}
 		Collections.sort(input, new Comparator<JRDatasetParameter>() {
 
 			@Override
@@ -437,7 +428,6 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 			}
 		});
 		tableViewer.setInput(input);
-		nameCellEditor.setInput(createNameComboInput());
 	}
 
 	private void setColumnToolTip() {
