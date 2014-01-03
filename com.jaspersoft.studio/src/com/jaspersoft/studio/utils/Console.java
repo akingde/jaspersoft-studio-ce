@@ -16,6 +16,8 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.swt.SWT;
@@ -92,7 +94,7 @@ public class Console {
 
 	public static Color REDCOLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 
-	public void addError(final Throwable e) {
+	public void addError(final Throwable e, final JasperDesign design) {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
@@ -102,7 +104,7 @@ public class Console {
 				out.println(ErrorUtil.getStackTrace(e) + "\n\r");
 				out.setColor(REDCOLOR);
 				for (VErrorPreview vep : ePreviews)
-					vep.addError(e);
+					vep.addError(e, design);
 			}
 		});
 	}
@@ -147,6 +149,16 @@ public class Console {
 			public void run() {
 				for (VErrorPreview vep : ePreviews)
 					vep.addProblem(problem, location, expr);
+			}
+		});
+	}
+	
+	public void addProblem(final String message, final SourceLocation location, final JRDesignElement element) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				for (VErrorPreview vep : ePreviews)
+					vep.addProblem(message, location, element);
 			}
 		});
 	}

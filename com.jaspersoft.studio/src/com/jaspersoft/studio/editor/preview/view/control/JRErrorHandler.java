@@ -13,6 +13,7 @@ package com.jaspersoft.studio.editor.preview.view.control;
 import net.sf.jasperreports.eclipse.builder.JasperReportErrorHandler;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 
@@ -32,7 +33,7 @@ public class JRErrorHandler implements JasperReportErrorHandler {
 
 	public void addMarker(Throwable e) {
 		hasErrors = true;
-		c.addError(e);
+		c.addError(e, null);
 	}
 
 	public void addMarker(IProblem problem, SourceLocation location) {
@@ -53,5 +54,11 @@ public class JRErrorHandler implements JasperReportErrorHandler {
 	public void addMarker(IProblem problem, SourceLocation location, JRExpression expr) {
 		hasErrors = true;
 		c.addProblem(problem, location, expr);
+	}
+
+	@Override
+	public void addMarker(String message, SourceLocation location, JRDesignElement element) {
+		hasErrors = true;
+		c.addProblem(message, location, element);
 	}
 }

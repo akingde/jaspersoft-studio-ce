@@ -14,14 +14,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRExpressionCollector;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -38,6 +43,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -212,6 +219,27 @@ public class VErrorPreview extends APreview {
 				}
 			}
 		});
+		
+		wtable.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				int sindex = wtable.getSelectionIndex();
+				if (sindex < 0 || sindex > errors.size())
+					return;
+				Object aux = auxil.get(sindex);
+				if (aux != null){
+					if (aux instanceof JRDesignElement) {
+						SelectionHelper.setSelection((JRDesignElement)aux, true);
+					} else if (aux instanceof List<?>){
+						for(Object item : (List<?>)aux){
+							if (item instanceof JRDesignElement){
+								SelectionHelper.setSelection((JRDesignElement)item, true);
+							}
+						}
+					}
+				}
+			}
+		});
 
 		TableColumn[] col = new TableColumn[3];
 		col[0] = new TableColumn(wtable, SWT.NONE);
@@ -383,19 +411,55 @@ public class VErrorPreview extends APreview {
 		// textSection.setText("Console: " + msg);
 	}
 
-	public void addError(Throwable t) {
+	public void addError(Throwable t, JasperDesign design) {
 		if (t != null) {
 			if (t instanceof InvocationTargetException)
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + NL); //$NON-NLS-1$
-			addError2List(t, t.getMessage(), null);
+			//The only way we have to find a missing style error is to parse the error message for now
+			String stylesErrorString = "Could not resolve style(s):";
+			if (t.getMessage().contains(stylesErrorString) && design != null){
+				String stylesNotFound = t.getMessage().substring(t.getMessage().indexOf(stylesErrorString)+stylesErrorString.length());
+				String[] styleNames = stylesNotFound.split(",");
+				HashSet<String> styles = new HashSet<String>();
+				for(String name : styleNames){
+					styles.add(name.trim());
+				}
+				List<JRDesignElement> elements = getNotReferencedStyles(design.getAllBands(), styles);
+				addError2List(t, t.getMessage(), elements);
+			} else addError2List(t, t.getMessage(), null);
 			// errorSection.setText("Errors: 1");
 		} else
 			terror.setText(""); //$NON-NLS-1$
 		refreshErrorTable();
 	}
-
+	
+	private List<JRDesignElement> getNotReferencedStyles(JRChild[] childs, HashSet<String> styles){	
+		List<JRDesignElement> result = new ArrayList<JRDesignElement>();
+		for(JRChild child : childs){
+			if (child instanceof JRDesignElement){
+				String styleName = getElementStyle((JRDesignElement)child);
+				if (styleName != null && styles.contains(styleName)){
+					result.add((JRDesignElement)child);
+				}
+			}
+			if (child instanceof JRElementGroup) {
+				JRElementGroup group = (JRElementGroup)child;
+				List<JRDesignElement> value = getNotReferencedStyles(group.getElements(), styles);
+				result.addAll(value);
+			}
+		}
+		return result;
+	}
+	
+	private String getElementStyle(JRDesignElement jrElement){
+		if (jrElement.getStyleNameReference() != null)
+			return jrElement.getStyleNameReference();
+		JRStyle actualStyle = jrElement.getStyle();
+		return actualStyle != null ? actualStyle.getName() : null;
+	}
+	
 	protected void refreshErrorTable() {
 		if (getErrorList().size() > 0)
 			errAction.run();
@@ -410,6 +474,11 @@ public class VErrorPreview extends APreview {
 
 	public void addProblem(IProblem problem, SourceLocation location, JRExpression expr) {
 		addError2List(problem, problem.getMessage(), expr);
+		refreshErrorTable();
+	}
+	
+	public void addProblem(String message, SourceLocation location, JRDesignElement element) {
+		addError2List(message, message, element);
 		refreshErrorTable();
 	}
 
@@ -449,7 +518,7 @@ public class VErrorPreview extends APreview {
 		errorList = new ArrayList<String>();
 		errorViewer.setInput(errorList);
 		setStats(null);
-		addError(null);
+		addError(null, null);
 	}
 
 	@Override

@@ -229,7 +229,7 @@ public class PreviewJRPrint extends ABasicEditor {
 				errorPreview.setMessage("The document is empty.");
 				container.switchView(stats, errorPreview);
 
-				getConsole().addError(e);
+				getConsole().addError(e, null);
 				return false;
 			}
 		}

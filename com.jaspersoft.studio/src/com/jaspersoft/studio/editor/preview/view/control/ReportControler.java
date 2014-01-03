@@ -300,6 +300,7 @@ public class ReportControler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+				JasperDesign jd = null;
 				try {
 					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 					setParameters();
@@ -310,7 +311,7 @@ public class ReportControler {
 
 					setupFileRezolver(monitor, file);
 
-					JasperDesign jd = jrContext.getJasperDesign();// ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
+					jd = jrContext.getJasperDesign();// ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
 
 					JasperReport jasperReport = compileJasperDesign(file, jd);
 
@@ -339,7 +340,7 @@ public class ReportControler {
 					}
 				} catch (final Throwable e) {
 					errorMessage();
-					showRunReport(c, pcontainer, e);
+					showRunReport(c, pcontainer, e, jd);
 				} finally {
 					Thread.currentThread().setContextClassLoader(oldLoader);
 					monitor.done();
@@ -584,7 +585,11 @@ public class ReportControler {
 	}
 
 	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e) {
-		c.addError(e);
+		showRunReport(c, pcontainer, e, null);
+	}
+	
+	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e, final JasperDesign design) {
+		c.addError(e, design);
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
