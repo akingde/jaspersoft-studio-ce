@@ -244,6 +244,7 @@ public class FindResourcePage extends WizardPage {
 		});
 
 		txt.setFocus();
+		setPageComplete(false);
 	}
 
 	private BiMap<String, Button> typesMap = HashBiMap.create();
@@ -300,6 +301,7 @@ public class FindResourcePage extends WizardPage {
 
 				@Override
 				public void run() {
+					setPageComplete(res != null);
 					if (res != null)
 						viewer.setInput(res);
 					else
