@@ -126,7 +126,7 @@ public class WsTypes {
 
 		setSoapFileType(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA, FileType.accessGrantSchema);
 		setSoapFileType(ResourceDescriptor.TYPE_CLASS_JAR, FileType.jar);
-		setSoapFileType(ResourceDescriptor.TYPE_CONTENT_RESOURCE, FileType.xml);
+		setSoapFileType(ResourceDescriptor.TYPE_CONTENT_RESOURCE, FileType.unspecified);
 		setSoapFileType(ResourceDescriptor.TYPE_FONT, FileType.font);
 		setSoapFileType(ResourceDescriptor.TYPE_IMAGE, FileType.img);
 		setSoapFileType(ResourceDescriptor.TYPE_JRXML, FileType.jrxml);
