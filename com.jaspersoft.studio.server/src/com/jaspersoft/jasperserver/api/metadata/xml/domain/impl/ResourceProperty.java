@@ -21,12 +21,16 @@
 
 package com.jaspersoft.jasperserver.api.metadata.xml.domain.impl;
 
+import java.io.Serializable;
+
+import net.sf.jasperreports.engine.JRConstants;
+
 /**
  * 
  * @author gtoffoli
  */
-public class ResourceProperty {
-
+public class ResourceProperty implements Serializable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String name = "";
 	private String value = "";
 

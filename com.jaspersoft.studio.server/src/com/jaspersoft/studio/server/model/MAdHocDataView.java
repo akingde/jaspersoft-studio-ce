@@ -22,7 +22,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MAdHocDataView extends MResource {
+public class MAdHocDataView extends MResource implements IInputControlsContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MAdHocDataView(ANode parent, ResourceDescriptor rd, int index) {

@@ -60,4 +60,6 @@ public interface IConnection {
 	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest) throws Exception;
 
 	public boolean isSupported(Feature f);
+
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception;
 }

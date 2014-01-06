@@ -248,4 +248,14 @@ public class RestV2Connection extends ARestV2Connection {
 
 	}
 
+	@Override
+	public List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception {
+		return null;
+	}
+
+	@Override
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception {
+
+	}
+
 }

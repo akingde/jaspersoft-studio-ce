@@ -39,7 +39,9 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MAdHocDataView;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MRDashboard;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -47,6 +49,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ProxyConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -215,6 +218,7 @@ public class WSClientHelper {
 			r.setParentFolder(pfolder);
 			r.setName(file);
 			r.setUriString(rd.getReferenceUri());
+			r.setWsType(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 			return sp.getWsClient(monitor).get(monitor, r, null);
 		}
 		return null;
@@ -243,6 +247,8 @@ public class WSClientHelper {
 			if (cli == null)
 				cli = connect(sp, monitor);
 			System.out.println("saving: " + rd.getUriString() + " parent:" + rd.getParentFolder());
+			if (rd.getIsReference())
+				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 
@@ -264,7 +270,7 @@ public class WSClientHelper {
 				rd = cli.addOrModifyResource(monitor, rd, file);
 			if (refresh && res.getParent() instanceof MResource) {
 				// standard resource creation inside an existing MResource
-				refreshResource((MResource) res.getParent(), monitor);
+				refreshContainer((MResource) res.getParent(), monitor);
 			} else if (res.getParent() instanceof MServerProfile) {
 				// resource created inside the root folder
 				connectGetData((MServerProfile) res.getParent(), monitor);
@@ -337,22 +343,28 @@ public class WSClientHelper {
 		ResourceDescriptor rd = res.getValue();
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
-			MServerProfile sp = (MServerProfile) res.getRoot();
-			ResourceDescriptor newrd = sp.getWsClient(monitor).get(monitor, rd, null);
+			ResourceDescriptor newrd = res.getWsClient().get(monitor, rd, null);
 			if (newrd != null) {
 				res.setValue(newrd);
-				if (res instanceof MFolder || res instanceof MReportUnit) {
+				if (res instanceof MFolder || res instanceof MReportUnit || (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof MAdHocDataView || res instanceof MRDashboard))) {
 					res.removeChildren();
 
-					listFolder(res, -1, sp.getWsClient(monitor), monitor, newrd, 0);
+					listFolder(res, -1, res.getWsClient(), monitor, newrd, 0);
 				}
-			} else {
+			} else
 				connectGetData((MServerProfile) res.getRoot(), monitor);
-			}
-
 			fireResourceChanged(res);
 		} else {
 			// posible problem?
+		}
+	}
+
+	public static void refreshContainer(MResource res, IProgressMonitor monitor) throws Exception {
+		if (res instanceof MFolder || res instanceof MReportUnit || (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof MAdHocDataView || res instanceof MRDashboard))) {
+			res.removeChildren();
+
+			listFolder(res, -1, res.getWsClient(), monitor, res.getValue(), 0);
+			fireResourceChanged(res);
 		}
 	}
 

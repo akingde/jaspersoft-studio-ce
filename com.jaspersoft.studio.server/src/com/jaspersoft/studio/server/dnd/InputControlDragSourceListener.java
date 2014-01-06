@@ -23,8 +23,12 @@ import org.eclipse.swt.dnd.Transfer;
 
 import com.jaspersoft.studio.dnd.NodeDragListener;
 import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.Feature;
 
 /**
  * 
@@ -48,7 +52,18 @@ public class InputControlDragSourceListener extends NodeDragListener implements 
 	public void dragStart(DragSourceEvent event) {
 		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		Object fe = selection.getFirstElement();
-		event.doit = !viewer.getSelection().isEmpty() && (fe instanceof MInputControl && ((MInputControl) fe).getParent() instanceof MReportUnit);
+		event.doit = !viewer.getSelection().isEmpty() && (fe instanceof MInputControl && isDragable(((MInputControl) fe).getParent()));
+	}
+
+	public static boolean isDragable(ANode parent) {
+		if (parent instanceof MReportUnit)
+			return true;
+		if (parent instanceof MResource) {
+			MResource res = (MResource) parent;
+			if (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof IInputControlsContainer))
+				return true;
+		}
+		return false;
 	}
 
 	@Override

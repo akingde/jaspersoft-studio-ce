@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -47,6 +48,8 @@ import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SelectorJrxml {
@@ -99,31 +102,54 @@ public class SelectorJrxml {
 				// to avoid problem of refreshing (children/parent relationship
 				// changes)
 				// due to tree viewer node expansion...
-				RepositoryDialog rd = new RepositoryDialog(Display.getDefault().getActiveShell(), ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot())) {
-					@Override
-					public boolean isResourceCompatible(MResource r) {
-						return r instanceof MJrxml;
-					}
-				};
-				if (rd.open() == Dialog.OK) {
-					MResource rs = rd.getResource();
-					if (rs != null) {
+				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
+				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, new String[] { ResourceMediaType.FILE_CLIENT_TYPE }, null);
+					if (rd != null) {
 						ResourceDescriptor runit = res.getValue();
 						try {
-							ResourceDescriptor ref = rs.getValue();
-							ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
-							ref.setIsReference(true);
-							ref.setMainReport(true);
-							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
-							ref.setWsType(ResourceDescriptor.TYPE_JRXML);
-							ref.setUriString(ref.getParentFolder() + "/" + ref.getName());
-							replaceMainReport(res, ref);
+							rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
+							rd.setIsReference(true);
+							rd.setMainReport(true);
+							rd.setReferenceUri(rd.getUriString());
+							rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
+							rd.setWsType(ResourceDescriptor.TYPE_JRXML);
+							rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
+							replaceMainReport(res, rd);
 							fireSelectionChanged();
 
-							jsRefDS.setText(ref.getUriString());
+							jsRefDS.setText(rd.getUriString());
 						} catch (Exception e1) {
 							UIUtils.showError(e1);
+						}
+					}
+				} else {
+					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
+						@Override
+						public boolean isResourceCompatible(MResource r) {
+							return r instanceof MJrxml;
+						}
+					};
+					if (rd.open() == Dialog.OK) {
+						MResource rs = rd.getResource();
+						if (rs != null) {
+							ResourceDescriptor runit = res.getValue();
+							try {
+								ResourceDescriptor ref = rs.getValue();
+								ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
+								ref.setIsReference(true);
+								ref.setMainReport(true);
+								ref.setReferenceUri(ref.getUriString());
+								ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
+								ref.setWsType(ResourceDescriptor.TYPE_JRXML);
+								ref.setUriString(ref.getParentFolder() + "/" + ref.getName());
+								replaceMainReport(res, ref);
+								fireSelectionChanged();
+
+								jsRefDS.setText(ref.getUriString());
+							} catch (Exception e1) {
+								UIUtils.showError(e1);
+							}
 						}
 					}
 				}

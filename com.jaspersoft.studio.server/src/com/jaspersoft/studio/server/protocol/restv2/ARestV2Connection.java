@@ -5,6 +5,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -105,4 +106,6 @@ public abstract class ARestV2Connection implements IConnection {
 	protected RESTv2ExceptionHandler eh;
 
 	public abstract void getBundle(Map<String, String> map, String name, IProgressMonitor monitor);
+
+	public abstract List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception;
 }

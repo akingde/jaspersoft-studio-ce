@@ -16,9 +16,24 @@ public class FindResourceWizard extends Wizard {
 		this.sp = sp;
 	}
 
+	private String[] itypes;
+	private String[] etypes;
+
+	public void setFilterTypes(String[] in, String[] excl) {
+		this.itypes = in;
+		this.etypes = excl;
+		setFilters();
+	}
+
+	private void setFilters() {
+		if (page0 != null)
+			page0.setFilterTypes(itypes, etypes);
+	}
+
 	@Override
 	public void addPages() {
 		page0 = new FindResourcePage(sp);
+		setFilters();
 		addPage(page0);
 	}
 

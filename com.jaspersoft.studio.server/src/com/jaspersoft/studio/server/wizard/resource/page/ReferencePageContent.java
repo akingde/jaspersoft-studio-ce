@@ -33,8 +33,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -47,6 +45,8 @@ import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 
 public class ReferencePageContent extends APageContent {
@@ -83,21 +83,30 @@ public class ReferencePageContent extends APageContent {
 		bbrowse.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell, ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot())) {
-
-					@Override
-					public boolean isResourceCompatible(MResource r) {
-						return !(r instanceof MFolder);
-					}
-
-				};
-				if (rd.open() == Dialog.OK) {
-					MResource rs = rd.getResource();
-					if (rs != null) {
-						res.getValue().setReferenceUri(rs.getValue().getUriString());
+				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
+				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, ResourceFactory.getFileTypes(), null);
+					if (rd != null) {
+						res.getValue().setReferenceUri(rd.getUriString());
 						loadReference(res.getValue());
 						bindingContext.updateTargets();
+					}
+				} else {
+					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
+
+						@Override
+						public boolean isResourceCompatible(MResource r) {
+							return !(r instanceof MFolder) && ResourceFactory.isFileResourceType(r.getValue());
+						}
+
+					};
+					if (rd.open() == Dialog.OK) {
+						MResource rs = rd.getResource();
+						if (rs != null) {
+							res.getValue().setReferenceUri(rs.getValue().getUriString());
+							loadReference(res.getValue());
+							bindingContext.updateTargets();
+						}
 					}
 				}
 			}
@@ -180,9 +189,9 @@ public class ReferencePageContent extends APageContent {
 	private Text tname;
 	private Text tdesc;
 
-	private void loadReference(ResourceDescriptor rd) {
+	private void loadReference(ResourceDescriptor resrd) {
 		try {
-			ref = WSClientHelper.getReference(new NullProgressMonitor(), pnode, rd);
+			ref = WSClientHelper.getReference(new NullProgressMonitor(), pnode, resrd);
 			if (ref != null) {
 				bind();
 				bindingContext.updateTargets();

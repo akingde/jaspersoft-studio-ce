@@ -37,6 +37,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.utils.RDUtil;
+import com.jaspersoft.studio.utils.Misc;
 
 public class Rest2Soap {
 
@@ -60,11 +61,11 @@ public class Rest2Soap {
 		rd.setLabel(cr.getLabel());
 		rd.setDescription(cr.getDescription());
 		rd.setName(RDUtil.getID(cr.getUri()));
-		rd.setVersion(cr.getVersion());
+		rd.setVersion(Misc.nvl(cr.getVersion(), 0));
 
 		rd.setCreationDate(rc.toTimestamp(cr.getCreationDate()));
 		DiffFields.setSoapValue(rd, DiffFields.UPDATEDATE, cr.getUpdateDate());
-		DiffFields.setSoapValue(rd, DiffFields.PERMISSIONMASK, cr.getPermissionMask());
+		DiffFields.setSoapValue(rd, DiffFields.PERMISSIONMASK, Misc.nvl(cr.getPermissionMask(), 0));
 
 		// look recursively
 		if (cr instanceof ClientDataType)

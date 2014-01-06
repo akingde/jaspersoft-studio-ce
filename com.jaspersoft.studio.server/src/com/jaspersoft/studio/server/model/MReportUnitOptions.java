@@ -25,7 +25,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MReportUnitOptions extends MResource {
+public class MReportUnitOptions extends MResource implements IInputControlsContainer {
 	private static final String PROP_OPTIONS_NAME = "PROP_OPTIONS_NAME";
 	private static final String PROP_VALUES = "PROP_VALUES";
 	public static final String REPORT_OPTIONS_RESOURCE = "ReportOptionsResource";
@@ -58,8 +58,7 @@ public class MReportUnitOptions extends MResource {
 
 	public static ResourceDescriptor createDescriptor(MReportUnit parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
-		ResourceProperty rp = new ResourceProperty(PROP_RU_URI, parent
-				.getValue().getUriString());
+		ResourceProperty rp = new ResourceProperty(PROP_RU_URI, parent.getValue().getUriString());
 		rd.getProperties().add(rp);
 
 		rp = new ResourceProperty(PROP_OPTIONS_NAME, rd.getName());

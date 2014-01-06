@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.server.wizard.find;
 
-
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,6 +20,16 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class FindResourceJob {
+	public static ResourceDescriptor doFindResource(MServerProfile msp, String[] in, String[] excl) {
+		FindResourceWizard wizard = new FindResourceWizard(msp);
+		wizard.setFilterTypes(in, excl);
+		WizardDialog dialog = new FindWizardDialog(UIUtils.getShell(), wizard);
+		dialog.setHelpAvailable(false);
+		dialog.create();
+		if (dialog.open() == Dialog.OK)
+			return wizard.getValue();
+		return null;
+	}
 
 	public static void doFindResource(ServerProvider sp, TreeViewer treeViewer) {
 		TreeSelection ts = (TreeSelection) treeViewer.getSelection();

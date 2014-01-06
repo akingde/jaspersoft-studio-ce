@@ -43,6 +43,9 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
+import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.ASelector;
@@ -159,7 +162,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 *          the resource for which we are configuring the datasource
 	 */
 	public void configurePage(ANode parent, MResource resource) {
-		isConfiguringPage=true;
+		isConfiguringPage = true;
 		this.parent = parent;
 		this.res = resource;
 
@@ -173,7 +176,7 @@ public class DatasourceSelectionComposite extends Composite {
 		} else {
 			setEnabled(SelectorDatasource.SelectionType.NO_DATASOURCE);
 		}
-		isConfiguringPage=false;
+		isConfiguringPage = false;
 	}
 
 	/*
@@ -266,30 +269,51 @@ public class DatasourceSelectionComposite extends Composite {
 		// order
 		// to avoid problem of refreshing (children/parent relationship changes)
 		// due to tree viewer node expansion...
-		RepositoryDialog rd = new RepositoryDialog(Display.getDefault().getActiveShell(), ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot())) {
-			@Override
-			public boolean isResourceCompatible(MResource r) {
-				return SelectorDatasource.isDatasource(r.getValue());
-			}
-		};
-		if (rd.open() == Dialog.OK) {
-			MResource rs = rd.getResource();
-			if (rs != null) {
+		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
+		if (res.isSupported(Feature.SEARCHREPOSITORY)) {
+			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, WsTypes.INST().getDatasourcesArray(), null);
+			if (rd != null) {
 				ResourceDescriptor runit = res.getValue();
 				try {
-					ResourceDescriptor ref = rs.getValue();
-					ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
-					ref.setIsReference(true);
-					ref.setReferenceUri(ref.getUriString());
-					ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-					ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
-					ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
-							+ ref.getName());
-					SelectorDatasource.replaceDatasource(res, ref);
+					rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
+					rd.setIsReference(true);
+					rd.setReferenceUri(rd.getUriString());
+					rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+					rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
+					rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
+					SelectorDatasource.replaceDatasource(res, rd);
 
-					textDSFromRepo.setText(ref.getReferenceUri());
-				} catch (Exception e1) {
-					UIUtils.showError(e1);
+					textDSFromRepo.setText(rd.getReferenceUri());
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
+			}
+		} else {
+			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
+				@Override
+				public boolean isResourceCompatible(MResource r) {
+					return SelectorDatasource.isDatasource(r.getValue());
+				}
+			};
+			if (rd.open() == Dialog.OK) {
+				MResource rs = rd.getResource();
+				if (rs != null) {
+					ResourceDescriptor runit = res.getValue();
+					try {
+						ResourceDescriptor ref = rs.getValue();
+						ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
+						ref.setIsReference(true);
+						ref.setReferenceUri(ref.getUriString());
+						ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+						ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
+						ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
+								+ ref.getName());
+						SelectorDatasource.replaceDatasource(res, ref);
+
+						textDSFromRepo.setText(ref.getReferenceUri());
+					} catch (Exception e1) {
+						UIUtils.showError(e1);
+					}
 				}
 			}
 		}
@@ -307,31 +331,29 @@ public class DatasourceSelectionComposite extends Composite {
 	}
 
 	/**
-	 * @return <code>true</code> if a valid alternative for dataset information
-	 *         is selected, <code>false</code> otherwise
+	 * @return <code>true</code> if a valid alternative for dataset information is
+	 *         selected, <code>false</code> otherwise
 	 */
 	public boolean isDatasourceSelectionValid() {
-		return rbNoDS.getSelection()
-				|| !textDSFromRepo.getText().trim().isEmpty()
-				|| !textLocalDS.getText().trim().isEmpty(); 
+		return rbNoDS.getSelection() || !textDSFromRepo.getText().trim().isEmpty() || !textLocalDS.getText().trim().isEmpty();
 	}
-	
-	public void addDatasourceSelectionListener(DatasourceSelectionListener l){
-		if (dsListeners == null){
+
+	public void addDatasourceSelectionListener(DatasourceSelectionListener l) {
+		if (dsListeners == null) {
 			dsListeners = new ArrayList<DatasourceSelectionListener>(1);
 		}
 		dsListeners.add(l);
 	}
-	
-	public void removeDatasourceSelectionListener(DatasourceSelectionListener l){
-		if(dsListeners!=null){
+
+	public void removeDatasourceSelectionListener(DatasourceSelectionListener l) {
+		if (dsListeners != null) {
 			dsListeners.remove(l);
 		}
 	}
 
 	private void notifyDatasourceSelectionChanged() {
-		if(dsListeners!=null){
-			for(DatasourceSelectionListener l : dsListeners){
+		if (dsListeners != null) {
+			for (DatasourceSelectionListener l : dsListeners) {
 				l.datasourceSelectionChanged();
 			}
 		}

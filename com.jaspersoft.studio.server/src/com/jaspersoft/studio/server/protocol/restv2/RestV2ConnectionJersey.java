@@ -40,6 +40,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
+import com.jaspersoft.jasperserver.dto.resources.ClientInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
@@ -57,12 +58,12 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class RestV2ConnectionJersey extends ARestV2Connection {
 
-	private <T> T toObj(Response res, final Class<T> clazz, IProgressMonitor monitor) throws IOException {
+	private <T> T toObj(Response res, Class<T> clazz, IProgressMonitor monitor) throws IOException {
 		T r = null;
 		try {
 			switch (res.getStatus()) {
 			case 200:
-				r = res.readEntity(clazz);
+				r = res.readEntity(checkClazz(res, clazz));
 			case 204:
 				break;
 			default:
@@ -77,7 +78,20 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		return r;
 	}
 
-	private <T> T toObj(Response res, final GenericType<T> type, IProgressMonitor monitor) throws IOException {
+	protected <T> Class<T> checkClazz(Response res, Class<T> clazz) {
+		if (clazz == null) {
+			String type = res.getHeaderString("Content-Type");
+			int sind = type.indexOf(".");
+			int eind = type.indexOf("+");
+			if (sind >= 0 && eind >= 0) {
+				type = type.substring(sind + 1, eind);
+				clazz = (Class<T>) WsTypes.INST().getType(type);
+			}
+		}
+		return clazz;
+	}
+
+	private <T> T toObj(Response res, GenericType<T> type, IProgressMonitor monitor) throws IOException {
 		T r = null;
 		try {
 			switch (res.getStatus()) {
@@ -234,6 +248,12 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = get(monitor, rd, null);
 			return rd.getChildren();
+		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW)) {
+			return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
+		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DASHBOARD)) {
+			return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
+		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {
+			return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
 		} else {
 			WebTarget tgt = target.path("resources");
 			tgt = tgt.queryParam("folderUri", rd.getUriString());
@@ -501,14 +521,11 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 	public boolean isSupported(Feature f) {
 		switch (f) {
 		case SEARCHREPOSITORY:
-			return true;
 		case UPDATEDATE:
-			return true;
 		case TIMEZONE:
-			return true;
 		case PERMISSION:
-			return true;
 		case DATASOURCENAME:
+		case INPUTCONTROLS_ORDERING:
 			return true;
 		}
 		return super.isSupported(f);
@@ -528,4 +545,34 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		}
 	}
 
+	@Override
+	public List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception {
+		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
+		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
+		try {
+			List<ClientInputControl> m = toObj(connector.get(req, monitor), new GenericType<List<ClientInputControl>>() {
+			}, monitor);
+			if (m != null) {
+				for (ClientInputControl cic : m) {
+					ResourceDescriptor nrd = Rest2Soap.getRD(this, cic);
+					rds.add(nrd);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return rds;
+	}
+
+	@Override
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rds, IProgressMonitor monitor) throws Exception {
+		List<ClientInputControl> ics = new ArrayList<ClientInputControl>();
+		for (ResourceDescriptor rd : rds)
+			ics.add((ClientInputControl) Soap2Rest.getResource(this, rd));
+
+		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
+		Response r = connector.put(req, Entity.entity(ics, MediaType.APPLICATION_JSON_TYPE), monitor);
+		toObj(r, new GenericType<List<ClientInputControl>>() {
+		}, monitor);
+	}
 }

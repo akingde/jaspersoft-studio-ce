@@ -169,4 +169,9 @@ public class ProxyConnection implements IConnection {
 		return c.isSupported(f);
 	}
 
+	@Override
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception {
+		c.reorderInputControls(uri, rd, monitor);
+	}
+
 }

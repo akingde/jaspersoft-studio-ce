@@ -21,34 +21,38 @@
 
 package com.jaspersoft.jasperserver.api.metadata.xml.domain.impl;
 
+import java.io.Serializable;
+
+import net.sf.jasperreports.engine.JRConstants;
+
 /**
- *
+ * 
  * @author gtoffoli
  */
-public class InputControlQueryDataRow {
-    
-    private Object value = null;
+public class InputControlQueryDataRow implements Serializable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	private Object value = null;
 	private java.util.List<String> columnValues = null;
-    
-    /** Creates a new instance of InputControlQueryDataRow */
-    public InputControlQueryDataRow() {
+
+	/** Creates a new instance of InputControlQueryDataRow */
+	public InputControlQueryDataRow() {
 		columnValues = new java.util.ArrayList<String>();
-    }
+	}
 
 	public java.util.List<String> getColumnValues() {
-        return columnValues;
-    }
+		return columnValues;
+	}
 
 	public void setColumnValues(java.util.List<String> columnValues) {
-        this.columnValues = columnValues;
-    }
+		this.columnValues = columnValues;
+	}
 
-    public Object getValue() {
-        return value;
-    }
+	public Object getValue() {
+		return value;
+	}
 
-    public void setValue(Object value) {
-        this.value = value;
-    }
-    
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
 }

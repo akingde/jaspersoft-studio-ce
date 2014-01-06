@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.server.model.MAdHocDataView;
@@ -65,6 +66,7 @@ import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -163,13 +165,16 @@ public class ResourceFactory {
 				else if (resource instanceof MRDataAdapter)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new DataAdapterPageContent(parent, resource));
 
-				if (resource instanceof MRDashboard)
+				else if (resource instanceof MRDashboard)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
-				if (resource instanceof MRMondrianSchema || resource instanceof MRAccessGrantSchema || resource instanceof MROlapUnit || resource instanceof MROlapMondrianConnection)
+				else if (resource instanceof MAdHocDataView)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
-				if (resource instanceof MROlapXmlaConnection)
+				else if (resource instanceof MRMondrianSchema || resource instanceof MRAccessGrantSchema || resource instanceof MROlapUnit || resource instanceof MROlapMondrianConnection)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
+				else if (resource instanceof MROlapXmlaConnection)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new OLAPXmlaPageContent(parent, resource));
-
+				else
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);
@@ -257,16 +262,28 @@ public class ResourceFactory {
 		if (wstype.equals(MRDatasourceAWS.TYPE_AWS))
 			return new MRDatasourceAWS(parent, resource, index);
 
-		if (wstype.equals(ResourceDescriptor.TYPE_REPORT_OPTIONS) || wstype.equals("ReportOptionsResource"))
-			return new MReportUnitOptions(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_REPORT_OPTIONS) || wstype.equals("ReportOptionsResource")) {
+			MReportUnitOptions mro = new MReportUnitOptions(parent, resource, index);
+			if (mro.isSupported(Feature.INPUTCONTROLS_ORDERING))
+				new MDummy(mro);
+			return mro;
+		}
 
 		if (wstype.equals(ResourceDescriptor.TYPE_XML_FILE))
 			return new MXmlFile(parent, resource, index);
 
-		if (wstype.equals(ResourceDescriptor.TYPE_DASHBOARD))
-			return new MRDashboard(parent, resource, index);
-		if (wstype.equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW))
-			return new MAdHocDataView(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_DASHBOARD)) {
+			MRDashboard mrd = new MRDashboard(parent, resource, index);
+			if (mrd.isSupported(Feature.INPUTCONTROLS_ORDERING))
+				new MDummy(mrd);
+			return mrd;
+		}
+		if (wstype.equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW)) {
+			MAdHocDataView madv = new MAdHocDataView(parent, resource, index);
+			if (madv.isSupported(Feature.INPUTCONTROLS_ORDERING))
+				new MDummy(madv);
+			return madv;
+		}
 		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
 			return new MRMondrianSchema(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
@@ -299,6 +316,12 @@ public class ResourceFactory {
 
 	public static boolean isFileResourceType(ResourceDescriptor r) {
 		return fileTypes.contains(r.getWsType());
+	}
+
+	private static final String[] REST_FILETYPES = new String[] { ResourceMediaType.FILE_CLIENT_TYPE };
+
+	public static String[] getFileTypes() {
+		return REST_FILETYPES;
 	}
 
 	private static Map<String, ImageDescriptor> tIcons = new HashMap<String, ImageDescriptor>();

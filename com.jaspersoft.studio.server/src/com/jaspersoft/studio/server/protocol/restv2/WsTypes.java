@@ -65,6 +65,7 @@ public class WsTypes {
 		setType(ClientAdhocDataView.class);
 		setType(ClientMondrianConnection.class);
 		setType(ClientSecureMondrianConnection.class);
+		setType(ClientResourceLookup.class);
 		setType(ClientUnknown.class);
 
 		setRestType(ResourceMediaType.ADHOC_DATA_VIEW_CLIENT_TYPE, ResourceDescriptor.TYPE_ADHOC_DATA_VIEW);
@@ -84,7 +85,7 @@ public class WsTypes {
 		setRestType(ResourceMediaType.OLAP_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAPUNIT);
 		setRestType(ResourceMediaType.QUERY_CLIENT_TYPE, ResourceDescriptor.TYPE_QUERY);
 		setRestType(ResourceMediaType.REPORT_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_REPORTUNIT);
-		setRestType(ResourceMediaType.RESOURCE_LOOKUP_CLIENT_TYPE, ResourceDescriptor.TYPE_REFERENCE);
+		setRestType(ResourceMediaType.FILE_CLIENT_TYPE, ResourceDescriptor.TYPE_REFERENCE);
 		setRestType(ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
 		setRestType(ResourceMediaType.VIRTUAL_DATA_SOURCE_CLIENT_TYPE, ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL);
 		setRestType(ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
@@ -115,7 +116,7 @@ public class WsTypes {
 		setSoapType(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION, ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_OLAPUNIT, ResourceMediaType.OLAP_UNIT_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_QUERY, ResourceMediaType.QUERY_CLIENT_TYPE);
-		setSoapType(ResourceDescriptor.TYPE_REFERENCE, ResourceMediaType.RESOURCE_LOOKUP_CLIENT_TYPE);
+		setSoapType(ResourceDescriptor.TYPE_REFERENCE, ResourceMediaType.FILE_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_REPORTUNIT, ResourceMediaType.REPORT_UNIT_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE, ResourceMediaType.FILE_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_STYLE_TEMPLATE, ResourceMediaType.FILE_CLIENT_TYPE);
@@ -272,5 +273,9 @@ public class WsTypes {
 			for (String s : DatasourcesAllFilter.getTypes())
 				dsTypes.add(WsTypes.INST().toRestType(s));
 		return dsTypes;
+	}
+
+	public String[] getDatasourcesArray() {
+		return getDatasources().toArray(new String[dsTypes.size()]);
 	}
 }

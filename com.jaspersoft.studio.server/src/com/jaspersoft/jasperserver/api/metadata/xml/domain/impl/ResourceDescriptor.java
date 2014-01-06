@@ -25,6 +25,7 @@ package com.jaspersoft.jasperserver.api.metadata.xml.domain.impl;
  * @version $Id: ResourceDescriptor.java 4307 2006-08-24 08:13:55Z giulio $
  */
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,11 +33,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import com.jaspersoft.jasperserver.api.metadata.common.domain.FileResource;
 import com.jaspersoft.jasperserver.api.metadata.common.domain.ResourceReference;
 
-public class ResourceDescriptor {
-
+public class ResourceDescriptor implements Serializable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String TYPE_FOLDER = "folder";
 	public static final String TYPE_REPORTUNIT = "reportUnit";
 	public static final String TYPE_OLAPUNIT = "olapUnit";

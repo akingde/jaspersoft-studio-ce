@@ -34,37 +34,48 @@ public class RESTv2ExceptionHandler {
 	public void handleException(Response res, IProgressMonitor monitor) throws ClientProtocolException {
 		switch (res.getStatus()) {
 		case 400:
-		case 403:
-		case 404:
-		case 409:
-		case 500:
 			if (res.getHeaderString("Content-Type").contains("xml")) {
-				GenericType<List<ErrorDescriptor>> type = new GenericType<List<ErrorDescriptor>>() {
-				};
-				List<ErrorDescriptor> list = res.readEntity(type);
+				List<ErrorDescriptor> list = res.readEntity(new GenericType<List<ErrorDescriptor>>() {
+				});
 				if (list != null) {
 					String msg = "";
-					for (ErrorDescriptor ed : list) {
-						if (!msg.isEmpty())
-							msg += "\n";
-						if (ed.getMessage() != null) {
-							if (ed.getParameters() != null)
-								msg += MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters());
-							else
-								msg += ed.getMessage();
-						} else {
-							String m = getMap(monitor).get(ed.getErrorCode());
-							if (Misc.isNullOrEmpty(m))
-								msg += ed.getErrorCode();
-							else
-								msg += MessageFormat.format(m, (Object[]) ed.getParameters());
-						}
-					}
+					for (ErrorDescriptor ed : list)
+						msg += buildMessage(monitor, msg, ed);
 					throw new ClientProtocolException(msg);
 				}
+			}
+		case 403:
+		case 409:
+		case 404:
+		case 500:
+			if (res.getHeaderString("Content-Type").contains("xml")) {
+				ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
+				String msg = buildMessage(monitor, "", ed);
+				if (!ed.getErrorCode().contains("{0}"))
+					for (String str : ed.getParameters())
+						msg += "\n" + str;
+				throw new ClientProtocolException(msg);
 			}
 		default:
 			throw new HttpResponseException(res.getStatus(), res.getStatusInfo().getReasonPhrase());
 		}
+	}
+
+	protected String buildMessage(IProgressMonitor monitor, String msg, ErrorDescriptor ed) {
+		if (!msg.isEmpty())
+			msg += "\n";
+		if (ed.getMessage() != null) {
+			if (ed.getParameters() != null)
+				msg += MessageFormat.format(ed.getMessage(), (Object[]) ed.getParameters());
+			else
+				msg += ed.getMessage();
+		} else {
+			String m = getMap(monitor).get(ed.getErrorCode());
+			if (Misc.isNullOrEmpty(m))
+				msg += ed.getErrorCode();
+			else
+				msg += MessageFormat.format(m, (Object[]) ed.getParameters());
+		}
+		return msg;
 	}
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.properties;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
@@ -27,11 +29,10 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.server.ServerManager;
@@ -40,6 +41,8 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 
 public class InputControlSection extends ASection {
 	private Combo ctype;
@@ -50,8 +53,7 @@ public class InputControlSection extends ASection {
 	private Button bbrowse;
 
 	@Override
-	protected void createSectionControls(Composite parent,
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+	protected void createSectionControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		AbstractSection.createLabel(parent, getWidgetFactory(), "", 120);
 
 		Composite cmp = new Composite(parent, SWT.NONE);
@@ -70,18 +72,11 @@ public class InputControlSection extends ASection {
 
 		AbstractSection.createLabel(parent, getWidgetFactory(), "Type", 120);
 
-		ctype = getWidgetFactory().createCombo(parent,
-				SWT.BORDER | SWT.READ_ONLY);
-		ctype.setItems(new String[] { "Boolean", "Single Value",
-				"Single Select List of Values",
-				"Single Select List of Values (Radio)",
-				"Multi Select List of Values",
-				"Multi Select List of Values (Checkbox)",
-				"Single Select Query", "Single Select Query (Radio)",
-				"Multi Select Query", "Multi Select Query (Checkbox)" });
+		ctype = getWidgetFactory().createCombo(parent, SWT.BORDER | SWT.READ_ONLY);
+		ctype.setItems(new String[] { "Boolean", "Single Value", "Single Select List of Values", "Single Select List of Values (Radio)", "Multi Select List of Values",
+				"Multi Select List of Values (Checkbox)", "Single Select Query", "Single Select Query (Radio)", "Multi Select Query", "Multi Select Query (Checkbox)" });
 
-		AbstractSection.createLabel(parent, getWidgetFactory(),
-				"Referenced List of values", 120);
+		AbstractSection.createLabel(parent, getWidgetFactory(), "Referenced List of values", 120);
 
 		cmp = new Composite(parent, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -90,8 +85,7 @@ public class InputControlSection extends ASection {
 		cmp.setLayout(layout);
 		cmp.setBackground(parent.getBackground());
 
-		trefuri = getWidgetFactory().createText(cmp, "",
-				SWT.BORDER | SWT.READ_ONLY);
+		trefuri = getWidgetFactory().createText(cmp, "", SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bbrowse = new Button(cmp, SWT.PUSH);
@@ -99,27 +93,32 @@ public class InputControlSection extends ASection {
 		bbrowse.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell, 
-						ServerManager.getMServerProfileCopy((MServerProfile)res.getRoot())) {
+				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) res.getRoot());
+				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
 
-					@Override
-					public boolean isResourceCompatible(MResource r) {
-						return (r instanceof MListOfValues)
-								|| (r instanceof MRQuery);
-					}
-
-				};
-				if (rd.open() == Dialog.OK) {
-					MResource rs = rd.getResource();
-					if (rs != null) {
-						res.getValue().setReferenceUri(
-								rs.getValue().getUriString());
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, new String[] { ResourceMediaType.LIST_OF_VALUES_CLIENT_TYPE, ResourceMediaType.QUERY_CLIENT_TYPE }, null);
+					if (rd != null) {
+						res.getValue().setReferenceUri(rd.getUriString());
 						bindingContext.updateTargets();
+					}
+				} else {
+					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
+
+						@Override
+						public boolean isResourceCompatible(MResource r) {
+							return (r instanceof MListOfValues) || (r instanceof MRQuery);
+						}
+
+					};
+					if (rd.open() == Dialog.OK) {
+						MResource rs = rd.getResource();
+						if (rs != null) {
+							res.getValue().setReferenceUri(rs.getValue().getUriString());
+							bindingContext.updateTargets();
+						}
 					}
 				}
 			}
-
 		});
 	}
 
@@ -135,16 +134,11 @@ public class InputControlSection extends ASection {
 
 	@Override
 	protected void bind() {
-		bindingContext.bindValue(SWTObservables
-				.observeSingleSelectionIndex(ctype), PojoObservables
-				.observeValue(getProxy(res.getValue()), "controlType"));
+		bindingContext.bindValue(SWTObservables.observeSingleSelectionIndex(ctype), PojoObservables.observeValue(getProxy(res.getValue()), "controlType"));
 
-		bindingContext.bindValue(SWTObservables.observeSelection(bmand),
-				PojoObservables.observeValue(res.getValue(), "mandatory"));
-		bindingContext.bindValue(SWTObservables.observeSelection(bread),
-				PojoObservables.observeValue(res.getValue(), "readOnly"));
-		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
-				PojoObservables.observeValue(res.getValue(), "visible"));
+		bindingContext.bindValue(SWTObservables.observeSelection(bmand), PojoObservables.observeValue(res.getValue(), "mandatory"));
+		bindingContext.bindValue(SWTObservables.observeSelection(bread), PojoObservables.observeValue(res.getValue(), "readOnly"));
+		bindingContext.bindValue(SWTObservables.observeSelection(bvisible), PojoObservables.observeValue(res.getValue(), "visible"));
 	}
 
 	private ShiftMapProxy getProxy(ResourceDescriptor rd) {

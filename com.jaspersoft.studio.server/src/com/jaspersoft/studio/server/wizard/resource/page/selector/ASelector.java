@@ -26,7 +26,9 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
+import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -75,33 +77,54 @@ public abstract class ASelector {
 		bRef.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RepositoryDialog rd = new RepositoryDialog(bRef.getShell(), ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot())) {
-
-					@Override
-					public boolean isResourceCompatible(MResource r) {
-						return isResCompatible(r);
-					}
-				};
-				if (rd.open() == Dialog.OK) {
-					MResource rs = rd.getResource();
-					if (rs != null) {
+				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
+				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, getIncludeTypes(), getExcludeTypes());
+					if (rd != null) {
 						ResourceDescriptor runit = res.getValue();
 						try {
-							ResourceDescriptor ref = rs.getValue();
-							ref = WSClientHelper.getResource(new NullProgressMonitor(), pnode, ref);
-							ref.setIsReference(false);
-							ref.setReferenceUri(ref.getUriString());
-							ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
-							ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
-							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
-							replaceChildren(res, ref);
+							rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
+							rd.setIsReference(true);
+							rd.setReferenceUri(rd.getUriString());
+							rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+							rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+							rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
+							replaceChildren(res, rd);
 
-							jsRefDS.setText(ref.getReferenceUri());
+							jsRefDS.setText(rd.getReferenceUri());
 						} catch (Exception e1) {
 							UIUtils.showError(e1);
 						}
 					}
-					firePageComplete();
+				} else {
+					RepositoryDialog rd = new RepositoryDialog(bRef.getShell(), msp) {
+
+						@Override
+						public boolean isResourceCompatible(MResource r) {
+							return isResCompatible(r);
+						}
+					};
+					if (rd.open() == Dialog.OK) {
+						MResource rs = rd.getResource();
+						if (rs != null) {
+							ResourceDescriptor runit = res.getValue();
+							try {
+								ResourceDescriptor ref = rs.getValue();
+								ref = WSClientHelper.getResource(new NullProgressMonitor(), pnode, ref);
+								ref.setIsReference(false);
+								ref.setReferenceUri(ref.getUriString());
+								ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
+								ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
+								ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+								replaceChildren(res, ref);
+
+								jsRefDS.setText(ref.getReferenceUri());
+							} catch (Exception e1) {
+								UIUtils.showError(e1);
+							}
+						}
+						firePageComplete();
+					}
 				}
 			}
 		});
@@ -123,6 +146,10 @@ public abstract class ASelector {
 		if (rd != null)
 			children.add(rd);
 	}
+
+	protected abstract String[] getIncludeTypes();
+
+	protected abstract String[] getExcludeTypes();
 
 	protected abstract boolean isResCompatible(MResource r);
 

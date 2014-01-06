@@ -168,4 +168,8 @@ public class SoapConnection implements IConnection {
 	public boolean isSupported(Feature f) {
 		return false;
 	}
+
+	@Override
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception {
+	}
 }
