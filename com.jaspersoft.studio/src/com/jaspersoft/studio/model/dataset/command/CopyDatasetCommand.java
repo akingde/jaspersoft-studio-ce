@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.command;
 
@@ -31,13 +26,13 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * Command to copy a dataset inside a specific jrDesign
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class CopyDatasetCommand extends Command {
 
 	/** The jr dataset. */
 	private JRDesignDataset originalDataset;
-	
+
 	/** The jr dataset. */
 	private JRDesignDataset newDataset = null;
 
@@ -45,10 +40,10 @@ public class CopyDatasetCommand extends Command {
 	private JasperDesign jrDesign;
 
 	/**
-	 * Create the command, the dataset will be created in the same design of the 
-	 * original dataset
+	 * Create the command, the dataset will be created in the same design of the original dataset
 	 * 
-	 * @param originalDataset the original dataset
+	 * @param originalDataset
+	 *          the original dataset
 	 */
 	public CopyDatasetCommand(MDataset originalDataset) {
 		super();
@@ -59,16 +54,19 @@ public class CopyDatasetCommand extends Command {
 	/**
 	 * Create the command, the dataset will be created in the specified design
 	 * 
-	 * @param originalDataset the original dataset
-	 * @param design where the dataset will be created, if null the one from the original dataset will be used
+	 * @param originalDataset
+	 *          the original dataset
+	 * @param design
+	 *          where the dataset will be created, if null the one from the original dataset will be used
 	 */
 	public CopyDatasetCommand(MDataset originalDataset, JasperDesign parentDesign) {
 		super();
 		this.originalDataset = originalDataset.getValue();
-		if (parentDesign != null) jrDesign = parentDesign;
-		else jrDesign = originalDataset.getJasperDesign();
+		if (parentDesign != null)
+			jrDesign = parentDesign;
+		else
+			jrDesign = originalDataset.getJasperDesign();
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -77,28 +75,30 @@ public class CopyDatasetCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		newDataset = (JRDesignDataset)originalDataset.clone();
+		newDataset = (JRDesignDataset) originalDataset.clone();
 		boolean operationAborted = false;
 		try {
-			while (jrDesign.getDatasetMap().containsKey(newDataset.getName()) && !operationAborted){
+			while (jrDesign.getDatasetMap().containsKey(newDataset.getName()) && !operationAborted) {
 				String defaultName = ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "CopyOfDataset_"); //$NON-NLS-1$
 				InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
-						Messages.CreateFieldCommand_field_name, Messages.CreateFieldCommand_field_name_text_dialog, defaultName,null);
+						Messages.CreateFieldCommand_field_name, Messages.CreateFieldCommand_field_name_text_dialog, defaultName,
+						null);
 				if (dlg.open() == InputDialog.OK) {
 					newDataset.setName(dlg.getValue());
-				} else operationAborted = true;
+				} else
+					operationAborted = true;
 			}
-			if (!operationAborted) jrDesign.addDataset(newDataset);
+			if (!operationAborted)
+				jrDesign.addDataset(newDataset);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public boolean canExecute() {
 		return (originalDataset != null && jrDesign != null);
 	}
-
 
 	/*
 	 * (non-Javadoc)

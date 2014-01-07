@@ -28,6 +28,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.dataset.command.CopyDatasetCommand;
 
 public class PasteCommand extends Command {
 	protected Map<ANode, Command> list;
@@ -89,15 +91,22 @@ public class PasteCommand extends Command {
 						rect = mge.getBounds();
 						rect.setLocation(de.getX(), de.getY());
 					}
-					// create command
-					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
-					if (cmdc != null) {
+					if (node instanceof MDataset) {
+						Command cmdc = new CopyDatasetCommand((MDataset) node, ((ANode) parent).getJasperDesign());
 						cmd.add(cmdc);
 						createdNodes++;
-					}
-
-					if (!cmd.isEmpty())
 						list.put(node, cmd);
+					} else {
+						// create command
+						Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
+						if (cmdc != null) {
+							cmd.add(cmdc);
+							createdNodes++;
+						}
+
+						if (!cmd.isEmpty())
+							list.put(node, cmd);
+					}
 				}
 			} catch (InstantiationException e) {
 				e.printStackTrace();
@@ -140,6 +149,6 @@ public class PasteCommand extends Command {
 	}
 
 	public boolean isPastableNode(Object node) {
-		return node instanceof ICopyable && ((ICopyable) node).isCopyable2(parent);
+		return node instanceof MDataset || (node instanceof ICopyable && ((ICopyable) node).isCopyable2(parent));
 	}
 }
