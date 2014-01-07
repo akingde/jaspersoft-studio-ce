@@ -625,7 +625,7 @@ public class ImageSelectionDialog extends Dialog {
 				jrImgExpression = new JRDesignExpression();
 				if (imageExpressionText.endsWith(".svg")) //$NON-NLS-1$
 					jrImgExpression
-							.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation(\"" + imageExpressionText + "\")");//$NON-NLS-1$ //$NON-NLS-2$
+							.setText("net.sf.jasperreports.renderers.BatikRenderer.getInstanceFromLocation($P{REPORT_CONTEXT}, \"" + imageExpressionText + "\")");//$NON-NLS-1$ //$NON-NLS-2$
 				else
 					jrImgExpression.setText("\"" + imageExpressionText + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 			} else {
