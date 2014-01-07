@@ -156,7 +156,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 						action.setEnabled(action.isEnabled());
 					}
 				}
-				getViewSite().getActionBars().updateActionBars();
+				// getViewSite().getActionBars().updateActionBars();
 
 				IActionBars actionBars = getViewSite().getActionBars();
 				actionBars.clearGlobalActionHandlers();
