@@ -121,7 +121,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 					"net.sourceforge.jtds.jdbc.Driver", //$NON-NLS-1$
 					"jdbc:jtds:sybase://{0}/{1}"), //$NON-NLS-1$		
 			new JDBCDriverDefinition("Sybase", //$NON-NLS-1$
-					"com.sybase.jdbc2.jdbc.SybDriver", //$NON-NLS-1$
+					"com.sybase.jdbc4.jdbc.SybDriver", //$NON-NLS-1$
 					"jdbc:sybase:Tds:{0}:2638/{1}"), //$NON-NLS-1$
 
 			new JDBCDriverDefinition("Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
@@ -462,7 +462,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	public void performAdditionalUpdates() {
-		if(JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+		if (JaspersoftStudioPlugin.shouldUseSecureStorage()) {
 			textPassword.persistSecret();
 			// update the "password" replacing it with the UUID key saved in secure
 			// preferences
