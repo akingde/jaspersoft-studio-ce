@@ -204,15 +204,19 @@ public class ExternalStylesManager {
 		}
 		
 		if (evaluatedExpression != null){
-			String key = StyleTemplateFactory.getFile(evaluatedExpression, project).getAbsolutePath();
-			List<JRStyle> cachedStyles = externalStylesCache.get(key);
-			if (cachedStyles == null){
-				cachedStyles = new ArrayList<JRStyle>();
-				StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
-				externalStylesCache.put(key, cachedStyles);
+			File styleFile = StyleTemplateFactory.getFile(evaluatedExpression, project);
+			if (styleFile != null) {
+				String key = styleFile.getAbsolutePath();
+				List<JRStyle> cachedStyles = externalStylesCache.get(key);
+				if (cachedStyles == null){
+					cachedStyles = new ArrayList<JRStyle>();
+					StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
+					externalStylesCache.put(key, cachedStyles);
+				}
+				return cachedStyles;
 			}
-			return cachedStyles;
-		} else return new ArrayList<JRStyle>();
+		}
+		return new ArrayList<JRStyle>();
 	}
 	
 }
