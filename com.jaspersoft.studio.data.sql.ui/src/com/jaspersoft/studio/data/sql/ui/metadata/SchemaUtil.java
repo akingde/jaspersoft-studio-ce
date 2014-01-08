@@ -27,9 +27,11 @@ public class SchemaUtil {
 		try {
 			String dbproduct = c.getMetaData().getDatabaseProductName();
 			System.out.println(dbproduct);
-			if (dbproduct.equalsIgnoreCase("Oracle")) {
+			if (dbproduct.equalsIgnoreCase("Oracle"))
 				return runSchemaQuery(c, "select sys_context('USERENV', 'CURRENT_SCHEMA') from dual");
-			} else if (dbproduct.equalsIgnoreCase("PostgreSQL")) {
+			// else if (dbproduct.equalsIgnoreCase("SQL Anywhere"))
+			// return runSchemaQuery(c, "select db_name()");
+			else if (dbproduct.equalsIgnoreCase("PostgreSQL")) {
 				Statement stmt = c.createStatement();
 				ResultSet rs = stmt.executeQuery("SHOW search_path");
 				while (rs.next()) {

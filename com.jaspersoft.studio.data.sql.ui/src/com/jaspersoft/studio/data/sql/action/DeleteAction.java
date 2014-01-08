@@ -22,16 +22,19 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.jface.viewers.TreeViewer;
 
+import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.model.ANode;
 
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	protected String name;
 	protected Class<T> type;
+	private SQLQueryDesigner designer;
 
-	public DeleteAction(TreeViewer treeViewer, String name, Class<T> type) {
+	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer, String name, Class<T> type) {
 		super("&Delete " + name, treeViewer);
 		this.name = name;
 		this.type = type;
+		this.designer = designer;
 	}
 
 	protected boolean isGoodNode(ANode element) {
@@ -63,6 +66,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 		if (indx - 1 > 0)
 			toSelect = (ANode) mfrom.getChildren().get(Math.min(mfrom.getChildren().size() - 1, indx));
 		selectInTree(toSelect);
+		designer.refreshQueryText();
 	}
 
 	protected void doDeleteMore(ANode parent, T todel) {

@@ -195,6 +195,16 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			diagram.scheduleRefresh();
 	}
 
+	public void refreshQueryText() {
+		if (refreshMetadata)
+			return;
+		if (root != null) {
+			isModelRefresh = true;
+			updateQueryText(QueryWriter.writeQuery(root));
+			isModelRefresh = false;
+		}
+	}
+
 	public void refreshQuery() {
 		if (refreshMetadata)
 			return;
