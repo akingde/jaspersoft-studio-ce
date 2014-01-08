@@ -92,11 +92,13 @@ public class Tag {
 		JRDesignVariable jrVariable = null;
 		if (tag.isField) {
 			String[] names = null;
-			if (Number.class.isAssignableFrom(tag.clazz))
+			if (Number.class.isAssignableFrom(tag.clazz)) {
 				names = EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL);
-			else
-				names = new String[] { CalculationEnum.NOTHING.getName(), CalculationEnum.COUNT.getName(),
-						CalculationEnum.DISTINCT_COUNT.getName() };
+			}
+			else {
+				names = EnumHelper.getEnumNames(new CalculationEnum[]{
+						CalculationEnum.NOTHING,CalculationEnum.COUNT,CalculationEnum.DISTINCT_COUNT}, NullEnum.NOTNULL);
+			}
 			Obj2TextWizard wizard = new Obj2TextWizard(names);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			dialog.create();
