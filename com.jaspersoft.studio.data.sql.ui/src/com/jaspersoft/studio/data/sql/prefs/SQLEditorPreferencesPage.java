@@ -8,7 +8,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
-	public static final String P_IDENTIFIER_QUOTE = "pageRulerGrid_SHOWRULER"; //$NON-NLS-1$
+	public static final String P_IDENTIFIER_QUOTE = "com.jaspersoft.studio.data.sql.prefs.IDENTIFIER_QUOTE"; //$NON-NLS-1$
 
 	public SQLEditorPreferencesPage() {
 		super(GRID);

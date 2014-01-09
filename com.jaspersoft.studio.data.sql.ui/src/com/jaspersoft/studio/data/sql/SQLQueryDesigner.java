@@ -378,8 +378,9 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	}
 
 	protected void doRefreshRoots() {
+		String iq = jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "");
 		for (MSQLRoot r : roots)
-			r.setIdentifierQuote(jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""));
+			r.setIdentifierQuote(iq);
 		refreshQueryText();
 	}
 }
