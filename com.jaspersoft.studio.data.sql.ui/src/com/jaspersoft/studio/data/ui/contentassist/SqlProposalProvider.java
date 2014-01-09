@@ -22,6 +22,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.impl.SelectImpl;
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
@@ -32,7 +33,6 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.text2model.Text2Model;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 
 /**
  * see
@@ -40,6 +40,8 @@ import com.jaspersoft.studio.model.MRoot;
  * how to customize content assistant
  */
 public class SqlProposalProvider extends AbstractSqlProposalProvider {
+	private MSQLRoot qroot;
+
 	protected Object getDesigner(ContentAssistContext context) {
 		return context.getViewer().getTextWidget().getData(SQLQueryDesigner.SQLQUERYDESIGNER);
 	}
@@ -103,11 +105,10 @@ public class SqlProposalProvider extends AbstractSqlProposalProvider {
 	}
 
 	protected ANode proposeColumn(ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		MRoot qroot = null;
 		Object obj = getDesigner(context);
 		if (obj instanceof SQLQueryDesigner) {
 			SQLQueryDesigner d = (SQLQueryDesigner) obj;
-			qroot = new MRoot(null, null);
+			qroot = ((SQLQueryDesigner) obj).createRoot(qroot);
 			Util.createSelect(qroot);
 			if (context.getCurrentModel() instanceof SelectImpl) {
 				Text2Model.convertSelect(d, qroot, (SelectImpl) context.getCurrentModel());

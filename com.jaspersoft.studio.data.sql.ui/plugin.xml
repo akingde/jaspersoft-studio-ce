@@ -65,6 +65,15 @@
             name="SQL Query Editor Syntax Coloring">
             <keywordReference id="com.jaspersoft.studio.data.ui.keyword_Sql"/>
         </page>
+        <page
+              category="com.jaspersoft.studio.preferences.EditorsPreferencePage"
+              class="com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage"
+              id="com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage"
+              name="SQL Query Editor">
+           <keywordReference
+                 id="com.jaspersoft.studio.data.ui.keyword_Sql">
+           </keywordReference>
+        </page>
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
@@ -73,9 +82,22 @@
               class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
               id="com.jaspersoft.studio.data.Sql.coloring.property"
               name="SQL Query Editor Syntax Coloring">
-           <keywordReference
-                 id="com.jaspersoft.studio.data.ui.keyword_Sql">
-           </keywordReference>
+           <enabledWhen>
+              <reference
+                    definitionId="com.jaspersoft.studio.projectorjrxml">
+              </reference>
+           </enabledWhen>
+        </page>
+        <page
+              category="com.jaspersoft.studio.preferences.EditorsPreferencePage.property"
+              class="com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage"
+              id="com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage"
+              name="SQL Query Editor">
+           <enabledWhen>
+              <reference
+                    definitionId="com.jaspersoft.studio.projectorjrxml">
+              </reference>
+           </enabledWhen>
         </page>
     </extension>
     <extension
@@ -206,6 +228,12 @@
            QueryDesignerClass="com.jaspersoft.studio.data.sql.SQLQueryDesigner"
            language="sql">
      </queryDesigner>
+  </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer
+           class="com.jaspersoft.studio.data.sql.prefs.PreferenceInitializer">
+     </initializer>
   </extension>
 
 </plugin>

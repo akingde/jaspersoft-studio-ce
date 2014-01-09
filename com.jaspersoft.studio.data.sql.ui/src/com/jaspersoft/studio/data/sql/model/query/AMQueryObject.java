@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -44,6 +45,11 @@ public abstract class AMQueryObject<T> extends ANode implements IQueryString {
 		id = UUID.randomUUID().toString();
 		if (image != null)
 			icon = JasperReportsPlugin.getDefault().getImageDescriptor(image);
+	}
+
+	@Override
+	public MSQLRoot getRoot() {
+		return (MSQLRoot) super.getRoot();
 	}
 
 	public String getId() {

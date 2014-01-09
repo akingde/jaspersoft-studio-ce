@@ -71,12 +71,14 @@ public class MSelectColumn extends AMQueryAliased<MSQLColumn> {
 
 	@Override
 	public String toSQLString() {
+		String IQ = getRoot().getIdentifierQuote();
+
 		StringBuffer ss = new StringBuffer();
 		if (mfTable.getAlias() != null && !mfTable.getAlias().trim().isEmpty())
 			ss.append(mfTable.getAlias());
 		else
 			ss.append(mfTable.getValue().toSQLString());
-		ss.append(".\"" + getValue().getDisplayText() + "\"");
+		ss.append("." + IQ + getValue().getDisplayText() + IQ);
 		ss.append(addAlias());
 
 		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();

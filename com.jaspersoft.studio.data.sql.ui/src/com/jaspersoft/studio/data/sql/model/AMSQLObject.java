@@ -41,21 +41,22 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 	public String toSQLString() {
 		String str = getValue();
 		ANode p = getParent();
+		String IQ = getRoot().getIdentifierQuote();
 		while (p != null) {
 			if (p instanceof AMSQLObject) {
 				if (p instanceof MSqlSchema) {
 					if ((((MSqlSchema) p).isCurrent()))
-						return "\"" + getValue() + "\"";
+						return IQ + getValue() + IQ;
 				}
 				String s = ((AMSQLObject) p).toSQLString();
 				if (Misc.isNullOrEmpty(s))
 					return getValue();
-				return s + ".\"" + getValue() + "\"";
+				return s + "." + IQ + getValue() + IQ;
 			}
 			p = p.getParent();
 		}
 		if (this instanceof MSqlSchema)
-			return "\"" + getValue() + "\"";
+			return IQ + getValue() + IQ;
 		return str;
 	}
 

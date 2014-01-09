@@ -16,12 +16,17 @@
 package com.jaspersoft.studio.data.sql;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -34,18 +39,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
+import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.data.sql.text2model.Text2Model;
 import com.jaspersoft.studio.data.sql.ui.SQLQueryOutline;
 import com.jaspersoft.studio.data.sql.ui.SQLQuerySource;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.metadata.DBMetadata;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	public static final String SQLQUERYDESIGNER = "SQLQUERYDESIGNER";
@@ -54,11 +62,12 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private SQLQuerySource source;
 	private SQLQueryOutline outline;
 	private SQLQueryDiagram diagram;
-	private MRoot root;
+	private MSQLRoot root;
 
 	public SQLQueryDesigner() {
 		super();
 		refreshViewer();
+		JaspersoftStudioPlugin.getInstance().addPreferenceListener(preferenceListener);
 	}
 
 	@Override
@@ -315,6 +324,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			outline.dispose();
 		if (diagram != null)
 			diagram.dispose();
+		JaspersoftStudioPlugin.getInstance().removePreferenceListener(preferenceListener);
 		super.dispose();
 	}
 
@@ -322,16 +332,54 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		return dbMetadata;
 	}
 
-	public MRoot getRoot() {
+	public MSQLRoot getRoot() {
 		return root;
+	}
+
+	@Override
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
+		super.setQuery(jDesign, jDataset, jConfig);
+		doRefreshRoots();
+	}
+
+	private Set<MSQLRoot> roots = new HashSet<MSQLRoot>();
+
+	public MSQLRoot createRoot(MSQLRoot oldRoot) {
+		if (oldRoot != null)
+			roots.remove(oldRoot);
+		MSQLRoot rt = new MSQLRoot(null, getjDataset());
+		if (jConfig != null)
+			rt.setIdentifierQuote(jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""));
+		roots.add(rt);
+		return rt;
+	}
+
+	private PreferenceListener preferenceListener = new PreferenceListener();
+
+	private final class PreferenceListener implements IPropertyChangeListener {
+
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			String p = event.getProperty();
+			if (p.equals(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE)) {
+				doRefreshRoots();
+			}
+		}
+
 	}
 
 	public void refreshViewer() {
 		if (root != null)
 			root.removeChildren();
-		else
-			root = new MRoot(null, getjDataset());
+		else {
+			root = createRoot(root);
+		}
 		Util.createSelect(root);
 		new MOrderBy(root);
+	}
+
+	protected void doRefreshRoots() {
+		for (MSQLRoot r : roots)
+			r.setIdentifierQuote(jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""));
+		refreshQueryText();
 	}
 }

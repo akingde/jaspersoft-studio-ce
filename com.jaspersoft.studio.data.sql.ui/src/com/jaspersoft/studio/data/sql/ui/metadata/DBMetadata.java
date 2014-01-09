@@ -61,6 +61,7 @@ import org.eclipse.ui.part.PluginTransfer;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
@@ -75,7 +76,7 @@ import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 
 public class DBMetadata {
 	private TreeViewer treeViewer;
-	private MRoot root;
+	private MSQLRoot root;
 	private SQLQueryDesigner designer;
 
 	public DBMetadata(SQLQueryDesigner designer) {
@@ -207,7 +208,7 @@ public class DBMetadata {
 
 		stackLayout.topControl = mcmp;
 
-		root = new MRoot(null, null);
+		root = designer.createRoot(root);
 		updateUI(root);
 
 		return composite;
@@ -380,14 +381,14 @@ public class DBMetadata {
 		return schema;
 	}
 
-	protected void updateUI(final MRoot root) {
+	protected void updateUI(final MSQLRoot root) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				if (treeViewer.getControl().isDisposed())
 					return;
 				DBMetadata.this.root = root;
 				if (DBMetadata.this.root == null)
-					DBMetadata.this.root = new MRoot(null, null);
+					DBMetadata.this.root = designer.createRoot(root);
 				treeViewer.setInput(DBMetadata.this.root);
 				designer.refreshQueryModel();
 				setFirstSelection();
