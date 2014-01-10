@@ -212,4 +212,7 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 
 	// =================================== //
 
+	public List getHandles() {
+		return handles;
+	}
 }

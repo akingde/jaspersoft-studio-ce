@@ -206,6 +206,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			Boolean value = keyMap.get(keyCode);
 			return value != null ? value : false;
 		}
+		
 	}
 
 	public Image getPartImage() {
@@ -216,7 +217,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * Instantiates a new abstract visual editor.
 	 */
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
-		setEditDomain(new KeyPressedEventDomain(this));
+		KeyPressedEventDomain ed = new KeyPressedEventDomain(this);
+		ed.setDefaultTool(new MovableSelectionTool(jrContext));
+		setEditDomain(ed);
 		this.jrContext = jrContext;
 	}
 
