@@ -50,7 +50,7 @@ public class SoapConnection implements IConnection {
 			return serverInfo;
 		serverInfo = new ServerInfo();
 		serverInfo.setVersion("4.5");
-		client.getVersion();
+		// serverInfo.setVersion(client.getVersion());
 		return serverInfo;
 	}
 

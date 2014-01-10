@@ -51,7 +51,7 @@ public class RESTv2ExceptionHandler {
 			if (res.getHeaderString("Content-Type").contains("xml")) {
 				ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
 				String msg = buildMessage(monitor, "", ed);
-				if (!ed.getErrorCode().contains("{0}"))
+				if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
 					for (String str : ed.getParameters())
 						msg += "\n" + str;
 				throw new ClientProtocolException(msg);

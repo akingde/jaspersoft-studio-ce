@@ -85,7 +85,6 @@ public class WsTypes {
 		setRestType(ResourceMediaType.OLAP_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAPUNIT);
 		setRestType(ResourceMediaType.QUERY_CLIENT_TYPE, ResourceDescriptor.TYPE_QUERY);
 		setRestType(ResourceMediaType.REPORT_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_REPORTUNIT);
-		setRestType(ResourceMediaType.FILE_CLIENT_TYPE, ResourceDescriptor.TYPE_REFERENCE);
 		setRestType(ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
 		setRestType(ResourceMediaType.VIRTUAL_DATA_SOURCE_CLIENT_TYPE, ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL);
 		setRestType(ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
@@ -277,5 +276,19 @@ public class WsTypes {
 
 	public String[] getDatasourcesArray() {
 		return getDatasources().toArray(new String[dsTypes.size()]);
+	}
+
+	private static final Set<Class<? extends ClientResource<?>>> containers = new HashSet<Class<? extends ClientResource<?>>>();
+	static {
+		containers.add(ClientQuery.class);
+		containers.add(ClientMondrianConnection.class);
+		containers.add(ClientReportUnit.class);
+		containers.add(ClientAdhocDataView.class);
+		containers.add(ClientXmlaConnection.class);
+		containers.add(ClientInputControl.class);
+	}
+
+	public boolean isContainerType(Class<?> cr) {
+		return containers.contains(cr);
 	}
 }

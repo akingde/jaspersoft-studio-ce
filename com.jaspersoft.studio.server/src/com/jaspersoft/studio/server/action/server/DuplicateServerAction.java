@@ -47,16 +47,13 @@ public class DuplicateServerAction extends Action {
 		setText(Messages.DuplicateServerAction_title);
 		setDescription(Messages.DuplicateServerAction_desc);
 		setToolTipText(Messages.DuplicateServerAction_desc);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance()
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
 
 	@Override
 	public boolean isEnabled() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		return firstElement != null && (firstElement instanceof MServerProfile);
 	}
 
@@ -69,13 +66,11 @@ public class DuplicateServerAction extends Action {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MServerProfile) {
 				try {
-					ServerProfile copy = (ServerProfile) ((MServerProfile) obj)
-							.getValue().clone();
-					copy.setName(DuplicateDataAdapterAction.COPY_OF
-							+ copy.getName());
+					MServerProfile oldMSP = (MServerProfile) obj;
+					ServerProfile copy = (ServerProfile) oldMSP.getValue().clone();
+					copy.setName(DuplicateDataAdapterAction.COPY_OF + copy.getName());
 
-					MServerProfile copyDataAdapter = new MServerProfile(
-							(ANode) ((MServerProfile) obj).getParent(), copy);
+					MServerProfile copyDataAdapter = new MServerProfile((ANode) oldMSP.getParent(), copy);
 					ServerManager.addServerProfile(copyDataAdapter);
 					copies.add(copyDataAdapter);
 

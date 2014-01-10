@@ -105,24 +105,8 @@ public class SelectorJrxml {
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, new String[] { ResourceMediaType.FILE_CLIENT_TYPE }, null);
-					if (rd != null) {
-						ResourceDescriptor runit = res.getValue();
-						try {
-							rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
-							rd.setIsReference(true);
-							rd.setMainReport(true);
-							rd.setReferenceUri(rd.getUriString());
-							rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
-							rd.setWsType(ResourceDescriptor.TYPE_JRXML);
-							rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
-							replaceMainReport(res, rd);
-							fireSelectionChanged();
-
-							jsRefDS.setText(rd.getUriString());
-						} catch (Exception e1) {
-							UIUtils.showError(e1);
-						}
-					}
+					if (rd != null)
+						setRemoteResource(res, rd, parent);
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 						@Override
@@ -132,25 +116,8 @@ public class SelectorJrxml {
 					};
 					if (rd.open() == Dialog.OK) {
 						MResource rs = rd.getResource();
-						if (rs != null) {
-							ResourceDescriptor runit = res.getValue();
-							try {
-								ResourceDescriptor ref = rs.getValue();
-								ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
-								ref.setIsReference(true);
-								ref.setMainReport(true);
-								ref.setReferenceUri(ref.getUriString());
-								ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
-								ref.setWsType(ResourceDescriptor.TYPE_JRXML);
-								ref.setUriString(ref.getParentFolder() + "/" + ref.getName());
-								replaceMainReport(res, ref);
-								fireSelectionChanged();
-
-								jsRefDS.setText(ref.getUriString());
-							} catch (Exception e1) {
-								UIUtils.showError(e1);
-							}
-						}
+						if (rs != null)
+							setRemoteResource(res, rs.getValue(), parent);
 					}
 				}
 			}
@@ -216,6 +183,26 @@ public class SelectorJrxml {
 			}
 		} else
 			setEnabled(1, true);
+	}
+
+	private void setRemoteResource(MResource res, ResourceDescriptor rd, ANode parent) {
+		ResourceDescriptor runit = res.getValue();
+		try {
+			rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
+			rd.setIsReference(true);
+			rd.setMainReport(true);
+			rd.setReferenceUri(rd.getUriString());
+			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
+			rd.setWsType(ResourceDescriptor.TYPE_JRXML);
+			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
+			replaceMainReport(res, rd);
+			rd.setDirty(false);
+			fireSelectionChanged();
+
+			jsRefDS.setText(rd.getUriString());
+		} catch (Exception e1) {
+			UIUtils.showError(e1);
+		}
 	}
 
 	private SelectionListener listener;

@@ -1,186 +1,197 @@
 package com.jaspersoft.jasperserver.dto.reports.inputcontrols;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.jaspersoft.jasperserver.dto.common.validations.DateTimeFormatValidationRule;
 import com.jaspersoft.jasperserver.dto.common.validations.MandatoryValidationRule;
 import com.jaspersoft.jasperserver.dto.common.validations.RangeValidationRule;
 import com.jaspersoft.jasperserver.dto.common.validations.RegexpValidationRule;
 import com.jaspersoft.jasperserver.dto.common.validations.ValidationRule;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author akasych
  * @version $Id: ReportInputControl.java 33643 2013-07-08 11:29:50Z ykovalchyk $
  */
 @XmlRootElement
-public class ReportInputControl {
-    private String id;
-    private String description;
-    private String type;
-    private String uri;
-    private String label;
-    private Boolean mandatory;
-    private Boolean readOnly;
-    private Boolean  visible;
-    private List<String> masterDependencies = new ArrayList<String>();
-    private List<String> slaveDependencies = new ArrayList<String>();
-    private List<ValidationRule> validationRules;
-    private InputControlState state;
+public class ReportInputControl implements Serializable {
 
-    public InputControlState getState() {
-        return state;
-    }
+	private static final long serialVersionUID = 1L;
+	private String id;
+	private String description;
+	private String type;
+	private String uri;
+	private String label;
+	private Boolean mandatory;
+	private Boolean readOnly;
+	private Boolean visible;
+	private List<String> masterDependencies = new ArrayList<String>();
+	private List<String> slaveDependencies = new ArrayList<String>();
+	private List<ValidationRule> validationRules;
+	private InputControlState state;
 
-    public ReportInputControl setState(InputControlState state) {
-        this.state = state;
-        return this;
-    }
+	public InputControlState getState() {
+		return state;
+	}
 
-    @XmlElementWrapper(name = "validationRules")
-    @XmlElements({
-            @XmlElement(name = "rangeValidationRule", type = RangeValidationRule.class),
-            @XmlElement(name = "regexpValidationRule", type = RegexpValidationRule.class),
-            @XmlElement(name = "dateTimeFormatValidationRule", type = DateTimeFormatValidationRule.class),
-            @XmlElement(name = "mandatoryValidationRule", type = MandatoryValidationRule.class)
-    })
-    public List<ValidationRule> getValidationRules() {
-        return validationRules;
-    }
+	public ReportInputControl setState(InputControlState state) {
+		this.state = state;
+		return this;
+	}
 
-    public ReportInputControl setValidationRules(List<ValidationRule> validationRules) {
-        this.validationRules = validationRules;
-        return this;
-    }
+	@XmlElementWrapper(name = "validationRules")
+	@XmlElements({ @XmlElement(name = "rangeValidationRule", type = RangeValidationRule.class), @XmlElement(name = "regexpValidationRule", type = RegexpValidationRule.class),
+			@XmlElement(name = "dateTimeFormatValidationRule", type = DateTimeFormatValidationRule.class), @XmlElement(name = "mandatoryValidationRule", type = MandatoryValidationRule.class) })
+	public List<ValidationRule> getValidationRules() {
+		return validationRules;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public ReportInputControl setValidationRules(List<ValidationRule> validationRules) {
+		this.validationRules = validationRules;
+		return this;
+	}
 
-    public ReportInputControl setType(String type) {
-        this.type = type;
-        return this;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public ReportInputControl setType(String type) {
+		this.type = type;
+		return this;
+	}
 
-    public ReportInputControl setDescription(String description) {
-        this.description = description;
-        return this;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getUri() {
-        return uri;
-    }
+	public ReportInputControl setDescription(String description) {
+		this.description = description;
+		return this;
+	}
 
-    public ReportInputControl setUri(String uri) {
-        this.uri = uri;
-        return this;
-    }
+	public String getUri() {
+		return uri;
+	}
 
-    public String getLabel() {
-        return label;
-    }
+	public ReportInputControl setUri(String uri) {
+		this.uri = uri;
+		return this;
+	}
 
-    public ReportInputControl setLabel(String label) {
-        this.label = label;
-        return this;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public Boolean getMandatory() {
-        return mandatory;
-    }
+	public ReportInputControl setLabel(String label) {
+		this.label = label;
+		return this;
+	}
 
-    public ReportInputControl setMandatory(Boolean mandatory) {
-        this.mandatory = mandatory;
-        return this;
-    }
+	public Boolean getMandatory() {
+		return mandatory;
+	}
 
-    public Boolean getReadOnly() {
-        return readOnly;
-    }
+	public ReportInputControl setMandatory(Boolean mandatory) {
+		this.mandatory = mandatory;
+		return this;
+	}
 
-    public ReportInputControl setReadOnly(Boolean readOnly) {
-        this.readOnly = readOnly;
-        return this;
-    }
+	public Boolean getReadOnly() {
+		return readOnly;
+	}
 
-    public Boolean getVisible() {
-        return visible;
-    }
+	public ReportInputControl setReadOnly(Boolean readOnly) {
+		this.readOnly = readOnly;
+		return this;
+	}
 
-    public ReportInputControl setVisible(Boolean visible) {
-        this.visible = visible;
-        return this;
-    }
+	public Boolean getVisible() {
+		return visible;
+	}
 
-    @XmlElementWrapper(name = "masterDependencies")
-    @XmlElement(name = "controlId")
-    public List<String> getMasterDependencies() {
-        return masterDependencies;
-    }
+	public ReportInputControl setVisible(Boolean visible) {
+		this.visible = visible;
+		return this;
+	}
 
-    @XmlElementWrapper(name = "slaveDependencies")
-    @XmlElement(name = "controlId")
-    public List<String> getSlaveDependencies() {
-        return slaveDependencies;
-    }
+	@XmlElementWrapper(name = "masterDependencies")
+	@XmlElement(name = "controlId")
+	public List<String> getMasterDependencies() {
+		return masterDependencies;
+	}
 
-    public String getId() {
-        return id;
-    }
+	@XmlElementWrapper(name = "slaveDependencies")
+	@XmlElement(name = "controlId")
+	public List<String> getSlaveDependencies() {
+		return slaveDependencies;
+	}
 
-    public ReportInputControl setId(String id) {
-        this.id = id;
-        return this;
-    }
+	public String getId() {
+		return id;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ReportInputControl)) return false;
+	public ReportInputControl setId(String id) {
+		this.id = id;
+		return this;
+	}
 
-        ReportInputControl that = (ReportInputControl) o;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof ReportInputControl))
+			return false;
 
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (!id.equals(that.id)) return false;
-        if (label != null ? !label.equals(that.label) : that.label != null) return false;
-        if (mandatory != null ? !mandatory.equals(that.mandatory) : that.mandatory != null) return false;
-        if (masterDependencies != null ? !masterDependencies.equals(that.masterDependencies) : that.masterDependencies != null)
-            return false;
-        if (readOnly != null ? !readOnly.equals(that.readOnly) : that.readOnly != null) return false;
-        if (slaveDependencies != null ? !slaveDependencies.equals(that.slaveDependencies) : that.slaveDependencies != null)
-            return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-        if (!type.equals(that.type)) return false;
-        if (!uri.equals(that.uri)) return false;
-        if (validationRules != null ? !validationRules.equals(that.validationRules) : that.validationRules != null)
-            return false;
-        if (visible != null ? !visible.equals(that.visible) : that.visible != null) return false;
+		ReportInputControl that = (ReportInputControl) o;
 
-        return true;
-    }
+		if (description != null ? !description.equals(that.description) : that.description != null)
+			return false;
+		if (!id.equals(that.id))
+			return false;
+		if (label != null ? !label.equals(that.label) : that.label != null)
+			return false;
+		if (mandatory != null ? !mandatory.equals(that.mandatory) : that.mandatory != null)
+			return false;
+		if (masterDependencies != null ? !masterDependencies.equals(that.masterDependencies) : that.masterDependencies != null)
+			return false;
+		if (readOnly != null ? !readOnly.equals(that.readOnly) : that.readOnly != null)
+			return false;
+		if (slaveDependencies != null ? !slaveDependencies.equals(that.slaveDependencies) : that.slaveDependencies != null)
+			return false;
+		if (state != null ? !state.equals(that.state) : that.state != null)
+			return false;
+		if (!type.equals(that.type))
+			return false;
+		if (!uri.equals(that.uri))
+			return false;
+		if (validationRules != null ? !validationRules.equals(that.validationRules) : that.validationRules != null)
+			return false;
+		if (visible != null ? !visible.equals(that.visible) : that.visible != null)
+			return false;
 
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + type.hashCode();
-        result = 31 * result + uri.hashCode();
-        result = 31 * result + (label != null ? label.hashCode() : 0);
-        result = 31 * result + (mandatory != null ? mandatory.hashCode() : 0);
-        result = 31 * result + (readOnly != null ? readOnly.hashCode() : 0);
-        result = 31 * result + (visible != null ? visible.hashCode() : 0);
-        result = 31 * result + (masterDependencies != null ? masterDependencies.hashCode() : 0);
-        result = 31 * result + (slaveDependencies != null ? slaveDependencies.hashCode() : 0);
-        result = 31 * result + (validationRules != null ? validationRules.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        return result;
-    }
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id.hashCode();
+		result = 31 * result + (description != null ? description.hashCode() : 0);
+		result = 31 * result + type.hashCode();
+		result = 31 * result + uri.hashCode();
+		result = 31 * result + (label != null ? label.hashCode() : 0);
+		result = 31 * result + (mandatory != null ? mandatory.hashCode() : 0);
+		result = 31 * result + (readOnly != null ? readOnly.hashCode() : 0);
+		result = 31 * result + (visible != null ? visible.hashCode() : 0);
+		result = 31 * result + (masterDependencies != null ? masterDependencies.hashCode() : 0);
+		result = 31 * result + (slaveDependencies != null ? slaveDependencies.hashCode() : 0);
+		result = 31 * result + (validationRules != null ? validationRules.hashCode() : 0);
+		result = 31 * result + (state != null ? state.hashCode() : 0);
+		return result;
+	}
 }

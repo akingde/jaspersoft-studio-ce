@@ -272,22 +272,8 @@ public class DatasourceSelectionComposite extends Composite {
 		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
 		if (res.isSupported(Feature.SEARCHREPOSITORY)) {
 			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, WsTypes.INST().getDatasourcesArray(), null);
-			if (rd != null) {
-				ResourceDescriptor runit = res.getValue();
-				try {
-					rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
-					rd.setIsReference(true);
-					rd.setReferenceUri(rd.getUriString());
-					rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-					rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
-					rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
-					SelectorDatasource.replaceDatasource(res, rd);
-
-					textDSFromRepo.setText(rd.getReferenceUri());
-				} catch (Exception e) {
-					UIUtils.showError(e);
-				}
-			}
+			if (rd != null)
+				setResource(res, rd);
 		} else {
 			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 				@Override
@@ -297,27 +283,29 @@ public class DatasourceSelectionComposite extends Composite {
 			};
 			if (rd.open() == Dialog.OK) {
 				MResource rs = rd.getResource();
-				if (rs != null) {
-					ResourceDescriptor runit = res.getValue();
-					try {
-						ResourceDescriptor ref = rs.getValue();
-						ref = WSClientHelper.getResource(new NullProgressMonitor(), parent, ref);
-						ref.setIsReference(true);
-						ref.setReferenceUri(ref.getUriString());
-						ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-						ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
-						ref.setUriString(ref.getParentFolder() + "/" //$NON-NLS-1$
-								+ ref.getName());
-						SelectorDatasource.replaceDatasource(res, ref);
-
-						textDSFromRepo.setText(ref.getReferenceUri());
-					} catch (Exception e1) {
-						UIUtils.showError(e1);
-					}
-				}
+				if (rs != null)
+					setResource(res, rs.getValue());
 			}
 		}
 		notifyDatasourceSelectionChanged();
+	}
+
+	private void setResource(MResource res, ResourceDescriptor rd) {
+		ResourceDescriptor runit = res.getValue();
+		try {
+			rd = WSClientHelper.getResource(new NullProgressMonitor(), parent, rd);
+			rd.setIsReference(true);
+			rd.setReferenceUri(rd.getUriString());
+			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setWsType(rd.getWsType());
+			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
+			SelectorDatasource.replaceDatasource(res, rd);
+			rd.setDirty(false);
+
+			textDSFromRepo.setText(rd.getReferenceUri());
+		} catch (Exception e1) {
+			UIUtils.showError(e1);
+		}
 	}
 
 	/*

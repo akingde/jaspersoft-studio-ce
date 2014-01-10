@@ -15,15 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
-import java.lang.reflect.InvocationTargetException;
-
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -35,9 +27,6 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 
 public class AddResourceAction extends Action {
@@ -49,12 +38,9 @@ public class AddResourceAction extends Action {
 		setId(ID);
 		setText(Messages.common_new);
 		setToolTipText(Messages.common_new);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
 		this.treeViewer = treeViewer;
 	}
 
@@ -70,43 +56,11 @@ public class AddResourceAction extends Action {
 				AddResourceWizard wizard = new AddResourceWizard(parent);
 				WizardDialog dialog = new WizardDialog(shell, wizard);
 				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					MResource res = wizard.getResource();
-					res.setParent(parent, -1);
-					dorun(res);
-					if(parent instanceof MServerProfile){
-						// we should force a refresh in case of a resource
-						// created under the main root folder
-						treeViewer.refresh();
-					}
-				}
+				dialog.open();
 			}
 			break;
 		}
 
 	}
 
-	private void dorun(final MResource res) {
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-				.getDefault().getActiveShell());
-		try {
-			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					try {
-						WSClientHelper.saveResource(res, monitor);
-					} catch (Throwable e) {
-						throw new InvocationTargetException(e);
-					} finally {
-						monitor.done();
-					}
-				}
-
-			});
-		} catch (InvocationTargetException e) {
-			UIUtils.showError(e.getCause());
-		} catch (InterruptedException e) {
-			UIUtils.showError(e);
-		}
-	}
 }

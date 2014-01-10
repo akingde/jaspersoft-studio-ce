@@ -39,8 +39,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
+import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
+import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControlsListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
-import com.jaspersoft.jasperserver.dto.resources.ClientInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -238,6 +240,7 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		if (serverInfo != null) {
 			dateFormat = new SimpleDateFormat(serverInfo.getDateFormatPattern());
 			timestampFormat = new SimpleDateFormat(serverInfo.getDatetimeFormatPattern());
+			sp.setJrVersion(Version.setJRVersion(serverInfo));
 		}
 		return serverInfo;
 	}
@@ -304,7 +307,7 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
-		WebTarget tgt = target.path("resources" + rd.getUriString());
+		WebTarget tgt = target.path("resources" + rd.getUriString().replaceAll("repo:", ""));
 		tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
@@ -383,10 +386,12 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 				InputStream in = new FileInputStream(inputFile);
 				writeFile(connector.put(req, Entity.entity(in, cf.getType().getMimeType()), monitor), in, monitor);
 				refresh = true;
-			}
+			} else if (WsTypes.INST().isContainerType(crl.getClass()))
+				refresh = true;
 			List<ResourceDescriptor> children = rd.getChildren();
 			for (ResourceDescriptor child : children)
-				addOrModifyResource(monitor, child, null);
+				if (child.isDirty())
+					addOrModifyResource(monitor, child, null);
 			if (refresh)
 				rd = get(monitor, rd, null);
 			else
@@ -526,6 +531,7 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		case PERMISSION:
 		case DATASOURCENAME:
 		case INPUTCONTROLS_ORDERING:
+		case MAXLENGHT:
 			return true;
 		}
 		return super.isSupported(f);
@@ -550,13 +556,10 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
 		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
 		try {
-			List<ClientInputControl> m = toObj(connector.get(req, monitor), new GenericType<List<ClientInputControl>>() {
-			}, monitor);
+			ReportInputControlsListWrapper m = toObj(connector.get(req, monitor), ReportInputControlsListWrapper.class, monitor);
 			if (m != null) {
-				for (ClientInputControl cic : m) {
-					ResourceDescriptor nrd = Rest2Soap.getRD(this, cic);
-					rds.add(nrd);
-				}
+				for (ReportInputControl ric : m.getInputParameters())
+					rds.add(Rest2Soap.getInputControl(this, ric, new ResourceDescriptor()));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -566,13 +569,16 @@ public class RestV2ConnectionJersey extends ARestV2Connection {
 
 	@Override
 	public void reorderInputControls(String uri, List<ResourceDescriptor> rds, IProgressMonitor monitor) throws Exception {
-		List<ClientInputControl> ics = new ArrayList<ClientInputControl>();
-		for (ResourceDescriptor rd : rds)
-			ics.add((ClientInputControl) Soap2Rest.getResource(this, rd));
+		List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
+		for (ResourceDescriptor rd : rds) {
+			Object v = rd.getValue();
+			if (v != null && v instanceof ReportInputControl)
+				ics.add((ReportInputControl) v);
+		}
+		ReportInputControlsListWrapper wrapper = new ReportInputControlsListWrapper(ics);
 
 		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
-		Response r = connector.put(req, Entity.entity(ics, MediaType.APPLICATION_JSON_TYPE), monitor);
-		toObj(r, new GenericType<List<ClientInputControl>>() {
-		}, monitor);
+		Response r = connector.put(req, Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE), monitor);
+		toObj(r, ReportInputControlsListWrapper.class, monitor);
 	}
 }

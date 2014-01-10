@@ -30,7 +30,6 @@ import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -46,7 +45,6 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
-import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -254,11 +252,7 @@ public class ServerManager {
 		if (spFound == null)
 			return null;
 		MServerProfile newServerProfile = new MServerProfile(new MRoot(null, null), spFound);
-		try {
-			WSClientHelper.connectGetData(newServerProfile, new NullProgressMonitor());
-		} catch (Exception e) {
-			UIUtils.showError(Messages.ServerManager_ErrorMessage1, e);
-		}
+		newServerProfile.setWsClient(original.getWsClient());
 		return newServerProfile;
 	}
 

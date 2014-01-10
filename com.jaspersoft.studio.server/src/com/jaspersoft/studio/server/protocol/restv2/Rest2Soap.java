@@ -9,6 +9,7 @@ import java.util.List;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
@@ -24,7 +25,6 @@ import com.jaspersoft.jasperserver.dto.resources.ClientListOfValuesItem;
 import com.jaspersoft.jasperserver.dto.resources.ClientMondrianConnection;
 import com.jaspersoft.jasperserver.dto.resources.ClientProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientQuery;
-import com.jaspersoft.jasperserver.dto.resources.ClientReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
@@ -50,6 +50,16 @@ public class Rest2Soap {
 	public static ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr) throws ParseException {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		getRD(rc, cr, rd);
+		return rd;
+	}
+
+	public static ResourceDescriptor getRDContainer(ARestV2Connection rc, ClientResource<?> cr) throws ParseException {
+		ResourceDescriptor rd = new ResourceDescriptor();
+		getRD(rc, cr, rd);
+		if (!cr.getUri().contains("_file")) {
+			rd.setIsReference(true);
+			rd.setReferenceUri(cr.getUri());
+		}
 		return rd;
 	}
 
@@ -111,14 +121,14 @@ public class Rest2Soap {
 
 	private static void getAdhocDataView(ARestV2Connection rc, ClientAdhocDataView cr, ResourceDescriptor rd) throws ParseException {
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
 	}
 
 	private static void getQuery(ARestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
 		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, cr.getLanguage());
 		rd.setSql(cr.getValue());
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
 	}
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) throws ParseException {
@@ -135,9 +145,9 @@ public class Rest2Soap {
 
 	private static void getMondrianConnection(ARestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
 		if (cr.getSchema() != null)
-			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getSchema()));
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
 	}
 
 	private static void getXmlaConnection(ARestV2Connection rc, ClientXmlaConnection cr, ResourceDescriptor rd) throws ParseException {
@@ -211,7 +221,7 @@ public class Rest2Soap {
 		rd.setStrictMax(cr.isStrictMax());
 		rd.setMinValue(cr.getMinValue());
 		rd.setStrictMin(cr.isStrictMin());
-		DiffFields.setSoapValue(rd, DiffFields.MAXLENGHT, cr.getMaxLength());
+		DiffFields.setSoapValue(rd, DiffFields.MAXLENGHT, Misc.nvl(cr.getMaxLength(), new Integer(0)));
 	}
 
 	private static void getReportUnit(ARestV2Connection rc, ClientReportUnit cr, ResourceDescriptor rd) throws ParseException {
@@ -230,21 +240,21 @@ public class Rest2Soap {
 		rd.getChildren().clear();
 
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRD(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
 		if (cr.getQuery() != null)
-			rd.getChildren().add(getRD(rc, (ClientQuery) cr.getQuery()));
+			rd.getChildren().add(getRDContainer(rc, (ClientQuery) cr.getQuery()));
 		if (cr.getJrxml() != null) {
-			ResourceDescriptor mjrxml = getRD(rc, (ClientResource<?>) cr.getJrxml());
+			ResourceDescriptor mjrxml = getRDContainer(rc, (ClientResource<?>) cr.getJrxml());
 			mjrxml.setMainReport(true);
 			rd.getChildren().add(mjrxml);
 		}
 
 		if (cr.getInputControls() != null)
 			for (ClientReferenceableInputControl cric : cr.getInputControls())
-				rd.getChildren().add(getRD(rc, (ClientResource<?>) cric));
+				rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cric));
 		if (cr.getFiles() != null)
 			for (ClientReferenceableFile crf : cr.getFiles().values())
-				rd.getChildren().add(getRD(rc, (ClientResource<?>) crf));
+				rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) crf));
 		Collections.sort(rd.getChildren(), new Comparator<ResourceDescriptor>() {
 
 			@Override
@@ -278,19 +288,27 @@ public class Rest2Soap {
 		});
 	}
 
-	private static void getReference(ARestV2Connection rc, ClientReference cr, ResourceDescriptor rd) {
-
-	}
-
 	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
 		if (cr.getListOfValues() != null)
-			rd.getChildren().add(getRD(rc, (ClientListOfValues) cr.getListOfValues()));
+			rd.getChildren().add(getRDContainer(rc, (ClientListOfValues) cr.getListOfValues()));
 		if (cr.getQuery() != null)
-			rd.getChildren().add(getRD(rc, (ClientQuery) cr.getQuery()));
+			rd.getChildren().add(getRDContainer(rc, (ClientQuery) cr.getQuery()));
+		if (cr.getDataType() != null)
+			rd.getChildren().add(getRDContainer(rc, (ClientDataType) cr.getDataType()));
 
 		rd.setControlType(cr.getType());
 		rd.setQueryValueColumn(cr.getValueColumn());
 		if (cr.getVisibleColumns() != null)
 			rd.setQueryVisibleColumns(cr.getVisibleColumns().toArray(new String[cr.getVisibleColumns().size()]));
+	}
+
+	public static ResourceDescriptor getInputControl(ARestV2Connection rc, ReportInputControl cr, ResourceDescriptor rd) throws ParseException {
+		rd.setName(cr.getId());
+		rd.setUriString(cr.getUri());
+		rd.setLabel(cr.getLabel());
+		rd.setDescription(cr.getDescription());
+		rd.setWsType(ResourceDescriptor.TYPE_INPUT_CONTROL);
+		rd.setValue(cr);
+		return rd;
 	}
 }

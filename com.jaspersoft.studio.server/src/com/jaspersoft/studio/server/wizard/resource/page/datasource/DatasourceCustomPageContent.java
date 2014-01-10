@@ -171,10 +171,11 @@ public class DatasourceCustomPageContent extends APageContent {
 
 		ResourceProperty rp = rd.getProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 		if (rp == null) {
-			ResourceProperty rpmap = new ResourceProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
-			rpmap.setProperties(new ArrayList<ResourceProperty>());
-			rd.setResourceProperty(rpmap);
+			rp = new ResourceProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
+			rp.setProperties(new ArrayList<ResourceProperty>());
+			rd.setResourceProperty(rp);
 		}
+
 		tviewer.setInput(rp.getProperties());
 		return composite;
 	}

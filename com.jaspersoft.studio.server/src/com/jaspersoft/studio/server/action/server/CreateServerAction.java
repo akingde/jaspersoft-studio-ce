@@ -17,10 +17,11 @@ package com.jaspersoft.studio.server.action.server;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
@@ -71,12 +72,13 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 				srv.setUser("username"); //$NON-NLS-1$
 				srv.setSupportsDateRanges(true);
 				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, srv));
-				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(Display.getDefault().getActiveShell(), wizard);
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(UIUtils.getShell(), wizard);
 				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					mservprof = wizard.getServerProfile();
 					MServerProfile newprofile = new MServerProfile((MServers) n, mservprof.getValue());
+					newprofile.setWsClient(mservprof.getWsClient());
 					// for (INode cn : mservprof.getChildren())
 					// newprofile.addChild((ANode) cn);
 					// try {

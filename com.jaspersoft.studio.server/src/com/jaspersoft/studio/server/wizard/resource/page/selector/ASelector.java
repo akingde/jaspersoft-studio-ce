@@ -80,22 +80,8 @@ public abstract class ASelector {
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, getIncludeTypes(), getExcludeTypes());
-					if (rd != null) {
-						ResourceDescriptor runit = res.getValue();
-						try {
-							rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
-							rd.setIsReference(true);
-							rd.setReferenceUri(rd.getUriString());
-							rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-							rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
-							rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
-							replaceChildren(res, rd);
-
-							jsRefDS.setText(rd.getReferenceUri());
-						} catch (Exception e1) {
-							UIUtils.showError(e1);
-						}
-					}
+					if (rd != null)
+						setRemoteResource(res, rd, pnode);
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(bRef.getShell(), msp) {
 
@@ -106,28 +92,30 @@ public abstract class ASelector {
 					};
 					if (rd.open() == Dialog.OK) {
 						MResource rs = rd.getResource();
-						if (rs != null) {
-							ResourceDescriptor runit = res.getValue();
-							try {
-								ResourceDescriptor ref = rs.getValue();
-								ref = WSClientHelper.getResource(new NullProgressMonitor(), pnode, ref);
-								ref.setIsReference(false);
-								ref.setReferenceUri(ref.getUriString());
-								ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
-								ref.setUriString(ref.getParentFolder() + "/" + ref.getName());//$NON-NLS-1$
-								ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
-								replaceChildren(res, ref);
-
-								jsRefDS.setText(ref.getReferenceUri());
-							} catch (Exception e1) {
-								UIUtils.showError(e1);
-							}
-						}
+						if (rs != null)
+							setRemoteResource(res, rs.getValue(), pnode);
 						firePageComplete();
 					}
 				}
 			}
 		});
+	}
+
+	private void setRemoteResource(MResource res, ResourceDescriptor rd, ANode pnode) {
+		ResourceDescriptor runit = res.getValue();
+		try {
+			rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
+			rd.setIsReference(true);
+			rd.setReferenceUri(rd.getUriString());
+			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
+			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
+			replaceChildren(res, rd);
+
+			jsRefDS.setText(rd.getReferenceUri());
+		} catch (Exception e1) {
+			UIUtils.showError(e1);
+		}
 	}
 
 	public void resetResource() {

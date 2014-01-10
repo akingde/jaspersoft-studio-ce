@@ -27,7 +27,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -75,8 +74,7 @@ public class ServerProfileWizard extends Wizard {
 	private void handleConnect(final boolean onlycheck) {
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					connect(onlycheck, monitor);
 				}
 
@@ -89,24 +87,26 @@ public class ServerProfileWizard extends Wizard {
 	}
 
 	private void connectionOK() {
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				MessageDialog.openInformation(getShell(),
-						"Connection to JasperServer", "Successful");
+				MessageDialog.openInformation(getShell(), "Connection to JasperServer", "Successful");
 			}
 		});
 	}
 
-	private IStatus connect(final boolean onlycheck, IProgressMonitor monitor)
-			throws InvocationTargetException {
+	private IStatus connect(final boolean onlycheck, IProgressMonitor monitor) throws InvocationTargetException {
 		try {
-			monitor.beginTask("Connecting to the server",
-					IProgressMonitor.UNKNOWN);
+			monitor.beginTask("Connecting to the server", IProgressMonitor.UNKNOWN);
 			if (onlycheck) {
 				if (WSClientHelper.checkConnection(serverProfile, monitor))
 					connectionOK();
 			} else
 				WSClientHelper.connectGetData(serverProfile, monitor);
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				public void run() {
+					page0.showServerInfo();
+				}
+			});
 		} catch (Throwable e) {
 			throw new InvocationTargetException(e);
 		} finally {

@@ -121,7 +121,7 @@ public class JSSApacheConnector extends ApacheConnector {
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(100000);
 					clean();
 				} catch (InterruptedException e) {
 					e.printStackTrace();

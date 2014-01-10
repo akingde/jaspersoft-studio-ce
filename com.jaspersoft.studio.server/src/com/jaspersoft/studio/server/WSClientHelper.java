@@ -39,9 +39,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MAdHocDataView;
+import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MRDashboard;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRDataAdapterFile;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -82,9 +81,10 @@ public class WSClientHelper {
 		monitor.subTask("Connecting to " + msp.getDisplayText());
 		IConnection c = new ProxyConnection();
 		boolean cres = c.connect(monitor, msp.getValue());
-		if (cres)
+		if (cres) {
 			monitor.subTask("Connected");
-		else
+			msp.setWsClient(c);
+		} else
 			monitor.subTask("Not Connected");
 		return cres;
 	}
@@ -346,7 +346,7 @@ public class WSClientHelper {
 			ResourceDescriptor newrd = res.getWsClient().get(monitor, rd, null);
 			if (newrd != null) {
 				res.setValue(newrd);
-				if (res instanceof MFolder || res instanceof MReportUnit || (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof MAdHocDataView || res instanceof MRDashboard))) {
+				if (res instanceof MFolder || res instanceof MReportUnit || (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof IInputControlsContainer))) {
 					res.removeChildren();
 
 					listFolder(res, -1, res.getWsClient(), monitor, newrd, 0);
@@ -360,7 +360,7 @@ public class WSClientHelper {
 	}
 
 	public static void refreshContainer(MResource res, IProgressMonitor monitor) throws Exception {
-		if (res instanceof MFolder || res instanceof MReportUnit || (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof MAdHocDataView || res instanceof MRDashboard))) {
+		if (res instanceof MFolder || res instanceof MReportUnit || (res.isSupported(Feature.INPUTCONTROLS_ORDERING) && (res instanceof IInputControlsContainer))) {
 			res.removeChildren();
 
 			listFolder(res, -1, res.getWsClient(), monitor, res.getValue(), 0);

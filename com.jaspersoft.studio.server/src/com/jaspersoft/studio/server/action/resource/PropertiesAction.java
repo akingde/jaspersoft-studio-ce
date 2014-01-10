@@ -15,35 +15,22 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
-import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class PropertiesAction extends Action {
 	private static final String ID = "RESOURCEPROPERTIES";
@@ -77,8 +64,7 @@ public class PropertiesAction extends Action {
 					ResourceWizard wizard = new ResourceWizard(mres, mres);
 					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 					dialog.create();
-
-					dorun(mres, dialog.open());
+					dialog.open();
 				} catch (Exception e) {
 					UIUtils.showError(e);
 				}
@@ -87,50 +73,4 @@ public class PropertiesAction extends Action {
 		}
 	}
 
-	private void dorun(final MResource obj, final int result) {
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-		try {
-			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					try {
-						editResource(obj, monitor, result);
-					} catch (Throwable e) {
-						throw new InvocationTargetException(e);
-					} finally {
-						monitor.done();
-					}
-				}
-			});
-		} catch (InvocationTargetException e) {
-			UIUtils.showError(e.getCause());
-		} catch (InterruptedException e) {
-			UIUtils.showError(e);
-		}
-	}
-
-	private void editResource(final MResource res, IProgressMonitor monitor, int result) throws Exception {
-		if (result == Dialog.OK) {
-			File tmpfile = null;
-			try {
-				if (res instanceof MReportUnit) {
-					tmpfile = FileUtils.createTempFile("jrstmp", ".jrxml");
-					List<ResourceDescriptor> toremove = new ArrayList<ResourceDescriptor>();
-					for (Object obj : res.getValue().getChildren()) {
-						ResourceDescriptor rd = (ResourceDescriptor) obj;
-						if (SelectorDatasource.isDatasource(rd))
-							continue;
-						toremove.add(rd);
-					}
-					for (ResourceDescriptor rd : toremove)
-						res.getValue().getChildren().remove(rd);
-				}
-				WSClientHelper.saveResource(res, monitor);
-			} finally {
-				if (tmpfile != null)
-					tmpfile.delete();
-			}
-		} else {
-			WSClientHelper.refreshResource(res, monitor);
-		}
-	}
 }

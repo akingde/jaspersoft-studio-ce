@@ -24,7 +24,9 @@ import com.jaspersoft.jasperserver.dto.resources.ClientListOfValuesItem;
 import com.jaspersoft.jasperserver.dto.resources.ClientMondrianConnection;
 import com.jaspersoft.jasperserver.dto.resources.ClientProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientQuery;
+import com.jaspersoft.jasperserver.dto.resources.ClientReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableDataSource;
+import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableDataType;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableListOfValues;
@@ -39,6 +41,11 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataso
 import com.jaspersoft.studio.utils.Misc;
 
 public class Soap2Rest {
+	public static Object getResourceContainer(ARestV2Connection rc, ResourceDescriptor rd) throws ParseException {
+		if (rd.getIsReference())
+			return new ClientReference(rd.getReferenceUri());
+		return getResource(rc, rd);
+	}
 
 	public static ClientResource<?> getResource(ARestV2Connection rc, ResourceDescriptor rd) throws ParseException {
 		ClientResource<?> cr = WsTypes.INST().createResource(rd);
@@ -95,7 +102,7 @@ public class Soap2Rest {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children)
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 	}
 
 	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr, ResourceDescriptor rd) {
@@ -109,9 +116,9 @@ public class Soap2Rest {
 	private static void getMondrianConnection(ARestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
 		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
-				cr.setSchema((ClientReferenceableFile) getResource(rc, r));
+				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc, r));
 		}
 	}
 
@@ -199,7 +206,10 @@ public class Soap2Rest {
 		cr.setStrictMax(rd.isStrictMax());
 		cr.setMinValue(rd.getMinValue());
 		cr.setStrictMin(rd.isStrictMin());
-		cr.setMaxLength(DiffFields.getSoapValueInteger(rd, DiffFields.MAXLENGHT));
+
+		Integer ml = DiffFields.getSoapValueInteger(rd, DiffFields.MAXLENGHT);
+		if (ml != null && ml.intValue() > 0)
+			cr.setMaxLength(ml);
 	}
 
 	private static void getQuery(ARestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
@@ -208,7 +218,7 @@ public class Soap2Rest {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children)
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 	}
 
 	private static void getImage(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) {
@@ -223,9 +233,11 @@ public class Soap2Rest {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children) {
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_LOV))
-				cr.setListOfValues((ClientReferenceableListOfValues) getResource(rc, r));
+				cr.setListOfValues((ClientReferenceableListOfValues) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
-				cr.setQuery((ClientReferenceableQuery) getResource(rc, r));
+				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
+			else if (r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
+				cr.setDataType((ClientReferenceableDataType) getResourceContainer(rc, r));
 		}
 	}
 
@@ -250,13 +262,13 @@ public class Soap2Rest {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children) {
 			if (SelectorDatasource.isDatasource(r))
-				cr.setDataSource((ClientReferenceableDataSource) getResource(rc, r));
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
-				cr.setQuery((ClientReferenceableQuery) getResource(rc, r));
+				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML))
-				cr.setJrxml((ClientReferenceableFile) getResource(rc, r));
+				cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-				cr.getInputControls().add((ClientReferenceableInputControl) getResource(rc, r));
+				cr.getInputControls().add((ClientReferenceableInputControl) getResourceContainer(rc, r));
 			else {
 				ClientFile res = (ClientFile) getResource(rc, r);
 				cr.getFiles().put(r.getLabel(), res);
