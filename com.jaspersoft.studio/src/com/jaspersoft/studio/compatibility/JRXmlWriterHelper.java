@@ -73,6 +73,10 @@ public class JRXmlWriterHelper {
 		return r;
 	}
 
+	public static Set<String> getVersionsSet() {
+		return writers;
+	}
+
 	public static String writeReport(JasperReportsConfiguration jrContext, JRReport report, IFile file, boolean showDialog)
 			throws Exception {
 

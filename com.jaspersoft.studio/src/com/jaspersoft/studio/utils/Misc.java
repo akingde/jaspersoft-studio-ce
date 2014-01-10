@@ -202,4 +202,11 @@ public class Misc {
 			sortedMap.put(entry.getKey(), entry.getValue());
 		return sortedMap;
 	}
+
+	public static String quote(String value, String q) {
+		String str = q + value;
+		if (q.equals("["))
+			q = "]";
+		return str + q;
+	}
 }

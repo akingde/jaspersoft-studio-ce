@@ -24,6 +24,7 @@ import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MSelectColumn extends AMQueryAliased<MSQLColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -78,7 +79,7 @@ public class MSelectColumn extends AMQueryAliased<MSQLColumn> {
 			ss.append(mfTable.getAlias());
 		else
 			ss.append(mfTable.getValue().toSQLString());
-		ss.append("." + IQ + getValue().getDisplayText() + IQ);
+		ss.append("." + Misc.quote(getValue().getDisplayText(), IQ));
 		ss.append(addAlias());
 
 		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();

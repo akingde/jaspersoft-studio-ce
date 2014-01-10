@@ -23,7 +23,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new ComboFieldEditor(P_IDENTIFIER_QUOTE, "Identifier Quotes", new String[][] { { "", "" }, { "\"", "\"" }, { "`", "`" } }, getFieldEditorParent()));
+		addField(new ComboFieldEditor(P_IDENTIFIER_QUOTE, "Identifier Quotes", new String[][] { { "id", "" }, { "\"id\"", "\"" }, { "`id`", "`" }, { "[id]", "[" } }, getFieldEditorParent()));
 	}
 
 	public static void getDefaults(IPreferenceStore store) {

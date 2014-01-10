@@ -25,6 +25,7 @@ import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MOrderByColumn extends AMOrderByMember<MSQLColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -90,7 +91,7 @@ public class MOrderByColumn extends AMOrderByMember<MSQLColumn> {
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
-			ss.append("." + IQ + getValue().getDisplayText() + IQ);
+			ss.append("." + Misc.quote(getValue().getDisplayText(), IQ));
 			ss.append(addDirection());
 		} else
 			ss.append(msColumn.getAlias());

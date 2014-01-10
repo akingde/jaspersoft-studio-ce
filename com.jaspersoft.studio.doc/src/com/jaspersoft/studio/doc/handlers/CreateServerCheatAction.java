@@ -2,6 +2,8 @@ package com.jaspersoft.studio.doc.handlers;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
@@ -56,12 +58,13 @@ public class CreateServerCheatAction extends AsyncAction {
 				srv.setUrl("http://localhost:8080/jasperserver/services/repository");
 				srv.setUser("username");
 				ServerProfileWizard wizard = new ServerProfileWizard(new MServerProfile(null, srv));
-				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(Display.getDefault().getActiveShell(), wizard);
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(UIUtils.getShell(), wizard);
 				wizard.bindTestButton(dialog);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					MServerProfile mservprof = wizard.getServerProfile();
 					MServerProfile newprofile = new MServerProfile((MServers) n, mservprof.getValue());
+					newprofile.setWsClient(mservprof.getWsClient());
 					// for (INode cn : mservprof.getChildren())
 					// newprofile.addChild((ANode) cn);
 					// try {
@@ -82,6 +85,7 @@ public class CreateServerCheatAction extends AsyncAction {
 		if (dialogToOpen.open() == Dialog.OK) {
 			MServerProfile mservprof = wizardDialog.getServerProfile();
 			MServerProfile newprofile = new MServerProfile((MServers) selectedElement, mservprof.getValue());
+			newprofile.setWsClient(mservprof.getWsClient());
 			// for (INode cn : mservprof.getChildren())
 			// newprofile.addChild((ANode) cn);
 			// try {

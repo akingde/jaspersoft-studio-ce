@@ -25,6 +25,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -94,7 +95,7 @@ public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
-			ss.append("." + IQ + getValue().getDisplayText() + IQ);
+			ss.append("." + Misc.quote(getValue().getDisplayText(), IQ));
 		} else
 			ss.append(msColumn.getAlias());
 		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();
