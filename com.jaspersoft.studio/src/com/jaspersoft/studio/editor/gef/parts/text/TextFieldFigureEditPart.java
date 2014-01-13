@@ -36,10 +36,8 @@ public class TextFieldFigureEditPart extends FigureEditPart {
 			MTextField textfield = (MTextField) getModel();
 			cmd = new EditTextFieldExpressionCommand(textfield) {
 				@Override
-				public void execute() {
-					if(this.showDialog()==Window.OK) {
-						super.execute();
-					}
+				public boolean canExecute() {
+					return super.canExecute() && this.showDialog()==Window.OK;
 				}
 			};
 			getViewer().getEditDomain().getCommandStack().execute(cmd);
