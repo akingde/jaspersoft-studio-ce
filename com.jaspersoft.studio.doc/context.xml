@@ -389,4 +389,7 @@
    <context id="createMeterSeries" title="Create a series for the meter chart">
       <description>In this dialog you can define all the attributes of a series for the meter chart. These attributes are the name of the series (optional), the color and its transparency and the expressions for the bound of the series. The last two values are mandatory.</description>
    </context>
+   <context id="domainConnectionWizardDialog" title="Create the parameters for the Domain">
+      <description>Create the parameters needed to connect the selected dataset to a Domain. The parameters will be created inside the main dataset, the selected dataset and all the dataset run associated to the selected dataset and they will be created only where they aren't already present. In this wizard you can see where the parameters will be created and you can proceed with the operation or cancel it.</description>
+   </context>
 </contexts>

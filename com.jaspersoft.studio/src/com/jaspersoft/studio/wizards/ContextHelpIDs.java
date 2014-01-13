@@ -100,4 +100,6 @@ public class ContextHelpIDs {
 	public static final String WIZARD_INSTALL_TRANSLATION_STEP1 = PREFIX.concat("createTranslationFragmentStep1");
 	
 	public static final String WIZARD_INSTALL_TRANSLATION_STEP2 = PREFIX.concat("createTranslationFragmentStep2");
+	
+	public static final String WIZARD_CONNECT_TO_DOMAIN = PREFIX.concat("domainConnectionWizardDialog");
 }

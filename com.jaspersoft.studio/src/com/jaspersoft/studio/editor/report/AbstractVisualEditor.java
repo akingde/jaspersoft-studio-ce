@@ -117,6 +117,7 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
+import com.jaspersoft.studio.editor.outline.actions.ConnectToDomainAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
@@ -852,6 +853,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 		
 		action = new MoveDetailDownAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new ConnectToDomainAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 		

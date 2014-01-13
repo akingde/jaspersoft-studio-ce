@@ -44,6 +44,7 @@ import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
 import com.jaspersoft.studio.editor.action.text.ConvertStaticIntoText;
 import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
+import com.jaspersoft.studio.editor.outline.actions.ConnectToDomainAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
@@ -115,6 +116,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		action = getActionRegistry().getAction(ActionFactory.REDO.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
+		
+		action = getActionRegistry().getAction(ConnectToDomainAction.ID);
+		if (action != null && action.isEnabled())
+			menu.add(action);
 
 		// ----------------------------------------
 
@@ -219,6 +224,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		action = getActionRegistry().getAction(MoveGroupDownAction.ID);
 		if (action != null && action.isEnabled())
 			menu.add(action);
+
 
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
 		if (action != null && action.isEnabled())

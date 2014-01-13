@@ -291,6 +291,14 @@ public class Messages extends NLS {
 	public static String CongratulationsWizardPage_label3;
 	public static String CongratulationsWizardPage_title;
 	public static String CongratulationsWizardPage_titleMessage;
+	public static String ConnectToDomainAction_actionTooltip;
+	public static String ConnectToDomainWizardPage_additionToDatasetRun;
+	public static String ConnectToDomainWizardPage_additionToDatasetRun2;
+	public static String ConnectToDomainWizardPage_additionToMaindataset;
+	public static String ConnectToDomainWizardPage_additionToSelectedDataset;
+	public static String ConnectToDomainWizardPage_dialogDescription;
+	public static String ConnectToDomainWizardPage_dialogTitle;
+	public static String ConnectToDomainWizardPage_noChangesLabel;
 	public static String ConvertStaticIntoText_actionName;
 	public static String ConvertStaticIntoText_actionTooltip;
 	public static String ConvertTextIntoStatic_actionName;
