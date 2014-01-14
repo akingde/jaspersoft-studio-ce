@@ -91,6 +91,7 @@ public class VErrorPreview extends APreview {
 	}
 
 	private Label compilationTime;
+	private Label compilSubTime;
 	private Label fillingTime;
 	private Label exportTime;
 	private Label execTime;
@@ -219,7 +220,7 @@ public class VErrorPreview extends APreview {
 				}
 			}
 		});
-		
+
 		wtable.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -227,13 +228,13 @@ public class VErrorPreview extends APreview {
 				if (sindex < 0 || sindex > errors.size())
 					return;
 				Object aux = auxil.get(sindex);
-				if (aux != null){
+				if (aux != null) {
 					if (aux instanceof JRDesignElement) {
-						SelectionHelper.setSelection((JRDesignElement)aux, true);
-					} else if (aux instanceof List<?>){
-						for(Object item : (List<?>)aux){
-							if (item instanceof JRDesignElement){
-								SelectionHelper.setSelection((JRDesignElement)item, true);
+						SelectionHelper.setSelection((JRDesignElement) aux, true);
+					} else if (aux instanceof List<?>) {
+						for (Object item : (List<?>) aux) {
+							if (item instanceof JRDesignElement) {
+								SelectionHelper.setSelection((JRDesignElement) item, true);
 							}
 						}
 					}
@@ -313,6 +314,13 @@ public class VErrorPreview extends APreview {
 		layout.horizontalSpacing = 3;
 		statComposite.setLayout(layout);
 
+		new Label(statComposite, SWT.NONE).setText("Subreport Compilation Time");
+
+		compilSubTime = new Label(statComposite, SWT.BOLD);
+		compilSubTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		com.jaspersoft.studio.utils.UIUtil.setBold(compilSubTime);
+		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
+
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_compilationTimeLabel);
 
 		compilationTime = new Label(statComposite, SWT.BOLD);
@@ -366,7 +374,10 @@ public class VErrorPreview extends APreview {
 	}
 
 	public void setStats(Statistics stats) {
+		if (compilationTime.isDisposed())
+			return;
 		if (stats != null) {
+			compilSubTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIMESUBREPORT)));
 			compilationTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIME)));
 			fillingTime.setText(format(stats.getDuration(ReportControler.ST_FILLINGTIME)));
 			exportTime.setText(format(stats.getDuration(ReportControler.ST_EXPORTTIME)));
@@ -377,6 +388,7 @@ public class VErrorPreview extends APreview {
 			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0")); //$NON-NLS-1$
 			statAction.run();
 		} else {
+			compilSubTime.setText("-"); //$NON-NLS-1$
 			compilationTime.setText("-"); //$NON-NLS-1$
 			fillingTime.setText("-"); //$NON-NLS-1$
 			exportTime.setText("-"); //$NON-NLS-1$
@@ -417,49 +429,51 @@ public class VErrorPreview extends APreview {
 				t = t.getCause();
 			String msg = terror.getText() + ErrorUtil.getStackTrace(t) + NL;
 			terror.setText(terror.getText() + msg + NL); //$NON-NLS-1$
-			//The only way we have to find a missing style error is to parse the error message for now
+			// The only way we have to find a missing style error is to parse the error message for now
 			String stylesErrorString = "Could not resolve style(s):";
-			if (t.getMessage().contains(stylesErrorString) && design != null){
-				String stylesNotFound = t.getMessage().substring(t.getMessage().indexOf(stylesErrorString)+stylesErrorString.length());
+			if (t.getMessage().contains(stylesErrorString) && design != null) {
+				String stylesNotFound = t.getMessage().substring(
+						t.getMessage().indexOf(stylesErrorString) + stylesErrorString.length());
 				String[] styleNames = stylesNotFound.split(",");
 				HashSet<String> styles = new HashSet<String>();
-				for(String name : styleNames){
+				for (String name : styleNames) {
 					styles.add(name.trim());
 				}
 				List<JRDesignElement> elements = getNotReferencedStyles(design.getAllBands(), styles);
 				addError2List(t, t.getMessage(), elements);
-			} else addError2List(t, t.getMessage(), null);
+			} else
+				addError2List(t, t.getMessage(), null);
 			// errorSection.setText("Errors: 1");
 		} else
 			terror.setText(""); //$NON-NLS-1$
 		refreshErrorTable();
 	}
-	
-	private List<JRDesignElement> getNotReferencedStyles(JRChild[] childs, HashSet<String> styles){	
+
+	private List<JRDesignElement> getNotReferencedStyles(JRChild[] childs, HashSet<String> styles) {
 		List<JRDesignElement> result = new ArrayList<JRDesignElement>();
-		for(JRChild child : childs){
-			if (child instanceof JRDesignElement){
-				String styleName = getElementStyle((JRDesignElement)child);
-				if (styleName != null && styles.contains(styleName)){
-					result.add((JRDesignElement)child);
+		for (JRChild child : childs) {
+			if (child instanceof JRDesignElement) {
+				String styleName = getElementStyle((JRDesignElement) child);
+				if (styleName != null && styles.contains(styleName)) {
+					result.add((JRDesignElement) child);
 				}
 			}
 			if (child instanceof JRElementGroup) {
-				JRElementGroup group = (JRElementGroup)child;
+				JRElementGroup group = (JRElementGroup) child;
 				List<JRDesignElement> value = getNotReferencedStyles(group.getElements(), styles);
 				result.addAll(value);
 			}
 		}
 		return result;
 	}
-	
-	private String getElementStyle(JRDesignElement jrElement){
+
+	private String getElementStyle(JRDesignElement jrElement) {
 		if (jrElement.getStyleNameReference() != null)
 			return jrElement.getStyleNameReference();
 		JRStyle actualStyle = jrElement.getStyle();
 		return actualStyle != null ? actualStyle.getName() : null;
 	}
-	
+
 	protected void refreshErrorTable() {
 		if (getErrorList().size() > 0)
 			errAction.run();
@@ -476,7 +490,7 @@ public class VErrorPreview extends APreview {
 		addError2List(problem, problem.getMessage(), expr);
 		refreshErrorTable();
 	}
-	
+
 	public void addProblem(String message, SourceLocation location, JRDesignElement element) {
 		addError2List(message, message, element);
 		refreshErrorTable();

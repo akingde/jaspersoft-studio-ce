@@ -83,7 +83,6 @@ import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.editor.action.CompileAction;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
@@ -786,7 +785,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					@Override
 					protected IStatus run(final IProgressMonitor monitor) {
 						monitor.beginTask("Compiling subreport", IProgressMonitor.UNKNOWN);
-						CompileAction.doRun(jrContext, monitor, false);
 						if (jrContext.getPropertyBoolean(DesignerPreferencePage.P_SAVE_ON_PREVIEW, Boolean.FALSE)) {
 							monitor.subTask("Saving Report");
 							Display.getDefault().syncExec(new Runnable() {
@@ -796,7 +794,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 									doSave(monitor);
 								}
 							});
-
 						}
 						Display.getDefault().syncExec(new Runnable() {
 							@Override
@@ -1002,20 +999,18 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void openEditor(Object obj, ANode node) {
 		reportContainer.openEditor(obj, node);
 	}
-	
-	public void refreshExternalStyles(HashSet<String> removedStyles){
-		//Very very heavy method, leave commented for future improovments
+
+	public void refreshExternalStyles(HashSet<String> removedStyles) {
+		// Very very heavy method, leave commented for future improovments
 		/*
-		JasperDesign jrDesign = getMReport().getJasperDesign();
-		for(JRDesignElement element : ModelUtils.getAllElements(jrDesign)){
-			if (element.getStyleNameReference() != null && removedStyles.contains(element.getStyleNameReference())){
-				String styleName = element.getStyleNameReference();
-				element.setStyleNameReference(null);
-				element.setStyleNameReference(styleName);
-			}
-		}
-		StyleHandlingReportConverter reportConverter = ((AEditPartFactory)reportContainer.getMainEditor().getGraphicalViewer().getEditPartFactory()).getReportConverter();
-		if (reportConverter != null) reportConverter.resetStyles(jrDesign);*/
+		 * JasperDesign jrDesign = getMReport().getJasperDesign(); for(JRDesignElement element :
+		 * ModelUtils.getAllElements(jrDesign)){ if (element.getStyleNameReference() != null &&
+		 * removedStyles.contains(element.getStyleNameReference())){ String styleName = element.getStyleNameReference();
+		 * element.setStyleNameReference(null); element.setStyleNameReference(styleName); } } StyleHandlingReportConverter
+		 * reportConverter =
+		 * ((AEditPartFactory)reportContainer.getMainEditor().getGraphicalViewer().getEditPartFactory()).getReportConverter
+		 * (); if (reportConverter != null) reportConverter.resetStyles(jrDesign);
+		 */
 	}
 
 }

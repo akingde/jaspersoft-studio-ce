@@ -21,9 +21,11 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fill.JRFiller;
 import net.sf.jasperreports.engine.util.JRResourcesUtil;
 import net.sf.jasperreports.engine.util.JRStringUtil;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -88,12 +90,13 @@ public abstract class AInterpreter {
 		while (expression.indexOf("$P{") >= 0) {
 			String pname = Misc.extract(expression, "$P{", "}");
 			JRParameter pr = null;
-			for (JRParameter p : dataset.getParametersList()) {
-				if (p.getName().equals(pname)) {
-					pr = p;
-					break;
-				}
-			}
+			pr = dataset.getParametersMap().get(pname);
+			// for (JRParameter p : dataset.getParametersList()) {
+			// if (p.getName().equals(pname)) {
+			// pr = p;
+			// break;
+			// }
+			// }
 			if (pr == null)
 				throw new JRException("Paramater $P{" + pname + "} does not exists in the dataset");
 			String pnameLiteral = getLiteral(pname);
@@ -104,22 +107,12 @@ public abstract class AInterpreter {
 		}
 		while (expression.indexOf("$R{") >= 0) {
 			String pname = Misc.extract(expression, "$R{", "}");
-			String baseName = dataset.getResourceBundle();
-			if (baseName == null)
-				baseName = jasperDesign.getMainDataset().getResourceBundle();
-			if (!Misc.isNullOrEmpty(baseName)) {
-				Locale locale = Locale.getDefault();
-				Object obj = null;
-				if (jConfig.getJRParameters() != null)
-					obj = jConfig.getJRParameters().get(JRParameter.REPORT_LOCALE);
-				if (obj != null && obj instanceof Locale)
-					locale = (Locale) obj;
-				ResourceBundle rb = JRResourcesUtil.loadResourceBundle(baseName, locale, jConfig.getClassLoader());
+			String baseName = getBundleName();
+			if (!baseName.isEmpty()) {
+				ResourceBundle rb = getResourceBundle();
 				if (rb != null)
 					baseName = Misc.nvl(rb.getString(pname));
 			}
-			if (baseName == null)
-				baseName = "";
 			expression = Misc.strReplace("\"" + baseName + "\"", "$R{" + pname + "}", expression);
 		}
 		return expression;
@@ -167,5 +160,46 @@ public abstract class AInterpreter {
 	 */
 	public void setConvertNullParams(boolean convertNullParams) {
 		this.convertNullParams = convertNullParams;
+	}
+
+	private ResourceBundle rb;
+
+	protected ResourceBundle getResourceBundle() {
+		if (rb == null)
+			rb = JRResourcesUtil.loadResourceBundle(getBundleName(), getLocale(), jConfig.getClassLoader());
+		return rb;
+	}
+
+	private String bundleName;
+
+	protected String getBundleName() {
+		if (bundleName != null)
+			return bundleName;
+		bundleName = dataset.getResourceBundle();
+		if (bundleName == null)
+			bundleName = jasperDesign.getMainDataset().getResourceBundle();
+		if (Misc.isNullOrEmpty(bundleName))
+			bundleName = "";
+		return bundleName;
+	}
+
+	private Locale locale;
+
+	protected Locale getLocale() {
+		if (locale != null)
+			return locale;
+		locale = Locale.getDefault();
+		Object obj = null;
+		if (jConfig.getJRParameters() != null) {
+			obj = jConfig.getJRParameters().get(JRParameter.REPORT_LOCALE);
+			if (obj == null) {
+				String str = jConfig.getProperty(JRFiller.PROPERTY_DEFAULT_LOCALE);
+				if (str != null)
+					obj = LocaleUtils.toLocale(str);
+			}
+		}
+		if (obj != null && obj instanceof Locale)
+			locale = (Locale) obj;
+		return locale;
 	}
 }

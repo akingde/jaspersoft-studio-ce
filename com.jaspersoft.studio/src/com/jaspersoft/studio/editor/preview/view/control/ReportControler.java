@@ -84,6 +84,7 @@ public class ReportControler {
 	public static final String ST_FILLINGTIME = "FILLINGTIME"; //$NON-NLS-1$
 
 	public static final String ST_COMPILATIONTIME = "COMPILATIONTIME"; //$NON-NLS-1$
+	public static final String ST_COMPILATIONTIMESUBREPORT = "COMPILATIONTIMESUBREPORT"; //$NON-NLS-1$
 
 	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME"; //$NON-NLS-1$
 
@@ -97,10 +98,10 @@ public class ReportControler {
 	static {
 		inputs.add(new BooleanInput());
 		inputs.add(new TextInput());
-		inputs.add(new LocaleInput());
-		inputs.add(new TimeZoneInput());
 		inputs.add(new BigNumericInput());
 		inputs.add(new DateInput());
+		inputs.add(new LocaleInput());
+		inputs.add(new TimeZoneInput());
 		inputs.add(new ImageInput());
 		inputs.add(new CollectionInput());
 		inputs.add(new MapInput());
@@ -303,6 +304,7 @@ public class ReportControler {
 				JasperDesign jd = null;
 				try {
 					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
+
 					setParameters();
 
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
@@ -313,7 +315,7 @@ public class ReportControler {
 
 					jd = jrContext.getJasperDesign();// ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
 
-					JasperReport jasperReport = compileJasperDesign(file, jd);
+					JasperReport jasperReport = compileJasperDesign(file, jd, monitor);
 
 					if (jasperReport != null) {
 						if (!prmInput.checkFieldsFilled())
@@ -380,7 +382,10 @@ public class ReportControler {
 		});
 	}
 
-	private JasperReport compileJasperDesign(IFile file, JasperDesign jd) throws CoreException {
+	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor) throws CoreException {
+		stats.startCount(ST_COMPILATIONTIMESUBREPORT);
+		// CompileAction.doRun(jrContext, monitor, false);
+		stats.endCount(ST_COMPILATIONTIMESUBREPORT);
 		stats.startCount(ST_COMPILATIONTIME);
 		c.startMessage(Messages.ReportControler_msg_compiling);
 		if (compiler == null) {
@@ -587,8 +592,9 @@ public class ReportControler {
 	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e) {
 		showRunReport(c, pcontainer, e, null);
 	}
-	
-	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e, final JasperDesign design) {
+
+	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e,
+			final JasperDesign design) {
 		c.addError(e, design);
 		Display.getDefault().syncExec(new Runnable() {
 

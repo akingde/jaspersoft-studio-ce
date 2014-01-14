@@ -43,7 +43,14 @@ public class ExpressionUtil {
 	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, JasperDesign jd) {
 		if (expr == null || jrd == null || jd == null)
 			return null;
-		return new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig).interpretExpression(expr.getText());
+		return getInterpreter((JRDesignDataset) jrd, jConfig, jd).interpretExpression(expr.getText());
+	}
+
+	public static final ExpressionInterpreter getInterpreter(JRDesignDataset jrd, JasperReportsConfiguration jConfig,
+			JasperDesign jd) {
+		if (jrd == null || jd == null)
+			return null;
+		return new ExpressionInterpreter(jrd, jd, jConfig);
 	}
 
 	/**

@@ -37,6 +37,7 @@ public class SubreportsUtil {
 
 	private static void publishSubreport(JasperReportsConfiguration jConfig, Map<File, IFile> fmap,
 			IProgressMonitor monitor, IFile file, JasperDesign parent, JRDesignSubreport ele) {
+		long stime = System.currentTimeMillis();
 		jConfig.init(file);
 		String expr = ExpressionUtil.eval(ele.getExpression(), jConfig, parent);
 		if (expr == null || expr.isEmpty())
@@ -74,6 +75,7 @@ public class SubreportsUtil {
 				fmap.put(f, null);
 			}
 		}
+		System.out.println(System.currentTimeMillis() - stime);
 	}
 
 	private static IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();

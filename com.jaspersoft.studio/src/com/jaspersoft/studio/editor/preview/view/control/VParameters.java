@@ -10,12 +10,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.editor.preview.input.BooleanNumericInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -68,37 +71,52 @@ public class VParameters extends AVParameters {
 	protected boolean isSystem = false;
 
 	public void setupDefaultValues() {
-		Job job = new Job("Building report") {
+		Job job = new Job("Calculating Default Values") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				JRDataset mDataset = jContext.getJasperDesign().getMainDataset();
+				JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
+				Set<String> keys = new HashSet<String>();
+				long stime = System.currentTimeMillis();
 				for (String pname : incontrols.keySet()) {
-					for (JRParameter p : prompts) {
-						if ((!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
-							continue;
-						if (p.getName().equals(pname)) {
-							if (p.getDefaultValueExpression() != null)
-								params.put(pname, ExpressionUtil.eval(p.getDefaultValueExpression(), mDataset, jContext));
-							else
-								params.put(pname, null);
-							updateControlInput(pname);
-							break;
-						}
+					JRParameter p = mDataset.getParametersMap().get(pname);
+					if (p == null || (!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
+						continue;
+					if (p.getName().equals(pname)) {
+						if (p.getDefaultValueExpression() != null) {
+							long sstime = System.currentTimeMillis();
+							params.put(pname, getInter(mDataset).interpretExpression(p.getDefaultValueExpression().getText()));
+							System.out.println("Eval:" + (System.currentTimeMillis() - sstime));
+						} else
+							params.put(pname, null);
+						keys.add(pname);
 					}
+
 				}
+				System.out.println("Defaults:" + (System.currentTimeMillis() - stime));
+				updateControlInput(keys);
 				return Status.OK_STATUS;
 			}
+
+			private ExpressionInterpreter eint;
+
+			private ExpressionInterpreter getInter(JRDesignDataset mDataset) {
+				if (eint == null)
+					eint = ExpressionUtil.getInterpreter(mDataset, jContext, jContext.getJasperDesign());
+				return eint;
+			}
+
 		};
 		job.setPriority(Job.SHORT);
 		job.schedule();
 	}
 
-	private void updateControlInput(final String pname) {
-		UIUtils.getDisplay().asyncExec(new Runnable() {
+	private void updateControlInput(final Set<String> keys) {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			@Override
 			public void run() {
-				incontrols.get(pname).updateInput();
+				for (String pname : keys)
+					incontrols.get(pname).updateInput();
 			}
 		});
 	}

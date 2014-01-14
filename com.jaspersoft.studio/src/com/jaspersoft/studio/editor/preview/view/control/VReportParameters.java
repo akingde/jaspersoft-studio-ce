@@ -13,7 +13,10 @@ package com.jaspersoft.studio.editor.preview.view.control;
 import net.sf.jasperreports.engine.JRParameter;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.editor.preview.input.IParameter;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VReportParameters extends VParameters {
@@ -27,5 +30,10 @@ public class VReportParameters extends VParameters {
 	protected boolean isParameterToShow(JRParameter p) {
 		return p.isSystemDefined() && !p.getName().equals(JRParameter.REPORT_TEMPLATES)
 				&& !p.getName().equals(JRParameter.SORT_FIELDS) && !p.getName().equals(JRParameter.REPORT_PARAMETERS_MAP);
+	}
+
+	@Override
+	protected void setupLabel(Label lbl, IParameter pres) {
+		lbl.setText(Messages.getString(pres.getLabel()));
 	}
 }

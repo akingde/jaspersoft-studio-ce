@@ -36,7 +36,6 @@ public class GroovyInterpretter extends AInterpreter {
 		ic.addStarImports("import java.io.*;");
 		ic.addStarImports("import java.net.*;");
 		ic.addStarImports("import java.util.*;");
-		ic.addStarImports("import net.sf.jasperreports.engine.*;");
 		ic.addStarImports("import net.sf.jasperreports.engine.data.*;");
 
 		if (jasperDesign != null) {
