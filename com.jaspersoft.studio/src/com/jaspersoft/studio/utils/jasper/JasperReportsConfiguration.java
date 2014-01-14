@@ -230,6 +230,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (list == null)
 			list = new ArrayList<RepositoryService>();
 		if (file != null) {
+			if (file.isLinked())
+				list.add(new FileRepositoryService(this, file.getRawLocation().toFile().getParentFile().getAbsolutePath(), true));
 			list.add(new FileRepositoryService(this, file.getParent().getLocation().toFile().getAbsolutePath(), true));
 			// list.add(new FileRepositoryService(this, ".", true));
 			list.add(new FileRepositoryService(this, file.getProject().getLocation().toFile().getAbsolutePath(), true));
@@ -539,12 +541,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 					String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
 					if (strprop != null) {
 						lst.clear();
-						List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
-								new ByteArrayInputStream(strprop.getBytes()));
-						if (fonts != null && !fonts.isEmpty()) {
-							for (FontFamily f : fonts)
-								if (f != null)
-									lst.add(f);
+						try {
+							List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
+									new ByteArrayInputStream(strprop.getBytes()));
+							if (fonts != null && !fonts.isEmpty()) {
+								for (FontFamily f : fonts)
+									if (f != null)
+										lst.add(f);
+							}
+						} catch (Exception e) {
+							// e.printStackTrace();
 						}
 					}
 

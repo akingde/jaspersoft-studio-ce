@@ -42,6 +42,7 @@ public class SubreportsUtil {
 		if (expr == null || expr.isEmpty())
 			return;
 		expr = expr.replaceAll(".jasper$", ".jrxml");
+		expr = expr.replaceFirst("repo:", "");
 		File f = FileUtils.findFile(file, expr);
 		if (f == null)
 			try {
