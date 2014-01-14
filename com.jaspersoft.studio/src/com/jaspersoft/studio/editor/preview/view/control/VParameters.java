@@ -13,10 +13,15 @@ package com.jaspersoft.studio.editor.preview.view.control;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -63,23 +68,39 @@ public class VParameters extends AVParameters {
 	protected boolean isSystem = false;
 
 	public void setupDefaultValues() {
-		JRDataset mDataset = jContext.getJasperDesign().getMainDataset();
-		for (String pname : incontrols.keySet()) {
-			for (JRParameter p : prompts) {
-				if ((!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
-					continue;
-				if (p.getName().equals(pname)) {
-					if (p.getDefaultValueExpression() != null) {
-						params.put(pname, ExpressionUtil.eval(p.getDefaultValueExpression(), mDataset, jContext));
-						incontrols.get(pname).updateInput();
-					} else {
-						params.put(pname, null);
-						incontrols.get(pname).updateInput();
+		Job job = new Job("Building report") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				JRDataset mDataset = jContext.getJasperDesign().getMainDataset();
+				for (String pname : incontrols.keySet()) {
+					for (JRParameter p : prompts) {
+						if ((!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
+							continue;
+						if (p.getName().equals(pname)) {
+							if (p.getDefaultValueExpression() != null)
+								params.put(pname, ExpressionUtil.eval(p.getDefaultValueExpression(), mDataset, jContext));
+							else
+								params.put(pname, null);
+							updateControlInput(pname);
+							break;
+						}
 					}
-					break;
 				}
+				return Status.OK_STATUS;
 			}
-		}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
+	}
+
+	private void updateControlInput(final String pname) {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				incontrols.get(pname).updateInput();
+			}
+		});
 	}
 
 	protected boolean isParameterToShow(JRParameter p) {

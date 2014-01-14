@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.inputs.dialog;
 
@@ -19,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
@@ -211,40 +207,46 @@ public class SortFieldSection {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void fillTable(Composite tabFolder, JasperDesign jDesign, List<JRParameter> prompts, Map<String, Object> params) {
+	public void fillTable(final Composite tabFolder, final JasperDesign jDesign, List<JRParameter> prompts,
+			final Map<String, Object> params) {
 		this.prompts = prompts;
-		if (prompts != null) {
-			createSortField(tabFolder);
-			inFields = new ArrayList<JRSortField>();
-			List<JRField> flist = jDesign.getFieldsList();
-			for (JRField f : flist) {
-				inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.FIELD, SortOrderEnum.ASCENDING));
-			}
-			List<JRVariable> vlist = jDesign.getVariablesList();
-			for (JRVariable f : vlist) {
-				inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.VARIABLE, SortOrderEnum.ASCENDING));
-			}
-			leftTView.setInput(inFields);
+		if (prompts != null)
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 
-			Object obj = params.get("SORT_FIELDS");//$NON-NLS-1$
-			if (obj == null || !(obj instanceof List)) {
-				outFields = new ArrayList<JRSortField>();
+				@Override
+				public void run() {
+					createSortField(tabFolder);
+					inFields = new ArrayList<JRSortField>();
+					List<JRField> flist = jDesign.getFieldsList();
+					for (JRField f : flist) {
+						inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.FIELD, SortOrderEnum.ASCENDING));
+					}
+					List<JRVariable> vlist = jDesign.getVariablesList();
+					for (JRVariable f : vlist) {
+						inFields.add(new JRDesignSortField(f.getName(), SortFieldTypeEnum.VARIABLE, SortOrderEnum.ASCENDING));
+					}
+					leftTView.setInput(inFields);
 
-				params.put("SORT_FIELDS", outFields);//$NON-NLS-1$
-			} else
-				outFields = (List<JRSortField>) obj;
+					Object obj = params.get("SORT_FIELDS");//$NON-NLS-1$
+					if (obj == null || !(obj instanceof List)) {
+						outFields = new ArrayList<JRSortField>();
 
-			// check if fields exists in the report
-			List<JRSortField> dlist = new ArrayList<JRSortField>();
-			for (JRSortField f : outFields) {
-				if (f.getType().equals(SortFieldTypeEnum.FIELD) && jDesign.getFieldsMap().get(f.getName()) == null)
-					dlist.add(f);
-				if (f.getType().equals(SortFieldTypeEnum.VARIABLE) && jDesign.getVariablesMap().get(f.getName()) == null)
-					dlist.add(f);
-			}
-			outFields.removeAll(dlist);
+						params.put("SORT_FIELDS", outFields);//$NON-NLS-1$
+					} else
+						outFields = (List<JRSortField>) obj;
 
-			rightTView.setInput(outFields);
-		}
+					// check if fields exists in the report
+					List<JRSortField> dlist = new ArrayList<JRSortField>();
+					for (JRSortField f : outFields) {
+						if (f.getType().equals(SortFieldTypeEnum.FIELD) && jDesign.getFieldsMap().get(f.getName()) == null)
+							dlist.add(f);
+						if (f.getType().equals(SortFieldTypeEnum.VARIABLE) && jDesign.getVariablesMap().get(f.getName()) == null)
+							dlist.add(f);
+					}
+					outFields.removeAll(dlist);
+
+					rightTView.setInput(outFields);
+				}
+			});
 	}
 }

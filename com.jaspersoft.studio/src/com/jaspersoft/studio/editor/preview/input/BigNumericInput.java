@@ -53,8 +53,8 @@ public class BigNumericInput extends ADataInput {
 			num = new Text(parent, SWT.BORDER | SWT.RIGHT);
 			setMandatory(param, num);
 
-			setError(num, "");
-			hideError(num);
+			// setError(num, "");
+			// hideError(num);
 
 			num.setToolTipText(VParameters.createToolTip(param));
 			num.addFocusListener(focusListener);

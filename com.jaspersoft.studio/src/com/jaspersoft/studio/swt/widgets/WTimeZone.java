@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class WTimeZone extends Composite {
 	private Combo combo;
-	private String[] timezones;
+	private static String[] timezones;
 
 	public WTimeZone(Composite parent, int style) {
 		super(parent, SWT.NONE);
@@ -59,8 +59,10 @@ public class WTimeZone extends Composite {
 	}
 
 	private String[] getTimeZones() {
-		timezones = TimeZone.getAvailableIDs();
-		Arrays.sort(timezones);
+		if (timezones == null) {
+			timezones = TimeZone.getAvailableIDs();
+			Arrays.sort(timezones);
+		}
 		return timezones;
 	}
 
