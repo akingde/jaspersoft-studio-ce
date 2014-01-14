@@ -27,13 +27,17 @@ import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
-public class ReportUnitDatasourceContent extends APageContent implements DatasourceSelectionListener{
-
+public class ReportUnitDatasourceContent extends APageContent implements DatasourceSelectionListener {
+	private boolean mandatory = false;
 	private DatasourceSelectionComposite datasourceSelectionCmp;
 
-	public ReportUnitDatasourceContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public ReportUnitDatasourceContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
+	}
+
+	public ReportUnitDatasourceContent(ANode parent, MResource resource, boolean mandatory) {
+		this(parent, resource);
+		this.mandatory = mandatory;
 	}
 
 	public ReportUnitDatasourceContent(ANode parent, MResource resource) {
@@ -49,23 +53,22 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 	public String getPageName() {
 		return "com.jaspersoft.studio.server.page.runit.datasource";
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.editReportUnitDSContent";
 	}
 
-
 	@Override
 	public Control createContent(Composite parent) {
-		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res);
+		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res, mandatory);
 		datasourceSelectionCmp.addDatasourceSelectionListener(this);
 		return datasourceSelectionCmp;
 	}
-	
+
 	@Override
 	public boolean isPageComplete() {
-		return datasourceSelectionCmp!=null && datasourceSelectionCmp.isDatasourceSelectionValid();
+		return datasourceSelectionCmp != null && datasourceSelectionCmp.isDatasourceSelectionValid();
 	}
 
 	@Override

@@ -37,7 +37,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MDummy;
+import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
@@ -52,7 +52,6 @@ import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ProxyConnection;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
-import com.jaspersoft.studio.utils.Misc;
 
 public class WSClientHelper {
 	private static Map<IConnection, ServerProfile> clients = new HashMap<IConnection, ServerProfile>();
@@ -141,6 +140,10 @@ public class WSClientHelper {
 						return -1;
 					if (wsType1.equals(ResourceDescriptor.TYPE_REPORTUNIT))
 						return 1;
+					if (wsType0.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+						return -1;
+					if (wsType1.equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+						return 1;
 					return wsType0.compareTo(wsType1);
 				}
 			});
@@ -151,7 +154,7 @@ public class WSClientHelper {
 			if (set.contains(r.getUriString()))
 				continue;
 			set.add(r.getUriString());
-			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT) || rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)) {
 				if (SelectorDatasource.isDatasource(r))
 					continue;
 			}
@@ -159,7 +162,7 @@ public class WSClientHelper {
 			if (depth <= 0) {
 				if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
 					listFolder(node, client, r.getUriString(), monitor, depth);
-				} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+				} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT) || rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)) {
 					r = client.get(monitor, r, null);
 					Set<String> setRU = new HashSet<String>();
 					List<ResourceDescriptor> children2 = r.getChildren();
@@ -418,7 +421,7 @@ public class WSClientHelper {
 
 	public static MResource findSelected(IProgressMonitor monitor, ResourceDescriptor rd, MServerProfile msp) throws Exception {
 		IConnection c = msp.getWsClient(monitor);
-		if (Misc.isNullOrEmpty(msp.getChildren()) || msp.getChildren().get(0) instanceof MDummy)
+		if (ModelUtil.isEmpty(msp))
 			listFolder(msp, c, "/", monitor, 0);
 		return findSelected(msp.getChildren(), monitor, rd.getUriString(), c);
 	}

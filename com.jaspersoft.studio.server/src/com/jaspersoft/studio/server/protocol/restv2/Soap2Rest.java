@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
@@ -22,6 +24,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientJndiJdbcDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientListOfValues;
 import com.jaspersoft.jasperserver.dto.resources.ClientListOfValuesItem;
 import com.jaspersoft.jasperserver.dto.resources.ClientMondrianConnection;
+import com.jaspersoft.jasperserver.dto.resources.ClientMondrianXmlaDefinition;
 import com.jaspersoft.jasperserver.dto.resources.ClientProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientQuery;
 import com.jaspersoft.jasperserver.dto.resources.ClientReference;
@@ -30,9 +33,11 @@ import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableDataType;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableListOfValues;
+import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableMondrianConnection;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableQuery;
 import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
+import com.jaspersoft.jasperserver.dto.resources.ClientSecureMondrianConnection;
 import com.jaspersoft.jasperserver.dto.resources.ClientSubDataSourceReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
@@ -57,9 +62,7 @@ public class Soap2Rest {
 		cr.setUpdateDate(DiffFields.getSoapValue(rd, DiffFields.UPDATEDATE));
 		cr.setPermissionMask(DiffFields.getSoapValueInteger(rd, DiffFields.PERMISSIONMASK));
 
-		if (rd.getWsType().equals(ResourceDescriptor.TYPE_IMAGE))
-			getImage(rc, cr, rd);
-		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
 			getDataType(rc, (ClientDataType) cr, rd);
 
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW))
@@ -89,9 +92,16 @@ public class Soap2Rest {
 			getXmlaConnection(rc, (ClientXmlaConnection) cr, rd);
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
 			getMondrianConnection(rc, (ClientMondrianConnection) cr, rd);
+		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
+			getSecureMondrianConnection(rc, (ClientSecureMondrianConnection) cr, rd);
+		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE))
+			getMondrianXmlaDefinition(rc, (ClientMondrianXmlaDefinition) cr, rd);
 
 		else if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
 			getReportUnit(rc, (ClientReportUnit) cr, rd);
+
+		if (WsTypes.INST().getSoapfileMap().containsKey(rd.getWsType()))
+			getFile(rc, (ClientFile) cr, rd);
 
 		else
 			Activator.getExtManager().getResource(rc, cr, rd);
@@ -122,12 +132,34 @@ public class Soap2Rest {
 		}
 	}
 
+	private static void getSecureMondrianConnection(ARestV2Connection rc, ClientSecureMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
+		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
+			if (SelectorDatasource.isDatasource(r))
+				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
+			else if (r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
+				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc, r));
+			else if (r.getWsType().equals(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA)) {
+				cr.getAccessGrants().add((ClientReferenceableFile) getResourceContainer(rc, r));
+			}
+		}
+	}
+
+	private static void getMondrianXmlaDefinition(ARestV2Connection rc, ClientMondrianXmlaDefinition cr, ResourceDescriptor rd) throws ParseException {
+		ResourceProperty rp = rd.getResourceProperty(ResourceDescriptor.PROP_XMLA_CATALOG);
+		if (rp != null)
+			cr.setCatalog(rp.getValue());
+		for (ResourceDescriptor r : (List<ResourceDescriptor>) rd.getChildren()) {
+			if (SelectorDatasource.isDatasource(r))
+				cr.setMondrianConnection((ClientReferenceableMondrianConnection) getResourceContainer(rc, r));
+		}
+	}
+
 	private static void getXmlaConnection(ARestV2Connection rc, ClientXmlaConnection cr, ResourceDescriptor rd) {
-		cr.setUrl(DiffFields.getSoapValue(rd, DiffFields.URL));
-		cr.setDataSource(DiffFields.getSoapValue(rd, DiffFields.DATASOURCE));
-		cr.setCatalog(DiffFields.getSoapValue(rd, DiffFields.CATALOG));
-		cr.setUsername(DiffFields.getSoapValue(rd, DiffFields.USERNAME));
-		cr.setPassword(DiffFields.getSoapValue(rd, DiffFields.PASSWORD));
+		cr.setUrl(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_URI));
+		cr.setDataSource(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_DATASOURCE));
+		cr.setCatalog(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_CATALOG));
+		cr.setUsername(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_USERNAME));
+		cr.setPassword(rd.getResourcePropertyValue(ResourceDescriptor.PROP_XMLA_PASSWORD));
 	}
 
 	private static void getVirtualDataSource(ARestV2Connection rc, ClientVirtualDataSource cr, ResourceDescriptor rd) {
@@ -221,8 +253,8 @@ public class Soap2Rest {
 				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 	}
 
-	private static void getImage(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) {
-
+	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) {
+		cr.setType(WsTypes.INST().toRestFileType(rd.getWsType()));
 	}
 
 	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
@@ -241,7 +273,7 @@ public class Soap2Rest {
 		}
 	}
 
-	private static void getReportUnit(ARestV2Connection rc, ClientReportUnit cr, ResourceDescriptor rd) throws ParseException {
+	public static void getReportUnit(ARestV2Connection rc, AbstractClientReportUnit<?> cr, ResourceDescriptor rd) throws ParseException {
 		cr.setAlwaysPromptControls(rd.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS));
 		cr.setInputControlRenderingView(rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW));
 		cr.setReportRenderingView(rd.getResourcePropertyValue(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW));
@@ -270,7 +302,7 @@ public class Soap2Rest {
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 				cr.getInputControls().add((ClientReferenceableInputControl) getResourceContainer(rc, r));
 			else {
-				ClientFile res = (ClientFile) getResource(rc, r);
+				ClientFile res = (ClientFile) getResourceContainer(rc, r);
 				cr.getFiles().put(r.getLabel(), res);
 			}
 		}

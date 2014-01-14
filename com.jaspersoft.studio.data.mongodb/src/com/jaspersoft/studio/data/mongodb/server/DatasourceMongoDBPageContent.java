@@ -69,11 +69,6 @@ public class DatasourceMongoDBPageContent extends APageContent {
 		Text tusername = new Text(composite, SWT.BORDER);
 		tusername.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_pass);
-
-		Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
-		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP, res.getValue().getProperties());
 
 		ResourceProperty rsp = ResourceDescriptorUtil.getProperty(MRDatasourceMongoDB.MONGO_URI, resprop.getProperties());
@@ -84,12 +79,18 @@ public class DatasourceMongoDBPageContent extends APageContent {
 		rsp.setValue(Misc.nvl(rsp.getValue()));
 		bindingContext.bindValue(SWTObservables.observeText(tusername, SWT.Modify), PojoObservables.observeValue(rsp, "value")); //$NON-NLS-1$
 
-		rsp = ResourceDescriptorUtil.getProperty(MRDatasourceMongoDB.PASSWORD, resprop.getProperties());
-		if (rsp == null)
-			rsp = new ResourceProperty(MRDatasourceMongoDB.PASSWORD);
-		rsp.setValue(Misc.nvl(rsp.getValue()));
-		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(rsp, "value")); //$NON-NLS-1$
+		if (res.getValue().getIsNew()) {
+			UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_pass);
 
+			Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+			tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+			rsp = ResourceDescriptorUtil.getProperty(MRDatasourceMongoDB.PASSWORD, resprop.getProperties());
+			if (rsp == null)
+				rsp = new ResourceProperty(MRDatasourceMongoDB.PASSWORD);
+			rsp.setValue(Misc.nvl(rsp.getValue()));
+			bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(rsp, "value")); //$NON-NLS-1$
+		}
 		return composite;
 	}
 

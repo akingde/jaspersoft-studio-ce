@@ -48,8 +48,8 @@ public class FindResourceAction extends Action {
 				IConnection c = msp.getWsClient(new Callback<IConnection>() {
 
 					@Override
-					public void completed(IConnection value) {
-						isEnabled();
+					public void completed(IConnection c) {
+						FindResourceAction.this.setEnabled(c != null && c.isSupported(Feature.SEARCHREPOSITORY));
 					}
 				});
 				if (c != null)

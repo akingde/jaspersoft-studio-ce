@@ -70,6 +70,7 @@ public class ResourceDescriptor implements Serializable {
 	public static final String TYPE_INPUT_CONTROL = "inputControl";
 	public static final String TYPE_DATA_TYPE = "dataType";
 	public static final String TYPE_OLAP_MONDRIAN_CONNECTION = "olapMondrianCon";
+	public static final String TYPE_SECURE_MONDRIAN_CONNECTION = "secureMondrianConnection";
 	public static final String TYPE_OLAP_XMLA_CONNECTION = "olapXmlaCon";
 	public static final String TYPE_MONDRIAN_SCHEMA = "olapMondrianSchema";
 	public static final String TYPE_MONDRIAN_XMLA_DEFINITION_CLIENT_TYPE = "mondrianXmlaDefinition";

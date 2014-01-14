@@ -15,6 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.properties.dialog;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -36,12 +42,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ServerProvider;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public abstract class RepositoryDialog extends Dialog {
 
@@ -85,7 +94,7 @@ public abstract class RepositoryDialog extends Dialog {
 		treeViewer.getTree().setLayoutData(gd);
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
-		treeViewer.setInput(root);
+
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -153,6 +162,36 @@ public abstract class RepositoryDialog extends Dialog {
 
 		ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Job job = new Job("Building report") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Looking into repository", IProgressMonitor.UNKNOWN);
+				try {
+					MServerProfile msp = null;
+					if (root instanceof MServerProfile)
+						msp = (MServerProfile) root;
+					else if (root instanceof MResource)
+						msp = (MServerProfile) ((MResource) root).getRoot();
+					if (ModelUtil.isEmpty(msp))
+						WSClientHelper.connectGetData(msp, monitor);
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							treeViewer.setInput(root);
+						}
+					});
+				} catch (Exception e) {
+					UIUtils.showError(e);
+					return Status.CANCEL_STATUS;
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
 
 		return composite;
 	}

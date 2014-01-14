@@ -60,7 +60,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE);
+		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE, false);
 		setControl(datasourceCmp);
 	}
 

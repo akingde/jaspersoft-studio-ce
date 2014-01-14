@@ -65,7 +65,6 @@ public class WsTypes {
 		setType(ClientAdhocDataView.class);
 		setType(ClientMondrianConnection.class);
 		setType(ClientSecureMondrianConnection.class);
-		setType(ClientResourceLookup.class);
 		setType(ClientUnknown.class);
 
 		setRestType(ResourceMediaType.ADHOC_DATA_VIEW_CLIENT_TYPE, ResourceDescriptor.TYPE_ADHOC_DATA_VIEW);
@@ -85,7 +84,7 @@ public class WsTypes {
 		setRestType(ResourceMediaType.OLAP_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAPUNIT);
 		setRestType(ResourceMediaType.QUERY_CLIENT_TYPE, ResourceDescriptor.TYPE_QUERY);
 		setRestType(ResourceMediaType.REPORT_UNIT_CLIENT_TYPE, ResourceDescriptor.TYPE_REPORTUNIT);
-		setRestType(ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
+		setRestType(ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION);
 		setRestType(ResourceMediaType.VIRTUAL_DATA_SOURCE_CLIENT_TYPE, ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL);
 		setRestType(ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE, ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
 
@@ -119,6 +118,7 @@ public class WsTypes {
 		setSoapType(ResourceDescriptor.TYPE_REPORTUNIT, ResourceMediaType.REPORT_UNIT_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE, ResourceMediaType.FILE_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_STYLE_TEMPLATE, ResourceMediaType.FILE_CLIENT_TYPE);
+		setSoapType(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION, ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_UNKNOW, ResourceMediaType.RESOURCE_LOOKUP_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_XML_FILE, ResourceMediaType.FILE_CLIENT_TYPE);
 		setSoapType(MRCSS.WSTYPE_CSS, ResourceMediaType.FILE_CLIENT_TYPE);
@@ -209,6 +209,10 @@ public class WsTypes {
 		return Misc.nvl(soapFileMap.get(stype), FileType.unspecified);
 	}
 
+	public Map<String, FileType> getSoapfileMap() {
+		return soapFileMap;
+	}
+
 	public String toRestType(String stype) {
 		return Misc.nvl(soapMap.get(stype), stype);
 	}
@@ -282,10 +286,13 @@ public class WsTypes {
 	static {
 		containers.add(ClientQuery.class);
 		containers.add(ClientMondrianConnection.class);
+		containers.add(ClientSecureMondrianConnection.class);
+		containers.add(ClientMondrianXmlaDefinition.class);
 		containers.add(ClientReportUnit.class);
 		containers.add(ClientAdhocDataView.class);
 		containers.add(ClientXmlaConnection.class);
 		containers.add(ClientInputControl.class);
+		Activator.getExtManager().initContainers(containers);
 	}
 
 	public boolean isContainerType(Class<?> cr) {

@@ -41,7 +41,6 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -71,12 +70,14 @@ public class ReferencePageContent extends APageContent {
 
 	public Control createContent(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
+		GridLayout layout = new GridLayout(3, false);
+		layout.horizontalSpacing = 0;
+		composite.setLayout(layout);
 
-		com.jaspersoft.studio.utils.UIUtil.createLabel(composite, Messages.RDReferencePage_referencedesc);
+		com.jaspersoft.studio.utils.UIUtil.createLabel(composite, Messages.RDReferencePage_referencedesc + " ");
 
 		trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_CENTER));
 		trefuri.setEnabled(false);
 
 		Button bbrowse = new Button(composite, SWT.ARROW | SWT.DOWN);
@@ -96,7 +97,8 @@ public class ReferencePageContent extends APageContent {
 
 						@Override
 						public boolean isResourceCompatible(MResource r) {
-							return !(r instanceof MFolder) && ResourceFactory.isFileResourceType(r.getValue());
+							return true;// !(r instanceof MFolder) &&
+													// ResourceFactory.isFileResourceType(r.getValue());
 						}
 
 					};

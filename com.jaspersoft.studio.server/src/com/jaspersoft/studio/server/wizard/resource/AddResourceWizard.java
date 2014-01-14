@@ -40,6 +40,11 @@ import com.jaspersoft.studio.server.wizard.resource.page.ResourceDescriptorPage;
 public class AddResourceWizard extends Wizard {
 	private AddResourcePage page0;
 
+	public AddResourceWizard(ANode parent, boolean nested) {
+		this(parent);
+		setNested(nested);
+	}
+
 	public AddResourceWizard(ANode parent) {
 		super();
 		setWindowTitle(Messages.AddResourceWizard_windowtitle);
@@ -48,6 +53,11 @@ public class AddResourceWizard extends Wizard {
 	}
 
 	private boolean skipFirstPage = false;
+	private boolean nested = false;
+
+	public void setNested(boolean nested) {
+		this.nested = nested;
+	}
 
 	public void setSkipFirstPage(boolean skipFirstPage) {
 		this.skipFirstPage = skipFirstPage;
@@ -148,6 +158,8 @@ public class AddResourceWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
+		if (nested)
+			return true;
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 

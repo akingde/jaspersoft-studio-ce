@@ -10,6 +10,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
+import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.AbstractClientReportUnit.ControlsLayoutType;
 import com.jaspersoft.jasperserver.dto.resources.ClientAdhocDataView;
 import com.jaspersoft.jasperserver.dto.resources.ClientAwsDataSource;
@@ -23,17 +24,19 @@ import com.jaspersoft.jasperserver.dto.resources.ClientJndiJdbcDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientListOfValues;
 import com.jaspersoft.jasperserver.dto.resources.ClientListOfValuesItem;
 import com.jaspersoft.jasperserver.dto.resources.ClientMondrianConnection;
+import com.jaspersoft.jasperserver.dto.resources.ClientMondrianXmlaDefinition;
 import com.jaspersoft.jasperserver.dto.resources.ClientProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientQuery;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableInputControl;
-import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
+import com.jaspersoft.jasperserver.dto.resources.ClientSecureMondrianConnection;
 import com.jaspersoft.jasperserver.dto.resources.ClientSubDataSourceReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.utils.RDUtil;
@@ -56,7 +59,7 @@ public class Rest2Soap {
 	public static ResourceDescriptor getRDContainer(ARestV2Connection rc, ClientResource<?> cr) throws ParseException {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		getRD(rc, cr, rd);
-		if (!cr.getUri().contains("_file")) {
+		if (!cr.getUri().contains(WSClientHelper._FILES)) {
 			rd.setIsReference(true);
 			rd.setReferenceUri(cr.getUri());
 		}
@@ -64,6 +67,7 @@ public class Rest2Soap {
 	}
 
 	public static ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+		rd.getChildren().clear();
 		rd.setWsType(WsTypes.INST().toSoapType(cr));
 
 		rd.setParentFolder(RDUtil.getParentFolder(cr.getUri()));
@@ -104,11 +108,15 @@ public class Rest2Soap {
 			getXmlaConnection(rc, (ClientXmlaConnection) cr, rd);
 		else if (cr instanceof ClientMondrianConnection)
 			getMondrianConnection(rc, (ClientMondrianConnection) cr, rd);
+		else if (cr instanceof ClientSecureMondrianConnection)
+			getSecureMondrianConnection(rc, (ClientSecureMondrianConnection) cr, rd);
+		else if (cr instanceof ClientMondrianXmlaDefinition)
+			getMondrianXmlaDefinition(rc, (ClientMondrianXmlaDefinition) cr, rd);
 
 		else if (cr instanceof ClientListOfValues)
 			getLOV(rc, (ClientListOfValues) cr, rd);
-		else if (cr instanceof ClientReportUnit)
-			getReportUnit(rc, (ClientReportUnit) cr, rd);
+		else if (cr instanceof AbstractClientReportUnit)
+			getReportUnit(rc, (AbstractClientReportUnit<?>) cr, rd);
 		else if (cr instanceof ClientInputControl)
 			getInputControl(rc, (ClientInputControl) cr, rd);
 		else if (cr instanceof ClientFile)
@@ -132,7 +140,6 @@ public class Rest2Soap {
 	}
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) throws ParseException {
-		cr.getType();
 		cr.getContent();
 	}
 
@@ -150,12 +157,32 @@ public class Rest2Soap {
 			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
 	}
 
+	private static void getSecureMondrianConnection(ARestV2Connection rc, ClientSecureMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
+		if (cr.getDataSource() != null)
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
+		if (cr.getSchema() != null)
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
+		if (cr.getAccessGrants() != null) {
+			for (ClientReferenceableFile crf : cr.getAccessGrants()) {
+				ResourceDescriptor ard = getRDContainer(rc, (ClientResource<?>) crf);
+				ard.setWsType(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA);
+				rd.getChildren().add(ard);
+			}
+		}
+	}
+
+	private static void getMondrianXmlaDefinition(ARestV2Connection rc, ClientMondrianXmlaDefinition cr, ResourceDescriptor rd) throws ParseException {
+		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_CATALOG, cr.getCatalog());
+		if (cr.getMondrianConnection() != null)
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getMondrianConnection()));
+	}
+
 	private static void getXmlaConnection(ARestV2Connection rc, ClientXmlaConnection cr, ResourceDescriptor rd) throws ParseException {
-		DiffFields.setSoapValue(rd, DiffFields.URL, cr.getUrl());
-		DiffFields.setSoapValue(rd, DiffFields.DATASOURCE, cr.getDataSource());
-		DiffFields.setSoapValue(rd, DiffFields.CATALOG, cr.getCatalog());
-		DiffFields.setSoapValue(rd, DiffFields.USERNAME, cr.getUsername());
-		DiffFields.setSoapValue(rd, DiffFields.PASSWORD, cr.getPassword());
+		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_URI, Misc.nvl(cr.getUrl()));
+		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_DATASOURCE, Misc.nvl(cr.getDataSource()));
+		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_CATALOG, Misc.nvl(cr.getCatalog()));
+		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_USERNAME, Misc.nvl(cr.getUsername()));
+		rd.setResourceProperty(ResourceDescriptor.PROP_XMLA_PASSWORD, Misc.nvl(cr.getPassword()));
 	}
 
 	private static void getBeanDataSource(ARestV2Connection rc, ClientBeanDataSource cr, ResourceDescriptor rd) throws ParseException {
@@ -224,7 +251,7 @@ public class Rest2Soap {
 		DiffFields.setSoapValue(rd, DiffFields.MAXLENGHT, Misc.nvl(cr.getMaxLength(), new Integer(0)));
 	}
 
-	private static void getReportUnit(ARestV2Connection rc, ClientReportUnit cr, ResourceDescriptor rd) throws ParseException {
+	private static void getReportUnit(ARestV2Connection rc, AbstractClientReportUnit<?> cr, ResourceDescriptor rd) throws ParseException {
 		rd.setResourceProperty(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, cr.isAlwaysPromptControls());
 		rd.setResourceProperty(ResourceDescriptor.PROP_RU_INPUTCONTROL_RENDERING_VIEW, cr.getInputControlRenderingView());
 		rd.setResourceProperty(ResourceDescriptor.PROP_RU_REPORT_RENDERING_VIEW, cr.getReportRenderingView());

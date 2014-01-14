@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.hive.server;
 
 import java.text.ParseException;
+import java.util.Set;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
@@ -70,6 +71,11 @@ public class HiveResourceFactory implements IResourceFactory {
 	@Override
 	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		return null;
+	}
+
+	@Override
+	public void initContainers(Set<Class<? extends ClientResource<?>>> containers) {
+
 	}
 
 }

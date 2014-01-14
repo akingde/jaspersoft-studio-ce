@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.server.plugin;
 
 import java.text.ParseException;
+import java.util.Set;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
@@ -40,4 +41,6 @@ public interface IResourceFactory {
 	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException;
 
 	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException;
+
+	public void initContainers(Set<Class<? extends ClientResource<?>>> containers);
 }

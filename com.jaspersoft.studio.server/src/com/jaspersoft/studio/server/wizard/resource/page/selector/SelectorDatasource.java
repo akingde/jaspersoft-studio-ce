@@ -48,18 +48,18 @@ public class SelectorDatasource {
 	 * @param res
 	 *          the resource which datasource information must be modified
 	 */
-	public DatasourceSelectionComposite createDatasource(TabFolder tabFolder, final ANode parent, final MResource res) {
+	public DatasourceSelectionComposite createDatasource(TabFolder tabFolder, final ANode parent, final MResource res, boolean mandatory) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText(Messages.SelectorDatasource_TabTitle);
 
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(tabFolder, SWT.NONE);
+		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(tabFolder, SWT.NONE, mandatory);
 		dsSelectionCmp.configurePage(parent, res);
 		item.setControl(dsSelectionCmp);
 		return dsSelectionCmp;
 	}
 
-	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final MResource res) {
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(parent, SWT.NONE);
+	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final MResource res, boolean mandatory) {
+		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(parent, SWT.NONE, mandatory);
 		dsSelectionCmp.configurePage(pnode, res);
 		return dsSelectionCmp;
 	}

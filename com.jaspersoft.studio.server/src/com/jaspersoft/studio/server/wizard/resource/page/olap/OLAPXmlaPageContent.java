@@ -38,8 +38,7 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class OLAPXmlaPageContent extends APageContent {
 
-	public OLAPXmlaPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public OLAPXmlaPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -54,7 +53,7 @@ public class OLAPXmlaPageContent extends APageContent {
 
 	@Override
 	public String getName() {
-		return Messages.OLAPXmlaPageContent_title;
+		return MROlapXmlaConnection.getIconDescriptor().getTitle();
 	}
 
 	public Control createContent(Composite parent) {
@@ -81,47 +80,37 @@ public class OLAPXmlaPageContent extends APageContent {
 		Text tuser = new Text(composite, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_pass);
-
-		Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
-		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		List<ResourceProperty> props = res.getValue().getProperties();
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
-				MROlapXmlaConnection.PROP_XMLA_URI, props);
+		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_URI, props);
 
-		bindingContext.bindValue(SWTObservables.observeText(turi, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(turi, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MROlapXmlaConnection.PROP_XMLA_CATALOG, props);
+		resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_CATALOG, props);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(tcatalog, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tcatalog, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MROlapXmlaConnection.PROP_XMLA_DATASOURCE, props);
+		resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_DATASOURCE, props);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(tdatasource, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tdatasource, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MROlapXmlaConnection.PROP_XMLA_USERNAME, props);
+		resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_USERNAME, props);
 
-		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MROlapXmlaConnection.PROP_XMLA_PASSWORD, props);
+		if (res.getValue().getIsNew()) {
+			UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_pass);
 
-		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+			Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+			tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+			resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_PASSWORD, props);
+
+			bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		}
 
 		return composite;
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.adapter_xmla";

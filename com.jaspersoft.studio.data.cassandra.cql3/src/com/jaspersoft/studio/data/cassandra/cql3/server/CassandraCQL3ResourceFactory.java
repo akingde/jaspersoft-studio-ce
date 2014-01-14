@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.data.cassandra.cql3.server;
 
 import java.text.ParseException;
+import java.util.Set;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
@@ -55,6 +56,11 @@ public class CassandraCQL3ResourceFactory implements IResourceFactory {
 	@Override
 	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		return null;
+	}
+
+	@Override
+	public void initContainers(Set<Class<? extends ClientResource<?>>> containers) {
+
 	}
 
 }

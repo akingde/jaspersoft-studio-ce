@@ -16,6 +16,7 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 
 public class ProxyConnection implements IConnection {
 	public Format getDateFormat() {
@@ -35,7 +36,7 @@ public class ProxyConnection implements IConnection {
 	private IConnection[] getConnections() {
 		List<IConnection> c = new ArrayList<IConnection>();
 		// c.add(new RestV2Connection());
-		// c.add(new RestV2ConnectionJersey());
+		c.add(new RestV2ConnectionJersey());
 
 		c.addAll(Activator.getExtManager().getProtocols());
 
@@ -43,22 +44,26 @@ public class ProxyConnection implements IConnection {
 	}
 
 	private IConnection c;
+	private IConnection soap;
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		for (IConnection co : cons) {
 			try {
-				if (co.connect(monitor, sp)) {
+				if (c == null && co.connect(monitor, sp))
 					c = co;
-					return true;
+				if (soap == null && co.getClass().getName().toUpperCase().contains("SOAP")) {
+					if (c == co)
+						soap = co;
+					else if (co.connect(monitor, sp))
+						soap = co;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				if (co == cons[cons.length - 1] || monitor.isCanceled())
-					throw e;
+				throw e;
 			}
 		}
-		return false;
+		return c != null;
 	}
 
 	@Override
@@ -66,15 +71,29 @@ public class ProxyConnection implements IConnection {
 		return c.getServerInfo(monitor);
 	}
 
+	private boolean useSoap(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+		String v = c.getServerInfo(monitor).getVersion();
+		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0 && rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+			return true;
+		return false;
+	}
+
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
-		rd = c.get(monitor, rd, f);
+		if (useSoap(monitor, rd))
+			rd = soap.get(monitor, rd, f);
+		else
+			rd = c.get(monitor, rd, f);
 		rd.setDirty(false);
 		return rd;
 	}
 
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File outFile, List<Argument> args) throws Exception {
+		if (useSoap(monitor, rd))
+			rd = soap.get(monitor, rd, outFile, args);
+		else
+			rd = c.get(monitor, rd, outFile, args);
 		rd = c.get(monitor, rd, outFile, args);
 		rd.setDirty(false);
 		return rd;
@@ -82,7 +101,13 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
-		List<ResourceDescriptor> list = c.list(monitor, rd);
+		List<ResourceDescriptor> list = null;
+		// String v = c.getServerInfo(monitor).getVersion();
+		// if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("6") < 0)
+		// list = soap.list(monitor, rd);
+		// else
+		list = c.list(monitor, rd);
+
 		for (ResourceDescriptor r : list)
 			r.setDirty(false);
 		return list;

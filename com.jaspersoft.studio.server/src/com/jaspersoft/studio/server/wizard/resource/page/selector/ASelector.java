@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -41,7 +42,7 @@ public abstract class ASelector {
 	protected Button bRef;
 	protected MResource res;
 
-	public void createControls(Composite cmp, final ANode parent, final MResource res) {
+	public Control createControls(Composite cmp, final ANode parent, final MResource res) {
 		this.res = res;
 
 		Composite composite = new Composite(cmp, SWT.NONE);
@@ -54,6 +55,7 @@ public abstract class ASelector {
 
 		createLocal(composite, parent);
 		init();
+		return composite;
 	}
 
 	protected void createRepository(Composite parent, final ANode pnode) {
@@ -178,7 +180,7 @@ public abstract class ASelector {
 					newref = true;
 				}
 				MResource r = ResourceFactory.getResource(null, ref, -1);
-				ResourceWizard wizard = new ResourceWizard(pnode, r, true);
+				ResourceWizard wizard = new ResourceWizard(pnode, r, true, true);
 				WizardDialog dialog = new WizardDialog(bLoc.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() != Dialog.OK)

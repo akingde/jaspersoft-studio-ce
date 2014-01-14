@@ -128,6 +128,11 @@ public class ExtensionManager {
 			r.initWsTypes(wsType);
 	}
 
+	public void initContainers(Set<Class<? extends ClientResource<?>>> containers) {
+		for (IResourceFactory r : resources)
+			r.initContainers(containers);
+	}
+
 	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ResourceDescriptor nrd = r.getRD(rc, cr, rd);

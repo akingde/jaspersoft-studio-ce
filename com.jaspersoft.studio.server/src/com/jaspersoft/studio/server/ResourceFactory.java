@@ -65,6 +65,7 @@ import com.jaspersoft.studio.server.model.datasource.MRMondrianXmlaDefinitionCli
 import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
+import com.jaspersoft.studio.server.model.datasource.MRSecureMondrianConnection;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -91,6 +92,8 @@ import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceCu
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJDBCPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceJndiPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceVDSPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.olap.MondrianXMLADefinitionContent;
+import com.jaspersoft.studio.server.wizard.resource.page.olap.OLAPMondrianSchemaContent;
 import com.jaspersoft.studio.server.wizard.resource.page.olap.OLAPXmlaPageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
@@ -168,8 +171,19 @@ public class ResourceFactory {
 				else if (resource instanceof MRDashboard)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 				else if (resource instanceof MAdHocDataView)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource));
+				else if (resource instanceof MROlapMondrianConnection)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true));
+				else if (resource instanceof MRSecureMondrianConnection)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true), new OLAPMondrianSchemaContent(parent, resource));
+				else if (resource instanceof MRMondrianSchema)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true), new OLAPMondrianSchemaContent(parent, resource));
+				else if (resource instanceof MRMondrianXmlaDefinitionClientType)
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new MondrianXMLADefinitionContent(parent, resource));
+				else if (resource instanceof MRAccessGrantSchema)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
-				else if (resource instanceof MRMondrianSchema || resource instanceof MRAccessGrantSchema || resource instanceof MROlapUnit || resource instanceof MROlapMondrianConnection)
+
+				else if (resource instanceof MROlapUnit)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 				else if (resource instanceof MROlapXmlaConnection)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new OLAPXmlaPageContent(parent, resource));
@@ -290,6 +304,8 @@ public class ResourceFactory {
 			return new MRMondrianXmlaDefinitionClientType(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
 			return new MROlapMondrianConnection(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION))
+			return new MRSecureMondrianConnection(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
 			return new MROlapXmlaConnection(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_OLAPUNIT))

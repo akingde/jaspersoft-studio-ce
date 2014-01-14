@@ -30,11 +30,13 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 
 public class PropertiesAction extends Action {
 	private static final String ID = "RESOURCEPROPERTIES";
 	private TreeViewer treeViewer;
+	private MResource mres;
 
 	public PropertiesAction(TreeViewer treeViewer) {
 		super();
@@ -53,13 +55,15 @@ public class PropertiesAction extends Action {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {
 				try {
-					MResource mres = (MResource) obj;
+					mres = (MResource) obj;
 					ResourceDescriptor rd = WSClientHelper.getResource(new NullProgressMonitor(), mres, mres.getValue());
 					ANode parent = mres.getParent();
-					int index = parent.getChildren().indexOf(mres);
-					parent.removeChild(mres);
-					mres = ResourceFactory.getResource(parent, rd, index);
-					WSClientHelper.fireResourceChanged(mres);
+					if (WsTypes.INST().getSoapfileMap().containsKey(mres.getValue().getWsType())) {
+						int index = parent.getChildren().indexOf(mres);
+						parent.removeChild(mres);
+						mres = ResourceFactory.getResource(parent, rd, index);
+						WSClientHelper.fireResourceChanged(mres);
+					}
 
 					ResourceWizard wizard = new ResourceWizard(mres, mres);
 					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);

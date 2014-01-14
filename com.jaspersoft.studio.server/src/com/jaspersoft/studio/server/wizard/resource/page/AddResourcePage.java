@@ -71,6 +71,7 @@ import com.jaspersoft.studio.server.model.datasource.MRMondrianSchema;
 import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
+import com.jaspersoft.studio.server.model.datasource.MRSecureMondrianConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Callback;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -186,10 +187,15 @@ public class AddResourcePage extends WizardPage {
 					public ImageDescriptor getImagePath() {
 						return MROlapMondrianConnection.getIconDescriptor().getIcon16();
 					}
+
+					public INode getRoot() {
+						return parent.getRoot();
+					}
 				};
 
 				new MRMondrianSchema(oroot, MRMondrianSchema.createDescriptor(parent), -1);
 				new MROlapMondrianConnection(oroot, MROlapMondrianConnection.createDescriptor(parent), -1);
+				new MRSecureMondrianConnection(oroot, MRSecureMondrianConnection.createDescriptor(parent), -1);
 				new MROlapXmlaConnection(oroot, MROlapXmlaConnection.createDescriptor(parent), -1);
 				new MROlapUnit(oroot, MROlapUnit.createDescriptor(parent), -1);
 				new MRAccessGrantSchema(root, MRAccessGrantSchema.createDescriptor(parent), -1);
@@ -233,9 +239,18 @@ public class AddResourcePage extends WizardPage {
 				return true;
 			}
 		};
-		if (root.getChildren() != null && !root.getChildren().isEmpty())
-			resource = (MResource) root.getChildren().get(0);
+		setResource(root);
 		return root;
+	}
+
+	private void setResource(INode rt) {
+		if (rt.getChildren() != null && !rt.getChildren().isEmpty()) {
+			INode iNode = rt.getChildren().get(0);
+			if (iNode instanceof MResource)
+				resource = (MResource) iNode;
+			else
+				setResource(iNode);
+		}
 	}
 
 	protected void createReportUnit(ANode root) {

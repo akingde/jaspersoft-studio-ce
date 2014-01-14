@@ -21,12 +21,6 @@ public class DiffFields {
 	public static final String DBINSTANCEIDENTIFIER = "dbInstanceIdentifier";
 	public static final String DBSERVICE = "dbService";
 
-	public static final String URL = "url";
-	public static final String DATASOURCE = "dataSource";
-	public static final String CATALOG = "catalog";
-	public static final String USERNAME = "username";
-	public static final String PASSWORD = "password";
-
 	public static void setSoapValue(ResourceDescriptor rd, String key, String v) {
 		rd.setResourceProperty(new ResourceProperty(key, v));
 	}

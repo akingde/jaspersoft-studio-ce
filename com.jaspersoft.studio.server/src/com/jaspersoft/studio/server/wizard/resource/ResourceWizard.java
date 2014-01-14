@@ -40,6 +40,16 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDataso
 
 public class ResourceWizard extends Wizard {
 	private boolean skipFirstPage = false;
+	private boolean nested = false;
+
+	public void setNested(boolean nested) {
+		this.nested = nested;
+	}
+
+	public ResourceWizard(ANode parent, MResource resource, boolean skipFirstPage, boolean nested) {
+		this(parent, resource, skipFirstPage);
+		setNested(nested);
+	}
 
 	public ResourceWizard(ANode parent, MResource resource, boolean skipFirstPage) {
 		this(parent, resource);
@@ -79,6 +89,8 @@ public class ResourceWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
+		if (nested)
+			return true;
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 
@@ -121,6 +133,8 @@ public class ResourceWizard extends Wizard {
 
 	@Override
 	public boolean performCancel() {
+		if (nested)
+			return true;
 		try {
 			getContainer().run(false, true, new IRunnableWithProgress() {
 

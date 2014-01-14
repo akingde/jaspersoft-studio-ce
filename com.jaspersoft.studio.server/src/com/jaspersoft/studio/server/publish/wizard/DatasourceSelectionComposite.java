@@ -30,8 +30,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -41,6 +39,7 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.datasource.MRDatasource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -50,6 +49,7 @@ import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.ASelector;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource.SelectionType;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
@@ -60,7 +60,7 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class DatasourceSelectionComposite extends Composite {
-
+	private boolean mandatory = false;
 	private MResource res;
 	private ANode parent;
 
@@ -81,9 +81,11 @@ public class DatasourceSelectionComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public DatasourceSelectionComposite(Composite parent, int style) {
+	public DatasourceSelectionComposite(Composite parent, int style, boolean mandatory) {
 		super(parent, style);
+		this.mandatory = mandatory;
 		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.horizontalSpacing = 0;
 		setLayout(gridLayout);
 
 		rbDSFromRepo = new Button(this, SWT.RADIO);
@@ -137,19 +139,19 @@ public class DatasourceSelectionComposite extends Composite {
 				selectLocalDatasource();
 			}
 		});
-
-		rbNoDS = new Button(this, SWT.RADIO);
-		rbNoDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		rbNoDS.setSelection(true);
-		rbNoDS.setText(Messages.DatasourceSelectionComposite_NoDatasource);
-		rbNoDS.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				removeDatasource(res);
-				setEnabled(SelectorDatasource.SelectionType.NO_DATASOURCE);
-			}
-		});
-
+		if (!mandatory) {
+			rbNoDS = new Button(this, SWT.RADIO);
+			rbNoDS.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+			rbNoDS.setSelection(true);
+			rbNoDS.setText(Messages.DatasourceSelectionComposite_NoDatasource);
+			rbNoDS.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					removeDatasource(res);
+					setEnabled(SelectorDatasource.SelectionType.NO_DATASOURCE);
+				}
+			});
+		}
 	}
 
 	/**
@@ -168,14 +170,12 @@ public class DatasourceSelectionComposite extends Composite {
 
 		ResourceDescriptor r = SelectorDatasource.getDatasource(res.getValue());
 		if (r != null) {
-			if (r.getIsReference()) {
+			if (r.getIsReference())
 				setEnabled(SelectorDatasource.SelectionType.REMOTE_DATASOURCE);
-			} else {
+			else
 				setEnabled(SelectorDatasource.SelectionType.LOCAL_DATASOURCE);
-			}
-		} else {
+		} else
 			setEnabled(SelectorDatasource.SelectionType.NO_DATASOURCE);
-		}
 		isConfiguringPage = false;
 	}
 
@@ -195,7 +195,8 @@ public class DatasourceSelectionComposite extends Composite {
 
 		rbDSFromRepo.setSelection(false);
 		rbLocalDS.setSelection(false);
-		rbNoDS.setSelection(false);
+		if (rbNoDS != null)
+			rbNoDS.setSelection(false);
 
 		// Enable and check all the resource related information
 		ResourceDescriptor r = SelectorDatasource.getDatasource(res.getValue());
@@ -215,7 +216,12 @@ public class DatasourceSelectionComposite extends Composite {
 				textLocalDS.setText(Misc.nvl(r.getName()));
 			break;
 		case NO_DATASOURCE:
-			rbNoDS.setSelection(true);
+			if (rbNoDS != null)
+				rbNoDS.setSelection(true);
+			else {
+				setEnabled(SelectionType.REMOTE_DATASOURCE);
+				return;
+			}
 			break;
 		}
 		notifyDatasourceSelectionChanged();
@@ -228,14 +234,19 @@ public class DatasourceSelectionComposite extends Composite {
 	private void selectLocalDatasource() {
 		ResourceDescriptor runit = res.getValue();
 		ResourceDescriptor ref = SelectorDatasource.getDatasource(runit);
+
 		if (ASelector.isReference(ref))
 			ref = null;
-
-		Shell shell = Display.getDefault().getActiveShell();
+		if (ref == null && res.getValue().getWsType().equals(WsTypes.INST().toRestType(ResourceDescriptor.TYPE_DOMAIN_TOPICS))) {
+			ref = MRDatasource.createDescriptor(null);
+			ref.setName("SemanticLayerDataSource");
+			ref.setLabel("SemanticLayerDataSource");
+			ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN);
+		}
 		if (ref == null) {
-			AddResourceWizard wizard = new AddResourceWizard(res);
+			AddResourceWizard wizard = new AddResourceWizard(res, true);
 			wizard.setOnlyDatasource(true);
-			WizardDialog dialog = new WizardDialog(shell, wizard);
+			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.create();
 			if (dialog.open() != Dialog.OK)
 				return;
@@ -249,8 +260,8 @@ public class DatasourceSelectionComposite extends Composite {
 			SelectorDatasource.replaceDatasource(res, ref);
 		} else {
 			MResource r = ResourceFactory.getResource(null, ASelector.cloneResource(ref), -1);
-			ResourceWizard wizard = new ResourceWizard(parent, r, true);
-			WizardDialog dialog = new WizardDialog(shell, wizard);
+			ResourceWizard wizard = new ResourceWizard(parent, r, true, true);
+			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.create();
 			if (dialog.open() != Dialog.OK)
 				return;
@@ -271,7 +282,10 @@ public class DatasourceSelectionComposite extends Composite {
 		// due to tree viewer node expansion...
 		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
 		if (res.isSupported(Feature.SEARCHREPOSITORY)) {
-			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, WsTypes.INST().getDatasourcesArray(), null);
+			String[] dsArray = WsTypes.INST().getDatasourcesArray();
+			if (res.getValue().getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
+				dsArray = new String[] { WsTypes.INST().toRestType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN) };
+			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, dsArray, null);
 			if (rd != null)
 				setResource(res, rd);
 		} else {
@@ -323,7 +337,7 @@ public class DatasourceSelectionComposite extends Composite {
 	 *         selected, <code>false</code> otherwise
 	 */
 	public boolean isDatasourceSelectionValid() {
-		return rbNoDS.getSelection() || !textDSFromRepo.getText().trim().isEmpty() || !textLocalDS.getText().trim().isEmpty();
+		return (rbNoDS != null && rbNoDS.getSelection()) || !textDSFromRepo.getText().trim().isEmpty() || !textLocalDS.getText().trim().isEmpty();
 	}
 
 	public void addDatasourceSelectionListener(DatasourceSelectionListener l) {
