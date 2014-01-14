@@ -76,23 +76,19 @@ public class VParameters extends AVParameters {
 			protected IStatus run(IProgressMonitor monitor) {
 				JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
 				Set<String> keys = new HashSet<String>();
-				long stime = System.currentTimeMillis();
 				for (String pname : incontrols.keySet()) {
 					JRParameter p = mDataset.getParametersMap().get(pname);
 					if (p == null || (!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
 						continue;
 					if (p.getName().equals(pname)) {
 						if (p.getDefaultValueExpression() != null) {
-							long sstime = System.currentTimeMillis();
 							params.put(pname, getInter(mDataset).interpretExpression(p.getDefaultValueExpression().getText()));
-							System.out.println("Eval:" + (System.currentTimeMillis() - sstime));
 						} else
 							params.put(pname, null);
 						keys.add(pname);
 					}
 
 				}
-				System.out.println("Defaults:" + (System.currentTimeMillis() - stime));
 				updateControlInput(keys);
 				return Status.OK_STATUS;
 			}
