@@ -61,7 +61,7 @@ public class ConnectToDomainAction extends SelectionAction {
 		setText(Messages.ConnectToDomainWizardPage_dialogTitle);
 		setToolTipText(Messages.ConnectToDomainAction_actionTooltip);
 		setId(ConnectToDomainAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/export_style.png")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/connectdomain.png")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 
