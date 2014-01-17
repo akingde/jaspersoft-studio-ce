@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -41,7 +42,8 @@ public class SubreportsUtil {
 		String expr = ExpressionUtil.eval(ele.getExpression(), jConfig, parent);
 		if (expr == null || expr.isEmpty())
 			return;
-		expr = expr.replaceAll(".jasper$", ".jrxml");
+		if (expr.endsWith(FileExtension.PointJASPER))
+			expr = expr.replaceAll(FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
 		expr = expr.replaceFirst("repo:", "");
 		File f = FileUtils.findFile(file, expr);
 		if (f == null)
