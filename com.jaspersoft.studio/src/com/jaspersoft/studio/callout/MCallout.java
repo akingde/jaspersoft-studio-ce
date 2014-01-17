@@ -383,8 +383,12 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 						+ pin.getPropertyValue(JRDesignElement.PROPERTY_Y);
 			}
 		}
-		if (!pins.isEmpty())
+		if (!pins.isEmpty()) {
 			properties.setProperty("callouts." + i + ".pins", pins);
+		}
+		else{ 
+			properties.remove("callouts." + i + ".pins");
+		}
 
 		getPropertiesHolder(getParent()).getPropertiesMap().setProperty(PROP_CALLOUT,
 				FileUtils.getPropertyAsString(properties).replace("\n", "\\n"));
