@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionComposite;
-import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionListener;
+import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionComposite;
+import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 

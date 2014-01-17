@@ -82,15 +82,14 @@ public class PublishUtil {
 	public static void initRUnitName(AMJrxmlContainer runit, JasperDesign jd) {
 		if (runit == null || jd == null)
 			return;
-		ResourceDescriptor rd = runit.getValue();
-		initRunitName(jd, rd);
+		initResourceName(jd.getName(), runit.getValue());
 	}
 
-	public static void initRunitName(JasperDesign jd, ResourceDescriptor rd) {
+	public static void initResourceName(String name, ResourceDescriptor rd) {
 		if (Misc.isNullOrEmpty(rd.getName()))
-			rd.setName(jd.getName().replace(" ", ""));
+			rd.setName(ResourcePageContent.safeChar(name));
 		if (Misc.isNullOrEmpty(rd.getLabel()))
-			rd.setLabel(jd.getName());
+			rd.setLabel(name);
 	}
 
 	public static void savePreferences(IFile ifile, List<MResource> files) throws CoreException {
@@ -145,5 +144,22 @@ public class PublishUtil {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static List<String[]> loadPath(IProgressMonitor monitor, IFile ifile) throws CoreException {
+		List<String[]> paths = new ArrayList<String[]>();
+		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
+		int substr = "JRSPATH.".length();
+		for (QualifiedName key : pmap.keySet()) {
+			if (key.getQualifier().equals(Activator.PLUGIN_ID) && key.getLocalName().startsWith("JRSPATH."))
+				paths.add(new String[] { key.getLocalName().substring(substr), pmap.get(key) });
+		}
+		return paths;
+	}
+
+	public static void savePath(IFile ifile, MResource mres) throws CoreException {
+		String jrs = mres.getWsClient().getServerProfile().getUrl();
+		String uri = mres.getValue().getUriString();
+		ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSPATH." + jrs), uri);
 	}
 }

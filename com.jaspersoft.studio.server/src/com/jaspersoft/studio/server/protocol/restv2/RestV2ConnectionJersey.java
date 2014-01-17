@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
@@ -28,6 +29,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
+import com.google.common.io.Files;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -56,8 +58,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+		super.connect(monitor, sp);
 		this.eh = new RESTv2ExceptionHandler(this);
-		this.sp = sp;
 
 		ClientConfig clientConfig = new ClientConfig();
 		// values are in milliseconds
@@ -228,9 +230,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
+		if (cr instanceof ClientFile && inFile != null) {
+			ClientFile crf = (ClientFile) cr;
+			crf.setType(WsTypes.getFileType(crf.getType(), Files.getFileExtension(inFile.getName())));
+		}
 
 		WebTarget tgt = target.path("resources" + rd.getUriString());
 		tgt = tgt.queryParam("createFolders", "true");
@@ -238,25 +244,33 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		Builder req = tgt.request();
 		Response r = connector.put(req, Entity.entity(cr, "application/repository." + rtype + "+" + FORMAT), monitor);
-		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
-		if (crl != null) {
+		ClientResource<?> crl = null;
+		try {
+			crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
+		} catch (HttpResponseException e) {
+			if (e.getStatusCode() == 409) {
+				rd.setVersion(get(monitor, rd, null).getVersion());
+				return addOrModifyResource(monitor, rd, inFile);
+			}
+		}
+		if (crl != null && !monitor.isCanceled()) {
 			boolean refresh = false;
-			if (crl instanceof ClientFile && inputFile != null) {
+			if (crl instanceof ClientFile && inFile != null) {
 				ClientFile cf = (ClientFile) crl;
 				tgt = target.path("resources" + rd.getUriString());
 
-				req = req.header("Content-Description", cf.getLabel());
-				req = req.header("Content-Disposition", "attachment; filename=" + inputFile.getName());
-				InputStream in = new FileInputStream(inputFile);
+				req = req.header("Content-Description", cf.getDescription());
+				req = req.header("Content-Disposition", "attachment; filename=" + inFile.getName());
+				InputStream in = new FileInputStream(inFile);
 				writeFile(connector.put(req, Entity.entity(in, cf.getType().getMimeType()), monitor), in, monitor);
 				refresh = true;
 			} else if (WsTypes.INST().isContainerType(crl.getClass()))
 				refresh = true;
 			List<ResourceDescriptor> children = rd.getChildren();
 			for (ResourceDescriptor child : children)
-				if (child.isDirty())
+				if (child.isDirty() && !monitor.isCanceled())
 					addOrModifyResource(monitor, child, null);
-			if (refresh)
+			if (refresh && !monitor.isCanceled())
 				rd = get(monitor, rd, null);
 			else
 				rd = Rest2Soap.getRD(this, crl, rd);

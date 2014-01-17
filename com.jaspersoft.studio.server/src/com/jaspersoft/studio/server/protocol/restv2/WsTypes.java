@@ -160,6 +160,29 @@ public class WsTypes {
 		Activator.getExtManager().initWsTypes(this);
 	}
 
+	public static FileType getFileType(FileType ftype, String ext) {
+		ext = ext.toLowerCase();
+		switch (ftype) {
+		case accessGrantSchema:
+		case olapMondrianSchema:
+			return ftype;
+		default:
+			try {
+				return FileType.valueOf(ext);
+			} catch (IllegalArgumentException e) {
+				if (ext.equals("properties"))
+					return FileType.prop;
+				if (ext.equals("xhtml") || ext.equals("htm"))
+					return FileType.html;
+				if (ext.equals("ttf") || ext.equals("eot") || ext.equals("woff") || ext.equals("svg"))
+					return FileType.font;
+				if (ext.equals("png") || ext.equals("gif") || ext.equals("jpg") || ext.equals("jpeg") || ext.equals("bmp") || ext.equals("tiff"))
+					return FileType.img;
+				return FileType.unspecified;
+			}
+		}
+	}
+
 	private static WsTypes instance;
 
 	public static WsTypes INST() {

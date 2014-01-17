@@ -44,7 +44,7 @@ public class RESTv2ExceptionHandler {
 					msg = "";
 					for (ErrorDescriptor ed : list)
 						msg += buildMessage(monitor, msg, ed);
-					throw new ClientProtocolException(msg);
+					throw new HttpResponseException(res.getStatus(), msg);
 				}
 			}
 		case 409:
@@ -56,7 +56,7 @@ public class RESTv2ExceptionHandler {
 				if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
 					for (String str : ed.getParameters())
 						msg += "\n" + str;
-				throw new ClientProtocolException(msg);
+				throw new HttpResponseException(res.getStatus(), msg);
 			}
 		default:
 			throw new HttpResponseException(res.getStatus(), res.getStatusInfo().getReasonPhrase());

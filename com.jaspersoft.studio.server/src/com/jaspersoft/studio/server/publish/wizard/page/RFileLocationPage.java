@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish.wizard;
+package com.jaspersoft.studio.server.publish.wizard.page;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,38 +38,31 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
-import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
-import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
-import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MJrxml;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.publish.PublishUtil;
-import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
@@ -78,13 +70,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
-public class RUnitLocationPage extends JSSHelpWizardPage {
-	private JasperDesign jDesign;
+public class RFileLocationPage extends JSSHelpWizardPage {
 	private TreeViewer treeViewer;
-	private Button bnRunit;
 	private Text ruLabel;
 
-	private ANode n;
 	private RefreshResourcesAction refreshAction;
 	private JasperReportsConfiguration jConfig;
 	private Text ruID;
@@ -92,34 +81,22 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 	private boolean isFillingInput;
 	private boolean canSuggestID;
+	private IFile file;
 
-	public RUnitLocationPage(JasperReportsConfiguration jConfig, JasperDesign jDesign, ANode n) {
-		super("serverpublish"); //$NON-NLS-1$
+	public RFileLocationPage(JasperReportsConfiguration jConfig) {
+		super("serverfilepublish"); //$NON-NLS-1$
 		setTitle(Messages.RUnitLocationPage_title);
-		setDescription(Messages.RUnitLocationPage_description);
-		this.jDesign = jDesign;
-		this.n = n;
+		setDescription("Select JasperReports Server and location where file will be published");
 		this.jConfig = jConfig;
 	}
 
-	public void setValue(JasperDesign jDesign, ANode n) {
-		this.jDesign = jDesign;
-		this.n = n;
-		fillInput();
+	public void refreshFile() {
+		file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		look4SelectedUnit();
 	}
 
-	public AMJrxmlContainer getSelectedNode() {
-		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
-		Object obj = ts.getFirstElement();
-		if (obj != null) {
-			if (obj instanceof MFolder)
-				return reportUnit;
-			return (AMJrxmlContainer) obj;
-		}
-		if (n instanceof AMJrxmlContainer)
-			return (AMJrxmlContainer) n;
-		reportUnit.setJasperConfiguration(jConfig);
-		return reportUnit;
+	public AFileResource getSelectedNode() {
+		return fileRes;
 	}
 
 	/**
@@ -142,11 +119,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		boolean isC;
 		TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 		Object firstElement = ts.getFirstElement();
-		isC = firstElement instanceof MJrxml || firstElement instanceof MFolder || firstElement instanceof MReportUnit;
-		if (isC && firstElement instanceof MFolder) {
-			AMJrxmlContainer runit = getReportUnit();
-			isC = runit instanceof AMJrxmlContainer && runit.getParent() != null;
-		}
+		isC = firstElement instanceof AFileResource || firstElement instanceof MFolder;
+		if (isC && firstElement instanceof MFolder)
+			isC = getNewRunit().getParent() != null;
 		return isC;
 	}
 
@@ -184,12 +159,12 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
 			@Override
 			public Object[] getChildren(Object parentElement) {
-				if (parentElement instanceof MFolder && newrunit.getValue().getIsNew() == true) {
+				if (parentElement instanceof MFolder && fileRes != null && fileRes.getValue().getIsNew() == true) {
 					MFolder node = (MFolder) parentElement;
 					if (node.getChildren() != null && node.getChildren().size() > 0) {
 						List<INode> children = new ArrayList<INode>();
 						for (INode n : node.getChildren()) {
-							if (n != newrunit && n != newjrxml)
+							if (n != fileRes)
 								children.add(n);
 						}
 						return children.toArray();
@@ -201,36 +176,10 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		ColumnViewerToolTipSupport.enableFor(treeViewer);
 
-		bnRunit = new Button(composite, SWT.CHECK);
-		bnRunit.setText(Messages.RUnitLocationPage_addreportunit_button);
-		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.horizontalSpan = 2;
-		bnRunit.setLayoutData(gd);
-		bnRunit.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean selected = bnRunit.getSelection();
-				// Enable/Disable the detail textboxes
-				// ruLabel.setEnabled(selected);
-				// ruID.setEnabled(selected);
-				// ruDescription.setEnabled(selected);
-
-				reportUnit = selected ? getNewRunit() : getNewJrxml();
-				if (reportUnit.getParent() == null) {
-					TreeSelection ts = (TreeSelection) treeViewer.getSelection();
-					Object obj = ts.getFirstElement();
-					if (obj instanceof ANode)
-						reportUnit.setParent((ANode) obj, -1);
-				}
-				performPageChecks();
-				setPageComplete(isPageComplete());
-			}
-		});
-
 		// Report Unit shown label (resource descriptor label)
 		Label lblRepoUnitName = new Label(composite, SWT.NONE);
 		lblRepoUnitName.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		lblRepoUnitName.setText(Messages.RUnitLocationPage_reportunitlabel);
+		lblRepoUnitName.setText(Messages.AResourcePage_name);
 		ruLabel = new Text(composite, SWT.BORDER);
 		ruLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ruLabel.addModifyListener(new ModifyListener() {
@@ -259,7 +208,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		// Report Unit ID (resource descriptor name)
 		Label lblRepoUnitID = new Label(composite, SWT.NONE);
 		lblRepoUnitID.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		lblRepoUnitID.setText(Messages.RUnitLocationPage_lblreportunit);
+		lblRepoUnitID.setText(Messages.AResourcePage_id);
 		ruID = new Text(composite, SWT.BORDER);
 		ruID.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ruID.addModifyListener(new ModifyListener() {
@@ -297,7 +246,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		Label lblRepoUnitDescription = new Label(composite, SWT.NONE);
 		GridData descLblGD = new GridData(SWT.FILL, SWT.TOP, false, false);
 		lblRepoUnitDescription.setLayoutData(descLblGD);
-		lblRepoUnitDescription.setText(Messages.RUnitLocationPage_reportunitdesc_label);
+		lblRepoUnitDescription.setText(Messages.AResourcePage_description);
 		ruDescription = new Text(composite, SWT.BORDER | SWT.MULTI);
 		GridData descGD = new GridData(SWT.FILL, SWT.TOP, true, true);
 		descGD.minimumHeight = 50;
@@ -313,7 +262,6 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 				setErrorMessage(ValidationUtils.validateDesc(rtext));
 			}
 		});
-		ruDescription.setText(""); //$NON-NLS-1$
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -356,31 +304,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 								try {
 									if (serverProvider == null)
 										serverProvider = new ServerProvider();
-									Object element = event.getElement();
-									boolean be = reportUnit.getParent() == element;
 									serverProvider.handleTreeEvent(event, monitor);
-									if (be) {
-										MFolder f = (MFolder) element;
-										String nm = reportUnit.getValue().getName();
-										boolean isnew = true;
-										for (INode n : f.getChildren()) {
-											if (n instanceof MReportUnit) {
-												if (((MReportUnit) n).getValue().getName().equals(nm)) {
-													reportUnit = (MReportUnit) n;
-													isnew = false;
-													break;
-												}
-											} else if (n instanceof MJrxml) {
-												if (((MJrxml) n).getValue().getName().equals(nm)) {
-													reportUnit = (MJrxml) n;
-													isnew = false;
-													break;
-												}
-											}
-										}
-										if (isnew)
-											reportUnit.setParent(f, -1);
-									}
 								} catch (Exception e) {
 									if (e instanceof InterruptedException)
 										throw (InterruptedException) e;
@@ -406,33 +330,20 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		fillInput();
 	}
 
-	private AMJrxmlContainer reportUnit;
-	private MReportUnit newrunit;
-	private MJrxml newjrxml;
+	private AFileResource newRes;
+	private AFileResource fileRes;
 
-	private MReportUnit getNewRunit() {
-		if (newrunit == null) {
-			ResourceDescriptor rd = MReportUnit.createDescriptor(null);
+	private AFileResource getNewRunit() {
+		if (newRes == null) {
+			ResourceDescriptor rd = AFileResource.createDescriptor(null);
+			rd.setWsType(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 			rd.setName(null);
-			newrunit = new MReportUnit(null, rd, -1);
+			PublishUtil.initResourceName(file.getName(), rd);
+			rd.setLabel(file.getName());
+			newRes = new MContentResource(null, rd, -1);
+			newRes.setJasperConfiguration(jConfig);
 		}
-		PublishUtil.initRUnitName(newrunit, jDesign);
-		return newrunit;
-	}
-
-	private MJrxml getNewJrxml() {
-		if (newjrxml == null) {
-			ResourceDescriptor rd = MJrxml.createDescriptor(null);
-			rd.setName(null);
-			newjrxml = new MJrxml(null, rd, -1);
-		}
-		PublishUtil.initRUnitName(newjrxml, jDesign);
-		return newjrxml;
-	}
-
-	private AMJrxmlContainer getReportUnit() {
-		PublishUtil.initRUnitName(reportUnit, jDesign);
-		return reportUnit;
+		return newRes;
 	}
 
 	private boolean isRefresh = false;
@@ -441,56 +352,29 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		if (isRefresh)
 			return;
 		isRefresh = true;
-		boolean isFolder = obj instanceof MFolder;
-		bnRunit.setSelection(isFolder);
-		bnRunit.setEnabled(isFolder);
-		ruLabel.setEnabled(bnRunit.getSelection() && isFolder);
-		ruID.setEnabled(bnRunit.getSelection() && isFolder);
-		ruDescription.setEnabled(bnRunit.getSelection() && isFolder);
 
-		reportUnit = getNewRunit();
-		if (obj instanceof MReportUnit) {
-			reportUnit = getNewRunit();
-			reportUnit = (MReportUnit) obj;
-			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
-			ruID.setText(Misc.nvl(reportUnit.getValue().getName()));
-			ruDescription.setText(Misc.nvl(reportUnit.getValue().getDescription()));
-		} else if (obj instanceof MFolder) {
-			newrunit = getNewRunit();
-			newrunit.setParent((ANode) obj, -1);
-
-			newjrxml = getNewJrxml();
-			newjrxml.setParent((ANode) obj, -1);
-
-			if (bnRunit.getSelection())
-				reportUnit = newrunit;
-			else
-				reportUnit = newjrxml;
-
-			ResourceDescriptor nrd = reportUnit.getValue();
-			nrd.setName(ruID.getText());
-			nrd.setLabel(ruLabel.getText());
-			nrd.setDescription(ruDescription.getText());
-			String uri = ((MFolder) obj).getValue().getUriString();
-			nrd.setParentFolder(uri);
-			nrd.setUriString(uri + "/" + nrd.getName()); //$NON-NLS-1$
-		} else if (obj instanceof MJrxml) {
-			reportUnit = getNewJrxml();
-			reportUnit = (MJrxml) obj;
-			ruLabel.setText(Misc.nvl(reportUnit.getValue().getLabel()));
-			ruID.setText(Misc.nvl(reportUnit.getValue().getName()));
-			ruDescription.setText(Misc.nvl(reportUnit.getValue().getDescription()));
-		} else if (obj instanceof MResource) {
-			ANode mparent = ((MResource) obj).getParent();
-			treeViewer.setSelection(new StructuredSelection(mparent), true);
-			handleSelectionChanged(mparent);
+		if (obj instanceof AFileResource)
+			fileRes = (AFileResource) obj;
+		else if (obj instanceof MFolder) {
+			fileRes = getNewRunit();
+			MFolder pfolder = (MFolder) obj;
+			fileRes.setParent(pfolder, -1);
+			ResourceDescriptor rd = fileRes.getValue();
+			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName());
 		} else
 			setPageComplete(false);
+		if (fileRes != null) {
+			ResourceDescriptor rd = fileRes.getValue();
+			ruLabel.setText(Misc.nvl(rd.getLabel()));
+			ruID.setText(Misc.nvl(rd.getName()));
+			ruDescription.setText(Misc.nvl(rd.getDescription()));
+		}
 		performPageChecks();
 		isRefresh = false;
 	}
 
 	private boolean skipEvents = false;
+	private MServers servers;
 
 	public void fillInput() {
 		Display.getDefault().asyncExec(new Runnable() {
@@ -498,85 +382,64 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			@Override
 			public void run() {
 				isFillingInput = true;
-				initIDLabel();
-				if (n instanceof MServerProfile)
-					look4SelectedUnit((MServerProfile) n);
-				setSelectedNode();
+				servers = new MServers(null);
+				ServerManager.loadServerProfilesCopy(servers);
+				treeViewer.setInput(servers);
+				refreshFile();
 				isFillingInput = false;
 			}
 		});
 	}
 
-	private void initIDLabel() {
-		if (jDesign != null) {
-			ruID.setText(jDesign.getName().replace(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
-			ruLabel.setText(jDesign.getName());
-		}
-	}
-
-	private void setSelectedNode() {
-		if (n == null || treeViewer.getTree().isDisposed())
-			return;
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				INode root = n.getRoot();
-				if (root instanceof MServerProfile)
-					root = ((ANode) root.getParent()).getRoot();
-				treeViewer.setInput(root);
-				skipEvents = true;
-				treeViewer.refresh();
-				if (n != null)
-					treeViewer.setSelection(new StructuredSelection(n), true);
-				setPageComplete(isPageCompleteLogic());
-				skipEvents = false;
-				handleSelectionChanged(n);
-			}
-		});
-	}
-
-	private void look4SelectedUnit(final MServerProfile mres) {
+	private void look4SelectedUnit() {
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-					ANode node = FindResources.findReportUnit(mres, monitor, jDesign, file);
-					if (monitor.isCanceled())
-						return;
-					if (n != mres)
-						return;
-					n = node;
+					monitor.beginTask("Looking for resource", IProgressMonitor.UNKNOWN);
 					try {
-						if (n instanceof MReportUnit && !ResourceDescriptorUtil.isReportMain(file)) {
-							MReportUnit mReportUnit = (MReportUnit) n;
-							String res = jDesign.getProperty(AExporter.PROP_REPORTRESOURCE);
-							if (!Misc.isNullOrEmpty(res)) {
-								mReportUnit.setValue(WSClientHelper.getResource(monitor, n, mReportUnit.getValue()));
-								List<ResourceDescriptor> children = mReportUnit.getValue().getChildren();
-								ResourceDescriptor rd = null;
-								for (ResourceDescriptor c : children) {
-									if (c.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && c.getUriString().equals(res)) {
-										rd = c;
-										break;
-									}
+						List<String[]> paths = PublishUtil.loadPath(monitor, file);
+						for (String[] p : paths) {
+							MServerProfile msp = null;
+							for (INode n : servers.getChildren()) {
+								if (n instanceof MServerProfile && ((MServerProfile) n).getValue().getUrl().equals(p[0])) {
+									msp = (MServerProfile) n;
+									break;
 								}
-								if (rd != null) {
-									n.removeChildren();
-									ANode tmpn = null;
-									for (ResourceDescriptor c : children) {
-										MResource mr = ResourceFactory.getResource(n, c, -1);
-										if (c == rd)
-											tmpn = mr;
-									}
-									n = tmpn;
-								}
+							}
+							if (msp != null) {
+								if (selectResource(msp, p[1], monitor))
+									break;
 							}
 						}
 					} catch (Exception ce) {
 						ce.printStackTrace();
+					} finally {
+						monitor.done();
 					}
+				}
+
+				private boolean selectResource(MServerProfile msp, String uri, IProgressMonitor monitor) throws Exception {
+					if (monitor.isCanceled())
+						return true;
+					ResourceDescriptor rd = new ResourceDescriptor();
+					rd.setUriString(uri);
+					final MResource mres = WSClientHelper.findSelected(monitor, rd, msp);
+					if (mres == null)
+						return false;
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							skipEvents = true;
+							treeViewer.refresh();
+							treeViewer.setSelection(new StructuredSelection(mres), true);
+							skipEvents = false;
+						}
+					});
+
+					return true;
 				}
 			});
 		} catch (InvocationTargetException e) {

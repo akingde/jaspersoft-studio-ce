@@ -22,6 +22,16 @@ public abstract class ARestV2Connection implements IConnection {
 	public static final String FORMAT = "xml";
 	protected ServerProfile sp;
 
+	@Override
+	public ServerProfile getServerProfile() {
+		return sp;
+	}
+
+	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+		this.sp = sp;
+		return true;
+	}
+
 	protected String url(String suffix) {
 		return sp.getUrl() + SUFFIX + suffix;
 	}

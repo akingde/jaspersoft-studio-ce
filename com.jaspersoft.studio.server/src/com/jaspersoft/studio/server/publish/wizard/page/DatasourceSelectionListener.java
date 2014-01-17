@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish.wizard;
+package com.jaspersoft.studio.server.publish.wizard.page;
 
 /**
  * Implementors will provide a method that deals with 

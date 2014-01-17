@@ -199,4 +199,9 @@ public class ProxyConnection implements IConnection {
 		c.reorderInputControls(uri, rd, monitor);
 	}
 
+	@Override
+	public ServerProfile getServerProfile() {
+		return c.getServerProfile();
+	}
+
 }

@@ -28,6 +28,11 @@ public class SoapConnection implements IConnection {
 	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
 	protected DateFormat timestampFormat = SimpleDateFormat.getTimeInstance();
 	protected NumberFormat numberFormat = NumberFormat.getInstance();
+	private ServerProfile sp;
+
+	public ServerProfile getServerProfile() {
+		return sp;
+	}
 
 	public Format getDateFormat() {
 		return dateFormat;
@@ -57,6 +62,7 @@ public class SoapConnection implements IConnection {
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		JServer server = new JServer();
+		this.sp = sp;
 		setupJServer(server, sp);
 
 		client = server.getWSClient();

@@ -26,7 +26,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
-import com.jaspersoft.studio.server.publish.wizard.DatasourceSelectionComposite;
+import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionComposite;
 
 /**
  * This class allows to create a datasource selection panel and contains a list

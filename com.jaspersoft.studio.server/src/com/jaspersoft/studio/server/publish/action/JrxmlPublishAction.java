@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
@@ -86,7 +85,7 @@ public class JrxmlPublishAction extends AContributorAction {
 		monitor.subTask(Messages.FindReportUnit_jobname);
 		try {
 			final JasperDesign jd = getJasperDesignCopy();
-			Display.getDefault().syncExec(new Runnable() {
+			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				public void run() {
 					status = publishReportUnit(jd, startpage, monitor);

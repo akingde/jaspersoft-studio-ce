@@ -42,7 +42,6 @@ import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -58,6 +57,10 @@ import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionPage;
+import com.jaspersoft.studio.server.publish.wizard.page.FileSelectionPage;
+import com.jaspersoft.studio.server.publish.wizard.page.RUnitLocationPage;
+import com.jaspersoft.studio.server.publish.wizard.page.ResourcesPage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -94,6 +97,14 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 				initJDesign(file);
 			}
 		}
+		if (jrConfig == null)
+			jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
+	}
+
+	@Override
+	public void dispose() {
+		jrConfig.dispose();
+		super.dispose();
 	}
 
 	private void initJDesign(IFile file) {
@@ -150,7 +161,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 				@Override
 				public void pageChanged(PageChangedEvent event) {
 					if (event.getSelectedPage() == page1) {
-						Display.getDefault().asyncExec(new Runnable() {
+						UIUtils.getDisplay().asyncExec(new Runnable() {
 
 							@Override
 							public void run() {
@@ -205,7 +216,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 					monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
 					try {
 						hasDepResources = FindResources.find(monitor, node, jDesign);
-						Display.getDefault().asyncExec(new Runnable() {
+						UIUtils.getDisplay().asyncExec(new Runnable() {
 							public void run() {
 								if (hasDepResources)
 									page1.fillData();

@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
@@ -133,6 +134,16 @@ public class ServerManager {
 
 		} catch (Exception e) {
 			UIUtils.showError(e);
+		}
+	}
+
+	public static void loadServerProfilesCopy(MServers root) {
+		if (serverProfiles.isEmpty())
+			loadServerProfiles(root);
+		for (MServerProfile msp : serverProfiles) {
+			MServerProfile newServerProfile = new MServerProfile(root, msp.getValue());
+			newServerProfile.setWsClient(msp.getWsClient());
+			new MDummy(newServerProfile);
 		}
 	}
 
@@ -279,6 +290,10 @@ public class ServerManager {
 	public static void selectIfExists(final IProgressMonitor monitor, MResource mres) {
 		MServerProfile sp = (MServerProfile) mres.getRoot();
 		sp = getServerByUrl(sp.getValue().getUrl());
+		selectIfExists(monitor, sp, mres);
+	}
+
+	public static void selectIfExists(final IProgressMonitor monitor, MServerProfile sp, MResource mres) {
 		if (mres.getParent() instanceof MServerProfile) {
 			try {
 				WSClientHelper.connectGetData(sp, monitor);
@@ -289,6 +304,13 @@ public class ServerManager {
 		} else {
 			final String puri = ((MResource) mres.getParent()).getValue().getUriString();
 			final String uri = mres.getValue().getUriString();
+			if (ModelUtil.isEmpty(sp))
+				try {
+					WSClientHelper.connectGetData(sp, monitor);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
 			new ModelVisitor<MResource>(sp) {
 
 				@Override

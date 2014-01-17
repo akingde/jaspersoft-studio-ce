@@ -13,7 +13,9 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish.wizard;
+package com.jaspersoft.studio.server.publish.wizard.page;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -46,7 +48,7 @@ public class FileSelectionPage extends JSSHelpWizardPage {
 
 	public static final String PAGE_NAME = "fileSelectionPage"; //$NON-NLS-1$
 
-	protected FileSelectionPage(JasperReportsConfiguration jConfig) {
+	public FileSelectionPage(JasperReportsConfiguration jConfig) {
 		super(PAGE_NAME);
 		setTitle("File Selection");
 		setDescription("Select a file.");
@@ -78,7 +80,7 @@ public class FileSelectionPage extends JSSHelpWizardPage {
 		b.setText(Messages.common_browse);
 		b.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(cmp.getShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+				FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(UIUtils.getShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 				dialog.setTitle(Messages.ResourceCellEditor_open_resource);
 				dialog.setInitialPattern("*.jrxml"); //$NON-NLS-1$
 				if (dialog.open() == Window.OK) {

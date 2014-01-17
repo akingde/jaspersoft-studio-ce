@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish.wizard;
+package com.jaspersoft.studio.server.publish.wizard.page;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -43,7 +43,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 	private JasperReportsConfiguration jConfig;
 	private DatasourceSelectionComposite datasourceCmp;
 
-	protected DatasourceSelectionPage(JasperReportsConfiguration jConfig) {
+	public DatasourceSelectionPage(JasperReportsConfiguration jConfig) {
 		super(PAGE_NAME);
 		setTitle(Messages.DatasourceSelectionPage_Title);
 		setDescription(Messages.DatasourceSelectionPage_Description);

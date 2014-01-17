@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.publish.wizard;
+package com.jaspersoft.studio.server.publish.wizard.page;
 
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -69,7 +69,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 	private JasperReportsConfiguration jConfig;
 	private TableViewer tableViewer;
 
-	protected ResourcesPage(JasperReportsConfiguration jConfig) {
+	public ResourcesPage(JasperReportsConfiguration jConfig) {
 		super("serverrespublish"); //$NON-NLS-1$
 		setTitle(Messages.ResourcesPage_title);
 		setDescription(Messages.ResourcesPage_description);

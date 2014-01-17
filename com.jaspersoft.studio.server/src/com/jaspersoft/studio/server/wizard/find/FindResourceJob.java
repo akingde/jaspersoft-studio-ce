@@ -55,7 +55,7 @@ public class FindResourceJob {
 		}
 	}
 
-	protected static void selectResource(final ServerProvider sp, final MServerProfile msp, final ResourceDescriptor rd, final TreeViewer treeViewer) {
+	public static void selectResource(final ServerProvider sp, final MServerProfile msp, final ResourceDescriptor rd, final TreeViewer treeViewer) {
 		Job job = new Job("Refreshing tree") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {

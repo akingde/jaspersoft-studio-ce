@@ -25,6 +25,8 @@ public interface IConnection {
 
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception;
 
+	public ServerProfile getServerProfile();
+
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception;
 
 	public String getWebservicesUri();

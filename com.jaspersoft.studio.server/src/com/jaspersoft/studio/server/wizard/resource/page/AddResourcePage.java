@@ -206,7 +206,6 @@ public class AddResourcePage extends WizardPage {
 			new MJar(root, MJar.createDescriptor(parent), -1);
 			// new MResource(root, MResource.createDescriptor(parent), -1);
 			new MResourceBundle(root, MResourceBundle.createDescriptor(parent), -1);
-			new MReference(root, MReference.createDescriptor(parent), -1);
 			new MRFont(root, MRFont.createDescriptor(parent), -1);
 			new MRImage(root, MRImage.createDescriptor(parent), -1);
 			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent), -1);
@@ -214,6 +213,7 @@ public class AddResourcePage extends WizardPage {
 			new MRDataAdapter(root, MRDataAdapter.createDescriptor(parent), -1);
 
 			if (parent instanceof MReportUnit) {
+				new MReference(root, MReference.createDescriptor(parent), -1);
 				new MReportUnitOptions(root, MReportUnitOptions.createDescriptor((MReportUnit) parent), -1);
 				boolean dsexists = false;
 				for (INode n : parent.getChildren()) {
