@@ -15,13 +15,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.dnd;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
+
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * Specific class of type {@link Transfer} for a Java string that is supposed to represent an image URL.
@@ -39,7 +44,7 @@ public class ImageURLTransfer extends ByteArrayTransfer {
 	}
 
 	/**
-	 * @return the singleton instance for the {@link ImageURLTransfer} type
+	 * @return the singleton instance for the {@link ImageURLTransfer}	 type
 	 */
 	public static ImageURLTransfer getInstance(){
 		return instance;
@@ -57,7 +62,7 @@ public class ImageURLTransfer extends ByteArrayTransfer {
 
 	@Override
 	protected void javaToNative(Object object, TransferData transferData) {
-		byte[] byteArray = toByteArray(((String)object).toCharArray());
+		byte[] byteArray = ((String) object).getBytes(getCurrentCharset());
 		if(byteArray!=null){
 			super.javaToNative(byteArray, transferData);
 		}
@@ -67,20 +72,31 @@ public class ImageURLTransfer extends ByteArrayTransfer {
 	protected Object nativeToJava(TransferData transferData) {
 		byte[] bytes = (byte[]) super.nativeToJava(transferData);
 		if(isSupportedType(transferData) && bytes !=null){
-			return new String(bytes);
+			return new String(bytes,getCurrentCharset());
 		}
 		else {
 			return null;
 		}
 	}
 	
-	private static byte[] toByteArray(char[] array) {
-	    return toByteArray(array, Charset.defaultCharset());
-	}
-
-	private static byte[] toByteArray(char[] array, Charset charset) {
-	    CharBuffer cbuf = CharBuffer.wrap(array);
-	    ByteBuffer bbuf = charset.encode(cbuf);
-	    return bbuf.array();
+	/*
+	 * Tries to get the charset from the currently open file.
+	 * Otherwise it the fallback solution is to return the 
+	 * the JVM default charset.
+	 */
+	private static Charset getCurrentCharset() {
+		Charset currCharset = Charset.defaultCharset();
+		IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
+		if (ep!=null && ep.getEditorInput() instanceof IFileEditorInput) {
+			IFile currFile = ((IFileEditorInput) ep.getEditorInput()).getFile();
+			if(currFile!=null) {
+				try {
+					currCharset = Charset.forName(currFile.getCharset());
+				} catch (CoreException e) {
+							NLS.bind("Unable to provide support for the file charset.",e);
+				}
+			}
+		}
+		return currCharset; 
 	}
 }
