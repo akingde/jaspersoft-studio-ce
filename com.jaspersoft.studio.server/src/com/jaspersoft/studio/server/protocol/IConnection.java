@@ -64,4 +64,6 @@ public interface IConnection {
 	public boolean isSupported(Feature f);
 
 	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception;
+
+	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception;
 }

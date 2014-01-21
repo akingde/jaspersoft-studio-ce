@@ -22,8 +22,9 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.utils.IPageCompleteListener;
 
-public abstract class APageContent {
+public abstract class APageContent implements IPageCompleteListener {
 	protected AWizardPage page;
 	protected ANode pnode;
 	protected MResource res;
@@ -71,6 +72,11 @@ public abstract class APageContent {
 
 	public boolean isPageComplete() {
 		return isPageComplete;
+	}
+
+	@Override
+	public void pageCompleted(boolean completed) {
+		setPageComplete(completed);
 	}
 
 	public void setPageComplete(boolean complete) {

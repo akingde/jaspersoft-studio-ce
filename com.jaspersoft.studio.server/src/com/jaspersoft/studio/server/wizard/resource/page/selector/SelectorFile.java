@@ -38,7 +38,7 @@ public class SelectorFile extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_CONTENT_RESOURCE) || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_CONTENT_RESOURCE))
 				return r;
 		}
 		return null;

@@ -315,6 +315,7 @@ public class WsTypes {
 		containers.add(ClientAdhocDataView.class);
 		containers.add(ClientXmlaConnection.class);
 		containers.add(ClientInputControl.class);
+		containers.add(ClientOlapUnit.class);
 		Activator.getExtManager().initContainers(containers);
 	}
 

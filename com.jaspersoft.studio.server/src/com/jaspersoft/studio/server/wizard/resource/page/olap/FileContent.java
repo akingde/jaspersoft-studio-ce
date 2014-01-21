@@ -59,6 +59,7 @@ public class FileContent extends APageContent {
 	@Override
 	public Control createContent(Composite parent) {
 		scompo = new SelectorFile();
+		scompo.addPageCompleteListener(this);
 		return scompo.createControls(parent, pnode, res);
 	}
 

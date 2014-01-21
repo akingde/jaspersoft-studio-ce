@@ -96,6 +96,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.datasource.DatasourceVD
 import com.jaspersoft.studio.server.wizard.resource.page.olap.MondrianXMLADefinitionContent;
 import com.jaspersoft.studio.server.wizard.resource.page.olap.OLAPMondrianSchemaContent;
 import com.jaspersoft.studio.server.wizard.resource.page.olap.OLAPXmlaPageContent;
+import com.jaspersoft.studio.server.wizard.resource.page.olap.OlapConnectionContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitInputControlContent;
@@ -174,18 +175,18 @@ public class ResourceFactory {
 				else if (resource instanceof MAdHocDataView)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource));
 				else if (resource instanceof MROlapMondrianConnection)
-					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true), new OLAPMondrianSchemaContent(parent, resource));
 				else if (resource instanceof MRSecureMondrianConnection)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true), new OLAPMondrianSchemaContent(parent, resource));
 				else if (resource instanceof MRMondrianSchema)
-					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true), new OLAPMondrianSchemaContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new FilePageContent(parent, resource));
 				else if (resource instanceof MRMondrianXmlaDefinitionClientType)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new MondrianXMLADefinitionContent(parent, resource));
 				else if (resource instanceof MRAccessGrantSchema)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
 
 				else if (resource instanceof MROlapUnit)
-					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new QueryPageContent(parent, resource, false), new OlapConnectionContent(parent, resource));
 				else if (resource instanceof MROlapXmlaConnection)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new OLAPXmlaPageContent(parent, resource));
 				else

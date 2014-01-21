@@ -16,6 +16,7 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 
 public class ProxyConnection implements IConnection {
 	public Format getDateFormat() {
@@ -35,7 +36,7 @@ public class ProxyConnection implements IConnection {
 	private IConnection[] getConnections() {
 		List<IConnection> c = new ArrayList<IConnection>();
 		// c.add(new RestV2Connection());
-		// c.add(new RestV2ConnectionJersey());
+		c.add(new RestV2ConnectionJersey());
 
 		c.addAll(Activator.getExtManager().getProtocols());
 
@@ -201,6 +202,11 @@ public class ProxyConnection implements IConnection {
 	@Override
 	public ServerProfile getServerProfile() {
 		return c.getServerProfile();
+	}
+
+	@Override
+	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
+		return c.initInputControls(uri, monitor);
 	}
 
 }

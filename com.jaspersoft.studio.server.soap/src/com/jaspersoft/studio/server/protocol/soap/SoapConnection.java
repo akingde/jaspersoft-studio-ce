@@ -5,12 +5,14 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.axis.AxisProperties;
 import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
@@ -20,9 +22,12 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.AFinderUI;
+import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class SoapConnection implements IConnection {
 	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
@@ -177,5 +182,39 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception {
+	}
+
+	@Override
+	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
+		ResourceDescriptor rdrepunit = WSClientHelper.getReportUnit(monitor, uri);
+		List<ResourceDescriptor> list = list(monitor, rdrepunit);
+		List<ResourceDescriptor> inputcontrols = new ArrayList<ResourceDescriptor>();
+		String dsUri = null;
+		for (ResourceDescriptor sub_rd : list) {
+			String wsType = sub_rd.getWsType();
+			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+				inputcontrols.add(sub_rd);
+			else if (wsType.equals(ResourceDescriptor.TYPE_DATASOURCE))
+				dsUri = sub_rd.getReferenceUri();
+			else if (SelectorDatasource.isDatasource(sub_rd))
+				dsUri = sub_rd.getUriString();
+		}
+		for (int i = 0; i < inputcontrols.size(); ++i) {
+			ResourceDescriptor ic = inputcontrols.get(i);
+			if (InputControlsManager.isICQuery(ic)) {
+				inputcontrols.remove(ic);
+
+				String dsUriQuery = InputControlsManager.getDataSourceQueryURI(dsUri, ic);
+				ic.setResourceProperty(ResourceDescriptor.PROP_QUERY_DATA, null);
+				// Ask to add values to the control....
+				List<Argument> args = new ArrayList<Argument>();
+				args.add(new Argument(Argument.IC_GET_QUERY_DATA, dsUriQuery));
+				args.add(new Argument(Argument.RU_REF_URI, uri));
+				ic = get(new NullProgressMonitor(), ic, null, args);
+
+				inputcontrols.add(i, ic);
+			}
+		}
+		return rdrepunit;
 	}
 }

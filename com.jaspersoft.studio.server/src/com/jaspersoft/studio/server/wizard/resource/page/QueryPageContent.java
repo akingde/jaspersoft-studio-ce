@@ -44,6 +44,13 @@ public class QueryPageContent extends APageContent {
 		super(parent, resource);
 	}
 
+	private boolean showLangs = true;
+
+	public QueryPageContent(ANode parent, MResource resource, boolean showLangs) {
+		super(parent, resource);
+		this.showLangs = showLangs;
+	}
+
 	@Override
 	public String getPageName() {
 		return "com.jaspersoft.studio.server.page.query";
@@ -55,18 +62,24 @@ public class QueryPageContent extends APageContent {
 	}
 
 	public Control createContent(Composite parent) {
-		return createContentComposite(parent, bindingContext, res.getValue(), res);
+		return createContentComposite(parent, bindingContext, res.getValue(), res, showLangs);
 	}
 
 	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res) {
+		return createContentComposite(parent, bindingContext, r, res);
+	}
+
+	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res, boolean showLangs) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtil.createLabel(composite, Messages.RDQueryPage_language);
+		if (showLangs) {
+			UIUtil.createLabel(composite, Messages.RDQueryPage_language);
 
-		Combo clang = new Combo(composite, SWT.BORDER);
-		clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
-
+			Combo clang = new Combo(composite, SWT.BORDER);
+			clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
+			bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
+		}
 		UIUtil.createLabel(composite, Messages.RDQueryPage_query);
 
 		Text tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
@@ -75,7 +88,6 @@ public class QueryPageContent extends APageContent {
 		gd.widthHint = 400;
 		tsql.setLayoutData(gd);
 
-		bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 
 		return composite;

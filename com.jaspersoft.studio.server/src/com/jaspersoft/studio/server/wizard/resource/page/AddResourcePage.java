@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -33,6 +34,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -75,6 +77,7 @@ import com.jaspersoft.studio.server.model.datasource.MRSecureMondrianConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Callback;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class AddResourcePage extends WizardPage {
@@ -153,6 +156,18 @@ public class AddResourcePage extends WizardPage {
 		this.ruOnly = ruOnly;
 	}
 
+	private boolean monOnly = false;
+
+	public void setMondrianOnly(boolean monOnly) {
+		this.monOnly = monOnly;
+	}
+
+	private boolean olapOnly = false;
+
+	public void setOlapOnly(boolean olapOnly) {
+		this.olapOnly = olapOnly;
+	}
+
 	private ANode getInput() {
 		MServerProfile root = new MServerProfile(null, null);
 		if (parent instanceof MResource)
@@ -163,6 +178,10 @@ public class AddResourcePage extends WizardPage {
 			createDatasources(root);
 		} else if (ruOnly) {
 			createReportUnit(root);
+		} else if (monOnly) {
+			createMondrian(root);
+		} else if (olapOnly) {
+			createOlap(root);
 		} else {
 			if (parent instanceof MFolder || parent instanceof MServerProfile) {
 				new MFolder(root, MFolder.createDescriptor(parent), -1);
@@ -194,9 +213,7 @@ public class AddResourcePage extends WizardPage {
 				};
 
 				new MRMondrianSchema(oroot, MRMondrianSchema.createDescriptor(parent), -1);
-				new MROlapMondrianConnection(oroot, MROlapMondrianConnection.createDescriptor(parent), -1);
-				new MRSecureMondrianConnection(oroot, MRSecureMondrianConnection.createDescriptor(parent), -1);
-				new MROlapXmlaConnection(oroot, MROlapXmlaConnection.createDescriptor(parent), -1);
+				createOlap(oroot);
 				new MROlapUnit(oroot, MROlapUnit.createDescriptor(parent), -1);
 				new MRAccessGrantSchema(root, MRAccessGrantSchema.createDescriptor(parent), -1);
 			}
@@ -255,6 +272,31 @@ public class AddResourcePage extends WizardPage {
 
 	protected void createReportUnit(ANode root) {
 		new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
+	}
+
+	protected void createMondrian(ANode root) {
+		ServerInfo si = getServerInfo(root);
+		if (si != null && Version.isPro(si))
+			new MRSecureMondrianConnection(root, MRSecureMondrianConnection.createDescriptor(parent), -1);
+		else
+			new MROlapMondrianConnection(root, MROlapMondrianConnection.createDescriptor(parent), -1);
+	}
+
+	private ServerInfo getServerInfo(ANode n) {
+		try {
+			if (n instanceof MServerProfile)
+				return ((MServerProfile) n).getWsClient().getServerInfo(new NullProgressMonitor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (n instanceof MResource)
+			return getServerInfo((ANode) n.getRoot());
+		return null;
+	}
+
+	protected void createOlap(ANode root) {
+		createMondrian(root);
+		new MROlapXmlaConnection(root, MROlapXmlaConnection.createDescriptor(parent), -1);
 	}
 
 	protected MRoot createDatasources(ANode root) {

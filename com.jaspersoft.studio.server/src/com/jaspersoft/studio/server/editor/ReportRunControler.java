@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -77,9 +76,8 @@ public class ReportRunControler {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
 							cli = WSClientHelper.getClient(monitor, reportUnit);
-							rdrepunit = WSClientHelper.getReportUnit(monitor, reportUnit);
-							List<ResourceDescriptor> list = cli.list(monitor, rdrepunit);
-							icm.getInputControls(list, cli);
+							rdrepunit = cli.initInputControls(reportUnit, monitor);
+							icm.initInputControls(rdrepunit.getChildren());
 
 							// TODO search all the repository
 							icm.getDefaults(rdrepunit);

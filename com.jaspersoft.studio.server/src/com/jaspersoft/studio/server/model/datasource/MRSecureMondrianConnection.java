@@ -46,6 +46,7 @@ public class MRSecureMondrianConnection extends MResource {
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION);
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_CATALOG, "catalog");
 		return rd;
 	}
 }

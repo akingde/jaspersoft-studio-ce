@@ -40,6 +40,7 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.protocol.Callback;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -238,5 +239,12 @@ public class MServerProfile extends ANode {
 				tmpDir.create(true, true, monitor);
 		}
 		return tmpDir;
+	}
+
+	public boolean isSupported(Feature f) {
+		IConnection c = getWsClient();
+		if (c != null)
+			return c.isSupported(f);
+		return false;
 	}
 }

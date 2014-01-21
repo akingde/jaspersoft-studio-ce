@@ -97,16 +97,16 @@ public class OLAPXmlaPageContent extends APageContent {
 
 		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
-		if (res.getValue().getIsNew()) {
-			UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_pass);
+		// if (res.getValue().getIsNew()) {
+		UIUtil.createLabel(composite, Messages.OLAPXmlaPageContent_pass);
 
-			Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
-			tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_PASSWORD, props);
+		resprop = ResourceDescriptorUtil.getProperty(MROlapXmlaConnection.PROP_XMLA_PASSWORD, props);
 
-			bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		}
+		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		// }
 
 		return composite;
 	}

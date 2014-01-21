@@ -21,6 +21,7 @@ import java.io.IOException;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -43,6 +44,16 @@ public abstract class AFileResource extends MResource {
 
 	public void setFile(File file) {
 		this.file = file;
+		if (file != null)
+			try {
+				getValue().setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
+				getValue().setHasData(true);
+				return;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		getValue().setData(null);
+		getValue().setHasData(false);
 	}
 
 	public String getHFFileSize() {

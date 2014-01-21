@@ -80,7 +80,7 @@ public abstract class ASelector {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
-				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
+				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, getIncludeTypes(), getExcludeTypes());
 					if (rd != null)
 						setRemoteResource(res, rd, pnode);
@@ -96,7 +96,6 @@ public abstract class ASelector {
 						MResource rs = rd.getResource();
 						if (rs != null)
 							setRemoteResource(res, rs.getValue(), pnode);
-						firePageComplete();
 					}
 				}
 			}
@@ -110,7 +109,6 @@ public abstract class ASelector {
 			rd.setIsReference(true);
 			rd.setReferenceUri(rd.getUriString());
 			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
-			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
 			replaceChildren(res, rd);
 
@@ -118,6 +116,7 @@ public abstract class ASelector {
 		} catch (Exception e1) {
 			UIUtils.showError(e1);
 		}
+		firePageComplete();
 	}
 
 	public void resetResource() {
@@ -169,21 +168,19 @@ public abstract class ASelector {
 				if (isReference(ref))
 					ref = null;
 				boolean newref = false;
-				if (ref != null)
+				MResource r = null;
+				if (ref != null) {
 					ref = cloneResource(ref);
-				else {
-					ref = createLocal(res);
-					ref.setIsNew(true);
-					ref.setIsReference(false);
-					ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
-
+					r = ResourceFactory.getResource(null, ref, -1);
+					if (!showLocalWizard(r, pnode))
+						return;
+				} else {
+					r = getLocalResource(res, runit, pnode);
+					if (r != null)
+						ref = r.getValue();
 					newref = true;
 				}
-				MResource r = ResourceFactory.getResource(null, ref, -1);
-				ResourceWizard wizard = new ResourceWizard(pnode, r, true, true);
-				WizardDialog dialog = new WizardDialog(bLoc.getShell(), wizard);
-				dialog.create();
-				if (dialog.open() != Dialog.OK)
+				if (r == null)
 					return;
 				ref.setUriString(ref.getParentFolder() + "/" + ref.getName()); //$NON-NLS-1$
 				if (newref)
@@ -195,6 +192,26 @@ public abstract class ASelector {
 				firePageComplete();
 			}
 		});
+	}
+
+	protected MResource getLocalResource(MResource res, ResourceDescriptor runit, ANode pnode) {
+		ResourceDescriptor ref = createLocal(res);
+		ref.setIsNew(true);
+		ref.setIsReference(false);
+		ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
+		ref.setDirty(true);
+
+		MResource r = ResourceFactory.getResource(null, ref, -1);
+		if (!showLocalWizard(r, pnode))
+			return null;
+		return r;
+	}
+
+	protected boolean showLocalWizard(MResource r, ANode pnode) {
+		ResourceWizard wizard = new ResourceWizard(pnode, r, true, true);
+		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
+		dialog.create();
+		return dialog.open() == Dialog.OK;
 	}
 
 	public static boolean isReference(ResourceDescriptor ref) {

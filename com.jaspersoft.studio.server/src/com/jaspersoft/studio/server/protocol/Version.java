@@ -1,9 +1,14 @@
 package com.jaspersoft.studio.server.protocol;
 
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo.ServerEdition;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 
 public class Version {
+	public static boolean isPro(ServerInfo si) {
+		return si.getEdition() == ServerEdition.PRO;
+	}
+
 	public static String setJRVersion(ServerInfo si) {
 		for (String av : JRXmlWriterHelper.getVersionsSet()) {
 			if (av.equals(si.getVersion()))

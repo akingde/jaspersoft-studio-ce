@@ -52,6 +52,13 @@ public class MROlapXmlaConnection extends MResource {
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);
+
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_URI, "uri");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_CATALOG, "catalog");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_DATASOURCE, "datasource");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_USERNAME, "username");
+		rd.setResourceProperty(MROlapXmlaConnection.PROP_XMLA_PASSWORD, "");
+
 		return rd;
 	}
 }

@@ -54,6 +54,7 @@ public class MondrianConnectionContent extends APageContent {
 	@Override
 	public Control createContent(Composite parent) {
 		scompo = new SelectorMondrianConnection();
+		scompo.addPageCompleteListener(this);
 		return scompo.createControls(parent, pnode, res);
 	}
 

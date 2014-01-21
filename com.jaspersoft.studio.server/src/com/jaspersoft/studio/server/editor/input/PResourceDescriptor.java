@@ -41,10 +41,6 @@ public class PResourceDescriptor implements IParameter {
 		this.p = p;
 	}
 
-	public InputControlsManager getInputControlManager() {
-		return icm;
-	}
-
 	public String getName() {
 		return p.getName();
 	}
@@ -100,13 +96,12 @@ public class PResourceDescriptor implements IParameter {
 				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_NUMBER)
 					return BigDecimal.class;
 			}
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_BOOLEAN) {
+		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_BOOLEAN)
 			return java.lang.Boolean.class;
-		} else if (InputControlsManager.isICListOfValues(rd)) {
+		else if (InputControlsManager.isICListOfValues(rd))
 			return List.class;
-		} else if (InputControlsManager.isICQuery(rd)) {
+		else if (InputControlsManager.isICQuery(rd))
 			return ResourceDescriptor.class;
-		}
 		return rd.getClass();
 	}
 

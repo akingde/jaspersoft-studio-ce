@@ -258,4 +258,10 @@ public class RestV2Connection extends ARestV2Connection {
 
 	}
 
+	@Override
+	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
+
+		return null;
+	}
+
 }

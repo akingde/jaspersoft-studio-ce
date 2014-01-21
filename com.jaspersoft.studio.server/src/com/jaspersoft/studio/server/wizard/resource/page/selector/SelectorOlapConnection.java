@@ -27,12 +27,12 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 
-public class SelectorMondrianConnection extends ASelector {
+public class SelectorOlapConnection extends ASelector {
 
 	@Override
 	protected MResource getLocalResource(MResource res, ResourceDescriptor runit, ANode pnode) {
 		AddResourceWizard wizard = new AddResourceWizard(res, true);
-		wizard.setMondrianOnly(true);
+		wizard.setOlapOnly(true);
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() != Dialog.OK)
@@ -59,7 +59,8 @@ public class SelectorMondrianConnection extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION) || r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION))
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION) || r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION)
+					|| r.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
 				return r;
 		}
 		return null;
@@ -67,7 +68,7 @@ public class SelectorMondrianConnection extends ASelector {
 
 	@Override
 	protected String[] getIncludeTypes() {
-		return new String[] { ResourceMediaType.MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE };
+		return new String[] { ResourceMediaType.MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE, ResourceMediaType.XMLA_CONNECTION_CLIENT_TYPE };
 	}
 
 	@Override

@@ -39,6 +39,7 @@ import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.AFileResource;
@@ -115,7 +116,22 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 						monitor.beginTask("Saving", IProgressMonitor.UNKNOWN);
 						AFileResource fres = page1.getSelectedNode();
 						if (fres != null) {
-							fres.getWsClient().addOrModifyResource(monitor, fres.getValue(), new File(file.getRawLocationURI()));
+							String ext = file.getFileExtension().toLowerCase();
+							ResourceDescriptor rd = fres.getValue();
+							if (ext.equals("xml"))
+								rd.setWsType(ResourceDescriptor.TYPE_XML_FILE);
+							else if (ext.equals("jar"))
+								rd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
+							else if (ext.equals("jrtx"))
+								rd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
+							else if (ext.equals("properties"))
+								rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
+							else if (ext.equals("ttf") || ext.equals("eot") || ext.equals("woff"))
+								rd.setWsType(ResourceDescriptor.TYPE_FONT);
+							else if (ext.equals("png") || ext.equals("gif") || ext.equals("jpg") || ext.equals("jpeg") || ext.equals("bmp") || ext.equals("tiff"))
+								rd.setWsType(ResourceDescriptor.TYPE_IMAGE);
+
+							fres.getWsClient().addOrModifyResource(monitor, rd, new File(file.getRawLocationURI()));
 							PublishUtil.savePath(file, fres);
 							INode n = fres.getRoot();
 							if (n != null && n instanceof MServerProfile) {

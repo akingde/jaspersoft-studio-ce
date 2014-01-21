@@ -28,6 +28,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
@@ -241,9 +244,15 @@ public class WSClientHelper {
 				rd.setUriString(getParentFolder(rd) + rd.getName());
 			}
 			File file = null;
-			if (res instanceof AFileResource)
+			if (res instanceof AFileResource) {
 				file = ((AFileResource) res).getFile();
-			rd.setHasData(file != null);
+				if (file != null) {
+					rd.setData(Base64.encodeBase64(FileUtils.getBytes(file)));
+					rd.setHasData(true);
+				} else
+					rd.setHasData(false);
+			} else
+				rd.setHasData(false);
 
 			MReportUnit mru = res.getReportUnit();
 			IConnection cli = sp.getWsClient(monitor);

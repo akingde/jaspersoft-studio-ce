@@ -25,6 +25,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientListOfValues;
 import com.jaspersoft.jasperserver.dto.resources.ClientListOfValuesItem;
 import com.jaspersoft.jasperserver.dto.resources.ClientMondrianConnection;
 import com.jaspersoft.jasperserver.dto.resources.ClientMondrianXmlaDefinition;
+import com.jaspersoft.jasperserver.dto.resources.ClientOlapUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientQuery;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
@@ -69,6 +70,7 @@ public class Rest2Soap {
 	public static ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		rd.getChildren().clear();
 		rd.setWsType(WsTypes.INST().toSoapType(cr));
+		rd.setIsNew(false);
 
 		rd.setParentFolder(RDUtil.getParentFolder(cr.getUri()));
 		rd.setUriString(cr.getUri());
@@ -100,6 +102,8 @@ public class Rest2Soap {
 			getCustomDataSource(rc, (ClientCustomDataSource) cr, rd);
 		else if (cr instanceof ClientBeanDataSource)
 			getBeanDataSource(rc, (ClientBeanDataSource) cr, rd);
+		else if (cr instanceof ClientOlapUnit)
+			getOlapUnit(rc, (ClientOlapUnit) cr, rd);
 
 		else if (cr instanceof ClientQuery)
 			getQuery(rc, (ClientQuery) cr, rd);
@@ -188,6 +192,13 @@ public class Rest2Soap {
 	private static void getBeanDataSource(ARestV2Connection rc, ClientBeanDataSource cr, ResourceDescriptor rd) throws ParseException {
 		rd.setBeanName(cr.getBeanName());
 		rd.setBeanMethod(cr.getBeanMethod());
+	}
+
+	private static void getOlapUnit(ARestV2Connection rc, ClientOlapUnit cr, ResourceDescriptor rd) throws ParseException {
+		rd.setSql(cr.getMdxQuery());
+		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, "mdx");
+		if (cr.getOlapConnection() != null)
+			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getOlapConnection()));
 	}
 
 	private static void getCustomDataSource(ARestV2Connection rc, ClientCustomDataSource cr, ResourceDescriptor rd) throws ParseException {

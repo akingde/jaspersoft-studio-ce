@@ -82,11 +82,25 @@ public class AddResourceWizard extends Wizard {
 		this.ruOnly = ruOnly;
 	}
 
+	private boolean monOnly = false;
+
+	public void setMondrianOnly(boolean monOnly) {
+		this.monOnly = monOnly;
+	}
+
+	private boolean olapOnly = false;
+
+	public void setOlapOnly(boolean olapOnly) {
+		this.olapOnly = olapOnly;
+	}
+
 	@Override
 	public void addPages() {
 		page0 = new AddResourcePage(parent);
 		page0.setOnlyDatasource(dsonly);
 		page0.setOnlyReportUnit(ruOnly);
+		page0.setMondrianOnly(monOnly);
+		page0.setOlapOnly(olapOnly);
 		addPage(page0);
 
 		addPage(new ResourceDescriptorPage());

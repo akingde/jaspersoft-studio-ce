@@ -102,11 +102,9 @@ public class DatasourceSelectionComposite extends Composite {
 		textDSFromRepo.setEnabled(false);
 		textDSFromRepo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
-		btnSelectDSFromRepo = new Button(this, SWT.ARROW | SWT.DOWN);
+		btnSelectDSFromRepo = new Button(this, SWT.PUSH);
+		btnSelectDSFromRepo.setText("...");
 		btnSelectDSFromRepo.setEnabled(false);
-		GridData gd_btnSelectDSFromRepo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_btnSelectDSFromRepo.widthHint = 20;
-		btnSelectDSFromRepo.setLayoutData(gd_btnSelectDSFromRepo);
 		btnSelectDSFromRepo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -128,11 +126,9 @@ public class DatasourceSelectionComposite extends Composite {
 		textLocalDS.setEnabled(false);
 		textLocalDS.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
-		btnSelectLocalDS = new Button(this, SWT.ARROW | SWT.DOWN);
+		btnSelectLocalDS = new Button(this, SWT.PUSH);
 		btnSelectLocalDS.setEnabled(false);
-		GridData gd_btnSelectLocalDS = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_btnSelectLocalDS.widthHint = 20;
-		btnSelectLocalDS.setLayoutData(gd_btnSelectLocalDS);
+		btnSelectLocalDS.setText("...");
 		btnSelectLocalDS.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -281,7 +277,7 @@ public class DatasourceSelectionComposite extends Composite {
 		// to avoid problem of refreshing (children/parent relationship changes)
 		// due to tree viewer node expansion...
 		MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) parent.getRoot());
-		if (res.isSupported(Feature.SEARCHREPOSITORY)) {
+		if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 			String[] dsArray = WsTypes.INST().getDatasourcesArray();
 			if (res.getValue().getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
 				dsArray = new String[] { WsTypes.INST().toRestType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN) };

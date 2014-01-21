@@ -20,40 +20,39 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.server.model.MRAccessGrantSchema;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorAccessGrantSchema;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorOlapConnection;
 
-public class AccessGrantSchemaContent extends APageContent {
-	private SelectorAccessGrantSchema scompo;
+public class OlapConnectionContent extends APageContent {
+	protected SelectorOlapConnection scompo;
 
-	public AccessGrantSchemaContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public OlapConnectionContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public AccessGrantSchemaContent(ANode parent, MResource resource) {
+	public OlapConnectionContent(ANode parent, MResource resource) {
 		super(parent, resource);
 	}
 
 	@Override
 	public String getName() {
-		return MRAccessGrantSchema.getIconDescriptor().getTitle();
+		return "OLAP Connection";
 	}
 
 	@Override
 	public String getPageName() {
-		return "com.jaspersoft.studio.server.page.accessGrantSchema";
+		return "com.jaspersoft.studio.server.page.olapConnection";
 	}
 
 	@Override
 	public String getHelpContext() {
-		return "com.jaspersoft.studio.doc.editAccessGrantSchema";
+		return "com.jaspersoft.studio.doc.editOlapConnection";
 	}
 
 	@Override
 	public Control createContent(Composite parent) {
-		scompo = new SelectorAccessGrantSchema();
+		scompo = new SelectorOlapConnection();
 		scompo.addPageCompleteListener(this);
 		return scompo.createControls(parent, pnode, res);
 	}

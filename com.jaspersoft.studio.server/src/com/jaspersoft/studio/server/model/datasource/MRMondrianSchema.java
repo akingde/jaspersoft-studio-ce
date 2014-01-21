@@ -21,9 +21,10 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MResource;
 
-public class MRMondrianSchema extends MResource {
+public class MRMondrianSchema extends AFileResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MRMondrianSchema(ANode parent, ResourceDescriptor rd, int index) {
@@ -47,5 +48,10 @@ public class MRMondrianSchema extends MResource {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA);
 		return rd;
+	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "xml";
 	}
 }

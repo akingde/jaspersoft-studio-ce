@@ -38,9 +38,8 @@ public class SelectorDataType extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE) || r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
 				return r;
-			}
 		}
 		return null;
 	}

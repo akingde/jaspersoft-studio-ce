@@ -1,9 +1,7 @@
 package com.jaspersoft.studio.server.protocol.restv2;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,21 +30,27 @@ import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 import com.google.common.io.Files;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
+import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlOption;
+import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlState;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControlsListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
+import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
 import com.jaspersoft.jasperserver.jaxrs.report.ReportExecutionRequest;
 import com.jaspersoft.jasperserver.remote.services.ExportExecution;
 import com.jaspersoft.jasperserver.remote.services.ReportExecution;
 import com.jaspersoft.jasperserver.remote.services.ReportOutputResource;
 import com.jaspersoft.studio.server.AFinderUI;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -173,7 +177,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
-		WebTarget tgt = target.path("resources" + rd.getUriString().replaceAll("repo:", ""));
+		String uri = rd.getUriString();
+		if (!uri.startsWith("/"))
+			uri = "/" + uri;
+		WebTarget tgt = target.path("resources" + uri.replaceAll("repo:", ""));
 		tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
@@ -182,7 +189,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (crl != null) {
 			if (f != null && crl instanceof ClientFile) {
 				ClientFile cf = (ClientFile) crl;
-				tgt = target.path("resources" + rd.getUriString());
+				tgt = target.path("resources" + uri);
 
 				req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
 				readFile(connector.get(req, monitor), f, monitor);
@@ -233,9 +240,18 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
-		if (cr instanceof ClientFile && inFile != null) {
-			ClientFile crf = (ClientFile) cr;
-			crf.setType(WsTypes.getFileType(crf.getType(), Files.getFileExtension(inFile.getName())));
+		if (inFile != null) {
+			if (cr instanceof ClientFile) {
+				ClientFile crf = (ClientFile) cr;
+				crf.setType(WsTypes.getFileType(crf.getType(), Files.getFileExtension(inFile.getName())));
+				// crf.setContent(Base64.encodeBase64String(FileUtils.getBytes(inFile)));
+			} else if (cr instanceof ClientReportUnit) {
+				// ClientReferenceableFile mainjrxml = ((ClientReportUnit)
+				// cr).getJrxml();
+				// if (mainjrxml instanceof ClientFile)
+				// ((ClientFile)
+				// mainjrxml).setContent(Base64.encodeBase64String(FileUtils.getBytes(inFile)));
+			}
 		}
 
 		WebTarget tgt = target.path("resources" + rd.getUriString());
@@ -251,24 +267,16 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			if (e.getStatusCode() == 409) {
 				rd.setVersion(get(monitor, rd, null).getVersion());
 				return addOrModifyResource(monitor, rd, inFile);
-			}
+			} else
+				throw e;
 		}
 		if (crl != null && !monitor.isCanceled()) {
 			boolean refresh = false;
-			if (crl instanceof ClientFile && inFile != null) {
-				ClientFile cf = (ClientFile) crl;
-				tgt = target.path("resources" + rd.getUriString());
-
-				req = req.header("Content-Description", cf.getDescription());
-				req = req.header("Content-Disposition", "attachment; filename=" + inFile.getName());
-				InputStream in = new FileInputStream(inFile);
-				writeFile(connector.put(req, Entity.entity(in, cf.getType().getMimeType()), monitor), in, monitor);
-				refresh = true;
-			} else if (WsTypes.INST().isContainerType(crl.getClass()))
+			if (WsTypes.INST().isContainerType(crl.getClass()))
 				refresh = true;
 			List<ResourceDescriptor> children = rd.getChildren();
 			for (ResourceDescriptor child : children)
-				if (child.isDirty() && !monitor.isCanceled())
+				if (!child.getIsReference() && child.isDirty() && !monitor.isCanceled())
 					addOrModifyResource(monitor, child, null);
 			if (refresh && !monitor.isCanceled())
 				rd = get(monitor, rd, null);
@@ -458,5 +466,43 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
 		Response r = connector.put(req, Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE), monitor);
 		toObj(r, ReportInputControlsListWrapper.class, monitor);
+	}
+
+	@Override
+	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
+		uri = WSClientHelper.getReportUnitUri(uri);
+		ResourceDescriptor rdunit = new ResourceDescriptor();
+		rdunit.setUriString(uri);
+		rdunit.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
+		rdunit = get(monitor, rdunit, null);
+
+		Builder req = target.path("reports" + uri + "/inputControls/values").request();
+		Response r = connector.get(req, monitor);
+		InputControlStateListWrapper crl = toObj(r, InputControlStateListWrapper.class, monitor);
+		if (crl != null)
+			for (ResourceDescriptor rd : rdunit.getChildren()) {
+				if (rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+					for (InputControlState ics : crl.getInputControlStateList()) {
+						if (ics.getId().equals(rd.getName())) {
+							if (ics.getValue() != null) {
+
+							} else if (ics.getOptions() != null) {
+								List<InputControlQueryDataRow> qvalues = new ArrayList<InputControlQueryDataRow>();
+								for (InputControlOption ico : ics.getOptions()) {
+									InputControlQueryDataRow dr = new InputControlQueryDataRow();
+									dr.setValue(ico.getValue());
+									List<String> cols = new ArrayList<String>();
+									cols.add(ico.getLabel());
+									dr.setColumnValues(cols);
+									qvalues.add(dr);
+								}
+								rd.setQueryData(qvalues);
+							}
+							break;
+						}
+					}
+				}
+			}
+		return rdunit;
 	}
 }
