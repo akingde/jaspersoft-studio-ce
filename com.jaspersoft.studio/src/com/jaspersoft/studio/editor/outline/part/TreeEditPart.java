@@ -26,7 +26,6 @@ import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
-import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -184,11 +183,9 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			if (ep != null)
 				edinput = ep.getEditorInput();
 		}
-		if (edinput != null)
-			if (edinput instanceof IFileEditorInput)
-				return ((IFileEditorInput) edinput).getFile();
-			else if (edinput instanceof JarEntryEditorInput)
-				return null;
+		if (edinput instanceof IFileEditorInput) {
+			return ((IFileEditorInput) edinput).getFile();
+		}
 		return null;
 	}
 

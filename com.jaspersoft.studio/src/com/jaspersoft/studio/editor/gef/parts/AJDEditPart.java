@@ -14,7 +14,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -93,11 +92,9 @@ public abstract class AJDEditPart extends AbstractGraphicalEditPart {
 			if (ep != null)
 				edinput = ep.getEditorInput();
 		}
-		if (edinput != null)
-			if (edinput instanceof IFileEditorInput)
-				return ((IFileEditorInput) edinput).getFile();
-			else if (edinput instanceof JarEntryEditorInput)
-				return null;
+		if (edinput instanceof IFileEditorInput) {
+			return ((IFileEditorInput) edinput).getFile();
+		}
 		return null;
 	}
 }
