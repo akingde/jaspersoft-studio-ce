@@ -25,15 +25,16 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.olap.JRMondrianQueryExecuter;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.internal.mondrian.JRMondrianQueryExecuter;
+import com.jaspersoft.studio.data.internal.mondrian.JRMondrianResult;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
 
 public class MondrianFieldsProvider implements IFieldsProvider {
-
+	
 	@Override
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		return true;
@@ -55,8 +56,8 @@ public class MondrianFieldsProvider implements IFieldsProvider {
 		JRMondrianQueryExecuter qe = new JRMondrianQueryExecuter(jConfig, jDataset, tmpMap);
 		qe.createDatasource();
 
-		// FIXME - We need to implement this!
-		return null;
+		JRMondrianResult result = new JRMondrianResult(qe.getResult());
+		return OlapFieldsProviderSupport.getFieldsFromResult(result);
 	}
 
 }
