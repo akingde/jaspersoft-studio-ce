@@ -53,7 +53,11 @@ public class DatasourceCassandraCQL3PageContent extends APageContent {
 		UIUtil.createLabel(composite,
 				Messages.CassandraCQL3DataAdapter_labelcassandraVersion);
 		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelclustername);
+				Messages.CassandraCQL3DataAdapter_labelclustername);		
+		UIUtil.createLabel(composite,
+				Messages.CassandraCQL3DataAdapter_labelusername);
+		UIUtil.createLabel(composite,
+				Messages.CassandraCQL3DataAdapter_labelpassword);
 
 		Text tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -88,6 +92,18 @@ public class DatasourceCassandraCQL3PageContent extends APageContent {
 		
 		resprop = ResourceDescriptorUtil.getProperty(
 				MRDatasourceCassandraCQL3.CLUSTERNAME, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		
+		resprop = ResourceDescriptorUtil.getProperty(
+				MRDatasourceCassandraCQL3.USERNAME, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
+				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		
+		resprop = ResourceDescriptorUtil.getProperty(
+				MRDatasourceCassandraCQL3.PASSWORD, resprop.getProperties());
 
 		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
 				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$

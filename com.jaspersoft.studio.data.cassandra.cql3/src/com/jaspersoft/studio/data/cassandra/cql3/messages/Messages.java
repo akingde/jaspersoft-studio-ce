@@ -9,6 +9,8 @@ public class Messages extends NLS {
 	public static String CassandraCQL3DataAdapter_labelkeyspace;
 	public static String CassandraCQL3DataAdapter_labelcassandraVersion;
 	public static String CassandraCQL3DataAdapter_labelclustername;
+	public static String CassandraCQL3DataAdapter_labelusername;
+	public static String CassandraCQL3DataAdapter_labelpassword;
 	public static String CassandraCQL3DataAdapterComposite_NotIntegerError;
 	public static String CassandraCQL3DataAdapterFactory_Description;
 	public static String CassandraCQL3DataAdapterFactory_Label;

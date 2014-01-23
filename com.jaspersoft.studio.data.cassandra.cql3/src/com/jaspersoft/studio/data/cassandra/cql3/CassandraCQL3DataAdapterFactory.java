@@ -32,6 +32,8 @@ public class CassandraCQL3DataAdapterFactory implements DataAdapterFactory {
 		descriptor.getDataAdapter().setKeyspace("keyspace"); //$NON-NLS-1$
 		descriptor.getDataAdapter().setCassandraVersion("1.2"); //$NON-NLS-1$
 		descriptor.getDataAdapter().setClustername("cluster"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setUsername("username"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setPassword("password");
 		return descriptor;
 	}
 

@@ -37,6 +37,8 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 	private Text keyspace;
 	private Text cassandraVersion;
 	private Text clustername;
+	private Text username;
+	private Text password;
 
 	private CassandraCQL3DataAdapterDescriptor dataAdapterDescriptor;
 
@@ -58,6 +60,10 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 		cassandraVersion = createTextField(false);
 		createLabel(Messages.CassandraCQL3DataAdapter_labelclustername);
 		clustername = createTextField(false);
+		createLabel(Messages.CassandraCQL3DataAdapter_labelusername);
+		username = createTextField(false);
+		createLabel(Messages.CassandraCQL3DataAdapter_labelpassword);
+		password = createTextField(true);
 	}
 
 	private void createLabel(String text) {
@@ -111,6 +117,8 @@ public class CassandraCQL3DataAdapterComposite extends ADataAdapterComposite {
 		bindingContext.bindValue(SWTObservables.observeText(keyspace, SWT.Modify), PojoObservables.observeValue(dataAdapter, "keyspace")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(cassandraVersion, SWT.Modify), PojoObservables.observeValue(dataAdapter, "cassandraVersion")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(clustername, SWT.Modify), PojoObservables.observeValue(dataAdapter, "clustername")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(username, SWT.Modify), PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(password, SWT.Modify), PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 	}
 
 	@Override

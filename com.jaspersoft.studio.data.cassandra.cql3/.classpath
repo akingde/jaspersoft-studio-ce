@@ -14,7 +14,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/hamcrest-core-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/high-scale-lib-1.1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jettison-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js-cassandra-datasource-cql3-2.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.9.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/netty-3.2.4.Final.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/snakeyaml-1.6.jar"/>
@@ -22,5 +21,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/snaptree-0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/uuid-3.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/guava-14.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/js-cassandra-datasource-cql3-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

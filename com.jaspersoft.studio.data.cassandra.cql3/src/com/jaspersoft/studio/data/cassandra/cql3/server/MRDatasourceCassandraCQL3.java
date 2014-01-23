@@ -19,6 +19,8 @@ public class MRDatasourceCassandraCQL3 extends MRDatasourceCustom {
 	public static final String KEYSPACE = "keyspace";
 	public static final String CASSANDRAVERSION = "cassandraVersion";
 	public static final String CLUSTERNAME = "clustername";
+	public static final String USERNAME = "username";
+	public static final String PASSWORD = "password";
 	public static final String ISFRAMED = "isFramed";
 
 	public static final String CUSTOM_CLASS = "com.jaspersoft.cassandra.cql3.jasperserver.CassandraDataSourceService";
@@ -50,11 +52,13 @@ public class MRDatasourceCassandraCQL3 extends MRDatasourceCustom {
 		props.add(new ResourceProperty(KEYSPACE, "keyspace"));
 		props.add(new ResourceProperty(CASSANDRAVERSION, "1.2"));
 		props.add(new ResourceProperty(CLUSTERNAME, "cluster"));
+		props.add(new ResourceProperty(USERNAME, "username"));
+		props.add(new ResourceProperty(PASSWORD, "password"));
 		props.add(new ResourceProperty(ISFRAMED, "false"));
 		rp.setProperties(props);
-		rd.setResourceProperty(rp);
+		rd.getProperties().add(rp);
 		rp = new ResourceProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, CUSTOM_CLASS);
-		rd.setResourceProperty(rp);
+		rd.getProperties().add(rp);
 		return rd;
 	}
 }
