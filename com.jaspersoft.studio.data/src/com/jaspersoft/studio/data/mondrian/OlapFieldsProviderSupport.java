@@ -92,9 +92,9 @@ public class OlapFieldsProviderSupport {
 		 */
 		Set<String> measureNames = new HashSet<String>();
 		
-		String measureLevelAxis = null;
-		
 		int axisCount = 0;
+		
+		int measureLevelAxisIndex = 0;
 		
 		for (JROlapResultAxis axis : result.getAxes()) {
 			String prefix = null;
@@ -119,7 +119,7 @@ public class OlapFieldsProviderSupport {
 					if (level != null) {
 						if (level.getName().equalsIgnoreCase("MeasuresLevel")) {
 							foundMeasuresLevel = true;
-							measureLevelAxis = prefix;
+							measureLevelAxisIndex = axisCount;
 						} else {
 							String rowsExpression = prefix
 									+ makeOlapExpression(hier
@@ -152,11 +152,23 @@ public class OlapFieldsProviderSupport {
 		}
 
 		for (String measureName : measureNames) {
-			if (measureLevelAxis.equals(PREFIX_COLUMNS)) addField(makeJRFieldName(measureName), "Data(" + measureName + ",?)", false, fields);
-			else addField(makeJRFieldName(measureName), "Data(?," + measureName + ")", false, fields);
+			addField(makeJRFieldName(measureName), generateMeasureAxisExpression(measureLevelAxisIndex, axisCount-1, measureName), false, fields);
 		}
 
 		return new ArrayList<JRDesignField>(fields.values());
+	}
+	
+	private static String generateMeasureAxisExpression(int measureLevelIndex, int axisNumber, String measureName){
+		StringBuilder result = new StringBuilder();
+		result.append("Data(");
+		for(int i=0; i<=axisNumber; i++){
+			if (i == measureLevelIndex) result.append(measureName);
+			else result.append("?");
+			
+			if (i != axisNumber) result.append(",");
+		}
+		result.append(")");
+		return result.toString();
 	}
 
 	private static void addField(String name, String description, boolean row,
