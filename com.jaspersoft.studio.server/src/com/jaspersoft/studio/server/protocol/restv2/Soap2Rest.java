@@ -3,6 +3,7 @@ package com.jaspersoft.studio.server.protocol.restv2;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -271,10 +272,15 @@ public class Soap2Rest {
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) {
 		cr.setType(WsTypes.INST().toRestFileType(rd.getWsType()));
-		cr.setContent(new String(rd.getData()));
+		if (rd.getData() != null)
+			cr.setContent(new String(rd.getData()));
 	}
 
 	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
+		cr.setMandatory(rd.isMandatory());
+		cr.setReadOnly(rd.isReadOnly());
+		cr.setVisible(rd.isVisible());
+
 		cr.setType(rd.getControlType());
 		cr.setValueColumn(rd.getQueryValueColumn());
 		if (rd.getQueryVisibleColumns() != null)
@@ -310,7 +316,19 @@ public class Soap2Rest {
 			break;
 		}
 		List<ResourceDescriptor> children = rd.getChildren();
+		List<ClientReferenceableInputControl> ics = cr.getInputControls();
+		if (ics == null) {
+			ics = new ArrayList<ClientReferenceableInputControl>();
+			cr.setInputControls(ics);
+		}
+		Map<String, ClientReferenceableFile> icf = cr.getFiles();
+		if (icf == null) {
+			icf = new HashMap<String, ClientReferenceableFile>();
+			cr.setFiles(icf);
+		}
 		for (ResourceDescriptor r : children) {
+			if (r == null)
+				continue;
 			if (SelectorDatasource.isDatasource(r))
 				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
@@ -318,13 +336,12 @@ public class Soap2Rest {
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML))
 				cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-				cr.getInputControls().add((ClientReferenceableInputControl) getResourceContainer(rc, r));
+				ics.add((ClientReferenceableInputControl) getResourceContainer(rc, r));
 			else {
 				ClientFile res = (ClientFile) getResourceContainer(rc, r);
-				cr.getFiles().put(r.getLabel(), res);
+				icf.put(r.getLabel(), res);
 			}
 		}
 
 	}
-
 }

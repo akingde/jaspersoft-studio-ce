@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,7 +32,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.server.editor.input.IInput;
-import com.jaspersoft.studio.server.editor.input.PResourceDescriptor;
 
 public class TableInput implements IInput {
 	private Table table;
@@ -83,32 +79,18 @@ public class TableInput implements IInput {
 	}
 
 	public void fillControl() {
-		PResourceDescriptor rdprm = (PResourceDescriptor) param;
-
-		ResourceDescriptor rd2 = (ResourceDescriptor) dataInput.getRd().getChildren().get(0);
-		List<ListItem> items = null;
-
-		if (rd2.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
-			ResourceDescriptor tmpRd = new ResourceDescriptor();
-			tmpRd.setUriString(rd2.getReferenceUri());
-			try {
-				tmpRd = rdprm.getWsClient().get(new NullProgressMonitor(), tmpRd, null);
-				items = tmpRd.getListOfValues();
-			} catch (Exception ex) {
-				UIUtils.showError(ex);
-				return;
-			}
-		} else {
-			items = rd2.getListOfValues();
-		}
-
+		List<ListItem> items = dataInput.getRd().getListOfValues();
 		table.removeAll();
 
+		List<Object> toSel = new ArrayList<Object>();
 		for (ListItem item : items) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(item.getLabel());
 			ti.setData(item.getValue());
+			if (item.isSelected())
+				toSel.add(item.getValue());
 		}
+		params.put(param.getName(), toSel);
 		if (items.size() > 4)
 			((GridData) table.getLayoutData()).heightHint = 100;
 
@@ -118,23 +100,26 @@ public class TableInput implements IInput {
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null) {
-			if (dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
-					|| dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+			byte ct = dataInput.getRd().getControlType();
+			if (ct == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES || ct == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
-					List<Object> lst = (List<Object>) value;
+					List<?> lst = (List<?>) value;
 					for (TableItem ti : table.getItems())
 						if (lst.contains(ti.getData()))
 							titems.add(ti);
 					table.setSelection(titems.toArray(new TableItem[titems.size()]));
 				}
-			} else
+			} else {
+				if (value instanceof List && !((List<?>) value).isEmpty())
+					value = ((List<?>) value).get(0);
 				for (TableItem ti : table.getItems()) {
 					if (ti.getData().equals(value)) {
 						table.setSelection(ti);
 						break;
 					}
 				}
+			}
 		}
 	}
 

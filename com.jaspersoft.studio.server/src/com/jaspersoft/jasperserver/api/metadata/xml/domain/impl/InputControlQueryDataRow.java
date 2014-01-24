@@ -33,6 +33,7 @@ public class InputControlQueryDataRow implements Serializable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Object value = null;
 	private java.util.List<String> columnValues = null;
+	private boolean selected = false;
 
 	/** Creates a new instance of InputControlQueryDataRow */
 	public InputControlQueryDataRow() {
@@ -55,4 +56,11 @@ public class InputControlQueryDataRow implements Serializable {
 		this.value = value;
 	}
 
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
 }

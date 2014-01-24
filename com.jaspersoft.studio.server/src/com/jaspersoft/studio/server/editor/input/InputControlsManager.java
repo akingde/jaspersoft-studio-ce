@@ -18,44 +18,32 @@ package com.jaspersoft.studio.server.editor.input;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRQueryChunk;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 import com.jaspersoft.studio.server.protocol.IConnection;
-import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 
 public class InputControlsManager {
-	private HashMap<String, List<String>> cascadingDepMap = new HashMap<String, List<String>>();
 	private List<ResourceDescriptor> inputcontrols;
 	private Map<String, Object> defaults;
+	private ResourceDescriptor rdrepunit;
 	private IConnection wsclient;
-	private String reportUnit;
 
-	public InputControlsManager(String reportUnit) {
-		this.reportUnit = WSClientHelper.getReportUnitUri(reportUnit);
+	public InputControlsManager() {
 	}
 
 	public IConnection getWsClient() {
@@ -66,14 +54,18 @@ public class InputControlsManager {
 		this.wsclient = wsclient;
 	}
 
+	public ResourceDescriptor getReportUnit() {
+		return rdrepunit;
+	}
+
 	public Map<String, Object> getParameters() {
 		return defaults;
 	}
 
-	public void getDefaults(ResourceDescriptor rd) {
+	public void getDefaults() {
 		defaults = new HashMap<String, Object>();
-		if (rd.getWsType().equals("ReportOptionsResource")) {
-			ResourceProperty rp = rd.getResourceProperty("PROP_VALUES");
+		if (rdrepunit.getWsType().equals("ReportOptionsResource")) {
+			ResourceProperty rp = rdrepunit.getResourceProperty("PROP_VALUES");
 
 			List<ResourceProperty> list = rp.getProperties();
 			if (list != null)
@@ -83,9 +75,8 @@ public class InputControlsManager {
 						for (Object sli : li.getProperties())
 							listVal.add(((ResourceProperty) sli).getValue());
 						defaults.put(li.getName(), listVal);
-					} else {
+					} else
 						defaults.put(li.getName(), Misc.nvl(li.getValue()));
-					}
 				}
 		}
 	}
@@ -94,56 +85,13 @@ public class InputControlsManager {
 		return inputcontrols;
 	}
 
-	public void initInputControls(List<ResourceDescriptor> list) {
+	public void initInputControls(ResourceDescriptor rdrepunit) {
+		this.rdrepunit = rdrepunit;
 		inputcontrols = new ArrayList<ResourceDescriptor>();
-		for (ResourceDescriptor sub_rd : list) {
+		for (ResourceDescriptor sub_rd : rdrepunit.getChildren()) {
 			String wsType = sub_rd.getWsType();
-			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 				inputcontrols.add(sub_rd);
-				cascadingDependencies(sub_rd);
-			}
-		}
-	}
-
-	private void cascadingDependencies(ResourceDescriptor ic) {
-		List<ResourceDescriptor> children = ic.getChildren();
-		for (ResourceDescriptor sub_ic : children) {
-			if (!isRDQuery(sub_ic))
-				continue;
-			String queryString = sub_ic.getSql();
-			String lang = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
-			if (queryString != null && !queryString.isEmpty()) {
-				List<String> parameters = new ArrayList<String>();
-				JRDesignQuery query = new JRDesignQuery();
-				query.setText(queryString);
-				if (lang != null)
-					query.setLanguage(lang);
-				for (JRQueryChunk chunk : query.getChunks()) {
-					switch (chunk.getType()) {
-					case JRQueryChunk.TYPE_TEXT:
-						break;
-					case JRQueryChunk.TYPE_PARAMETER_CLAUSE:
-					case JRQueryChunk.TYPE_PARAMETER:
-						String paramName = chunk.getText();
-						if (!parameters.contains(paramName))
-							parameters.add(paramName);
-						break;
-					case JRQueryChunk.TYPE_CLAUSE_TOKENS:
-						String[] tokens = chunk.getTokens();
-						if (tokens.length > 2) {
-							for (String t : tokens) {
-								t = t.trim();
-								if (!parameters.contains(t))
-									parameters.add(t);
-							}
-						}
-						break;
-					}
-				}
-				if (!parameters.isEmpty())
-					cascadingDepMap.put(ic.getName(), parameters);
-			}
-			break;
 		}
 	}
 
@@ -154,18 +102,44 @@ public class InputControlsManager {
 	}
 
 	private PropertyChangeListener propChangeListener = new PropertyChangeListener() {
+		private int started = 0;
+		private boolean ended = true;
+		private IDataInput control;
 
 		public void propertyChange(PropertyChangeEvent evt) {
 			final Object source = evt.getSource();
 			if (source instanceof IDataInput) {
+				control = (IDataInput) source;
+				doCascade();
+			}
+		}
+
+		protected void doCascade() {
+			started++;
+			if (ended) {
+				ended = false;
 				Job job = new Job("Update Cascading Input Controls") {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						IDataInput control = (IDataInput) source;
-						actionPerformed(control, new HashSet<IDataInput>());
+						monitor.beginTask("Update Controls", IProgressMonitor.UNKNOWN);
+
+						Map<IDataInput, Map<String, Object>> toUpd = new HashMap<IDataInput, Map<String, Object>>();
+						actionPerformed(control, toUpd);
+						try {
+							updateControls(toUpd, monitor);
+							ended = true;
+							started--;
+							if (started > 0) {
+								started = 0;
+								doCascade();
+							}
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						} finally {
+							monitor.done();
+						}
 						return Status.OK_STATUS;
 					}
-
 				};
 				job.setSystem(true);
 				job.setUser(false);
@@ -173,72 +147,61 @@ public class InputControlsManager {
 			}
 		}
 	};
-	private String dsUri;
 
 	public PropertyChangeListener getPropertyChangeListener() {
 		return propChangeListener;
 	}
 
-	public void actionPerformed(IDataInput ic, Set<IDataInput> controls) {
-		try {
-			String updateICName = ic.getParameter().getName();
-			// get the first input control having this param in the list...
-			for (IDataInput icToUpdate : icontrols) {
-				if (icToUpdate == ic || controls.contains(icToUpdate))
-					continue;
-				String icName = icToUpdate.getParameter().getName();
-				if (cascadingDepMap.get(icName) == null || !cascadingDepMap.get(icName).contains(updateICName)) {
-					continue;
-				}
+	public void actionPerformed(IDataInput ic, Map<IDataInput, Map<String, Object>> controls) {
+		String icName = ((PResourceDescriptor) ic.getParameter()).getResourceDescriptor().getName();
+		// get the first input control having this param in the list...
+		for (IDataInput icToUpdate : icontrols) {
+			if (icToUpdate == ic || controls.containsKey(icToUpdate))
+				continue;
+			ResourceDescriptor rd = ((PResourceDescriptor) icToUpdate.getParameter()).getResourceDescriptor();
+			List<String> parametersICs = rd.getMasterInputControls();
+			if (parametersICs == null || !parametersICs.contains(icName))
+				continue;
 
-				Map<String, Object> parameters = new HashMap<String, Object>();
-				List<String> parametersICs = cascadingDepMap.get(icName);
-				for (String paramName : parametersICs) {
-					Object value = getParameters().get(paramName);
-					parameters.put(paramName, value);
-				}
-				updateControl(icToUpdate, parameters);
-				controls.add(icToUpdate);
-				actionPerformed(icToUpdate, controls);
-				break;
-			}
-		} catch (Exception ex) {
-			UIUtils.showError(ex);
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			Map<String, Object> prms = getParameters();
+			for (String paramName : parametersICs)
+				parameters.put(paramName, prms.get(paramName));
+			controls.put(icToUpdate, parameters);
+			actionPerformed(icToUpdate, controls);
+			break;
 		}
 	}
 
-	private void updateControl(final IDataInput ic, Map<String, Object> parameters) throws Exception {
-		PResourceDescriptor presd = (PResourceDescriptor) ic.getParameter();
-		List<Argument> args = new ArrayList<Argument>();
-
-		args.add(new Argument(Argument.IC_GET_QUERY_DATA, getDataSourceQueryURI(dsUri, presd.getResourceDescriptor())));
-		args.add(new Argument(Argument.RU_REF_URI, reportUnit));
-
-		ResourceDescriptor rd = presd.getResourceDescriptor();
-		rd.getParameters().clear();
-		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_DATA, null);
-
-		for (String key : parameters.keySet()) {
-			Object value = parameters.get(key);
-			if (value != null)
-				if (value instanceof Collection) {
-					for (String item : ((Collection<String>) value)) {
-						ListItem l = new ListItem(key, item);
-						l.setIsListItem(true);
-						rd.getParameters().add(l);
-					}
-				} else {
-					rd.getParameters().add(new ListItem(key, value));
-				}
+	private void updateControls(final Map<IDataInput, Map<String, Object>> controls, IProgressMonitor monitor) throws Exception {
+		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
+		for (IDataInput ic : controls.keySet()) {
+			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter()).getResourceDescriptor();
+			rd.setIcValues(controls.get(ic));
+			rds.add(rd);
 		}
-		presd.setResourceDescriptor(getWsClient().get(new NullProgressMonitor(), rd, null, args));
+		List<ResourceDescriptor> newRds = wsclient.cascadeInputControls(rdrepunit, rds, monitor);
+		for (IDataInput ic : controls.keySet()) {
+			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter()).getResourceDescriptor();
+			for (ResourceDescriptor r : newRds) {
+				if (r != rd && r.getName().equals(rd.getName())) {
+					// ok, replacing values
+					rd.setListOfValues(r.getListOfValues());
+					rd.setQueryData(r.getQueryData());
+					rd.setValue(r.getValue());
+				}
+			}
+		}
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			public void run() {
-				if (ic instanceof QueryInput)
-					((QueryInput) ic).fillTable();
-				else if (ic instanceof ListOfValuesInput)
-					((ListOfValuesInput) ic).fillTable();
+				for (IDataInput ic : controls.keySet()) {
+					if (ic instanceof QueryInput)
+						((QueryInput) ic).fillTable();
+					else if (ic instanceof ListOfValuesInput)
+						((ListOfValuesInput) ic).fillTable();
+					ic.updateInput();
+				}
 			}
 		});
 	}
@@ -251,31 +214,15 @@ public class InputControlsManager {
 		return false;
 	}
 
-	public static String getDataSourceQueryURI(String dsUri, ResourceDescriptor ic) {
-		String dsUriQuery = null;
-		// reset query data...
-		// Look if this query has a specific datasource...
-		for (int k = 0; dsUriQuery == null && k < ic.getChildren().size(); ++k) {
-			ResourceDescriptor sub_ic = (ResourceDescriptor) ic.getChildren().get(k);
-			if (isRDQuery(sub_ic))
-				for (int k2 = 0; k2 < sub_ic.getChildren().size(); ++k2) {
-					ResourceDescriptor sub_sub_ic = (ResourceDescriptor) sub_ic.getChildren().get(k2);
-					if (SelectorDatasource.isDatasource(sub_sub_ic)) {
-						dsUriQuery = sub_sub_ic.getUriString();
-						break;
-					}
-				}
-		}
-		if (dsUriQuery == null)
-			dsUriQuery = dsUri;
-		return dsUriQuery;
+	public static boolean isICSingle(ResourceDescriptor ic) {
+		return ic.getControlType() == ResourceDescriptor.IC_TYPE_BOOLEAN || ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_VALUE;
 	}
 
 	protected static boolean isICVisible(ResourceDescriptor ic) {
 		return ic.getResourcePropertyValue(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE) == null || ic.getResourcePropertyValue(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE).equals("true");
 	}
 
-	protected static boolean isRDQuery(ResourceDescriptor sub_ic) {
+	public static boolean isRDQuery(ResourceDescriptor sub_ic) {
 		return sub_ic.getWsType().equals(ResourceDescriptor.TYPE_QUERY);
 	}
 

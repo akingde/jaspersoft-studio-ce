@@ -85,6 +85,18 @@ public class PublishUtil {
 		initResourceName(jd.getName(), runit.getValue());
 	}
 
+	public static void setChild(ResourceDescriptor rd, ResourceDescriptor child) {
+		List<ResourceDescriptor> children = rd.getChildren();
+		for (int i = 0; i < children.size(); i++) {
+			ResourceDescriptor r = children.get(i);
+			if (r.getUriString().equals(child.getUriString())) {
+				children.set(i, child);
+				return;
+			}
+		}
+		children.add(child);
+	}
+
 	public static void initResourceName(String name, ResourceDescriptor rd) {
 		if (Misc.isNullOrEmpty(rd.getName()))
 			rd.setName(ResourcePageContent.safeChar(name));

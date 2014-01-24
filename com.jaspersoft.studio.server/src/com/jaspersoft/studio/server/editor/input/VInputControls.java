@@ -18,6 +18,12 @@ package com.jaspersoft.studio.server.editor.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -73,14 +79,37 @@ public class VInputControls extends AVParameters {
 		composite.pack();
 		setScrollbarMinHeight();
 		if (showEmptyParametersWarning) {
-			setupDefaultValues();
+			// setupDefaultValues();
 			setDirty(false);
 		}
 		showEmptyParametersWarning = false;
 	}
 
 	public void setupDefaultValues() {
-		// we should set default values
+		Job job = new Job("Calculating Default Values") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Resetting input parameters", IProgressMonitor.UNKNOWN);
+				try {
+					rdrepunit = icm.getWsClient().initInputControls(rdrepunit.getUriString(), monitor);
+					icm.initInputControls(rdrepunit);
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							createInputControls(icm);
+						}
+					});
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
 	}
 
 	public boolean checkFieldsFilled() {
@@ -114,6 +143,8 @@ public class VInputControls extends AVParameters {
 					createVerticalSeprator(first);
 					createLabel(sectionClient, pres, in);
 					in.createInput(sectionClient, pres, icm.getParameters());
+					if (InputControlsManager.isICSingle(p) && p.getValue() != null)
+						in.updateModel(p.getValue());
 					in.addChangeListener(icm.getPropertyChangeListener());
 					icm.getControls().add(in);
 					return true;

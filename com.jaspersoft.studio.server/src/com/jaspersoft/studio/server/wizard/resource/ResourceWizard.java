@@ -15,28 +15,21 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class ResourceWizard extends Wizard {
 	private boolean skipFirstPage = false;
@@ -97,26 +90,11 @@ public class ResourceWizard extends Wizard {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask("Saving", IProgressMonitor.UNKNOWN);
-					File tmpfile = null;
 					try {
-						if (resource instanceof MReportUnit) {
-							tmpfile = FileUtils.createTempFile("jrstmp", ".jrxml");
-							List<ResourceDescriptor> toremove = new ArrayList<ResourceDescriptor>();
-							for (Object obj : resource.getValue().getChildren()) {
-								ResourceDescriptor rd = (ResourceDescriptor) obj;
-								if (SelectorDatasource.isDatasource(rd))
-									continue;
-								toremove.add(rd);
-							}
-							for (ResourceDescriptor rd : toremove)
-								resource.getValue().getChildren().remove(rd);
-						}
 						WSClientHelper.saveResource(resource, monitor);
 					} catch (Exception e) {
 						throw new InvocationTargetException(e);
 					} finally {
-						if (tmpfile != null)
-							tmpfile.delete();
 						monitor.done();
 					}
 				}

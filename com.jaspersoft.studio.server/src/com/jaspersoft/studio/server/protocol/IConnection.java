@@ -37,8 +37,6 @@ public interface IConnection {
 
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception;
 
-	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File outFile, java.util.List<Argument> args) throws Exception;
-
 	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception;
 
 	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception;
@@ -51,7 +49,7 @@ public interface IConnection {
 
 	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception;
 
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, String reportUnitUri) throws Exception;
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception;
 
 	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, java.util.Map<String, Object> prm, List<Argument> args) throws Exception;
 
@@ -66,4 +64,6 @@ public interface IConnection {
 	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception;
 
 	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception;
+
+	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception;
 }

@@ -431,18 +431,17 @@ public class VErrorPreview extends APreview {
 			terror.setText(terror.getText() + msg + NL); //$NON-NLS-1$
 			// The only way we have to find a missing style error is to parse the error message for now
 			String stylesErrorString = "Could not resolve style(s):";
-			if (t.getMessage().contains(stylesErrorString) && design != null) {
-				String stylesNotFound = t.getMessage().substring(
-						t.getMessage().indexOf(stylesErrorString) + stylesErrorString.length());
+			String m = t.getMessage();
+			if (m != null && m.contains(stylesErrorString) && design != null) {
+				String stylesNotFound = m.substring(m.indexOf(stylesErrorString) + stylesErrorString.length());
 				String[] styleNames = stylesNotFound.split(",");
 				HashSet<String> styles = new HashSet<String>();
-				for (String name : styleNames) {
+				for (String name : styleNames)
 					styles.add(name.trim());
-				}
 				List<JRDesignElement> elements = getNotReferencedStyles(design.getAllBands(), styles);
-				addError2List(t, t.getMessage(), elements);
+				addError2List(t, m, elements);
 			} else
-				addError2List(t, t.getMessage(), null);
+				addError2List(t, m, null);
 			// errorSection.setText("Errors: 1");
 		} else
 			terror.setText(""); //$NON-NLS-1$

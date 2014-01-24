@@ -89,17 +89,6 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File outFile, List<Argument> args) throws Exception {
-		if (useSoap(monitor, rd))
-			rd = soap.get(monitor, rd, outFile, args);
-		else
-			rd = c.get(monitor, rd, outFile, args);
-		rd = c.get(monitor, rd, outFile, args);
-		rd.setDirty(false);
-		return rd;
-	}
-
-	@Override
 	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		List<ResourceDescriptor> list = null;
 		// String v = c.getServerInfo(monitor).getVersion();
@@ -147,8 +136,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, String reportUnitUri) throws Exception {
-		c.delete(monitor, rd, reportUnitUri);
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
+		c.delete(monitor, rd, runit);
 	}
 
 	@Override
@@ -207,6 +196,11 @@ public class ProxyConnection implements IConnection {
 	@Override
 	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
 		return c.initInputControls(uri, monitor);
+	}
+
+	@Override
+	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
+		return c.cascadeInputControls(runit, ics, monitor);
 	}
 
 }

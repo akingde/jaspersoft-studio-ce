@@ -313,7 +313,7 @@ public class WSClientHelper {
 				}
 				try {
 					if (n != null && !(f instanceof MReportUnit))
-						wsClient.delete(monitor, rd, ((MReportUnit) n).getValue().getUriString());
+						wsClient.delete(monitor, rd, ((MReportUnit) n).getValue());
 					else
 						wsClient.delete(monitor, rd);
 				} catch (Exception e1) {
@@ -344,7 +344,7 @@ public class WSClientHelper {
 			MReportUnit n = res.getReportUnit();
 			IConnection wsClient = sp.getWsClient(monitor);
 			if (n != null && !(res instanceof MReportUnit))
-				wsClient.delete(monitor, rd, ((MReportUnit) n).getValue().getUriString());
+				wsClient.delete(monitor, rd, ((MReportUnit) n).getValue());
 			else
 				wsClient.delete(monitor, rd);
 		}
@@ -445,8 +445,12 @@ public class WSClientHelper {
 				continue;
 			MResource mr = (MResource) list.get(i);
 			String uri = mr.getValue().getUriString();
-			if (prunit.equals(uri))
-				return mr;
+			if (prunit.equals(uri)) {
+				ANode p = mr.getParent();
+				int ind = p.getChildren().indexOf(mr);
+				p.removeChild(mr);
+				return ResourceFactory.getResource(p, cli.get(monitor, mr.getValue(), null), ind);
+			}
 			if (prunit.startsWith(uri) && prunit.length() >= uri.length()) {
 				if (maxl < uri.length()) {
 					maxl = uri.length();

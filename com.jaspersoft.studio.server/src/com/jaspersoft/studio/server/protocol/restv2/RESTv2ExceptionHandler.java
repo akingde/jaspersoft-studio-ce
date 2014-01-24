@@ -33,7 +33,8 @@ public class RESTv2ExceptionHandler {
 
 	public void handleException(Response res, IProgressMonitor monitor) throws ClientProtocolException {
 		String msg = "";
-		switch (res.getStatus()) {
+		int status = res.getStatus();
+		switch (status) {
 		case 400:
 			if (res.getHeaderString("Content-Type").contains("xml")) {
 				List<ErrorDescriptor> list = res.readEntity(new GenericType<List<ErrorDescriptor>>() {
@@ -42,7 +43,7 @@ public class RESTv2ExceptionHandler {
 					msg = "";
 					for (ErrorDescriptor ed : list)
 						msg += buildMessage(monitor, msg, ed);
-					throw new HttpResponseException(res.getStatus(), msg);
+					throw new HttpResponseException(status, msg);
 				}
 			}
 		case 403:
@@ -55,11 +56,11 @@ public class RESTv2ExceptionHandler {
 				if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
 					for (String str : ed.getParameters())
 						msg += "\n" + str;
-				throw new HttpResponseException(res.getStatus(), msg);
+				throw new HttpResponseException(status, msg);
 			}
 		default:
 			msg = res.getStatusInfo().getReasonPhrase() + "\n" + res.readEntity(String.class);
-			throw new HttpResponseException(res.getStatus(), msg);
+			throw new HttpResponseException(status, msg);
 		}
 	}
 

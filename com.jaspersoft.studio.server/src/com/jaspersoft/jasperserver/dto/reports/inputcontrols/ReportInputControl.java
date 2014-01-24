@@ -33,7 +33,7 @@ public class ReportInputControl implements Serializable {
 	private Boolean visible;
 	private List<String> masterDependencies = new ArrayList<String>();
 	private List<String> slaveDependencies = new ArrayList<String>();
-	private List<ValidationRule> validationRules;
+	private List<ValidationRule<?>> validationRules;
 	private InputControlState state;
 
 	public InputControlState getState() {
@@ -48,11 +48,11 @@ public class ReportInputControl implements Serializable {
 	@XmlElementWrapper(name = "validationRules")
 	@XmlElements({ @XmlElement(name = "rangeValidationRule", type = RangeValidationRule.class), @XmlElement(name = "regexpValidationRule", type = RegexpValidationRule.class),
 			@XmlElement(name = "dateTimeFormatValidationRule", type = DateTimeFormatValidationRule.class), @XmlElement(name = "mandatoryValidationRule", type = MandatoryValidationRule.class) })
-	public List<ValidationRule> getValidationRules() {
+	public List<ValidationRule<?>> getValidationRules() {
 		return validationRules;
 	}
 
-	public ReportInputControl setValidationRules(List<ValidationRule> validationRules) {
+	public ReportInputControl setValidationRules(List<ValidationRule<?>> validationRules) {
 		this.validationRules = validationRules;
 		return this;
 	}

@@ -231,7 +231,9 @@ public class AddResourcePage extends WizardPage {
 
 			if (parent instanceof MReportUnit) {
 				new MReference(root, MReference.createDescriptor(parent), -1);
-				new MReportUnitOptions(root, MReportUnitOptions.createDescriptor((MReportUnit) parent), -1);
+				ServerInfo si = getServerInfo(root);
+				if (si != null && Version.isPro(si))
+					new MReportUnitOptions(root, MReportUnitOptions.createDescriptor((MReportUnit) parent), -1);
 				boolean dsexists = false;
 				for (INode n : parent.getChildren()) {
 					if (n instanceof MResource && SelectorDatasource.isDatasource(((MResource) n).getValue())) {

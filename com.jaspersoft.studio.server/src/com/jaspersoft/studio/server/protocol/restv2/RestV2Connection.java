@@ -153,19 +153,6 @@ public class RestV2Connection extends ARestV2Connection {
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File outFile, List<Argument> args) throws Exception {
-		URIBuilder ub = new URIBuilder(url("resources" + rd.getUriString()));
-		ub.addParameter("expanded", "true");
-		Request req = HttpUtils.get(ub.build().toASCIIString(), sp);
-		String rtype = WsTypes.INST().toRestType(rd.getWsType());
-		req.setHeader("Accept", "application/repository." + rtype + "+" + FORMAT);
-		ClientResource<?> crl = toObj(req, WsTypes.INST().getType(rtype), monitor);
-		if (crl != null)
-			return Rest2Soap.getRD(this, crl, rd);
-		return null;
-	}
-
-	@Override
 	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		URIBuilder ub = new URIBuilder(url("resources" + destFolderURI));
 		ub.addParameter("overwrite", "true");
@@ -222,7 +209,7 @@ public class RestV2Connection extends ARestV2Connection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, String reportUnitUri) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
 		delete(monitor, rd);
 	}
 
@@ -261,6 +248,12 @@ public class RestV2Connection extends ARestV2Connection {
 	@Override
 	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
 
+		return null;
+	}
+
+	@Override
+	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

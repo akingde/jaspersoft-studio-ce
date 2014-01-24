@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.common.domain.FileResource;
 import com.jaspersoft.jasperserver.api.metadata.common.domain.ResourceReference;
+import com.jaspersoft.studio.utils.Misc;
 
 public class ResourceDescriptor implements Serializable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -189,6 +190,7 @@ public class ResourceDescriptor implements Serializable {
 	public static final String PROP_QUERY_DATA = "PROP_QUERY_DATA";
 	public static final String PROP_QUERY_DATA_ROW = "PROP_QUERY_DATA_ROW";
 	public static final String PROP_QUERY_DATA_ROW_COLUMN = "PROP_QUERY_DATA_ROW_COLUMN";
+	public static final String PROP_QUERY_DATA_ROW_SELECTED = "PROP_QUERY_DATA_ROW_SELECTED";
 
 	// OLAP XMLA Connection
 	public static final String PROP_XMLA_URI = "PROP_XMLA_URI";
@@ -653,33 +655,27 @@ public class ResourceDescriptor implements Serializable {
 	 * list.
 	 */
 	public List<ListItem> getListOfValues() {
-
-		ResourceProperty rp = getResourceProperty(PROP_LOV);
-
-		java.util.List<ListItem> listOfValues = new java.util.ArrayList<ListItem>();
-		if (rp != null) {
-			for (int i = 0; i < rp.getProperties().size(); ++i) {
-				ResourceProperty rpChild = rp.getProperties().get(i);
-				ListItem li = new ListItem(rpChild.getValue() != null ? rpChild.getValue() : rpChild.getName(), rpChild.getName());
-				listOfValues.add(li);
-			}
+		if (listItems == null) {
+			ResourceProperty rp = getResourceProperty(PROP_LOV);
+			listItems = new java.util.ArrayList<ListItem>();
+			if (rp != null)
+				for (ResourceProperty rpChild : rp.getProperties())
+					listItems.add(new ListItem(Misc.nvl(rpChild.getValue(), rpChild.getName()), rpChild.getName()));
 		}
-
-		return listOfValues;
+		return listItems;
 	}
+
+	private List<ListItem> listItems;
 
 	/**
 	 * Convenient way to create tje LOV property from a list of ListItem
 	 */
 	public void setListOfValues(List<ListItem> listOfValues) {
-
+		this.listItems = listOfValues;
 		ResourceProperty rp = new ResourceProperty(PROP_LOV);
-
-		for (int i = 0; i < listOfValues.size(); ++i) {
-			ListItem li = listOfValues.get(i);
-			rp.getProperties().add(new ResourceProperty(li.getValue() + "", li.getLabel()));
-		}
-
+		List<ResourceProperty> prps = rp.getProperties();
+		for (ListItem li : listOfValues)
+			prps.add(new ResourceProperty(Misc.nvl(li.getValue(), ""), li.getLabel()));
 		setResourceProperty(rp);
 	}
 
@@ -821,18 +817,17 @@ public class ResourceDescriptor implements Serializable {
 		ResourceProperty rp = getResourceProperty(PROP_QUERY_DATA);
 		if (rp != null) {
 			// Look for rows....
-			for (int i = 0; i < rp.getProperties().size(); ++i) {
-				ResourceProperty rpRow = (ResourceProperty) rp.getProperties().get(i);
+			for (ResourceProperty rpRow : rp.getProperties()) {
 				if (rpRow.getName().equals(PROP_QUERY_DATA_ROW)) {
 					InputControlQueryDataRow icqdr = new InputControlQueryDataRow();
 					icqdr.setValue(rpRow.getValue());
 
 					// Look for row details...
-					for (int k = 0; k < rpRow.getProperties().size(); ++k) {
-						ResourceProperty rpRowChild = (ResourceProperty) rpRow.getProperties().get(k);
-						if (rpRowChild.getName().equals(PROP_QUERY_DATA_ROW_COLUMN)) {
+					for (ResourceProperty rpRowChild : rpRow.getProperties()) {
+						if (rpRowChild.getName().equals(PROP_QUERY_DATA_ROW_COLUMN))
 							icqdr.getColumnValues().add(rpRowChild.getValue());
-						}
+						else if (rpRowChild.getName().equals(PROP_QUERY_DATA_ROW_SELECTED))
+							icqdr.setSelected(true);
 					}
 
 					queryDataCache.add(icqdr);
@@ -860,11 +855,11 @@ public class ResourceDescriptor implements Serializable {
 			InputControlQueryDataRow icqdr = (InputControlQueryDataRow) queryData.get(i);
 
 			ResourceProperty rpRow = new ResourceProperty(PROP_QUERY_DATA_ROW, "" + icqdr.getValue());
-
-			for (int k = 0; k < icqdr.getColumnValues().size(); ++k) {
-				Object columnValue = icqdr.getColumnValues().get(k);
-				rpRow.getProperties().add(new ResourceProperty(PROP_QUERY_DATA_ROW_COLUMN, (columnValue == null) ? "" : "" + columnValue));
-			}
+			List<ResourceProperty> prps = rpRow.getProperties();
+			if (icqdr.isSelected())
+				prps.add(new ResourceProperty(PROP_QUERY_DATA_ROW_SELECTED, "true"));
+			for (String c : icqdr.getColumnValues())
+				prps.add(new ResourceProperty(PROP_QUERY_DATA_ROW_COLUMN, Misc.nvl(c)));
 
 			rp.getProperties().add(rpRow);
 		}
@@ -1058,4 +1053,25 @@ public class ResourceDescriptor implements Serializable {
 			for (ResourceDescriptor p : children)
 				p.setDirty(isDirty);
 	}
+
+	private List<String> masterICs;
+
+	public List<String> getMasterInputControls() {
+		return masterICs;
+	}
+
+	public void setMasterInputControls(List<String> prms) {
+		this.masterICs = prms;
+	}
+
+	private Map<String, Object> icValues;
+
+	public void setIcValues(Map<String, Object> icValues) {
+		this.icValues = icValues;
+	}
+
+	public Map<String, Object> getIcValues() {
+		return icValues;
+	}
+
 }

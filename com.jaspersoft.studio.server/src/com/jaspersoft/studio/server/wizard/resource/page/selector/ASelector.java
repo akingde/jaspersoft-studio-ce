@@ -260,6 +260,14 @@ public abstract class ASelector {
 		jsLocDS.setText(""); //$NON-NLS-1$
 
 		ResourceDescriptor r = getResourceDescriptor(res.getValue());
+		if (r == null) {
+			for (ResourceDescriptor rd : res.getValue().getChildren()) {
+				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
+					r = rd;
+					pos = 0;
+				}
+			}
+		}
 		switch (pos) {
 		case 0:
 			bRef.setEnabled(true);

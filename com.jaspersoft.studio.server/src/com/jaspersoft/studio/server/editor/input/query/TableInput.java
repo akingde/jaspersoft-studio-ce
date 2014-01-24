@@ -105,19 +105,19 @@ public class TableInput implements IInput {
 		for (TableColumn tc : table.getColumns())
 			tc.dispose();
 
-		for (String c : qcolumns) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(c);
-		}
-
+		for (String c : qcolumns)
+			new TableColumn(table, SWT.NONE).setText(c);
+		java.util.List<Object> toSel = new ArrayList<Object>();
 		for (InputControlQueryDataRow item : qvalues) {
 			TableItem ti = new TableItem(table, SWT.NONE);
+			ti.setData(item.getValue());
 			List<String> cvals = item.getColumnValues();
-			for (int i = 0; i < cvals.size(); i++) {
+			for (int i = 0; i < cvals.size(); i++)
 				ti.setText(i, cvals.get(i));
-				ti.setData(item.getValue());
-			}
+			if (item.isSelected())
+				toSel.add(item.getValue());
 		}
+		params.put(param.getName(), toSel);
 
 		for (TableColumn tc : table.getColumns())
 			tc.pack();
@@ -134,17 +134,19 @@ public class TableInput implements IInput {
 			if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY || dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
-					List<Object> lst = (List<Object>) value;
+					List<?> lst = (List<?>) value;
 					for (TableItem ti : table.getItems())
 						if (lst.contains(ti.getData()))
 							titems.add(ti);
 					table.setSelection(titems.toArray(new TableItem[titems.size()]));
 				}
-			} else
-				for (TableItem ti : table.getItems()) {
+			} else {
+				if (value instanceof List && !((List<?>) value).isEmpty())
+					value = ((List<?>) value).get(0);
+				for (TableItem ti : table.getItems())
 					if (ti.getData().equals(value))
 						table.setSelection(ti);
-				}
+			}
 		}
 	}
 

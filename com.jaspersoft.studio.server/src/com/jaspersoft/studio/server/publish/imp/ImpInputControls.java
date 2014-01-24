@@ -42,10 +42,10 @@ public class ImpInputControls {
 	}
 
 	public void publish(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, JasperReportsConfiguration jrConfig) throws Exception {
+		ResourceDescriptor runit = mrunit.getValue();
 		for (JRParameter p : jasper.getParametersList()) {
 			if (p.isSystemDefined() || !p.isForPrompting())
 				continue;
-			ResourceDescriptor runit = mrunit.getValue();
 
 			ResourceDescriptor rd = MInputControl.createDescriptor(mrunit);
 			rd.setName(p.getName());
@@ -74,8 +74,10 @@ public class ImpInputControls {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
 			} else if (Number.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);
-			} else
-				return;
+			} else {
+				mrunit.removeChild(mres);
+				continue;
+			}
 
 			mres.setPublishOptions(new PublishOptions());
 

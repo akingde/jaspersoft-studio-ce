@@ -258,6 +258,10 @@ public class WsTypes {
 		return types.get(type);
 	}
 
+	public String getRestType(ClientResource<?> clazz) {
+		return types.inverse().get(clazz.getClass());
+	}
+
 	private static String getType(Class<? extends ClientResource<?>> clientObjectClass) {
 		String clientResourceType = null;
 		XmlRootElement xmlRootElement = clientObjectClass.getAnnotation(XmlRootElement.class);

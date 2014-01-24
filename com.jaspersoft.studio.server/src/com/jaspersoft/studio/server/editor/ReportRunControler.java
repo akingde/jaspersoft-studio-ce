@@ -57,7 +57,6 @@ public class ReportRunControler {
 	private LinkedHashMap<String, APreview> viewmap;
 	private ReportUnitEditor pcontainer;
 	private VInputControls prmInput;
-	private ResourceDescriptor rdrepunit;
 	private InputControlsManager icm;
 	private String reportUnit;
 
@@ -69,18 +68,18 @@ public class ReportRunControler {
 		this.reportUnit = key;
 		if (viewmap != null && prmInput == null) {
 			try {
-				icm = new InputControlsManager(reportUnit);
-				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+				icm = new InputControlsManager();
+				ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
 							cli = WSClientHelper.getClient(monitor, reportUnit);
-							rdrepunit = cli.initInputControls(reportUnit, monitor);
-							icm.initInputControls(rdrepunit.getChildren());
+							icm.setWsclient(cli);
+							icm.initInputControls(cli.initInputControls(reportUnit, monitor));
 
 							// TODO search all the repository
-							icm.getDefaults(rdrepunit);
+							icm.getDefaults();
 							Display.getDefault().asyncExec(new Runnable() {
 								public void run() {
 									if (viewmap != null) {
@@ -153,7 +152,7 @@ public class ReportRunControler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					prmInput.setReportUnit(rdrepunit);
+					prmInput.setReportUnit(icm.getReportUnit());
 					if (!prmInput.checkFieldsFilled())
 						return Status.CANCEL_STATUS;
 					Map<String, Object> prmcopy = new HashMap<String, Object>();
@@ -204,5 +203,9 @@ public class ReportRunControler {
 
 	public void finishReport() {
 		ReportControler.finishCompiledReport(c, prmInput, pcontainer);
+	}
+
+	public void resetParametersToDefault() {
+		prmInput.setupDefaultValues();
 	}
 }

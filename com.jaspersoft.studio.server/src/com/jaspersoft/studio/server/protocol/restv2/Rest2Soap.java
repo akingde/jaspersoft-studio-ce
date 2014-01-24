@@ -303,7 +303,7 @@ public class Rest2Soap {
 					return 1;
 				String wsType0 = arg0.getWsType();
 				String wsType1 = arg1.getWsType();
-				if (wsType0.equals(wsType1))
+				if (wsType0.equals(wsType1) && !wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 					return arg0.getLabel().compareTo(arg1.getLabel());
 				if (DatasourcesAllFilter.getTypes().contains(wsType0))
 					return -1;
@@ -318,15 +318,18 @@ public class Rest2Soap {
 				if (wsType1.equals(ResourceDescriptor.TYPE_QUERY))
 					return 1;
 				if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-					return -1;
-				if (wsType1.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 					return 1;
+				if (wsType1.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					return -1;
 				return wsType0.compareTo(wsType1);
 			}
 		});
 	}
 
 	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
+		rd.setMandatory(cr.isMandatory());
+		rd.setReadOnly(cr.isReadOnly());
+		rd.setVisible(cr.isVisible());
 		if (cr.getListOfValues() != null)
 			rd.getChildren().add(getRDContainer(rc, (ClientListOfValues) cr.getListOfValues()));
 		if (cr.getQuery() != null)

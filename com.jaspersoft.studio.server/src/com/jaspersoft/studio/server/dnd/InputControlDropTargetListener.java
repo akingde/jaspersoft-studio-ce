@@ -36,7 +36,6 @@ import com.jaspersoft.studio.dnd.NodeTreeDropAdapter;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -113,24 +112,23 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 				}
 			}
 		}
-		// move elements here
-		container.removeChildren(tm);
+		if (!tm.isEmpty()) {
+			// move elements here
+			container.removeChildren(tm);
 
-		for (int i = 0; i < tm.size(); i++)
-			container.addChild(tm.get(i), i + indx);
-
-		String uriString = container.getValue().getUriString();
-		if (container instanceof MReportUnit) {
-			List<MInputControl> ics = doBuildICList(container);
-			IConnection c = doGetFullResources(monitor, (MReportUnit) container, ics);
-			doSaveBack(monitor, c, uriString, ics);
+			for (int i = 0; i < tm.size(); i++)
+				container.addChild(tm.get(i), i + indx);
 		} else {
-			try {
-				container.getWsClient().reorderInputControls(uriString, doBuildICResourceDescriptorList(container), monitor);
-			} catch (Exception e) {
-				UIUtils.showError(e);
-			}
+			for (int i = 0; i < toMove.size(); i++)
+				container.addChild(toMove.get(i), i + indx);
 		}
+		String uriString = container.getValue().getUriString();
+		try {
+			container.getWsClient().reorderInputControls(uriString, doBuildICResourceDescriptorList(container), monitor);
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
+		// }
 		ServerManager.selectIfExists(monitor, container);
 		return Status.OK_STATUS;
 	}
@@ -143,38 +141,19 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 		return ics;
 	}
 
-	protected List<MInputControl> doBuildICList(MResource mrunit) {
-		List<MInputControl> ics = new ArrayList<MInputControl>();
-		for (INode n : mrunit.getChildren())
-			if (n instanceof MInputControl)
-				ics.add((MInputControl) n);
-		return ics;
-	}
-
-	protected IConnection doGetFullResources(IProgressMonitor monitor, MReportUnit mrunit, List<MInputControl> ics) {
-		IConnection c = null;
-		try {
-			c = mrunit.getWsClient();
-			for (MInputControl n : ics) {
-				try {
-					ResourceDescriptor rd = n.getValue();
-					n.setValue(WSClientHelper.getResource(monitor, c, rd, null));
-					c.delete(monitor, rd, mrunit.getValue().getUriString());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		return c;
-	}
-
 	protected void doSaveBack(IProgressMonitor monitor, IConnection c, String ruuri, List<MInputControl> ics) {
 		for (MInputControl n : ics) {
 			try {
-				n.getValue().setIsNew(true);
-				c.modifyReportUnitResource(monitor, ruuri, n.getValue(), null);
+				ResourceDescriptor rd = n.getValue();
+				rd.setIsNew(true);
+				if (!rd.getParentFolder().endsWith("_files")) {
+					rd.setIsReference(true);
+					rd.setReferenceUri(rd.getUriString());
+					rd.setParentFolder(ruuri + "_files");
+				}
+				rd.setUriString(ruuri + "_files/" + rd.getName());
+
+				c.modifyReportUnitResource(monitor, ruuri, rd, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

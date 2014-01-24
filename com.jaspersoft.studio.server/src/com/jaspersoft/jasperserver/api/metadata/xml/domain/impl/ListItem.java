@@ -35,6 +35,7 @@ public class ListItem implements Serializable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Object value;
 	private String label;
+	private boolean selected = false;
 	private boolean isListItem = false;
 
 	/** Creates a new instance of ListItem */
@@ -71,4 +72,11 @@ public class ListItem implements Serializable {
 		this.isListItem = isListItem;
 	}
 
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
 }

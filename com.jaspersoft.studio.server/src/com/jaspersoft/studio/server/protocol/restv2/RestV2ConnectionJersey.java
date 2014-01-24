@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -31,6 +32,7 @@ import com.google.common.io.Files;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
@@ -51,6 +53,7 @@ import com.jaspersoft.jasperserver.remote.services.ReportExecution;
 import com.jaspersoft.jasperserver.remote.services.ReportOutputResource;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -200,11 +203,6 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File outFile, List<Argument> args) throws Exception {
-		return get(monitor, rd, outFile);
-	}
-
-	@Override
 	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 
@@ -274,10 +272,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			boolean refresh = false;
 			if (WsTypes.INST().isContainerType(crl.getClass()))
 				refresh = true;
-			List<ResourceDescriptor> children = rd.getChildren();
-			for (ResourceDescriptor child : children)
-				if (!child.getIsReference() && child.isDirty() && !monitor.isCanceled())
-					addOrModifyResource(monitor, child, null);
+			// List<ResourceDescriptor> children = rd.getChildren();
+			// for (ResourceDescriptor child : children) {
+			// if (child == null)
+			// continue;
+			// if (!child.getIsReference() && child.isDirty() &&
+			// !monitor.isCanceled())
+			// addOrModifyResource(monitor, child, null);
+			// }
 			if (refresh && !monitor.isCanceled())
 				rd = get(monitor, rd, null);
 			else
@@ -294,13 +296,32 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	@Override
 	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		WebTarget tgt = target.path("resources" + rd.getUriString());
-		if (connector.delete(tgt.request(), monitor).getStatus() == 204)
-			System.out.println("Deleted");
+		Response res = connector.delete(tgt.request(), monitor);
+		try {
+			switch (res.getStatus()) {
+			case 204:
+				System.out.println("Deleted");
+				break;
+			default:
+				eh.handleException(res, monitor);
+			}
+		} finally {
+			res.close();
+		}
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, String reportUnitUri) throws Exception {
-		delete(monitor, rd);
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
+		ResourceDescriptor rdrem = null;
+		for (ResourceDescriptor r : runit.getChildren())
+			if (r.getUriString().equals(rd.getUriString())) {
+				rdrem = r;
+				break;
+			}
+		if (rdrem != null) {
+			runit.getChildren().remove(rdrem);
+			addOrModifyResource(monitor, runit, null);
+		}
 	}
 
 	@Override
@@ -475,34 +496,113 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		rdunit.setUriString(uri);
 		rdunit.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 		rdunit = get(monitor, rdunit, null);
-
-		Builder req = target.path("reports" + uri + "/inputControls/values").request();
+		if (monitor.isCanceled())
+			return rdunit;
+		Builder req = target.path("reports" + uri + "/inputControls").request();
 		Response r = connector.get(req, monitor);
-		InputControlStateListWrapper crl = toObj(r, InputControlStateListWrapper.class, monitor);
+		ReportInputControlsListWrapper crl = toObj(r, ReportInputControlsListWrapper.class, monitor);
 		if (crl != null)
 			for (ResourceDescriptor rd : rdunit.getChildren()) {
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
-					for (InputControlState ics : crl.getInputControlStateList()) {
+					for (ReportInputControl ric : crl.getInputParameters()) {
+						InputControlState ics = ric.getState();
+						rd.setMasterInputControls(ric.getMasterDependencies());
 						if (ics.getId().equals(rd.getName())) {
-							if (ics.getValue() != null) {
-
-							} else if (ics.getOptions() != null) {
-								List<InputControlQueryDataRow> qvalues = new ArrayList<InputControlQueryDataRow>();
-								for (InputControlOption ico : ics.getOptions()) {
-									InputControlQueryDataRow dr = new InputControlQueryDataRow();
-									dr.setValue(ico.getValue());
-									List<String> cols = new ArrayList<String>();
-									cols.add(ico.getLabel());
-									dr.setColumnValues(cols);
-									qvalues.add(dr);
-								}
-								rd.setQueryData(qvalues);
-							}
+							setInputControlState(rd, ics);
 							break;
 						}
 					}
 				}
 			}
 		return rdunit;
+	}
+
+	private void setInputControlState(ResourceDescriptor rd, InputControlState ics) {
+		if (ics.getValue() != null)
+			rd.setValue(ics.getValue());
+		else if (ics.getOptions() != null) {
+			if (InputControlsManager.isICQuery(rd)) {
+				List<InputControlQueryDataRow> qvalues = new ArrayList<InputControlQueryDataRow>();
+				for (InputControlOption ico : ics.getOptions()) {
+					InputControlQueryDataRow dr = new InputControlQueryDataRow();
+					dr.setValue(ico.getValue());
+					List<String> cols = new ArrayList<String>();
+					StringTokenizer st = new StringTokenizer(ico.getLabel(), " | ");
+					while (st.hasMoreElements())
+						cols.add(st.nextToken());
+					dr.setColumnValues(cols);
+					dr.setSelected(ico.isSelected());
+					qvalues.add(dr);
+				}
+				rd.setQueryData(qvalues);
+			} else if (InputControlsManager.isICListOfValues(rd)) {
+				List<ListItem> qvalues = new ArrayList<ListItem>();
+				for (InputControlOption ico : ics.getOptions()) {
+					ListItem dr = new ListItem();
+					dr.setValue(ico.getValue());
+					dr.setLabel(ico.getLabel());
+					dr.setSelected(ico.isSelected());
+					qvalues.add(dr);
+				}
+				rd.setListOfValues(qvalues);
+			}
+		}
+	}
+
+	@Override
+	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
+		if (ics.isEmpty())
+			return ics;
+		String ctrls = "";
+		String del = "";
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		List<ReportParameter> lrp = new ArrayList<ReportParameter>();
+		for (ResourceDescriptor rd : ics) {
+			Map<String, Object> icMap = rd.getIcValues();
+			for (String key : icMap.keySet())
+				setMap(key, map, icMap.get(key));
+			ctrls += del + rd.getName();
+			del = ";";
+		}
+		for (String key : map.keySet()) {
+			ReportParameter r = new ReportParameter();
+			r.setName(key);
+			r.setValues(map.get(key));
+			lrp.add(r);
+		}
+		Builder req = target.path("reports" + runit.getUriString() + "/inputControls/" + ctrls + "/values").request();
+		Response r = connector.post(req, Entity.entity(new ReportParameters(lrp), MediaType.APPLICATION_XML_TYPE), monitor);
+		InputControlStateListWrapper crl = toObj(r, InputControlStateListWrapper.class, monitor);
+		if (crl != null) {
+			for (ResourceDescriptor rd : ics) {
+				if (rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					for (InputControlState state : crl.getInputControlStateList()) {
+						if (state.getId().equals(rd.getName())) {
+							setInputControlState(rd, state);
+							break;
+						}
+					}
+			}
+		}
+		return ics;
+	}
+
+	private void setMap(String key, Map<String, List<String>> map, Object value) {
+		List<String> vals = map.get(key);
+		if (vals == null) {
+			vals = new ArrayList<String>();
+			map.put(key, vals);
+		}
+		if (value instanceof Collection) {
+			for (Object obj : (Collection<?>) value) {
+				String str = obj.toString();
+				if (!vals.contains(str))
+					vals.add(str);
+			}
+		} else {
+			String str = value.toString();
+			if (!vals.contains(str))
+				vals.add(str);
+		}
 	}
 }

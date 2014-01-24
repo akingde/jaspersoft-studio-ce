@@ -65,6 +65,9 @@ public class FindResources {
 					prunit = file.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_REPORTRESOURCE));
 
 				String srvURL = jd.getProperty(AExporter.PROP_SERVERURL);
+				if (srvURL == null)
+					srvURL = file.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, AExporter.PROP_SERVERURL));
+
 				if (prunit != null && srvURL != null && mserv.getValue().getUrl().equals(srvURL)) {
 					WSClientHelper.connect(mserv, monitor);
 					WSClientHelper.connectGetData(mserv, monitor);
