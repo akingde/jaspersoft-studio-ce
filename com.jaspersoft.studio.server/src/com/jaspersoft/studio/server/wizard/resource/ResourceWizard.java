@@ -24,6 +24,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -91,6 +92,8 @@ public class ResourceWizard extends Wizard {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask("Saving", IProgressMonitor.UNKNOWN);
 					try {
+						ResourceDescriptor rd = resource.getValue();
+						rd.fixResourceMap();
 						WSClientHelper.saveResource(resource, monitor);
 					} catch (Exception e) {
 						throw new InvocationTargetException(e);

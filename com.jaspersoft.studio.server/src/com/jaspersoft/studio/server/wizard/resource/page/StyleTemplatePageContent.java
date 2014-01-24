@@ -20,8 +20,9 @@ import org.eclipse.core.databinding.DataBindingContext;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.ATextFileResourcePageContent;
 
-public class StyleTemplatePageContent extends AFileResourcePageContent {
+public class StyleTemplatePageContent extends ATextFileResourcePageContent {
 
 	public StyleTemplatePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);

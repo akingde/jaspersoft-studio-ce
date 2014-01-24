@@ -287,6 +287,10 @@ public abstract class ASelector {
 	}
 
 	public static void copyFields(ResourceDescriptor rd, ResourceDescriptor rnew) {
+		rnew.setParameters(rd.getParameters());
+		rnew.setProperties(rd.getProperties());
+		rnew.setChildren(rd.getChildren());
+
 		rnew.setQueryData(rd.getQueryData());
 		rnew.setQueryValueColumn(rd.getQueryValueColumn());
 		rnew.setQueryVisibleColumns(rd.getQueryVisibleColumns());
@@ -313,46 +317,19 @@ public abstract class ASelector {
 		rnew.setName(rd.getName());
 		rnew.setLabel(rd.getLabel());
 		rnew.setDescription(rd.getDescription());
-
-		rnew.setParameters(rd.getParameters());
-		rnew.setProperties(rd.getProperties());
-		rnew.setChildren(rd.getChildren());
 	}
 
 	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {
 		ResourceDescriptor rnew = new ResourceDescriptor();
+		copyFields(rd, rnew);
+
 		rnew.setIsNew(rd.getIsNew());
 		rnew.setIsReference(rd.getIsReference());
-		rnew.setName(rd.getName());
-		rnew.setLabel(rd.getLabel());
-		rnew.setDescription(rd.getDescription());
+
 		rnew.setUriString(rd.getUriString());
 		rnew.setParentFolder(rd.getParentFolder());
 		rnew.setDataSourceType(rd.getDataSourceType());
 		rnew.setWsType(rd.getWsType());
-
-		rnew.setListOfValues(rd.getListOfValues());
-
-		rnew.setPattern(rd.getPattern());
-		rnew.setMinValue(rd.getMinValue());
-		rnew.setMaxValue(rd.getMaxValue());
-		rnew.setStrictMin(rd.isStrictMin());
-		rnew.setStrictMax(rd.isStrictMax());
-		rnew.setDataType(rd.getDataType());
-
-		rnew.setJndiName(rd.getJndiName());
-
-		rnew.setBeanMethod(rd.getBeanMethod());
-		rnew.setBeanName(rd.getBeanName());
-
-		rnew.setDriverClass(rd.getDriverClass());
-		rnew.setUsername(rd.getUsername());
-		rnew.setPassword(rd.getPassword());
-		rnew.setConnectionUrl(rd.getConnectionUrl());
-
-		rnew.setParameters(rd.getParameters());
-		rnew.setProperties(rd.getProperties());
-		rnew.setChildren(rd.getChildren());
 
 		return rnew;
 	}

@@ -1054,6 +1054,12 @@ public class ResourceDescriptor implements Serializable {
 				p.setDirty(isDirty);
 	}
 
+	public void fixResourceMap() {
+		setProperties(getProperties());
+		for (ResourceDescriptor r : getChildren())
+			r.fixResourceMap();
+	}
+
 	private List<String> masterICs;
 
 	public List<String> getMasterInputControls() {
