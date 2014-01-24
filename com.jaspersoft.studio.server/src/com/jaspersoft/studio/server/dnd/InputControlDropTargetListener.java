@@ -40,7 +40,6 @@ import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.protocol.IConnection;
 
 /**
  * A target drop listener that creates a generic file resource element when
@@ -139,25 +138,6 @@ public class InputControlDropTargetListener extends NodeTreeDropAdapter implemen
 			if (n instanceof MInputControl)
 				ics.add(((MInputControl) n).getValue());
 		return ics;
-	}
-
-	protected void doSaveBack(IProgressMonitor monitor, IConnection c, String ruuri, List<MInputControl> ics) {
-		for (MInputControl n : ics) {
-			try {
-				ResourceDescriptor rd = n.getValue();
-				rd.setIsNew(true);
-				if (!rd.getParentFolder().endsWith("_files")) {
-					rd.setIsReference(true);
-					rd.setReferenceUri(rd.getUriString());
-					rd.setParentFolder(ruuri + "_files");
-				}
-				rd.setUriString(ruuri + "_files/" + rd.getName());
-
-				c.modifyReportUnitResource(monitor, ruuri, rd, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@Override

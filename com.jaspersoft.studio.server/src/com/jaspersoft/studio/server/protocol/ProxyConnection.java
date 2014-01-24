@@ -124,8 +124,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, String rUnitUri, ResourceDescriptor rd, File inFile) throws Exception {
-		rd = c.modifyReportUnitResource(monitor, rUnitUri, rd, inFile);
+	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+		rd = c.modifyReportUnitResource(monitor, runit, rd, inFile);
 		rd.setDirty(false);
 		return rd;
 	}

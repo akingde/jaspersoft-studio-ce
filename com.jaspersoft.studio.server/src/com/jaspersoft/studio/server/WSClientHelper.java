@@ -262,8 +262,6 @@ public class WSClientHelper {
 			if (rd.getIsReference())
 				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 			if (mru != null && res != mru) {
-				String ruuri = mru.getValue().getUriString();
-
 				String wsType = rd.getWsType();
 				if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew())
 					rd = cli.addOrModifyResource(monitor, rd, file);
@@ -273,7 +271,7 @@ public class WSClientHelper {
 					if (wsType.equals(ResourceDescriptor.TYPE_JRXML) && !rd.getIsNew() && rd.getName().equals("main_jrxml"))
 						rd.setMainReport(true);
 					// String turi = rd.getUriString();
-					ResourceDescriptor trd = cli.modifyReportUnitResource(monitor, ruuri, rd, file);
+					ResourceDescriptor trd = cli.modifyReportUnitResource(monitor, mru.getValue(), rd, file);
 					// if (!trd.getUriString().equals(turi))
 					// rd = getResource(cli, rd, null);
 					rd = trd;

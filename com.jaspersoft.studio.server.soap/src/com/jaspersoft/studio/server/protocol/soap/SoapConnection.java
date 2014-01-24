@@ -153,8 +153,8 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, String rUnitUri, ResourceDescriptor rd, File inFile) throws Exception {
-		return client.modifyReportUnitResource(rUnitUri, rd, inFile);
+	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+		return client.modifyReportUnitResource(runit.getUriString(), rd, inFile);
 	}
 
 	@Override

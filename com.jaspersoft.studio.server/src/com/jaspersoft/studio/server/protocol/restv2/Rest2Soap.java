@@ -317,10 +317,11 @@ public class Rest2Soap {
 					return -1;
 				if (wsType1.equals(ResourceDescriptor.TYPE_QUERY))
 					return 1;
-				if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-					return 1;
 				if (wsType1.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					return 1;
+				if (wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 					return -1;
+
 				return wsType0.compareTo(wsType1);
 			}
 		});

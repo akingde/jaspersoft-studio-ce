@@ -2,6 +2,7 @@ package com.jaspersoft.studio.server.protocol.restv2;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,6 +59,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.Version;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -214,7 +216,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
-			return Rest2Soap.getRD(this, crl, rd);
+			return doGet(monitor, rd, crl);
 		return null;
 	}
 
@@ -230,7 +232,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Response r = connector.post(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
-			return Rest2Soap.getRD(this, crl, rd);
+			return doGet(monitor, rd, crl);
 		return null;
 	}
 
@@ -268,29 +270,28 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			} else
 				throw e;
 		}
-		if (crl != null && !monitor.isCanceled()) {
-			boolean refresh = false;
-			if (WsTypes.INST().isContainerType(crl.getClass()))
-				refresh = true;
-			// List<ResourceDescriptor> children = rd.getChildren();
-			// for (ResourceDescriptor child : children) {
-			// if (child == null)
-			// continue;
-			// if (!child.getIsReference() && child.isDirty() &&
-			// !monitor.isCanceled())
-			// addOrModifyResource(monitor, child, null);
-			// }
-			if (refresh && !monitor.isCanceled())
-				rd = get(monitor, rd, null);
-			else
-				rd = Rest2Soap.getRD(this, crl, rd);
-		}
+		if (crl != null && !monitor.isCanceled())
+			rd = doGet(monitor, rd, crl);
+
+		return rd;
+	}
+
+	private ResourceDescriptor doGet(IProgressMonitor monitor, ResourceDescriptor rd, ClientResource<?> crl) throws Exception, ParseException {
+		boolean refresh = false;
+		if (WsTypes.INST().isContainerType(crl.getClass()))
+			refresh = true;
+		if (refresh && !monitor.isCanceled())
+			rd = get(monitor, rd, null);
+		else
+			rd = Rest2Soap.getRD(this, crl, rd);
 		return rd;
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, String rUnitUri, ResourceDescriptor rd, File inFile) throws Exception {
-		return addOrModifyResource(monitor, rd, inFile);
+	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+		runit = get(monitor, runit, null);
+		PublishUtil.setChild(runit, rd);
+		return addOrModifyResource(monitor, runit, inFile);
 	}
 
 	@Override
@@ -476,17 +477,23 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public void reorderInputControls(String uri, List<ResourceDescriptor> rds, IProgressMonitor monitor) throws Exception {
-		List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
-		for (ResourceDescriptor rd : rds) {
-			Object v = rd.getValue();
-			if (v != null && v instanceof ReportInputControl)
-				ics.add((ReportInputControl) v);
-		}
-		ReportInputControlsListWrapper wrapper = new ReportInputControlsListWrapper(ics);
+		Builder req = target.path("reports" + uri + "/inputControls").request();
+		Response res = connector.get(req, monitor);
+		ReportInputControlsListWrapper crl = toObj(res, ReportInputControlsListWrapper.class, monitor);
+		if (crl != null) {
+			List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
+			for (ResourceDescriptor r : rds) {
+				for (ReportInputControl ric : crl.getInputParameters()) {
+					if (r.getName().equals(ric.getId()))
+						ics.add(ric);
+				}
+			}
+			ReportInputControlsListWrapper wrapper = new ReportInputControlsListWrapper(ics);
 
-		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
-		Response r = connector.put(req, Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE), monitor);
-		toObj(r, ReportInputControlsListWrapper.class, monitor);
+			req = target.path("reports" + uri + "/inputControls").request();
+			Response r = connector.put(req, Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE), monitor);
+			toObj(r, ReportInputControlsListWrapper.class, monitor);
+		}
 	}
 
 	@Override

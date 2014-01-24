@@ -126,7 +126,7 @@ public class PasteResourceAction extends Action {
 							p = (ANode) p.getChildren().get(0);
 						s = new TreeSelection(new TreePath(new Object[] { p }));
 
-						Display.getDefault().asyncExec(new Runnable() {
+						UIUtils.getDisplay().asyncExec(new Runnable() {
 
 							public void run() {
 								treeViewer.refresh(true);
@@ -197,7 +197,7 @@ public class PasteResourceAction extends Action {
 						}
 						// WSClientHelper.saveResource((MReportUnit) parent, monitor,
 						// false);
-						ws.modifyReportUnitResource(monitor, prd.getUriString(), origin, file);
+						ws.modifyReportUnitResource(monitor, prd, origin, file);
 
 						origin.setName(oldName);
 						origin.setLabel(oldLabel);
