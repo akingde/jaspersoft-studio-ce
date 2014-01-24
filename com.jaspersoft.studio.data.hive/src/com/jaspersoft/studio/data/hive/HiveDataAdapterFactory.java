@@ -20,9 +20,9 @@ import net.sf.jasperreports.data.DataAdapterService;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterService;
+import com.jaspersoft.connectors.hive.adapter.HiveDataAdapter;
+import com.jaspersoft.connectors.hive.adapter.HiveDataAdapterImpl;
+import com.jaspersoft.connectors.hive.adapter.HiveDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
@@ -53,7 +53,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
 	 */
 	public String getDataAdapterClassName() {
-		return HiveDataAdapterImplementation.class.getName();
+		return HiveDataAdapterImpl.class.getName();
 	}
 
 	/*

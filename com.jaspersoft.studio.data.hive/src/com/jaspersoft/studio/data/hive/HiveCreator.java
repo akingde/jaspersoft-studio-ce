@@ -20,7 +20,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
+import com.jaspersoft.connectors.hive.adapter.HiveDataAdapterImpl;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 
@@ -34,7 +34,7 @@ public class HiveCreator implements IDataAdapterCreator {
 
 	@Override
 	public DataAdapterDescriptor buildFromXML(Document docXML) {
-		HiveDataAdapterImplementation result = new HiveDataAdapterImplementation();
+		HiveDataAdapterImpl result = new HiveDataAdapterImpl();
 		
 		NamedNodeMap rootAttributes = docXML.getChildNodes().item(0).getAttributes();
 		String connectionName = rootAttributes.getNamedItem("name").getTextContent();

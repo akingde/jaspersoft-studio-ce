@@ -27,9 +27,9 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.hadoop.hive.HiveDataSource;
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
+import com.jaspersoft.connectors.hive.HiveDataSource;
+import com.jaspersoft.connectors.hive.adapter.HiveDataAdapter;
+import com.jaspersoft.connectors.hive.adapter.HiveDataAdapterImpl;
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
@@ -72,7 +72,7 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	@Override
 	public HiveDataAdapter getDataAdapter() {
 		if (dataAdapter == null)
-			dataAdapter = new HiveDataAdapterImplementation();
+			dataAdapter = new HiveDataAdapterImpl();
 		return (HiveDataAdapter) dataAdapter;
 	}
 
