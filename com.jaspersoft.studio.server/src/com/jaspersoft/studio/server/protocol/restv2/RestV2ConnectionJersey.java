@@ -378,6 +378,17 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 							addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
 						}
 				}
+			} else {
+				tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + Argument.RUN_OUTPUT_FORMAT_JRPRINT + "/outputResource");
+				req = tgt.request(MediaType.APPLICATION_OCTET_STREAM_TYPE);
+				byte[] d = readFile(connector.get(req, monitor), monitor);
+				FileContent content = new FileContent();
+				content.setData(d);
+				content.setMimeType(MediaType.APPLICATION_OCTET_STREAM_TYPE.toString());
+				content.setName("attachment-0");
+
+				map.put("jasperPrint", content);
+				// addFileContent(d, map, , "attachment-0", "jasperPrint");
 			}
 		}
 		return map;
