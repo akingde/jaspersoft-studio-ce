@@ -25,6 +25,9 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.swt.graphics.Image;
+
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
@@ -62,4 +65,15 @@ public class XmlaDataAdapterDescriptor extends DataAdapterDescriptor implements 
 		getFieldProvider();
 		return fprovider.getFields(con, jConfig, jDataset);
 	}
+	
+	/**
+	 * Return an Image. By default this method returns a simple database icon
+	 */
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getDefault().getImage("icons/database.png"); //$NON-NLS-1$
+		}
+		return null;
+	}
+
 }
