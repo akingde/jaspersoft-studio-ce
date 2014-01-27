@@ -222,6 +222,7 @@ public class Messages extends NLS {
 	public static String BandSection_height_tool_tip;
 	public static String BandSection_split_type_tool_tip;
 	public static String BandSection_title;
+	public static String BookmarkSection_bookmarkSectionTitle;
 	public static String BooleanCellEditorValidator_value_is_not_instance_of_boolean;
 	public static String BordersSection_all_borders_tool_tip;
 	public static String common_borders;
@@ -681,6 +682,8 @@ public class Messages extends NLS {
 	public static String FontSection_strike_through_tool_tip;
 	public static String FontSection_underline_tool_tip;
 	public static String FontsPreferencePage_fontListTitle;
+	public static String FreeLayout_name;
+	public static String FreeLayout_tooltip;
 	public static String G2DExporterPreferencePage_2;
 	public static String G2DExporterPreferencePage_3;
 	public static String G2DExporterPreferencePage_4;
@@ -689,8 +692,10 @@ public class Messages extends NLS {
 	public static String GenerateFragmentWizard_congratsText3;
 	public static String GenerateFragmentWizard_congratsText4;
 	public static String GenerateFragmentWizard_congratsText5;
+	public static String GlobalPreferencePage_flagDescription;
 	public static String GlobalPreferencePage_jettyServerTitle;
 	public static String GlobalPreferencePage_port;
+	public static String GlobalPreferencePage_title;
 	public static String GraphicSection_Detail_Section_Title;
 	public static String GroupSection_SameNameErrorMsg;
 	public static String GroupSection_SameNameErrorTitle;
@@ -1399,6 +1404,11 @@ public class Messages extends NLS {
 	public static String PDFPermissionFieldEditor_allowPrinting;
 	public static String PDFPermissionFieldEditor_allowScreenReader;
 	public static String PDFPermissionFieldEditor_permissionsTitle;
+	public static String PercentagePage_datasetsLabel;
+	public static String PercentagePage_fieldsLabel;
+	public static String PercentagePage_percentaceWizardDescription;
+	public static String PercentagePage_percentageWizardTitle;
+	public static String PercentagePage_resetTypeLabel;
 	public static String PercentagePattern_description;
 	public static String PostSetDatasetName_message;
 	public static String PostSetDatasetName_title;

@@ -64,7 +64,7 @@ public class BookmarkSection extends AbstractSection {
 	
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent = getWidgetFactory().createSection(parent, "Anchor and Bookmark", true, 2);
+		parent = getWidgetFactory().createSection(parent, Messages.BookmarkSection_bookmarkSectionTitle, true, 2);
 		section = (ExpandableComposite)parent.getParent();
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ASPropertyWidget exp = createWidget4Property(parent, getAnchorNameProperty(), true);  

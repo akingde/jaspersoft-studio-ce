@@ -4,6 +4,7 @@ Bundle-Name: SQL Query Editor
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Version: 5.6.0.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui;singleton:=true
+Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.6.0",
  org.eclipse.xtext.ui,

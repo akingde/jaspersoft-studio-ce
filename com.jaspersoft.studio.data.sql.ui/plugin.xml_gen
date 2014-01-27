@@ -11,7 +11,7 @@
             default="true"
             extensions="sql"
             id="com.jaspersoft.studio.data.Sql"
-            name="Sql Editor">
+            name="%sql_editor">
         </editor>
     </extension>
     <extension
@@ -59,7 +59,7 @@
             category="com.jaspersoft.studio.data.Sql"
             class="com.jaspersoft.studio.data.ui.SqlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="com.jaspersoft.studio.data.Sql.coloring"
-            name="Syntax Coloring">
+            name="%syntaxColor">
             <keywordReference id="com.jaspersoft.studio.data.ui.keyword_Sql"/>
         </page>
         <page

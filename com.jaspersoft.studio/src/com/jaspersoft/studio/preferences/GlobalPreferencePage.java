@@ -51,10 +51,10 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 		separator.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 		
 		Label securityTitle = new Label(getFieldEditorParent(), SWT.NONE);
-		securityTitle.setText("Security related preferences");
+		securityTitle.setText(Messages.GlobalPreferencePage_title);
 		securityTitle.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,2,1));
 		
-		BooleanFieldEditor useSecStorage = new BooleanFieldEditor(JSS_USE_SECURE_STORAGE, "Use the Secure Storage to save credentials",getFieldEditorParent());
+		BooleanFieldEditor useSecStorage = new BooleanFieldEditor(JSS_USE_SECURE_STORAGE, Messages.GlobalPreferencePage_flagDescription,getFieldEditorParent());
 		addField(useSecStorage);
 	}
 

@@ -23,6 +23,8 @@ import net.sf.jasperreports.engine.JRElement;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class FreeLayout implements ILayout {
 
 	@Override
@@ -32,17 +34,17 @@ public class FreeLayout implements ILayout {
 
 	@Override
 	public String getName() {
-		return "Free Layout";
+		return Messages.FreeLayout_name;
 	}
 
 	@Override
 	public String getToolTip() {
-		return "Free Layout";
+		return Messages.FreeLayout_tooltip;
 	}
 
 	@Override
 	public String getIcon() {
-		return "icons/layout.png";
+		return "icons/layout.png"; //$NON-NLS-1$
 	}
 
 }

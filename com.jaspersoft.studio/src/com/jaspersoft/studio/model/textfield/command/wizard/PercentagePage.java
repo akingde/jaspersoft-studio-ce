@@ -39,13 +39,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.CreatePercentageCommand;
 import com.jaspersoft.studio.property.dataset.TLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class PercentagePage extends WizardPage {
-	private static final String GROUP2 = "(Group) ";
+	private static final String GROUP2 = "(Group) "; //$NON-NLS-1$
 	private JRCloneable field;
 	private ResetTypeEnum rtype;
 	private JRGroup group;
@@ -73,8 +74,8 @@ public class PercentagePage extends WizardPage {
 
 	public PercentagePage() {
 		super("pecentage"); //$NON-NLS-1$
-		setTitle("Percentage Configuration Wizard");
-		setDescription("Please, select a field for wich you want percentage.");
+		setTitle(Messages.PercentagePage_percentageWizardTitle);
+		setDescription(Messages.PercentagePage_percentaceWizardDescription);
 		setImageDescriptor(MPercentage.getIconDescriptor().getIcon32());
 	}
 
@@ -111,13 +112,13 @@ public class PercentagePage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 
 		Label lblResetType = new Label(composite, SWT.NONE);
-		lblResetType.setText("Reset Type");
+		lblResetType.setText(Messages.PercentagePage_resetTypeLabel);
 
 		rtypeList = new Combo(composite, SWT.BORDER);
 		rtypeList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Label lblFields = new Label(composite, SWT.NONE);
-		lblFields.setText("Fields");
+		lblFields.setText(Messages.PercentagePage_fieldsLabel);
 
 		fieldsTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -127,7 +128,7 @@ public class PercentagePage extends WizardPage {
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(fieldsTable, SWT.NONE);
-		col[0].setText("Dataset Objects");
+		col[0].setText(Messages.PercentagePage_datasetsLabel);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();

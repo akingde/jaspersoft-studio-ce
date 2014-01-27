@@ -5,6 +5,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
@@ -13,7 +14,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	public SQLEditorPreferencesPage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("SQL Query Editor Settings");
+		setDescription(Messages.SQLEditorPreferencesPage_dialogTitle);
 	}
 
 	@Override
@@ -23,11 +24,11 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new ComboFieldEditor(P_IDENTIFIER_QUOTE, "Identifier Quotes", new String[][] { { "id", "" }, { "\"id\"", "\"" }, { "`id`", "`" }, { "[id]", "[" } }, getFieldEditorParent()));
+		addField(new ComboFieldEditor(P_IDENTIFIER_QUOTE, Messages.SQLEditorPreferencesPage_comboLabel, new String[][] { { "id", "" }, { "\"id\"", "\"" }, { "`id`", "`" }, { "[id]", "[" } }, getFieldEditorParent())); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(P_IDENTIFIER_QUOTE, "");
+		store.setDefault(P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
 
 	}
 
