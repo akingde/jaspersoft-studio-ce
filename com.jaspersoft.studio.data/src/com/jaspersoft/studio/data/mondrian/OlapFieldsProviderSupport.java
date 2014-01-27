@@ -123,18 +123,19 @@ public class OlapFieldsProviderSupport {
 						} else {
 							String rowsExpression = prefix
 									+ makeOlapExpression(hier
-											.getDimensionName()) + "["
-									+ level.getName() + "]";
+											.getDimensionName())
+									+ "[" + level.getName() + "]";
 							
 							addField(makeJRFieldName(hier.getDimensionName()
-									+ level.getName()), rowsExpression, false,
+									+ level.getName()), rowsExpression, "java.lang.String",
 									fields);
 						}
 					}
 				}
 
 				/*
-				 * Pick up the measure names
+				 * Pick up the measure names.
+				 * There should always be a measuresLevel.
 				 */
 				if (foundMeasuresLevel){
 					for (int i = 0; i < axis.getTupleCount(); i++) {
@@ -151,11 +152,22 @@ public class OlapFieldsProviderSupport {
 			axisCount++;
 		}
 
+		/*
+		 * This assumes measures will be only on only rows and columns.
+		 * will fail for pages, chapters and sections
+		 */
 		for (String measureName : measureNames) {
-			addField(makeJRFieldName(measureName), generateMeasureAxisExpression(measureLevelAxisIndex, axisCount-1, measureName), false, fields);
+			addField(makeJRFieldName(measureName), generateMeasureAxisExpression(measureLevelAxisIndex, axisCount-1, measureName), "java.lang.Number", fields);
 		}
 
-		return new ArrayList<JRDesignField>(fields.values());
+		// preserve the order of field creation
+		
+		List<JRDesignField> returnedList = new ArrayList<JRDesignField>(fields.size());
+		
+		for (String key : fields.keySet()) {
+			returnedList.add(fields.get(key));
+		}
+		return returnedList;
 	}
 	
 	private static String generateMeasureAxisExpression(int measureLevelIndex, int axisNumber, String measureName){
@@ -171,20 +183,17 @@ public class OlapFieldsProviderSupport {
 		return result.toString();
 	}
 
-	private static void addField(String name, String description, boolean row,
-			Map<String, JRDesignField> fieldsMap) {
+		
+	private static void addField(String name, String description, String type, Map<String, JRDesignField> fieldsMap) {
 		JRDesignField f = new JRDesignField();
 		f.setName(name);
 		f.setDescription(description);
 
-		f.setValueClassName("java.lang.String");
+		f.setValueClassName(type);
 
-		if (fieldsMap.containsKey(name)) {
-
-		} else {
-			fieldsMap.put(name, f);
-		}
+		fieldsMap.put(name, f);
 	}
+
 
 	private static String makeJRFieldName(String s) {
 		String out = s.replace(" ", "");
@@ -223,5 +232,4 @@ public class OlapFieldsProviderSupport {
 		 */
 		return uniqueName.startsWith("[Measures].");
 	}
-
 }
