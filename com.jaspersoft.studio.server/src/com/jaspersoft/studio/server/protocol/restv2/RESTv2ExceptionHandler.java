@@ -46,6 +46,8 @@ public class RESTv2ExceptionHandler {
 					throw new HttpResponseException(status, msg);
 				}
 			}
+		case 401:
+			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
 		case 403:
 		case 409:
 		case 404:
