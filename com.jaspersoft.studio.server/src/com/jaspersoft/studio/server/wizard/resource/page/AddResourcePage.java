@@ -213,7 +213,7 @@ public class AddResourcePage extends WizardPage {
 				};
 
 				new MRMondrianSchema(oroot, MRMondrianSchema.createDescriptor(parent), -1);
-				createOlap(oroot);
+				// createOlap(oroot);
 				new MROlapUnit(oroot, MROlapUnit.createDescriptor(parent), -1);
 				new MRAccessGrantSchema(root, MRAccessGrantSchema.createDescriptor(parent), -1);
 			}
@@ -327,7 +327,7 @@ public class AddResourcePage extends WizardPage {
 		new MRDatasourceDiagnostic(mroot, MRDatasourceDiagnostic.createDescriptor(parent), -1);
 
 		new MRDatasourceAWS(mroot, MRDatasourceAWS.createDescriptor(parent), -1);
-
+		createOlap(mroot);
 		Activator.getExtManager().createNewDatasource(mroot, parent);
 		return mroot;
 	}

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
@@ -39,7 +40,8 @@ public class ProxyConnection implements IConnection {
 		c.add(new RestV2ConnectionJersey());
 
 		c.addAll(Activator.getExtManager().getProtocols());
-
+		for (IConnection con : c)
+			con.setParent(this);
 		return c.toArray(new IConnection[c.size()]);
 	}
 
@@ -83,7 +85,19 @@ public class ProxyConnection implements IConnection {
 		if (useSoap(monitor, rd))
 			rd = soap.get(monitor, rd, f);
 		else
-			rd = c.get(monitor, rd, f);
+			try {
+				rd = c.get(monitor, rd, f);
+			} catch (Exception e) {
+				if (e instanceof HttpResponseException) {
+					HttpResponseException he = (HttpResponseException) e;
+					if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
+						rd = soap.get(monitor, rd, f);
+						rd.setDirty(false);
+						return rd;
+					}
+				}
+				throw e;
+			}
 		rd.setDirty(false);
 		return rd;
 	}
@@ -95,8 +109,20 @@ public class ProxyConnection implements IConnection {
 		// if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("6") < 0)
 		// list = soap.list(monitor, rd);
 		// else
-		list = c.list(monitor, rd);
-
+		try {
+			list = c.list(monitor, rd);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
+					list = soap.list(monitor, rd);
+					for (ResourceDescriptor r : list)
+						r.setDirty(false);
+					return list;
+				}
+			}
+			throw e;
+		}
 		for (ResourceDescriptor r : list)
 			r.setDirty(false);
 		return list;
@@ -201,6 +227,10 @@ public class ProxyConnection implements IConnection {
 	@Override
 	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
 		return c.cascadeInputControls(runit, ics, monitor);
+	}
+
+	@Override
+	public void setParent(IConnection parent) {
 	}
 
 }

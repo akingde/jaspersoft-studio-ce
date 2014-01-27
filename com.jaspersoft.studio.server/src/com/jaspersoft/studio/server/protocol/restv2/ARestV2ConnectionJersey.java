@@ -16,6 +16,8 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.jaspersoft.studio.server.protocol.IConnection;
+
 public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 	protected WebTarget target;
 	protected JSSApacheConnector connector;
@@ -148,5 +150,16 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 			FileUtils.closeStream(in);
 			res.close();
 		}
+	}
+
+	public ARestV2ConnectionJersey() {
+		setParent(this);
+	}
+
+	protected IConnection parent;
+
+	@Override
+	public void setParent(IConnection parent) {
+		this.parent = parent;
 	}
 }

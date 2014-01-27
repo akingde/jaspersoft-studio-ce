@@ -89,7 +89,7 @@ public class PublishUtil {
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (int i = 0; i < children.size(); i++) {
 			ResourceDescriptor r = children.get(i);
-			if (r.getUriString().equals(child.getUriString())) {
+			if ((child.getUriString() == null && r.getUriString() == null && child.getWsType().equals(r.getWsType())) || (r.getUriString() != null && r.getUriString().equals(child.getUriString()))) {
 				children.set(i, child);
 				return;
 			}

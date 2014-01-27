@@ -121,10 +121,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
-			rd = get(monitor, rd, null);
+			rd = parent.get(monitor, rd, null);
 			return rd.getChildren();
 		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)) {
-			rd = get(monitor, rd, null);
+			rd = parent.get(monitor, rd, null);
 			return rd.getChildren();
 		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW)) {
 			return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
@@ -170,7 +170,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						ResourceDescriptor pub = new ResourceDescriptor();
 						pub.setUriString("/public");
 						pub.setWsType(ResourceDescriptor.TYPE_FOLDER);
-						rds.add(get(monitor, pub, null));
+						rds.add(parent.get(monitor, pub, null));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -265,7 +265,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		} catch (HttpResponseException e) {
 			if (e.getStatusCode() == 409) {
-				rd.setVersion(get(monitor, rd, null).getVersion());
+				rd.setVersion(parent.get(monitor, rd, null).getVersion());
 				return addOrModifyResource(monitor, rd, inFile);
 			} else
 				throw e;
@@ -281,7 +281,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (WsTypes.INST().isContainerType(crl.getClass()))
 			refresh = true;
 		if (refresh && !monitor.isCanceled())
-			rd = get(monitor, rd, null);
+			rd = parent.get(monitor, rd, null);
 		else
 			rd = Rest2Soap.getRD(this, crl, rd);
 		return rd;
@@ -289,7 +289,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
-		runit = get(monitor, runit, null);
+		runit = parent.get(monitor, runit, null);
 		PublishUtil.setChild(runit, rd);
 		return addOrModifyResource(monitor, runit, inFile);
 	}
@@ -502,7 +502,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		ResourceDescriptor rdunit = new ResourceDescriptor();
 		rdunit.setUriString(uri);
 		rdunit.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
-		rdunit = get(monitor, rdunit, null);
+		rdunit = parent.get(monitor, rdunit, null);
 		if (monitor.isCanceled())
 			return rdunit;
 		Builder req = target.path("reports" + uri + "/inputControls").request();

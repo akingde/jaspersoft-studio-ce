@@ -16,6 +16,7 @@ import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 public interface IConnection {
+	public void setParent(IConnection parent);
 
 	public Format getDateFormat();
 

@@ -37,6 +37,7 @@ import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.ConnectionManager;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
 
@@ -255,6 +256,12 @@ public class RestV2Connection extends ARestV2Connection {
 	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setParent(IConnection parent) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

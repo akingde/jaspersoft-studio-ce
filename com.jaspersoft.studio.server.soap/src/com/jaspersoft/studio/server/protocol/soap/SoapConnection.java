@@ -385,4 +385,8 @@ public class SoapConnection implements IConnection {
 			dsUriQuery = dsUri;
 		return dsUriQuery;
 	}
+
+	@Override
+	public void setParent(IConnection parent) {
+	}
 }
