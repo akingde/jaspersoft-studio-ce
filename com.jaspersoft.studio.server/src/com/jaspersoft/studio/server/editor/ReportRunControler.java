@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -80,11 +79,10 @@ public class ReportRunControler {
 
 							// TODO search all the repository
 							icm.getDefaults();
-							Display.getDefault().asyncExec(new Runnable() {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
 								public void run() {
-									if (viewmap != null) {
+									if (viewmap != null)
 										fillForms();
-									}
 									runReport();
 								}
 							});
