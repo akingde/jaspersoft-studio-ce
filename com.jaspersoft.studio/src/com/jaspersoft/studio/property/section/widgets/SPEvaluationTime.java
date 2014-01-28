@@ -67,9 +67,11 @@ public class SPEvaluationTime extends ASPropertyWidget {
 				} else {
 					et = EnumHelper.getValue(EvaluationTimeEnum.getByName(str), 1, false);
 				}
-
-				section.changeProperty(pDescriptor.getId(), et);
+				//It is important to set first the group because the group changing dosen't trigger an event
+				//so otherwise setting the type first trigger the event but the group has not been set to the 
+				//setData method dosen't find the group and set always the element 0.
 				section.changeProperty(gDescriptor.getId(), group);
+				section.changeProperty(pDescriptor.getId(), et);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
