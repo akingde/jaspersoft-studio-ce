@@ -99,8 +99,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		client.register(new HttpBasicAuthFilter(user, Pass.getPass(sp.getPass())));
 		target = client.target(sp.getUrl() + SUFFIX);
 		getServerInfo(monitor);
-
-		return true;
+		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0;
 	}
 
 	@Override
