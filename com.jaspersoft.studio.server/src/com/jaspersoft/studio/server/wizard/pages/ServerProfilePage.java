@@ -39,6 +39,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -74,6 +75,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Text ttimeout;
 	private Text lpath;
 	private Button bchunked;
+	private Combo bmime;
 	private Button bdaterange;
 	private Button blpath;
 	private VersionCombo cversion;
@@ -182,6 +184,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify), PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeSelection(bchunked), PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeSelection(bdaterange), PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
 
@@ -221,9 +224,21 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		gd.horizontalSpan = 2;
 		bdaterange.setLayoutData(gd);
 
-		String ttip = "Folder where files will be stored locally, when opened in the editor. If empty a temporary folder will be created automatically.";
-
+		String ttip = "For SOAP connections only.";
 		Label lbl = new Label(cmp, SWT.NONE);
+		lbl.setText("Format of Attachements");
+		lbl.setToolTipText(ttip);
+
+		bmime = new Combo(cmp, SWT.READ_ONLY);
+		bmime.setItems(new String[] { "MIME", "DIME" });
+		bmime.setToolTipText(ttip);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		bmime.setLayoutData(gd);
+
+		ttip = "Folder where files will be stored locally, when opened in the editor. If empty a temporary folder will be created automatically.";
+
+		lbl = new Label(cmp, SWT.NONE);
 		lbl.setText("Workspace Folder");
 		lbl.setToolTipText(ttip);
 
@@ -299,6 +314,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		public String getProjectPath() {
 			return sp.getProjectPath();
+		}
+
+		public void setMime(String v) {
+			sp.setMime(v.equals("MIME"));
+		}
+
+		public String getMime() {
+			return sp.isMime() ? "MIME" : "DIME";
 		}
 	}
 

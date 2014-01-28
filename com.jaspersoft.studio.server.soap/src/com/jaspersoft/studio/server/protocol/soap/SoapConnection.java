@@ -1,6 +1,8 @@
 package com.jaspersoft.studio.server.protocol.soap;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -12,11 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRQueryChunk;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.apache.axis.AxisProperties;
 import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
@@ -100,6 +104,7 @@ public class SoapConnection implements IConnection {
 		server.setPassword(sp.getPass());
 		server.setTimeout(sp.getTimeout());
 		server.setChunked(sp.isChunked());
+		server.setMime(sp.isMime());
 	}
 
 	@Override
@@ -126,14 +131,22 @@ public class SoapConnection implements IConnection {
 	@Override
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
 		List<ResourceDescriptor> children = rd.getChildren();
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
+			for (ResourceDescriptor r : rd.getChildren()) {
+				if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml")) {
+					r.setMainReport(true);
+					if (r.getHasData() && r.getData() != null)
+						inputFile = writeToTemp(r.getData());
+					break;
+				}
+			}
 		rd = client.addOrModifyResource(rd, inputFile);
 		List<ResourceDescriptor> oldChildren = list(monitor, rd);
-		for (ResourceDescriptor r : oldChildren) {
+		for (ResourceDescriptor r : oldChildren)
 			for (ResourceDescriptor newr : children) {
 				if (r.getWsType().equals(newr.getWsType()) && r.getUriString().equals(newr.getUriString()))
 					newr.setIsNew(false);
 			}
-		}
 
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = get(monitor, rd, null);
@@ -144,8 +157,12 @@ public class SoapConnection implements IConnection {
 					continue;
 				if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !r.getIsNew())
 					r = client.addOrModifyResource(r, null);
-				else
-					r = client.modifyReportUnitResource(rd.getUriString(), r, null);
+				else {
+					inputFile = null;
+					if (r.getHasData() && r.getData() != null)
+						inputFile = writeToTemp(r.getData());
+					r = client.modifyReportUnitResource(rd.getUriString(), r, inputFile);
+				}
 				rd.getChildren().add(r);
 			}
 		}
@@ -388,5 +405,19 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public void setParent(IConnection parent) {
+	}
+
+	public static File writeToTemp(byte[] b64data) throws IOException {
+		File inputFile = FileUtils.createTempFile("save", "jrxml");
+		inputFile.deleteOnExit();
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(inputFile);
+			out.write(Base64.decodeBase64(b64data));
+			out.flush();
+		} finally {
+			FileUtils.closeStream(out);
+		}
+		return inputFile;
 	}
 }

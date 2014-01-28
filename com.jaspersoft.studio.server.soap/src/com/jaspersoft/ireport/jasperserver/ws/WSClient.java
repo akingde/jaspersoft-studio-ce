@@ -540,10 +540,12 @@ public class WSClient {
 			// attach the file...
 			if (attachments != null && attachments.length > 0) {
 				descriptor.setHasData(true);
-
 				// Tell the stub that the message being formed also contains an
 				// attachment, and it is of type MIME encoding.
-				((org.apache.axis.client.Stub) ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
+				if (getServer().isMime())
+					((org.apache.axis.client.Stub) ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_MIME);
+				else
+					((org.apache.axis.client.Stub) ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
 
 				for (int i = 0; i < attachments.length; i++) {
 					RequestAttachment attachment = attachments[i];

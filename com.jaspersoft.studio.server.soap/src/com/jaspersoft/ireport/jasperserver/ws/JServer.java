@@ -27,6 +27,7 @@ public class JServer {
 	private String username;
 	private String password;
 	private boolean chunked;
+	private boolean mime;
 
 	private WSClient wSClient = null;
 
@@ -55,6 +56,14 @@ public class JServer {
 	public void setUrl(String url) {
 		this.url = url;
 		setWSClient(null);
+	}
+
+	public boolean isMime() {
+		return mime;
+	}
+
+	public void setMime(boolean mime) {
+		this.mime = mime;
 	}
 
 	public String getUsername() {

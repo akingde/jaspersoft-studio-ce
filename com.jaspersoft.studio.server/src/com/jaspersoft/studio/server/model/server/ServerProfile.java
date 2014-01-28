@@ -35,7 +35,16 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	private String jrVersion = JRXmlWriterHelper.LAST_VERSION;
 	private int timeout = 60000;
 	private boolean chunked;
+	private boolean mime = true;
 	private String projectPath;
+
+	public boolean isMime() {
+		return mime;
+	}
+
+	public void setMime(boolean mime) {
+		this.mime = mime;
+	}
 
 	public String getProjectPath() {
 		return projectPath;
