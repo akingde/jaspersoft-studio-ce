@@ -5,10 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.apache.commons.lang.SystemUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -184,17 +187,22 @@ public class FindResourcePage extends WizardPage {
 
 		TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		tableComposite.setLayout(tableColumnLayout);
-		viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		TableViewerColumn col = new TableViewerColumn(viewer, SWT.NONE);
 		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
 			public void update(ViewerCell cell) {
-				ClientResourceLookup p = (ClientResourceLookup) cell.getElement();
+				ClientResourceLookup p = (ClientResourceLookup) cell
+						.getElement();
 
 				cell.setText(p.getLabel() + " : " + p.getUri());
-				StyleRange myStyledRange = new StyleRange(p.getLabel().length() + 3, cell.getText().length(), Display.getCurrent().getSystemColor(SWT.COLOR_GRAY), null);
+				StyleRange myStyledRange = new StyleRange(
+						p.getLabel().length() + 3, cell.getText().length(),
+						Display.getCurrent().getSystemColor(SWT.COLOR_GRAY),
+						null);
 				StyleRange[] range = { myStyledRange };
 				cell.setStyleRanges(range);
 
@@ -222,7 +230,8 @@ public class FindResourcePage extends WizardPage {
 			}
 		});
 
-		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(100));
+		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(
+				100));
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(false);
 		table.setLinesVisible(false);
@@ -234,7 +243,9 @@ public class FindResourcePage extends WizardPage {
 					try {
 						int[] sel = table.getSelectionIndices();
 						if (sel.length > 0)
-							value = WSClientHelper.toResourceDescriptor(finderUI.getServerProfile(), res.get(sel[0]));
+							value = WSClientHelper.toResourceDescriptor(
+									finderUI.getServerProfile(),
+									res.get(sel[0]));
 						if (value != null)
 							setPageComplete(true);
 					} catch (Exception e1) {
@@ -324,11 +335,30 @@ public class FindResourcePage extends WizardPage {
 		started++;
 		if (ended) {
 			ended = false;
+			search();
+		}
+	}
+
+	private void search() {
+		if (SystemUtils.IS_OS_WINDOWS)
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						WSClientHelper.findResources(new NullProgressMonitor(),
+								finderUI);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		else
 			try {
 				getContainer().run(true, true, new IRunnableWithProgress() {
 
 					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					public void run(IProgressMonitor monitor)
+							throws InvocationTargetException,
+							InterruptedException {
 						monitor.beginTask("Searching", IProgressMonitor.UNKNOWN);
 						try {
 							WSClientHelper.findResources(monitor, finderUI);
@@ -344,6 +374,5 @@ public class FindResourcePage extends WizardPage {
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-		}
 	}
 }

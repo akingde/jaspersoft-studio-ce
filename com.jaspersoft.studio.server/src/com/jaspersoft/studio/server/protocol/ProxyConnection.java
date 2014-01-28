@@ -49,12 +49,15 @@ public class ProxyConnection implements IConnection {
 	private IConnection soap;
 
 	@Override
-	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+	public boolean connect(IProgressMonitor monitor, ServerProfile sp)
+			throws Exception {
 		for (IConnection co : cons) {
 			try {
 				if (c == null && co.connect(monitor, sp))
 					c = co;
-				if (soap == null && co.getClass().getName().toUpperCase().contains("SOAP")) {
+				if (soap == null
+						&& co.getClass().getName().toUpperCase()
+								.contains("SOAP")) {
 					if (c == co)
 						soap = co;
 					else if (co.connect(monitor, sp))
@@ -81,15 +84,18 @@ public class ProxyConnection implements IConnection {
 		return c.getServerInfo(monitor);
 	}
 
-	private boolean useSoap(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+	private boolean useSoap(IProgressMonitor monitor, ResourceDescriptor rd)
+			throws Exception {
 		String v = c.getServerInfo(monitor).getVersion();
-		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0 && rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0
+				&& rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 			return true;
 		return false;
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
+	public ResourceDescriptor get(IProgressMonitor monitor,
+			ResourceDescriptor rd, File f) throws Exception {
 		if (useSoap(monitor, rd))
 			rd = soap.get(monitor, rd, f);
 		else
@@ -98,7 +104,8 @@ public class ProxyConnection implements IConnection {
 			} catch (Exception e) {
 				if (e instanceof HttpResponseException) {
 					HttpResponseException he = (HttpResponseException) e;
-					if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
+					if (he.getStatusCode() == 500
+							&& he.getMessage().contains("Unexpected error")) {
 						rd = soap.get(monitor, rd, f);
 						rd.setDirty(false);
 						return rd;
@@ -106,12 +113,14 @@ public class ProxyConnection implements IConnection {
 				}
 				throw e;
 			}
-		rd.setDirty(false);
+		if (rd != null)
+			rd.setDirty(false);
 		return rd;
 	}
 
 	@Override
-	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+	public List<ResourceDescriptor> list(IProgressMonitor monitor,
+			ResourceDescriptor rd) throws Exception {
 		List<ResourceDescriptor> list = null;
 		// String v = c.getServerInfo(monitor).getVersion();
 		// if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("6") < 0)
@@ -122,7 +131,8 @@ public class ProxyConnection implements IConnection {
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
+				if (he.getStatusCode() == 500
+						&& he.getMessage().contains("Unexpected error")) {
 					list = soap.list(monitor, rd);
 					for (ResourceDescriptor r : list)
 						r.setDirty(false);
@@ -137,50 +147,60 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor move(IProgressMonitor monitor,
+			ResourceDescriptor rd, String destFolderURI) throws Exception {
 		rd = c.move(monitor, rd, destFolderURI);
 		rd.setDirty(false);
 		return rd;
 	}
 
 	@Override
-	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor copy(IProgressMonitor monitor,
+			ResourceDescriptor rd, String destFolderURI) throws Exception {
 		rd = c.copy(monitor, rd, destFolderURI);
 		rd.setDirty(false);
 		return rd;
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor,
+			ResourceDescriptor rd, File inputFile) throws Exception {
 		rd = c.addOrModifyResource(monitor, rd, inputFile);
 		rd.setDirty(false);
 		return rd;
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+	public ResourceDescriptor modifyReportUnitResource(
+			IProgressMonitor monitor, ResourceDescriptor runit,
+			ResourceDescriptor rd, File inFile) throws Exception {
 		rd = c.modifyReportUnitResource(monitor, runit, rd, inFile);
 		rd.setDirty(false);
 		return rd;
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd)
+			throws Exception {
 		c.delete(monitor, rd);
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
+			ResourceDescriptor runit) throws Exception {
 		c.delete(monitor, rd, runit);
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
+	public Map<String, FileContent> runReport(IProgressMonitor monitor,
+			ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args)
+			throws Exception {
 		return c.runReport(monitor, rd, prm, args);
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor)
+			throws Exception {
 		List<ResourceDescriptor> list = c.listDatasources(monitor);
 		for (ResourceDescriptor r : list)
 			r.setDirty(false);
@@ -203,12 +223,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
+	public void findResources(IProgressMonitor monitor, AFinderUI callback)
+			throws Exception {
 		c.findResources(monitor, callback);
 	}
 
 	@Override
-	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest) throws Exception {
+	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest)
+			throws Exception {
 		return c.toResourceDescriptor(rest);
 	}
 
@@ -218,7 +240,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception {
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rd,
+			IProgressMonitor monitor) throws Exception {
 		c.reorderInputControls(uri, rd, monitor);
 	}
 
@@ -228,12 +251,15 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
+	public ResourceDescriptor initInputControls(String uri,
+			IProgressMonitor monitor) throws Exception {
 		return c.initInputControls(uri, monitor);
 	}
 
 	@Override
-	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> cascadeInputControls(
+			ResourceDescriptor runit, List<ResourceDescriptor> ics,
+			IProgressMonitor monitor) throws Exception {
 		return c.cascadeInputControls(runit, ics, monitor);
 	}
 
