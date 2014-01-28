@@ -30,6 +30,8 @@ public interface IConnection {
 
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception;
 
+	public ServerInfo getServerInfo();
+
 	public String getWebservicesUri();
 
 	public String getUsername();

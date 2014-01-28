@@ -89,6 +89,11 @@ public abstract class ARestV2Connection implements IConnection {
 	protected ServerInfo serverInfo;
 
 	@Override
+	public ServerInfo getServerInfo() {
+		return serverInfo;
+	}
+
+	@Override
 	public String getWebservicesUri() {
 		return sp.getUrl();
 	}

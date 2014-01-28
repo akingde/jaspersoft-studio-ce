@@ -60,12 +60,20 @@ public class ProxyConnection implements IConnection {
 					else if (co.connect(monitor, sp))
 						soap = co;
 				}
+				serverInfo = co.getServerInfo();
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw e;
 			}
 		}
 		return c != null;
+	}
+
+	private ServerInfo serverInfo;
+
+	@Override
+	public ServerInfo getServerInfo() {
+		return serverInfo;
 	}
 
 	@Override

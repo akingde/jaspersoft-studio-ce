@@ -67,12 +67,20 @@ public class SoapConnection implements IConnection {
 	private ServerInfo serverInfo;
 
 	@Override
+	public ServerInfo getServerInfo() {
+		return parent.getServerInfo();
+	}
+
+	@Override
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception {
 		if (serverInfo != null)
 			return serverInfo;
-		serverInfo = new ServerInfo();
-		serverInfo.setVersion("4.5");
-		// serverInfo.setVersion(client.getVersion());
+		serverInfo = getServerInfo();
+		if (serverInfo == null) {
+			serverInfo = new ServerInfo();
+			serverInfo.setVersion("4.5");
+			// serverInfo.setVersion(client.getVersion());
+		}
 		return serverInfo;
 	}
 
@@ -403,8 +411,11 @@ public class SoapConnection implements IConnection {
 		return dsUriQuery;
 	}
 
+	private IConnection parent;
+
 	@Override
 	public void setParent(IConnection parent) {
+		this.parent = parent;
 	}
 
 	public static File writeToTemp(byte[] b64data) throws IOException {

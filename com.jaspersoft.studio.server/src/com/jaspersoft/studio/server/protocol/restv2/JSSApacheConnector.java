@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
@@ -104,11 +107,15 @@ public class JSSApacheConnector extends ApacheConnector {
 	}
 
 	private synchronized static void clean() {
+		Set<ClientRequest> set = new HashSet<ClientRequest>();
 		for (ClientRequest r : requests.keySet())
 			if (requests.get(r).isCanceled()) {
 				r.close();
-				requests.remove(r);
+				set.add(r);
+
 			}
+		for (ClientRequest r : set)
+			requests.remove(r);
 	}
 
 	private static Thread mct = new Thread(new MonitorCancelThread());

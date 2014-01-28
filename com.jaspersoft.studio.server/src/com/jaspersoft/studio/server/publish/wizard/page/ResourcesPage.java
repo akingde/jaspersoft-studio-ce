@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.wizard.page;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -218,7 +220,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
 		tableViewer.getControl().setMenu(menu);
 
-		fillData();
+		fillData(false);
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
@@ -266,8 +268,12 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "EXPRESSION", "FILESIZE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public void fillData() {
-		tableViewer.setInput(PublishUtil.getResources(new NullProgressMonitor(), jConfig));
+	public void fillData(boolean isNew) {
+		List<MResource> res = PublishUtil.getResources(new NullProgressMonitor(), jConfig);
+		if (isNew)
+			for (MResource r : res)
+				r.getPublishOptions().setOverwrite(true);
+		tableViewer.setInput(res);
 		tableViewer.refresh();
 	}
 

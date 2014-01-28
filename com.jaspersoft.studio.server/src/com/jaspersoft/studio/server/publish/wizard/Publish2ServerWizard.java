@@ -219,13 +219,13 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 						UIUtils.getDisplay().asyncExec(new Runnable() {
 							public void run() {
 								if (hasDepResources)
-									page1.fillData();
+									page1.fillData(node.getValue().getIsNew());
 								else {
-									if (page0.getSelectedNode() instanceof MReportUnit) {
+									if (node instanceof MReportUnit) {
 										IWizardContainer container = getContainer();
 										container.showPage(getNextPage(page1));
 										container.updateButtons();
-									} else if (page0.getSelectedNode() instanceof MJrxml) {
+									} else if (node instanceof MJrxml) {
 										doFinish();
 									}
 								}
