@@ -42,6 +42,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -131,7 +132,9 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 							else if (ext.equals("png") || ext.equals("gif") || ext.equals("jpg") || ext.equals("jpeg") || ext.equals("bmp") || ext.equals("tiff"))
 								rd.setWsType(ResourceDescriptor.TYPE_IMAGE);
 
-							fres.getWsClient().addOrModifyResource(monitor, rd, new File(file.getRawLocationURI()));
+							fres.setFile(new File(file.getRawLocationURI()));
+							WSClientHelper.save(monitor, fres);
+
 							PublishUtil.savePath(file, fres);
 							INode n = fres.getRoot();
 							if (n != null && n instanceof MServerProfile) {

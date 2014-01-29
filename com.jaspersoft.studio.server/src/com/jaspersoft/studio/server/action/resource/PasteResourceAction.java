@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.server.action.resource;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Set;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
@@ -162,50 +164,31 @@ public class PasteResourceAction extends Action {
 					if (m.isCut())
 						toRefresh.add(m.getParent());
 					ResourceDescriptor origin = m.getValue();
-					String newname = dURI + "/" + origin.getName();
-					if (parent instanceof MFolder) {
+					if (!isSameServer(parent, m)) {
+						IConnection mc = m.getWsClient();
+						File file = FileUtils.createTempFile("tmp", "file");
+						try {
+							origin = mc.get(monitor, origin, file);
+							origin.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
+							origin.setHasData(true);
+						} catch (Throwable e) {
+							file = null;
+						}
+						if (parent instanceof MFolder) {
+							origin.setUriString(dURI + "/" + origin.getName());
+							ws.addOrModifyResource(monitor, origin, file);
+						} else if (parent instanceof MReportUnit)
+							saveToReportUnit(monitor, parent, ws, origin);
+						deleteIfCut(monitor, m);
+					} else if (parent instanceof MFolder) {
 						if (m.isCut()) {
 							ws.move(monitor, origin, dURI);
 							m.setCut(false);
-						} else {
-							ResourceDescriptor newrd = ws.copy(monitor, origin, newname);
-							try {
-								newrd.setLabel(newrd.getName());
-								String newuri = dURI + (dURI.endsWith("/") ? "" : "/") + newrd.getName();
-								newrd.setUriString(newuri);
-
-								ws.addOrModifyResource(monitor, newrd, null);
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						}
+						} else
+							ws.copy(monitor, origin, dURI);
 					} else if (parent instanceof MReportUnit) {
-						ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
-
-						String oldName = origin.getName();
-						String oldLabel = origin.getLabel();
-
-						origin = doPasteIntoReportUnit(parent, m, prd, origin);
-
-						prd.getChildren().add(origin);
-						File file = FileUtils.createTempFile("tmp", "file");
-						try {
-							ws.get(monitor, origin, file);
-						} catch (Throwable e) {
-							// e.printStackTrace();
-							file = null;
-						}
-						// WSClientHelper.saveResource((MReportUnit) parent, monitor,
-						// false);
-						ws.modifyReportUnitResource(monitor, prd, origin, file);
-
-						origin.setName(oldName);
-						origin.setLabel(oldLabel);
-
-						if (m.isCut()) {
-							m.setCut(false);
-							WSClientHelper.deleteResource(monitor, m);
-						}
+						saveToReportUnit(monitor, parent, ws, origin);
+						deleteIfCut(monitor, m);
 					}
 				}
 			}
@@ -218,7 +201,48 @@ public class PasteResourceAction extends Action {
 			refreshNode(n, monitor);
 	}
 
-	protected ResourceDescriptor doPasteIntoReportUnit(ANode parent, MResource m, ResourceDescriptor prd, ResourceDescriptor origin) {
+	protected void deleteIfCut(IProgressMonitor monitor, MResource m) throws Exception {
+		if (m.isCut()) {
+			m.setCut(false);
+			WSClientHelper.deleteResource(monitor, m);
+		}
+	}
+
+	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin) throws IOException, Exception {
+		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
+
+		String oldName = origin.getName();
+		String oldLabel = origin.getLabel();
+
+		origin = doPasteIntoReportUnit(prd, origin);
+
+		prd.getChildren().add(origin);
+		File file = FileUtils.createTempFile("tmp", "file");
+		try {
+			ws.get(monitor, origin, file);
+		} catch (Throwable e) {
+			file = null;
+		}
+		ws.modifyReportUnitResource(monitor, prd, origin, file);
+
+		origin.setName(oldName);
+		origin.setLabel(oldLabel);
+	}
+
+	private boolean isSameServer(ANode parent, MResource m) {
+		IConnection mc = m.getWsClient();
+		IConnection pc = null;
+		if (parent instanceof MResource)
+			pc = ((MResource) parent).getWsClient();
+		else if (parent instanceof MServerProfile)
+			pc = ((MServerProfile) parent).getWsClient();
+		if (pc != null && mc != null)
+			return mc.getServerProfile().getUrl().equals(pc.getServerProfile().getUrl());
+
+		return true;
+	}
+
+	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
 		String ruuri = prd.getUriString();
 		origin.setParentFolder(ruuri + "_files/" + origin.getName());
 		origin.setIsNew(true);

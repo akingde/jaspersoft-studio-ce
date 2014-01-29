@@ -281,9 +281,9 @@
 					<iterate operator="or"> 
 						<or>
 							<instanceof value="org.eclipse.core.resources.IFile"/> 
-							<with variable="activeEditorInput">
+							 <with variable="activeEditorInput">
 			      		<instanceof value="org.eclipse.ui.IFileEditorInput"/> 
-			    		</with>
+			    		</with> 
 		    		</or>
 					</iterate> 
 				</with> 

@@ -27,6 +27,7 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		try {
 			switch (res.getStatus()) {
 			case 200:
+			case 201:
 				r = res.readEntity(checkClazz(res, clazz));
 			case 204:
 				break;
@@ -60,6 +61,7 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		try {
 			switch (res.getStatus()) {
 			case 200:
+			case 201:
 				r = res.readEntity(type);
 			case 204:
 				break;
@@ -79,6 +81,7 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		try {
 			switch (res.getStatus()) {
 			case 200:
+			case 201:
 				InputStream in = res.readEntity(InputStream.class);
 				if (in != null) {
 					OutputStream out = new FileOutputStream(f);
@@ -107,6 +110,7 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		try {
 			switch (res.getStatus()) {
 			case 200:
+			case 201:
 				InputStream in = res.readEntity(InputStream.class);
 				if (in != null) {
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -140,6 +144,7 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 		try {
 			switch (res.getStatus()) {
 			case 200:
+			case 201:
 				res.readEntity(String.class);
 			case 204:
 				break;

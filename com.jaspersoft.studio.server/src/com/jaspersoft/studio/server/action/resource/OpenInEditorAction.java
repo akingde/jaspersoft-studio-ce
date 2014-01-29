@@ -32,7 +32,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
@@ -45,6 +44,7 @@ import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class OpenInEditorAction extends Action {
@@ -146,8 +146,10 @@ public class OpenInEditorAction extends Action {
 			else
 				f = new AExporter(path).exportToIFile(res, rd, fkeyname, monitor);
 
-			if (f != null)
+			if (f != null) {
+				PublishUtil.savePath(f, res);
 				openEditor(f);
+			}
 			path = null;
 		}
 	}
@@ -155,7 +157,7 @@ public class OpenInEditorAction extends Action {
 	private void openEditor(final IFile f) {
 		if (!openInEditor)
 			return;
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			public void run() {
 				SelectionHelper.openEditor(f);

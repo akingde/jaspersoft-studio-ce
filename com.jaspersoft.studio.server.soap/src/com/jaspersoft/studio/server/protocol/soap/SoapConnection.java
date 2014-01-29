@@ -128,11 +128,15 @@ public class SoapConnection implements IConnection {
 	@Override
 	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		client.move(rd, destFolderURI);
-		return rd;
+		ResourceDescriptor nrd = new ResourceDescriptor();
+		nrd.setWsType(rd.getWsType());
+		nrd.setUriString(destFolderURI + "/" + rd.getName());
+		return parent.get(monitor, nrd, null);
 	}
 
 	@Override
 	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+		destFolderURI = destFolderURI + "/" + rd.getName();
 		return client.copy(rd, destFolderURI);
 	}
 
@@ -143,8 +147,10 @@ public class SoapConnection implements IConnection {
 			for (ResourceDescriptor r : rd.getChildren()) {
 				if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml")) {
 					r.setMainReport(true);
-					if (r.getHasData() && r.getData() != null)
+					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
+						r.setData(null);
+					}
 					break;
 				}
 			}
@@ -167,8 +173,10 @@ public class SoapConnection implements IConnection {
 					r = client.addOrModifyResource(r, null);
 				else {
 					inputFile = null;
-					if (r.getHasData() && r.getData() != null)
+					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
+						r.setData(null);
+					}
 					r = client.modifyReportUnitResource(rd.getUriString(), r, inputFile);
 				}
 				rd.getChildren().add(r);

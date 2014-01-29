@@ -45,6 +45,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientSubDataSourceReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -337,7 +338,7 @@ public class Soap2Rest {
 				cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 				ics.add((ClientReferenceableInputControl) getResourceContainer(rc, r));
-			else {
+			else if (ResourceFactory.isFileResourceType(r)) {
 				ClientFile res = (ClientFile) getResourceContainer(rc, r);
 				icf.put(r.getLabel(), res);
 			}

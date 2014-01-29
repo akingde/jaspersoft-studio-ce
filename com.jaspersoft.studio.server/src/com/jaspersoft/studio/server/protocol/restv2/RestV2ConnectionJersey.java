@@ -215,7 +215,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
-			return doGet(monitor, rd, crl);
+			return doGet(monitor, Rest2Soap.getRD(this, crl), crl);
 		return null;
 	}
 
@@ -231,7 +231,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Response r = connector.post(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null)
-			return doGet(monitor, rd, crl);
+			return doGet(monitor, Rest2Soap.getRD(this, crl), crl);
 		return null;
 	}
 
