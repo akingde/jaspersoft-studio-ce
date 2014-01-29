@@ -40,7 +40,8 @@ public class TableInput implements IInput {
 	private Map<String, Object> params;
 	private IParameter param;
 
-	public TableInput(QueryInput dataInput, IParameter param, Map<String, Object> params) {
+	public TableInput(QueryInput dataInput, IParameter param,
+			Map<String, Object> params) {
 		this.dataInput = dataInput;
 		this.param = param;
 		this.params = params;
@@ -63,7 +64,8 @@ public class TableInput implements IInput {
 				else if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY)
 					doUpdateModel(ti);
 				else
-					dataInput.updateModel(ti.length > 0 ? ti[0].getData() : null);
+					dataInput.updateModel(ti.length > 0 ? ti[0].getData()
+							: null);
 			}
 		};
 		table.addSelectionListener(listener);
@@ -90,7 +92,8 @@ public class TableInput implements IInput {
 	}
 
 	protected void createTable(Composite parent, int style) {
-		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
+				| SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(false);
 	}
@@ -99,7 +102,8 @@ public class TableInput implements IInput {
 		table.select(-1);
 		table.removeAll();
 
-		List<InputControlQueryDataRow> qvalues = dataInput.getRD().getQueryData();
+		List<InputControlQueryDataRow> qvalues = dataInput.getRD()
+				.getQueryData();
 		String[] qcolumns = dataInput.getRD().getQueryVisibleColumns();
 
 		for (TableColumn tc : table.getColumns())
@@ -131,14 +135,16 @@ public class TableInput implements IInput {
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null) {
-			if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY || dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+			if (dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
+					|| dataInput.getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
 					List<?> lst = (List<?>) value;
 					for (TableItem ti : table.getItems())
 						if (lst.contains(ti.getData()))
 							titems.add(ti);
-					table.setSelection(titems.toArray(new TableItem[titems.size()]));
+					table.setSelection(titems.toArray(new TableItem[titems
+							.size()]));
 				}
 			} else {
 				if (value instanceof List && !((List<?>) value).isEmpty())

@@ -39,14 +39,16 @@ public class TableInput implements IInput {
 	private Map<String, Object> params;
 	private IParameter param;
 
-	public TableInput(ListOfValuesInput dataInput, IParameter param, Map<String, Object> params) {
+	public TableInput(ListOfValuesInput dataInput, IParameter param,
+			Map<String, Object> params) {
 		this.dataInput = dataInput;
 		this.param = param;
 		this.params = params;
 	}
 
 	public void createControl(Composite parent, int style) {
-		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
+				| SWT.BORDER | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalIndent = 8;
 		gd.minimumHeight = 100;
@@ -58,7 +60,8 @@ public class TableInput implements IInput {
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
 				if (dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX)
-					doUpdateModel(com.jaspersoft.studio.server.editor.input.query.TableInput.getCheckedElements(table));
+					doUpdateModel(com.jaspersoft.studio.server.editor.input.query.TableInput
+							.getCheckedElements(table));
 				else if (dataInput.getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES) {
 					doUpdateModel(ti);
 				} else if (ti.length > 0) {
@@ -101,14 +104,16 @@ public class TableInput implements IInput {
 		Object value = params.get(param.getName());
 		if (value != null) {
 			byte ct = dataInput.getRd().getControlType();
-			if (ct == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES || ct == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+			if (ct == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
+					|| ct == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
 					List<?> lst = (List<?>) value;
 					for (TableItem ti : table.getItems())
 						if (lst.contains(ti.getData()))
 							titems.add(ti);
-					table.setSelection(titems.toArray(new TableItem[titems.size()]));
+					table.setSelection(titems.toArray(new TableItem[titems
+							.size()]));
 				}
 			} else {
 				if (value instanceof List && !((List<?>) value).isEmpty())
