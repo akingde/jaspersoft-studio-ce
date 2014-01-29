@@ -55,6 +55,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	private Combo datasource;
 	private DataSourceTreeElement[] dstes;
 	private DataSourceTreeElement[] catalogs;
+	private XmlaDataAdapter adapter;
 
 	/**
 	 * Create the composite.
@@ -185,13 +186,10 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
 	@Override
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDesc) {
-		super.setDataAdapter(dataAdapterDesc);
-
 		removeDirtyListenersToContext();
-
-		String url = xmlaUri.getText();
+		adapter = (XmlaDataAdapter)dataAdapterDesc.getDataAdapter();
+		String url = adapter.getXmlaUrl();
 		ServerMetadata smd = new ServerMetadata(url);
-
 		handleMetaDataChanged(smd);
 		if (dstes == null) {
 			XmlaDataAdapterDescriptor xmlda = (XmlaDataAdapterDescriptor) dataAdapterDesc;
@@ -204,10 +202,23 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
 			cube.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getCube()) });
 			cube.select(0);
-		} else
+		} else {
 			handleDatasourceChanged();
-
+		}
+		
+		//The super call bind the widgets,it is called a the end to avoid it to used uninitialized
+		//widgets
+		super.setDataAdapter(dataAdapterDesc);
 		addDirtyListenersToContext();
+	}
+	
+	private int getIndex(String[] array, String value, int notFoundValue){
+		int i = 0;
+		for(String item : array){
+			if (item.equals(value)) return i;
+			i++;
+		}
+		return notFoundValue;
 	}
 
 	protected void handleDatasourceChanged() {
@@ -224,7 +235,11 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		for (int i = 0; i < catalogs.length; i++)
 			scat[i] = ((CatalogElement) catalogs[i]).toString();
 		catalog.setItems(scat);
-		catalog.select(0);
+		int selectionIndex = 0;
+		if (adapter != null) {
+			selectionIndex = getIndex(scat, adapter.getCatalog(), 0);
+		}
+		catalog.select(selectionIndex);
 		handleCatalogChanged();
 	}
 
@@ -241,8 +256,13 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		for (int i = 0; i < cubes.length; i++)
 			scubes[i] = ((CubeElement) cubes[i]).toString();
 		cube.setItems(scubes);
-		cube.select(0);
+		int selectionIndex = 0;
+		if (adapter != null) {
+			selectionIndex = getIndex(scubes, adapter.getCube(), 0);
+		}
+		cube.select(selectionIndex);
 	}
+	
 
 	protected void handleMetaDataChanged(ServerMetadata smd) {
 		datasource.removeAll();
@@ -256,7 +276,11 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		for (int i = 0; i < dstes.length; i++)
 			dsources[i] = dstes[i].getDataSourceInfo();
 		datasource.setItems(dsources);
-		datasource.select(0);
+		int selectionIndex = 0;
+		if (adapter != null) {
+			selectionIndex = getIndex(dsources, adapter.getDatasource(), 0);
+		}
+		datasource.select(selectionIndex);
 	}
 
 	@Override
