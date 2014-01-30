@@ -129,9 +129,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				String url = xmlaUri.getText();
 				ServerMetadata smd = new ServerMetadata(url);
-
 				handleMetaDataChanged(smd);
-
 			}
 		});
 
@@ -188,19 +186,14 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDesc) {
 		removeDirtyListenersToContext();
 		adapter = (XmlaDataAdapter)dataAdapterDesc.getDataAdapter();
-		String url = adapter.getXmlaUrl();
-		ServerMetadata smd = new ServerMetadata(url);
-		handleMetaDataChanged(smd);
 		if (dstes == null) {
-			XmlaDataAdapterDescriptor xmlda = (XmlaDataAdapterDescriptor) dataAdapterDesc;
-
-			datasource.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getDatasource()) });
+			datasource.setItems(new String[] { Misc.nvl(adapter.getDatasource()) });
 			datasource.select(0);
 
-			catalog.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getCatalog()) });
+			catalog.setItems(new String[] { Misc.nvl(adapter.getCatalog()) });
 			catalog.select(0);
 
-			cube.setItems(new String[] { Misc.nvl(xmlda.getDataAdapter().getCube()) });
+			cube.setItems(new String[] { Misc.nvl(adapter.getCube()) });
 			cube.select(0);
 		} else {
 			handleDatasourceChanged();
@@ -211,7 +204,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		super.setDataAdapter(dataAdapterDesc);
 		addDirtyListenersToContext();
 	}
-	
+
 	private int getIndex(String[] array, String value, int notFoundValue){
 		int i = 0;
 		for(String item : array){
@@ -281,6 +274,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			selectionIndex = getIndex(dsources, adapter.getDatasource(), 0);
 		}
 		datasource.select(selectionIndex);
+		handleDatasourceChanged();
 	}
 
 	@Override
