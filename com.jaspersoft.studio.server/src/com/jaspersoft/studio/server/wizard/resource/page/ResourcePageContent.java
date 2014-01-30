@@ -54,6 +54,13 @@ public class ResourcePageContent extends APageContent {
 
 	private Text tname;
 	private Text tid;
+	private Text tudate;
+	private Proxy proxy;
+	private Text tparent;
+	private Text tdesc;
+	private Text tcdate;
+	private Text ttype;
+	private Button bisRef;
 
 	public ResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
@@ -78,38 +85,36 @@ public class ResourcePageContent extends APageContent {
 		composite.setLayout(new GridLayout(3, false));
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_parentfolder);
-		Text tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tparent.setLayoutData(gd);
 		// tparent.setEnabled(false);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_type);
-		Text ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		ttype = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		// ttype.setEnabled(false);
 
-		Button bisRef = new Button(composite, SWT.CHECK);
+		bisRef = new Button(composite, SWT.CHECK);
 		bisRef.setText(Messages.ResourcePageContent_isReference);
 		bisRef.setEnabled(false);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_creationdate);
-		Text tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		tcdate.setLayoutData(gd);
 		// tcdate.setEnabled(false);
 
 		ResourceDescriptor rd = res.getValue();
-		Proxy proxy = new Proxy(rd);
+		proxy = new Proxy(rd);
 		if (res.isSupported(Feature.UPDATEDATE)) {
 			UIUtil.createLabel(composite, Messages.ResourcePageContent_UpdateDate);
-			Text tudate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+			tudate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 			gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			tudate.setLayoutData(gd);
-
-			bindingContext.bindValue(SWTObservables.observeText(tudate, SWT.NONE), PojoObservables.observeValue(proxy, "updateDate")); //$NON-NLS-1$
 		}
 
 		UIUtil.createSeparator(composite, 3);
@@ -127,14 +132,35 @@ public class ResourcePageContent extends APageContent {
 		tid.setLayoutData(gd);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_description);
-		Text tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+		tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
 		gd.horizontalSpan = 2;
 		tdesc.setLayoutData(gd);
 
-		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(proxy, "parentFolder")); //$NON-NLS-1$
+		tid.setEditable(rd.getIsNew());
+		if (rd.getIsNew()) {
+			rd.setName(rd.getLabel());
+			tname.addModifyListener(new ModifyListener() {
 
+				@Override
+				public void modifyText(ModifyEvent e) {
+					tid.setText(safeChar(Misc.nvl(tname.getText())));
+				}
+			});
+		}
+		rebind();
+
+		tname.setFocus();
+		return composite;
+	}
+
+	@Override
+	protected void rebind() {
+		ResourceDescriptor rd = res.getValue();
+		if (tudate != null)
+			bindingContext.bindValue(SWTObservables.observeText(tudate, SWT.NONE), PojoObservables.observeValue(proxy, "updateDate")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(proxy, "parentFolder")); //$NON-NLS-1$
 		IConnection c = res.getWsClient();
 		final Format f = (c != null ? c.getTimestampFormat() : DateFormat.getTimeInstance());
 
@@ -159,33 +185,16 @@ public class ResourcePageContent extends APageContent {
 		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv),
 				new UpdateValueStrategy().setConverter(m2tConv));
 
-		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$
-
-		bindingContext.bindValue(SWTObservables.observeSelection(bisRef), PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$
-
+		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$ 
+		bindingContext.bindValue(SWTObservables.observeSelection(bisRef), PojoObservables.observeValue(rd, "isReference")); //$NON-NLS-1$ 
 		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify), PojoObservables.observeValue(rd, "name"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new IDStringValidator()), null);
 
 		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(rd, "label"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
 		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
-
-		tid.setEditable(rd.getIsNew());
-		if (rd.getIsNew()) {
-			rd.setName(rd.getLabel());
-			tname.addModifyListener(new ModifyListener() {
-
-				@Override
-				public void modifyText(ModifyEvent e) {
-					tid.setText(safeChar(Misc.nvl(tname.getText())));
-				}
-			});
-		}
 		bindingContext.updateTargets();
 		bindingContext.updateModels();
-
-		tname.setFocus();
-		return composite;
 	}
 
 	@Override

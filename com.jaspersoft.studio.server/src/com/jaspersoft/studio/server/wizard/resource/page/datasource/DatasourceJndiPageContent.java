@@ -40,6 +40,8 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceJndiPageContent extends APageContent {
 
+	private Text tname;
+
 	public DatasourceJndiPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
@@ -64,7 +66,7 @@ public class DatasourceJndiPageContent extends APageContent {
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceJNDIPage_JNDIName);
 
-		final Text tname = new Text(composite, SWT.BORDER);
+		tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		TimeZoneProperty.addTimeZone(res, composite);
@@ -88,10 +90,13 @@ public class DatasourceJndiPageContent extends APageContent {
 				}
 			}
 		});
-
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(res.getValue(), "jndiName")); //$NON-NLS-1$
-
+		rebind();
 		return composite;
+	}
+
+	@Override
+	protected void rebind() {
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(res.getValue(), "jndiName")); //$NON-NLS-1$
 	}
 
 	@Override

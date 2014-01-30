@@ -45,6 +45,8 @@ public class QueryPageContent extends APageContent {
 	}
 
 	private boolean showLangs = true;
+	private static Text tsql;
+	private static Combo clang;
 
 	public QueryPageContent(ANode parent, MResource resource, boolean showLangs) {
 		super(parent, resource);
@@ -62,7 +64,9 @@ public class QueryPageContent extends APageContent {
 	}
 
 	public Control createContent(Composite parent) {
-		return createContentComposite(parent, bindingContext, res.getValue(), res, showLangs);
+		Control createContentComposite = createContentComposite(parent, bindingContext, res.getValue(), res, showLangs);
+		rebind();
+		return createContentComposite;
 	}
 
 	public static Control createContentComposite(Composite parent, DataBindingContext bindingContext, ResourceDescriptor r, MResource res) {
@@ -76,21 +80,27 @@ public class QueryPageContent extends APageContent {
 		if (showLangs) {
 			UIUtil.createLabel(composite, Messages.RDQueryPage_language);
 
-			Combo clang = new Combo(composite, SWT.BORDER);
+			clang = new Combo(composite, SWT.BORDER);
 			clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
-			bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
+
 		}
 		UIUtil.createLabel(composite, Messages.RDQueryPage_query);
 
-		Text tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
+		tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
 		gd.widthHint = 400;
 		tsql.setLayoutData(gd);
 
-		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
-
 		return composite;
+	}
+
+	@Override
+	protected void rebind() {
+		ResourceDescriptor r = res.getValue();
+		if (clang == null)
+			bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 	}
 
 	private static QProxy getProxy(ResourceDescriptor rd) {

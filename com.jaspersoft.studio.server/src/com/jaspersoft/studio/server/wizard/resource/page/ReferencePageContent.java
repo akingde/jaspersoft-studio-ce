@@ -153,11 +153,12 @@ public class ReferencePageContent extends APageContent {
 		tdesc.setLayoutData(gd);
 
 		loadReference(res.getValue());
-
+		rebind();
 		return composite;
 	}
 
-	protected void bind() {
+	@Override
+	protected void rebind() {
 		Object[] bds = bindingContext.getBindings().toArray();
 		for (Object obj : bds) {
 			Binding b = (Binding) obj;
@@ -195,7 +196,7 @@ public class ReferencePageContent extends APageContent {
 		try {
 			ref = WSClientHelper.getReference(new NullProgressMonitor(), pnode, resrd);
 			if (ref != null) {
-				bind();
+				rebind();
 				bindingContext.updateTargets();
 				if (ResourceFactory.isFileResourceType(ref))
 					res.getValue().setWsType(ResourceDescriptor.TYPE_REFERENCE);

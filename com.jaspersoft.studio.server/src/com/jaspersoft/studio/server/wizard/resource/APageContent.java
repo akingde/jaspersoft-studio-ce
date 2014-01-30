@@ -42,7 +42,10 @@ public abstract class APageContent implements IPageCompleteListener {
 
 	public void setBindingContext(DataBindingContext bindingContext) {
 		this.bindingContext = bindingContext;
+		rebind();
 	}
+
+	protected abstract void rebind();
 
 	public DataBindingContext getBindingContext() {
 		return bindingContext;

@@ -146,6 +146,8 @@ public class GridDataUtil
 	 */
 	public static void gridDataExclude(Control control, boolean exclude){
 		Assert.isNotNull(control);
+		if (control.getLayoutData() == null)
+			return;
 		Assert.isTrue(control.getLayoutData() instanceof GridData);
 		((GridData) control.getLayoutData()).exclude = exclude;
 	}

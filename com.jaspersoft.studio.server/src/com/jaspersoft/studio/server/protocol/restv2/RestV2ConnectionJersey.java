@@ -103,6 +103,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Builder req = target.path("serverInfo").request();
 		serverInfo = toObj(connector.get(req, monitor), ServerInfo.class, monitor);
 		if (serverInfo != null) {
+			serverInfo.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat()).toPattern());
 			dateFormat = new SimpleDateFormat(serverInfo.getDateFormatPattern());
 			timestampFormat = new SimpleDateFormat(serverInfo.getDatetimeFormatPattern());
 			sp.setJrVersion(Version.setJRVersion(serverInfo));
@@ -606,14 +607,24 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		}
 		if (value instanceof Collection) {
 			for (Object obj : (Collection<?>) value) {
-				String str = obj.toString();
+				String str = val2String(obj);
 				if (!vals.contains(str))
 					vals.add(str);
 			}
 		} else {
-			String str = value.toString();
+			String str = val2String(value);
 			if (!vals.contains(str))
 				vals.add(str);
 		}
+	}
+
+	private String val2String(Object val) {
+		if (val instanceof java.sql.Date)
+			return getDateFormat().format(val);
+		if (val instanceof java.sql.Timestamp)
+			return getTimestampFormat().format(val);
+		if (val instanceof java.sql.Time)
+			return getTimeFormat().format(val);
+		return val.toString();
 	}
 }

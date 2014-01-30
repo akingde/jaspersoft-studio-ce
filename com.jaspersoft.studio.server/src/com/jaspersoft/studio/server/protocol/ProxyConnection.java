@@ -28,6 +28,11 @@ public class ProxyConnection implements IConnection {
 		return c.getTimestampFormat();
 	}
 
+	@Override
+	public Format getTimeFormat() {
+		return c.getTimeFormat();
+	}
+
 	public Format getNumberFormat() {
 		return c.getNumberFormat();
 	}

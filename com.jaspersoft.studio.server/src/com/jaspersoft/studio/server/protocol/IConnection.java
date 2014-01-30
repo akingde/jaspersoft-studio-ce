@@ -22,6 +22,8 @@ public interface IConnection {
 
 	public Format getTimestampFormat();
 
+	public Format getTimeFormat();
+
 	public Format getNumberFormat();
 
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception;

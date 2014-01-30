@@ -54,7 +54,12 @@ public class OlapConnectionContent extends APageContent {
 	public Control createContent(Composite parent) {
 		scompo = new SelectorOlapConnection();
 		scompo.addPageCompleteListener(this);
+		rebind();
 		return scompo.createControls(parent, pnode, res);
+	}
+
+	@Override
+	protected void rebind() {
 	}
 
 	@Override

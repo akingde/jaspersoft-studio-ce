@@ -44,6 +44,11 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasourceJDBCPageContent extends APageContent {
 
+	private Text tdriver;
+	private Text turl;
+	private Text tuser;
+	private Text tpass;
+
 	public DatasourceJDBCPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
@@ -68,34 +73,39 @@ public class DatasourceJDBCPageContent extends APageContent {
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_Driver);
 
-		final Text tdriver = new Text(composite, SWT.BORDER);
+		tdriver = new Text(composite, SWT.BORDER);
 		tdriver.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_URL);
 
-		final Text turl = new Text(composite, SWT.BORDER);
+		turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_User);
 
-		final Text tuser = new Text(composite, SWT.BORDER);
+		tuser = new Text(composite, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceJDBCPage_Password);
 
-		final Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		TimeZoneProperty.addTimeZone(res, composite);
 
 		createImportButton(composite, tdriver, turl, tuser, tpass);
+
+		rebind();
+		return composite;
+	}
+
+	@Override
+	protected void rebind() {
 		ResourceDescriptor rd = res.getValue();
 		bindingContext.bindValue(SWTObservables.observeText(tdriver, SWT.Modify), PojoObservables.observeValue(rd, "driverClass")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(rd, "connectionUrl")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(rd, "username")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(rd, "password")); //$NON-NLS-1$
-
-		return composite;
 	}
 
 	protected void createImportButton(Composite composite, final Text tdriver, final Text turl, final Text tuser, final Text tpass) {

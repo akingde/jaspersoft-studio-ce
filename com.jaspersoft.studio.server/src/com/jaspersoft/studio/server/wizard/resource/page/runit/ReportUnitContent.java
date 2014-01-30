@@ -75,17 +75,22 @@ public class ReportUnitContent extends APageContent {
 
 		UIUtil.createLabel(composite, Messages.RDReportUnitPage_jspforrepview);
 
-		Text jspview = new Text(composite, SWT.BORDER);
+		jspview = new Text(composite, SWT.BORDER);
 		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		jspview.setToolTipText(Messages.RDReportUnitPage_within);
 
-		ReportProxy v = getProxy(res.getValue());
-		bindingContext.bindValue(SWTObservables.observeText(jspview, SWT.Modify), PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
-
+		rebind();
 		res.getChildren();
 		if (res.getValue().getIsNew())
 			setPageComplete(false);
+
 		return composite;
+	}
+
+	@Override
+	protected void rebind() {
+		ReportProxy v = getProxy(res.getValue());
+		bindingContext.bindValue(SWTObservables.observeText(jspview, SWT.Modify), PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
 	}
 
 	protected ReportProxy getProxy(ResourceDescriptor rd) {
@@ -100,6 +105,7 @@ public class ReportUnitContent extends APageContent {
 
 	private ReportProxy proxy = new ReportProxy();
 	private SelectorJrxml2 selectorJrxml;
+	private Text jspview;
 
 	class ReportProxy {
 		private ResourceDescriptor rd;

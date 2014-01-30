@@ -37,6 +37,10 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceMongoDBPageContent extends APageContent {
 
+	private Text turi;
+	private Text tusername;
+	private Text tpass;
+
 	public DatasourceMongoDBPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
@@ -61,14 +65,26 @@ public class DatasourceMongoDBPageContent extends APageContent {
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_labelurl);
 
-		Text turi = new Text(composite, SWT.BORDER);
+		turi = new Text(composite, SWT.BORDER);
 		turi.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_username);
 
-		Text tusername = new Text(composite, SWT.BORDER);
+		tusername = new Text(composite, SWT.BORDER);
 		tusername.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		if (res.getValue().getIsNew()) {
+			UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_pass);
+
+			tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+			tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		}
+		rebind();
+		return composite;
+	}
+
+	@Override
+	protected void rebind() {
 		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP, res.getValue().getProperties());
 
 		ResourceProperty rsp = ResourceDescriptorUtil.getProperty(MRDatasourceMongoDB.MONGO_URI, resprop.getProperties());
@@ -79,19 +95,13 @@ public class DatasourceMongoDBPageContent extends APageContent {
 		rsp.setValue(Misc.nvl(rsp.getValue()));
 		bindingContext.bindValue(SWTObservables.observeText(tusername, SWT.Modify), PojoObservables.observeValue(rsp, "value")); //$NON-NLS-1$
 
-		if (res.getValue().getIsNew()) {
-			UIUtil.createLabel(composite, Messages.RDDatasourceMongoDBPage_pass);
-
-			Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
-			tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		if (tpass != null) {
 			rsp = ResourceDescriptorUtil.getProperty(MRDatasourceMongoDB.PASSWORD, resprop.getProperties());
 			if (rsp == null)
 				rsp = new ResourceProperty(MRDatasourceMongoDB.PASSWORD);
 			rsp.setValue(Misc.nvl(rsp.getValue()));
 			bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(rsp, "value")); //$NON-NLS-1$
 		}
-		return composite;
 	}
 
 	@Override

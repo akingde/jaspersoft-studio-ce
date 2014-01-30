@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +45,17 @@ public abstract class ARestV2Connection implements IConnection {
 		return timestampFormat;
 	}
 
+	public Format getTimeFormat() {
+		return timeFormat;
+	}
+
 	public Format getNumberFormat() {
 		return numberFormat;
 	}
 
 	protected DateFormat dateFormat = DateFormat.getDateInstance();
-	protected DateFormat timestampFormat = DateFormat.getTimeInstance();
+	protected DateFormat timestampFormat = DateFormat.getDateTimeInstance();
+	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss");
 	protected NumberFormat numberFormat = NumberFormat.getInstance();
 
 	public Date toDate(String sdate) throws ParseException {

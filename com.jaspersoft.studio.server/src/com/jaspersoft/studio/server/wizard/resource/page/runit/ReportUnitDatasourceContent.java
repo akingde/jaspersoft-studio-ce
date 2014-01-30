@@ -63,7 +63,13 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 	public Control createContent(Composite parent) {
 		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res, mandatory);
 		datasourceSelectionCmp.addDatasourceSelectionListener(this);
+		rebind();
 		return datasourceSelectionCmp;
+	}
+
+	@Override
+	protected void rebind() {
+
 	}
 
 	@Override

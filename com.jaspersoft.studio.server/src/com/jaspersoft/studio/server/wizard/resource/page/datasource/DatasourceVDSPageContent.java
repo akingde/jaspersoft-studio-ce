@@ -212,9 +212,14 @@ public class DatasourceVDSPageContent extends APageContent {
 		mt2t.createButtonsShort(bGroup, leftTView, rightTView, false);
 
 		fillLeftTable();
-
+		rebind();
 		return composite;
 	}
+
+	@Override
+	protected void rebind() {
+
+	};
 
 	private void fillLeftTable() {
 		final MServerProfile root = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());

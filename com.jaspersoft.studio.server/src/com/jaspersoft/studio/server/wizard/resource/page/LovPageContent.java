@@ -53,8 +53,7 @@ public class LovPageContent extends APageContent {
 	private static final String VALUE = "VALUE";
 	private static final String KEY = "KEY";
 
-	public LovPageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	public LovPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -78,8 +77,7 @@ public class LovPageContent extends APageContent {
 		super.dispose();
 	}
 
-	private final class TLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
+	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public String getColumnText(Object element, int columnIndex) {
 			ListItem dto = (ListItem) element;
@@ -143,13 +141,17 @@ public class LovPageContent extends APageContent {
 		border.createOrderButtons(bGroup, tableViewer);
 
 		tableViewer.setInput(res.getValue().getListOfValues());
-
+		rebind();
 		return composite;
 	}
 
+	@Override
+	protected void rebind() {
+
+	}
+
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE
-				| SWT.FULL_SELECTION);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 200;
 		table.setLayoutData(gd);
@@ -222,8 +224,7 @@ public class LovPageContent extends APageContent {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				new TextCellEditor(parent) });
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new TextCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { KEY, VALUE });
 	}
 
@@ -235,7 +236,7 @@ public class LovPageContent extends APageContent {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.editListOfValue";

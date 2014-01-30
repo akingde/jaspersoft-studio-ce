@@ -62,7 +62,13 @@ public class ReportUnitQueryContent extends APageContent {
 				return QueryPageContent.createContentComposite(parent, bindingContext, r, res);
 			}
 		}
+		rebind();
 		return null;
+	}
+
+	@Override
+	protected void rebind() {
+
 	}
 
 	public static boolean hasTypeQuery(MResource res) {

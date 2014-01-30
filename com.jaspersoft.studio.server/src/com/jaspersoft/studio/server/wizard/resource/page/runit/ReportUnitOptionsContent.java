@@ -41,6 +41,9 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class ReportUnitOptionsContent extends APageContent {
 
+	private ResourceProperty resprop;
+	private Text tname;
+
 	public ReportUnitOptionsContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
@@ -66,13 +69,9 @@ public class ReportUnitOptionsContent extends APageContent {
 
 		UIUtil.createLabel(composite, "Report Unit");
 
-		Text tname = new Text(composite, SWT.BORDER);
+		tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tname.setEnabled(false);
-
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MReportUnitOptions.PROP_RU_URI, res.getValue().getProperties());
-
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
 
 		Composite cmp = new Composite(composite, SWT.NONE);
 		cmp.setLayout(new GridLayout(2, false));
@@ -111,7 +110,13 @@ public class ReportUnitOptionsContent extends APageContent {
 				lbl.setLayoutData(gd);
 			}
 		}
+		rebind();
 		return composite;
 	}
 
+	@Override
+	protected void rebind() {
+		resprop = ResourceDescriptorUtil.getProperty(MReportUnitOptions.PROP_RU_URI, res.getValue().getProperties());
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+	}
 }

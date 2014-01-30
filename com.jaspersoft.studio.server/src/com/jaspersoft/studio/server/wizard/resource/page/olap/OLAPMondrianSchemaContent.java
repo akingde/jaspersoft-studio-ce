@@ -55,7 +55,12 @@ public class OLAPMondrianSchemaContent extends APageContent {
 	public Control createContent(Composite parent) {
 		scompo = new SelectorOlapMondrianSchema();
 		scompo.addPageCompleteListener(this);
+		rebind();
 		return scompo.createControls(parent, pnode, res);
+	}
+
+	@Override
+	protected void rebind() {
 	}
 
 	@Override

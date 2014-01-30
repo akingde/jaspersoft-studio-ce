@@ -21,8 +21,15 @@ import com.jaspersoft.studio.utils.UIUtil;
 
 public class DatasourceCassandraCQL3PageContent extends APageContent {
 
-	public DatasourceCassandraCQL3PageContent(ANode parent, MResource resource,
-			DataBindingContext bindingContext) {
+	private Text tname;
+	private Text tport;
+	private Text tkeyspace;
+	private Text tversion;
+	private Text tcluster;
+	private Text tuser;
+	private Text tpass;
+
+	public DatasourceCassandraCQL3PageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -44,73 +51,71 @@ public class DatasourceCassandraCQL3PageContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelhostname);
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelport);
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelkeyspace);
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelcassandraVersion);
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelclustername);		
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelusername);
-		UIUtil.createLabel(composite,
-				Messages.CassandraCQL3DataAdapter_labelpassword);
-
-		Text tname = new Text(composite, SWT.BORDER);
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelhostname);
+		tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP, res
-						.getValue().getProperties());
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelport);
+		tport = new Text(composite, SWT.BORDER);
+		tport.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.HOSTNAME, resprop.getProperties());
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelkeyspace);
+		tkeyspace = new Text(composite, SWT.BORDER);
+		tkeyspace.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.PORT, resprop.getProperties());
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelcassandraVersion);
+		tversion = new Text(composite, SWT.BORDER);
+		tversion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.KEYSPACE, resprop.getProperties());
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelclustername);
+		tcluster = new Text(composite, SWT.BORDER);
+		tcluster.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.CASSANDRAVERSION, resprop.getProperties());
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelusername);
+		tuser = new Text(composite, SWT.BORDER);
+		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.CLUSTERNAME, resprop.getProperties());
+		UIUtil.createLabel(composite, Messages.CassandraCQL3DataAdapter_labelpassword);
+		tpass = new Text(composite, SWT.BORDER);
+		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.USERNAME, resprop.getProperties());
-
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-		
-		resprop = ResourceDescriptorUtil.getProperty(
-				MRDatasourceCassandraCQL3.PASSWORD, resprop.getProperties());
-
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
-
+		rebind();
 		return composite;
 	}
-	
+
+	@Override
+	protected void rebind() {
+		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP, res.getValue().getProperties());
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.HOSTNAME, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.PORT, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tport, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.KEYSPACE, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tkeyspace, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.CASSANDRAVERSION, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tversion, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.CLUSTERNAME, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tcluster, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.USERNAME, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+
+		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandraCQL3.PASSWORD, resprop.getProperties());
+
+		bindingContext.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+	}
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.adapter_cassandracql3";

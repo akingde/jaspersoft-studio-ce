@@ -43,7 +43,8 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class SoapConnection implements IConnection {
 	protected DateFormat dateFormat = SimpleDateFormat.getDateInstance();
-	protected DateFormat timestampFormat = SimpleDateFormat.getTimeInstance();
+	protected DateFormat timestampFormat = SimpleDateFormat.getDateTimeInstance();
+	protected DateFormat timeFormat = new SimpleDateFormat("h:mm:ss");
 	protected NumberFormat numberFormat = NumberFormat.getInstance();
 	private ServerProfile sp;
 
@@ -57,6 +58,10 @@ public class SoapConnection implements IConnection {
 
 	public Format getTimestampFormat() {
 		return timestampFormat;
+	}
+
+	public Format getTimeFormat() {
+		return timeFormat;
 	}
 
 	public Format getNumberFormat() {
@@ -79,6 +84,9 @@ public class SoapConnection implements IConnection {
 		if (serverInfo == null) {
 			serverInfo = new ServerInfo();
 			serverInfo.setVersion("4.5");
+			serverInfo.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat()).toPattern());
+			serverInfo.setDateFormatPattern(((SimpleDateFormat) getDateFormat()).toPattern());
+			serverInfo.setDatetimeFormatPattern(((SimpleDateFormat) getTimestampFormat()).toPattern());
 			// serverInfo.setVersion(client.getVersion());
 		}
 		return serverInfo;

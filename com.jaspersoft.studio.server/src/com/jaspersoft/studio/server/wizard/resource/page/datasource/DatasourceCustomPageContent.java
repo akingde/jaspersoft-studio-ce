@@ -93,6 +93,7 @@ public class DatasourceCustomPageContent extends APageContent {
 	}
 
 	private TableViewer tviewer;
+	private Text srvName;
 
 	public Control createContent(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -100,7 +101,7 @@ public class DatasourceCustomPageContent extends APageContent {
 
 		UIUtil.createLabel(composite, "Service Class");
 
-		final Text srvName = new Text(composite, SWT.BORDER);
+		srvName = new Text(composite, SWT.BORDER);
 		srvName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		if (res.isSupported(Feature.DATASOURCENAME)) {
@@ -167,17 +168,22 @@ public class DatasourceCustomPageContent extends APageContent {
 		};
 		delb.createDeleteButton(bGroup, tviewer);
 
-		bindingContext.bindValue(SWTObservables.observeText(srvName, SWT.Modify), PojoObservables.observeValue(rd, "serviceClass")); //$NON-NLS-1$
-
 		ResourceProperty rp = rd.getProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 		if (rp == null) {
 			rp = new ResourceProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 			rp.setProperties(new ArrayList<ResourceProperty>());
 			rd.setResourceProperty(rp);
 		}
-
+		rebind();
 		tviewer.setInput(rp.getProperties());
 		return composite;
+	}
+
+	@Override
+	protected void rebind() {
+		ResourceDescriptor rd = res.getValue();
+		bindingContext.bindValue(SWTObservables.observeText(srvName, SWT.Modify), PojoObservables.observeValue(rd, "serviceClass")); //$NON-NLS-1$
+
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {

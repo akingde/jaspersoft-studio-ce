@@ -55,7 +55,13 @@ public class AccessGrantSchemaContent extends APageContent {
 	public Control createContent(Composite parent) {
 		scompo = new SelectorAccessGrantSchema();
 		scompo.addPageCompleteListener(this);
+		rebind();
 		return scompo.createControls(parent, pnode, res);
+	}
+
+	@Override
+	protected void rebind() {
+
 	}
 
 	@Override
