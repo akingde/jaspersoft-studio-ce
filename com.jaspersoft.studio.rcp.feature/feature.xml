@@ -32,55 +32,78 @@
 
    <includes
          id="org.eclipse.cvs"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.tigris.subversion.clientadapter.svnkit.feature"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.tmatesoft.svnkit"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.tigris.subversion.clientadapter.feature"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.tigris.subversion.clientadapter.svnkit.feature"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.tigris.subversion.subclipse"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.eclipse.egit"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.eclipse.jgit"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.eclipse.jgit.java7"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="org.eclipse.jgit.pgm"
-         version="0.0.0"/>
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <includes
          id="com.jaspersoft.studio.jre.feature"
-         version="0.0.0"/>
+         version="0.0.0"
+         search-location="both"/>
 
    <includes
          id="org.eclipse.equinox.p2.user.ui"
-         version="0.0.0"/>
+         version="0.0.0"
+         search-location="both"/>
 
    <includes
          id="com.jaspersoft.studio.i18n.feature"
-         version="0.0.0"/>
+         version="0.0.0"
+         search-location="both"/>
 
    <requires>
       <import plugin="org.eclipse.ui.intro"/>
