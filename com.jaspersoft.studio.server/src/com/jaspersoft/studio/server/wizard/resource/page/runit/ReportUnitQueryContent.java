@@ -25,7 +25,6 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.QueryPageContent;
-import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorJrxml;
 
 public class ReportUnitQueryContent extends APageContent {
 
@@ -47,12 +46,12 @@ public class ReportUnitQueryContent extends APageContent {
 		return "com.jaspersoft.studio.server.page.runit.query";
 	}
 
-	@Override
-	public boolean isPageComplete() {
-		if (res != null)
-			return SelectorJrxml.getMainReport(res.getValue()) != null;
-		return false;
-	}
+	// @Override
+	// public boolean isPageComplete() {
+	// if (res != null)
+	// return SelectorJrxml2.getMainReport(res.getValue()) != null;
+	// return false;
+	// }
 
 	@Override
 	public Control createContent(Composite parent) {

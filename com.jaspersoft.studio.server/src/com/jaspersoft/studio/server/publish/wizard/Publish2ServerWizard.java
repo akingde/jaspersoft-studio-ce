@@ -57,6 +57,7 @@ import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.Publish;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.FileSelectionPage;
 import com.jaspersoft.studio.server.publish.wizard.page.RUnitLocationPage;
@@ -154,9 +155,17 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 		page2 = new DatasourceSelectionPage(jrConfig);
 		addPage(page2);
 
+		addPageChangeListener();
+	}
+
+	private IPageChangedListener pageChangeListener;
+
+	protected void addPageChangeListener() {
+		if (pageChangeListener != null)
+			return;
 		IWizardContainer c = getContainer();
 		if (c instanceof WizardDialog) {
-			((WizardDialog) c).addPageChangedListener(new IPageChangedListener() {
+			pageChangeListener = new IPageChangedListener() {
 
 				@Override
 				public void pageChanged(PageChangedEvent event) {
@@ -181,12 +190,14 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 							doFinish();
 					}
 				}
-			});
+			};
+			((WizardDialog) c).addPageChangedListener(pageChangeListener);
 		}
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
+		addPageChangeListener();
 		if (page_1 != null && jDesign == null && page == page_1) {
 			initJDesign(page_1.getFile());
 			page0.setValue(jDesign, getNode());
@@ -253,6 +264,27 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		try {
+			getContainer().run(true, true, new IRunnableWithProgress() {
+
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Publishing", IProgressMonitor.UNKNOWN);
+					try {
+						ANode node = getNode();
+						if (node instanceof AMJrxmlContainer)
+							new Publish(jrConfig).publish((AMJrxmlContainer) node, jDesign, monitor);
+					} finally {
+						monitor.done();
+					}
+				}
+			});
+		} catch (InvocationTargetException e) {
+			UIUtils.showError(e.getCause());
+		} catch (InterruptedException e) {
+			UIUtils.showError(e);
+		}
+
 		return true;
 	}
 

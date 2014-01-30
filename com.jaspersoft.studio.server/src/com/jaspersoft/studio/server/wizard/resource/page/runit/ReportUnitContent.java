@@ -19,8 +19,6 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -33,7 +31,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
-import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorJrxml;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorJrxml2;
 import com.jaspersoft.studio.utils.UIUtil;
 
 public class ReportUnitContent extends APageContent {
@@ -58,7 +56,7 @@ public class ReportUnitContent extends APageContent {
 
 	@Override
 	public boolean isPageComplete() {
-		return res != null && selectorJrxml != null && selectorJrxml.isJrxmlSelected();
+		return res != null && selectorJrxml != null && selectorJrxml.isPageComplete();
 	}
 
 	@Override
@@ -66,14 +64,9 @@ public class ReportUnitContent extends APageContent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		selectorJrxml = new SelectorJrxml();
+		selectorJrxml = new SelectorJrxml2();
 		selectorJrxml.createControls(composite, pnode, res);
-		selectorJrxml.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setPageComplete(isPageComplete());
-			}
-		});
+		selectorJrxml.addPageCompleteListener(this);
 
 		Label lbl = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -99,15 +92,14 @@ public class ReportUnitContent extends APageContent {
 		proxy.setResourceDescriptor(rd);
 		return proxy;
 	}
-	
+
 	@Override
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.editReportUnitContent";
 	}
 
-
 	private ReportProxy proxy = new ReportProxy();
-	private SelectorJrxml selectorJrxml;
+	private SelectorJrxml2 selectorJrxml;
 
 	class ReportProxy {
 		private ResourceDescriptor rd;

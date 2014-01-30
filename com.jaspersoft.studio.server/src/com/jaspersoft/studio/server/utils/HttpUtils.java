@@ -7,15 +7,19 @@ import java.util.Map;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.eclipse.core.net.proxy.IProxyChangeEvent;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
+import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.client.ClientConfig;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -33,6 +37,16 @@ public class HttpUtils {
 		}
 		executors.put(exec, uri);
 		return exec;
+	}
+
+	public static void setupProxy(ClientConfig clientConfig, URI uri) {
+		CredentialsProvider cp = (CredentialsProvider) clientConfig.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
+		for (IProxyData d : proxyService.select(uri)) {
+			cp.setCredentials(new AuthScope(new HttpHost(d.getHost(), d.getPort())), getCredentials(d));
+			clientConfig.property(ApacheClientProperties.PROXY_URI, d.getHost());
+			break;
+		}
+		clientConfigs.put(clientConfig, uri);
 	}
 
 	public static Request setRequest(Request req, ServerProfile sp) {
@@ -67,6 +81,7 @@ public class HttpUtils {
 	}
 
 	private static Map<Executor, URI> executors = new HashMap<Executor, URI>();
+	private static Map<ClientConfig, URI> clientConfigs = new HashMap<ClientConfig, URI>();
 
 	public static IProxyService getProxyService() {
 		BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
@@ -78,6 +93,8 @@ public class HttpUtils {
 			public void proxyInfoChanged(IProxyChangeEvent event) {
 				for (Executor exe : executors.keySet())
 					setupProxy(exe, executors.get(exe));
+				for (ClientConfig exe : clientConfigs.keySet())
+					setupProxy(exe, clientConfigs.get(exe));
 			}
 		});
 		return service;

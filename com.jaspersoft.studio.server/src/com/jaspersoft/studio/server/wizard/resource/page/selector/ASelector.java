@@ -110,6 +110,7 @@ public abstract class ASelector {
 			rd.setReferenceUri(rd.getUriString());
 			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
+			setupResource(rd);
 			replaceChildren(res, rd);
 
 			jsRefDS.setText(rd.getReferenceUri());
@@ -167,7 +168,7 @@ public abstract class ASelector {
 				ResourceDescriptor ref = getResourceDescriptor(runit);
 				if (isReference(ref))
 					ref = null;
-				boolean newref = false;
+				// boolean newref = false;
 				MResource r = null;
 				if (ref != null) {
 					ref = cloneResource(ref);
@@ -178,15 +179,15 @@ public abstract class ASelector {
 					r = getLocalResource(res, runit, pnode);
 					if (r != null)
 						ref = r.getValue();
-					newref = true;
+					// newref = true;
 				}
 				if (r == null)
 					return;
-				ref.setUriString(ref.getParentFolder() + "/" + ref.getName()); //$NON-NLS-1$
-				if (newref)
-					replaceChildren(res, ref);
-				else
-					ASelector.copyFields(ref, r.getValue());
+				ref.setUriString(ref.getParentFolder() + "/" + ref.getName()); //$NON-NLS-1$ 
+				// if (newref)
+				replaceChildren(res, ref);
+				// else
+				// ASelector.copyFields(getResourceDescriptor(runit), r.getValue());
 				// ASelector.copyFields(res.getValue(), ref);
 				jsLocDS.setText(Misc.nvl(ref.getName()));
 				firePageComplete();
@@ -199,6 +200,7 @@ public abstract class ASelector {
 		ref.setIsNew(true);
 		ref.setIsReference(false);
 		ref.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$
+		setupResource(ref);
 		ref.setDirty(true);
 
 		MResource r = ResourceFactory.getResource(null, ref, -1);
@@ -212,6 +214,10 @@ public abstract class ASelector {
 		WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 		dialog.create();
 		return dialog.open() == Dialog.OK;
+	}
+
+	protected void setupResource(ResourceDescriptor rd) {
+
 	}
 
 	public static boolean isReference(ResourceDescriptor ref) {
@@ -317,6 +323,9 @@ public abstract class ASelector {
 		rnew.setName(rd.getName());
 		rnew.setLabel(rd.getLabel());
 		rnew.setDescription(rd.getDescription());
+
+		rnew.setData(rd.getData());
+		rnew.setHasData(rd.getHasData());
 	}
 
 	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {

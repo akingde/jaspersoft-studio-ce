@@ -334,9 +334,12 @@ public class Soap2Rest {
 				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
 				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML))
+			else if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.isMainReport()) {
+				r.setName("main_jrxml");
+				r.setLabel("Main Jrxml");
+				r.setUriString(rd.getUriString() + "_files/" + r.getName());
 				cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 				ics.add((ClientReferenceableInputControl) getResourceContainer(rc, r));
 			else if (ResourceFactory.isFileResourceType(r)) {
 				ClientFile res = (ClientFile) getResourceContainer(rc, r);

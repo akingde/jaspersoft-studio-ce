@@ -34,7 +34,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
@@ -150,7 +149,7 @@ public class SelectorJrxml {
 		bLoc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FilteredResourcesSelectionDialog wizard = new FilteredResourcesSelectionDialog(Display.getCurrent().getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+				FilteredResourcesSelectionDialog wizard = new FilteredResourcesSelectionDialog(UIUtils.getShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 				wizard.setInitialPattern("*.jrxml");//$NON-NLS-1$
 				if (wizard.open() == Dialog.OK) {
 					ResourceDescriptor jrxmlDescriptor = new ResourceDescriptor();

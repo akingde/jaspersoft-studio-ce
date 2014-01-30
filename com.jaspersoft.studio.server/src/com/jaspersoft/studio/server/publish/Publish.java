@@ -107,7 +107,9 @@ public class Publish {
 					throw e;
 			} catch (Exception e) {
 			}
-			PublishUtil.setChild(r, jrxml.getValue());
+			ResourceDescriptor rdjrxml = jrxml.getValue();
+			rdjrxml.setMainReport(true);
+			PublishUtil.setChild(r, rdjrxml);
 			for (MResource res : resources) {
 				if (res.getPublishOptions().isOverwrite())
 					PublishUtil.setChild(r, res.getValue());

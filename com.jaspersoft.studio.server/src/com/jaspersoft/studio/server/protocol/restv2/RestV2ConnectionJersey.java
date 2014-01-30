@@ -20,7 +20,6 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
@@ -60,6 +59,7 @@ import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -84,13 +84,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		connector = new JSSApacheConnector(clientConfig);
 		clientConfig.connector(connector);
-		// connector.getHttpClient().getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
-		// proxy);
-
-		CredentialsProvider cp = (CredentialsProvider) clientConfig.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
-
-		// cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
-		// credentials);
+		HttpUtils.setupProxy(clientConfig, sp.getURL().toURI());
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
 		String user = sp.getUser();
