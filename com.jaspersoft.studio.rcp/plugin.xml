@@ -390,6 +390,7 @@
    		id="preferences" point="org.eclipse.core.runtime.preferences" name="%preferences">
 		<initializer class="com.jaspersoft.studio.rcp.p2.PreferenceInitializer"/>
    </extension>
+   <!--
    <extension
      point="org.eclipse.ui.installationPages">
       <page
@@ -403,6 +404,7 @@
         id="com.jaspersoft.studio.rcp.pages.RevertProfilePage">
       </page>
    </extension>
+   -->
    <extension point="org.eclipse.ui.commands">
    	  <category name="Languages" id="com.jaspersoft.studio.switchlanguage.category">
       </category>
