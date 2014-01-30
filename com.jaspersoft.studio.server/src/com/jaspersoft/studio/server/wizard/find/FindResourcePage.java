@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -54,6 +53,7 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
+import com.jaspersoft.studio.utils.Misc;
 
 public class FindResourcePage extends WizardPage {
 	private FinderUI finderUI;
@@ -118,9 +118,13 @@ public class FindResourcePage extends WizardPage {
 			expcmp.setExpanded(false);
 
 			Composite scmp = new Composite(expcmp, SWT.NONE);
-			scmp.setLayout(new GridLayout(4, false));
+			scmp.setLayout(new GridLayout(2, false));
 
-			ball = new Button(scmp, SWT.CHECK);
+			Composite dsCmp = new Composite(scmp, SWT.NONE);
+			dsCmp.setLayout(new GridLayout(2, false));
+			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+			ball = new Button(dsCmp, SWT.CHECK);
 			ball.setText("Select All");
 			ball.setSelection(true);
 			ball.addSelectionListener(new SelectionAdapter() {
@@ -133,12 +137,32 @@ public class FindResourcePage extends WizardPage {
 					finderUI.getTypes().clear();
 				}
 			});
+			Label lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl.setLayoutData(gd);
 
-			bds = new Button(scmp, SWT.CHECK);
+			Map<String, String> typeNames = ResourceFactory.getTypeNames();
+			for (String rtype : typeNames.keySet()) {
+				if (dsTypes.contains(rtype))
+					continue;
+				final Button bhiden = new Button(dsCmp, SWT.CHECK);
+				bhiden.setText(typeNames.get(rtype));
+				bhiden.setSelection(true);
+				bhiden.setToolTipText(rtype);
+				typesMap.put(rtype, bhiden);
+				bhiden.addSelectionListener(typeListener);
+			}
+
+			dsCmp = new Composite(scmp, SWT.NONE);
+			dsCmp.setLayout(new GridLayout(2, false));
+			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+			bds = new Button(dsCmp, SWT.CHECK);
 			bds.setText("Select Datasources");
 			bds.setSelection(true);
 			gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-			gd.horizontalSpan = 3;
+			gd.horizontalSpan = 2;
 			bds.setLayoutData(gd);
 			bds.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -156,15 +180,16 @@ public class FindResourcePage extends WizardPage {
 				}
 			});
 
-			Label lbl = new Label(scmp, SWT.SEPARATOR | SWT.HORIZONTAL);
+			lbl = new Label(dsCmp, SWT.SEPARATOR | SWT.HORIZONTAL);
 			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 4;
+			gd.horizontalSpan = 2;
 			lbl.setLayoutData(gd);
 
-			Map<String, String> typeNames = ResourceFactory.getTypeNames();
-			for (String rtype : typeNames.keySet()) {
-				final Button bhiden = new Button(scmp, SWT.CHECK);
-				bhiden.setText(typeNames.get(rtype));
+			for (String rtype : dsTypes) {
+				if (!typeNames.containsKey(rtype))
+					continue;
+				final Button bhiden = new Button(dsCmp, SWT.CHECK);
+				bhiden.setText(Misc.nvl(typeNames.get(rtype), rtype));
 				bhiden.setSelection(true);
 				bhiden.setToolTipText(rtype);
 				typesMap.put(rtype, bhiden);
@@ -187,22 +212,17 @@ public class FindResourcePage extends WizardPage {
 
 		TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		tableComposite.setLayout(tableColumnLayout);
-		viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		TableViewerColumn col = new TableViewerColumn(viewer, SWT.NONE);
 		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
 			public void update(ViewerCell cell) {
-				ClientResourceLookup p = (ClientResourceLookup) cell
-						.getElement();
+				ClientResourceLookup p = (ClientResourceLookup) cell.getElement();
 
 				cell.setText(p.getLabel() + " : " + p.getUri());
-				StyleRange myStyledRange = new StyleRange(
-						p.getLabel().length() + 3, cell.getText().length(),
-						Display.getCurrent().getSystemColor(SWT.COLOR_GRAY),
-						null);
+				StyleRange myStyledRange = new StyleRange(p.getLabel().length() + 3, cell.getText().length(), Display.getCurrent().getSystemColor(SWT.COLOR_GRAY), null);
 				StyleRange[] range = { myStyledRange };
 				cell.setStyleRanges(range);
 
@@ -230,8 +250,7 @@ public class FindResourcePage extends WizardPage {
 			}
 		});
 
-		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(
-				100));
+		tableColumnLayout.setColumnData(col.getColumn(), new ColumnWeightData(100));
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(false);
 		table.setLinesVisible(false);
@@ -243,9 +262,7 @@ public class FindResourcePage extends WizardPage {
 					try {
 						int[] sel = table.getSelectionIndices();
 						if (sel.length > 0)
-							value = WSClientHelper.toResourceDescriptor(
-									finderUI.getServerProfile(),
-									res.get(sel[0]));
+							value = WSClientHelper.toResourceDescriptor(finderUI.getServerProfile(), res.get(sel[0]));
 						if (value != null)
 							setPageComplete(true);
 					} catch (Exception e1) {
@@ -344,8 +361,7 @@ public class FindResourcePage extends WizardPage {
 			new Thread(new Runnable() {
 				public void run() {
 					try {
-						WSClientHelper.findResources(new NullProgressMonitor(),
-								finderUI);
+						WSClientHelper.findResources(new NullProgressMonitor(), finderUI);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -356,9 +372,7 @@ public class FindResourcePage extends WizardPage {
 				getContainer().run(true, true, new IRunnableWithProgress() {
 
 					@Override
-					public void run(IProgressMonitor monitor)
-							throws InvocationTargetException,
-							InterruptedException {
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						monitor.beginTask("Searching", IProgressMonitor.UNKNOWN);
 						try {
 							WSClientHelper.findResources(monitor, finderUI);
