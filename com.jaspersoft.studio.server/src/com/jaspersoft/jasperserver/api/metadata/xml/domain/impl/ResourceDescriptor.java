@@ -345,6 +345,8 @@ public class ResourceDescriptor implements Serializable {
 
 	public void setIsNew(boolean isNew) {
 		this.isNew = isNew;
+		if (isNew)
+			setVersion(-1);
 	}
 
 	public Date getCreationDate() {

@@ -193,7 +193,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
 				readFile(connector.get(req, monitor), f, monitor);
 			}
-			return Rest2Soap.getRD(this, crl, rd);
+			return Rest2Soap.getRD(this, crl);
 		}
 		return null;
 	}

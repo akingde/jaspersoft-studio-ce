@@ -242,7 +242,6 @@ public class PasteResourceAction extends Action {
 				rd = doPasteIntoReportUnit(prd, rd);
 			} catch (Throwable e) {
 				file = null;
-				rd = origin;
 			}
 		}
 		prd.getChildren().add(rd);
@@ -264,10 +263,11 @@ public class PasteResourceAction extends Action {
 
 	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
 		String ruuri = prd.getUriString();
+		origin.setParentFolder(ruuri + "_files");
 		origin.setUriString(ruuri + "_files/" + origin.getName());
 		origin.setIsNew(true);
 		origin.setName(getRName(origin.getName(), prd.getChildren()));
-		origin.setLabel(origin.getName());
+		origin.setLabel(origin.getLabel());
 		origin.setMainReport(false);
 		return origin;
 	}
