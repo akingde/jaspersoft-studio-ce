@@ -84,13 +84,15 @@ public class ReportUnitContent extends APageContent {
 		if (res.getValue().getIsNew())
 			setPageComplete(false);
 
+		rebind();
 		return composite;
 	}
 
 	@Override
 	protected void rebind() {
 		ReportProxy v = getProxy(res.getValue());
-		bindingContext.bindValue(SWTObservables.observeText(jspview, SWT.Modify), PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
+		if (jspview != null)
+			bindingContext.bindValue(SWTObservables.observeText(jspview, SWT.Modify), PojoObservables.observeValue(v, "jspView")); //$NON-NLS-1$
 	}
 
 	protected ReportProxy getProxy(ResourceDescriptor rd) {

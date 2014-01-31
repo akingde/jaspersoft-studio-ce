@@ -39,6 +39,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlExporter extends AExporter {
 	public static final String PROP_REPORT_ISMAIN = "ireport.jasperserver.report.ismain";
@@ -52,8 +53,14 @@ public class JrxmlExporter extends AExporter {
 	public IFile exportToIFile(AFileResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
+			JasperReportsConfiguration jrConfig = res.getJasperConfiguration();
+			if (jrConfig == null) {
+				jrConfig = JasperReportsConfiguration.getDefaultJRConfig(f);
+				res.setJasperConfiguration(jrConfig);
+			} else
+				jrConfig.init(f);
 			try {
-				JasperDesign jd = JRXmlLoader.load(res.getJasperConfiguration(), f.getContents());
+				JasperDesign jd = JRXmlLoader.load(jrConfig, f.getContents());
 				setPropServerURL(res, jd);
 				setPropReportUnit(res, jd);
 				getResources(res, jd);

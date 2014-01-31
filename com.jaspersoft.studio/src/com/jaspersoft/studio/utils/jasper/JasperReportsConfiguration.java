@@ -643,6 +643,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 	}
 
+	public static JasperReportsConfiguration getDefaultJRConfig(IFile f) {
+		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), f);
+	}
+
 	private static JasperReportsConfiguration instance;
 
 	/**

@@ -51,8 +51,10 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class Soap2Rest {
 	public static Object getResourceContainer(ARestV2Connection rc, ResourceDescriptor rd) throws ParseException {
+		if (rd.getParentFolder() != null && !rd.getParentFolder().endsWith("_files"))
+			rd.setIsReference(true);
 		if (rd.getIsReference())
-			return new ClientReference(rd.getReferenceUri());
+			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
 		ClientResource<?> res = getResource(rc, rd);
 		if (rd.getIsNew())
 			res.setVersion(-1);
@@ -332,18 +334,20 @@ public class Soap2Rest {
 				continue;
 			if (SelectorDatasource.isDatasource(r))
 				cr.setDataSource((ClientReferenceableDataSource) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
-				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.isMainReport()) {
-				r.setName("main_jrxml");
-				r.setLabel("Main Jrxml");
-				r.setUriString(rd.getUriString() + "_files/" + r.getName());
-				cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
-			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-				ics.add((ClientReferenceableInputControl) getResourceContainer(rc, r));
-			else if (ResourceFactory.isFileResourceType(r)) {
-				ClientFile res = (ClientFile) getResourceContainer(rc, r);
-				icf.put(r.getLabel(), res);
+			else {
+				String t = r.getWsType();
+				if (t.equals(ResourceDescriptor.TYPE_QUERY))
+					cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
+				else if ((t.equals(ResourceDescriptor.TYPE_JRXML) || t.equals(ResourceDescriptor.TYPE_REFERENCE)) && r.isMainReport()) {
+					// r.setName("main_jrxml");
+					// r.setLabel("Main Jrxml");
+					// r.setUriString(rd.getUriString() + "_files/" + r.getName());
+					cr.setJrxml((ClientReferenceableFile) getResourceContainer(rc, r));
+				} else if (t.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					ics.add((ClientReferenceableInputControl) getResourceContainer(rc, r));
+				else if (ResourceFactory.isFileResourceType(r) || t.equals(ResourceDescriptor.TYPE_REFERENCE)) {
+					icf.put(r.getName(), (ClientReferenceableFile) getResourceContainer(rc, r));
+				}
 			}
 		}
 

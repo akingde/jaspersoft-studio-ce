@@ -92,7 +92,8 @@ public class ImpInputControls {
 		rdtype.setLabel(name);
 		rdtype.setIsNew(true);
 		rdtype.setDataType(type);
-		rdtype.setUriString(String.format("%s/%s/%s", rd.getParentFolder(), rd.getName(), name));
+		rdtype.setIsReference(false);
+		rdtype.setUriString(String.format("%s/%s/%s", rd.getParentFolder(), rd.getName() + "_files", name));
 
 		rd.getChildren().add(rdtype);
 	}

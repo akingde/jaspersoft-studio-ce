@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.part;
 
@@ -19,6 +14,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -44,9 +41,9 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  * The Class ATreeEditPart.
  */
 public class TreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener {
-	
+
 	private IResource associatedFile;
-	
+
 	@Override
 	protected void addChild(EditPart child, int index) {
 		if (child != null)
@@ -99,36 +96,42 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	protected void refreshVisuals() {
 		if (getWidget() instanceof Tree)
 			return;
-		TreeItem item = (TreeItem) getWidget();
-		ANode node = (ANode) getModel();
-		if (node != null) {
-			if (node.getImagePath() != null) {
-				Image image = JaspersoftStudioPlugin.getInstance().getImage(node.getImagePath());
-				if (image != null) {
-					if (node.getBackground() != null)
-						image.setBackground(node.getBackground());
-					else {
-						if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
-							image.setBackground(item.getParent().getBackground());
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				TreeItem item = (TreeItem) getWidget();
+				ANode node = (ANode) getModel();
+				if (node != null) {
+					if (node.getImagePath() != null) {
+						Image image = JaspersoftStudioPlugin.getInstance().getImage(node.getImagePath());
+						if (image != null) {
+							if (node.getBackground() != null)
+								image.setBackground(node.getBackground());
+							else {
+								if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
+									image.setBackground(item.getParent().getBackground());
+							}
+							setWidgetImage(image);
+						}
 					}
-					setWidgetImage(image);
+					if (item != null) {
+						if (node.getBackground() != null)
+							item.setBackground(node.getBackground());
+						if (node.getForeground() != null)
+							item.setForeground(node.getForeground());
+					}
+					String displayText = node.getDisplayText();
+					if (displayText != null) {
+						displayText = displayText.replaceAll("(\\r|\\n)+", " ");
+						if (displayText.length() > 30)
+							displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
+						setWidgetText(displayText);
+					} else
+						setWidgetText("Unknown");
 				}
 			}
-			if (item != null) {
-				if (node.getBackground() != null)
-					item.setBackground(node.getBackground());
-				if (node.getForeground() != null)
-					item.setForeground(node.getForeground());
-			}
-			String displayText = node.getDisplayText();
-			if (displayText != null) {
-				displayText = displayText.replaceAll("(\\r|\\n)+", " ");
-				if (displayText.length() > 30)
-					displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
-				setWidgetText(displayText);
-			} else
-				setWidgetText("Unknown");
-		}
+		});
 	}
 
 	/*
@@ -154,7 +157,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
 	}
-	
+
 	@Override
 	public Object getAdapter(Class key) {
 		if (key == IResource.class || key == IFile.class) {
@@ -165,7 +168,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 		}
 		return super.getAdapter(key);
 	}
-	
+
 	/**
 	 * Returns the file associated.
 	 * <p>

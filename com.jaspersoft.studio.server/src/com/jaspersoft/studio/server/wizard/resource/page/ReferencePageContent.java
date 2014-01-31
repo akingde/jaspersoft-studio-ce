@@ -15,6 +15,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.ParseException;
+import java.util.Date;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 
@@ -22,6 +27,8 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.conversion.Converter;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
@@ -45,6 +52,7 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 
@@ -139,18 +147,21 @@ public class ReferencePageContent extends APageContent {
 		com.jaspersoft.studio.utils.UIUtil.createSeparator(cmp, 2);
 
 		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refid);
-		tid = new Text(cmp, SWT.BORDER);
+		tid = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tid.setEnabled(false);
 
 		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refname);
-		tname = new Text(cmp, SWT.BORDER);
+		tname = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tname.setEnabled(false);
 
 		com.jaspersoft.studio.utils.UIUtil.createLabel(cmp, Messages.RDReferencePage_refdesc);
-		tdesc = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+		tdesc = new Text(cmp, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
 		tdesc.setLayoutData(gd);
+		tdesc.setEnabled(false);
 
 		loadReference(res.getValue());
 		rebind();
@@ -169,7 +180,29 @@ public class ReferencePageContent extends APageContent {
 		if (ref != null) {
 			bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE), PojoObservables.observeValue(ref, "parentFolder")); //$NON-NLS-1$
 
-			bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(ref, "creationDate")); //$NON-NLS-1$
+			IConnection c = res.getWsClient();
+			final Format f = (c != null ? c.getTimestampFormat() : DateFormat.getTimeInstance());
+			IConverter t2mConv = new Converter(String.class, Date.class) {
+
+				public Object convert(Object fromObject) {
+					try {
+						if (fromObject != null && fromObject instanceof String && !((String) fromObject).isEmpty())
+							return f.parseObject((String) fromObject);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+			};
+			IConverter m2tConv = new Converter(Date.class, String.class) {
+
+				public Object convert(Object fromObject) {
+					return f.format(fromObject);
+				}
+			};
+
+			bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(ref, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv),
+					new UpdateValueStrategy().setConverter(m2tConv));
 
 			bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(ref, "wsType")); //$NON-NLS-1$
 
