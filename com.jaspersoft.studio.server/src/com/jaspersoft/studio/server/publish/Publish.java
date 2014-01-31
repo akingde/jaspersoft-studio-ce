@@ -91,6 +91,9 @@ public class Publish {
 		String version = ServerManager.getVersion(Misc.nvl(mrunit, jrxml));
 		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
 		jrxml.setFile(file);
+		ResourceDescriptor rdjrxml = jrxml.getValue();
+		if (rdjrxml.getParentFolder() != null && !rdjrxml.getParentFolder().endsWith("_files"))
+			rdjrxml.setIsReference(true);
 
 		List<MResource> resources = ((JasperReportsConfiguration) jrConfig).get(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		updSelectedResources(monitor, resources, version);
@@ -107,9 +110,11 @@ public class Publish {
 					throw e;
 			} catch (Exception e) {
 			}
-			ResourceDescriptor rdjrxml = jrxml.getValue();
+
 			boolean isMain = true;
 			for (ResourceDescriptor rd : r.getChildren()) {
+				if (rd.getUriString() == null)
+					continue;
 				String wsType = rd.getWsType();
 				if (rd.getUriString().equals(rdjrxml.getUriString()) && (wsType.equals(ResourceDescriptor.TYPE_JRXML) || wsType.equals(ResourceDescriptor.TYPE_REFERENCE))) {
 					isMain = rd.isMainReport();

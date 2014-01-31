@@ -259,8 +259,6 @@ public class WSClientHelper {
 			if (cli == null)
 				cli = connect(sp, monitor);
 			System.out.println("saving: " + rd.getUriString() + " parent:" + rd.getParentFolder());
-			if (rd.getIsReference())
-				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 			if (mru != null && res != mru) {
 				String wsType = rd.getWsType();
 				if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !rd.getIsNew())

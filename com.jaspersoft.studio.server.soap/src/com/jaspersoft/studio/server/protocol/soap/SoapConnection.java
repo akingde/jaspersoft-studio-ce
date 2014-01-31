@@ -150,10 +150,12 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
+		if (rd.getIsReference())
+			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 		List<ResourceDescriptor> children = rd.getChildren();
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
-			for (ResourceDescriptor r : rd.getChildren()) {
-				if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml")) {
+			for (ResourceDescriptor r : children) {
+				if (r.isMainReport() || (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) {
 					r.setMainReport(true);
 					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());
@@ -166,6 +168,8 @@ public class SoapConnection implements IConnection {
 		List<ResourceDescriptor> oldChildren = list(monitor, rd);
 		for (ResourceDescriptor r : oldChildren)
 			for (ResourceDescriptor newr : children) {
+				if (newr.getUriString() == null || r.getUriString() == null)
+					continue;
 				if (r.getWsType().equals(newr.getWsType()) && r.getUriString().equals(newr.getUriString()))
 					newr.setIsNew(false);
 			}
@@ -173,8 +177,8 @@ public class SoapConnection implements IConnection {
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = get(monitor, rd, null);
 			for (ResourceDescriptor r : children) {
-				if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))
-					r.setMainReport(true);
+				if (r.getUriString() == null || SelectorDatasource.isDatasource(r))
+					continue;
 				if (r.isMainReport())
 					continue;
 				if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !r.getIsNew())
@@ -195,6 +199,12 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+		if (rd.getIsReference()) {
+			if (!rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
+				rd.setIsReference(false);
+				return client.addOrModifyResource(rd, inFile);
+			}
+		}
 		return client.modifyReportUnitResource(runit.getUriString(), rd, inFile);
 	}
 

@@ -45,6 +45,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
@@ -170,7 +171,7 @@ public class PasteResourceAction extends Action {
 						try {
 							origin = mc.get(monitor, origin, file);
 							origin.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
-							origin.setHasData(true);
+							origin.setHasData(origin.getData() != null);
 						} catch (Throwable e) {
 							file = null;
 						}
@@ -187,6 +188,10 @@ public class PasteResourceAction extends Action {
 						} else
 							ws.copy(monitor, origin, dURI);
 					} else if (parent instanceof MReportUnit) {
+						if (!(m.getParent() instanceof MFolder) && m.getParent() instanceof MResource) {
+							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files"))
+								origin.setIsReference(true);
+						}
 						saveToReportUnit(monitor, parent, ws, origin);
 						deleteIfCut(monitor, m);
 					}
@@ -210,23 +215,38 @@ public class PasteResourceAction extends Action {
 
 	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin) throws IOException, Exception {
 		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
+		ResourceDescriptor rd = null;
+		File file = null;
+		if (origin.getIsReference()) {
+			rd = new ResourceDescriptor();
+			rd.setName(origin.getName());
+			rd.setLabel(origin.getLabel());
+			rd.setDescription(origin.getDescription());
+			rd.setIsNew(true);
+			rd.setIsReference(true);
+			rd.setReferenceUri(origin.getUriString());
+			rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");
+			if (ResourceFactory.isFileResourceType(origin))
+				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+			else
+				rd.setWsType(origin.getWsType());
+			rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName());
+		} else {
+			file = FileUtils.createTempFile("tmp", "file");
 
-		String oldName = origin.getName();
-		String oldLabel = origin.getLabel();
+			try {
+				rd = ws.get(monitor, origin, file);
+				rd.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
+				rd.setHasData(rd.getData() != null);
 
-		origin = doPasteIntoReportUnit(prd, origin);
-
-		prd.getChildren().add(origin);
-		File file = FileUtils.createTempFile("tmp", "file");
-		try {
-			ws.get(monitor, origin, file);
-		} catch (Throwable e) {
-			file = null;
+				rd = doPasteIntoReportUnit(prd, rd);
+			} catch (Throwable e) {
+				file = null;
+				rd = origin;
+			}
 		}
-		ws.modifyReportUnitResource(monitor, prd, origin, file);
-
-		origin.setName(oldName);
-		origin.setLabel(oldLabel);
+		prd.getChildren().add(rd);
+		ws.addOrModifyResource(monitor, prd, null);
 	}
 
 	private boolean isSameServer(ANode parent, MResource m) {
@@ -244,11 +264,11 @@ public class PasteResourceAction extends Action {
 
 	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
 		String ruuri = prd.getUriString();
-		origin.setParentFolder(ruuri + "_files/" + origin.getName());
+		origin.setUriString(ruuri + "_files/" + origin.getName());
 		origin.setIsNew(true);
-
 		origin.setName(getRName(origin.getName(), prd.getChildren()));
 		origin.setLabel(origin.getName());
+		origin.setMainReport(false);
 		return origin;
 	}
 

@@ -283,14 +283,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
-		if (rd.getIsReference() && rd.getHasData()) {
-			ResourceDescriptor r = new ResourceDescriptor();
-			r.setUriString(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
-			r.setWsType(rd.getWsType());
-			ResourceDescriptor ref = parent.get(monitor, r, null);
-			ref.setHasData(true);
-			ref.setData(rd.getData());
-			addOrModifyResource(monitor, ref, inFile);
+		if (rd.getIsReference() && (rd.isDirty() || rd.getHasData())) {
+			// ResourceDescriptor r = new ResourceDescriptor();
+			// r.setUriString(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
+			// r.setWsType(rd.getWsType());
+			// ResourceDescriptor ref = parent.get(monitor, r, null);
+			// ref.setHasData(true);
+			// ref.setData(rd.getData());
+			return addOrModifyResource(monitor, rd, inFile);
 		}
 		runit = parent.get(monitor, runit, null);
 		PublishUtil.setChild(runit, rd);
