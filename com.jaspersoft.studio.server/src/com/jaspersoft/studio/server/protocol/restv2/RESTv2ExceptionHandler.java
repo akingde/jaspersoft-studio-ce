@@ -61,7 +61,10 @@ public class RESTv2ExceptionHandler {
 				throw new HttpResponseException(status, msg);
 			}
 		default:
-			msg = res.getStatusInfo().getReasonPhrase() + "\n" + res.readEntity(String.class);
+			String cnt = res.readEntity(String.class);
+			if (cnt.length() > 100)
+				cnt = "";
+			msg = res.getStatusInfo().getReasonPhrase() + "\n" + cnt;
 			throw new HttpResponseException(status, msg);
 		}
 	}

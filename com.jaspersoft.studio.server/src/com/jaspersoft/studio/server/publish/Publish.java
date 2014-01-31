@@ -190,7 +190,7 @@ public class Publish {
 							continue;
 						ResourceDescriptor rd = res.getValue();
 						rd.setParentFolder(popt.getReferencedResource().getUriString());
-						rd.setUriString(rd.getParentFolder() + rd.getName());
+						rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.REWRITEEXPRESSION) {
 						;
 					} else if (res instanceof MJrxml) {

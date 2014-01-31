@@ -37,7 +37,6 @@ import com.jaspersoft.jasperserver.dto.resources.ClientSubDataSourceReference;
 import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.studio.server.Activator;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.utils.RDUtil;
@@ -60,7 +59,7 @@ public class Rest2Soap {
 	public static ResourceDescriptor getRDContainer(ARestV2Connection rc, ClientResource<?> cr) throws ParseException {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		getRD(rc, cr, rd);
-		if (!cr.getUri().contains(WSClientHelper._FILES)) {
+		if (!(RDUtil.getParentFolder(cr.getUri()).endsWith("_files"))) {
 			rd.setIsReference(true);
 			rd.setReferenceUri(cr.getUri());
 		}
@@ -291,8 +290,12 @@ public class Rest2Soap {
 			for (ClientReferenceableInputControl cric : cr.getInputControls())
 				rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cric));
 		if (cr.getFiles() != null)
-			for (ClientReferenceableFile crf : cr.getFiles().values())
-				rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) crf));
+			for (String key : cr.getFiles().keySet()) {
+				ClientReferenceableFile crf = cr.getFiles().get(key);
+				ResourceDescriptor r = getRDContainer(rc, (ClientResource<?>) crf);
+				r.setName(key);
+				rd.getChildren().add(r);
+			}
 		Collections.sort(rd.getChildren(), new Comparator<ResourceDescriptor>() {
 
 			@Override

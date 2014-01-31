@@ -97,7 +97,7 @@ public class InputControlPageContent extends APageContent implements IPageComple
 				Messages.RDInputControlPage_singleselectqueryradio, Messages.RDInputControlPage_multiselectquery, Messages.RDInputControlPage_multiselectquerycheckbox });
 
 		stackComposite = new Composite(composite, SWT.NONE);
-		final StackLayout stackLayout = new StackLayout();
+		stackLayout = new StackLayout();
 		stackComposite.setLayout(stackLayout);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
@@ -132,6 +132,10 @@ public class InputControlPageContent extends APageContent implements IPageComple
 		bindingContext.bindValue(SWTObservables.observeSelection(bmand), PojoObservables.observeValue(res.getValue(), "mandatory")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bread), PojoObservables.observeValue(res.getValue(), "readOnly")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bvisible), PojoObservables.observeValue(res.getValue(), "visible")); //$NON-NLS-1$
+		if (tvalue != null)
+			bindingContext.bindValue(SWTObservables.observeText(tvalue, SWT.Modify), PojoObservables.observeValue(res.getValue(), "queryValueColumn")); //$NON-NLS-1$
+
+		handleTypeChanged(ctype, stackLayout);
 	}
 
 	protected void handleTypeChanged(Combo ctype, StackLayout stackLayout) {
@@ -227,7 +231,7 @@ public class InputControlPageContent extends APageContent implements IPageComple
 
 		UIUtil.createLabel(cmp, Messages.RDInputControlPage_valuecolumn);
 
-		Text tvalue = new Text(cmp, SWT.BORDER);
+		tvalue = new Text(cmp, SWT.BORDER);
 		tvalue.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		cmp = new Composite(cmp, SWT.NONE);
@@ -245,7 +249,7 @@ public class InputControlPageContent extends APageContent implements IPageComple
 				page.setPageComplete(sQuery.isPageComplete());
 			}
 		});
-		bindingContext.bindValue(SWTObservables.observeText(tvalue, SWT.Modify), PojoObservables.observeValue(res.getValue(), "queryValueColumn")); //$NON-NLS-1$
+
 	}
 
 	@Override
@@ -273,6 +277,8 @@ public class InputControlPageContent extends APageContent implements IPageComple
 	private Button bread;
 	private Button bvisible;
 	private Combo ctype;
+	private Text tvalue;
+	private StackLayout stackLayout;
 
 	class ShiftMapProxy {
 		private ResourceDescriptor rd;
