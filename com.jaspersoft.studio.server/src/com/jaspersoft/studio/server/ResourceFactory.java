@@ -179,11 +179,11 @@ public class ResourceFactory {
 				else if (resource instanceof MRSecureMondrianConnection)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource, true), new OLAPMondrianSchemaContent(parent, resource));
 				else if (resource instanceof MRMondrianSchema)
-					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new FilePageContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new XmlPageContent(parent, resource));
 				else if (resource instanceof MRMondrianXmlaDefinitionClientType)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new MondrianXMLADefinitionContent(parent, resource));
 				else if (resource instanceof MRAccessGrantSchema)
-					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource));
+					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new XmlPageContent(parent, resource));
 
 				else if (resource instanceof MROlapUnit)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new QueryPageContent(parent, resource, false), new OlapConnectionContent(parent, resource));
@@ -314,8 +314,8 @@ public class ResourceFactory {
 			return new MROlapUnit(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA))
 			return new MRAccessGrantSchema(parent, resource, index);
-		// if (wstype.equals(MRCSS.WSTYPE_CSS))
-		// return new MRCSS(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_CSS_FILE))
+			return new MRCSS(parent, resource, index);
 
 		return new MUnknown(parent, resource, index);
 	}
@@ -330,6 +330,7 @@ public class ResourceFactory {
 		fileTypes.add(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 		fileTypes.add(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		fileTypes.add(ResourceDescriptor.TYPE_XML_FILE);
+		fileTypes.add(ResourceDescriptor.TYPE_CSS_FILE);
 	}
 
 	public static boolean isFileResourceType(ResourceDescriptor r) {

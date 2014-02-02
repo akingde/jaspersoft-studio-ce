@@ -162,9 +162,11 @@ public class PasteResourceAction extends Action {
 			if (obj instanceof MResource && obj instanceof ICopyable) {
 				MResource m = (MResource) obj;
 				if (m.isCopyable2(parent)) {
+					ResourceDescriptor origin = m.getValue();
+					if (origin.isMainReport())
+						m.setCut(false);
 					if (m.isCut())
 						toRefresh.add(m.getParent());
-					ResourceDescriptor origin = m.getValue();
 					if (!isSameServer(parent, m)) {
 						IConnection mc = m.getWsClient();
 						File file = FileUtils.createTempFile("tmp", "file");

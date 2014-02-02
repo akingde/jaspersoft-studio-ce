@@ -150,6 +150,8 @@ public class Soap2Rest {
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_MONDRIAN_SCHEMA))
 				cr.setSchema((ClientReferenceableFile) getResourceContainer(rc, r));
 			else if (r.getWsType().equals(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA)) {
+				if (cr.getAccessGrants() == null)
+					cr.setAccessGrants(new ArrayList<ClientReferenceableFile>());
 				cr.getAccessGrants().add((ClientReferenceableFile) getResourceContainer(rc, r));
 			}
 		}

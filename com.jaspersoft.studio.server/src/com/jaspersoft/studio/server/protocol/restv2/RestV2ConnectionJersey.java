@@ -20,6 +20,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.jasperreports.eclipse.util.FileExtension;
+
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
@@ -28,7 +30,6 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
-import com.google.common.io.Files;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
@@ -41,7 +42,6 @@ import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlState;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControl;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.ReportInputControlsListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientFile;
-import com.jaspersoft.jasperserver.dto.resources.ClientReportUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
@@ -144,16 +144,20 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					rds.add(nrd);
 					if (nrd.getWsType().equals(ResourceDescriptor.TYPE_CONTENT_RESOURCE)) {
 						String name = nrd.getUriString().toLowerCase();
-						if (name.endsWith(".png") || name.endsWith(".jpeg") || name.endsWith(".jpg") || name.endsWith(".bmp") || name.endsWith(".tiff") || name.endsWith(".gif"))
+						if (FileExtension.isImage(name))
 							nrd.setWsType(ResourceDescriptor.TYPE_IMAGE);
+						if (FileExtension.isFont(name))
+							nrd.setWsType(ResourceDescriptor.TYPE_FONT);
 						else if (name.endsWith(".xml"))
 							nrd.setWsType(ResourceDescriptor.TYPE_XML_FILE);
-						else if (name.endsWith(".jrxml"))
+						else if (name.endsWith(FileExtension.PointJRXML))
 							nrd.setWsType(ResourceDescriptor.TYPE_JRXML);
 						else if (name.endsWith(".jar"))
 							nrd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
-						else if (name.endsWith(".jrtx"))
+						else if (name.endsWith(FileExtension.PointJRTX))
 							nrd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
+						else if (name.endsWith(ResourceDescriptor.TYPE_CSS_FILE))
+							nrd.setWsType(ResourceDescriptor.TYPE_CSS_FILE);
 						else if (name.endsWith(".properties"))
 							nrd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
 					}
@@ -200,7 +204,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
-		String rtype = WsTypes.INST().toRestType(rd.getWsType());
+		String wsType = rd.getWsType();
+		String rtype = WsTypes.INST().toRestType(wsType);
 
 		WebTarget tgt = target.path("resources" + destFolderURI);
 		tgt = tgt.queryParam("overwrite", "true");
@@ -209,14 +214,19 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Builder req = tgt.request().header("Content-Location", rd.getUriString());
 		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
-		if (crl != null)
-			return doGet(monitor, Rest2Soap.getRD(this, crl), crl);
+		if (crl != null) {
+			rd = new ResourceDescriptor();
+			rd.setWsType(wsType);
+			rd.setUriString(crl.getUri());
+			return doGet(monitor, rd, crl);
+		}
 		return null;
 	}
 
 	@Override
 	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
-		String rtype = WsTypes.INST().toRestType(rd.getWsType());
+		String wsType = rd.getWsType();
+		String rtype = WsTypes.INST().toRestType(wsType);
 
 		WebTarget tgt = target.path("resources" + destFolderURI);
 		tgt = tgt.queryParam("overwrite", "true");
@@ -225,8 +235,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		Builder req = tgt.request().header("Content-Location", rd.getUriString());
 		Response r = connector.post(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
-		if (crl != null)
-			return doGet(monitor, Rest2Soap.getRD(this, crl), crl);
+		if (crl != null) {
+			rd = new ResourceDescriptor();
+			rd.setWsType(wsType);
+			rd.setUriString(crl.getUri());
+			return doGet(monitor, rd, crl);
+		}
 		return null;
 	}
 
@@ -234,19 +248,6 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
-		if (inFile != null) {
-			if (cr instanceof ClientFile) {
-				ClientFile crf = (ClientFile) cr;
-				crf.setType(WsTypes.getFileType(crf.getType(), Files.getFileExtension(inFile.getName())));
-				// crf.setContent(Base64.encodeBase64String(FileUtils.getBytes(inFile)));
-			} else if (cr instanceof ClientReportUnit) {
-				// ClientReferenceableFile mainjrxml = ((ClientReportUnit)
-				// cr).getJrxml();
-				// if (mainjrxml instanceof ClientFile)
-				// ((ClientFile)
-				// mainjrxml).setContent(Base64.encodeBase64String(FileUtils.getBytes(inFile)));
-			}
-		}
 
 		WebTarget tgt = target.path("resources" + rd.getUriString());
 		tgt = tgt.queryParam("createFolders", "true");
@@ -274,7 +275,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		boolean refresh = false;
 		if (WsTypes.INST().isContainerType(crl.getClass()))
 			refresh = true;
-		if (refresh && !monitor.isCanceled())
+		if (monitor.isCanceled())
+			return rd;
+		if (refresh)
 			rd = parent.get(monitor, rd, null);
 		else
 			rd = Rest2Soap.getRD(this, crl, rd);

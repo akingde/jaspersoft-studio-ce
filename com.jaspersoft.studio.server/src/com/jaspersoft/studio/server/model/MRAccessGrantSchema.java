@@ -22,7 +22,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MRAccessGrantSchema extends MResource {
+public class MRAccessGrantSchema extends AFileResource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MRAccessGrantSchema(ANode parent, ResourceDescriptor rd, int index) {
@@ -46,5 +46,10 @@ public class MRAccessGrantSchema extends MResource {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA);
 		return rd;
+	}
+
+	@Override
+	public String getDefaultFileExtension() {
+		return "xml";
 	}
 }

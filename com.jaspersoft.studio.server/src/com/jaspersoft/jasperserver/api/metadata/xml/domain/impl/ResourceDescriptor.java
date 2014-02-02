@@ -82,6 +82,7 @@ public class ResourceDescriptor implements Serializable {
 	public static final String TYPE_CONTENT_RESOURCE = "contentResource";
 	public static final String TYPE_STYLE_TEMPLATE = FileResource.TYPE_STYLE_TEMPLATE;
 	public static final String TYPE_XML_FILE = FileResource.TYPE_XML;
+	public static final String TYPE_CSS_FILE = FileResource.TYPE_CSS;
 
 	public static final String XML_ATT_NAME = "name";
 	public static final String XML_ATT_WSTYPE = "wsType";

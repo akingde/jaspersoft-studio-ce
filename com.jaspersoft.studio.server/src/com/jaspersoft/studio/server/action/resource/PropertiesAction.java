@@ -29,6 +29,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.model.IInputControlsContainer;
+import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 
@@ -55,13 +57,18 @@ public class PropertiesAction extends Action {
 			if (obj instanceof MResource) {
 				try {
 					mres = (MResource) obj;
-					ResourceDescriptor rd = WSClientHelper.getResource(new NullProgressMonitor(), mres, mres.getValue());
-					ANode parent = mres.getParent();
-					int index = parent.getChildren().indexOf(mres);
-					parent.removeChild(mres);
-					mres = ResourceFactory.getResource(parent, rd, index);
-					WSClientHelper.fireResourceChanged(mres);
-
+					if (!(mres instanceof MFolder)) {
+						NullProgressMonitor monitor = new NullProgressMonitor();
+						ResourceDescriptor rd = WSClientHelper.getResource(monitor, mres, mres.getValue());
+						ANode parent = mres.getParent();
+						int index = parent.getChildren().indexOf(mres);
+						parent.removeChild(mres);
+						mres = ResourceFactory.getResource(parent, rd, index);
+						if (mres instanceof IInputControlsContainer)
+							WSClientHelper.refreshContainer(mres, monitor);
+						// if(ModelUtil.isEmpty(mres))
+						WSClientHelper.fireResourceChanged(mres);
+					}
 					ResourceWizard wizard = new ResourceWizard(mres, mres);
 					WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 					dialog.create();

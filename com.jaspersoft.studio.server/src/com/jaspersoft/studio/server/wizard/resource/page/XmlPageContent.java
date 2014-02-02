@@ -28,8 +28,15 @@ public class XmlPageContent extends ATextFileResourcePageContent {
 		super(parent, resource, bindingContext);
 	}
 
+	private String title;
+
 	public XmlPageContent(ANode parent, MResource resource) {
 		super(parent, resource);
+	}
+
+	public XmlPageContent(ANode parent, MResource resource, String title) {
+		this(parent, resource);
+		this.title = title;
 	}
 
 	@Override
@@ -39,6 +46,8 @@ public class XmlPageContent extends ATextFileResourcePageContent {
 
 	@Override
 	public String getName() {
+		if (title != null)
+			return title;
 		return Messages.RDXmlFile_title;
 	}
 

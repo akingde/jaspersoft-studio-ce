@@ -1,8 +1,6 @@
 package com.jaspersoft.studio.utils;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +46,12 @@ public class SubreportsUtil {
 		File f = FileUtils.findFile(file, expr);
 		if (f == null)
 			try {
-				f = new File(new URI(expr));
-			} catch (URISyntaxException e1) {
+				try {
+					f = new File(expr);
+				} catch (IllegalArgumentException e) {
+					f = new File(file.getRawLocationURI().getPath(), expr);
+				}
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		if (fmap.containsKey(f))

@@ -47,6 +47,7 @@ public class QueryPageContent extends APageContent {
 	private boolean showLangs = true;
 	private static Text tsql;
 	private static Combo clang;
+	private static QProxy proxy;
 
 	public QueryPageContent(ANode parent, MResource resource, boolean showLangs) {
 		super(parent, resource);
@@ -98,14 +99,14 @@ public class QueryPageContent extends APageContent {
 	@Override
 	protected void rebind() {
 		ResourceDescriptor r = res.getValue();
-		if (clang == null)
+		if (clang != null)
 			bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 	}
 
 	private static QProxy getProxy(ResourceDescriptor rd) {
-		QProxy proxy = new QProxy();
-
+		if (proxy == null)
+			proxy = new QProxy();
 		proxy.setResourceDescriptor(rd);
 		return proxy;
 	}

@@ -249,6 +249,9 @@ public abstract class AFileResourcePageContent extends APageContent {
 	}
 
 	protected String getIntialPattern() {
+		String[] f = getFilter();
+		if (f != null && f.length > 0)
+			return f[f.length - 1];
 		return ".*";
 	}
 

@@ -163,7 +163,7 @@ public class DataTypePageContent extends APageContent {
 				}
 			}
 		});
-		// rebind();
+		rebind();
 		return container;
 	}
 

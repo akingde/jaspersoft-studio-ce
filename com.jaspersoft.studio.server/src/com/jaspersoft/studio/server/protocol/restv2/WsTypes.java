@@ -39,7 +39,6 @@ import com.jaspersoft.jasperserver.dto.resources.ClientVirtualDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientXmlaConnection;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.server.Activator;
-import com.jaspersoft.studio.server.model.MRCSS;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -121,7 +120,7 @@ public class WsTypes {
 		setSoapType(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION, ResourceMediaType.SECURE_MONDRIAN_CONNECTION_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_UNKNOW, ResourceMediaType.RESOURCE_LOOKUP_CLIENT_TYPE);
 		setSoapType(ResourceDescriptor.TYPE_XML_FILE, ResourceMediaType.FILE_CLIENT_TYPE);
-		setSoapType(MRCSS.WSTYPE_CSS, ResourceMediaType.FILE_CLIENT_TYPE);
+		setSoapType(ResourceDescriptor.TYPE_CSS_FILE, ResourceMediaType.FILE_CLIENT_TYPE);
 
 		setSoapFileType(ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA, FileType.accessGrantSchema);
 		setSoapFileType(ResourceDescriptor.TYPE_CLASS_JAR, FileType.jar);
@@ -133,17 +132,17 @@ public class WsTypes {
 		setSoapFileType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE, FileType.prop);
 		setSoapFileType(ResourceDescriptor.TYPE_STYLE_TEMPLATE, FileType.jrtx);
 		setSoapFileType(ResourceDescriptor.TYPE_XML_FILE, FileType.xml);
-		setSoapFileType(MRCSS.WSTYPE_CSS, FileType.css);
+		setSoapFileType(ResourceDescriptor.TYPE_CSS_FILE, FileType.css);
 
 		setRestFileType(FileType.accessGrantSchema, ResourceDescriptor.TYPE_ACCESS_GRANT_SCHEMA);
-		setRestFileType(FileType.css, MRCSS.WSTYPE_CSS);
+		setRestFileType(FileType.css, ResourceDescriptor.TYPE_CSS_FILE);
 		setRestFileType(FileType.csv, ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		setRestFileType(FileType.docx, ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		setRestFileType(FileType.font, ResourceDescriptor.TYPE_FONT);
 		setRestFileType(FileType.html, ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		setRestFileType(FileType.img, ResourceDescriptor.TYPE_IMAGE);
 		setRestFileType(FileType.jar, ResourceDescriptor.TYPE_CLASS_JAR);
-		setRestFileType(FileType.jrtx, ResourceDescriptor.TYPE_CONTENT_RESOURCE);
+		setRestFileType(FileType.jrtx, ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 		setRestFileType(FileType.jrxml, ResourceDescriptor.TYPE_JRXML);
 		setRestFileType(FileType.ods, ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		setRestFileType(FileType.odt, ResourceDescriptor.TYPE_CONTENT_RESOURCE);
@@ -326,4 +325,5 @@ public class WsTypes {
 	public boolean isContainerType(Class<?> cr) {
 		return containers.contains(cr);
 	}
+
 }
