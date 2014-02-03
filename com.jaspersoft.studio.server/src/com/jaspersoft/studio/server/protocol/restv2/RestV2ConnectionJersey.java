@@ -35,6 +35,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlOption;
@@ -54,6 +55,7 @@ import com.jaspersoft.jasperserver.remote.services.ReportOutputResource;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
+import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -62,6 +64,7 @@ import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
+import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.utils.Misc;
 
 public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
@@ -249,13 +252,36 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
+		Response r = null;
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {
+			ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MReportUnitOptions.PROP_RU_URI, rd.getProperties());
+			WebTarget tgt = target.path("reports" + resprop.getValue() + "/options");
+			tgt = tgt.queryParam("label", rd.getLabel());
+			tgt = tgt.queryParam("overwrite", "true");
 
+			ReportParameters rprms = new ReportParameters(new ArrayList<ReportParameter>());
+
+			Builder req = tgt.request();
+			r = connector.post(req, Entity.entity(rprms, MediaType.APPLICATION_XML_TYPE), monitor);
+
+			try {
+				toObj(r, String.class, monitor);
+			} catch (HttpResponseException e) {
+				if (e.getStatusCode() == 409) {
+					rd.setVersion(parent.get(monitor, rd, null).getVersion());
+					return addOrModifyResource(monitor, rd, inFile);
+				} else
+					throw e;
+			}
+			return doGet(monitor, rd, cr);
+		}
 		WebTarget tgt = target.path("resources" + rd.getUriString());
 		tgt = tgt.queryParam("createFolders", "true");
 		tgt = tgt.queryParam("overwrite", "true");
 
 		Builder req = tgt.request();
-		Response r = connector.put(req, Entity.entity(cr, "application/repository." + rtype + "+" + FORMAT), monitor);
+		r = connector.put(req, Entity.entity(cr, "application/repository." + rtype + "+" + FORMAT), monitor);
+
 		ClientResource<?> crl = null;
 		try {
 			crl = toObj(r, WsTypes.INST().getType(rtype), monitor);

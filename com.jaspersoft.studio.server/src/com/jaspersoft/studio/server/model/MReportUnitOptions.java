@@ -28,7 +28,6 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 public class MReportUnitOptions extends MResource implements IInputControlsContainer {
 	private static final String PROP_OPTIONS_NAME = "PROP_OPTIONS_NAME";
 	private static final String PROP_VALUES = "PROP_VALUES";
-	public static final String REPORT_OPTIONS_RESOURCE = "ReportOptionsResource";
 	public static final String PROP_RU_URI = "PROP_RU_URI";
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -69,7 +68,7 @@ public class MReportUnitOptions extends MResource implements IInputControlsConta
 		rd.getProperties().add(rp);
 
 		rd.setParentFolder(parent.getValue().getParentFolder());
-		rd.setWsType(REPORT_OPTIONS_RESOURCE);
+		rd.setWsType(ResourceDescriptor.TYPE_REPORT_OPTIONS);
 		return rd;
 	}
 }

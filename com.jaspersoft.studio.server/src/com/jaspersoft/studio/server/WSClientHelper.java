@@ -282,6 +282,7 @@ public class WSClientHelper {
 			} else if (res.getParent() instanceof MServerProfile) {
 				// resource created inside the root folder
 				connectGetData((MServerProfile) res.getParent(), monitor);
+				fireResourceChanged(res);
 			}
 		}
 		return rd;
