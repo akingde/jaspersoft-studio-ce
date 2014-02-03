@@ -13,6 +13,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.AFinderUI;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 public interface IConnection {
@@ -58,7 +59,7 @@ public interface IConnection {
 
 	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, java.util.Map<String, Object> prm, List<Argument> args) throws Exception;
 
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception;
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter filter) throws Exception;
 
 	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception;
 

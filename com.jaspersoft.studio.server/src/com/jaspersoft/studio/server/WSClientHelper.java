@@ -464,15 +464,7 @@ public class WSClientHelper {
 	}
 
 	public static List<ResourceDescriptor> getDatasourceList(IProgressMonitor monitor, IConnection c, IDatasourceFilter f) throws Exception {
-		List<ResourceDescriptor> list = c.listDatasources(monitor);
-		if (f != null) {
-			List<ResourceDescriptor> toremove = new ArrayList<ResourceDescriptor>();
-			for (ResourceDescriptor rd : list)
-				if (!f.isDatasource(rd))
-					toremove.add(rd);
-			list.removeAll(toremove);
-		}
-		return list;
+		return c.listDatasources(monitor, f);
 	}
 
 	public static MServerProfile getDatasourceListTree(IProgressMonitor monitor, MServerProfile sp, IDatasourceFilter f) throws Exception {

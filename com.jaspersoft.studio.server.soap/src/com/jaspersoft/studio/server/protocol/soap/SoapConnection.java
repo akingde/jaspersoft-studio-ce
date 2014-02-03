@@ -34,6 +34,7 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -224,8 +225,16 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
-		return client.listDatasources();
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
+		List<ResourceDescriptor> list = client.listDatasources();
+		if (f != null) {
+			List<ResourceDescriptor> toremove = new ArrayList<ResourceDescriptor>();
+			for (ResourceDescriptor rd : list)
+				if (!f.isDatasource(rd))
+					toremove.add(rd);
+			list.removeAll(toremove);
+		}
+		return list;
 	}
 
 	@Override

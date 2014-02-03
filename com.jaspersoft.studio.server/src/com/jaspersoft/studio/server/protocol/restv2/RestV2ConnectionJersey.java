@@ -55,6 +55,7 @@ import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.Version;
@@ -412,11 +413,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
 		WebTarget tgt = target.path("resources");
-		for (String type : DatasourcesAllFilter.getTypes())
-			tgt = tgt.queryParam("type", type);
+		if (f == null)
+			f = new DatasourcesAllFilter();
+		for (String type : f.getFilterTypes())
+			tgt = tgt.queryParam("type", WsTypes.INST().toRestType(type));
 		tgt = tgt.queryParam("sortBy", "label");
 		tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
 

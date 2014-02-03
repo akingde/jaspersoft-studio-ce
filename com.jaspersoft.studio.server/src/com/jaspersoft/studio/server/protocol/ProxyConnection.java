@@ -16,6 +16,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 
@@ -188,8 +189,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
-		List<ResourceDescriptor> list = c.listDatasources(monitor);
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
+		List<ResourceDescriptor> list = c.listDatasources(monitor, f);
 		for (ResourceDescriptor r : list)
 			r.setDirty(false);
 		return list;

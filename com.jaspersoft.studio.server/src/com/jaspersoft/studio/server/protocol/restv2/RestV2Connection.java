@@ -35,6 +35,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
 import com.jaspersoft.studio.server.AFinderUI;
+import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.ConnectionManager;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -221,7 +222,7 @@ public class RestV2Connection extends ARestV2Connection {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

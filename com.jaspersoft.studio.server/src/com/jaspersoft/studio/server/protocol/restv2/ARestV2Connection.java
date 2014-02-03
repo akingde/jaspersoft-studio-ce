@@ -17,6 +17,7 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.utils.Pass;
 
 public abstract class ARestV2Connection implements IConnection {
 	public static final String SUFFIX = "rest_v2/";
@@ -111,7 +112,7 @@ public abstract class ARestV2Connection implements IConnection {
 
 	@Override
 	public String getPassword() {
-		return sp.getPass();
+		return Pass.getPass(sp.getPass());
 	}
 
 	@Override
