@@ -98,6 +98,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.AContributorAction;
+import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
@@ -1001,6 +1002,16 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		reportContainer.openEditor(obj, node);
 	}
 
+	/**
+	 * Return the console area if available, null otherwise
+	 */
+	public Console getConsole(){
+		if (previewEditor != null){
+			return previewEditor.getConsole();
+		}
+		return null;
+	}
+	
 	public void refreshExternalStyles(HashSet<String> removedStyles) {
 		// Very very heavy method, leave commented for future improovments
 		/*

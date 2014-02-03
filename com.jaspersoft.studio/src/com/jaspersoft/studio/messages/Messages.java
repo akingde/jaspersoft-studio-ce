@@ -287,6 +287,11 @@ public class Messages extends NLS {
 	public static String ColorSchemaGenerator_schema_pastel;
 	public static String ColorStyledText_LineColor_ToolTip;
 	public static String ColumnsOrderDialog_ColumOrderDialog;
+	public static String CompileAction_actionName;
+	public static String CompileAction_actionTooltip;
+	public static String CompileAction_consoleMessage1;
+	public static String CompileAction_consoleMessage2;
+	public static String CompileAction_jobName;
 	public static String CongratulationsWizardPage_label1;
 	public static String CongratulationsWizardPage_label2;
 	public static String CongratulationsWizardPage_label3;

@@ -385,7 +385,7 @@ public class ReportControler {
 
 	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor) throws CoreException {
 		stats.startCount(ST_COMPILATIONTIMESUBREPORT);
-		CompileAction.doRun(jrContext, monitor, false);
+		CompileAction.doRun(jrContext, monitor, false, null);
 		stats.endCount(ST_COMPILATIONTIMESUBREPORT);
 		stats.startCount(ST_COMPILATIONTIME);
 		c.startMessage(Messages.ReportControler_msg_compiling);
