@@ -43,11 +43,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
@@ -93,11 +96,17 @@ public class ReferencePageContent extends APageContent {
 
 			public void widgetSelected(SelectionEvent e) {
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
+				ResourceDescriptor resrd = res.getValue();
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, ResourceFactory.getFileTypes(), null);
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, null, new String[] { ResourceMediaType.FOLDER_CLIENT_TYPE, ResourceMediaType.REPORT_UNIT_CLIENT_TYPE,
+							ResourceMediaType.DOMAIN_TOPIC_TYPE });
 					if (rd != null) {
-						res.getValue().setReferenceUri(rd.getUriString());
-						loadReference(res.getValue());
+						resrd.setReferenceUri(rd.getUriString());
+						resrd.setIsReference(true);
+						resrd.setUriString(rd.getUriString());
+						resrd.setWsType(rd.getWsType());
+						ref = rd;
+						rebind();
 						bindingContext.updateTargets();
 					}
 				} else {
@@ -105,16 +114,16 @@ public class ReferencePageContent extends APageContent {
 
 						@Override
 						public boolean isResourceCompatible(MResource r) {
-							return true;// !(r instanceof MFolder) &&
-													// ResourceFactory.isFileResourceType(r.getValue());
+							return !(r instanceof MFolder || r instanceof MReportUnit);
+							// ResourceFactory.isFileResourceType(r.getValue());
 						}
 
 					};
 					if (rd.open() == Dialog.OK) {
 						MResource rs = rd.getResource();
 						if (rs != null) {
-							res.getValue().setReferenceUri(rs.getValue().getUriString());
-							loadReference(res.getValue());
+							resrd.setReferenceUri(rs.getValue().getUriString());
+							loadReference(resrd);
 							bindingContext.updateTargets();
 						}
 					}

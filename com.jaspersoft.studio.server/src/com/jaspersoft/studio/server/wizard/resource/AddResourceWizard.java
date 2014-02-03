@@ -29,10 +29,13 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MReference;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.page.AddResourcePage;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourceDescriptorPage;
@@ -182,8 +185,16 @@ public class AddResourceWizard extends Wizard {
 					monitor.beginTask("Saving", IProgressMonitor.UNKNOWN);
 					File tmpfile = null;
 					try {
-						getResource().setParent(parent, -1);
-						WSClientHelper.saveResource(getResource(), monitor);
+						MResource resource = getResource();
+						if (parent instanceof MReportUnit && (resource instanceof MReference || resource.getValue().getIsReference())) {
+							MReportUnit mrunit = (MReportUnit) parent;
+							ResourceDescriptor runit = mrunit.getValue();
+							runit.getChildren().add(resource.getValue());
+							WSClientHelper.saveResource(mrunit, monitor);
+						} else {
+							resource.setParent(parent, -1);
+							WSClientHelper.saveResource(resource, monitor);
+						}
 					} catch (Exception e) {
 						throw new InvocationTargetException(e);
 					} finally {

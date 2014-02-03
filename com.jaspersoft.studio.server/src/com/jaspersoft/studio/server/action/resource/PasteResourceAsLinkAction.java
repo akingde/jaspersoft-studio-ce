@@ -15,8 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -25,6 +27,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PasteResourceAsLinkAction extends PasteResourceAction {
 	public static final String PASTE_ASLINK = "PASTEASLINK";
@@ -57,25 +60,26 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 		return false;
 	}
 
-	protected ResourceDescriptor doPasteIntoReportUnit(ANode parent, MResource m, ResourceDescriptor prd, ResourceDescriptor origin) {
-		if (m.isCut())
-			return doPasteIntoReportUnit(parent, m, prd, origin);
-
-		ResourceDescriptor runit = (ResourceDescriptor) parent.getValue();
-		ResourceDescriptor norigin = new ResourceDescriptor();
-		norigin.setName(origin.getName());
-		norigin.setLabel(origin.getLabel());
-		norigin.setDescription(origin.getDescription());
-		norigin.setIsNew(true);
-		norigin.setIsReference(true);
-		norigin.setReferenceUri(origin.getUriString());
-		norigin.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files");
+	@Override
+	protected void saveToReportUnit(IProgressMonitor monitor, ANode parent, IConnection ws, ResourceDescriptor origin) throws IOException, Exception {
+		ResourceDescriptor prd = (ResourceDescriptor) parent.getValue();
+		ResourceDescriptor rd = null;
+		rd = new ResourceDescriptor();
+		rd.setName(origin.getName());
+		rd.setLabel(origin.getLabel());
+		rd.setDescription(origin.getDescription());
+		rd.setIsNew(true);
+		rd.setIsReference(true);
+		rd.setReferenceUri(origin.getUriString());
+		rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");
 		if (ResourceFactory.isFileResourceType(origin))
-			norigin.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 		else
-			norigin.setWsType(origin.getWsType());
-		norigin.setUriString(runit.getParentFolder() + "/" + runit.getName() + "_files/" + prd.getName());
+			rd.setWsType(origin.getWsType());
+		rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName());
 
-		return norigin;
+		prd.getChildren().add(rd);
+		ws.addOrModifyResource(monitor, prd, null);
 	}
+
 }
