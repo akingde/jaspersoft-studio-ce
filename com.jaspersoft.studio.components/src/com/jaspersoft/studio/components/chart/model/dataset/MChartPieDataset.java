@@ -233,8 +233,11 @@ public class MChartPieDataset extends MChartDataset {
 
 		if (id.equals(JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE))
 			jrElement.setMinPercentage((Float) value);
-		else if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT))
-			jrElement.setMaxCount((Integer) value);
+		else if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT)){
+			Integer intValue = (Integer)value;
+			if (intValue == 0) intValue = null;
+			jrElement.setMaxCount(intValue);
+		}
 		// else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION))
 		// jrElement.setKeyExpression(ExprUtil.setValues(
 		// jrElement.getKeyExpression(), value));
