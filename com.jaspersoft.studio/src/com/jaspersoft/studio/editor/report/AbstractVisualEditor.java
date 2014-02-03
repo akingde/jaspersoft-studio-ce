@@ -74,6 +74,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.action.CustomDeleteAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
@@ -591,11 +592,17 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	@Override
 	protected void createActions() {
 		super.createActions();
+		
 		ActionRegistry registry = getActionRegistry();
 		IAction action = new CutAction(this);
 		registry.registerAction(action);
 		List<String> selectionActions = getSelectionActions();
 		selectionActions.add(action.getId());
+		
+		//Create the custom delete action that aggregate all the messages when more elements are deleted
+		//the old default action is replaced
+		CustomDeleteAction deleteAction = new CustomDeleteAction(this);
+		registry.registerAction(deleteAction);
 
 		action = new CopyAction(this);
 		registry.registerAction(action);

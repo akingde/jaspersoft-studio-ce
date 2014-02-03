@@ -363,6 +363,8 @@ public class Messages extends NLS {
 	public static String CSVRootAction_GeneralDialog;
 	public static String CSVRootAction_RecordDelimiterDialog;
 	public static String CurrencyPattern_description;
+	public static String CustomDeleteAction_messageListEnd;
+	public static String CustomDeleteAction_messageListStart;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;
 	public static String DataAdapterDragSourceListener_EncondingErrorMsg;
