@@ -1580,6 +1580,8 @@ public class Messages extends NLS {
 	public static String ShowXLSTagsAction_toolTip;
 	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedText;
 	public static String SimpleQueryWizardDataEditorComposite_noQueryProvidedTitle;
+	public static String SimpleQueryWizardDataEditorComposite_QueryErrorMsg;
+	public static String SimpleQueryWizardDataEditorComposite_QueryErrorTitle;
 	public static String Size2BorderAction_fit_both;
 	public static String Size2BorderAction_fit_both_tool_tip;
 	public static String Size2BorderAction_fit_height;
