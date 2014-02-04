@@ -136,7 +136,12 @@ public class CompileAction extends SelectionAction {
 				if (compileMain){
 					IFile destFIle = builder.compileJRXML(mfile, monitor);
 					if (console != null && destFIle != null){
-						console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage2, destFIle.getRawLocation().toFile().toString()));
+						File file =  destFIle.getRawLocation().toFile();
+						if (file.exists()){
+							console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage2, file.toString()));
+						} else {
+							console.addMessage(Messages.CompileAction_consoleMessage3);
+						}
 					}
 				}
 				Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
