@@ -91,11 +91,13 @@ public class ResourceBundlePropertyDescriptor extends NTextPropertyDescriptor {
 									handleTextChanged(section, pDescriptor.getId(), fileName);
 									boolean answerYes = UIUtils.showConfirmation(Messages.SPResourceType_messageTitle, Messages.SPResourceType_messageDescription);
 									if (answerYes) addSourceFolder(path, openProject);
-								} else {
+								} else if (!path.toOSString().equals(entryInClasspath)){//check if the exact path it is already in the classpath
 									String parentPath = file.getParent().getFullPath().toOSString();
 									String pathNotInclassPath = parentPath.substring(entryInClasspath.length()+1);
 									pathNotInclassPath = pathNotInclassPath.replace(File.separator, ".");
 									handleTextChanged(section, pDescriptor.getId(), pathNotInclassPath+"."+fileName);
+								} else {
+									handleTextChanged(section, pDescriptor.getId(), fileName);
 								}
 							}
 						}
