@@ -61,11 +61,7 @@ public class QueryVisibleColumnsTable {
 	private DeleteButton bdel;
 	private ListOrderButtons border;
 
-	public void dispose() {
-		setValues();
-	}
-
-	protected void setValues() {
+	public void setValues() {
 		List<String> lst = (List<String>) tableViewer.getInput();
 		rd.setQueryVisibleColumns(lst.toArray(new String[lst.size()]));
 		page.setPageComplete(sQuery.isPageComplete());
@@ -162,7 +158,7 @@ public class QueryVisibleColumnsTable {
 				lst.set(index, (String) value);
 				//				if (property.equals("KEY")) //$NON-NLS-1$
 				// mi.setLabel((String) value);
-
+				setValues();
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}

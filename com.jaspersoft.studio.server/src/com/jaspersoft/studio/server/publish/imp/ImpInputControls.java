@@ -85,7 +85,7 @@ public class ImpInputControls {
 		}
 	}
 
-	protected static void addType(ResourceDescriptor rd, MInputControl mres, byte type) {
+	public static ResourceDescriptor addType(ResourceDescriptor rd, MInputControl mres, byte type) {
 		ResourceDescriptor rdtype = MDataType.createDescriptor(mres);
 		String name = "myDatatype";
 		rdtype.setName(name);
@@ -93,8 +93,10 @@ public class ImpInputControls {
 		rdtype.setIsNew(true);
 		rdtype.setDataType(type);
 		rdtype.setIsReference(false);
-		rdtype.setUriString(String.format("%s/%s/%s", rd.getParentFolder(), rd.getName() + "_files", name));
+		rdtype.setParentFolder(rd.getUriString() + "_files");
+		rdtype.setUriString(rdtype.getParentFolder() + "/" + name);
 
 		rd.getChildren().add(rdtype);
+		return rdtype;
 	}
 }

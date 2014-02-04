@@ -179,6 +179,8 @@ public class ResourcePageContent extends APageContent {
 		IConverter m2tConv = new Converter(Date.class, String.class) {
 
 			public Object convert(Object fromObject) {
+				if (fromObject == null)
+					return "";
 				return f.format(fromObject);
 			}
 		};

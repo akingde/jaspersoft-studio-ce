@@ -254,8 +254,6 @@ public class InputControlPageContent extends APageContent implements IPageComple
 
 	@Override
 	public void dispose() {
-		if (qvct != null)
-			qvct.dispose();
 		if (cSelector != null)
 			cSelector.removePageCompleteListener(this);
 		super.dispose();
