@@ -82,7 +82,9 @@ public class QueryPageContent extends APageContent {
 			UIUtil.createLabel(composite, Messages.RDQueryPage_language);
 
 			clang = new Combo(composite, SWT.BORDER);
-			clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
+
+			clang.setItems(new String[] { "sql", "hql", "domain", "sl", "HiveQL", "MongoDbQuery" });
+			// clang.setItems(ModelUtils.getQueryLanguages(res.getJasperConfiguration()));
 
 		}
 		UIUtil.createLabel(composite, Messages.RDQueryPage_query);
