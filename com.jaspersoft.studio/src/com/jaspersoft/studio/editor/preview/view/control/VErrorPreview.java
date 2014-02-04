@@ -43,9 +43,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -110,6 +114,7 @@ public class VErrorPreview extends APreview {
 	private Action errAction;
 	private Action statAction;
 	private Action msgAction;
+	private CTabFolder tabFolder;
 
 	@Override
 	public Control createControl(final Composite parent) {
@@ -188,11 +193,12 @@ public class VErrorPreview extends APreview {
 		layout.marginHeight = 0;
 		errorsComposite.setLayout(layout);
 
-		CTabFolder tabFolder = new CTabFolder(errorsComposite, SWT.BOTTOM);
+		tabFolder = new CTabFolder(errorsComposite, SWT.BOTTOM);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		CTabItem itemTbl = new CTabItem(tabFolder, SWT.NONE);
 		itemTbl.setText(Messages.VErrorPreview_tableLabel);
+		
 
 		final Table wtable = new Table(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION
 				| SWT.BORDER);
@@ -242,13 +248,13 @@ public class VErrorPreview extends APreview {
 			}
 		});
 
-		TableColumn[] col = new TableColumn[3];
+		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(wtable, SWT.NONE);
 		col[0].setText(Messages.VErrorPreview_fieldNameLabel);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(100, false));
+		tlayout.addColumnData(new ColumnWeightData(100, true));
 		wtable.setLayout(tlayout);
 
 		errorViewer = new TableViewer(wtable);
@@ -267,7 +273,49 @@ public class VErrorPreview extends APreview {
 
 		itemTbl.setControl(wtable);
 
+		/**
+		 * When the container is resized also the table column is resized to its 
+		 * maximum width
+		 */
+		tabFolder.addControlListener(new ControlAdapter() {
+	    public void controlResized(ControlEvent e) {
+	    	refreshTableCellWidth();
+	    }
+	  });
+
+		
 		tabFolder.setSelection(itemTbl);
+	}
+	
+	/**
+	 * Set the width of the table column to the max width available
+	 */
+	private void refreshTableCellWidth(){
+  	Table wtable =  errorViewer.getTable();
+  	TableColumn col = wtable.getColumns()[0];
+    Rectangle area = tabFolder.getClientArea();
+    Point preferredSize = wtable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+    int width = area.width - 2*wtable.getBorderWidth();
+    if (preferredSize.y > area.height + wtable.getHeaderHeight()) {
+      // Subtract the scrollbar width from the total column width
+      // if a vertical scrollbar will be required
+      Point vBarSize = wtable.getVerticalBar().getSize();
+      width -= vBarSize.x;
+    }
+    Point oldSize = wtable.getSize();
+    if (oldSize.x > area.width) {
+      // table is getting smaller so make the columns 
+      // smaller first and then resize the table to
+      // match the client area width
+    	col.setWidth(width);
+      wtable.setSize(area.width, area.height);
+    } else {
+      // table is getting bigger so make the table 
+      // bigger first and then make the columns wider
+      // to match the client area width
+    	wtable.setSize(area.width, area.height);
+    	col.setWidth(width);
+    }
 	}
 
 	public static boolean openExpressionEditor(JasperReportsConfiguration jContext,
@@ -532,6 +580,7 @@ public class VErrorPreview extends APreview {
 		errorViewer.setInput(errorList);
 		setStats(null);
 		addError(null, null);
+		refreshTableCellWidth();
 	}
 
 	@Override

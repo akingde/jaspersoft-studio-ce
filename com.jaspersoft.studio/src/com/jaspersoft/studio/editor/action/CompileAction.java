@@ -1,13 +1,25 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.editor.action;
 
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -25,6 +37,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.preview.view.control.JRErrorHandler;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -59,7 +72,7 @@ public class CompileAction extends SelectionAction {
 			Job job = new Job(Messages.CompileAction_jobName) {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					IStatus status = doRun(jConfig, monitor, true, console);
+					IStatus status = actionCompile(jConfig, monitor, true, console);
 					return status;
 				}
 			};
@@ -67,6 +80,99 @@ public class CompileAction extends SelectionAction {
 			job.schedule();
 		}
 	}
+	
+	/**
+	 * Execute the action of compilation of the report and its subreports, adding the errors to the error view 
+	 * and various information to the console.
+	 * 
+	 * @param jConfig jasper configuration of the compiled report
+	 * @param monitor monitor for the execution
+	 * @param compileMain true if the main file need to be compiled, false to compile only the subreports
+	 * @param console console where print info and errors
+	 * @return Status.OK_STATUS if the compilation finished without exception (this dosen't means that the report 
+	 * hasen't Compilation error), Status.CANCEL_STATUS otherwise
+	 */
+	public IStatus actionCompile(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain, Console console) {
+		
+		IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		if (mfile != null){
+			try{
+				if (console != null) {
+					console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage1, mfile.getName()));
+				}
+				
+				// ATTENTION! this can generate possible errors, because we are not calling builders in the right order
+				// we are also not looking very good for for subreports, because expression evaluation is not good
+				// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+				JasperReportsBuilder builder = new JasperReportsBuilder();
+				if (compileMain){
+					IFile destFIle = builder.compileJRXML(mfile, monitor);
+					if (console != null && destFIle != null){
+						File file =  destFIle.getRawLocation().toFile();
+						if (file.exists()){
+							console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage2, file.toString()));
+						} else {
+							console.addMessage(Messages.CompileAction_consoleMessage3);
+						}
+					}
+				}
+				Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
+				for (File f : fmap.keySet()) {
+					IFile file = fmap.get(f);
+					if (file != null) {
+						builder.compileJRXML(file, monitor);
+					} else {
+						try {
+							JasperCompileManager.compileReportToFile(f.getAbsolutePath());
+						} catch (JRException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				//FIXME: at this time the compilation is done twice, one to get the path and one the get eventually the compilation errors,
+				//eventually with some major change only one can be be done
+				JasperReportCompiler compiler = new JasperReportCompiler();
+				compiler.setErrorHandler(new JRErrorHandler(console));
+				compiler.setProject(mfile.getProject());
+				
+				((JRErrorHandler) compiler.getErrorHandler()).reset();
+				JasperDesign jd = jConfig.getJasperDesign();
+				try {
+					compiler.compileReport(jConfig, jd);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			} catch(CoreException ex){
+				return Status.CANCEL_STATUS;
+			}
+		}
+		return Status.OK_STATUS;
+	}
+	
+	/**
+	 * Return the output console for the current opened editor, the console is 
+	 * cleaned before the return. If the console can not be found the null is 
+	 * returned 
+	 * 
+	 * @return reference to a clean console of the current editor or null if it 
+	 * is not available
+	 */
+	private Console getCleanConsole(){
+		JrxmlEditor editor = (JrxmlEditor)SelectionHelper.getActiveJRXMLEditor();
+		if (editor != null) {
+			final Console console = editor.getConsole();
+			if (console != null){ 
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						console.clearConsole();
+					}
+				});
+			}
+			return editor.getConsole();
+		}
+		else return null;
+	}
+
 
 	private JasperReportsConfiguration getMDatasetToShow() {
 		ISelection selection = getSelection();
@@ -97,53 +203,18 @@ public class CompileAction extends SelectionAction {
 	protected boolean calculateEnabled() {
 		return true;
 	}
-	
-	/**
-	 * Return the output console for the current opened editor, the console is 
-	 * cleaned before the return. If the console can not be found the null is 
-	 * returned 
-	 * 
-	 * @return reference to a clean console of the current editor or null if it 
-	 * is not available
-	 */
-	private Console getCleanConsole(){
-		JrxmlEditor editor = (JrxmlEditor)SelectionHelper.getActiveJRXMLEditor();
-		if (editor != null) {
-			final Console console = editor.getConsole();
-			if (console != null){ 
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						console.clearConsole();
-					}
-				});
-			}
-			return editor.getConsole();
-		}
-		else return null;
-	}
 
-	public static IStatus doRun(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain, Console console) {
+	public static IStatus doRun(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain) {
 		IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		if (mfile != null)
 			try {
 				// ATTENTION! this can generate possible errors, because we are not calling builders in the right order
 				// we are also not looking very good for for subreports, because expression evaluation is not good
 				// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-				if (console != null) {
-					console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage1, mfile.getName()));
-				}
+
 				JasperReportsBuilder builder = new JasperReportsBuilder();
-				if (compileMain){
-					IFile destFIle = builder.compileJRXML(mfile, monitor);
-					if (console != null && destFIle != null){
-						File file =  destFIle.getRawLocation().toFile();
-						if (file.exists()){
-							console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage2, file.toString()));
-						} else {
-							console.addMessage(Messages.CompileAction_consoleMessage3);
-						}
-					}
-				}
+				if (compileMain)
+					builder.compileJRXML(mfile, monitor);
 				Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
 				for (File f : fmap.keySet()) {
 					IFile file = fmap.get(f);
