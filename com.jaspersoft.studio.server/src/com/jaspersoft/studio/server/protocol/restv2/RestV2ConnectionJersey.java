@@ -197,9 +197,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			if (f != null && crl instanceof ClientFile) {
 				ClientFile cf = (ClientFile) crl;
 				tgt = target.path("resources" + uri);
-
-				req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
-				readFile(connector.get(req, monitor), f, monitor);
+				try {
+					req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
+					readFile(connector.get(req, monitor), f, monitor);
+				} catch (HttpResponseException e) {
+					if (e.getStatusCode() == 500)
+						;// jrs 5.5 returns 500 if file is not existing, a bug
+					// for newer versions, we should show the error
+				}
 			}
 			return Rest2Soap.getRD(this, crl);
 		}

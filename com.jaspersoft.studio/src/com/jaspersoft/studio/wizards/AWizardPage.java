@@ -13,12 +13,11 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.server.wizard.resource;
+package com.jaspersoft.studio.wizards;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardContainer;
 
-import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
 public abstract class AWizardPage extends JSSHelpWizardPage {
 

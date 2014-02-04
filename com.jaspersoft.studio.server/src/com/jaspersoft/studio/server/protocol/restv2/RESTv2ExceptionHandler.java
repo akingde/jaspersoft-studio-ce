@@ -59,6 +59,10 @@ public class RESTv2ExceptionHandler {
 					for (String str : ed.getParameters())
 						msg += "\n" + str;
 				throw new HttpResponseException(status, msg);
+			} else if (res.getHeaderString("Content-Type").contains("text/html")) {
+				res.readEntity(String.class);
+				msg = res.getStatusInfo().getReasonPhrase() + "\n";
+				throw new HttpResponseException(status, msg);
 			}
 		default:
 			String cnt = res.readEntity(String.class);

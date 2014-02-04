@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.utils.IPageCompleteListener;
+import com.jaspersoft.studio.wizards.AWizardPage;
 
 public abstract class APageContent implements IPageCompleteListener {
 	protected AWizardPage page;

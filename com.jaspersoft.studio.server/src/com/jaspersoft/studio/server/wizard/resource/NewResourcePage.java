@@ -18,6 +18,8 @@ package com.jaspersoft.studio.server.wizard.resource;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.wizards.AWizardPage;
+
 public class NewResourcePage extends AWizardPage {
 	private APageContent rcontent;
 

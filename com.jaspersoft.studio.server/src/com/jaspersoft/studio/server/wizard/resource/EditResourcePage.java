@@ -29,6 +29,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
+import com.jaspersoft.studio.wizards.AWizardPage;
+
 public class EditResourcePage extends AWizardPage {
 	private APageContent[] rcontent;
 	private TabFolder tabFolder;
