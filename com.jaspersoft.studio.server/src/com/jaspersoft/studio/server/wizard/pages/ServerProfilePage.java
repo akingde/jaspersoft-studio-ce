@@ -172,7 +172,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 						return s;
 					}
 				}), null);
-		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(value, "url"), //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify), PojoObservables.observeValue(proxy, "url"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new URLValidator()), null);
 		dbc.bindValue(SWTObservables.observeText(lpath, SWT.Modify), PojoObservables.observeValue(proxy, "projectPath"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
@@ -298,6 +298,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		public Proxy(ServerProfile sp) {
 			this.sp = sp;
+		}
+
+		public void setUrl(String url) {
+			sp.setUrl(Misc.nvl(url).trim());
+		}
+
+		public String getUrl() {
+			return sp.getUrl();
 		}
 
 		public void setJrVersion(String v) {
