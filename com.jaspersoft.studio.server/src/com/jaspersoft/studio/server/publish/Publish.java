@@ -124,8 +124,13 @@ public class Publish {
 			rdjrxml.setMainReport(isMain);
 			PublishUtil.setChild(r, rdjrxml);
 			for (MResource res : resources) {
-				if (res.getPublishOptions().isOverwrite())
-					PublishUtil.setChild(r, res.getValue());
+				if (res.getPublishOptions().isOverwrite()) {
+					ResourceDescriptor rd = res.getValue();
+					if (rd.getData() != null && !rd.getParentFolder().endsWith("_files")) {
+						mrunit.getWsClient().addOrModifyResource(monitor, rd, null);
+					} else
+						PublishUtil.setChild(r, rd);
+				}
 			}
 			mrunit.getWsClient().addOrModifyResource(monitor, r, null);
 			this.resources.add(r.getUriString());
