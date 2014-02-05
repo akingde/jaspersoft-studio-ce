@@ -129,8 +129,11 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 				ComboParameterEditor wizard = new ComboParameterEditor();
 				wizard.setValue(prmDTO,mDataSet);
-				JasperReportsConfiguration config = section.getElement().getJasperConfiguration();
-				JRDesignDataset parentDatset = ModelUtils.getFirstDatasetInHierarchy(section.getElement());
+				//get always the selected element, because the getElement of some sections (i.e. MCrosstab) 
+				//return something else for their tricky dirty purposes. getSelectedElement return always
+				//the selected element for the section
+				JasperReportsConfiguration config = section.getSelectedElement().getJasperConfiguration();
+				JRDesignDataset parentDatset = ModelUtils.getFirstDatasetInHierarchy(section.getSelectedElement());
 				wizard.setExpressionContext(new ExpressionContext(parentDatset, config));
 				WizardDialog dialog = new WizardDialog(params.getShell(), wizard);
 				dialog.create();

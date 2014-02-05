@@ -126,8 +126,13 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return null;
 	}
 
+	/**
+	 * Return always the selected element, in many case this is equals
+	 * to getElement, but some section can override it to return something 
+	 * else. This method instead is thought to return always the selected element
+	 */
 	@Override
-	public Object getSelectedElement() {
+	public APropertyNode getSelectedElement() {
 		return element;
 	}
 

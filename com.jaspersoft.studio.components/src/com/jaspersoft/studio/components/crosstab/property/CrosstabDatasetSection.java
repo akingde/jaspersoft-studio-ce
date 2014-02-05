@@ -29,6 +29,9 @@ import com.jaspersoft.studio.model.dataset.descriptor.DatasetSection;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
 public class CrosstabDatasetSection extends DatasetSection {
+	
+	APropertyNode selectedCrosstab;
+	
 	@Override
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -45,11 +48,17 @@ public class CrosstabDatasetSection extends DatasetSection {
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode md = super.getModelFromEditPart(item);
 		if (md instanceof MCrosstab) {
+			selectedCrosstab = md;
 			MCrosstabDataset dataset = (MCrosstabDataset) md
 					.getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
 			return dataset;
 		}
 		return md;
+	}
+	
+	@Override
+	public APropertyNode getSelectedElement() {
+		return selectedCrosstab;
 	}
 	
 	@Override
