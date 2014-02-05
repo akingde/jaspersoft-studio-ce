@@ -113,7 +113,9 @@ public class WColorPicker extends Composite {
 				cd.setText(Messages.ColorsSection_element_forecolor);
 				cd.setRGB(selectedRGB);
 				AlfaRGB newColor = cd.openAlfaRGB();
-				setColor(newColor);
+				if(newColor!=null){
+					setColor(newColor);
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
