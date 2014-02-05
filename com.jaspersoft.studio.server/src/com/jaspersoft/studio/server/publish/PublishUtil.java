@@ -23,6 +23,7 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.utils.RDUtil;
 import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -155,6 +156,7 @@ public class PublishUtil {
 					String path = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
 					if (path != null) {
 						ResourceDescriptor rd = new ResourceDescriptor();
+						rd.setParentFolder(RDUtil.getParentFolder(path));
 						rd.setUriString(path);
 						rd.setWsType(f.getValue().getWsType());
 						popt.setReferencedResource(WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
