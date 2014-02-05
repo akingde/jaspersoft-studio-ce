@@ -17,7 +17,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.wb.swt.ResourceManager;
@@ -73,8 +72,7 @@ public class DatasetAction extends SelectionAction {
 		try {
 			MDataset mdataset = getMDatasetToShow();
 			if (mdataset != null)
-				new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mdataset.getJasperConfiguration(),
-						getCommandStack()).open();
+				new DatasetDialog(UIUtils.getShell(), mdataset, mdataset.getJasperConfiguration(), getCommandStack()).open();
 		} catch (Exception e) {
 			UIUtils.showError(Messages.DatasetAction_ErrorMsg, e);
 		} finally {

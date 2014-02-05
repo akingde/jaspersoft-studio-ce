@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -214,7 +215,7 @@ public abstract class DataQueryAdapters extends AQueryDesignerContainer {
 			langComposite.layout();
 			currentDesigner = designer;
 			currentDesigner.setJasperConfiguration(jConfig);
-			Display.getDefault().asyncExec(new Runnable() {
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {

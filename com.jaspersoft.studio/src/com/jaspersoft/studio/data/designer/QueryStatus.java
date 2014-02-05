@@ -68,7 +68,7 @@ public class QueryStatus extends AQueryStatus {
 	}
 
 	public void showInfo(final String msg) {
-		Display.getDefault().syncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			public void run() {
 				msgItem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/info_tsk.gif"));

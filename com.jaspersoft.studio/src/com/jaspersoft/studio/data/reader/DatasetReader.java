@@ -180,6 +180,8 @@ public class DatasetReader {
 			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
 			das.contributeParameters(hm);
 
+			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
+
 			// 9. Fill the report
 			JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
 
