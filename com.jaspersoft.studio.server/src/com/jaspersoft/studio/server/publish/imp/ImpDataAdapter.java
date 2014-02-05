@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
@@ -68,8 +69,7 @@ public class ImpDataAdapter extends AImpObject {
 			PublishOptions popt = new PublishOptions();
 			popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
-			// jd.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
-			// "repo:" + fr.getValue().getUriString());
+			jd.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "repo:" + fr.getValue().getUriString());
 		}
 		return f;
 	}
@@ -104,7 +104,7 @@ public class ImpDataAdapter extends AImpObject {
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
-		PublishUtil.getResources(monitor, jrConfig).add(mres);
+		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		if (true) {
 			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject();
 			InputStream is = null;
@@ -141,7 +141,7 @@ public class ImpDataAdapter extends AImpObject {
 								mdaf.setFile(file);
 								mdaf.setPublishOptions(new PublishOptions());
 
-								PublishUtil.getResources(monitor, jrConfig).add(mdaf);
+								PublishUtil.getResources(mrunit, monitor, jrConfig).add(mdaf);
 
 								setFileName(da, "repo:" + rd.getUriString());
 								f = FileUtils.createTempFile("tmp", "");

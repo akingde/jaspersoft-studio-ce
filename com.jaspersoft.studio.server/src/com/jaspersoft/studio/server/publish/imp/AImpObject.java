@@ -78,14 +78,14 @@ public abstract class AImpObject {
 			rd.setLabel(rname);
 
 			rd.setParentFolder(runit.getUriString() + "_files");
-			rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
+			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 		}
 
 		AFileResource mres = (AFileResource) ResourceFactory.getResource(mrunit, rd, -1);
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
-		PublishUtil.getResources(monitor, jrConfig).add(mres);
+		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		return mres;
 	}
 

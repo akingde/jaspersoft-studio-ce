@@ -175,6 +175,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 							@Override
 							public void run() {
 								AMJrxmlContainer snode = page0.getSelectedNode();
+								page1.setParentResource(snode);
 								if (snode == null) {
 									page0.setValue(jDesign, getNode());
 									snode = page0.getSelectedNode();

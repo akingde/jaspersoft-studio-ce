@@ -30,10 +30,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class PublishUtil {
 	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA"; //$NON-NLS-1$
 
-	public static List<MResource> getResources(IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
+	public static List<MResource> getResources(MResource parent, IProgressMonitor monitor, JasperReportsConfiguration jrConfig) {
 		List<MResource> resources = jrConfig.get(KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		jrConfig.put(KEY_PUBLISH2JSS_DATA, resources);
-		loadPreferences(monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
+		loadPreferences(parent, monitor, (IFile) jrConfig.get(FileUtils.KEY_FILE), resources);
 		return resources;
 	}
 
@@ -139,7 +139,9 @@ public class PublishUtil {
 		}
 	}
 
-	public static void loadPreferences(IProgressMonitor monitor, IFile ifile, List<MResource> files) {
+	public static void loadPreferences(MResource parent, IProgressMonitor monitor, IFile ifile, List<MResource> files) {
+		if (parent == null || parent.getValue() == null || parent.getValue().getIsNew())
+			return;
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
 			String prefix = f.getValue().getName();

@@ -81,7 +81,7 @@ public class ImpInputControls {
 
 			mres.setPublishOptions(new PublishOptions());
 
-			PublishUtil.getResources(monitor, jrConfig).add(mres);
+			PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		}
 	}
 

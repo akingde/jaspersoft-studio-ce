@@ -53,6 +53,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEdit
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
@@ -76,6 +77,12 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		setTitle(Messages.ResourcesPage_title);
 		setDescription(Messages.ResourcesPage_description);
 		this.jConfig = jConfig;
+	}
+
+	private AMJrxmlContainer pres;
+
+	public void setParentResource(AMJrxmlContainer pres) {
+		this.pres = pres;
 	}
 
 	/**
@@ -269,7 +276,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 	}
 
 	public void fillData(boolean isNew) {
-		List<MResource> res = PublishUtil.getResources(new NullProgressMonitor(), jConfig);
+		List<MResource> res = PublishUtil.getResources(pres, new NullProgressMonitor(), jConfig);
 		if (isNew)
 			for (MResource r : res)
 				r.getPublishOptions().setOverwrite(true);
