@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.model.dataset.descriptor;
 
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -38,6 +40,7 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SPDatasetRun extends ASPropertyWidget {
 	private Combo dsetCombo;
@@ -126,6 +129,9 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 				ComboParameterEditor wizard = new ComboParameterEditor();
 				wizard.setValue(prmDTO,mDataSet);
+				JasperReportsConfiguration config = section.getElement().getJasperConfiguration();
+				JRDesignDataset parentDatset = ModelUtils.getFirstDatasetInHierarchy(section.getElement());
+				wizard.setExpressionContext(new ExpressionContext(parentDatset, config));
 				WizardDialog dialog = new WizardDialog(params.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {

@@ -84,12 +84,15 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -110,6 +113,39 @@ public class ModelUtils {
 				return ((MDataset) n).getValue();
 			if (n instanceof MReport)
 				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
+			n = n.getParent();
+		}
+		return null;
+	}
+	
+	/**
+	 * Search for the first dataset in hierarchy starting from the parent of the passed 
+	 * node. go back until it arrive to a root node or to a node with a dataset run
+	 * 
+	 */
+	public static JRDesignDataset getFirstDatasetInHierarchy(ANode node) {
+		ANode n = node.getParent();
+		while (n != null) {
+			if (n instanceof MPage){
+				//In this case the node is into a separated editor, need to get the real parent of the node
+				ANode realParent = ((MPage)n).getRealParent();
+				if (realParent != null){
+					n = realParent;
+				}
+			}
+			if (n instanceof MDataset)
+				return ((MDataset) n).getValue();
+			if (n instanceof MReport)
+				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
+			if (n instanceof IDatasetContainer){
+				//Found an element with a dataset run, take the first dataset referenced
+				List<MDatasetRun> datasets = ((IDatasetContainer)n).getDatasetRunList();
+				JasperDesign design = n.getJasperDesign();
+				for(MDatasetRun parentDataset : datasets){
+					JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap().get(parentDataset.getValue().getDatasetName());
+					if (dataset != null) return dataset;
+				}
+ 			}
 			n = n.getParent();
 		}
 		return null;

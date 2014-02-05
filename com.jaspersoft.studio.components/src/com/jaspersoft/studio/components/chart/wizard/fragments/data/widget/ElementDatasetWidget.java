@@ -50,11 +50,12 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class ElementDatasetWidget implements IExpressionContextSetter {
@@ -213,9 +214,9 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 					prmDTO.setJasperDesign(jrDesign);
 					prmDTO.setValue(datasetRun.getParameters());
 				}
-
-				ParameterEditor wizard = new ParameterEditor();
-				wizard.setValue(prmDTO);
+				
+				ComboParameterEditor wizard = new ComboParameterEditor();
+				wizard.setValue(prmDTO, new MDatasetRun(eDataset.getDatasetRun(), jrDesign));
 				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
 						wizard);

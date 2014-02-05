@@ -36,17 +36,22 @@ public class ChartBookmarkSection extends BookmarkSection {
 
 	@Override
 	public String getAnchorNameProperty() {
-		if (getElement() instanceof MSpiderChart)
-			return StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION;
-		else
+		if (getElement() instanceof MSpiderChart){
+			return StandardChartSettings.PROPERTY_ANCHOR_NAME_EXPRESSION;	
+		} else if (getElement().getPropertyDescriptor(JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION) != null){
 			return JRDesignChart.PROPERTY_ANCHOR_NAME_EXPRESSION;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public String getBookmarkLevelProperty() {
-		if (getElement() instanceof MSpiderChart)
+		if (getElement() instanceof MSpiderChart){
 			return StandardChartSettings.PROPERTY_BOOKMARK_LEVEL;
-		return JRDesignChart.PROPERTY_BOOKMARK_LEVEL;
+		} else if (getElement().getPropertyDescriptor(JRDesignChart.PROPERTY_BOOKMARK_LEVEL) != null){
+			return JRDesignChart.PROPERTY_BOOKMARK_LEVEL;
+		} else return null;
 	}
 
 	@Override

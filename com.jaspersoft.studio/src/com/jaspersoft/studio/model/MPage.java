@@ -42,7 +42,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 public class MPage extends APropertyNode implements IGraphicElement, IContainerEditPart {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
-
+	private ANode realParent;
 	private MDataset getDataset(JasperDesign jrDesign) {
 		MDataset mDataset = new MDataset(null, (JRDesignDataset) jrDesign.getMainDataset());
 		mDataset.setJasperConfiguration(getJasperConfiguration());
@@ -220,4 +220,29 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 		return new Rectangle(APageFigure.PAGE_BORDER.left, APageFigure.PAGE_BORDER.top, 300, 400);
 	}
 
+	/**
+	 * Set the real parent of the child of the page, this is used when the page is created to 
+	 * open a subeditor. In that case the classic chain of parents is not valid anymore
+	 * since a separate editor has a new root separated from the rest of the report. 
+	 * So this field is provided to keep a reference to the real parent of the 
+	 * element opened in the editor
+	 * 
+	 * @param realParent real parent of the element opened in the editor
+	 */
+	public void setRealParent(ANode realParent){
+		this.realParent = realParent;
+	}
+	
+	/**
+	 * Get the real parent of the child of the page, this is used when the page is created to 
+	 * open a subeditor. In that case the classic chain of parents is not valid anymore
+	 * since a separate editor has a new root separated from the rest of the report. 
+	 * So this field is provided to keep a reference to the real parent of the 
+	 * element opened in the editor
+	 * 
+	 * @param realParent real parent of the element opened in the editor
+	 */
+	public ANode getRealParent(){
+		return realParent;
+	}
 }

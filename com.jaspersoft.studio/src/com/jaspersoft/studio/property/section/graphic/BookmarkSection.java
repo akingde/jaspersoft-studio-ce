@@ -44,7 +44,7 @@ public class BookmarkSection extends AbstractSection {
 	 * Return the key of the property that define the anchor name. The property can
 	 * have multiple value depending to the type of the selected element
 	 * 
-	 * @return key of the property that define the anchor name
+	 * @return key of the property that define the anchor name, null if there isn't an anchor property for the element
 	 */
 	public String getAnchorNameProperty(){
 		if (getElement() instanceof MImage) return JRDesignImage.PROPERTY_ANCHOR_NAME_EXPRESSION;
@@ -64,13 +64,21 @@ public class BookmarkSection extends AbstractSection {
 	
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent = getWidgetFactory().createSection(parent, Messages.BookmarkSection_bookmarkSectionTitle, true, 2);
-		section = (ExpandableComposite)parent.getParent();
-		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ASPropertyWidget exp = createWidget4Property(parent, getAnchorNameProperty(), true);  
-		exp.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		createWidget4Property(parent, getBookmarkLevelProperty(), true);  
-		section.setExpanded(false);
+		String anchorNameProperty = getAnchorNameProperty();
+		String bookmarkLevelProperty = getBookmarkLevelProperty();
+		if (bookmarkLevelProperty != null || anchorNameProperty != null){
+			parent = getWidgetFactory().createSection(parent, Messages.BookmarkSection_bookmarkSectionTitle, true, 2);
+			section = (ExpandableComposite)parent.getParent();
+			parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			if (anchorNameProperty != null) {
+				ASPropertyWidget exp = createWidget4Property(parent, anchorNameProperty, true);  
+				exp.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			}
+			if (bookmarkLevelProperty != null){
+				createWidget4Property(parent,bookmarkLevelProperty, true);  
+				section.setExpanded(false);
+			}
+		}
 	}
 	
 	@Override

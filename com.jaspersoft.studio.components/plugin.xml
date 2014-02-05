@@ -409,9 +409,6 @@
                   type="com.jaspersoft.studio.components.chart.model.dataset.MChartPieDataset">
             </input>
             <input
-                  type="com.jaspersoft.studio.components.chart.model.series.category.MCategorySeries">
-            </input>
-            <input
                   type="com.jaspersoft.studio.components.chart.model.series.gantt.MGanttSeries">
             </input>
             <input
