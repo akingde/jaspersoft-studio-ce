@@ -14,12 +14,11 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
+import net.sf.jasperreports.eclipse.builder.JasperReportErrorHandler;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -92,7 +91,7 @@ public class CompileAction extends SelectionAction {
 	 * @return Status.OK_STATUS if the compilation finished without exception (this dosen't means that the report 
 	 * hasen't Compilation error), Status.CANCEL_STATUS otherwise
 	 */
-	public IStatus actionCompile(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain, Console console) {
+	public IStatus actionCompile(final JasperReportsConfiguration jConfig, IProgressMonitor monitor, boolean compileMain, final Console console) {
 		
 		IFile mfile = (IFile) jConfig.get(FileUtils.KEY_FILE);
 		if (mfile != null){
@@ -101,10 +100,20 @@ public class CompileAction extends SelectionAction {
 					console.addMessage(MessageFormat.format(Messages.CompileAction_consoleMessage1, mfile.getName()));
 				}
 				
+				//Use a custom builder that redirect the output errors found during the compilation process to the console
+				JasperReportsBuilder builder = new JasperReportsBuilder(){
+					
+					@Override
+					protected JasperReportErrorHandler getErrorHandler(Object[] arguments) {
+						JRErrorHandler errorHandler = new JRErrorHandler(console);
+						errorHandler.reset();
+						return errorHandler;
+					};
+				};
+				
 				// ATTENTION! this can generate possible errors, because we are not calling builders in the right order
 				// we are also not looking very good for for subreports, because expression evaluation is not good
 				// file.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-				JasperReportsBuilder builder = new JasperReportsBuilder();
 				if (compileMain){
 					IFile destFIle = builder.compileJRXML(mfile, monitor);
 					if (console != null && destFIle != null){
@@ -128,19 +137,6 @@ public class CompileAction extends SelectionAction {
 							e.printStackTrace();
 						}
 					}
-				}
-				//FIXME: at this time the compilation is done twice, one to get the path and one the get eventually the compilation errors,
-				//eventually with some major change only one can be be done
-				JasperReportCompiler compiler = new JasperReportCompiler();
-				compiler.setErrorHandler(new JRErrorHandler(console));
-				compiler.setProject(mfile.getProject());
-				
-				((JRErrorHandler) compiler.getErrorHandler()).reset();
-				JasperDesign jd = jConfig.getJasperDesign();
-				try {
-					compiler.compileReport(jConfig, jd);
-				} catch (CoreException e) {
-					e.printStackTrace();
 				}
 			} catch(CoreException ex){
 				return Status.CANCEL_STATUS;
