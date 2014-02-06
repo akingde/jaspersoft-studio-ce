@@ -277,8 +277,12 @@ public class Soap2Rest {
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) {
 		cr.setType(WsTypes.INST().toRestFileType(rd.getWsType()));
-		if (rd.getData() != null)
-			cr.setContent(new String(rd.getData()));
+		if (rd.getData() != null) {
+			String content = new String(rd.getData());
+			if (content.isEmpty())
+				content = "    "; // if empty, jrs throw an exception
+			cr.setContent(content);
+		}
 	}
 
 	private static void getInputControl(ARestV2Connection rc, ClientInputControl cr, ResourceDescriptor rd) throws ParseException {
