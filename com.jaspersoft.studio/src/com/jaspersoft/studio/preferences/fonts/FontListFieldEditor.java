@@ -24,7 +24,9 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRRuntimeException;
@@ -189,7 +191,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 							}
 						} catch (final Exception e) {
 							e.printStackTrace();
-							Display.getCurrent().asyncExec(new Runnable() {
+							UIUtils.getDisplay().asyncExec(new Runnable() {
 								public void run() {
 									IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
 											"Error saving file.", e.getCause()); //$NON-NLS-1$
@@ -240,7 +242,6 @@ public class FontListFieldEditor extends TableFieldEditor {
 					pdfenc = ModelUtils.getPDFEncoding2key(pdfenc);
 					((SimpleFontFamily) f).setPdfEncoding(pdfenc);
 				}
-
 				newfonts.add(f);
 			}
 
@@ -275,7 +276,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 			return fontname;
 		File file = new File(fontname);
 		if (file.exists()) {
-			String name = "fonts/" + fontFamily.getName() + "/" + font.getName() + file.getName(); //$NON-NLS-1$ 
+			String name = "fonts/" + StringUtils.toPackageName(fontFamily.getName()) + "/" + file.getName(); //$NON-NLS-1$ 
 			if (!names.contains(name)) {
 				ZipEntry ttfZipEntry = new ZipEntry(name);
 				zipos.putNextEntry(ttfZipEntry);
