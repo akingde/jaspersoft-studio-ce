@@ -339,7 +339,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	@Override
 	public void setQuery(JasperDesign jDesign, JRDataset jDataset, JasperReportsConfiguration jConfig) {
 		super.setQuery(jDesign, jDataset, jConfig);
-		doRefreshRoots();
+		doRefreshRoots(false);
 	}
 
 	private Set<MSQLRoot> roots = new HashSet<MSQLRoot>();
@@ -361,7 +361,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			String p = event.getProperty();
 			if (p.equals(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE)) {
-				doRefreshRoots();
+				doRefreshRoots(true);
 			}
 		}
 
@@ -377,10 +377,11 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		new MOrderBy(root);
 	}
 
-	protected void doRefreshRoots() {
+	protected void doRefreshRoots(boolean updateText) {
 		String iq = jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "");
 		for (MSQLRoot r : roots)
 			r.setIdentifierQuote(iq);
-		refreshQueryText();
+		if (updateText)
+			refreshQueryText();
 	}
 }
