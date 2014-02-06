@@ -56,7 +56,6 @@
 		<module>../../com.jaspersoft.studio.components</module>
 		<module>../../com.jaspersoft.studio.data</module>
 		<module>../../com.jaspersoft.studio.data.cassandra</module>
-		<module>../../com.jaspersoft.studio.data.cassandra.cql3</module>
 		<module>../../com.jaspersoft.studio.data.drivers</module>
 		<module>../../com.jaspersoft.studio.data.hive</module>
 		<module>../../com.jaspersoft.studio.data.hbase</module>
