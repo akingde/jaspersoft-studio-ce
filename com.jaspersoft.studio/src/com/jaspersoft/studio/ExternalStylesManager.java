@@ -66,9 +66,11 @@ public class ExternalStylesManager {
 		@Override
 		public void resourceChanged(IResourceChangeEvent event) {
 			HashSet<String> removedStyles = new HashSet<String>();
-			removeStyle(event.getDelta().getAffectedChildren(), removedStyles);
-			if (event.getType() == IResourceChangeEvent.PRE_CLOSE) removeReport(event.getDelta().getAffectedChildren());
-			refreshStyles(removedStyles);
+			if (event.getDelta() != null){
+				removeStyle(event.getDelta().getAffectedChildren(), removedStyles);
+				if (event.getType() == IResourceChangeEvent.PRE_CLOSE) removeReport(event.getDelta().getAffectedChildren());
+				refreshStyles(removedStyles);
+			}
 		}	
 	};
 	
