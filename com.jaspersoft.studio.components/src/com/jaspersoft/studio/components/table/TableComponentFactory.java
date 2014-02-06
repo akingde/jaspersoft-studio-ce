@@ -90,6 +90,7 @@ import com.jaspersoft.studio.components.table.model.column.action.CreateColumnCe
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCellAction;
+import com.jaspersoft.studio.components.table.model.column.action.DeleteRowAction;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnFromGroupCommand;
@@ -676,6 +677,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 		lst.add(AContextMenuProvider.SEPARATOR);
 		lst.add(DeleteColumnAction.ID);
+		lst.add(DeleteRowAction.ID);
 		lst.add(DeleteColumnCellAction.ID);
 		lst.add(EditStyleAction.ID);
 		lst.add(RemoveTableStylesAction.ID);

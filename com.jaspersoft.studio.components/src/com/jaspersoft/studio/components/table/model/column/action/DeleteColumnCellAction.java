@@ -26,8 +26,10 @@ import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.table.TableComponentFactory;
+import com.jaspersoft.studio.components.table.model.MTableDetail;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.model.ANode;
 
 /*
  * The Class CreateGroupAction.
@@ -74,10 +76,14 @@ public class DeleteColumnCellAction extends DeleteAction {
 			EditPart object = (EditPart) objects.get(i);
 			if (object.getModel() instanceof MCell) {
 				MColumn model = (MColumn) object.getModel();
-				Command cmd = TableComponentFactory.getDeleteCellCommand(
-						model.getParent(), model);
-				if (cmd != null)
-					compoundCmd.add(cmd);
+				ANode parent = model.getParent();
+				//The cell of the detail can not be deleted
+				if (!(parent instanceof MTableDetail)){
+					Command cmd = TableComponentFactory.getDeleteCellCommand(
+							model.getParent(), model);
+					if (cmd != null)
+						compoundCmd.add(cmd);
+				}
 			}
 		}
 		return compoundCmd;
