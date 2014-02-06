@@ -46,9 +46,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.cassandra.adapter.CassandraDataAdapter;
+import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapter;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.secret.DataAdaptersSecretsProvider;
+import com.jaspersoft.studio.swt.widgets.WSecretText;
 
 /**
  * 
@@ -57,6 +60,8 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
  */
 public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 	private Text jdbcURL;
+	private Text username;
+	private WSecretText password;
 
 	private CassandraDataAdapterDescriptor dataAdapterDescriptor;
 
@@ -68,8 +73,14 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 	private void initComponents() {
 		setLayout(new GridLayout(2, false));
 
-		createLabel("JDBC URL");
-		jdbcURL = createTextField(false);
+		createLabel("JDBC URL:");
+		jdbcURL = createTextField();
+		
+		createLabel("Username:");
+		username = createTextField();
+		
+		createLabel("Password:");
+		password = createPasswordField();
 	}
 
 	private void createLabel(String text) {
@@ -79,18 +90,29 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 				1));
 	}
 
-	private Text createTextField(boolean password) {
-		Text textField = new Text(this, !password ? SWT.BORDER : SWT.BORDER
-				| SWT.PASSWORD);
+	private Text createTextField() {
+		Text textField = new Text(this, SWT.BORDER);
 		textField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 		return textField;
+	}
+	
+	private WSecretText createPasswordField() {
+		WSecretText passwd = new WSecretText(this, SWT.BORDER | SWT.PASSWORD);
+		passwd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+				1, 1));
+		return passwd;
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDescriptor == null) {
 			dataAdapterDescriptor = new CassandraDataAdapterDescriptor();
 		}
+		CassandraDataAdapter cassandraDA = (CassandraDataAdapter) dataAdapterDesc.getDataAdapter();
+		cassandraDA.setUsername(username.getText());
+		cassandraDA.setPassword(password.getText());
+		cassandraDA.setUrl(jdbcURL.getText());
+		
 		return dataAdapterDescriptor;
 	}
 
@@ -98,21 +120,42 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
 		super.setDataAdapter(dataAdapterDescriptor);
 
+		if (!password.isWidgetConfigured()) {
+			password.loadSecret(DataAdaptersSecretsProvider.SECRET_NODE_ID, password.getText());
+		}
+		
 		this.dataAdapterDescriptor = (CassandraDataAdapterDescriptor) dataAdapterDescriptor;
-		CassandraDataAdapter dataAdapter = (CassandraDataAdapter) dataAdapterDescriptor
-				.getDataAdapter();
-		bindWidgets(dataAdapter);
+//		CassandraDataAdapter dataAdapter = (CassandraDataAdapter) dataAdapterDescriptor
+//				.getDataAdapter();
+//		bindWidgets(dataAdapter);
 	}
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		bindingContext.bindValue(
 				SWTObservables.observeText(jdbcURL, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "jdbcURL"));
+				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(username, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(password, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getHelpContextId() {
 		return PREFIX.concat("adapter_cassandra");
+	}
+	
+	@Override
+	public void performAdditionalUpdates() {
+		if (JaspersoftStudioPlugin.shouldUseSecureStorage()) {
+			password.persistSecret();
+			// update the "password" replacing it with the UUID key saved in secure
+			// preferences
+			CassandraDataAdapter cassandraDA = (CassandraDataAdapter) dataAdapterDesc.getDataAdapter();
+			cassandraDA.setPassword(password.getUUIDKey());
+		}
 	}
 }

@@ -11,8 +11,9 @@ Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.6.0";visibility:=re
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
-Bundle-ClassPath: lib/cassandra-clientutil-1.0.6.jar,
- lib/cassandra-jdbc-1.0.5-SNAPSHOT.jar,
- lib/cassandra-thrift-1.0.6.jar,
- lib/libthrift-0.6.1.jar,
+Bundle-ClassPath: lib/js-cassandra-datasource-1.0.0-SNAPSHOT.jar,
+ lib/cassandra-clientutil-1.2.5.jar,
+ lib/cassandra-jdbc-1.2.5-JS.jar,
+ lib/cassandra-thrift-1.2.5.jar,
+ lib/libthrift-0.7.0.jar,
  .

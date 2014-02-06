@@ -39,9 +39,9 @@ import net.sf.jasperreports.data.DataAdapterService;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.cassandra.adapter.CassandraDataAdapter;
-import com.jaspersoft.cassandra.adapter.CassandraDataAdapterImplementation;
-import com.jaspersoft.cassandra.adapter.CassandraDataAdapterService;
+import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapter;
+import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapterImpl;
+import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
@@ -60,7 +60,7 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public DataAdapterDescriptor createDataAdapter() {
 		CassandraDataAdapterDescriptor descriptor = new CassandraDataAdapterDescriptor();
-		descriptor.getDataAdapter().setJdbcURL("jdbc:cassandra://HOST:9160/KEY_SPACE");
+		descriptor.getDataAdapter().setUrl("jdbc:cassandra://HOST:9160/KEY_SPACE");
 		return descriptor;
 	}
 
@@ -71,7 +71,7 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 	 * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
 	 */
 	public String getDataAdapterClassName() {
-		return CassandraDataAdapterImplementation.class.getName();
+		return CassandraDataAdapterImpl.class.getName();
 	}
 
 	/*

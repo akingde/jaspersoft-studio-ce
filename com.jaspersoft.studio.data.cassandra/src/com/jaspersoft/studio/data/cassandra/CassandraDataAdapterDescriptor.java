@@ -46,9 +46,9 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.cassandra.CassandraDataSource;
-import com.jaspersoft.cassandra.adapter.CassandraDataAdapter;
-import com.jaspersoft.cassandra.adapter.CassandraDataAdapterImplementation;
+import com.jaspersoft.connectors.cassandra.CassandraDataSource;
+import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapter;
+import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapterImpl;
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
@@ -69,7 +69,7 @@ public class CassandraDataAdapterDescriptor extends DataAdapterDescriptor implem
 	@Override
 	public CassandraDataAdapter getDataAdapter() {
 		if (dataAdapter == null)
-			dataAdapter = new CassandraDataAdapterImplementation();
+			dataAdapter = new CassandraDataAdapterImpl();
 		return (CassandraDataAdapter) dataAdapter;
 	}
 
