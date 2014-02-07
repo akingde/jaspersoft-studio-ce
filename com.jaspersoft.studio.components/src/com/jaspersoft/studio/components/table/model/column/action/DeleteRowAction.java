@@ -26,6 +26,7 @@ import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.table.TableComponentFactory;
+import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTableDetail;
 import com.jaspersoft.studio.components.table.model.column.MCell;
@@ -53,8 +54,8 @@ public class DeleteRowAction extends DeleteAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Delete Row");
-		setToolTipText("Delete selected table row");
+		setText(Messages.DeleteRowAction_name);
+		setToolTipText(Messages.DeleteRowAction_tooltip);
 		setId(DeleteRowAction.ID);
 	}
 	
