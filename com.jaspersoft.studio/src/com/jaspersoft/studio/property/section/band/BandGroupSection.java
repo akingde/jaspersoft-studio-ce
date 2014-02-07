@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.band;
 
@@ -21,6 +16,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.band.MBandGroupFooter;
+import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -32,36 +30,44 @@ public class BandGroupSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		if (getElement().getValue() != null) {
-			parent = getWidgetFactory().createSection(parent, "Group Band Properties", false, 2);
+		parent = getWidgetFactory().createSection(parent, "Group Band Properties", false, 2);
 
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE);
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE);
 
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_FOOTER_POSITION);
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_FOOTER_POSITION);
 
-			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 3;
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_START_NEW_COLUMN, false).getControl().setLayoutData(gd);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_START_NEW_COLUMN, false).getControl().setLayoutData(gd);
 
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 3;
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_START_NEW_PAGE, false).getControl().setLayoutData(gd);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_START_NEW_PAGE, false).getControl().setLayoutData(gd);
 
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 3;
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, false).getControl()
-					.setLayoutData(gd);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, false).getControl()
+				.setLayoutData(gd);
 
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 3;
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, false).getControl().setLayoutData(gd);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, false).getControl().setLayoutData(gd);
 
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 3;
-			createWidget4Property(parent, JRDesignGroup.PROPERTY_KEEP_TOGETHER, false).getControl().setLayoutData(gd);
-		}
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JRDesignGroup.PROPERTY_KEEP_TOGETHER, false).getControl().setLayoutData(gd);
 	}
-	
+
+	@Override
+	protected APropertyNode getModelFromEditPart(Object item) {
+		APropertyNode md = super.getModelFromEditPart(item);
+		if (md instanceof MBandGroupHeader)
+			return ((MBandGroupHeader) md).getMGroup();
+		if (md instanceof MBandGroupFooter)
+			return ((MBandGroupFooter) md).getMGroup();
+		return md;
+	}
+
 	@Override
 	protected void initializeProvidedProperties() {
 		super.initializeProvidedProperties();
