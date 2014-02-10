@@ -126,7 +126,7 @@ public class ConvertUtil {
 		}.getObject();
 		if (key == null) {
 			for (MFromTable mft : Util.getFromTables(msel)) {
-				if (mft.getValue().isNotInMetadata())
+				if (mft.getValue().isNotInMetadata() && mft.getValue().getValue().equalsIgnoreCase(table))
 					return new KeyValue<MSQLColumn, MFromTable>(new MSQLColumn(mft.getValue(), column, null), mft);
 			}
 		}
