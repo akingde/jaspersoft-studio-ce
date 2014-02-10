@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio feature"
-      version="5.6.0.qualifier"
+      version="5.5.1"
       provider-name="Jaspersoft Corporation"
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
