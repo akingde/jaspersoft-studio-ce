@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xtext JFace Integration
 Bundle-SymbolicName: com.jaspersoft.studio.xtext.jface;singleton:=true
-Bundle-Version: 5.5.1.final
+Bundle-Version: 5.6.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.xtext.jface.XJIActivator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.6.0,4.0.0)",
