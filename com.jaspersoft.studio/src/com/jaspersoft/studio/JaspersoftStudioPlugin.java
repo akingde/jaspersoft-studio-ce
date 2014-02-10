@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio;
 
@@ -20,6 +15,7 @@ import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.data.defaults.DefaultDAManager;
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
@@ -40,7 +36,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 
 	public static final String PLUGIN_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
-	
+
 	// The shared instance.
 	/** The plugin. */
 	private static JaspersoftStudioPlugin plugin;
@@ -67,7 +63,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		info.setProductVersion(getBundle().getVersion().toString());
 		info.setProductMainBundleID(PLUGIN_ID);
 		setBrandingInformation(info);
-		logInfo(NLS.bind("Starting JaspersoftStudio bundle - Version: {0}",info.getProductVersion()));
+		logInfo(NLS.bind("Starting JaspersoftStudio bundle - Version: {0}", info.getProductVersion()));
 	}
 
 	/**
@@ -109,6 +105,16 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			decoratorManager.init();
 		}
 		return decoratorManager;
+	}
+
+	private static DefaultDAManager daManager;
+
+	public static DefaultDAManager getDefaultDAManager() {
+		if (daManager == null) {
+			daManager = new DefaultDAManager();
+			daManager.init();
+		}
+		return daManager;
 	}
 
 	private static ToolItemsManager toolItemsManager;
@@ -162,14 +168,15 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	public static String getUniqueIdentifier() {
 		return PLUGIN_ID;
 	}
-	
+
 	/**
-	 * Sets the branding information that will helps identify the
-	 * product, for example in case of debug, diagnostics or statistics.
+	 * Sets the branding information that will helps identify the product, for example in case of debug, diagnostics or
+	 * statistics.
 	 * 
-	 * @param info branding information
+	 * @param info
+	 *          branding information
 	 */
-	public void setBrandingInformation(BrandingInfo info){
+	public void setBrandingInformation(BrandingInfo info) {
 		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_NAME, info.getProductName());
 		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_VERSION, info.getProductVersion());
 		getPreferenceStore().putValue(BrandingInfo.BRANDING_PRODUCT_MAINBUNDLE, info.getProductMainBundleID());
@@ -179,19 +186,19 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 * @return the branding information that identify the currently running product (plugin/product)
 	 * 
 	 */
-	public BrandingInfo getBrandingInformation(){
+	public BrandingInfo getBrandingInformation() {
 		BrandingInfo info = new BrandingInfo();
 		info.setProductName(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_NAME));
 		info.setProductVersion(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_VERSION));
 		info.setProductMainBundleID(getPreferenceStore().getString(BrandingInfo.BRANDING_PRODUCT_MAINBUNDLE));
 		return info;
 	}
-	
+
 	/**
 	 * @return <code>true</code> if we should use the Eclipse Secure Storage feature,<code>false</code> otherwise
 	 */
-	public static boolean shouldUseSecureStorage(){ 
+	public static boolean shouldUseSecureStorage() {
 		return getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_USE_SECURE_STORAGE);
 	}
-	
+
 }

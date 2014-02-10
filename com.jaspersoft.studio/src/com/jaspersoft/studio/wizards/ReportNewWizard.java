@@ -20,8 +20,9 @@ import java.util.Map;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -104,7 +105,10 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 		// Attention! This operation should always be performed by
 		// the wizard caller, since we are forcing here a new config.
-		setConfig(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null));
+		JasperReportsConfiguration jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
+		jrConfig.setJasperDesign(new JasperDesign());
+
+		setConfig(jrConfig);
 	}
 
 	public ReportNewWizard(IWizard parentWizard, IWizardPage fallbackPage) {
@@ -232,8 +236,8 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		if (getSettings().containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
 			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
 		}
-		
-		if (getSettings().containsKey(WizardDataSourcePage.ORDER_GROUP)){
+
+		if (getSettings().containsKey(WizardDataSourcePage.ORDER_GROUP)) {
 			templateSettings.put(DefaultTemplateEngine.ORDER_GROUP, getSettings().get(WizardDataSourcePage.ORDER_GROUP));
 		}
 
@@ -251,8 +255,14 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 			// Save the data adapter used...
 			if (step2.getDataAdapter() != null) {
-				reportBundle.getJasperDesign().setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER,
-						step2.getDataAdapter().getName());
+				JasperDesign jd = reportBundle.getJasperDesign();
+				Object props = getSettings().get(WizardDataSourcePage.DATASET_PROPERTIES);
+				if (props != null && props instanceof JRPropertiesMap) {
+					JRPropertiesMap pmap = (JRPropertiesMap) props;
+					for (String key : pmap.getPropertyNames())
+						jd.setProperty(key, pmap.getProperty(key));
+				}
+				jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
 			}
 
 			// Store the report bundle on file system

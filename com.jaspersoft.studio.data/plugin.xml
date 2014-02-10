@@ -38,7 +38,6 @@
          </dataAdapter>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.customjrds.CustomJrdsDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jrdsprovider.JrdsProviderDataAdapterFactory"/>
-         <dataAdapter ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory"/>
    </extension>
    <extension
          point="com.jaspersoft.studio.queryDesigner">

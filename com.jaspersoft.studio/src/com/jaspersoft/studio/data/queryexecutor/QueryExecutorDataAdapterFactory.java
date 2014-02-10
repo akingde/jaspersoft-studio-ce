@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.queryexecutor;
 
@@ -21,11 +16,11 @@ import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.studio.data.Activator;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
-import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.messages.Messages;
 
 public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 
@@ -52,7 +47,7 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/receipt.png"); //$NON-NLS-1$
+			return JaspersoftStudioPlugin.getInstance().getImage("icons/QueryExecutorDataAdapterIcon.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

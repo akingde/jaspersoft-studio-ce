@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
@@ -39,7 +40,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.data.AWizardDataEditorComposite;
@@ -48,6 +48,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IWizardDataEditorProvider;
 import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -80,6 +81,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 	public static final String DATASET_FIELDS = "dataset_fields"; //$NON-NLS-1$
 	public static final String GROUP_FIELDS = "group_fields"; //$NON-NLS-1$
 	public static final String DATASET_QUERY_LANGUAGE = "query_language"; //$NON-NLS-1$
+	public static final String DATASET_PROPERTIES = "dataset_properties";
 	public static final String DATASET_QUERY_TEXT = "query_text"; //$NON-NLS-1$
 	public static final String EXTRA_PARAMETERS = "extra_parameters"; //$NON-NLS-1$
 	public static final String ORDER_GROUP = "create_sort_fields"; //$NON-NLS-1$
@@ -364,8 +366,11 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 			getSettings().remove(DISCOVERED_FIELDS);
 			getSettings().put(DATASET_QUERY_LANGUAGE, activeEditor.getQueryLanguage());
 			getSettings().put(DATASET_QUERY_TEXT, activeEditor.getQueryString());
+			if (activeEditor instanceof SimpleQueryWizardDataEditorComposite)
+				getSettings().put(DATASET_PROPERTIES,
+						((SimpleQueryWizardDataEditorComposite) activeEditor).getDataset().getPropertiesMap());
 
-			Display.getDefault().asyncExec(new Runnable() {
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				public void run() {
 					monitor.setTaskName("Getting fields...");
@@ -382,6 +387,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		} else {
 			getSettings().remove(DATASET_QUERY_LANGUAGE);
 			getSettings().remove(DATASET_QUERY_TEXT);
+			getSettings().remove(DATASET_PROPERTIES);
 		}
 	}
 

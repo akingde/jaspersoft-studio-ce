@@ -102,7 +102,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		}
 
 		// Add a list of default data adapters only if none is found.
-		if(getDataAdapterDescriptors().size()==0) {
+		if (getDataAdapterDescriptors().size() == 0) {
 			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
 			Enumeration<URL> urls = bundle.findEntries("defaults/dataadapter/prefs/", "*.xml", true);
 			while (urls.hasMoreElements()) {
@@ -123,6 +123,13 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 					FileUtils.closeStream(in);
 				}
 			}
+		}
+		for (DataAdapterDescriptor dad : JaspersoftStudioPlugin.getDefaultDAManager().getDefaultDAs()) {
+			DataAdapterDescriptor prefdad = findDataAdapter(dad.getName());
+			if (prefdad == null)
+				addDataAdapter(getNewID(), dad);
+			else
+				addDataAdapter(getUrl(prefdad), dad);
 		}
 	}
 
