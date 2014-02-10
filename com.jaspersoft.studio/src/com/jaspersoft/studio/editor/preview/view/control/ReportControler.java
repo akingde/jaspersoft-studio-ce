@@ -391,7 +391,7 @@ public class ReportControler {
 		c.startMessage(Messages.ReportControler_msg_compiling);
 		if (compiler == null) {
 			compiler = new JasperReportCompiler();
-			compiler.setErrorHandler(new JRErrorHandler(c));
+			compiler.setErrorHandler(new JRMarkerErrorHandler(c,file));
 			compiler.setProject(file.getProject());
 		}
 		((JRErrorHandler) compiler.getErrorHandler()).reset();

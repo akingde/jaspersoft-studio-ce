@@ -31,34 +31,39 @@ public class JRErrorHandler implements JasperReportErrorHandler {
 		hasErrors = false;
 	}
 
+	public boolean isHasErrors() {
+		return hasErrors;
+	}
+	
 	public void addMarker(Throwable e) {
 		hasErrors = true;
-		c.addError(e, null);
+		if (c != null)
+			c.addError(e, null);
 	}
 
 	public void addMarker(IProblem problem, SourceLocation location) {
 		hasErrors = true;
-		c.addProblem(problem, location);
+		if (c != null)
+			c.addProblem(problem, location);
 	}
 
 	public void addMarker(String message, SourceLocation location) {
 		hasErrors = true;
-		c.addProblem(message, location);
-	}
-
-	public boolean isHasErrors() {
-		return hasErrors;
+		if (c != null)
+			c.addProblem(message, location);
 	}
 
 	@Override
 	public void addMarker(IProblem problem, SourceLocation location, JRExpression expr) {
 		hasErrors = true;
-		c.addProblem(problem, location, expr);
+		if (c != null)
+			c.addProblem(problem, location, expr);
 	}
 
 	@Override
 	public void addMarker(String message, SourceLocation location, JRDesignElement element) {
 		hasErrors = true;
-		c.addProblem(message, location, element);
+		if (c != null)
+			c.addProblem(message, location, element);
 	}
 }

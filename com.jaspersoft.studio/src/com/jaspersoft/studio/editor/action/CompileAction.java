@@ -37,6 +37,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.preview.view.control.JRErrorHandler;
+import com.jaspersoft.studio.editor.preview.view.control.JRMarkerErrorHandler;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -104,8 +105,8 @@ public class CompileAction extends SelectionAction {
 				JasperReportsBuilder builder = new JasperReportsBuilder(){
 					
 					@Override
-					protected JasperReportErrorHandler getErrorHandler(Object[] arguments) {
-						JRErrorHandler errorHandler = new JRErrorHandler(console);
+					protected JasperReportErrorHandler getErrorHandler(IFile resource) {
+						JRErrorHandler errorHandler = new JRMarkerErrorHandler(console, resource);
 						errorHandler.reset();
 						return errorHandler;
 					};
