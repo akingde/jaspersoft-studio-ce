@@ -16,7 +16,10 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -25,6 +28,7 @@ import net.sf.jasperreports.types.date.TimestampRange;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.MDataType;
@@ -74,6 +78,20 @@ public class ImpInputControls {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
 			} else if (Number.class.isAssignableFrom(p.getValueClass())) {
 				addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);
+			} else if (Collection.class.isAssignableFrom(p.getValueClass())) {
+				rd.setControlType(ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES);
+
+				ResourceDescriptor dt = new ResourceDescriptor();
+				dt.setWsType(ResourceDescriptor.TYPE_LOV);
+				dt.setName("lov_" + rd.getName());
+				dt.setLabel("lov_" + rd.getName());
+				dt.setIsNew(true);
+				dt.setParentFolder(rd.getUriString() + "_files");
+				dt.setUriString(dt.getParentFolder() + "/" + rd.getName());
+				List<ListItem> values = new ArrayList<ListItem>();
+
+				dt.setListOfValues(values);
+				rd.getChildren().add(dt);
 			} else {
 				mrunit.removeChild(mres);
 				continue;

@@ -148,8 +148,9 @@ public class Rest2Soap {
 
 	private static void getLOV(ARestV2Connection rc, ClientListOfValues cr, ResourceDescriptor rd) throws ParseException {
 		List<ListItem> lovs = new ArrayList<ListItem>();
-		for (ClientListOfValuesItem sds : cr.getItems())
-			lovs.add(new ListItem(sds.getLabel(), sds.getValue()));
+		if (cr.getItems() != null)
+			for (ClientListOfValuesItem sds : cr.getItems())
+				lovs.add(new ListItem(sds.getLabel(), sds.getValue()));
 		rd.setListOfValues(lovs);
 	}
 
