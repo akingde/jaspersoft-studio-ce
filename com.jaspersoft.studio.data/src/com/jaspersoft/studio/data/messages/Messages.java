@@ -63,6 +63,7 @@ public class Messages extends NLS {
 	public static String CSVDataAdapterComposite_34;
 	public static String CSVDataAdapterComposite_35;
 	public static String CSVDataAdapterComposite_36;
+	public static String CSVDataAdapterComposite_37;
 	public static String CSVDataAdapterComposite_39;
 	public static String CSVDataAdapterComposite_4;
 	public static String CSVDataAdapterComposite_5;

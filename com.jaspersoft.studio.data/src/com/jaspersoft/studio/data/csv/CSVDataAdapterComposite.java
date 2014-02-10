@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 
@@ -53,6 +54,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -102,6 +104,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 
 	// The data model
 	private java.util.List<String> rows;
+	private Combo cEncoding;
 
 	/**
 	 * Create the composite.
@@ -301,6 +304,16 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 3, 1));
 		btnCheckSkipFirstLine.setText(Messages.CSVDataAdapterComposite_14);
 
+		Label lbl = new Label(grpOther, SWT.NONE);
+		lbl.setText(Messages.CSVDataAdapterComposite_37);
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+
+		cEncoding = new Combo(grpOther, SWT.SINGLE | SWT.BORDER);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		cEncoding.setItems(StringUtils.getEncodings());
+		cEncoding.setLayoutData(gd);
+
 		CTabItem tbtmSeparators = new CTabItem(tabFolder, SWT.NONE);
 		tbtmSeparators.setText(Messages.CSVDataAdapterComposite_15);
 
@@ -401,21 +414,21 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		grpSpecialCharacters.setLayout(new GridLayout(4, false));
 		grpSpecialCharacters.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
-		lbl.setText("\\n");
+		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
+		lbl.setText("\\n"); //$NON-NLS-1$
 		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		new Label(grpSpecialCharacters, SWT.NONE).setText(Messages.CSVDataAdapterComposite_32);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
-		lbl.setText("\\r");
+		lbl.setText("\\r"); //$NON-NLS-1$
 		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_b = new Label(grpSpecialCharacters, SWT.NONE);
 		text_b.setText(Messages.CSVDataAdapterComposite_33);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
-		lbl.setText("\\r\\n");
+		lbl.setText("\\r\\n"); //$NON-NLS-1$
 		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_c = new Label(grpSpecialCharacters, SWT.NONE);
@@ -425,14 +438,14 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		text_c.setLayoutData(gd);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
-		lbl.setText("\\t");
+		lbl.setText("\\t"); //$NON-NLS-1$
 		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_d = new Label(grpSpecialCharacters, SWT.NONE);
 		text_d.setText(Messages.CSVDataAdapterComposite_35);
 
 		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
-		lbl.setText("\\\\");
+		lbl.setText("\\\\"); //$NON-NLS-1$
 		com.jaspersoft.studio.utils.UIUtil.setBold(lbl);
 
 		Label text_e = new Label(grpSpecialCharacters, SWT.NONE);
@@ -599,6 +612,7 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		bindingContext.bindValue(SWTObservables.observeSelection(btnCheckSkipFirstLine), PojoObservables.observeValue(dataAdapter, "useFirstRowAsHeader")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(textDatePattern, SWT.Modify), PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(textNumberPattern, SWT.Modify), PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(cEncoding), PojoObservables.observeValue(dataAdapter, "encoding")); //$NON-NLS-1$
 
 		CsvDataAdapter csvDataAdapter = (CsvDataAdapter) dataAdapter;
 		List<String> listColumnNames = csvDataAdapter.getColumnNames();
@@ -1097,11 +1111,11 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_csv");
+		return PREFIX.concat("adapter_csv"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.csv", "*.*" };
+		return new String[] { "*.csv", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
