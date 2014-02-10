@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.rcp.feature"
       label="Jaspersoft Studio Community RCP Feature"
-      version="5.5.1"
+      version="5.5.1.final"
       provider-name="Jaspersoft Corporation"
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"

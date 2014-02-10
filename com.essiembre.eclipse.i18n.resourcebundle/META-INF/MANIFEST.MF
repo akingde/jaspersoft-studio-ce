@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Resourcebundle
 Bundle-SymbolicName: com.essiembre.eclipse.i18n.resourcebundle;singleton:=true
-Bundle-Version: 5.5.1
+Bundle-Version: 5.5.1.final
 Bundle-Vendor: ESSIEMBRE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
