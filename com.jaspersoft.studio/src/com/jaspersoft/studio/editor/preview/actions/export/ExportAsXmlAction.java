@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.export.JRXmlExporterParameter;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsXmlAction extends AbstractExportAction {
@@ -42,7 +41,6 @@ public class ExportAsXmlAction extends AbstractExportAction {
 		JRXmlExporter exp = new JRXmlExporter(jContext);
 
 		exp.setParameter(JRXmlExporterParameter.IS_EMBEDDING_IMAGES, Boolean.FALSE);
-		exp.setParameter(JRXmlExporterParameter.DTD_LOCATION, XMLExporterPreferencePage.NSF_EXPORT_XML_DTD_LOCATION);
 		return exp;
 	}
 }
