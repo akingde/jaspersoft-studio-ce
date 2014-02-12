@@ -126,7 +126,7 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
-		if (rd.getUriString().contains("<"))
+		if (rd.getUriString() == null || rd.getUriString().contains("<"))
 			throw new Exception("wrong url");
 		return client.get(rd, f);
 	}

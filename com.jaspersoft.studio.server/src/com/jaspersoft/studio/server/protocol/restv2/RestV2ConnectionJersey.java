@@ -184,6 +184,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
+		if (rd.getUriString() == null || rd.getUriString().contains("<"))
+			throw new Exception("wrong url");
 		String uri = rd.getUriString();
 		if (!uri.startsWith("/"))
 			uri = "/" + uri;
