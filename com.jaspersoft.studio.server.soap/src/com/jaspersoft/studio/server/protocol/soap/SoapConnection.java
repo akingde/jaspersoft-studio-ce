@@ -126,6 +126,8 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
+		if (rd.getUriString().contains("<"))
+			throw new Exception("wrong url");
 		return client.get(rd, f);
 	}
 
@@ -178,13 +180,18 @@ public class SoapConnection implements IConnection {
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = get(monitor, rd, null);
 			for (ResourceDescriptor r : children) {
-				if (r.getUriString() == null || SelectorDatasource.isDatasource(r))
+				if (SelectorDatasource.isDatasource(r))
 					continue;
 				if (r.isMainReport())
 					continue;
-				if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL) && !r.getIsNew())
-					r = client.addOrModifyResource(r, null);
-				else {
+				if (r.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+					if (r.getIsReference())
+						r.setUriString(rd.getUriString() + "_files/" + r.getName());
+					if (!r.getIsNew())
+						r = client.addOrModifyResource(r, null);
+					else
+						client.modifyReportUnitResource(rd.getUriString(), r, null);
+				} else {
 					inputFile = null;
 					if (r.getHasData() && r.getData() != null) {
 						inputFile = writeToTemp(r.getData());

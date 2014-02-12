@@ -211,7 +211,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 				if (s != null) {
 					MResource mres = (MResource) s.getFirstElement();
 					if (mres != null && mres.getPublishOptions().isOverwrite()) {
-						if (sresource.calculateEnabled(mres) && mres instanceof AFileResource)
+						if (sresource.calculateEnabled(mres))
 							menu.add(sresource);
 						if (sres.calculateEnabled(mres))
 							menu.add(sres);

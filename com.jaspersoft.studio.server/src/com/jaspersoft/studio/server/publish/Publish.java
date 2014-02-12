@@ -181,13 +181,14 @@ public class Publish {
 						ResourceDescriptor rd = res.getValue();
 						ResourceDescriptor ref = new ResourceDescriptor();
 						ref.setName(rd.getName());
+						ref.setIsNew(true);
 						ref.setLabel(rd.getLabel());
 						ref.setDescription(rd.getDescription());
-						ref.setIsReference(false);
+						ref.setIsReference(true);
 						ref.setReferenceUri(popt.getReferencedResource().getUriString());
 						ref.setParentFolder(rd.getParentFolder());
 						ref.setUriString(rd.getUriString());
-						ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+						ref.setWsType(rd.getWsType());// ResourceDescriptor.TYPE_REFERENCE);
 
 						res.setValue(ref);
 					} else if (popt.getPublishMethod() == ResourcePublishMethod.RESOURCE) {
