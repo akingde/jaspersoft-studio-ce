@@ -176,9 +176,9 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		composite.setLayout(new GridLayout(2, false));
 
 		treeViewer = new TreeViewer(composite, SWT.SINGLE | SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 300;
-		gd.heightHint = 400;
+ 		gd.heightHint = 400;
 		gd.horizontalSpan = 2;
 		treeViewer.getTree().setLayoutData(gd);
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
@@ -299,8 +299,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		lblRepoUnitDescription.setLayoutData(descLblGD);
 		lblRepoUnitDescription.setText(Messages.RUnitLocationPage_reportunitdesc_label);
 		ruDescription = new Text(composite, SWT.BORDER | SWT.MULTI);
-		GridData descGD = new GridData(SWT.FILL, SWT.TOP, true, true);
-		descGD.minimumHeight = 50;
+		GridData descGD = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		descGD.heightHint = 50;
 		ruDescription.setLayoutData(descGD);
 		ruDescription.addModifyListener(new ModifyListener() {
 
