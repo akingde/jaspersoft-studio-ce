@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpressionCollector;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -309,6 +310,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class type) {
+		if (type == JasperReportsContext.class)
+			return jrContext;
 		if (type == IContentOutlinePage.class) {
 			if (outlinePage == null)
 				outlinePage = new MultiOutlineView(this);

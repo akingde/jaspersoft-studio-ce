@@ -17,6 +17,8 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -29,7 +31,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.editor.action.PrintAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
@@ -58,6 +62,23 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	public PreviewJRPrint(boolean listenresource) {
 		super(listenresource);
+	}
+
+	private ActionRegistry actionRegistry;
+
+	protected ActionRegistry getActionRegistry() {
+		if (actionRegistry == null)
+			actionRegistry = new ActionRegistry();
+		return actionRegistry;
+	}
+
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter == ActionRegistry.class)
+			return getActionRegistry();
+		if (adapter == JasperPrint.class)
+			return getJasperPrint();
+		return super.getAdapter(adapter);
 	}
 
 	@Override
@@ -114,6 +135,11 @@ public class PreviewJRPrint extends ABasicEditor {
 		// // console.showConsole();
 		// }
 		// });
+
+		ActionRegistry registry = getActionRegistry();
+		IAction action = new PrintAction(this);
+		registry.registerAction(action);
+		getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PRINT.getId(), action);
 	}
 
 	protected void loadJRPrint(IEditorInput input) throws PartInitException {

@@ -15,7 +15,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.base.JRBaseReport;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Insets;
@@ -33,7 +33,7 @@ public class ReportPageFigure extends APageFigure {
 
 	/** The bands height. */
 	private int bandsHeight = 0;
-	protected JasperDesign jrDesign = null;
+	protected JRBaseReport jrDesign = null;
 	/** The bands vertical lines color */
 	protected Color printMarginColor = new Color(170, 168, 255);
 
@@ -49,7 +49,7 @@ public class ReportPageFigure extends APageFigure {
 	 * @param viewMargins
 	 *          the view margins
 	 */
-	public ReportPageFigure(JasperDesign jd, boolean viewMargins) {
+	public ReportPageFigure(JRBaseReport jd, boolean viewMargins) {
 		super(viewMargins);
 		this.jrDesign = jd;
 	}

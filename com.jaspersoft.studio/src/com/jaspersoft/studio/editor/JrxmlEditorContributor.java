@@ -50,6 +50,7 @@ import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
+import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
@@ -107,6 +108,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
+		// addRetargetAction(new PrintAction());
 
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
@@ -182,6 +184,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * @see org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()
 	 */
 	protected void declareGlobalActionKeys() {
+		addGlobalActionKey(ActionFactory.PRINT.getId());
 		addGlobalActionKey(ActionFactory.CUT.getId());
 		addGlobalActionKey(ActionFactory.COPY.getId());
 		addGlobalActionKey(ActionFactory.PASTE.getId());
@@ -255,9 +258,19 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			}
 			selectionProvider.addSelectionChangedListener(getSelectionChangeListener(registry));
 			selectionListener.contributeToContextBars(selection);
+		} else if (activeEditor instanceof PreviewJRPrint) {
+			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
+			if (registry != null) {
+				for (String id : globalActionKeys)
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+				for (Iterator<IAction> it = registry.getActions(); it.hasNext();) {
+					IAction action = it.next();
+					if (action instanceof IGlobalAction)
+						bars.setGlobalActionHandler(action.getId(), action);
+				}
+			}
 		}
 		bars.updateActionBars();
-
 	}
 
 	public IEditorPart getLastEditor() {
