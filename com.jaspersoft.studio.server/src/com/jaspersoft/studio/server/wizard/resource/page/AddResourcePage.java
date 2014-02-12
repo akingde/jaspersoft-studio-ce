@@ -203,6 +203,11 @@ public class AddResourcePage extends WizardPage {
 					}
 
 					@Override
+					public String getToolTip() {
+						return "OLAP Resources";
+					}
+
+					@Override
 					public ImageDescriptor getImagePath() {
 						return MROlapMondrianConnection.getIconDescriptor().getIcon16();
 					}
@@ -308,6 +313,11 @@ public class AddResourcePage extends WizardPage {
 			@Override
 			public String getDisplayText() {
 				return "Data Sources";
+			}
+
+			@Override
+			public String getToolTip() {
+				return "Data Sources Resources";
 			}
 
 			@Override
