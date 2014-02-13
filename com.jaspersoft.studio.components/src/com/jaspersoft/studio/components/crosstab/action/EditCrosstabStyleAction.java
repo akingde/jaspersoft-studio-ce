@@ -17,7 +17,6 @@ package com.jaspersoft.studio.components.crosstab.action;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -30,6 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
@@ -121,7 +121,7 @@ public class EditCrosstabStyleAction extends SelectionAction {
 	 * @return the command to update the styles of the crosstab
 	 */
 	protected Command changeStyleCommand(MCrosstab crosstab, CrosstabStyle newStyle, boolean updateOldStyles) {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(crosstab);
 		command.setDebugLabel(getText());
 		UpdateCrosstabStyleCommand updateCommand = new UpdateCrosstabStyleCommand(crosstab, newStyle,updateOldStyles);
 		command.add(updateCommand);

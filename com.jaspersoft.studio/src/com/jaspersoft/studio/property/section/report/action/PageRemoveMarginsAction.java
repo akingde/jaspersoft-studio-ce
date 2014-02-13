@@ -20,10 +20,10 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
@@ -65,7 +65,7 @@ public class PageRemoveMarginsAction extends SelectionAction {
 		MReport n = (MReport) part.getModel().getChildren().get(0);
 		JasperDesign jd = n.getJasperDesign();
 
-		CompoundCommand c = new CompoundCommand(getText());
+		JSSCompoundCommand c = new JSSCompoundCommand(getText(), n);
 		c.add(createResetCommand(n, JasperDesign.PROPERTY_LEFT_MARGIN, 0));
 		c.add(createResetCommand(n, JasperDesign.PROPERTY_RIGHT_MARGIN, 0));
 		c.add(createResetCommand(n, JasperDesign.PROPERTY_TOP_MARGIN, 0));

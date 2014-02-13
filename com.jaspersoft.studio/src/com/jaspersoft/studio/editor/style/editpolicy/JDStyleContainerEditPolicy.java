@@ -19,11 +19,11 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.ContainerEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.style.StyleTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 /*
@@ -41,10 +41,11 @@ public class JDStyleContainerEditPolicy extends ContainerEditPolicy {
 	 */
 	public Command getOrphanChildrenCommand(GroupRequest request) {
 		List<?> parts = request.getEditParts();
-		CompoundCommand result = new CompoundCommand("orphans"); //$NON-NLS-1$
+		JSSCompoundCommand result = new JSSCompoundCommand("orphans", null); //$NON-NLS-1$
 		for (int i = 0; i < parts.size(); i++) {
-			result.add(StyleTreeEditPartFactory.getOrphanCommand((ANode) getHost().getModel(),
-					(ANode) ((EditPart) parts.get(i)).getModel()));
+			ANode child = (ANode) ((EditPart) parts.get(i)).getModel();
+			result.setReferenceNodeIfNull(child);
+			result.add(StyleTreeEditPartFactory.getOrphanCommand((ANode) getHost().getModel(), child));
 
 		}
 		return result.unwrap();

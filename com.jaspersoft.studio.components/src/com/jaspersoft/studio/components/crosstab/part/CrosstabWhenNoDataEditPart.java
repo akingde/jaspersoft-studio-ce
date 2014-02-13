@@ -33,12 +33,12 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
@@ -161,7 +161,7 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 
 							return cmd;
 						} else {
-							CompoundCommand c = new CompoundCommand();
+							JSSCompoundCommand c = new JSSCompoundCommand(cmodel);
 
 							c.add(new OrphanElementCommand(cparent, cmodel));
 							c.add(new CreateElementCommand((MCell) getModel(), cmodel, rect, -1));

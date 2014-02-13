@@ -27,9 +27,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -285,11 +285,11 @@ public class CreateElementCommand extends Command {
 		this.jrGroup = jrGroup;
 	}
 
-	private CompoundCommand commands;
+	private JSSCompoundCommand commands;
 
 	protected void addCommand(Command command) {
 		if (commands == null)
-			commands = new CompoundCommand();
+			commands = new JSSCompoundCommand(srcNode);
 		commands.add(command);
 	}
 

@@ -20,13 +20,13 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.messages.Messages;
 
 public class EqualsHSpaceAction extends AbstractFormattingAction{
 
@@ -46,8 +46,8 @@ public class EqualsHSpaceAction extends AbstractFormattingAction{
 		return getOperationSet().size()>1;
 	}
 	
-	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
-		CompoundCommand command = new CompoundCommand();    
+	public static JSSCompoundCommand generateCommand(List<APropertyNode> nodes){
+		JSSCompoundCommand command = new JSSCompoundCommand(null);    
 
     if (nodes.isEmpty()) return command;
     List<APropertyNode> sortedElements = sortXY( nodes );
@@ -59,6 +59,7 @@ public class EqualsHSpaceAction extends AbstractFormattingAction{
     int maxX = minX + jrElement.getWidth();
     for (APropertyNode element : sortedElements)
     {
+    		command.setReferenceNodeIfNull(element);
     		jrElement = (JRDesignElement)element.getValue();
         if (minX > jrElement.getX()) minX = jrElement.getX();
         if (maxX < jrElement.getX()+jrElement.getWidth()) maxX = jrElement.getX()+jrElement.getWidth();
@@ -102,13 +103,11 @@ public class EqualsHSpaceAction extends AbstractFormattingAction{
 
 	protected Command createAlignmentCommand() {
 			List<APropertyNode> nodes = getOperationSet();
-			CompoundCommand command = null;
-			if (nodes.isEmpty()) 
-				command = new CompoundCommand();
-			else {
+			JSSCompoundCommand command = null;
+			if (!nodes.isEmpty()){
 				command = generateCommand(nodes);
+				command.setDebugLabel(getText());
 			}
-			command.setDebugLabel(getText());
 			return command;
 	}
 	

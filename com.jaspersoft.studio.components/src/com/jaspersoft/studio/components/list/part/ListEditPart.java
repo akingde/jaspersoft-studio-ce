@@ -33,9 +33,9 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
@@ -139,15 +139,14 @@ public class ListEditPart extends EditableFigureEditPart {
 									(ANode) request.getNewObject(),
 									constraint.getCopy(), -1);
 						} else if (request.getNewObject() instanceof Collection<?>) {
-							CompoundCommand cmd = new CompoundCommand();
-							Collection<?> c = (Collection<?>) request
-									.getNewObject();
+							JSSCompoundCommand cmd = new JSSCompoundCommand(null);
+							Collection<?> c = (Collection<?>) request.getNewObject();
 							for (Object obj : c) {
-								if (obj instanceof ANode)
-									cmd.add(OutlineTreeEditPartFactory
-											.getCreateCommand((ANode) getHost()
-													.getModel(), (ANode) obj,
-													constraint.getCopy(), -1));
+								if (obj instanceof ANode) {
+									ANode aObj = (ANode) obj;
+									cmd.setReferenceNodeIfNull(aObj);
+									cmd.add(OutlineTreeEditPartFactory .getCreateCommand((ANode) getHost().getModel(), aObj, constraint.getCopy(), -1));
+								}
 							}
 							return cmd;
 						}
@@ -178,13 +177,9 @@ public class ListEditPart extends EditableFigureEditPart {
 									return cmd;
 								}
 							} else {
-								CompoundCommand c = new CompoundCommand();
-
-								c.add(OutlineTreeEditPartFactory
-										.getOrphanCommand(cmodel.getParent(),
-												cmodel));
-								c.add(new CreateElementCommand(
-										(MList) getModel(), cmodel, rect, -1));
+								JSSCompoundCommand c = new JSSCompoundCommand(cmodel);
+								c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(),cmodel));
+								c.add(new CreateElementCommand((MList) getModel(), cmodel, rect, -1));
 								return c;
 							}
 						} else if (child instanceof CalloutEditPart) {

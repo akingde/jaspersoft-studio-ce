@@ -20,9 +20,9 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 
@@ -39,11 +39,12 @@ public class AlignMarginTopAction extends AbstractFormattingAction {
 		setId(ID);
 	}
 
-	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
-		CompoundCommand command = new CompoundCommand();
+	public static JSSCompoundCommand generateCommand(List<APropertyNode> nodes){
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
     // Find the smallest one...
 		for (APropertyNode element : nodes)
     {
+			command.setReferenceNodeIfNull(element);
 			SetValueCommand setCommand = new SetValueCommand();
 			setCommand.setTarget(element);
 			setCommand.setPropertyId(JRDesignElement.PROPERTY_Y);
@@ -56,13 +57,11 @@ public class AlignMarginTopAction extends AbstractFormattingAction {
 
 	protected Command createAlignmentCommand() {
 			List<APropertyNode> nodes = getOperationSet();
-			CompoundCommand command = null;
-			if (nodes.isEmpty()) 
-				command = new CompoundCommand();
-			else {
+			Command command = null;
+			if (!nodes.isEmpty()) {
 				command = generateCommand(nodes);
+				command.setDebugLabel(getText());
 			}
-			command.setDebugLabel(getText());
 			return command;
 	}
 	

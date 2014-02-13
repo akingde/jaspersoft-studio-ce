@@ -33,11 +33,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -144,7 +144,7 @@ public class RemoveCrosstabStylesAction extends SelectionAction {
 	 * @param cell the cell from where the style must be removed 
 	 * @param container compound command where the new commands will be stored
 	 */
-	protected void createCommand(JRCellContents cell, CompoundCommand container){
+	protected void createCommand(JRCellContents cell, JSSCompoundCommand container){
 		if (cell != null && cell instanceof JRDesignCellContents){
 			container.add(new RemoveStyleCommand((JRDesignCellContents)cell));
 			if (deleteStyles && cell.getStyle() != null){
@@ -168,10 +168,11 @@ public class RemoveCrosstabStylesAction extends SelectionAction {
 	 * @return the command to remove all the styles
 	 */
 	protected Command changeStyleCommand(List<EditPart> editParts) {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		deletedStyles = new HashSet<String>();
 		for(EditPart editPart : editParts){
 			MCrosstab table = (MCrosstab)editPart.getModel();
+			command.setReferenceNodeIfNull(table);
 			design = table.getJasperDesign();
 			JRDesignCrosstab crosstab = (JRDesignCrosstab)table.getValue();
 			crosstab.getCellsList();

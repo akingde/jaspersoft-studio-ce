@@ -28,7 +28,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -49,6 +48,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -177,7 +177,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * @param selectedElement selected preset
 		 * @param lp element to change
 		 */
-		private void changeAllProperties(CompoundCommand cc, TemplateBorder selectedElement, MLinePen lp){
+		private void changeAllProperties(JSSCompoundCommand cc, TemplateBorder selectedElement, MLinePen lp){
 			Command c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_COLOR, new AlfaRGB(selectedElement.getColor(),255), lp);
 			if (c != null) cc.add(c);
 			c = getChangePropertyCommand(JRBasePen.PROPERTY_LINE_STYLE, selectedElement.getStyle(), lp);
@@ -220,7 +220,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 */
 		private void changeProperty() {
 			  if (combo.getSelectionIndex()<exampleImages.size()){
-					CompoundCommand cc = new CompoundCommand("Change border"); //$NON-NLS-1$
+					JSSCompoundCommand cc = new JSSCompoundCommand("Change border", models.isEmpty() ? null : models.get(0)); //$NON-NLS-1$
 			  	for(MGraphicElementLineBox model : models){
 						TemplateBorder selectedElement = exampleImages.get(combo.getSelectionIndex());
 						MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX);

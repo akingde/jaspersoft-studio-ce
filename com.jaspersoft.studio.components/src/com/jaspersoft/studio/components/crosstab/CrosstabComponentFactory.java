@@ -45,10 +45,10 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.crosstab.action.EditCrosstabStyleAction;
 import com.jaspersoft.studio.components.crosstab.action.RemoveCrosstabStylesAction;
@@ -654,7 +654,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				return null;
 			Dimension d = model.getMCrosstab().getCrosstabManager().getCellPackSize(new CrosstabCell(model.getValue()));
 			if (d != null && d.height > 0 && d.width > 0) {
-				CompoundCommand c = new CompoundCommand("Resize to container");
+				JSSCompoundCommand c = new JSSCompoundCommand("Resize to container", model);
 
 				SetValueCommand cmd = new SetValueCommand();
 

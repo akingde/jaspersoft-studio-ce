@@ -20,13 +20,13 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.messages.Messages;
 
 public class RemoveVSpaceAction extends AbstractFormattingAction {
 
@@ -41,8 +41,8 @@ public class RemoveVSpaceAction extends AbstractFormattingAction {
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/elem_add_vspace_zero.png"));  //$NON-NLS-1$
 	}
 	
-	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
-		CompoundCommand command = new CompoundCommand();
+	public static JSSCompoundCommand generateCommand(List<APropertyNode> nodes){
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 
     if (nodes.isEmpty()) return command;
     List<APropertyNode> sortedElements = sortYX( nodes );
@@ -53,6 +53,7 @@ public class RemoveVSpaceAction extends AbstractFormattingAction {
     for (int i=1; i<sortedElements.size(); ++i)
     {
         APropertyNode element = sortedElements.get(i);
+        command.setReferenceNodeIfNull(element);
         jrElement = (JRDesignElement)element.getValue();
         SetValueCommand setCommand = new SetValueCommand();
   			setCommand.setTarget(element);
@@ -68,13 +69,11 @@ public class RemoveVSpaceAction extends AbstractFormattingAction {
 	@Override
 	protected Command createAlignmentCommand() {
 		List<APropertyNode> nodes = getOperationSet();
-		CompoundCommand command = null;
-		if (nodes.isEmpty()) 
-			command = new CompoundCommand();
-		else {
+		JSSCompoundCommand command = null;
+		if (!nodes.isEmpty()){
 			command = generateCommand(nodes);
+			command.setDebugLabel(getText());
 		}
-		command.setDebugLabel(getText());
 		return command;
 	}
 

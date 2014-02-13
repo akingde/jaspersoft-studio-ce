@@ -27,9 +27,9 @@ import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.crosstab.CrosstabCell;
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
@@ -78,7 +78,7 @@ public class CreateResize {
 				return null;
 		}
 
-		CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
+		JSSCompoundCommand c = new JSSCompoundCommand("Change Cell Size", model); //$NON-NLS-1$
 
 		PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0,
 				0, sizeDelta.width, sizeDelta.height));

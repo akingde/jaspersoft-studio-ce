@@ -18,10 +18,10 @@ package com.jaspersoft.studio.editor.action.csv;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.decorator.csv.ColumnsOrderDialog;
 import com.jaspersoft.studio.editor.gef.decorator.csv.NameChooserDialog;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -47,7 +47,7 @@ public class CSVColOrderAction extends CSVAction {
 	 * @param columnValue element where the property with the column names is set, must be the root of the report
 	 * @param commandStack stack of commands where the new commands are added
 	 */
-	private void createCommand(String columnOrders, APropertyNode columnValue, CompoundCommand commandStack){
+	private void createCommand(String columnOrders, APropertyNode columnValue, JSSCompoundCommand commandStack){
 		JRPropertiesMap rootMap = (JRPropertiesMap)columnValue.getPropertyValue(MGraphicElement.PROPERTY_MAP);
 		if (rootMap == null)
 			rootMap = new JRPropertiesMap();
@@ -93,9 +93,9 @@ public class CSVColOrderAction extends CSVAction {
 	 * @param columnNames initial column order, name of the columns comma separated
 	 */
 	protected Command createAlignmentCommand(String columnNames) {
-		CompoundCommand command = new CompoundCommand();
-		command.setDebugLabel(getText());
 		APropertyNode columnValue = getRoot();
+		JSSCompoundCommand command = new JSSCompoundCommand(columnValue);
+		command.setDebugLabel(getText());
 		if (columnValue != null){
 			createCommand(columnNames, columnValue, command);
 		}

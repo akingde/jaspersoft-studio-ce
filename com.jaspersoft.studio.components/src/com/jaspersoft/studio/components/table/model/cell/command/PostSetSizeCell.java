@@ -25,9 +25,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.ColumnCell;
 import com.jaspersoft.studio.components.table.Guide;
 import com.jaspersoft.studio.components.table.TableManager;
@@ -61,7 +61,7 @@ public class PostSetSizeCell implements IPostSetValue {
 		pholder[2] = mTable.getValue();
 
 		TableManager tb = mTable.getTableManager();
-		CompoundCommand c = new CompoundCommand("Resize Table Cell");
+		JSSCompoundCommand c = new JSSCompoundCommand("Resize Table Cell", mTable);
 		ColumnCell cc = tb.getMatrixHelper().getColumnCell(
 				new ColumnCell(mcell.getType(), mcell.getGrName(), mcell
 						.getValue()));
@@ -80,9 +80,7 @@ public class PostSetSizeCell implements IPostSetValue {
 		return c;
 	}
 
-	public void createCommands(JasperDesign jDesign,
-			JRPropertiesHolder[] pholder, CompoundCommand c,
-			List<ColumnCell> cells) {
+	public void createCommands(JasperDesign jDesign, JRPropertiesHolder[] pholder, JSSCompoundCommand c, List<ColumnCell> cells) {
 		for (ColumnCell ccell : cells) {
 			if (ccell.cell == null)
 				continue;

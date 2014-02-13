@@ -27,9 +27,9 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -142,11 +142,12 @@ public class PostSetParameterName implements IPostSetValue {
 	 */
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop, Object newValue, Object oldValue) {
-		CompoundCommand c = new CompoundCommand();
+		JSSCompoundCommand c = new JSSCompoundCommand(null);
 		//Check if the updated element is a dataset and the updated property is the name
 		if (target instanceof MParameter && prop.equals(JRDesignParameter.PROPERTY_NAME)) {
 			//Get all the references to this dataset
 			ANode parentElement = ((MParameter)target).getParent().getParent();
+			c.setReferenceNodeIfNull(parentElement);
 			if (parentElement instanceof MDataset){
 				MDataset parentDataset = (MDataset)parentElement;
 				List<IDatasetContainer> references = DeleteDatasetCommand.getDatasetUsage(parentDataset.getRoot().getChildren(), parentDataset.getPropertyActualValue(JRDesignDataset.PROPERTY_NAME).toString());

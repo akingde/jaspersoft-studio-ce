@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -40,6 +39,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -137,12 +137,13 @@ public class TextAlignmentContributionItem extends ContributionItem implements I
 	 * return withoud to nothing
 	 */
 	protected void createCommand(Object data){
-		CompoundCommand changeSizeCommands = new CompoundCommand();
+		JSSCompoundCommand changeSizeCommands = new JSSCompoundCommand(null);
 		String property = "";
 		if (data instanceof VerticalAlignEnum) property = JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT;
 		else if (data instanceof HorizontalAlignEnum) property = JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT;
 		else return;
 		for (APropertyNode model : models){	
+			changeSizeCommands.setReferenceNodeIfNull(model);
 			Command c = getChangePropertyCommand(property, data, model);
 			if (c != null) {
 				changeSizeCommands.add(c);

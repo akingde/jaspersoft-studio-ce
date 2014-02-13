@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -48,6 +47,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
 import com.jaspersoft.studio.data.IFieldSetter;
@@ -302,10 +302,10 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		bptab.setControl(sectionClient);
 	}
 
-	private CompoundCommand command;
+	private JSSCompoundCommand command;
 	private Color background;
 
-	public CompoundCommand getCommand() {
+	public JSSCompoundCommand getCommand() {
 		return command;
 	}
 
@@ -325,7 +325,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	public void createCommand() {
 		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mdataset.getJasperConfiguration()
 				.getJasperDesign().getMainDesignDataset() : mdataset.getValue());
-		command = new CompoundCommand();
+		command = new JSSCompoundCommand(mdataset);
 
 		String lang = newdataset.getQuery().getLanguage();
 		((JRDesignQuery) newdataset.getQuery()).setText(dataquery.getQuery());
@@ -455,7 +455,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		}
 	}
 
-	private void addSetValueCommand(CompoundCommand cc, String property, Object value, IPropertySource target) {
+	private void addSetValueCommand(JSSCompoundCommand cc, String property, Object value, IPropertySource target) {
 		if (value != null && !value.equals(target.getPropertyValue(property))) {
 			SetValueCommand cmd = new SetValueCommand();
 			cmd.setTarget(target);

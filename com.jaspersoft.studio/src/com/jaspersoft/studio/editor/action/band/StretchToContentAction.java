@@ -26,10 +26,10 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -108,7 +108,7 @@ public class StretchToContentAction extends SelectionAction {
 				return null;
 
 			APropertyNode mcontainer = getContainerNode(n);
-			CompoundCommand cc = new CompoundCommand(getText());
+			JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
 			Dimension size = new Dimension(0, 0);
 			if (container instanceof JRDesignFrame) {
 				size = ModelUtils.getContainerSize(container.getChildren(), size);
@@ -149,13 +149,15 @@ public class StretchToContentAction extends SelectionAction {
 	}
 
 	private JRElementGroup getContainer(ANode n) {
-		Object val = n.getValue();
-		if (n instanceof IGroupElement)
-			return ((IGroupElement) n).getJRElementGroup();
-		if (val instanceof JRElementGroup)
-			return (JRElementGroup) val;
-		if (val instanceof JRDesignElement)
-			return getContainer(n.getParent());
+		if (n != null){
+			Object val = n.getValue();
+			if (n instanceof IGroupElement)
+				return ((IGroupElement) n).getJRElementGroup();
+			if (val instanceof JRElementGroup)
+				return (JRElementGroup) val;
+			if (val instanceof JRDesignElement)
+				return getContainer(n.getParent());
+		}
 		return null;
 	}
 

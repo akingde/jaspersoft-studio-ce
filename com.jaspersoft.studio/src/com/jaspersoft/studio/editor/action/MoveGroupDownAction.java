@@ -22,11 +22,11 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -136,7 +136,7 @@ public class MoveGroupDownAction extends SelectionAction implements IGlobalActio
 		EditPart selectionParent = ((EditPart)editparts.get(0)).getParent();
 		APropertyNode groupNode = getOperationSet().get(0);
     // Remove the group...
-    CompoundCommand cmd = new CompoundCommand();
+		JSSCompoundCommand cmd = new JSSCompoundCommand(groupNode);
     MGroup groupElement = null;
     if (groupNode instanceof MBandGroupHeader) {
     	cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupHeader) groupNode));

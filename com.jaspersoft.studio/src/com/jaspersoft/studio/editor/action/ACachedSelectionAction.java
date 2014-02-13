@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
@@ -47,7 +48,7 @@ public abstract class ACachedSelectionAction extends SelectionAction {
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
 			if (editpart.getModel() instanceof MGraphicElement) {
-				CompoundCommand cmd = new CompoundCommand();
+				JSSCompoundCommand cmd = new JSSCompoundCommand((ANode)editpart.getModel());
 				cmd.add(new SetValueCommand());
 				return cmd;
 			}

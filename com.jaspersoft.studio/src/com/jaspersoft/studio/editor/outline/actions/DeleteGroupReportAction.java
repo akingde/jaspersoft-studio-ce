@@ -20,13 +20,13 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.messages.Messages;
@@ -86,12 +86,13 @@ public class DeleteGroupReportAction extends DeleteAction {
 		GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
 		deleteReq.setEditParts(objects);
 
-		CompoundCommand compoundCmd = new CompoundCommand("Delete Report Group"); //$NON-NLS-1$
+		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Delete Report Group", null); //$NON-NLS-1$
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
 			if (part instanceof TreeEditPart || part instanceof BandEditPart) {
 				ANode node = (ANode) part.getModel();
+				compoundCmd.setReferenceNodeIfNull(node);
 				if (node instanceof MBandGroupHeader) {
 					cmd = new DeleteGroupCommand((MReport) node.getParent(), (MBandGroupHeader) node);
 				}

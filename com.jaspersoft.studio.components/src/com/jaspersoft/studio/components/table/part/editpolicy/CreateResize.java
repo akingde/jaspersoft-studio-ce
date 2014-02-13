@@ -23,9 +23,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.model.ANode;
@@ -54,7 +54,7 @@ public class CreateResize {
 		PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0,
 				0, sd.width, sd.height));
 		editPart.getFigure().translateToRelative(deltaRect);
-		CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
+		JSSCompoundCommand c = new JSSCompoundCommand("Change Cell Size", model); //$NON-NLS-1$
 		if (request.getSizeDelta().width != 0) {
 			int w = deltaRect.width;
 			if (request.getResizeDirection() == PositionConstants.WEST)

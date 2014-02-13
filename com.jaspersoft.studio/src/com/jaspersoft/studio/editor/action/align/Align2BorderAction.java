@@ -21,12 +21,12 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
@@ -131,13 +131,14 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 		if (editparts.isEmpty())
 			return null;
 
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement)
+			if (editpart.getModel() instanceof MGraphicElement){
 				command.add(new AlignCommand(alignment, editpart));
-			// command.add(editpart.getCommand(request));
+				command.setReferenceNodeIfNull(editpart.getModel());
+			}
 		}
 		return command;
 	}

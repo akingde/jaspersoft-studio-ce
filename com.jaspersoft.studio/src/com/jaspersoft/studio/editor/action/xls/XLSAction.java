@@ -16,10 +16,10 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.editor.action.pdf.PropertiesList;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -155,12 +155,15 @@ public class XLSAction extends CustomSelectionAction {
 	protected Command createCommand4Execute(List<?> editparts) {
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
 			return null;
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement)
-				command.add(createCommand((MGraphicElement) editpart.getModel()));
+			if (editpart.getModel() instanceof MGraphicElement){
+				MGraphicElement graphElement = (MGraphicElement) editpart.getModel();
+				command.add(createCommand(graphElement));
+				command.setReferenceNodeIfNull(graphElement);
+			}
 		}
 		freshChecked = false;
 		return command;

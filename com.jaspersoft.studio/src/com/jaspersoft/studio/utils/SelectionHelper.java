@@ -49,6 +49,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.util.StringInput;
@@ -72,6 +73,18 @@ public class SelectionHelper {
 		MRoot root = (MRoot) jrxmlEditor.getModel();
 		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
 		return node;
+	}
+	
+	/**
+	 * Return the root node of the actually opened editor or null if it is not 
+	 * available
+	 */
+	public static ANode getOpenedRoot(){
+		JrxmlEditor editor = (JrxmlEditor)getActiveJRXMLEditor();
+		if (editor != null){
+			return (ANode)editor.getModel();
+		}
+		return null;
 	}
 
 	public static IEditorPart getActiveJRXMLEditor() {
@@ -111,18 +124,22 @@ public class SelectionHelper {
 	public static void setSelection(JRDesignElement jrElement, boolean add) {
 		EditPart ep = getEditPart(jrElement);
 		if (ep != null) {
-			ISelection sel = ep.getViewer().getSelection();
-			List<Object> s = new ArrayList<Object>();
-			s.add(ep);
-			if (add) {
-				if (sel instanceof StructuredSelection) {
-					for (Object o : ((StructuredSelection) sel).toList()) {
-						s.add(o);
+			//The selection is set only if the refresh is enabled
+			ANode mainNode = JSSCompoundCommand.getMainNode((ANode)ep.getModel());
+			if (!JSSCompoundCommand.isRefreshEventsIgnored(mainNode)){
+				ISelection sel = ep.getViewer().getSelection();
+				List<Object> s = new ArrayList<Object>();
+				s.add(ep);
+				if (add) {
+					if (sel instanceof StructuredSelection) {
+						for (Object o : ((StructuredSelection) sel).toList()) {
+							s.add(o);
+						}
 					}
 				}
+				ep.getViewer().select(ep);
+				ep.getViewer().reveal(ep);
 			}
-			ep.getViewer().select(ep);
-			ep.getViewer().reveal(ep);
 		}
 
 	}

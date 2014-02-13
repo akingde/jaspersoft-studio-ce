@@ -21,7 +21,6 @@ import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -29,9 +28,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
@@ -161,11 +160,11 @@ public class CreateElementCommand extends Command {
 		executeCommands();
 	}
 
-	private CompoundCommand commands;
+	private JSSCompoundCommand commands;
 
 	protected void addCommand(Command command) {
 		if (commands == null)
-			commands = new CompoundCommand();
+			commands = new JSSCompoundCommand(srcNode);
 		commands.add(command);
 	}
 

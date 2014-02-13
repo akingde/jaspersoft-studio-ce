@@ -23,9 +23,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -48,12 +48,13 @@ public class CenterInParentAction extends AbstractFormattingAction {
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/align-container-center.png"));  //$NON-NLS-1$
 	}
 	
-	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
-		CompoundCommand command = new CompoundCommand();
+	public static JSSCompoundCommand generateCommand(List<APropertyNode> nodes){
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		
 		if (nodes.isEmpty()) return command;
     for (APropertyNode element : nodes)
     {
+    		command.setReferenceNodeIfNull(element);
         ANode parent = element.getParent();
         
         Dimension parentBounds = null;
@@ -92,13 +93,11 @@ public class CenterInParentAction extends AbstractFormattingAction {
 	@Override
 	protected Command createAlignmentCommand() {
 		List<APropertyNode> nodes = getOperationSet();
-		CompoundCommand command = null;
-		if (nodes.isEmpty()) 
-			command = new CompoundCommand();
-		else {
+		Command command = null;
+		if (!nodes.isEmpty()) {
 			command = generateCommand(nodes);
+			command.setDebugLabel(getText());
 		}
-		command.setDebugLabel(getText());
 		return command;
 	}
 

@@ -367,6 +367,12 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(),
 		// evt.getNewValue());
 		// }
+		
+		firePropertyChange(evt);
+	}
+	
+	
+	protected void firePropertyChange(PropertyChangeEvent evt){
 		getPropertyChangeSupport().firePropertyChange(evt);
 	}
 

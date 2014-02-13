@@ -34,11 +34,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.list.commands.element.CreateListElement4ObjectCommand;
 import com.jaspersoft.studio.components.list.editor.ListEditor;
@@ -302,8 +302,7 @@ public class ListComponentFactory implements IComponentFactory {
 				Dimension d = ModelUtils.getContainerSize(jrList.getContents()
 						.getChildren(), new Dimension(0, 0));
 				if (d.height > 0 && d.width > 0) {
-					CompoundCommand c = new CompoundCommand(
-							"Resize to container");
+					JSSCompoundCommand c = new JSSCompoundCommand("Resize to container", model);
 
 					SetValueCommand cmd = new SetValueCommand();
 					cmd.setTarget((IPropertySource) model);

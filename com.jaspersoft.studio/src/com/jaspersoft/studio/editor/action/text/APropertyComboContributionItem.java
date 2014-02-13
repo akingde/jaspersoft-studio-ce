@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -39,6 +38,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
 import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -73,7 +73,7 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 			StructuredSelection ss = (StructuredSelection) selection;
 			boolean fontsareset = false;
 			Object fontSize = null;
-			for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
+			for (Iterator<?> it = ss.iterator(); it.hasNext();) {
 				Object obj = it.next();
 				if (obj instanceof EditPart)
 					obj = ((EditPart) obj).getModel();
@@ -157,14 +157,18 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 	private void onSelection() {
 		if (selection.isEmpty())
 			return;
-		CompoundCommand cc = new CompoundCommand();
+		JSSCompoundCommand cc = new JSSCompoundCommand(null);
 		StructuredSelection ss = (StructuredSelection) selection;
-		for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
+		for (Iterator<?> it = ss.iterator(); it.hasNext();) {
 			Object obj = it.next();
 			if (obj instanceof EditPart)
 				obj = ((EditPart) obj).getModel();
 
-			cc.add(createCommand(obj, combo.getText()));
+			Command changeValueCmd = createCommand(obj, combo.getText());
+			if (changeValueCmd != null){
+				cc.add(changeValueCmd);
+				cc.setReferenceNodeIfNull(obj);
+			}
 			getCommandStack().execute(cc);
 		}
 	}

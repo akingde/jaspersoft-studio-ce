@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
@@ -191,7 +192,7 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 * @see org.eclipse.ui.views.properties.PropertySheetEntry#resetPropertyValue()
 	 */
 	public void resetPropertyValue() {
-		CompoundCommand cc = new CompoundCommand();
+		JSSCompoundCommand cc = new JSSCompoundCommand(null);
 		ResetValueCommand restoreCmd;
 
 		if (getParent() == null)
@@ -209,6 +210,7 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 				restoreCmd.setTarget(source);
 				restoreCmd.setPropertyId(getDescriptor().getId());
 				cc.add(restoreCmd);
+				cc.setReferenceNodeIfNull(source);
 				change = true;
 			}
 		}

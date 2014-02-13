@@ -16,11 +16,11 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -53,13 +53,15 @@ public abstract class ABooleanPropertyAction extends ACachedSelectionAction {
 		if (editparts.isEmpty())
 			return null;
 		boolean checked = !isChecked();
-		CompoundCommand cc = new CompoundCommand(getText());
+		JSSCompoundCommand cc = new JSSCompoundCommand(getText(), null);
 		for (Object obj : editparts) {
-			if (obj instanceof EditPart)
-				obj = ((EditPart) obj).getModel();
-
+			if (obj instanceof EditPart){
+				EditPart part = (EditPart) obj;
+				cc.setReferenceNodeIfNull(part.getModel());
+				obj = part.getModel();
+			}
+			
 			if (checkSelection(obj)) {
-
 				cc.add(createCommand(obj, checked));
 			} else
 				return null;

@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * 
  * @author Chicu Veaceslav
  */
-public class MPage extends APropertyNode implements IGraphicElement, IContainerEditPart {
+public class MPage extends MLockableRefresh implements IGraphicElement, IContainerEditPart {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 	private ANode realParent;

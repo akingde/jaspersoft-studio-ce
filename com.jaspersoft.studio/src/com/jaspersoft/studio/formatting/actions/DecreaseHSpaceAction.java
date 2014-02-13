@@ -16,15 +16,15 @@
 package com.jaspersoft.studio.formatting.actions;
 
 import java.util.List;
-import com.jaspersoft.studio.messages.Messages;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
 
@@ -46,8 +46,8 @@ public class DecreaseHSpaceAction extends AbstractFormattingAction{
 		return getOperationSet().size()>1;
 	}
 	
-	public static CompoundCommand generateCommand(List<APropertyNode> nodes){
-		CompoundCommand command = new CompoundCommand();
+	public static JSSCompoundCommand generateCommand(List<APropertyNode> nodes){
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		   
 		if (nodes.isEmpty()) return command;
 	  nodes = sortXY(nodes);
@@ -55,6 +55,7 @@ public class DecreaseHSpaceAction extends AbstractFormattingAction{
     for (int i=1; i<nodes.size(); ++i)
     {
     		APropertyNode node = nodes.get(i);
+    		command.setReferenceNodeIfNull(node);
         JRDesignElement element = (JRDesignElement)node.getValue();
       	SetValueCommand setCommand = new SetValueCommand();
   			setCommand.setTarget(node);
@@ -68,13 +69,11 @@ public class DecreaseHSpaceAction extends AbstractFormattingAction{
 
 	protected Command createAlignmentCommand() {
 			List<APropertyNode> nodes = getOperationSet();
-			CompoundCommand command = null;
-			if (nodes.isEmpty()) 
-				command = new CompoundCommand();
-			else {
+			JSSCompoundCommand command = null;
+			if (!nodes.isEmpty()){
 				command = generateCommand(nodes);
+				command.setDebugLabel(getText());
 			}
-			command.setDebugLabel(getText());
 			return command;
 	}
 	

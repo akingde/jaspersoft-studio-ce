@@ -30,13 +30,13 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
@@ -160,10 +160,11 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 		if (editparts.size() < 2)
 			return null;
 
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
+			command.setReferenceNodeIfNull(editpart.getModel());
 			command.add(editpart.getCommand(request));
 		}
 		return command;

@@ -22,11 +22,11 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -139,20 +139,20 @@ public class MoveGroupUpAction extends SelectionAction implements IGlobalAction 
     APropertyNode groupNode = getOperationSet().get(0);
     // Remove the group...
 
-   CompoundCommand cmd = new CompoundCommand();
-   MGroup groupElement = null;
-	 if (groupNode instanceof MBandGroupHeader) {
-			cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupHeader) groupNode));
-			groupElement = ((MBandGroupHeader)groupNode).getMGroup();
-		} else if (groupNode instanceof MBandGroupFooter) {
-			cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupFooter) groupNode));
-			groupElement = ((MBandGroupFooter)groupNode).getMGroup();
-		}
-		
-		int index = groupNode.getJasperDesign().getGroupsList().indexOf(groupElement.getValue());
-		cmd.add(new CreateGroupCommand((MReport) groupNode.getParent(), groupElement, index-1)); 
-		execute(cmd);
-		setSelection(selectionParent,groupNode);
+    JSSCompoundCommand cmd = new JSSCompoundCommand(groupNode);
+	   MGroup groupElement = null;
+		 if (groupNode instanceof MBandGroupHeader) {
+				cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupHeader) groupNode));
+				groupElement = ((MBandGroupHeader)groupNode).getMGroup();
+			} else if (groupNode instanceof MBandGroupFooter) {
+				cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupFooter) groupNode));
+				groupElement = ((MBandGroupFooter)groupNode).getMGroup();
+			}
+			
+			int index = groupNode.getJasperDesign().getGroupsList().indexOf(groupElement.getValue());
+			cmd.add(new CreateGroupCommand((MReport) groupNode.getParent(), groupElement, index-1)); 
+			execute(cmd);
+			setSelection(selectionParent,groupNode);
 	}
 	
 

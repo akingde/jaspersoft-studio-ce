@@ -21,9 +21,9 @@ import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.IPostSetValue;
@@ -45,9 +45,10 @@ public class PostSetFieldName implements IPostSetValue {
 	 */
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop, Object newValue, Object oldValue) {
-		CompoundCommand c = new CompoundCommand();
+		JSSCompoundCommand c = new JSSCompoundCommand(null);
 		if (target instanceof MField && prop.equals(JRDesignField.PROPERTY_NAME)) {
 			MField targetNode = (MField) target;
+			c.setReferenceNodeIfNull(targetNode);
 			JRDesignDataset d = ModelUtils.getDataset(targetNode);
 			if (d != null){
 				for(INode field : ModelUtils.getSortFields(targetNode)){

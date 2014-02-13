@@ -20,11 +20,11 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -73,11 +73,12 @@ public class DeleteRowAction extends DeleteAction {
 		GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
 		deleteReq.setEditParts(objects);
 
-		CompoundCommand compoundCmd = new CompoundCommand(getText());
+		JSSCompoundCommand compoundCmd = new JSSCompoundCommand(getText(), null);
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
 			if (object.getModel() instanceof AMCollection && !(object.getModel() instanceof MTableDetail)) {
 				AMCollection model = (AMCollection) object.getModel();
+				compoundCmd.setReferenceNodeIfNull(model);
 				for(INode child : model.getChildren()){
 					if (child instanceof MCell){
 						Command cmd = TableComponentFactory.getDeleteCellCommand(model, (MCell)child);

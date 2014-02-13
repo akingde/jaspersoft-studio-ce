@@ -21,9 +21,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeTracker;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -46,7 +46,7 @@ public class PostSetSizeBand implements IPostSetValue {
 						.equals(JasperDesign.PROPERTY_RIGHT_MARGIN))) {
 			MReport mrep = (MReport) target;
 			JasperDesign jDesign = mrep.getJasperDesign();
-			CompoundCommand c = new CompoundCommand();
+			JSSCompoundCommand c = new JSSCompoundCommand(mrep);
 			for (INode n : mrep.getChildren()) {
 				if (n instanceof MBand && n.getValue() != null)
 					c.add(getBandResizeCommand((MBand) n, jDesign));

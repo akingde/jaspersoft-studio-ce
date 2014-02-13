@@ -20,9 +20,9 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -69,7 +69,7 @@ public class PasteCommand extends Command {
 			return;
 		createdNodes = 0;
 		for (ANode node : list.keySet()) {
-			CompoundCommand cmd = new CompoundCommand();
+			JSSCompoundCommand cmd = new JSSCompoundCommand(node);
 			// create new Node put, clone into it
 			try {
 				Object value = node.getValue();

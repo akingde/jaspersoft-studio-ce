@@ -20,11 +20,11 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
@@ -68,11 +68,12 @@ public class DeleteColumnAction extends DeleteAction {
 		GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
 		deleteReq.setEditParts(objects);
 
-		CompoundCommand compoundCmd = new CompoundCommand(getText());
+		JSSCompoundCommand compoundCmd = new JSSCompoundCommand(getText(), null);
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
 			if (object.getModel() instanceof MColumn) {
 				MColumn model = (MColumn) object.getModel();
+				compoundCmd.setReferenceNodeIfNull(model);
 				Command cmd = TableComponentFactory.getDeleteColumnCommand(
 						model.getParent(), model);
 				if (cmd != null)

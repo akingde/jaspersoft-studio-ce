@@ -44,6 +44,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
@@ -117,9 +118,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		Request target = getTargetRequest();
 		if (target instanceof CreateRequest) {
 			EditPart container = getContainer();
-			if (container instanceof BandEditPart && 
-							((MBand) container.getModel()).getBandType() == BandTypeEnum.DETAIL &&
-																							previusCommand instanceof CompoundCommand) {
+			if (container instanceof BandEditPart && ((MBand) container.getModel()).getBandType() == BandTypeEnum.DETAIL && previusCommand instanceof CompoundCommand) {
 				CompoundCommand compCommand = (CompoundCommand) previusCommand;
 				List<Command> commandToAdd = new ArrayList<Command>();
 				// I'm creating something inside the detail band
@@ -254,16 +253,16 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
    * @param parentPart root node of the report tree, used to refresh its children
    * @return a list of command
    */
-  private CompoundCommand moveBandsCommand(List<MBand> moved, int location, final EditPart parentPart){
+  private JSSCompoundCommand moveBandsCommand(List<MBand> moved, int location, final EditPart parentPart){
  	  final ANode report = moved.get(0).getParent(); 
   	
  	  /**
  	   * Customized compound command that after the execute and undo force a refresh of the editor and outline
  	   */
- 	  CompoundCommand cmd = new CompoundCommand(){
+ 	  JSSCompoundCommand cmd = new JSSCompoundCommand(report){
  	  	
       //I create a fake command to force the refresh of the editor and outline panels
-  		private void refreshVisuals(){
+  		protected void refreshVisuals(){
 	 			 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), "refresh", null, null);
 	 			 report.propertyChange(event);
 					 for(Object part : parentPart.getChildren()){
@@ -310,7 +309,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
    * 
    * @return command to move the detail band or null if the user is not moving the band
    */
-	private CompoundCommand dropDetailBands(){
+	private JSSCompoundCommand dropDetailBands(){
 		if (getCurrentEvent().detail != DND.DROP_MOVE) return null;
 		if (getCurrentEvent().item == null || !(getCurrentEvent().item instanceof TreeItem)) return null;
 		Tree tree = ((TreeItem)getCurrentEvent().item).getParent();
@@ -359,7 +358,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 	protected void handleDrop() {
 		updateTargetRequest();
 		updateTargetEditPart();
-		CompoundCommand movingDetails = dropDetailBands();
+		JSSCompoundCommand movingDetails = dropDetailBands();
 		if (movingDetails != null){
 			getViewer().getEditDomain().getCommandStack().execute(movingDetails);
 		} else if (getTargetEditPart() != null) {
@@ -378,15 +377,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 			}
 			if (command != null && command.canExecute())
 				if (command instanceof CompoundCommand){
-					//If the command is a compound command i execute its content one by one
-					for(Object singleCmd : ((CompoundCommand)command).getCommands()){
-						if (singleCmd instanceof CreateElementCommand){
-							CreateElementCommand cmd = (CreateElementCommand)singleCmd;
-							getViewer().getEditDomain().getCommandStack().execute(cmd);
-							//if one command is cancelled during the execution even the following are skipped
-							if (cmd.isCancelled()) break;
-						} else getViewer().getEditDomain().getCommandStack().execute((Command)singleCmd);
-					}
+					executeCompoundCOmmand((CompoundCommand)command);
 				}
 				else getViewer().getEditDomain().getCommandStack().execute(command);
 			else
@@ -394,6 +385,44 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		} else
 			getCurrentEvent().detail = DND.DROP_NONE;
 		selectAddedObject();
+	}
+	
+	private void executeCompoundCOmmand(CompoundCommand cmd){
+		JSSCompoundCommand compound = new JSSCompoundCommand(cmd, null){
+			@Override
+			public void execute() {
+				if (size() > 0){
+					List<?> commands = getCommands(); 
+					setIgnoreEvents(true);
+					//If the command is a compound command i execute its content one by one
+					for (int i = 0; i < size(); i++) {
+						Command cmd = (Command) commands.get(i);
+						if (cmd instanceof CreateElementCommand){
+							CreateElementCommand createCnd = (CreateElementCommand)cmd;
+							createCnd.execute();
+							//if one command is cancelled during the execution even the following are skipped
+							if (createCnd.isCancelled()) break;
+						} else cmd.execute();
+					}
+					setIgnoreEvents(false);
+					refreshVisuals();
+				}
+			}
+		};
+		//Found a node to disable the refresh
+		if (getCurrentEvent().data instanceof List<?>){
+			List<?> list = (List<?>)getCurrentEvent().data;
+			for(Object obj : list){
+				if (obj instanceof ANode){
+					ANode node = JSSCompoundCommand.getMainNode((ANode)obj);
+					if (node != null){
+						compound.setReferenceNodeIfNull(node);
+						break;
+					}
+				}
+			}
+		}
+		getViewer().getEditDomain().getCommandStack().execute(compound);
 	}
 
 	private void selectAddedObject() {

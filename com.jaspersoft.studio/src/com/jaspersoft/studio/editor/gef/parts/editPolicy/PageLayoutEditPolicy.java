@@ -33,13 +33,13 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.CalloutElementResizableEditPolicy;
 import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
@@ -176,7 +176,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			ANode parent = (ANode) getHost().getModel();
 			Rectangle copyconstraint = constraint.getCopy();
 			if (request.getNewObject() instanceof Collection<?>) {
-				CompoundCommand ccmd = new CompoundCommand();
+				JSSCompoundCommand ccmd = new JSSCompoundCommand(parent);
 				Collection<?> objs = (Collection<?>) request.getNewObject();
 				if (parent instanceof IGraphicElement && !isGraphicObjects(objs) && objs.size() > 1) {
 					Rectangle rparent = ((IGraphicElement) parent).getBounds();

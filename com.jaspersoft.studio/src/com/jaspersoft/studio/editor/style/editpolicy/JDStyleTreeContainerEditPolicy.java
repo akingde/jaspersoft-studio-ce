@@ -20,12 +20,12 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.editpolicies.TreeContainerEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.style.StyleTreeEditPartFactory;
@@ -56,12 +56,13 @@ public class JDStyleTreeContainerEditPolicy extends TreeContainerEditPolicy {
 	 * org.eclipse.gef.editpolicies.TreeContainerEditPolicy#getAddCommand(org.eclipse.gef.requests.ChangeBoundsRequest)
 	 */
 	protected Command getAddCommand(ChangeBoundsRequest request) {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		List<?> editparts = request.getEditParts();
 		int index = findIndexOfTreeItemAt(request.getLocation());
 
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart child = (EditPart) editparts.get(i);
+			command.setReferenceNodeIfNull(child.getModel());
 			if (isAncestor(child, getHost())) {
 				command.add(UnexecutableCommand.INSTANCE);
 			} else {
@@ -97,12 +98,13 @@ public class JDStyleTreeContainerEditPolicy extends TreeContainerEditPolicy {
 	 * ChangeBoundsRequest)
 	 */
 	protected Command getMoveChildrenCommand(ChangeBoundsRequest request) {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		List<?> editparts = request.getEditParts();
 		List<?> children = getHost().getChildren();
 		int newIndex = findIndexOfTreeItemAt(request.getLocation());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart child = (EditPart) editparts.get(i);
+			command.setReferenceNodeIfNull(child.getModel());
 			int tempIndex = newIndex;
 			int oldIndex = children.indexOf(child);
 			if (oldIndex == tempIndex || oldIndex + 1 == tempIndex) {

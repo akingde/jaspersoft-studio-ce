@@ -22,9 +22,9 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -87,7 +87,8 @@ public class PostSetDatasetName implements IPostSetValue {
 	 */
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop, Object newValue, Object oldValue) {
-		CompoundCommand c = new CompoundCommand();
+		JSSCompoundCommand c = new JSSCompoundCommand(null);
+		c.setReferenceNodeIfNull(target);
 		//Check if the updated element is a dataset and the updated property is the name
 		if (target instanceof MDataset && prop.equals(JRDesignDataset.PROPERTY_NAME)) {
 			//Get all the references to this dataset

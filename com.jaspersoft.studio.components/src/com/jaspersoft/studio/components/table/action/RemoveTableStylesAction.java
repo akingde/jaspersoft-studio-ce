@@ -32,11 +32,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
@@ -143,7 +143,7 @@ public class RemoveTableStylesAction extends SelectionAction {
 	 * @param cell the cell from where the style must be removed 
 	 * @param container compound command where the new commands will be stored
 	 */
-	protected void createCommand(Cell cell, CompoundCommand container){
+	protected void createCommand(Cell cell, JSSCompoundCommand container){
 		if (cell != null && cell instanceof DesignCell){
 			container.add(new RemoveStyleCommand((DesignCell)cell));
 			if (deleteStyles && cell.getStyle() != null){
@@ -162,7 +162,7 @@ public class RemoveTableStylesAction extends SelectionAction {
 	 * @param columns not null list of columns
 	 * @param container compound command where the new commands will be stored
 	 */
-	protected void createCommandForColumns(List<BaseColumn> columns, CompoundCommand command){
+	protected void createCommandForColumns(List<BaseColumn> columns, JSSCompoundCommand command){
 		for (BaseColumn col : columns){
 			createCommand(col.getColumnFooter(),command);
 			createCommand(col.getColumnHeader(),command);
@@ -191,10 +191,11 @@ public class RemoveTableStylesAction extends SelectionAction {
 	 * @return the command to remove all the styles
 	 */
 	protected Command changeStyleCommand(List<EditPart> parts) {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		deletedStyles = new HashSet<String>();
 		for(EditPart part : parts){
 			MTable table = (MTable)part.getModel();
+			command.setReferenceNodeIfNull(table);
 			design = table.getJasperDesign();
 			StandardTable jrTable = (StandardTable)((JRDesignComponentElement)table.getValue()).getComponent();
 			createCommandForColumns(jrTable.getColumns(), command);

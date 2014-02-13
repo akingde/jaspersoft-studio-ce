@@ -20,10 +20,10 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.decorator.csv.NameChooserDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -90,10 +90,10 @@ public class CSVRootAction extends CSVAction {
 	 * @param fieldValue the value inserted by the user for the field
 	 * @return the command to set the value of the attribute to fieldValue
 	 */
-	protected Command createAlignmentCommand(String fieldValue) {
-		CompoundCommand command = new CompoundCommand();
-		command.setDebugLabel(getText());
+	protected JSSCompoundCommand createAlignmentCommand(String fieldValue) {
 		APropertyNode root = getRoot();
+		JSSCompoundCommand command = new JSSCompoundCommand(root);
+		command.setDebugLabel(getText());
 		if (root != null){
 			command.add(createCommand(root, fieldValue));
 		}
@@ -101,7 +101,7 @@ public class CSVRootAction extends CSVAction {
 	}
 	
 	@Override
-	protected Command createCommand(List<?> selectedObjects) {
+	protected JSSCompoundCommand createCommand(List<?> selectedObjects) {
 		return createAlignmentCommand(""); //$NON-NLS-1$
 	}
 	

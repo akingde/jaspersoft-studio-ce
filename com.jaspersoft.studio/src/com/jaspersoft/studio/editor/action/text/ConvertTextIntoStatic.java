@@ -29,10 +29,10 @@ import net.sf.jasperreports.engine.design.JRDesignTextField;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
@@ -177,7 +177,7 @@ public class ConvertTextIntoStatic extends SelectionAction {
 	 * create in their place similar static texts
 	 */
 	protected Command createAlignmentCommand() {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
 			return command;
@@ -185,6 +185,9 @@ public class ConvertTextIntoStatic extends SelectionAction {
 			if (part instanceof TextFieldFigureEditPart){
 				TextFieldFigureEditPart editPart = (TextFieldFigureEditPart)part;
 				MTextField textField = (MTextField)editPart.getModel();
+				
+				command.setReferenceNodeIfNull(textField);
+				
 				DeleteElementCommand deleteCommand = new DeleteElementCommand(null, textField);
 				MStaticText modelText = new MStaticText();
 				

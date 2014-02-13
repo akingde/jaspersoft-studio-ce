@@ -16,10 +16,10 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.CustomSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -201,11 +201,14 @@ public abstract class PdfActionAbstact extends CustomSelectionAction {
 	protected Command createCommand4execute(List<?> editparts) {
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
 			return null;
-		CompoundCommand command = new CompoundCommand(getText());
+		JSSCompoundCommand command = new JSSCompoundCommand(getText(), null);
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement)
-				command.add(createCommand((MGraphicElement) editpart.getModel()));
+			if (editpart.getModel() instanceof MGraphicElement){
+				MGraphicElement grModel = (MGraphicElement) editpart.getModel();
+				command.setReferenceNodeIfNull(grModel);
+				command.add(createCommand(grModel));
+			}
 		}
 		freshChecked = false;
 		return command;

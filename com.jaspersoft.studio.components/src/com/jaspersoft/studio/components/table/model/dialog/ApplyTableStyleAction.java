@@ -35,8 +35,7 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ModeEnum;
 
-import org.eclipse.gef.commands.CompoundCommand;
-
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.editor.style.ApplyStyleAction;
 import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
@@ -237,7 +236,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	 * @param removeOldStyles if updateOldStyles is false, after the new styles are created the old one are deleted
 	 */
 	public void updateStyle(JasperDesign design, List<JRDesignStyle> newStyles, boolean updatOldStyles, boolean removeOldStyles){
-		CompoundCommand commands = new CompoundCommand();
+		JSSCompoundCommand commands = new JSSCompoundCommand(null);
 		if (updatOldStyles){
 			JRDesignStyle[] actualStyles = getStylesFromTable();
 			for(int i=0; i<actualStyles.length; i++){
@@ -289,7 +288,7 @@ public class ApplyTableStyleAction extends ApplyStyleAction {
 	{
     	String baseName = "Table";
     	TableStyle style = (TableStyle)getStyle();
-    	CompoundCommand commands = new CompoundCommand();
+    	JSSCompoundCommand commands = new JSSCompoundCommand(null);
 		for (int i = 0;; i++) {
 			String name = baseName;
 			if (i > 0) {

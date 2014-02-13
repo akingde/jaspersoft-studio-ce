@@ -19,10 +19,10 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -75,7 +75,7 @@ public class BringToBackAction extends SelectionAction implements IGlobalAction 
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring To Back"); //$NON-NLS-1$
+		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring To Back", null); //$NON-NLS-1$
 		int j = 0;
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
@@ -83,6 +83,7 @@ public class BringToBackAction extends SelectionAction implements IGlobalAction 
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
+				compoundCmd.setReferenceNodeIfNull(parent);
 				if (parent != null && parent.getChildren().indexOf(model) > 0) {
 					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, j);
 					j++;

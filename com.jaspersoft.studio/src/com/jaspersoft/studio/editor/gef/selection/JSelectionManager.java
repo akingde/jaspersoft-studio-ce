@@ -23,8 +23,10 @@ import org.eclipse.gef.SelectionManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.model.ANode;
 
 /**
  * Class that extend the default SelectionManager to change the behavior when a selection of more elements 
@@ -36,6 +38,36 @@ public class JSelectionManager extends SelectionManager {
 	
 	private static EditPart lastSelected = null;
 	
+	/**
+	 * Take a node from the selection check if for its model the refresh is ignored
+	 * or not
+	 * 
+	 * @param selection actual selection
+	 * @return true if the refresh is ignored, false otherwise
+	 */
+	private boolean isRefreshIgnored(List<?> selection){
+		for (Object item : selection){
+			if (item instanceof EditPart) {
+				EditPart part = (EditPart)item;
+				if (part.getModel() instanceof ANode){
+					ANode mainNode = JSSCompoundCommand.getMainNode((ANode)part.getModel());
+					if (mainNode != null) return JSSCompoundCommand.isRefreshEventsIgnored(mainNode);
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Before to call the deselect check if the refresh is ignored or not, since it case a lot
+	 * of updates
+	 */
+	@Override
+	public void deselect(EditPart editpart) {
+		if (!JSSCompoundCommand.isRefreshEventsIgnored((ANode)editpart.getModel())){
+			super.deselect(editpart);
+		} 
+	}
 	
 	/**
 	 * Sets the selection, override the original method to store and give the status of selected primary
@@ -52,6 +84,9 @@ public class JSelectionManager extends SelectionManager {
 		if (!(newSelection instanceof IStructuredSelection))
 			return;
 		List<?> orderedSelection = ((IStructuredSelection) newSelection).toList();
+		//Beofre to set a selection that causes a lot of events check if the refresh is ignored
+		if (isRefreshIgnored(orderedSelection)) 
+			return;
 		EditPart focusedEditPart = null;
 		if (!orderedSelection.isEmpty()) {
 			Iterator<?> itr = orderedSelection.iterator();

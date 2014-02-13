@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
@@ -86,10 +86,10 @@ public class CreateColumnGroupAction extends ACreateAction {
 			else
 				return super.createCommand(objects);
 		}
-		CompoundCommand c = new CompoundCommand("New Column Group");
 
 		MColumn fmc = columns.get(0);
 		ANode mparent = fmc.getParent();
+		JSSCompoundCommand c = new JSSCompoundCommand("New Column Group", mparent);
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);

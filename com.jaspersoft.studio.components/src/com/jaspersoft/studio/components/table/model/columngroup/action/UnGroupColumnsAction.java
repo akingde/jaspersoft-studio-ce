@@ -19,10 +19,10 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
@@ -75,7 +75,7 @@ public class UnGroupColumnsAction extends SelectionAction {
 			if (sel instanceof TableCellEditPart)
 				sel = ((TableCellEditPart) sel).getModel();
 			if (sel instanceof MColumn) {
-				CompoundCommand c = new CompoundCommand("Ungroup Columns");
+				JSSCompoundCommand c = new JSSCompoundCommand("Ungroup Columns", (ANode)sel);
 
 				MColumn fmc = (MColumn) sel;
 				ANode mparent = fmc.getParent();

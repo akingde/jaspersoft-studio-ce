@@ -33,11 +33,11 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
@@ -171,7 +171,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 
 						return cmd;
 					} else {
-						CompoundCommand c = new CompoundCommand();
+						JSSCompoundCommand c = new JSSCompoundCommand(cmodel);
 
 						c.add(new OrphanElementCommand(cparent, cmodel));
 						c.add(new CreateElementCommand(getModel(), cmodel, rect, -1));

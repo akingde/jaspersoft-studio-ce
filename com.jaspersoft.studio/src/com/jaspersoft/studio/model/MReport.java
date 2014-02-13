@@ -79,7 +79,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends APropertyNode implements IGraphicElement, IContainerEditPart, IContainerLayout, IPastable {
+public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout, IPastable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 

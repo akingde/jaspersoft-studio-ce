@@ -28,9 +28,9 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.handles.HandleBounds;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
@@ -115,11 +115,11 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 
 						return cmd;
 					} else {
-						CompoundCommand c = new CompoundCommand();
+						JSSCompoundCommand c = new JSSCompoundCommand(getModel());
 						// Without this an element it's one point up when placed into a frame
 						rect.y++;
 						c.add(OutlineTreeEditPartFactory.getOrphanCommand(cmodel.getParent(), cmodel));
-						c.add(new CreateElementCommand((MFrame) getModel(), cmodel, rect, -1));
+						c.add(new CreateElementCommand(getModel(), cmodel, rect, -1));
 						return c;
 					}
 				} else {

@@ -21,13 +21,13 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.messages.Messages;
 
 public class OrganizeAsTableAction extends AbstractFormattingAction {
 
@@ -50,7 +50,7 @@ public class OrganizeAsTableAction extends AbstractFormattingAction {
   	
 	protected Command createAlignmentCommand() {
 		List<APropertyNode> nodes = getOperationSet();
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());
 		
 		if (nodes.isEmpty()) return command;
@@ -60,6 +60,7 @@ public class OrganizeAsTableAction extends AbstractFormattingAction {
 	  command.add(AlignMarginTopAction.generateCommand(nodes));
 	  for (APropertyNode element : nodes)
 	  {
+	  		command.setReferenceNodeIfNull(element);
 	      // 1. Find the parent...
 	      Rectangle oldBounds = getElementBounds((JRDesignElement)element.getValue());
   			SetValueCommand setCommand = new SetValueCommand();

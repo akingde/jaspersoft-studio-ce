@@ -17,7 +17,6 @@ package com.jaspersoft.studio.components.table.action;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -30,6 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
@@ -119,7 +119,7 @@ public class EditStyleAction extends SelectionAction {
 	 * @return the command to update the styles of the table
 	 */
 	protected Command changeStyleCommand(MTable table, TableStyle newStyle, boolean updateOldStyles) {
-		CompoundCommand command = new CompoundCommand();
+		JSSCompoundCommand command = new JSSCompoundCommand(table);
 		command.setDebugLabel(getText());
 		UpdateStyleCommand updateCommand = new UpdateStyleCommand(table, newStyle,updateOldStyles);
 		command.add(updateCommand);

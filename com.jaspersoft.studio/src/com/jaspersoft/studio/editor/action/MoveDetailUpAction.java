@@ -22,11 +22,11 @@ import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -122,8 +122,8 @@ public class MoveDetailUpAction extends SelectionAction implements IGlobalAction
 		EditPart selectionParent = ((EditPart)editparts.get(0)).getParent();
 		APropertyNode node = getOperationSet().get(0);
     // Remove the band
-    CompoundCommand cmd = new CompoundCommand();
     MBand bandNode = (MBand)node;
+		JSSCompoundCommand cmd = new JSSCompoundCommand(bandNode);
     DeleteBandDetailCommand deleteBand = new DeleteBandDetailCommand(bandNode.getParent(), bandNode);
     cmd.add(deleteBand);
 		int index = ((JRDesignSection)bandNode.getJasperDesign().getDetailSection()).getBandsList().indexOf(bandNode.getValue());

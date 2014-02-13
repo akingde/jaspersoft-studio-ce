@@ -28,11 +28,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -135,7 +135,7 @@ public class LayoutAction extends SelectionAction {
 				size.expand(prnt.getLeftPadding(), prnt.getTopPadding());
 			}
 			APropertyNode mcontainer = getContainerNode(n);
-			CompoundCommand cc = new CompoundCommand(getText());
+			JSSCompoundCommand cc = new JSSCompoundCommand(getText(), mcontainer);
 			if (mcontainer.getValue() instanceof JRPropertiesHolder) {
 				JRPropertiesMap pmap = (JRPropertiesMap) mcontainer.getPropertyValue(MGraphicElement.PROPERTY_MAP);
 				pmap = (JRPropertiesMap) pmap.clone();
@@ -167,13 +167,15 @@ public class LayoutAction extends SelectionAction {
 	}
 
 	private JRElementGroup getContainer(ANode n) {
-		Object val = n.getValue();
-		if (n instanceof IGroupElement)
-			return ((IGroupElement) n).getJRElementGroup();
-		if (val instanceof JRElementGroup)
-			return (JRElementGroup) val;
-		if (val instanceof JRDesignElement)
-			return getContainer(n.getParent());
+		if (n != null){
+			Object val = n.getValue();
+			if (n instanceof IGroupElement)
+				return ((IGroupElement) n).getJRElementGroup();
+			if (val instanceof JRElementGroup)
+				return (JRElementGroup) val;
+			if (val instanceof JRDesignElement)
+				return getContainer(n.getParent());
+		}
 		return null;
 	}
 

@@ -23,7 +23,6 @@ import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -44,6 +43,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.help.HelpSystem;
@@ -269,11 +269,12 @@ public class BordersSection extends AbstractSection {
 	 * the general padding to a value or null respectively
 	 */
 	private void uniformAfterCheck(){
-		CompoundCommand cc = new CompoundCommand("Change padding");  //$NON-NLS-1$
+		JSSCompoundCommand cc = new JSSCompoundCommand("Change padding", null);  //$NON-NLS-1$
 		if (checkBoxPadding.getSelection()){
 			//I've selected to use the same value in all the padding area
 			//so i generate immediately the command
 			for (APropertyNode m : getElements()) {
+				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, new Integer(paddingLeft.getSelection()), lb);
@@ -283,6 +284,7 @@ public class BordersSection extends AbstractSection {
 		} else {
 			//The box was deselected so i need to set immediately the padding for all to null
 			for (APropertyNode m : getElements()) {
+				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				c = getChangePropertyCommand(JRBaseLineBox.PROPERTY_PADDING, null, lb);
@@ -547,8 +549,9 @@ public class BordersSection extends AbstractSection {
 	 */
 	public void changePropertyPadding(String property, Object newValue){
 		if (!isRefreshing) {
-			CompoundCommand cc = new CompoundCommand("Change padding"); //$NON-NLS-1$
+			JSSCompoundCommand cc = new JSSCompoundCommand("Change padding", null); //$NON-NLS-1$
 			for (APropertyNode m : getElements()) {
+				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				//If the checkbox is set i need to set the general padding, otherwise it must be null
@@ -576,8 +579,9 @@ public class BordersSection extends AbstractSection {
 	 */
 	public void changeProperty(String property, Object newValue) {
 		if (!isRefreshing) {
-			CompoundCommand cc = new CompoundCommand("Change border"); //$NON-NLS-1$
+			JSSCompoundCommand cc = new JSSCompoundCommand("Change border", null); //$NON-NLS-1$
 			for (APropertyNode m : getElements()) {
+				cc.setReferenceNodeIfNull(m);
 				Command c = null;
 				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 				//it's a change of a border attribute

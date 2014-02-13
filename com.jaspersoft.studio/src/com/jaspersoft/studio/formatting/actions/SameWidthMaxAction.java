@@ -16,9 +16,9 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -42,8 +42,8 @@ public class SameWidthMaxAction extends AbstractFormattingAction {
 		return getOperationSet().size() > 1;
 	}
 
-	public static CompoundCommand generateCommand(List<APropertyNode> nodes) {
-		CompoundCommand command = new CompoundCommand();
+	public static JSSCompoundCommand generateCommand(List<APropertyNode> nodes) {
+		JSSCompoundCommand command = new JSSCompoundCommand(null);
 
 		int width = (Integer) nodes.get(0).getPropertyValue(JRDesignElement.PROPERTY_WIDTH);
 
@@ -61,6 +61,7 @@ public class SameWidthMaxAction extends AbstractFormattingAction {
 		}
 
 		for (APropertyNode node : nodes) {
+			command.setReferenceNodeIfNull(node);
 			SetValueCommand setCommand = new SetValueCommand();
 			setCommand.setTarget(node);
 			setCommand.setPropertyId(JRDesignElement.PROPERTY_WIDTH);
@@ -73,13 +74,11 @@ public class SameWidthMaxAction extends AbstractFormattingAction {
 
 	protected Command createAlignmentCommand() {
 		List<APropertyNode> nodes = getOperationSet();
-		CompoundCommand command = null;
-		if (nodes.isEmpty())
-			command = new CompoundCommand();
-		else {
+		JSSCompoundCommand command = null;
+		if (!nodes.isEmpty()) {
 			command = generateCommand(nodes);
+			command.setDebugLabel(getText());
 		}
-		command.setDebugLabel(getText());
 		return command;
 	}
 

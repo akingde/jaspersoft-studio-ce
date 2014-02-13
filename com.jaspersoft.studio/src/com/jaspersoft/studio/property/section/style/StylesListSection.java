@@ -30,7 +30,6 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -55,6 +54,7 @@ import org.eclipse.wb.swt.ResourceCache;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
@@ -213,7 +213,7 @@ public class StylesListSection extends AbstractSection {
 			}
 			if (executeCommand) {
 				CommandStack cs = getEditDomain().getCommandStack();
-				CompoundCommand cc = new CompoundCommand("Set " + property); //$NON-NLS-1$
+				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, targetElement); //$NON-NLS-1$
 				Command c = getChangePropertyCommand(property, null, targetElement);
 				if (c != null)
 					cc.add(c);

@@ -47,13 +47,13 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.components.table.action.EditStyleAction;
 import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
@@ -746,7 +746,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 			Dimension d = model.getMTable().getTableManager().getCellPackSize(cc);
 			if (d.height > 0 && d.width > 0) {
-				CompoundCommand c = new CompoundCommand("Resize to container");
+				JSSCompoundCommand c = new JSSCompoundCommand("Resize to container",model);
 
 				SetValueCommand cmd = new SetValueCommand();
 

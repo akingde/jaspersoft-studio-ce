@@ -19,10 +19,10 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -75,13 +75,14 @@ public class BringForwardAction extends SelectionAction implements IGlobalAction
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring Forward"); //$NON-NLS-1$
+		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring Forward", null); //$NON-NLS-1$
 		for (int i = objects.size() - 1; i >= 0; i--) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
+				compoundCmd.setReferenceNodeIfNull(parent);
 				if (parent != null && parent.getChildren() != null) {
 					int newIndex = parent.getChildren().indexOf(model) + 1;
 					if (newIndex < parent.getChildren().size()) {

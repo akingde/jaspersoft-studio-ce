@@ -23,7 +23,6 @@ import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -36,7 +35,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.report.EditorContributor;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.internal.IWidgetsProviderSection;
@@ -270,8 +271,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public boolean changeProperty(Object property, Object newValue, List<Command> commands) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
-			CompoundCommand cc = new CompoundCommand("Set " + property);
+			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, null);
 			for (APropertyNode n : elements) {
+				cc.setReferenceNodeIfNull(n);
 				Command c = getChangePropertyCommand(property, newValue, n);
 				if (c != null)
 					cc.add(c);
@@ -294,7 +296,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void changePropertyOn(Object property, Object newValue, APropertyNode n, List<Command> commands) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
-			CompoundCommand cc = new CompoundCommand("Set " + property);
+			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, n);
 			Command c = getChangePropertyCommand(property, newValue, n);
 			if (c != null)
 				cc.add(c);
@@ -382,5 +384,17 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
 		return widgets.get(propertyId);
+	}
+	
+	protected boolean isRefreshIgnored(){
+		if (getElement() != null){
+			ANode mainNode = JSSCompoundCommand.getMainNode(getElement());
+			if (mainNode != null) return JSSCompoundCommand.isRefreshEventsIgnored(mainNode);
+		}
+		for (ANode item : getElements()){
+			ANode mainNode = JSSCompoundCommand.getMainNode(item);
+			if (mainNode != null) return JSSCompoundCommand.isRefreshEventsIgnored(mainNode);
+		}
+		return false;
 	}
 }
