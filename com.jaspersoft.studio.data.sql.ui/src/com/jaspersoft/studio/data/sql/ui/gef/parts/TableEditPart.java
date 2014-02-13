@@ -156,7 +156,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelSourceConnections() {
+	protected List<?> getModelSourceConnections() {
 		if (getModel().getTableJoins() != null && !getModel().getTableJoins().isEmpty()) {
 			List<TableJoin> joins = new ArrayList<TableJoin>();
 			for (TableJoin tj : getModel().getTableJoins()) {
@@ -174,7 +174,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelTargetConnections() {
+	protected List<?> getModelTargetConnections() {
 		if (getModel() instanceof MFromTableJoin) {
 			List<TableJoin> joins = new ArrayList<TableJoin>();
 			TableJoin tj = ((MFromTableJoin) getModel()).getTableJoin();

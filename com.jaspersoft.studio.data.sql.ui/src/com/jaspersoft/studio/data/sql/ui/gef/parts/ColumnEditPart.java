@@ -51,11 +51,9 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 		ImageDescriptor imgd = getModel().getImagePath();
 		if (imgd != null)
 			image = JasperReportsPlugin.getDefault().getImage(imgd);
-		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(
-				SQLQueryDiagram.SQLQUERYDIAGRAM);
+		SQLQueryDesigner designer = (SQLQueryDesigner) getViewer().getProperty(SQLQueryDiagram.SQLQUERYDIAGRAM);
 		afactory = designer.getOutline().getAfactory();
-		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(),
-				MSelect.class);
+		mselect = Util.getKeyword(ColumnEditPart.this.getParent().getModel(), MSelect.class);
 		ColumnFigure cbfig = new ColumnFigure(colname, image) {
 			@Override
 			protected void handleSelectionChanged() {
@@ -83,6 +81,7 @@ public class ColumnEditPart extends AbstractGraphicalEditPart {
 					if (dc.calculateEnabled(new Object[] { mSelCol }))
 						dc.run();
 				}
+				refreshVisuals();
 			}
 		};
 		cbfig.setToolTip(new Label(getModel().getToolTip()));
