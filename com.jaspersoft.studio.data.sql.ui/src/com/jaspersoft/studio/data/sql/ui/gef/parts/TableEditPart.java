@@ -94,21 +94,23 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		f.setName(tblName);
 
 		MSelect msel = Util.getKeyword(fromTable, MSelect.class);
-		set.clear();
-		allstar = false;
-		for (INode n : msel.getChildren()) {
-			if (n instanceof MSelectExpression && n.getValue().equals("*")) {
-				allstar = true;
-				break;
-			}
-		}
-		if (!allstar)
+		if (msel != null) {
+			set.clear();
+			allstar = false;
 			for (INode n : msel.getChildren()) {
-				if (allstar || (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(fromTable))) {
-					MSelectColumn msc = (MSelectColumn) n;
-					set.put(msc.getValue().getValue(), msc);
+				if (n instanceof MSelectExpression && n.getValue().equals("*")) {
+					allstar = true;
+					break;
 				}
 			}
+			if (!allstar)
+				for (INode n : msel.getChildren()) {
+					if (allstar || (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(fromTable))) {
+						MSelectColumn msc = (MSelectColumn) n;
+						set.put(msc.getValue().getValue(), msc);
+					}
+				}
+		}
 		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
 		Point location = f.getLocation();
 		Rectangle constraint = new Rectangle(location.x, location.y, -1, -1);

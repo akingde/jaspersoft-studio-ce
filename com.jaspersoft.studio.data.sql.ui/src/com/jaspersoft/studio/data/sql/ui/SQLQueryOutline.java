@@ -30,10 +30,12 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.KeyAdapter;
@@ -64,9 +66,11 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
+import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
+import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
@@ -129,7 +133,20 @@ public class SQLQueryOutline {
 
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
 		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(), PluginTransfer.getInstance() };
-		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(treeViewer));
+		treeViewer.addDragSupport(ops, transfers, new NodeDragListener(treeViewer) {
+			@Override
+			public void dragStart(DragSourceEvent event) {
+				IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+				Object fe = selection.getFirstElement();
+				event.doit = !viewer.getSelection().isEmpty() && isDragable(fe);
+			}
+
+			public boolean isDragable(Object fe) {
+				if (fe instanceof MSelect || fe instanceof MFrom || fe instanceof MGroupBy || fe instanceof MHaving || fe instanceof MWhere || fe instanceof MOrderBy || fe instanceof MUnion)
+					return false;
+				return true;
+			}
+		});
 
 		transfers = new Transfer[] { NodeTransfer.getInstance(), TemplateTransfer.getInstance(), PluginTransfer.getInstance() };
 		NodeTreeDropAdapter dropAdapter = new NodeTreeDropAdapter(treeViewer) {
