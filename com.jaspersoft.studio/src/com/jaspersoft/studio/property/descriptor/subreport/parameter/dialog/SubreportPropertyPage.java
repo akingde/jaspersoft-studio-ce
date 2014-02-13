@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -29,9 +30,12 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -39,13 +43,16 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.command.wizard.NewSubreportPage;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
 public class SubreportPropertyPage extends JSSWizardPage {
@@ -170,6 +177,45 @@ public class SubreportPropertyPage extends JSSWizardPage {
 		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
+
+		Button bMaster = new Button(bGroup, SWT.PUSH);
+		bMaster.setText("Copy From Master");
+		bMaster.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				JasperReportsConfiguration jrConfig = (JasperReportsConfiguration) getSettings().get(
+						JSSWizard.JASPERREPORTS_CONFIGURATION);
+				if (jrConfig == null)
+					return;
+				JasperDesign jd = jrConfig.getJasperDesign();
+				if (jd == null)
+					return;
+				List<JRSubreportParameter> lst = (List<JRSubreportParameter>) tableViewer.getInput();
+				if (lst == null)
+					lst = new ArrayList<JRSubreportParameter>();
+				for (JRParameter prm : jd.getParametersList()) {
+					if (prm.isSystemDefined())
+						continue;
+					String name = prm.getName();
+					boolean exists = false;
+					for (JRSubreportParameter sp : lst) {
+						if (sp.getName().equals(name)) {
+							exists = true;
+							break;
+						}
+					}
+					if (exists)
+						return;
+
+					JRDesignSubreportParameter param = new JRDesignSubreportParameter();
+					param.setName(name);
+					param.setExpression(ExprUtil.createExpression("$P{" + name + "}"));
+					lst.add(param);
+				}
+				tableViewer.setInput(lst);
+				tableViewer.refresh(true);
+			}
+		});
 	}
 
 	private void buildTable(Composite composite) {

@@ -89,7 +89,7 @@ public class SPSubreportParametersButton extends ASPropertyWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				SubreportPropertyEditor wizard = new SubreportPropertyEditor();
-				wizard.setValue(dto);
+				wizard.setValue(dto, msubreport);
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)

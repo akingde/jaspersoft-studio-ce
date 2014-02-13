@@ -157,6 +157,7 @@ public class MSubreport extends MGraphicElement {
 		desc.add(propertiesD);
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#subreportParameter"));
+		propertiesD.init(this);
 
 		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
 				Messages.common_return_values);

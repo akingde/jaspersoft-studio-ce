@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.subreport.parameter;
 
@@ -19,6 +14,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -32,7 +28,18 @@ public class SubreportPropertiesPropertyDescriptor extends NTextPropertyDescript
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		return new SubreportPropertiesCellEditor(parent);
+		cellEditor = new SubreportPropertiesCellEditor(parent);
+		cellEditor.init(msubreport);
+		return cellEditor;
+	}
+
+	private MSubreport msubreport;
+	private SubreportPropertiesCellEditor cellEditor;
+
+	public void init(MSubreport msubreport) {
+		this.msubreport = msubreport;
+		if (cellEditor != null)
+			cellEditor.init(msubreport);
 	}
 
 	@Override
