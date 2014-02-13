@@ -363,6 +363,25 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	};
 	
 	/**
+	 * Search a valid node that has as ancestor a node to disable the 
+	 * editor refresh. The node is searched between the selection set
+	 * 
+	 * @return the node if it is found, null otherwise
+	 */
+	private ANode getLockableNode(){
+		for(Object part : getOperationSet()){
+			if (part instanceof EditPart){
+				EditPart ePart = (EditPart)part;
+				if (ePart.getModel() instanceof ANode){
+					ANode mainNode = JSSCompoundCommand.getMainNode((ANode)ePart.getModel());
+					if (mainNode != null) return mainNode;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * When the command from a drag operation is returned it is checked if it a compoundcommand
 	 * but not JSSCompoundCommand. If this condition it is true then it is converted into
 	 * a JSSCompoundCommand to improove the performance during the execution
@@ -372,8 +391,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		Command command = super.getCurrentCommand();
 		if (command instanceof CompoundCommand && !(command instanceof JSSCompoundCommand)){
 			CompoundCommand cc = (CompoundCommand)command;
-			JSSCompoundCommand jsscc = new JSSCompoundCommand(cc, null);
-			jsscc.setReferenceNodeIfNull(getTargetEditPart().getModel());
+			JSSCompoundCommand jsscc = new JSSCompoundCommand(cc,getLockableNode()) ;
 			command = jsscc;
 		}
 		return command;

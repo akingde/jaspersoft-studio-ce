@@ -22,11 +22,11 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
-import org.eclipse.gef.tools.ResizeTracker;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.parts.IPrefEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSCompoundResizeTracker;
 
 /*
  * The Class BandResizeHandle.
@@ -72,7 +72,7 @@ public class CellResizeHandle extends ResizeHandle {
 	}
 
 	protected DragTracker createDragTracker() {
-		return new ResizeTracker(getOwner(), cursorDirection) {
+		return new JSSCompoundResizeTracker(getOwner(), cursorDirection) {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			@Override
 			protected List createOperationSet() {

@@ -37,7 +37,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.report.EditorContributor;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.properties.internal.IHighlightPropertyWidget;
 import com.jaspersoft.studio.properties.internal.IWidgetsProviderSection;
@@ -384,17 +383,5 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
 		return widgets.get(propertyId);
-	}
-	
-	protected boolean isRefreshIgnored(){
-		if (getElement() != null){
-			ANode mainNode = JSSCompoundCommand.getMainNode(getElement());
-			if (mainNode != null) return JSSCompoundCommand.isRefreshEventsIgnored(mainNode);
-		}
-		for (ANode item : getElements()){
-			ANode mainNode = JSSCompoundCommand.getMainNode(item);
-			if (mainNode != null) return JSSCompoundCommand.isRefreshEventsIgnored(mainNode);
-		}
-		return false;
 	}
 }
