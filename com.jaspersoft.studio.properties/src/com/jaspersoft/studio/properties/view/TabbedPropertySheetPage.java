@@ -172,7 +172,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			return null;
 		}
 	}
-	
 
 	/**
 	 * SelectionChangedListener for the ListViewer.
@@ -201,26 +200,26 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 				if (tab != currentTab) {
 					hideTab(currentTab);
 				}
+				if (tab != null && tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
+					// force widgets to be resized
+					tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
 
-				// force widgets to be resized
-				tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
+					Composite tabComposite = tabToComposite.get(tab);
+					if (tabComposite == null) {
+						tabComposite = createTabComposite();
+						tab.createControls(tabComposite, TabbedPropertySheetPage.this);
 
-				Composite tabComposite = tabToComposite.get(tab);
-				if (tabComposite == null) {
-					tabComposite = createTabComposite();
-					tab.createControls(tabComposite, TabbedPropertySheetPage.this);
+						tabToComposite.put(tab, tabComposite);
+					}
 
-					tabToComposite.put(tab, tabComposite);
+					// store tab selection
+					storeCurrentTabSelection(descriptor.getLabel());
+
+					if (tab != currentTab) {
+						showTab(tab);
+					}
+					tab.refresh();
 				}
-
-				// store tab selection
-				storeCurrentTabSelection(descriptor.getLabel());
-
-				if (tab != currentTab) {
-					showTab(tab);
-				}
-
-				tab.refresh();
 			}
 			tabbedPropertyComposite.getTabComposite().layout(true);
 			currentTab = tab;
@@ -231,17 +230,17 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			}
 		}
 	}
-	
+
 	/**
 	 * Take a TabContents and search a TabDescriptor for that tab
 	 */
-	private ITabDescriptor getTabDescriptor(TabContents tab){
-		for(ITabDescriptor key : descriptorToTab.keySet()){
-			if (descriptorToTab.get(key) == tab) return key;
+	private ITabDescriptor getTabDescriptor(TabContents tab) {
+		for (ITabDescriptor key : descriptorToTab.keySet()) {
+			if (descriptorToTab.get(key) == tab)
+				return key;
 		}
 		return null;
 	}
-	
 
 	/**
 	 * Shows the given tab.
@@ -260,7 +259,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			}
 		}
 	}
-	
+
 	/**
 	 * Hides the given tab.
 	 */
@@ -273,12 +272,12 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			}
 		}
 	}
-	
+
 	/**
 	 * Change the selected tab with the one passed by parameter
 	 */
-	public void setSelection(TabContents tab){
-		tabbedPropertyViewer.forceChangeSelectionToWidget( getTabDescriptor(tab));
+	public void setSelection(TabContents tab) {
+		tabbedPropertyViewer.forceChangeSelectionToWidget(getTabDescriptor(tab));
 	}
 
 	/**
@@ -1050,14 +1049,13 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 			}
 		}
 	}
-	
+
 	/**
 	 * Return a list of all the available TabContents
 	 */
-	public List<TabContents> getTabs(){
+	public List<TabContents> getTabs() {
 		return new ArrayList<TabContents>(descriptorToTab.values());
 	}
-	
 
 	/**
 	 * Returns text of the properties title for given selection. If selection is
