@@ -40,7 +40,7 @@ public class Text2Model {
 			doc.readOnly(new IUnitOfWork<String, XtextResource>() {
 				public String exec(XtextResource resource) {
 					if (!resource.getErrors().isEmpty()) {
-						if (showWarning && !doc.get().isEmpty())
+						if (showWarning && !doc.get().trim().isEmpty())
 							UIUtils.showWarning(Messages.Text2Model_warn);
 						// designer.showWarning("Parser is not able to convert Query to the model");
 						isRunning = false;
