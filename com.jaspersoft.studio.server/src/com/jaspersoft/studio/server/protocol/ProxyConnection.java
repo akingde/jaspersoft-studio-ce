@@ -56,6 +56,7 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+		Exception exc = null;
 		for (IConnection co : cons) {
 			try {
 				if (c == null && co.connect(monitor, sp))
@@ -69,11 +70,13 @@ public class ProxyConnection implements IConnection {
 				serverInfo = co.getServerInfo();
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw e;
+				exc = e;
 			}
 			if (monitor.isCanceled())
 				break;
 		}
+		if (c == null && exc != null)
+			throw exc;
 		return c != null;
 	}
 
