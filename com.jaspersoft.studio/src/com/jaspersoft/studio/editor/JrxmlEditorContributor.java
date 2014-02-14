@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -349,10 +351,16 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			contributeToContextBars(event.getSelection());
 		}
 
-		public void contributeToContextBars(ISelection selection) {
+		public void contributeToContextBars(final ISelection selection) {
 			if (selection.isEmpty())
 				return;
-			selectionContributor.contributeToContextBars(getActionBars(), selection);
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					selectionContributor.contributeToContextBars(getActionBars(), selection);
+				}
+			});
 		}
 	}
 

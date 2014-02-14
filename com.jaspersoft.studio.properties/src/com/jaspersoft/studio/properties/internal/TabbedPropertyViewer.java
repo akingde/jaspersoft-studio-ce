@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -44,7 +45,7 @@ public class TabbedPropertyViewer extends StructuredViewer {
 	 * Constructor for TabbedPropertyViewer.
 	 * 
 	 * @param list
-	 *            the TabbedPropertyList.
+	 *          the TabbedPropertyList.
 	 */
 	public TabbedPropertyViewer(TabbedPropertyList list) {
 		this.list = list;
@@ -57,7 +58,7 @@ public class TabbedPropertyViewer extends StructuredViewer {
 	 * <code>null</code> if the index is out of range.
 	 * 
 	 * @param index
-	 *            the zero-based index
+	 *          the zero-based index
 	 * @return the element at the given index, or <code>null</code> if the index
 	 *         is out of range
 	 */
@@ -69,8 +70,8 @@ public class TabbedPropertyViewer extends StructuredViewer {
 	}
 
 	/**
-	 * Returns the zero-relative index of the item which is currently selected
-	 * in the receiver, or -1 if no item is selected.
+	 * Returns the zero-relative index of the item which is currently selected in
+	 * the receiver, or -1 if no item is selected.
 	 * 
 	 * @return the index of the selected item
 	 */
@@ -124,25 +125,24 @@ public class TabbedPropertyViewer extends StructuredViewer {
 					index = i;
 				}
 			}
-			Assert.isTrue(index != -1,
-					"Could not set the selected tab in the tabbed property viewer");//$NON-NLS-1$
+			Assert.isTrue(index != -1, "Could not set the selected tab in the tabbed property viewer");//$NON-NLS-1$
 			list.select(index);
 		}
 	}
-	
+
 	/**
-	 * Force the selection to change on the tab with id equals to the one inside the 
-	 * Descriptor passed as parameter. If the tab to select is not found a exception is raised
+	 * Force the selection to change on the tab with id equals to the one inside
+	 * the Descriptor passed as parameter. If the tab to select is not found a
+	 * exception is raised
 	 */
 	public void forceChangeSelectionToWidget(ITabDescriptor tab) {
 		int index = -1;
 		for (int i = 0; i < elements.size(); i++) {
 			if (elements.get(i).getId().equals(tab.getId())) {
-					index = i; 
+				index = i;
 			}
 		}
-		Assert.isTrue(index != -1,
-				"Could not set the selected tab in the tabbed property viewer");//$NON-NLS-1$
+		Assert.isTrue(index != -1, "Could not set the selected tab in the tabbed property viewer");//$NON-NLS-1$
 		list.select(index);
 	}
 
@@ -165,9 +165,9 @@ public class TabbedPropertyViewer extends StructuredViewer {
 	 * Set the input for viewer.
 	 * 
 	 * @param part
-	 *            the workbench part.
+	 *          the workbench part.
 	 * @param selection
-	 *            the selection in the workbench part.
+	 *          the selection in the workbench part.
 	 */
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		this.part = part;
@@ -191,5 +191,16 @@ public class TabbedPropertyViewer extends StructuredViewer {
 	 */
 	public List<ITabDescriptor> getElements() {
 		return elements;
+	}
+
+	@Override
+	protected void updateSelection(final ISelection selection) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				TabbedPropertyViewer.super.updateSelection(selection);
+			}
+		});
 	}
 }

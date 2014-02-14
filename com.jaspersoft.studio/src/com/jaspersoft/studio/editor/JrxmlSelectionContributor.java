@@ -61,6 +61,7 @@ public class JrxmlSelectionContributor {
 	}
 
 	public void cleanBars(IActionBars bars) {
+		long stime = System.currentTimeMillis();
 		if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
 			ICoolBarManager2 cbm2 = (ICoolBarManager2) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager())
 					.getParent();
@@ -90,6 +91,7 @@ public class JrxmlSelectionContributor {
 		}
 		cbaritemID.clear();
 		cbarID.clear();
+		System.out.println("cleared in: " + (System.currentTimeMillis() - stime));
 	}
 
 	public void cleanBars(IActionBars bars, ISelection selection) {
@@ -154,6 +156,7 @@ public class JrxmlSelectionContributor {
 	private ISelection lastselection;
 
 	public void contributeToContextCoolBar(IActionBars bars, ICoolBarManager coolBarManager, ISelection selection) {
+		long stime = System.currentTimeMillis();
 		IEditorPart lastEditor = editorContributor.getLastEditor();
 		if (lastEditor instanceof ReportContainer)
 			lastEditor = ((ReportContainer) lastEditor).getActiveEditor();
@@ -179,6 +182,7 @@ public class JrxmlSelectionContributor {
 		} else {
 			System.out.println("haha");
 		}
+		System.out.println("contributed in: " + (System.currentTimeMillis() - stime));
 	}
 
 	private void addContributionToCoolbar(ICoolBarManager2 cbm2, ToolItemsSet ts, ToolItem ti, ISelection selection) {
