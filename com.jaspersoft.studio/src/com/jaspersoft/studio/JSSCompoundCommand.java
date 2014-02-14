@@ -203,6 +203,20 @@ public class JSSCompoundCommand extends CompoundCommand {
 	}
 	
 	/**
+	 * Get if the events are ignored or not
+	 * 
+	 * @param value true if the refresh should be disabled, false otherwise
+	 */
+	protected boolean isIgnoreEvents(){
+		ANode rootNode = getNode();
+		if (rootNode != null){
+			if (rootNode instanceof MLockableRefresh) return ((MLockableRefresh)rootNode).isRefreshEventIgnored();
+		}
+		return false;
+	}
+	
+	
+	/**
 	 * Override of the execute command, disable the refresh before the first command
 	 * and enable it at the end
 	 */
@@ -216,7 +230,10 @@ public class JSSCompoundCommand extends CompoundCommand {
 				cmd.execute();
 			}
 			setIgnoreEvents(false);
-			refreshVisuals();
+			//Since there could be multiple compound command executed at the same time, the refresh
+			//is not forced if the actual command is not the last lock removed. In other words the refresh
+			//is disable until the last command has finished
+			if (!isIgnoreEvents()) refreshVisuals();
 		}
 	}
 	
@@ -233,7 +250,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 				((Command) commands.get(i)).undo();
 			}
 			setIgnoreEvents(false);
-			refreshVisuals();
+			if (!isIgnoreEvents()) refreshVisuals();
 		}
 	}
 	
@@ -250,7 +267,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 				((Command) commands.get(i)).redo();
 			}
 			setIgnoreEvents(false);
-			refreshVisuals();
+			if (!isIgnoreEvents()) refreshVisuals();
 		}
 	}
 }
