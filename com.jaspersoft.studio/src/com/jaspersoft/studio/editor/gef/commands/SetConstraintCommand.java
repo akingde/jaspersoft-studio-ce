@@ -291,10 +291,10 @@ public class SetConstraintCommand extends Command {
 			if (pBand != null && cBand != null)
 				pBand.removeElement(jrElement);
 			if (cBand != null)
-				if (oldIndex < 0 || oldIndex > cBand.getElements().length)
+				if (oldIndex < 0 || oldIndex >= cBand.getElements().length)
 					cBand.addElement(jrElement);
-		//		else
-			//		cBand.addElement(oldIndex, jrElement);
+				else
+					cBand.addElement(oldIndex, jrElement);
 
 			jrElement.setWidth(oldBounds.width);
 			jrElement.setHeight(oldBounds.height);
