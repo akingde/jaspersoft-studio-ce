@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
@@ -89,6 +90,16 @@ public class RenameDatasetObjectNameCommand extends Command {
 				cexpr.add((JRDesignExpression) expr);
 			}
 		}
+		doSetQuery(oldvalue, newvalue);
+	}
+
+	protected void doSetQuery(String oldVal, String newVal) {
+		if (type1.equals("$P{")) {
+			JRDesignQuery query = (JRDesignQuery) dataset.getQuery();
+			String q = query.getText();
+			// replace $P{} in query
+			query.setText(q.replaceAll(type + oldVal + "}", type + newVal + "}"));
+		}
 	}
 
 	@Override
@@ -101,5 +112,6 @@ public class RenameDatasetObjectNameCommand extends Command {
 		for (JRDesignExpression de : cexpr) {
 			de.setText(de.getText().replaceAll(newvalue, oldvalue));
 		}
+		doSetQuery(newvalue, oldvalue);
 	}
 }
