@@ -93,6 +93,9 @@
 		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
 		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
+		<!-- copy fix files for Ubuntu -->
+		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
 		<!-- rename the folder -->
@@ -130,6 +133,9 @@
 		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
 		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
+		<!-- copy fix files for Ubuntu -->
+		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
 		<!-- rename the folder -->
