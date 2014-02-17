@@ -64,6 +64,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * This interface should not be extended or implemented. New section instances
  * should be created using <code>AbstractPropertySection</code>.
  * </p>
+ * 
  * @see org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage
  * 
  * @author Anthony Hunter
@@ -83,7 +84,7 @@ public interface ISection {
 	 * @param tabbedPropertySheetPage
 	 *            the tabbed property sheet page.
 	 */
-	public abstract void createControls(Composite parent,
+	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage);
 
 	/**
@@ -91,7 +92,7 @@ public interface ISection {
 	 * @param part The active workench part.
 	 * @param selection The active selection in the workbench part.
 	 */
-	public abstract void setInput(IWorkbenchPart part, ISelection selection);
+	public void setInput(IWorkbenchPart part, ISelection selection);
 
 	/**
 	 * Notifies the section that its controls are about to be shown. It is
@@ -102,19 +103,19 @@ public interface ISection {
 	 * refresh() before updating the section controls.
 	 * </p>
 	 */
-	public abstract void aboutToBeShown();
+	public void aboutToBeShown();
 
 	/**
 	 * Notifies the section that its controls are about to be hidden. It is
 	 * expected that sections disable domain related functions in this method,
 	 * most commonly remove listeners.
 	 */
-	public abstract void aboutToBeHidden();
+	public void aboutToBeHidden();
 
 	/**
 	 * Dispose this section.
 	 */
-	public abstract void dispose();
+	public void dispose();
 
 	/**
 	 * Returns the minimum height needed by this section. A return value of
@@ -122,7 +123,7 @@ public interface ISection {
 	 * 
 	 * @return the minimum height needed by this section.
 	 */
-	public abstract int getMinimumHeight();
+	public int getMinimumHeight();
 
 	/**
 	 * Determine whether this section would like extra height space in case
@@ -130,10 +131,12 @@ public interface ISection {
 	 * be displayed on a tab or is the only section on a tab.
 	 * @return <code>true</code> if this section would like extra height space.
 	 */
-	public abstract boolean shouldUseExtraSpace();
+	public boolean shouldUseExtraSpace();
 
 	/**
 	 * Refresh the contents of the controls displayed in this section.
 	 */
-	public abstract void refresh();
+	public void refresh();
+
+	public Object getElement();
 }

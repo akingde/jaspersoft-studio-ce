@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.properties.view;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -90,6 +91,16 @@ public abstract class AbstractPropertySection implements ISection {
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		this.selection = selection;
 		this.part = part;
+		element = null;
+		if (selection != null && selection instanceof IStructuredSelection)
+			element = ((IStructuredSelection) selection).getFirstElement();
+	}
+
+	private Object element;
+
+	@Override
+	public Object getElement() {
+		return element;
 	}
 	
 	public TabbedPropertySheetPage getTabbedPropertySheetPage(){
