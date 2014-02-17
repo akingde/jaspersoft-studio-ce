@@ -103,11 +103,13 @@
 			<tarfileset dir="${dirlocation.linux.x86}/" filemode="755">
 				<include name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*" />
 				<include name="**/Jaspersoft Studio" />
+				<include name="**/runubuntu.sh"/>
 			</tarfileset>
 			<tarfileset dir="${dirlocation.linux.x86}/">
 				<include name="**/*" />
 				<exclude name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*"/>
 				<exclude name="**/Jaspersoft Studio" />
+				<exclude name="**/runubuntu.sh"/>
 			</tarfileset>
 		</tar>
 		<!-- create debian package -->
@@ -138,11 +140,13 @@
 			<tarfileset dir="${dirlocation.linux.x86_64}/" filemode="755">
 				<include name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*" />
 				<include name="**/Jaspersoft Studio" />
+				<include name="**/runubuntu.sh"/>
 			</tarfileset>
 			<tarfileset dir="${dirlocation.linux.x86_64}/">
 				<include name="**/*" />
 				<exclude name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*"/>
 				<exclude name="**/Jaspersoft Studio" />
+				<exclude name="**/runubuntu.sh"/>
 			</tarfileset>
 		</tar>
 		<!-- create debian package -->
@@ -236,6 +240,7 @@
 		</copy>
 		<echo file="${dist}/debian/postinst" append="false">#! /bin/sh
 chmod +x "/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio"
+chmod +x "/opt/jaspersoft/${jss.distro.folder}/runubuntu.sh"
 chmod -R +x "/opt/jaspersoft/${jss.distro.folder}/${jre.feature.location}/"
 exit 0;</echo>
 		<desktopEntry 
