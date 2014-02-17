@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -234,10 +235,13 @@ public class ParametersTable {
 				TableItem tableItem = (TableItem) element;
 				JRDesignParameter field = (JRDesignParameter) tableItem.getData();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
-					if (dataset.getParametersMap().get(field.getName()) != null) {
-						dataset.getParametersMap().remove(field.getName());
+					String old = field.getName();
+					if (dataset.getParametersMap().get(old) != null) {
+						dataset.getParametersMap().remove(old);
 						field.setName((String) value);
 						dataset.getParametersMap().put(field.getName(), field);
+						propertyChangeSupport.firePropertyChange(new java.beans.PropertyChangeEvent(field,
+								JRDesignParameter.PROPERTY_NAME, old, field.getName()));
 					}
 				} else if ("ISFORPROMPT".equals(property) && isMainDataset) { //$NON-NLS-1$
 					field.setForPrompting((Boolean) value);
@@ -248,12 +252,21 @@ public class ParametersTable {
 				}
 				tviewer.update(element, new String[] { property });
 				tviewer.refresh();
+
 			}
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent),
 				new ClassTypeCellEditor(parent), new TextCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "NAME", "ISFORPROMPT", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	}
+
+	private PropertyChangeSupport propertyChangeSupport;
+
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		if (propertyChangeSupport == null)
+			propertyChangeSupport = new PropertyChangeSupport(this);
+		return propertyChangeSupport;
 	}
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {

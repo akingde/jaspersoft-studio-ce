@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
 import com.jaspersoft.studio.data.IFieldSetter;
@@ -57,11 +60,15 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
+import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameterSystem;
+import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
 import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
@@ -121,6 +128,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 				cmdStack.execute(command);
 		}
 		dataquery.dispose();
+		ptable.getPropertyChangeSupport().removePropertyChangeListener(prmListener);
 		return super.close();
 	}
 
@@ -258,8 +266,27 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 		ptable = new ParametersTable(tabFolder, newdataset, background, mdataset.isMainDataset());
 
+		ptable.getPropertyChangeSupport().addPropertyChangeListener(prmListener);
 		bptab.setControl(ptable.getControl());
 	}
+
+	private PropertyChangeListener prmListener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent arg0) {
+			MRoot mroot = new MRoot(null, null);
+			mroot.setJasperConfiguration(jConfig);
+			MReport mrep = new MReport(mroot, jConfig);
+			MDataset mdts = new MDataset(mrep, newdataset, -1);
+			MParameters<?> mprms = new MParameters<JRDesignDataset>(mdts, newdataset, JRDesignDataset.PROPERTY_PARAMETERS);
+			MParameter mprm = new MParameter(mprms, (JRDesignParameter) arg0.getSource(), -1);
+			List<Command> cmds = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(mprm,
+					JRDesignParameter.PROPERTY_NAME, arg0.getNewValue(), arg0.getOldValue());
+			for (Command c : cmds)
+				c.execute();
+			dataquery.setDataset(jConfig.getJasperDesign(), newdataset);
+		}
+	};
 
 	private void createFields(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
