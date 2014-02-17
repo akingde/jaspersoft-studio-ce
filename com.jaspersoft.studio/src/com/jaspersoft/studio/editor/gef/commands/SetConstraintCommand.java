@@ -201,7 +201,7 @@ public class SetConstraintCommand extends Command {
 						y = aC - (tm - bands.get(i).getHeight());
 						break;
 					}
-				}
+				} 
 			}
 		}
 		return y;
@@ -288,14 +288,13 @@ public class SetConstraintCommand extends Command {
 		if (lCmd != null)
 			lCmd.undo();
 		if (jrElement != null) {
-			if (pBand != null && cBand != null)
+			if (pBand != null && cBand != null){
 				pBand.removeElement(jrElement);
-			if (cBand != null)
 				if (oldIndex < 0 || oldIndex >= cBand.getElements().length)
 					cBand.addElement(jrElement);
 				else
 					cBand.addElement(oldIndex, jrElement);
-
+			}
 			jrElement.setWidth(oldBounds.width);
 			jrElement.setHeight(oldBounds.height);
 			jrElement.setX(oldBounds.x);
