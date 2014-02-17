@@ -66,9 +66,8 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
-public class MList extends MGraphicElement implements IPastable,
-		IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart,
-		IGroupElement, IGraphicElementContainer, ICopyable, IDatasetContainer {
+public class MList extends MGraphicElement implements IPastable, IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart, IGroupElement, IGraphicElementContainer, ICopyable,
+		IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -95,11 +94,11 @@ public class MList extends MGraphicElement implements IPastable,
 	 * Instantiates a new m list.
 	 * 
 	 * @param parent
-	 *            the parent
+	 *          the parent
 	 * @param jrList
-	 *            the jr line
+	 *          the jr line
 	 * @param newIndex
-	 *            the new index
+	 *          the new index
 	 */
 	public MList(ANode parent, JRDesignComponentElement jrList, int newIndex) {
 		super(parent, newIndex);
@@ -125,8 +124,7 @@ public class MList extends MGraphicElement implements IPastable,
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1,
-			Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -135,65 +133,45 @@ public class MList extends MGraphicElement implements IPastable,
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *            the desc
+	 *          the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
-			Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		printOrderD = new JSSEnumPropertyDescriptor(
-				StandardListComponent.PROPERTY_PRINT_ORDER,
-				Messages.MList_print_order, PrintOrderEnum.class,
-				NullEnum.NOTNULL);
+		printOrderD = new JSSEnumPropertyDescriptor(StandardListComponent.PROPERTY_PRINT_ORDER, Messages.MList_print_order, PrintOrderEnum.class, NullEnum.NOTNULL);
 		printOrderD.setDescription(Messages.MList_print_order_description);
 		desc.add(printOrderD);
 		printOrderD.setCategory(Messages.MList_list_properties_category);
-		printOrderD
-				.setHelpRefBuilder(new HelpReferenceBuilder(
-						"net.sf.jasperreports.doc/docs/components.schema.reference.html#_printOrder"));
+		printOrderD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#_printOrder"));
 
-		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(
-				StandardListComponent.PROPERTY_IGNORE_WIDTH,
-				Messages.MList_ignore_width, NullEnum.NULL);
+		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(StandardListComponent.PROPERTY_IGNORE_WIDTH, Messages.MList_ignore_width, NullEnum.NULL);
 		ignoreWidthD.setDescription(Messages.MList_ignore_width_description);
 		desc.add(ignoreWidthD);
 		ignoreWidthD.setCategory(Messages.MList_list_properties_category);
-		ignoreWidthD
-				.setHelpRefBuilder(new HelpReferenceBuilder(
-						"net.sf.jasperreports.doc/docs/components.schema.reference.html#_ignoreWidth"));
+		ignoreWidthD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#_ignoreWidth"));
 
-		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
-				PREFIX + StandardListComponent.PROPERTY_DATASET_RUN,
-				Messages.MList_dataset_run, false); //$NON-NLS-1$
+		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN, Messages.MList_dataset_run, false); //$NON-NLS-1$
 		datasetRunD.setDescription(Messages.MList_dataset_run_description);
 		datasetRunD.setCategory(Messages.MList_list_properties_category);
 		desc.add(datasetRunD);
 
-		setHelpPrefix(desc,
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#list");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#list");
 
-		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(
-				PREFIX + DesignListContents.PROPERTY_HEIGHT,
-				Messages.MList_cell_height);
+		PixelPropertyDescriptor heightD = new PixelPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_HEIGHT, Messages.MList_cell_height);
 		heightD.setCategory(Messages.MList_list_properties_category);
 		heightD.setDescription(Messages.MList_cell_height_description);
 		desc.add(heightD);
-		heightD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_height"));
+		heightD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_height"));
 
-		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(PREFIX
-				+ DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
+		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
 		widthD.setCategory(Messages.MList_list_properties_category);
 		widthD.setDescription(Messages.MList_cell_width_description);
 		desc.add(widthD);
-		widthD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_width"));
+		widthD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_width"));
 
-		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH,
-				new Boolean(false));
-		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER,
-				PrintOrderEnum.HORIZONTAL);
+		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH, new Boolean(false));
+		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER, PrintOrderEnum.HORIZONTAL);
 
 	}
 
@@ -240,14 +218,11 @@ public class MList extends MGraphicElement implements IPastable,
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			jrList.setIgnoreWidth((Boolean) value);
 		else if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))
-			jrList.setPrintOrderValue((PrintOrderEnum) printOrderD
-					.getEnumValue(value));
+			jrList.setPrintOrderValue((PrintOrderEnum) printOrderD.getEnumValue(value));
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_HEIGHT))
-			((DesignListContents) jrList.getContents())
-					.setHeight((Integer) value);
+			((DesignListContents) jrList.getContents()).setHeight((Integer) value);
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
-			((DesignListContents) jrList.getContents())
-					.setWidth((Integer) value);
+			((DesignListContents) jrList.getContents()).setWidth((Integer) value);
 		else if (id.equals(PREFIX + JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			if (value == null) {
 				jrList.setDatasetRun(null);
@@ -265,10 +240,8 @@ public class MList extends MGraphicElement implements IPastable,
 
 	public Dimension getContainerSize() {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		StandardListComponent jrList = (StandardListComponent) jrElement
-				.getComponent();
-		return new Dimension(jrList.getContents().getWidth(), jrList
-				.getContents().getHeight());
+		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+		return new Dimension(jrList.getContents().getWidth(), jrList.getContents().getHeight());
 	}
 
 	/*
@@ -289,9 +262,7 @@ public class MList extends MGraphicElement implements IPastable,
 		componentImpl.setContents(contents);
 
 		component.setComponent(componentImpl);
-		ComponentKey componentKey = new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components",
-				"jr", "list");
+		ComponentKey componentKey = new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "list");
 		component.setComponentKey(componentKey);
 
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
@@ -337,8 +308,7 @@ public class MList extends MGraphicElement implements IPastable,
 		JRElementGroup res = null;
 		if (value != null) {
 			JRDesignComponentElement jrElement = value;
-			StandardListComponent jrList = (StandardListComponent) jrElement
-					.getComponent();
+			StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
 			res = jrList.getContents();
 		}
 		return res;
@@ -350,66 +320,55 @@ public class MList extends MGraphicElement implements IPastable,
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) getValue();
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
 			if (elementGroup instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) elementGroup).getEventSupport()
-						.removePropertyChangeListener(this);
+				((JRChangeEventsSupport) elementGroup).getEventSupport().removePropertyChangeListener(this);
 		}
 		if (value != null) {
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) value;
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
 			if (elementGroup instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) elementGroup).getEventSupport()
-						.addPropertyChangeListener(this);
+				((JRChangeEventsSupport) elementGroup).getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {
-			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-			StandardListComponent jrList = (StandardListComponent) jrElement
-					.getComponent();
-			((DesignListContents) jrList.getContents()).setHeight((Integer) evt
-					.getNewValue());
-		} else if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)) {
-			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-			StandardListComponent jrList = (StandardListComponent) jrElement
-					.getComponent();
-			((DesignListContents) jrList.getContents()).setWidth((Integer) evt
-					.getNewValue());
-		} else if (getParent() instanceof MPage
-				&& evt.getPropertyName().equals(
-						JRDesignElementGroup.PROPERTY_CHILDREN)) {
-			if (evt.getSource() == getJRElementGroup()) {
-				if (evt.getOldValue() == null && evt.getNewValue() != null) {
-					int newIndex = -1;
-					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt)
-								.getAddedIndex();
-					}
-					// add the node to this parent
-					ANode n = ReportFactory.createNode(this, evt.getNewValue(),
-							newIndex);
-					if (evt.getNewValue() instanceof JRElementGroup) {
-						JRElementGroup jrFrame = (JRElementGroup) evt
-								.getNewValue();
-						ReportFactory.createElementsForBand(n,
-								jrFrame.getChildren());
-					}
-				} else if (evt.getOldValue() != null
-						&& evt.getNewValue() == null) {
-					// delete
-					for (INode n : getChildren()) {
-						if (n.getValue() == evt.getOldValue()) {
-							removeChild((ANode) n);
-							break;
+		if (evt.getSource() == getValue()) {
+			if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {
+				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+				StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+				((DesignListContents) jrList.getContents()).setHeight((Integer) evt.getNewValue());
+			} else if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)) {
+				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+				StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+				((DesignListContents) jrList.getContents()).setWidth((Integer) evt.getNewValue());
+			} else if (getParent() instanceof MPage && evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+				if (evt.getSource() == getJRElementGroup()) {
+					if (evt.getOldValue() == null && evt.getNewValue() != null) {
+						int newIndex = -1;
+						if (evt instanceof CollectionElementAddedEvent) {
+							newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
 						}
-					}
-				} else {
-					// changed
-					for (INode n : getChildren()) {
-						if (n.getValue() == evt.getOldValue())
-							n.setValue(evt.getNewValue());
+						// add the node to this parent
+						ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+						if (evt.getNewValue() instanceof JRElementGroup) {
+							JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+							ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+						}
+					} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+						// delete
+						for (INode n : getChildren()) {
+							if (n.getValue() == evt.getOldValue()) {
+								removeChild((ANode) n);
+								break;
+							}
+						}
+					} else {
+						// changed
+						for (INode n : getChildren()) {
+							if (n.getValue() == evt.getOldValue())
+								n.setValue(evt.getNewValue());
+						}
 					}
 				}
 			}
@@ -439,8 +398,7 @@ public class MList extends MGraphicElement implements IPastable,
 
 	public StandardListComponent getList() {
 		JRDesignComponentElement jrElement = getValue();
-		StandardListComponent jrList = (StandardListComponent) jrElement
-				.getComponent();
+		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
 		return jrList;
 	}
 
@@ -452,7 +410,7 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-		datasetList.add((MDatasetRun)getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN));
+		datasetList.add((MDatasetRun) getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN));
 		return datasetList;
 	}
 }
