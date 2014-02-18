@@ -127,7 +127,7 @@ public abstract class ARestV2Connection implements IConnection {
 
 	protected RESTv2ExceptionHandler eh;
 
-	public abstract void getBundle(Map<String, String> map, String name, IProgressMonitor monitor);
+	public abstract void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) throws Exception;
 
 	public abstract List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception;
 }

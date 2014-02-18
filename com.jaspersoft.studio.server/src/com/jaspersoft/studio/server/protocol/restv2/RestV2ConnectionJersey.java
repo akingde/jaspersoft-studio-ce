@@ -499,7 +499,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) {
+	public void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) throws Exception {
 		Builder req = target.path("bundles/" + name).request(MediaType.APPLICATION_JSON_TYPE);
 		try {
 			GenericType<Map<String, String>> type = new GenericType<Map<String, String>>() {

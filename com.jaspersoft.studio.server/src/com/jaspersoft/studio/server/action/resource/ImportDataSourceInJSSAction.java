@@ -60,38 +60,28 @@ public class ImportDataSourceInJSSAction extends Action {
 		setId(ID);
 		setText(Messages.ImportDataSourceInJSSAction_ActionText);
 		setToolTipText(Messages.ImportDataSourceInJSSAction_ActionTooltip);
-		setImageDescriptor(ResourceManager.getPluginImageDescriptor(
-				JaspersoftStudioPlugin.PLUGIN_ID,
-				"/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
+		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		return firstElement != null && isValidDataSource(firstElement);
 	}
 
 	@Override
 	public void run() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		importDataSourceAsDataAdapter(firstElement);
-		MessageDialog.openInformation(UIUtils.getShell(), Messages.ImportDataSourceInJSSAction_OperationInfoTitle,
-				Messages.ImportDataSourceInJSSAction_OperationInfoMsg);
+		MessageDialog.openInformation(UIUtils.getShell(), Messages.ImportDataSourceInJSSAction_OperationInfoTitle, Messages.ImportDataSourceInJSSAction_OperationInfoMsg);
 	}
 
 	/*
-	 * Right how the allowed type of DataSource are: 
-	 * 	- JDBC 
-	 * 	- Bean
-	 * 	- JNDI
+	 * Right how the allowed type of DataSource are: - JDBC - Bean - JNDI
 	 */
 	private boolean isValidDataSource(Object element) {
-		return element instanceof MRDatasourceJDBC
-				|| element instanceof MRDatasourceJNDI
-				|| element instanceof MRDatasourceBean;
+		return element instanceof MRDatasourceJDBC || element instanceof MRDatasourceJNDI || element instanceof MRDatasourceBean;
 	}
 
 	/*
@@ -101,10 +91,8 @@ public class ImportDataSourceInJSSAction extends Action {
 		if (datasource instanceof MRDatasourceJDBC) {
 			MRDatasourceJDBC jdbcDS = (MRDatasourceJDBC) datasource;
 			JDBCDataAdapterDescriptor jdbcDA = new JDBCDataAdapterDescriptor();
-			JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) jdbcDA
-					.getDataAdapter();
-			jdbcDataAdapter.setName(getValidName(jdbcDS.getValue().getLabel(),
-					"JDBC")); //$NON-NLS-1$
+			JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) jdbcDA.getDataAdapter();
+			jdbcDataAdapter.setName(getValidName(jdbcDS.getValue().getLabel(), "JDBC")); //$NON-NLS-1$
 			jdbcDataAdapter.setDriver(jdbcDS.getValue().getDriverClass());
 			jdbcDataAdapter.setUsername(jdbcDS.getValue().getUsername());
 			jdbcDataAdapter.setPassword(getPasswordValue(jdbcDS.getValue().getPassword()));
@@ -112,29 +100,24 @@ public class ImportDataSourceInJSSAction extends Action {
 			jdbcDataAdapter.setSavePassword(true);
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
 					jdbcDA);
-		}
-		else if (datasource instanceof MRDatasourceJNDI){
+		} else if (datasource instanceof MRDatasourceJNDI) {
 			MRDatasourceJNDI jndiDS = (MRDatasourceJNDI) datasource;
 			JndiDataAdapterDescriptor jndiDA = new JndiDataAdapterDescriptor();
 			JndiDataAdapter jndiDataAdapter = (JndiDataAdapter) jndiDA.getDataAdapter();
-			jndiDataAdapter.setName(getValidName(jndiDS.getValue().getLabel(),
-					"JNDI")); //$NON-NLS-1$
+			jndiDataAdapter.setName(getValidName(jndiDS.getValue().getLabel(), "JNDI")); //$NON-NLS-1$
 			jndiDataAdapter.setDataSourceName(jndiDS.getValue().getJndiName());
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
 					jndiDA);
-		}
-		else if (datasource instanceof MRDatasourceBean){
+		} else if (datasource instanceof MRDatasourceBean) {
 			MRDatasourceBean beanDS = (MRDatasourceBean) datasource;
 			BeanDataAdapterDescriptor beanDA = new BeanDataAdapterDescriptor();
 			BeanDataAdapter beanDataAdapter = (BeanDataAdapter) beanDA.getDataAdapter();
-			beanDataAdapter.setName(getValidName(beanDS.getValue().getLabel(),
-					"Bean")); //$NON-NLS-1$
+			beanDataAdapter.setName(getValidName(beanDS.getValue().getLabel(), "Bean")); //$NON-NLS-1$
 			beanDataAdapter.setFactoryClass(beanDS.getValue().getBeanName());
 			beanDataAdapter.setMethodName(beanDS.getValue().getBeanMethod());
 			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
 					beanDA);
-		}
-		else {
+		} else {
 			throw new RuntimeException(Messages.ImportDataSourceInJSSAction_DataSourceNotSupportedError);
 		}
 	}
@@ -143,46 +126,41 @@ public class ImportDataSourceInJSSAction extends Action {
 	 * Gets a valid name for the new data adapter being created.
 	 */
 	private String getValidName(String proposedName, String prefix) {
-		ADataAdapterStorage prefStorage = DataAdapterManager
-				.getPreferencesStorage();
+		ADataAdapterStorage prefStorage = DataAdapterManager.getPreferencesStorage();
 		if (prefStorage.isDataAdapterNameValid(proposedName)) {
 			return proposedName;
 		} else {
-			MessageFormat msgF = new MessageFormat(
-					Messages.ImportDataSourceInJSSAction_DataAdapterNameTemplate);
+			MessageFormat msgF = new MessageFormat(Messages.ImportDataSourceInJSSAction_DataAdapterNameTemplate);
 			for (int i = 1; i < 1000; i++) {
-				String name = msgF.format(new Object[] { prefix,
-						(i > 1) ? "(" + i + ")" : "" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				String name = msgF.format(new Object[] { prefix, (i > 1) ? "(" + i + ")" : "" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				if (prefStorage.isDataAdapterNameValid(name)) {
 					return name;
 				}
 			}
-			throw new RuntimeException(
-					Messages.ImportDataSourceInJSSAction_UnableToGetNameError);
+			throw new RuntimeException(Messages.ImportDataSourceInJSSAction_UnableToGetNameError);
 		}
 	}
-	
-	/* 
+
+	/*
 	 * Gets the secret storage key or the plain text password value.
 	 */
 	private String getPasswordValue(String passwordFieldTxt) {
-		return JaspersoftStudioPlugin.shouldUseSecureStorage() 
-				? getSecretStorageKey(passwordFieldTxt) : passwordFieldTxt;
+		return JaspersoftStudioPlugin.shouldUseSecureStorage() ? getSecretStorageKey(passwordFieldTxt) : passwordFieldTxt;
 	}
-	
+
 	/*
-	 * Returns the key that will be used to retrieve the information from 
-	 * the secure preferences.
+	 * Returns the key that will be used to retrieve the information from the
+	 * secure preferences.
 	 */
 	private String getSecretStorageKey(String pass) {
 		try {
 			UUID uuidKey = UUID.randomUUID();
-			SecureStorageUtils.saveToDefaultSecurePreferences(
-					AbstractDataAdapterService.SECRETS_CATEGORY, uuidKey.toString(), pass);
+			SecureStorageUtils.saveToDefaultSecurePreferences(AbstractDataAdapterService.SECRETS_CATEGORY, uuidKey.toString(), pass);
 			return uuidKey.toString();
 		} catch (StorageException e) {
-			Activator.getDefault().logError(Messages.Common_ErrSecurePrefStorage,e);
-		};
+			Activator.getDefault().logError(Messages.Common_ErrSecurePrefStorage, e);
+		}
+		;
 		// in case something goes wrong return the clear-text password
 		// we will rely on back-compatibility
 		return pass;

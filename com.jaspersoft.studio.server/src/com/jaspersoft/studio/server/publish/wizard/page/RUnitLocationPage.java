@@ -349,7 +349,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 			public void treeExpanded(final TreeExpansionEvent event) {
 				if (!skipEvents) {
 					try {
-						getContainer().run(false, true, new IRunnableWithProgress() {
+						getContainer().run(true, true, new IRunnableWithProgress() {
 
 							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 								monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
