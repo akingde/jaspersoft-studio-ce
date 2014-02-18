@@ -96,7 +96,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 	protected IFigure createFigure() {
 		JDRulerFigure ruler = new JDRulerFigure(isHorizontal(), getRulerProvider().getUnit());
 		if (ruler.getUnit() == RulerProvider.UNIT_PIXELS)
-			ruler.setInterval(10, 1);
+			ruler.setInterval(100, 10);
 
 		ruler.setHend(((ReportRuler) getRulerProvider().getRuler()).getHend());
 		ruler.setHoffset(((ReportRuler) getRulerProvider().getRuler()).getHoffset());
