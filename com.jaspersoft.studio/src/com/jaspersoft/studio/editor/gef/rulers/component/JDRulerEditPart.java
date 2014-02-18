@@ -169,7 +169,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		return getRulerProvider().getGuides();
 	}
 
-	protected JDRulerFigure getRulerFigure() {
+	public JDRulerFigure getRulerFigure() {
 		return (JDRulerFigure) getFigure();
 	}
 

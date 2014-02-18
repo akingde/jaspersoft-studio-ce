@@ -10,13 +10,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.snap;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.FormDialog;
@@ -106,7 +107,7 @@ public class SizeGridAction extends AResourcePreferenceAction {
 		int x = getStore().getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX);
 		int y = getStore().getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY);
 
-		SizeDialog dlg = new SizeDialog(Display.getDefault().getActiveShell(), new Dimension(x, y));
+		SizeDialog dlg = new SizeDialog(UIUtils.getShell(), new Dimension(x, y));
 		if (dlg.open() == Window.OK) {
 			ScopedPreferenceStore store = getStore();
 			store.setValue(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX, dlg.getWidth());

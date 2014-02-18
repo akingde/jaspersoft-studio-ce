@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.rulers.component;
 
@@ -38,7 +33,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.internal.ui.rulers.GuideEditPart;
-import org.eclipse.gef.internal.ui.rulers.RulerContextMenuProvider;
 import org.eclipse.gef.internal.ui.rulers.RulerEditPartFactory;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
@@ -56,6 +50,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
+import com.jaspersoft.studio.editor.gef.rulers.JDRulerContextMenuProvider;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 
 public class JDRulerComposite extends Composite {
@@ -297,7 +292,7 @@ public class JDRulerComposite extends Composite {
 				// @TODO:Pratik If you use Display.asyncExec(runnable) here, some flashing
 				// occurs. You can see it when the palette is in the editor, and you hit
 				// the button to show/hide it.
-						layout(true);		
+				layout(true);
 			}
 		};
 		addListener(SWT.Resize, layoutListener);
@@ -305,8 +300,8 @@ public class JDRulerComposite extends Composite {
 		editor.getHorizontalBar().addListener(SWT.Hide, layoutListener);
 		editor.getVerticalBar().addListener(SWT.Show, layoutListener);
 		editor.getVerticalBar().addListener(SWT.Hide, layoutListener);
-//		editor.addListener(SWT.Show, layoutListener);
-//		editor.addListener(SWT.Hide, layoutListener);
+		// editor.addListener(SWT.Show, layoutListener);
+		// editor.addListener(SWT.Hide, layoutListener);
 
 		propertyListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -492,7 +487,7 @@ public class JDRulerComposite extends Composite {
 		 * @see org.eclipse.gef.ui.parts.AbstractEditPartViewer#init()
 		 */
 		protected void init() {
-			setContextMenu(new RulerContextMenuProvider(this));
+			setContextMenu(new JDRulerContextMenuProvider(this));
 			setKeyHandler(new RulerKeyHandler(this));
 		}
 
