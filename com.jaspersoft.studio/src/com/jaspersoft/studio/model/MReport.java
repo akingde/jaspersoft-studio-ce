@@ -79,7 +79,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout, IPastable {
+public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout,
+		IPastable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
@@ -676,21 +677,17 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		JRDesignSection source = (JRDesignSection) evt.getSource();
 		JROrigin sourceOrigin = source.getOrigin();
 		String groupName = sourceOrigin.getGroupName();
-		for (Iterator<?> it = getChildren().iterator(); it.hasNext();) {
-			ANode node = (ANode) it.next();
-			if (node instanceof MBand) {
-				MBand mBand = (MBand) node;
+		for (INode n : getChildren()) {
+			if (n instanceof MBand) {
+				MBand mBand = (MBand) n;
+				BandTypeEnum bt = sourceOrigin.getBandTypeValue();
+				if ((mBand instanceof MBandGroupHeader && groupName != null && bt.equals(BandTypeEnum.GROUP_HEADER) && groupName
+						.equals(((MBandGroupHeader) mBand).getJrGroup().getName()))
 
-				if ((mBand instanceof MBandGroupHeader && groupName != null
-						&& sourceOrigin.getBandTypeValue().equals(BandTypeEnum.GROUP_HEADER) && groupName
-							.equals(((MBandGroupHeader) mBand).getJrGroup().getName()))
+						|| (mBand instanceof MBandGroupFooter && groupName != null && bt.equals(BandTypeEnum.GROUP_FOOTER) && groupName
+								.equals(((MBandGroupFooter) mBand).getJrGroup().getName()))
 
-						|| (mBand instanceof MBandGroupFooter && groupName != null
-								&& sourceOrigin.getBandTypeValue().equals(BandTypeEnum.GROUP_FOOTER) && groupName
-									.equals(((MBandGroupFooter) mBand).getJrGroup().getName()))
-
-						|| (sourceOrigin.getBandTypeValue().equals(BandTypeEnum.DETAIL) && BandTypeEnum.DETAIL.equals(mBand
-								.getBandType()))) {
+						|| (bt.equals(BandTypeEnum.DETAIL) && BandTypeEnum.DETAIL.equals(mBand.getBandType()))) {
 					if (firstBand == null)
 						firstBand = mBand;
 					lastBand = mBand;
@@ -705,16 +702,15 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				firstBand.setValue(evt.getNewValue());
 			} else {
 				int index = lastIndex;
-				if (evt instanceof CollectionElementAddedEvent) {
+				if (evt instanceof CollectionElementAddedEvent)
 					index = getChildren().indexOf(firstBand) + ((CollectionElementAddedEvent) evt).getAddedIndex();
-				}
-				if (firstBand instanceof MBandGroupHeader) {
+				if (firstBand instanceof MBandGroupHeader)
 					firstBand = new MBandGroupHeader(this, ((MBandGroupHeader) firstBand).getJrGroup(),
 							(JRBand) evt.getNewValue(), index);
-				} else if (firstBand instanceof MBandGroupFooter) {
+				else if (firstBand instanceof MBandGroupFooter)
 					firstBand = new MBandGroupFooter(this, ((MBandGroupFooter) firstBand).getJrGroup(),
 							(JRBand) evt.getNewValue(), index);
-				} else
+				else
 					firstBand = (MBand) ReportFactory.createNode(this, evt.getNewValue(), index);
 			}
 			ReportFactory.createElementsForBand(firstBand, ((JRDesignBand) evt.getNewValue()).getChildren());
@@ -770,10 +766,11 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				if (n instanceof MBandGroupFooter && ((MBandGroupFooter) n).getJrGroup() == group)
 					return;
 			}
-			
-			//Check if the new group is for the main dataset or from a subdataset, in the second case the band are not created
-			boolean createBands = !getJasperDesign().getDatasetMap().containsKey(((JRDataset)evt.getSource()).getName());
-			if (createBands){
+
+			// Check if the new group is for the main dataset or from a subdataset, in the second case the band are not
+			// created
+			boolean createBands = !getJasperDesign().getDatasetMap().containsKey(((JRDataset) evt.getSource()).getName());
+			if (createBands) {
 				// find the right position to put the band
 				addGroupListener(group);
 				int position = 0;
@@ -796,7 +793,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 						break;
 					position++;
 				}
-				
+
 				if (group.getGroupHeaderSection() != null) {
 					List<?> grhBands = ((JRDesignSection) group.getGroupHeaderSection()).getBandsList();
 					if (grhBands != null) {
