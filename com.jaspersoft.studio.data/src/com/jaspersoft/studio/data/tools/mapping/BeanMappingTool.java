@@ -27,6 +27,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -128,14 +129,21 @@ public class BeanMappingTool implements IMappingTool {
 		gd.horizontalSpan = 3;
 		methods.setLayoutData(gd);
 
-		Button gfbtn = new Button(control, SWT.PUSH);
+		Composite bottomToolbar=new Composite(control,SWT.NONE);
+		GridLayout btGL = new GridLayout(3,false);
+		btGL.marginWidth=0;
+		btGL.marginHeight=0;
+		bottomToolbar.setLayout(btGL);
+		bottomToolbar.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,3,1));
+		
+		Button gfbtn = new Button(bottomToolbar, SWT.PUSH);
 		gfbtn.setText(Messages.BeanMappingTool_selectfieldstitle);
+		gfbtn.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,false));
 		gfbtn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				int[] items = methods.getSelectionIndices();
 				if (methodsarray != null && items != null) {
-					// hmm, aici ar trebui sa am eu un hook ceva
 					List<JRDesignField> flist = new ArrayList<JRDesignField>();
 					for (int i = 0; i < items.length; i++) {
 						JRDesignField f = new JRDesignField();
@@ -152,7 +160,7 @@ public class BeanMappingTool implements IMappingTool {
 							f.setDescription(description);
 						flist.add(f);
 					}
-					fsetter.setFields(flist);
+					fsetter.addFields(flist);
 				}
 			}
 
@@ -160,11 +168,24 @@ public class BeanMappingTool implements IMappingTool {
 				widgetSelected(e);
 			}
 		});
+		
+		Button clearBtn = new Button(bottomToolbar, SWT.PUSH);
+		clearBtn.setText("Clear fields list");
+		clearBtn.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,false));
+		clearBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fsetter.clearFields();
+			}
+		});
 
-		errMsg = new Label(control, SWT.NONE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		errMsg.setLayoutData(gd);
+		errMsg = new Label(bottomToolbar, SWT.RIGHT);
+		errMsg.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false));
 
 		return control;
 	}

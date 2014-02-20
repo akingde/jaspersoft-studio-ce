@@ -12,6 +12,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,7 @@ import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
@@ -226,6 +228,21 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
+	}
+	
+	public void addFields(List<JRDesignField> fields) {
+		List<JRDesignField> allFields = ftable.getFields();
+		for(JRDesignField f : fields) {
+			// Take care of having "valid" name for field
+			String newName = ModelUtils.getNameForField(allFields, f.getName());
+			f.setName(newName);
+			allFields.add(f);
+		}
+		ftable.setFields(allFields);
+	}
+
+	public void clearFields() {
+		ftable.setFields(new ArrayList<JRDesignField>(0));
 	}
 
 	public void setParameters(List<JRDesignParameter> fields) {
@@ -535,4 +552,5 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	public List<JRDesignField> getFieldsForPreview() {
 		return this.getCurrentFields();
 	}
+
 }

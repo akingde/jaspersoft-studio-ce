@@ -37,7 +37,7 @@ public class ClassType {
 
 	public void createComponent(Composite parent, String tooltip) {
 		factoryText = new Text(parent, SWT.BORDER);
-		factoryText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		factoryText.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false));
 		factoryText.setToolTipText(tooltip);
 
 		btnNewButton = new Button(parent, SWT.NONE);
@@ -50,6 +50,7 @@ public class ClassType {
 			}
 		});
 		btnNewButton.setText("...");
+		btnNewButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 	}
 
 	public Text getControl() {
