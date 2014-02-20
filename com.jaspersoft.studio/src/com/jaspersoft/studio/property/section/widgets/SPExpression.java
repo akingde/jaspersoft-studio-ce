@@ -71,7 +71,6 @@ public class SPExpression extends AHistorySPropertyWidget implements IExpression
 		});
 		if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.widthHint = 100;
 			expr.setLayoutData(gd);
 		}
 		expr.getTextControl().addFocusListener(focusListener);
