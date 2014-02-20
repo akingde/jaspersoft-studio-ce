@@ -72,6 +72,15 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 
 	private MLineBox lineBox;
 
+	
+	private MLineBox getLineBox(){
+		JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
+		if (lineBox == null) {
+			lineBox = new MLineBox(jrGraphicElement.getLineBox());
+			setChildListener(lineBox);
+		}
+		return lineBox;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -81,12 +90,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	public Object getPropertyValue(Object id) {
 		// pen
 		if (id.equals(LINE_BOX)) {
-			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
-			if (lineBox == null) {
-				lineBox = new MLineBox(jrGraphicElement.getLineBox());
-				setChildListener(lineBox);
-			}
-			return lineBox;
+			return getLineBox();
 		}
 		return super.getPropertyValue(id);
 	}

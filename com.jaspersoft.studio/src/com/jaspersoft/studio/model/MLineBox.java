@@ -173,47 +173,67 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				return lineBox.getOwnBottomPadding();
 			// ----------------------------------------------------
 			if (id.equals(LINE_PEN)) {
-				if (linePen == null) {
-					linePen = new MLinePen(lineBox.getPen());
-					setChildListener(linePen);
-					linePen.getPropertyDescriptors();
-				}
-				return linePen;
+					return getLinePen(lineBox);
 			}
 			if (id.equals(LINE_PEN_TOP)) {
-				if (linePenTop == null) {
-					linePenTop = new MLinePen(lineBox.getTopPen());
-					setChildListener(linePenTop);
-					linePenTop.getPropertyDescriptors();
-				}
-				return linePenTop;
+					return getTopLinePen(lineBox);
 			}
 			if (id.equals(LINE_PEN_BOTTOM)) {
-				if (linePenBottom == null) {
-					linePenBottom = new MLinePen(lineBox.getBottomPen());
-					setChildListener(linePenBottom);
-					linePenBottom.getPropertyDescriptors();
-				}
-				return linePenBottom;
+					return getBottomLinePen(lineBox);
 			}
 			if (id.equals(LINE_PEN_LEFT)) {
-				if (linePenLeft == null) {
-					linePenLeft = new MLinePen(lineBox.getLeftPen());
-					setChildListener(linePenLeft);
-					linePenLeft.getPropertyDescriptors();
-				}
-				return linePenLeft;
+					return getLeftLinePen(lineBox);
 			}
 			if (id.equals(LINE_PEN_RIGHT)) {
-				if (linePenRight == null) {
-					linePenRight = new MLinePen(lineBox.getRightPen());
-					setChildListener(linePenRight);
-					linePenRight.getPropertyDescriptors();
-				}
-				return linePenRight;
+					return getRightLinePen(lineBox);
 			}
 		}
 		return null;
+	}
+	
+	private MLinePen getLinePen(JRLineBox lineBox){
+		if (linePen == null) {
+			linePen = new MLinePen(lineBox.getPen());
+			setChildListener(linePen);
+			linePen.getPropertyDescriptors();
+		}
+		return linePen;
+	}
+	
+	private MLinePen getTopLinePen(JRLineBox lineBox){
+		if (linePenTop == null) {
+			linePenTop = new MLinePen(lineBox.getTopPen());
+			setChildListener(linePenTop);
+			linePenTop.getPropertyDescriptors();
+		}
+		return linePenTop;
+	}
+	
+	private MLinePen getBottomLinePen(JRLineBox lineBox){
+		if (linePenBottom == null) {
+			linePenBottom = new MLinePen(lineBox.getBottomPen());
+			setChildListener(linePenBottom);
+			linePenBottom.getPropertyDescriptors();
+		}
+		return linePenBottom;
+	}
+	
+	private MLinePen getLeftLinePen(JRLineBox lineBox){
+		if (linePenLeft == null) {
+			linePenLeft = new MLinePen(lineBox.getLeftPen());
+			setChildListener(linePenLeft);
+			linePenLeft.getPropertyDescriptors();
+		}
+		return linePenLeft;
+	}
+	
+	private MLinePen getRightLinePen(JRLineBox lineBox){
+		if (linePenRight == null) {
+			linePenRight = new MLinePen(lineBox.getRightPen());
+			setChildListener(linePenRight);
+			linePenRight.getPropertyDescriptors();
+		}
+		return linePenRight;
 	}
 
 	public Object getPropertyActualValue(Object id) {
