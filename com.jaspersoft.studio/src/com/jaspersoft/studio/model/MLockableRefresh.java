@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
-import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 
 /**
@@ -55,13 +54,13 @@ public abstract class MLockableRefresh extends APropertyNode {
 		}
 	}*/
 	
-	@Override
+	/*@Override
 	protected void firePropertyChange(PropertyChangeEvent evt) {
 		synchronized(lockMap){
 			if (lockMap.isEmpty()) 
 				super.firePropertyChange(evt);
 		}
-	}
+	}*/
 
 	/**
 	 * Create or remove a lock for the refresh 
