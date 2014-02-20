@@ -60,11 +60,19 @@ public class JSSCompoundResizeTracker extends ResizeTracker {
 	@Override
 	protected Command getCurrentCommand() {
 		Command command = super.getCurrentCommand();
-		if (command instanceof CompoundCommand && !(command instanceof JSSCompoundCommand)){
-			CompoundCommand cc = (CompoundCommand)command;
-			JSSCompoundCommand jsscc = new JSSCompoundCommand(cc, getLockableNode());
-			command = jsscc;
+		if (!(command instanceof JSSCompoundCommand)){
+			if (command instanceof CompoundCommand){
+				CompoundCommand cc = (CompoundCommand)command;
+				JSSCompoundCommand jsscc = new JSSCompoundCommand(cc,getLockableNode()) ;
+				command = jsscc;
+			} else {
+				JSSCompoundCommand jsscc = new JSSCompoundCommand(getLockableNode());
+				jsscc.add(command);
+				command = jsscc;
+			}
 		}
 		return command;
+		
+		
 	}
 }
