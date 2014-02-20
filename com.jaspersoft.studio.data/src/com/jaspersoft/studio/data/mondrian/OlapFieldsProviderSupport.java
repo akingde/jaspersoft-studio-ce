@@ -22,15 +22,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.jaspersoft.studio.data.internal.olap.JROlapHierarchy;
-import com.jaspersoft.studio.data.internal.olap.JROlapHierarchyLevel;
-import com.jaspersoft.studio.data.internal.olap.JROlapMember;
-import com.jaspersoft.studio.data.internal.olap.JROlapMemberTuple;
-import com.jaspersoft.studio.data.internal.olap.JROlapResult;
-import com.jaspersoft.studio.data.internal.olap.JROlapResultAxis;
-
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.olap.result.JROlapHierarchy;
+import net.sf.jasperreports.olap.result.JROlapHierarchyLevel;
+import net.sf.jasperreports.olap.result.JROlapMember;
+import net.sf.jasperreports.olap.result.JROlapMemberTuple;
+import net.sf.jasperreports.olap.result.JROlapResult;
+import net.sf.jasperreports.olap.result.JROlapResultAxis;
 
 /**
  * Offers the support methods that using the result of a mondrian or xmla query generate 

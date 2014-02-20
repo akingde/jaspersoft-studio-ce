@@ -25,10 +25,10 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.olap.result.JROlapResult;
+import net.sf.jasperreports.olap.xmla.JRXmlaQueryExecuter;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.data.internal.olap.JROlapResult;
-import com.jaspersoft.studio.data.internal.xmla.JRXmlaQueryExecuter;
 import com.jaspersoft.studio.data.mondrian.OlapFieldsProviderSupport;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;

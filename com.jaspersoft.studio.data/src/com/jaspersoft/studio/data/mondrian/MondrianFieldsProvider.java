@@ -25,10 +25,10 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.olap.JRMondrianQueryExecuter;
+import net.sf.jasperreports.olap.mondrian.JRMondrianResult;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.data.internal.mondrian.JRMondrianQueryExecuter;
-import com.jaspersoft.studio.data.internal.mondrian.JRMondrianResult;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
