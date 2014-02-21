@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
@@ -84,13 +79,15 @@ public class MBandGroupHeader extends MBand {
 		setChildListener(mGroup);
 		mGroupBand = new MGroupBand(jrGroup);
 		// Fix missing jasper configuration
-		if(parent!=null) {
+		if (parent != null) {
 			JasperReportsConfiguration jconfig = parent.getJasperConfiguration();
-			if(jconfig!=null){
+			if (jconfig != null) {
 				mGroup.setJasperConfiguration(jconfig);
 				mGroupBand.setJasperConfiguration(jconfig);
 			}
 		}
+		bandIndex = 1;
+		refreshIndex();
 	}
 
 	/**
@@ -118,16 +115,23 @@ public class MBandGroupHeader extends MBand {
 		if (getJrGroup() == null)
 			return super.getDisplayText();
 		JRDesignBand value = (JRDesignBand) getValue();
+		String index = "";
+		if (bandIndex != -1)
+			index = " " + String.valueOf(bandIndex);
 		if (value != null)
-			return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header; //$NON-NLS-1$
+			return jrGroup.getName()
+					+ " " + Messages.MBandGroupHeader_group_header + index + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header + index;//$NON-NLS-1$
 	}
 
 	@Override
 	public String getSimpleDisplayName() {
 		if (getJrGroup() == null)
 			return super.getSimpleDisplayName();
-		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header; //$NON-NLS-1$
+		String index = "";
+		if (bandIndex != -1)
+			index = " " + String.valueOf(bandIndex);
+		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header + index; //$NON-NLS-1$
 	}
 
 	/*
@@ -196,4 +200,8 @@ public class MBandGroupHeader extends MBand {
 		return super.getPropertyDefaultValue(id);
 	}
 
+	@Override
+	protected boolean isSameBandType(MBand band) {
+		return super.isSameBandType(band) && jrGroup != null && jrGroup == ((MBandGroupHeader) band).getJrGroup();
+	}
 }
