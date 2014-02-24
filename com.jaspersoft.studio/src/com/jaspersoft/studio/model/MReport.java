@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -589,6 +590,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_LAST_PAGE_FOOTER)
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_SUMMARY)
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_NO_DATA)
+				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_DETAIL)
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_BACKGROUND)) {
 			handleBandChanged(evt);
 		} else if (evt.getPropertyName().equals(JRDesignSection.PROPERTY_BANDS)) {
@@ -696,14 +698,30 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			}
 			lastIndex++;
 		}
-		if (evt.getNewValue() != null) {
+		int find = getChildren().indexOf(firstBand);
+		if (evt instanceof IndexedPropertyChangeEvent && evt.getNewValue() instanceof Integer) {
+			int newInd = ((IndexedPropertyChangeEvent) evt).getIndex();
+			JRBand b = source.getBandsList().get(newInd);
+			MBand mb = null;
+			for (INode n : getChildren()) {
+				if (n.getValue() == b) {
+					mb = (MBand) n;
+					break;
+				}
+			}
+			if (mb != null) {
+				newInd = getChildren().indexOf(mb) + (newInd - (Integer) evt.getOldValue());
+				removeChild(mb);
+				addChild(mb, newInd);
+			}
+		} else if (evt.getNewValue() != null) {
 			// new value
 			if (firstBand != null && firstBand.equals(lastBand) && firstBand.getValue() == null) {
 				firstBand.setValue(evt.getNewValue());
 			} else {
 				int index = lastIndex;
 				if (evt instanceof CollectionElementAddedEvent)
-					index = getChildren().indexOf(firstBand) + ((CollectionElementAddedEvent) evt).getAddedIndex();
+					index = find + ((CollectionElementAddedEvent) evt).getAddedIndex();
 				if (firstBand instanceof MBandGroupHeader)
 					firstBand = new MBandGroupHeader(this, ((MBandGroupHeader) firstBand).getJrGroup(),
 							(JRBand) evt.getNewValue(), index);

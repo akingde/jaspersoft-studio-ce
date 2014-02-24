@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
@@ -169,7 +168,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		return actualIndex;
 	}
 
-	protected boolean isSameBandType(MBand band) {
+	public boolean isSameBandType(MBand band) {
 		return bandType == band.getBandType();
 	}
 

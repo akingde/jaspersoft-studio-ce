@@ -201,7 +201,7 @@ public class MBandGroupHeader extends MBand {
 	}
 
 	@Override
-	protected boolean isSameBandType(MBand band) {
+	public boolean isSameBandType(MBand band) {
 		return super.isSameBandType(band) && jrGroup != null && jrGroup == ((MBandGroupHeader) band).getJrGroup();
 	}
 }
