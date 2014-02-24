@@ -178,7 +178,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		treeViewer = new TreeViewer(composite, SWT.SINGLE | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 300;
- 		gd.heightHint = 400;
+		gd.heightHint = 400;
 		gd.horizontalSpan = 2;
 		treeViewer.getTree().setLayoutData(gd);
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
@@ -348,54 +348,61 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 
 			public void treeExpanded(final TreeExpansionEvent event) {
 				if (!skipEvents) {
-					try {
-						getContainer().run(true, true, new IRunnableWithProgress() {
+					UIUtils.getDisplay().asyncExec(new Runnable() {
 
-							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-								monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
-								try {
-									if (serverProvider == null)
-										serverProvider = new ServerProvider();
-									Object element = event.getElement();
-									boolean be = reportUnit.getParent() == element;
-									serverProvider.handleTreeEvent(event, monitor);
-									if (be) {
-										MFolder f = (MFolder) element;
-										String nm = reportUnit.getValue().getName();
-										boolean isnew = true;
-										for (INode n : f.getChildren()) {
-											if (n instanceof MReportUnit) {
-												if (((MReportUnit) n).getValue().getName().equals(nm)) {
-													reportUnit = (MReportUnit) n;
-													isnew = false;
-													break;
+						@Override
+						public void run() {
+							try {
+								getContainer().run(true, true, new IRunnableWithProgress() {
+
+									public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+										monitor.beginTask(Messages.Publish2ServerWizard_MonitorName, IProgressMonitor.UNKNOWN);
+										try {
+											if (serverProvider == null)
+												serverProvider = new ServerProvider();
+											Object element = event.getElement();
+											boolean be = reportUnit.getParent() == element;
+											serverProvider.handleTreeEvent(event, monitor);
+											if (be) {
+												MFolder f = (MFolder) element;
+												String nm = reportUnit.getValue().getName();
+												boolean isnew = true;
+												for (INode n : f.getChildren()) {
+													if (n instanceof MReportUnit) {
+														if (((MReportUnit) n).getValue().getName().equals(nm)) {
+															reportUnit = (MReportUnit) n;
+															isnew = false;
+															break;
+														}
+													} else if (n instanceof MJrxml) {
+														if (((MJrxml) n).getValue().getName().equals(nm)) {
+															reportUnit = (MJrxml) n;
+															isnew = false;
+															break;
+														}
+													}
 												}
-											} else if (n instanceof MJrxml) {
-												if (((MJrxml) n).getValue().getName().equals(nm)) {
-													reportUnit = (MJrxml) n;
-													isnew = false;
-													break;
-												}
+												if (isnew)
+													reportUnit.setParent(f, -1);
 											}
+										} catch (Exception e) {
+											if (e instanceof InterruptedException)
+												throw (InterruptedException) e;
+											else
+												UIUtils.showError(e);
+										} finally {
+											monitor.done();
 										}
-										if (isnew)
-											reportUnit.setParent(f, -1);
 									}
-								} catch (Exception e) {
-									if (e instanceof InterruptedException)
-										throw (InterruptedException) e;
-									else
-										UIUtils.showError(e);
-								} finally {
-									monitor.done();
-								}
+								});
+							} catch (InvocationTargetException e) {
+								UIUtils.showError(e.getCause());
+							} catch (InterruptedException e) {
+								UIUtils.showError(e.getCause());
 							}
-						});
-					} catch (InvocationTargetException e) {
-						UIUtils.showError(e.getCause());
-					} catch (InterruptedException e) {
-						UIUtils.showError(e.getCause());
-					}
+						}
+					});
+
 				}
 			}
 

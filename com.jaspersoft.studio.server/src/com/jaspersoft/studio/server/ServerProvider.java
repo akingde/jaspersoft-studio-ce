@@ -270,19 +270,17 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	public void handleTreeEvent(TreeExpansionEvent event) {
-		if (event.getElement() instanceof MServerProfile) {
+		if (event.getElement() instanceof MServerProfile)
 			listServer(event);
-		} else if (event.getElement() instanceof MResource) {
+		else if (event.getElement() instanceof MResource)
 			lazyLoadResource(event);
-		}
 	}
 
 	public void handleTreeEvent(TreeExpansionEvent event, IProgressMonitor monitor) {
-		if (event.getElement() instanceof MServerProfile) {
+		if (event.getElement() instanceof MServerProfile)
 			listServer(event, monitor);
-		} else if (event.getElement() instanceof MResource) {
+		else if (event.getElement() instanceof MResource)
 			lazyLoadResource(event, monitor);
-		}
 	}
 
 	private void listServer(final TreeExpansionEvent event) {
@@ -351,16 +349,16 @@ public class ServerProvider implements IRepositoryViewProvider {
 		final MServerProfile r = (MServerProfile) event.getElement();
 		try {
 			WSClientHelper.connectGetData(r, monitor);
-			Display.getDefault().asyncExec(new Runnable() {
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				public void run() {
-					tv.refresh(true);
+					tv.refresh(r, true);
 				}
 			});
 
 			return Status.OK_STATUS;
 		} catch (final Throwable e) {
-			Display.getDefault().syncExec(new Runnable() {
+			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				public void run() {
 					tv.collapseToLevel(r, 1);
