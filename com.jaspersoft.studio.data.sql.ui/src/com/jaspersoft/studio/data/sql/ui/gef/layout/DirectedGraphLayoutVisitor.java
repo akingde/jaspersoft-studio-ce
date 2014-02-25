@@ -46,6 +46,9 @@ public class DirectedGraphLayoutVisitor {
 		graph = new DirectedGraph();
 		graph.setDirection(PositionConstants.EAST);
 		addNodes(diagram);
+		Rectangle r = diagram.getFigure().getBounds();
+		if (r.x < -1000 || r.y < -1000)
+			return;
 		if (graph.nodes.size() > 0) {
 			addEdges(diagram);
 			new NodeJoiningDirectedGraphLayout().visit(graph);
@@ -85,14 +88,14 @@ public class DirectedGraphLayoutVisitor {
 
 	protected void applyChildrenResults(AbstractGraphicalEditPart diagram) {
 		List<AbstractGraphicalEditPart> children = diagram.getChildren();
+		Rectangle r = diagram.getFigure().getBounds();
 		for (AbstractGraphicalEditPart tp : children) {
 			Node n = (Node) partToNodesMap.get(tp);
 			IFigure f = tp.getFigure();
 
 			Dimension psize = f.getPreferredSize();
-			AbstractGraphicalEditPart p = (AbstractGraphicalEditPart) tp.getParent();
-			Rectangle r = p.getFigure().getBounds();
-			f.setBounds(new Rectangle(r.x + n.x, r.y + n.y, psize.width, psize.height));
+			f.setBounds(new Rectangle(r.x + n.x, r.y + n.y, psize.width,
+					psize.height));
 
 			List<RelationshipPart> sc = tp.getSourceConnections();
 			for (RelationshipPart rp : sc)
@@ -106,7 +109,8 @@ public class DirectedGraphLayoutVisitor {
 			return;
 		NodeList nodes = e.vNodes;
 
-		PolylineConnection conn = (PolylineConnection) relationshipPart.getConnectionFigure();
+		PolylineConnection conn = (PolylineConnection) relationshipPart
+				.getConnectionFigure();
 		if (nodes != null) {
 			List<AbsoluteBendpoint> bends = new ArrayList<AbsoluteBendpoint>();
 			for (int i = 0; i < nodes.size(); i++) {
