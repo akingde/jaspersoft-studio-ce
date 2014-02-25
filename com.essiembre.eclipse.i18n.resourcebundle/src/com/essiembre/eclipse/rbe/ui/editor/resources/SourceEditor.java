@@ -139,6 +139,7 @@ public class SourceEditor {
             TextSelection selection = (TextSelection) textEditor.getSelectionProvider().getSelection();
             int selectionStart = selection.getOffset();
             String content = getContent();
+            if (content.trim().isEmpty()) return null;
             int start = 0, end = 0;
             
             // Extract the bounds of the line containing the selection
