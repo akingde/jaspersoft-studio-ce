@@ -36,8 +36,11 @@ public class QueryWriter {
 			public boolean visit(INode n) {
 				if (n instanceof ISubQuery)
 					sb.append("(");
-				else if (n instanceof IQueryString)
+				else if (n instanceof IQueryString) {
+					if (n instanceof MFromTable && n.getValue() instanceof MQueryTable && !((MFromTable) n).isFirst())
+						sb.append(",\n\t");
 					sb.append(((IQueryString) n).toSQLString());
+				}
 				return true;
 			}
 

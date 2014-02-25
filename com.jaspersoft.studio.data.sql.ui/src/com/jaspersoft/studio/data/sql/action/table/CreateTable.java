@@ -17,6 +17,8 @@ package com.jaspersoft.studio.data.sql.action.table;
 
 import java.util.Collection;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -60,9 +62,8 @@ public class CreateTable extends AAction {
 		for (MSqlTable t : nodes) {
 			if (sel instanceof MFrom)
 				sel = run(t, (MFrom) sel, 0);
-			else if (sel instanceof MFromTable) {
+			else if (sel instanceof MFromTable)
 				sel = run(t, (MFromTable) sel);
-			}
 		}
 		selectInTree(sel);
 	}
@@ -76,7 +77,7 @@ public class CreateTable extends AAction {
 	}
 
 	public MFromTable run(final MSqlTable node, MFrom mfrom, int index) {
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
