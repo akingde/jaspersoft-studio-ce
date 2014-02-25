@@ -184,7 +184,7 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 					String language = evaluate(map.getLanguageExpression(), jrd, jrContext, "");
 					String markers = "";
 
-					String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude
+					String imageLocation = "http://maps.google.com/maps/api/staticmap?center=" + (latitude%90) + "," + (longitude%180)
 							+ "&size=" + element.getWidth() + "x" + element.getHeight() + "&zoom=" + zoom
 							+ (mapType == null ? "" : "&maptype=" + mapType) + (mapFormat == null ? "" : "&format=" + mapFormat)
 							+ (mapScale == null ? "" : "&scale=" + mapScale) + markers + "&sensor=false"
