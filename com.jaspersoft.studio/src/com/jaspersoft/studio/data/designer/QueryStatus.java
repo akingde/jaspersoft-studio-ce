@@ -51,6 +51,8 @@ public class QueryStatus extends AQueryStatus {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
+				if (msgItem.isDisposed())
+					return;
 				msgItem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif"));
 				setMessage(t, message, true);
 			}
@@ -61,6 +63,8 @@ public class QueryStatus extends AQueryStatus {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
+				if (msgItem.isDisposed())
+					return;
 				msgItem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/warn_tsk.gif"));
 				setMessage(null, msg, true);
 			}
@@ -71,6 +75,8 @@ public class QueryStatus extends AQueryStatus {
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			public void run() {
+				if (msgItem.isDisposed())
+					return;
 				msgItem.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/info_tsk.gif"));
 				setMessage(null, msg, false);
 			}
