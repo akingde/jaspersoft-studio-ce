@@ -15,9 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.table;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditFromTableDialog;
@@ -49,7 +50,7 @@ public class EditTable extends AAction {
 				break;
 			}
 		}
-		EditFromTableDialog dialog = new EditFromTableDialog(Display.getDefault().getActiveShell());
+		EditFromTableDialog dialog = new EditFromTableDialog(UIUtils.getShell());
 		dialog.setValue(mcol);
 		if (dialog.open() == Dialog.OK) {
 			mcol.setAlias(dialog.getAlias());
