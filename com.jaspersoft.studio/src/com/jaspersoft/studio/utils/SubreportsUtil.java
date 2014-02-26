@@ -80,5 +80,5 @@ public class SubreportsUtil {
 		}
 	}
 
-	private static IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+	public static IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 }

@@ -95,7 +95,7 @@ public class VErrorPreview extends APreview {
 	}
 
 	private Label compilationTime;
-	private Label compilSubTime;
+	// private Label compilSubTime;
 	private Label fillingTime;
 	private Label exportTime;
 	private Label execTime;
@@ -198,7 +198,6 @@ public class VErrorPreview extends APreview {
 
 		CTabItem itemTbl = new CTabItem(tabFolder, SWT.NONE);
 		itemTbl.setText(Messages.VErrorPreview_tableLabel);
-		
 
 		final Table wtable = new Table(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION
 				| SWT.BORDER);
@@ -274,48 +273,46 @@ public class VErrorPreview extends APreview {
 		itemTbl.setControl(wtable);
 
 		/**
-		 * When the container is resized also the table column is resized to its 
-		 * maximum width
+		 * When the container is resized also the table column is resized to its maximum width
 		 */
 		tabFolder.addControlListener(new ControlAdapter() {
-	    public void controlResized(ControlEvent e) {
-	    	refreshTableCellWidth();
-	    }
-	  });
+			public void controlResized(ControlEvent e) {
+				refreshTableCellWidth();
+			}
+		});
 
-		
 		tabFolder.setSelection(itemTbl);
 	}
-	
+
 	/**
 	 * Set the width of the table column to the max width available
 	 */
-	private void refreshTableCellWidth(){
-  	Table wtable =  errorViewer.getTable();
-  	TableColumn col = wtable.getColumns()[0];
-    Rectangle area = tabFolder.getClientArea();
-    Point preferredSize = wtable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-    int width = area.width - 2*wtable.getBorderWidth();
-    if (preferredSize.y > area.height + wtable.getHeaderHeight()) {
-      // Subtract the scrollbar width from the total column width
-      // if a vertical scrollbar will be required
-      Point vBarSize = wtable.getVerticalBar().getSize();
-      width -= vBarSize.x;
-    }
-    Point oldSize = wtable.getSize();
-    if (oldSize.x > area.width) {
-      // table is getting smaller so make the columns 
-      // smaller first and then resize the table to
-      // match the client area width
-    	col.setWidth(width);
-      wtable.setSize(area.width, area.height);
-    } else {
-      // table is getting bigger so make the table 
-      // bigger first and then make the columns wider
-      // to match the client area width
-    	wtable.setSize(area.width, area.height);
-    	col.setWidth(width);
-    }
+	private void refreshTableCellWidth() {
+		Table wtable = errorViewer.getTable();
+		TableColumn col = wtable.getColumns()[0];
+		Rectangle area = tabFolder.getClientArea();
+		Point preferredSize = wtable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+		int width = area.width - 2 * wtable.getBorderWidth();
+		if (preferredSize.y > area.height + wtable.getHeaderHeight()) {
+			// Subtract the scrollbar width from the total column width
+			// if a vertical scrollbar will be required
+			Point vBarSize = wtable.getVerticalBar().getSize();
+			width -= vBarSize.x;
+		}
+		Point oldSize = wtable.getSize();
+		if (oldSize.x > area.width) {
+			// table is getting smaller so make the columns
+			// smaller first and then resize the table to
+			// match the client area width
+			col.setWidth(width);
+			wtable.setSize(area.width, area.height);
+		} else {
+			// table is getting bigger so make the table
+			// bigger first and then make the columns wider
+			// to match the client area width
+			wtable.setSize(area.width, area.height);
+			col.setWidth(width);
+		}
 	}
 
 	public static boolean openExpressionEditor(JasperReportsConfiguration jContext,
@@ -362,12 +359,12 @@ public class VErrorPreview extends APreview {
 		layout.horizontalSpacing = 3;
 		statComposite.setLayout(layout);
 
-		new Label(statComposite, SWT.NONE).setText("Subreport Compilation Time");
-
-		compilSubTime = new Label(statComposite, SWT.BOLD);
-		compilSubTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		com.jaspersoft.studio.utils.UIUtil.setBold(compilSubTime);
-		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
+		// new Label(statComposite, SWT.NONE).setText("Subreport Compilation Time");
+		//
+		// compilSubTime = new Label(statComposite, SWT.BOLD);
+		// compilSubTime.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		// com.jaspersoft.studio.utils.UIUtil.setBold(compilSubTime);
+		// new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_secLabel);
 
 		new Label(statComposite, SWT.NONE).setText(Messages.VErrorPreview_compilationTimeLabel);
 
@@ -425,7 +422,7 @@ public class VErrorPreview extends APreview {
 		if (compilationTime.isDisposed())
 			return;
 		if (stats != null) {
-			compilSubTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIMESUBREPORT)));
+			// compilSubTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIMESUBREPORT)));
 			compilationTime.setText(format(stats.getDuration(ReportControler.ST_COMPILATIONTIME)));
 			fillingTime.setText(format(stats.getDuration(ReportControler.ST_FILLINGTIME)));
 			exportTime.setText(format(stats.getDuration(ReportControler.ST_EXPORTTIME)));
@@ -436,7 +433,7 @@ public class VErrorPreview extends APreview {
 			fillSize.setText(Misc.nvl(stats.getValue(ReportControler.ST_REPORTSIZE), "0")); //$NON-NLS-1$
 			statAction.run();
 		} else {
-			compilSubTime.setText("-"); //$NON-NLS-1$
+			//			compilSubTime.setText("-"); //$NON-NLS-1$
 			compilationTime.setText("-"); //$NON-NLS-1$
 			fillingTime.setText("-"); //$NON-NLS-1$
 			exportTime.setText("-"); //$NON-NLS-1$

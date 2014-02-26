@@ -49,7 +49,6 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
-import com.jaspersoft.studio.editor.action.CompileAction;
 import com.jaspersoft.studio.editor.preview.IParametrable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
@@ -384,9 +383,9 @@ public class ReportControler {
 	}
 
 	private JasperReport compileJasperDesign(IFile file, JasperDesign jd, IProgressMonitor monitor) throws CoreException {
-		stats.startCount(ST_COMPILATIONTIMESUBREPORT);
-		CompileAction.doRun(jrContext, monitor, false);
-		stats.endCount(ST_COMPILATIONTIMESUBREPORT);
+		// stats.startCount(ST_COMPILATIONTIMESUBREPORT);
+		// CompileAction.doRun(jrContext, monitor, false);
+		// stats.endCount(ST_COMPILATIONTIMESUBREPORT);
 		stats.startCount(ST_COMPILATIONTIME);
 		c.startMessage(Messages.ReportControler_msg_compiling);
 		if (compiler == null) {

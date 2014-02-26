@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -230,18 +231,29 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (list == null)
 			list = new ArrayList<RepositoryService>();
 		if (file != null) {
+			Set<String> rset = new HashSet<String>();
 			if (file.isLinked())
-				list.add(new FileRepositoryService(this, file.getRawLocation().toFile().getParentFile().getAbsolutePath(), true));
-			list.add(new FileRepositoryService(this, file.getParent().getLocation().toFile().getAbsolutePath(), true));
+				add(list, rset, file.getRawLocation().toFile().getParentFile().getAbsolutePath());
+			add(list, rset, file.getParent().getLocation().toFile().getAbsolutePath());
 			// list.add(new FileRepositoryService(this, ".", true));
-			list.add(new FileRepositoryService(this, file.getProject().getLocation().toFile().getAbsolutePath(), true));
+			add(list, rset, file.getProject().getLocation().toFile().getAbsolutePath());
 		}
-		setExtensions(RepositoryService.class, list);
+		repositoryServices = new ArrayList<RepositoryService>();
+		repositoryServices.add(new JSSFileRepositoryService(this, list));
+		setExtensions(RepositoryService.class, repositoryServices);
 		List<PersistenceServiceFactory> persistenceServiceFactoryList = getExtensions(PersistenceServiceFactory.class);
 		if (persistenceServiceFactoryList != null)
 			persistenceServiceFactoryList.add(FileRepositoryPersistenceServiceFactory.getInstance());
 		setExtensions(PersistenceServiceFactory.class, persistenceServiceFactoryList);
 		setFileResolver(new ProxyFileResolver());
+	}
+
+	private String add(List<RepositoryService> list, Set<String> rset, String root) {
+		if (rset.contains(root))
+			return null;
+		rset.add(root);
+		list.add(new FileRepositoryService(this, root, true));
+		return root;
 	}
 
 	@Override
@@ -608,6 +620,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
+			} else if (repositoryServices != null && extensionType == RepositoryService.class) {
+				result = (List<T>) repositoryServices;
 			} else {
 				try {
 					result = super.getExtensions(extensionType);
@@ -648,6 +662,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	}
 
 	private static JasperReportsConfiguration instance;
+	private List<RepositoryService> repositoryServices;
 
 	/**
 	 * @return a default {@link JasperReportsConfiguration} instance, based on the {@link DefaultJasperReportsContext}.
