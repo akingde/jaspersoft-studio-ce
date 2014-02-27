@@ -37,6 +37,7 @@ public class CustomDeleteAction extends DeleteAction{
 
 	public CustomDeleteAction(IWorkbenchPart part) {
 		super(part);
+		setLazyEnablementCalculation(true);
 	}
 	
 	private ANode getModel(){

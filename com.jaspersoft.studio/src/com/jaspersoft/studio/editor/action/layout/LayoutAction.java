@@ -64,7 +64,7 @@ public class LayoutAction extends SelectionAction {
 	 */
 	public LayoutAction(IWorkbenchPart part, Class<?> type) {
 		super(part);
-		setLazyEnablementCalculation(false);
+		setLazyEnablementCalculation(true);
 		layout = LayoutManager.instLayout(type.getName());
 		setText(layout.getName());
 		setToolTipText(layout.getToolTip());

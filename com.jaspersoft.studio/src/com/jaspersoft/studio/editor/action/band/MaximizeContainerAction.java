@@ -52,7 +52,7 @@ public class MaximizeContainerAction extends SelectionAction {
 	 */
 	public MaximizeContainerAction(IWorkbenchPart part) {
 		super(part);
-		setLazyEnablementCalculation(false);
+		setLazyEnablementCalculation(true);
 		setText(Messages.MaximizeContainerAction_name);
 		setToolTipText(Messages.MaximizeContainerAction_tooltip);
 		setId(ID);
