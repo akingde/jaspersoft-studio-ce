@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
- * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
- ******************************************************************************/
 package com.jaspersoft.studio.editor.jrexpressions.ui.contentassist.antlr.internal; 
 
 import org.antlr.runtime.BaseRecognizer;
@@ -30,7 +15,7 @@ import com.jaspersoft.studio.editor.jrexpressions.services.JavaJRExpressionGramm
 @SuppressWarnings("all")
 public class InternalJavaJRExpressionParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXPREFIX", "RULE_HEXDIGIT", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'=='", "'!='", "'+'", "'-'", "'*'", "'/'", "'%'", "'false'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'<'", "'>='", "'>'", "':'", "'?'", "'~'", "'!'", "'$F'", "'$P'", "'$V'", "'$R'", "'.'", "'['", "']'", "'null'", "'('", "')'", "'new'", "'{'", "'}'", "','", "'extends'", "'super'", "'||'", "'&&'", "'instanceof'", "'true'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXDIGIT", "RULE_HEXPREFIX", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'=='", "'!='", "'+'", "'-'", "'*'", "'/'", "'%'", "'false'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'<'", "'>='", "'>'", "':'", "'?'", "'~'", "'!'", "'$F'", "'$P'", "'$V'", "'$R'", "'.'", "'['", "']'", "'null'", "'('", "')'", "'new'", "'{'", "'}'", "','", "'extends'", "'super'", "'||'", "'&&'", "'instanceof'", "'true'"
     };
     public static final int T__68=68;
     public static final int T__69=69;
@@ -46,7 +31,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final int T__26=26;
     public static final int T__63=63;
     public static final int RULE_ANY_OTHER=25;
-    public static final int RULE_HEXDIGIT=19;
+    public static final int RULE_HEXDIGIT=18;
     public static final int T__61=61;
     public static final int EOF=-1;
     public static final int T__60=60;
@@ -78,7 +63,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final int RULE_LONG=7;
     public static final int T__48=48;
     public static final int T__49=49;
-    public static final int RULE_HEXPREFIX=18;
+    public static final int RULE_HEXPREFIX=19;
     public static final int RULE_BRACED_IDENTIFIER=5;
     public static final int RULE_FLOAT=8;
     public static final int RULE_SL_COMMENT=23;

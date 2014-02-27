@@ -2441,7 +2441,8 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	} 
 
 	//terminal fragment EscapeSequence:
-	//	"\\" ("b" | "t" | "n" | "f" | "r" | "\"" | "\'" | "\\" | "0".."3" "0".."7" "0".."7" | "0".."7" "0".."7" | "0".."7");
+	//	"\\" ("b" | "t" | "n" | "f" | "r" | "\"" | "\'" | "\\" | "0".."3" "0".."7" "0".."7" | "0".."7" "0".."7" | "0".."7" |
+	//	"u" HexDigit HexDigit HexDigit HexDigit);
 	public TerminalRule getEscapeSequenceRule() {
 		return (tEscapeSequence != null) ? tEscapeSequence : (tEscapeSequence = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "EscapeSequence"));
 	} 

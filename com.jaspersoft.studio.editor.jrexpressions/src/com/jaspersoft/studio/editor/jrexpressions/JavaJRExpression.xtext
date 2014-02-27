@@ -234,7 +234,9 @@ terminal fragment EscapeSequence:
 	|
 	('0'..'7') ('0'..'7')
 	|
-	('0'..'7'));
+	('0'..'7')
+	| 'u' HexDigit HexDigit HexDigit HexDigit
+	);
 terminal fragment IntegerNumber:
 	'0'
 	| '1'..'9' ('0'..'9')*

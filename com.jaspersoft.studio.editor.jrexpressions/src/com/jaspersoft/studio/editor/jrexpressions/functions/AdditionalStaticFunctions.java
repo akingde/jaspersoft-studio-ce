@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.jaspersoft.studio.editor.jrexpressions.messages.Messages;
-
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionCategoryBean;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionParameterBean;
+
+import com.jaspersoft.studio.editor.jrexpressions.messages.Messages;
 
 /**
  * This class manages additional functions that can be used in the expression editor

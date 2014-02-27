@@ -8586,7 +8586,7 @@ RULE_CHAR : '\'' (RULE_ESCAPESEQUENCE|~(('\''|'\\'|'\r'|'\n'))) '\'';
 
 RULE_STRING : '"' (RULE_ESCAPESEQUENCE|~(('\\'|'"'|'\r'|'\n')))* '"';
 
-fragment RULE_ESCAPESEQUENCE : '\\' ('b'|'t'|'n'|'f'|'r'|'"'|'\''|'\\'|'0'..'3' '0'..'7' '0'..'7'|'0'..'7' '0'..'7'|'0'..'7');
+fragment RULE_ESCAPESEQUENCE : '\\' ('b'|'t'|'n'|'f'|'r'|'"'|'\''|'\\'|'0'..'3' '0'..'7' '0'..'7'|'0'..'7' '0'..'7'|'0'..'7'|'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT);
 
 fragment RULE_INTEGERNUMBER : ('0'|'1'..'9' ('0'..'9')*|'0' ('0'..'7')+|RULE_HEXPREFIX RULE_HEXDIGIT+);
 

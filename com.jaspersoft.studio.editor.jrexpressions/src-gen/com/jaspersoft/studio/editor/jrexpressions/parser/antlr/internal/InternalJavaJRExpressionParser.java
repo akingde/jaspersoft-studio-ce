@@ -34,7 +34,7 @@ import com.jaspersoft.studio.editor.jrexpressions.services.JavaJRExpressionGramm
 @SuppressWarnings("all")
 public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_ID", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXPREFIX", "RULE_HEXDIGIT", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'?'", "':'", "'||'", "'&&'", "'=='", "'!='", "'instanceof'", "'+'", "'-'", "'*'", "'/'", "'%'", "'~'", "'!'", "'.'", "'$F'", "'$P'", "'$V'", "'$R'", "'new'", "'['", "']'", "'false'", "'true'", "'null'", "'('", "')'", "'{'", "'}'", "','", "'<'", "'>'", "'extends'", "'super'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'>='"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_ID", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXDIGIT", "RULE_HEXPREFIX", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'?'", "':'", "'||'", "'&&'", "'=='", "'!='", "'instanceof'", "'+'", "'-'", "'*'", "'/'", "'%'", "'~'", "'!'", "'.'", "'$F'", "'$P'", "'$V'", "'$R'", "'new'", "'['", "']'", "'false'", "'true'", "'null'", "'('", "')'", "'{'", "'}'", "','", "'<'", "'>'", "'extends'", "'super'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'>='"
     };
     public static final int T__68=68;
     public static final int T__69=69;
@@ -50,7 +50,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final int T__26=26;
     public static final int T__63=63;
     public static final int RULE_ANY_OTHER=25;
-    public static final int RULE_HEXDIGIT=19;
+    public static final int RULE_HEXDIGIT=18;
     public static final int T__61=61;
     public static final int EOF=-1;
     public static final int T__60=60;
@@ -82,7 +82,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalAntlrParser 
     public static final int RULE_LONG=6;
     public static final int T__48=48;
     public static final int T__49=49;
-    public static final int RULE_HEXPREFIX=18;
+    public static final int RULE_HEXPREFIX=19;
     public static final int RULE_BRACED_IDENTIFIER=4;
     public static final int RULE_FLOAT=7;
     public static final int RULE_SL_COMMENT=23;

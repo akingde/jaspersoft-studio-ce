@@ -44,7 +44,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     public static final int T__63=63;
     public static final int T__26=26;
     public static final int RULE_ANY_OTHER=25;
-    public static final int RULE_HEXDIGIT=19;
+    public static final int RULE_HEXDIGIT=18;
     public static final int T__61=61;
     public static final int EOF=-1;
     public static final int T__60=60;
@@ -76,7 +76,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     public static final int T__48=48;
     public static final int RULE_LONG=6;
     public static final int T__49=49;
-    public static final int RULE_HEXPREFIX=18;
+    public static final int RULE_HEXPREFIX=19;
     public static final int RULE_BRACED_IDENTIFIER=4;
     public static final int RULE_FLOAT=7;
     public static final int RULE_SL_COMMENT=23;
@@ -1246,12 +1246,12 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     // $ANTLR start "RULE_ESCAPESEQUENCE"
     public final void mRULE_ESCAPESEQUENCE() throws RecognitionException {
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:30: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:32: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:30: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' | 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:32: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' | 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )
             {
             match('\\'); 
-            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )
-            int alt4=11;
+            // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' | 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )
+            int alt4=12;
             alt4 = dfa4.predict(input);
             switch (alt4) {
                 case 1 :
@@ -1331,6 +1331,17 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                     // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:117: '0' .. '7'
                     {
                     matchRange('0','7'); 
+
+                    }
+                    break;
+                case 12 :
+                    // ../com.jaspersoft.studio.editor.jrexpressions/src-gen/com/jaspersoft/studio/editor/jrexpressions/parser/antlr/internal/InternalJavaJRExpression.g:3110:126: 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT
+                    {
+                    match('u'); 
+                    mRULE_HEXDIGIT(); 
+                    mRULE_HEXDIGIT(); 
+                    mRULE_HEXDIGIT(); 
+                    mRULE_HEXDIGIT(); 
 
                     }
                     break;
@@ -2893,20 +2904,21 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     protected DFA21 dfa21 = new DFA21(this);
     protected DFA32 dfa32 = new DFA32(this);
     static final String DFA4_eotS =
-        "\11\uffff\2\14\1\15\3\uffff";
+        "\11\uffff\2\15\1\uffff\1\16\3\uffff";
     static final String DFA4_eofS =
-        "\17\uffff";
+        "\20\uffff";
     static final String DFA4_minS =
-        "\1\42\10\uffff\3\60\3\uffff";
+        "\1\42\10\uffff\2\60\1\uffff\1\60\3\uffff";
     static final String DFA4_maxS =
-        "\1\164\10\uffff\3\67\3\uffff";
+        "\1\165\10\uffff\2\67\1\uffff\1\67\3\uffff";
     static final String DFA4_acceptS =
-        "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\3\uffff\1\13\1\12\1\11";
+        "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\2\uffff\1\14\1\uffff\1"+
+        "\13\1\12\1\11";
     static final String DFA4_specialS =
-        "\17\uffff}>";
+        "\20\uffff}>";
     static final String[] DFA4_transitionS = {
             "\1\6\4\uffff\1\7\10\uffff\4\11\4\12\44\uffff\1\10\5\uffff\1"+
-            "\1\3\uffff\1\4\7\uffff\1\3\3\uffff\1\5\1\uffff\1\2",
+            "\1\3\uffff\1\4\7\uffff\1\3\3\uffff\1\5\1\uffff\1\2\1\13",
             "",
             "",
             "",
@@ -2915,9 +2927,10 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "",
             "",
             "",
-            "\10\13",
-            "\10\15",
+            "\10\14",
             "\10\16",
+            "",
+            "\10\17",
             "",
             "",
             ""
@@ -2953,11 +2966,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             this.transition = DFA4_transition;
         }
         public String getDescription() {
-            return "3110:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' )";
+            return "3110:37: ( 'b' | 't' | 'n' | 'f' | 'r' | '\"' | '\\'' | '\\\\' | '0' .. '3' '0' .. '7' '0' .. '7' | '0' .. '7' '0' .. '7' | '0' .. '7' | 'u' RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT RULE_HEXDIGIT )";
         }
     }
     static final String DFA21_eotS =
-        "\1\uffff\1\6\1\uffff\1\6\4\uffff";
+        "\1\uffff\1\5\1\uffff\1\5\4\uffff";
     static final String DFA21_eofS =
         "\10\uffff";
     static final String DFA21_minS =
@@ -2965,15 +2978,15 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     static final String DFA21_maxS =
         "\1\71\1\170\1\uffff\1\145\4\uffff";
     static final String DFA21_acceptS =
-        "\2\uffff\1\2\1\uffff\1\5\1\3\1\4\1\1";
+        "\2\uffff\1\2\1\uffff\1\5\1\4\1\1\1\3";
     static final String DFA21_specialS =
         "\10\uffff}>";
     static final String[] DFA21_transitionS = {
             "\1\2\1\uffff\1\1\11\3",
-            "\1\7\1\uffff\12\3\13\uffff\1\5\22\uffff\1\4\14\uffff\1\5\22"+
+            "\1\6\1\uffff\12\3\13\uffff\1\7\22\uffff\1\4\14\uffff\1\7\22"+
             "\uffff\1\4",
             "",
-            "\1\7\1\uffff\12\3\13\uffff\1\5\37\uffff\1\5",
+            "\1\6\1\uffff\12\3\13\uffff\1\7\37\uffff\1\7",
             "",
             "",
             "",
@@ -3015,15 +3028,15 @@ public class InternalJavaJRExpressionLexer extends Lexer {
     }
     static final String DFA32_eotS =
         "\3\uffff\3\51\1\60\1\62\3\uffff\1\70\2\uffff\1\74\1\51\1\62\2\uffff"+
-        "\2\62\2\uffff\1\112\2\uffff\1\117\1\121\6\62\2\135\3\51\12\uffff"+
-        "\1\62\11\uffff\1\136\5\uffff\2\62\2\uffff\3\62\12\uffff\10\62\2"+
-        "\uffff\1\135\2\uffff\1\136\2\uffff\1\136\1\uffff\1\135\3\uffff\1"+
-        "\62\1\177\1\uffff\1\u0082\14\62\1\135\2\uffff\2\136\1\uffff\1\62"+
-        "\2\uffff\1\136\1\uffff\1\u0094\2\62\1\u0097\4\62\1\u009c\1\u009d"+
-        "\1\u009e\1\62\3\uffff\1\136\1\62\1\uffff\1\u00a3\1\u00a4\1\uffff"+
-        "\1\62\1\u00a6\1\u00a7\1\62\3\uffff\1\62\1\uffff\1\136\1\62\2\uffff"+
-        "\1\62\2\uffff\1\62\1\u00ad\1\62\1\u00af\1\u00b0\1\uffff\1\62\2\uffff"+
-        "\1\62\1\u00b3\1\uffff";
+        "\2\62\2\uffff\1\113\2\uffff\1\117\1\121\6\62\2\137\3\51\12\uffff"+
+        "\1\62\11\uffff\1\142\5\uffff\2\62\2\uffff\3\62\12\uffff\10\62\2"+
+        "\uffff\1\142\1\137\1\142\5\uffff\1\137\3\uffff\1\62\1\177\1\uffff"+
+        "\1\u0082\14\62\1\137\1\uffff\1\142\2\uffff\1\142\1\62\2\uffff\1"+
+        "\142\1\uffff\1\u0094\2\62\1\u0097\4\62\1\u009c\1\u009d\1\u009e\1"+
+        "\62\3\uffff\1\142\1\62\1\uffff\1\u00a3\1\u00a4\1\uffff\1\62\1\u00a6"+
+        "\1\u00a7\1\62\3\uffff\1\62\1\uffff\1\142\1\62\2\uffff\1\62\2\uffff"+
+        "\1\62\1\u00ad\1\62\1\u00af\1\u00b0\1\uffff\1\62\2\uffff\1\62\1\u00b3"+
+        "\1\uffff";
     static final String DFA32_eofS =
         "\u00b4\uffff";
     static final String DFA32_minS =
@@ -3031,38 +3044,38 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         "\1\145\2\uffff\1\141\1\162\2\uffff\1\0\2\uffff\2\75\1\170\1\150"+
         "\1\157\1\150\2\157\2\56\2\0\1\101\12\uffff\1\163\11\uffff\1\60\5"+
         "\uffff\1\167\1\154\2\uffff\1\154\1\157\1\165\12\uffff\1\164\1\160"+
-        "\2\157\1\164\1\141\1\156\1\165\3\56\2\uffff\1\56\1\uffff\1\53\1"+
-        "\60\1\uffff\1\56\3\uffff\1\164\1\60\1\53\1\60\1\154\1\163\1\141"+
-        "\3\145\1\162\1\154\1\145\1\162\1\147\1\142\1\56\4\60\1\53\1\141"+
-        "\1\uffff\2\60\1\uffff\1\60\1\145\1\164\1\60\1\156\1\162\1\164\1"+
-        "\145\3\60\1\154\1\60\1\53\2\60\1\156\1\uffff\2\60\1\uffff\1\144"+
-        "\2\60\1\141\3\uffff\1\145\2\60\1\143\2\uffff\1\163\2\uffff\1\156"+
-        "\1\60\1\145\2\60\1\uffff\1\157\2\uffff\1\146\1\60\1\uffff";
+        "\2\157\1\164\1\141\1\156\1\165\2\56\1\60\2\56\1\uffff\1\53\3\uffff"+
+        "\1\56\3\uffff\1\164\1\60\1\53\1\60\1\154\1\163\1\141\3\145\1\162"+
+        "\1\154\1\145\1\162\1\147\1\142\1\56\2\60\1\53\2\60\1\141\1\uffff"+
+        "\2\60\1\uffff\1\60\1\145\1\164\1\60\1\156\1\162\1\164\1\145\3\60"+
+        "\1\154\1\60\1\53\2\60\1\156\1\uffff\2\60\1\uffff\1\144\2\60\1\141"+
+        "\3\uffff\1\145\2\60\1\143\2\uffff\1\163\2\uffff\1\156\1\60\1\145"+
+        "\2\60\1\uffff\1\157\2\uffff\1\146\1\60\1\uffff";
     static final String DFA32_maxS =
         "\1\uffff\2\uffff\1\174\1\46\2\75\1\156\3\uffff\1\57\2\uffff\1\71"+
         "\1\126\1\165\2\uffff\1\154\1\162\2\uffff\1\uffff\2\uffff\2\75\1"+
         "\170\1\165\1\171\1\150\2\157\1\170\1\154\2\uffff\1\172\12\uffff"+
         "\1\164\11\uffff\1\146\5\uffff\1\167\1\154\2\uffff\1\154\1\157\1"+
-        "\165\12\uffff\1\164\1\160\2\157\1\164\1\141\1\156\1\165\2\146\1"+
-        "\154\2\uffff\1\146\1\uffff\1\71\1\146\1\uffff\1\154\3\uffff\1\164"+
-        "\1\172\1\71\1\172\1\154\1\163\1\141\3\145\1\162\1\154\1\145\1\162"+
-        "\1\147\1\142\1\154\1\160\1\71\2\146\1\71\1\141\1\uffff\1\71\1\146"+
-        "\1\uffff\1\172\1\145\1\164\1\172\1\156\1\162\1\164\1\145\3\172\1"+
-        "\154\1\160\2\71\1\146\1\156\1\uffff\2\172\1\uffff\1\144\2\172\1"+
-        "\141\3\uffff\1\145\1\71\1\146\1\143\2\uffff\1\163\2\uffff\1\156"+
-        "\1\172\1\145\2\172\1\uffff\1\157\2\uffff\1\146\1\172\1\uffff";
+        "\165\12\uffff\1\164\1\160\2\157\1\164\1\141\1\156\1\165\3\146\1"+
+        "\154\1\146\1\uffff\1\71\3\uffff\1\154\3\uffff\1\164\1\172\1\71\1"+
+        "\172\1\154\1\163\1\141\3\145\1\162\1\154\1\145\1\162\1\147\1\142"+
+        "\1\154\1\160\1\146\2\71\1\146\1\141\1\uffff\1\71\1\146\1\uffff\1"+
+        "\172\1\145\1\164\1\172\1\156\1\162\1\164\1\145\3\172\1\154\1\160"+
+        "\2\71\1\146\1\156\1\uffff\2\172\1\uffff\1\144\2\172\1\141\3\uffff"+
+        "\1\145\1\71\1\146\1\143\2\uffff\1\163\2\uffff\1\156\1\172\1\145"+
+        "\2\172\1\uffff\1\157\2\uffff\1\146\1\172\1\uffff";
     static final String DFA32_acceptS =
         "\1\uffff\1\1\1\2\5\uffff\1\10\1\11\1\12\1\uffff\1\14\1\15\3\uffff"+
         "\1\25\1\26\2\uffff\1\32\1\33\1\uffff\1\35\1\36\15\uffff\1\64\1\67"+
         "\1\70\1\1\1\2\1\3\1\4\1\5\1\6\1\16\1\uffff\1\64\1\10\1\11\1\12\1"+
         "\65\1\66\1\13\1\14\1\15\1\uffff\1\17\1\20\1\21\1\22\1\23\2\uffff"+
-        "\1\25\1\26\3\uffff\1\32\1\33\1\34\1\63\1\35\1\36\1\53\1\37\1\54"+
-        "\1\40\13\uffff\1\56\1\60\1\uffff\1\57\2\uffff\1\55\1\uffff\1\61"+
-        "\1\62\1\67\27\uffff\1\47\2\uffff\1\24\21\uffff\1\31\2\uffff\1\30"+
-        "\4\uffff\1\45\1\44\1\50\4\uffff\1\27\1\51\1\uffff\1\42\1\46\5\uffff"+
-        "\1\52\1\uffff\1\41\1\43\2\uffff\1\7";
+        "\1\25\1\26\3\uffff\1\32\1\33\1\63\1\34\1\35\1\36\1\53\1\37\1\54"+
+        "\1\40\15\uffff\1\56\1\uffff\1\57\1\60\1\55\1\uffff\1\61\1\62\1\67"+
+        "\27\uffff\1\47\2\uffff\1\24\21\uffff\1\31\2\uffff\1\30\4\uffff\1"+
+        "\45\1\44\1\50\4\uffff\1\27\1\51\1\uffff\1\42\1\46\5\uffff\1\52\1"+
+        "\uffff\1\41\1\43\2\uffff\1\7";
     static final String DFA32_specialS =
-        "\1\0\26\uffff\1\1\14\uffff\1\3\1\2\u008e\uffff}>";
+        "\1\3\26\uffff\1\0\14\uffff\1\1\1\2\u008e\uffff}>";
     static final String[] DFA32_transitionS = {
             "\11\51\2\50\2\51\1\50\22\51\1\50\1\6\1\45\1\51\1\17\1\14\1\4"+
             "\1\44\1\25\1\26\1\12\1\10\1\31\1\11\1\16\1\13\1\42\11\43\1\2"+
@@ -3091,7 +3104,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "\1\107",
             "",
             "",
-            "\12\113\1\uffff\2\113\1\uffff\157\113\1\uffff\uff82\113",
+            "\12\112\1\uffff\2\112\1\uffff\157\112\1\uffff\uff82\112",
             "",
             "",
             "\1\116",
@@ -3102,11 +3115,11 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "\1\127",
             "\1\130",
             "\1\131",
-            "\1\142\1\uffff\10\134\2\137\12\uffff\1\136\1\141\1\140\5\uffff"+
-            "\1\143\13\uffff\1\133\13\uffff\1\136\1\141\1\140\5\uffff\1\143"+
+            "\1\134\1\uffff\10\135\2\136\12\uffff\1\142\1\140\1\141\5\uffff"+
+            "\1\143\13\uffff\1\133\13\uffff\1\142\1\140\1\141\5\uffff\1\143"+
             "\13\uffff\1\132",
-            "\1\142\1\uffff\12\144\12\uffff\1\136\1\141\1\140\5\uffff\1"+
-            "\143\27\uffff\1\136\1\141\1\140\5\uffff\1\143",
+            "\1\134\1\uffff\12\144\12\uffff\1\142\1\140\1\141\5\uffff\1"+
+            "\143\27\uffff\1\142\1\140\1\141\5\uffff\1\143",
             "\12\145\1\uffff\2\145\1\uffff\31\145\1\uffff\uffd8\145",
             "\12\146\1\uffff\2\146\1\uffff\ufff2\146",
             "\32\62\4\uffff\1\62\1\uffff\32\62",
@@ -3130,7 +3143,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "",
             "",
             "",
-            "\12\73\13\uffff\1\152\1\140\36\uffff\1\152\1\140",
+            "\12\73\13\uffff\1\152\1\141\36\uffff\1\152\1\141",
             "",
             "",
             "",
@@ -3163,18 +3176,18 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "\1\167",
             "\1\171\1\uffff\12\170\7\uffff\6\170\32\uffff\6\170",
             "\1\171\1\uffff\12\170\7\uffff\6\170\32\uffff\6\170",
-            "\1\142\1\uffff\10\134\2\137\12\uffff\1\136\1\141\1\140\5\uffff"+
-            "\1\143\27\uffff\1\136\1\141\1\140\5\uffff\1\143",
+            "\12\172\13\uffff\1\173\1\141\36\uffff\1\173\1\141",
+            "\1\134\1\uffff\10\135\2\136\12\uffff\1\142\1\140\1\141\5\uffff"+
+            "\1\143\27\uffff\1\142\1\140\1\141\5\uffff\1\143",
+            "\1\134\1\uffff\12\136\13\uffff\1\140\1\141\36\uffff\1\140\1"+
+            "\141",
+            "",
+            "\1\174\1\uffff\1\174\2\uffff\12\175",
             "",
             "",
-            "\1\142\1\uffff\12\137\13\uffff\1\141\1\140\36\uffff\1\141\1"+
-            "\140",
             "",
-            "\1\172\1\uffff\1\172\2\uffff\12\173",
-            "\12\174\13\uffff\1\175\1\140\36\uffff\1\175\1\140",
-            "",
-            "\1\142\1\uffff\12\144\12\uffff\1\136\1\141\1\140\5\uffff\1"+
-            "\143\27\uffff\1\136\1\141\1\140\5\uffff\1\143",
+            "\1\134\1\uffff\12\144\12\uffff\1\142\1\140\1\141\5\uffff\1"+
+            "\143\27\uffff\1\142\1\140\1\141\5\uffff\1\143",
             "",
             "",
             "",
@@ -3198,14 +3211,14 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "\6\170\5\uffff\1\143",
             "\12\u008f\7\uffff\6\u008f\11\uffff\1\u0090\20\uffff\6\u008f"+
             "\11\uffff\1\u0090",
-            "\12\173",
-            "\12\173\14\uffff\1\140\37\uffff\1\140",
-            "\12\174\13\uffff\1\175\1\140\36\uffff\1\175\1\140",
+            "\12\172\13\uffff\1\173\1\141\36\uffff\1\173\1\141",
             "\1\u0091\1\uffff\1\u0091\2\uffff\12\u0092",
+            "\12\175",
+            "\12\175\14\uffff\1\141\37\uffff\1\141",
             "\1\u0093",
             "",
             "\12\u0081",
-            "\12\u0081\14\uffff\1\140\37\uffff\1\140",
+            "\12\u0081\14\uffff\1\141\37\uffff\1\141",
             "",
             "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
             "\1\u0095",
@@ -3223,7 +3236,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "\11\uffff\1\u0090",
             "\1\u00a0\1\uffff\1\u00a0\2\uffff\12\u00a1",
             "\12\u0092",
-            "\12\u0092\14\uffff\1\140\37\uffff\1\140",
+            "\12\u0092\14\uffff\1\141\37\uffff\1\141",
             "\1\u00a2",
             "",
             "\12\62\7\uffff\32\62\4\uffff\1\62\1\uffff\32\62",
@@ -3238,7 +3251,7 @@ public class InternalJavaJRExpressionLexer extends Lexer {
             "",
             "\1\u00a9",
             "\12\u00a1",
-            "\12\u00a1\14\uffff\1\140\37\uffff\1\140",
+            "\12\u00a1\14\uffff\1\141\37\uffff\1\141",
             "\1\u00aa",
             "",
             "",
@@ -3296,6 +3309,36 @@ public class InternalJavaJRExpressionLexer extends Lexer {
         	int _s = s;
             switch ( s ) {
                     case 0 : 
+                        int LA32_23 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA32_23>='\u0000' && LA32_23<='\t')||(LA32_23>='\u000B' && LA32_23<='\f')||(LA32_23>='\u000E' && LA32_23<='|')||(LA32_23>='~' && LA32_23<='\uFFFF')) ) {s = 74;}
+
+                        else s = 75;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
+                        int LA32_36 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA32_36>='\u0000' && LA32_36<='\t')||(LA32_36>='\u000B' && LA32_36<='\f')||(LA32_36>='\u000E' && LA32_36<='&')||(LA32_36>='(' && LA32_36<='\uFFFF')) ) {s = 101;}
+
+                        else s = 41;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 : 
+                        int LA32_37 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA32_37>='\u0000' && LA32_37<='\t')||(LA32_37>='\u000B' && LA32_37<='\f')||(LA32_37>='\u000E' && LA32_37<='\uFFFF')) ) {s = 102;}
+
+                        else s = 41;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 : 
                         int LA32_0 = input.LA(1);
 
                         s = -1;
@@ -3380,36 +3423,6 @@ public class InternalJavaJRExpressionLexer extends Lexer {
                         else if ( ((LA32_0>='\t' && LA32_0<='\n')||LA32_0=='\r'||LA32_0==' ') ) {s = 40;}
 
                         else if ( ((LA32_0>='\u0000' && LA32_0<='\b')||(LA32_0>='\u000B' && LA32_0<='\f')||(LA32_0>='\u000E' && LA32_0<='\u001F')||LA32_0=='#'||LA32_0==';'||LA32_0=='@'||LA32_0=='\\'||LA32_0=='`'||(LA32_0>='\u007F' && LA32_0<='\uFFFF')) ) {s = 41;}
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
-                        int LA32_23 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA32_23>='\u0000' && LA32_23<='\t')||(LA32_23>='\u000B' && LA32_23<='\f')||(LA32_23>='\u000E' && LA32_23<='|')||(LA32_23>='~' && LA32_23<='\uFFFF')) ) {s = 75;}
-
-                        else s = 74;
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 2 : 
-                        int LA32_37 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA32_37>='\u0000' && LA32_37<='\t')||(LA32_37>='\u000B' && LA32_37<='\f')||(LA32_37>='\u000E' && LA32_37<='\uFFFF')) ) {s = 102;}
-
-                        else s = 41;
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 3 : 
-                        int LA32_36 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA32_36>='\u0000' && LA32_36<='\t')||(LA32_36>='\u000B' && LA32_36<='\f')||(LA32_36>='\u000E' && LA32_36<='&')||(LA32_36>='(' && LA32_36<='\uFFFF')) ) {s = 101;}
-
-                        else s = 41;
 
                         if ( s>=0 ) return s;
                         break;
