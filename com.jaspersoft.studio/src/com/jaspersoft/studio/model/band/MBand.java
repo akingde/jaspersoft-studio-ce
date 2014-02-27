@@ -446,4 +446,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public JRElementGroup getJRElementGroup() {
 		return getValue();
 	}
+
+	public static boolean isMultiBand(MBand mband) {
+		return mband.getBandType() == BandTypeEnum.DETAIL || mband.getBandType() == BandTypeEnum.GROUP_HEADER
+				|| mband.getBandType() == BandTypeEnum.GROUP_FOOTER;
+	}
 }
