@@ -201,7 +201,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		result.put(JRDesignStyle.PROPERTY_FORECOLOR, element.getOwnForecolor());
 		result.put(JRDesignStyle.PROPERTY_FILL, element.getOwnFillValue());
 		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
-		result.put(JRDesignStyle.PROPERTY_FONT_SIZE, element.getOwnFontSize());
+		result.put(JRDesignStyle.PROPERTY_FONT_SIZE, element.getOwnFontsize());
 		result.put(JRDesignStyle.PROPERTY_BOLD, element.isOwnBold());
 		result.put(JRDesignStyle.PROPERTY_ITALIC, element.isOwnItalic());
 		result.put(JRDesignStyle.PROPERTY_UNDERLINE, element.isOwnUnderline());
@@ -543,7 +543,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getOwnFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getOwnFontSize() != null ? jrstyle.getOwnFontSize().toString() : ""; //$NON-NLS-1$
+			return jrstyle.getOwnFontsize() != null ? jrstyle.getOwnFontsize().toString() : ""; //$NON-NLS-1$
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyValue(id);
 			if (val != null)
@@ -603,7 +603,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getFontName();
 		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getFontSize() != null ? jrstyle.getFontSize().toString() : ""; //$NON-NLS-1$
+			return jrstyle.getFontsize() != null ? jrstyle.getFontsize().toString() : ""; //$NON-NLS-1$
 		if (lineBox != null) {
 			Object val = lineBox.getPropertyActualValue(id);
 			if (val != null)
@@ -694,9 +694,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setFontName((String) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
 			if ((value instanceof String && value.toString().length() == 0) || value == null)
-				jrstyle.setFontSize(null);
+				jrstyle.setFontSize((Float)null);
 			else
-				jrstyle.setFontSize(new Integer((String) value));
+				jrstyle.setFontSize(new Float((String) value));
 		else if (lineBox != null) {
 			lineBox.setPropertyValue(id, value);
 		}
