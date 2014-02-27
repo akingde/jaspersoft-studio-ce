@@ -204,7 +204,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		 *          an SWT keycode
 		 * @return true if the key is held down, otherwise false
 		 */
-		public Boolean isPressed(Integer keyCode) {
+		public boolean isPressed(int keyCode) {
 			Boolean value = keyMap.get(keyCode);
 			return value != null ? value : false;
 		}
@@ -220,7 +220,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
 		KeyPressedEventDomain ed = new KeyPressedEventDomain(this);
-		ed.setDefaultTool(new MovableSelectionTool(jrContext));
+		ed.setDefaultTool(new MovableSelectionTool());
 		setEditDomain(ed);
 		this.jrContext = jrContext;
 	}
