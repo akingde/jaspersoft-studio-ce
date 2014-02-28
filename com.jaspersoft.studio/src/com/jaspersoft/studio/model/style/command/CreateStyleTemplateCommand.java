@@ -15,16 +15,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
+import java.io.File;
+
+import net.sf.jasperreports.eclipse.messages.Messages;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -107,13 +114,28 @@ public class CreateStyleTemplateCommand extends Command {
 			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
 			if (fd.open() == Dialog.OK) {
 				IFile file = (IFile) fd.getFirstResult();
-
-				this.jrTemplate = MStyleTemplate.createJRTemplate();
-
-				JRDesignExpression jre = new JRDesignExpression();
-				jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
-				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
-
+				IPath path2 = file.getLocation();
+				File  fileToBeOpened = path2.toFile();
+				boolean showErrorMessage = false;
+				//Check if the file is a valid template before add it to the model
+				if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
+					try{
+						//Try to load the file to see if it is a valid template
+						JRXmlTemplateLoader.load(fileToBeOpened);
+						this.jrTemplate = MStyleTemplate.createJRTemplate();
+		
+						JRDesignExpression jre = new JRDesignExpression();
+						jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+						((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
+					} catch(Exception ex){
+						showErrorMessage = true;
+					}
+				} else {
+					showErrorMessage = true;
+				}
+				if (showErrorMessage){
+					MessageDialog.open(MessageDialog.ERROR, Display.getCurrent().getActiveShell(), Messages.UIUtils_ExceptionTitle, Messages.CreateStyleTemplateCommand_loadStyleError, SWT.NONE);
+				}
 			}
 		}
 	}
