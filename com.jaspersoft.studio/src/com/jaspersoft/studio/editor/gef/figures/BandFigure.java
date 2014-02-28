@@ -22,7 +22,6 @@ import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RectangleFigure;
@@ -140,10 +139,6 @@ public class BandFigure extends RectangleFigure {
 	 */
 	public void paint(Graphics graphics) {
 		Rectangle b = getBounds();
-		if (b.height == 0) {
-			graphics.setForegroundColor(ColorConstants.red);
-			graphics.setBackgroundColor(ColorConstants.red);
-		}
 		graphics.setForegroundColor(marginsColor);
 		graphics.setBackgroundColor(marginsColor);
 
