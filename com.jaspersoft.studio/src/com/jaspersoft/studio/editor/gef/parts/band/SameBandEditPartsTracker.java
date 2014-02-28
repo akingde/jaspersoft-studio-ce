@@ -229,12 +229,12 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	 */
 	public static final int DEFAULT_MARQUEE_BEHAVIOR = BEHAVIOR_NODES_CONTAINED;
 
-	private Set allChildren = new HashSet();
+	private Set<?> allChildren = new HashSet<Object>();
 	private int marqueeBehavior = DEFAULT_MARQUEE_BEHAVIOR;
 	private Figure marqueeRectangleFigure;
 	private int mode;
 
-	private Collection selectedEditParts;
+	private Collection<?> selectedEditParts;
 
 	private Request targetRequest;
 
@@ -380,7 +380,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	protected void eraseTargetFeedback() {
 		if (selectedEditParts == null)
 			return;
-		Iterator oldEditParts = selectedEditParts.iterator();
+		Iterator<?> oldEditParts = selectedEditParts.iterator();
 		while (oldEditParts.hasNext()) {
 			EditPart editPart = (EditPart) oldEditParts.next();
 			editPart.eraseTargetFeedback(getTargetRequest());
@@ -603,7 +603,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	 *         selection, <code>false</code> otherwise.
 	 * @since 3.7
 	 */
-	private boolean isSecondaryMarqueeSelectedEditPart(Collection directlyMarqueeSelectedEditParts, EditPart editPart) {
+	private boolean isSecondaryMarqueeSelectedEditPart(Collection<?> directlyMarqueeSelectedEditParts, EditPart editPart) {
 		boolean included = false;
 		if (editPart instanceof ConnectionEditPart
 				&& (marqueeBehavior == BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS || marqueeBehavior == BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS)) {
@@ -762,7 +762,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	}
 
 	protected void showTargetFeedback() {
-		for (Iterator itr = selectedEditParts.iterator(); itr.hasNext();) {
+		for (Iterator<?> itr = selectedEditParts.iterator(); itr.hasNext();) {
 			EditPart editPart = (EditPart) itr.next();
 			editPart.showTargetFeedback(getTargetRequest());
 		}
