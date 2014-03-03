@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.editor.gef.figures;
 
 import net.sf.jasperreports.engine.JRComponentElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
@@ -60,15 +59,15 @@ public class FigureFactory {
 		if (node instanceof MRectangle)
 			return new RectangleFigure();
 		if (node instanceof MStaticText)
-			return new StaticTextFigure();
+			return new StaticTextFigure((MStaticText)node);
 		if (node instanceof MTextField)
-			return new TextFieldFigure();
+			return new TextFieldFigure((MTextField)node);
 		if (node instanceof MLine)
 			return new LineFigure();
 		if (node instanceof MFrame)
 			return new FrameFigure();
 		if (node instanceof MImage)
-			return new ImageFigure();
+			return new ImageFigure((MImage)node);
 		if (node instanceof MSubreport)
 			return new SubreportFigure();
 		if (node instanceof MGenericElement)
@@ -82,18 +81,6 @@ public class FigureFactory {
 			rfig.setLayoutManager(new XYLayout());
 			return rfig;
 		}
-	}
-
-	/**
-	 * Creates a new Figure object.
-	 * 
-	 * @param jdesign
-	 *          the jdesign
-	 * @return the page figure
-	 */
-	public static ReportPageFigure createNewPage(JasperDesign jdesign) {
-		ReportPageFigure page = new ReportPageFigure(jdesign, true);
-		return page;
 	}
 
 }

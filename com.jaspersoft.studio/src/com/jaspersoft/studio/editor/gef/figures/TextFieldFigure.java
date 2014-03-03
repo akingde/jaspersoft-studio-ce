@@ -15,10 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
+import java.awt.Graphics2D;
+
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRTextField;
 
+import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.model.text.MTextField;
 /*
  * The Class TextFieldFigure.
  * 
@@ -26,12 +30,17 @@ import com.jaspersoft.studio.jasper.JSSDrawVisitor;
  */
 public class TextFieldFigure extends FrameFigure {
 
+	private MTextField textFieldModel = null;
+	
+	private StackGraphics2D cachedGraphics = null;
 	/**
 	 * Instantiates a new text field figure.
 	 */
-	public TextFieldFigure() {
+	public TextFieldFigure(MTextField model) {
 		super();
+		this.textFieldModel = model;
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -42,7 +51,16 @@ public class TextFieldFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitTextField((JRTextField) jrElement);
+		if (cachedGraphics == null || textFieldModel.hasChangedProperty()){
+			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+			cachedGraphics = new StackGraphics2D(oldGraphics);
+			drawVisitor.setGraphics2D(cachedGraphics);
+			drawVisitor.visitTextField((JRTextField) jrElement);
+			drawVisitor.setGraphics2D(oldGraphics);
+			textFieldModel.setChangedProperty(false);
+		}
+		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
+		cachedGraphics.paintStack();
 	}
 
 }

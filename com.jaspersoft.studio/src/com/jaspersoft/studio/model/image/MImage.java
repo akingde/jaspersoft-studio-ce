@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.image;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -481,5 +482,17 @@ public class MImage extends MGraphicElementLineBox {
 		}
 		return getIconDescriptor().getToolTip();
 	}
-
+	
+	/**
+	 * Return the graphical properties for an MImage
+	 */
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRBaseStyle.PROPERTY_FILL);
+		result.add(JRBaseStyle.PROPERTY_SCALE_IMAGE);
+		result.add(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+		result.add(JRDesignImage.PROPERTY_EXPRESSION);
+		return result;
+	}
 }

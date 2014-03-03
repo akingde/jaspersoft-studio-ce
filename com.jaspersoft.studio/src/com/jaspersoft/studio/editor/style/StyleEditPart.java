@@ -37,7 +37,9 @@ import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.style.editpolicy.ElementEditPolicy;
+import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
 public class StyleEditPart extends FigureEditPart {
@@ -60,7 +62,8 @@ public class StyleEditPart extends FigureEditPart {
 
 		MStyle st = (MStyle) getModel();
 		JRStyle style = (JRStyle) st.getValue();
-
+		
+		MStaticText textModel = new MStaticText();
 		textE = new JRDesignStaticText();
 		textE.setX(20);
 		textE.setY(20);
@@ -68,20 +71,23 @@ public class StyleEditPart extends FigureEditPart {
 		textE.setHeight(100);
 		textE.setText("Static Text for style: " + style.getName());
 		textE.setStyle(style);
+		textModel.setValue(textE);
 
+		MImage imageModel = new MImage();
 		imageE = new JRDesignImage(null);
 		imageE.setX(textE.getX() * 2 + textE.getWidth());
 		imageE.setY(textE.getY());
 		imageE.setWidth(100);
 		imageE.setHeight(textE.getHeight());
 		imageE.setStyle(style);
+		imageModel.setValue(imageE);
 
 		rf.setSize(textE.getX() * 3 + textE.getWidth() + imageE.getWidth(), textE.getY() * 2 + textE.getHeight());
-
-		textF = new StaticTextFigure();
+		
+		textF = new StaticTextFigure(textModel);
 		textF.setJRElement(textE, drawVisitor);
 
-		imageF = new ImageFigure();
+		imageF = new ImageFigure(imageModel);
 		imageF.setJRElement(imageE, drawVisitor);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);

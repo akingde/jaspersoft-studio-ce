@@ -10,7 +10,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -709,6 +711,80 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return true;
 		return false;
 	}
+	
+	/**
+	 * Flag changed when some property that has graphical impact on the element is changed.
+	 * This is used to redraw the elemnt only when something graphical is changed isndie it,
+	 * all the other times can just be copied
+	 */
+	private boolean visualPropertyChanged = true;
 
-
+	/**
+	 * Return the graphical properties for an MGraphicalElement
+	 */
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = new HashSet<String>();
+		result.add(JRDesignElement.PROPERTY_PARENT_STYLE);
+		result.add(JRDesignElement.PROPERTY_HEIGHT);
+		result.add(JRDesignElement.PROPERTY_WIDTH);
+		result.add(JRDesignElement.PROPERTY_X);
+		result.add(JRDesignElement.PROPERTY_Y);
+		result.add(JRBaseStyle.PROPERTY_FORECOLOR);
+		result.add(JRBaseStyle.PROPERTY_BACKCOLOR);
+		result.add(JRBaseStyle.PROPERTY_MODE);
+		return result;
+	}
+	
+	/**
+	 * Static cache map of the graphic properties for every type of element. The cache is created 
+	 * when the element graphical properties are requested
+	 */
+	private static HashMap<Class<?>, HashSet<String>> cachedGraphicalProperties = new HashMap<Class<?>, HashSet<String>>();
+	
+	/**
+	 * Return the graphical property for the actual type of element. If the are stored 
+	 * inside the cache then the cached version is returned. Otherwise they are calculated,
+	 * cached an returned 
+	 * 
+	 * @return an hashset of string that contains the graphical properties of the actual type of element. 
+	 * The graphical properties of an element are those properties that affect the appearance of an element
+	 * when changed
+	 */
+	public HashSet<String> getGraphicalProperties(){
+		HashSet<String> result = cachedGraphicalProperties.get(this.getClass());
+		if (result == null){
+			result = generateGraphicalProperties();
+			cachedGraphicalProperties.put(this.getClass(), result);
+		}
+		return result;
+	}
+	
+	/**
+	 * True if some graphical property is changed for the element, false otherwise
+	 */
+	public boolean hasChangedProperty(){
+		return visualPropertyChanged;
+	}
+	
+	/**
+	 * Set the actual state of the property change flag
+	 */
+	public void setChangedProperty(boolean value){
+		visualPropertyChanged = value;
+	}
+	
+	/**
+	 * When a property change event occur, if the changed property is a graphical one then
+	 * the visual property change flag is set to true
+	 * 
+	 * @param evt the change event
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		HashSet<String> graphicalProperties = getGraphicalProperties();
+		if (graphicalProperties.contains(evt.getPropertyName())){
+			setChangedProperty(true);
+		}
+		super.propertyChange(evt);
+	}
 }

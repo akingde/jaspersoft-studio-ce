@@ -13,6 +13,8 @@ package com.jaspersoft.studio.editor.outline.part;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -22,6 +24,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
@@ -30,6 +33,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
@@ -102,36 +106,57 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			public void run() {
 				TreeItem item = (TreeItem) getWidget();
 				ANode node = (ANode) getModel();
-				if (node != null) {
-					if (node.getImagePath() != null) {
-						Image image = JaspersoftStudioPlugin.getInstance().getImage(node.getImagePath());
-						if (image != null) {
-							if (node.getBackground() != null)
-								image.setBackground(node.getBackground());
-							else {
-								if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
-									image.setBackground(item.getParent().getBackground());
-							}
-							setWidgetImage(image);
-						}
-					}
-					if (item != null) {
-						if (node.getBackground() != null)
-							item.setBackground(node.getBackground());
-						if (node.getForeground() != null)
-							item.setForeground(node.getForeground());
-					}
-					String displayText = node.getDisplayText();
-					if (displayText != null) {
-						displayText = displayText.replaceAll("(\\r|\\n)+", " ");
-						if (displayText.length() > 30)
-							displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
-						setWidgetText(displayText);
-					} else
-						setWidgetText("Unknown");
-				}
+				refreshItem(item, node);
 			}
 		});
+	}
+	
+	/**
+	 * Refresh a specific tree item
+	 */
+	private void refreshItem(TreeItem item, ANode node){
+		if (node != null && checkTreeItem(item)) {
+			if (node.getImagePath() != null) {
+				Image image = JaspersoftStudioPlugin.getInstance().getImage(node.getImagePath());
+				if (image != null) {
+					if (node.getBackground() != null)
+						image.setBackground(node.getBackground());
+					else {
+						if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
+							image.setBackground(item.getParent().getBackground());
+					}
+					setWidgetImage(item, image);
+				}
+			}
+			if (item != null) {
+				if (node.getBackground() != null)
+					item.setBackground(node.getBackground());
+				if (node.getForeground() != null)
+					item.setForeground(node.getForeground());
+			}
+			String displayText = node.getDisplayText();
+			if (displayText != null) {
+				displayText = displayText.replaceAll("(\\r|\\n)+", " ");
+				if (displayText.length() > 30)
+					displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
+				setWidgetText(item, displayText);
+			} else
+				setWidgetText(item, "Unknown");
+		}
+	}
+	
+	protected final boolean checkTreeItem(TreeItem widget) {
+		return !(widget == null || widget.isDisposed());
+	}
+	
+	protected void setWidgetText(TreeItem item, String text) {
+		if (checkTreeItem(item))
+			item.setText(text);
+	}
+	
+	protected void setWidgetImage(TreeItem item, Image image) {
+		if (checkTreeItem(item))
+			item.setImage(image);
 	}
 
 	/*
@@ -148,6 +173,12 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			}
 		return list;
 	}
+	
+	/**
+	 * Map of all the treeitem, they can be queued it the refresh is disabled and then repainted all
+	 * the the same time at the end
+	 */
+	private static HashMap<TreeItem, ANode> refreshMap = new LinkedHashMap<TreeItem, ANode>();
 
 	/*
 	 * (non-Javadoc)
@@ -155,7 +186,27 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		refresh();
+		ANode modelNode = null;
+		RootEditPart root = getRoot();
+		if (root != null && root.getModel() instanceof ANode){
+			modelNode = (ANode)root.getModel();
+		} else {
+			modelNode = (ANode)getModel();
+		}
+		if (!JSSCompoundCommand.isRefreshEventsIgnored(modelNode)){
+			//Refresh the cached node
+			for(TreeItem item : refreshMap.keySet()){
+				refreshItem(item, refreshMap.get(item));
+			}
+			refreshMap.clear();
+			//Refresh the current node
+			refresh();
+		} else {
+			refreshChildren();
+			TreeItem item = (TreeItem) getWidget();
+			ANode node = (ANode) getModel();
+			refreshMap.put(item, node);
+		}
 	}
 
 	@Override

@@ -19,7 +19,6 @@ import net.sf.jasperreports.engine.JRPrintElement;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.convert.ConvertVisitor;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.export.AwtTextRenderer;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
@@ -32,13 +31,20 @@ import net.sf.jasperreports.engine.util.UniformElementVisitor;
 
 public class JSSDrawVisitor extends UniformElementVisitor {
 
-	protected ConvertVisitor convertVisitor;
+	protected JSSConvertVisitor convertVisitor;
 	protected PrintDrawVisitor drawVisitor;
+	protected ReportConverter reportConverter;
+	/**
+	 * The graphics 2d actually used by the visitor
+	 */
+	private Graphics2D grx;
 
+	
 	/**
 	 *
 	 */
 	public JSSDrawVisitor(ReportConverter reportConverter, Graphics2D grx) {
+		this.reportConverter = reportConverter;
 		this.convertVisitor = new JSSConvertVisitor(reportConverter);
 		final JasperReportsContext jasperReportsContext = reportConverter.getJasperReportsContext();
 		this.drawVisitor = new PrintDrawVisitor(jasperReportsContext) {
@@ -51,9 +57,12 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 
 				setTextDrawer(new TextDrawer(jasperReportsContext, textRenderer));
 				setFrameDrawer(new FrameDrawer(jasperReportsContext, null, textRenderer));
+				
 			}
+
 		};
 		setTextRenderer(reportConverter.getReport());
+		this.grx = grx;
 		setGraphics2D(grx);
 		this.drawVisitor.setClip(true);
 	}
@@ -63,22 +72,40 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 	}
 
 	/**
-	 *
+	 * Set the used Graphics 2D
 	 */
 	public void setGraphics2D(Graphics2D grx) {
+		this.grx = grx;
 		drawVisitor.setGraphics2D(grx);
 	}
-
+	
 	/**
-	 *
+	 * Return the actually used graphics 2d
+	 * 
+	 * @return a graphics 2d, can be null
 	 */
+	public Graphics2D getGraphics2d(){
+		return grx;
+	}
+
+	public ReportConverter getReportConverter(){
+		return reportConverter;
+	}
+	
+	public JSSConvertVisitor getConvertVisitor(){
+		return convertVisitor;
+	}
+	
+	public PrintDrawVisitor getDrawVisitor() {
+		return drawVisitor;
+	}
+
+	
 	public void setTextRenderer(JRReport report) {
 		drawVisitor.setTextRenderer(report);
 	}
 
-	/**
-	 *
-	 */
+
 	@Override
 	public void visitBreak(JRBreak breakElement) {
 		// FIXMEDRAW
@@ -94,7 +121,7 @@ public class JSSDrawVisitor extends UniformElementVisitor {
 		}
 	}
 
-	protected Offset elementOffset(JRElement element) {
+	public static Offset elementOffset(JRElement element) {
 		return new Offset(-element.getX(), -element.getY());
 	}
 

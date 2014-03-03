@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -281,9 +282,9 @@ public class MTextField extends MTextElement {
 				jrElement.setEvaluationGroup(group);
 			} else
 				jrElement.setEvaluationGroup(null);
-		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION))
+		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)){
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
-		else if (id.equals(JRDesignTextField.PROPERTY_PATTERN_EXPRESSION))
+		} else if (id.equals(JRDesignTextField.PROPERTY_PATTERN_EXPRESSION))
 			jrElement.setPatternExpression(ExprUtil.setValues(jrElement.getPatternExpression(), value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);
@@ -397,6 +398,15 @@ public class MTextField extends MTextElement {
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
+	}
+
+	/**
+	 * Return the graphical properties for an MTextField
+	 */
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRDesignTextField.PROPERTY_EXPRESSION);
+		return result;
 	}
 
 }

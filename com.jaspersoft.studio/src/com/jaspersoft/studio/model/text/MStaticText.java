@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.model.text;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -134,9 +135,9 @@ public class MStaticText extends MTextElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignStaticText jrElement = (JRDesignStaticText) getValue();
 
-		if (id.equals(JRBaseStaticText.PROPERTY_TEXT))
+		if (id.equals(JRBaseStaticText.PROPERTY_TEXT)){
 			jrElement.setText((String) value);
-		else
+		}	else
 			super.setPropertyValue(id, value);
 	}
 
@@ -203,5 +204,14 @@ public class MStaticText extends MTextElement {
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
+	}
+	
+	/**
+	 * Return the graphical properties for an MStaticText
+	 */
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRBaseStaticText.PROPERTY_TEXT);
+		return result;
 	}
 }

@@ -11,6 +11,7 @@
 
 package com.jaspersoft.studio.jasper;
 
+import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.RenderableUtil;
 import net.sf.jasperreports.engine.base.JRBasePrintImage;
 import net.sf.jasperreports.engine.convert.ElementConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
+import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
@@ -157,7 +159,8 @@ public final class ImageConverter extends ElementConverter {
 						public void run() {
 							cache.put(element, r);
 							kv.value = System.currentTimeMillis();
-							AMultiEditor.refresh(jrContext);
+							PropertyChangeEvent event = new PropertyChangeEvent(image, JRDesignImage.PROPERTY_EXPRESSION, null,  expr);
+							AMultiEditor.refreshElement(jrContext, event);
 						}
 
 					});

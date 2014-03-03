@@ -11,11 +11,13 @@
 package com.jaspersoft.studio.model.text;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -43,7 +45,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 public abstract class MTextElement extends MGraphicElementLineBox implements IRotatable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-
+	
 	public MTextElement() {
 		super();
 	}
@@ -68,6 +70,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
 
+	
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
@@ -214,5 +217,33 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		getMFont().setPropertyValue(id, value);
 
 		super.setPropertyValue(id, value);
+	}
+	
+	/**
+	 * Return the graphical properties for an MTextElement
+	 */
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+		result.add(JRBaseStyle.PROPERTY_ROTATION);
+		
+		result.add(JRBaseParagraph.PROPERTY_LINE_SPACING);
+		result.add(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE);
+		result.add(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT);
+		result.add(JRBaseParagraph.PROPERTY_LEFT_INDENT);
+		result.add(JRBaseParagraph.PROPERTY_RIGHT_INDENT);
+		result.add(JRBaseParagraph.PROPERTY_SPACING_BEFORE);
+		result.add(JRBaseParagraph.PROPERTY_SPACING_AFTER);
+		result.add(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH);
+		
+		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+		result.add(JRBaseFont.PROPERTY_BOLD);
+		result.add(JRBaseFont.PROPERTY_UNDERLINE);
+		result.add(JRBaseFont.PROPERTY_STRIKE_THROUGH);
+		result.add(JRBaseFont.PROPERTY_ITALIC);
+		result.add(JRBaseFont.PROPERTY_FONT_SIZE);
+		result.add(JRBaseFont.PROPERTY_FONT_NAME);
+		return result;
 	}
 }

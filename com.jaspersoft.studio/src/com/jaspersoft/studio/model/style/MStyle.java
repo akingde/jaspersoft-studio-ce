@@ -45,6 +45,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.text.MFont;
@@ -717,6 +718,26 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		jrDesignStyle.setName(ModelUtils.getDefaultName(jrDesign.getStylesMap(), "Style")); //$NON-NLS-1$
 		return jrDesignStyle;
 	}
+	
+	/**
+	 * Search all the nodes that are using this styles and set the flag to tell the graphic manager
+	 * to repaint them
+	 * 
+	 * @param childerns the children of the actual level
+	 */
+	private void setStyleRefresh(List<INode> childerns){
+		for(INode child : childerns){
+			if (child instanceof MGraphicElement){
+				MGraphicElement graphicalElement = (MGraphicElement)child;
+				JRStyle style = graphicalElement.getValue().getStyle();
+				if (style != null && style.getName().equals(getValue().getName())){
+					graphicalElement.setChangedProperty(true);
+				}
+			}
+			setStyleRefresh(child.getChildren());
+		}
+		
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -749,8 +770,17 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				}
 			}
 		}
+		//Avoid the refresh if the style is not in the hierarchy
+		if (getRoot() != null) setStyleRefresh(getRoot().getChildren());
 		evt = new PropertyChangeEvent(getValue(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		super.propertyChange(evt);
+	}
+	
+	/**
+	 * Return the style element
+	 */
+	public JRStyle getValue(){
+		return (JRStyle) super.getValue();
 	}
 
 	public boolean isCopyable2(Object parent) {

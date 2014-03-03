@@ -11,10 +11,12 @@
 package com.jaspersoft.studio.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
@@ -86,4 +88,14 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 		return super.getPropertyValue(id);
 	}
 
+	/**
+	 * Return the graphical properties for an MGraphicalElementLinePen 
+	 */
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRBasePen.PROPERTY_LINE_COLOR);
+		result.add(JRBasePen.PROPERTY_LINE_STYLE);
+		result.add(JRBasePen.PROPERTY_LINE_WIDTH);
+		return result;
+	}
 }
