@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='9'>
+  <ius size='10'>
     <iu id='org.apache.commons.dbcp' name='Apache Commons DBCP' version='1.4.0.v201204271417'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/'/>
@@ -52,5 +52,10 @@
         <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
       </repositories>
     </iu>
+    <iu id='com.buzzcoders.yasw.widgets.map.feature.feature.group' name='YASW Map widget' version='1.0.0.v20140303-1454'>
+      <repositories size='1'>
+        <repository location='http://yasw-library.sf.net/updates/'/>
+      </repositories>
+    </iu>    
   </ius>
 </p2f>
