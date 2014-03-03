@@ -826,6 +826,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		setChangedProperty(true);
 		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {

@@ -71,6 +71,10 @@ public class JRtxEditor extends AMultiEditor {
 			styleEditor.setModel(model);
 	}
 
+	public INode getModel(){
+		return model;
+	}
+	
 	@Override
 	protected void createPages() {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getContainer(), "com.jaspersoft.studio.doc.editor_jrtx");

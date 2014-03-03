@@ -147,7 +147,7 @@ public class ChartComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MChart)
-			return new ChartFigure();
+			return new ChartFigure((MChart)node);
 		return null;
 	}
 

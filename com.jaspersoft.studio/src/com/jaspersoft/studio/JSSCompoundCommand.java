@@ -140,8 +140,10 @@ public class JSSCompoundCommand extends CompoundCommand {
 			else if (startNode instanceof MRoot) {
 				//I'm on the root, need to go down
 				return getMainNode((ANode)startNode.getChildren().get(0));
-			} else {
-				return getMainNode(startNode.getParent());
+			} else { 
+				ANode node = startNode.getParent();
+				if (node instanceof MRoot) return null;
+				else return getMainNode(node);
 			}
 		}
 		return null;
@@ -172,7 +174,13 @@ public class JSSCompoundCommand extends CompoundCommand {
 				return getNode();
 			} else {
 				referenceNode = referenceNode.getParent();
-				return getNode();
+				if (referenceNode instanceof MRoot) {
+					referenceNode = null;
+					return null;
+				}
+				else {
+					return getNode();
+				}
 			}
 		}
 		return null;

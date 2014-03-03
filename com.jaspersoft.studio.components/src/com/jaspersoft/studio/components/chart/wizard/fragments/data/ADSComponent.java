@@ -193,7 +193,7 @@ public abstract class ADSComponent implements IExpressionContextSetter {
 
 	private void setChartFigure() {
 		if (jrElement instanceof JRChart)
-			chartFigure = new ChartFigure();
+			chartFigure = new ChartFigure(null);
 		else
 			// if (jrElement instanceof JRCommonElement)
 			chartFigure = new JRComponentFigure();

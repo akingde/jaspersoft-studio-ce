@@ -51,6 +51,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.IMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.editor.util.StringStorage;
@@ -80,7 +81,7 @@ public class SelectionHelper {
 	 * available
 	 */
 	public static ANode getOpenedRoot(){
-		JrxmlEditor editor = (JrxmlEditor)getActiveJRXMLEditor();
+		IMultiEditor editor = (IMultiEditor)getActiveJRXMLEditor();
 		if (editor != null){
 			return (ANode)editor.getModel();
 		}

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.chart.editor.part;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,15 +44,20 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.viewers.ISelection;
 
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.theme.MChartThemeSettings;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 public class ChartThemeEditPart extends FigureEditPart {
 
+	/**
+	 * List of all the sample chart models, so when a property is changed the model can be easly refrshed
+	 */
+	private List<MChart> chartModels = new ArrayList<MChart>();
+	
 	private List<ChartFigure> charts = new ArrayList<ChartFigure>();
 
 	@Override
@@ -309,8 +316,24 @@ public class ChartThemeEditPart extends FigureEditPart {
 				* rf.getChildren().size() / 3 + 50);
 
 		setPrefsBorder(rf);
+		
+		//Add the property change listener to force the charts refresh when something is changed
+		//FIXME: add the refresh only on the change of visual property
+		getModel().getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				for (MChart child : chartModels){
+					((MGraphicElement)child).setChangedProperty(true);
+				}
+				refreshChildren();
+				refreshVisuals();
+			}
+		});
 		return rf;
 	}
+	
+	
 
 	protected void setupChartSize(JRDesignChart jdc, GridLayout lm,
 			ChartFigure cf) {
@@ -329,9 +352,11 @@ public class ChartThemeEditPart extends FigureEditPart {
 		lm.setConstraint(cf, gd);
 	}
 
-	protected void addChart(final RectangleFigure rf, final GridLayout lm,
-			final JRDesignChart jdc) {
-		final ChartFigure cf = new ChartFigure();
+	protected void addChart(final RectangleFigure rf, final GridLayout lm, final JRDesignChart jdc) {
+		MChart model = new MChart();
+		chartModels.add(model);
+		model.setValue(jdc);
+		final ChartFigure cf = new ChartFigure(model);
 		setupChartSize(jdc, lm, cf);
 		cf.setToolTip(new Label("Click on me to zoom"));
 		cf.setJRElement(jdc, getDrawVisitor());
@@ -377,6 +402,7 @@ public class ChartThemeEditPart extends FigureEditPart {
 
 	public void setPrefsBorder(IFigure rect) {
 	}
+	
 
 	@Override
 	public MChartThemeSettings getModel() {
