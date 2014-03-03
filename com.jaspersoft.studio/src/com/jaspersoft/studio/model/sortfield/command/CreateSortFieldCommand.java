@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield.command;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
@@ -22,7 +23,6 @@ import net.sf.jasperreports.engine.design.JRDesignSortField;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
@@ -96,7 +96,7 @@ public class CreateSortFieldCommand extends Command {
 			jrField = MSortField.createJRSortField(jrDataSet);
 			SortFieldWizard wizard = new SortFieldWizard();
 			wizard.init(jrDataSet, jrField);
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			dialog.create();
 			if (dialog.open() != Dialog.OK) {
 				jrField = null;

@@ -151,7 +151,9 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 
-		JSSTextPropertyDescriptor nameD = new  JSSValidatedTextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.common_name, new FieldNameValidator());
+		FieldNameValidator validator = new FieldNameValidator();
+		validator.setTargetNode(this);
+		JSSTextPropertyDescriptor nameD = new  JSSValidatedTextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setDescription(Messages.MField_name_description);
 		desc.add(nameD);
 

@@ -143,7 +143,9 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap,
 			boolean readOnly) {
-		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name, new VariableNameValidator());
+		VariableNameValidator validator = new VariableNameValidator();
+		validator.setTargetNode(this);
+		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setReadOnly(readOnly);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
