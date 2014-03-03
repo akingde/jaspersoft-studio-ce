@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.model.parameter.command;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -67,6 +68,14 @@ public class ReorderParameterCommand extends Command {
 		oldIndex = jrDataset.getParametersList().indexOf(jrParameter);
 
 		try {
+			int i = 0;
+			for (JRParameter v : jrDataset.getParametersList()) {
+				if (v.isSystemDefined())
+					i++;
+				else
+					break;
+			}
+			newIndex = Math.max(newIndex, i);
 			jrDataset.removeParameter(jrParameter);
 			if (newIndex < 0 || newIndex > jrDataset.getParametersList().size())
 				jrDataset.addParameter(jrParameter);
