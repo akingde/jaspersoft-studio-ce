@@ -143,15 +143,16 @@ public class MSortField extends APropertyNode implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	/**
 	 * Return an hashset of all the already used sortfields name of a specific type.
 	 */
-	private HashSet<String> getUsedValues(SortFieldTypeEnum type){
+	private HashSet<String> getUsedValues(SortFieldTypeEnum type) {
 		HashSet<String> result = new HashSet<String>();
 		JRDesignDataset jrDataset = getDataSet();
-		for (JRSortField field : jrDataset.getSortFieldsList()){
-			if (field.getType().equals(type)) result.add(field.getName());
+		for (JRSortField field : jrDataset.getSortFieldsList()) {
+			if (field.getType().equals(type))
+				result.add(field.getName());
 		}
 		return result;
 	}
@@ -161,6 +162,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 		super.postDescriptors(descriptors);
 		if (nameD != null) {
 			JRDesignDataset jrDataset = getDataSet();
+			if (jrDataset == null)
+				return;
 			if (getValue() != null) {
 				JRDesignSortField sortField = (JRDesignSortField) getValue();
 				List<String> items = new ArrayList<String>();
@@ -169,14 +172,16 @@ public class MSortField extends APropertyNode implements ICopyable {
 					HashSet<String> usedFields = getUsedValues(SortFieldTypeEnum.FIELD);
 					for (int j = 0; j < fields.length; j++) {
 						String name = fields[j].getName();
-						if (!usedFields.contains(name)) items.add(name);
+						if (!usedFields.contains(name))
+							items.add(name);
 					}
 				} else {
 					JRVariable[] vars = jrDataset.getVariables();
 					HashSet<String> usedVariables = getUsedValues(SortFieldTypeEnum.VARIABLE);
 					for (int j = 0; j < vars.length; j++) {
 						String name = vars[j].getName();
-						if (!usedVariables.contains(name)) items.add(name);
+						if (!usedVariables.contains(name))
+							items.add(name);
 					}
 				}
 				nameD.setItems(items.toArray(new String[items.size()]));
@@ -206,8 +211,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, Messages.MSortField_typeTitle, SortFieldTypeEnum.class,
-				NullEnum.NOTNULL) {
+		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, Messages.MSortField_typeTitle,
+				SortFieldTypeEnum.class, NullEnum.NOTNULL) {
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 				Image[] images = new Image[] {
 						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/fields-sort-16.png"), //$NON-NLS-1$
@@ -245,33 +250,32 @@ public class MSortField extends APropertyNode implements ICopyable {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME))
 			return jrField.getName();
-		if (id.equals(JRDesignSortField.PROPERTY_ORDER)){
-			if (orderD == null) getPropertyDescriptors();
+		if (id.equals(JRDesignSortField.PROPERTY_ORDER)) {
+			if (orderD == null)
+				getPropertyDescriptors();
 			return orderD.getEnumValue(jrField.getOrderValue());
 		}
-		if (id.equals(JRDesignSortField.PROPERTY_TYPE)){
-			if (typeD == null) getPropertyDescriptors();
+		if (id.equals(JRDesignSortField.PROPERTY_TYPE)) {
+			if (typeD == null)
+				getPropertyDescriptors();
 			return typeD.getEnumValue(jrField.getType());
 		}
 		return null;
 	}
-	
+
 	/**
-	 * FIXME: this function is used to generate the key from a sortfield into the sortfields 
-	 * map inside the jasperreports structure. This function in jasperreport is private and for 
-	 * this reason it was copied here. It is necessary because when the name of a sortfield is changed
-	 * also the map should be updated but JR dosen't do that, so we need to do it manually, but to 
-	 * do it we need the function to calculate the key. Delete and reinsert the sortfield is not 
-	 * a solution, it's an unnecessary heavy operation and other that this it raise a series of events
-	 * that cause many problems in JSS nodes model
+	 * FIXME: this function is used to generate the key from a sortfield into the sortfields map inside the jasperreports
+	 * structure. This function in jasperreport is private and for this reason it was copied here. It is necessary because
+	 * when the name of a sortfield is changed also the map should be updated but JR dosen't do that, so we need to do it
+	 * manually, but to do it we need the function to calculate the key. Delete and reinsert the sortfield is not a
+	 * solution, it's an unnecessary heavy operation and other that this it raise a series of events that cause many
+	 * problems in JSS nodes model
 	 * 
 	 */
-	private String getSortFieldKey(JRSortField sortField)
-	{
+	private String getSortFieldKey(JRSortField sortField) {
 		return sortField.getName() + "|" + sortField.getType().getName();
 	}
 
-	
 	/*
 	 * (non-Javadoc)
 	 * 
