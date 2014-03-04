@@ -455,6 +455,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		result.add(JRDesignCellContents.PROPERTY_STYLE_NAME_REFERENCE);
 		result.add(JRDesignCrosstabCell.PROPERTY_WIDTH);
 		result.add(JRDesignCrosstabCell.PROPERTY_HEIGHT);
+		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
 		return result;
 	}
 	

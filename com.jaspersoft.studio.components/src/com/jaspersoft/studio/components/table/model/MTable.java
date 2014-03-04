@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
 import net.sf.jasperreports.engine.JRConstants;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.components.StylesUtils;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -330,6 +332,15 @@ public class MTable extends MGraphicElement implements IContainer,
 		properties.add(DesignCell.PROPERTY_STYLE_NAME_REFERENCE);
 		properties.add(DesignCell.PROPERTY_ROW_SPAN);
 		properties.add(DesignCell.PROPERTY_HEIGHT);
+		properties.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
+		properties.add(MColumn.PROPERTY_NAME);
+		properties.add(StandardBaseColumn.PROPERTY_WIDTH);
+		properties.add(StandardBaseColumn.PROPERTY_TABLE_HEADER);
+		properties.add(StandardBaseColumn.PROPERTY_TABLE_FOOTER);
+		properties.add(StandardBaseColumn.PROPERTY_COLUMN_HEADER);
+		properties.add(StandardBaseColumn.PROPERTY_COLUMN_FOOTER);
+		properties.add(StandardBaseColumn.PROPERTY_GROUP_HEADERS);
+		properties.add(StandardBaseColumn.PROPERTY_GROUP_FOOTERS);
 		return properties;
 	}
 
