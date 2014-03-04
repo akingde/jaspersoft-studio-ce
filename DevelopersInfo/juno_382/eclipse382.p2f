@@ -137,7 +137,7 @@
         <repository location='http://download.eclipse.org/releases/juno'/>
       </repositories>
     </iu>
-    <iu id='com.buzzcoders.yasw.widgets.map.feature.feature.group' name='YASW Map widget' version='1.0.0.v20140303-1454'>
+    <iu id='com.buzzcoders.yasw.widgets.map.feature.feature.group' name='YASW Map widget' version='1.0.0.v20140304-0957'>
       <repositories size='1'>
         <repository location='http://yasw-library.sf.net/updates/'/>
       </repositories>
