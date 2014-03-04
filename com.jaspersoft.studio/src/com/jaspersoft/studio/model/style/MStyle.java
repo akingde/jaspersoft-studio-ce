@@ -43,9 +43,9 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDragable;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.text.MFont;
@@ -727,10 +727,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	private void setStyleRefresh(List<INode> childerns){
 		for(INode child : childerns){
-			if (child instanceof MGraphicElement){
-				MGraphicElement graphicalElement = (MGraphicElement)child;
-				JRStyle style = graphicalElement.getValue().getStyle();
-				if (style != null && style.getName().equals(getValue().getName())){
+			if (child instanceof IGraphicalPropertiesHandler){
+				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)child;
+				if (graphicalElement.getUsedStyles().contains(getValue().getName())){
 					graphicalElement.setChangedProperty(true);
 				}
 			}

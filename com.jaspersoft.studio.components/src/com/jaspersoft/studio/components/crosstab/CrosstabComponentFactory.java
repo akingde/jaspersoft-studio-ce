@@ -592,7 +592,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MCrosstab)
-			return new CrosstabFigure();
+			return new CrosstabFigure((MCrosstab)node);
 		if (node instanceof MCrosstabHeader || node instanceof MCrosstabWhenNoData)
 			return new EmptyCellFigure();
 		if (node instanceof MCrosstabWhenNoDataCell)

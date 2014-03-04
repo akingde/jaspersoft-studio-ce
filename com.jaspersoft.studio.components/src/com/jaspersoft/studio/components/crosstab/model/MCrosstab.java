@@ -17,6 +17,7 @@ package com.jaspersoft.studio.components.crosstab.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +26,16 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
@@ -39,6 +43,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.StylesUtils;
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
@@ -442,11 +447,35 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	}
 
 	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRBaseStyle.PROPERTY_BACKCOLOR);
+		result.add(JRDesignCellContents.PROPERTY_STYLE);
+		result.add(JRBaseStyle.PROPERTY_MODE);
+		result.add(JRDesignCellContents.PROPERTY_STYLE_NAME_REFERENCE);
+		result.add(JRDesignCrosstabCell.PROPERTY_WIDTH);
+		result.add(JRDesignCrosstabCell.PROPERTY_HEIGHT);
+		return result;
+	}
+	
+	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 		MCrosstabDataset crosstabDataset = (MCrosstabDataset) getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
 		datasetList.add((MDatasetRun)crosstabDataset.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN));
 		return datasetList;
+	}
+	
+	@Override
+	public HashSet<String> getUsedStyles() {
+		HashSet<String> result = super.getUsedStyles();
+		JRDesignStyle[] styles = StylesUtils.getStylesFromCrosstab(getValue());
+		for(JRDesignStyle style : styles){
+			if (style != null){
+				result.add(style.getName());
+			}
+		}
+		return result;
 	}
 
 }

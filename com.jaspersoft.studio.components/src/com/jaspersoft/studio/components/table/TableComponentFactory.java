@@ -416,7 +416,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MTable)
-			return new TableFigure();
+			return new TableFigure((MTable)node);
 		if (node instanceof MCell)
 			return new CellFigure();
 

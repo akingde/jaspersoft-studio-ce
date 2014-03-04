@@ -17,6 +17,7 @@ package com.jaspersoft.studio.components.table.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
@@ -38,6 +40,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.StylesUtils;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -318,6 +321,17 @@ public class MTable extends MGraphicElement implements IContainer,
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
+	
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(DesignCell.PROPERTY_DEFAULT_STYLE_PROVIDER);
+		properties.add(DesignCell.PROPERTY_STYLE);
+		properties.add(DesignCell.PROPERTY_STYLE_NAME_REFERENCE);
+		properties.add(DesignCell.PROPERTY_ROW_SPAN);
+		properties.add(DesignCell.PROPERTY_HEIGHT);
+		return properties;
+	}
 
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
@@ -326,4 +340,15 @@ public class MTable extends MGraphicElement implements IContainer,
 		return datasetList;
 	}
 	
+	@Override
+	public HashSet<String> getUsedStyles() {
+		HashSet<String> result = super.getUsedStyles();
+		JRDesignStyle[] styles = StylesUtils.getStylesFromTable((JRDesignComponentElement) getValue());
+		for(JRDesignStyle style : styles){
+			if (style != null){
+				result.add(style.getName());
+			}
+		}
+		return result;
+	}
 }

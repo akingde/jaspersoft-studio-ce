@@ -326,8 +326,7 @@ public class ChartThemeEditPart extends FigureEditPart {
 				for (MChart child : chartModels){
 					((MGraphicElement)child).setChangedProperty(true);
 				}
-				refreshChildren();
-				refreshVisuals();
+				refresh();
 			}
 		});
 		return rf;

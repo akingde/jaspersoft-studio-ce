@@ -15,15 +15,44 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.figure;
 
+import java.awt.Graphics2D;
+
+import net.sf.jasperreports.engine.JRComponentElement;
+import net.sf.jasperreports.engine.JRElement;
+
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
+import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class TableFigure extends JRComponentFigure {
 
+	private MTable tableModel = null;
+	
+	private StackGraphics2D cachedGraphics = null;
+	
+	
 	/**
 	 * Instantiates a new text field figure.
 	 */
-	public TableFigure() {
+	public TableFigure(MTable tableModel) {
 		super();
+		this.tableModel = tableModel;
 	}
 
+	@Override
+	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
+		if (tableModel != null){
+			if (cachedGraphics == null || tableModel.hasChangedProperty()){
+				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+				cachedGraphics = new StackGraphics2D(oldGraphics);
+				drawVisitor.setGraphics2D(cachedGraphics);
+				drawVisitor.visitComponentElement((JRComponentElement) jrElement);
+				drawVisitor.setGraphics2D(oldGraphics);
+				tableModel.setChangedProperty(false);
+			}
+			cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
+			cachedGraphics.paintStack();
+		}
+	}
 }

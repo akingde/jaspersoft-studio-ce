@@ -66,7 +66,7 @@ import com.jaspersoft.studio.utils.Misc;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable, IGraphicalPropertiesHandler{
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 
@@ -750,6 +750,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * The graphical properties of an element are those properties that affect the appearance of an element
 	 * when changed
 	 */
+	@Override
 	public HashSet<String> getGraphicalProperties(){
 		HashSet<String> result = cachedGraphicalProperties.get(this.getClass());
 		if (result == null){
@@ -762,6 +763,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	/**
 	 * True if some graphical property is changed for the element, false otherwise
 	 */
+	@Override
 	public boolean hasChangedProperty(){
 		return visualPropertyChanged;
 	}
@@ -769,6 +771,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	/**
 	 * Set the actual state of the property change flag
 	 */
+	@Override
 	public void setChangedProperty(boolean value){
 		visualPropertyChanged = value;
 	}
@@ -786,5 +789,21 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			setChangedProperty(true);
 		}
 		super.propertyChange(evt);
+	}
+
+	/**
+	 * Return a list of used styles by the element. This is very useful in case of 
+	 * and element like table or crosstab that can use many styles
+	 * 
+	 * @return a not null hashset of the names of all the styles used by this element
+	 */
+	@Override
+	public HashSet<String> getUsedStyles() {
+		HashSet<String> result = new HashSet<String>();
+		JRStyle style = getValue().getStyle();
+		if (style != null){
+			result.add(style.getName());
+		}
+		return result;
 	}
 }

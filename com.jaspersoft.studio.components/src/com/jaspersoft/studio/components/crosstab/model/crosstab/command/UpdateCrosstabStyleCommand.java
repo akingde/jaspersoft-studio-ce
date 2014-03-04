@@ -78,6 +78,7 @@ public class UpdateCrosstabStyleCommand extends Command{
 		oldStyles = applyAction.getStylesFromCrosstab();
 		//Apply the new style, the old one if not overwritten are not removed
 		applyAction.updateStyle(crosstab.getJasperDesign(), newStyleTemplate, updateOldStyles, false);
+		crosstab.setChangedProperty(true);
 	}
 	
 	@Override
@@ -87,6 +88,7 @@ public class UpdateCrosstabStyleCommand extends Command{
 		//Restore the new style, if the update has created new styles they will be also removed
 		applyAction.updateStyle(crosstab.getJasperDesign(), styles, false, true);
 		oldStyles = null;
+		crosstab.setChangedProperty(true);
 	}
 	
 	/**
