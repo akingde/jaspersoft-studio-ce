@@ -84,16 +84,23 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		ANode parent = getParent();
 		if (parent != null) {
 			properties = getProperities(parent);
-
-			removeChild(this);
-
 			properties.remove("callouts." + i + ".bounds");
 			properties.remove("callouts." + i + ".pins");
 			properties.remove("callouts." + i + ".text");
 			properties.remove("callouts." + i + ".pins");
+			properties.remove("callouts." + i + ".bg");
+			properties.remove("callouts." + i + ".fg");
 
-			getPropertiesHolder(parent).getPropertiesMap().setProperty(PROP_CALLOUT,
-					FileUtils.getPropertyAsString(properties));
+			String calloutInfoStr = FileUtils.getPropertyAsString(properties);
+			if(calloutInfoStr==null || calloutInfoStr.isEmpty()){
+				getPropertiesHolder(parent).getPropertiesMap().removeProperty(PROP_CALLOUT);
+			}
+			else{
+				getPropertiesHolder(parent).getPropertiesMap().setProperty(PROP_CALLOUT,
+						calloutInfoStr);	
+			}
+			
+			removeChild(this);
 
 			getPropertyChangeSupport().fireIndexedPropertyChange(JRDesignElementGroup.PROPERTY_CHILDREN, -1, true, false);
 		}
