@@ -359,6 +359,7 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
+		Object oldValue = getPropertyValue(id);
 		if (id.equals(JRDesignElement.PROPERTY_X))
 			x = (Integer) value;
 		else if (id.equals(JRDesignElement.PROPERTY_Y))
@@ -398,10 +399,11 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 		else{ 
 			properties.remove("callouts." + i + ".pins");
 		}
-
+		
 		getPropertiesHolder(getParent()).getPropertiesMap().setProperty(PROP_CALLOUT,
 				FileUtils.getPropertyAsString(properties).replace("\n", "\\n"));
-
+		
+		getPropertyChangeSupport().firePropertyChange((String)id, oldValue, value);
 	}
 
 	@Override
