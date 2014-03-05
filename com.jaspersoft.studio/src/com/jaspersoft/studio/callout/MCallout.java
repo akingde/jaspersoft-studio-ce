@@ -60,7 +60,9 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class MCallout extends APropertyNode implements IGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-
+	
+	public static final int DEFAULT_HEIGHT = 200;
+	public static final int DEFAULT_WIDTH = 200;
 	public static final String PROP_CALLOUT = "ireport.callouts";
 
 	public MCallout() {
@@ -409,12 +411,12 @@ public class MCallout extends APropertyNode implements IGraphicElement {
 
 	@Override
 	public int getDefaultWidth() {
-		return 0;
+		return DEFAULT_WIDTH;
 	}
 
 	@Override
 	public int getDefaultHeight() {
-		return 0;
+		return DEFAULT_HEIGHT;
 	}
 
 	@Override
