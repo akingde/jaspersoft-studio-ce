@@ -11,7 +11,6 @@
 package com.jaspersoft.studio.model.sortfield;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +126,7 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private static RComboBoxPropertyDescriptor nameD;
+	private RComboBoxPropertyDescriptor nameD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -145,19 +144,6 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		defaultsMap = defaultsMap1;
 	}
 
-	/**
-	 * Return an hashset of all the already used sortfields name of a specific type.
-	 */
-	private HashSet<String> getUsedValues(SortFieldTypeEnum type) {
-		HashSet<String> result = new HashSet<String>();
-		JRDesignDataset jrDataset = getDataSet();
-		for (JRSortField field : jrDataset.getSortFieldsList()) {
-			if (field.getType().equals(type))
-				result.add(field.getName());
-		}
-		return result;
-	}
-
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
@@ -166,23 +152,24 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 			if (jrDataset == null)
 				return;
 			if (getValue() != null) {
+				Map<String, JRSortField> sortFields = jrDataset.getSortFieldsMap();
 				JRDesignSortField sortField = (JRDesignSortField) getValue();
 				List<String> items = new ArrayList<String>();
+				items.add(sortField.getName());
 				if (sortField.getType().equals(SortFieldTypeEnum.FIELD)) {
-					JRField[] fields = jrDataset.getFields();
-					HashSet<String> usedFields = getUsedValues(SortFieldTypeEnum.FIELD);
-					for (int j = 0; j < fields.length; j++) {
-						String name = fields[j].getName();
-						if (!usedFields.contains(name))
-							items.add(name);
+					for (JRField f : jrDataset.getFieldsList()) {
+						JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.FIELD.getName());
+						//If a field with the same name is not present or if it is present but with a different type then show it
+						if (checkIfPresent == null){
+							items.add(f.getName());
+						}
 					}
 				} else {
-					JRVariable[] vars = jrDataset.getVariables();
-					HashSet<String> usedVariables = getUsedValues(SortFieldTypeEnum.VARIABLE);
-					for (int j = 0; j < vars.length; j++) {
-						String name = vars[j].getName();
-						if (!usedVariables.contains(name))
-							items.add(name);
+					for (JRVariable f : jrDataset.getVariablesList()) {
+						JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.VARIABLE.getName());
+						if (checkIfPresent == null){
+							items.add(f.getName());
+						}
 					}
 				}
 				nameD.setItems(items.toArray(new String[items.size()]));

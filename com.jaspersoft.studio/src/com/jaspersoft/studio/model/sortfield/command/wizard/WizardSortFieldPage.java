@@ -12,6 +12,7 @@ package com.jaspersoft.studio.model.sortfield.command.wizard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRSortField;
@@ -39,6 +40,10 @@ import com.jaspersoft.studio.property.dataset.TLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class WizardSortFieldPage extends WizardPage {
+	
+	public enum SHOW_TYPE{VARIABLES, FIELDS, BOTH};
+	
+	private SHOW_TYPE showType = SHOW_TYPE.BOTH;
 
 	private final class SFSelectionListener implements SelectionListener {
 		public void widgetSelected(SelectionEvent e) {
@@ -63,6 +68,12 @@ public class WizardSortFieldPage extends WizardPage {
 	private TableViewer tableView;
 	private Table table;
 
+	
+	public WizardSortFieldPage(JRDesignDataset jrDataset, JRDesignSortField jrSortField, SHOW_TYPE showType) {
+		this(jrDataset, jrSortField);
+		this.showType = showType;
+	}
+	
 	public WizardSortFieldPage(JRDesignDataset jrDataset, JRDesignSortField jrSortField) {
 		super("sortfieldpage"); //$NON-NLS-1$
 		this.jrDataset = jrDataset;
@@ -110,28 +121,24 @@ public class WizardSortFieldPage extends WizardPage {
 
 	private void fillTable() {
 		List<Object> objects = new ArrayList<Object>();
-		for (JRField f : jrDataset.getFieldsList()) {
-			boolean found = false;
-			for (JRSortField sf : jrDataset.getSortFieldsList()) {
-				if (sf.getType().equals(SortFieldTypeEnum.FIELD) && sf.getName().equals(f.getName())) {
-					found = true;
-					break;
+		Map<String, JRSortField> sortFields = jrDataset.getSortFieldsMap();
+		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.FIELDS){
+			for (JRField f : jrDataset.getFieldsList()) {
+				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.FIELD.getName());
+				//If a field with the same name is not present or if it is present but with a different type then show it
+				if (checkIfPresent == null){
+					objects.add(f);
 				}
 			}
-			if (!found)
-				objects.add(f);
 		}
 
-		for (JRVariable f : jrDataset.getVariablesList()) {
-			boolean found = false;
-			for (JRSortField sf : jrDataset.getSortFieldsList()) {
-				if (sf.getType().equals(SortFieldTypeEnum.VARIABLE) && sf.getName().equals(f.getName())) {
-					found = true;
-					break;
+		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.VARIABLES){
+			for (JRVariable f : jrDataset.getVariablesList()) {
+				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.VARIABLE.getName());
+				if (checkIfPresent == null){
+					objects.add(f);
 				}
 			}
-			if (!found)
-				objects.add(f);
 		}
 		setPageComplete(!objects.isEmpty());
 		tableView.setInput(objects);
