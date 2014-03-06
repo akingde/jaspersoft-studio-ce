@@ -137,13 +137,27 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public void setDetailIndex(int detailIndex) {
 		bandIndex = detailIndex;
+		INode n = getRoot();
+		if (n instanceof MReport) {
+			MReport mrep = (MReport) n;
+			mrep.setBandIndex(bandIndex, getValue());
+		}
 	}
 
 	/**
 	 * Refresh the index of the band with the current number returned by getDesignIndex
 	 */
 	public void refreshIndex() {
-		bandIndex = getFreeIndex();
+		INode n = getRoot();
+		if (n instanceof MReport) {
+			MReport mrep = (MReport) n;
+			Integer index = mrep.getBandIndex(getValue());
+			if (index != null) {
+				bandIndex = index;
+				return;
+			}
+		}
+		setDetailIndex(getFreeIndex());
 	}
 
 	/**
@@ -156,7 +170,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		int actualIndex = 1;
 		if (getParent() instanceof MReport) {
 			for (INode node : getParent().getChildren()) {
-				if(node == this)
+				if (node == this)
 					continue;
 				if (node instanceof MBand) {
 					MBand band = (MBand) node;

@@ -12,7 +12,6 @@ package com.jaspersoft.studio.editor.preview;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
@@ -168,7 +167,7 @@ public abstract class ABasicEditor extends EditorPart {
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null)
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+			jrContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 	}
 
 	@Override

@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.band.command;
 
@@ -23,19 +18,20 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.band.MBand;
-/*/*
- * link nodes & together.
+
+/*
+ * /* link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
 public class DeleteBandCommand extends Command {
-	
+
 	/** The jr element. */
 	private JRDesignBand jrElement;
-	
+
 	/** The band type. */
 	private BandTypeEnum bandType;
-	
+
 	/** The jr design. */
 	private JasperDesign jrDesign;
 
@@ -54,7 +50,9 @@ public class DeleteBandCommand extends Command {
 		this.jrDesign = srcNode.getJasperDesign();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -90,7 +88,9 @@ public class DeleteBandCommand extends Command {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */
 	@Override
@@ -98,7 +98,9 @@ public class DeleteBandCommand extends Command {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override

@@ -987,4 +987,14 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
+
+	private Map<JRBand, Integer> bandIndexMap = new HashMap<JRBand, Integer>();
+
+	public Integer getBandIndex(JRBand band) {
+		return bandIndexMap.get(band);
+	}
+
+	public void setBandIndex(int index, JRBand band) {
+		bandIndexMap.put(band, index);
+	}
 }
