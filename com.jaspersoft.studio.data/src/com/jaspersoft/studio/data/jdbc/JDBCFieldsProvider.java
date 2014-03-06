@@ -73,8 +73,9 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 				List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
 				for (int i = 1; i <= cc; i++) {
 					String name = metaData.getColumnLabel(i);
+					System.out.println("name: " + metaData.getColumnName(i) + " Label: " + name);
 					if (colset.contains(name))
-						continue;
+						name = "COLUMN_" /* JRResultSetDataSource.INDEXED_COLUMN_PREFIX */+ i;
 					colset.add(name);
 					JRDesignField field = new JRDesignField();
 					field.setName(name);
