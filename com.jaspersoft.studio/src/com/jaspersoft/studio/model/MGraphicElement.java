@@ -765,7 +765,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public boolean hasChangedProperty(){
-		return visualPropertyChanged;
+		synchronized (this) {
+			return visualPropertyChanged;
+		}
 	}
 	
 	/**
@@ -773,7 +775,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void setChangedProperty(boolean value){
-		visualPropertyChanged = value;
+		synchronized (this) {
+			visualPropertyChanged = value;
+		}
 	}
 	
 	/**

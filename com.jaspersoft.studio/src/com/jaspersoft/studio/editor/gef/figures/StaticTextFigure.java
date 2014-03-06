@@ -49,12 +49,12 @@ public class StaticTextFigure extends FrameFigure {
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
 		if (cachedGraphics == null || staticTextModel.hasChangedProperty()){
+			staticTextModel.setChangedProperty(false);
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 			cachedGraphics = new StackGraphics2D(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			drawVisitor.visitStaticText((JRStaticText) jrElement);
 			drawVisitor.setGraphics2D(oldGraphics);
-			staticTextModel.setChangedProperty(false);
 		}
 		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 		cachedGraphics.paintStack();

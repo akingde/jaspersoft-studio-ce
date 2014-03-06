@@ -56,7 +56,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -342,33 +341,34 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 				StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
 				((DesignListContents) jrList.getContents()).setWidth((Integer) evt.getNewValue());
-			} else if (getParent() instanceof MPage && evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
-				if (evt.getSource() == getJRElementGroup()) {
-					if (evt.getOldValue() == null && evt.getNewValue() != null) {
-						int newIndex = -1;
-						if (evt instanceof CollectionElementAddedEvent) {
-							newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+			} 
+		}
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+			if (evt.getSource() == getJRElementGroup()) {
+				if (evt.getOldValue() == null && evt.getNewValue() != null) {
+					int newIndex = -1;
+					if (evt instanceof CollectionElementAddedEvent) {
+						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+					}
+					// add the node to this parent
+					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+					if (evt.getNewValue() instanceof JRElementGroup) {
+						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+					}
+				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					// delete
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue()) {
+							removeChild((ANode) n);
+							break;
 						}
-						// add the node to this parent
-						ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
-						if (evt.getNewValue() instanceof JRElementGroup) {
-							JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
-							ReportFactory.createElementsForBand(n, jrFrame.getChildren());
-						}
-					} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-						// delete
-						for (INode n : getChildren()) {
-							if (n.getValue() == evt.getOldValue()) {
-								removeChild((ANode) n);
-								break;
-							}
-						}
-					} else {
-						// changed
-						for (INode n : getChildren()) {
-							if (n.getValue() == evt.getOldValue())
-								n.setValue(evt.getNewValue());
-						}
+					}
+				} else {
+					// changed
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue())
+							n.setValue(evt.getNewValue());
 					}
 				}
 			}
