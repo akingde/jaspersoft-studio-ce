@@ -361,7 +361,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(markupD);
 
 		FontNamePropertyDescriptor fontNameD = new FontNamePropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
-				Messages.common_font_name);
+				Messages.common_font_name, getJasperConfiguration().getFontList(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 

@@ -83,7 +83,7 @@ public class MFont extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		FontNamePropertyDescriptor fontNameD = new FontNamePropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
-				Messages.common_font_name);
+				Messages.common_font_name,getJasperConfiguration().getFontList(),NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
