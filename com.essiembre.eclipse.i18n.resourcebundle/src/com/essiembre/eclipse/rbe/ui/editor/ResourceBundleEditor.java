@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -93,6 +95,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
      */
     public void init(IEditorSite site, IEditorInput editorInput)
         throws PartInitException {
+    	editorInput = FileUtils.checkAndConvertEditorInput(editorInput, null);
         super.init(site, editorInput);
         if (editorInput instanceof IFileEditorInput) {
             IFile file = ((IFileEditorInput) editorInput).getFile();
