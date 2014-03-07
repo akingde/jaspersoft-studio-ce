@@ -107,6 +107,8 @@ public class CrosstabEditor extends AbstractVisualEditor {
 
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
+		createDatasetActions(registry);
+		
 		IAction action = new CreateMeasureAction(this);
 		registry.registerAction(action);
 		@SuppressWarnings("unchecked")

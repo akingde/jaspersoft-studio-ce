@@ -117,6 +117,8 @@ public class TableEditor extends AbstractVisualEditor {
 
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
+		createDatasetActions(registry);
+		
 		IAction action = new CreateColumnEndAction(this);
 		registry.registerAction(action);
 		@SuppressWarnings("unchecked")

@@ -179,56 +179,12 @@ public class ReportEditor extends AbstractVisualEditor {
 	}
 
 	protected void createEditorActions(ActionRegistry registry) {
-		IAction action = new CreateFieldAction(this);
-		registry.registerAction(action);
 		List<String> selectionActions = getSelectionActions();
-		selectionActions.add(CreateFieldAction.ID);
-
-		action = new CreateSortFieldAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateSortFieldAction.ID);
-
-		action = new CreateVariableAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateVariableAction.ID);
-
-		action = new CreateScriptletAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateScriptletAction.ID);
-
-		action = new CreateParameterAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateParameterAction.ID);
-
-		action = new CreateGroupAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateGroupAction.ID);
-
-		action = new CreateDatasetAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateDatasetAction.ID);
-
-		action = new CreateStyleAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateStyleAction.ID);
-
-		action = new CreateConditionalStyleAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateConditionalStyleAction.ID);
 		
-		action = new ExportStyleAsTemplateAction(this);
-		registry.registerAction(action);
-		selectionActions.add(ExportStyleAsTemplateAction.ID);
-		
-		action = new ResetStyleAction(this);
-		registry.registerAction(action);
-		selectionActions.add(ResetStyleAction.ID);
+		//Create the action on the dataset element
+		createDatasetActions(registry);
 
-		action = new CreateStyleTemplateAction(this);
-		registry.registerAction(action);
-		selectionActions.add(CreateStyleTemplateAction.ID);
-
-		action = new CreateBandAction(this);
+		IAction action = new CreateBandAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateBandAction.ID);
 

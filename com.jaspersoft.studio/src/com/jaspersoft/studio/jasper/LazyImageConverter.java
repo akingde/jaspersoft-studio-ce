@@ -229,7 +229,7 @@ public class LazyImageConverter extends ElementConverter {
 	private Renderable getRenderable(ReportConverter reportConverter, JRImage image, MImage modelElement) {
 		JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
 		JRExpression expr = image.getExpression();
-		KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, expr.getText());
+		KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, expr != null ? expr.getText() : "");
 		TimedCache imageInfo = imgCache.get(key);
 		
 		//Check if the image was cached

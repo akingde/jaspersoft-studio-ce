@@ -119,6 +119,18 @@ import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 import com.jaspersoft.studio.editor.outline.actions.ConnectToDomainAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
+import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
@@ -582,6 +594,62 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 				viewer.getContextMenu().addMenuListener(menuListener);
 			}
 		};
+	}
+	
+	/**
+	 * Create the contextual action to add stuff to the datasets (fields, variables) 
+	 * and to create styles.
+	 */
+	protected void createDatasetActions(ActionRegistry registry){
+		List<String> selectionActions = getSelectionActions();
+		
+		IAction action = new CreateFieldAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateFieldAction.ID);
+		
+		action = new CreateSortFieldAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateSortFieldAction.ID);
+
+		action = new CreateVariableAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateVariableAction.ID);
+
+		action = new CreateScriptletAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateScriptletAction.ID);
+
+		action = new CreateParameterAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateParameterAction.ID);
+
+		action = new CreateGroupAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateGroupAction.ID);
+
+		action = new CreateDatasetAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateDatasetAction.ID);
+
+		action = new CreateStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateStyleAction.ID);
+
+		action = new CreateConditionalStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateConditionalStyleAction.ID);
+		
+		action = new ExportStyleAsTemplateAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ExportStyleAsTemplateAction.ID);
+		
+		action = new ResetStyleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(ResetStyleAction.ID);
+
+		action = new CreateStyleTemplateAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateStyleTemplateAction.ID);
 	}
 
 	/*

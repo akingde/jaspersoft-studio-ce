@@ -95,6 +95,8 @@ public class ListEditor extends AbstractVisualEditor {
 	protected void createEditorActions(ActionRegistry registry) {
 		super.createEditorActions(registry);
 
+		createDatasetActions(registry);	
+		
 		@SuppressWarnings("unchecked")
 		List<String> selectionActions = getSelectionActions();
 
