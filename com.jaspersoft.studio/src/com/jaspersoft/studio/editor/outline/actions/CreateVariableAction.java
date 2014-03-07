@@ -23,6 +23,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.model.variable.MVariables;
 
 /*
  * /* The Class CreateVariableAction.
@@ -47,6 +48,14 @@ public class CreateVariableAction extends ACreateAndSelectAction {
 		setSelection(selection);
 	}
 
+	@Override
+	protected boolean calculateEnabled() {
+		if(!checkSingleSelectedObject(MVariables.class)){
+			return false;
+		}
+		return super.calculateEnabled();
+	}
+	
 	/**
 	 * Initializes this action's text and images.
 	 */

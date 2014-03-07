@@ -27,6 +27,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
+import com.jaspersoft.studio.model.style.MStyles;
 
 /*
  * The Class CreateStyleTemplateAction.
@@ -45,6 +46,14 @@ public class CreateStyleTemplateAction extends ACreateAndSelectAction {
 	public CreateStyleTemplateAction(IWorkbenchPart part) {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MStyleTemplate.class));
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		if(!checkSingleSelectedObject(MStyles.class)){
+			return false;
+		}
+		return super.calculateEnabled();
 	}
 
 	/**

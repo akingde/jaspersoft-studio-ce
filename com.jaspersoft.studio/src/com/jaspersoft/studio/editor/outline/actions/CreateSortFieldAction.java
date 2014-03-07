@@ -22,6 +22,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.sortfield.MSortField;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
 /*
  * The Class CreateFieldAction.
  */
@@ -41,6 +42,14 @@ public class CreateSortFieldAction extends ACreateAction {
 		setCreationFactory(new JDPaletteCreationFactory(MSortField.class));
 	}
 
+	@Override
+	protected boolean calculateEnabled() {
+		if(!checkSingleSelectedObject(MSortFields.class)){
+			return false;
+		}
+		return super.calculateEnabled();
+	}
+	
 	/**
 	 * Initializes this action's text and images.
 	 */

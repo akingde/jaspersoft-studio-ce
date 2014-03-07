@@ -43,8 +43,13 @@ public class CreateBandAction extends ACreateAndSelectAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		command = createCommand(getSelectedObjects());
-		return command != null && command.canExecute();
+		if(!checkAllSelectedObjects(MBand.class)){
+			return false;
+		}
+		else {
+			command = createCommand(getSelectedObjects());
+			return command != null && command.canExecute();
+		}
 	}
 
 	/**

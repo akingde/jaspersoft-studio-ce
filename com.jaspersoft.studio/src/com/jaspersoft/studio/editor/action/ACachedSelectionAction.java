@@ -55,4 +55,39 @@ public abstract class ACachedSelectionAction extends SelectionAction {
 		}
 		return null;
 	}
+	
+	/**
+	 * Verifies that all the currently selected objects are EditParts
+	 * referring to model objects of the specified class type.
+	 * 
+	 * @param clazz the wanted type for the model objects 
+	 * @return <code>true</code> all model objects are of the same type,<code>false</code> otherwise
+	 */
+	public boolean checkAllSelectedObjects(Class<?> clazz) {
+		List<?> selectedObjects = getSelectedObjects();
+		if(selectedObjects.size()==0) return false;
+		for(Object o : selectedObjects){
+			// All selected objects should be of the same kind
+			if(!(o instanceof EditPart) || 
+					!clazz.isInstance(((EditPart) o).getModel())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Verifies that there is only one EditPart selected
+	 * referring to a model object of the specified class type.
+	 * 
+	 * @param clazz the wanted type for the model object 
+	 * @return <code>true</code> the single model object has the wanted type,<code>false</code> otherwise
+	 */
+	public boolean checkSingleSelectedObject(Class<?> clazz) {
+		List<?> selectedObjects = getSelectedObjects();
+		if(selectedObjects.size()==1 && selectedObjects.get(0) instanceof EditPart) {
+				return clazz.isInstance(((EditPart)selectedObjects.get(0)).getModel());
+		}
+		return false;
+	}
 }
