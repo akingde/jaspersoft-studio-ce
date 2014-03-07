@@ -418,33 +418,35 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			setActivePage(0);
 		} else {
 			AbstractVisualEditor ave = createEditorPage(obj);
-			/**
-			 * If was created another editor with inside an mpage the i save the parent of the 
-			 * current node inside the page. Doing this it is always possible from a node get its
-			 * real parent and go back into the hierarchy. This information need only to be saved here
-			 * since when an element change parent all the open editors for the element are closed
-			 */
-			if (ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage){
-				MPage pageElement = (MPage)ave.getModel().getChildren().get(0);
-				pageElement.setRealParent(node.getParent());
-			}
-			if (getActiveEditor() != ave) {
-				int index = editors.indexOf(ave);
-				if (index > 0 && index <= editors.size() - 1) {
-					setActivePage(index);
-					final Composite prnt = getContainer().getParent();
-					final Point size = prnt.getSize();
-					prnt.getParent().setSize(size.x - 2, size.y - 2);
-					UIUtils.getDisplay().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							prnt.getParent().setSize(size.x, size.y);
-						}
-					});
-
-					// if (obj instanceof JRDesignElement)
-					// SelectionHelper.setSelection((JRDesignElement) obj, true);
-					// ave.getGraphicalViewer().setSelection(new StructuredSelection(obj));
+			if(ave!=null) {
+				/**
+				 * If was created another editor with inside an mpage the i save the parent of the 
+				 * current node inside the page. Doing this it is always possible from a node get its
+				 * real parent and go back into the hierarchy. This information need only to be saved here
+				 * since when an element change parent all the open editors for the element are closed
+				 */
+				if (ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage){
+					MPage pageElement = (MPage)ave.getModel().getChildren().get(0);
+					pageElement.setRealParent(node.getParent());
+				}
+				if (getActiveEditor() != ave) {
+					int index = editors.indexOf(ave);
+					if (index > 0 && index <= editors.size() - 1) {
+						setActivePage(index);
+						final Composite prnt = getContainer().getParent();
+						final Point size = prnt.getSize();
+						prnt.getParent().setSize(size.x - 2, size.y - 2);
+						UIUtils.getDisplay().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								prnt.getParent().setSize(size.x, size.y);
+							}
+						});
+	
+						// if (obj instanceof JRDesignElement)
+						// SelectionHelper.setSelection((JRDesignElement) obj, true);
+						// ave.getGraphicalViewer().setSelection(new StructuredSelection(obj));
+					}
 				}
 			}
 		}
