@@ -297,7 +297,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				if (newIndex >= minIndex && newIndex <= maxIndex)
 					return new ReorderBandCommand((MBand) child, (MReport) parent, newIndex - minIndex);
 			}
-		} else if (child instanceof MGraphicElement) {
+		} else if (child instanceof MGraphicElement && ! (parent instanceof MPage)) {
 			return new ReorderElementCommand((MGraphicElement) child, parent, newIndex);
 		} else if (child instanceof MElementGroup) {
 			return new ReorderElementGroupCommand((MElementGroup) child, parent, newIndex);

@@ -31,7 +31,8 @@ public class ElementTypeMapper implements ITypeMapper {
 	public Class<?> mapType(Object object) {
 		Class<?> type = object.getClass();
 		if (object instanceof EditPart) {
-			type = ((EditPart) object).getModel().getClass();
+			EditPart part =(EditPart) object;
+			if (part.getModel() != null) type = part.getModel().getClass();
 		}
 		return type;
 	}
