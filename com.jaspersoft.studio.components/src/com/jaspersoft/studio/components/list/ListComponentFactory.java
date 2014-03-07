@@ -59,6 +59,8 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.command.DeleteElementCommand;
+import com.jaspersoft.studio.model.command.DeleteElementGroupCommand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.frame.MFrame;
@@ -235,6 +237,14 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
+		if (child instanceof MList)
+			return null;
+		if (parent instanceof MPage)
+			parent = child.getParent();
+		if (child instanceof MGraphicElement && parent instanceof MList && child.getValue() != null)
+			return new DeleteElementCommand((MList) parent, (MGraphicElement) child);
+		if (child instanceof MElementGroup && parent instanceof MList && child.getValue() != null)
+			return new DeleteElementGroupCommand((MList) parent, (MElementGroup) child);
 		return null;
 	}
 
