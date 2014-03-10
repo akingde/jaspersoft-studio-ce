@@ -1490,7 +1490,7 @@
              file-extensions="xml"
              id="com.jaspersoft.studio.data.dataAdapter"
              name="DataAdapter File"
-             priority="high">
+             priority="low">
        </content-type>
     </extension>
     <extension
