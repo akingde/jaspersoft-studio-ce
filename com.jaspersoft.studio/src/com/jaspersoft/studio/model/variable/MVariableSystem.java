@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -113,6 +114,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static VariableNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -129,6 +131,13 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		//Set into the validator the actual reference
+		validator.setTargetNode(this);
+	}
 
 	/**
 	 * Creates the property descriptors.
@@ -141,9 +150,9 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		createPropertyDescriptors(desc, defaultsMap, true);
 	}
 
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap,
-			boolean readOnly) {
-		VariableNameValidator validator = new VariableNameValidator();
+	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, boolean readOnly) {
+		
+		validator = new VariableNameValidator();
 		validator.setTargetNode(this);
 		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setReadOnly(readOnly);
@@ -175,6 +184,19 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		return null;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (JRDesignVariable.PROPERTY_NAME.equals(evt.getPropertyName())){
+			JRDesignDataset d = ModelUtils.getDataset(this);
+			JRDesignVariable jrVariable = (JRDesignVariable) getValue();
+			if (d != null) {
+				d.getVariablesMap().remove(evt.getOldValue());
+				d.getVariablesMap().put(jrVariable.getName(), jrVariable);
+			}
+		}
+		super.propertyChange(evt);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -185,11 +207,6 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		if (id.equals(JRDesignVariable.PROPERTY_NAME)){
 			if (!value.equals("")) {
 				jrVariable.setName((String) value);
-				JRDesignDataset d = ModelUtils.getDataset(this);
-				if (d != null) {
-					d.getVariablesMap().remove(jrVariable);
-					d.getVariablesMap().put(jrVariable.getName(), jrVariable);
-				}
 			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME))
 				jrVariable.setValueClassName((String) value);

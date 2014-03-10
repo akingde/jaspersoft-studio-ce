@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.field;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +118,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static FieldNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -136,6 +138,14 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 
 	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		//Set into the validator the actual reference
+		validator.setTargetNode(this);
+	}
+	
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -151,7 +161,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 
-		FieldNameValidator validator = new FieldNameValidator();
+		validator = new FieldNameValidator();
 		validator.setTargetNode(this);
 		JSSTextPropertyDescriptor nameD = new  JSSValidatedTextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setDescription(Messages.MField_name_description);
@@ -191,6 +201,19 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			return jrField.getPropertiesMap();
 		return null;
 	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (JRDesignParameter.PROPERTY_NAME.equals(evt.getPropertyName())) {
+			JRDesignField jrField = (JRDesignField) getValue();
+			JRDesignDataset d = ModelUtils.getDataset(this);
+			if (d != null) {
+				d.getFieldsMap().remove(evt.getOldValue());
+				d.getFieldsMap().put(jrField.getName(), jrField);
+			}
+		}
+		super.propertyChange(evt);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -202,11 +225,6 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		if (id.equals(JRDesignParameter.PROPERTY_NAME)) {
 			if (!value.equals("")) {
 				jrField.setName((String) value);
-				JRDesignDataset d = ModelUtils.getDataset(this);
-				if (d != null) {
-					d.getFieldsMap().remove(jrField);
-					d.getFieldsMap().put(jrField.getName(), jrField);
-				}
 			}
 		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
 			jrField.setValueClassName((String) value);

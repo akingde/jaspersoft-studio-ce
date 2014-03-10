@@ -18,6 +18,7 @@ package com.jaspersoft.studio.property.section.obj;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -29,6 +30,7 @@ import com.jaspersoft.studio.model.sortfield.command.ChangeSortFieldNameCommand;
 import com.jaspersoft.studio.model.sortfield.command.ChangeSortFieldTypeCommand;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class SortFieldSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -36,8 +38,9 @@ public class SortFieldSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		createWidget4Property(parent, JRDesignSortField.PROPERTY_NAME);
-
+		ASPropertyWidget nameWidget = createWidget4Property(parent, JRDesignSortField.PROPERTY_NAME);
+		nameWidget.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		createWidget4Property(parent, JRDesignSortField.PROPERTY_TYPE);
 		createWidget4Property(parent, JRDesignSortField.PROPERTY_ORDER);
 	}

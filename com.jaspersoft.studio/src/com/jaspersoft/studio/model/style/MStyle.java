@@ -63,10 +63,10 @@ import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescripto
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
@@ -156,6 +156,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static StyleNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -191,6 +192,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					styleD.setItems(newitems);
 				}
 		}
+		//Set into the validator the actual reference
+		validator.setTargetNode(this);
 	}
 	
 	public HashMap<String, Object> getStylesDescriptors() {
@@ -241,7 +244,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));
 		desc.add(styleD);
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.common_name);
+		validator = new StyleNameValidator();
+		validator.setTargetNode(this);
+		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setDescription(Messages.MStyle_name_description);
 		desc.add(nameD);
 
@@ -618,6 +623,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		return super.getPropertyActualValue(id);
 	}
 
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -630,8 +637,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
 			if (id.equals(JRDesignStyle.PROPERTY_NAME)){
 				jrstyle.setName((String) value);
-				getJasperDesign().getStylesMap().remove(jrstyle.getName());
-				getJasperDesign().getStylesMap().put(jrstyle.getName(), jrstyle);
 			} else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 				jrstyle.setPattern((String) value);
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
@@ -745,7 +750,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_CONDITIONAL_STYLES) && evt.getSource() == getValue()) {
+		if (JRDesignStyle.PROPERTY_NAME.equals(evt.getPropertyName())){
+			JasperDesign design = getJasperDesign();
+			JRBaseStyle jrstyle = (JRBaseStyle) getValue();
+			if (design != null){
+				design.getStylesMap().remove(evt.getOldValue());
+				design.getStylesMap().put(jrstyle.getName(), jrstyle);
+			}
+		}else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_CONDITIONAL_STYLES) && evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
 				if (evt instanceof CollectionElementAddedEvent) {

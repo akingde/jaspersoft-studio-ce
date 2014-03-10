@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryButtonPropertyDe
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.ResourceBundlePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -153,6 +154,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static DatasetNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -169,6 +171,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		//Set into the validator the actual reference
+		validator.setTargetNode(this);
+	}
 
 	/**
 	 * Creates the property descriptors.
@@ -178,26 +187,23 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.common_name);
+		validator = new DatasetNameValidator();
+		validator.setTargetNode(this);
+		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setDescription(Messages.MDataset_name_description);
 		desc.add(nameD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.common_properties);
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.common_properties);
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
-		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
+		propertiesD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#property"));
 
-		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
-				Messages.MDataset_scriplet_class);
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, Messages.MDataset_scriplet_class);
 		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
-		classD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet"));
+		classD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#scriptlet"));
 
-		ResourceBundlePropertyDescriptor resBundleD = new ResourceBundlePropertyDescriptor(
-				JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
+		ResourceBundlePropertyDescriptor resBundleD = new ResourceBundlePropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, Messages.MDataset_resource_bundle);
 		resBundleD.setDescription(Messages.MDataset_resource_bundle_description);
 		desc.add(resBundleD);
 
@@ -269,6 +275,21 @@ public class MDataset extends APropertyNode implements ICopyable {
 
 		return null;
 	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (JRDesignDataset.PROPERTY_NAME.equals(evt.getPropertyName())) {
+			// When the name is changed, the one inside the jasperdesign is updated also
+			JasperDesign design = getJasperDesign();
+			JRDesignDataset jrDataset = (JRDesignDataset) getValue();
+			String oldName = (String)evt.getOldValue();
+			if (design != null) {
+				design.getDatasetMap().remove(oldName);
+				design.getDatasetMap().put(jrDataset.getName(), jrDataset);
+			}
+		}
+		super.propertyChange(evt);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -278,14 +299,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
 		if (id.equals(JRDesignDataset.PROPERTY_NAME)) {
-			// When the name is changed, the one inside the jasperdesign is updated also
-			JasperDesign design = getJasperDesign();
-			String oldName = jrDataset.getName();
 			jrDataset.setName((String) value);
-			if (design != null) {
-				design.getDatasetMap().remove(oldName);
-				design.getDatasetMap().put(jrDataset.getName(), jrDataset);
-			}
 		} else if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE)) {
 			String v = (String) value;
 			if (v != null && v.trim().isEmpty())

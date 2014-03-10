@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -116,6 +117,7 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static ParameterNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -132,6 +134,13 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		//Set into the validator the actual reference
+		validator.setTargetNode(this);
+	}
 
 	/**
 	 * Creates the property descriptors.
@@ -141,7 +150,9 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.common_name);
+		validator = new ParameterNameValidator();
+		validator.setTargetNode(this);
+		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setReadOnly(areFieldsReadOnly());
 		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
@@ -177,6 +188,19 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 			return jrParameter.getValueClassName();
 		return null;
 	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (JRDesignParameter.PROPERTY_NAME.equals(evt.getPropertyName())){
+			JRDesignDataset d = ModelUtils.getDataset(this);
+			JRDesignParameter jrParameter = (JRDesignParameter) getValue();
+			if (d != null) {
+				d.getParametersMap().remove(evt.getOldValue());
+				d.getParametersMap().put(jrParameter.getName(), jrParameter);
+			}
+		}
+		super.propertyChange(evt);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -188,11 +212,6 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		if (id.equals(JRDesignParameter.PROPERTY_NAME)){
 			if (!value.equals("")) {
 				jrParameter.setName((String) value);
-				JRDesignDataset d = ModelUtils.getDataset(this);
-				if (d != null) {
-					d.getParametersMap().remove(jrParameter);
-					d.getParametersMap().put(jrParameter.getName(), jrParameter);
-				}
 			} 
 		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
 				jrParameter.setValueClassName((String) value);
