@@ -67,7 +67,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	@Override
 	public void createControl(Composite parent) {
 		pagebook = new PageBook(parent, SWT.NONE);
-
+		listeners = new ArrayList<ISelectionChangedListener>();
 		if (editor instanceof IMultiEditor) {
 			IMultiEditor ed = (IMultiEditor) editor;
 			IContentOutlinePage cop = (IContentOutlinePage) ed.getActiveEditor().getAdapter(IContentOutlinePage.class);
