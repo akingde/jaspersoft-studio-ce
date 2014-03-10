@@ -83,8 +83,7 @@ public class PropertiesList {
 			props.add(new PropertyDTO("net.sf.jasperreports.export.character.encoding", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.graphics2d.min.job.size", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.html.frames.as.nested.tables", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			props
-					.add(new PropertyDTO("net.sf.jasperreports.export.html.remove.empty.space.between.rows", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			props.add(new PropertyDTO("net.sf.jasperreports.export.html.remove.empty.space.between.rows", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.html.white.page.background", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.html.wrap.break.word", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.html.size.unit", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -98,11 +97,10 @@ public class PropertiesList {
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.create.custom.palette", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.one.page.per.sheet", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.remove.empty.space.between.rows", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.remove.empty.space.between.columns", "Property", //$NON-NLS-1$ //$NON-NLS-2$
-					"true")); //$NON-NLS-1$
+			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.remove.empty.space.between.columns", "Property", "true"));//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-1$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.white.page.background", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.detect.cell.type", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.size.fix.enabled", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.font.size.fix.enabled", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.ignore.graphics", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.collapse.row.span", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			props.add(new PropertyDTO("net.sf.jasperreports.export.xls.ignore.cell.border", "Property", "true")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
