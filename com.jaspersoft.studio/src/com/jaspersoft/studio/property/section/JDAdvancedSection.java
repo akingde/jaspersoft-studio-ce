@@ -90,7 +90,7 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		setPart(part);
 		setSelection(selection);
-		if (selection instanceof IStructuredSelection) {
+		if (!(selection.isEmpty()) && selection instanceof IStructuredSelection) {
 			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 			if (provider != null)
 				setEditDomain(provider.getEditDomain());
@@ -117,18 +117,20 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeShown()
 	 */
 	public void aboutToBeShown() {
-		ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
-		if (!comp.isDisposed()) comp.addControlListener(viewResize);
-		
-		if (getElement() != null)
-			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
-		if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
-			IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
-			if (actionBars != null)
-				actionBars.getToolBarManager().removeAll();
-			page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
-					actionBars.getStatusLineManager());
-			actionBars.updateActionBars();
+		if (getTabbedPropertySheetPage() != null){
+			ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
+			if (!comp.isDisposed()) comp.addControlListener(viewResize);
+			
+			if (getElement() != null)
+				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
+				IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+				if (actionBars != null)
+					actionBars.getToolBarManager().removeAll();
+				page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
+						actionBars.getStatusLineManager());
+				actionBars.updateActionBars();
+			}
 		}
 	}
 
@@ -136,16 +138,18 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeHidden()
 	 */
 	public void aboutToBeHidden() {
-		ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
-		if (!comp.isDisposed()) comp.removeControlListener(viewResize);
-		
-		if (getElement() != null)
-			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-		if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
-			IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
-			if (actionBars != null) {
-				actionBars.getToolBarManager().removeAll();
-				actionBars.updateActionBars();
+		if (getTabbedPropertySheetPage() != null){
+			ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
+			if (!comp.isDisposed()) comp.removeControlListener(viewResize);
+			
+			if (getElement() != null)
+				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+			if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
+				IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+				if (actionBars != null) {
+					actionBars.getToolBarManager().removeAll();
+					actionBars.updateActionBars();
+				}
 			}
 		}
 	}
