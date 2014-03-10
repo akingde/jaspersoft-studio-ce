@@ -175,5 +175,10 @@
             plugin="com.essiembre.eclipse.i18n.resourcebundle">
       </contexts>
    </extension>
-   
+      <extension
+         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+      <input
+            class="com.essiembre.eclipse.rbe.messages.ResourcePublisher">
+      </input>
+   </extension>
 </plugin>

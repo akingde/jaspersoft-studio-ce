@@ -21,12 +21,12 @@
 package com.essiembre.eclipse.rbe.model.tree.updater;
 
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import com.essiembre.eclipse.rbe.model.bundle.BundleEntry;
 import com.essiembre.eclipse.rbe.model.bundle.BundleGroup;
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 
 /**

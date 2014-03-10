@@ -20,18 +20,16 @@
  */
 package com.essiembre.eclipse.rbe;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import com.essiembre.eclipse.rbe.messages.Messages;
 
 /**
  * The main resource bundle editor plugin class to be used in the desktop.
@@ -44,8 +42,6 @@ public class RBEPlugin extends AbstractUIPlugin {
     
     //The shared instance.
     private static RBEPlugin plugin;
-    //Resource bundle.
-    private ResourceBundle resourceBundle;
     
     /**
      * The constructor.
@@ -60,16 +56,6 @@ public class RBEPlugin extends AbstractUIPlugin {
      */
     public void start(BundleContext context) throws Exception {
         super.start(context);
-        try {
-            URL messagesUrl = 
-                    find(new Path("$nl$/messages.properties")); //$NON-NLS-1$
-            if(messagesUrl != null) {
-                resourceBundle = new PropertyResourceBundle(
-                        messagesUrl.openStream());
-            }
-        } catch (IOException x) {
-            resourceBundle = null;
-        }
     }
 
     /**
@@ -87,64 +73,41 @@ public class RBEPlugin extends AbstractUIPlugin {
         return plugin;
     }
 
-    /**
+	/**
      * Returns the string from the plugin's resource bundle,
      * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @return localized string corresponding to key
-     */
-    public static String getString(String key) {
-        ResourceBundle bundle = 
-                RBEPlugin.getDefault().getResourceBundle();
-        try {
-            return (bundle != null) ? bundle.getString(key) : key;
-        } catch (MissingResourceException e) {
-            return key;
-        }
-    }
-
-    /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
+     * @param localizedText the localized text
      * @param arg1 runtime argument to replace in key value 
      * @return localized string corresponding to key
      */
-    public static String getString(String key, String arg1) {
-        return MessageFormat.format(getString(key), new Object[]{arg1});
+    public static String getString(String localizedText, String arg1) {
+        return MessageFormat.format(localizedText, new Object[]{arg1});
     }
     /**
      * Returns the string from the plugin's resource bundle,
      * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
+     * @param localizedText the localized text
      * @param arg1 runtime first argument to replace in key value
      * @param arg2 runtime second argument to replace in key value
      * @return localized string corresponding to key
      */
-    public static String getString(String key, String arg1, String arg2) {
-        return MessageFormat.format(getString(key), new Object[]{arg1, arg2});
+    public static String getString(String localizedText, String arg1, String arg2) {
+        return MessageFormat.format(localizedText, new Object[]{arg1, arg2});
     }
     /**
      * Returns the string from the plugin's resource bundle,
      * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
+     * @param localizedText the localized text
      * @param arg1 runtime argument to replace in key value 
      * @param arg2 runtime second argument to replace in key value
      * @param arg3 runtime third argument to replace in key value
      * @return localized string corresponding to key
      */
     public static String getString(
-            String key, String arg1, String arg2, String arg3) {
-        return MessageFormat.format(getString(key), new Object[]{arg1, arg2, arg3});
+            String localizedText, String arg1, String arg2, String arg3) {
+        return MessageFormat.format(localizedText, new Object[]{arg1, arg2, arg3});
     }
     
-    /**
-     * Returns the plugin's resource bundle.
-     * @return resource bundle
-     */
-    public ResourceBundle getResourceBundle() {
-        return resourceBundle;
-    }
     
     /**
      * Gets an image descriptor.
@@ -163,5 +126,12 @@ public class RBEPlugin extends AbstractUIPlugin {
             return ImageDescriptor.getMissingImageDescriptor();
         }
     }
+
+    /**
+     * @return the resource bundle associated with this plugin
+     */
+	public ResourceBundle getResourceBundle() {
+		return ResourceBundle.getBundle(Messages.BUNDLE_NAME);
+	}
     
 }

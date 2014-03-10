@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.ui.widgets.LocaleSelector;
 import com.jaspersoft.translation.wizard.HelpWizardPage;
 
@@ -61,7 +61,7 @@ import com.jaspersoft.translation.wizard.HelpWizardPage;
 public class ResourceBundleNewWizardPage extends HelpWizardPage {
 
 	public static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
-			+ RBEPlugin.getString("editor.default") //$NON-NLS-1$
+			+ Messages.editor_default
 			+ "]"; //$NON-NLS-1$
 
 	private Text containerText;
@@ -86,8 +86,8 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 	 */
 	public ResourceBundleNewWizardPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
-		setTitle(RBEPlugin.getString("editor.wiz.title")); //$NON-NLS-1$
-		setDescription(RBEPlugin.getString("editor.wiz.desc")); //$NON-NLS-1$
+		setTitle(Messages.editor_wiz_title);
+		setDescription(Messages.editor_wiz_desc);
 		this.selection = selection;
 	}
 
@@ -156,7 +156,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 		selectedGroup.setLayout(layout);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		selectedGroup.setLayoutData(gd);
-		selectedGroup.setText(RBEPlugin.getString("editor.wiz.selected")); //$NON-NLS-1$
+		selectedGroup.setText(Messages.editor_wiz_selected);
 		bundleLocalesList = new List(selectedGroup, SWT.READ_ONLY | SWT.MULTI
 				| SWT.BORDER);
 		gd = new GridData(GridData.FILL_BOTH);
@@ -209,7 +209,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 		addButton = new Button(container, SWT.NULL);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		addButton.setLayoutData(gd);
-		addButton.setText(RBEPlugin.getString("editor.wiz.add")); //$NON-NLS-1$
+		addButton.setText(Messages.editor_wiz_add);
 		addButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				bundleLocalesList.add(getSelectedLocaleAsString());
@@ -221,7 +221,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 		removeButton = new Button(container, SWT.NULL);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		removeButton.setLayoutData(gd);
-		removeButton.setText(RBEPlugin.getString("editor.wiz.remove")); //$NON-NLS-1$
+		removeButton.setText(Messages.editor_wiz_remove);
 		removeButton.setEnabled(false);
 		removeButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
@@ -253,7 +253,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 	
 	protected void createBundleNameArea(Composite container){
 		Label label = new Label(container, SWT.NULL);
-		label.setText(RBEPlugin.getString("editor.wiz.bundleName")); //$NON-NLS-1$
+		label.setText(Messages.editor_wiz_bundleName);
 
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -285,7 +285,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 
 		// Folder
 		Label label = new Label(container, SWT.NULL);
-		label.setText(RBEPlugin.getString("editor.wiz.folder")); //$NON-NLS-1$
+		label.setText(Messages.editor_wiz_folder);
 
 		containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -296,7 +296,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 			}
 		});
 		Button button = new Button(container, SWT.PUSH);
-		button.setText(RBEPlugin.getString("editor.wiz.browse")); //$NON-NLS-1$
+		button.setText(Messages.editor_wiz_browse);
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				handleBrowse();
@@ -337,7 +337,7 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 	protected void handleBrowse() {
 		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
 				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				RBEPlugin.getString("editor.wiz.selectFolder")); //$NON-NLS-1$
+				Messages.editor_wiz_selectFolder);
 		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1) {
@@ -353,20 +353,20 @@ public class ResourceBundleNewWizardPage extends HelpWizardPage {
 		String container = getContainerName();
 		String fileName = getFileName();
 		if (container.length() == 0) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.container"), IMessageProvider.ERROR); //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_container, IMessageProvider.ERROR); //$NON-NLS-1$
 			return;
 		}
 		if (fileName.length() == 0) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.bundleName"), IMessageProvider.ERROR); //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_bundleName, IMessageProvider.ERROR); //$NON-NLS-1$
 			return;
 		}
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.extension"), IMessageProvider.ERROR); //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_extension, IMessageProvider.ERROR); //$NON-NLS-1$
 			return;
 		}
 		if (bundleLocalesList.getItems().length==0) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.noLocale"), IMessageProvider.ERROR);  //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_noLocale, IMessageProvider.ERROR);  //$NON-NLS-1$
 			return;
 		}
 		updateStatus(null, IMessageProvider.NONE);

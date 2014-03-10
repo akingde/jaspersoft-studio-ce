@@ -54,7 +54,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.ide.undo.CreateFolderOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.model.bundle.PropertiesGenerator;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 import com.essiembre.eclipse.rbe.ui.wizards.ResourceBundleNewWizardPage;
@@ -91,7 +91,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
     public TranslateBundleWizard() {
         super();
         setNeedsProgressMonitor(true);
-		setWindowTitle(RBEPlugin.getString("editor.wiz.window.title"));
+		setWindowTitle(Messages.editor_wiz_window_title);
     }
     
     /**
@@ -203,7 +203,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
             public void run(IProgressMonitor monitor) throws InvocationTargetException {
                 try {
                     monitor.worked(1);
-                    monitor.setTaskName(RBEPlugin.getString("editor.wiz.creating")); //$NON-NLS-1$
+                    monitor.setTaskName(Messages.editor_wiz_creating); //$NON-NLS-1$
                     //Check if the selected project exist, otherwise it is created
                     IProject prj = checkAndCreatePrject(containerName, monitor);
                     for(AbstractResourceDefinition resource : getSelectedResource()){
@@ -222,7 +222,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
                             	if (resource.getPackageName() != null){
                             		folder = createNewFolder(folder.getFullPath().toString(), resource.getPackageName(), monitor);
                             	}
-                                monitor.beginTask(RBEPlugin.getString("editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
+                                monitor.beginTask(Messages.editor_wiz_creating + fileName, 2); //$NON-NLS-1$
                                 IResource containerResource =  ResourcesPlugin.getWorkspace().getRoot().findMember(folder.getFullPath());
                                 if (!containerResource.exists() || !(containerResource instanceof IContainer)) {
                                     throwCoreException("Container \"" + folder.getFullPath().toString() + "\" does not exist."); //$NON-NLS-1$
@@ -269,7 +269,7 @@ public class TranslateBundleWizard extends Wizard implements INewWizard {
      * the editor on the newly created file.
      */
     protected IFile createFile(IResource containerResource, String fileName, AbstractResourceDefinition sourceResource, String locale, IProgressMonitor monitor) throws CoreException {     
-        monitor.beginTask(RBEPlugin.getString("editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
+        monitor.beginTask(Messages.editor_wiz_creating + fileName, 2); //$NON-NLS-1$
         IContainer container = (IContainer) containerResource;
         final IFile file = container.getFile(new Path(fileName));
         try {

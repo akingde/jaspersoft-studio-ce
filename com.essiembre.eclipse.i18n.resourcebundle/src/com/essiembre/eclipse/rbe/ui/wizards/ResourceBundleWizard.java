@@ -48,7 +48,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.model.bundle.PropertiesGenerator;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 
@@ -96,8 +96,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
             public void run(IProgressMonitor monitor) throws InvocationTargetException {
                 try {
                     monitor.worked(1);
-                    monitor.setTaskName(RBEPlugin.getString(
-                            "editor.wiz.creating")); //$NON-NLS-1$
+                    monitor.setTaskName(Messages.editor_wiz_creating);
                     IFile file = null;
                     for (int i = 0; i <  locales.length; i++) {
                         String fileName = baseName;
@@ -153,8 +152,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
             IProgressMonitor monitor)
             throws CoreException {
         
-        monitor.beginTask(RBEPlugin.getString(
-                "editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
+        monitor.beginTask(Messages.editor_wiz_creating + fileName, 2); //$NON-NLS-1$
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         IResource resource = root.findMember(new Path(containerName));
         if (!resource.exists() || !(resource instanceof IContainer)) {

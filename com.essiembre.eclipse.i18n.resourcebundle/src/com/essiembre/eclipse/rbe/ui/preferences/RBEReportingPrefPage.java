@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 
 /**
@@ -66,32 +66,27 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
         
-        new Label(composite, SWT.NONE).setText(
-                RBEPlugin.getString("prefs.perform.intro1")); //$NON-NLS-1$
-        new Label(composite, SWT.NONE).setText(
-                RBEPlugin.getString("prefs.perform.intro2")); //$NON-NLS-1$
+        new Label(composite, SWT.NONE).setText(Messages.prefs_perform_intro1);
+        new Label(composite, SWT.NONE).setText(Messages.prefs_perform_intro2);
         new Label(composite, SWT.NONE).setText(" "); //$NON-NLS-1$
         
         // Report missing values?
         field = createFieldComposite(composite);
         reportMissingVals = new Button(field, SWT.CHECK);
         reportMissingVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_MISSING_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-        new Label(field, SWT.NONE).setText(
-                RBEPlugin.getString("prefs.perform.missingVals")); //$NON-NLS-1$
+        new Label(field, SWT.NONE).setText(Messages.prefs_perform_missingVals);
 
         // Report duplicate values?
         field = createFieldComposite(composite);
         reportDuplVals = new Button(field, SWT.CHECK);
         reportDuplVals.setSelection( prefs.getBoolean(RBEPreferences.REPORT_DUPL_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-        new Label(field, SWT.NONE).setText(
-                RBEPlugin.getString("prefs.perform.duplVals")); //$NON-NLS-1$
+        new Label(field, SWT.NONE).setText(Messages.prefs_perform_duplVals);
         
         // Report similar values?
         field = createFieldComposite(composite);
         reportSimVals = new Button(field, SWT.CHECK);
         reportSimVals.setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-        new Label(field, SWT.NONE).setText(
-                RBEPlugin.getString("prefs.perform.simVals")); //$NON-NLS-1$
+        new Label(field, SWT.NONE).setText(Messages.prefs_perform_simVals);
         reportSimVals.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
@@ -108,25 +103,22 @@ public class RBEReportingPrefPage extends AbstractRBEPrefPage {
         // Report similar values: word count
         reportSimValsMode[0] = new Button(simValModeGroup, SWT.RADIO);
         reportSimValsMode[0].setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES_WORD_COMPARE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-        new Label(simValModeGroup, SWT.NONE).setText(RBEPlugin.getString(
-                "prefs.perform.simVals.wordCount")); //$NON-NLS-1$
+        new Label(simValModeGroup, SWT.NONE).setText(Messages.prefs_perform_simVals_wordCount);
         
         // Report similar values: Levensthein
         reportSimValsMode[1] = new Button(simValModeGroup, SWT.RADIO);
         reportSimValsMode[1].setSelection(prefs.getBoolean(RBEPreferences.REPORT_SIM_VALUES_LEVENSTHEIN, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-        new Label(simValModeGroup, SWT.NONE).setText(RBEPlugin.getString(
-                "prefs.perform.simVals.levensthein")); //$NON-NLS-1$
+        new Label(simValModeGroup, SWT.NONE).setText(Messages.prefs_perform_simVals_levensthein);
         
         // Report similar values: precision level
         field = createFieldComposite(composite, indentPixels);
-        new Label(field, SWT.NONE).setText(RBEPlugin.getString(
-                "prefs.perform.simVals.precision")); //$NON-NLS-1$
+        new Label(field, SWT.NONE).setText(Messages.prefs_perform_simVals_precision);
         reportSimPrecision = new Text(field, SWT.BORDER);
         reportSimPrecision.setText(Double.toString(prefs.getDouble(RBEPreferences.REPORT_SIM_VALUES_PRECISION, IPreferenceStore.DOUBLE_DEFAULT_DEFAULT)));
         reportSimPrecision.setTextLimit(6);
         setWidthInChars(reportSimPrecision, 6);
         reportSimPrecision.addKeyListener(new DoubleTextValidatorKeyListener(
-                RBEPlugin.getString("prefs.perform.simVals.precision.error"),0, 1));//$NON-NLS-1$
+                Messages.prefs_perform_simVals_precision_error,0, 1));
         
         refreshEnabledStatuses();
         

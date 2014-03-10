@@ -30,7 +30,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.jaspersoft.translation.resources.TranslationProjectNature;
 
 /**
@@ -48,7 +48,7 @@ public class TranslationProjectWizard extends Wizard implements INewWizard, IExe
 
 	public TranslationProjectWizard() {
 		super();
-		setWindowTitle(RBEPlugin.getString("translation.wiz.title"));
+		setWindowTitle(Messages.translation_wiz_title);
 		setNeedsProgressMonitor(true);
 	}
 	

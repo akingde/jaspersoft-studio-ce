@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.ui.UIUtils;
 import com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor;
 import com.essiembre.eclipse.rbe.ui.editor.resources.ResourceManager;
@@ -77,7 +77,7 @@ public class NewLocalePage extends Composite {
         
         // Title label
         Label label = new Label(block, SWT.NONE);
-        label.setText(RBEPlugin.getString("editor.new.title")); //$NON-NLS-1$
+        label.setText(Messages.editor_new_title);
         label.setFont(fontBoldBig);
         gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;
@@ -93,8 +93,7 @@ public class NewLocalePage extends Composite {
         
         // Create button
         Button createButton = new Button(block, SWT.NULL);
-        createButton.setText(RBEPlugin.getString(
-                "editor.new.create")); //$NON-NLS-1$
+        createButton.setText(Messages.editor_new_create);
         createButton.setFont(fontBold);
         gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;

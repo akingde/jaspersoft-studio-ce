@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 
 
 /**
@@ -187,14 +188,14 @@ public final class UIUtils {
      * Shows an error dialog based on the supplied arguments.
      * @param shell the shell
      * @param exception the core exception
-     * @param msgKey key to the plugin message text
+     * @param msgText the message text
      */
     public static void showErrorDialog(
-            Shell shell, CoreException exception, String msgKey) {
+            Shell shell, CoreException exception, String msgText) {
         exception.printStackTrace();
         ErrorDialog.openError(
                 shell,
-                RBEPlugin.getString(msgKey),
+                msgText,
                 exception.getLocalizedMessage(),
                 exception.getStatus());
     }
@@ -203,21 +204,21 @@ public final class UIUtils {
      * Shows an error dialog based on the supplied arguments.
      * @param shell the shell
      * @param exception the core exception
-     * @param msgKey key to the plugin message text
+     * @param msgText the message text
      */
     public static void showErrorDialog(
-            Shell shell, Exception exception, String msgKey) {
+            Shell shell, Exception exception, String msgText) {
         exception.printStackTrace();
         IStatus status = new Status(
                 IStatus.ERROR, 
                 RBEPlugin.ID,
                 0, 
-                RBEPlugin.getString(msgKey) + " " //$NON-NLS-1$
-                        + RBEPlugin.getString("error.seeLogs"), //$NON-NLS-1$
+                msgText + " " //$NON-NLS-1$
+                        + Messages.error_seeLogs,
                 exception);
         ErrorDialog.openError(
                 shell,
-                RBEPlugin.getString(msgKey),
+                msgText,
                 exception.getLocalizedMessage(),
                 status);
     }
@@ -229,7 +230,7 @@ public final class UIUtils {
      */
     public static String getDisplayName(Locale locale) {
         if (locale == null) {
-            return RBEPlugin.getString("editor.default"); //$NON-NLS-1$
+            return Messages.editor_default; //$NON-NLS-1$
         }
         return locale.getDisplayName();
     }

@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.ui.UIUtils;
 
 /**
@@ -52,7 +52,7 @@ import com.essiembre.eclipse.rbe.ui.UIUtils;
 public class LocaleSelector extends Composite {
 
     private static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
-            + RBEPlugin.getString("editor.default") //$NON-NLS-1$ 
+            + Messages.editor_default 
             + "]"; //$NON-NLS-1$
     
     protected Locale[] availableLocales;
@@ -90,8 +90,7 @@ public class LocaleSelector extends Composite {
         selectionGroup = new Group(this, SWT.NULL);
         layout = new GridLayout(3, false);
         selectionGroup.setLayout(layout);
-        selectionGroup.setText(RBEPlugin.getString(
-                "selector.title")); //$NON-NLS-1$
+        selectionGroup.setText(Messages.selector_title);
         // Set locales drop-down
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.horizontalSpan = 3;
@@ -156,17 +155,15 @@ public class LocaleSelector extends Composite {
         
         // Labels
         Label lblLang = new Label(selectionGroup, SWT.NULL);
-        lblLang.setText(RBEPlugin.getString("selector.language")); //$NON-NLS-1$
+        lblLang.setText(Messages.selector_language);
         lblLang.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 
         Label lblCountry = new Label(selectionGroup, SWT.NULL);
-        lblCountry.setText(RBEPlugin.getString(
-                "selector.country")); //$NON-NLS-1$
+        lblCountry.setText(Messages.selector_country);
         lblCountry.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 
         Label lblVariant = new Label(selectionGroup, SWT.NULL);
-        lblVariant.setText(RBEPlugin.getString(
-                "selector.variant")); //$NON-NLS-1$
+        lblVariant.setText(Messages.selector_variant);
         lblVariant.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
     }
 

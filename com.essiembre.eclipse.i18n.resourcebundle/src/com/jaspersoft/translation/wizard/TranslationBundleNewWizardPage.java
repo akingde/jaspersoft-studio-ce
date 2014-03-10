@@ -28,7 +28,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.ui.wizards.ResourceBundleNewWizardPage;
 import com.jaspersoft.translation.resources.TranslationProjectNature;
 
@@ -86,7 +86,7 @@ public class TranslationBundleNewWizardPage extends ResourceBundleNewWizardPage 
 		if (getWizard() instanceof TranslateBundleWizard) {
 			final Button createFolderButton = new Button(container, SWT.CHECK);
 			createFolderButton.setSelection(true);
-			createFolderButton.setText(RBEPlugin.getString("editor.wiz.createFolder"));
+			createFolderButton.setText(Messages.editor_wiz_createFolder);
 			createFolder = true;
 			createFolderButton.addSelectionListener(new SelectionAdapter(){
 				@Override
@@ -133,30 +133,30 @@ public class TranslationBundleNewWizardPage extends ResourceBundleNewWizardPage 
 		String container = getContainerName();
 		String fileName = getFileName();
 		if (container.length() == 0) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.container"), IMessageProvider.ERROR); //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_container, IMessageProvider.ERROR); //$NON-NLS-1$
 			return;
 		}
 		if (fileName.length() == 0) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.bundleName"), IMessageProvider.ERROR); //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_bundleName, IMessageProvider.ERROR); //$NON-NLS-1$
 			return;
 		}
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.extension"), IMessageProvider.ERROR); //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_extension, IMessageProvider.ERROR); //$NON-NLS-1$
 			return;
 		}
 		if (getLocaleStrings().length==0) {
-			updateStatus(RBEPlugin.getString("editor.wiz.error.noLocale"), IMessageProvider.ERROR);  //$NON-NLS-1$
+			updateStatus(Messages.editor_wiz_error_noLocale, IMessageProvider.ERROR);  //$NON-NLS-1$
 			return;
 		}
 		IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(container);
 		if (!prj.exists()){
-			updateStatus(RBEPlugin.getString("editor.wiz.error.noPrject"), IMessageProvider.INFORMATION); 
+			updateStatus(Messages.editor_wiz_error_noPrject, IMessageProvider.INFORMATION); 
 			return;
 		} else {
 			try {
 				if (!prj.hasNature(TranslationProjectNature.NATURE_ID)){
-					updateStatus(RBEPlugin.getString("editor.wiz.error.wrongType"), IMessageProvider.ERROR); 
+					updateStatus(Messages.editor_wiz_error_wrongType, IMessageProvider.ERROR); 
 					return;
 				}
 			} catch (CoreException e) {

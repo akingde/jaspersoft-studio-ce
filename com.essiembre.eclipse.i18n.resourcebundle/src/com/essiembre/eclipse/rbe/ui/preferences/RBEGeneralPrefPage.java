@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 import com.essiembre.eclipse.rbe.ui.UIUtils;
 
@@ -113,7 +113,7 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage {
 
       // Key group separator
       field = createFieldComposite(composite);
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.groupSep")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_groupSep);
       keyGroupSeparator = new Text(field, SWT.BORDER);
       keyGroupSeparator.setText(prefs.get(RBEPreferences.KEY_GROUP_SEPARATOR, IPreferenceStore.STRING_DEFAULT_DEFAULT));
       keyGroupSeparator.setTextLimit(2);
@@ -122,58 +122,58 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage {
       field = createFieldComposite(composite);
       convertEncodedToUnicode = new Button(field, SWT.CHECK);
       convertEncodedToUnicode.setSelection(prefs.getBoolean(RBEPreferences.CONVERT_ENCODED_TO_UNICODE, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.convertEncoded")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_convertEncoded);
 
       // Support "NL" localization structure
       field = createFieldComposite(composite);
       supportNL = new Button(field, SWT.CHECK);
       supportNL.setSelection(prefs.getBoolean(RBEPreferences.SUPPORT_NL, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.supportNL")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_supportNL);
 
       // Support loading resources from fragment 
       field = createFieldComposite(composite);
       supportFragments = new Button(field, SWT.CHECK);
       supportFragments.setSelection(RBEPreferences.getSupportFragments());
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.supportFragments")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_supportFragments);
 
       // Support loading resources from fragment 
       field = createFieldComposite(composite);
       loadOnlyFragmentResources = new Button(field, SWT.CHECK);
       loadOnlyFragmentResources.setSelection(RBEPreferences.getLoadOnlyFragmentResources());
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.loadOnlyFragmentResources")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_loadOnlyFragmentResources);
 
       // Default key tree mode (tree vs flat)
       field = createFieldComposite(composite);
       keyTreeHierarchical = new Button(field, SWT.CHECK);
       keyTreeHierarchical.setSelection(prefs.getBoolean(RBEPreferences.KEY_TREE_HIERARCHICAL, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.keyTree.hierarchical"));//$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_keyTree_hierarchical);
 
       // Default key tree expand status (expanded vs collapsed)
       field = createFieldComposite(composite);
       keyTreeExpanded = new Button(field, SWT.CHECK);
       keyTreeExpanded.setSelection(prefs.getBoolean(RBEPreferences.KEY_TREE_EXPANDED, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT)); //$NON-NLS-1$
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.keyTree.expanded")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_keyTree_expanded);
 
       // Default tab key behaviour in text field
       field = createFieldComposite(composite);
       fieldTabInserts = new Button(field, SWT.CHECK);
       fieldTabInserts.setSelection(prefs.getBoolean(RBEPreferences.FIELD_TAB_INSERTS, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT));
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.fieldTabInserts")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_fieldTabInserts);
 
       field = createFieldComposite(composite);
       noTreeInEditor = new Button(field, SWT.CHECK);
       noTreeInEditor.setSelection(prefs.getBoolean(RBEPreferences.NO_TREE_IN_EDITOR, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT)); //$NON-NLS-1$
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.noTreeInEditor")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_noTreeInEditor);
 
       Label desc = new Label(composite, SWT.READ_ONLY);
-      desc.setText(RBEPlugin.getString("prefs.properties-desc"));
+      desc.setText(Messages.prefs_properties_desc);
       _boldFont = UIUtils.createFont(desc, SWT.BOLD);
       desc.setFont(_boldFont);
 
       field = createFieldComposite(composite);
       autoAdjust = new Button(field, SWT.CHECK);
       autoAdjust.setSelection(prefs.getBoolean(RBEPreferences.AUTO_ADJUST, IPreferenceStore.BOOLEAN_DEFAULT_DEFAULT)); //$NON-NLS-1$
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.autoAdjust")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_autoAdjust);
       autoAdjust.addSelectionListener(new SelectionAdapter() {
          public void widgetSelected(SelectionEvent event) {
              refreshEnabledStatuses();
@@ -181,12 +181,12 @@ public class RBEGeneralPrefPage extends AbstractRBEPrefPage {
      });
 
       field = createFieldComposite(composite);
-      new Label(field, SWT.NONE).setText(RBEPlugin.getString("prefs.minHeight")); //$NON-NLS-1$
+      new Label(field, SWT.NONE).setText(Messages.prefs_minHeight);
       _minHeight = new Text(field, SWT.BORDER);
       _minHeight.setText(Integer.toString(prefs.getInt(RBEPreferences.MIN_HEIGHT, IPreferenceStore.INT_DEFAULT_DEFAULT)));
       _minHeight.setTextLimit(3);
       setWidthInChars(_minHeight, 3);
-      _minHeight.addKeyListener(new IntTextValidatorKeyListener(RBEPlugin.getString("prefs.minHeight.error"))); //$NON-NLS-1$        
+      _minHeight.addKeyListener(new IntTextValidatorKeyListener(Messages.prefs_minHeight_error));        
 
       refreshEnabledStatuses();
       return composite;

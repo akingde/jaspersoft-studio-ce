@@ -50,7 +50,7 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;
 import com.essiembre.eclipse.rbe.ui.UIUtils;
 import com.essiembre.eclipse.rbe.ui.editor.i18n.I18nPage;
@@ -112,7 +112,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 //             resourceMediator.getKeyTree().a           
             setPartName(resourceMediator.getEditorDisplayName());
             setContentDescription(
-                    RBEPlugin.getString("editor.content.desc") //$NON-NLS-1$
+                    Messages.editor_content_desc
                   + resourceMediator.getEditorDisplayName() + ".");//$NON-NLS-1$
             setTitleImage(UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
             closeIfAreadyOpen(site, file);
@@ -141,7 +141,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 	           I18nPageEditor i18PageEditor = new I18nPageEditor(resourceMediator);
 	           index = addPage(i18PageEditor, null);
 	           i18nPage = i18PageEditor.getI18nPage();
-	           setPageText(index, RBEPlugin.getString("editor.properties")); //$NON-NLS-1$
+	           setPageText(index, Messages.editor_properties);
 	           setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
 	        }
 	        catch ( PartInitException argh ) {
@@ -176,7 +176,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
 	        // Add "new locale" page
 	        newLocalePage = new NewLocalePage(getContainer(), resourceMediator, this);
 	        index = addPage(newLocalePage);
-	        setPageText(index, RBEPlugin.getString("editor.new.tab")); //$NON-NLS-1$
+	        setPageText(index, Messages.editor_new_tab); //$NON-NLS-1$
 	        setPageImage(
 	                index, UIUtils.getImage(UIUtils.IMAGE_NEW_PROPERTIES_FILE));
         }

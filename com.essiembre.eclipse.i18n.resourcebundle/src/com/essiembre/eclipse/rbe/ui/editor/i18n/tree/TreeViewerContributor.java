@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.essiembre.eclipse.rbe.model.bundle.BundleGroup;
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
@@ -125,7 +126,7 @@ public class TreeViewerContributor {
                 newKey();
             }
         };
-        actions[MENU_NEW].setText(RBEPlugin.getString("key.new")); //$NON-NLS-1$
+        actions[MENU_NEW].setText(Messages.key_new);
         
         actions[MENU_RENAME] = new Action () {
             @Override
@@ -133,7 +134,7 @@ public class TreeViewerContributor {
                 renameKeyOrGroup();
             }
         };
-        actions[MENU_RENAME].setText(RBEPlugin.getString("key.rename")); //$NON-NLS-1$
+        actions[MENU_RENAME].setText(Messages.key_rename);
         
         actions[MENU_DELETE] = new Action () {
             @Override
@@ -141,7 +142,7 @@ public class TreeViewerContributor {
                 deleteKeyOrGroup();
             }
         };
-        actions[MENU_DELETE].setText(RBEPlugin.getString("key.delete")); //$NON-NLS-1$
+        actions[MENU_DELETE].setText(Messages.key_delete);
         
         actions[MENU_COPY] = new Action () {
             @Override
@@ -149,7 +150,7 @@ public class TreeViewerContributor {
                 copyKeyOrGroup();
             }
         };
-        actions[MENU_COPY].setText(RBEPlugin.getString("key.duplicate")); //$NON-NLS-1$
+        actions[MENU_COPY].setText(Messages.key_duplicate);
         
         actions[MENU_COMMENT] = new Action () {
             @Override
@@ -157,7 +158,7 @@ public class TreeViewerContributor {
                 commentKey();
             }
         };
-        actions[MENU_COMMENT].setText(RBEPlugin.getString("key.comment")); //$NON-NLS-1$
+        actions[MENU_COMMENT].setText(Messages.key_comment);
         
         actions[MENU_UNCOMMENT] = new Action () {
             @Override
@@ -165,8 +166,7 @@ public class TreeViewerContributor {
                 uncommentKey();
             }
         };
-        actions[MENU_UNCOMMENT].setText(
-                RBEPlugin.getString("key.uncomment")); //$NON-NLS-1$
+        actions[MENU_UNCOMMENT].setText(Messages.key_uncomment);
         
         separator = new Separator();
       
@@ -176,7 +176,7 @@ public class TreeViewerContributor {
                 treeviewer.expandAll();
             }
         };
-        actions[MENU_EXPAND].setText(RBEPlugin.getString("key.expandAll")); //$NON-NLS-1$
+        actions[MENU_EXPAND].setText(Messages.key_expandAll);
         
         actions[MENU_COLLAPSE] = new Action () {
             @Override
@@ -184,7 +184,7 @@ public class TreeViewerContributor {
                 treeviewer.collapseAll();
             }
         };
-        actions[MENU_COLLAPSE].setText(RBEPlugin.getString("key.collapseAll")); //$NON-NLS-1$
+        actions[MENU_COLLAPSE].setText(Messages.key_collapseAll);
     }
     
     private void fillMenu(IMenuManager manager) {
@@ -242,8 +242,8 @@ public class TreeViewerContributor {
     protected void newKey() {
         KeyTreeItem selectedItem = getSelection();
         String key = selectedItem != null ? selectedItem.getId() : "";
-        String msgHead = RBEPlugin.getString("dialog.new.head"); //$NON-NLS-1$
-        String msgBody = RBEPlugin.getString("dialog.new.body", key); //$NON-NLS-1$
+        String msgHead = Messages.dialog_new_head;
+        String msgBody = RBEPlugin.getString(Messages.dialog_new_body, key); //$NON-NLS-1$
         InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
         dialog.open();
         if (dialog.getReturnCode() == Window.OK ) {
@@ -265,16 +265,13 @@ public class TreeViewerContributor {
         String msgHead = null;
         String msgBody = null;
         if (selectedItem.getChildren().size() == 0) {
-            msgHead = RBEPlugin.getString(
-                    "dialog.rename.head.single"); //$NON-NLS-1$
+            msgHead = Messages.dialog_rename_head_single;
             msgBody = RBEPlugin.getString(
-                    "dialog.rename.body.single", key); //$NON-NLS-1$
+                    Messages.dialog_rename_body_single, key);
         } else {
-            msgHead = RBEPlugin.getString(
-                    "dialog.rename.head.multiple"); //$NON-NLS-1$
+            msgHead = Messages.dialog_rename_head_multiple;
             msgBody = RBEPlugin.getString(
-                    "dialog.rename.body.multiple", //$NON-NLS-1$
-                    selectedItem.getName());
+                    Messages.dialog_rename_body_multiple, selectedItem.getName());
         }
         // Rename single item
         InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key, null);
@@ -322,15 +319,13 @@ public class TreeViewerContributor {
         String msgHead = null;
         String msgBody = null;
         if (selectedItem.getChildren().size() == 0) {
-            msgHead = RBEPlugin.getString(
-                    "dialog.delete.head.single"); //$NON-NLS-1$
+            msgHead = Messages.dialog_delete_head_single;
             msgBody = RBEPlugin.getString(
-                    "dialog.delete.body.single", key); //$NON-NLS-1$
+                    Messages.dialog_delete_body_single, key); //$NON-NLS-1$
         } else {
-            msgHead = RBEPlugin.getString(
-                    "dialog.delete.head.multiple"); //$NON-NLS-1$
+            msgHead = Messages.dialog_delete_head_multiple;
             msgBody = RBEPlugin.getString(
-                    "dialog.delete.body.multiple", //$NON-NLS-1$ 
+                    Messages.dialog_delete_body_multiple, //$NON-NLS-1$ 
                     selectedItem.getName());
         }
         MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_QUESTION|SWT.OK|SWT.CANCEL);
@@ -375,15 +370,13 @@ public class TreeViewerContributor {
         String msgHead = null;
         String msgBody = null;
         if (selectedItem.getChildren().size() == 0) {
-            msgHead = RBEPlugin.getString(
-                    "dialog.duplicate.head.single"); //$NON-NLS-1$
+            msgHead = Messages.dialog_duplicate_head_single;
             msgBody = RBEPlugin.getString(
-                    "dialog.duplicate.body.single", key); //$NON-NLS-1$
+                    Messages.dialog_duplicate_body_single, key); 
         } else {
-            msgHead = RBEPlugin.getString(
-                    "dialog.duplicate.head.multiple"); //$NON-NLS-1$
+            msgHead = Messages.dialog_duplicate_head_multiple;
             msgBody = RBEPlugin.getString(
-                    "dialog.duplicate.body.multiple", //$NON-NLS-1$ 
+                    Messages.dialog_duplicate_body_multiple,
                     selectedItem.getName());
         }
         // Rename single item

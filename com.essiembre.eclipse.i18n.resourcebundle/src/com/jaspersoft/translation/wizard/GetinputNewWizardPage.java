@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 import com.jaspersoft.translation.resources.AbstractResourceDefinition;
 import com.jaspersoft.translation.resources.IResourcesInput;
 
@@ -164,8 +164,8 @@ public class GetinputNewWizardPage extends HelpWizardPage {
 
 	protected GetinputNewWizardPage(String pageName) {
 		super(pageName);
-		setTitle(RBEPlugin.getString("resource.wiz.title"));
-		setDescription(RBEPlugin.getString("resource.wiz.description"));
+		setTitle(Messages.resource_wiz_title);
+		setDescription(Messages.resource_wiz_description);
 	}
 
 	/**
@@ -206,16 +206,16 @@ public class GetinputNewWizardPage extends HelpWizardPage {
 		resourceList.getControl().setLayoutData(treeData);
 
 		Group infoGroup = new Group(container, SWT.NONE);
-		infoGroup.setText(RBEPlugin.getString("resource.wiz.information.title"));
+		infoGroup.setText(Messages.resource_wiz_information_title);
 		infoGroup.setLayout(new GridLayout(2, false));
 		GridData infoData = new GridData(GridData.FILL_BOTH);
 		infoData.widthHint = 300;
 		infoGroup.setLayoutData(infoData);
 
-		pluginLbl = createInfoElement(infoGroup, RBEPlugin.getString("resource.wiz.information.plugin"), "");
-		packageLbl = createInfoElement(infoGroup, RBEPlugin.getString("resource.wiz.information.package"), "");
-		fileNameLbl = createInfoElement(infoGroup, RBEPlugin.getString("resource.wiz.information.name"), "");
-		descriptionLbl = createInfoElement(infoGroup, RBEPlugin.getString("resource.wiz.information.description"), "");
+		pluginLbl = createInfoElement(infoGroup, Messages.resource_wiz_information_plugin, "");
+		packageLbl = createInfoElement(infoGroup, Messages.resource_wiz_information_package, "");
+		fileNameLbl = createInfoElement(infoGroup, Messages.resource_wiz_information_name, "");
+		descriptionLbl = createInfoElement(infoGroup, Messages.resource_wiz_information_description, "");
 
 		Tree tree = (Tree) resourceList.getControl();
 		tree.addSelectionListener(new SelectionAdapter() {
@@ -251,7 +251,7 @@ public class GetinputNewWizardPage extends HelpWizardPage {
 			fileNameLbl.setText(resource.getFileName());
 			descriptionLbl.setText(resource.getDescription());
 			if (resource.getPackageName() != null) packageLbl.setText(resource.getPackageName());
-			else packageLbl.setText(RBEPlugin.getString("resource.wiz.information.noPackage"));
+			else packageLbl.setText(Messages.resource_wiz_information_noPackage);
 			parentControl.layout(true,true);
 			getHelpData(item.getParentItem().getData());
 		} else getHelpData(item.getData());

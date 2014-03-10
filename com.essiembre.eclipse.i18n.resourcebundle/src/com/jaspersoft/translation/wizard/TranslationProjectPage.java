@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.essiembre.eclipse.rbe.RBEPlugin;
+import com.essiembre.eclipse.rbe.messages.Messages;
 
 /**
  * Page to define the name of a new translation project
@@ -37,8 +37,8 @@ public class TranslationProjectPage  extends WizardPage {
 	
 	public TranslationProjectPage() {
 		super("JRPROJECTPAGE"); //$NON-NLS-1$
-		setTitle(RBEPlugin.getString("translation.wiz.title")); //$NON-NLS-1$
-		setDescription(RBEPlugin.getString("translation.wiz.description")); //$NON-NLS-1$
+		setTitle(Messages.translation_wiz_title);
+		setDescription(Messages.translation_wiz_description);
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class TranslationProjectPage  extends WizardPage {
 		setControl(composite);
 		composite.setLayout(new GridLayout(2, false));
 
-		new Label(composite, SWT.NONE).setText(RBEPlugin.getString("translation.wiz.name")); //$NON-NLS-1$
+		new Label(composite, SWT.NONE).setText(Messages.translation_wiz_name);
 
 		final Text tname = new Text(composite, SWT.BORDER);
 		tname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
