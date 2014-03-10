@@ -41,11 +41,10 @@ public class VariableNameValidator extends AbstractJSSCellEditorValidator {
 	public String isValid(Object value) {
 		JRDesignDataset d = ModelUtils.getDataset(getTarget());
 		if (d !=null ){
-			for(JRVariable variable : d.getVariablesList()){
-				if (variable.getName().equals(value) && getTarget().getValue() != variable) {
-					String message = MessageFormat.format(Messages.VariableNameValidator_variableDuplicatedName, new Object[] { value });
-					return message;
-				}
+			JRVariable variable = d.getVariablesMap().get(value);
+			if (variable != null && getTarget().getValue() != variable){
+				String message = MessageFormat.format(Messages.VariableNameValidator_variableDuplicatedName, new Object[] { value });
+				return message;
 			}
 		}
 		return null;
