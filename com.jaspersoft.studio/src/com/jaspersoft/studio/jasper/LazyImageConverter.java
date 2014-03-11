@@ -282,7 +282,6 @@ public class LazyImageConverter extends ElementConverter {
 						e.printStackTrace();
 					}
 					pendingRequests.remove(modelElement);
-					System.out.println("thread ended for "+modelElement);
 					return Status.OK_STATUS;
 				}
 			};
