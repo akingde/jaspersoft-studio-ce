@@ -209,7 +209,7 @@ public class CreateElementCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return destNode != null;
+		return destNode != null && destNode.canAcceptChildren();
 	}
 
 	private Dimension d;

@@ -465,4 +465,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		return mband.getBandType() == BandTypeEnum.DETAIL || mband.getBandType() == BandTypeEnum.GROUP_HEADER
 				|| mband.getBandType() == BandTypeEnum.GROUP_FOOTER;
 	}
+	
+	@Override
+	public boolean canAcceptChildren() {
+		Object height = getPropertyValue(JRDesignBand.PROPERTY_HEIGHT);
+		return (height instanceof Integer && ((Integer)height) > 0);
+	}
 }

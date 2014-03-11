@@ -538,4 +538,19 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			return parent.getChildren().indexOf(this) == 0;
 		return true;
 	}
+	
+	/**
+	 * This method should be overridden by sub-classes 
+	 * whenever a node during its life-cycle can be in 
+	 * a state where new children can not be added.
+	 * <p>
+	 * 
+	 * Default value is <code>true</code> in order to ensure back-compatibility
+	 *   
+	 * @return <code>true</code> if new children can be added, <code>false</code> otherwise
+	 * 
+	 */
+	public boolean canAcceptChildren() {
+		return true;
+	}
 }
