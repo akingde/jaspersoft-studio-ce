@@ -43,7 +43,8 @@ public class TextInput extends ADataInput {
 			ModifyListener listener = new ModifyListener() {
 
 				public void modifyText(ModifyEvent e) {
-					updateModel(txt.getText());
+					if (!isRefresh)
+						updateModel(txt.getText());
 				}
 			};
 			txt.addModifyListener(listener);
@@ -52,12 +53,17 @@ public class TextInput extends ADataInput {
 		}
 	}
 
+	private boolean isRefresh = false;
+
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null && value instanceof String)
 			txt.setText((String) value);
-		else
+		else {
+			isRefresh = true;
 			txt.setText("");
+			isRefresh = false;
+		}
 		setDecoratorNullable(param);
 	}
 }
