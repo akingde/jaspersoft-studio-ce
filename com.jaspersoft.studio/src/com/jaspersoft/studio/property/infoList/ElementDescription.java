@@ -15,14 +15,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.infoList;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
+
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
 /**
  * Define an element that can be listed into a SelectableComposite
@@ -224,5 +233,39 @@ public class ElementDescription implements Comparable<ElementDescription> {
 	@Override
 	public int compareTo(ElementDescription o) {
 		return name.compareTo(o.getName());
+	}
+	
+	/**
+	 * Retrieves a list of element descriptions from the specified properties file.
+	 * 
+	 * @param pathname the location of the properties file
+	 * @return the list of descriptions
+	 */
+	public static List<ElementDescription> getPropertiesInformation(String pathname) {
+		List<ElementDescription> descriptions = new ArrayList<ElementDescription>();
+		try {
+			FileInputStream fin = new FileInputStream(new File(pathname));
+			Properties props = new Properties();
+			props.load(fin);
+			for(String pName : props.stringPropertyNames()) {
+				descriptions.add(new ElementDescription(pName, props.getProperty(pName), false));
+			}
+			FileUtils.closeStream(fin);
+		} catch (Exception e) {
+			JaspersoftStudioPlugin.getInstance().logError(
+					NLS.bind("Error occurred while opening the file {0}.",pathname), e);
+		}
+		Collections.sort(descriptions, new Comparator<ElementDescription>() {
+			@Override
+			public int compare(ElementDescription o1, ElementDescription o2) {
+				if(o1.getName()!=null && o2.getName()!=null) {
+					return o1.getName().compareTo(o2.getName());
+				}
+				else {
+					return 0;
+				}
+			}
+		});		
+		return descriptions;
 	}
 }
