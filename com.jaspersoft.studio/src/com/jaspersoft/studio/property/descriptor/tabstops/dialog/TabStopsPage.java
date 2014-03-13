@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -98,8 +99,8 @@ public class TabStopsPage extends WizardPage {
 
 	protected TabStopsPage(String pageName) {
 		super(pageName);
-		setTitle("Tab Stops");
-		setDescription("Tab Stops");
+		setTitle(Messages.TabStopsPage_title);
+		setDescription(Messages.TabStopsPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -144,10 +145,10 @@ public class TabStopsPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Position [px]");
+		column[0].setText(Messages.TabStopsPage_col1);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Alignement");
+		column[1].setText(Messages.TabStopsPage_col2);
 
 		fillTable(table, value);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -190,7 +191,7 @@ public class TabStopsPage extends WizardPage {
 					try {
 						data.setPosition(new Integer((String) value));
 					} catch (NumberFormatException e) {
-						setErrorMessage("Number format incorect");
+						setErrorMessage(Messages.TabStopsPage_formatError);
 					}
 
 				} else if ("ALIGNEMENT".equals(property)) { //$NON-NLS-1$

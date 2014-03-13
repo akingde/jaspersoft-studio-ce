@@ -1659,6 +1659,11 @@ public class Messages extends NLS {
 	public static String SwitchLanguageHandler_restartMessage;
 	public static String SwitchLanguageHandler_restartTitle;
 	public static String SwitchViewsAction_actionTooltip;
+	public static String TabStopsPage_col1;
+	public static String TabStopsPage_col2;
+	public static String TabStopsPage_description;
+	public static String TabStopsPage_formatError;
+	public static String TabStopsPage_title;
 	public static String TemplateExporterWizard_congratCongratulations;
 	public static String TemplateExporterWizard_congratDesc;
 	public static String TemplateExporterWizard_congratMessage;
