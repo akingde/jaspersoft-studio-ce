@@ -30,15 +30,11 @@ import com.jaspersoft.studio.model.text.MTextField;
  */
 public class TextFieldFigure extends FrameFigure {
 
-	private MTextField textFieldModel = null;
-	
-	private StackGraphics2D cachedGraphics = null;
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public TextFieldFigure(MTextField model) {
-		super();
-		this.textFieldModel = model;
+		super(model);
 	}
 
 
@@ -51,13 +47,13 @@ public class TextFieldFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (cachedGraphics == null || textFieldModel.hasChangedProperty()){
+		if (cachedGraphics == null || model.hasChangedProperty()){
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 			cachedGraphics = new StackGraphics2D(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
 			drawVisitor.visitTextField((JRTextField) jrElement);
 			drawVisitor.setGraphics2D(oldGraphics);
-			textFieldModel.setChangedProperty(false);
+			model.setChangedProperty(false);
 		}
 		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 		cachedGraphics.paintStack();

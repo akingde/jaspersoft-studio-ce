@@ -28,17 +28,12 @@ import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class CrosstabFigure extends FrameFigure {
-
-	private MCrosstab crosstabModel = null;
-	
-	private StackGraphics2D cachedGraphics = null;
 	
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public CrosstabFigure(MCrosstab crosstabModel) {
-		super();
-		this.crosstabModel = crosstabModel;
+		super(crosstabModel);
 		setLayoutManager(new XYLayout());
 	}
 
@@ -52,14 +47,14 @@ public class CrosstabFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (crosstabModel != null){
-			if (cachedGraphics == null || crosstabModel.hasChangedProperty()){
+		if (model != null){
+			if (cachedGraphics == null || model.hasChangedProperty()){
 				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 				cachedGraphics = new StackGraphics2D(oldGraphics);
 				drawVisitor.setGraphics2D(cachedGraphics);
 				drawVisitor.visitCrosstab((JRCrosstab) jrElement);
 				drawVisitor.setGraphics2D(oldGraphics);
-				crosstabModel.setChangedProperty(false);
+				model.setChangedProperty(false);
 			}
 			cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 			cachedGraphics.paintStack();

@@ -26,30 +26,24 @@ import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 
 public class TableFigure extends JRComponentFigure {
-
-	private MTable tableModel = null;
-	
-	private StackGraphics2D cachedGraphics = null;
-	
 	
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public TableFigure(MTable tableModel) {
-		super();
-		this.tableModel = tableModel;
+		super(tableModel);
 	}
 
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (tableModel != null){
-			if (cachedGraphics == null || tableModel.hasChangedProperty()){
+		if (model != null){
+			if (cachedGraphics == null || model.hasChangedProperty()){
 				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 				cachedGraphics = new StackGraphics2D(oldGraphics);
 				drawVisitor.setGraphics2D(cachedGraphics);
 				drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 				drawVisitor.setGraphics2D(oldGraphics);
-				tableModel.setChangedProperty(false);
+				model.setChangedProperty(false);
 			}
 			cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 			cachedGraphics.paintStack();

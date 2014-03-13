@@ -28,25 +28,22 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.jasper.LazyImageConverter;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.image.MImage;
 /*
  * The Class ChartFigure.
  */
 public class ImageFigure extends FrameFigure {
 
-	private MImage imageModel = null;
-	
-	private StackGraphics2D cachedGraphics = null;
 	
 	/**
 	 * Instantiates a new ImageFigure.
 	 */
 	public ImageFigure(MImage imageModel) {
-		super();
-		this.imageModel = imageModel;
+		super(imageModel);
 	}
 
-	protected void visitElement(JSSDrawVisitor drawVisitor, MImage model) {
+	protected void visitElement(JSSDrawVisitor drawVisitor, MGraphicElement model) {
 		JRElement element = model.getValue();
 		JRPrintElement printElement = LazyImageConverter.getInstance().convertImage(drawVisitor.getReportConverter(), model);
 		try {
@@ -55,7 +52,6 @@ public class ImageFigure extends FrameFigure {
 			t.printStackTrace();
 		}
 	}
-
 	
 	/*
 	 * (non-Javadoc)
@@ -66,16 +62,16 @@ public class ImageFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (cachedGraphics == null || imageModel.hasChangedProperty()){
+		if (cachedGraphics == null || model.hasChangedProperty()){
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 			cachedGraphics = new StackGraphics2D(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);
-			visitElement(drawVisitor, imageModel);
+			visitElement(drawVisitor, model);
 			drawVisitor.setGraphics2D(oldGraphics);
-			imageModel.setChangedProperty(false);
+			model.setChangedProperty(false);
 		} else {
 			//If the image dosen't need to be reloaded than a recheck is launched to see if it was updated
-			LazyImageConverter.getInstance().convertImage(drawVisitor.getReportConverter(), imageModel);
+			LazyImageConverter.getInstance().convertImage(drawVisitor.getReportConverter(), model);
 		}
 		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 		cachedGraphics.paintStack();

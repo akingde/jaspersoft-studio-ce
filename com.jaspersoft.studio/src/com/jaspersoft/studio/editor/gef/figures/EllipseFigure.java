@@ -15,15 +15,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
+import java.awt.Graphics2D;
+
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JREllipse;
 
+import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.model.MEllipse;
 /*
  * The Class EllipseFigure.
  */
 public class EllipseFigure extends LineFigure {
 
+	public EllipseFigure(MEllipse model) {
+		super(model);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -33,7 +41,16 @@ public class EllipseFigure extends LineFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitEllipse((JREllipse) jrElement);
+		if (cachedGraphics == null || model.hasChangedProperty()){
+			model.setChangedProperty(false);
+			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+			cachedGraphics = new StackGraphics2D(oldGraphics);
+			drawVisitor.setGraphics2D(cachedGraphics);
+			drawVisitor.visitEllipse((JREllipse) jrElement);
+			drawVisitor.setGraphics2D(oldGraphics);
+		}
+		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
+		cachedGraphics.paintStack();
 	}
 
 }

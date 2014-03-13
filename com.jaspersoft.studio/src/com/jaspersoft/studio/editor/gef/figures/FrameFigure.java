@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
+import java.awt.Graphics2D;
+
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRFrame;
@@ -18,7 +20,9 @@ import net.sf.jasperreports.engine.JRLineBox;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /*
  * The Class FrameFigure.
@@ -27,14 +31,26 @@ import com.jaspersoft.studio.jasper.JSSDrawVisitor;
  */
 public class FrameFigure extends AHandleBoundsFigure {
 
+	protected MGraphicElement model = null;
+	
+	protected StackGraphics2D cachedGraphics = null;
+	
 	/**
 	 * Instantiates a new text field figure.
 	 */
-	public FrameFigure() {
+	public FrameFigure(MGraphicElement frameModel) {
 		super();
+		this.model = frameModel;
 		setLayoutManager(new XYLayout());
 	}
 
+	
+	public FrameFigure(){
+		super();
+		this.model = null;
+		setLayoutManager(new XYLayout());
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -44,7 +60,19 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitFrame((JRFrame) jrElement);
+		if (model == null){
+			drawVisitor.visitFrame((JRFrame) jrElement);
+			return;
+		} else if (cachedGraphics == null || model.hasChangedProperty()){
+			model.setChangedProperty(false);
+			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+			cachedGraphics = new StackGraphics2D(oldGraphics);
+			drawVisitor.setGraphics2D(cachedGraphics);
+			drawVisitor.visitFrame((JRFrame) jrElement);
+			drawVisitor.setGraphics2D(oldGraphics);
+		}
+		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
+		cachedGraphics.paintStack();
 	}
 
 	/*

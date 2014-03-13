@@ -70,6 +70,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 
+	/**
+	 * Special propery id to force the refresh of the graphic element
+	 */
+	public static String FORCE_GRAPHICAL_REFRESH = "forceGraphicalRefresh";
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -724,6 +729,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	public HashSet<String> generateGraphicalProperties(){
 		HashSet<String> result = new HashSet<String>();
+		result.add(FORCE_GRAPHICAL_REFRESH);
 		result.add(JRDesignElement.PROPERTY_PARENT_STYLE);
 		result.add(JRDesignElement.PROPERTY_HEIGHT);
 		result.add(JRDesignElement.PROPERTY_WIDTH);

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.figures;
 
+import java.awt.Graphics2D;
+
 import net.sf.jasperreports.engine.JRCommonGraphicElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLine;
@@ -17,17 +19,25 @@ import net.sf.jasperreports.engine.JRPen;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.editor.java2d.StackGraphics2D;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /*
  * The Class LineFigure.
  */
 public class LineFigure extends AHandleBoundsFigure {
+
+	protected MGraphicElement model = null;
+	
+	protected StackGraphics2D cachedGraphics = null;
+	
 	/**
 	 * Instantiates a new line figure.
 	 */
-	public LineFigure() {
+	public LineFigure(MGraphicElement lineModel) {
 		super();
+		this.model = lineModel;
 	}
 
 	/*
@@ -39,7 +49,16 @@ public class LineFigure extends AHandleBoundsFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitLine((JRLine) jrElement);
+		if (cachedGraphics == null || model.hasChangedProperty()){
+			model.setChangedProperty(false);
+			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
+			cachedGraphics = new StackGraphics2D(oldGraphics);
+			drawVisitor.setGraphics2D(cachedGraphics);
+			drawVisitor.visitLine((JRLine) jrElement);
+			drawVisitor.setGraphics2D(oldGraphics);
+		}
+		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
+		cachedGraphics.paintStack();
 	}
 
 	/*

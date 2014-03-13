@@ -33,7 +33,7 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
@@ -41,7 +41,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.components.StylesUtils;
+import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -51,7 +51,9 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -308,6 +310,30 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		/*if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) && evt.getNewValue() != null){
+			JRBaseElement element = (JRBaseElement)evt.getNewValue();
+			new StyleChangeNotifier(this, element);
+		}*/
+		if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) || 
+				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP) ||
+						evt.getPropertyName().equals(MColumn.PROPERTY_NAME)){
+			fullModelTable = null;
+		}
+		
+		if (evt.getPropertyName().equals(MGraphicElement.FORCE_GRAPHICAL_REFRESH)){
+			ANode parent = getParent();
+			IGraphicalPropertiesHandler upperGrahpicHandler = null;
+			while(parent != null){
+				if (parent instanceof IGraphicalPropertiesHandler){
+					upperGrahpicHandler = (IGraphicalPropertiesHandler)parent;
+				}
+				parent = parent.getParent();
+			}
+			if (upperGrahpicHandler != null){
+				((MGraphicElement)upperGrahpicHandler).getValue().getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+			}
+		}
+		
 		if (getTableManager() != null && (getParent() instanceof MPage
 				&& evt instanceof CollectionElementAddedEvent
 				|| evt instanceof CollectionElementRemovedEvent
@@ -351,15 +377,33 @@ public class MTable extends MGraphicElement implements IContainer,
 		return datasetList;
 	}
 	
+	private ANode fullModelTable = null;
+	
+	private void fillUsedStyles(List<INode> children, HashSet<String> map){
+		for(INode node : children){
+			if (node instanceof IGraphicalPropertiesHandler){
+				map.addAll(((IGraphicalPropertiesHandler)node).getUsedStyles());
+			}
+			fillUsedStyles(node.getChildren(), map);
+		}
+	}
+	
 	@Override
 	public HashSet<String> getUsedStyles() {
-		HashSet<String> result = super.getUsedStyles();
-		JRDesignStyle[] styles = StylesUtils.getStylesFromTable((JRDesignComponentElement) getValue());
-		for(JRDesignStyle style : styles){
-			if (style != null){
-				result.add(style.getName());
+		if (fullModelTable == null){
+			if (getChildren().isEmpty()) {
+				JRDesignComponentElement tbl = (JRDesignComponentElement) getValue();
+				JasperDesign jasperDesign = getJasperDesign();
+				TableManager tblManager = new TableManager(tbl, jasperDesign);
+				MTable mt = new MTable(null, tbl, 0, tblManager);
+				mt.setJasperConfiguration(getJasperConfiguration());
+				fullModelTable = TableComponentFactory.createTable(mt);
+	
 			}
+			else fullModelTable = this;
 		}
+		HashSet<String> result = super.getUsedStyles();
+		fillUsedStyles(fullModelTable.getChildren(),result);
 		return result;
 	}
 }

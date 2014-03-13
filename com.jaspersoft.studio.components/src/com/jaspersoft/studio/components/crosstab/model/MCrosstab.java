@@ -35,7 +35,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
@@ -43,7 +43,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.components.StylesUtils;
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
@@ -58,6 +57,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IDatasetContainer;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
@@ -352,6 +352,13 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) || 
+				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP) || 
+					evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS) ||
+						evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS) ||  
+							evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_MEASURES)){
+			fullModelCrosstab = null;
+		}
 		if (getParent() == null || flagRefreshCells)
 			return;
 		String pname = evt.getPropertyName();
@@ -456,6 +463,9 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		result.add(JRDesignCrosstabCell.PROPERTY_WIDTH);
 		result.add(JRDesignCrosstabCell.PROPERTY_HEIGHT);
 		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
+		result.add(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
+		result.add(JRDesignCrosstab.PROPERTY_ROW_GROUPS);
+		result.add(JRDesignCrosstab.PROPERTY_MEASURES);
 		return result;
 	}
 	
@@ -467,15 +477,32 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		return datasetList;
 	}
 	
+	private ANode fullModelCrosstab = null;
+	
+	private void fillUsedStyles(List<INode> children, HashSet<String> map){
+		for(INode node : children){
+			if (node instanceof IGraphicalPropertiesHandler){
+				map.addAll(((IGraphicalPropertiesHandler)node).getUsedStyles());
+			}
+			fillUsedStyles(node.getChildren(), map);
+		}
+	}
+	
 	@Override
 	public HashSet<String> getUsedStyles() {
-		HashSet<String> result = super.getUsedStyles();
-		JRDesignStyle[] styles = StylesUtils.getStylesFromCrosstab(getValue());
-		for(JRDesignStyle style : styles){
-			if (style != null){
-				result.add(style.getName());
+		if (fullModelCrosstab == null){
+			if (getChildren().isEmpty()) {
+				JRDesignCrosstab ct = (JRDesignCrosstab) getValue();
+				CrosstabManager ctManager = new CrosstabManager(ct);
+				MCrosstab mc = new MCrosstab(null, ct, 0, ctManager);
+				mc.setJasperConfiguration(getJasperConfiguration());
+				fullModelCrosstab = CrosstabComponentFactory.createCrosstab(mc);
+	
 			}
+			else fullModelCrosstab = this;
 		}
+		HashSet<String> result = super.getUsedStyles();
+		fillUsedStyles(fullModelCrosstab.getChildren(),result);
 		return result;
 	}
 

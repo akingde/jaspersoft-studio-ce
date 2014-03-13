@@ -16,12 +16,14 @@
 package com.jaspersoft.studio.components.table.model.column;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -47,6 +49,7 @@ import com.jaspersoft.studio.components.table.util.TableColumnSize;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
@@ -64,7 +67,7 @@ import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable,
-		IGroupElement {
+		IGroupElement, IGraphicalPropertiesHandler {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
@@ -366,6 +369,10 @@ public class MCell extends MColumn implements IGraphicElement,
 				}
 			}
 		}
+		HashSet<String> graphicalProperties = getGraphicalProperties();
+		if (graphicalProperties.contains(evt.getPropertyName())){
+			setChangedProperty(true);
+		}
 		super.propertyChange(evt);
 	}
 
@@ -406,5 +413,70 @@ public class MCell extends MColumn implements IGraphicElement,
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { cell, getValue(),
 				getMTable().getValue() };
+	}
+	
+	/**
+	 * Flag changed when some property that has graphical impact on the element is changed.
+	 * This is used to redraw the elemnt only when something graphical is changed isndie it,
+	 * all the other times can just be copied
+	 */
+	private boolean visualPropertyChanged = true;
+
+	/**
+	 * True if some graphical property is changed for the element, false otherwise
+	 */
+	@Override
+	public boolean hasChangedProperty(){
+		synchronized (this) {
+			return visualPropertyChanged;
+		}
+	}
+	
+	/**
+	 * Set the actual state of the property change flag
+	 */
+	@Override
+	public void setChangedProperty(boolean value){
+		synchronized (this) {
+			visualPropertyChanged = value;
+		}
+	}
+
+	private static HashSet<String> cachedGraphicalProperties = null;
+	
+	/**
+	 * Return the graphical properties for an MGraphicalElement
+	 */
+	@Override
+	public HashSet<String> getGraphicalProperties() {
+		if (cachedGraphicalProperties == null){
+			cachedGraphicalProperties = new HashSet<String>();
+			cachedGraphicalProperties.add(DesignCell.PROPERTY_STYLE);
+			cachedGraphicalProperties.add(DesignCell.PROPERTY_ROW_SPAN);
+			cachedGraphicalProperties.add(DesignCell.PROPERTY_HEIGHT);
+		}
+		return cachedGraphicalProperties;
+	}
+	
+	private void addStyle(HashSet<String> stylesMap, JRStyle style){
+		if (style != null) stylesMap.add(style.getName());
+	}
+	
+	/**
+	 * Return all the styles of the column
+	 */
+	@Override
+	public HashSet<String> getUsedStyles() {
+		StandardBaseColumn standardCol = getValue();
+		HashSet<String> result = new HashSet<String>();
+		if (standardCol.getColumnFooter() != null) addStyle(result, standardCol.getColumnFooter().getStyle());
+		if (standardCol.getColumnHeader() != null) addStyle(result, standardCol.getColumnFooter().getStyle());
+		if (standardCol.getTableHeader() != null) addStyle(result, standardCol.getTableHeader().getStyle());
+		if (standardCol.getTableFooter() != null) addStyle(result, standardCol.getTableFooter().getStyle());
+		if (standardCol instanceof StandardColumn){
+			DesignCell detCell = (DesignCell) ((StandardColumn)standardCol).getDetailCell();
+			if (detCell != null)  addStyle(result, detCell.getStyle());
+		}
+		return result;
 	}
 }

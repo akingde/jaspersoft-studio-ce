@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.frame;
 
+import java.beans.PropertyChangeEvent;
+import java.util.HashSet;
+
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -29,6 +32,8 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
@@ -172,4 +177,29 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		return new JRPropertiesHolder[] { getValue() };
 	}
 
+	
+	@Override
+	public HashSet<String> getUsedStyles() {
+		HashSet<String> usedStyles = super.getUsedStyles();
+		for(INode node : getChildren()){
+			if (node instanceof IGraphicalPropertiesHandler){
+				HashSet<String> childStyles = ((IGraphicalPropertiesHandler)node).getUsedStyles();
+				usedStyles.addAll(childStyles);
+			}
+		}
+		return usedStyles;
+	}
+	
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRDesignFrame.PROPERTY_CHILDREN);
+		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
+		return result;
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+		super.propertyChange(evt);
+	}
 }

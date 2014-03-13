@@ -27,16 +27,11 @@ import com.jaspersoft.studio.model.text.MStaticText;
  * The Class StaticTextFigure.
  */
 public class StaticTextFigure extends FrameFigure {
-
-	private MStaticText staticTextModel = null;
-	
-	private StackGraphics2D cachedGraphics = null;
 	/**
 	 * Instantiates a new static text figure.
 	 */
 	public StaticTextFigure(MStaticText model) {
-		super();
-		this.staticTextModel = model;
+		super(model);
 	}
 
 	/*
@@ -48,8 +43,8 @@ public class StaticTextFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (cachedGraphics == null || staticTextModel.hasChangedProperty()){
-			staticTextModel.setChangedProperty(false);
+		if (cachedGraphics == null || model.hasChangedProperty()){
+			model.setChangedProperty(false);
 			Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 			cachedGraphics = new StackGraphics2D(oldGraphics);
 			drawVisitor.setGraphics2D(cachedGraphics);

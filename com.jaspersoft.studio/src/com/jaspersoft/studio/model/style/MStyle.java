@@ -737,8 +737,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				if (graphicalElement.getUsedStyles().contains(getValue().getName())){
 					graphicalElement.setChangedProperty(true);
 				}
-			}
-			setStyleRefresh(child.getChildren());
+			} else setStyleRefresh(child.getChildren());
 		}
 		
 	}

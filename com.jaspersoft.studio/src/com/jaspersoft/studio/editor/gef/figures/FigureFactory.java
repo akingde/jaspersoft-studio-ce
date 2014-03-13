@@ -55,23 +55,23 @@ public class FigureFactory {
 		if (f != null)
 			return f;
 		if (node instanceof MEllipse)
-			return new EllipseFigure();
+			return new EllipseFigure((MEllipse)node);
 		if (node instanceof MRectangle)
-			return new RectangleFigure();
+			return new RectangleFigure((MRectangle)node);
 		if (node instanceof MStaticText)
 			return new StaticTextFigure((MStaticText)node);
 		if (node instanceof MTextField)
 			return new TextFieldFigure((MTextField)node);
 		if (node instanceof MLine)
-			return new LineFigure();
+			return new LineFigure((MLine)node);
 		if (node instanceof MFrame)
-			return new FrameFigure();
+			return new FrameFigure((MFrame)node);
 		if (node instanceof MImage)
 			return new ImageFigure((MImage)node);
 		if (node instanceof MSubreport)
-			return new SubreportFigure();
+			return new SubreportFigure((MSubreport)node);
 		if (node instanceof MGenericElement)
-			return new GenericElementFigure();
+			return new GenericElementFigure((MGenericElement)node);
 		if (node.getValue() instanceof JRComponentElement)
 			return new ComponentFigure();
 		if (node instanceof MCallout)

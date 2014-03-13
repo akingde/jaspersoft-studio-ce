@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -205,6 +206,12 @@ public class MEllipse extends MGraphicElementLinePen {
 	public Object getEditableValue() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public HashSet<String> generateGraphicalProperties(){
+		HashSet<String> result = super.generateGraphicalProperties();
+		result.add(JRBaseStyle.PROPERTY_FILL);
+		return result;
 	}
 
 }

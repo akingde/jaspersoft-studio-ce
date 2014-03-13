@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.crosstab.model.cell;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,7 @@ import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
@@ -69,7 +71,7 @@ import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
-public class MCell extends APropertyNode implements IGraphicElement, IPastable, IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart, ILineBox, IGroupElement, IGraphicElementContainer {
+public class MCell extends APropertyNode implements IGraphicElement, IPastable, IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart, ILineBox, IGroupElement, IGraphicElementContainer, IGraphicalPropertiesHandler {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -414,5 +416,69 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	@Override
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue(), getMCrosstab().getValue() };
+	}
+
+	
+	/**
+	 * Flag changed when some property that has graphical impact on the element is changed.
+	 * This is used to redraw the elemnt only when something graphical is changed isndie it,
+	 * all the other times can just be copied
+	 */
+	private boolean visualPropertyChanged = true;
+
+	/**
+	 * True if some graphical property is changed for the element, false otherwise
+	 */
+	@Override
+	public boolean hasChangedProperty(){
+		synchronized (this) {
+			return visualPropertyChanged;
+		}
+	}
+	
+	/**
+	 * Set the actual state of the property change flag
+	 */
+	@Override
+	public void setChangedProperty(boolean value){
+		synchronized (this) {
+			visualPropertyChanged = value;
+		}
+	}
+
+	private static HashSet<String> cachedGraphicalProperties = null;
+	
+	/**
+	 * Return the graphical properties for an MGraphicalElement
+	 */
+	@Override
+	public HashSet<String> getGraphicalProperties() {
+		if (cachedGraphicalProperties == null){
+			cachedGraphicalProperties = new HashSet<String>();
+			cachedGraphicalProperties.add(JRBaseStyle.PROPERTY_MODE);
+			cachedGraphicalProperties.add(JRBaseStyle.PROPERTY_BACKCOLOR);
+			cachedGraphicalProperties.add(JRDesignCellContents.PROPERTY_STYLE);
+			cachedGraphicalProperties.add(JRDesignCrosstabCell.PROPERTY_WIDTH);
+			cachedGraphicalProperties.add(JRDesignCrosstabCell.PROPERTY_HEIGHT);
+		}
+		return cachedGraphicalProperties;
+	}
+
+	@Override
+	public HashSet<String> getUsedStyles() {
+		JRDesignCellContents jrElement = getValue();
+		HashSet<String> result = new HashSet<String>();
+		if (jrElement != null && jrElement.getStyle() != null)
+			result.add(jrElement.getStyle().getName());
+		return result;
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		HashSet<String> graphicalProperties = getGraphicalProperties();
+		if (graphicalProperties.contains(evt.getPropertyName())){
+			setChangedProperty(true);
+		}
+		super.propertyChange(evt);
 	}
 }

@@ -43,7 +43,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.AMultiEditor;
-import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -192,7 +192,7 @@ public class LazyImageConverter extends ElementConverter {
 	 * @return An image pointed by the expression of the element if it can be found, the
 	 * standard not found image otherwise. it is never null
 	 */
-	public JRPrintElement convertImage(ReportConverter reportConverter, MImage element){
+	public JRPrintElement convertImage(ReportConverter reportConverter, MGraphicElement element){
 		JRImage image = (JRImage) element.getValue();
 		JRBasePrintImage printImage = new JRBasePrintImage(reportConverter.getDefaultStyleProvider());
 		Renderable cacheRenderer = getRenderable(reportConverter, image, element);
@@ -226,7 +226,7 @@ public class LazyImageConverter extends ElementConverter {
 	 * @param modelElement the model that encapsulate the image
 	 * @return the image to display if it is cached (expired or not), null otherwise
 	 */
-	private Renderable getRenderable(ReportConverter reportConverter, JRImage image, MImage modelElement) {
+	private Renderable getRenderable(ReportConverter reportConverter, JRImage image, MGraphicElement modelElement) {
 		JasperReportsContext jrContext = reportConverter.getJasperReportsContext();
 		JRExpression expr = image.getExpression();
 		KeyValue<JasperReportsContext, String> key = new KeyValue<JasperReportsContext, String>(jrContext, expr != null ? expr.getText() : "");
@@ -255,7 +255,7 @@ public class LazyImageConverter extends ElementConverter {
 	 * @param jrContext the context to get the image
 	 * @param key the key of the image in the cache map.
 	 */
-	private void refreshImageInfo(final TimedCache info,  final MImage modelElement, final JRExpression expr, final JasperReportsContext jrContext, final KeyValue<JasperReportsContext, String> key){
+	private void refreshImageInfo(final TimedCache info,  final MGraphicElement modelElement, final JRExpression expr, final JasperReportsContext jrContext, final KeyValue<JasperReportsContext, String> key){
 		if (!pendingRequests.contains(modelElement)){
 			pendingRequests.add(modelElement);
 			Job job = new Job("load image") {
