@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.group;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -113,6 +115,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 	private static JSSEnumPropertyDescriptor positionD;
+	private static GroupNameValidator validator;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -129,6 +132,23 @@ public class MGroup extends APropertyNode implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		//Set into the validator the actual reference
+		updateValidator();
+	}
+	
+	/**
+	 * Update the reference into the static validator when the actual group is 
+	 * edited
+	 */
+	public void updateValidator(){
+		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
+		System.out.println("selected group "+jrGroup.getName());
+		validator.setTargetNode(this);
+	}
 
 	/**
 	 * Creates the property descriptors.
@@ -138,7 +158,9 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
+		validator = new GroupNameValidator();
+		validator.setTargetNode(this);
+		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name, validator);
 		nameD.setDescription(Messages.MGroup_name_description);
 		desc.add(nameD);
 
@@ -224,6 +246,21 @@ public class MGroup extends APropertyNode implements ICopyable {
 
 		return null;
 	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (JRDesignGroup.PROPERTY_NAME.equals(evt.getPropertyName())) {
+			// Temporary fix for the Community Bug #2991
+			// Should be done on JR-side. Let's keep the cache map of groups in sync.
+			JRDesignGroup jrGroup = (JRDesignGroup) getValue();
+			JasperDesign design = getJasperDesign();
+			if (design != null){
+				design.getGroupsMap().remove(evt.getOldValue());
+				design.getGroupsMap().put(jrGroup.getName(), jrGroup);
+			}
+		}
+		super.propertyChange(evt);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -235,13 +272,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignGroup.PROPERTY_NAME)) {
 			// Temporary fix for the Community Bug #2991
 			// Should be done on JR-side. Let's keep the cache map of groups in sync.
-			String oldName = jrGroup.getName();
 			jrGroup.setName((String) value);
-			JasperDesign design = getJasperDesign();
-			if (design != null){
-				design.getGroupsMap().remove(oldName);
-				design.getGroupsMap().put(jrGroup.getName(), jrGroup);
-			}
 		}
 		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
 			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value, null));

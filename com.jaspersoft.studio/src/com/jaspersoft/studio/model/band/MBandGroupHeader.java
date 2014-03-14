@@ -104,6 +104,18 @@ public class MBandGroupHeader extends MBand {
 	public MGroup getMGroup() {
 		return mGroup;
 	}
+	
+	/**
+	 * Update the name validator for the group when a new band connected
+	 * to the group is selected
+	 */
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		if (mGroup != null){
+			mGroup.updateValidator();
+		}
+		super.postDescriptors(descriptors);
+	}
 
 	/*
 	 * (non-Javadoc)
