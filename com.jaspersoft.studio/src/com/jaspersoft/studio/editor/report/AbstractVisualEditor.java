@@ -130,6 +130,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
@@ -600,7 +601,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * Create the contextual action to add stuff to the datasets (fields, variables) 
 	 * and to create styles.
 	 */
-	protected void createDatasetActions(ActionRegistry registry){
+	protected void createDatasetAndStyleActions(ActionRegistry registry){
 		List<String> selectionActions = getSelectionActions();
 		
 		IAction action = new CreateFieldAction(this);
@@ -650,6 +651,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new CreateStyleTemplateAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateStyleTemplateAction.ID);
+		
+		action = new RefreshTemplateStyleExpression(this);
+		registry.registerAction(action);
+		selectionActions.add(RefreshTemplateStyleExpression.ID);
 	}
 
 	/*

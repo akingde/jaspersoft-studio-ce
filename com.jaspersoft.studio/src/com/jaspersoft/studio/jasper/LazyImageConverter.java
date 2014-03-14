@@ -30,7 +30,9 @@ import net.sf.jasperreports.engine.RenderableUtil;
 import net.sf.jasperreports.engine.base.JRBasePrintImage;
 import net.sf.jasperreports.engine.convert.ElementConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
@@ -45,7 +47,8 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.KeyValue;
-import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 
@@ -246,6 +249,57 @@ public class LazyImageConverter extends ElementConverter {
 	}
 	
 	/**
+	 * Cache of the expression interpreter for a report, the key is the dataset for which the interpreter is created
+	 */
+	private static HashMap<JRDesignDataset, ExpressionInterpreter> interpreterMaps = new HashMap<JRDesignDataset, ExpressionInterpreter>();
+	
+	
+	/**
+	 * Return the expression interpreter for a report. If it is cached is returned the cached one, otherwise a new one is created and the cached
+	 * 
+	 * @param jConf the configuration of the report 
+	 * @param modelElement the model of the element, necessary to get its dataset
+	 * @return the interpreter for the element
+	 */
+	private ExpressionInterpreter getInterpreter(JasperReportsConfiguration jConf, MGraphicElement modelElement){
+		 JRDesignDataset jrd = ModelUtils.getDataset(modelElement);
+		 ExpressionInterpreter interpreter = null;
+		 if (jrd != null){
+			 interpreter = interpreterMaps.get(jrd);
+			 if (interpreter == null){
+					JasperDesign jd = jConf.getJasperDesign();
+					if (jrd != null && jd != null){
+						interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConf);
+						interpreterMaps.put(jrd, interpreter);
+					}
+				}
+		 }
+		 return interpreter;
+	}
+	
+	/**
+	 * Interpret the expression of an element. The expression is evaluated first with a simple and fast interpreter. 
+	 * If that interpreter can not evaluate the expression a more complex one is taken (from the cache or created, since
+	 * create the complex interpreter take a lot of time), 
+	 * 
+	 * @param jConf the configuration of the report
+	 * @param modelElement the element that contains the expression
+	 * @param expr the expression
+	 * @return the value of the expression or null if it can not be evaluated
+	 */
+	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement, JRExpression expr){
+		String evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(expr);
+		if (evaluatedExpression == null){
+			ExpressionInterpreter interpreter = getInterpreter(jConf, modelElement);
+			if (interpreter != null){
+				Object expressionValue = interpreter.interpretExpression(expr.getText());
+				if (expressionValue != null) evaluatedExpression = expressionValue.toString();
+			}
+		}
+		return evaluatedExpression;
+	}
+	
+	/**
 	 * Start the thread to refresh a specific image. when the thread has cached a new image then the model and the editor 
 	 * are notified to ask a refresh
 	 * 
@@ -261,7 +315,7 @@ public class LazyImageConverter extends ElementConverter {
 			Job job = new Job("load image") {
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						String location = ExpressionUtil.eval(expr, (JasperReportsConfiguration) jrContext);
+						String location = evaluatedExpression((JasperReportsConfiguration) jrContext, modelElement, expr); 
 						if (location != null){
 							Renderable r = RenderableUtil.getInstance(jrContext).getRenderable(location, OnErrorTypeEnum.ERROR, false);
 							info.update(r);

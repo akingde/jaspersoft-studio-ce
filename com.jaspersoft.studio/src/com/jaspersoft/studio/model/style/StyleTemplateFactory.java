@@ -64,7 +64,10 @@ public class StyleTemplateFactory {
 
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
 		MStyleTemplate mStyleTemplate = new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
-		String str = ExpressionUtil.eval(jrObject.getSourceExpression(), parent.getJasperConfiguration());
+		JasperReportsConfiguration jConf =  parent.getJasperConfiguration();
+		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+		//Use the style manager to retrive the styles, so the result is cached
+		String str = ExternalStylesManager.evaluateStyleExpression( (JRDesignReportTemplate) jrObject, project,jConf); 
 		if (str != null) {
 			Set<String> set = new HashSet<String>();
 			if (file == null) {
@@ -73,7 +76,6 @@ public class StyleTemplateFactory {
 					file = ((IFileEditorInput) ep.getEditorInput()).getFile();
 			}
 			createTemplateReference(mStyleTemplate, str, -1, set, false, file);
-
 			return mStyleTemplate;
 		}
 		return null;
@@ -205,7 +207,7 @@ public class StyleTemplateFactory {
 	private static List<JRStyle> getStyles(JasperReportsConfiguration jConfig, JasperDesign jd, IFile file) {
 		List<JRStyle> list = new ArrayList<JRStyle>();
 		for (JRReportTemplate t : jd.getTemplatesList())
-			list.addAll(ExternalStylesManager.getStyles(t.getSourceExpression(), file, jConfig));
+			list.addAll(ExternalStylesManager.getStyles(t, file, jConfig));
 		return list;
 	}
 

@@ -16,10 +16,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -37,6 +41,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -177,6 +183,143 @@ public class ExternalStylesManager {
 	}
 	
 	/**
+	 * Map of the expression that was already attempt to evaluate, but since their evaluation
+	 * failed they are marked as not valuable, so the next evaluation will be skipped
+	 */
+	private static HashSet<String> notEvaluableExpressions = new HashSet<String>();
+	
+	/**
+	 * Key when it is raised an event of style not found
+	 */
+	public static final String STYLE_NOT_FOUND_EVENT = "templateReferenceNotFound";
+	
+	/**
+	 * Key when it is raised an event of style found
+	 */
+	public static final String STYLE_FOUND_EVENT = "templateReferenceFound";
+	
+	/**
+	 * Fire an event of style found or not found
+	 * 
+	 * @param event the text of the event, should be STYLE_NOT_FOUND_EVENT or STYLE_FOUND_EVENT
+	 * @param element JRelement of the template style
+	 */
+	private static void fireEvent(String event, JRReportTemplate element){
+		if (element instanceof JRChangeEventsSupport){
+			JRChangeEventsSupport eventElement = (JRChangeEventsSupport)element;
+			eventElement.getEventSupport().firePropertyChange(event, null, null);
+		}
+	}
+	
+	/**
+	 * Check if a style reference expression is valuable or not 
+	 * 
+	 * @param projectPath the path of the project where the style is defined
+	 * @param expression the text of the expression
+	 * @param true if the expression can be evaluated (because it was already evaluated without errors or
+	 * because it was never evaluated) false otherwise (during the last attempt to evaluate the expression an
+	 * error happen)
+	 */
+	public static boolean isNotValuable(String projectPath, String expression){
+		return (notEvaluableExpressions.contains(projectPath + "." + expression));
+	}
+	
+	/**
+	 * Check if a style reference expression is valuable or not 
+	 * 
+	 * @param template the model that contains the reference information
+	 * @param true if the expression can be evaluated (because it was already evaluated without errors or
+	 * because it was never evaluated) false otherwise (during the last attempt to evaluate the expression an
+	 * error happen)
+	 */
+	public static boolean isNotValuable(MStyleTemplate template){
+		JasperReportsConfiguration jConf = template.getJasperConfiguration();
+		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+		String projectPath = project.getLocation().toPortableString();
+		
+		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) template.getValue();
+		String expression =  jrTemplate.getSourceExpression().getText();
+		return (notEvaluableExpressions.contains(projectPath + "." + expression));
+	}
+	
+	/**
+	 * Add a new expression of a template style to the not valuable expressions
+	 * 
+	 * @param projectPath the path of the project where the style is defined
+	 * @param expression the text of the expression
+	 */
+	public static void addNotValuableExpression(String projectPath, String expression){
+		notEvaluableExpressions.add(projectPath + "." + expression);
+	}
+	
+	/**
+	 * Reload a style, ignoring if it expression was already evaluated before
+	 * 
+	 * @param template a template style element, the value inside the model must be an
+	 * instance of JRDesignReportTemplate
+	 */
+	public static void refreshStyle(ANode template){
+		JasperReportsConfiguration jConf = template.getJasperConfiguration();
+		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+		String projectPath = project.getLocation().toPortableString();
+		
+		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) template.getValue();
+		String expression =  jrTemplate.getSourceExpression().getText();
+		
+		notEvaluableExpressions.remove(projectPath + "." + expression);
+		getStyles(jrTemplate, project, jConf);
+	}
+	
+	/**
+	 * Resolve an expression and return the reference to the style or null if it can not be resolve
+	 * 
+	 * @param styleExpression expression of the external style
+	 * @param project project of the report
+	 * @param jConfig Configuration of the report to evaluate the expression
+	 * @return path of the style of null if the expression can't be resolved
+	 */
+	public static String evaluateStyleExpression(JRReportTemplate style, IFile project, JasperReportsConfiguration jConfig){	
+		String evaluatedExpression = null;
+		String projectPath = project.getLocation().toPortableString();
+		JRExpression styleExpression = style.getSourceExpression();
+		String expString = styleExpression != null ? styleExpression.getText() : "";
+		try{
+			//Check first if there are previous failed attempt to evaluate the expression
+			if (!isNotValuable(projectPath, expString)){
+				evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(styleExpression);
+				if (evaluatedExpression == null){
+					//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
+					ExpressionInterpreter interpreter = interpreterMaps.get(projectPath);
+					if (interpreter == null){
+						JasperDesign jd = jConfig.getJasperDesign();
+						JRDesignDataset jrd = jd.getMainDesignDataset();
+						if (styleExpression != null && jrd != null && jd != null){
+							interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig);
+							interpreterMaps.put(projectPath, interpreter);
+						}
+					}
+					if (interpreter != null){
+						Object expressionValue = interpreter.interpretExpression(expString);
+						if (expressionValue != null) evaluatedExpression = expressionValue.toString();
+					}
+				}
+				if (evaluatedExpression == null){
+					//The expression is not valuable, add it to the map
+					addNotValuableExpression(projectPath, expString);
+					fireEvent(STYLE_NOT_FOUND_EVENT, style);
+				}
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			//The expression is not valuable, add it to the map
+			addNotValuableExpression(projectPath, expString);
+			fireEvent(STYLE_NOT_FOUND_EVENT, style);
+		}
+		return evaluatedExpression;
+	}
+	
+	
+	/**
 	 * If the expression of an external style can be resolved then return all the jrstyle defined inside
 	 * otherwise return an empty list
 	 * 
@@ -185,40 +328,29 @@ public class ExternalStylesManager {
 	 * @param jConfig Configuration of the report to evaluate the expression
 	 * @return Not null list of styles inside the external style associated with the project and expression
 	 */
-	public static List<JRStyle> getStyles(JRExpression styleExpression, IFile project, JasperReportsConfiguration jConfig){	
-		String evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(styleExpression);
-		if (evaluatedExpression == null){
-			//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
-			String interpreterKey = project.getLocation().toPortableString();
-			ExpressionInterpreter interpreter = interpreterMaps.get(interpreterKey);
-			if (interpreter == null){
-				JasperDesign jd = jConfig.getJasperDesign();
-				JRDesignDataset jrd = jd.getMainDesignDataset();
-				if (styleExpression != null && jrd != null && jd != null){
-					interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig);
-					interpreterMaps.put(interpreterKey, interpreter);
-				}
-			}
-			if (interpreter != null){
-				Object expressionValue = interpreter.interpretExpression(styleExpression.getText());
-				if (expressionValue != null) evaluatedExpression = expressionValue.toString();
-			}
-		}
-		
-		if (evaluatedExpression != null){
+	public static List<JRStyle> getStyles(JRReportTemplate style, IFile project, JasperReportsConfiguration jConfig) {
+		String evaluatedExpression = evaluateStyleExpression(style, project, jConfig);
+		if (evaluatedExpression != null) {
 			File styleFile = StyleTemplateFactory.getFile(evaluatedExpression, project);
 			if (styleFile != null) {
 				String key = styleFile.getAbsolutePath();
 				List<JRStyle> cachedStyles = externalStylesCache.get(key);
-				if (cachedStyles == null){
+				if (cachedStyles == null) {
 					cachedStyles = new ArrayList<JRStyle>();
 					StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
 					externalStylesCache.put(key, cachedStyles);
 				}
+				fireEvent(STYLE_FOUND_EVENT, style);
 				return cachedStyles;
+			} else {
+				String projectPath = project.getLocation().toPortableString();
+				JRExpression styleExpression = style.getSourceExpression();
+				String expString = styleExpression != null ? styleExpression.getText() : "";
+				addNotValuableExpression(projectPath, expString);
+				fireEvent(STYLE_NOT_FOUND_EVENT, style);
 			}
 		}
 		return new ArrayList<JRStyle>();
 	}
-	
+
 }

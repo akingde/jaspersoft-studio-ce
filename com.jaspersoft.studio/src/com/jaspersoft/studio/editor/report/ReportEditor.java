@@ -48,6 +48,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
@@ -152,6 +153,9 @@ public class ReportEditor extends AbstractVisualEditor {
 				id = ExportStyleAsTemplateAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 				
+				id = RefreshTemplateStyleExpression.ID;
+				bars.setGlobalActionHandler(id, registry.getAction(id));
+				
 				id = ResetStyleAction.ID;
 				bars.setGlobalActionHandler(id, registry.getAction(id));
 
@@ -182,7 +186,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		List<String> selectionActions = getSelectionActions();
 		
 		//Create the action on the dataset element
-		createDatasetActions(registry);
+		createDatasetAndStyleActions(registry);
 
 		IAction action = new CreateBandAction(this);
 		registry.registerAction(action);

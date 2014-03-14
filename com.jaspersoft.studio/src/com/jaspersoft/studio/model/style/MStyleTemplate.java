@@ -10,25 +10,33 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.ExternalStylesManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MStyleTemplate.
@@ -39,7 +47,13 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
+	
+	/**
+	 * Icon used when the style can not be resolved
+	 */
+	private static ImageDescriptor styleNotFoundImage = JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/no_style_error.png");
+	
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -80,17 +94,22 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public String getDisplayText() {
 		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
-		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null)
-			return iconDescriptor.getTitle() + "(" + jt.getSourceExpression().getText() + ")";//$NON-NLS-1$ //$NON-NLS-2$
-		return iconDescriptor.getTitle();
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null){
+			return  getIconDescriptor().getTitle() + "(" + jt.getSourceExpression().getText() + ")";
+		}
+		return getIconDescriptor().getTitle();
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
+		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null && ExternalStylesManager.isNotValuable(this)){
+			return styleNotFoundImage;
+		}
 		return getIconDescriptor().getIcon16();
 	}
 
@@ -101,7 +120,10 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	@Override
 	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
+		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null && ExternalStylesManager.isNotValuable(this)){
+			return "The resource can not be found, fix the expression and reload the style to use it";
+		} else 	return getIconDescriptor().getToolTip();
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -156,7 +178,24 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
 			jrTemplate.setSourceExpression(ExprUtil.setValues(jrTemplate.getSourceExpression(), value));
 	}
-
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		//If the expression change try to reload the style
+		if (evt.getPropertyName().equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)){
+			JasperReportsConfiguration jConf = getJasperConfiguration();
+			IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+			JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
+			
+			List<JRStyle> styles = ExternalStylesManager.getStyles(jrTemplate, project, jConf);
+			getChildren().clear();
+			for (JRStyle s : styles) {
+				APropertyNode n = (APropertyNode) ReportFactory.createNode(this, s, -1);
+				n.setEditable(false);
+			}
+		}
+		super.propertyChange(evt);
+	}
 	/**
 	 * Creates the jr template.
 	 * 
