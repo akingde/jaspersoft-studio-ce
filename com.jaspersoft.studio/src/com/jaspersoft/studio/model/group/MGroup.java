@@ -145,8 +145,6 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 * edited
 	 */
 	public void updateValidator(){
-		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
-		System.out.println("selected group "+jrGroup.getName());
 		validator.setTargetNode(this);
 	}
 
