@@ -267,7 +267,23 @@ public class ExternalStylesManager {
 		String expression =  jrTemplate.getSourceExpression().getText();
 		
 		notEvaluableExpressions.remove(projectPath + "." + expression);
-		getStyles(jrTemplate, project, jConf);
+		//Recalculate the style overwriting the cache
+		String evaluatedExpression = evaluateStyleExpression(jrTemplate, project, jConf);
+		if (evaluatedExpression != null) {
+			File styleFile = StyleTemplateFactory.getFile(evaluatedExpression, project);
+			if (styleFile != null) {
+				String key = styleFile.getAbsolutePath();
+				List<JRStyle> cachedStyles = new ArrayList<JRStyle>();
+				StyleTemplateFactory.getStylesReference(project, evaluatedExpression, cachedStyles, new HashSet<File>());
+				externalStylesCache.put(key, cachedStyles);
+				fireEvent(STYLE_FOUND_EVENT, jrTemplate);
+			} else {
+				JRExpression styleExpression = jrTemplate.getSourceExpression();
+				String expString = styleExpression != null ? styleExpression.getText() : "";
+				addNotValuableExpression(projectPath, expString);
+				fireEvent(STYLE_NOT_FOUND_EVENT, jrTemplate);
+			}
+		}
 	}
 	
 	/**
