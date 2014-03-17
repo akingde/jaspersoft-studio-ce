@@ -40,8 +40,11 @@ public class LinePenSection extends AbstractRealValueSection {
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
 		APropertyNode model = super.getModelFromEditPart(item);
-		if (model != null && model instanceof MGraphicElementLinePen || model instanceof MStyle)
+		if (model != null && model instanceof MGraphicElementLinePen || model instanceof MStyle){
+			boolean editable = model.isEditable();
 			model = (APropertyNode) model.getPropertyValue(MGraphicElementLinePen.LINE_PEN);
+			model.setEditable(editable);
+		}
 		return model;
 	}
 

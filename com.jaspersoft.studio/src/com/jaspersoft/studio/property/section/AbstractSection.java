@@ -66,7 +66,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
 	 */
 	public void refresh() {
-		isRefreshing = true;
+		setRefreshing(true);
 		APropertyNode element = getElement();
 		if (element != null) {
 			element.getPropertyDescriptors();
@@ -74,7 +74,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 				widgets.get(key).setData(element, element.getPropertyValue(key));
 			}
 		}
-		isRefreshing = false;
+		setRefreshing(false);
 	}
 
 	public ASPropertyWidget createWidget4Property(Composite composite, Object property) {
@@ -248,7 +248,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!isDisposed()) {
 			String n = evt.getPropertyName();
-			isRefreshing = true;
+			setRefreshing(true);
 			APropertyNode element = getElement();
 			if (element != null) {
 				element.getPropertyDescriptors();
@@ -257,18 +257,43 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 						widgets.get(key).setData(element, element.getPropertyValue(key));
 				}
 			}
-			isRefreshing = false;
+			setRefreshing(false);
 		}
 	}
 
-	protected boolean isRefreshing = false;
+	/**
+	 * Flag used to know if the section is refreshing or not
+	 */
+	private boolean isRefreshing = false;
+	
+	/**
+	 * Return if the section is refreshing or not, it is synchronized
+	 * to avoid concurrent modifications, due for example to a change property
+	 * call
+	 */
+	public boolean isRefreshing(){
+		synchronized (this) {
+			return isRefreshing;
+		}
+	}
+	
+	/**
+	 * set if the section is refreshing or not, it is synchronized
+	 * to avoid concurrent modifications, due for example to a change property
+	 * call
+	 */
+	public void setRefreshing(boolean value){
+		synchronized (this) {
+			isRefreshing = value;
+		}
+	}
 
 	public boolean changeProperty(Object property, Object newValue) {
 		return changeProperty(property, newValue, null);
 	}
 
 	public boolean changeProperty(Object property, Object newValue, List<Command> commands) {
-		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
+		if (!isRefreshing() && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, null);
 			for (APropertyNode n : elements) {
@@ -293,7 +318,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public void changePropertyOn(Object property, Object newValue, APropertyNode n, List<Command> commands) {
-		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
+		if (!isRefreshing() && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, n);
 			Command c = getChangePropertyCommand(property, newValue, n);

@@ -94,6 +94,7 @@ public class SPFontNameCombo extends ASPropertyWidget {
 	@Override
 	public void setData(final APropertyNode pnode, Object b) {
 		if (pnode != null) {
+			combo.setEnabled(pnode.isEditable());
 			if (!dataSetted) {
 				if (pnode.getJasperConfiguration() != null) combo.setItems(pnode.getJasperConfiguration().getFontList());
 				else FontUtils.stringToItems(getFontNames());

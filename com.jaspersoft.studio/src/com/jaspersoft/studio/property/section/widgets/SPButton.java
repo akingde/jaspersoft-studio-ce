@@ -150,6 +150,7 @@ public class SPButton extends ASPropertyWidget {
 
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
+		buttons.setEnabled(pnode.isEditable());
 	}
 
 	@Override

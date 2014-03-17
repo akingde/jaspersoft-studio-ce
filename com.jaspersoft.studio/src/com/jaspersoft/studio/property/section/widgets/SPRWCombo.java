@@ -98,6 +98,7 @@ public class SPRWCombo extends ASPropertyWidget {
 		combo.setSelection(new Point(stringLength, stringLength));
 		refresh = false;
 		combo.getParent().layout(true);
+		combo.setEnabled(pnode.isEditable());
 	}
 
 	public void setNewItems(final RWComboBoxPropertyDescriptor pd) {

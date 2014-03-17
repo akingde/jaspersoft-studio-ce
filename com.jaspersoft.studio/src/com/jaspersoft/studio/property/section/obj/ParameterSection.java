@@ -111,7 +111,7 @@ public class ParameterSection extends AbstractSection {
 	 */
 	@Override
 	public void refresh() {
-		isRefreshing = true;
+		setRefreshing(true);
 		APropertyNode element = getElement();
 		if (element != null) {
 			element.getPropertyDescriptors();
@@ -131,6 +131,6 @@ public class ParameterSection extends AbstractSection {
 				}
 			}
 		}
-		isRefreshing = false;
+		setRefreshing(false);
 	}
 }

@@ -116,6 +116,7 @@ public class SPNumber extends AHistorySPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		ftext.setEnabled(pnode.isEditable());
 		Number n = (Number) b;
 		isRefresh = true;
 		setDataNumber(n);

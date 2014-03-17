@@ -548,7 +548,7 @@ public class BordersSection extends AbstractSection {
 	 * @param newValue the new value
 	 */
 	public void changePropertyPadding(String property, Object newValue){
-		if (!isRefreshing) {
+		if (!isRefreshing()) {
 			JSSCompoundCommand cc = new JSSCompoundCommand("Change padding", null); //$NON-NLS-1$
 			for (APropertyNode m : getElements()) {
 				cc.setReferenceNodeIfNull(m);
@@ -578,7 +578,7 @@ public class BordersSection extends AbstractSection {
 	 * @param newValue the new value
 	 */
 	public void changeProperty(String property, Object newValue) {
-		if (!isRefreshing) {
+		if (!isRefreshing()) {
 			JSSCompoundCommand cc = new JSSCompoundCommand("Change border", null); //$NON-NLS-1$
 			for (APropertyNode m : getElements()) {
 				cc.setReferenceNodeIfNull(m);
@@ -670,15 +670,31 @@ public class BordersSection extends AbstractSection {
 	 * -If no border is selected will default values will be used
 	 */
 	public void refresh() {
-		isRefreshing = true;
+		setRefreshing(true);
 		APropertyNode m = getElement();
 		if (m != null) {
 			MLineBox lb = (MLineBox) m.getPropertyActualValue(MGraphicElementLineBox.LINE_BOX);
 			refreshPadding(lb);
+			enableControls(m.isEditable());
 		}
 		if (square != null)
 			square.redraw();
-		isRefreshing = false;
+		setRefreshing(false);
+	}
+	
+	private void enableControls(boolean enable){
+		lineColor.setEnabled(enable);
+		lineStyle.getControl().setEnabled(enable);
+		lineWidth.setEnabled(enable);
+		paddingRight.setEnabled(enable);
+		paddingLeft.setEnabled(enable);
+		paddingTop.setEnabled(enable);
+		paddingBottom.setEnabled(enable);
+		checkBoxPadding.setEnabled(enable);
+		allBorder.setEnabled(enable);
+		noneBorder.setEnabled(enable);
+		leftRightBorder.setEnabled(enable);
+		upDownBorder.setEnabled(enable);
 	}
 
 	/**

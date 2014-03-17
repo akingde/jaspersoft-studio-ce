@@ -61,6 +61,7 @@ public class SPReadComboEnum extends ASPropertyWidget {
 		if (b != null)
 			index = ((Number) b).intValue();
 		combo.select(index);
+		combo.setEnabled(pnode.isEditable());
 	}
 
 }

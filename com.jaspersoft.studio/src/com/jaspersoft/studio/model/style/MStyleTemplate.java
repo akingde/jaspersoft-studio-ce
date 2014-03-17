@@ -230,6 +230,23 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		});
 
 	}
+	
+	/**
+	 * Refresh the children of a template sytle by reloading them from the external styles cache
+	 */
+	public void refreshChildren(){
+		JasperReportsConfiguration jConf = getJasperConfiguration();
+		IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
+		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
+		getChildren().clear();
+		List<JRStyle> styles = ExternalStylesManager.getStyles(jrTemplate, project, jConf);
+		
+		for (JRStyle s : styles) {
+			APropertyNode n = (APropertyNode) ReportFactory.createNode(getActualStyle(), s, -1);
+			n.setEditable(false);
+		}
+		fireChildrenChangeEvent();
+	}
 
 
 	
@@ -246,18 +263,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		}
 		
 		@Override
-		public IStatus run(IProgressMonitor monitor) {
-			JasperReportsConfiguration jConf = getJasperConfiguration();
-			IFile project = (IFile) jConf.get(FileUtils.KEY_FILE);
-			JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-			getChildren().clear();
-			List<JRStyle> styles = ExternalStylesManager.getStyles(jrTemplate, project, jConf);
-			
-			for (JRStyle s : styles) {
-				APropertyNode n = (APropertyNode) ReportFactory.createNode(getActualStyle(), s, -1);
-				n.setEditable(false);
-			}
-			fireChildrenChangeEvent();
+		public IStatus run(IProgressMonitor monitor) {	
+			refreshChildren();
 			monitor.done();
 			return Status.OK_STATUS;
 		}

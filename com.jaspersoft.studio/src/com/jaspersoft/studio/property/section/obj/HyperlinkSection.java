@@ -241,7 +241,7 @@ public class HyperlinkSection extends AbstractSection {
 	 */
 	@Override
 	public void refresh() {
-		isRefreshing = true;
+		setRefreshing(true);
 		APropertyNode element = getElement();
 		if (element != null) {
 			anchorWidget.setData(element, element.getPropertyActualValue(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION));
@@ -257,7 +257,7 @@ public class HyperlinkSection extends AbstractSection {
 			//I don't set the text on the combo if it has already the right value to avoid to raise the panel refresh
 			if (!typeValue.equals(typeCombo.getText())) typeCombo.setText(typeValue);	
 		}
-		isRefreshing = false;
+		setRefreshing(false);
 	}
 	
 	/**

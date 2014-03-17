@@ -55,30 +55,32 @@ public class SPColor extends ASPropertyWidget {
 			}
 		});
 		foreButton = new ToolItem(toolBar, SWT.PUSH);
-		foreButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				ColorDialog cd = new ColorDialog(toolBar.getShell());
-				cd.setText(pDescriptor.getDisplayName());
-				AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
-				cd.setRGB(rgb == null ? null : rgb);
-				boolean useTransparency = true;
-				if(pDescriptor instanceof ColorPropertyDescriptor) {
-					useTransparency = ((ColorPropertyDescriptor)pDescriptor).supportsTransparency();
-				}				
-				if(useTransparency) {
-					AlfaRGB newColor = cd.openAlfaRGB();
-					if (newColor != null) {
-						changeProperty(section, pDescriptor.getId(), newColor);
+		if (section.getElement().isEditable()){
+			foreButton.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					ColorDialog cd = new ColorDialog(toolBar.getShell());
+					cd.setText(pDescriptor.getDisplayName());
+					AlfaRGB rgb = (AlfaRGB) section.getElement().getPropertyActualValue(pDescriptor.getId());
+					cd.setRGB(rgb == null ? null : rgb);
+					boolean useTransparency = true;
+					if(pDescriptor instanceof ColorPropertyDescriptor) {
+						useTransparency = ((ColorPropertyDescriptor)pDescriptor).supportsTransparency();
+					}				
+					if(useTransparency) {
+						AlfaRGB newColor = cd.openAlfaRGB();
+						if (newColor != null) {
+							changeProperty(section, pDescriptor.getId(), newColor);
+						}
+					}
+					else {
+						RGB newColor = cd.openRGB();
+						if (newColor != null) {
+							changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
+						}
 					}
 				}
-				else {
-					RGB newColor = cd.openRGB();
-					if (newColor != null) {
-						changeProperty(section, pDescriptor.getId(), AlfaRGB.getFullyOpaque(newColor));
-					}
-				}
-			}
-		});
+			});
+		}
 		foreButton.setToolTipText(pDescriptor.getDescription());
 		toolBar.pack();
 	}

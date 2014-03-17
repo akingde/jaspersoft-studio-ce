@@ -74,6 +74,8 @@ public class RefreshTemplateStyleExpression extends SelectionAction {
 		List<MStyleTemplate> templates = getSelectedStyles();
 		for(MStyleTemplate template : templates){
 			ExternalStylesManager.refreshStyle(template);
+			//Need to manually refresh the child nodes
+			template.refreshChildren();
 		}
 	}
 	

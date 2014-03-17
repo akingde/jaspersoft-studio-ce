@@ -111,13 +111,15 @@ public class SPText extends AHistorySPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		ftext.setEnabled(pnode.isEditable());
 		if (b != null) {
 			int oldpos = ftext.getLocation().x;
 			ftext.setText(b.toString());
 			if (b.toString().length() >= oldpos)
 				ftext.setSelection(oldpos, oldpos);
-		} else
+		} else {
 			ftext.setText("");
+		}
 	}
 
 }

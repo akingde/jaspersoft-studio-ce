@@ -946,8 +946,7 @@ public class StylesListSection extends AbstractSection {
 	 * Override of the property change handler, check if the last event received was already notified
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (!isDisposed()) {
-			isRefreshing = true;
+		if (!isDisposed() && !isRefreshing()) {
 			if (lastChangeEvent == null) {
 				lastChangeEvent = new ArrayList<Object>();
 				lastChangeEvent.add(evt.getOldValue());
@@ -967,7 +966,6 @@ public class StylesListSection extends AbstractSection {
 					lastChangeEvent.add(evt.getPropertyName());
 				}
 			}
-			isRefreshing = false;
 		}
 	}
 
@@ -994,31 +992,31 @@ public class StylesListSection extends AbstractSection {
 	 */
 	@Override
 	public void refresh() {
-		isRefreshing = true;
-		trackerListener.refresh();
-		setElement(getElement());
-		elementAttributes = getElement().getStylesDescriptors();
-		// Dispose the old widgets
-		for (Control kid : parent.getChildren()) {
-			kid.dispose();
+		if (!isRefreshing()){
+			setRefreshing(true);
+			trackerListener.refresh();
+			elementAttributes = getElement().getStylesDescriptors();
+			// Dispose the old widgets
+			for (Control kid : parent.getChildren()) {
+				kid.dispose();
+			}
+			GridLayout layout = new GridLayout(2, false);
+			layout.marginWidth = 0;
+			parent.setLayout(layout);
+			printWindowTitle(parent);
+			initStyleMaps();
+			LinkedList<MStyle> styles = buildStylesGerarchy(getElement());
+			// Printing the main attribute, opening the guard
+			mainElementEvent = true;
+			printElementAttribute(parent, getElement(), Messages.StylesSectionList_Element_Attributes);
+			// Element printed, closing the guard
+			mainElementEvent = false;
+			printStyles(styles, parent);
+			printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
+			// styleMaps = null;
+			parent.layout();
+			setRefreshing(false);
 		}
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		parent.setLayout(layout);
-		printWindowTitle(parent);
-		initStyleMaps();
-		LinkedList<MStyle> styles = buildStylesGerarchy(getElement());
-		// Printing the main attribute, opening the guard
-		mainElementEvent = true;
-		printElementAttribute(parent, getElement(), Messages.StylesSectionList_Element_Attributes);
-		// Element printed, closing the guard
-		mainElementEvent = false;
-		printStyles(styles, parent);
-		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
-		ovverridenAttributes = null;
-		// styleMaps = null;
-		parent.layout();
-		isRefreshing = false;
 	}
 
 	/**
@@ -1056,7 +1054,6 @@ public class StylesListSection extends AbstractSection {
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		setElement(getElement());
 		initStyleMaps();
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;

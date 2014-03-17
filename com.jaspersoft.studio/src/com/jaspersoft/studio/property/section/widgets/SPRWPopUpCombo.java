@@ -66,6 +66,7 @@ public class SPRWPopUpCombo extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		combo.setEnabled(pnode.isEditable());
 		int index = 0;
 		if (b != null)
 			index = ((Number) b).intValue();

@@ -79,6 +79,7 @@ public class SPToolBarEnum extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		toolBar.setEnabled(pnode.isEditable());
 		int index = 0;
 		if (b != null)
 			index = ((Number) b).intValue();

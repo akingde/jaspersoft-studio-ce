@@ -62,6 +62,7 @@ public class SP3Boolean extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		cmb3Bool.setEnabled(pnode.isEditable());
 		if (b == null)
 			cmb3Bool.select(0);
 		else if ((Boolean) b)

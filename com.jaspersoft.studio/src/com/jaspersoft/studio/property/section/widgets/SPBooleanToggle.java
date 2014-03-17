@@ -67,6 +67,7 @@ public class SPBooleanToggle extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		cmb3Bool.setEnabled(pnode.isEditable());
 		boolean v = false;
 		if (b != null)
 			v = (Boolean) b;

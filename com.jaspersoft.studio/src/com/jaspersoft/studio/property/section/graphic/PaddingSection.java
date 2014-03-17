@@ -164,7 +164,7 @@ public class PaddingSection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
 	 */
 	public void refresh() {
-		isRefreshing = true;
+		setRefreshing(true);
 		APropertyNode element = getElement();
 		if (element != null) {
 			UIUtil.setSpinnerSelection(allPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING), 0);
@@ -173,7 +173,7 @@ public class PaddingSection extends AbstractSection {
 			UIUtil.setSpinnerSelection(leftPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING), 0);
 			UIUtil.setSpinnerSelection(rightPadding, element.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING), 0);
 		}
-		isRefreshing = false;
+		setRefreshing(false);
 	}
 
 	@Override
