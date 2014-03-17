@@ -331,7 +331,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		if (cEvent.detail != DND.DROP_MOVE)
 			return null;
 		// System.out.println(cEvent.data.getClass().getName());
-		if (cEvent.data != null && cEvent.data instanceof ANode && !(cEvent.data instanceof MBand))
+		if (cEvent.data != null && !(cEvent.data instanceof MBand))
 			return null;
 		if (cEvent.item == null || !(cEvent.item instanceof TreeItem))
 			return null;
@@ -411,6 +411,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 			destinationIndex = bands.size() + 1;
 		else
 			return null;
+		System.out.println("movable");
 		return moveBandsCommand(movedBands, destinationIndex,
 				((NotDragableContainerTreeEditPart) firstItem.getData()).getParent());
 	}

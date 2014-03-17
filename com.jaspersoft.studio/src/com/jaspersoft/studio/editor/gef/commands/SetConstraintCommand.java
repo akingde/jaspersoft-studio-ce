@@ -126,10 +126,15 @@ public class SetConstraintCommand extends Command {
 			if (cBand != null){
 				int maxHeight = BandResizeTracker.getMaxBandHeight(cBand, jrDesign);
 				int elementHeight = jrElement.getHeight() + jrElement.getY();
-				if (elementHeight>maxHeight){
-					jrElement.setHeight(maxHeight-jrElement.getY()-1);
+				if (maxHeight > 1 && elementHeight > cBand.getHeight()){
+					//If the band could increase its size and the element is higher than the bend
+					//reside the element or the band to fit the element. If the band could not increase
+					//leave the element as it is
+					if (elementHeight>maxHeight){
+						jrElement.setHeight(maxHeight-jrElement.getY()-1);
+					}
+					adjustBand();
 				}
-				adjustBand();
 			}
 
 			if (jrElement instanceof JRPropertiesHolder && jrGroup != null) {
