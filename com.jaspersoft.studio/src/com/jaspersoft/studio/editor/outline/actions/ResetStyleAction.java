@@ -83,6 +83,7 @@ public class ResetStyleAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
+		if (getSelectedObjects().isEmpty()) return false;
 		for (Object obj : getSelectedObjects()){
 			if (obj instanceof EditPart){
 				if (!(((EditPart)obj).getModel() instanceof MStyle)) return false;
