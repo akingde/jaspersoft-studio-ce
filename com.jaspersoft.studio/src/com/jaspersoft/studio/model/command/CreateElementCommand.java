@@ -158,7 +158,7 @@ public class CreateElementCommand extends Command {
 		} else if (destNode instanceof MFrame) {
 			setContext(destNode, srcNode, index);
 		} else
-			setContext(null, srcNode, index);
+			setContext(destNode, srcNode, index);
 	}
 
 	private Object destValue;
@@ -182,7 +182,7 @@ public class CreateElementCommand extends Command {
 			this.jrElement = (JRDesignElement) srcNode.getValue();
 			if (destNode instanceof IGroupElement)
 				jrGroup = ((IGroupElement) destNode).getJRElementGroup();
-			else
+			else if (destNode.getValue() instanceof JRElementGroup)
 				jrGroup = (JRElementGroup) destNode.getValue();
 			destValue = destNode.getValue();
 			this.destNode = destNode;
