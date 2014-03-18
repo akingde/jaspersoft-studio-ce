@@ -10,6 +10,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.text;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -269,7 +272,8 @@ public class MTextField extends MTextElement {
 		}
 		return super.getPropertyValue(id);
 	}
-
+	
+	
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
@@ -284,6 +288,12 @@ public class MTextField extends MTextElement {
 				jrElement.setEvaluationGroup(null);
 		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)){
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
+			JRDesignExpression expression = (JRDesignExpression)jrElement.getExpression();
+			//When the expression changes update also the listeners
+			if (expression != null){
+				removeListeners(expression);
+				expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
+			}
 		} else if (id.equals(JRDesignTextField.PROPERTY_PATTERN_EXPRESSION))
 			jrElement.setPatternExpression(ExprUtil.setValues(jrElement.getPatternExpression(), value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
@@ -328,6 +338,69 @@ public class MTextField extends MTextElement {
 			super.setPropertyValue(id, value);
 	}
 
+	/**
+	 * Listener for the expression of the element. This set the flag to refresh the 
+	 * element when its main expression changes
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class ExpressionNameChanged implements PropertyChangeListener {
+		
+		/**
+		 * Element to refresh, owner of the expression
+		 */
+		private MTextField element;
+		
+		public ExpressionNameChanged(MTextField element){
+			this.element = element;
+		}
+		
+		/**
+		 * Wait the changes of the expression
+		 */
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (JRDesignExpression.PROPERTY_TEXT.equals(evt.getPropertyName()) && element != null){
+				element.setChangedProperty(true);
+			}
+		}
+	};
+	
+	/**
+	 * Remove all the ExpressionNameChanged listeners from an expression element
+	 * 
+	 * @param expression the expression element
+	 */
+	private void removeListeners(JRDesignExpression expression){
+		List<PropertyChangeListener> listenersToRemove = new ArrayList<PropertyChangeListener>();
+		for(PropertyChangeListener listener : expression.getEventSupport().getPropertyChangeListeners()){
+			if (listener instanceof ExpressionNameChanged){
+				listenersToRemove.add(listener);
+			}
+		}
+		for(PropertyChangeListener listener : listenersToRemove){
+			expression.getEventSupport().removePropertyChangeListener(listener);
+		}
+	}
+	
+	/**
+	 * When the value of the element is set, it will be removed also all the ExpressionNameChange from 
+	 * the expression of its value and will be set a new ExpressionNameChange on the expression for the actual 
+	 * model. This is done to avoid duplicate of the listener if for expample the JRElement is moved from a model
+	 * to another
+	 */
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		JRDesignTextField jrElement = (JRDesignTextField) getValue();
+		JRDesignExpression expression = (JRDesignExpression)jrElement.getExpression();
+		if (expression != null){
+			removeListeners(expression);
+			expression.getEventSupport().addPropertyChangeListener(new ExpressionNameChanged(this));
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
