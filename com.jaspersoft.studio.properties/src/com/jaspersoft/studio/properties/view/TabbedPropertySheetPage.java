@@ -183,50 +183,52 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 		 * Shows the tab associated with the selection.
 		 */
 		public void selectionChanged(SelectionChangedEvent event) {
-			IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-			TabContents tab = null;
-			ITabDescriptor descriptor = (ITabDescriptor) selection.getFirstElement();
-			if (descriptor == lastDescriptor)
-				return;
-			if (descriptor == null) {
-				// pretend the tab is empty.
-				hideTab(currentTab);
-			} else {
-				// create tab if necessary
-				// can not cache based on the id - tabs may have the same id,
-				// but different section depending on the selection
-				tab = (TabContents) descriptorToTab.get(descriptor);
-
-				if (tab != currentTab) {
+			if(!tabbedPropertyComposite.isDisposed()){
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				TabContents tab = null;
+				ITabDescriptor descriptor = (ITabDescriptor) selection.getFirstElement();
+				if (descriptor == lastDescriptor)
+					return;
+				if (descriptor == null) {
+					// pretend the tab is empty.
 					hideTab(currentTab);
-				}
-				if (tab != null && tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
-					// force widgets to be resized
-					tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
-
-					Composite tabComposite = tabToComposite.get(tab);
-					if (tabComposite == null) {
-						tabComposite = createTabComposite();
-						tab.createControls(tabComposite, TabbedPropertySheetPage.this);
-
-						tabToComposite.put(tab, tabComposite);
-					}
-
-					// store tab selection
-					storeCurrentTabSelection(descriptor.getLabel());
-
+				} else {
+					// create tab if necessary
+					// can not cache based on the id - tabs may have the same id,
+					// but different section depending on the selection
+					tab = (TabContents) descriptorToTab.get(descriptor);
+	
 					if (tab != currentTab) {
-						showTab(tab);
+						hideTab(currentTab);
 					}
-					tab.refresh();
+					if (tab != null && tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
+						// force widgets to be resized
+						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
+	
+						Composite tabComposite = tabToComposite.get(tab);
+						if (tabComposite == null) {
+							tabComposite = createTabComposite();
+							tab.createControls(tabComposite, TabbedPropertySheetPage.this);
+	
+							tabToComposite.put(tab, tabComposite);
+						}
+	
+						// store tab selection
+						storeCurrentTabSelection(descriptor.getLabel());
+	
+						if (tab != currentTab) {
+							showTab(tab);
+						}
+						tab.refresh();
+					}
 				}
-			}
-			tabbedPropertyComposite.getTabComposite().layout(true);
-			currentTab = tab;
-			resizeScrolledComposite();
-			updatePageMinimumSize();
-			if (descriptor != null) {
-				handleTabSelection(descriptor);
+				tabbedPropertyComposite.getTabComposite().layout(true);
+				currentTab = tab;
+				resizeScrolledComposite();
+				updatePageMinimumSize();
+				if (descriptor != null) {
+					handleTabSelection(descriptor);
+				}
 			}
 		}
 	}
