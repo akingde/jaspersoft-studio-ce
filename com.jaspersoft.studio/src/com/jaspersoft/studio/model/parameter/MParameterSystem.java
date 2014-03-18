@@ -153,26 +153,17 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		validator = new ParameterNameValidator();
 		validator.setTargetNode(this);
 		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.common_name, validator);
-		nameD.setReadOnly(areFieldsReadOnly());
 		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_class);
 		classD.setDescription(Messages.MParameterSystem_class_description);
-		classD.setReadOnly(areFieldsReadOnly());
 		desc.add(classD);
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#parameter_class"));
 
 		defaultsMap.put(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
-	}
-	
-	/**
-	 * Return true to set the control of this element type as read only
-	 */
-	protected boolean areFieldsReadOnly(){
-		return true;
 	}
 
 	/*
@@ -208,6 +199,8 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
+		if (!isEditable())
+			return;
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_NAME)){
 			if (!value.equals("")) {
@@ -216,6 +209,12 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
 				jrParameter.setValueClassName((String) value);
 		}
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		setEditable(false);
 	}
 
 	/**

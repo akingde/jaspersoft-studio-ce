@@ -93,10 +93,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		super(parent, jrParameter, newIndex);
 	}
 	
-	@Override
-	protected boolean areFieldsReadOnly() {
-		return false;
-	}
 
 	@Override
 	public JRDesignParameter getValue() {
@@ -269,6 +265,12 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		if (dataSet != null && conf != null)
 			return new ExpressionContext(dataSet, conf);
 		return null;
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		setEditable(true);
 	}
 	
 	@Override

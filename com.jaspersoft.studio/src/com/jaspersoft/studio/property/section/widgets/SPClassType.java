@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -52,5 +53,11 @@ public class SPClassType extends SPText {
 		if (text != null && text.trim().isEmpty())
 			text = null;
 		section.changeProperty(property, text);
+	}
+	
+	@Override
+	public void setData(APropertyNode pnode, Object b) {
+		btn.setEnabled(pnode.isEditable());
+		super.setData(pnode, b);
 	}
 }

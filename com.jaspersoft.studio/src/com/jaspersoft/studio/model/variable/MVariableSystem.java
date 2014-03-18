@@ -147,21 +147,14 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		createPropertyDescriptors(desc, defaultsMap, true);
-	}
-
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap, boolean readOnly) {
-		
 		validator = new VariableNameValidator();
 		validator.setTargetNode(this);
 		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name, validator);
-		nameD.setReadOnly(readOnly);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_value_class_name);
-		classD.setReadOnly(readOnly);
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
 		classD.setHelpRefBuilder(new HelpReferenceBuilder(
@@ -169,6 +162,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 
 		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -203,6 +197,8 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
+		if (!isEditable())
+			return;
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_NAME)){
 			if (!value.equals("")) {
@@ -224,5 +220,11 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		jrDesignVariable.setSystemDefined(true);
 		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDesign.getVariablesMap(), "Variable_")); //$NON-NLS-1$
 		return jrDesignVariable;
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		setEditable(false);
 	}
 }

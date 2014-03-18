@@ -120,7 +120,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap, false);
+		super.createPropertyDescriptors(desc, defaultsMap);
 
 		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 
@@ -329,6 +329,12 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			return getExpressionContext();
 		}
 		return super.getAdapter(adapter);
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		setEditable(true);
 	}
 
 }
