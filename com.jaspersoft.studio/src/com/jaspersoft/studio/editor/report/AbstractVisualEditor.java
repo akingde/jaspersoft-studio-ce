@@ -68,6 +68,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -133,6 +134,7 @@ import com.jaspersoft.studio.editor.outline.actions.ExportStyleAsTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.RefreshTemplateStyleExpression;
 import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
+import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseVSpaceAction;
@@ -435,7 +437,23 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		updateActions(getSelectionActions());
+		if (isSame(part))
+			updateActions(getSelectionActions());
+	}
+
+	private boolean isSame(IWorkbenchPart part) {
+		if (part == getSite().getPart())
+			return true;
+		if (part instanceof MultiPageEditorPart) {
+			Object spage = ((MultiPageEditorPart) part).getSelectedPage();
+			if (spage instanceof IWorkbenchPart)
+				return isSame((IWorkbenchPart) spage);
+		} else if (part instanceof MultiPageToolbarEditorPart) {
+			Object spage = ((MultiPageToolbarEditorPart) part).getSelectedPage();
+			if (spage instanceof IWorkbenchPart)
+				return isSame((IWorkbenchPart) spage);
+		}
+		return false;
 	}
 
 	/** The outline page. */
