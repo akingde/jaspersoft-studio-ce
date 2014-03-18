@@ -120,7 +120,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<?> getModelChildren() {
 		return getModel().getValue().getChildren();
 	}
 

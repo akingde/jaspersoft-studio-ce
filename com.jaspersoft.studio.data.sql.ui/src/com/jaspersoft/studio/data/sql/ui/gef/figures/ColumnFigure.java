@@ -23,6 +23,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
@@ -52,6 +53,11 @@ public class ColumnFigure extends Figure {
 		Label lbl = new Label(ConvertUtil.cleanDbNameFull(text), image);
 		lbl.setTextPlacement(PositionConstants.WEST);
 		add(lbl);
+	}
+
+	@Override
+	public Insets getInsets() {
+		return SqlTableFigure.INSETS;
 	}
 
 	/**

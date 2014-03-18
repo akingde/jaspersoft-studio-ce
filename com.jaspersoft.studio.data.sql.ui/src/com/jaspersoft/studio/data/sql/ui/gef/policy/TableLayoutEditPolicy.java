@@ -24,6 +24,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -38,6 +39,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.ui.gef.command.JoinCommand;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.ColumnEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.NoSelectionEditPolicy;
 
 public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 	private RectangleFigure targetFeedback;
@@ -136,4 +138,11 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 		return null;
 	}
 
+	@Override
+	protected EditPolicy createChildEditPolicy(EditPart child) {
+		if (child instanceof ColumnEditPart)
+			return new NoSelectionEditPolicy();
+
+		return super.createChildEditPolicy(child);
+	}
 }

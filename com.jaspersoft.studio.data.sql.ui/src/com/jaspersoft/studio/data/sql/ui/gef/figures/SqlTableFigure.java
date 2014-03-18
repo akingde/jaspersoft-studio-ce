@@ -33,11 +33,6 @@ public class SqlTableFigure extends Figure {
 		private NameLabel(String s) {
 			super(s);
 		}
-
-		@Override
-		public Insets getInsets() {
-			return INSETS;
-		}
 	}
 
 	public static Color classColor = SWTResourceManager.getColor(255, 255, 206);
