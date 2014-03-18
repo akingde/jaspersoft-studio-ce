@@ -36,7 +36,6 @@ import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -61,6 +60,7 @@ import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ResourceTransfer;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.dnd.ImageResourceDropTargetListener;
 import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
@@ -208,8 +208,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				showPage(ID_OUTLINE);
 			}
 		};
-		showOutlineAction
-				.setImageDescriptor(ImageDescriptor.createFromFile(JDReportOutlineView.class, "icons/outline.gif")); //$NON-NLS-1$
+		showOutlineAction.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/outline.gif")); //$NON-NLS-1$
 		showOutlineAction.setToolTipText(Messages.JDReportOutlineView_show_outline_tool_tip);
 		tbm.add(showOutlineAction);
 		showOverviewAction = new Action() {
@@ -218,8 +217,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				showPage(ID_OVERVIEW);
 			}
 		};
-		showOverviewAction.setImageDescriptor(ImageDescriptor.createFromFile(JDReportOutlineView.class,
-				"icons/overview.gif")); //$NON-NLS-1$
+		showOverviewAction
+				.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/overview.gif")); //$NON-NLS-1$
 		showOverviewAction.setToolTipText(Messages.JDReportOutlineView_show_overview_tool_tip);
 		tbm.add(showOverviewAction);
 
@@ -267,7 +266,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 								tree.deselectAll();
 								tree.select(item);
 								tree.layout(true);
-								
+
 							}
 						}
 					}
