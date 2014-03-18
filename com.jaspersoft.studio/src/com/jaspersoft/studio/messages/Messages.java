@@ -1302,6 +1302,7 @@ public class Messages extends NLS {
 	public static String PageMarginSection_margin;
 	public static String PageMarginSection_right_margin_tool_tip;
 	public static String PageMarginSection_top_margin_tool_tip;
+	public static String PageNumberContributionItem_page;
 	public static String PageRemoveMarginsAction_actionName;
 	public static String PageRemoveMarginsAction_actionTooltip;
 	public static String PagesFieldEditor_allPages;
