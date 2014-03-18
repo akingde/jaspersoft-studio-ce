@@ -16,7 +16,6 @@ import org.glassfish.jersey.client.ClientResponse;
 
 public class JSSApacheConnector extends ApacheConnector {
 	private ClientRequest lastRequest;
-	private IProgressMonitor lastMonitor;
 
 	public JSSApacheConnector(Configuration arg0) {
 		super(arg0);
@@ -30,29 +29,6 @@ public class JSSApacheConnector extends ApacheConnector {
 	}
 
 	public void closeLastRequest() {
-		// try {
-		// ClientConnectionManager cm = getHttpClient().getConnectionManager();
-		// Field m = cm.getClass().getDeclaredField("poolEntry");
-		// m.setAccessible(true);
-		// PoolEntry poolEntry = (PoolEntry) m.get(cm);
-		// if (poolEntry != null && !poolEntry.isClosed()) {
-		// // poolEntry.close();
-		// DefaultClientConnection dcc = (DefaultClientConnection)
-		// poolEntry.getConnection();
-		// dcc.close();
-		// dcc.getSocket().close();
-		// }
-		// } catch (SecurityException e) {
-		// e.printStackTrace();
-		// } catch (IllegalArgumentException e) {
-		// e.printStackTrace();
-		// } catch (IllegalAccessException e) {
-		// e.printStackTrace();
-		// } catch (NoSuchFieldException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
 		if (lastRequest != null)
 			lastRequest.close();
 	}
@@ -73,22 +49,18 @@ public class JSSApacheConnector extends ApacheConnector {
 	}
 
 	public Response get(Builder builder, IProgressMonitor monitor) throws Exception {
-		lastMonitor = monitor;
 		return doWait(builder.async().get(), monitor);
 	}
 
 	public Response delete(Builder builder, IProgressMonitor monitor) throws Exception {
-		lastMonitor = monitor;
 		return doWait(builder.async().delete(), monitor);
 	}
 
 	public Response post(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
-		lastMonitor = monitor;
 		return doWait(builder.async().post(entity), monitor);
 	}
 
 	public Response put(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
-		lastMonitor = monitor;
 		return doWait(builder.async().put(entity), monitor);
 	}
 }
