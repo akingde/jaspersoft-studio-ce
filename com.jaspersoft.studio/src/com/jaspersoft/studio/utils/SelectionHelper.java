@@ -75,15 +75,16 @@ public class SelectionHelper {
 		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
 		return node;
 	}
-	
+
 	/**
-	 * Return the root node of the actually opened editor or null if it is not 
-	 * available
+	 * Return the root node of the actually opened editor or null if it is not available
 	 */
-	public static ANode getOpenedRoot(){
-		IMultiEditor editor = (IMultiEditor)getActiveJRXMLEditor();
-		if (editor != null){
-			return (ANode)editor.getModel();
+	public static ANode getOpenedRoot() {
+		IEditorPart editPart = getActiveJRXMLEditor();
+		if (editPart instanceof IMultiEditor) {
+			IMultiEditor editor = (IMultiEditor) editPart;
+			if (editor != null)
+				return (ANode) editor.getModel();
 		}
 		return null;
 	}
@@ -125,9 +126,9 @@ public class SelectionHelper {
 	public static void setSelection(JRDesignElement jrElement, boolean add) {
 		EditPart ep = getEditPart(jrElement);
 		if (ep != null) {
-			//The selection is set only if the refresh is enabled
-			ANode mainNode = JSSCompoundCommand.getMainNode((ANode)ep.getModel());
-			if (!JSSCompoundCommand.isRefreshEventsIgnored(mainNode)){
+			// The selection is set only if the refresh is enabled
+			ANode mainNode = JSSCompoundCommand.getMainNode((ANode) ep.getModel());
+			if (!JSSCompoundCommand.isRefreshEventsIgnored(mainNode)) {
 				ISelection sel = ep.getViewer().getSelection();
 				List<Object> s = new ArrayList<Object>();
 				s.add(ep);
