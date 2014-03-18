@@ -81,6 +81,7 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 			index = findIndexOfTreeItemAt(request.getLocation());
 		if (index < 0)
 			index = CreateRequestUtil.getNewIndex(request);
+
 		if (request.getNewObject() instanceof ANode) {
 			return createCreateCommand((ANode) request.getNewObject(), index);
 		} else if (request.getNewObject() instanceof CreateElementAction) {
