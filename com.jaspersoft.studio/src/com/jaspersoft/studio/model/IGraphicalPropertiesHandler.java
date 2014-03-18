@@ -52,4 +52,12 @@ public interface IGraphicalPropertiesHandler {
 	 * @return a not null hashset of the names of all the styles used by this element
 	 */
 	public HashSet<String> getUsedStyles();
+	
+	/**
+	 * Some element could have a partial or an empty model, to speed up the performances (crosstab and table e.g.). This in many cases works
+	 * but sometime it can give issue since for example you need to inspect the content of the element and without
+	 * model you can't or you need a model to set up the listener. This method is used to ask explicitly to an element to 
+	 * create the model if it hasen't one 
+	 */
+	public void initModel();
 }

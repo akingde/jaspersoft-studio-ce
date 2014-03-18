@@ -348,6 +348,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 				((JRDesignCellContents) wndCell).getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
+		fullModelCrosstab = null;
 	}
 
 	@Override
@@ -490,6 +491,14 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	
 	@Override
 	public HashSet<String> getUsedStyles() {
+		initModel();
+		HashSet<String> result = super.getUsedStyles();
+		fillUsedStyles(fullModelCrosstab.getChildren(),result);
+		return result;
+	}
+	
+	@Override
+	public void initModel() {
 		if (fullModelCrosstab == null){
 			if (getChildren().isEmpty()) {
 				JRDesignCrosstab ct = (JRDesignCrosstab) getValue();
@@ -501,9 +510,6 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 			}
 			else fullModelCrosstab = this;
 		}
-		HashSet<String> result = super.getUsedStyles();
-		fillUsedStyles(fullModelCrosstab.getChildren(),result);
-		return result;
 	}
 
 }

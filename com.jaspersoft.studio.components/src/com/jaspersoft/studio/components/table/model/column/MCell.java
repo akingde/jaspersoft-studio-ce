@@ -479,4 +479,8 @@ public class MCell extends MColumn implements IGraphicElement,
 		}
 		return result;
 	}
+
+	@Override
+	public void initModel() {
+	}
 }

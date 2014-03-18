@@ -24,6 +24,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
@@ -39,9 +42,11 @@ public class RenameDatasetObjectNameCommand extends Command {
 	private JasperReportsContext jContext;
 	private JRDataset dataset;
 	private Set<JRDesignExpression> cexpr = new HashSet<JRDesignExpression>();
+	private ANode node;
 
 	public RenameDatasetObjectNameCommand(MField mfield, String oldvalue) {
 		super();
+		node = mfield;
 		jd = mfield.getJasperDesign();
 		jContext = mfield.getJasperConfiguration();
 		dataset = ModelUtils.getDataset(mfield);
@@ -53,6 +58,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 
 	public RenameDatasetObjectNameCommand(MVariable mvar, String oldvalue) {
 		super();
+		node = mvar;
 		jd = mvar.getJasperDesign();
 		jContext = mvar.getJasperConfiguration();
 		dataset = ModelUtils.getDataset(mvar);
@@ -64,6 +70,7 @@ public class RenameDatasetObjectNameCommand extends Command {
 
 	public RenameDatasetObjectNameCommand(MParameter mparam, String oldvalue) {
 		super();
+		node = mparam;
 		jd = mparam.getJasperDesign();
 		jContext = mparam.getJasperConfiguration();
 		dataset = ModelUtils.getDataset(mparam);
@@ -72,6 +79,25 @@ public class RenameDatasetObjectNameCommand extends Command {
 		this.newvalue = mparam.getValue().getName();
 		this.oldvalue = oldvalue;
 	}
+	
+	
+	/**
+	 * Search all the nodes that are using this styles and set the flag to tell the graphic manager
+	 * to repaint them
+	 * 
+	 * @param childerns the children of the actual level
+	 */
+	private void setModelRefresh(List<INode> childerns){
+		for(INode child : childerns){
+			if (child instanceof IGraphicalPropertiesHandler){
+				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)child;
+				graphicalElement.initModel();
+			}
+			setModelRefresh(child.getChildren());
+		}
+		
+	}
+	
 
 	@Override
 	public void execute() {
@@ -80,11 +106,18 @@ public class RenameDatasetObjectNameCommand extends Command {
 		JRExpressionCollector datasetCollector = reportCollector.getCollector(dataset);
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		// update expressions
+		boolean modelAlreadyInitialized = false;
 		for (JRExpression expr : datasetExpressions) {
 			String s = expr.getText();
 			if (s != null && s.length() > 4 && s.contains(type1 + oldvalue + "}")) {
+				//If there are changes this will assure that the model of all the elements
+				//is initialized, so the elements inside containers can be refreshed
+				if (!modelAlreadyInitialized) {
+					setModelRefresh(node.getRoot().getChildren());
+					modelAlreadyInitialized = true;
+				}
+				
 				s = s.replaceAll(type + oldvalue + "}", type + newvalue + "}");
-
 				JRDesignExpression dexpr = (JRDesignExpression) expr;
 				dexpr.setText(s);
 				cexpr.add((JRDesignExpression) expr);

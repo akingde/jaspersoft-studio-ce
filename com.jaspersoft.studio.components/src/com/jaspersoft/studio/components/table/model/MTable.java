@@ -317,6 +317,7 @@ public class MTable extends MGraphicElement implements IContainer,
 		if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) || 
 				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP) ||
 						evt.getPropertyName().equals(MColumn.PROPERTY_NAME)){
+			//The children are changed, need to build a new full model when it will be necessary
 			fullModelTable = null;
 		}
 		
@@ -377,6 +378,9 @@ public class MTable extends MGraphicElement implements IContainer,
 		return datasetList;
 	}
 	
+	/**
+	 * Cached fullmodel of the table with all the children and stuff
+	 */
 	private ANode fullModelTable = null;
 	
 	private void fillUsedStyles(List<INode> children, HashSet<String> map){
@@ -389,7 +393,24 @@ public class MTable extends MGraphicElement implements IContainer,
 	}
 	
 	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		fullModelTable = null;
+	}
+	
+	@Override
 	public HashSet<String> getUsedStyles() {
+		initModel();
+		HashSet<String> result = super.getUsedStyles();
+		fillUsedStyles(fullModelTable.getChildren(),result);
+		return result;
+	}
+	
+	/**
+	 * Create the fullmodel of the table if it is not was already created
+	 */
+	@Override
+	public void initModel() {
 		if (fullModelTable == null){
 			if (getChildren().isEmpty()) {
 				JRDesignComponentElement tbl = (JRDesignComponentElement) getValue();
@@ -402,8 +423,5 @@ public class MTable extends MGraphicElement implements IContainer,
 			}
 			else fullModelTable = this;
 		}
-		HashSet<String> result = super.getUsedStyles();
-		fillUsedStyles(fullModelTable.getChildren(),result);
-		return result;
 	}
 }

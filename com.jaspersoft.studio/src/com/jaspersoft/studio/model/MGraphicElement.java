@@ -816,4 +816,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		}
 		return result;
 	}
+	
+	/**
+	 * By default the model is alrerady created, so the real exception is when 
+	 * this method has a body
+	 */
+	@Override
+	public void initModel() {
+	}
 }

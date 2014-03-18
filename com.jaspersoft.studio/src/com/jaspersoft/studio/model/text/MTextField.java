@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -35,6 +36,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -339,8 +341,8 @@ public class MTextField extends MTextElement {
 	}
 
 	/**
-	 * Listener for the expression of the element. This set the flag to refresh the 
-	 * element when its main expression changes
+	 * Listener for the expression of the element. This will ask for the
+	 * refresh of its container or eventually of the containers of the element
 	 * 
 	 * @author Orlandin Marco
 	 *
@@ -362,7 +364,21 @@ public class MTextField extends MTextElement {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (JRDesignExpression.PROPERTY_TEXT.equals(evt.getPropertyName()) && element != null){
-				element.setChangedProperty(true);
+				ANode parent = element.getParent();
+				//Refresh also the container if it is a table or something like that
+				while (parent != null){
+					if (parent instanceof IGraphicalPropertiesHandler){
+						((IGraphicalPropertiesHandler)parent).setChangedProperty(true);
+						if (parent.getValue() instanceof JRChangeEventsSupport){
+							((JRChangeEventsSupport)parent.getValue()).getEventSupport().firePropertyChange(FORCE_GRAPHICAL_REFRESH, null, null);
+						}
+						
+					}
+					parent = parent.getParent();
+				}
+				//Notify the change to the element, no need to set the the refresh to true, it will be done by
+				//the property change since the PROPERTY_EXPRESSION is a graphical property
+				element.getValue().getEventSupport().firePropertyChange(JRDesignTextField.PROPERTY_EXPRESSION, evt.getOldValue(), evt.getNewValue());
 			}
 		}
 	};
