@@ -28,6 +28,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.band.MBandGroup;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
 
@@ -53,27 +54,11 @@ public class ReorderBandCommand extends Command {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public ReorderBandCommand(MBandGroupHeader child, int newIndex) {
+	public ReorderBandCommand(MBandGroup child, int newIndex) {
 		super(Messages.common_reorder_elements);
 
 		this.newIndex = Math.max(0, newIndex);
-		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupHeaderSection();
-		this.jrBand = (JRDesignBand) child.getValue();
-	}
-
-	/**
-	 * Instantiates a new reorder band command.
-	 * 
-	 * @param child
-	 *          the child
-	 * @param newIndex
-	 *          the new index
-	 */
-	public ReorderBandCommand(MBandGroupFooter child, int newIndex) {
-		super(Messages.common_reorder_elements);
-
-		this.newIndex = newIndex;
-		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupFooterSection();
+		this.jrDesignSection = (JRDesignSection) child.getSection();
 		this.jrBand = (JRDesignBand) child.getValue();
 	}
 
@@ -116,6 +101,8 @@ public class ReorderBandCommand extends Command {
 			newInd = bList.size() - 1;
 		}
 		jrDesignSection.getEventSupport().fireIndexedPropertyChange(JRDesignSection.PROPERTY_BANDS, newInd, oldInd, -1);
+		//jrBand.getEventSupport().fireIndexedPropertyChange("refresh", newInd, oldInd, -1);
+		//node.propertyChange(new PropertyChangeEvent(jrBand, "children", null, null));
 		return oldInd;
 	}
 
@@ -178,11 +165,11 @@ public class ReorderBandCommand extends Command {
 		MBand firstBand = moved.get(0);
 		if (BandTypeEnum.GROUP_HEADER.equals(firstBand.getBandType())){
 			for (MBand bandNode : moved) {
-				cmd.add(new ReorderBandCommand((MBandGroupHeader) bandNode, location));
+				cmd.add(new ReorderBandCommand((MBandGroup) bandNode, location));
 			}
 		} else if (BandTypeEnum.GROUP_FOOTER.equals(firstBand.getBandType())){
 			for (MBand bandNode : moved) {
-				cmd.add(new ReorderBandCommand((MBandGroupFooter) bandNode, location));
+				cmd.add(new ReorderBandCommand((MBandGroup) bandNode, location));
 			}
 		} else if (BandTypeEnum.DETAIL.equals(firstBand.getBandType())){
 			for (MBand bandNode : moved) {
@@ -300,24 +287,14 @@ public class ReorderBandCommand extends Command {
 			} else if (BandTypeEnum.DETAIL.equals(band2Type)){
 				destinationIndex = allBands.indexOf(band2.getValue());
 			}
-		} else if (moveType == BandTypeEnum.GROUP_HEADER){
-			MBandGroupHeader header =  (MBandGroupHeader)movedBand;
-			List<JRBand> allBands = Arrays.asList(header.getJrGroup().getGroupHeaderSection().getBands());
-			if (BandTypeEnum.GROUP_HEADER.equals(band1Type) && BandTypeEnum.GROUP_HEADER.equals(band2Type)){
+		} else if (moveType == BandTypeEnum.GROUP_HEADER || moveType == BandTypeEnum.GROUP_FOOTER){
+			MBandGroup group =  (MBandGroup)movedBand;
+			List<JRBand> allBands = Arrays.asList(group.getSection().getBands());
+			if (band1 != null && band2 != null){
 				destinationIndex = allBands.indexOf(band2.getValue());
-			} else if (BandTypeEnum.GROUP_HEADER.equals(band1Type)){
+			} else if (band1 != null){
 				destinationIndex = allBands.indexOf(band1.getValue())+1;
-			} else if (BandTypeEnum.GROUP_HEADER.equals(band2Type)){
-				destinationIndex = allBands.indexOf(band2.getValue());
-			}
-		} else if (moveType == BandTypeEnum.GROUP_FOOTER){
-			MBandGroupFooter header =  (MBandGroupFooter)movedBand;
-			List<JRBand> allBands = Arrays.asList(header.getJrGroup().getGroupFooterSection().getBands());
-			if (BandTypeEnum.GROUP_FOOTER.equals(band1Type) && BandTypeEnum.GROUP_FOOTER.equals(band2Type)){
-				destinationIndex = allBands.indexOf(band2.getValue());
-			} else if (BandTypeEnum.GROUP_FOOTER.equals(band1Type)){
-				destinationIndex = allBands.indexOf(band1.getValue())+1;
-			} else if (BandTypeEnum.GROUP_FOOTER.equals(band2Type)){
+			} else if (band2 != null){
 				destinationIndex = allBands.indexOf(band2.getValue());
 			}
 		}

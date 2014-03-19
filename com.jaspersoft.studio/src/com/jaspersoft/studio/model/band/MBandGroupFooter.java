@@ -10,49 +10,29 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
-import java.util.List;
-import java.util.Map;
-
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MBandGroupFooter.
  * 
  * @author Chicu Veaceslav
  */
-public class MBandGroupFooter extends MBand {
+public class MBandGroupFooter extends MBandGroup {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
-
-	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
-	 */
-	public static IIconDescriptor getIconDescriptor() {
-		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("groupfooter"); //$NON-NLS-1$
-		return iconDescriptor;
-	}
-
-	/** The jr group. */
-	private JRDesignGroup jrGroup;
 
 	/**
 	 * Instantiates a new m band group footer.
@@ -74,56 +54,25 @@ public class MBandGroupFooter extends MBand {
 	 *          the index
 	 */
 	public MBandGroupFooter(ANode parent, JRDesignGroup jrGroup, JRBand jrband, int index) {
-		super(parent, jrband, BandTypeEnum.GROUP_FOOTER, index);
-		this.jrGroup = jrGroup;
-		mGroup = new MGroup(null, jrGroup, -1);
-		setChildListener(mGroup);
-		mGroupBand = new MGroupBand(jrGroup);
-		// Fix missing jasper configuration
-		if (parent != null) {
-			JasperReportsConfiguration jconfig = parent.getJasperConfiguration();
-			if (jconfig != null) {
-				mGroup.setJasperConfiguration(jconfig);
-				mGroupBand.setJasperConfiguration(jconfig);
-			}
-		}
-		bandIndex = 1;
-		refreshIndex();
+		super(parent, jrGroup, jrband, BandTypeEnum.GROUP_FOOTER, index);
 	}
 
-	private MGroup mGroup;
-
-	public MGroup getMGroup() {
-		return mGroup;
+	/**
+	 * Gets the icon descriptor.
+	 * 
+	 * @return the icon descriptor
+	 */
+	protected IIconDescriptor getLocalIconDescriptor() {
+		if (iconDescriptor == null)
+			iconDescriptor = new NodeIconDescriptor("groupfooter"); //$NON-NLS-1$
+		return iconDescriptor;
 	}
 	
-	/**
-	 * Update the name validator for the group when a new band connected
-	 * to the group is selected
-	 */
 	@Override
-	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
-		if (mGroup != null){
-			mGroup.updateValidator();
-		}
-		super.postDescriptors(descriptors);
+	public JRSection getSection(){
+		return getJrGroup().getGroupFooterSection();
 	}
 
-
-	/**
-	 * Gets the jr group.
-	 * 
-	 * @return the jr group
-	 */
-	public JRDesignGroup getJrGroup() {
-		return jrGroup;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.band.MBand#getDisplayText()
-	 */
 	@Override
 	public String getDisplayText() {
 		if (getJrGroup() == null)
@@ -146,76 +95,5 @@ public class MBandGroupFooter extends MBand {
 		if (bandIndex != -1)
 			index = " " + String.valueOf(bandIndex);
 		return jrGroup.getName() + " " + Messages.MBandGroupFooter_group_footer + index; //$NON-NLS-1$
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.band.MBand#getImagePath()
-	 */
-	@Override
-	public ImageDescriptor getImagePath() {
-		return getIconDescriptor().getIcon16();
-	}
-
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
-	@Override
-	public Map<String, Object> getDefaultsMap() {
-		return defaultsMap;
-	}
-
-	@Override
-	public IPropertyDescriptor[] getDescriptors() {
-		return descriptors;
-	}
-
-	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
-		descriptors = descriptors1;
-		defaultsMap = defaultsMap1;
-	}
-
-	/**
-	 * Creates the property descriptors.
-	 * 
-	 * @param desc
-	 *          the desc
-	 */
-	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
-
-		new MGroupBand(getJrGroup()).createPropertyDescriptors(desc, defaultsMap);
-	}
-
-	private MGroupBand mGroupBand;
-
-	@Override
-	public Object getPropertyValue(Object id) {
-		Object obj = mGroupBand.getPropertyValue(id);
-		if (obj != null)
-			return obj;
-		return super.getPropertyValue(id);
-	}
-
-	@Override
-	public void setPropertyValue(Object id, Object value) {
-		mGroupBand.setPropertyValue(id, value);
-		super.setPropertyValue(id, value);
-	}
-
-	@Override
-	public Object getPropertyDefaultValue(String id) throws Exception {
-		Object obj = mGroupBand.getPropertyDefaultValue(id);
-		if (obj != null)
-			return obj;
-		return super.getPropertyDefaultValue(id);
-	}
-
-	@Override
-	public boolean isSameBandType(MBand band) {
-		return super.isSameBandType(band) && jrGroup != null && jrGroup == ((MBandGroupFooter) band).getJrGroup();
 	}
 }

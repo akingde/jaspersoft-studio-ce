@@ -268,8 +268,6 @@ public class MGroup extends APropertyNode implements ICopyable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME)) {
-			// Temporary fix for the Community Bug #2991
-			// Should be done on JR-side. Let's keep the cache map of groups in sync.
 			jrGroup.setName((String) value);
 		}
 		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
