@@ -138,7 +138,7 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 							PublishUtil.savePath(file, fres);
 							INode n = fres.getRoot();
 							if (n != null && n instanceof MServerProfile) {
-								MServerProfile msp = ServerManager.getServerProfile(((MServerProfile) n).getValue().getName() + ":");
+								MServerProfile msp = ServerManager.getServerByUrl(((MServerProfile) n).getValue().getUrl());
 								ServerManager.selectIfExists(monitor, msp, fres);
 							}
 						}

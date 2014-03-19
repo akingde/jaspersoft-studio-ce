@@ -20,6 +20,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
@@ -186,9 +187,11 @@ public class ServerManager {
 	public static MServerProfile getServerProfile(String key) {
 		int ind = key.indexOf(":"); //$NON-NLS-1$
 		if (ind > 0) {
-			String name = key.substring(0, ind);
+			StringTokenizer st = new StringTokenizer(key, ":");
+			String name = st.nextToken();
+			String url = st.nextToken();
 			for (MServerProfile sp : serverProfiles) {
-				if (sp.getValue().getName().equals(name))
+				if (sp.getValue().getName().equals(name) && sp.getValue().getName().equals(url))
 					return sp;
 			}
 		}
