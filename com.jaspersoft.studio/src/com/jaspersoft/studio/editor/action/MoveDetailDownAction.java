@@ -99,7 +99,8 @@ public class MoveDetailDownAction extends SelectionAction implements IGlobalActi
 				EditPart part = (EditPart) element;
 				if (part.getModel() instanceof MBand && MBand.isMultiBand((MBand) part.getModel())) {
 					result.add((APropertyNode) part.getModel());
-					selectionIndex = part.getParent().getChildren().indexOf(part);
+					if (part.getParent() != null && part.getParent().getChildren() != null)
+						selectionIndex = part.getParent().getChildren().indexOf(part);
 					break;
 				}
 			}
