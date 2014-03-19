@@ -468,9 +468,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	
 	@Override
 	public boolean canAcceptChildren() {
-		return getValue() != null;
-
-		// Object height = getPropertyValue(JRDesignBand.PROPERTY_HEIGHT);
-		// return (height instanceof Integer && ((Integer) height) >= 0);
+		// check for deleted band
+		return getValue()!=null;
 	}
 }
