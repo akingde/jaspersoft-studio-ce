@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
@@ -40,7 +35,7 @@ import com.jaspersoft.studio.model.style.MStyle;
  * Action to open the wizard to export one or more JRStyle as an external template style file
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public class ExportStyleAsTemplateAction extends SelectionAction {
 
@@ -55,6 +50,7 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 	 */
 	public ExportStyleAsTemplateAction(IWorkbenchPart part) {
 		super(part);
+		setLazyEnablementCalculation(true);
 	}
 
 	/**
@@ -68,6 +64,7 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 		setId(ExportStyleAsTemplateAction.ID);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/export_style.png")); //$NON-NLS-1$
 		setEnabled(false);
+		setLazyEnablementCalculation(true);
 	}
 
 	/**
@@ -83,32 +80,34 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 		StyleTemplateImportWizard importWizard = new StyleTemplateImportWizard(getSelectedStyles());
 		ISelection selection = getSelection();
 		StructuredSelection structured = null;
-		if (selection instanceof StructuredSelection) structured = (StructuredSelection)selection;
-		else structured = new StructuredSelection();
+		if (selection instanceof StructuredSelection)
+			structured = (StructuredSelection) selection;
+		else
+			structured = new StructuredSelection();
 		importWizard.init(PlatformUI.getWorkbench(), structured);
 		WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), importWizard);
 		dialog.open();
 	}
-	
+
 	/**
-	 * Return the list of all the selected JRStyle. If a conditional style is selected
-	 * then it is taken its parent. 
+	 * Return the list of all the selected JRStyle. If a conditional style is selected then it is taken its parent.
 	 * 
 	 * @return a not null list of JRStyle
 	 */
-	private List<JRStyle> getSelectedStyles(){
+	private List<JRStyle> getSelectedStyles() {
 		List<?> objects = getSelectedObjects();
 		if (objects == null || objects.isEmpty())
 			return new ArrayList<JRStyle>();
 		List<JRStyle> result = new ArrayList<JRStyle>();
-		for (Object obj : objects){
+		for (Object obj : objects) {
 			if (obj instanceof EditPart) {
 				ANode n = (ANode) ((EditPart) obj).getModel();
-				if (n instanceof MConditionalStyle){
-					JRStyle condStyle = (JRStyle)n.getParent().getValue();
-					if (!result.contains(condStyle)) result.add(condStyle);
+				if (n instanceof MConditionalStyle) {
+					JRStyle condStyle = (JRStyle) n.getParent().getValue();
+					if (!result.contains(condStyle))
+						result.add(condStyle);
 				} else if (n instanceof MStyle && !result.contains(n.getValue())) {
-					result.add((JRStyle)n.getValue());
+					result.add((JRStyle) n.getValue());
 				}
 			}
 		}

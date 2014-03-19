@@ -40,6 +40,7 @@ public class CreateConditionalStyleAction extends ACreateAndSelectAction {
 	public CreateConditionalStyleAction(IWorkbenchPart part) {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MConditionalStyle.class));
+		setLazyEnablementCalculation(true);
 	}
 
 	/**
