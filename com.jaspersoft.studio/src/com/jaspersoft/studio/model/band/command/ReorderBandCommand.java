@@ -100,9 +100,8 @@ public class ReorderBandCommand extends Command {
 			bList.add(jrBand);
 			newInd = bList.size() - 1;
 		}
-		jrDesignSection.getEventSupport().fireIndexedPropertyChange(JRDesignSection.PROPERTY_BANDS, newInd, oldInd, -1);
-		//jrBand.getEventSupport().fireIndexedPropertyChange("refresh", newInd, oldInd, -1);
-		//node.propertyChange(new PropertyChangeEvent(jrBand, "children", null, null));
+		//This event will not change the listener on the model, but only changes its position
+		jrDesignSection.getEventSupport().fireIndexedPropertyChange(MReport.CHANGE_BAND_POSITION, newInd, oldInd, -1);
 		return oldInd;
 	}
 

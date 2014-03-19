@@ -85,6 +85,14 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
+	/**
+	 * used when we need to change the position of a band. The differences between this and 
+	 * for example JRDesignSection.PROPERTY_BANDS is that this key uses a more light method to
+	 * do the changes and since the hierarchy remains the same it will keep also all the listeners
+	 */
+	public static final String CHANGE_BAND_POSITION = "changeBandPosition";
+	
+	
 	@Override
 	public INode getRoot() {
 		return this;
@@ -597,6 +605,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			handleDetailBandChanged(evt);
 		} else if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)) {
 			handleGroupChanged(evt);
+		} else if (evt.getPropertyName().equals(CHANGE_BAND_POSITION)) {
+			handleChangeOrder(evt);
 		} else if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_QUERY))
 			return;
 		super.propertyChange(evt);
@@ -666,6 +676,31 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		}
 	}
 
+	/**
+	 * Handle the change of the position of a band
+	 * 
+	 * @param evt the event that changed the band position
+	 */
+	private void handleChangeOrder(PropertyChangeEvent evt) {
+		if (evt instanceof IndexedPropertyChangeEvent && evt.getNewValue() instanceof Integer) {
+			JRDesignSection source = (JRDesignSection) evt.getSource();
+			int newInd = ((IndexedPropertyChangeEvent) evt).getIndex();
+			JRBand b = source.getBandsList().get(newInd);
+			MBand mb = null;
+			for (INode n : getChildren()) {
+				if (n.getValue() == b) {
+					mb = (MBand) n;
+					break;
+				}
+			}
+			if (mb != null) {
+				newInd = getChildren().indexOf(mb) + (newInd - (Integer) evt.getOldValue());
+				getChildren().remove(mb);
+				getChildren().add(newInd, mb);
+			}
+		}
+	}
+	
 	/**
 	 * Handle detail band changed.
 	 * 

@@ -43,6 +43,9 @@ public abstract class MBandGroup extends MBand {
 	 */
 	protected JRDesignGroup jrGroup;
 	
+	/**
+	 * The model of the JRGroup
+	 */
 	protected MGroup mGroup;
 	
 	protected MGroupBand mGroupBand;
@@ -73,9 +76,12 @@ public abstract class MBandGroup extends MBand {
 		refreshIndex();
 	}
 
+	/**
+	 * Return the icon descriptor for the element 
+	 * 
+	 * @return a not null icon descriptor
+	 */
 	protected abstract IIconDescriptor getLocalIconDescriptor();
-	
-	
 	
 	/**
 	 * Gets the jr group.
@@ -85,7 +91,6 @@ public abstract class MBandGroup extends MBand {
 	public JRDesignGroup getJrGroup() {
 		return jrGroup;
 	}
-
 
 	/**
 	 * Refresh the index of the band with the current number returned by getDesignIndex
