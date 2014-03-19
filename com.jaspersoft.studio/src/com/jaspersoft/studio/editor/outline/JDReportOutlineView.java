@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
@@ -78,6 +80,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -186,6 +189,12 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							Object model = ((EditPart) it).getModel();
 							if (model instanceof IDragable) {
 								models.add(model);
+							}
+							if (model instanceof MBand){
+								BandTypeEnum bandType =((MBand)model).getBandType();
+								if (BandTypeEnum.DETAIL.equals(bandType) || BandTypeEnum.GROUP_FOOTER.equals(bandType) || BandTypeEnum.GROUP_HEADER.equals(bandType)){
+									models.add(model);
+								}
 							}
 						}
 					}

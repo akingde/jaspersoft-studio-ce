@@ -10,17 +10,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.dnd;
 
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -38,6 +34,7 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -46,7 +43,6 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
-import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.palette.JDCreationTool;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
@@ -55,8 +51,6 @@ import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.band.MBandGroupFooter;
-import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.band.command.ReorderBandCommand;
 import com.jaspersoft.studio.model.command.CreateE4ObjectCommand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
@@ -90,6 +84,13 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 	protected CreationFactory getFactory(Object template) {
 		return new JDPaletteCreationFactory(template);
 	}
+	
+	@Override
+	public Transfer getTransfer() {
+		// TODO Auto-generated method stub
+		return super.getTransfer();
+	}
+	
 
 	/**
 	 * Get a compound command and a list of commands and add to the compound command every command in the list
@@ -249,76 +250,7 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		}
 		return index;
 	}
-
-	/**
-	 * Generate the commands to move the selected bands into a specific location
-	 * 
-	 * @param moved
-	 *          list of the bands to move
-	 * @param location
-	 *          new position o the bands
-	 * @param parentPart
-	 *          root node of the report tree, used to refresh its children
-	 * @return a list of command
-	 */
-	private JSSCompoundCommand moveBandsCommand(List<MBand> moved, int location, final EditPart parentPart) {
-		final ANode report = moved.get(0).getParent();
-		/**
-		 * Customized compound command that after the execute and undo force a refresh of the editor and outline
-		 */
-		JSSCompoundCommand cmd = new JSSCompoundCommand(report) {
-
-			// I create a fake command to force the refresh of the editor and outline panels
-			protected void refreshVisuals() {
-				PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), "refresh", null, null);
-				report.propertyChange(event);
-				for (Object part : parentPart.getChildren()) {
-					((EditPart) part).refresh();
-				}
-			}
-
-			private void refreshBandNumbers() {
-				// for (INode node : report.getChildren()) {
-				// if (node instanceof MBand) {
-				// ((MBand) node).refreshIndex();
-				// }
-				// }
-			}
-
-			@Override
-			public void execute() {
-				super.execute();
-				refreshBandNumbers();
-				refreshVisuals();
-			}
-
-			@Override
-			public void undo() {
-				super.undo();
-				refreshBandNumbers();
-				refreshVisuals();
-			}
-		};
-
-		for (MBand bandNode : moved) {
-			// cmd.add(new SetDetailNumberCommand((MReport)bandNode.getParent(), bandNode.getDetailIndex(),
-			// bandNode.getValue(), true));
-			// DeleteBandDetailCommand deleteBand = new DeleteBandDetailCommand(bandNode.getParent(), bandNode);
-			// cmd.add(deleteBand);
-			if (bandNode instanceof MBandGroupFooter)
-				cmd.add(new ReorderBandCommand((MBandGroupFooter) bandNode, location));
-			else if (bandNode instanceof MBandGroupHeader)
-				cmd.add(new ReorderBandCommand((MBandGroupHeader) bandNode, location));
-			else if (bandNode instanceof MBand && bandNode.getBandType() == BandTypeEnum.DETAIL)
-				cmd.add(new ReorderBandCommand(bandNode, (MReport) bandNode.getParent(), location));
-
-			// CreateBandDetailCommand createBand = new CreateBandDetailCommand((MBand) bandNode, (MBand) bandNode, location);
-			// cmd.add(createBand);
-			// cmd.add(new SetDetailNumberCommand((MReport)bandNode.getParent(), bandNode.getDetailIndex(),
-			// bandNode.getValue(), false));
-		}
-		return cmd;
-	}
+	
 
 	/**
 	 * Check if the user is dragging a detail band to move it before or after another detail band. In this case it return
@@ -330,32 +262,23 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		DropTargetEvent cEvent = getCurrentEvent();
 		if (cEvent.detail != DND.DROP_MOVE)
 			return null;
-		// System.out.println(cEvent.data.getClass().getName());
-		if (cEvent.data != null && !(cEvent.data instanceof MBand))
-			return null;
 		if (cEvent.item == null || !(cEvent.item instanceof TreeItem))
 			return null;
-		Tree tree = ((TreeItem) cEvent.item).getParent();
-		List<MBand> movedBands = new ArrayList<MBand>();
-		MBand first = null;
-		for (TreeItem item : tree.getSelection()) {
-			TreeEditPart draggetItem = (TreeEditPart) item.getData();
-			Object m = draggetItem.getModel();
-			if (m instanceof MBand) {
-				MBand mb = (MBand) m;
-				if (!(mb.getBandType() == BandTypeEnum.DETAIL || mb.getBandType() == BandTypeEnum.GROUP_HEADER || mb
-						.getBandType() == BandTypeEnum.GROUP_FOOTER))
-					return null;
-				if (first == null)
-					first = mb;
-				else if (!first.isSameBandType(mb))
-					return null;
-				movedBands.add((MBand) m);
-			} else
-				return null;
+		
+		//Get the list of element from the event or from the selection (as fallback)
+		List<?> selectedItems = null;
+		if (cEvent.data != null && cEvent.data instanceof List) {
+			selectedItems = (List<?>) cEvent.data;
+		} else {
+			selectedItems = getViewer().getSelectedEditParts();
 		}
-		if (movedBands.size() == 0)
-			return null;
+		 
+		List<MBand> movedBands = new ArrayList<MBand>();
+		BandTypeEnum moveType = ReorderBandCommand.getMoveType(selectedItems, movedBands);
+		if (moveType == null) return null;
+		
+		//Calculate the two element between the dragged element is moved
+		Tree tree = ((TreeItem) cEvent.item).getParent();
 		TreeItem destinationItem = (TreeItem) cEvent.item;
 		Point pt = tree.getDisplay().map(null, tree, cEvent.x, cEvent.y);
 		org.eclipse.swt.graphics.Rectangle destinationBounds = destinationItem.getBounds();
@@ -384,43 +307,30 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		Object model2 = ((NotDragableContainerTreeEditPart) secondItem.getData()).getModel();
 		MBand band1 = null;
 		MBand band2 = null;
-		if (model1 instanceof MBand)
+		if (model1 instanceof MBand){
 			band1 = (MBand) model1;
-		if (model2 instanceof MBand)
+		}
+		if (model2 instanceof MBand){
 			band2 = (MBand) model2;
-		if (band1 == null && band2 == null)
-			return null;
-		int destinationIndex = -1;
-		// CASE: destination between two details, the index is the same of the second band
-		JasperDesign jd = first.getJasperDesign();
-		List<JRBand> bands = null;
-		if (first.getBandType() == BandTypeEnum.DETAIL)
-			bands = ((JRDesignSection) jd.getDetailSection()).getBandsList();
-		else if (first.getBandType() == BandTypeEnum.GROUP_HEADER)
-			bands = ((JRDesignSection) ((MBandGroupHeader) first).getJrGroup().getGroupHeaderSection()).getBandsList();
-		else if (first.getBandType() == BandTypeEnum.GROUP_FOOTER)
-			bands = ((JRDesignSection) ((MBandGroupFooter) first).getJrGroup().getGroupFooterSection()).getBandsList();
+		}
+		//One of the two element must be a band, otherwise the drag can't be done
+		if (band1 == null && band2 == null) return null;
+		
+		//Calculate the destination index
+		int destinationIndex = ReorderBandCommand.calculateIndex(band1, band2, movedBands.get(0));
 
-		if (band1 != null && band2 != null && first.isSameBandType(band1) && first.isSameBandType(band2))
-			destinationIndex = Math.max(0, bands.indexOf(band2.getValue()) - 1);
-		else if (band2 != null && first.isSameBandType(band2)) // CASE: only band 2 is a detail band, so
-			// i'm putting something at the top
-			destinationIndex = 0;
-		else if (band1 != null && first.isSameBandType(band1)) // CASE: only band 2 is a detail band, so
-			// i'm putting something at the bottom
-			destinationIndex = bands.size() + 1;
-		else
-			return null;
-		System.out.println("movable");
-		return moveBandsCommand(movedBands, destinationIndex,
-				((NotDragableContainerTreeEditPart) firstItem.getData()).getParent());
+		if (destinationIndex == -1) return null;
+		else return ReorderBandCommand.moveBandsCommand(movedBands, destinationIndex,((NotDragableContainerTreeEditPart) firstItem.getData()).getParent());
 	}
 
 	@Override
 	protected Command getCommand() {
 		Command cmd = super.getCommand();
-		if (cmd == null)
+		if (cmd == null) {
+			updateTargetRequest();
+			updateTargetEditPart();
 			cmd = dropDetailBands();
+		}
 		return cmd;
 	}
 
