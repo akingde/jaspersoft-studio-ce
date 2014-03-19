@@ -437,7 +437,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (isSame(part))
+		if (!isSame(part))
 			updateActions(getSelectionActions());
 	}
 
