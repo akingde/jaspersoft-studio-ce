@@ -45,8 +45,11 @@ public class NodeDragListener extends DragSourceAdapter {
 			IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 			for (Iterator<?> it = selection.iterator(); it.hasNext();) {
 				Object obj = it.next();
-				if (obj instanceof ANode)
-					((ANode) obj).setParent(null, -1);
+				if (obj instanceof ANode) {
+					ANode n = (ANode) obj;
+					if (n.isCut())
+						((ANode) obj).setParent(null, -1);
+				}
 			}
 			viewer.refresh();
 		}
