@@ -48,8 +48,6 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
@@ -588,7 +586,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
 		return new PaletteViewerProvider(getEditDomain()) {
-			private IMenuListener menuListener;
 
 			@Override
 			protected void configurePaletteViewer(PaletteViewer viewer) {
@@ -615,14 +612,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 				if (copy != null) {
 					viewer.addSelectionChangedListener(copy);
 				}
-				if (menuListener == null)
-					menuListener = new IMenuListener() {
-						public void menuAboutToShow(IMenuManager manager) {
-							if (copy != null)
-								manager.appendToGroup(GEFActionConstants.GROUP_COPY, copy);
-						}
-					};
-				viewer.getContextMenu().addMenuListener(menuListener);
 			}
 		};
 	}

@@ -419,7 +419,6 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		// System.out.println("changed " + this);
 		if (getParent() != null)
 			getParent().refresh();
 	}

@@ -157,7 +157,6 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// System.out.println("changed " + this);
 		if (arg0.getSource() instanceof MReport) {
 			ANode model = (ANode) getModel();
 			if (model.getChildren() != null)
