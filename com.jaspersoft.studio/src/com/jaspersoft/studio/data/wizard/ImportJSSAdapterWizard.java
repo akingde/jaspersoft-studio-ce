@@ -122,11 +122,9 @@ public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 	public boolean performFinish() {
 		addAdapters();
 		List<String> proeprties = page2.getProperties();
-		//Properties prop = getSelectedConfiguration().getConfiguration();
 		String[] keys = proeprties.toArray(new String[proeprties.size()]);
 		String[] values = new String[proeprties.size()];
 		for(int i=0;i<keys.length; i++){
-			//String value = prop.getProperty(keys[i]);
 			values[i] = page2.getProperyValue(keys[i]); 
 		}
 		PreferencesUtils.storeJasperReportsProperty(keys, values);

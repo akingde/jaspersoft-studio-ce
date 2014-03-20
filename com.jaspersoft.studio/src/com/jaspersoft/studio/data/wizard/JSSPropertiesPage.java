@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.data.wizard;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -54,8 +55,8 @@ public class JSSPropertiesPage extends ShowPropertiesPage {
 	 * are also added the default one if they are not specified
 	 */
 	@Override
-	protected List<String> getInFields(){
-		List<String> readKeys = new ArrayList<String>();
+	protected Collection<Object> getInFields(){
+		List<Object> readKeys = new ArrayList<Object>();
 		IReportDescriptor selectedConfig = ((ImportJSSAdapterWizard)getWizard()).getSelectedConfiguration();
 		String propertyString = selectedConfig.getConfiguration().getProperty(PreferencesUtils.NET_SF_JASPERREPORTS_JRPROPERTIES);
 		prop = PreferencesUtils.loadJasperReportsProperties(propertyString);

@@ -18,6 +18,7 @@ package com.jaspersoft.studio.data.adapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
@@ -87,6 +88,12 @@ public class IReportDescriptor {
 	
 	}
 	
+	/**
+	 * Read the properties file of iReport and return a subset of the properties with olny the ones compatible
+	 * with JSS
+	 * 
+	 * @return a subset of the iReport properties file with the JSS compatible properties
+	 */
 	protected Properties loadConfiguration(){
 		Properties prop = new Properties();
 		String path = destination.getAbsolutePath().concat(ImportUtility.FILE_SEPARATOR).concat("ireport.properties");
@@ -96,7 +103,18 @@ public class IReportDescriptor {
 				FileInputStream is = new FileInputStream(newFile);
 				prop.load(is);
 				is.close();
-				return prop;
+				
+				Properties result = new Properties();
+				for(Entry<Object, Object> entry : prop.entrySet()){
+					String key = entry.getKey().toString();
+					//Remove this prefix since it is for a jasper report property
+					if (key.startsWith("ireport.jrproperty.")  && key.length() > 19 ){
+						result.put(key.substring(19), entry.getValue());
+					} else {
+						result.put(key, entry.getValue());
+					}
+				}
+				return result;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

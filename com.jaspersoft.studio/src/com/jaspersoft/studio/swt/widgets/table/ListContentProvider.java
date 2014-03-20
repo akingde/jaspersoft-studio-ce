@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets.table;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -33,6 +34,10 @@ public class ListContentProvider implements IStructuredContentProvider {
 	public Object[] getElements(Object inputElement) {
 		if (inputElement != null && inputElement instanceof List)
 			return ((List<?>) inputElement).toArray();
+		//If it's not a list check if it is a least a collection
+		else if (inputElement != null && inputElement instanceof Collection){
+			return ((Collection<?>) inputElement).toArray();
+		}
 		return new Object[0];
 	}
 

@@ -51,7 +51,7 @@ public class ImportDataAdapterWizard extends Wizard implements IImportWizard {
 	ShowAdaptersPage page1 = new ShowAdaptersPage();
 	
 	/**
-	 * Page that list the availabe properties into a precise configuration
+	 * Page that list the available properties into a precise configuration
 	 */
 	ShowPropertiesPage page2 = new ShowPropertiesPage();
 	
