@@ -15,16 +15,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.expression;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionXDialog;
+import com.jaspersoft.studio.data.sql.dialogs.EditPNotExpressionDialog;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionPNot;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.model.ANode;
 
@@ -49,7 +52,7 @@ public class EditExpression extends AAction {
 		for (Object obj : selection) {
 			if (obj instanceof MExpression) {
 				MExpression mcol = (MExpression) obj;
-				EditExpressionDialog dialog = new EditExpressionDialog(Display.getDefault().getActiveShell());
+				EditExpressionDialog dialog = new EditExpressionDialog(UIUtils.getShell());
 				dialog.setValue(mcol);
 				if (dialog.open() == Dialog.OK) {
 					mcol.setOperator(Operator.getOperator((dialog.getOperator())));
@@ -60,12 +63,21 @@ public class EditExpression extends AAction {
 				break;
 			} else if (obj instanceof MExpressionX) {
 				MExpressionX mcol = (MExpressionX) obj;
-				EditExpressionXDialog dialog = new EditExpressionXDialog(Display.getDefault().getActiveShell());
+				EditExpressionXDialog dialog = new EditExpressionXDialog(UIUtils.getShell());
 				dialog.setValue(mcol);
 				if (dialog.open() == Dialog.OK) {
 					mcol.setFunction(dialog.getFunction());
 					mcol.setPrevCond(dialog.getPrevcond());
 					mcol.setOperands(dialog.getOperands());
+					selectInTree(mcol);
+				}
+				break;
+			} else if (obj instanceof MExpressionPNot) {
+				MExpressionPNot mcol = (MExpressionPNot) obj;
+				EditPNotExpressionDialog dialog = new EditPNotExpressionDialog(UIUtils.getShell());
+				dialog.setValue(mcol);
+				if (dialog.open() == Dialog.OK) {
+					mcol.setValue(dialog.getValue());
 					selectInTree(mcol);
 				}
 				break;

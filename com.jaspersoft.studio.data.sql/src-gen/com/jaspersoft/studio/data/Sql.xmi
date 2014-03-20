@@ -296,8 +296,13 @@
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//OrderByColumnFull"/>
       </type>
       <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:Assignment" feature="colOrder" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.6"/>
+        <elements xsi:type="xtext:Alternatives">
+          <elements xsi:type="xtext:Assignment" feature="colOrder" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.6"/>
+          </elements>
+          <elements xsi:type="xtext:Assignment" feature="colOrderInt" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
+          </elements>
         </elements>
         <elements xsi:type="xtext:Assignment" cardinality="?" feature="direction" operator="=">
           <terminal xsi:type="xtext:Alternatives">
@@ -358,15 +363,20 @@
       <type metamodel="/0/@metamodelDeclarations.1">
         <classifier xsi:type="ecore:EClass" href="http://www.com.jaspersoft.studio.data.Sql#//FullExpression"/>
       </type>
-      <alternatives xsi:type="xtext:Group">
-        <elements xsi:type="xtext:Assignment" feature="c" operator="=">
-          <terminal xsi:type="xtext:Alternatives">
-            <elements xsi:type="xtext:Keyword" value="AND"/>
-            <elements xsi:type="xtext:Keyword" value="OR"/>
-          </terminal>
+      <alternatives xsi:type="xtext:Alternatives">
+        <elements xsi:type="xtext:Group">
+          <elements xsi:type="xtext:Assignment" feature="c" operator="=">
+            <terminal xsi:type="xtext:Alternatives">
+              <elements xsi:type="xtext:Keyword" value="AND"/>
+              <elements xsi:type="xtext:Keyword" value="OR"/>
+            </terminal>
+          </elements>
+          <elements xsi:type="xtext:Assignment" feature="efrag" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.20"/>
+          </elements>
         </elements>
-        <elements xsi:type="xtext:Assignment" feature="efrag" operator="=">
-          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.20"/>
+        <elements xsi:type="xtext:Assignment" feature="notPrm" operator="=">
+          <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.55"/>
         </elements>
       </alternatives>
     </rules>

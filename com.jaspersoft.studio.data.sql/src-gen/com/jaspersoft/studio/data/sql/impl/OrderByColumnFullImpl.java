@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl#getColOrder <em>Col Order</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl#getColOrderInt <em>Col Order Int</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.OrderByColumnFullImpl#getDirection <em>Direction</em>}</li>
  * </ul>
  * </p>
@@ -39,6 +40,26 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
    * @ordered
    */
   protected ColumnFull colOrder;
+
+  /**
+   * The default value of the '{@link #getColOrderInt() <em>Col Order Int</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColOrderInt()
+   * @generated
+   * @ordered
+   */
+  protected static final int COL_ORDER_INT_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getColOrderInt() <em>Col Order Int</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getColOrderInt()
+   * @generated
+   * @ordered
+   */
+  protected int colOrderInt = COL_ORDER_INT_EDEFAULT;
 
   /**
    * The default value of the '{@link #getDirection() <em>Direction</em>}' attribute.
@@ -134,6 +155,29 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
    * <!-- end-user-doc -->
    * @generated
    */
+  public int getColOrderInt()
+  {
+    return colOrderInt;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColOrderInt(int newColOrderInt)
+  {
+    int oldColOrderInt = colOrderInt;
+    colOrderInt = newColOrderInt;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT, oldColOrderInt, colOrderInt));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getDirection()
   {
     return direction;
@@ -180,6 +224,8 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
     {
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         return getColOrder();
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT:
+        return getColOrderInt();
       case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
         return getDirection();
     }
@@ -198,6 +244,9 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
     {
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         setColOrder((ColumnFull)newValue);
+        return;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT:
+        setColOrderInt((Integer)newValue);
         return;
       case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
         setDirection((String)newValue);
@@ -219,6 +268,9 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         setColOrder((ColumnFull)null);
         return;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT:
+        setColOrderInt(COL_ORDER_INT_EDEFAULT);
+        return;
       case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
         setDirection(DIRECTION_EDEFAULT);
         return;
@@ -238,6 +290,8 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
     {
       case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER:
         return colOrder != null;
+      case SqlPackage.ORDER_BY_COLUMN_FULL__COL_ORDER_INT:
+        return colOrderInt != COL_ORDER_INT_EDEFAULT;
       case SqlPackage.ORDER_BY_COLUMN_FULL__DIRECTION:
         return DIRECTION_EDEFAULT == null ? direction != null : !DIRECTION_EDEFAULT.equals(direction);
     }
@@ -255,7 +309,9 @@ public class OrderByColumnFullImpl extends OrOrderByColumnImpl implements OrderB
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (direction: ");
+    result.append(" (colOrderInt: ");
+    result.append(colOrderInt);
+    result.append(", direction: ");
     result.append(direction);
     result.append(')');
     return result.toString();

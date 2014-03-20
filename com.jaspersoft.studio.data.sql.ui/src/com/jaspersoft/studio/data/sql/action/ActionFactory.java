@@ -25,6 +25,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.expression.ChangeOperator;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpressionGroup;
+import com.jaspersoft.studio.data.sql.action.expression.CreatePNotExpression;
 import com.jaspersoft.studio.data.sql.action.expression.CreateWhereFromColumn;
 import com.jaspersoft.studio.data.sql.action.expression.CreateXExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
@@ -105,6 +106,7 @@ public class ActionFactory {
 		actions.add(new CreateExpressionGroup(treeViewer));
 		actions.add(new CreateExpression(designer, treeViewer));
 		actions.add(new CreateXExpression(designer, treeViewer));
+		actions.add(new CreatePNotExpression(designer, treeViewer));
 		actions.add(new ChangeOperator(treeViewer));
 		actions.add(null);
 		actions.add(new CreateUnion(treeViewer));

@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.data.sql.model;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
@@ -8,8 +9,13 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class MSQLRoot extends MRoot {
 
-	public MSQLRoot(ANode parent, Object value) {
+	public MSQLRoot(ANode parent, JRDesignDataset value) {
 		super(parent, value);
+	}
+
+	@Override
+	public JRDesignDataset getValue() {
+		return (JRDesignDataset) super.getValue();
 	}
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

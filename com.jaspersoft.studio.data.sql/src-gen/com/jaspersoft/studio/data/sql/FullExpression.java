@@ -13,6 +13,7 @@ package com.jaspersoft.studio.data.sql;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getC <em>C</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getEfrag <em>Efrag</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getNotPrm <em>Not Prm</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getExpgroup <em>Expgroup</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getExp <em>Exp</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.FullExpression#getXexp <em>Xexp</em>}</li>
@@ -82,6 +83,32 @@ public interface FullExpression extends OrExpr
    * @generated
    */
   void setEfrag(FullExpression value);
+
+  /**
+   * Returns the value of the '<em><b>Not Prm</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Not Prm</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Not Prm</em>' attribute.
+   * @see #setNotPrm(String)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getFullExpression_NotPrm()
+   * @model
+   * @generated
+   */
+  String getNotPrm();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.FullExpression#getNotPrm <em>Not Prm</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Not Prm</em>' attribute.
+   * @see #getNotPrm()
+   * @generated
+   */
+  void setNotPrm(String value);
 
   /**
    * Returns the value of the '<em><b>Expgroup</b></em>' containment reference.

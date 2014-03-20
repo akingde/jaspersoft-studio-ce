@@ -1017,9 +1017,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getOrderByColumnFull_Direction()
+  public EAttribute getOrderByColumnFull_ColOrderInt()
   {
     return (EAttribute)orderByColumnFullEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getOrderByColumnFull_Direction()
+  {
+    return (EAttribute)orderByColumnFullEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1117,9 +1127,9 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Expgroup()
+  public EAttribute getFullExpression_NotPrm()
   {
-    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)fullExpressionEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1127,7 +1137,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Exp()
+  public EReference getFullExpression_Expgroup()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(3);
   }
@@ -1137,7 +1147,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Xexp()
+  public EReference getFullExpression_Exp()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(4);
   }
@@ -1147,7 +1157,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFullExpression_Op1()
+  public EReference getFullExpression_Xexp()
   {
     return (EReference)fullExpressionEClass.getEStructuralFeatures().get(5);
   }
@@ -1157,9 +1167,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getFullExpression_Op1()
+  {
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getFullExpression_Isnull()
   {
-    return (EAttribute)fullExpressionEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)fullExpressionEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -1169,7 +1189,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getFullExpression_In()
   {
-    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(7);
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -1179,7 +1199,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getFullExpression_Between()
   {
-    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(8);
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -1189,7 +1209,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getFullExpression_Like()
   {
-    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(9);
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(10);
   }
 
   /**
@@ -1199,7 +1219,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    */
   public EReference getFullExpression_Comp()
   {
-    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(10);
+    return (EReference)fullExpressionEClass.getEStructuralFeatures().get(11);
   }
 
   /**
@@ -2245,6 +2265,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     orderByColumnFullEClass = createEClass(ORDER_BY_COLUMN_FULL);
     createEReference(orderByColumnFullEClass, ORDER_BY_COLUMN_FULL__COL_ORDER);
+    createEAttribute(orderByColumnFullEClass, ORDER_BY_COLUMN_FULL__COL_ORDER_INT);
     createEAttribute(orderByColumnFullEClass, ORDER_BY_COLUMN_FULL__DIRECTION);
 
     orGroupByColumnEClass = createEClass(OR_GROUP_BY_COLUMN);
@@ -2259,6 +2280,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     fullExpressionEClass = createEClass(FULL_EXPRESSION);
     createEAttribute(fullExpressionEClass, FULL_EXPRESSION__C);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__EFRAG);
+    createEAttribute(fullExpressionEClass, FULL_EXPRESSION__NOT_PRM);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__EXPGROUP);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__EXP);
     createEReference(fullExpressionEClass, FULL_EXPRESSION__XEXP);
@@ -2519,6 +2541,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(orderByColumnFullEClass, OrderByColumnFull.class, "OrderByColumnFull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOrderByColumnFull_ColOrder(), this.getColumnFull(), null, "colOrder", null, 0, 1, OrderByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getOrderByColumnFull_ColOrderInt(), ecorePackage.getEInt(), "colOrderInt", null, 0, 1, OrderByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getOrderByColumnFull_Direction(), ecorePackage.getEString(), "direction", null, 0, 1, OrderByColumnFull.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(orGroupByColumnEClass, OrGroupByColumn.class, "OrGroupByColumn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2533,6 +2556,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEClass(fullExpressionEClass, FullExpression.class, "FullExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFullExpression_C(), ecorePackage.getEString(), "c", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Efrag(), this.getFullExpression(), null, "efrag", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFullExpression_NotPrm(), ecorePackage.getEString(), "notPrm", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Expgroup(), this.getExprGroup(), null, "expgroup", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Exp(), this.getFullExpression(), null, "exp", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFullExpression_Xexp(), this.getXExpr(), null, "xexp", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

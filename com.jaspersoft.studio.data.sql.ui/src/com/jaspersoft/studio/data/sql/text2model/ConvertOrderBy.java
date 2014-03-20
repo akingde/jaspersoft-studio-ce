@@ -13,6 +13,7 @@ import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByColumn;
+import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderByExpression;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.model.util.KeyValue;
 
@@ -30,25 +31,26 @@ public class ConvertOrderBy {
 	}
 
 	private static void doColumn(SQLQueryDesigner designer, MSelect msel, OrderByColumnFull tf) {
-		if (tf.getColOrder() == null)
-			return;
-		EList<EObject> eContents = tf.getColOrder().eContents();
-		String column = null;
-		if (tf instanceof DbObjectNameImpl)
-			column = ((DbObjectNameImpl) tf).getDbname();
-		else if (tf.getColOrder() instanceof DbObjectNameImpl)
-			column = ((DbObjectNameImpl) tf.getColOrder()).getDbname();
-		else
-			column = ConvertUtil.getDbObjectName(eContents, 1);
-		String table = ConvertUtil.getDbObjectName(eContents, 2);
-		String schema = ConvertUtil.getDbObjectName(eContents, 3);
-		// String catalog = getDbObjectName(eContents, 3);
-		MOrderByColumn mocol = findColumn(msel, schema, table, column);
-		if (mocol != null) {
-			String direction = tf.getDirection();
-			if (direction != null)
-				mocol.setDesc(direction.trim().equalsIgnoreCase(AMKeyword.DESCENDING_KEYWORD.trim()));
-		}
+		if (tf.getColOrder() != null) {
+			EList<EObject> eContents = tf.getColOrder().eContents();
+			String column = null;
+			if (tf instanceof DbObjectNameImpl)
+				column = ((DbObjectNameImpl) tf).getDbname();
+			else if (tf.getColOrder() instanceof DbObjectNameImpl)
+				column = ((DbObjectNameImpl) tf.getColOrder()).getDbname();
+			else
+				column = ConvertUtil.getDbObjectName(eContents, 1);
+			String table = ConvertUtil.getDbObjectName(eContents, 2);
+			String schema = ConvertUtil.getDbObjectName(eContents, 3);
+			// String catalog = getDbObjectName(eContents, 3);
+			MOrderByColumn mocol = findColumn(msel, schema, table, column);
+			if (mocol != null) {
+				String direction = tf.getDirection();
+				if (direction != null)
+					mocol.setDesc(direction.trim().equalsIgnoreCase(AMKeyword.DESCENDING_KEYWORD.trim()));
+			}
+		} else if (tf.getColOrderInt() > 0)
+			new MOrderByExpression(Util.getKeyword(msel.getParent(), MOrderBy.class), Integer.toString(tf.getColOrderInt()));
 	}
 
 	//

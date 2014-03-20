@@ -81,6 +81,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrderByColumnFull">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//OrderByColumnFull/colOrder"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OrderByColumnFull/colOrderInt"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//OrderByColumnFull/direction"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//OrGroupByColumn">
@@ -95,6 +96,7 @@
     <genClasses ecoreClass="Sql.ecore#//FullExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FullExpression/c"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/efrag"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//FullExpression/notPrm"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/expgroup"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/exp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/xexp"/>

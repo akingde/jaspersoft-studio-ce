@@ -68,6 +68,7 @@ import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.MHaving;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.MWhere;
+import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -209,9 +210,9 @@ public class SQLQueryOutline {
 							refreshAndReveal(oldNode);
 							continue;
 						}
-						if (target instanceof MExpression && (n instanceof MExpression || n instanceof MExpressionGroup)) {
+						if (target instanceof AMExpression && (n instanceof AMExpression || n instanceof MExpressionGroup)) {
 							oldNode.setParent(null, -1);
-							MExpression mexpr = (MExpression) target;
+							AMExpression<?> mexpr = (AMExpression<?>) target;
 							ANode p = mexpr.getParent();
 							oldNode.setParent(p, p.getChildren().indexOf(mexpr));
 

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -33,6 +34,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionGroup;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionPNot;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
@@ -72,6 +74,23 @@ public class ConvertExpression {
 	}
 
 	private static void doExpression(SQLQueryDesigner designer, MSelect msel, ANode qroot, ANode parent, FullExpression tf) {
+		String notPrm = tf.getNotPrm();
+		if (notPrm != null) {
+			JRDesignDataset jrDataset = msel.getRoot().getValue();
+			if (jrDataset == null)
+				jrDataset = designer.getjDataset();
+			JRDesignParameter prm = null;
+			for (net.sf.jasperreports.engine.JRParameter p : jrDataset.getParametersList()) {
+				if (p.getName().equals(notPrm))
+					prm = (JRDesignParameter) p;
+			}
+			if (prm == null) {
+				prm = new JRDesignParameter();
+				prm.setName(notPrm.substring(4, notPrm.length() - 1));
+			}
+			new MExpressionPNot(parent, prm, -1);
+			return;
+		}
 		String prevCond = tf.getC();
 		if (tf.getEfrag() != null)
 			tf = tf.getEfrag();

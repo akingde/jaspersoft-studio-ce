@@ -668,13 +668,22 @@ public interface SqlPackage extends EPackage
   int ORDER_BY_COLUMN_FULL__COL_ORDER = OR_ORDER_BY_COLUMN_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Col Order Int</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ORDER_BY_COLUMN_FULL__COL_ORDER_INT = OR_ORDER_BY_COLUMN_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Direction</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ORDER_BY_COLUMN_FULL__DIRECTION = OR_ORDER_BY_COLUMN_FEATURE_COUNT + 1;
+  int ORDER_BY_COLUMN_FULL__DIRECTION = OR_ORDER_BY_COLUMN_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Order By Column Full</em>' class.
@@ -683,7 +692,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ORDER_BY_COLUMN_FULL_FEATURE_COUNT = OR_ORDER_BY_COLUMN_FEATURE_COUNT + 2;
+  int ORDER_BY_COLUMN_FULL_FEATURE_COUNT = OR_ORDER_BY_COLUMN_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.OrGroupByColumnImpl <em>Or Group By Column</em>}' class.
@@ -816,13 +825,22 @@ public interface SqlPackage extends EPackage
   int FULL_EXPRESSION__EFRAG = OR_EXPR_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Not Prm</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FULL_EXPRESSION__NOT_PRM = OR_EXPR_FEATURE_COUNT + 2;
+
+  /**
    * The feature id for the '<em><b>Expgroup</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__EXPGROUP = OR_EXPR_FEATURE_COUNT + 2;
+  int FULL_EXPRESSION__EXPGROUP = OR_EXPR_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Exp</b></em>' containment reference.
@@ -831,7 +849,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__EXP = OR_EXPR_FEATURE_COUNT + 3;
+  int FULL_EXPRESSION__EXP = OR_EXPR_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Xexp</b></em>' containment reference.
@@ -840,7 +858,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__XEXP = OR_EXPR_FEATURE_COUNT + 4;
+  int FULL_EXPRESSION__XEXP = OR_EXPR_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Op1</b></em>' containment reference.
@@ -849,7 +867,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__OP1 = OR_EXPR_FEATURE_COUNT + 5;
+  int FULL_EXPRESSION__OP1 = OR_EXPR_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Isnull</b></em>' attribute.
@@ -858,7 +876,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__ISNULL = OR_EXPR_FEATURE_COUNT + 6;
+  int FULL_EXPRESSION__ISNULL = OR_EXPR_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>In</b></em>' containment reference.
@@ -867,7 +885,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__IN = OR_EXPR_FEATURE_COUNT + 7;
+  int FULL_EXPRESSION__IN = OR_EXPR_FEATURE_COUNT + 8;
 
   /**
    * The feature id for the '<em><b>Between</b></em>' containment reference.
@@ -876,7 +894,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__BETWEEN = OR_EXPR_FEATURE_COUNT + 8;
+  int FULL_EXPRESSION__BETWEEN = OR_EXPR_FEATURE_COUNT + 9;
 
   /**
    * The feature id for the '<em><b>Like</b></em>' containment reference.
@@ -885,7 +903,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__LIKE = OR_EXPR_FEATURE_COUNT + 9;
+  int FULL_EXPRESSION__LIKE = OR_EXPR_FEATURE_COUNT + 10;
 
   /**
    * The feature id for the '<em><b>Comp</b></em>' containment reference.
@@ -894,7 +912,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION__COMP = OR_EXPR_FEATURE_COUNT + 10;
+  int FULL_EXPRESSION__COMP = OR_EXPR_FEATURE_COUNT + 11;
 
   /**
    * The number of structural features of the '<em>Full Expression</em>' class.
@@ -903,7 +921,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FULL_EXPRESSION_FEATURE_COUNT = OR_EXPR_FEATURE_COUNT + 11;
+  int FULL_EXPRESSION_FEATURE_COUNT = OR_EXPR_FEATURE_COUNT + 12;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.ExprGroupImpl <em>Expr Group</em>}' class.
@@ -2769,6 +2787,17 @@ public interface SqlPackage extends EPackage
   EReference getOrderByColumnFull_ColOrder();
 
   /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrderInt <em>Col Order Int</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Col Order Int</em>'.
+   * @see com.jaspersoft.studio.data.sql.OrderByColumnFull#getColOrderInt()
+   * @see #getOrderByColumnFull()
+   * @generated
+   */
+  EAttribute getOrderByColumnFull_ColOrderInt();
+
+  /**
    * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.OrderByColumnFull#getDirection <em>Direction</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2873,6 +2902,17 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getFullExpression_Efrag();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.FullExpression#getNotPrm <em>Not Prm</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Not Prm</em>'.
+   * @see com.jaspersoft.studio.data.sql.FullExpression#getNotPrm()
+   * @see #getFullExpression()
+   * @generated
+   */
+  EAttribute getFullExpression_NotPrm();
 
   /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.FullExpression#getExpgroup <em>Expgroup</em>}'.
@@ -4422,6 +4462,14 @@ public interface SqlPackage extends EPackage
     EReference ORDER_BY_COLUMN_FULL__COL_ORDER = eINSTANCE.getOrderByColumnFull_ColOrder();
 
     /**
+     * The meta object literal for the '<em><b>Col Order Int</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ORDER_BY_COLUMN_FULL__COL_ORDER_INT = eINSTANCE.getOrderByColumnFull_ColOrderInt();
+
+    /**
      * The meta object literal for the '<em><b>Direction</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4508,6 +4556,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference FULL_EXPRESSION__EFRAG = eINSTANCE.getFullExpression_Efrag();
+
+    /**
+     * The meta object literal for the '<em><b>Not Prm</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FULL_EXPRESSION__NOT_PRM = eINSTANCE.getFullExpression_NotPrm();
 
     /**
      * The meta object literal for the '<em><b>Expgroup</b></em>' containment reference feature.

@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getC <em>C</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getEfrag <em>Efrag</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getNotPrm <em>Not Prm</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getExpgroup <em>Expgroup</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getExp <em>Exp</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.FullExpressionImpl#getXexp <em>Xexp</em>}</li>
@@ -74,6 +75,26 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
    * @ordered
    */
   protected FullExpression efrag;
+
+  /**
+   * The default value of the '{@link #getNotPrm() <em>Not Prm</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNotPrm()
+   * @generated
+   * @ordered
+   */
+  protected static final String NOT_PRM_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getNotPrm() <em>Not Prm</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNotPrm()
+   * @generated
+   * @ordered
+   */
+  protected String notPrm = NOT_PRM_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getExpgroup() <em>Expgroup</em>}' containment reference.
@@ -265,6 +286,29 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
     }
     else if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__EFRAG, newEfrag, newEfrag));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getNotPrm()
+  {
+    return notPrm;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNotPrm(String newNotPrm)
+  {
+    String oldNotPrm = notPrm;
+    notPrm = newNotPrm;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.FULL_EXPRESSION__NOT_PRM, oldNotPrm, notPrm));
   }
 
   /**
@@ -720,6 +764,8 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
         return getC();
       case SqlPackage.FULL_EXPRESSION__EFRAG:
         return getEfrag();
+      case SqlPackage.FULL_EXPRESSION__NOT_PRM:
+        return getNotPrm();
       case SqlPackage.FULL_EXPRESSION__EXPGROUP:
         return getExpgroup();
       case SqlPackage.FULL_EXPRESSION__EXP:
@@ -757,6 +803,9 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
         return;
       case SqlPackage.FULL_EXPRESSION__EFRAG:
         setEfrag((FullExpression)newValue);
+        return;
+      case SqlPackage.FULL_EXPRESSION__NOT_PRM:
+        setNotPrm((String)newValue);
         return;
       case SqlPackage.FULL_EXPRESSION__EXPGROUP:
         setExpgroup((ExprGroup)newValue);
@@ -805,6 +854,9 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
       case SqlPackage.FULL_EXPRESSION__EFRAG:
         setEfrag((FullExpression)null);
         return;
+      case SqlPackage.FULL_EXPRESSION__NOT_PRM:
+        setNotPrm(NOT_PRM_EDEFAULT);
+        return;
       case SqlPackage.FULL_EXPRESSION__EXPGROUP:
         setExpgroup((ExprGroup)null);
         return;
@@ -850,6 +902,8 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
         return C_EDEFAULT == null ? c != null : !C_EDEFAULT.equals(c);
       case SqlPackage.FULL_EXPRESSION__EFRAG:
         return efrag != null;
+      case SqlPackage.FULL_EXPRESSION__NOT_PRM:
+        return NOT_PRM_EDEFAULT == null ? notPrm != null : !NOT_PRM_EDEFAULT.equals(notPrm);
       case SqlPackage.FULL_EXPRESSION__EXPGROUP:
         return expgroup != null;
       case SqlPackage.FULL_EXPRESSION__EXP:
@@ -885,6 +939,8 @@ public class FullExpressionImpl extends OrExprImpl implements FullExpression
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (c: ");
     result.append(c);
+    result.append(", notPrm: ");
+    result.append(notPrm);
     result.append(", isnull: ");
     result.append(isnull);
     result.append(')');

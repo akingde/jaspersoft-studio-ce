@@ -51,7 +51,7 @@ OrderByColumns returns OrOrderByColumn:
 	OrderByColumnFull ({OrOrderByColumn.entries+=current} ("," entries+=OrderByColumnFull)+)?;
 
 OrderByColumnFull:
-	colOrder=ColumnFull direction=('ASC' | 'DESC')?;
+	(colOrder=ColumnFull | colOrderInt=INT) direction=('ASC' | 'DESC')?;
 
 GroupByColumns returns OrGroupByColumn:
 	GroupByColumnFull ({OrGroupByColumn.entries+=current} ("," entries+=GroupByColumnFull)+)?;
@@ -63,7 +63,7 @@ FullExpression returns OrExpr:
 	ExpressionFragment ({OrExpr.entries+=current} (entries+=ExpressionFragmentSecond)+)?;
 
 ExpressionFragmentSecond returns FullExpression:
-	c=('AND' | 'OR') efrag=ExpressionFragment;
+	((c=('AND' | 'OR') efrag=ExpressionFragment) | notPrm=JRNPARAM);
 
 ExpressionFragment returns FullExpression:
 	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);

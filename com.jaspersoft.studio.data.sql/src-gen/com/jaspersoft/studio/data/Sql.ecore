@@ -84,6 +84,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="OrderByColumnFull" eSuperTypes="#//OrOrderByColumn">
     <eStructuralFeatures xsi:type="ecore:EReference" name="colOrder" eType="#//ColumnFull"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colOrderInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OrGroupByColumn">
@@ -102,6 +103,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="c" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="efrag" eType="#//FullExpression"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notPrm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expgroup" eType="#//ExprGroup"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="exp" eType="#//FullExpression"
