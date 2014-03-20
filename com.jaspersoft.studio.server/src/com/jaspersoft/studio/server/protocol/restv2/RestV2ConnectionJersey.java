@@ -95,7 +95,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
 			user += "|" + sp.getOrganisation();
 		client.register(new HttpBasicAuthFilter(user, Pass.getPass(sp.getPass())));
-		target = client.target(sp.getUrl() + SUFFIX);
+		String url = sp.getUrl().trim();
+		if (url.endsWith("/services/repository/"))
+			url = url.substring(0, url.lastIndexOf("/services/repository/"));
+		else if (url.endsWith("services/repository"))
+			url = url.substring(0, url.lastIndexOf("/services/repository"));
+		if (!url.endsWith("/"))
+			url += "/";
+		target = client.target(url + SUFFIX);
 		getServerInfo(monitor);
 		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0;
 	}
