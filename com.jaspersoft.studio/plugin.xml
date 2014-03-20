@@ -1442,12 +1442,6 @@
     </extension>
     <extension point="org.eclipse.ui.commands">
 	  <command
-         categoryId="org.eclipse.gef.category.view"
-         description="Show or hide the grid"
-         id="org.eclipse.gef.toggle_grid_visibility"
-         name="ShowGrid">
-	  </command>
-	  <command
          id="com.jaspersoft.studio.commands.ReportNewWizard"
          name="JasperReport"
          defaultHandler="com.jaspersoft.studio.wizards.NewReportWizardHandler">
@@ -1475,14 +1469,6 @@
          name="CreateTranslationFragmentCommand">
    </command>
 	</extension>
-    <extension 
-          point="org.eclipse.ui.bindings">
-       <key
-             commandId="org.eclipse.gef.toggle_grid_visibility"
-             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-             sequence="M1+M2+Z">
-       </key>
-    </extension>
     <extension
           point="org.eclipse.core.contenttype.contentTypes">
        <content-type
