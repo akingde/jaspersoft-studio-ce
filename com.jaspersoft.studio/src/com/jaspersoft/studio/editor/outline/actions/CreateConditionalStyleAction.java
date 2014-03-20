@@ -22,6 +22,8 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
+import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * /* The Class CreateConditionalStyleAction.
@@ -35,12 +37,23 @@ public class CreateConditionalStyleAction extends ACreateAndSelectAction {
 	 * Constructs a <code>CreateAction</code> using the specified part.
 	 * 
 	 * @param part
-	 *          The part for this action
+	 *          The part for this action	
 	 */
 	public CreateConditionalStyleAction(IWorkbenchPart part) {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MConditionalStyle.class));
 		setLazyEnablementCalculation(true);
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		// Strict check on MStyle. 
+		// Its subclass MConditionalStyle is not allowed.
+		if(!checkAllSelectedObjects(MStyle.class) || 
+				!ModelUtils.checkTypesForAllEditParModels(getSelectedObjects(),false,MConditionalStyle.class)) {
+			return false;
+		}
+		return super.calculateEnabled();
 	}
 
 	/**

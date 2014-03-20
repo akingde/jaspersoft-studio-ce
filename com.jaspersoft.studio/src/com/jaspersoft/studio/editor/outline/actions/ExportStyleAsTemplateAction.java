@@ -30,6 +30,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * Action to open the wizard to export one or more JRStyle as an external template style file
@@ -72,7 +73,8 @@ public class ExportStyleAsTemplateAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		return !getSelectedStyles().isEmpty();
+		return ModelUtils.checkTypesForAllEditParModels(
+				getSelectedObjects(), true, new Class<?>[]{MConditionalStyle.class, MStyle.class});
 	}
 
 	@Override

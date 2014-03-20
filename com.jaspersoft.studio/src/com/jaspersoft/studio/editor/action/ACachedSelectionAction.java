@@ -11,6 +11,7 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public abstract class ACachedSelectionAction extends SelectionAction {
 
@@ -57,37 +58,29 @@ public abstract class ACachedSelectionAction extends SelectionAction {
 	}
 	
 	/**
-	 * Verifies that all the currently selected objects are EditParts
-	 * referring to model objects of the specified class type.
+	 * Verifies that there is only one EditPart selected
+	 * referring to a model object of the allowed class types.
 	 * 
-	 * @param clazz the wanted type for the model objects 
-	 * @return <code>true</code> all model objects are of the same type,<code>false</code> otherwise
+	 * @param classes the allowed type(s) for the model object 
+	 * @return <code>true</code> the single model object is instance of
+	 * 					one of the allowed types,<code>false</code> otherwise
 	 */
-	public boolean checkAllSelectedObjects(Class<?> clazz) {
+	public boolean checkSingleSelectedObject(Class<?>...classes) {
 		List<?> selectedObjects = getSelectedObjects();
-		if(selectedObjects.size()==0) return false;
-		for(Object o : selectedObjects){
-			// All selected objects should be of the same kind
-			if(!(o instanceof EditPart) || 
-					!clazz.isInstance(((EditPart) o).getModel())) {
-				return false;
-			}
-		}
-		return true;
+		if(selectedObjects.size()!=1) return false;
+		return ModelUtils.checkTypesForSingleEditPartModel(getSelectedObjects().get(0), true, classes);
 	}
 	
 	/**
-	 * Verifies that there is only one EditPart selected
-	 * referring to a model object of the specified class type.
+	 * Verifies that all the currently selected objects are EditParts
+	 * referring to model objects of the allowed class types.
 	 * 
-	 * @param clazz the wanted type for the model object 
-	 * @return <code>true</code> the single model object has the wanted type,<code>false</code> otherwise
+	 * @param classes the allowed type(s) for the model objects 
+	 * @return <code>true</code> all model objects are instances of 
+	 * 					one of the allowed types,<code>false</code> otherwise
 	 */
-	public boolean checkSingleSelectedObject(Class<?> clazz) {
-		List<?> selectedObjects = getSelectedObjects();
-		if(selectedObjects.size()==1 && selectedObjects.get(0) instanceof EditPart) {
-				return clazz.isInstance(((EditPart)selectedObjects.get(0)).getModel());
-		}
-		return false;
+	public boolean checkAllSelectedObjects(Class<?>... classes){
+		return ModelUtils.checkTypesForAllEditParModels(getSelectedObjects(), true, classes);
 	}
+	
 }

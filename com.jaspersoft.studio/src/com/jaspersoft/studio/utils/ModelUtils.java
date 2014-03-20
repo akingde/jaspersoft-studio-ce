@@ -77,6 +77,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -1482,5 +1483,46 @@ public class ModelUtils {
 		}
 		return new ArrayList<INode>();
 	}
-
+	
+	/**
+	 * Verifies that all the specified objects are EditParts
+	 * referring to model objects belonging or not to the 
+	 * specified list of classes.
+	 * 
+	 * @param editParts list of objects supposed to be {@link EditPart}
+	 * @param allowed determines if the list is of allowed (true) or excluded (false) types
+	 * @param classes the list of type(s) 
+	 * @return <code>true</code> all model objects respect the condition,<code>false</code> otherwise
+	 */
+	public static boolean checkTypesForAllEditParModels(List<?> editParts, boolean allowed, Class<?>... classes){
+		if(editParts.size()==0) return false;
+		for(Object o : editParts){
+			boolean result = checkTypesForSingleEditPartModel(o, allowed, classes);
+			if(!result) return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Verifies that there is only one EditPart selected
+	 * referring to a model object of the allowed class types.
+	 * 
+	 * @param editPart the object supposed to be {@link EditPart}
+	 * @param allowed determines if the list is of allowed (true) 
+	 * 				or excluded (false) types
+	 * @param classes the list of type(s) 
+	 * @return <code>true</code> if the single model object respects
+	 * 				 the condition,<code>false</code> otherwise
+	 */
+	public static boolean checkTypesForSingleEditPartModel(Object editPart, boolean allowed, Class<?>...classes) {
+		if(editPart instanceof EditPart) {
+			Object node = ((EditPart)editPart).getModel();
+			for(Class<?> clazz : classes) {
+				if(clazz.isInstance(node)) return allowed;
+			}
+		}
+		return !allowed;
+	}
+	
+	
 }
