@@ -267,8 +267,14 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		
 		//Get the list of element from the event or from the selection (as fallback)
 		List<?> selectedItems = null;
-		if (cEvent.data != null && cEvent.data instanceof List) {
-			selectedItems = (List<?>) cEvent.data;
+		if (cEvent.data != null){
+			if (cEvent.data instanceof List) {
+				selectedItems = (List<?>) cEvent.data;
+			} else {
+				//I'm dragging something that it isn't a list, probably an element from the 
+				//outline, so it isn't a drag band command
+				return null;
+			}
 		} else {
 			selectedItems = getViewer().getSelectedEditParts();
 		}
