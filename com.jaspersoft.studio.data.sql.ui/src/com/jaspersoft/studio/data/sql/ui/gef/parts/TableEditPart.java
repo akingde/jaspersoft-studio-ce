@@ -105,9 +105,10 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 			}
 			if (!allstar)
 				for (INode n : msel.getChildren()) {
-					if (allstar || (n instanceof MSelectColumn && ((MSelectColumn) n).getMFromTable().equals(fromTable))) {
+					if (n instanceof MSelectColumn) {
 						MSelectColumn msc = (MSelectColumn) n;
-						set.put(msc.getValue().getValue(), msc);
+						if (((MSelectColumn) n).getMFromTable() == fromTable)
+							set.put(msc.getValue().getValue(), msc);
 					}
 				}
 		}

@@ -19,9 +19,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -59,7 +60,7 @@ public class CreateColumn extends AAction {
 
 	@Override
 	public void run() {
-		FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell());
+		FromTableColumnsDialog dialog = new FromTableColumnsDialog(UIUtils.getShell());
 		dialog.setSelection((ANode) selection[0]);
 		if (dialog.open() == Window.OK)
 			run(dialog.getColumns());
@@ -113,9 +114,16 @@ public class CreateColumn extends AAction {
 		selectInTree(sel);
 	}
 
-	protected MSelectColumn run(MSQLColumn node, MFromTable mfTable, MSelectColumn mtable) {
-		MSelect mfrom = (MSelect) mtable.getParent();
-		return run(node, mfTable, mfrom, mfrom.getChildren().indexOf(mtable) + 1);
+	public MSelectColumn run(MSQLColumn sCol, MFromTable mfTable) {
+		MSelect mSelect = Util.getKeyword(mfTable, MSelect.class);
+		MSelectColumn msCol = run(sCol, mfTable, mSelect, -1);
+		selectInTree(msCol);
+		return msCol;
+	}
+
+	protected MSelectColumn run(MSQLColumn sCol, MFromTable mfTable, MSelectColumn mSelCol) {
+		MSelect mSelect = Util.getKeyword(mfTable, MSelect.class);
+		return run(sCol, mfTable, mSelect, mSelect.getChildren().indexOf(mSelCol) + 1);
 	}
 
 	public MSelectColumn run(MSQLColumn node, MFromTable mfTable, MSelect select, int index) {
