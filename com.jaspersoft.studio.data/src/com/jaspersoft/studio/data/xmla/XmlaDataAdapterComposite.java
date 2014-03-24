@@ -15,8 +15,14 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.xmla;
 
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
+import java.net.URL;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -128,8 +134,11 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String url = xmlaUri.getText();
-				ServerMetadata smd = new ServerMetadata(url);
-				handleMetaDataChanged(smd);
+				boolean loginSuccesfull = validateUsernamePassword(url);
+				if (loginSuccesfull) {
+					ServerMetadata smd = new ServerMetadata(url);
+					handleMetaDataChanged(smd);
+				}
 			}
 		});
 
@@ -256,6 +265,44 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 		cube.select(selectionIndex);
 	}
 	
+	/**
+	 * Set a custom swt validation dialog for an url
+	 * 
+	 * @param url the url of the server
+	 * @return true if the operation was aborted, false otherwise
+	 */
+	private boolean validateUsernamePassword(String url) {
+		try {
+			/**
+			 * Create the dialog
+			 */
+			final AuthenticationDialog ad = new AuthenticationDialog(UIUtils.getShell(), url);
+
+			/**
+			 * Set the dialog as authenticator
+			 */
+			Authenticator.setDefault(new Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					//If the user used the cancel key on the dialog then the operation is aborted to the 
+					//authenticator must return null
+					if (ad.cancelOperation()) return null;
+					else {
+						//Otherwise the fields are reseted to do another try and the dialog opened
+						ad.resetFields();
+						ad.openDialog();
+						return new PasswordAuthentication(ad.getUsername(), ad.getPasswordCA());
+					}
+				}
+			});
+			URL endpoint = new URL(url);
+			HttpURLConnection urlConnection = (HttpURLConnection) endpoint.openConnection();
+			urlConnection.getResponseCode();
+			return (!ad.cancelOperation());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	protected void handleMetaDataChanged(ServerMetadata smd) {
 		datasource.removeAll();
