@@ -19,6 +19,9 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.mongodb.messages.messages"; //$NON-NLS-1$
+	public static String MongoDbDataAdapterComposite_labelPassword;
+	public static String MongoDbDataAdapterComposite_labelURI;
+	public static String MongoDbDataAdapterComposite_labelUsername;
 	public static String MongoDbDataAdapterFactory_description;
 	public static String MongoDbDataAdapterFactory_label;
 	public static String RDDatasourceMongoDBPage_desc;
