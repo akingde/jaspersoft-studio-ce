@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.toolbar;
 
@@ -31,6 +26,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.IParametrable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
+import com.jaspersoft.studio.editor.preview.actions.ViewBookmarksAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewExporterAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewReportParametersAction;
@@ -49,6 +45,7 @@ public class LeftToolBarManager extends ATopToolBarManager {
 	private ViewParametersAction vprmAction;
 	private ViewReportParametersAction vprmrepAction;
 	private ViewSortFieldsAction vsortAction;
+	private ViewBookmarksAction vTocAction;
 	// private ViewExecutionInfoAction vexecAction;
 	private ViewExporterAction vexpAction;
 
@@ -86,6 +83,10 @@ public class LeftToolBarManager extends ATopToolBarManager {
 		// vexecAction = new ViewExecutionInfoAction(pvcont);
 		// tbManager.add(vexecAction);
 		addExporterSettings(tbManager, pvcont);
+
+		if (vTocAction == null)
+			vTocAction = new ViewBookmarksAction(pvcont.getLeftContainer());
+		tbManager.add(vTocAction);
 
 		addPin(container, tbManager);
 	}

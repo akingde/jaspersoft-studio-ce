@@ -12,8 +12,8 @@ package com.jaspersoft.studio.editor.preview.actions.export.xls;
 
 import net.sf.jasperreports.eclipse.viewer.IReportViewer;
 import net.sf.jasperreports.engine.export.JExcelApiMetadataExporter;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
-import net.sf.jasperreports.engine.export.JRXlsAbstractMetadataExporterParameter;
+import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
+import net.sf.jasperreports.export.SimpleJxlMetadataReportConfiguration;
 
 import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.messages.Messages;
@@ -34,12 +34,13 @@ public class ExportAsXlsMetadataAction extends AExportXlsAction {
 	}
 
 	@Override
-	protected JRXlsAbstractExporter createExporter(JasperReportsConfiguration jContext) {
+	protected JExcelApiMetadataExporter createExporter(JasperReportsConfiguration jContext,
+			JRExportProgressMonitor monitor) {
 		JExcelApiMetadataExporter exp = new JExcelApiMetadataExporter(jContext);
-		exp.setParameter(JRXlsAbstractMetadataExporterParameter.WRITE_HEADER,
-				jContext.getProperty(JRXlsAbstractMetadataExporterParameter.PROPERTY_WRITE_HEADER));
-		exp.setParameter(JRXlsAbstractMetadataExporterParameter.COLUMN_NAMES,
-				jContext.getProperty(JRXlsAbstractMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX));
+
+		SimpleJxlMetadataReportConfiguration rconf = new SimpleJxlMetadataReportConfiguration();
+		setupReportConfiguration(rconf, monitor);
+		exp.setConfiguration(rconf);
 		return exp;
 	}
 }

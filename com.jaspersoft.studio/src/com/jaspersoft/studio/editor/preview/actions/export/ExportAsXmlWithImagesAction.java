@@ -10,15 +10,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
+import java.io.File;
+
 import net.sf.jasperreports.eclipse.viewer.IReportViewer;
-import net.sf.jasperreports.engine.JRAbstractExporter;
+import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
-import net.sf.jasperreports.engine.export.JRXmlExporterParameter;
+import net.sf.jasperreports.export.SimpleReportExportConfiguration;
+import net.sf.jasperreports.export.SimpleXmlExporterOutput;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ExportAsXmlWithImagesAction extends AbstractExportAction {
+public class ExportAsXmlWithImagesAction extends AExportAction {
 
 	public ExportAsXmlWithImagesAction(IReportViewer viewer, JasperReportsConfiguration jContext,
 			ExportMenuAction parentMenu) {
@@ -34,10 +37,16 @@ public class ExportAsXmlWithImagesAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+	protected JRXmlExporter getExporter(JasperReportsConfiguration jContext, JRExportProgressMonitor monitor, File file) {
 		JRXmlExporter exp = new JRXmlExporter(jContext);
+		SimpleXmlExporterOutput expOut = new SimpleXmlExporterOutput(file);
+		expOut.setEmbeddingImages(Boolean.TRUE);
+		exp.setExporterOutput(expOut);
 
-		exp.setParameter(JRXmlExporterParameter.IS_EMBEDDING_IMAGES, Boolean.TRUE);
+		SimpleReportExportConfiguration rconf = new SimpleReportExportConfiguration();
+		setupReportConfiguration(rconf, monitor);
+		exp.setConfiguration(rconf);
+
 		return exp;
 	}
 }

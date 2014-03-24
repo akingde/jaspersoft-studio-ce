@@ -45,7 +45,7 @@ public class ExportImageAction extends AReportAction {
 	}
 
 	public boolean isActionEnabled() {
-		return rviewer.hasDocument();
+		return rviewer.hasReport();
 	}
 
 	@Override

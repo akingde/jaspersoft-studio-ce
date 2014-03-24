@@ -1,29 +1,27 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
+import java.io.File;
+
 import net.sf.jasperreports.eclipse.viewer.IReportViewer;
-import net.sf.jasperreports.engine.JRAbstractExporter;
 import net.sf.jasperreports.engine.export.JRCsvMetadataExporter;
-import net.sf.jasperreports.engine.export.JRCsvMetadataExporterParameter;
+import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
+import net.sf.jasperreports.export.SimpleCsvMetadataReportConfiguration;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ExportAsCsvMetadataAction extends AbstractExportAction {
+public class ExportAsCsvMetadataAction extends AExportAction {
 
 	public ExportAsCsvMetadataAction(IReportViewer viewer, JasperReportsConfiguration jContext,
 			ExportMenuAction parentMenu) {
@@ -38,21 +36,14 @@ public class ExportAsCsvMetadataAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+	protected JRCsvMetadataExporter getExporter(JasperReportsConfiguration jContext, JRExportProgressMonitor monitor,
+			File file) {
 		JRCsvMetadataExporter exp = new JRCsvMetadataExporter(jContext);
+		exp.setExporterOutput(new SimpleWriterExporterOutput(file));
 
-		String param = jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_FIELD_DELIMITER);
-		exp.setParameter(JRCsvMetadataExporterParameter.FIELD_DELIMITER, param);
-
-		param = jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_RECORD_DELIMITER);
-		exp.setParameter(JRCsvMetadataExporterParameter.RECORD_DELIMITER, param);
-
-		param = jContext.getProperty(JRCsvMetadataExporterParameter.PROPERTY_COLUMN_NAMES_PREFIX);
-		if (param != null)
-			exp.setParameter(JRCsvMetadataExporterParameter.COLUMN_NAMES, param);
-
-		Boolean bparam = jContext.getPropertyBoolean(JRCsvMetadataExporterParameter.PROPERTY_WRITE_HEADER);
-		exp.setParameter(JRCsvMetadataExporterParameter.WRITE_HEADER, bparam);
+		SimpleCsvMetadataReportConfiguration rconf = new SimpleCsvMetadataReportConfiguration();
+		setupReportConfiguration(rconf, monitor);
+		exp.setConfiguration(rconf);
 
 		return exp;
 	}

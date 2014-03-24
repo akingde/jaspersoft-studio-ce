@@ -1,22 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
+import net.sf.jasperreports.export.XlsExporterConfiguration;
+import net.sf.jasperreports.export.XlsReportConfiguration;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -108,37 +104,37 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_WHITE_PAGE_BACKGROUND,
 				Messages.ExcelExporterPreferencePage_30, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_COLLAPSE_ROW_SPAN,
 				Messages.ExcelExporterPreferencePage_31, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
 				Messages.ExcelExporterPreferencePage_32, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
 				Messages.ExcelExporterPreferencePage_33, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_IGNORE_GRAPHICS,
 				Messages.ExcelExporterPreferencePage_34, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
 				Messages.ExcelExporterPreferencePage_35, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		StringFieldEditor se = new StringFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
+		StringFieldEditor se = new StringFieldEditor(XlsReportConfiguration.PROPERTY_PASSWORD,
 				Messages.ExcelExporterPreferencePage_36, sc);
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
@@ -188,13 +184,13 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(cfe);
 		HelpSystem.setHelp(cfe.getComboBoxControl(parent), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
-		IntegerFieldEditor iedit = new IntegerFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
+		IntegerFieldEditor iedit = new IntegerFieldEditor(XlsReportConfiguration.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
 				Messages.ExcelExporterPreferencePage_40, parent);
 		iedit.setValidRange(0, Integer.MAX_VALUE);
 		addField(iedit);
 		HelpSystem.setHelp(iedit.getTextControl(parent), StudioPreferencePage.REFERENCE_PREFIX + iedit.getPreferenceName());
 
-		BooleanFieldEditor bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,
+		BooleanFieldEditor bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_ONE_PAGE_PER_SHEET,
 				Messages.ExcelExporterPreferencePage_41, parent);
 		addField(bf);
 		HelpSystem
@@ -272,17 +268,17 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_DETECT_CELL_TYPE,
 				Messages.ExcelExporterPreferencePage_55, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_IGNORE_CELL_BACKGROUND,
 				Messages.ExcelExporterPreferencePage_56, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_IGNORE_CELL_BORDER,
 				Messages.ExcelExporterPreferencePage_57, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
@@ -291,7 +287,7 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
+		bf = new BooleanFieldEditor(XlsReportConfiguration.PROPERTY_FONT_SIZE_FIX_ENABLED,
 				Messages.ExcelExporterPreferencePage_59, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
@@ -310,7 +306,7 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		Composite sc = new Composite(scompo, SWT.NONE);
 		sc.setLayout(new GridLayout(3, false));
 
-		BooleanFieldEditor bf = new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
+		BooleanFieldEditor bf = new BooleanFieldEditor(XlsExporterConfiguration.PROPERTY_CREATE_CUSTOM_PALETTE,
 				Messages.ExcelExporterPreferencePage_61, sc);
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
@@ -325,10 +321,10 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		// JEXCELAPI
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD))); //$NON-NLS-1$
+		store.setDefault(XlsExporterConfiguration.PROPERTY_CREATE_CUSTOM_PALETTE,
+				PropertiesHelper.DPROP.getProperty(XlsExporterConfiguration.PROPERTY_CREATE_CUSTOM_PALETTE));
+		store.setDefault(XlsReportConfiguration.PROPERTY_PASSWORD,
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_PASSWORD))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_USE_TIMEZONE,
@@ -337,26 +333,27 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT))); //$NON-NLS-1$
 		// COMMON
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED), "false")); //$NON-NLS-1$
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS));
+		store.setDefault(XlsReportConfiguration.PROPERTY_COLLAPSE_ROW_SPAN,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_COLLAPSE_ROW_SPAN));
+		store.setDefault(XlsReportConfiguration.PROPERTY_IGNORE_GRAPHICS,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_IGNORE_GRAPHICS));
+		store
+				.setDefault(XlsReportConfiguration.PROPERTY_IMAGE_BORDER_FIX_ENABLED, Misc.nvl(
+						PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_IMAGE_BORDER_FIX_ENABLED), "false")); //$NON-NLS-1$
+		store.setDefault(XlsReportConfiguration.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
+		store.setDefault(XlsReportConfiguration.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS));
 		// page
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
+		store.setDefault(XlsReportConfiguration.PROPERTY_WHITE_PAGE_BACKGROUND,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_WHITE_PAGE_BACKGROUND));
 		// sheet
 		store.setDefault(NSF_EXPORT_XLS_SHEET_DIRECTION,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_DIRECTION), RunDirectionEnum.LTR.getName()));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
+		store.setDefault(XlsReportConfiguration.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
+		store.setDefault(XlsReportConfiguration.PROPERTY_ONE_PAGE_PER_SHEET,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_ONE_PAGE_PER_SHEET));
 
 		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER))); //$NON-NLS-1$
@@ -379,12 +376,12 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_HIDDEN), "false")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_CELL_LOCKED,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_LOCKED), "false")); //$NON-NLS-1$
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND));
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER));
+		store.setDefault(XlsReportConfiguration.PROPERTY_DETECT_CELL_TYPE,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_DETECT_CELL_TYPE));
+		store.setDefault(XlsReportConfiguration.PROPERTY_IGNORE_CELL_BACKGROUND,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_IGNORE_CELL_BACKGROUND));
+		store.setDefault(XlsReportConfiguration.PROPERTY_IGNORE_CELL_BORDER,
+				PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_IGNORE_CELL_BORDER));
 		store.setDefault(NSF_EXPORT_XLS_CELL_WRAP_TEXT, PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_WRAP_TEXT));
 
 		store.setDefault(NSF_EXPORT_XLS_AUTO_FILTER,
@@ -393,8 +390,8 @@ public class ODSExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(NSF_EXPORT_XLS_FREEZ_COLUMN,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_FREEZ_COLUMN)));
 
-		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
+		store.setDefault(XlsReportConfiguration.PROPERTY_FONT_SIZE_FIX_ENABLED,
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(XlsReportConfiguration.PROPERTY_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
 	}
 
 	/*

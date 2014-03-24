@@ -18,7 +18,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
@@ -42,7 +42,7 @@ public abstract class ASystemViewer extends SWTViewer {
 			try {
 				String ext = getExtension(jrprint);
 				File tmpFile = File.createTempFile("report", ext);
-				AbstractExportAction exp = createExporterAction(rptviewer);
+				AExportAction exp = createExporterAction(rptviewer);
 				stats.startCount(ReportControler.ST_EXPORTTIME);
 				exp.export(tmpFile);
 				stats.endCount(ReportControler.ST_EXPORTTIME);

@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsPptxAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -31,7 +31,7 @@ public class PowerPointViewer extends ASystemViewer {
 	}
 
 	@Override
-	protected AbstractExportAction createExporter(ReportViewer rptv) {
+	protected AExportAction createExporter(ReportViewer rptv) {
 		return new ExportAsPptxAction(rptv, jContext, null);
 	}
 

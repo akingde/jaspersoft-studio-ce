@@ -53,7 +53,7 @@ public class ExportMenuAction extends AReportViewerAction implements IMenuCreato
 
 	@Override
 	protected boolean calculateEnabled() {
-		return getReportViewer().hasDocument();
+		return getReportViewer().hasReport();
 	}
 
 	@Override

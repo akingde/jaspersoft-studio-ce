@@ -1,29 +1,27 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export;
 
+import java.io.File;
+
 import net.sf.jasperreports.eclipse.viewer.IReportViewer;
-import net.sf.jasperreports.engine.JRAbstractExporter;
+import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
-import net.sf.jasperreports.engine.export.JRXmlExporterParameter;
+import net.sf.jasperreports.export.SimpleReportExportConfiguration;
+import net.sf.jasperreports.export.SimpleXmlExporterOutput;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ExportAsXmlAction extends AbstractExportAction {
+public class ExportAsXmlAction extends AExportAction {
 
 	public ExportAsXmlAction(IReportViewer viewer, JasperReportsConfiguration jContext, ExportMenuAction parentMenu) {
 		super(viewer, jContext, parentMenu);
@@ -37,10 +35,16 @@ public class ExportAsXmlAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+	protected JRXmlExporter getExporter(JasperReportsConfiguration jContext, JRExportProgressMonitor monitor, File file) {
 		JRXmlExporter exp = new JRXmlExporter(jContext);
+		SimpleXmlExporterOutput expOut = new SimpleXmlExporterOutput(file);
+		expOut.setEmbeddingImages(Boolean.FALSE);
+		exp.setExporterOutput(expOut);
 
-		exp.setParameter(JRXmlExporterParameter.IS_EMBEDDING_IMAGES, Boolean.FALSE);
+		SimpleReportExportConfiguration rconf = new SimpleReportExportConfiguration();
+		setupReportConfiguration(rconf, monitor);
+		exp.setConfiguration(rconf);
+
 		return exp;
 	}
 }

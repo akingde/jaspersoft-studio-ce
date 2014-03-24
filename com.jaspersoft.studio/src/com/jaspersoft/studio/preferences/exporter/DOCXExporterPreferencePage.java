@@ -1,21 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.engine.export.ooxml.JRDocxExporterParameter;
+import net.sf.jasperreports.export.DocxReportConfiguration;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -43,13 +38,13 @@ public class DOCXExporterPreferencePage extends FieldEditorOverlayPage {
 	 *
 	 */
 	public void createFieldEditors() {
-		BooleanFieldEditor bf = new BooleanFieldEditor(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
+		BooleanFieldEditor bf = new BooleanFieldEditor(DocxReportConfiguration.PROPERTY_FRAMES_AS_NESTED_TABLES,
 				Messages.DOCXExporterPreferencePage_3, getFieldEditorParent());
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT,
+		bf = new BooleanFieldEditor(DocxReportConfiguration.PROPERTY_FLEXIBLE_ROW_HEIGHT,
 				Messages.DOCXExporterPreferencePage_4, getFieldEditorParent());
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
@@ -57,10 +52,10 @@ public class DOCXExporterPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
-				PropertiesHelper.DPROP.getProperty(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
-		store.setDefault(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT,
-				PropertiesHelper.DPROP.getProperty(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT));
+		store.setDefault(DocxReportConfiguration.PROPERTY_FRAMES_AS_NESTED_TABLES,
+				PropertiesHelper.DPROP.getProperty(DocxReportConfiguration.PROPERTY_FRAMES_AS_NESTED_TABLES));
+		store.setDefault(DocxReportConfiguration.PROPERTY_FLEXIBLE_ROW_HEIGHT,
+				PropertiesHelper.DPROP.getProperty(DocxReportConfiguration.PROPERTY_FLEXIBLE_ROW_HEIGHT));
 	}
 
 	/*

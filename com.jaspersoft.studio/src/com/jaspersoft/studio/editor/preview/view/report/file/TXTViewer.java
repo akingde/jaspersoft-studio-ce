@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsTextAction;
 import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -32,7 +32,7 @@ public class TXTViewer extends AFileViewer {
 	}
 
 	@Override
-	protected AbstractExportAction createExporter(ReportViewer rptv) {
+	protected AExportAction createExporter(ReportViewer rptv) {
 		return new ExportAsTextAction(rptv, jContext, null);
 	}
 

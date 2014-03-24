@@ -23,7 +23,7 @@ import org.eclipse.swt.custom.BusyIndicator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ExportAsJasperReportsAction extends AbstractExportAction {
+public class ExportAsJasperReportsAction extends AExportAction {
 
 	public ExportAsJasperReportsAction(IReportViewer viewer, JasperReportsConfiguration jContext,
 			ExportMenuAction parentMenu) {
@@ -44,7 +44,7 @@ public class ExportAsJasperReportsAction extends AbstractExportAction {
 		BusyIndicator.showWhile(null, new Runnable() {
 			public void run() {
 				try {
-					JRSaver.saveObject(getReportViewer().getDocument(), f);
+					JRSaver.saveObject(getReportViewer().getReport(), f);
 				} catch (Throwable e) {
 					ex[0] = e;
 				}
@@ -55,7 +55,8 @@ public class ExportAsJasperReportsAction extends AbstractExportAction {
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
+	protected JRAbstractExporter<?, ?, ?, ?> getExporter(JasperReportsConfiguration jContext,
+			JRExportProgressMonitor monitor, File file) {
 		return null;
 	}
 }

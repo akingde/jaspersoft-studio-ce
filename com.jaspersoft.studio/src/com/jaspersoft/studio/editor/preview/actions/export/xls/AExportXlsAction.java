@@ -10,62 +10,32 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions.export.xls;
 
-import net.sf.jasperreports.eclipse.viewer.IReportViewer;
-import net.sf.jasperreports.engine.JRAbstractExporter;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
+import java.io.File;
 
-import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import net.sf.jasperreports.eclipse.viewer.IReportViewer;
+import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
+import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+
+import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class AExportXlsAction extends AbstractExportAction {
+public abstract class AExportXlsAction extends AExportAction {
 
 	public AExportXlsAction(IReportViewer viewer, JasperReportsConfiguration jContext, ExportMenuAction parentMenu) {
 		super(viewer, jContext, parentMenu);
 	}
 
 	@Override
-	protected JRAbstractExporter getExporter(JasperReportsConfiguration jContext) {
-		JRXlsAbstractExporter exporter = createExporter(jContext);
+	protected JRXlsAbstractExporter<?, ?, ?> getExporter(JasperReportsConfiguration jContext,
+			JRExportProgressMonitor monitor, File file) {
+		JRXlsAbstractExporter<?, ?, ?> exp = createExporter(jContext, monitor);
+		exp.setExporterOutput(new SimpleOutputStreamExporterOutput(file));
 
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
-
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_COLLAPSE_ROW_SPAN,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_IGNORE_GRAPHICS,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_IMAGE_BORDER_FIX_ENABLED,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_WHITE_PAGE_BACKGROUND,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
-
-		exporter.setParameter(JRXlsAbstractExporterParameter.CREATE_CUSTOM_PALETTE,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_IGNORE_CELL_BACKGROUND,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_IGNORE_CELL_BORDER,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER));
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_FONT_SIZE_FIX_ENABLED,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED));
-
-		exporter.setParameter(JRXlsAbstractExporterParameter.IS_DETECT_CELL_TYPE,
-				jContext.getPropertyBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE));
-
-		exporter.setParameter(JRXlsAbstractExporterParameter.MAXIMUM_ROWS_PER_SHEET,
-				jContext.getPropertyInteger(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
-
-		exporter.setParameter(JRXlsAbstractExporterParameter.PASSWORD,
-				jContext.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD));
-		exporter.setParameter(JRXlsAbstractExporterParameter.SHEET_NAMES,
-				jContext.getProperty(JRXlsAbstractExporterParameter.PROPERTY_SHEET_NAMES_PREFIX));
-		return exporter;
+		return exp;
 	}
 
-	protected abstract JRXlsAbstractExporter createExporter(JasperReportsConfiguration jContext);
+	protected abstract JRXlsAbstractExporter<?, ?, ?> createExporter(JasperReportsConfiguration jContext,
+			JRExportProgressMonitor monitor);
 }

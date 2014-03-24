@@ -1,21 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.export.ReportExportConfiguration;
+import net.sf.jasperreports.export.WriterExporterOutput;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -52,7 +49,7 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	public void createFieldEditors() {
-		CEncodingFieldEditor cefe = new CEncodingFieldEditor(JRExporterParameter.PROPERTY_CHARACTER_ENCODING,
+		CEncodingFieldEditor cefe = new CEncodingFieldEditor(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING,
 				Messages.JRExporterPreferencePage_7, Messages.JRExporterPreferencePage_8, getFieldEditorParent());
 		addField(cefe);
 		for (Control c : cefe.getControls())
@@ -73,8 +70,8 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
-		bf = new BooleanFieldEditor(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS, Messages.JRExporterPreferencePage_15,
-				getFieldEditorParent());
+		bf = new BooleanFieldEditor(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS,
+				Messages.JRExporterPreferencePage_15, getFieldEditorParent());
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
@@ -86,10 +83,10 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(JRExporterParameter.PROPERTY_CHARACTER_ENCODING,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING), "UTF-8")); //$NON-NLS-1$
-		store.setDefault(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS,
-				PropertiesHelper.DPROP.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS));
+		store.setDefault(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING,
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING), "UTF-8")); //$NON-NLS-1$
+		store.setDefault(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS,
+				PropertiesHelper.DPROP.getBooleanProperty(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS));
 		store
 				.setDefault(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS, PropertiesHelper.DPROP
 						.getBooleanProperty(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS));

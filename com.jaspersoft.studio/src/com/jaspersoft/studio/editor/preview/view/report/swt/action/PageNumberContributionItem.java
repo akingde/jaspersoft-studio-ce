@@ -49,7 +49,7 @@ public class PageNumberContributionItem extends ContributionItem {
 		public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 			if (isRefresh)
 				return;
-			if (viewer.hasDocument())
+			if (viewer.hasReport())
 				setPageNumber(text.getText());
 
 		};
@@ -74,10 +74,9 @@ public class PageNumberContributionItem extends ContributionItem {
 	void refresh() {
 		if (text == null || text.isDisposed())
 			return;
-		boolean hasDoc = viewer.hasDocument();
+		boolean hasDoc = viewer.hasReport();
 		text.setEnabled(hasDoc);
-		setText(hasDoc ? getPageMofNText() : MessageFormat.format(Messages.PageNumberContributionItem_page, new Object[] {
-				"....", "...." }));
+		setText(hasDoc ? getPageMofNText() : MessageFormat.format(Messages.PageNumberContributionItem_page, "....", "...."));
 	}
 
 	private Control createControl(Composite parent) {
@@ -142,8 +141,8 @@ public class PageNumberContributionItem extends ContributionItem {
 	}
 
 	private String getPageMofNText() {
-		return MessageFormat.format(Messages.PageNumberContributionItem_page,
-				new Object[] { new Integer(viewer.getPageIndex() + 1), new Integer(viewer.getDocument().getPages().size()) });
+		return MessageFormat.format(Messages.PageNumberContributionItem_page, new Integer(viewer.getPageIndex() + 1),
+				new Integer(viewer.getReport().getPages().size()));
 	}
 
 	public void dispose() {

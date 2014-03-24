@@ -260,13 +260,10 @@ public class TextFieldEditor extends FieldEditor {
 			if (isNullAllowed && bIsNull != null) {
 				if (pstore instanceof ScopedPreferenceStore) {
 					try {
-						Method m = pstore.getClass().getDeclaredMethod("internalGet", String.class);
-						m.setAccessible(true);
+						Method m = getPrivateInternalGet(pstore.getClass());
 						if (m != null)
 							value = (String) m.invoke(pstore, getPreferenceName());
 					} catch (SecurityException e) {
-						e.printStackTrace();
-					} catch (NoSuchMethodException e) {
 						e.printStackTrace();
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
@@ -275,7 +272,6 @@ public class TextFieldEditor extends FieldEditor {
 					} catch (InvocationTargetException e) {
 						e.printStackTrace();
 					}
-
 				}
 
 				bIsNull.setSelection(value == null);
@@ -284,6 +280,25 @@ public class TextFieldEditor extends FieldEditor {
 			textField.setText(Misc.nvl(value));
 			oldValue = value;
 		}
+	}
+
+	private Method getPrivateInternalGet(Class<?> clazz) {
+		if (clazz == null)
+			return null;
+		try {
+			Method m = clazz.getDeclaredMethod("internalGet", String.class);
+			if (m != null) {
+				m.setAccessible(true);
+				return m;
+			}
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			return getPrivateInternalGet(clazz.getSuperclass());
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/*

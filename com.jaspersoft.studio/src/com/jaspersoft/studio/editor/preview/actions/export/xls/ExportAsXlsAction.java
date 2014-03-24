@@ -11,8 +11,9 @@
 package com.jaspersoft.studio.editor.preview.actions.export.xls;
 
 import net.sf.jasperreports.eclipse.viewer.IReportViewer;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
+import net.sf.jasperreports.engine.export.JRExportProgressMonitor;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 
 import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.messages.Messages;
@@ -32,7 +33,13 @@ public class ExportAsXlsAction extends AExportXlsAction {
 	}
 
 	@Override
-	protected JRXlsAbstractExporter createExporter(JasperReportsConfiguration jContext) {
-		return new JRXlsExporter(jContext);
+	protected JRXlsExporter createExporter(JasperReportsConfiguration jContext, JRExportProgressMonitor monitor) {
+		JRXlsExporter exp = new JRXlsExporter(jContext);
+
+		SimpleXlsReportConfiguration rconf = new SimpleXlsReportConfiguration();
+		setupReportConfiguration(rconf, monitor);
+		exp.setConfiguration(rconf);
+
+		return exp;
 	}
 }

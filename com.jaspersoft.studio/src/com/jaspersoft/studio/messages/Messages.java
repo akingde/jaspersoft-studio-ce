@@ -180,6 +180,7 @@ public class Messages extends NLS {
 	public static String ADatasetObjectDeleteCommand_confirmationquestion;
 	public static String ADatasetObjectDeleteCommand_confirmationtitle;
 	public static String ADatasourcePage_datasource_editor_description;
+	public static String AExportAction_exportreport;
 	public static String AFileDatasourcePage_browse;
 	public static String Align2BorderAction_align_to_bottom;
 	public static String Align2BorderAction_align_to_bottom_tool_tip;
@@ -1828,6 +1829,7 @@ public class Messages extends NLS {
 	public static String common_confirmdelete;
 	public static String common_yes;
 	public static String common_no;
+	public static String commons_bookmarks;
 
 	public static String VariableNameValidator_variableDuplicatedName;
 	public static String VErrorPreview_bytesLabel;

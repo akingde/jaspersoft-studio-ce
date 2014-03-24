@@ -27,7 +27,6 @@ import com.jaspersoft.studio.editor.preview.actions.export.ExportAsTextAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsXmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsXmlWithImagesAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
-import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsLHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsXHtmlAction;
 import com.jaspersoft.studio.editor.preview.actions.export.xls.ExportAsExcelAPIAction;
@@ -47,7 +46,6 @@ public class ExportMenu {
 
 		mm.add(new ExportAsPdfAction(rptviewer, jContext, exportMenu));
 		mm.add(new ExportAsLHtmlAction(rptviewer, jContext, exportMenu));
-		mm.add(new ExportAsHtmlAction(rptviewer, jContext, exportMenu));
 		mm.add(new ExportAsXHtmlAction(rptviewer, jContext, exportMenu));
 		mm.add(new Separator());
 

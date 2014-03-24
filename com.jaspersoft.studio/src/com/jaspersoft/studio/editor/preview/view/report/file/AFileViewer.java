@@ -11,11 +11,17 @@
 package com.jaspersoft.studio.editor.preview.view.report.file;
 
 import java.io.File;
+import java.io.IOException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.ReportViewer;
 import net.sf.jasperreports.engine.JasperPrint;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -24,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportMenuAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -32,26 +38,27 @@ import com.jaspersoft.studio.editor.preview.view.IPreferencePage;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AFileViewer extends APreview implements IJRPrintable, IPreferencePage {
 
 	private ReportViewer rptviewer;
-	private Text browser;
+	private Text txt;
 
 	public AFileViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
 
-	private AbstractExportAction expAction;
+	private AExportAction expAction;
 
-	protected AbstractExportAction createExporterAction(ReportViewer rptv) {
+	protected AExportAction createExporterAction(ReportViewer rptv) {
 		if (expAction == null)
 			expAction = createExporter(rptv);
 		return expAction;
 	}
 
-	protected abstract AbstractExportAction createExporter(ReportViewer rptv);
+	protected abstract AExportAction createExporter(ReportViewer rptv);
 
 	protected abstract String getExtension();
 
@@ -72,8 +79,8 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
 
-		browser = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.READ_ONLY);
-		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
+		txt = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.READ_ONLY);
+		txt.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		rptviewer = new ReportViewer(jContext);
 		return composite;
@@ -85,21 +92,38 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 		setJRPRint(stats, jrprint, false);
 	}
 
-	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) throws Exception {
+	public void setJRPRint(final Statistics stats, final JasperPrint jrprint, boolean refresh) throws Exception {
 		if (this.jrprint == null || this.jrprint != jrprint || refresh) {
-			rptviewer.setDocument(jrprint);
+			rptviewer.setReport(jrprint);
 
-			File tmpFile = File.createTempFile("report", getExtension());
+			Job job = new Job(Messages.AExportAction_exportreport) {
+				@Override
+				protected IStatus run(final IProgressMonitor monitor) {
+					try {
+						File tmpFile = File.createTempFile("report", getExtension());
+						AExportAction exp = createExporterAction(rptviewer);
+						stats.startCount(ReportControler.ST_EXPORTTIME);
+						exp.doExport(tmpFile, jrprint, monitor);
+						stats.endCount(ReportControler.ST_EXPORTTIME);
+						stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+						final String content = (FileUtils.readFileAsAString(tmpFile));
+						UIUtils.getDisplay().asyncExec(new Runnable() {
 
-			AbstractExportAction exp = createExporterAction(rptviewer);
-			stats.startCount(ReportControler.ST_EXPORTTIME);
-			exp.export(tmpFile);
-			stats.endCount(ReportControler.ST_EXPORTTIME);
-			stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+							@Override
+							public void run() {
+								txt.setText(content);
+							}
+						});
+					} catch (IOException e) {
+						UIUtils.showError(e);
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.LONG);
+			job.schedule();
 
-			browser.setText(FileUtils.readFileAsAString(tmpFile));
 		}
 		this.jrprint = jrprint;
 	}
-
 }

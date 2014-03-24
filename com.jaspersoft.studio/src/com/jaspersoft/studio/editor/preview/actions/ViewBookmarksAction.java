@@ -8,24 +8,18 @@
  * 
  * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.preview.view.report.html;
+package com.jaspersoft.studio.editor.preview.actions;
 
-import net.sf.jasperreports.eclipse.viewer.ReportViewer;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.preview.MultiPageContainer;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.messages.Messages;
 
-import org.eclipse.swt.widgets.Composite;
+public class ViewBookmarksAction extends ASwitchAction {
 
-import com.jaspersoft.studio.editor.preview.actions.export.AExportAction;
-import com.jaspersoft.studio.editor.preview.actions.export.html.ExportAsLHtmlAction;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
-public class LayeredHTMLViewer extends HTMLViewer {
-
-	public LayeredHTMLViewer(Composite parent, JasperReportsConfiguration jContext) {
-		super(parent, jContext);
+	public ViewBookmarksAction(MultiPageContainer pContainer) {
+		super(pContainer, ReportControler.FORM_BOOKMARKS);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/bookmark.png"));
+		setToolTipText(Messages.commons_bookmarks);
 	}
-
-	protected AExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsLHtmlAction(rptv, jContext, null);
-	}
-
 }
