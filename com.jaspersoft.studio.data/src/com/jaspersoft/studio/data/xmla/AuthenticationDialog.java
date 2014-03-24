@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.messages.Messages;
+
 /**
  * Dialog used to authenticate the user when he try to connect
  * to a Xmla endpoint
@@ -40,12 +42,12 @@ public class AuthenticationDialog extends Dialog{
 	/**
 	 *  key of the username in the url
 	 */
-	private static final String usernameKey = "j_username=";
+	private static final String usernameKey = "j_username="; //$NON-NLS-1$
 	
 	/**
 	 *  key of the password in the url
 	 */
-	private static final String passwordKey = "j_password=";
+	private static final String passwordKey = "j_password="; //$NON-NLS-1$
 	
 	/**
 	 * Field where the username is typed
@@ -60,12 +62,12 @@ public class AuthenticationDialog extends Dialog{
 	/**
 	 * The actual username
 	 */
-	private String username = "";
+	private String username = ""; //$NON-NLS-1$
 
 	/**
 	 * The actual password
 	 */
-	private String password = "";
+	private String password = ""; //$NON-NLS-1$
 
 	/**
 	 * Flag to set if the operation was aborted by the user
@@ -78,7 +80,7 @@ public class AuthenticationDialog extends Dialog{
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Username dialog");
+		newShell.setText(Messages.AuthenticationDialog_title);
 	}
 
     /**
@@ -96,8 +98,8 @@ public class AuthenticationDialog extends Dialog{
 		int userStart = urlString.indexOf(usernameKey);
 		int passwordStart = urlString.indexOf(passwordKey);
 		if (userStart == -1 || passwordStart == -1) {
-			username = "";
-			password = "";
+			username = ""; //$NON-NLS-1$
+			password = ""; //$NON-NLS-1$
 		} else {
 			userStart += usernameKey.length();
 			passwordStart += passwordKey.length();
@@ -125,7 +127,7 @@ public class AuthenticationDialog extends Dialog{
 		Composite dialogArea = (Composite) super.createDialogArea(parent);
 		dialogArea.setLayout(new GridLayout(2, false));
 		Label lblUserName = new Label(dialogArea, SWT.NONE);
-		lblUserName.setText("Username");
+		lblUserName.setText(Messages.AuthenticationDialog_usernameLbl);
 		usernameText = new Text(dialogArea, SWT.BORDER);
 		usernameText.setText(username);
 		usernameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -138,7 +140,7 @@ public class AuthenticationDialog extends Dialog{
 		});
 
 		Label lblPassword = new Label(dialogArea, SWT.NONE);
-		lblPassword.setText("Password");
+		lblPassword.setText(Messages.AuthenticationDialog_passwordLbl);
 		passwordText = new Text(dialogArea, SWT.BORDER);
 		passwordText.setText(password);
 		passwordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -194,8 +196,8 @@ public class AuthenticationDialog extends Dialog{
 	 * Reset the fields value
 	 */
 	public void resetFields() {
-		username = "";
-		password = "";
+		username = ""; //$NON-NLS-1$
+		password = ""; //$NON-NLS-1$
 		cancelOperation = false;
 	}
 

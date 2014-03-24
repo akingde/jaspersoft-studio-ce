@@ -140,7 +140,7 @@ public abstract class AbstractDataAdapterWizard extends JSSWizard implements Sel
 
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Testing DataAdapter", SWT.INDETERMINATE);
+						monitor.beginTask("Testing Data Adapter", SWT.INDETERMINATE);
 						ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 						try {
 							ClassLoader cl = Thread.currentThread().getContextClassLoader();

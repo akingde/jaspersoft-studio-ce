@@ -445,7 +445,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	 *            The Status with the root cause.
 	 */
 	public DataAdapterErrorDialog(Shell parentShell, String message, IStatus status) {
-			this(parentShell, "DataAdapter Error", message, status);
+			this(parentShell, "Data Adapter Error", message, status);
 	}
 
 	/**

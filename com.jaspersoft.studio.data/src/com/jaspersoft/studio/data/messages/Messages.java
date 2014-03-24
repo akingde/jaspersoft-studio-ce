@@ -20,6 +20,9 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.messages.messages"; //$NON-NLS-1$
 	public static String ATreeWizardDataEditorComposite_Title;
+	public static String AuthenticationDialog_passwordLbl;
+	public static String AuthenticationDialog_title;
+	public static String AuthenticationDialog_usernameLbl;
 	public static String BeanDataAdapterComposite_0;
 	public static String BeanDataAdapterComposite_1;
 	public static String BeanDataAdapterComposite_2;
