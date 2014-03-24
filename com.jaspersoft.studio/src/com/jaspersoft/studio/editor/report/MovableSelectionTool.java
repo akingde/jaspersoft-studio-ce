@@ -28,6 +28,7 @@ import org.eclipse.gef.tools.SelectionTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor.KeyPressedEventDomain;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -50,17 +51,22 @@ public class MovableSelectionTool extends SelectionTool {
 		if (isInState(STATE_INITIAL) && UIUtil.isArrowKey(e.keyCode)) {
 			EditPartViewer viewer = getCurrentViewer();
 			if (viewer instanceof GraphicalViewer) {
-				EditPart focusEditPart = getCurrentViewer().getFocusEditPart();
-				if (focusEditPart instanceof GraphicalEditPart) {
-					Object modelObj = focusEditPart.getModel();
-					if(modelObj instanceof MGraphicElement) {
-						MGraphicElement node = (MGraphicElement) modelObj;
-						SetConstraintCommand moveUpCmd = new SetConstraintCommand();
-						moveUpCmd.setContext(null, node, getNewLocation(e.keyCode, node));
-						getDomain().getCommandStack().execute(moveUpCmd);
-						return true;
+				JSSCompoundCommand ccmd = new JSSCompoundCommand(null);
+				for(Object selectedEditPart : getCurrentViewer().getSelectedEditParts()) {
+					if (selectedEditPart instanceof GraphicalEditPart) {
+						Object modelObj = ((EditPart) selectedEditPart).getModel();
+						if(modelObj instanceof MGraphicElement) {
+							MGraphicElement node = (MGraphicElement) modelObj;
+							SetConstraintCommand moveCmd = new SetConstraintCommand();
+							moveCmd.setContext(null, node, getNewLocation(e.keyCode, node));
+							ccmd.add(moveCmd);
+						}
 					}
 				}
+				if(!ccmd.isEmpty()) {
+					getDomain().getCommandStack().execute(ccmd);
+					return true;
+				}	
 			}
 		}
 		return super.handleKeyDown(e);
