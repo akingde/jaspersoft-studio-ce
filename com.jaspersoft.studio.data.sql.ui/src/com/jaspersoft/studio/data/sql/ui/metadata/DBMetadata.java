@@ -98,7 +98,7 @@ public class DBMetadata {
 		gd.horizontalAlignment = SWT.CENTER;
 		gd.horizontalIndent = 20;
 		msg.setLayoutData(gd);
-		msg.setText("No Metadata.\nSelect a JDBC DataAdapter.");
+		msg.setText("No Metadata.\nSelect a JDBC Data Adapter.");
 		msg.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
