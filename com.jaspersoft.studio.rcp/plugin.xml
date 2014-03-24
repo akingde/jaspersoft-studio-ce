@@ -256,7 +256,7 @@
 		   	<command
 	            commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
 	            id="com.jaspersoft.studio.rcp.newdataadapter"
-	            label="New DataAdapter"
+	            label="%newDataAdapter"
 	            style="push"
 	            icon="icons/toolbar/data_source.png"
 	            tooltip="%newDataAdapter">
