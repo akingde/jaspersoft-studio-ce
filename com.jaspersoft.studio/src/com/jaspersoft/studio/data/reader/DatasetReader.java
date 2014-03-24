@@ -160,7 +160,9 @@ public class DatasetReader {
 				jrobj = JasperCompileManager.getInstance(jConfig).compile(dataJD);
 
 			// 7. Prepare parameters
-			Map<String, Object> hm = new HashMap<String, Object>();
+			Map<String, Object> hm = jConfig.getJRParameters();
+			if (hm == null)
+				hm = new HashMap<String, Object>();
 			hm = ReportControler.resetParameters(hm, jConfig);
 
 			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
