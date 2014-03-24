@@ -201,7 +201,7 @@
 	  </para>
 	  <para>
 	  	Now create two fields (In the outline view right click on the element Fields and select Create Field, one time for each field), and drag and drop them in the detail band. Probably you will 
-	  	have to adjust the size of the band and of the frame inside it (you could also remove this frame). Anyway ad the and you will obtein something like this:
+	  	have to adjust the size of the band and of the frame inside it (you could also remove this frame). Anyway ad the and you will obtain something like this:
 	  </para>
 	  <figure>
 			<title>Structure of the report</title>

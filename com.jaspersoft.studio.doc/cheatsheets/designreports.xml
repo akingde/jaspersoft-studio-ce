@@ -19,7 +19,7 @@
       </description>      
       	<subitem label="Select a template"/>
 		<subitem label="Select the project and report file name"/>
-		<subitem label="Configure DataAdapter, report language, edit the query" skip="true"/>
+		<subitem label="Configure Data Adapter, report language, edit the query" skip="true"/>
 		<subitem label="Select fields you want to use" skip="true"/>
 		<subitem label="Select groups" skip="true"/>      
    </item>
