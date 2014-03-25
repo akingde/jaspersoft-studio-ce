@@ -208,7 +208,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 		editorContainer.setLayout(layout);
 
 		editorArea = new StyledText(editorContainer, SWT.BORDER
-				| SWT.BORDER_SOLID | SWT.MULTI | SWT.WRAP);
+				| SWT.BORDER_SOLID | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 		
 		new UndoRedoImpl(editorArea);
 		GridData editorAreaGD=new GridData(SWT.FILL, SWT.FILL, true, true);
