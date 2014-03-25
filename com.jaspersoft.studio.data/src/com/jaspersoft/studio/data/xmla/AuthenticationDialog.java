@@ -68,6 +68,12 @@ public class AuthenticationDialog extends Dialog{
 	 * The actual password
 	 */
 	private String password = ""; //$NON-NLS-1$
+	
+	/**
+	 * Counter to keep trace to the number of attempt used to connect (must
+	 * be updated manually)
+	 */
+	private int authenticationAttempt = 0;
 
 	/**
 	 * Flag to set if the operation was aborted by the user
@@ -199,6 +205,38 @@ public class AuthenticationDialog extends Dialog{
 		username = ""; //$NON-NLS-1$
 		password = ""; //$NON-NLS-1$
 		cancelOperation = false;
+		authenticationAttempt = 0;
+	}
+	
+	/**
+	 * Reset the fields value, and initialize the fields username and password
+	 * with a specific value
+	 * 
+	 * @param usernameInit the initial value for the username field, if it is null
+	 * the value is considered the empty string
+	 * @param passwordInit the initial value for the password field, if it is null
+	 * the value is considered the empty string
+	 */
+	public void resetFields(String usernameInit, String passwordInit){
+		username = usernameInit != null ? usernameInit : ""; //$NON-NLS-1$
+		password = passwordInit != null ? passwordInit : ""; //$NON-NLS-1$
+		cancelOperation = false;
+		authenticationAttempt = 0;
+	}
+	
+	/**
+	 * Increment the value of authentication attempt by one
+	 */
+	public void incrementAuthAttempt(){
+		authenticationAttempt ++;
+	}
+	
+	/**
+	 * Return the value of authentication attempt
+	 * @return an integer greater or equal to 0
+	 */
+	public int getAuthenticationAttempt(){
+		return authenticationAttempt;
 	}
 
 	/**

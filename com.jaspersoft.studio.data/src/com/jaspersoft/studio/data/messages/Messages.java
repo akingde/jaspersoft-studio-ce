@@ -214,6 +214,10 @@ public class Messages extends NLS {
 	public static String XmlaDataAdapterComposite_2;
 	public static String XmlaDataAdapterComposite_3;
 	public static String XmlaDataAdapterComposite_4;
+	public static String XmlaDataAdapterComposite_failedText;
+	public static String XmlaDataAdapterComposite_failedTitle;
+	public static String XmlaDataAdapterComposite_successText;
+	public static String XmlaDataAdapterComposite_successTitle;
 	public static String XmlaDataAdapterFactory_description;
 	public static String XmlaDataAdapterFactory_label;
 	public static String XMLDataAdapterComposite_0;
