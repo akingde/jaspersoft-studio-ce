@@ -13,6 +13,7 @@ package com.jaspersoft.studio.editor.preview.toolbar;
 import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
 
 import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
@@ -53,6 +54,8 @@ public abstract class ATopToolBarManager {
 		for (IContributionItem it : tbManager.getItems()) {
 			if (it instanceof ActionContributionItem && ((ActionContributionItem) it).getAction() instanceof IDisposable)
 				((IDisposable) ((ActionContributionItem) it).getAction()).dispose();
+			else if (it instanceof ContributionItem)
+				it.dispose();
 		}
 		tbManager.removeAll();
 	}

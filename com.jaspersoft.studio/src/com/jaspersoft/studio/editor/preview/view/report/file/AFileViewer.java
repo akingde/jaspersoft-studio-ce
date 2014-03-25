@@ -64,6 +64,7 @@ public abstract class AFileViewer extends APreview implements IJRPrintable, IPre
 
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
+		super.contribute2ToolBar(tmanager);
 		if (jrprint != null) {
 			ExportMenuAction exportMenu = ExportMenu.getExportMenu(rptviewer, jContext);
 			setDefaultExporter(exportMenu, createExporterAction(rptviewer));

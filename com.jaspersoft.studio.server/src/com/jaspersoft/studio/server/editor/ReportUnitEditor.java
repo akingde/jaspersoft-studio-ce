@@ -198,7 +198,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 	}
 
 	@Override
-	protected boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
+	public boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
 		reportControler.viewerChanged(view);
 		return super.switchRightView(view, stats, container);
 	}

@@ -35,8 +35,14 @@ public abstract class APreview {
 		return control;
 	}
 
-	public void contribute2ToolBar(IToolBarManager tmanager) {
+	private boolean contributed = false;
 
+	public boolean isContributed2ToolBar() {
+		return contributed;
+	}
+
+	public void contribute2ToolBar(IToolBarManager tmanager) {
+		contributed = true;
 	}
 
 	public void dispose() {

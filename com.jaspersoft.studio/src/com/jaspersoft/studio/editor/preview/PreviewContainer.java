@@ -245,7 +245,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	@Override
-	protected boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
+	public boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
 		reportControler.viewerChanged(view);
 		return super.switchRightView(view, stats, container);
 	}

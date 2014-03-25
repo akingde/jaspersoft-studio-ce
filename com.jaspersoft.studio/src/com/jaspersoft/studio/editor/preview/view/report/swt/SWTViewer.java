@@ -82,6 +82,7 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
+		super.contribute2ToolBar(tmanager);
 		tmanager.add(new FirstPageAction(rptviewer));
 		tmanager.add(new PreviousPageAction(rptviewer));
 		tmanager.add(new PageNumberContributionItem(rptviewer));

@@ -225,8 +225,7 @@ public class ReportControler {
 	private Console c;
 
 	public void runReport() {
-		VSimpleErrorPreview errorView = pcontainer.getErrorView();
-		pcontainer.getRightContainer().switchView(null, errorView);
+		VSimpleErrorPreview errorView = showErrorView(pcontainer);
 		errorView.setMessage(Messages.ReportControler_generating);
 		c = pcontainer.getConsole();
 
@@ -279,8 +278,7 @@ public class ReportControler {
 				boolean notprmfiled = !prmInput.checkFieldsFilled();
 				if (notprmfiled) {
 					c.addMessage(Messages.ReportControler_msg_fillparameters);
-					VSimpleErrorPreview errorView = pcontainer.getErrorView();
-					pcontainer.getRightContainer().switchView(null, errorView);
+					VSimpleErrorPreview errorView = showErrorView(pcontainer);
 					errorView.setMessage(Messages.ReportControler_msg_fillparameters);
 					// UIUtils.showWarning(Messages.ReportControler_msg_fillparameters);
 					prmInput.setFocus();
@@ -402,8 +400,7 @@ public class ReportControler {
 
 				@Override
 				public void run() {
-					VSimpleErrorPreview errorView = pcontainer.getErrorView();
-					pcontainer.getRightContainer().switchView(null, errorView);
+					VSimpleErrorPreview errorView = showErrorView(pcontainer);
 					errorView.setMessage(Messages.ReportControler_compilationerrors);
 				}
 			});
@@ -455,7 +452,7 @@ public class ReportControler {
 		IStatus retstatus = Status.OK_STATUS;
 		try {
 			pmonitor.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
-			fh.addFillListener((IJRPrintable) pcontainer.getDefaultViewer());
+			fh.addFillListener((IJRPrintable) getDefaultViewer());
 			PageGenerationListener pgListener = new PageGenerationListener();
 			fh.addFillListener(pgListener);
 			fh.addListener(pgListener);
@@ -500,7 +497,7 @@ public class ReportControler {
 			if (page == 0) {
 				UIUtils.getDisplay().syncExec(new Runnable() {
 					public void run() {
-						pcontainer.getRightContainer().switchView(stats, pcontainer.getDefaultViewerKey());
+						refreshRightView();
 					}
 				});
 			}
@@ -576,7 +573,7 @@ public class ReportControler {
 				if (scfactory != null)
 					stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
 				stats.endCount(ST_REPORTEXECUTIONTIME);
-				APreview pv = pcontainer.getDefaultViewer();
+				APreview pv = getDefaultViewer();
 				if (pv instanceof IJRPrintable)
 					try {
 						((IJRPrintable) pv).setJRPRint(stats, jPrint, true);
@@ -592,6 +589,11 @@ public class ReportControler {
 		});
 	}
 
+	protected APreview getDefaultViewer() {
+		APreview pv = pcontainer.getDefaultViewer();
+		return pv;
+	}
+
 	public static void showRunReport(Console c, final PreviewJRPrint pcontainer, final Throwable e) {
 		showRunReport(c, pcontainer, e, null);
 	}
@@ -602,10 +604,19 @@ public class ReportControler {
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			public void run() {
-				VSimpleErrorPreview errorView = pcontainer.getErrorView();
-				pcontainer.getRightContainer().switchView(null, errorView);
+				VSimpleErrorPreview errorView = showErrorView(pcontainer);
 				errorView.setMessage(Messages.ReportControler_generatingerror);
 			}
 		});
+	}
+
+	protected static VSimpleErrorPreview showErrorView(PreviewJRPrint pcontainer) {
+		VSimpleErrorPreview errorView = pcontainer.getErrorView();
+		pcontainer.getRightContainer().switchView(null, errorView);
+		return errorView;
+	}
+
+	private void refreshRightView() {
+		pcontainer.switchRightView(pcontainer.getDefaultViewer(), stats, pcontainer.getRightContainer());
 	}
 }
