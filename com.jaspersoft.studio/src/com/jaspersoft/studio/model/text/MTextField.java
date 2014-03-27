@@ -424,7 +424,7 @@ public class MTextField extends MTextElement {
 	 */
 	@Override
 	public int getDefaultHeight() {
-		return 30;
+		return 20;
 	}
 
 	/*
