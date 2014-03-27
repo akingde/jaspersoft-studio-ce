@@ -57,7 +57,7 @@ public class PublishHandler extends AbstractHandler {
 				file = getFileFromURI(((CompilationUnit) obj).getPath().toFile().toURI());
 		}
 		if (file == null) {
-			IEditorInput ei = HandlerUtil.getActiveEditorInput(event);
+			IEditorInput ei = com.jaspersoft.studio.utils.compatibility.HandlerUtil.getActiveEditorInput(event);
 			if (ei instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) ei).getFile();
 				String ext = file.getFileExtension();
