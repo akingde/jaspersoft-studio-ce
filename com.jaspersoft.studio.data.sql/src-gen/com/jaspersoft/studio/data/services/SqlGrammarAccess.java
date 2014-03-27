@@ -3062,7 +3062,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal ID:
-	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")*;
+	//	("a".."z" | "A".."Z" | "_" | "あ".."ん" | "ア".."ン" | "ー") ("a".."z" | "A".."Z" | "_" | "あ".."ん" | "ア".."ン" | "ー" |
+	//	"0".."9")*;
 	public TerminalRule getIDRule() {
 		return (tID != null) ? tID : (tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID"));
 	} 
