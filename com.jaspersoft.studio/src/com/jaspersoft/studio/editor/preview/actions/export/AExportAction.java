@@ -179,20 +179,23 @@ public abstract class AExportAction extends AReportViewerAction {
 
 	public void doExport(File file, JasperPrint jrPrint, final IProgressMonitor monitor) {
 		try {
-			final Integer size = jrPrint.getPages().size();
-			monitor.beginTask(Messages.AExportAction_exportreport, size);
-			exportWithProgress(file, new JRExportProgressMonitor() {
-				private int current = 0;
+			if (jrPrint != null && jrPrint.getPages() != null) {
+				final Integer size = jrPrint.getPages().size();
+				monitor.beginTask(Messages.AExportAction_exportreport, size);
+				exportWithProgress(file, new JRExportProgressMonitor() {
+					private int current = 0;
 
-				@Override
-				public void afterPageExport() {
-					if (monitor.isCanceled())
-						Thread.currentThread().interrupt();
-					monitor.worked(1);
-					monitor.subTask(MessageFormat.format(Messages.PageNumberContributionItem_page, new Integer(current++), size));
-				}
+					@Override
+					public void afterPageExport() {
+						if (monitor.isCanceled())
+							Thread.currentThread().interrupt();
+						monitor.worked(1);
+						monitor.subTask(MessageFormat
+								.format(Messages.PageNumberContributionItem_page, new Integer(current++), size));
+					}
 
-			});
+				});
+			}
 		} catch (Throwable e) {
 			UIUtils.showError(e);
 		} finally {
