@@ -36,6 +36,7 @@ import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
+import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ViewsFactory {
@@ -108,8 +109,19 @@ public class ViewsFactory {
 				return val;
 			}
 		};
-		for (String key : pcmap.keySet())
+		for (String key : pcmap.keySet()) {
+			if (key.equals("ExcelAPI")
+					&& !jContext.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, false))
+				continue;
+			if (key.equals("xHTML")
+					&& !jContext.getPropertyBoolean(JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false))
+				continue;
+			if (key.equals("XLS Metadata")
+					&& !jContext.getPropertyBoolean(
+							JRExporterPreferencePage.COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA, false))
+				continue;
 			pmap.put(key, null);
+		}
 
 		// pmap.put(VIEWER_JAVA, new SWTViewer(composite, jContext));
 		//

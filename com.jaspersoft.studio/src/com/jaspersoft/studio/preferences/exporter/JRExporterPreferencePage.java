@@ -36,6 +36,9 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
+	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML = "com.jaspersoft.studio.exporter.show.xhtml";
+	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA = "com.jaspersoft.studio.exporter.show.excelapi.metadata";
+	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI = "com.jaspersoft.studio.exporter.show.excelapi";
 	public static final String NSF_EXPORT_LEGACY_BORDER_OFFSET = "net.sf.jasperreports.export.legacy.border.offset"; //$NON-NLS-1$
 	public static final String EXPPARAM_OFFSET_X = "expparam.offset.x"; //$NON-NLS-1$
 	public static final String EXPPARAM_OFFSET_Y = "expparam.offset.y"; //$NON-NLS-1$
@@ -80,6 +83,19 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(new IntegerFieldEditor(EXPPARAM_OFFSET_Y, Messages.JRExporterPreferencePage_17, getFieldEditorParent()));
 
 		addField(new PagesFieldEditor(EXPPARAM_INDEX_PAGE, Messages.JRExporterPreferencePage_18, getFieldEditorParent()));
+
+		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, "Show Excel API Exporter",
+				getFieldEditorParent());
+		addField(bf);
+
+		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA,
+				"Show Excel API Metadata Exporter", getFieldEditorParent());
+		addField(bf);
+
+		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, "Show xHTML Exporter",
+				getFieldEditorParent());
+		addField(bf);
+
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
@@ -95,6 +111,10 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
 		store.setDefault(EXPPARAM_OFFSET_X, 0);
 		store.setDefault(EXPPARAM_OFFSET_Y, 0);
+
+		store.setDefault(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, false);
+		store.setDefault(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA, false);
+		store.setDefault(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, false);
 
 		store.setDefault(EXPPARAM_INDEX_PAGE, "all"); //$NON-NLS-1$
 	}
