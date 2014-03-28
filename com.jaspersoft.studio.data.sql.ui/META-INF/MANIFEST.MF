@@ -18,7 +18,19 @@ Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.6.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
 Bundle-Activator: com.jaspersoft.studio.data.sql.Activator
-Export-Package: com.jaspersoft.studio.data.ui.contentassist.antlr,
- com.jaspersoft.studio.data.ui.contentassist
+Export-Package: com.jaspersoft.studio.data.sql.model,
+ com.jaspersoft.studio.data.sql.model.enums,
+ com.jaspersoft.studio.data.sql.model.metadata,
+ com.jaspersoft.studio.data.sql.model.metadata.keys,
+ com.jaspersoft.studio.data.sql.model.query,
+ com.jaspersoft.studio.data.sql.model.query.expression,
+ com.jaspersoft.studio.data.sql.model.query.from,
+ com.jaspersoft.studio.data.sql.model.query.groupby,
+ com.jaspersoft.studio.data.sql.model.query.operand,
+ com.jaspersoft.studio.data.sql.model.query.orderby,
+ com.jaspersoft.studio.data.sql.model.query.select,
+ com.jaspersoft.studio.data.sql.model.query.subquery,
+ com.jaspersoft.studio.data.ui.contentassist,
+ com.jaspersoft.studio.data.ui.contentassist.antlr
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
