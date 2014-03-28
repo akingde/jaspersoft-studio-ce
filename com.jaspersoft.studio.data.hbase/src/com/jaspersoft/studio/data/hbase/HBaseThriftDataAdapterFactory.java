@@ -60,4 +60,9 @@ public class HBaseThriftDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return null;
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

@@ -68,4 +68,9 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
+
 }

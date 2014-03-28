@@ -91,4 +91,9 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 		return new JDBCCreator();
 	}
 
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
+
 }

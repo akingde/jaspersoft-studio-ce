@@ -60,4 +60,9 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return null;
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

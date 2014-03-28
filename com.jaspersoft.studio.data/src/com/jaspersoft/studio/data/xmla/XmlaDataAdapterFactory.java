@@ -70,4 +70,9 @@ public class XmlaDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return new XMLACreator();
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

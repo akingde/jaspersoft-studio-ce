@@ -70,4 +70,9 @@ public class SpringHibernateDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return new SpringHibernateCreator();
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

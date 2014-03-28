@@ -70,4 +70,9 @@ public class EjbqlDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return new EjbqlCreator();
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

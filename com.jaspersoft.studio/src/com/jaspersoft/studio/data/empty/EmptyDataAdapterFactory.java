@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.data.empty;
 
@@ -39,18 +34,19 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	public String getLabel() {
 		return Messages.EmptyDataAdapterFactory_label;
 	}
-	
-	public String getDescription() { 
+
+	public String getDescription() {
 		return Messages.EmptyDataAdapterFactory_description;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png"); //$NON-NLS-1$
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return JaspersoftStudioPlugin.getInstance().getImage("icons/battery-empty.png"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -63,8 +59,10 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return null;
 	}
-	
-	
 
-	
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
+
 }

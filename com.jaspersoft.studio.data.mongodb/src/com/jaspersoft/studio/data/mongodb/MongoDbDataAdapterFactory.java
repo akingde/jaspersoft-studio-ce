@@ -98,4 +98,9 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return new MongoDBCreator();
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

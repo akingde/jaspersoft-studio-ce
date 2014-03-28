@@ -13,11 +13,11 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.data.customjrds;
+package com.jaspersoft.studio.data.excel;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
+import net.sf.jasperreports.data.excel.ExcelDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -27,18 +27,18 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.messages.Messages;
 
-public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
+public class ExcelDataAdapterFactory implements DataAdapterFactory {
 
 	public DataAdapterDescriptor createDataAdapter() {
-		return new CustomJrdsDataAdapterDescriptor();
+		return new ExcelDataAdapterDescriptor();
 	}
 
 	public String getDataAdapterClassName() {
-		return DataSourceDataAdapterImpl.class.getName();
+		return ExcelDataAdapterImpl.class.getName();
 	}
 
 	public String getLabel() {
-		return Messages.CustomJrdsDataAdapterFactory_customJrAdapterLabel;
+		return Messages.ExcelDataAdapterFactory_label;
 	}
 
 	/*
@@ -47,7 +47,7 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return Messages.CustomJrdsDataAdapterFactory_customJrAdapterDescription;
+		return Messages.ExcelDataAdapterFactory_description;
 	}
 
 	/*
@@ -56,9 +56,8 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	public Image getIcon(int size) {
-		if (size == 16) {
-			return Activator.getDefault().getImage("icons/bean-green.png"); //$NON-NLS-1$
-		}
+		if (size == 16)
+			return Activator.getDefault().getImage("icons/document-excel.png"); //$NON-NLS-1$ 
 		return null;
 	}
 
@@ -68,12 +67,11 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 
 	@Override
 	public IDataAdapterCreator iReportConverter() {
-		return null;
+		return new ExcelCreator();
 	}
 
 	@Override
 	public boolean isDepricated() {
 		return false;
 	}
-
 }

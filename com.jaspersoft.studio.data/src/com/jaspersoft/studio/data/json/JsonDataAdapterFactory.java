@@ -70,4 +70,9 @@ public class JsonDataAdapterFactory implements DataAdapterFactory {
 	public IDataAdapterCreator iReportConverter() {
 		return new JsonCreator();
 	}
+
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
 }

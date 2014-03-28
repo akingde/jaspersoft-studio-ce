@@ -73,4 +73,9 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 		return new RemoteXMLCreator();
 	}
 
+	@Override
+	public boolean isDepricated() {
+		return false;
+	}
+
 }
