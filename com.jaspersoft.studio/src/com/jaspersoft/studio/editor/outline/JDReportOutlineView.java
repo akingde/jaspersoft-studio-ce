@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.editor.outline;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,8 +39,8 @@ import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.SubContributionManager;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -105,10 +106,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	private IAction showOutlineAction, showOverviewAction;
 
 	/** The Constant ID_OUTLINE. */
-	static final int ID_OUTLINE = 0;
+	public static final String ID_ACTION_OUTLINE = "showOutlineAction";
 
 	/** The Constant ID_OVERVIEW. */
-	static final int ID_OVERVIEW = 1;
+	public static final String ID_ACTION_OVERVIEW = "showOverviewAction";
 
 	/** The thumbnail. */
 	private JSSScrollableThumbnail thumbnail;
@@ -214,34 +215,45 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		registerToolbarAction(tbm);
 		
-		showPage(ID_OUTLINE);
+		showPage(ID_ACTION_OUTLINE);
 	}
 	
 	public void registerToolbarAction(IToolBarManager tbm){
-		showOutlineAction = new Action() {
+		IContributionItem items[] = tbm.getItems();
+		HashSet<String> existingItems = new HashSet<String>();
+		for(IContributionItem item : items){
+			existingItems.add(item.getId());
+		}
+		
+		showOutlineAction = new Action(){
 			@Override
 			public void run() {
-				showPage(ID_OUTLINE);
+				showPage(ID_ACTION_OUTLINE);
 			}
 		};
-		((SubContributionManager)tbm).setVisible(true);
+		showOutlineAction.setId(ID_ACTION_OUTLINE);
 		showOutlineAction.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/outline.gif")); //$NON-NLS-1$
 		showOutlineAction.setToolTipText(Messages.JDReportOutlineView_show_outline_tool_tip);
-		ActionContributionItem showOutlineItem = new ActionContributionItem(showOutlineAction);
-		showOutlineItem.setVisible(true);
-		tbm.add(showOutlineItem);
+		if (!existingItems.contains(ID_ACTION_OUTLINE)){
+			ActionContributionItem showOutlineItem = new ActionContributionItem(showOutlineAction);
+			showOutlineItem.setVisible(true);
+			tbm.add(showOutlineItem);
+		}
 		
 		showOverviewAction = new Action() {
 			@Override
 			public void run() {
-				showPage(ID_OVERVIEW);
+				showPage(ID_ACTION_OVERVIEW);
 			}
 		};
+		showOverviewAction.setId(ID_ACTION_OVERVIEW);
 		showOverviewAction.setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/overview.gif")); //$NON-NLS-1$
 		showOverviewAction.setToolTipText(Messages.JDReportOutlineView_show_overview_tool_tip);
-		ActionContributionItem showOverviewItem = new ActionContributionItem(showOverviewAction);
-		showOverviewItem.setVisible(true);
-		tbm.add(showOverviewItem);
+		if (!existingItems.contains(ID_ACTION_OVERVIEW)){
+			ActionContributionItem showOverviewItem = new ActionContributionItem(showOverviewAction);
+			showOverviewItem.setVisible(true);
+			tbm.add(showOverviewItem);
+		}
 	}
 
 	/*
@@ -460,14 +472,14 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * @param id
 	 *          the id
 	 */
-	protected void showPage(int id) {
-		if (id == ID_OUTLINE) {
+	protected void showPage(String id) {
+		if (ID_ACTION_OUTLINE.equals(id)) {
 			showOutlineAction.setChecked(true);
 			showOverviewAction.setChecked(false);
 			pageBook.showPage(outline);
 			if (thumbnail != null)
 				thumbnail.setVisible(false);
-		} else if (id == ID_OVERVIEW) {
+		} else if (ID_ACTION_OVERVIEW.equals(id)) {
 			if (thumbnail == null)
 				initializeOverview();
 			showOutlineAction.setChecked(false);

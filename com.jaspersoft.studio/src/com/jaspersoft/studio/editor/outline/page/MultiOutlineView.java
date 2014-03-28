@@ -130,9 +130,9 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	public void setActionBars(IActionBars actionBars) {
 		this.actionBars = actionBars;
 		registerToolbarActions(actionBars);
-		if (currentPage != null)
+		if (currentPage != null){
 			setPageActive(currentPage);
-
+		}
 	}
 
 	public IActionBars getActionBars() {
@@ -162,10 +162,15 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		isRefresh = true;
 		if (page == null)
 			page = getEmptyPage();
+		Control control = page.getControl();
 		if (currentPage != null)
 			currentPage.removeSelectionChangedListener(this);
-		if (getActionBars() != null && getActionBars().getToolBarManager() != null)
+		if (getActionBars() != null && getActionBars().getToolBarManager() != null){
 			getActionBars().getToolBarManager().removeAll();
+			 if (page != null && page instanceof JDReportOutlineView) {
+					((JDReportOutlineView)page).registerToolbarAction(getActionBars().getToolBarManager());
+				}
+		}
 		if (getSite() != null && page instanceof JDReportOutlineView) {
 			JDReportOutlineView jdoutpage = (JDReportOutlineView) page;
 			if (page.getControl() != null && page.getControl().isDisposed()) {
@@ -175,28 +180,27 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 			}
 			jdoutpage.init(getSite());
 		}
-
 		page.addSelectionChangedListener(this);
 		this.currentPage = page;
 		if (pagebook == null) {
 			// still not being made
 			return;
 		}
-		Control control = page.getControl();
 		if (control == null || control.isDisposed()) {
 			// first time
 			page.createControl(pagebook);
-			if (getActionBars() != null)
+			if (getActionBars() != null){
 				page.setActionBars(getActionBars());
+			}
 			control = page.getControl();
-		}
+		} 
 		pagebook.showPage(control);
 		if (page instanceof JDReportOutlineView) {
 			JDReportOutlineView jdoutpage = (JDReportOutlineView) page;
 			jdoutpage.setTreeSelection(selection);
 		} else
 			setSelection(page.getSelection());
-		if (getActionBars() != null && getActionBars().getToolBarManager() != null)
+	if (getActionBars() != null && getActionBars().getToolBarManager() != null)
 			getActionBars().getToolBarManager().update(true);
 		isRefresh = false;
 	}

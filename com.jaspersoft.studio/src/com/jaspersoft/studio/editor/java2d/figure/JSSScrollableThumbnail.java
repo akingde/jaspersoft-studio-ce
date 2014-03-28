@@ -19,16 +19,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.nio.ByteOrder;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.KeyEvent;
 import org.eclipse.draw2d.KeyListener;
+import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
@@ -37,11 +34,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
@@ -68,6 +65,7 @@ public class JSSScrollableThumbnail extends Figure {
 			Point scrollPoint = me.getLocation().getTranslated(getLocation().getNegated()).translate(selectorCenter.negate())
 					.scale(1.0f / getViewportScaleX(), 1.0f / getViewportScaleY())
 					.translate(viewport.getHorizontalRangeModel().getMinimum(), viewport.getVerticalRangeModel().getMinimum());
+
 			viewport.setViewLocation(scrollPoint);
 			syncher.mousePressed(me);
 			dragTransfer = true;
@@ -131,6 +129,8 @@ public class JSSScrollableThumbnail extends Figure {
 			reconfigureSelectorBounds();
 		}
 	};
+	
+	
 	private KeyListener keyListener = new KeyListener.Stub() {
 		public void keyPressed(KeyEvent ke) {
 			int moveX = viewport.getClientArea().width / 4;
@@ -156,11 +156,34 @@ public class JSSScrollableThumbnail extends Figure {
 	private IFigure selector;
 	private Viewport viewport;
 	private IFigure sourceFigure;
-	private float scaleX;
-	private float scaleY;
 	protected Dimension targetSize = new Dimension(0, 0);
 	private Image cachedImage = null; 
-
+	private RGB backgroundColor = null;
+	private boolean deactivated = false;
+	public Runnable refreshScheduler = new Runnable() {
+		
+		@Override
+		public void run() {
+			while(!deactivated){
+				if (isNeedRefresh() && isVisible()){
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							cachedImage = getThumbnailImage();
+							repaint();
+						}
+					});
+					setNeedRefresh(false);
+				}
+			}
+		}
+	};
+	
 	protected Image getThumbnailImage() {
 		Rectangle e = getSourceRectangle();
 		targetSize = getPreferredSize();
@@ -172,16 +195,27 @@ public class JSSScrollableThumbnail extends Figure {
 		
 		// Create a J2DGraphics with the reight size..
 		Graphics graphics = gs.getGraphics(e); 
-		Color background = getBackgroundColor();
-		((J2DGraphics)graphics).getGraphics2D().setColor(new java.awt.Color(background.getRed(), background.getGreen(), background.getBlue()));
+		if (backgroundColor == null){
+			backgroundColor = getBackgroundColor().getRGB();
+		}
+		((J2DGraphics)graphics).getGraphics2D().setColor(new java.awt.Color(backgroundColor.red, backgroundColor.green, backgroundColor.blue));
 		((J2DGraphics)graphics).getGraphics2D().fillRect(0,0,e.width, e.height);
 		sourceFigure.paint(graphics);
 		gs.flushGraphics(e);
 		
 		int height = (targetSize.width * e.height)/e.width;
 		
+		int width = -1;
+		
+		if (height > targetSize.height){
+			height = targetSize.height;
+			width = (targetSize.height * e.width)/e.height;
+		} else {
+			width = targetSize.width;
+		}
+		
 		palette = new PaletteData(0x0000ff, 0x00ff00,0xff0000);
-		ImageData resizedImageData = new ImageData( targetSize.width,height,24,palette);
+		ImageData resizedImageData = new ImageData(width,height,24,palette);
 		
 		Image resizedImage = new Image(Display.getCurrent(), resizedImageData);
 		GC resizedImageGC = new GC(resizedImage);
@@ -189,7 +223,7 @@ public class JSSScrollableThumbnail extends Figure {
 		try {
 			resizedImageGC.setAntialias(SWT.ON);
 			resizedImageGC.setInterpolation(SWT.HIGH);
-			resizedImageGC.drawImage(fullImage, 0, 0, fullImage.getBounds().width, fullImage.getBounds().height, 0, 0, targetSize.width, height);
+			resizedImageGC.drawImage(fullImage, 0, 0, fullImage.getBounds().width, fullImage.getBounds().height, 0, 0, width, height);
 			resizedImageData = resizedImage.getImageData();
 			
 			fixedImage = fixColor(resizedImage.getImageData());
@@ -226,7 +260,29 @@ public class JSSScrollableThumbnail extends Figure {
 		super();
 		setViewport(port);
 		initialize();
+		addLayoutListener(new LayoutListener() {
+			
+			@Override
+			public void setConstraint(IFigure child, Object constraint) {}
+			
+			@Override
+			public void remove(IFigure child) {}
+			
+			@Override
+			public void postLayout(IFigure container) {
+				setNeedRefresh(true);
+			}
+			
+			@Override
+			public boolean layout(IFigure container) {
+				return false;
+			}
+			
+			@Override
+			public void invalidate(IFigure container) {}
+		});
 		this.rootNode = rootNode;
+		new Thread(refreshScheduler).start();
 	}
 
 	/**
@@ -235,6 +291,7 @@ public class JSSScrollableThumbnail extends Figure {
 	public void deactivate() {
 		unhookViewport();
 		unhookSelector();
+		deactivated = true;
 	}
 
 	private double getViewportScaleX() {
@@ -278,23 +335,7 @@ public class JSSScrollableThumbnail extends Figure {
 		selector.setBounds(rect);
 	}
 
-	/**
-	 * Reconfigures the SelectorFigure's bounds if the scales have changed.
-	 * 
-	 * @param scaleX
-	 *          The X scale
-	 * @param scaleY
-	 *          The Y scale
-	 * @see org.eclipse.draw2d.parts.Thumbnail#setScales(float, float)
-	 */
-	protected void setScales(float x, float y) {
-		if (scaleX == x && scaleY == y)
-			return;
 
-		scaleX = x;
-		scaleY = y;
-		reconfigureSelectorBounds();
-	}
 
 	/**
 	 * Sets the Viewport that this ScrollableThumbnail will synch with.
@@ -341,8 +382,6 @@ public class JSSScrollableThumbnail extends Figure {
 			return;
 		sourceFigure = fig;
 		if (sourceFigure != null) {
-			setScales((float) getSize().width / (float) getSourceRectangle().width, (float) getSize().height
-					/ (float) getSourceRectangle().height);
 			repaint();
 		}
 		if (rootNode != null){
@@ -351,52 +390,27 @@ public class JSSScrollableThumbnail extends Figure {
 		}
 	}
 	
-	private boolean refreshing = false;
+	private boolean needRefresh = false;
 	private MRoot rootNode = null;
 	private PropertyChangeListener listener = new PropertyChangeListener() {
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			refresh();
+			setNeedRefresh(true);
 		}
 	};
 	
-	private boolean isRefreshing(){
+	private boolean isNeedRefresh(){
 		synchronized (this) {
-			return refreshing;
+			return needRefresh;
 		}
 	}
 	
-	private void setRefreshing(boolean value){
+	private void setNeedRefresh(boolean value){
 		synchronized (this) {
-			refreshing = value;
+			needRefresh = value;
 		}
 	}
 	
-	private void refresh(){
-		if (!isRefreshing() && isVisible()){
-			setRefreshing(true);
-			Job job = new Job("create preview") {
-				protected IStatus run(IProgressMonitor monitor) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							cachedImage = getThumbnailImage();
-							repaint();
-						}
-					});
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					setRefreshing(false);
-					return Status.OK_STATUS;
-				}
-			};
-			job.setSystem(true);
-			job.setPriority(Job.SHORT);
-			job.schedule();
-		}
-	}
+
 }
