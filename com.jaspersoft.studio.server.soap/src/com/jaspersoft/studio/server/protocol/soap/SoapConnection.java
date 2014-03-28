@@ -81,10 +81,11 @@ public class SoapConnection implements IConnection {
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception {
 		if (serverInfo != null)
 			return serverInfo;
+		String v = client.getVersion();
 		serverInfo = getServerInfo();
 		if (serverInfo == null) {
 			serverInfo = new ServerInfo();
-			serverInfo.setVersion("4.5");
+			serverInfo.setVersion(v);
 			serverInfo.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat()).toPattern());
 			serverInfo.setDateFormatPattern(((SimpleDateFormat) getDateFormat()).toPattern());
 			serverInfo.setDatetimeFormatPattern(((SimpleDateFormat) getTimestampFormat()).toPattern());
@@ -95,6 +96,7 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+		monitor.subTask("Trying SOAP");
 		JServer server = new JServer();
 		this.sp = sp;
 		setupJServer(server, sp);

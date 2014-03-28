@@ -71,6 +71,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+		monitor.subTask("Trying RESTv2");
 		super.connect(monitor, sp);
 		this.eh = new RESTv2ExceptionHandler(this);
 

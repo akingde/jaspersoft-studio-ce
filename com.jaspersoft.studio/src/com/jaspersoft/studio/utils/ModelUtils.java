@@ -118,19 +118,19 @@ public class ModelUtils {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Search for the first dataset in hierarchy starting from the parent of the passed 
-	 * node. go back until it arrive to a root node or to a node with a dataset run
+	 * Search for the first dataset in hierarchy starting from the parent of the passed node. go back until it arrive to a
+	 * root node or to a node with a dataset run
 	 * 
 	 */
 	public static JRDesignDataset getFirstDatasetInHierarchy(ANode node) {
 		ANode n = node.getParent();
 		while (n != null) {
-			if (n instanceof MPage){
-				//In this case the node is into a separated editor, need to get the real parent of the node
-				ANode realParent = ((MPage)n).getRealParent();
-				if (realParent != null){
+			if (n instanceof MPage) {
+				// In this case the node is into a separated editor, need to get the real parent of the node
+				ANode realParent = ((MPage) n).getRealParent();
+				if (realParent != null) {
 					n = realParent;
 				}
 			}
@@ -138,15 +138,17 @@ public class ModelUtils {
 				return ((MDataset) n).getValue();
 			if (n instanceof MReport)
 				return (JRDesignDataset) ((MReport) n).getValue().getMainDataset();
-			if (n instanceof IDatasetContainer){
-				//Found an element with a dataset run, take the first dataset referenced
-				List<MDatasetRun> datasets = ((IDatasetContainer)n).getDatasetRunList();
+			if (n instanceof IDatasetContainer) {
+				// Found an element with a dataset run, take the first dataset referenced
+				List<MDatasetRun> datasets = ((IDatasetContainer) n).getDatasetRunList();
 				JasperDesign design = n.getJasperDesign();
-				for(MDatasetRun parentDataset : datasets){
-					JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap().get(parentDataset.getValue().getDatasetName());
-					if (dataset != null) return dataset;
+				for (MDatasetRun parentDataset : datasets) {
+					JRDesignDataset dataset = (JRDesignDataset) design.getDatasetMap().get(
+							parentDataset.getValue().getDatasetName());
+					if (dataset != null)
+						return dataset;
 				}
- 			}
+			}
 			n = n.getParent();
 		}
 		return null;
@@ -972,6 +974,9 @@ public class ModelUtils {
 			for (JRQueryExecuterFactoryBundle bundle : bundles) {
 				String[] languages = bundle.getLanguages();
 				for (String l : languages) {
+					// check for depricated languages
+					if (l.equalsIgnoreCase("xlsx"))
+						continue;
 					if (!langs.contains(l)) {
 						boolean exists = false;
 						for (String item : langs) {
@@ -989,6 +994,9 @@ public class ModelUtils {
 			for (QueryExecuterFactoryBundle bundle : oldbundles) {
 				String[] languages = bundle.getLanguages();
 				for (String l : languages) {
+					// check for depricated languages
+					if (l.equalsIgnoreCase("xlsx"))
+						continue;
 					if (!langs.contains(l)) {
 						boolean exists = false;
 						for (String item : langs) {
@@ -1483,46 +1491,50 @@ public class ModelUtils {
 		}
 		return new ArrayList<INode>();
 	}
-	
+
 	/**
-	 * Verifies that all the specified objects are EditParts
-	 * referring to model objects belonging or not to the 
-	 * specified list of classes.
+	 * Verifies that all the specified objects are EditParts referring to model objects belonging or not to the specified
+	 * list of classes.
 	 * 
-	 * @param editParts list of objects supposed to be {@link EditPart}
-	 * @param allowed determines if the list is of allowed (true) or excluded (false) types
-	 * @param classes the list of type(s) 
+	 * @param editParts
+	 *          list of objects supposed to be {@link EditPart}
+	 * @param allowed
+	 *          determines if the list is of allowed (true) or excluded (false) types
+	 * @param classes
+	 *          the list of type(s)
 	 * @return <code>true</code> all model objects respect the condition,<code>false</code> otherwise
 	 */
-	public static boolean checkTypesForAllEditParModels(List<?> editParts, boolean allowed, Class<?>... classes){
-		if(editParts.size()==0) return false;
-		for(Object o : editParts){
+	public static boolean checkTypesForAllEditParModels(List<?> editParts, boolean allowed, Class<?>... classes) {
+		if (editParts.size() == 0)
+			return false;
+		for (Object o : editParts) {
 			boolean result = checkTypesForSingleEditPartModel(o, allowed, classes);
-			if(!result) return false;
+			if (!result)
+				return false;
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Verifies that there is only one EditPart selected
-	 * referring to a model object of the allowed class types.
+	 * Verifies that there is only one EditPart selected referring to a model object of the allowed class types.
 	 * 
-	 * @param editPart the object supposed to be {@link EditPart}
-	 * @param allowed determines if the list is of allowed (true) 
-	 * 				or excluded (false) types
-	 * @param classes the list of type(s) 
-	 * @return <code>true</code> if the single model object respects
-	 * 				 the condition,<code>false</code> otherwise
+	 * @param editPart
+	 *          the object supposed to be {@link EditPart}
+	 * @param allowed
+	 *          determines if the list is of allowed (true) or excluded (false) types
+	 * @param classes
+	 *          the list of type(s)
+	 * @return <code>true</code> if the single model object respects the condition,<code>false</code> otherwise
 	 */
-	public static boolean checkTypesForSingleEditPartModel(Object editPart, boolean allowed, Class<?>...classes) {
-		if(editPart instanceof EditPart) {
-			Object node = ((EditPart)editPart).getModel();
-			for(Class<?> clazz : classes) {
-				if(clazz.isInstance(node)) return allowed;
+	public static boolean checkTypesForSingleEditPartModel(Object editPart, boolean allowed, Class<?>... classes) {
+		if (editPart instanceof EditPart) {
+			Object node = ((EditPart) editPart).getModel();
+			for (Class<?> clazz : classes) {
+				if (clazz.isInstance(node))
+					return allowed;
 			}
 		}
 		return !allowed;
 	}
-	
-	
+
 }
