@@ -42,7 +42,7 @@ public class ExportAsTextAction extends AExportAction {
 
 		SimpleTextExporterConfiguration stc = new SimpleTextExporterConfiguration();
 		stc.setLineSeparator(jContext.getProperty(TextExporterPreferencePage.NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"));
-		stc.setBetweenPagesText(jContext.getProperty(TextExporterPreferencePage.NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT));
+		stc.setPageSeparator(jContext.getProperty(TextExporterPreferencePage.NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT));
 
 		SimpleTextReportConfiguration rconf = new SimpleTextReportConfiguration();
 		setupReportConfiguration(rconf, monitor);
