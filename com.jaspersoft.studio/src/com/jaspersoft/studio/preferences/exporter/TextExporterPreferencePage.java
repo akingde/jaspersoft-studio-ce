@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
+import net.sf.jasperreports.export.TextExporterConfiguration;
 import net.sf.jasperreports.export.TextReportConfiguration;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -31,9 +32,6 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class TextExporterPreferencePage extends FieldEditorOverlayPage {
-
-	public static final String NSF_EXPORT_TEXT_LINE_SEPARATOR = "net.sf.jasperreports.export.text.line.separator"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT = "net.sf.jasperreports.export.text.between.page.text"; //$NON-NLS-1$
 
 	public TextExporterPreferencePage() {
 		super(GRID);
@@ -69,12 +67,12 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(ife.getTextControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + ife.getPreferenceName());
 
-		NStringFieldEditor sfe = new NStringFieldEditor(NSF_EXPORT_TEXT_LINE_SEPARATOR,
+		NStringFieldEditor sfe = new NStringFieldEditor(TextExporterConfiguration.PROPERTY_LINE_SEPARATOR,
 				Messages.TextExporterPreferencePage_11, 4, getFieldEditorParent());
 		addField(sfe);
 
-		TextFieldEditor te = new TextFieldEditor(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT, Messages.TextExporterPreferencePage_12,
-				true, getFieldEditorParent());
+		TextFieldEditor te = new TextFieldEditor(TextExporterConfiguration.PROPERTY_PAGE_SEPARATOR,
+				Messages.TextExporterPreferencePage_12, true, getFieldEditorParent());
 		addField(te);
 
 	}
@@ -84,8 +82,8 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 			// we can't store null values in the store, but for this one we have null
 			// a workaround is to remove the property for null values
 			// so we initialise the default only if no properties are initialised
-			store.setDefault(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT,
-					Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT), "")); //$NON-NLS-1$
+			store.setDefault(TextExporterConfiguration.PROPERTY_PAGE_SEPARATOR,
+					Misc.nvl(PropertiesHelper.DPROP.getProperty(TextExporterConfiguration.PROPERTY_PAGE_SEPARATOR), "")); //$NON-NLS-1$
 		}
 
 		store.setDefault(TextReportConfiguration.PROPERTY_CHARACTER_HEIGHT,
@@ -97,7 +95,7 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(TextReportConfiguration.PROPERTY_PAGE_WIDTH,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(TextReportConfiguration.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
 
-		store.setDefault(NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"); //$NON-NLS-1$ 
+		store.setDefault(TextExporterConfiguration.PROPERTY_LINE_SEPARATOR, "\n"); //$NON-NLS-1$ 
 	}
 
 	/*

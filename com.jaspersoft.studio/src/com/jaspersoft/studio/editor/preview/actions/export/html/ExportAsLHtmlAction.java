@@ -39,27 +39,11 @@ public class ExportAsLHtmlAction extends AExportAction {
 	@Override
 	protected HtmlExporter getExporter(JasperReportsConfiguration jContext, JRExportProgressMonitor monitor, File file) {
 		HtmlExporter exp = new HtmlExporter(jContext);
-		SimpleHtmlExporterOutput expOut = new SimpleHtmlExporterOutput(file);
-		exp.setExporterOutput(expOut);
+		exp.setExporterOutput(new SimpleHtmlExporterOutput(file));
 
 		SimpleHtmlReportConfiguration rconf = new SimpleHtmlReportConfiguration();
 		setupReportConfiguration(rconf, monitor);
 		exp.setConfiguration(rconf);
-
-		// exp.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML,
-		// jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_BETWEEN_PAGES));
-		// exp.setParameter(JRHtmlExporterParameter.HTML_HEADER,
-		// jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_HEADER));
-		// exp.setParameter(JRHtmlExporterParameter.HTML_FOOTER,
-		// jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_FOOTER));
-		//
-		// exp.setParameter(JRHtmlExporterParameter.IMAGES_DIR_NAME,
-		// jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IMAGES_DIR_NAME));
-		// exp.setParameter(JRHtmlExporterParameter.IMAGES_URI,
-		// jContext.getProperty(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IMAGES_URI));
-		// exp.setParameter(JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR,
-		// jContext.getPropertyBoolean(HTMLExporterPreferencePage.NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR));
-
 		return exp;
 	}
 }

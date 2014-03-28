@@ -20,7 +20,6 @@ import net.sf.jasperreports.export.SimpleTextReportConfiguration;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExportAsTextAction extends AExportAction {
@@ -40,9 +39,7 @@ public class ExportAsTextAction extends AExportAction {
 		JRTextExporter exp = new JRTextExporter(jContext);
 		exp.setExporterOutput(new SimpleWriterExporterOutput(file));
 
-		SimpleTextExporterConfiguration stc = new SimpleTextExporterConfiguration();
-		stc.setLineSeparator(jContext.getProperty(TextExporterPreferencePage.NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"));
-		stc.setPageSeparator(jContext.getProperty(TextExporterPreferencePage.NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT));
+		exp.setConfiguration(new SimpleTextExporterConfiguration());
 
 		SimpleTextReportConfiguration rconf = new SimpleTextReportConfiguration();
 		setupReportConfiguration(rconf, monitor);

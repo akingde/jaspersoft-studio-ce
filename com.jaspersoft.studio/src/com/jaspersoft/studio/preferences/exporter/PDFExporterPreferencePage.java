@@ -51,14 +51,6 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 	public static final String NSF_EXPORT_PDF_ENCODING = "net.sf.jasperreports.default.pdf.encoding"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_PDF_FONT_NAME = "net.sf.jasperreports.default.pdf.font.name"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_PDF_FONTDIR = "net.sf.jasperreports.export.pdf.fontdir"; //$NON-NLS-1$
-	// security
-	public static final String NSF_EXPORT_PDF_PERMISSION = "export.pdf.PERMISSIONS"; //$NON-NLS-1$
-	// metadata
-	public static final String NSF_EXPORT_PDF_METADATA_TITLE = "net.sf.jasperreports.export.pdf.metadata.title"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_PDF_METADATA_AUTHOR = "net.sf.jasperreports.export.pdf.metadata.author"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_PDF_METADATA_SUBJECT = "net.sf.jasperreports.export.pdf.metadata.subject"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_PDF_METADATA_KEYWORDS = "net.sf.jasperreports.export.pdf.metadata.keywords"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_PDF_METADATA_CREATOR = "net.sf.jasperreports.export.pdf.metadata.creator"; //$NON-NLS-1$
 
 	public PDFExporterPreferencePage() {
 		super(GRID);
@@ -106,19 +98,25 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(PdfExporterConfiguration.PROPERTY_OWNER_PASSWORD, Misc.nvl(
 				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_OWNER_PASSWORD),
 				Messages.PDFExporterPreferencePage_31));
-		store.setDefault(NSF_EXPORT_PDF_PERMISSION,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_PERMISSION), Messages.PDFExporterPreferencePage_32));
+		store.setDefault(PdfExporterConfiguration.PROPERTY_PERMISSIONS_ALLOWED, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_PERMISSIONS_ALLOWED),
+				Messages.PDFExporterPreferencePage_32));
 		// metadata
-		store.setDefault(NSF_EXPORT_PDF_METADATA_TITLE, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_TITLE), Messages.PDFExporterPreferencePage_33));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_AUTHOR, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_AUTHOR), Messages.PDFExporterPreferencePage_34));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_SUBJECT, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_SUBJECT), Messages.PDFExporterPreferencePage_35));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_KEYWORDS, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_KEYWORDS), Messages.PDFExporterPreferencePage_36));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_CREATOR, Misc.nvl(
-				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_CREATOR), Messages.PDFExporterPreferencePage_37));
+		store.setDefault(PdfExporterConfiguration.PROPERTY_METADATA_TITLE, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_METADATA_TITLE),
+				Messages.PDFExporterPreferencePage_33));
+		store.setDefault(PdfExporterConfiguration.PROPERTY_METADATA_AUTHOR, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_METADATA_AUTHOR),
+				Messages.PDFExporterPreferencePage_34));
+		store.setDefault(PdfExporterConfiguration.PROPERTY_METADATA_SUBJECT, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_METADATA_SUBJECT),
+				Messages.PDFExporterPreferencePage_35));
+		store.setDefault(PdfExporterConfiguration.PROPERTY_METADATA_KEYWORDS, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_METADATA_KEYWORDS),
+				Messages.PDFExporterPreferencePage_36));
+		store.setDefault(PdfExporterConfiguration.PROPERTY_METADATA_CREATOR, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_METADATA_CREATOR),
+				Messages.PDFExporterPreferencePage_37));
 		// PDF/A
 		store.setDefault(PdfExporterConfiguration.PROPERTY_PDFA_CONFORMANCE, Misc.nvl(
 				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_PDFA_CONFORMANCE),
@@ -149,11 +147,16 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 		ptab.setControl(sc);
 
-		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_TITLE, Messages.PDFExporterPreferencePage_39, sc));
-		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_AUTHOR, Messages.PDFExporterPreferencePage_40, sc));
-		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_SUBJECT, Messages.PDFExporterPreferencePage_41, sc));
-		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_KEYWORDS, Messages.PDFExporterPreferencePage_42, sc));
-		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_CREATOR, Messages.PDFExporterPreferencePage_43, sc));
+		addField(new StringFieldEditor(PdfExporterConfiguration.PROPERTY_METADATA_TITLE,
+				Messages.PDFExporterPreferencePage_39, sc));
+		addField(new StringFieldEditor(PdfExporterConfiguration.PROPERTY_METADATA_AUTHOR,
+				Messages.PDFExporterPreferencePage_40, sc));
+		addField(new StringFieldEditor(PdfExporterConfiguration.PROPERTY_METADATA_SUBJECT,
+				Messages.PDFExporterPreferencePage_41, sc));
+		addField(new StringFieldEditor(PdfExporterConfiguration.PROPERTY_METADATA_KEYWORDS,
+				Messages.PDFExporterPreferencePage_42, sc));
+		addField(new StringFieldEditor(PdfExporterConfiguration.PROPERTY_METADATA_CREATOR,
+				Messages.PDFExporterPreferencePage_43, sc));
 
 		sc.setLayout(new GridLayout(3, false));
 	}
@@ -186,7 +189,8 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(se);
 		HelpSystem.setHelp(se.getTextControl(sc), StudioPreferencePage.REFERENCE_PREFIX + se.getPreferenceName());
 
-		addField(new PDFPermissionFieldEditor(NSF_EXPORT_PDF_PERMISSION, Messages.PDFExporterPreferencePage_49, sc));
+		addField(new PDFPermissionFieldEditor(PdfExporterConfiguration.PROPERTY_PERMISSIONS_ALLOWED,
+				Messages.PDFExporterPreferencePage_49, sc));
 
 		ptab.setControl(sc);
 	}

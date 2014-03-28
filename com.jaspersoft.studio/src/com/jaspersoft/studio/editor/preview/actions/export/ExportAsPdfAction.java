@@ -38,24 +38,10 @@ public class ExportAsPdfAction extends AExportAction {
 	@Override
 	protected JRPdfExporter getExporter(JasperReportsConfiguration jContext, JRExportProgressMonitor monitor, File file) {
 		JRPdfExporter exp = new JRPdfExporter(jContext);
+
 		exp.setExporterOutput(new SimpleOutputStreamExporterOutput(file));
 
 		SimplePdfExporterConfiguration conf = new SimplePdfExporterConfiguration();
-		// metadata
-		// exp.setParameter(JRPdfExporterParameter.METADATA_AUTHOR,
-		// jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_AUTHOR));
-		// exp.setParameter(JRPdfExporterParameter.METADATA_CREATOR,
-		// jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_CREATOR));
-		// exp.setParameter(JRPdfExporterParameter.METADATA_KEYWORDS,
-		// jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_KEYWORDS));
-		// exp.setParameter(JRPdfExporterParameter.METADATA_SUBJECT,
-		// jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_SUBJECT));
-		// exp.setParameter(JRPdfExporterParameter.METADATA_TITLE,
-		// jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_METADATA_TITLE));
-		// security
-		// String perm = jContext.getProperty(PDFExporterPreferencePage.NSF_EXPORT_PDF_PERMISSION);
-		// if (!Misc.isNullOrEmpty(perm))
-		// exp.setParameter(JRPdfExporterParameter.PERMISSIONS, new Integer(perm));
 		exp.setConfiguration(conf);
 
 		SimplePdfReportConfiguration rconf = new SimplePdfReportConfiguration();

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.export.CommonExportConfiguration;
 import net.sf.jasperreports.export.ReportExportConfiguration;
 import net.sf.jasperreports.export.WriterExporterOutput;
 
@@ -64,8 +64,8 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 				StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
 		BooleanFieldEditor bf = new BooleanFieldEditor(
-				JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS, Messages.JRExporterPreferencePage_14,
-				getFieldEditorParent());
+				CommonExportConfiguration.PROPERTY_EXPORT_CONFIGURATION_OVERRIDE_REPORT_HINTS,
+				Messages.JRExporterPreferencePage_14, getFieldEditorParent());
 		addField(bf);
 		HelpSystem.setHelp(bf.getDescriptionControl(getFieldEditorParent()),
 				StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
@@ -87,9 +87,9 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(WriterExporterOutput.PROPERTY_CHARACTER_ENCODING), "UTF-8")); //$NON-NLS-1$
 		store.setDefault(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS,
 				PropertiesHelper.DPROP.getBooleanProperty(ReportExportConfiguration.PROPERTY_IGNORE_PAGE_MARGINS));
-		store
-				.setDefault(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS, PropertiesHelper.DPROP
-						.getBooleanProperty(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS));
+		store.setDefault(CommonExportConfiguration.PROPERTY_EXPORT_CONFIGURATION_OVERRIDE_REPORT_HINTS,
+				PropertiesHelper.DPROP
+						.getBooleanProperty(CommonExportConfiguration.PROPERTY_EXPORT_CONFIGURATION_OVERRIDE_REPORT_HINTS));
 		store.setDefault(NSF_EXPORT_LEGACY_BORDER_OFFSET,
 				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_LEGACY_BORDER_OFFSET), "DEFAULT")); //$NON-NLS-1$
 
