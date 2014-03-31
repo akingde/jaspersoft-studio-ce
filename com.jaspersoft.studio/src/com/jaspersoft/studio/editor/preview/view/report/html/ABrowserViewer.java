@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ABrowserViewer extends APreview implements IURLViewable {
@@ -58,8 +59,10 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	private URLContributionItem urlBar;
 
 	public void setURL(String url) throws Exception {
-		this.url = url;
-		urlBar.setUrl(url);
-		browser.setUrl(url);
+		this.url = Misc.nvl(url);
+		if (urlBar != null)
+			urlBar.setUrl(url);
+		if (browser != null)
+			browser.setUrl(url);
 	}
 }
