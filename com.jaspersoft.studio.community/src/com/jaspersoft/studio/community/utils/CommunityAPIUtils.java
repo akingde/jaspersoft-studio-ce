@@ -13,6 +13,7 @@ import java.util.zip.ZipOutputStream;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.BundleCommonUtils;
+import net.sf.jasperreports.soutils.EnvironmentUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -21,7 +22,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.wb.internal.core.EnvironmentUtils;
 import org.eclipse.wb.internal.core.utils.IOUtils2;
 import org.eclipse.wb.internal.core.utils.platform.PlatformInfo;
 import org.eclipse.wb.internal.core.utils.platform.PluginUtilities;

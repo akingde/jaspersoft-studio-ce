@@ -18,6 +18,8 @@ package com.jaspersoft.studio.editor.java2d.figure;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import net.sf.jasperreports.soutils.EnvironmentUtils;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.Graphics;
@@ -337,20 +339,23 @@ public class JSSScrollableThumbnail extends Figure {
 	
 	/**
 	 * The image painted by the figure seems to has some problems with depth and color.
-	 * Even if the depth should be 32 it was 24 and other than that the blue and red components
-	 * of the rgb were switched. So this method switch the blue and red components. The switch is done directly 
-	 * on the original image data with the bytes shifting method, for the sake of the performances
+	 * Even if the depth should be 32 it was 24 and other than that on Windows the blue and red components
+	 * of the rgb were switched. So this method switch the blue and red components when the operative 
+	 * system is Windows. The switch is done directly on the original image data with the bytes shifting method, 
+	 * for the sake of the performances
 	 * 
 	 * @param data original image data
-	 * @return the original image data with the red and blue components switched, for every pixel, and then it is
-	 * also returned
+	 * @return the original image data with the red and blue components switched if the operative system is windows,
+	 * or untouched otherwise
 	 */
 	private ImageData fixColor(ImageData data){
-		for (int i = 0; i < data.width; i++) {
-			for (int j = 0; j < data.height; j++) {
-				int pixel = data.getPixel(i, j);
-				int newPixel = (pixel >> 16) + (pixel << 16) + (pixel & 0x00FF00);
-				data.setPixel(i, j, newPixel);
+		if (EnvironmentUtils.IS_WINDOWS){
+			for (int i = 0; i < data.width; i++) {
+				for (int j = 0; j < data.height; j++) {
+					int pixel = data.getPixel(i, j);
+					int newPixel = (pixel >> 16) + (pixel << 16) + (pixel & 0x00FF00);
+					data.setPixel(i, j, newPixel);
+				}
 			}
 		}
 		return data;
