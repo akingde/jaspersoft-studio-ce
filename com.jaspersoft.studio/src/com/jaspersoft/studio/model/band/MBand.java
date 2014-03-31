@@ -364,7 +364,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		JRDesignBand jrband = (JRDesignBand) getValue();
 		if (jrband != null) {
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT)) {
-				jrband.setHeight((Integer) Misc.nvl(value, Integer.valueOf(0)));
+				jrband.setHeight(Math.max(0, (Integer) Misc.nvl(value, Integer.valueOf(0))));
 			} else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 				jrband.setSplitType((SplitTypeEnum) splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
@@ -465,10 +465,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		return mband.getBandType() == BandTypeEnum.DETAIL || mband.getBandType() == BandTypeEnum.GROUP_HEADER
 				|| mband.getBandType() == BandTypeEnum.GROUP_FOOTER;
 	}
-	
+
 	@Override
 	public boolean canAcceptChildren() {
 		// check for deleted band
-		return getValue()!=null;
+		return getValue() != null;
 	}
 }
