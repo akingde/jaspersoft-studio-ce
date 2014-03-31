@@ -17,7 +17,6 @@ package com.jaspersoft.studio.editor.java2d.figure;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.nio.ByteOrder;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureListener;
@@ -338,25 +337,20 @@ public class JSSScrollableThumbnail extends Figure {
 	
 	/**
 	 * The image painted by the figure seems to has some problems with depth and color.
-	 * Even if the depth should be 32 it was 24 and other than that the blue and red component
-	 * of the rgb were switched. we suppose that this is because the big-little endian way to
-	 * ready the byte of the image data. So this method switch the blue and red component if the 
-	 * architecture is little endian. The switch is done directly on the original image data with
-	 * the byte shifting method, for the sake of the performances
+	 * Even if the depth should be 32 it was 24 and other than that the blue and red components
+	 * of the rgb were switched. So this method switch the blue and red components. The switch is done directly 
+	 * on the original image data with the bytes shifting method, for the sake of the performances
 	 * 
 	 * @param data original image data
-	 * @return if the architecture of the so is little_endian it switch the red and blue component
-	 * of the imagedata for every pixel and then return it, otherwise it will return the original
-	 * image data
+	 * @return the original image data with the red and blue components switched, for every pixel, and then it is
+	 * also returned
 	 */
 	private ImageData fixColor(ImageData data){
-		if (java.nio.ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN){
-			for(int i = 0 ; i<data.width; i++){
-				for (int j=0; j<data.height; j++){
-					int pixel = data.getPixel(i, j);
-					int newPixel = (pixel >> 16) + (pixel << 16) + (pixel & 0x00FF00); 
-					data.setPixel(i,j, newPixel);
-				}
+		for (int i = 0; i < data.width; i++) {
+			for (int j = 0; j < data.height; j++) {
+				int pixel = data.getPixel(i, j);
+				int newPixel = (pixel >> 16) + (pixel << 16) + (pixel & 0x00FF00);
+				data.setPixel(i, j, newPixel);
 			}
 		}
 		return data;
