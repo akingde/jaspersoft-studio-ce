@@ -42,6 +42,7 @@ import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 
 /**
@@ -171,11 +172,13 @@ public class RemoveCrosstabStylesAction extends SelectionAction {
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		deletedStyles = new HashSet<String>();
 		for(EditPart editPart : editParts){
-			MCrosstab table = (MCrosstab)editPart.getModel();
-			command.setReferenceNodeIfNull(table);
-			design = table.getJasperDesign();
-			JRDesignCrosstab crosstab = (JRDesignCrosstab)table.getValue();
-			crosstab.getCellsList();
+			MCrosstab crosstabModel = (MCrosstab)editPart.getModel();
+			command.setReferenceNodeIfNull(crosstabModel);
+			design = crosstabModel.getJasperDesign();
+			JRDesignCrosstab crosstab = (JRDesignCrosstab)crosstabModel.getValue();
+			//This command is added before and after all the other commands to force its
+			//refresh when the other commands are executed ore undone
+			command.add(new ForceRefreshCommand(crosstabModel));
 			for (JRCrosstabRowGroup rowGroup : crosstab.getRowGroupsList()){
 				JRDesignCrosstabRowGroup designGroup = (JRDesignCrosstabRowGroup)rowGroup;
 				createCommand(designGroup.getTotalHeader(), command);
@@ -189,6 +192,7 @@ public class RemoveCrosstabStylesAction extends SelectionAction {
 			for(JRCrosstabCell dataCell : crosstab.getCellsList()){
 				createCommand(dataCell.getContents(), command);
 			}
+			command.add(new ForceRefreshCommand(crosstabModel));
 		}
 		return command;
 	}

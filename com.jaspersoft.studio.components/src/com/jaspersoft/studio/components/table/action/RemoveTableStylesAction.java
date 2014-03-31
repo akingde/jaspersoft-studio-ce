@@ -22,6 +22,7 @@ import java.util.List;
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
@@ -41,6 +42,7 @@ import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
 
 /**
@@ -169,6 +171,14 @@ public class RemoveTableStylesAction extends SelectionAction {
 			createCommand(col.getTableFooter(),command);
 			createCommand(col.getTableHeader(),command);
 			
+			for(GroupCell cell : col.getGroupFooters()){
+				createCommand(cell.getCell(),command);
+			}
+			
+			for(GroupCell cell : col.getGroupHeaders()){
+				createCommand(cell.getCell(),command);
+			}
+			
 			if (col instanceof StandardColumn){
 				StandardColumn baseCol = (StandardColumn)col;
 				createCommand(baseCol.getDetailCell(),command);
@@ -198,7 +208,11 @@ public class RemoveTableStylesAction extends SelectionAction {
 			command.setReferenceNodeIfNull(table);
 			design = table.getJasperDesign();
 			StandardTable jrTable = (StandardTable)((JRDesignComponentElement)table.getValue()).getComponent();
+			//This command is added before and after all the other commands to force its
+			//refresh when the other commands are executed ore undone
+			command.add(new ForceRefreshCommand(table));
 			createCommandForColumns(jrTable.getColumns(), command);
+			command.add(new ForceRefreshCommand(table));
 		}
 		return command;
 	}

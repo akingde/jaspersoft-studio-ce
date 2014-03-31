@@ -481,6 +481,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		HashSet<String> graphicalProperties = getGraphicalProperties();
 		if (graphicalProperties.contains(evt.getPropertyName())){
 			setChangedProperty(true);
+			/*if (getParent() != null && getParent() instanceof IGraphicalPropertiesHandler) {
+				((IGraphicalPropertiesHandler)getParent()).setChangedProperty(true);
+			}*/
 		}
 		super.propertyChange(evt);
 	}
