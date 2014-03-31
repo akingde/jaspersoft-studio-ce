@@ -218,6 +218,13 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		showPage(ID_ACTION_OUTLINE);
 	}
 	
+	/**
+	 * Create on the table manger the toolbar actions for the outline. The actions are created 
+	 * only if the toolbar manager dosen't contains them already. Actually the added action are 
+	 * the one the show the standard outline and the one to show the thumbnail of the report.
+	 * 
+	 * @param tbm the toolbar manager for the outline.
+	 */
 	public void registerToolbarAction(IToolBarManager tbm){
 		IContributionItem items[] = tbm.getItems();
 		HashSet<String> existingItems = new HashSet<String>();

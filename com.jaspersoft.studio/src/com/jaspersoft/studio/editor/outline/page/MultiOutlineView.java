@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
  * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Jaspersoft Studio Team - initial API and implementation
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.page;
 
@@ -167,6 +172,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 			currentPage.removeSelectionChangedListener(this);
 		if (getActionBars() != null && getActionBars().getToolBarManager() != null){
 			getActionBars().getToolBarManager().removeAll();
+			//when the action are cleared reload the ones for the current page
 			 if (page != null && page instanceof JDReportOutlineView) {
 					((JDReportOutlineView)page).registerToolbarAction(getActionBars().getToolBarManager());
 				}
@@ -187,7 +193,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 			return;
 		}
 		if (control == null || control.isDisposed()) {
-			// first time
+			// first time, it will also create the contextual action
 			page.createControl(pagebook);
 			if (getActionBars() != null){
 				page.setActionBars(getActionBars());
