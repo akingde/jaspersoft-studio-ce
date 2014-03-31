@@ -43,7 +43,8 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	@Override
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		super.contribute2ToolBar(tmanager);
-		tmanager.add(new URLContributionItem(url));
+		urlBar = new URLContributionItem(url);
+		tmanager.add(urlBar);
 		tmanager.add(new Action("", JaspersoftStudioPlugin.getInstance().getImageDescriptor(
 				JaspersoftStudioPlugin.ICONS_RESOURCES_REFRESH_16_PNG)) {
 			@Override
@@ -54,9 +55,11 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	}
 
 	protected String url;
+	private URLContributionItem urlBar;
 
 	public void setURL(String url) throws Exception {
 		this.url = url;
+		urlBar.setUrl(url);
 		browser.setUrl(url);
 	}
 }
