@@ -13,6 +13,7 @@ package com.jaspersoft.studio.editor.preview.view.report.html;
 import java.io.File;
 import java.io.IOException;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.viewer.ReportViewer;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -77,6 +78,7 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 
 			setURL(tmpFile.toURI().toASCIIString());
 		}
+		doRefresh();
 		this.jrprint = jrprint;
 	}
 
@@ -113,12 +115,35 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 
 	@Override
 	public void pageGenerated(JasperPrint arg0, int arg1) {
-
+		doRefresh();
 	}
 
 	@Override
 	public void pageUpdated(JasperPrint arg0, int arg1) {
+		doRefresh();
+	}
 
+	private boolean isRefresh = false;;
+	private boolean newRequest = false;
+
+	private void doRefresh() {
+		if (isRefresh) {
+			newRequest = true;
+			return;
+		}
+		isRefresh = true;
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("dorefresh");
+				newRequest = false;
+				browser.refresh();
+				isRefresh = false;
+				if (newRequest)
+					doRefresh();
+			}
+		});
 	}
 
 	@Override
