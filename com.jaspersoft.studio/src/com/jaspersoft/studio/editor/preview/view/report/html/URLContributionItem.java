@@ -47,7 +47,7 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 
 	public void setUrl(String url) {
 		this.url = url;
-		// refresh();
+		refresh();
 	}
 
 	/**
