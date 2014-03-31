@@ -278,9 +278,9 @@ public class JSSScrollableThumbnail extends Figure {
 	
 
 	/**
-	 * Generate and return the thumbnail image
+	 * Generate and return the thumbnail image data
 	 * 
-	 * @return a not null thumbnail image
+	 * @return a not null thumbnail image data
 	 */
 	protected ImageData getThumbnailImage() {
 		Rectangle e = getSourceRectangle();
