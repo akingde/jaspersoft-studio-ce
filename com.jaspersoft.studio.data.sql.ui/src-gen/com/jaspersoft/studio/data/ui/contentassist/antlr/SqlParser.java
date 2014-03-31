@@ -186,6 +186,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionFragmentAccess().getExpgroupAssignment_0(), "rule__ExpressionFragment__ExpgroupAssignment_0");
 					put(grammarAccess.getExpressionFragmentAccess().getExpAssignment_1(), "rule__ExpressionFragment__ExpAssignment_1");
 					put(grammarAccess.getExpressionFragmentAccess().getXexpAssignment_2(), "rule__ExpressionFragment__XexpAssignment_2");
+					put(grammarAccess.getExpressionFragmentAccess().getNotPrmAssignment_3(), "rule__ExpressionFragment__NotPrmAssignment_3");
 					put(grammarAccess.getExpressionGroupAccess().getExprAssignment_2(), "rule__ExpressionGroup__ExprAssignment_2");
 					put(grammarAccess.getXExpressionAccess().getXfAssignment_3(), "rule__XExpression__XfAssignment_3");
 					put(grammarAccess.getXExpressionAccess().getColAssignment_5(), "rule__XExpression__ColAssignment_5");

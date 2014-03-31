@@ -1575,6 +1575,25 @@ ruleExpressionFragment returns [EObject current=null]
 )
 
 )
+)
+    |(
+(
+		lv_notPrm_3_0=RULE_JRNPARAM
+		{
+			newLeafNode(lv_notPrm_3_0, grammarAccess.getExpressionFragmentAccess().getNotPrmJRNPARAMTerminalRuleCall_3_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getExpressionFragmentRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"notPrm",
+        		lv_notPrm_3_0, 
+        		"JRNPARAM");
+	    }
+
+)
 ))
 ;
 

@@ -836,12 +836,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cXexpAlternatives_2_0 = (Alternatives)cXexpAssignment_2.eContents().get(0);
 		private final RuleCall cXexpXExpressionParserRuleCall_2_0_0 = (RuleCall)cXexpAlternatives_2_0.eContents().get(0);
 		private final RuleCall cXexpXExpression_ParserRuleCall_2_0_1 = (RuleCall)cXexpAlternatives_2_0.eContents().get(1);
+		private final Assignment cNotPrmAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cNotPrmJRNPARAMTerminalRuleCall_3_0 = (RuleCall)cNotPrmAssignment_3.eContents().get(0);
 		
 		//ExpressionFragment returns FullExpression:
-		//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);
+		//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
 		public ParserRule getRule() { return rule; }
 
-		//expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_)
+		//expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//expgroup=ExpressionGroup
@@ -867,6 +869,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//XExpression_
 		public RuleCall getXexpXExpression_ParserRuleCall_2_0_1() { return cXexpXExpression_ParserRuleCall_2_0_1; }
+
+		//notPrm=JRNPARAM
+		public Assignment getNotPrmAssignment_3() { return cNotPrmAssignment_3; }
+
+		//JRNPARAM
+		public RuleCall getNotPrmJRNPARAMTerminalRuleCall_3_0() { return cNotPrmJRNPARAMTerminalRuleCall_3_0; }
 	}
 
 	public class ExpressionGroupElements extends AbstractParserRuleElementFinder {
@@ -2651,7 +2659,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionFragment returns FullExpression:
-	//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);
+	//	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
 	public ExpressionFragmentElements getExpressionFragmentAccess() {
 		return (pExpressionFragment != null) ? pExpressionFragment : (pExpressionFragment = new ExpressionFragmentElements());
 	}
@@ -3062,8 +3070,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal ID:
-	//	("a".."z" | "A".."Z" | "_" | "あ".."ん" | "ア".."ン" | "ー") ("a".."z" | "A".."Z" | "_" | "あ".."ん" | "ア".."ン" | "ー" |
-	//	"0".."9")*;
+	//	("a".."z" | "A".."Z" | "_" | "あ".."ん" | "ア".."ン" | "ー" | "0".."9")*;
 	public TerminalRule getIDRule() {
 		return (tID != null) ? tID : (tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID"));
 	} 

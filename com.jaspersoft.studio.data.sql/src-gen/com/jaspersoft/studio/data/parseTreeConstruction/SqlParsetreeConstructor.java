@@ -3993,11 +3993,11 @@ protected class ExpressionFragmentSecond_NotPrmAssignment_1 extends AssignmentTo
 /************ begin Rule ExpressionFragment ****************
  *
  * ExpressionFragment returns FullExpression:
- * 	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_);
+ * 	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
  *
  **/
 
-// expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_)
+// expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM
 protected class ExpressionFragment_Alternatives extends AlternativesToken {
 
 	public ExpressionFragment_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4015,6 +4015,7 @@ protected class ExpressionFragment_Alternatives extends AlternativesToken {
 			case 0: return new ExpressionFragment_ExpgroupAssignment_0(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new ExpressionFragment_ExpAssignment_1(lastRuleCallOrigin, this, 1, inst);
 			case 2: return new ExpressionFragment_XexpAssignment_2(lastRuleCallOrigin, this, 2, inst);
+			case 3: return new ExpressionFragment_NotPrmAssignment_3(lastRuleCallOrigin, this, 3, inst);
 			default: return null;
 		}	
 	}
@@ -4171,6 +4172,39 @@ protected class ExpressionFragment_XexpAssignment_2 extends AssignmentToken  {
 			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
 		}	
 	}	
+}
+
+// notPrm=JRNPARAM
+protected class ExpressionFragment_NotPrmAssignment_3 extends AssignmentToken  {
+	
+	public ExpressionFragment_NotPrmAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getExpressionFragmentAccess().getNotPrmAssignment_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("notPrm",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("notPrm");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getExpressionFragmentAccess().getNotPrmJRNPARAMTerminalRuleCall_3_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getExpressionFragmentAccess().getNotPrmJRNPARAMTerminalRuleCall_3_0();
+			return obj;
+		}
+		return null;
+	}
+
 }
 
 

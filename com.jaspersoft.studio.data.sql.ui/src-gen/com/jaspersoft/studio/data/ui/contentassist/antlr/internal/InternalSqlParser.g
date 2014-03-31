@@ -1844,6 +1844,12 @@ rule__ExpressionFragment__Alternatives
 { after(grammarAccess.getExpressionFragmentAccess().getXexpAssignment_2()); }
 )
 
+    |(
+{ before(grammarAccess.getExpressionFragmentAccess().getNotPrmAssignment_3()); }
+(rule__ExpressionFragment__NotPrmAssignment_3)
+{ after(grammarAccess.getExpressionFragmentAccess().getNotPrmAssignment_3()); }
+)
+
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -9574,6 +9580,21 @@ rule__ExpressionFragment__XexpAssignment_2
 { before(grammarAccess.getExpressionFragmentAccess().getXexpAlternatives_2_0()); }
 (rule__ExpressionFragment__XexpAlternatives_2_0)
 { after(grammarAccess.getExpressionFragmentAccess().getXexpAlternatives_2_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__ExpressionFragment__NotPrmAssignment_3
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getExpressionFragmentAccess().getNotPrmJRNPARAMTerminalRuleCall_3_0()); }
+	RULE_JRNPARAM{ after(grammarAccess.getExpressionFragmentAccess().getNotPrmJRNPARAMTerminalRuleCall_3_0()); }
 )
 
 ;
