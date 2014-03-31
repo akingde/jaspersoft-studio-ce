@@ -63,5 +63,8 @@ public interface DataAdapterFactory {
 	 */
 	public IDataAdapterCreator iReportConverter();
 
-	public boolean isDepricated();
+	/**
+	 * Verifies if the current data adapter factory is deprecated.
+	 */
+	public boolean isDeprecated();
 }

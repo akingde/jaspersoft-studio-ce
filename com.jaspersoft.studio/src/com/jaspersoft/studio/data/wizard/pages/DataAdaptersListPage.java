@@ -121,7 +121,7 @@ public class DataAdaptersListPage extends WizardPage {
 	private void updateFactoriesList() {
 		List<DataAdapterFactory> list = new ArrayList<DataAdapterFactory>();
 		for (DataAdapterFactory daf : DataAdapterManager.getDataAdapterFactories()) {
-			if (!daf.isDepricated())
+			if (!daf.isDeprecated())
 				list.add(daf);
 		}
 		dataAdapterFactories = list;

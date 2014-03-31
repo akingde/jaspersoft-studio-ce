@@ -61,7 +61,7 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	@Override
-	public boolean isDepricated() {
+	public boolean isDeprecated() {
 		return false;
 	}
 
