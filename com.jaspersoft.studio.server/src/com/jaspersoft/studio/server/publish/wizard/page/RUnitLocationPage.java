@@ -421,6 +421,7 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		if (newrunit == null) {
 			ResourceDescriptor rd = MReportUnit.createDescriptor(null);
 			rd.setName(null);
+			rd.setResourceProperty(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, true);
 			newrunit = new MReportUnit(null, rd, -1);
 		}
 		PublishUtil.initRUnitName(newrunit, jDesign);
