@@ -15,12 +15,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.image.command;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DialogEnabledCommand;
@@ -76,7 +76,7 @@ public class CreateImageCommand extends CreateElementCommand implements DialogEn
 
 	@Override
 	public int openDialog() {
-		ImageCreationDialog d=new ImageCreationDialog(Display.getCurrent().getActiveShell());
+		ImageCreationDialog d = new ImageCreationDialog(UIUtils.getShell());
 		d.configureDialog(jConfig);
 		int dialogResult = d.open();
 		imageExpression = d.getImageExpression();
