@@ -289,7 +289,7 @@ public class LazyImageConverter extends ElementConverter {
 	 */
 	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement, JRExpression expr){
 		String evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(expr);
-		if (evaluatedExpression == null){
+		if (evaluatedExpression == null && expr != null){
 			ExpressionInterpreter interpreter = getInterpreter(jConf, modelElement);
 			if (interpreter != null){
 				Object expressionValue = interpreter.interpretExpression(expr.getText());

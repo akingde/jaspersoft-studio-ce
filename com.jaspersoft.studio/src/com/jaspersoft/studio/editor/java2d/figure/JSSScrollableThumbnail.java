@@ -64,7 +64,7 @@ public class JSSScrollableThumbnail extends Figure {
 	 * Figure where the preview image is painted and that listen for the 
 	 * click or drag of the mouse 
 	 */
-	private IFigure selector;
+	private SelectorFigure selector;
 	
 	/**
 	 * Viewport used to move the main report
@@ -137,7 +137,7 @@ public class JSSScrollableThumbnail extends Figure {
 		public void mousePressed(MouseEvent me) {
 			if (!(JSSScrollableThumbnail.this.getClientArea().contains(me.getLocation())))
 				return;
-			Dimension selectorCenter = selector.getBounds().getSize().scale(0.5f);
+			Dimension selectorCenter = selector.getViewportBounds().getSize().scale(0.5f);
 			Point scrollPoint = me.getLocation().getTranslated(getLocation().getNegated()).translate(selectorCenter.negate())
 					.scale(1.0f / getViewportScaleX(), 1.0f / getViewportScaleY())
 					.translate(viewport.getHorizontalRangeModel().getMinimum(), viewport.getVerticalRangeModel().getMinimum());
@@ -248,7 +248,15 @@ public class JSSScrollableThumbnail extends Figure {
 	 */
 	private class SelectorFigure extends Figure {
 
-
+		private Rectangle viewPortBounds;
+		
+		public void setViewportBounds(Rectangle rect){
+			this.viewPortBounds = rect;
+		}
+		
+		public Rectangle getViewportBounds(){
+			return viewPortBounds;
+		}
 		
 		public void paintFigure(Graphics g) {
 			if (cachedImage == null){
@@ -258,7 +266,7 @@ public class JSSScrollableThumbnail extends Figure {
 			g.drawImage(imageToDraw, 0, 0);
 			imageToDraw.dispose();
 			//g.setForegroundColor(ColorConstants.menuBackgroundSelected);
-			//g.drawRectangle(bounds);
+			//g.drawRectangle(viewPortBounds);
 		}
 	}
 	
@@ -269,11 +277,12 @@ public class JSSScrollableThumbnail extends Figure {
 	}
 
 	/**
-	 * Listener called when the figure changes
+	 * Listener called when the figure zoom changes
 	 */
 	private FigureListener figureListener = new FigureListener() {
 		public void figureMoved(IFigure source) {
 			reconfigureSelectorBounds();
+			needRefresh = true;
 		}
 	};
 	
@@ -287,32 +296,33 @@ public class JSSScrollableThumbnail extends Figure {
 	protected ImageData getThumbnailImage() {
 		Rectangle e = getSourceRectangle();
 		targetSize = getPreferredSize();
+		Rectangle fullSize = new Rectangle(0, 0, e.width + Math.abs(e.x), e.height + Math.abs(e.y));
+		
 		
 		//Generate a full size image
 		PaletteData palette = new PaletteData(0x0000ff, 0x00ff00,0xff0000);
 		//The graphics should paint the image with a depth of 32 bit but for some reason it's always 24
-		ImageData data = new ImageData(e.width, e.height, 24, palette);
+		ImageData data = new ImageData(fullSize.width, fullSize.height, 24, palette);
 		Image fullImage = new Image(Display.getCurrent(), data);
 		GC fullImageGC = new GC(fullImage);
 		J2DGraphicsSource gs = new J2DGraphicsSource(fullImageGC);
-		Graphics graphics = gs.getGraphics(e); 
+		Graphics graphics = gs.getGraphics(fullSize); 
 		RGB backgroundColor = getBackgroundColor().getRGB();
+		((J2DGraphics)graphics).getGraphics2D().translate(-e.x, -e.y);
 		((J2DGraphics)graphics).getGraphics2D().setColor(new java.awt.Color(backgroundColor.red, backgroundColor.green, backgroundColor.blue));
-		((J2DGraphics)graphics).getGraphics2D().fillRect(0,0,e.width, e.height);
+		((J2DGraphics)graphics).getGraphics2D().fillRect(e.x,e.y,data.width, data.height);
 		sourceFigure.paint(graphics);
-		gs.flushGraphics(e);
+		gs.flushGraphics(fullSize);
 		
 		//Calculate the maximum size for the painting area keeping the aspect ratio
-		int height = (targetSize.width * e.height)/e.width;
-		int width;
-		if (height > targetSize.height){
-			height = targetSize.height;
-			width = (targetSize.height * e.width)/e.height;
-		} else {
-			width = targetSize.width;
-		}
-		targetSize.setWidth(width);
-		targetSize.setHeight(height);
+		Point thumbNailSize = calculateMaximumSize(fullSize.width, fullSize.height);
+		int height = thumbNailSize.y;
+		int width = thumbNailSize.x;
+				
+		int offset_x = (e.x * width) / fullSize.width; 
+		int offset_y = (e.y * height) / fullSize.height; 
+		targetSize.setWidth(width + offset_x);
+		targetSize.setHeight(height + offset_y);
 		
 		palette = new PaletteData(0x0000ff, 0x00ff00,0xff0000);
 		ImageData resizedImageData = new ImageData(width,height,24,palette);
@@ -334,9 +344,42 @@ public class JSSScrollableThumbnail extends Figure {
 			fullImageGC.dispose();
 			fullImage.dispose();
 		}
-		return fixedImage;
+		return fixedImage;//fullImage.getImageData();
 	}
 	
+	private Point calculateMaximumSize(int fullWidth, int fullHeight){
+		int height1 = (targetSize.width * fullHeight)/fullWidth;
+		int width1 = targetSize.width;
+		int height2 = targetSize.height;
+		int width2 = (targetSize.height * fullWidth)/fullHeight;
+
+		if (height1 > targetSize.height) return new Point(width2, height2);
+		else if (width2 > targetSize.width) return new Point(width1, height1);
+		else {
+			int area1 = height1 * width1;
+			int area2 = height2 * width2;
+			if (area1 > area2) return new Point(width1, height1);
+			else return new Point(width2, height2);
+		}
+	}
+	/*
+	private void getRightLowerMostAngle(List<INode> nodes, Rectangle insets){
+		if (nodes == null) return;
+		for(INode node : nodes){
+			if (node.getValue() instanceof JRDesignElement){
+				JRDesignElement element = (JRDesignElement)node.getValue();
+				int positionY = element.getHeight() + element.getY();
+				int positionX = element.getWidth() + element.getX();
+				System.out.println(positionY +  " " +  positionX);
+				if (positionY > insets.height) insets.setHeight(positionY);
+				if (positionY < insets.y) insets.setY(positionY);
+				if (positionX > insets.width) insets.setWidth(positionX);
+				if (positionX < insets.x) insets.setX(positionX);
+			}
+			getRightLowerMostAngle(node.getChildren(), insets);
+		}
+	}*/
+
 	/**
 	 * The image painted by the figure seems to has some problems with depth and color.
 	 * Even if the depth should be 32 it was 24 and other than that on Windows the blue and red components
@@ -448,6 +491,7 @@ public class JSSScrollableThumbnail extends Figure {
 	private void initialize() {
 		selector = new SelectorFigure();
 		selector.setFocusTraversable(true);
+		add(selector);
 		hookSelector();
 		ClickScrollerAndDragTransferrer transferrer = new ClickScrollerAndDragTransferrer();
 		addMouseListener(transferrer);
@@ -466,7 +510,8 @@ public class JSSScrollableThumbnail extends Figure {
 		rect.setSize(viewport.getClientArea().getSize());
 		rect.scale(getViewportScaleX(), getViewportScaleY());
 		rect.translate(getClientArea().getLocation());
-		selector.setBounds(rect);
+		selector.setViewportBounds(rect);
+		selector.repaint();
 	}
 
 	/**
@@ -511,13 +556,13 @@ public class JSSScrollableThumbnail extends Figure {
 		if (sourceFigure == fig)
 			return;
 		sourceFigure = fig;
-		if (sourceFigure != null) {
-			repaint();
-		}
 		//Add the listener for changes in the model on the first children of the root node (it should be an mpage or an mreport).
 		if (rootNode != null && rootNode.getChildren() != null && rootNode.getChildren().size()>0){
 			rootNode.getChildren().get(0).getPropertyChangeSupport().removePropertyChangeListener(listener);
 			rootNode.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(listener);
+		}
+		if (sourceFigure != null) {
+			reconfigureSelectorBounds();
 		}
 	}
 	

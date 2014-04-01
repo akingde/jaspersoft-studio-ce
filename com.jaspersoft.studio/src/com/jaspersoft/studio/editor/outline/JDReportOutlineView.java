@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
@@ -437,11 +436,11 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 */
 	protected void initializeOverview() {
 		LightweightSystem lws = new J2DLightweightSystem(overview);
+
 		RootEditPart rep = editor.getGraphicalViewer().getRootEditPart();
 		if (rep instanceof MainDesignerRootEditPart) {
 			ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) rep;
 			thumbnail = new JSSScrollableThumbnail((Viewport) root.getFigure(), (MRoot)getViewer().getContents().getModel());
-			thumbnail.setBorder(new MarginBorder(3));
 			thumbnail.setSource(root.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 			disposeListener = new DisposeListener() {
@@ -453,6 +452,13 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				}
 			};
 			editor.getEditor().addDisposeListener(disposeListener);
+			/*overview.addControlListener(new ControlAdapter() {
+				@Override
+				public void controlResized(ControlEvent e) {
+					overview.setBackground(ResourceManager.getColor(0, 255, 0));
+					thumbnail.setSize(overview.getSize().x, overview.getSize().y);
+				}
+			});*/
 		}
 		lws.setControl(overview);
 	}
