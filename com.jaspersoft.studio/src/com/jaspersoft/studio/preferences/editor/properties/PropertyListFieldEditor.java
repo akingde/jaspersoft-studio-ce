@@ -16,8 +16,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
+import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
@@ -28,7 +30,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
@@ -67,7 +68,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	@Override
 	protected String[] getNewInputObject() {
 		final String[] prop = new String[2];
-		Dialog dialog = new Dialog(Display.getDefault().getActiveShell()) {
+		Dialog dialog = new Dialog(UIUtils.getShell()) {
 
 			/*
 			 * (non-Javadoc)
@@ -131,7 +132,13 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 		for (int i = 0; i < items.length; i++) {
 			TableItem item = items[i];
 			// getPreferenceStore().setValue(item.getText(0), item.getText(1));
-			props.setProperty(item.getText(0), item.getText(1));
+			String key = item.getText(0);
+			String value = item.getText(1);
+			props.setProperty(key, value);
+			if (key.equals("net.sf.jasperreports.default.font.name"))
+				JRProperties.setProperty(key, value);
+			else if (key.equals("net.sf.jasperreports.default.font.size"))
+				JRProperties.setProperty(key, value);
 		}
 		getPreferenceStore().setValue(NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
 	}
