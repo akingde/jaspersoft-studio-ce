@@ -167,7 +167,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 					public IStatus validate(Object value) {
 						IStatus s = super.validate(value);
 						if (s.equals(Status.OK_STATUS) && !ServerManager.isUniqueName(sprofile, (String) value)) {
-							return ValidationStatus.error(Messages.ServerProfilePage_13);
+							return ValidationStatus.warning(Messages.ServerProfilePage_13);
 						}
 						return s;
 					}
