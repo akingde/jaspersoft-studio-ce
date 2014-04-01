@@ -30,7 +30,7 @@ public class SortFieldWizard extends Wizard {
 	
 	public SortFieldWizard() {
 		super();
-		setWindowTitle(Messages.common_image);
+		setWindowTitle(Messages.SortFieldWizard_Title);
 	}
 
 	@Override

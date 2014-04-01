@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.TLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
@@ -78,8 +79,8 @@ public class WizardSortFieldPage extends WizardPage {
 		super("sortfieldpage"); //$NON-NLS-1$
 		this.jrDataset = jrDataset;
 		this.jrSortfield = jrSortField;
-		setTitle("New Sort Field");
-		setDescription("Create a SortField from Field or Variable");
+		setTitle(Messages.WizardSortFieldPage_Title);
+		setDescription(Messages.WizardSortFieldPage_Description);
 	}
 
 	public void createControl(Composite parent) {
@@ -95,7 +96,7 @@ public class WizardSortFieldPage extends WizardPage {
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(table, SWT.NONE);
-		col[0].setText("Dataset Fields and Variables");
+		col[0].setText(Messages.WizardSortFieldPage_Col1);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -116,7 +117,7 @@ public class WizardSortFieldPage extends WizardPage {
 			listener.widgetSelected(null);
 		}
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
 	}
 
 	private void fillTable() {
@@ -124,7 +125,7 @@ public class WizardSortFieldPage extends WizardPage {
 		Map<String, JRSortField> sortFields = jrDataset.getSortFieldsMap();
 		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.FIELDS){
 			for (JRField f : jrDataset.getFieldsList()) {
-				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.FIELD.getName());
+				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.FIELD.getName()); //$NON-NLS-1$
 				//If a field with the same name is not present or if it is present but with a different type then show it
 				if (checkIfPresent == null){
 					objects.add(f);
@@ -134,7 +135,7 @@ public class WizardSortFieldPage extends WizardPage {
 
 		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.VARIABLES){
 			for (JRVariable f : jrDataset.getVariablesList()) {
-				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.VARIABLE.getName());
+				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.VARIABLE.getName()); //$NON-NLS-1$
 				if (checkIfPresent == null){
 					objects.add(f);
 				}

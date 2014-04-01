@@ -1617,6 +1617,7 @@ public class Messages extends NLS {
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_fields;
 	public static String SortFieldSection_sort_order;
+	public static String SortFieldWizard_Title;
 	public static String SP3Boolean_False_Value;
 	public static String SP3Boolean_True_Value;
 	public static String SP3Boolean_Undefined_Value;
@@ -1864,6 +1865,9 @@ public class Messages extends NLS {
 	public static String WizardDataSourcePage_btnNew_text;
 	public static String WizardDataSourcePage_lblNewLabel_text_1;
 	public static String WizardDataSourcePage_lblThisDataAdapter_text;
+	public static String WizardSortFieldPage_Col1;
+	public static String WizardSortFieldPage_Description;
+	public static String WizardSortFieldPage_Title;
 	public static String NewSubreportPage_useReport_text;
 	public static String NewSubreportPage_newReport_text;
 	public static String NewSubreportPage_useReportB_text;
@@ -1878,7 +1882,6 @@ public class Messages extends NLS {
 	public static String DuplicateDataAdapterAction_duplicateName;
 	public static String DuplicateDataAdapterAction_duplicateToolTip;
 	public static String DuplicateDataAdapterAction_newAdapterPrefix;
-
 
 	static {
 		// initialize resource bundle
