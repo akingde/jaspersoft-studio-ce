@@ -67,13 +67,11 @@ public class JavaInterpreter extends AInterpreter {
 		if (jasperDesign != null) {
 			String[] imports = jasperDesign.getImports();
 			for (int i = 0; imports != null && i < imports.length; ++i) {
-
 				String importString = imports[i];
-				if (importString.startsWith("static ")) {
+				if (importString.startsWith("static "))
 					interpreter.eval("static import " + imports[i].substring("static ".length()) + ";");
-				} else {
+				else
 					interpreter.eval("import " + imports[i] + ";");
-				}
 			}
 		}
 	}

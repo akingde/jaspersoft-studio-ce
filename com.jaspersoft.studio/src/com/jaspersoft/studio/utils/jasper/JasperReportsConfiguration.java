@@ -69,7 +69,7 @@ import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class JasperReportsConfiguration extends LocalJasperReportsContext {
+public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
 	// public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	public static final String KEY_JASPERDESIGN = "JasperDesign";

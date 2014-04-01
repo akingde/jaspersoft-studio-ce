@@ -123,6 +123,8 @@ public abstract class AInterpreter {
 		String pliteral = getLiteral(prm.getName());
 		if (literals.contains(pliteral))
 			return get(pliteral);
+		if (prm.getName().equals("JASPER_REPORTS_CONTEXT"))
+			return setValue(jConfig, pliteral);
 		JRExpression exp = prm.getDefaultValueExpression();
 		if (recursion > 100 || exp == null || Misc.isNullOrEmpty(exp.getText()))
 			return getNull(pliteral, prm);
