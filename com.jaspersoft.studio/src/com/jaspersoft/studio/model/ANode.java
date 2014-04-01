@@ -547,10 +547,11 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 * 
 	 * Default value is <code>true</code> in order to ensure back-compatibility
 	 *   
+	 * @param child the child that should be added to the element (useful for example for typecheck)
 	 * @return <code>true</code> if new children can be added, <code>false</code> otherwise
 	 * 
 	 */
-	public boolean canAcceptChildren() {
+	public boolean canAcceptChildren(ANode child) {
 		return true;
 	}
 }

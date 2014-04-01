@@ -467,7 +467,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	@Override
-	public boolean canAcceptChildren() {
+	public boolean canAcceptChildren(ANode child) {
 		// check for deleted band
 		return getValue() != null;
 	}

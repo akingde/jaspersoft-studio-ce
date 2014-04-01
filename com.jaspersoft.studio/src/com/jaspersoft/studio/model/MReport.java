@@ -1032,4 +1032,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public void setBandIndex(int index, Object band) {
 		bandIndexMap.put(band, index);
 	}
+	
+	@Override
+	public boolean canAcceptChildren(ANode child) {
+		return (child instanceof MBand); 
+	}
 }
