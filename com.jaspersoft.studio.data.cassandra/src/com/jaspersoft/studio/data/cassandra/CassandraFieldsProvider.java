@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import com.jaspersoft.connectors.cassandra.connection.CassandraConnection;
+import com.jaspersoft.connectors.cassandra.connection.JSCassandraConnection;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
@@ -47,7 +47,7 @@ public class CassandraFieldsProvider implements IFieldsProvider {
 		dataAdapterService.contributeParameters(parameters);
 		ParameterUtil.setParameters(jasperReportsConfiguration, dataset, parameters);
 		return com.jaspersoft.connectors.cassandra.CassandraFieldsProvider.getFields(
-				jasperReportsConfiguration, (CassandraConnection) parameters.get(JRParameter.REPORT_CONNECTION), dataset, parameters);
+				jasperReportsConfiguration, (JSCassandraConnection) parameters.get(JRParameter.REPORT_CONNECTION), dataset, parameters);
 	}
 
 	@Override

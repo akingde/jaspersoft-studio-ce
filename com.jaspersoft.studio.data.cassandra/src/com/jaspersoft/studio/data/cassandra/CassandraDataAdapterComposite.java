@@ -37,15 +37,22 @@ package com.jaspersoft.studio.data.cassandra;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.conversion.IConverter;
+import org.eclipse.core.databinding.conversion.NumberToStringConverter;
+import org.eclipse.core.databinding.conversion.StringToNumberConverter;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.ibm.icu.text.NumberFormat;
 import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapter;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
@@ -59,7 +66,9 @@ import com.jaspersoft.studio.swt.widgets.WSecretText;
  * 
  */
 public class CassandraDataAdapterComposite extends ADataAdapterComposite {
-	private Text jdbcURL;
+	private Text hostname;
+	private Text port;
+	private Text keyspace;
 	private Text username;
 	private WSecretText password;
 
@@ -73,8 +82,14 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 	private void initComponents() {
 		setLayout(new GridLayout(2, false));
 
-		createLabel("JDBC URL:");
-		jdbcURL = createTextField();
+		createLabel("Hostname:");
+		hostname = createTextField();
+
+		createLabel("Port:");
+		port = createTextField();
+
+		createLabel("Keyspace:");
+		keyspace = createTextField();
 		
 		createLabel("Username:");
 		username = createTextField();
@@ -108,11 +123,6 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 		if (dataAdapterDescriptor == null) {
 			dataAdapterDescriptor = new CassandraDataAdapterDescriptor();
 		}
-		CassandraDataAdapter cassandraDA = (CassandraDataAdapter) dataAdapterDesc.getDataAdapter();
-		cassandraDA.setUsername(username.getText());
-		cassandraDA.setPassword(password.getText());
-		cassandraDA.setUrl(jdbcURL.getText());
-		
 		return dataAdapterDescriptor;
 	}
 
@@ -125,22 +135,43 @@ public class CassandraDataAdapterComposite extends ADataAdapterComposite {
 		}
 		
 		this.dataAdapterDescriptor = (CassandraDataAdapterDescriptor) dataAdapterDescriptor;
-//		CassandraDataAdapter dataAdapter = (CassandraDataAdapter) dataAdapterDescriptor
-//				.getDataAdapter();
-//		bindWidgets(dataAdapter);
 	}
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		bindingContext.bindValue(
-				SWTObservables.observeText(jdbcURL, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
+				SWTObservables.observeText(hostname, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "hostname")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(keyspace, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "keyspace")); //$NON-NLS-1$
+		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+		numberFormat.setGroupingUsed(false);
+		IConverter targetToModelConverter = StringToNumberConverter.toInteger(numberFormat, true);
+		IConverter modelToTargetConverter = NumberToStringConverter.fromInteger(numberFormat, true);
+		bindingContext.bindValue(
+				SWTObservables.observeText(port, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "port"),
+				new UpdateValueStrategy().setConverter(targetToModelConverter),
+				new UpdateValueStrategy().setConverter(modelToTargetConverter)); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(username, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(password, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
+		
+		port.addVerifyListener(new VerifyListener() {
+			@Override
+			public void verifyText(VerifyEvent e) {
+				for (char c : e.text.toCharArray()){
+					if (!Character.isDigit(c)) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
 	}
 
 	@Override

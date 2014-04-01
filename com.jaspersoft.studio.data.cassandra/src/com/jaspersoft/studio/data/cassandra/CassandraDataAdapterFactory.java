@@ -60,7 +60,9 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public DataAdapterDescriptor createDataAdapter() {
 		CassandraDataAdapterDescriptor descriptor = new CassandraDataAdapterDescriptor();
-		descriptor.getDataAdapter().setUrl("jdbc:cassandra://HOST:9160/KEY_SPACE");
+		descriptor.getDataAdapter().setHostname("HOST"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setKeyspace("KEYSPACE"); //$NON-NLS-1$
+		descriptor.getDataAdapter().setPort(9160); 
 		return descriptor;
 	}
 
