@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.ui.actions;
 
@@ -33,19 +28,18 @@ import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
- * Dropdown action to contribute a settings menu with the menu items
- * taken from the global View menu.
+ * Dropdown action to contribute a settings menu with the menu items taken from the global View menu.
  * <p>
  * 
  * The following items currently compose the menu:
  * <ul>
- * 	<li>Rulers</li>
- * 	<li>Snap To Guides</li>
- * 	<li>Show Grid</li>
- * 	<li>Snap To Grid</li>
- *  <li>Snap To Geometry</li>
- *  <li>Grid Size...</li>
- *  <li>Decorating contributions</li>
+ * <li>Rulers</li>
+ * <li>Snap To Guides</li>
+ * <li>Show Grid</li>
+ * <li>Snap To Grid</li>
+ * <li>Snap To Geometry</li>
+ * <li>Grid Size...</li>
+ * <li>Decorating contributions</li>
  * </ul>
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
@@ -57,7 +51,7 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 	public ViewSettingsDropDownAction(ActionRegistry actionRegistry) {
 		setText(Messages.ViewSettingsDropDownAction_settingsName);
 		setMenuCreator(this);
-		this.actionRegistry=actionRegistry;
+		this.actionRegistry = actionRegistry;
 	}
 
 	@Override
@@ -75,7 +69,7 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 
 	@Override
 	public Menu getMenu(Control parent) {
-		if (menu != null){
+		if (menu != null) {
 			menu.dispose();
 		}
 		menu = new Menu(parent);
@@ -87,12 +81,14 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 		addActionToMenu(menu, actionRegistry.getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
 		addActionToMenu(menu, actionRegistry.getAction(SizeGridAction.ID));
 		new MenuItem(menu, SWT.SEPARATOR);
-		for(String id : JaspersoftStudioPlugin.getDecoratorManager().getActionIDs()){
+		for (String id : JaspersoftStudioPlugin.getDecoratorManager().getActionIDs())
 			addActionToMenu(menu, actionRegistry.getAction(id));
-		}
+		new MenuItem(menu, SWT.SEPARATOR);
+		for (String id : JaspersoftStudioPlugin.getEditorSettingsManager().getActionIDs())
+			addActionToMenu(menu, actionRegistry.getAction(id));
 		return menu;
 	}
-	
+
 	/*
 	 * Adds an item to the existing menu using, using the contributed action.
 	 */

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -27,7 +28,6 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.IEditorContributor;
@@ -82,14 +82,19 @@ public class JRSEditorContributor implements IEditorContributor {
 		if (prop == null)
 			return;
 
-		boolean run = jConfig.get(KEY_PUBLISH2JSS, false);
-		boolean allways = jConfig.get(KEY_PUBLISH2JSS_SILENT, false);
-		if (!allways) {
-			SaveConfirmationDialog dialog = new SaveConfirmationDialog(Display.getDefault().getActiveShell());
+		boolean run = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS, false);
+		boolean allways = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS_SILENT, false);
+		if (allways) {
+			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);
-			jConfig.put(KEY_PUBLISH2JSS, run);
-			jConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
+			jConfig.getPrefStore().setValue(KEY_PUBLISH2JSS_SILENT, !dialog.getAllways());
 		}
+
+		jConfig.getPrefStore().setValue(KEY_PUBLISH2JSS, run);
+
+		// jConfig.put(KEY_PUBLISH2JSS, run);
+		// jConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
+
 		if (run)
 			getAction(monitor, jConfig).run();
 	}

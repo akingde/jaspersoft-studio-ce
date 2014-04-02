@@ -340,5 +340,11 @@
            sequence="M1+M3+U">
      </key>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.EditorSettingsMenu">
+     <EditorSettingsMenu
+           ClassFactory="com.jaspersoft.studio.server.publish.action.ServerSettingsEditorMenuContributor">
+     </EditorSettingsMenu>
+  </extension>
 
 </plugin>

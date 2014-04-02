@@ -18,6 +18,7 @@ import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.data.defaults.DefaultDAManager;
 import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
+import com.jaspersoft.studio.editor.gef.ui.actions.EditorSettingsContributorManager;
 import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
 import com.jaspersoft.studio.plugin.ExtensionManager;
@@ -113,6 +114,16 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 			decoratorManager.init();
 		}
 		return decoratorManager;
+	}
+
+	private static EditorSettingsContributorManager editorSettingsManager;
+
+	public static EditorSettingsContributorManager getEditorSettingsManager() {
+		if (editorSettingsManager == null) {
+			editorSettingsManager = new EditorSettingsContributorManager();
+			editorSettingsManager.init();
+		}
+		return editorSettingsManager;
 	}
 
 	private static DefaultDAManager daManager;
