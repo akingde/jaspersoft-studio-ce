@@ -18,6 +18,7 @@ package com.jaspersoft.studio.model.group;
 import java.text.MessageFormat;
 
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -38,11 +39,20 @@ public class GroupNameValidator extends AbstractJSSCellEditorValidator {
 	 */
 	@Override
 	public String isValid(Object value) {
+		String selectedName = ((JRGroup)getTarget().getValue()).getName();
+		if (value.equals(selectedName)) return null;
 		JasperDesign d =  getTarget().getJasperDesign();
-		if (d !=null ){
+		if (d !=null){
 			JRGroup group = d.getGroupsMap().get(value);
 			if (group != null){
 				String message = MessageFormat.format(Messages.GroupSection_SameNameErrorMsg, new Object[] { value });
+				return message;
+			}
+			//Check if there is an existing variable for the group
+			//JRDesignDataset dataset = ModelUtils.getDataset(getTarget());
+			JRVariable groupVar = getTarget().getJasperDesign().getVariablesMap().get(value  + "_COUNT");
+			if (groupVar != null){
+				String message = MessageFormat.format(Messages.GroupSection_SameVariableNameErrorMsg, new Object[] {value  + "_COUNT", value });
 				return message;
 			}
 		}

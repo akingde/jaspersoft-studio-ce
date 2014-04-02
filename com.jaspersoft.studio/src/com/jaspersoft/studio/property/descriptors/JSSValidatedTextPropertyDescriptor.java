@@ -38,11 +38,11 @@ import com.jaspersoft.studio.property.section.widgets.SPText;
 public class JSSValidatedTextPropertyDescriptor extends JSSTextPropertyDescriptor {
 	
 	/**
-	 * class that extends the standard text control widget to ovverride the text changed 
+	 * class that extends the standard text control widget to override the text changed 
 	 * method. This is method is called when a value was inserted in the text area and 
 	 * need to be send to the related node. It differs from the original because of 
 	 * the check with a validator before to modify the node. If the validator return an 
-	 * error then this is displayed and the value in the textarea is resetted to the 
+	 * error then this is displayed and the value in the textarea is reset to the 
 	 * actual value of the node. If the validator is null the node is not changed
 	 * 
 	 * @author Orlandin Marco
@@ -76,7 +76,7 @@ public class JSSValidatedTextPropertyDescriptor extends JSSTextPropertyDescripto
 	 * @param validator validator used to check if the value inserted in the textarea is valid for the property node.
 	 * As validator is suggested an instanceof AbstractJSSCellEditorValidator, since this update the target of the validator
 	 * when the widget is created. This is done because many property descriptors are created statically and for this reason 
-	 * in somecases it isn't possible keep an instance of the target inside the descriptor, since the descriptor is shared from 
+	 * in some cases it isn't possible keep an instance of the target inside the descriptor, since the descriptor is shared from 
 	 * more elements
 	 */
 	public JSSValidatedTextPropertyDescriptor(Object id, String displayName, ICellEditorValidator validator) {

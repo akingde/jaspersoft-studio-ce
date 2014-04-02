@@ -709,6 +709,7 @@ public class Messages extends NLS {
 	public static String GroupSection_SameNameErrorMsg;
 	public static String GroupSection_SameNameErrorTitle;
 	public static String GroupSection_SectionTitle;
+	public static String GroupSection_SameVariableNameErrorMsg;
 	public static String HeadingAction_heading;
 	public static String HorizontalRowLayout_name;
 	public static String HorizontalRowLayout_toolTip;

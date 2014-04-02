@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.base.JRBaseGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.FooterPositionEnum;
 
@@ -255,6 +257,12 @@ public class MGroup extends APropertyNode implements ICopyable {
 			if (design != null){
 				design.getGroupsMap().remove(evt.getOldValue());
 				design.getGroupsMap().put(jrGroup.getName(), jrGroup);
+				//JRDesignDataset dataset = ModelUtils.getDataset(this);
+				JRVariable groupVar =  getJasperDesign().getVariablesMap().get(evt.getOldValue()  + "_COUNT");
+				if (groupVar != null){
+					//This should launch the propertyChange event on the variable so the map is updated also for it
+					((JRDesignVariable)groupVar).setName(jrGroup.getName() + "_COUNT");
+				}
 			}
 		}
 		super.propertyChange(evt);

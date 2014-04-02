@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.group.command;
 
+import java.text.MessageFormat;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -105,7 +107,15 @@ public class CreateGroupCommand extends Command {
 					jrDataSet.addGroup(index, jrGroup);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+				if (e.getMessage().startsWith("Duplicate declaration of variable")){//$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_"); //$NON-NLS-1$
+					String message = MessageFormat.format(Messages.GroupSection_SameVariableNameErrorMsg, new Object[] {jrGroup.getName()  + "_COUNT", jrGroup.getName()  });
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.common_group_name, message, defaultName,null);
+					if (dlg.open() == InputDialog.OK) {
+						jrGroup.setName(dlg.getValue());
+						execute();
+					}
+				} else if (e.getMessage().startsWith("Duplicate declaration")) {//$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
 							Messages.common_group_name, Messages.CreateGroupCommand_group_name_dialog_text, defaultName,
