@@ -37,6 +37,15 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	private boolean chunked;
 	private boolean mime = true;
 	private String projectPath;
+	private boolean useOnlySOAP = false;
+
+	public boolean isUseOnlySOAP() {
+		return useOnlySOAP;
+	}
+
+	public void setUseOnlySOAP(boolean useOnlySOAP) {
+		this.useOnlySOAP = useOnlySOAP;
+	}
 
 	public boolean isMime() {
 		return mime;

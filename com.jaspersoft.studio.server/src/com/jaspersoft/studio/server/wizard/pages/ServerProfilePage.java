@@ -77,6 +77,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Button bchunked;
 	private Combo bmime;
 	private Button bdaterange;
+	private Button bUseSoap;
 	private Button blpath;
 	private VersionCombo cversion;
 	private DataBindingContext dbc;
@@ -187,6 +188,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeSelection(bdaterange), PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bUseSoap), PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()), PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
@@ -223,6 +225,12 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		bdaterange.setLayoutData(gd);
+
+		bUseSoap = new Button(cmp, SWT.CHECK);
+		bUseSoap.setText("Use SOAP protocol only");
+		gd = new GridData();
+		gd.horizontalSpan = 3;
+		bUseSoap.setLayoutData(gd);
 
 		String ttip = "For SOAP connections only.";
 		Label lbl = new Label(cmp, SWT.NONE);

@@ -58,10 +58,13 @@ public class ProxyConnection implements IConnection {
 	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		Exception exc = null;
 		for (IConnection co : cons) {
+			String connName = co.getClass().getName().toUpperCase();
+			if (sp.isUseOnlySOAP() && !connName.contains("SOAP"))
+				continue;
 			try {
 				if (c == null && co.connect(monitor, sp))
 					c = co;
-				if (soap == null && co.getClass().getName().toUpperCase().contains("SOAP")) {
+				if (soap == null && connName.contains("SOAP")) {
 					if (c == co)
 						soap = co;
 					else if (co.connect(monitor, sp))
