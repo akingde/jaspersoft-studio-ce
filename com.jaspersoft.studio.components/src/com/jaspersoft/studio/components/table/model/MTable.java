@@ -379,7 +379,8 @@ public class MTable extends MGraphicElement implements IContainer,
 	}
 	
 	/**
-	 * Cached fullmodel of the table with all the children and stuff
+	 * Cache for the real model. The cache is build only we needed and is discarded when elements are
+	 * added or removed to the model
 	 */
 	private ANode fullModelTable = null;
 	
@@ -410,7 +411,7 @@ public class MTable extends MGraphicElement implements IContainer,
 	 * Create the fullmodel of the table if it is not was already created
 	 */
 	@Override
-	public void initModel() {
+	public List<INode> initModel() {
 		if (fullModelTable == null){
 			if (getChildren().isEmpty()) {
 				JRDesignComponentElement tbl = (JRDesignComponentElement) getValue();
@@ -423,5 +424,6 @@ public class MTable extends MGraphicElement implements IContainer,
 			}
 			else fullModelTable = this;
 		}
+		return fullModelTable.getChildren();
 	}
 }

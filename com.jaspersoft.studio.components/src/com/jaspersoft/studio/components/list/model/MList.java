@@ -17,6 +17,7 @@ package com.jaspersoft.studio.components.list.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -41,6 +43,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
@@ -51,6 +54,7 @@ import com.jaspersoft.studio.model.IContainerLayout;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -315,6 +319,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public void setValue(Object value) {
+		fullModelList = null;
 		if (getValue() != null) {
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) getValue();
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
@@ -332,6 +337,10 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) || 
+				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP)) {
+			fullModelList = null;
+		}
 		if (evt.getSource() == getValue()) {
 			if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {
 				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
@@ -412,5 +421,41 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 		datasetList.add((MDatasetRun) getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN));
 		return datasetList;
+	}
+	
+	/**
+	 * Cache for the real model. The cache is build only we needed and is discarded when elements are
+	 * added or removed to the model
+	 */
+	private ANode fullModelList = null;
+	
+	private void fillUsedStyles(List<INode> children, HashSet<String> map){
+		for(INode node : children){
+			if (node instanceof IGraphicalPropertiesHandler){
+				map.addAll(((IGraphicalPropertiesHandler)node).getUsedStyles());
+			}
+			fillUsedStyles(node.getChildren(), map);
+		}
+	}
+	
+	@Override
+	public HashSet<String> getUsedStyles() {
+		initModel();
+		HashSet<String> result = super.getUsedStyles();
+		fillUsedStyles(fullModelList.getChildren(),result);
+		return result;
+	}
+	
+	@Override
+	public List<INode> initModel() {
+		if (fullModelList == null){
+			if (getChildren().isEmpty()) {
+				fullModelList = ListComponentFactory.INST().createNode(null, getValue(),  -1);
+				StandardListComponent list = (StandardListComponent) getValue().getComponent();
+				ReportFactory.createElementsForBand(fullModelList, list.getContents().getChildren());
+			}
+			else fullModelList = this;
+		}
+		return fullModelList.getChildren();
 	}
 }

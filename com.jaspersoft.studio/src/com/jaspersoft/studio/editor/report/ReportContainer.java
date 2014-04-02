@@ -14,6 +14,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +84,14 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 	/** The editors. */
 	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
+	
+	/**
+	 * Property used by an element to ask to the container to check if for that element
+	 * there is an editor opened and in that case close it. The property change event
+	 * must have the old value set with the JRelement that it is requesting the editor
+	 * closing
+	 */
+	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
 
 	/** The parent. */
 	private EditorPart parent;
@@ -172,7 +182,12 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	private PropertyChangeListener modelListener = new PropertyChangeListener() {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getNewValue() != null && evt.getOldValue() == null) {
+			
+			if (evt.getPropertyName().equals(CLOSE_EDITOR_PROPERTY)){
+				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());
+				if (obj != null)
+					removeEditorPage(evt, obj);
+			} else if (evt.getNewValue() != null && evt.getOldValue() == null) {
 				// createEditorPage(evt.getNewValue());
 			} else if (evt.getNewValue() == null && evt.getOldValue() != null) {
 				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());

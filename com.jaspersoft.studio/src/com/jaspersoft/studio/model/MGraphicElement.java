@@ -818,10 +818,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 	
 	/**
-	 * By default the model is alrerady created, so the real exception is when 
-	 * this method has a body
+	 * By default the model is already created, so this method does nothing 
+	 * and simply return the list of children
 	 */
 	@Override
-	public void initModel() {
+	public List<INode> initModel() {
+		return getChildren();
 	}
 }

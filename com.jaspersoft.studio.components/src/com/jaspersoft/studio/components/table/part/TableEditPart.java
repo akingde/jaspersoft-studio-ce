@@ -21,14 +21,13 @@ import org.eclipse.gef.EditPolicy;
 
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
 
 public class TableEditPart extends EditableFigureEditPart {
-
+		
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,11 +35,9 @@ public class TableEditPart extends EditableFigureEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new FigureSelectionEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE,
-				new FigurePageLayoutEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FigurePageLayoutEditPolicy());
 	}
 
 	@Override

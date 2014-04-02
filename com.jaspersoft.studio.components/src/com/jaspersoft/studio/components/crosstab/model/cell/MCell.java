@@ -474,7 +474,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 	
 	@Override
-	public void initModel() {}
+	public List<INode> initModel() {
+		return getChildren();
+	}
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

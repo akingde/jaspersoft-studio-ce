@@ -481,6 +481,7 @@ public class MCell extends MColumn implements IGraphicElement,
 	}
 
 	@Override
-	public void initModel() {
+	public List<INode> initModel() {
+		return getChildren();
 	}
 }

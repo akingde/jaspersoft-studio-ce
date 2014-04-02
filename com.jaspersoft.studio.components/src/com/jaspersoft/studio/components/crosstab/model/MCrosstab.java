@@ -478,6 +478,10 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		return datasetList;
 	}
 	
+	/**
+	 * Cache for the real model. The cache is build only we needed and is discarded when elements are
+	 * added or removed to the model
+	 */
 	private ANode fullModelCrosstab = null;
 	
 	private void fillUsedStyles(List<INode> children, HashSet<String> map){
@@ -498,7 +502,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	}
 	
 	@Override
-	public void initModel() {
+	public List<INode> initModel() {
 		if (fullModelCrosstab == null){
 			if (getChildren().isEmpty()) {
 				JRDesignCrosstab ct = (JRDesignCrosstab) getValue();
@@ -510,6 +514,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 			}
 			else fullModelCrosstab = this;
 		}
+		return fullModelCrosstab.getChildren();
 	}
 
 }

@@ -47,7 +47,6 @@ import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
@@ -118,7 +117,7 @@ public class ListEditPart extends EditableFigureEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE,
 				new FigurePageLayoutEditPolicy() {
 
@@ -199,8 +198,7 @@ public class ListEditPart extends EditableFigureEditPart {
 					}
 
 				});
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new FigureSelectionEditPolicy());
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
 	}
 
 	@Override

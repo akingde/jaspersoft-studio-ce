@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.model;
 
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Class used to support the refresh system of the elements only when 
@@ -55,9 +56,10 @@ public interface IGraphicalPropertiesHandler {
 	
 	/**
 	 * Some element could have a partial or an empty model, to speed up the performances (crosstab and table e.g.). This in many cases works
-	 * but sometime it can give issue since for example you need to inspect the content of the element and without
-	 * model you can't or you need a model to set up the listener. This method is used to ask explicitly to an element to 
-	 * create the model if it hasen't one 
+	 * but sometime it can give issue since for example you need to inspect the content of the element to set listeners or check the children. 
+	 * This method is used to ask explicitly to an element to create the complete model if it hasen't one, and then return the list of children.
+	 * 
+	 * @return the list of the real children of the element initialized
 	 */
-	public void initModel();
+	public List<INode> initModel();
 }
