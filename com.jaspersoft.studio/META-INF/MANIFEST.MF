@@ -161,6 +161,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.model.util,
    org.eclipse.gef.commands,
    org.eclipse.draw2d.geometry",
+ com.jaspersoft.studio.editor.action.snap,
  com.jaspersoft.studio.editor.dnd,
  com.jaspersoft.studio.editor.expression;
   uses:="net.sf.jasperreports.crosstabs,

@@ -11,6 +11,7 @@
 package com.jaspersoft.studio;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.BundleContext;
@@ -24,6 +25,7 @@ import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -64,6 +66,12 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		info.setProductMainBundleID(PLUGIN_ID);
 		setBrandingInformation(info);
 		logInfo(NLS.bind("Starting JaspersoftStudio bundle - Version: {0}", info.getProductVersion()));
+
+		JasperReportsConfiguration c = JasperReportsConfiguration.getDefaultInstance();
+		String key = "net.sf.jasperreports.default.font.name";
+		JRProperties.setProperty(key, c.getProperty(key));
+		key = "net.sf.jasperreports.default.font.size";
+		JRProperties.setProperty(key, c.getProperty(key));
 	}
 
 	/**

@@ -43,7 +43,6 @@ import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.FileResolver;
-import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
@@ -367,10 +366,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			try {
 				pstore.setWithDefault(false);
 				props = FileUtils.load(pstore.getString(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES));
-				String key = "net.sf.jasperreports.default.font.name";
-				JRProperties.setProperty(key, props.getProperty(key));
-				key = "net.sf.jasperreports.default.font.size";
-				JRProperties.setProperty(key, props.getProperty(key));
 			} catch (IOException e) {
 				e.printStackTrace();
 				props = new Properties();
