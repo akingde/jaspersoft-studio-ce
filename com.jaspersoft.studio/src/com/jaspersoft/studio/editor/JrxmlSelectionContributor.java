@@ -83,7 +83,9 @@ public class JrxmlSelectionContributor {
 			}
 			for (String id : cbarID) {
 				IContributionItem ic = ToolItemsManager.findToolbar(cbm2, id);
-				if (ic != null) {
+				//Check if the coolrbar is disposed, because on the close of the application it could 
+				//happen that it is already disposed before this point
+				if (ic != null &&  !cbm2.getControl2().isDisposed()) {
 					cbm2.remove(ic);
 					ic.dispose();
 				}

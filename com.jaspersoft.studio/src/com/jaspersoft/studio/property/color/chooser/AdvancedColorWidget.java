@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -254,17 +255,17 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 						float s = (float)saturation.getSelection()/100;
 						float b = (float)brightness.getSelection()/100;
 						colorsSelector.setSelectedColor(h, s, b, false);
-						updateText(h,s,b);
+						updateText(h,s,b, e.widget);
 					} else if (e.widget == red || e.widget == green || e.widget == blue){
 						RGB rgbColor = new RGB(red.getSelection(),green.getSelection(),blue.getSelection());
 						colorsSelector.setSelectedColor(rgbColor, false);
-						updateText(rgbColor, rgbColor.getHSB());
+						updateText(rgbColor, rgbColor.getHSB(), e.widget);
 					} else if (e.widget == hex){
 						AlfaRGB rgbColor = hexParser(hex.getText());
 						if (rgbColor != null){
 							colorsSelector.setSelectedColor(rgbColor.getRgb(), false);
 							alphaText.setSelection(rgbColor.getAlfa());
-							updateText(rgbColor.getRgb(), rgbColor.getRgb().getHSB());
+							updateText(rgbColor.getRgb(), rgbColor.getRgb().getHSB(), e.widget);
 						}
 					}
 					hue.getParent().getParent().setRedraw(true);
@@ -391,7 +392,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 	 * It will also update the color preview area
 	 */
 	private void updateText(){
-		updateText(colorsSelector.getSelectedColorRGB(), colorsSelector.getSelectedColorHSB());
+		updateText(colorsSelector.getSelectedColorRGB(), colorsSelector.getSelectedColorHSB(), null);
 	}
 	
 	/**
@@ -400,21 +401,24 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 	 * 
 	 * @param color the rgb of the new color
 	 * @param hsb an array of float that represent the hsb values of the color
+	 * @param source the widget that raised the event, to avoid a selection text problem
+	 * on some platforms the text that has raised the event must not be set, otherwise it 
+	 * will be automatically selected. It this value is null then all the widget will be set
 	 */
-	private void updateText(RGB color, float[] hsb){
+	private void updateText(RGB color, float[] hsb, Widget source){
 		synchronized (modfiedGuard) {
 			modfiedGuard = false;
 			hue.getParent().getParent().setRedraw(false);
-			red.setSelection(color.red);
-			green.setSelection(color.green);
-			blue.setSelection(color.blue);
+			if (red != source) red.setSelection(color.red);
+			if (green != source) green.setSelection(color.green);
+			if (blue != source) blue.setSelection(color.blue);
 			hex.setText(getHexFromRGB(color));
 			int h = Math.round(hsb[0]);
 			int s = Math.round(hsb[1]*100);
 			int b = Math.round(hsb[2]*100);
-			hue.setSelection(h);
-			saturation.setSelection(s);
-			brightness.setSelection(b);
+			if (hue != source) hue.setSelection(h);
+			if (saturation != source) saturation.setSelection(s);
+			if (brightness != source) brightness.setSelection(b);
 			hue.getParent().getParent().setRedraw(true);
 			updatePreview();
 			modfiedGuard = true;
@@ -436,21 +440,24 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 	 * @param fh hue of the color
 	 * @param fs saturation of the color
 	 * @param fb brightness of the color
+	 * @param source the widget that raised the event, to avoid a selection text problem
+	 * on some platforms the text that has raised the event must not be set, otherwise it 
+	 * will be automatically selected. It this value is null then all the widget will be set
 	 */
-	private void updateText(float fh, float fs, float fb){
+	private void updateText(float fh, float fs, float fb, Widget source){
 		synchronized (modfiedGuard) {
 			modfiedGuard = false;
 			hue.getParent().getParent().setRedraw(false);
 			int h = Math.round(fh);
 			int s = Math.round(fs*100);
 			int b = Math.round(fb*100);
-			hue.setSelection(h);
-			saturation.setSelection(s);
-			brightness.setSelection(b);
+			if (hue != source) hue.setSelection(h);
+			if (saturation != source) saturation.setSelection(s);
+			if (brightness != source) brightness.setSelection(b);
 			RGB color = new RGB(fh,fs,fb);
-			red.setSelection(color.red);
-			green.setSelection(color.green);
-			blue.setSelection(color.blue);
+			if (red != source) red.setSelection(color.red);
+			if (green != source) green.setSelection(color.green);
+			if (blue != source) blue.setSelection(color.blue);
 			hex.setText(getHexFromRGB(color));
 			hue.getParent().getParent().setRedraw(true);
 			updatePreview();
@@ -681,7 +688,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 				java.awt.Color color = robot.getPixelColor(pos.x, pos.y);
 				RGB rgbColor = new RGB(color.getRed(), color.getGreen(), color.getBlue());
 				colorsSelector.setSelectedColor(rgbColor, false);
-				updateText(rgbColor, rgbColor.getHSB());
+				updateText(rgbColor, rgbColor.getHSB(), null);
 			} catch (AWTException e) {
 				e.printStackTrace();
 			}
