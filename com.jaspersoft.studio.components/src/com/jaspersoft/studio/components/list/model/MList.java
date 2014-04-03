@@ -33,7 +33,6 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -60,6 +59,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -337,7 +337,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) || 
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) || 
 				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP)) {
 			fullModelList = null;
 		}
@@ -352,7 +352,8 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				((DesignListContents) jrList.getContents()).setWidth((Integer) evt.getNewValue());
 			} 
 		}
-		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+		//Add the children at the model only if the list is opned into a separate editor
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) && getParent() instanceof MPage) {
 			if (evt.getSource() == getJRElementGroup()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
@@ -382,10 +383,6 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				}
 			}
 		}
-		// PropertyChangeEvent newEvent = evt;
-		// if (!(evt.getSource() instanceof ANode))
-		// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(),
-		// evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(evt);
 	}
 
