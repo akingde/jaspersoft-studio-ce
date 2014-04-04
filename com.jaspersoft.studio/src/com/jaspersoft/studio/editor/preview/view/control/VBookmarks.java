@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -45,9 +45,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class VBookmarks extends APreview {
 	private Composite composite;
 	private TreeViewer treeViewer;
-	private PreviewContainer pcontainer;
+	private PreviewJRPrint pcontainer;
 
-	public VBookmarks(Composite parent, JasperReportsConfiguration jContext, PreviewContainer pcontainer) {
+	public VBookmarks(Composite parent, JasperReportsConfiguration jContext, PreviewJRPrint pcontainer) {
 		super(parent, jContext);
 		this.pcontainer = pcontainer;
 	}
@@ -166,7 +166,7 @@ public class VBookmarks extends APreview {
 		@Override
 		public Object[] getElements(Object element) {
 			if (element instanceof List)
-				return ((List) element).toArray();
+				return ((List<?>) element).toArray();
 			return getChildren(element);
 		}
 

@@ -40,8 +40,10 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.VBookmarks;
 import com.jaspersoft.studio.editor.preview.view.control.VExporter;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
+import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
@@ -109,6 +111,7 @@ public class ReportRunControler {
 	public LinkedHashMap<String, APreview> createControls(Composite composite, JasperReportsConfiguration jContext) {
 		viewmap = new LinkedHashMap<String, APreview>();
 		viewmap.put(FORM_PARAMETERS, new VInputControls(composite, jContext));
+		viewmap.put(ReportControler.FORM_BOOKMARKS, new VBookmarks(composite, jContext, pcontainer));
 		viewmap.put(ReportControler.FORM_EXPORTER, new VExporter(composite, jContext));
 		return viewmap;
 	}
@@ -176,12 +179,25 @@ public class ReportRunControler {
 							htmlFile.close();
 							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
 							stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
-							Object obj = JRLoader.loadObject(f);
-							if (obj instanceof JasperPrint) {
-								stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
-								pcontainer.setJasperPrint(stats, (JasperPrint) obj);
-							}
+							final Object obj = JRLoader.loadObject(f);
+							if (obj instanceof JasperPrint)
+								UIUtils.getDisplay().asyncExec(new Runnable() {
 
+									@Override
+									public void run() {
+										stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
+										APreview pv = pcontainer.getDefaultViewer();
+										if (pv instanceof IJRPrintable)
+											try {
+												((IJRPrintable) pv).setJRPRint(stats, ((JasperPrint) obj), true);
+												VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
+												vs.setJasperPrint(((JasperPrint) obj));
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+										pcontainer.setJasperPrint(stats, (JasperPrint) obj);
+									}
+								});
 							break;
 						}
 					}

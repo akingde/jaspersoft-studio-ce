@@ -336,6 +336,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.utils.jasper,
    org.eclipse.swt.widgets,
    com.jaspersoft.studio.editor.preview",
+ com.jaspersoft.studio.editor.preview.view.report,
  com.jaspersoft.studio.editor.report;
   uses:="org.eclipse.core.runtime,
    org.eclipse.gef.palette,

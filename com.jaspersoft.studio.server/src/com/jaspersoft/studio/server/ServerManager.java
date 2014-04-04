@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.prefs.Preferences;
@@ -189,9 +190,11 @@ public class ServerManager {
 		if (ind > 0) {
 			StringTokenizer st = new StringTokenizer(key, ":");
 			String name = st.nextToken();
-			String url = st.nextToken();
+			String path = st.nextToken();
+			String url = new String(Base64.decodeBase64(st.nextToken()));
 			for (MServerProfile sp : serverProfiles) {
-				if (sp.getValue().getName().equals(name) && sp.getValue().getName().equals(url))
+				ServerProfile serv = sp.getValue();
+				if (serv.getName().equals(name) && url != null && serv.getUrl().equals(url))
 					return sp;
 			}
 		}
@@ -228,8 +231,8 @@ public class ServerManager {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) n;
-			return sp.getValue().getName() + ":" //$NON-NLS-1$
-					+ res.getValue().getUriString();
+			ServerProfile serv = sp.getValue();
+			return serv.getName() + ":" + res.getValue().getUriString() + ":" + Base64.encodeBase64String(serv.getUrl().getBytes());//$NON-NLS-1$ //$NON-NLS-2$  
 		}
 		return null;
 	}

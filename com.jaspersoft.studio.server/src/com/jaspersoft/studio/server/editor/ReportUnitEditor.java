@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.jface.action.ToolBarManager;
@@ -28,7 +29,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
@@ -62,7 +62,7 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 		} catch (Exception e1) {
 			throw new PartInitException(e1.getMessage(), e1);
 		}
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			public void run() {
 				runReport();

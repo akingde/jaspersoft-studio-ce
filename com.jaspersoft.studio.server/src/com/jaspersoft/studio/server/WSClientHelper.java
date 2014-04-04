@@ -417,7 +417,11 @@ public class WSClientHelper {
 	}
 
 	public static String getReportUnitUri(String uri) {
-		return uri.substring(uri.indexOf(":") + 1);
+		StringTokenizer st = new StringTokenizer(uri, ":");
+		String name = st.nextToken();
+		return st.nextToken();
+
+		// return uri.substring(uri.indexOf(":") + 1);
 	}
 
 	public static IConnection getClient(IProgressMonitor monitor, String uri) throws Exception {
