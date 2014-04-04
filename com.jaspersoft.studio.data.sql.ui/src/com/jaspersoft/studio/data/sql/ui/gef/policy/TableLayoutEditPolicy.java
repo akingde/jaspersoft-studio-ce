@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -63,7 +62,7 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 			ChangeBoundsRequest r = (ChangeBoundsRequest) request;
 			EditPart child = null;
 			List<?> editParts = r.getEditParts();
-			for (int i = 0; i < editParts.size(); i++) {
+			for (int i = 0; i < editParts.size();) {
 				child = (EditPart) editParts.get(i);
 				break;
 			}
@@ -75,7 +74,9 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 				return;
 			if (targetFeedback == null) {
 				targetFeedback = new RectangleFigure();
-				targetFeedback.setFill(false);
+				targetFeedback.setFill(true);
+				targetFeedback.setBackgroundColor(ColorConstants.gray);
+				targetFeedback.setAlpha(50);
 
 				IFigure hostFigure = after.getFigure();
 				Rectangle bounds = hostFigure.getBounds();
@@ -86,7 +87,7 @@ public class TableLayoutEditPolicy extends FlowLayoutEditPolicy {
 				getFeedbackLayer().translateToRelative(rect);
 
 				targetFeedback.setBounds(rect.shrink(-4, -4));
-				targetFeedback.setBorder(new LineBorder(ColorConstants.gray, 2));
+				// targetFeedback.setBorder(new LineBorder(ColorConstants.gray, 2));
 				addFeedback(targetFeedback);
 			}
 		} else
