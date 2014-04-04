@@ -64,11 +64,50 @@ public class VParameters extends AVParameters {
 		if (showEmptyParametersWarning) {
 			setupDefaultValues();
 			setDirty(false);
-		}
+		} else
+			setupDefaultValuesNonDirty();
 		showEmptyParametersWarning = false;
 	}
 
 	protected boolean isSystem = false;
+
+	public void setupDefaultValuesNonDirty() {
+		Job job = new Job("Calculating Default Values") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				JRDesignDataset mDataset = (JRDesignDataset) jContext.getJasperDesign().getMainDataset();
+				Set<String> keys = new HashSet<String>();
+				for (String pname : incontrols.keySet()) {
+					JRParameter p = mDataset.getParametersMap().get(pname);
+					if (p == null || (!isSystem && p.isSystemDefined()) || (isSystem && !p.isSystemDefined()))
+						continue;
+					if (p.getName().equals(pname)) {
+						if (params.get(pname) != null)
+							continue;
+						if (p.getDefaultValueExpression() != null) {
+							params.put(pname, getInter(mDataset).interpretExpression(p.getDefaultValueExpression().getText()));
+						} else
+							params.put(pname, null);
+						keys.add(pname);
+					}
+
+				}
+				updateControlInput(keys);
+				return Status.OK_STATUS;
+			}
+
+			private ExpressionInterpreter eint;
+
+			private ExpressionInterpreter getInter(JRDesignDataset mDataset) {
+				if (eint == null)
+					eint = ExpressionUtil.getInterpreter(mDataset, jContext, jContext.getJasperDesign());
+				return eint;
+			}
+
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
+	}
 
 	public void setupDefaultValues() {
 		Job job = new Job("Calculating Default Values") {

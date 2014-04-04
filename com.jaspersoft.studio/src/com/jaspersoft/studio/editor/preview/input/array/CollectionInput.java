@@ -84,6 +84,7 @@ public class CollectionInput extends ADataInput {
 				}
 			});
 			updateInput();
+			setDirty(false);
 		}
 	}
 
