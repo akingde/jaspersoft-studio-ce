@@ -145,7 +145,7 @@ public class ResourcePageContent extends APageContent {
 
 				@Override
 				public void modifyText(ModifyEvent e) {
-					tid.setText(safeChar(Misc.nvl(tname.getText())));
+					tid.setText(IDStringValidator.safeChar(Misc.nvl(tname.getText())));
 				}
 			});
 		}
@@ -204,18 +204,7 @@ public class ResourcePageContent extends APageContent {
 		return "com.jaspersoft.studio.doc.editResource"; //$NON-NLS-1$
 	}
 
-	public static String safeChar(String input) {
-		char[] allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_./".toCharArray(); //$NON-NLS-1$
-		char[] charArray = input.toString().toCharArray();
-		StringBuilder result = new StringBuilder();
-		for (char c : charArray) {
-			for (char a : allowed) {
-				if (c == a)
-					result.append(a);
-			}
-		}
-		return result.toString();
-	}
+
 
 	@Override
 	public boolean isPageComplete() {

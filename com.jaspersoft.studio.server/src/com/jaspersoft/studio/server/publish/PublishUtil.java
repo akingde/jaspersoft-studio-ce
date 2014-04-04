@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -24,7 +25,6 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.utils.RDUtil;
-import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -47,7 +47,7 @@ public class PublishUtil {
 				if (sp != null) {
 					ResourceDescriptor rd = new ResourceDescriptor();
 					rd.setName(jrxmln.substring((unit + WSClientHelper._FILES).length()));
-					rd.setLabel(ResourcePageContent.safeChar(rd.getName()));
+					rd.setLabel(IDStringValidator.safeChar(rd.getName()));
 					rd.setUriString(jrxmln);
 					rd.setParentFolder(unit + "_files");
 					rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
@@ -108,7 +108,7 @@ public class PublishUtil {
 
 	public static void initResourceName(String name, ResourceDescriptor rd) {
 		if (Misc.isNullOrEmpty(rd.getName()))
-			rd.setName(ResourcePageContent.safeChar(name));
+			rd.setName(IDStringValidator.safeChar(name));
 		if (Misc.isNullOrEmpty(rd.getLabel()))
 			rd.setLabel(name);
 	}

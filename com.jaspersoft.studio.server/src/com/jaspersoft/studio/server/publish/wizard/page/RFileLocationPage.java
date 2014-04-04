@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -64,7 +65,6 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
-import com.jaspersoft.studio.server.wizard.resource.page.ResourcePageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -197,7 +197,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 					// suggest the ID
 					if (canSuggestID) {
 						ruID.setText(rtext);
-						ru.setName(ResourcePageContent.safeChar(rtext));
+						ru.setName(IDStringValidator.safeChar(rtext));
 						ru.setUriString(ru.getParentFolder() + "/" + ru.getName());
 					}
 				}
@@ -238,7 +238,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 			public void verifyText(VerifyEvent e) {
 				// sanitize the text for the id attribute (name)
 				// of the repository resource
-				e.text = ResourcePageContent.safeChar(e.text);
+				e.text = IDStringValidator.safeChar(e.text);
 			}
 		});
 
