@@ -26,6 +26,7 @@ import com.jaspersoft.studio.data.hive.HiveIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceCustom;
+import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
 
 public class MRDatasourceHadoopHive extends MRDatasourceCustom {
 
@@ -60,6 +61,7 @@ public class MRDatasourceHadoopHive extends MRDatasourceCustom {
 		rd.setResourceProperty(rp);
 		rp = new ResourceProperty(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS, CUSTOM_CLASS);
 		rd.setResourceProperty(rp);
+		rd.setResourceProperty(DiffFields.DATASOURCENAME, "HiveDataSource");
 		return rd;
 	}
 }
