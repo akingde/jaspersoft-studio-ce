@@ -200,6 +200,16 @@ public class SelectionHelper {
 		return true;
 	}
 
+	public static final void openEditorFile(final IFile file) {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				openEditor(file);
+			}
+		});
+	}
+
 	public static final boolean openEditor(IFile file, String path) {
 		try {
 			if (file != null && path != null) {
