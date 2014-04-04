@@ -154,11 +154,11 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				queryString = styledText.getText();
+				queryString = styledText.getText().trim();
 			}
 		});
 
-		queryString = styledText.getText();
+		queryString = styledText.getText().trim();
 	}
 
 	public String getQueryString() {
@@ -224,7 +224,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 					getDataAdapterDescriptor().getDataAdapter());
 			try {
 				JRDesignDataset tmpDataset = getDataset();
-				if (tmpDataset.getQuery().getText() == null || tmpDataset.getQuery().getText().length() == 0) {
+				if (tmpDataset.getQuery().getText() == null || tmpDataset.getQuery().getText().trim().length() == 0) {
 					Display.getDefault().syncExec(new Runnable() {
 
 						@Override
