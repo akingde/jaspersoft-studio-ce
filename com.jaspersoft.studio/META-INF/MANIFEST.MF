@@ -29,10 +29,7 @@ Bundle-ClassPath: .,
  lib/jetty-all-8.1.5.v20120716.jar,
  lib/bcmail-jdk15-146.jar,
  lib/bcprov-jdk15-146.jar,
- lib/bctsp-jdk15-146.jar,
- lib/itext-asian.jar,
- lib/itext-asiancmaps.jar,
- lib/itext-hyph-xml.jar
+ lib/bctsp-jdk15-146.jar
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
 Eclipse-RegisterBuddy: net.sf.jasperreports
