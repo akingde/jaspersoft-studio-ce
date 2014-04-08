@@ -43,6 +43,10 @@ public class ProxyFileResolver implements FileResolver {
 		resolvers.remove(resolver);
 	}
 
+	public List<FileResolver> getResolvers() {
+		return resolvers;
+	}
+
 	public ProxyFileResolver() {
 		resolvers = new ArrayList<FileResolver>();
 	}
