@@ -623,7 +623,12 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			((JRDesignCategoryDataset) jrChart.getDataset()).addCategorySeries(catSeries);
 		} else if (jrChart.getDataset() instanceof JRDesignValueDataset) {
 			JRDesignValueDataset valueDataset = (JRDesignValueDataset) jrChart.getDataset();
-			valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
+			if(jrChart.getChartType()==JRDesignChart.CHART_TYPE_METER) {
+				valueDataset.setValueExpression(new JRDesignExpression("50"));
+			}
+			else {
+				valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
+			}
 		} else if (jrChart.getDataset() instanceof JRDesignXyDataset) {
 			JRDesignXySeries series = new XySerie().createSerie();
 			((JRDesignXyDataset) jrChart.getDataset()).addXySeries(series);
@@ -691,8 +696,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 
 	private static JRDesignDataRange getDummyDataRange() {
 		JRDesignDataRange dataRange = new JRDesignDataRange(null);
-		dataRange.setHighExpression(new JRDesignExpression("\"CHANGE_ME\""));
-		dataRange.setLowExpression(new JRDesignExpression("\"CHANGE_ME\""));
+		dataRange.setHighExpression(new JRDesignExpression("100"));
+		dataRange.setLowExpression(new JRDesignExpression("1"));
 		return dataRange;
 	}
 

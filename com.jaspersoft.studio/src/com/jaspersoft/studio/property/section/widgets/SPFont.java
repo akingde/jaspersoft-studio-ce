@@ -198,6 +198,7 @@ public class SPFont extends ASPropertyWidget {
 
 	protected void createComponent(Composite parent) {
 		mfont = new MFont(new JRDesignFont(null));
+		mfont.setJasperConfiguration(section.getElement().getJasperConfiguration());
 		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 3);
 
 		final FontNamePropertyDescriptor pd = (FontNamePropertyDescriptor) mfont
