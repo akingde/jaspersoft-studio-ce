@@ -1762,6 +1762,8 @@ public class Messages extends NLS {
 	public static String WizardBandGroupLayoutPage_add_group_header;
 	public static String WizardBandGroupLayoutPage_description;
 	public static String WizardBandGroupLayoutPage_group_layout;
+	public static String WizardBandGroupPage_1;
+	public static String WizardBandGroupPage_2;
 	public static String WizardBandGroupPage_description;
 	public static String WizardBandGroupPage_error_message_group_name_not_empty;
 	public static String WizardBandGroupPage_error_message_unique_name;

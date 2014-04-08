@@ -80,7 +80,7 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 				else if (element instanceof JRDesignVariable)
 					return JaspersoftStudioPlugin.getInstance().getImage(MVariable.getIconDescriptor().getIcon16());
 				else if (element instanceof JRDesignParameter)
-					return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/parameter-report-16.png");
+					return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/parameter-report-16.png"); //$NON-NLS-1$
 			}
 			return null;
 		}
@@ -155,14 +155,14 @@ public class WizardBandGroupPage extends WizardPage implements IExpressionContex
 		grName.setText(ModelUtils.getDefaultName(jrDesign.getMainDesignDataset().getGroupsMap(), Messages.common_group));
 
 		bfield = new Button(composite, SWT.RADIO);
-		bfield.setText("Create Group from a report object");
+		bfield.setText(Messages.WizardBandGroupPage_1);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bfield.setLayoutData(gd);
 		bfield.setSelection(true);
 
 		Button bexpr = new Button(composite, SWT.RADIO);
-		bexpr.setText("Create Group from expression");
+		bexpr.setText(Messages.WizardBandGroupPage_2);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bexpr.setLayoutData(gd);
