@@ -36,6 +36,10 @@ public class JSSFileRepositoryService implements RepositoryService {
 		this.jConfig = jConfig;
 	}
 
+	public List<RepositoryService> getRepositoryServices() {
+		return list;
+	}
+
 	@Override
 	public Resource getResource(String uri) {
 		for (RepositoryService rs : list) {
@@ -55,35 +59,41 @@ public class JSSFileRepositoryService implements RepositoryService {
 	@Override
 	public <K extends Resource> K getResource(String uri, Class<K> resourceType) {
 		for (RepositoryService rs : list) {
-			try {
-				K r = rs.getResource(uri, resourceType);
-				if (r != null)
-					return r;
-			} catch (JRRuntimeException e) {
-			}
-			try {
-				if (ReportResource.class.equals(resourceType) && uri.endsWith(FileExtension.PointJASPER)) {
-					String nuri = uri.replaceAll(FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
-					InputStreamResource inr = rs.getResource(nuri, InputStreamResource.class);
-					if (inr != null) {
-						if (rs instanceof DefaultRepositoryService) {
-							URI dUri = new URI(uri);
-							JasperCompileManager.getInstance(jConfig).compileToFile(new URI(nuri).getRawPath(), dUri.getRawPath());
-						} else {
-							OutputStreamResource or = new OutputStreamResource();
-							or.setOutputStream(new ByteArrayOutputStream());
-							JasperCompileManager.getInstance(jConfig).compileToStream(inr.getInputStream(), or.getOutputStream());
-							rs.saveResource(uri, or);
-						}
-						refreshFile(rs, uri);
-						return rs.getResource(uri, resourceType);
-					}
-				}
-			} catch (Throwable e1) {
-				e1.printStackTrace();
-			}
+			K r = doGetResource(uri, resourceType, rs);
+			if (r != null)
+				return r;
 		}
+		return null;
+	}
 
+	public <K extends Resource> K doGetResource(String uri, Class<K> resourceType, RepositoryService rs) {
+		try {
+			K r = rs.getResource(uri, resourceType);
+			if (r != null)
+				return r;
+		} catch (JRRuntimeException e) {
+		}
+		try {
+			if (ReportResource.class.equals(resourceType) && uri.endsWith(FileExtension.PointJASPER)) {
+				String nuri = uri.replaceAll(FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
+				InputStreamResource inr = rs.getResource(nuri, InputStreamResource.class);
+				if (inr == null)
+					return null;
+				if (rs instanceof DefaultRepositoryService) {
+					URI dUri = new URI(uri);
+					JasperCompileManager.getInstance(jConfig).compileToFile(new URI(nuri).getRawPath(), dUri.getRawPath());
+				} else {
+					OutputStreamResource or = new OutputStreamResource();
+					or.setOutputStream(new ByteArrayOutputStream());
+					JasperCompileManager.getInstance(jConfig).compileToStream(inr.getInputStream(), or.getOutputStream());
+					rs.saveResource(uri, or);
+				}
+				refreshFile(rs, uri);
+				return rs.getResource(uri, resourceType);
+			}
+		} catch (Throwable e1) {
+			e1.printStackTrace();
+		}
 		return null;
 	}
 

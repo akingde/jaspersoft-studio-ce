@@ -47,6 +47,7 @@ public class ReferenceResolver {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setUriString(refrd.getReferenceUri());
 		rd.setIsNew(false);
+		rd.setWsType(refrd.getWsType());
 
 		rd = wsc.get(monitor, rd, null);
 		if (monitor != null && monitor.isCanceled())

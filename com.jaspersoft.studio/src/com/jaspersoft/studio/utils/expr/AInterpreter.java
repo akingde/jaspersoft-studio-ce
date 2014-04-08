@@ -79,6 +79,7 @@ public abstract class AInterpreter {
 				expression = prepareExpression(expression, 0);
 			return eval(expression);
 		} catch (Throwable e) {
+			System.out.println("Expression: " + expression);
 			e.printStackTrace();
 		}
 		return null;

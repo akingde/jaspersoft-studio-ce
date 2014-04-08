@@ -35,11 +35,12 @@ public class JSSApacheConnector extends ApacheConnector {
 
 	private Response doWait(Future<Response> rf, IProgressMonitor monitor) throws Exception {
 		try {
-			while (!rf.isDone() && !rf.isCancelled()) {
-				if (monitor.isCanceled())
-					rf.cancel(true);
-				Thread.sleep(5);
-			}
+			if (monitor != null)
+				while (!rf.isDone() && !rf.isCancelled()) {
+					if (monitor.isCanceled())
+						rf.cancel(true);
+					Thread.sleep(5);
+				}
 			return rf.get();
 		} catch (InterruptedException e) {
 			throw e;

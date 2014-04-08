@@ -15,29 +15,31 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.repo.FileRepositoryService;
+import net.sf.jasperreports.repo.RepositoryService;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.IEditorContributor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.server.Activator;
-import com.jaspersoft.studio.server.JSFileResolver;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
 import com.jaspersoft.studio.utils.AContributorAction;
+import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRSEditorContributor implements IEditorContributor {
@@ -48,17 +50,29 @@ public class JRSEditorContributor implements IEditorContributor {
 		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
-
-		Job job = new Job("Initialize JRS File Resolver") {
-			protected IStatus run(IProgressMonitor monitor) {
-				((JrxmlEditor) editor).addFileResolver(new JSFileResolver(jd, monitor));
-				return Status.OK_STATUS;
+		JrxmlEditor jEditor = (JrxmlEditor) editor;
+		JasperReportsConfiguration jConfig = jEditor.getJrContext(null);
+		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();
+		List<RepositoryService> rservices = repService.getRepositoryServices();
+		List<RepositoryService> toDel = new ArrayList<RepositoryService>();
+		for (RepositoryService rs : rservices)
+			if (rs instanceof JRSRepositoryService) {
+				toDel.add(rs);
+				FileRepositoryService frs = ((JRSRepositoryService) rs).getFileRepositoryService();
+				if (frs != null)
+					toDel.add(frs);
 			}
-		};
-		job.setPriority(Job.LONG);
-		job.setSystem(true);
-		job.schedule();
+		rservices.removeAll(toDel);
+		rservices.add(new JRSRepositoryService(repService, jConfig));
 
+		// FileResolver fr = jConfig.getFileResolver();
+		// if (fr instanceof ProxyFileResolver) {
+		// ProxyFileResolver pfr = (ProxyFileResolver) fr;
+		// for (FileResolver r : pfr.getResolvers())
+		// if (r instanceof JSFileResolver)
+		// pfr.removeResolver(r);
+		// jEditor.addFileResolver(new JSFileResolver(jd));
+		// }
 		// prop = jd.getProperty("com.jaspersoft.ji.adhoc");
 		// if (prop != null && prop.equals("1")) {
 		// UIUtils.showWarning("You have selected to edit an Ad Hoc report.\n"

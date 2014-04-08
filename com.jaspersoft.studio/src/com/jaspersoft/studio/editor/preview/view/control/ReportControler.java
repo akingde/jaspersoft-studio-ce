@@ -310,8 +310,6 @@ public class ReportControler {
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 
-					setupFileRezolver(monitor, file);
-
 					jd = jrContext.getJasperDesign();// ModelUtils.copyJasperDesign(jrContext.getJasperDesign());
 
 					JasperReport jasperReport = compileJasperDesign(file, jd, monitor);
@@ -419,10 +417,6 @@ public class ReportControler {
 
 	public void errorMessage() {
 		c.addMessage(Messages.ReportControler_error);
-	}
-
-	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
-		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, jrContext.getFileResolver());
 	}
 
 	private void setupVirtualizer(JasperDesign jd) {

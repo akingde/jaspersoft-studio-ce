@@ -12,7 +12,6 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -56,7 +55,6 @@ import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public abstract class AMultiEditor extends MultiPageEditorPart implements IResourceChangeListener, IMultiEditor {
 	protected JasperReportsConfiguration jrContext;
@@ -222,10 +220,6 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 				}
 			}
 		}
-	}
-
-	public void addFileResolver(FileResolver resolver) {
-		((ProxyFileResolver) jrContext.getFileResolver()).addResolver(resolver);
 	}
 
 	public static final String THEEDITOR = "thecurrenteditor";
@@ -470,7 +464,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			gv.getContents().refresh();
 		}
 	}
-	
+
 	/**
 	 * Allow the refresh of a specific element of the editor
 	 */
@@ -484,7 +478,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			refreshElement(((AMultiEditor) obj).getActiveEditor(), event);
 		}
 	}
-	
+
 	/**
 	 * Allow the refresh of a specific element of the editor
 	 */
@@ -495,9 +489,10 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			IGraphicalEditor ige = (IGraphicalEditor) ep;
 			GraphicalViewer gv = ige.getGraphicalViewer();
 			EditPart editor = gv.getContents();
-			if (editor instanceof ReportPageEditPart){
-				((ReportPageEditPart)editor).propertyChange(event);
-			} else editor.refresh();
+			if (editor instanceof ReportPageEditPart) {
+				((ReportPageEditPart) editor).propertyChange(event);
+			} else
+				editor.refresh();
 		}
 	}
 }
