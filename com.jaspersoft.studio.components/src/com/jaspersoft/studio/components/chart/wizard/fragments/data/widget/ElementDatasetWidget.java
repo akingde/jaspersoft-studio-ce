@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
@@ -59,7 +60,7 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class ElementDatasetWidget implements IExpressionContextSetter {
-	private static final String GROUPPREFIX = "[Group] ";
+	private static final String GROUPPREFIX = "[Group] "; //$NON-NLS-1$
 	private JRDesignElementDataset eDataset;
 	private JasperDesign jrDesign;
 	private Combo dsCombo;
@@ -388,7 +389,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 
 	private void createConnection(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Dataset");
+		bptab.setText(Messages.ElementDatasetWidget_tabTitle);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, true));
@@ -398,15 +399,15 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		leftComposite.setLayoutData(new GridData(GridData.FILL_BOTH
 				| GridData.VERTICAL_ALIGN_BEGINNING));
 
-		new Label(leftComposite, SWT.NONE).setText("Increment on");
+		new Label(leftComposite, SWT.NONE).setText(Messages.ElementDatasetWidget_incrementOnLabel);
 		cbIncrement = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY
 				| SWT.SINGLE);
 		cbIncrement.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		btnIncrement = new Button(leftComposite, SWT.PUSH);
-		btnIncrement.setText("...");
-		btnIncrement.setToolTipText("Increment When Expression");
+		btnIncrement.setText("..."); //$NON-NLS-1$
+		btnIncrement.setToolTipText(Messages.ElementDatasetWidget_buttonTooltip);
 
-		new Label(leftComposite, SWT.NONE).setText("Reset on");
+		new Label(leftComposite, SWT.NONE).setText(Messages.ElementDatasetWidget_resetOnLabel);
 		cbReset = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY
 				| SWT.SINGLE);
 		cbReset.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -454,10 +455,10 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		composite.setLayout(layout);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Dataset");
+		lbl.setText(Messages.ElementDatasetWidget_datasetLabel);
 
 		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
-		dsCombo.setItems(new String[] { "main dataset" });
+		dsCombo.setItems(new String[] { "main dataset" }); //$NON-NLS-1$
 
 		// Button newDataset = new Button(composite, SWT.PUSH);
 		// newDataset.setText("new");
@@ -465,10 +466,10 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL
 				| SWT.WRAP | SWT.RIGHT);
 		prmItem = new ToolItem(toolBar, SWT.PUSH);
-		prmItem.setText("Parameters");
+		prmItem.setText(Messages.ElementDatasetWidget_parametersLabel);
 
 		prmMapItem = new ToolItem(toolBar, SWT.PUSH);
-		prmMapItem.setText("Parameters Map");
+		prmMapItem.setText(Messages.ElementDatasetWidget_parametersMapLabel);
 
 		int tabHeight = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 		tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());

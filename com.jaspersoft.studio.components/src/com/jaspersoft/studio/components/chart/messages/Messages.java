@@ -123,6 +123,7 @@ public class Messages extends NLS {
 	public static String CreateXYZAction_create_xyz_series;
 	public static String CreateXYZAction_create_xyz_series_description;
 	public static String DSCategory_categoryLabel;
+	public static String DSCategory_datasetName;
 	public static String DSCategory_defineHyperlinkButtton;
 	public static String DSCategory_hyperlinkButtonDisabled;
 	public static String DSCategory_labelLabel;
@@ -146,6 +147,13 @@ public class Messages extends NLS {
 	public static String DSXy_valueXLabel;
 	public static String DSXy_valueYLabel;
 	public static String DSXyz_valuzeZLabel;
+	public static String ElementDatasetWidget_buttonTooltip;
+	public static String ElementDatasetWidget_datasetLabel;
+	public static String ElementDatasetWidget_incrementOnLabel;
+	public static String ElementDatasetWidget_parametersLabel;
+	public static String ElementDatasetWidget_parametersMapLabel;
+	public static String ElementDatasetWidget_resetOnLabel;
+	public static String ElementDatasetWidget_tabTitle;
 	public static String HyperlinkDialog_deleteHyperlinkAction;
 	public static String HyperlinkDialog_hyperlinkDialogName;
 	public static String HyperlinkDialog_hyperlinkDialogTitle;
