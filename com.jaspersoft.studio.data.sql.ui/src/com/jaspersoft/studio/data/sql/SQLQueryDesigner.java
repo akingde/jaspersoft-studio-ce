@@ -43,6 +43,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
