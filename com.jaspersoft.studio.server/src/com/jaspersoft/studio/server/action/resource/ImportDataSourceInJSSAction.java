@@ -25,6 +25,10 @@ import net.sf.jasperreports.data.jndi.JndiDataAdapter;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -33,6 +37,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.bean.BeanDataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
@@ -40,6 +45,7 @@ import com.jaspersoft.studio.data.jndi.JndiDataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceBean;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJDBC;
 import com.jaspersoft.studio.server.model.datasource.MRDatasourceJNDI;
@@ -72,9 +78,35 @@ public class ImportDataSourceInJSSAction extends Action {
 
 	@Override
 	public void run() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-		importDataSourceAsDataAdapter(firstElement);
-		MessageDialog.openInformation(UIUtils.getShell(), Messages.ImportDataSourceInJSSAction_OperationInfoTitle, Messages.ImportDataSourceInJSSAction_OperationInfoMsg);
+		final Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+
+		Job job = new Job("Building report") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("", IProgressMonitor.UNKNOWN);
+				try {
+					if (firstElement instanceof MResource) {
+						MResource mres = (MResource) firstElement;
+						mres.setValue(mres.getWsClient().get(monitor, mres.getValue(), null));
+						final DataAdapterDescriptor dad = importDataSourceAsDataAdapter(mres);
+						UIUtils.getDisplay().syncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								DataAdapterManager.getPreferencesStorage().addDataAdapter("", dad);//$NON-NLS-1$
+
+								MessageDialog.openInformation(UIUtils.getShell(), Messages.ImportDataSourceInJSSAction_OperationInfoTitle, Messages.ImportDataSourceInJSSAction_OperationInfoMsg);
+							}
+						});
+					}
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
 	}
 
 	/*
@@ -87,7 +119,7 @@ public class ImportDataSourceInJSSAction extends Action {
 	/*
 	 * Performs the import operation.
 	 */
-	private void importDataSourceAsDataAdapter(Object datasource) {
+	private DataAdapterDescriptor importDataSourceAsDataAdapter(MResource datasource) {
 		if (datasource instanceof MRDatasourceJDBC) {
 			MRDatasourceJDBC jdbcDS = (MRDatasourceJDBC) datasource;
 			JDBCDataAdapterDescriptor jdbcDA = new JDBCDataAdapterDescriptor();
@@ -98,28 +130,26 @@ public class ImportDataSourceInJSSAction extends Action {
 			jdbcDataAdapter.setPassword(getPasswordValue(jdbcDS.getValue().getPassword()));
 			jdbcDataAdapter.setUrl(jdbcDS.getValue().getConnectionUrl());
 			jdbcDataAdapter.setSavePassword(true);
-			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
-					jdbcDA);
-		} else if (datasource instanceof MRDatasourceJNDI) {
+			return jdbcDA;
+		}
+		if (datasource instanceof MRDatasourceJNDI) {
 			MRDatasourceJNDI jndiDS = (MRDatasourceJNDI) datasource;
 			JndiDataAdapterDescriptor jndiDA = new JndiDataAdapterDescriptor();
 			JndiDataAdapter jndiDataAdapter = (JndiDataAdapter) jndiDA.getDataAdapter();
 			jndiDataAdapter.setName(getValidName(jndiDS.getValue().getLabel(), "JNDI")); //$NON-NLS-1$
 			jndiDataAdapter.setDataSourceName(jndiDS.getValue().getJndiName());
-			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
-					jndiDA);
-		} else if (datasource instanceof MRDatasourceBean) {
+			return jndiDA;
+		}
+		if (datasource instanceof MRDatasourceBean) {
 			MRDatasourceBean beanDS = (MRDatasourceBean) datasource;
 			BeanDataAdapterDescriptor beanDA = new BeanDataAdapterDescriptor();
 			BeanDataAdapter beanDataAdapter = (BeanDataAdapter) beanDA.getDataAdapter();
 			beanDataAdapter.setName(getValidName(beanDS.getValue().getLabel(), "Bean")); //$NON-NLS-1$
 			beanDataAdapter.setFactoryClass(beanDS.getValue().getBeanName());
 			beanDataAdapter.setMethodName(beanDS.getValue().getBeanMethod());
-			DataAdapterManager.getPreferencesStorage().addDataAdapter("", //$NON-NLS-1$
-					beanDA);
-		} else {
-			throw new RuntimeException(Messages.ImportDataSourceInJSSAction_DataSourceNotSupportedError);
+			return beanDA;
 		}
+		throw new RuntimeException(Messages.ImportDataSourceInJSSAction_DataSourceNotSupportedError);
 	}
 
 	/*
