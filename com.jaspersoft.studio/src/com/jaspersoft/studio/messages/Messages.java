@@ -738,6 +738,7 @@ public class Messages extends NLS {
 	public static String HTMLExporterPreferencePage_36;
 	public static String HyperlinkParameterPage_Description;
 	public static String HyperlinkParameterPage_Title;
+	public static String HyperlinkSection_hyperlinkSectionTitle;
 	public static String ImageSelectionDialog_Browse;
 	public static String ImageSectionDialog_bytes;
 	public static String ImageCreationDialog_CreationModeGroupTitle;
@@ -1686,6 +1687,7 @@ public class Messages extends NLS {
 	public static String TextExporterPreferencePage_7;
 	public static String TextExporterPreferencePage_8;
 	public static String TextExporterPreferencePage_9;
+	public static String TextFieldEditor_setToNullCheckbox;
 	public static String TextSection_align_bottom_tool_tip;
 	public static String TextSection_align_center_tool_tip;
 	public static String TextSection_align_justified_tool_tip;

@@ -452,13 +452,6 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				}
 			};
 			editor.getEditor().addDisposeListener(disposeListener);
-			/*overview.addControlListener(new ControlAdapter() {
-				@Override
-				public void controlResized(ControlEvent e) {
-					overview.setBackground(ResourceManager.getColor(0, 255, 0));
-					thumbnail.setSize(overview.getSize().x, overview.getSize().y);
-				}
-			});*/
 		}
 		lws.setControl(overview);
 	}

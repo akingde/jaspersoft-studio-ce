@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -34,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 
 public class TextFieldEditor extends FieldEditor {
@@ -126,7 +126,7 @@ public class TextFieldEditor extends FieldEditor {
 		// widthInChars = width;
 		setValidateStrategy(strategy);
 		isValid = false;
-		errorMessage = JFaceResources.getString("StringFieldEditor.errorMessage");//$NON-NLS-1$
+		errorMessage = "Field contains an invalid value";//$NON-NLS-1$
 		createControl(parent);
 	}
 
@@ -286,7 +286,7 @@ public class TextFieldEditor extends FieldEditor {
 		if (clazz == null)
 			return null;
 		try {
-			Method m = clazz.getDeclaredMethod("internalGet", String.class);
+			Method m = clazz.getDeclaredMethod("internalGet", String.class); //$NON-NLS-1$
 			if (m != null) {
 				m.setAccessible(true);
 				return m;
@@ -411,12 +411,12 @@ public class TextFieldEditor extends FieldEditor {
 		if (textField == null) {
 			if (isNullAllowed) {
 				bIsNull = new Button(parent, SWT.CHECK);
-				bIsNull.setText("Set To NULL Value");
+				bIsNull.setText(Messages.TextFieldEditor_setToNullCheckbox);
 				bIsNull.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						textField.setEnabled(!bIsNull.getSelection());
-						textField.setText("");
+						textField.setText(""); //$NON-NLS-1$
 					}
 				});
 			}

@@ -276,7 +276,7 @@ public class HyperlinkSection extends AbstractSection {
 				// the contributed ones...
 				hideList.put(linkTypeItems[i], new ElementHider[]{tooltip, parameters, reference, anchor, page});
 			}
-			hideList.put("Custom", new ElementHider[]{tooltip, parameters, reference, anchor, page});
+			hideList.put("Custom", new ElementHider[]{tooltip, parameters, reference, anchor, page}); //$NON-NLS-1$
 		}
 	}
 	
@@ -288,7 +288,7 @@ public class HyperlinkSection extends AbstractSection {
 		for(ElementHider hider : hiders)
 			hider.hideAll();
 		String selectedValue = typeCombo.getText();
-		if (!hideList.containsKey(selectedValue)) selectedValue = "Custom";
+		if (!hideList.containsKey(selectedValue)) selectedValue = "Custom"; //$NON-NLS-1$
 		ElementHider[] actualHiders = hideList.get(selectedValue);
 		for(ElementHider hider : actualHiders)
 			hider.showAll();
@@ -323,16 +323,16 @@ public class HyperlinkSection extends AbstractSection {
 	 * Set the help for the custom components (the two combos)
 	 */
 	private void setHelp(){
-		String prefix = "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#";
+		String prefix = "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#"; //$NON-NLS-1$
 		if (getElement() instanceof MImage){
-			HelpSystem.setHelp(typeCombo, prefix+"image_hyperlinkType"); 
-			HelpSystem.setHelp(targetCombo, prefix+"image_hyperlinkTarget");
+			HelpSystem.setHelp(typeCombo, prefix+"image_hyperlinkType");  //$NON-NLS-1$
+			HelpSystem.setHelp(targetCombo, prefix+"image_hyperlinkTarget"); //$NON-NLS-1$
 		} else if (getElement() instanceof MTextField){
-			HelpSystem.setHelp(typeCombo, prefix+"textField_hyperlinkType"); 
-			HelpSystem.setHelp(targetCombo, prefix+"textField_hyperlinkTarget");
+			HelpSystem.setHelp(typeCombo, prefix+"textField_hyperlinkType");  //$NON-NLS-1$
+			HelpSystem.setHelp(targetCombo, prefix+"textField_hyperlinkTarget"); //$NON-NLS-1$
 		} else {
-			HelpSystem.setHelp(typeCombo, prefix+"sectionHyperlink_hyperlinkType"); 
-			HelpSystem.setHelp(targetCombo, prefix+"sectionHyperlink_hyperlinkTarget");
+			HelpSystem.setHelp(typeCombo, prefix+"sectionHyperlink_hyperlinkType");  //$NON-NLS-1$
+			HelpSystem.setHelp(targetCombo, prefix+"sectionHyperlink_hyperlinkTarget"); //$NON-NLS-1$
 		}
 	}
 	
@@ -342,7 +342,7 @@ public class HyperlinkSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		
-		mainComposite = getWidgetFactory().createSection(parent, "Hyperlink", true, 3);
+		mainComposite = getWidgetFactory().createSection(parent, Messages.HyperlinkSection_hyperlinkSectionTitle, true, 3);
 		section = (ExpandableComposite)mainComposite.getParent();
 		
 		mainComposite.setLayout(new GridLayout(3, false));
