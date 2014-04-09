@@ -36,8 +36,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode parent;
 	protected JRDesignDataset jDataset;
 
-	public CreateE4ObjectCommand(ANode child, MCell parent, Rectangle location,
-			int index) {
+	public CreateE4ObjectCommand(ANode child, MCell parent, Rectangle location, int index) {
 		super(parent, null, location, index);
 		JasperDesign jd = parent.getJasperDesign();
 		jDataset = jd.getMainDesignDataset();

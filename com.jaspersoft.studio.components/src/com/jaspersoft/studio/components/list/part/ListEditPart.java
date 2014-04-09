@@ -134,10 +134,7 @@ public class ListEditPart extends EditableFigureEditPart {
 							action.run();
 							return action.getCommand();
 						} else if (request.getNewObject() instanceof MGraphicElement) {
-							return OutlineTreeEditPartFactory.getCreateCommand(
-									(ANode) getHost().getModel(),
-									(ANode) request.getNewObject(),
-									constraint.getCopy(), -1);
+							return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),(ANode) request.getNewObject(),constraint.getCopy(), -1);
 						} else if (request.getNewObject() instanceof Collection<?>) {
 							JSSCompoundCommand cmd = new JSSCompoundCommand(null);
 							Collection<?> c = (Collection<?>) request.getNewObject();
