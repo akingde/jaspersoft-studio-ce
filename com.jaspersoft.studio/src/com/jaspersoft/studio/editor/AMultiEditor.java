@@ -211,6 +211,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 					setInputWithNotify(modelFile);
 					xmlEditor.setInput(modelFile);
 					setPartName(file.getName());
+					jrContext.init(file);
 
 					doSave(monitor);
 				} catch (CoreException e) {

@@ -485,6 +485,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						setInputWithNotify(modelFile);
 						xmlEditor.setInput(modelFile);
 						setPartName(file.getName());
+						jrContext.init(file);
 
 						doSave(monitor);
 					} catch (CoreException e) {
