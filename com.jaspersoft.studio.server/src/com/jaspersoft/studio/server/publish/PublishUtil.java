@@ -99,6 +99,8 @@ public class PublishUtil {
 				return;
 			}
 			if ((child.getUriString() == null && r.getUriString() == null && child.getWsType().equals(r.getWsType())) || (r.getUriString() != null && r.getUriString().equals(child.getUriString()))) {
+				if (r.isMainReport())
+					child.setMainReport(true);
 				children.set(i, child);
 				return;
 			}

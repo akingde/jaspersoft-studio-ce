@@ -64,15 +64,18 @@ import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.IInputControlsContainer;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.utils.ValidationUtils;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -184,15 +187,25 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 		treeViewer.setContentProvider(new ReportTreeContetProvider() {
 			@Override
 			public Object[] getChildren(Object parentElement) {
-				if (parentElement instanceof MFolder && newrunit.getValue().getIsNew() == true) {
-					MFolder node = (MFolder) parentElement;
-					if (node.getChildren() != null && node.getChildren().size() > 0) {
-						List<INode> children = new ArrayList<INode>();
-						for (INode n : node.getChildren()) {
-							if (n != newrunit && n != newjrxml)
-								children.add(n);
+				if (parentElement instanceof MResource) {
+					MResource mres = (MResource) parentElement;
+					if (mres instanceof MReportUnit || (mres.isSupported(Feature.INPUTCONTROLS_ORDERING) && (mres instanceof IInputControlsContainer))) {
+						if (mres.getChildren() != null && mres.getChildren().size() > 0) {
+							List<INode> children = new ArrayList<INode>();
+							for (INode n : mres.getChildren())
+								if (!SelectorDatasource.isDatasource(((MResource) n).getValue()))
+									children.add(n);
+							return children.toArray();
 						}
-						return children.toArray();
+					} else if (mres instanceof MFolder && newrunit.getValue().getIsNew() == true) {
+						MFolder node = (MFolder) mres;
+						if (node.getChildren() != null && node.getChildren().size() > 0) {
+							List<INode> children = new ArrayList<INode>();
+							for (INode n : node.getChildren())
+								if (n != newrunit && n != newjrxml)
+									children.add(n);
+							return children.toArray();
+						}
 					}
 				}
 				return super.getChildren(parentElement);
