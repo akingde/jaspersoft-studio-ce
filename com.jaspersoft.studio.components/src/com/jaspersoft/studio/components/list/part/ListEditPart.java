@@ -50,6 +50,7 @@ import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.command.CreateElementCommand;

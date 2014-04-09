@@ -21,6 +21,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.JDContainerEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.JDTreeContainerEditPolicy;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -38,6 +39,8 @@ public class ContainerTreeEditPart extends TreeEditPart {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new JDContainerEditPolicy());
 		installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new JDTreeContainerEditPolicy());
+		//Overwrite the policy that handle the delete, so i have a custom delete command to close the subeditor
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		// If this editpart is the contents of the viewer, then it is not deletable!
 		if (getParent() instanceof RootEditPart)
 			installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());

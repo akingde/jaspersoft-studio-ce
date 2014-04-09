@@ -23,6 +23,7 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
 
