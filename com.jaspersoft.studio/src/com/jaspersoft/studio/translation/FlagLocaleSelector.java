@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.babel.editor.widgets.LocaleSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,7 +34,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 
-import com.essiembre.eclipse.rbe.ui.widgets.LocaleSelector;
 import com.jaspersoft.studio.utils.ImageUtils;
 
 /**

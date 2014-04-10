@@ -44,13 +44,13 @@
       </menuContribution>
    </extension>
    <extension
-         point="com.essiembre.eclipse.i18n.resourcebundle.resourceSender">
+         point="com.jaspersoft.studio.babel.editor.resourceSender">
       <sender
             class="com.jaspersoft.studio.community.translationSender.TranslationCommunitySender">
       </sender>
    </extension>
    <extension
-         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+         point="com.jaspersoft.studio.babel.editor.resourceInput">
       <input
             class="com.jaspersoft.studio.community.messages.ResourcePublisher">
       </input>

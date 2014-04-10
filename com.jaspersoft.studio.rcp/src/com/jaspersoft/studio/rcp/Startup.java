@@ -53,7 +53,7 @@ public class Startup implements IStartup {
 				project.setDescription(description, monitor);
 			}
 			IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
-			registry.setDefaultEditor("*.properties", "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor");
+			registry.setDefaultEditor("*.properties", "com.essiembre.rbe.eclipse.editor.ResourceBundleEditor");
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} finally {

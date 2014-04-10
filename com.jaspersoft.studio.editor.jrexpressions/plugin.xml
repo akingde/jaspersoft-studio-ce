@@ -11,7 +11,7 @@
 	
   </extension>
   <extension
-        point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+        point="com.jaspersoft.studio.babel.editor.resourceInput">
      <input
            class="com.jaspersoft.studio.editor.jrexpressions.messages.ResourcePublisher">
      </input>

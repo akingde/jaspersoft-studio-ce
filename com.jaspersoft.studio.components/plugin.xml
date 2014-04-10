@@ -29,12 +29,6 @@
             ClassFactory="com.jaspersoft.studio.components.chartspider.SpiderChartComponentFactory">
       </component>
    </extension>
-   <extension point="org.eclipse.ui.dropActions">
-      <action
-            class="com.jaspersoft.studio.components.table.TableStylePluginDrop"
-            id="com.jaspersoft.studio.components.table.TableStylePluginDrop">
-      </action>
-   </extension>
    <extension
          point="com.jaspersoft.studio.properties.propertySections">
       <propertySections
@@ -985,7 +979,7 @@
       </styleViewProvider>
    </extension>
    <extension
-         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+         point="com.jaspersoft.studio.babel.editor.resourceInput">
       <input
             class="com.jaspersoft.studio.components.messages.ResourcePublisher">
       </input>

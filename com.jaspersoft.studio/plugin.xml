@@ -2236,7 +2236,7 @@
       </wizard>
    </extension>
     <extension
-          point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+          point="com.jaspersoft.studio.babel.editor.resourceInput">
        <input
              class="com.jaspersoft.studio.messages.ResourcePublisher">
        </input>

@@ -50,7 +50,7 @@
 		<module>../../net.sf.jasperreports.doc</module>
 		<module>../../net.sf.jasperreports.samples</module>
 		<!-- Jaspersoft Studio plug-ins -->
-		<module>../../com.essiembre.eclipse.i18n.resourcebundle</module>
+		<module>../../com.jaspersoft.studio.babel.editor</module>
 		<module>../../com.jaspersoft.studio</module>
 		<module>../../com.jaspersoft.studio.community</module>
 		<module>../../com.jaspersoft.studio.components</module>

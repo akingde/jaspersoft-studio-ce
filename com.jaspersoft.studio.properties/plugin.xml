@@ -5,7 +5,7 @@
    <extension-point id="propertyTabs" name="%ExtPoint.propertyTabs" schema="schema/propertyTabs.exsd"/>
    <extension-point id="propertyContributor" name="%ExtPoint.propertyContributor" schema="schema/propertyContributor.exsd"/>
    <extension
-         point="com.essiembre.eclipse.i18n.resourcebundle.resourceInput">
+         point="com.jaspersoft.studio.babel.editor.resourceInput">
       <input
             class="com.jaspersoft.studio.properties.messages.ResourcePublisher">
       </input>

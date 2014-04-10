@@ -235,5 +235,11 @@
            class="com.jaspersoft.studio.data.sql.prefs.PreferenceInitializer">
      </initializer>
   </extension>
+  <extension
+        point="com.jaspersoft.studio.babel.editor.resourceInput">
+     <input
+           class="com.jaspersoft.studio.data.sql.messages.ResourcePublisher">
+     </input>
+  </extension>
 
 </plugin>
