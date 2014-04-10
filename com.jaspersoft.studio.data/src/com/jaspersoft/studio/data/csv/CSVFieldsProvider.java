@@ -23,6 +23,7 @@ import java.util.Map;
 import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
@@ -79,7 +80,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 
 	private void createColumn(List<JRDesignField> columns, String key) {
 		JRDesignField field = new JRDesignField();
-		field.setName(key);
+		field.setName(StringUtils.xmlEncode(key, null));
 		field.setValueClass(String.class);
 		columns.add(field);
 	}

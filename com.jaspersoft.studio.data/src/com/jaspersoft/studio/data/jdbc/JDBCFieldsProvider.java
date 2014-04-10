@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
@@ -79,7 +80,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX + i;
 					colset.add(name);
 					JRDesignField field = new JRDesignField();
-					field.setName(name);
+					field.setName(StringUtils.xmlEncode(name, null));
 
 					field.setValueClassName(getJdbcTypeClass(metaData, i));
 					try {
@@ -88,7 +89,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						String table = metaData.getTableName(i);
 						ResultSet rsmc = c.getMetaData().getColumns(catalog, schema, table, name);
 						while (rsmc.next()) {
-							field.setDescription(rsmc.getString("REMARKS"));
+							field.setDescription(StringUtils.xmlEncode(rsmc.getString("REMARKS"), null));
 							break;
 						}
 					} catch (SQLException se) {

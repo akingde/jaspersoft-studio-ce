@@ -22,6 +22,7 @@ import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -72,9 +73,9 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 						fields.add((JRDesignField) f);
 					else {
 						JRDesignField jdf = new JRDesignField();
-						jdf.setName(f.getName());
+						jdf.setName(StringUtils.xmlEncode(f.getName(), null));
 						jdf.setValueClassName(f.getValueClassName());
-						jdf.setDescription(f.getDescription());
+						jdf.setDescription(StringUtils.xmlEncode(f.getDescription(), null));
 						fields.add(jdf);
 					}
 				}

@@ -23,6 +23,7 @@ import java.util.Map;
 import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.excel.ExcelDataAdapter;
+import net.sf.jasperreports.eclipse.util.StringUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
@@ -60,7 +61,7 @@ public class ExcelFieldsProvider implements IFieldsProvider {
 			List<JRDesignField> columns = new ArrayList<JRDesignField>(map.keySet().size());
 			for (String key : map.keySet()) {
 				JRDesignField field = new JRDesignField();
-				field.setName(key);
+				field.setName(StringUtils.xmlEncode(key, null));
 				field.setValueClass(String.class);
 				columns.add(field);
 			}
