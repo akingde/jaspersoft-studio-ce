@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <psf version="2.0">
 <provider id="org.tigris.subversion.subclipse.core.svnnature">
-<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.essiembre.eclipse.i18n.resourcebundle,com.essiembre.eclipse.i18n.resourcebundle"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.babel.editor,com.jaspersoft.studio.babel.editor"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio,com.jaspersoft.studio"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.community,com.jaspersoft.studio.community"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.components,com.jaspersoft.studio.components"/>
