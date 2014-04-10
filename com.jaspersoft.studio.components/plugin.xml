@@ -715,7 +715,7 @@
       <propertyTabs
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.chart"
                image="icons/chart-16.png"
@@ -751,47 +751,49 @@
                label="%labelChartPlot">
          </propertyTab>
          <propertyTab
+               afterTab="com.jaspersoft.studio.components.chart.plot"
                category="element"
                id="com.jaspersoft.studio.components.chart.dataset"
                indented="true"
                label="%labelChartDataset">
          </propertyTab>
          <propertyTab
+               afterTab="com.jaspersoft.studio.components.chart.plot"
                category="element"
                id="com.jaspersoft.studio.components.chart.series"
                indented="true"
                label="%labelChartSeries">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.barcode"
                image="icons/barcode-16.png"
                label="%labelBarcode">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.list"
                image="icons/list-16.png"
                label="%labelList">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.crosstab"
                image="icons/crosstab-16.png"
                label="%labelCrosstab">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.cell"
                image="icons/cell-16.png"
                label="%labelCell">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.Map"
                image="icons/map.png"
@@ -819,7 +821,7 @@
                label="Paths">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.components.chartaxis"
                image="icons/chart-16.png"

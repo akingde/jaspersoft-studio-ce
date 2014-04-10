@@ -594,13 +594,14 @@
       <propertyTabs
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                image="icons/resources/field-16.png"
                label="%labelObject">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
+               afterTab="com.jaspersoft.studio.editor.propertyTab.style"
                category="advanced"
                id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab"
                image="icons/resources/eclipse/properties_view.gif"
@@ -620,90 +621,91 @@
                label="%borders">
          </propertyTab>
          <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.propertyTab.report"
                image="icons/report.png"
                label="%labelReport">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Text"
                image="icons/resources/genericelement-16.png"
                label="%element">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.StaticText"
                image="icons/resources/statictext-16.png"
                label="%elementStaticText">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.TextField"
                image="icons/resources/textfield-16.png"
                label="%elementTextField">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Style"
                image="icons/resources/style-16.png"
                label="%elementStyle">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.ConditionalStyle"
                image="icons/resources/style-16.png"
                label="%elementConditionalStyle">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Image"
                image="icons/resources/image-16.png"
                label="%elementImage">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Break"
                image="icons/resources/break-16.png"
                label="%elementBreak">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Rectangle"
                image="icons/resources/rectangle-16.png"
                label="%elementRectangle">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Line"
                image="icons/resources/line-16.png"
                label="%elementLine">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.GenericElement"
                image="icons/resources/genericelement-16.png"
                label="%elementGenericElement">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Subreport"
                image="icons/resources/subreport-16.png"
                label="%elementSubreport">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Map"
                image="icons/map.png"
@@ -717,7 +719,7 @@
                label="%style">
          </propertyTab>
          <propertyTab
-               afterTab="com.jaspersoft.studio.propertyTab.report"
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.section.DATASET"
                image="icons/resources/dataset-16.png"
@@ -731,18 +733,21 @@
                label="%labelHyperlink">
          </propertyTab>
          <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.section.GROUP"
                image="icons/resources/groups-16.png"
                label="%labelGroup">
          </propertyTab>
          <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.editor.section.SCRIPTLET"
                image="icons/resources/scriptlet-16.png"
                label="%labelScriptlet">
          </propertyTab>
          <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="element"
                id="com.jaspersoft.studio.callou.CALLOUT"
                image="icons/callout-16.png"
