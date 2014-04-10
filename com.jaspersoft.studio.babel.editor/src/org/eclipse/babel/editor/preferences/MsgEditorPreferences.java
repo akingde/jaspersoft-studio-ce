@@ -666,7 +666,7 @@ public final class MsgEditorPreferences{
 
     
     public static IEclipsePreferences getEclipsePreferenceStore() {
-  	   return InstanceScope.INSTANCE.getNode(MessagesEditorPlugin.PLUGIN_ID);
+  	   return new InstanceScope().getNode(MessagesEditorPlugin.PLUGIN_ID);
      }
     
     /**

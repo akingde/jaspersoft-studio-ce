@@ -117,7 +117,7 @@ public class Builder extends IncrementalProjectBuilder {
 	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
-	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor)
+	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
 			throws CoreException {
 		try {
 			_alreadBuiltMessageBundle = null;
