@@ -1,0 +1,154 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
+package com.jaspersoft.studio.property;
+
+import java.text.MessageFormat;
+import java.util.List;
+
+import org.eclipse.gef.commands.Command;
+import org.eclipse.ui.views.properties.IPropertySource;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+
+/*
+ * The Class SetValueCommand.
+ */
+public class SetValueCommand extends Command {
+
+	/** The property value. */
+	protected Object propertyValue;
+
+	/** The property name. */
+	protected Object propertyName;
+
+	/** The undo value. */
+	protected Object undoValue;
+
+	/** The reset on undo. */
+	protected boolean resetOnUndo;
+
+	/** The target. */
+	protected IPropertySource target;
+
+	/**
+	 * Instantiates a new sets the value command.
+	 */
+	public SetValueCommand() {
+		super(""); //$NON-NLS-1$
+	}
+
+	/**
+	 * Instantiates a new sets the value command.
+	 * 
+	 * @param propLabel
+	 *          the prop label
+	 */
+	public SetValueCommand(String propLabel) {
+		super(MessageFormat.format(Messages.SetValueCommand_set_zero_property, new Object[] { propLabel }).trim());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.commands.Command#canExecute()
+	 */
+	@Override
+	public boolean canExecute() {
+		return true;
+	}
+
+	/**
+	 * Gets the target.
+	 * 
+	 * @return the target
+	 */
+	public IPropertySource getTarget() {
+		((ANode) target).setValue(targetValue);
+		return target;
+	}
+
+	private Object targetValue;
+
+	/**
+	 * Sets the target.
+	 * 
+	 * @param aTarget
+	 *          the new target
+	 */
+	public void setTarget(IPropertySource aTarget) {
+		target = aTarget;
+		targetValue = ((ANode) aTarget).getValue();
+	}
+
+	/**
+	 * Sets the property id.
+	 * 
+	 * @param pName
+	 *          the new property id
+	 */
+	public void setPropertyId(Object pName) {
+		propertyName = pName;
+	}
+
+	/**
+	 * Sets the property value.
+	 * 
+	 * @param val
+	 *          the new property value
+	 */
+	public void setPropertyValue(Object val) {
+		propertyValue = val;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.commands.Command#execute()
+	 */
+	@Override
+	public void execute() {
+		undoValue = getTarget().getPropertyValue(propertyName);
+		getTarget().setPropertyValue(propertyName, propertyValue);
+
+		if (commands == null)
+			commands = JaspersoftStudioPlugin.getPostSetValueManager().postSetValue(target, propertyName, propertyValue,
+					undoValue);
+		if (commands != null)
+			for (Command c : commands)
+				c.execute();
+	}
+
+	private List<Command> commands;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.commands.Command#undo()
+	 */
+	@Override
+	public void undo() {
+		if (commands != null)
+			for (Command c : commands)
+				c.undo();
+		if (resetOnUndo)
+			getTarget().resetPropertyValue(propertyName);
+		else
+			getTarget().setPropertyValue(propertyName, undoValue);
+	}
+
+}
