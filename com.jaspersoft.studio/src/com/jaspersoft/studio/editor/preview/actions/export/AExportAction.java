@@ -115,7 +115,8 @@ public abstract class AExportAction extends AReportViewerAction {
 				if (extension != null)
 					for (String fe : fileExtensions) {
 						if (fe.endsWith(extension)) {
-							filePath += '.' + defaultFileExtension;
+							if (!filePath.toLowerCase().endsWith(defaultFileExtension.toLowerCase()))
+								filePath += '.' + defaultFileExtension;
 							break;
 						}
 					}
