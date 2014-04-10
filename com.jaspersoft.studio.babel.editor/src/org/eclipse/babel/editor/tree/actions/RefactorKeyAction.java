@@ -13,6 +13,7 @@ package org.eclipse.babel.editor.tree.actions;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.messages.Messages;
 import org.eclipse.jface.viewers.TreeViewer;
