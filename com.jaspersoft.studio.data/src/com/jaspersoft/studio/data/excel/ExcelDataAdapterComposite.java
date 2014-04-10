@@ -78,6 +78,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 	private Text textDatePattern;
 	private Text textNumberPattern;
+	private Text textSheetSelection;
 	private TableViewer tableViewer;
 	private Table table;
 	private TableViewerColumn tableViewerColumnName;
@@ -249,6 +250,11 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 		btnCheckSkipFirstLine.setText(Messages.XLSDataAdapterComposite_14);
 
+		new Label(grpOther, SWT.NONE).setText("Sheet Selection");
+
+		textSheetSelection = new Text(grpOther, SWT.BORDER);
+		textSheetSelection.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+
 		// get Excel file columns
 		btnGetExcelColumnsName.addSelectionListener(new SelectionAdapter() {
 
@@ -415,6 +421,7 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 
 		bindingContext.bindValue(SWTObservables.observeText(textDatePattern, SWT.Modify), PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(textNumberPattern, SWT.Modify), PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeText(textSheetSelection, SWT.Modify), PojoObservables.observeValue(dataAdapter, "sheetSelection")); //$NON-NLS-1$
 
 		List<String> listColumnNames = xlsDataAdapter.getColumnNames();
 		List<Integer> listColumnIndexes = xlsDataAdapter.getColumnIndexes();
@@ -482,12 +489,23 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 			listColumnNames.add(row[0]);
 			listColumnIndexes.add(Integer.valueOf(row[1]));
 		}
-
+		switch (format.getSelectionIndex()) {
+		case 0:
+			xlsDataAdapter.setFormat(ExcelFormatEnum.AUTODETECT);
+			break;
+		case 1:
+			xlsDataAdapter.setFormat(ExcelFormatEnum.XLS);
+			break;
+		case 2:
+			xlsDataAdapter.setFormat(ExcelFormatEnum.XLSX);
+			break;
+		}
 		xlsDataAdapter.setColumnNames(listColumnNames);
 		xlsDataAdapter.setColumnIndexes(listColumnIndexes);
 
 		xlsDataAdapter.setDatePattern(textDatePattern.getText());
 		xlsDataAdapter.setNumberPattern(textNumberPattern.getText());
+		xlsDataAdapter.setSheetSelection(textSheetSelection.getText());
 		xlsDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine.getSelection());
 
 		return dataAdapterDesc;
