@@ -146,7 +146,7 @@ public class ListComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MList)
-			return new ListFigure();
+			return new ListFigure((MList)node);
 		return null;
 	}
 

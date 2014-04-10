@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 
@@ -63,8 +64,8 @@ public class ListFigure extends JRComponentFigure {
 	/**
 	 * Instantiates a new text field figure.
 	 */
-	public ListFigure() {
-		super();
+	public ListFigure(MList model) {
+		super(model);
 	}
 	
 	/**

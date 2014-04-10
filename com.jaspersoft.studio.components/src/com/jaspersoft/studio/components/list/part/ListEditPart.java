@@ -68,7 +68,7 @@ public class ListEditPart extends EditableFigureEditPart {
 	 * figure of this edit part
 	 */
 	protected IFigure createFigure() {
-		ListFigure rect = new ListFigure();
+		ListFigure rect = new ListFigure((MList)getModel());
 		setupListFigure(rect);
 		setPrefsBorder(rect);
 		setupFigure(rect);

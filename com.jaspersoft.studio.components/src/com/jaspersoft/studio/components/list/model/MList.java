@@ -337,6 +337,10 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		HashSet<String> graphicalProperties = getGraphicalProperties();
+		if (graphicalProperties.contains(evt.getPropertyName())){
+			setChangedProperty(true);
+		}
 		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) || 
 				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP)) {
 			fullModelList = null;
@@ -455,4 +459,15 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		}
 		return fullModelList.getChildren();
 	}
+	
+
+	@Override
+	public HashSet<String> generateGraphicalProperties() {
+		HashSet<String> properties = super.generateGraphicalProperties();
+		properties.add(JRDesignElementGroup.PROPERTY_CHILDREN);
+		properties.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
+		properties.add(JRDesignElement.PROPERTY_PARENT_STYLE_NAME_REFERENCE);
+		return properties;
+	}
+
 }

@@ -737,7 +737,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				if (graphicalElement.getUsedStyles().contains(getValue().getName())){
 					graphicalElement.setChangedProperty(true);
 				}
-			} else setStyleRefresh(child.getChildren());
+			}
+			setStyleRefresh(child.getChildren());
 		}
 		
 	}
@@ -773,17 +774,32 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					}
 				}
 			} else {
-				// changed
+			// changed
 				for (INode n : getChildren()) {
 					if (n.getValue() == evt.getOldValue())
 						n.setValue(evt.getNewValue());
 				}
 			}
 		}
-		//Avoid the refresh if the style is not in the hierarchy
-		if (getRoot() != null) setStyleRefresh(getRoot().getChildren());
+		fireUpdateForElements();
 		evt = new PropertyChangeEvent(getValue(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		super.propertyChange(evt);
+	}
+	
+	/**
+	 * Search in background the elements that are using this styles and mark them for the refresh
+	 */
+	private void fireUpdateForElements(){
+		Runnable notifier = new Runnable() {
+	    public void run() {
+	  		//Avoid the refresh if the style is not in the hierarchy
+	    	INode root = getRoot();
+	    	if (root != null) {
+	  			setStyleRefresh(root.getChildren());
+	  		}
+	    }
+		};
+		new Thread(notifier).start();
 	}
 	
 	/**
