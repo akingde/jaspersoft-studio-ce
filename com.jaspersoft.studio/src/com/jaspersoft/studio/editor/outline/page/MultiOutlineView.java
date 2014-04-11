@@ -190,6 +190,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		this.currentPage = page;
 		if (pagebook == null) {
 			// still not being made
+			isRefresh = false;
 			return;
 		}
 		if (control == null || control.isDisposed()) {
