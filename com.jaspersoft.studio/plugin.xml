@@ -579,14 +579,7 @@
          </propertyCategory>
          <propertyCategory
                category="advanced">
-         </propertyCategory>
-         <propertyCategory
-               category="parameter">
-         </propertyCategory>
-         <propertyCategory
-               category="field">
-         </propertyCategory>
-
+         </propertyCategory>  
       </propertyContributor>
    </extension>
    <extension

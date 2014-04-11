@@ -183,7 +183,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 		 * Shows the tab associated with the selection.
 		 */
 		public void selectionChanged(SelectionChangedEvent event) {
-			if(!tabbedPropertyComposite.isDisposed()){
+			if (!tabbedPropertyComposite.isDisposed()) {
 				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 				TabContents tab = null;
 				ITabDescriptor descriptor = (ITabDescriptor) selection.getFirstElement();
@@ -197,25 +197,25 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 					// can not cache based on the id - tabs may have the same id,
 					// but different section depending on the selection
 					tab = (TabContents) descriptorToTab.get(descriptor);
-	
+
 					if (tab != currentTab) {
 						hideTab(currentTab);
 					}
 					if (tab != null && tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
 						// force widgets to be resized
 						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
-	
+
 						Composite tabComposite = tabToComposite.get(tab);
 						if (tabComposite == null) {
 							tabComposite = createTabComposite();
 							tab.createControls(tabComposite, TabbedPropertySheetPage.this);
-	
+
 							tabToComposite.put(tab, tabComposite);
 						}
-	
+
 						// store tab selection
 						storeCurrentTabSelection(descriptor.getLabel());
-	
+
 						if (tab != currentTab) {
 							showTab(tab);
 						}
@@ -756,7 +756,15 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 		if (selection.equals(currentSelection)) {
 			return;
 		}
-
+		ITabDescriptor currentTabDescriptor = null;
+		if (currentTab != null) {
+			for (ITabDescriptor td : descriptorToTab.keySet()) {
+				if (descriptorToTab.get(td).equals(currentTab)) {
+					currentTabDescriptor = td;
+					break;
+				}
+			}
+		}
 		this.currentSelection = selection;
 
 		// see if the selection provides a new contributor
@@ -768,10 +776,13 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 		if (descriptors.length > 0) {
 			updateTabs(descriptors);
 		}
+
 		// update tabs list
 		tabbedPropertyViewer.setInput(part, currentSelection);
 		int lastTabSelectionIndex = getLastTabSelection(part, currentSelection);
-		Object selectedTab = tabbedPropertyViewer.getElementAt(lastTabSelectionIndex);
+		ITabDescriptor selectedTab = tabbedPropertyViewer.getElementAt(lastTabSelectionIndex);
+		if (selectedTab != null && currentTabDescriptor != null && !selectedTab.getLabel().equals(currentTabDescriptor.getLabel()))
+			selectedTab = tabbedPropertyViewer.getElementAt(0);
 		selectionQueueLocked = true;
 		try {
 			if (selectedTab == null) {
