@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
@@ -33,7 +35,6 @@ import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor.KeyPressedEventDomain;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.INode;
@@ -448,11 +449,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	 */
 	@Override
 	protected void snapPoint(ChangeBoundsRequest request) {
-		boolean shiftPressed = false;
-		if (getCurrentViewer().getEditDomain() instanceof KeyPressedEventDomain){
-			KeyPressedEventDomain domain = (KeyPressedEventDomain)getCurrentViewer().getEditDomain();
-			shiftPressed = domain.isPressed(SWT.SHIFT);
-		}
+		boolean shiftPressed = JasperReportsPlugin.isPressed(SWT.SHIFT);
 		if (!shiftPressed) {
 			//Shift was released so use the default snap hander and reset the mouse direction
 			firstMovment = MOUSE_DIRECTION.UNDEFINED;

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.report;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -30,7 +31,6 @@ import org.eclipse.swt.events.KeyEvent;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor.KeyPressedEventDomain;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -78,11 +78,7 @@ public class MovableSelectionTool extends SelectionTool {
 	 */
 	private Rectangle getNewLocation(int arrowKeyCode, MGraphicElement node) {
 		int step=1;
-		if(getDomain() instanceof KeyPressedEventDomain) {
-			if(((KeyPressedEventDomain)getDomain()).isPressed(SWT.SHIFT)) {
-				step = 10;
-			}
-		}
+		if (JasperReportsPlugin.isPressed(SWT.SHIFT)) step = 10;
 		Point location = ModelUtils.getY4Element(node);
 		Integer width = (Integer) node.getPropertyValue(JRDesignElement.PROPERTY_WIDTH);
 		Integer height = (Integer) node.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT);

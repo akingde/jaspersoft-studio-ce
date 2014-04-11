@@ -17,13 +17,13 @@ package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
+
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.AbstractHandle;
 import org.eclipse.swt.SWT;
-
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor.KeyPressedEventDomain;
 
 /**
  * 
@@ -75,11 +75,7 @@ public class BandResizeHandle extends AbstractHandle {
 	public DragTracker getDragTracker()
 	{	
 		GraphicalEditPart actualChildren = getOwner();
-		boolean shiftPressed = false;
-		if (getOwner().getViewer().getEditDomain() instanceof KeyPressedEventDomain){
-			KeyPressedEventDomain domain = (KeyPressedEventDomain)getOwner().getViewer().getEditDomain();
-			shiftPressed = domain.isPressed(SWT.SHIFT);
-		}
+		boolean shiftPressed = JasperReportsPlugin.isPressed(SWT.SHIFT);
 		if (getOwner().getFigure().getBounds().height == 1 && !shiftPressed) {
 			List<?> children = getOwner().getParent().getChildren();
 			int index = children.indexOf(actualChildren);

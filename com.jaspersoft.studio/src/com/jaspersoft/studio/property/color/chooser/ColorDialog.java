@@ -58,9 +58,20 @@ public class ColorDialog extends Dialog{
 	 */
 	private WebColorsWidget webColors  = null;
 	
+	/**
+	 * Control provider the select the previusly colors
+	 */
 	private LastUsedColorsWidget lastColors = null;
 	
+	/**
+	 * List of all the available controls provider
+	 */
 	private List<IColorProvider> colorsWidgets = new ArrayList<IColorProvider>();
+	
+	/**
+	 * Folder where all the controls provider are placed
+	 */
+	private TabFolder folder;
 	
   /**
    * Flag used to hide the alpha controls
@@ -100,6 +111,16 @@ public class ColorDialog extends Dialog{
 	}
 	
 	/**
+	 * Explicitly call the dispose of the color provider when the dialog
+	 * is closed
+	 */
+	private void disposeControlsProvider(){
+		for (IColorProvider provider : colorsWidgets){
+			provider.dispose();
+		}
+	}
+	
+	/**
 	 * Open the dialog an return the selected color when it is closed. If nothing
 	 * is closed return null
 	 * 
@@ -108,10 +129,12 @@ public class ColorDialog extends Dialog{
 	 */
 	public AlfaRGB openAlfaRGB(){
 		int returnCode = super.open();
+		disposeControlsProvider();
 		if (returnCode == Dialog.CANCEL) return null;
 		else {
 			AlfaRGB newColor = colorsWidgets.get(selectedTab).getSelectedColor();
 			LastUsedColorsWidget.addColor(newColor);
+
 			return newColor;
 		}
 	}
@@ -128,6 +151,7 @@ public class ColorDialog extends Dialog{
 		//When a simple RGB is requested hide the alpha control
 		hasAlpha = false;
 		int returnCode = super.open();
+		disposeControlsProvider();
 		if (returnCode == Dialog.CANCEL) return null;
 		else {
 			AlfaRGB newColor = colorsWidgets.get(selectedTab).getSelectedColor();
@@ -174,7 +198,7 @@ public class ColorDialog extends Dialog{
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		 Composite dialogArea = (Composite) super.createDialogArea(parent);
-		 final TabFolder folder = new TabFolder(dialogArea, SWT.NONE);
+		 folder = new TabFolder(dialogArea, SWT.NONE);
 		 advancedColors = new AdvancedColorWidget(folder, SWT.NONE, oldColor, hasAlpha);
 		 advancedColors.setLayoutData(new GridData(GridData.FILL_BOTH));
 		 TabItem tab1 = new TabItem(folder, SWT.NONE);
@@ -205,8 +229,5 @@ public class ColorDialog extends Dialog{
 		 });
 		 return folder;
 	}
-	
-	
-	
 	
 }

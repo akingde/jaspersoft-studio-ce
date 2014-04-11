@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
@@ -55,6 +56,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -143,16 +145,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 		@Override
 		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
-			if (myDataAdapterDesc != null) {
-				JasperDesign jasperDesign = getJasperDesign();
-				String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
-				if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
-					getMReport().putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-					jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
-					setDirty(true);
+			boolean shiftPressed = JasperReportsPlugin.isPressed(SWT.SHIFT);
+			if (!shiftPressed){
+				if (myDataAdapterDesc != null) {
+					JasperDesign jasperDesign = getJasperDesign();
+					String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+					if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
+						getMReport().putParameter(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc);
+						jasperDesign.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+						setDirty(true);
+					}
 				}
+				super.runReport(myDataAdapterDesc);
 			}
-			super.runReport(myDataAdapterDesc);
 		}
 
 		public void setDirty(boolean dirty) {
@@ -192,6 +197,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
 				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 		ExternalStylesManager.initListeners();
+		JasperReportsPlugin.initializeKeyListener();
 	}
 
 	/**

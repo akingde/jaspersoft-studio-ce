@@ -20,8 +20,6 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -48,6 +46,7 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -157,6 +156,11 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
    */
   private boolean hideSliderBar = false;
   
+  /**
+   * Boolean flag to know if there is an acquiring action by the color picker
+   */
+	private boolean isAcquiring = false;
+  
 	/**
 	 * Color that we are changing from the color dialog, used to compare the new color 
 	 * to the old one. If it is null it is not shown
@@ -225,19 +229,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
    */
 	private ColorPickerThreadClass colorPickerThread = new ColorPickerThreadClass();
 	
-	/**
-	 * Listener used to stop the color picking thread when the space key is pressed
-	 */
-	private Listener getColor = new Listener() {
-		
-		@Override
-		public void handleEvent(Event event) {
-			if (event.keyCode == UIUtils.SWT_SPACE){
-				stopPickerThread();
-			}	
-		}
-	};
-	
+
 	/**
 	 * Modify listener used when a textual control or a numeric one is modified by the user
 	 */
@@ -274,6 +266,30 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 			}
 		}
 		
+	};
+	
+	/**
+	 * Listener used to stop the color picking thread when the space key is pressed
+	 */
+	private Listener spaceKeyListener = new Listener() {
+		
+		public void handleEvent(Event e) {	
+			if (e.keyCode == SWT.SPACE){
+				if (!isAcquiring){
+					isAcquiring = true;
+					colorPickerThread.setStop(false);
+					Display.getCurrent().timerExec(TIMER_INTERVAL, colorPickerThread);
+	        pickColorButton.setImage(null);
+	        pickColorButton.setText(Messages.ColorDialog_stopPickingActionText);
+	        pickColorButton.setEnabled(false);
+	        pickColorButton.setLayoutData(new GridData(GridData.FILL_BOTH));
+	        pickColorButton.getParent().layout(true, true);
+				} else {
+					stopPickerThread();
+					isAcquiring = false;
+				}
+			} 
+		}
 	};
 	
 	/**
@@ -329,7 +345,10 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 		 //Create the textual\numeric controls
 		 createTextArea(righSide);
 		 updateText();
+		 
+		 PlatformUI.getWorkbench().getDisplay().addFilter(org.eclipse.swt.SWT.KeyDown, spaceKeyListener);
 	}
+	
 	
 	/**
 	 * Get the alpha rgb of the actually selected color
@@ -498,15 +517,15 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 		 pickColorButton.addSelectionListener(new SelectionAdapter() {
 			 @Override
 			public void widgetSelected(SelectionEvent e) {
+				isAcquiring = true;
 				colorPickerThread.setStop(false);
 				Display.getCurrent().timerExec(TIMER_INTERVAL, colorPickerThread);
-        Display.getCurrent().addFilter(SWT.KeyDown, getColor);
         pickColorButton.setImage(null);
         pickColorButton.setText(Messages.ColorDialog_stopPickingActionText);
         pickColorButton.setEnabled(false);
         pickColorButton.setLayoutData(new GridData(GridData.FILL_BOTH));
         pickColorButton.getParent().layout(true, true);
-        getShell().forceFocus();
+       // getShell().forceFocus();
 			}
 		 });
 	}
@@ -721,7 +740,6 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 	 */
   private void stopPickerThread(){
 		colorPickerThread.setStop(true);
-    Display.getCurrent().removeFilter(SWT.KeyDown, getColor);
     if (!pickColorButton.isDisposed()){
 	    pickColorButton.setText(""); //$NON-NLS-1$
 	    pickColorButton.setEnabled(true);
@@ -734,12 +752,14 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
     }
 	}
   
+  
   /**
    * Dispose the control and if it is still active stop the thread
    */
   @Override
   public void dispose() {
   	super.dispose();
+  	PlatformUI.getWorkbench().getDisplay().removeFilter(org.eclipse.swt.SWT.KeyDown, spaceKeyListener);
 		stopPickerThread();
   }
 
