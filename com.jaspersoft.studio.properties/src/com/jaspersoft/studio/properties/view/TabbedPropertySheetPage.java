@@ -229,6 +229,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage,
 				if (descriptor != null) {
 					handleTabSelection(descriptor);
 				}
+				refreshTitleBar();
 			}
 		}
 	}
