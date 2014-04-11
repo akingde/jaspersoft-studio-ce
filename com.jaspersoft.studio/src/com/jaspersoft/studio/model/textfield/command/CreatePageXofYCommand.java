@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -146,7 +147,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 		tfPageNumber.setHorizontalAlignment(HorizontalAlignEnum.RIGHT);
 		tfPageNumber.setEvaluationTime(EvaluationTimeEnum.NOW);
 		JRDesignExpression expression = new JRDesignExpression();
-		expression.setText("\"Page \" + $V{PAGE_NUMBER}");
+		expression.setText(Messages.CreatePageXofYCommand_0);
 		tfPageNumber.setExpression(expression);
 
 		if (jrGroup instanceof JRDesignElementGroup)
@@ -164,7 +165,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 		tfPageTotal.setHorizontalAlignment(HorizontalAlignEnum.LEFT);
 		tfPageTotal.setEvaluationTime(EvaluationTimeEnum.REPORT);
 		expression = new JRDesignExpression();
-		expression.setText("\" of \" + $V{PAGE_NUMBER}");
+		expression.setText(Messages.CreatePageXofYCommand_1);
 		tfPageTotal.setExpression(expression);
 
 		if (jrGroup instanceof JRDesignElementGroup)

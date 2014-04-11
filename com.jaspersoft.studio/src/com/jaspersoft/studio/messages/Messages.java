@@ -334,6 +334,8 @@ public class Messages extends NLS {
 	public static String CreateGroupCommand_group_name_dialog_text;
 	public static String CreateGuideCommand_create_guide;
 	public static String CreateMainGroupCommand_create_main_group;
+	public static String CreatePageXofYCommand_0;
+	public static String CreatePageXofYCommand_1;
 	public static String CreateParameterAction_create_parameter;
 	public static String CreateParameterAction_create_parameter_tool_tip;
 	public static String CreateParameterCommand_parameter_name;
