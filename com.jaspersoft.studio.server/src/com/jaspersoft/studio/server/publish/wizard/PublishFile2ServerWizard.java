@@ -44,6 +44,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.publish.wizard.page.FileSelectionPage;
@@ -119,18 +120,23 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 						if (fres != null) {
 							String ext = file.getFileExtension().toLowerCase();
 							ResourceDescriptor rd = fres.getValue();
-							if (ext.equals("xml"))
+							if (ext.equalsIgnoreCase("xml"))
 								rd.setWsType(ResourceDescriptor.TYPE_XML_FILE);
-							else if (ext.equals("jar"))
+							else if (ext.equalsIgnoreCase("jar") || ext.equalsIgnoreCase("zip"))
 								rd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
-							else if (ext.equals("jrtx"))
+							else if (ext.equalsIgnoreCase("jrtx"))
 								rd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
-							else if (ext.equals("properties"))
+							else if (ext.equalsIgnoreCase("css"))
+								rd.setWsType(ResourceDescriptor.TYPE_CSS_FILE);
+							else if (ext.equalsIgnoreCase("properties"))
 								rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
-							else if (ext.equals("ttf") || ext.equals("eot") || ext.equals("woff"))
+							else if (ext.equalsIgnoreCase("ttf") || ext.equalsIgnoreCase("eot") || ext.equalsIgnoreCase("woff"))
 								rd.setWsType(ResourceDescriptor.TYPE_FONT);
-							else if (ext.equals("png") || ext.equals("gif") || ext.equals("jpg") || ext.equals("jpeg") || ext.equals("bmp") || ext.equals("tiff"))
+							else if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp")
+									|| ext.equalsIgnoreCase("tiff"))
 								rd.setWsType(ResourceDescriptor.TYPE_IMAGE);
+							else if (fres.getParent() instanceof MReportUnit)
+								rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
 
 							fres.setFile(new File(file.getRawLocationURI()));
 							WSClientHelper.save(monitor, fres);

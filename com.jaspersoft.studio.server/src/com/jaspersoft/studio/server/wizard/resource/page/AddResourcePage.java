@@ -75,10 +75,10 @@ import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.model.datasource.MRSecureMondrianConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.protocol.Callback;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
+import com.jaspersoft.studio.utils.Callback;
 
 public class AddResourcePage extends WizardPage {
 	private MResource resource;

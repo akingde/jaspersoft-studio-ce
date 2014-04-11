@@ -32,6 +32,7 @@ import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
+import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPreferencePage {
@@ -64,7 +65,7 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 		setJRPRint(stats, jrprint, false);
 	}
 
-	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) throws Exception {
+	public void setJRPRint(final Statistics stats, JasperPrint jrprint, boolean refresh) throws Exception {
 		if (this.jrprint != jrprint || refresh) {
 			rptviewer.setReport(jrprint);
 
@@ -72,11 +73,21 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 
 			AExportAction exp = createExporter(rptviewer);
 			stats.startCount(ReportControler.ST_EXPORTTIME);
-			exp.export(tmpFile);
-			stats.endCount(ReportControler.ST_EXPORTTIME);
-			stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+			exp.export(tmpFile, new Callback<File>() {
 
-			setURL(tmpFile.toURI().toASCIIString());
+				@Override
+				public void completed(File value) {
+					stats.endCount(ReportControler.ST_EXPORTTIME);
+					stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
+
+					try {
+						setURL(tmpFile.toURI().toASCIIString());
+					} catch (Exception e) {
+						UIUtils.showError(e);
+					}
+					doRefresh();
+				}
+			});
 		}
 		doRefresh();
 		this.jrprint = jrprint;

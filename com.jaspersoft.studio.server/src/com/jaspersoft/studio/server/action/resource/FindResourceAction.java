@@ -9,10 +9,10 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.protocol.Callback;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
+import com.jaspersoft.studio.utils.Callback;
 
 public class FindResourceAction extends Action {
 	public static final String ID = "findResourceAction"; //$NON-NLS-1$

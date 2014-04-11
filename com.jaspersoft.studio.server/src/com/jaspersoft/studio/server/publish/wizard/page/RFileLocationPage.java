@@ -60,6 +60,7 @@ import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MContentResource;
 import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -278,7 +279,7 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 			public void doubleClick(DoubleClickEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				if (el instanceof MFolder || el instanceof MServerProfile) {
+				if (el instanceof MFolder || el instanceof MServerProfile || el instanceof MReportUnit) {
 					if (treeViewer.getExpandedState(el))
 						treeViewer.collapseToLevel(el, 1);
 					else {
@@ -353,15 +354,21 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 			return;
 		isRefresh = true;
 
-		if (obj instanceof AFileResource)
-			fileRes = (AFileResource) obj;
-		else if (obj instanceof MFolder) {
+		if (obj instanceof MReportUnit) {
+			fileRes = getNewRunit();
+			MReportUnit pfolder = (MReportUnit) obj;
+			fileRes.setParent(pfolder, -1);
+			ResourceDescriptor rd = fileRes.getValue();
+			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName());
+		} else if (obj instanceof MFolder) {
 			fileRes = getNewRunit();
 			MFolder pfolder = (MFolder) obj;
 			fileRes.setParent(pfolder, -1);
 			ResourceDescriptor rd = fileRes.getValue();
 			rd.setUriString(pfolder.getValue().getUriString() + "/" + rd.getName());
-		} else
+		} else if (obj instanceof AFileResource)
+			fileRes = (AFileResource) obj;
+		else
 			setPageComplete(false);
 		if (fileRes != null) {
 			ResourceDescriptor rd = fileRes.getValue();

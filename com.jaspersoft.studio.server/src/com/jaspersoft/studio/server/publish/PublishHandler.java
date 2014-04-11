@@ -5,7 +5,6 @@ import java.util.zip.ZipFile;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -77,7 +76,7 @@ public class PublishHandler extends AbstractHandler {
 		String ext = file.getFileExtension();
 		if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
 			if (jContext == null) {
-				jContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
+				jContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 				try {
 					JasperDesign jd = new JRXmlLoader(jContext, JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(file.getContents()));
 					jContext.setJasperDesign(jd);

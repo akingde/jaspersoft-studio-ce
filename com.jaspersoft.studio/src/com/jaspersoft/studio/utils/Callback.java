@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.server.protocol;
+package com.jaspersoft.studio.utils;
 
 public interface Callback<T> {
 	public void completed(T value);

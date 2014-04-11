@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.pages.Pages;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
+import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AExportAction extends AReportViewerAction {
@@ -122,7 +123,12 @@ public abstract class AExportAction extends AReportViewerAction {
 					}
 			}
 			try {
-				export(new File(filePath));
+				export(new File(filePath), new Callback<File>() {
+
+					@Override
+					public void completed(File value) {
+					}
+				});
 			} catch (Throwable e) {
 				UIUtils.showError(e);
 			}
@@ -131,7 +137,7 @@ public abstract class AExportAction extends AReportViewerAction {
 			parentMenu.setDefaultAction(this);
 	}
 
-	public void export(final File file) throws Exception {
+	public void export(final File file, final Callback<File> callback) throws Exception {
 		final JasperPrint jrPrint = getReportViewer().getReport();
 		if (jrPrint == null || jrPrint.getPages() == null)
 			return;
@@ -139,6 +145,7 @@ public abstract class AExportAction extends AReportViewerAction {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				doExport(file, jrPrint, monitor);
+				callback.completed(file);
 				return Status.OK_STATUS;
 			}
 		};

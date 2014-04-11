@@ -25,10 +25,10 @@ import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.protocol.Callback;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
+import com.jaspersoft.studio.utils.Callback;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
