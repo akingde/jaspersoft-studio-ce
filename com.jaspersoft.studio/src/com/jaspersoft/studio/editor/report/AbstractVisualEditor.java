@@ -205,8 +205,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// getGraphicalViewer().setRootEditPart(new MainDesignerRootEditPart());
 		// if (model != null)
 		getGraphicalViewer().setContents(model);
-		if (outlinePage != null)
-			outlinePage.setContents(model);
+		if (outlinePage != null){
+			//The outline for the current editor maybe not available because it was closed 
+			//and reopened into another editor. So when we try to set its contents it is 
+			//better to check if it was disposed outside and in that case recrated it.
+			if (outlinePage.isDisposed()){
+				//If the outline is recreated by calling the getOutlineView 
+				//then the setContends it is already done so we need to do it only in the else case
+				getOutlineView();
+			} else outlinePage.setContents(model);
+		}
 	}
 
 	/**

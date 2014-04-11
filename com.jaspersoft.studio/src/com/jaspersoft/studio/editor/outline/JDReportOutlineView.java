@@ -166,6 +166,19 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	protected ContextMenuProvider getMenuContentProvider() {
 		return new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
 	}
+	
+	/**
+	 * Check if the outline page was closed. When the outline page is closed 
+	 * the control inside the viewer is disposed and removed (so this method 
+	 * will always catch the getViewer().getControl() == null when the outline 
+	 * was closed).
+	 * 
+	 * @return true if the outline was closed and its control disposed. False otherwise
+	 */
+	public boolean isDisposed(){
+		return (getViewer() == null || getViewer().getControl() == null 
+					|| getViewer().getControl().isDisposed());
+	}
 
 	/**
 	 * Configure outline viewer.
@@ -463,8 +476,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 *          the new contents
 	 */
 	public void setContents(Object contents) {
-		if (getViewer().getEditPartFactory() != null)
+		if (getViewer().getEditPartFactory() != null){
 			getViewer().setContents(contents);
+		}
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
 			if (!tree.isDisposed() && tree.getItems() != null && tree.getItems().length > 0)
