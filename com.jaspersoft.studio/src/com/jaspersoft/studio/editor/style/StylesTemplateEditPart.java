@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.style;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -42,6 +45,14 @@ public class StylesTemplateEditPart extends FigureEditPart {
 		f.setLayoutManager(lm);
 		f.setBounds(new Rectangle(10, 10, 600, 600));
 		f.setBorder(null);
+		
+		//Event to refresh the editor when a styles is added or removed
+		getModel().getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {	
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				refresh();			
+			}
+		});
 		return f;
 	}
 

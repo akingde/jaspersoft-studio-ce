@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.style;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
@@ -47,7 +50,9 @@ public class StyleEditPart extends FigureEditPart {
 	private StaticTextFigure textF;
 	private ImageFigure imageF;
 	private JRDesignStaticText textE;
+	private MStaticText textModel;
 	private JRDesignImage imageE;
+	private MImage imageModel;
 	private GridData gd;
 
 	@Override
@@ -63,7 +68,7 @@ public class StyleEditPart extends FigureEditPart {
 		MStyle st = (MStyle) getModel();
 		JRStyle style = (JRStyle) st.getValue();
 		
-		MStaticText textModel = new MStaticText();
+		textModel = new MStaticText();
 		textE = new JRDesignStaticText();
 		textE.setX(20);
 		textE.setY(20);
@@ -73,7 +78,7 @@ public class StyleEditPart extends FigureEditPart {
 		textE.setStyle(style);
 		textModel.setValue(textE);
 
-		MImage imageModel = new MImage();
+		imageModel = new MImage();
 		imageE = new JRDesignImage(null);
 		imageE.setX(textE.getX() * 2 + textE.getWidth());
 		imageE.setY(textE.getY());
@@ -103,7 +108,17 @@ public class StyleEditPart extends FigureEditPart {
 		rf.add(textF);
 		rf.add(imageF);
 		setPrefsBorder(rf);
-
+		
+		//Event to refresh the figure when a style attributed is changed
+		st.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				imageModel.setChangedProperty(true);
+				textModel.setChangedProperty(true);
+				refresh();
+			}
+		});
+		
 		return rf;
 	}
 
