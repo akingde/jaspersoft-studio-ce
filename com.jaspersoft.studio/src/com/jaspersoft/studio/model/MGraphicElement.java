@@ -782,6 +782,20 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	public void setChangedProperty(boolean value){
 		synchronized (this) {
+			if (value){
+				ANode parent = getParent();
+				while(parent != null){
+					if (parent instanceof IGraphicalPropertiesHandler){
+						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler)parent;
+						handler.setChangedProperty(true);
+						//We can exit the cycle since the setChangedProperty on the parent will propagate the
+						//refresh on the upper levels
+						break;
+					} else {
+						parent = parent.getParent();
+					}
+				}
+			}
 			visualPropertyChanged = value;
 		}
 	}
