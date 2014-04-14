@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 
@@ -54,8 +55,8 @@ public class RefreshTemplateStyleExpression extends SelectionAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Reload Style");
-		setToolTipText("Evaluate the expression of a template style reload it");
+		setText(Messages.RefreshTemplateStyleExpression_title);
+		setToolTipText(Messages.RefreshTemplateStyleExpression_tooltip);
 		setId(RefreshTemplateStyleExpression.ID);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/refresh_style_action.png")); //$NON-NLS-1$
 		setEnabled(false);
