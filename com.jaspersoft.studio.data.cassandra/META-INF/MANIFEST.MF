@@ -13,7 +13,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
 Bundle-ClassPath: lib/js-cassandracql3-datasource-1.0.0-SNAPSHOT.jar,
- lib/cassandra-driver-core-1.0.4.jar,
+ lib/cassandra-driver-core-1.0.4-dse.jar,
  lib/cassandra-all-1.2.9.jar,
  lib/libthrift-0.7.0.jar,
  lib/snappy-java-1.0.5.jar,
