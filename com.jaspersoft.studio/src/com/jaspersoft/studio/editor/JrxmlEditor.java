@@ -208,7 +208,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		reportContainer.addPageChangedListener(new IPageChangedListener() {
 
 			public void pageChanged(PageChangedEvent event) {
-				updateContentOutline(PAGE_DESIGNER);
+				updateContentOutline(getActivePage());
 			}
 		});
 
