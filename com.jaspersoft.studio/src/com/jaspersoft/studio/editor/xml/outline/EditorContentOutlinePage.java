@@ -112,7 +112,6 @@ public class EditorContentOutlinePage extends ContentOutlinePage
 			{
 				control.setRedraw(false);
 				viewer.setInput(input);
-				viewer.expandAll();
 				control.setRedraw(true);
 			}
 		}

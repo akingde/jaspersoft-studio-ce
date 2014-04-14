@@ -39,6 +39,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.IMultiEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
+import com.jaspersoft.studio.editor.xml.outline.EditorContentOutlinePage;
 
 public class MultiOutlineView extends Page implements IContentOutlinePage, ISelectionProvider,
 		ISelectionChangedListener, IAdaptable {
@@ -172,10 +173,10 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 			currentPage.removeSelectionChangedListener(this);
 		if (getActionBars() != null && getActionBars().getToolBarManager() != null){
 			getActionBars().getToolBarManager().removeAll();
-			//when the action are cleared reload the ones for the current page
-			 if (page != null && page instanceof JDReportOutlineView) {
-					((JDReportOutlineView)page).registerToolbarAction(getActionBars().getToolBarManager());
-				}
+			// when the action are cleared reload the ones for the current page
+			if (page != null && page instanceof JDReportOutlineView) {
+				((JDReportOutlineView) page).registerToolbarAction(getActionBars().getToolBarManager());
+			}
 		}
 		if (getSite() != null && page instanceof JDReportOutlineView) {
 			JDReportOutlineView jdoutpage = (JDReportOutlineView) page;
@@ -200,15 +201,20 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 				page.setActionBars(getActionBars());
 			}
 			control = page.getControl();
-		} 
+		}
 		pagebook.showPage(control);
 		if (page instanceof JDReportOutlineView) {
 			JDReportOutlineView jdoutpage = (JDReportOutlineView) page;
 			jdoutpage.setTreeSelection(selection);
-		} else
+		} else if (page instanceof EditorContentOutlinePage) {
+			EditorContentOutlinePage jdoutpage = (EditorContentOutlinePage) page;
+			jdoutpage.update();
+		} else {
 			setSelection(page.getSelection());
-	if (getActionBars() != null && getActionBars().getToolBarManager() != null)
+		}
+		if (getActionBars() != null && getActionBars().getToolBarManager() != null){
 			getActionBars().getToolBarManager().update(true);
+		}
 		isRefresh = false;
 	}
 
