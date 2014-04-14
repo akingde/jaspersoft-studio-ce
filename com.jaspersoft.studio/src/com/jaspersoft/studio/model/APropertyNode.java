@@ -98,7 +98,10 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 			if (this.getValue() instanceof JRDesignElement) {
 				designEl = (JRDesignElement) this.getValue();
 			}
-			ExpressionContext elementExpressionContext = ModelUtils.getElementExpressionContext(designEl, this);
+			ExpressionContext elementExpressionContext = (ExpressionContext) this.getAdapter(ExpressionContext.class);
+			if(elementExpressionContext==null){
+				elementExpressionContext = ModelUtils.getElementExpressionContext(designEl, this);
+			}
 			for (IPropertyDescriptor desc : descriptors) {
 				if (desc instanceof IExpressionContextSetter) {
 					((IExpressionContextSetter) desc).setExpressionContext(elementExpressionContext);
