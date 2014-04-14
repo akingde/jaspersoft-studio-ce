@@ -637,9 +637,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
 			if (id.equals(JRDesignStyle.PROPERTY_NAME)){
 				jrstyle.setName((String) value);
-			} else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
-				jrstyle.setPattern((String) value);
-			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
+			} else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
 				// getJasperDesign().resetDefaultStyle();
 				JRDesignStyle style = (JRDesignStyle) getJasperDesign().getDefaultStyle();
 				if (style != null)
@@ -660,7 +658,9 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			}
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
-		if (id.equals(JRDesignStyle.PROPERTY_RADIUS))
+		if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+			jrstyle.setPattern((String) value);
+		else if (id.equals(JRDesignStyle.PROPERTY_RADIUS))
 			jrstyle.setRadius((Integer) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
 			jrstyle.setMarkup((String) value);
