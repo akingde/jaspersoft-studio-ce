@@ -33,6 +33,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
@@ -69,7 +70,7 @@ public class MFont extends APropertyNode {
 			return result;
 		JRFont element = (JRFont) getValue();
 		result.put(JRDesignStyle.PROPERTY_FONT_NAME, element.getOwnFontName());
-		result.put(JRDesignStyle.PROPERTY_FONT_SIZE, element.getOwnFontSize());
+		result.put(JRDesignStyle.PROPERTY_FONT_SIZE, element.getOwnFontsize());
 		result.put(JRDesignStyle.PROPERTY_PDF_ENCODING, element.getOwnPdfEncoding());
 		result.put(JRDesignStyle.PROPERTY_PDF_FONT_NAME, element.getOwnPdfFontName());
 		result.put(JRDesignStyle.PROPERTY_BOLD, element.isOwnBold());
@@ -87,7 +88,7 @@ public class MFont extends APropertyNode {
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
-		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE,
+		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE,
 				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
@@ -213,7 +214,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return Integer.toString(jrElement.getFontSize()); //$NON-NLS-1$
+			return Float.toString(jrElement.getFontsize()); //$NON-NLS-1$
 		return null;
 	}
 
@@ -241,7 +242,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getOwnPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return jrElement.getOwnFontSize() != null ? jrElement.getOwnFontSize().toString() : ""; //$NON-NLS-1$
+			return jrElement.getOwnFontsize()!= null ? jrElement.getOwnFontsize().toString() : ""; //$NON-NLS-1$
 		return null;
 	}
 
@@ -271,7 +272,7 @@ public class MFont extends APropertyNode {
 				jrElement.setFontName((String) value);
 		} else if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
 			try {
-				jrElement.setFontSize(value != null ? new Integer((String) value) : null);
+				jrElement.setFontSize(value != null ? new Float((String) value) : null);
 			} catch (NumberFormatException e) {
 			}
 		else if (id.equals(JRBaseFont.PROPERTY_PDF_FONT_NAME))

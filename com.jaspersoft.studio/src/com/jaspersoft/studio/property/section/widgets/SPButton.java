@@ -99,13 +99,13 @@ public class SPButton extends ASPropertyWidget {
 		Object fontSize = section.getElement().getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
 		if (fontSize.equals(""))
 			fontSize = fontValue.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-		Integer newValue = 2;
+		Float newValue = 2.0f;
 		if (fontSize != null && fontSize.toString().length()>0){
-			newValue = Integer.valueOf(fontSize.toString());
+			newValue = Float.valueOf(fontSize.toString());
 			Integer plus = null;
 			if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
 			else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
-			if ((newValue+plus)>99) newValue = 99;
+			if ((newValue+plus)>99) newValue = 99.0f;
 			else if ((newValue+plus)>0) newValue += plus;
 			section.changeProperty(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString());
 		}

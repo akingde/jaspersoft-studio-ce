@@ -61,6 +61,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
@@ -370,8 +371,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 
-		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
-				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED);
+		RWFloatComboBoxPropertyDescriptor fontSizeD = new RWFloatComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
+				Messages.common_font_size, ModelUtils.FONT_SIZES, NullEnum.INHERITED, false);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
