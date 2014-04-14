@@ -23,6 +23,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.MStylesTemplate;
 
 /*
  * The Class CreateStyleAction.
@@ -45,7 +46,7 @@ public class CreateStyleAction extends ACreateAndSelectAction {
 	
 	@Override
 	protected boolean calculateEnabled() {
-		if(!checkSingleSelectedObject(MStyles.class)){
+		if(!checkSingleSelectedObject(MStyles.class) && !checkSingleSelectedObject(MStylesTemplate.class)){
 			return false;
 		}
 		return super.calculateEnabled();

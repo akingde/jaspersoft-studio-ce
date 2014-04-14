@@ -20,7 +20,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplateReference;
+import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.MStylesTemplate;
 
 /*
  * The Class CreateStyleTemplateAction.
@@ -41,14 +44,22 @@ public class CreateStyleTemplateReferenceAction extends ACreateAndSelectAction {
 		setCreationFactory(new JDPaletteCreationFactory(MStyleTemplateReference.class));
 	}
 
+	@Override
+	protected boolean calculateEnabled() {
+		if(!checkSingleSelectedObject(MStyles.class) && !checkSingleSelectedObject(MStylesTemplate.class)){
+			return false;
+		}
+		return super.calculateEnabled();
+	}
+	
 	/**
 	 * Initializes this action's text and images.
 	 */
 	@Override
 	protected void init() {
 		super.init();
-		setText("Create Reference");
-		setToolTipText("Create style template reference.");
+		setText(Messages.CreateStyleTemplateAction_create_style_template);
+		setToolTipText(Messages.CreateStyleTemplateAction_create_style_template_tool_tip);
 		setId(CreateStyleTemplateReferenceAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

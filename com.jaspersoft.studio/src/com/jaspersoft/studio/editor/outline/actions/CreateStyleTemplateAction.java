@@ -79,7 +79,7 @@ public class CreateStyleTemplateAction extends ACreateAndSelectAction {
 			Object obj = ((StructuredSelection) s).getFirstElement();
 			if (obj instanceof EditPart) {
 				EditPart editPart = (EditPart) obj;
-				List children = editPart.getParent().getChildren();
+				List<?> children = editPart.getParent().getChildren();
 				if (children != null && !children.isEmpty()) {
 					int last = 0;
 					StructuredSelection newselection = new StructuredSelection(children.get(last));
