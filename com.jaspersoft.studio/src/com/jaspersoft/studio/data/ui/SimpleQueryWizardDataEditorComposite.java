@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -230,7 +231,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 						@Override
 						public void run() {
 
-							MessageBox dialog = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.OK
+							MessageBox dialog = new MessageBox(UIUtils.getShell(), SWT.ICON_QUESTION | SWT.OK
 									| SWT.CANCEL);
 							dialog.setText(Messages.SimpleQueryWizardDataEditorComposite_noQueryProvidedTitle);
 							dialog.setMessage(Messages.SimpleQueryWizardDataEditorComposite_noQueryProvidedText);
@@ -243,7 +244,9 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 						throw JSSWizardRunnablePage.USER_CANCEL_EXCEPTION;
 					}
 				}
-				fields = ((IFieldsProvider) getDataAdapterDescriptor()).getFields(das, jContext, dataset);
+				else {
+					fields = ((IFieldsProvider) getDataAdapterDescriptor()).getFields(das, jContext, dataset);
+				}
 			} catch (final JRException ex) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
@@ -257,7 +260,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 						}
 						page.setErrorMessage(errorMsg);
 						boolean answer = 
-								MessageDialog.openQuestion(getShell(), Messages.SimpleQueryWizardDataEditorComposite_QueryErrorTitle, NLS.bind(Messages.SimpleQueryWizardDataEditorComposite_QueryErrorMsg,errorMsg));
+								MessageDialog.openQuestion(UIUtils.getShell(), Messages.SimpleQueryWizardDataEditorComposite_QueryErrorTitle, NLS.bind(Messages.SimpleQueryWizardDataEditorComposite_QueryErrorMsg,errorMsg));
 						questionReturnCode = (answer) ? SWT.OK : SWT.CANCEL;
 					}
 				});
