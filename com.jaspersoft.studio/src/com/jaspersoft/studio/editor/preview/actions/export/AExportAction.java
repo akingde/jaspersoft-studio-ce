@@ -145,7 +145,13 @@ public abstract class AExportAction extends AReportViewerAction {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				doExport(file, jrPrint, monitor);
-				callback.completed(file);
+				UIUtils.getDisplay().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						callback.completed(file);
+					}
+				});
 				return Status.OK_STATUS;
 			}
 		};
