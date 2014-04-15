@@ -22,7 +22,6 @@ import net.sf.jasperreports.eclipse.classpath.ClassLoaderUtil;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.util.FileResolver;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -217,7 +216,7 @@ public class SelectionHelper {
 				FileResolver fileResolver = getFileResolver(file);
 
 				File fileToBeOpened = fileResolver.resolveFile(path);
-
+				
 				if (file != null && fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 					IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToBeOpened.toURI());
 
@@ -232,27 +231,25 @@ public class SelectionHelper {
 		}
 		return false;
 	}
-
+	
 	public static FileResolver getFileResolver() {
 		IEditorPart ep = getActiveJRXMLEditor();
 		if (ep != null && ep.getEditorInput() instanceof IFileEditorInput) {
 			IFileEditorInput fe = ((IFileEditorInput) ep.getEditorInput());
 			return getFileResolver(fe.getFile());
 		}
-		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(".") })); //$NON-NLS-1$
+		URLFileResolver fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File(".") })); //$NON-NLS-1$
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
 
 	public static FileResolver getFileResolver(IFile file) {
-		SimpleFileResolver fileResolver = null;
+		URLFileResolver fileResolver = null;
 		if (file == null)
-			fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
+			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
 			}));
 		else
-			fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
-					//					new File("."), //$NON-NLS-1$
-					new File(file.getProject().getLocationURI()) }));
+			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()), new File(file.getProject().getLocationURI()) }));
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
