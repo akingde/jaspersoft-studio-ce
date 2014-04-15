@@ -86,6 +86,11 @@ public class WSClientHelper {
 		if (cres) {
 			monitor.subTask("Connected");
 			msp.setWsClient(c);
+			monitor.subTask("Trying to read folder");
+			ResourceDescriptor rd = new ResourceDescriptor();
+			rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
+			rd.setUriString("/");
+			c.get(monitor, rd, null);
 		} else
 			monitor.subTask("Not Connected");
 		return cres;
