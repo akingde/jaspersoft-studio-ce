@@ -114,8 +114,11 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		}
 		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
 		Point location = f.getLocation();
-		Rectangle constraint = new Rectangle(location.x, location.y, -1, -1);
-		parent.setLayoutConstraint(this, f, constraint);
+		if (fromTable.getPropertyActualValue(MFromTable.PROP_X) != null)
+			location.x = (Integer) fromTable.getPropertyValue(MFromTable.PROP_X);
+		if (fromTable.getPropertyActualValue(MFromTable.PROP_Y) != null)
+			location.y = (Integer) fromTable.getPropertyValue(MFromTable.PROP_Y);
+		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
 
 		f.setToolTip(new Label(fromTable.getToolTip()));
 	}

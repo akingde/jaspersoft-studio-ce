@@ -22,9 +22,10 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.jaspersoft.studio.model.AMapElement;
 import com.jaspersoft.studio.model.ANode;
 
-public class MDBObjects extends ANode {
+public class MDBObjects extends AMapElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
 	private String image;

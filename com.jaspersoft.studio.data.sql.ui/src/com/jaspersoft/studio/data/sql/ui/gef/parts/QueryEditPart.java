@@ -47,7 +47,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<?> getModelChildren() {
 		MRoot root = (MRoot) getModel();
 		List<MFrom> list = new ArrayList<MFrom>();
 		for (INode n : root.getChildren()) {

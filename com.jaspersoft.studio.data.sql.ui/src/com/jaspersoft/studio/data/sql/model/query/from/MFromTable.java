@@ -83,4 +83,8 @@ public class MFromTable extends AMQueryAliased<MSqlTable> {
 	public List<TableJoin> getTableJoins() {
 		return tableJoins;
 	}
+
+	public static final String PROP_X = "x";
+	public static final String PROP_Y = "y";
+
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +40,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.w3c.tools.codec.Base64Encoder;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -45,6 +48,7 @@ import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
 import com.jaspersoft.studio.data.querydesigner.sql.SimpleSQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
 import com.jaspersoft.studio.data.sql.prefs.SQLEditorPreferencesPage;
 import com.jaspersoft.studio.data.sql.text2model.Text2Model;
@@ -53,6 +57,7 @@ import com.jaspersoft.studio.data.sql.ui.SQLQuerySource;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.metadata.DBMetadata;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -346,15 +351,47 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 	private Set<MSQLRoot> roots = new HashSet<MSQLRoot>();
 
 	public MSQLRoot createRoot(MSQLRoot oldRoot) {
-		if (oldRoot != null)
+		if (oldRoot != null) {
+			oldRoot.getPropertyChangeSupport().removePropertyChangeListener(tblListener);
 			roots.remove(oldRoot);
+		}
 		MSQLRoot rt = new MSQLRoot(null, getjDataset());
 		if (jConfig != null)
 			rt.setIdentifierQuote(jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, "")); //$NON-NLS-1$
 		roots.add(rt);
+		rt.getPropertyChangeSupport().addPropertyChangeListener(tblListener);
 		return rt;
 	}
 
+	private PropertyChangeListener tblListener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent arg0) {
+			if (getjDataset() == null)
+				return;
+			final Set<String> tables = new HashSet<String>();
+			new ModelVisitor<String>((INode) arg0.getSource()) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MFromTable) {
+						MFromTable ft = (MFromTable) n;
+						Object x = ((MFromTable) n).getPropertyActualValue(MFromTable.PROP_X);
+						Object y = ((MFromTable) n).getPropertyActualValue(MFromTable.PROP_Y);
+						if (x != null && y != null)
+							tables.add(ft.getValue().toSQLString() + ft.getAliasKeyString() + "," + x + "," + y + ";");
+					}
+					return true;
+				}
+			};
+			if (!tables.isEmpty()) {
+				String input = "";
+				for (String t : tables)
+					input += t;
+				getjDataset().setProperty(SQLQueryDiagram.SQL_EDITOR_TABLES, new Base64Encoder(input).processString());
+			}
+		}
+	};
 	private PreferenceListener preferenceListener = new PreferenceListener();
 
 	private final class PreferenceListener implements IPropertyChangeListener {

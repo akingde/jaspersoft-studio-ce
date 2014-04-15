@@ -16,10 +16,14 @@
 package com.jaspersoft.studio.data.sql.ui.gef;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -27,21 +31,28 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.w3c.tools.codec.Base64Decoder;
+import org.w3c.tools.codec.Base64FormatException;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.action.LayoutAction;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
@@ -56,6 +67,9 @@ import com.jaspersoft.studio.data.sql.ui.gef.parts.SQLDesignerEditPartFactory;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.DialogEnabledCommand;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class SQLQueryDiagram {
 	private SQLQueryDesigner designer;
@@ -99,6 +113,7 @@ public class SQLQueryDiagram {
 						selection = models.toArray();
 				}
 				designer.getOutline().getAfactory().fillMenu(selection, menu);
+				menu.add(new LayoutAction(designer));
 			}
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(viewer, NodeTransfer.getInstance()));
@@ -108,7 +123,52 @@ public class SQLQueryDiagram {
 		return viewer.getControl();
 	}
 
+	public ScrollingGraphicalViewer getViewer() {
+		return viewer;
+	}
+
+	public static final String SQL_EDITOR_TABLES = "com.jaspersoft.studio.data.sql.tables";
+
 	protected void refreshViewer() {
+		if (designer.getjDataset() != null) {
+			String tbls = designer.getjDataset().getPropertiesMap().getProperty(SQL_EDITOR_TABLES);
+			if (tbls != null) {
+				final Map<String, Point> map = new HashMap<String, Point>();
+				try {
+					StringTokenizer st = new StringTokenizer(new Base64Decoder(tbls).processString(), ";");
+					while (st.hasMoreTokens()) {
+						StringTokenizer tblSt = new StringTokenizer(st.nextToken(), ",");
+						String tbl = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
+						String xs = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
+						String ys = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
+
+						if (tbl != null && xs != null && ys != null)
+							map.put(tbl, new Point(Integer.parseInt(xs), Integer.parseInt(ys)));
+					}
+					new ModelVisitor<Object>(designer.getRoot()) {
+
+						@Override
+						public boolean visit(INode n) {
+							if (n instanceof MFromTable) {
+								MFromTable ft = (MFromTable) n;
+								String t = ft.getValue().toSQLString() + ft.getAliasKeyString();
+								Point p = map.get(t);
+								if (p != null) {
+									ft.setNoEvents(true);
+									ft.setPropertyValue(MFromTable.PROP_X, p.x);
+									ft.setPropertyValue(MFromTable.PROP_Y, p.y);
+									ft.setNoEvents(false);
+								}
+							}
+							return true;
+						}
+					};
+				} catch (Base64FormatException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		viewer.setContents(designer.getRoot());
 
 		TreeSelection s = (TreeSelection) designer.getOutline().getTreeViewer().getSelection();
@@ -168,7 +228,7 @@ public class SQLQueryDiagram {
 		}
 
 		private void doDrop(List<ANode> node) {
-			Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
+			final Set<MSqlTable> tablesset = new LinkedHashSet<MSqlTable>();
 			Set<MSQLColumn> colsset = new LinkedHashSet<MSQLColumn>();
 			Set<ANode> others = new LinkedHashSet<ANode>();
 			Util.filterTables(node, tablesset, colsset, others);
@@ -186,15 +246,46 @@ public class SQLQueryDiagram {
 				mfrom = Util.getKeyword(designer.getRoot(), MFrom.class);
 
 			if (!tablesset.isEmpty()) {
-				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD REVIEW
-				// Forcing the loading of the tables information so the user can use smoothly
+				// TODO for Slavic - Bugzilla #34318: TEMPORARY FIX THAT YOU SHOULD
+				// REVIEW
+				// Forcing the loading of the tables information so the user can use
+				// smoothly
 				// the graphical editor (Diagram Tab) without NPE.
-				for(MSqlTable t : tablesset) {
+				for (MSqlTable t : tablesset) {
 					designer.getDbMetadata().loadTable(t);
 				}
 				CreateTable ct = designer.getOutline().getAfactory().getAction(CreateTable.class);
 				if (ct.calculateEnabled(new Object[] { mfrom })) {
-					ct.run(tablesset);
+					// ct.run(tablesset);
+					CreateRequest tgReq = (CreateRequest) getTargetRequest();
+					tgReq.setFactory(new CreationFactory() {
+
+						@Override
+						public Object getObjectType() {
+							return MSqlTable.class;
+						}
+
+						@Override
+						public Object getNewObject() {
+							return tablesset;
+						}
+					});
+					Command command = getTargetEditPart().getCommand(tgReq);
+
+					if (command instanceof DialogEnabledCommand && command.canExecute()) {
+						// If we have a special command that supports dialog (i.e: image
+						// creation)
+						// we'll show the popup dialog and continue with creation only if
+						// the user has confirmed.
+						if (((DialogEnabledCommand) command).openDialog() == Dialog.CANCEL) {
+							getCurrentEvent().detail = DND.DROP_NONE;
+							return;
+						}
+					}
+					if (command != null && command.canExecute())
+						getViewer().getEditDomain().getCommandStack().execute(command);
+					else
+						getCurrentEvent().detail = DND.DROP_NONE;
 					refreshViewer();
 				}
 			}
@@ -212,5 +303,6 @@ public class SQLQueryDiagram {
 			CreateRequest request = new CreateRequest();
 			return request;
 		}
+
 	}
 }

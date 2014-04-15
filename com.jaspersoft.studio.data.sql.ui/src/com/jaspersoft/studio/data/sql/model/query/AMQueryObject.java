@@ -24,10 +24,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
+import com.jaspersoft.studio.model.AMapElement;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
-public abstract class AMQueryObject<T> extends ANode implements IQueryString {
+public abstract class AMQueryObject<T> extends AMapElement implements IQueryString {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	transient private ImageDescriptor icon;
 	private String image;
