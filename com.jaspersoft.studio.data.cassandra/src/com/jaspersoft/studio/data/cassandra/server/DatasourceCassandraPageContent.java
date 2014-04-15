@@ -72,9 +72,12 @@ public class DatasourceCassandraPageContent extends APageContent {
 	protected void rebind() {
 		ResourceProperty resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCustom.PROP_DATASOURCE_CUSTOM_PROPERTY_MAP, res.getValue().getProperties());
 
-		resprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandra.JDBC_URL, resprop.getProperties());
-
-		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(resprop, "value")); //$NON-NLS-1$
+		ResourceProperty rsprop = ResourceDescriptorUtil.getProperty(MRDatasourceCassandra.JDBC_URL, resprop.getProperties());
+		if (rsprop == null) {
+			rsprop = new ResourceProperty(MRDatasourceCassandra.JDBC_URL, "");
+			resprop.getProperties().add(rsprop);
+		}
+		bindingContext.bindValue(SWTObservables.observeText(tname, SWT.Modify), PojoObservables.observeValue(rsprop, "value")); //$NON-NLS-1$
 	}
 
 	@Override
