@@ -33,11 +33,11 @@ public class CurrencyPattern extends NumericPattern {
 	protected java.util.List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("Â¤#,##0.###;Â¤-##0.###"); //$NON-NLS-1$
-			dList.add("#,##0.##Â¤;#,##0.###- Â¤"); //$NON-NLS-1$
-			dList.add("#,##0.##Â¤;(#,##0.###) Â¤"); //$NON-NLS-1$
-			dList.add("Â¤#,##0.###;Â¤(-#,##0.###)"); //$NON-NLS-1$
-			dList.add("Â¤#,##0.###;Â¤(#,##0.###-)"); //$NON-NLS-1$
+			dList.add("¤#,##0.##;¤-##0.##"); //$NON-NLS-1$
+			dList.add("#,##0.##¤;#,##0.##- ¤"); //$NON-NLS-1$
+			dList.add("#,##0.##¤;(#,##0.##) ¤"); //$NON-NLS-1$
+			dList.add("¤#,##0.###;¤(-#,##0.###)"); //$NON-NLS-1$
+			dList.add("¤#,##0.###;¤(#,##0.###-)"); //$NON-NLS-1$
 			setPattern(dList.get(0));
 		}
 		return dList;
