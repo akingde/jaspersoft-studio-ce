@@ -153,8 +153,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			for (Object item : selected) {
 				if (item instanceof EditPart) {
 					APropertyNode model = getModelFromEditPart(item);
-					jasperReportsContext = model.getJasperConfiguration();
 					if (model != null) {
+						jasperReportsContext = model.getJasperConfiguration();
 						if (element == null) {
 							EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 							if (provider != null)
