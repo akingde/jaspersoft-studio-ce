@@ -727,6 +727,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void pageChange(final int newPageIndex) {
+		//Set the visibility flag of the previeweditor
+		if (previewEditor != null){
+			previewEditor.setVisible(newPageIndex == PAGE_PREVIEW);
+		}
+		
+		
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
 			if (activePage == PAGE_DESIGNER) {
 				if (outlinePage != null)

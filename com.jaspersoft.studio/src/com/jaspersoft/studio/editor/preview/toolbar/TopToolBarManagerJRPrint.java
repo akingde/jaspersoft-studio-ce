@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.toolbar;
 
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
@@ -26,10 +27,16 @@ public class TopToolBarManagerJRPrint extends ATopToolBarManager {
 
 	public TopToolBarManagerJRPrint(PreviewJRPrint container, Composite parent) {
 		super(container, parent);
+
 	}
 
 	protected SwitchViewsAction pvModeAction;
 
+	public IContributionItem[] getContributions(){
+		if (tbManager == null) return new IContributionItem[0];
+		return tbManager.getItems();
+	}
+	
 	protected void fillToolbar(IToolBarManager tbManager) {
 		if (pvModeAction == null)
 			pvModeAction = new SwitchViewsAction(container.getRightContainer(), "Java", true);
