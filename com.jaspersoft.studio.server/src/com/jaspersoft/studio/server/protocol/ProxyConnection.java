@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -87,6 +88,12 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public ServerInfo getServerInfo() {
+		if (serverInfo == null)
+			try {
+				serverInfo = getServerInfo(new NullProgressMonitor());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		return serverInfo;
 	}
 

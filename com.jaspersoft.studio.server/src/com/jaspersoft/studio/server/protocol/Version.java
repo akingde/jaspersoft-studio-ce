@@ -26,8 +26,10 @@ public class Version {
 	}
 
 	public static boolean isDateRangeSupported(ServerInfo si) {
-		if (si.getVersion().startsWith("5."))
-			return true;
-		return false;
+		return si.getVersion().startsWith("5.");
+	}
+
+	public static boolean isGreaterThan(ServerInfo si, String version) {
+		return si.getVersion().compareTo(version) >= 0;
 	}
 }
