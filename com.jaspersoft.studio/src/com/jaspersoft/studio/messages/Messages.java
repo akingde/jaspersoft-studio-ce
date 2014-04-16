@@ -311,6 +311,7 @@ public class Messages extends NLS {
 	public static String ConvertStaticIntoText_actionTooltip;
 	public static String ConvertTextIntoStatic_actionName;
 	public static String ConvertTextIntoStatic_actionToolTip;
+	public static String CopyFormatAction_title;
 	public static String CreateBandAction_create_band;
 	public static String CreateBandAction_create_band_tool_tip;
 	public static String CreateConditionalStyleAction_create_conditional_style;
@@ -1333,6 +1334,7 @@ public class Messages extends NLS {
 	public static String ParametersTable_description;
 	public static String ParametersTable_isForPrompt;
 	public static String ParametersTable_name;
+	public static String PasteFormatAction_title;
 	public static String PatternPage_currency;
 	public static String PatternPage_date;
 	public static String PatternPage_description;

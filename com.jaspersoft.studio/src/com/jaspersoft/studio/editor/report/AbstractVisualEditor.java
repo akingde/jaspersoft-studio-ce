@@ -77,8 +77,10 @@ import com.jaspersoft.studio.editor.action.align.Align2Element;
 import com.jaspersoft.studio.editor.action.band.MaximizeContainerAction;
 import com.jaspersoft.studio.editor.action.band.StretchToContentAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
+import com.jaspersoft.studio.editor.action.copy.CopyFormatAction;
 import com.jaspersoft.studio.editor.action.copy.CutAction;
 import com.jaspersoft.studio.editor.action.copy.PasteAction;
+import com.jaspersoft.studio.editor.action.copy.PasteFormatAction;
 import com.jaspersoft.studio.editor.action.exporter.AddExporterPropertyAction;
 import com.jaspersoft.studio.editor.action.image.ChangeImageExpression;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
@@ -652,6 +654,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		selectionActions.add(action.getId());
 
 		action = new PasteAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new CopyFormatAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+
+		action = new PasteFormatAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
