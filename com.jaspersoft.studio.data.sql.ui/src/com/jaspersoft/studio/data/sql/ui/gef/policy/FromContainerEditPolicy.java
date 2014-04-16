@@ -22,7 +22,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.AbstractEditPolicy;
 import org.eclipse.gef.editpolicies.ContainerEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -49,30 +48,18 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 	protected Command getCreateCommand(CreateRequest request) {
 		Object newObject = request.getNewObject();
 		if (getHost().getModel() instanceof MFrom) {
+			MFrom parent = (MFrom) getHost().getModel();
 			if (newObject instanceof Collection<?>) {
-				Collection<MSqlTable> col = (Collection<MSqlTable>) newObject;
-				CompoundCommand cc = new CompoundCommand();
-				boolean first = false;
-				for (MSqlTable mtbl : col) {
-					if (!first) {
-						int x = 10;
-						int y = 10;
-						int w = 100;
-						int h = 100;
-						if (request.getLocation() != null) {
-							x = request.getLocation().x;
-							y = request.getLocation().y;
-						}
-						if (request.getSize() != null) {
-							w = request.getSize().width;
-							h = request.getSize().height;
-						}
-						cc.add(new AddTableCommand((MFrom) getHost().getModel(), mtbl, new Rectangle(x, y, w, h)));
-						first = true;
-					} else
-						cc.add(new AddTableCommand((MFrom) getHost().getModel(), mtbl, null));
+				Rectangle r = new Rectangle(10, 10, 100, 100);
+				if (request.getLocation() != null) {
+					r.x = request.getLocation().x;
+					r.y = request.getLocation().y;
 				}
-				return cc;
+				if (request.getSize() != null) {
+					r.width = request.getSize().width;
+					r.height = request.getSize().height;
+				}
+				return new AddTableCommand(parent, (Collection<MSqlTable>) newObject, r);
 			}
 		}
 		return null;
