@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -29,7 +30,6 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetNewPage;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 
 /**
@@ -93,6 +93,11 @@ public class WizardUtils {
 					query.setText((String)settings.get(WizardDataSourcePage.DATASET_QUERY_TEXT) );
 				}
 				
+			if (settings.containsKey(WizardDataSourcePage.DATASET_PROPERTIES)) {
+				JRPropertiesMap map = (JRPropertiesMap) settings.get(WizardDataSourcePage.DATASET_PROPERTIES);
+				for (String prop : map.getPropertyNames())
+					dataset.setProperty(prop, map.getProperty(prop));
+			}
 				
 			  // Check for fields...
 				if (settings.containsKey( WizardDataSourcePage.DATASET_FIELDS))
