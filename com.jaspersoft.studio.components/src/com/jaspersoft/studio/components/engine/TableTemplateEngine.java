@@ -519,6 +519,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			if (key.contains("ireport")) tableDataset.setProperty(key, properties.getProperty(key));
 		}
 		tableDataset.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
+		jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
+
 		//Remove the main dataset query
 		((JRDesignQuery)jd.getMainDataset().getQuery()).setText("");
 		JRDesignDataset mainDataset = (JRDesignDataset)jd.getMainDataset();
