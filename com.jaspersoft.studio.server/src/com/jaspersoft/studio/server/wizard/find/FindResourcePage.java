@@ -51,6 +51,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.utils.Misc;
@@ -76,9 +77,9 @@ public class FindResourcePage extends WizardPage {
 	}
 
 	protected FindResourcePage(MServerProfile sp) {
-		super("findresource");
-		setTitle("Find Resource");
-		setDescription("Search for occurrence in label or description of resource.");
+		super("findresource"); //$NON-NLS-1$
+		setTitle(Messages.FindResourcePage_1);
+		setDescription(Messages.FindResourcePage_2);
 		finderUI = new FinderUI(sp);
 	}
 
@@ -88,7 +89,7 @@ public class FindResourcePage extends WizardPage {
 		cmp.setLayout(new GridLayout(3, false));
 		setControl(cmp);
 
-		new Label(cmp, SWT.NONE).setText("Search:");
+		new Label(cmp, SWT.NONE).setText(Messages.FindResourcePage_3);
 
 		txt = new Text(cmp, SWT.BORDER);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -101,7 +102,7 @@ public class FindResourcePage extends WizardPage {
 		});
 
 		Button b = new Button(cmp, SWT.PUSH);
-		b.setText("Search");
+		b.setText(Messages.FindResourcePage_4);
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -110,7 +111,7 @@ public class FindResourcePage extends WizardPage {
 		});
 		if (itypes == null && etypes == null) {
 			Section expcmp = new Section(cmp, ExpandableComposite.TREE_NODE);
-			expcmp.setText("Resource Types");
+			expcmp.setText(Messages.FindResourcePage_5);
 			GridData gd = new GridData(GridData.FILL_BOTH);
 			gd.horizontalSpan = 3;
 			gd.verticalIndent = 3;
@@ -125,7 +126,7 @@ public class FindResourcePage extends WizardPage {
 			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 			ball = new Button(dsCmp, SWT.CHECK);
-			ball.setText("Select All");
+			ball.setText(Messages.FindResourcePage_6);
 			ball.setSelection(true);
 			ball.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -159,7 +160,7 @@ public class FindResourcePage extends WizardPage {
 			dsCmp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 			bds = new Button(dsCmp, SWT.CHECK);
-			bds.setText("Select Datasources");
+			bds.setText(Messages.FindResourcePage_7);
 			bds.setSelection(true);
 			gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 			gd.horizontalSpan = 2;
@@ -221,7 +222,7 @@ public class FindResourcePage extends WizardPage {
 			public void update(ViewerCell cell) {
 				ClientResourceLookup p = (ClientResourceLookup) cell.getElement();
 
-				cell.setText(p.getLabel() + " : " + p.getUri());
+				cell.setText(p.getLabel() + " : " + p.getUri()); //$NON-NLS-1$
 				StyleRange myStyledRange = new StyleRange(p.getLabel().length() + 3, cell.getText().length(), Display.getCurrent().getSystemColor(SWT.COLOR_GRAY), null);
 				StyleRange[] range = { myStyledRange };
 				cell.setStyleRanges(range);
@@ -234,11 +235,11 @@ public class FindResourcePage extends WizardPage {
 			public String getToolTipText(Object element) {
 				ClientResourceLookup p = (ClientResourceLookup) element;
 				String tt = p.getLabel();
-				tt += "\n" + "Description: " + p.getDescription();
-				tt += "\n" + "URI: " + p.getUri();
-				tt += "\n" + "Type: " + p.getResourceType();
-				tt += "\n" + "Creation Date: " + p.getCreationDate();
-				tt += "\n" + "Update Date: " + p.getUpdateDate();
+				tt += "\n" + Messages.FindResourcePage_10 + p.getDescription(); //$NON-NLS-1$
+				tt += "\n" + Messages.FindResourcePage_uri + p.getUri(); //$NON-NLS-1$
+				tt += "\n" + Messages.FindResourcePage_14 + p.getResourceType(); //$NON-NLS-1$
+				tt += "\n" + Messages.FindResourcePage_16 + p.getCreationDate(); //$NON-NLS-1$
+				tt += "\n" + Messages.FindResourcePage_18 + p.getUpdateDate(); //$NON-NLS-1$
 				return tt;
 			}
 		});
@@ -373,7 +374,7 @@ public class FindResourcePage extends WizardPage {
 
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Searching", IProgressMonitor.UNKNOWN);
+						monitor.beginTask(Messages.FindResourcePage_19, IProgressMonitor.UNKNOWN);
 						try {
 							WSClientHelper.findResources(monitor, finderUI);
 						} catch (Exception e) {

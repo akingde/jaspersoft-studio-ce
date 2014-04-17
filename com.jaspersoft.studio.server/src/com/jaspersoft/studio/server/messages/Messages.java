@@ -19,6 +19,10 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.server.messages.messages"; //$NON-NLS-1$
+	public static String AddResourcePage_0;
+	public static String AddResourcePage_1;
+	public static String AddResourcePage_2;
+	public static String AddResourcePage_3;
 	public static String AddResourcePage_Description;
 	public static String AddResourcePage_Title;
 	public static String AddResourceWizard_windowtitle;
@@ -49,12 +53,28 @@ public class Messages extends NLS {
 	public static String DeleteServerAction_desc;
 	public static String DuplicateServerAction_desc;
 	public static String DuplicateServerAction_title;
+	public static String EditResourcePage_1;
+	public static String EditResourcePage_2;
 	public static String EditServerAction_desc;
 	public static String EditServerAction_jobname;
 	public static String EditServerAction_taskname;
 	public static String EditServerAction_title;
 	public static String FindReportUnit_jobname;
+	public static String FindResourcePage_1;
+	public static String FindResourcePage_10;
+	public static String FindResourcePage_14;
+	public static String FindResourcePage_16;
+	public static String FindResourcePage_18;
+	public static String FindResourcePage_19;
+	public static String FindResourcePage_2;
+	public static String FindResourcePage_3;
+	public static String FindResourcePage_4;
+	public static String FindResourcePage_5;
+	public static String FindResourcePage_6;
+	public static String FindResourcePage_7;
+	public static String FindResourcePage_uri;
 	public static String FindResources_jobname;
+	public static String FindResourceWizard_0;
 	public static String ImportDataSourceInfoFromDA_DialogTitle;
 	public static String ImportDataSourceInfoFromDA_InfoLabel;
 	public static String ImportDataSourceInJSSAction_ActionText;
@@ -85,6 +105,8 @@ public class Messages extends NLS {
 	public static String OpenInEditorAction_title;
 	public static String Publish2ServerWizard_MonitorName;
 	public static String Publish2ServerWizard_Title;
+	public static String QueryVisibleColumnsTable_0;
+	public static String QueryVisibleColumnsTable_1;
 	public static String RDDataAdapterPage_Description;
 	public static String RDDataAdapterPage_Title;
 	public static String RDDatasourceBeanPage_BeanMethod;
@@ -279,6 +301,9 @@ public class Messages extends NLS {
 	public static String RDXmlFile_desc;
 	public static String RDXmlFile_id;
 	public static String RDXmlFile_title;
+	public static String RunReportUnitAction_1;
+	public static String RunReportUnitAction_2;
+	public static String RunReportUnitAction_3;
 	public static String WSClient_errorWithMessage;
 	public static String WSClient_errorWithoutMessage;
 	static {

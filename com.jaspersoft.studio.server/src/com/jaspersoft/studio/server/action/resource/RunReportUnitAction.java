@@ -26,20 +26,21 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.editor.ReportUnitEditor;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class RunReportUnitAction extends Action {
-	private static final String ID = "RUNREPORTUNIT";
+	private static final String ID = "RUNREPORTUNIT"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 
 	public RunReportUnitAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Run Report Unit");
-		setDescription("Run Report Unit");
-		setToolTipText("Run the report unit");
+		setText(Messages.RunReportUnitAction_1);
+		setDescription(Messages.RunReportUnitAction_2);
+		setToolTipText(Messages.RunReportUnitAction_3);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;

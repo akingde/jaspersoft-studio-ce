@@ -3,6 +3,7 @@ package com.jaspersoft.studio.server.wizard.find;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class FindResourceWizard extends Wizard {
@@ -11,7 +12,7 @@ public class FindResourceWizard extends Wizard {
 
 	public FindResourceWizard(MServerProfile sp) {
 		super();
-		setWindowTitle("Find resource from " + sp.getDisplayText());
+		setWindowTitle(Messages.FindResourceWizard_0 + sp.getDisplayText());
 		setNeedsProgressMonitor(true);
 		this.sp = sp;
 	}

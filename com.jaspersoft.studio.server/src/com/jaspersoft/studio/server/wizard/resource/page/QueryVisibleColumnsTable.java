@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
 import com.jaspersoft.studio.swt.events.ChangeEvent;
@@ -86,7 +87,7 @@ public class QueryVisibleColumnsTable {
 		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				return "<new field>";
+				return Messages.QueryVisibleColumnsTable_0;
 			}
 
 		});
@@ -132,7 +133,7 @@ public class QueryVisibleColumnsTable {
 
 		TableColumn[] column = new TableColumn[1];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Visible Query Columns");
+		column[0].setText(Messages.QueryVisibleColumnsTable_1);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();

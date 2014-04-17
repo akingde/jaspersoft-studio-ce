@@ -199,12 +199,12 @@ public class AddResourcePage extends WizardPage {
 
 					@Override
 					public String getDisplayText() {
-						return "OLAP";
+						return Messages.AddResourcePage_0;
 					}
 
 					@Override
 					public String getToolTip() {
-						return "OLAP Resources";
+						return Messages.AddResourcePage_1;
 					}
 
 					@Override
@@ -312,12 +312,12 @@ public class AddResourcePage extends WizardPage {
 
 			@Override
 			public String getDisplayText() {
-				return "Data Sources";
+				return Messages.AddResourcePage_2;
 			}
 
 			@Override
 			public String getToolTip() {
-				return "Data Sources Resources";
+				return Messages.AddResourcePage_3;
 			}
 
 			@Override

@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.wizards.AWizardPage;
 
 public class EditResourcePage extends AWizardPage {
@@ -37,10 +38,10 @@ public class EditResourcePage extends AWizardPage {
 	private List<String> helpContexts;
 
 	public EditResourcePage(APageContent... rcontent) {
-		super("editresourcepage");
+		super("editresourcepage"); //$NON-NLS-1$
 		this.rcontent = rcontent;
-		setTitle("Edit Resource");
-		setDescription("Change Jaspersoft Server Resource");
+		setTitle(Messages.EditResourcePage_1);
+		setDescription(Messages.EditResourcePage_2);
 		for (APageContent p : rcontent)
 			p.setPage(this);
 	}
