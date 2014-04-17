@@ -96,8 +96,8 @@ public class JRSEditorContributor implements IEditorContributor {
 		if (prop == null)
 			return;
 
-		boolean run = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS, false);
-		boolean allways = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS_SILENT, false);
+		boolean run = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS, true);
+		boolean allways = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS_SILENT, true);
 		if (allways) {
 			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);

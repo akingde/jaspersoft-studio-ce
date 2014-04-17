@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -55,6 +56,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.server.ResourceFactory;
@@ -192,8 +194,14 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 					if (mres instanceof MReportUnit || (mres.isSupported(Feature.INPUTCONTROLS_ORDERING) && (mres instanceof IInputControlsContainer))) {
 						if (mres.getChildren() != null && mres.getChildren().size() > 0) {
 							List<INode> children = new ArrayList<INode>();
+							if (mres.getChildren().get(0) instanceof MDummy)
+								try {
+									WSClientHelper.refreshContainer(mres, new NullProgressMonitor());
+								} catch (Exception e) {
+									UIUtils.showError(e);
+								}
 							for (INode n : mres.getChildren())
-								if (!SelectorDatasource.isDatasource(((MResource) n).getValue()))
+								if (n instanceof MResource && !SelectorDatasource.isDatasource(((MResource) n).getValue()))
 									children.add(n);
 							return children.toArray();
 						}
