@@ -74,14 +74,14 @@ public class BeanMappingTool implements IMappingTool {
 	private static String getClassName(Class<?> propertyType){
 		if (primitiveTypeMap == null){
 			primitiveTypeMap = new HashMap<String, String>();
-			primitiveTypeMap.put("byte", "java.lang.Byte");
-			primitiveTypeMap.put("short", "java.lang.Short");
-			primitiveTypeMap.put("int", "java.lang.Integer");
-			primitiveTypeMap.put("long", "java.lang.Long");
-			primitiveTypeMap.put("float", "java.lang.Float");
-			primitiveTypeMap.put("double", "java.lang.Double");
-			primitiveTypeMap.put("char", "java.lang.Character");
-			primitiveTypeMap.put("boolean", "java.lang.Boolean");
+			primitiveTypeMap.put("byte", "java.lang.Byte"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("short", "java.lang.Short"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("int", "java.lang.Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("long", "java.lang.Long"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("float", "java.lang.Float"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("double", "java.lang.Double"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("char", "java.lang.Character"); //$NON-NLS-1$ //$NON-NLS-2$
+			primitiveTypeMap.put("boolean", "java.lang.Boolean"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		String className = propertyType.getCanonicalName();
 		if (primitiveTypeMap.containsKey(className)) className = primitiveTypeMap.get(className);
@@ -95,7 +95,7 @@ public class BeanMappingTool implements IMappingTool {
 		Label label = new Label(control, SWT.NONE);
 		label.setText(Messages.BeanMappingTool_labeltitle);
 
-		final ClassType classType = new ClassType(control, "");
+		final ClassType classType = new ClassType(control, ""); //$NON-NLS-1$
 		classType.addListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -170,7 +170,7 @@ public class BeanMappingTool implements IMappingTool {
 		});
 		
 		Button clearBtn = new Button(bottomToolbar, SWT.PUSH);
-		clearBtn.setText("Clear fields list");
+		clearBtn.setText(Messages.BeanMappingTool_17);
 		clearBtn.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,false));
 		clearBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
