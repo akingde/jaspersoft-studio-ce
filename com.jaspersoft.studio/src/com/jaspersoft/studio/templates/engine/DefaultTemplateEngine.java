@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -39,7 +40,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -540,6 +543,14 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		}
 		
 		return errorsList;
+	}
+
+	@Override
+	public void setReportDataAdapter(ReportBundle bundle, DataAdapterDescriptor dataadapter, JRPropertiesMap properties) {
+		JasperDesign jd = bundle.getJasperDesign();
+		for (String key : properties.getPropertyNames())
+			jd.setProperty(key, properties.getProperty(key));
+		jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
 	}
 
 }

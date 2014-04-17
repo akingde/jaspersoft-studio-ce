@@ -61,7 +61,6 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
@@ -255,14 +254,13 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 			// Save the data adapter used...
 			if (step2.getDataAdapter() != null) {
-				JasperDesign jd = reportBundle.getJasperDesign();
 				Object props = getSettings().get(WizardDataSourcePage.DATASET_PROPERTIES);
+				JRPropertiesMap pmap = new JRPropertiesMap();
 				if (props != null && props instanceof JRPropertiesMap) {
-					JRPropertiesMap pmap = (JRPropertiesMap) props;
-					for (String key : pmap.getPropertyNames())
-						jd.setProperty(key, pmap.getProperty(key));
+					pmap = (JRPropertiesMap) props;
 				}
-				jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
+				templateEngine.setReportDataAdapter(reportBundle, step2.getDataAdapter(), pmap);
+
 			}
 
 			// Store the report bundle on file system

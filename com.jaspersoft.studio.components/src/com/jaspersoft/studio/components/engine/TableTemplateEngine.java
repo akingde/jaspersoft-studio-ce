@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -63,10 +64,12 @@ import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle.BorderStyleEnum;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableSections;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableWizardLayoutPage;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.AlfaRGB;
@@ -507,6 +510,23 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	}
 	
 
+	@Override
+	public void setReportDataAdapter(ReportBundle bundle, DataAdapterDescriptor dataadapter, JRPropertiesMap properties) {
+		JRDesignDataset tableDataset = (JRDesignDataset)bundle.getJasperDesign().getDatasetMap().get("tableDataset");
+		JasperDesign jd = bundle.getJasperDesign();
+		for (String key : properties.getPropertyNames()){
+			jd.setProperty(key, properties.getProperty(key));
+			if (key.contains("ireport")) tableDataset.setProperty(key, properties.getProperty(key));
+		}
+		tableDataset.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
+		//Remove the main dataset query
+		((JRDesignQuery)jd.getMainDataset().getQuery()).setText("");
+		JRDesignDataset mainDataset = (JRDesignDataset)jd.getMainDataset();
+		for(JRField field : mainDataset.getFields()){
+			mainDataset.removeField(field);
+		}
+	}
+
 	
 
 	/**
@@ -599,9 +619,6 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		table.setX(tableX);
 		table.setY(tableY);
 		summaryBand.addElement(table);
-		
-		//Remove the main dataset query
-		((JRDesignQuery)jd.getMainDataset().getQuery()).setText("");
 		
 		return reportBundle;
 	}
