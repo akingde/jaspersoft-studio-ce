@@ -17,7 +17,10 @@ package com.jaspersoft.templates;
 
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JasperReportsContext;
+
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 /**
  * A TemplateEngine produces a ReportBundle starting from a TemplateBundle and a set of user settings provided
@@ -40,5 +43,7 @@ public interface TemplateEngine {
 	 */
 	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings,
 			JasperReportsContext jContext) throws TemplateEngineException;
+	
+	public void setReportDataAdapter(ReportBundle bundle, DataAdapterDescriptor dataadapter, JRPropertiesMap properties);
 	
 }
