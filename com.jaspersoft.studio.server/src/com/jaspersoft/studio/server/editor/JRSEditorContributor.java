@@ -18,6 +18,7 @@ package com.jaspersoft.studio.server.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -39,6 +40,7 @@ import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
 import com.jaspersoft.studio.utils.AContributorAction;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -95,16 +97,21 @@ public class JRSEditorContributor implements IEditorContributor {
 		String prop = getServerURL(jd, (IFile) jrConfig.getValue(FileUtils.KEY_FILE));
 		if (prop == null)
 			return;
+		MScopedPreferenceStore pStore = (MScopedPreferenceStore) jConfig.getPrefStore();
+		pStore.setWithDefault(false);
+		String sRun = Misc.nullIfEmpty(pStore.getString(KEY_PUBLISH2JSS));
+		String sAllways = Misc.nullIfEmpty(pStore.getString(KEY_PUBLISH2JSS_SILENT));
+		pStore.setWithDefault(true);
 
-		boolean run = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS, true);
-		boolean allways = jConfig.getPropertyBoolean(KEY_PUBLISH2JSS_SILENT, true);
+		boolean run = sRun != null ? Boolean.parseBoolean(sRun) : false;
+		boolean allways = sAllways != null ? Boolean.parseBoolean(sAllways) : true;
 		if (allways) {
 			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);
-			jConfig.getPrefStore().setValue(KEY_PUBLISH2JSS_SILENT, !dialog.getAllways());
+			pStore.setValue(KEY_PUBLISH2JSS_SILENT, Boolean.toString(!dialog.getAllways()));
 		}
 
-		jConfig.getPrefStore().setValue(KEY_PUBLISH2JSS, run);
+		pStore.setValue(KEY_PUBLISH2JSS, Boolean.toString(run));
 
 		// jConfig.put(KEY_PUBLISH2JSS, run);
 		// jConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
