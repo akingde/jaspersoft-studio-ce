@@ -12,6 +12,7 @@ import com.jaspersoft.hadoop.hbase.adapter.HBaseThriftDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+import com.jaspersoft.studio.data.hbase.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -35,12 +36,12 @@ public class HBaseThriftDataAdapterFactory implements DataAdapterFactory {
 
 	@Override
 	public String getLabel() {
-		return "HBase Thrift Connection";
+		return Messages.HBaseThriftDataAdapterFactory_0;
 	}
 
 	@Override
 	public String getDescription() {
-		return "HBase Thrift Connection";
+		return Messages.HBaseThriftDataAdapterFactory_1;
 	}
 
 	@Override

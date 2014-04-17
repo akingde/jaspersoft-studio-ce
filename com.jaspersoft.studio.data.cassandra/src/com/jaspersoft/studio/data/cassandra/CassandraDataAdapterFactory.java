@@ -45,6 +45,7 @@ import com.jaspersoft.connectors.cassandra.adapter.CassandraDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+import com.jaspersoft.studio.data.cassandra.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -82,7 +83,7 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
-		return "Cassandra Connection";
+		return Messages.CassandraDataAdapterFactory_0;
 	}
 
 	/*
@@ -91,7 +92,7 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use CQL queries to get data from Cassandra";
+		return Messages.CassandraDataAdapterFactory_1;
 	}
 
 	/*
@@ -101,7 +102,7 @@ public class CassandraDataAdapterFactory implements DataAdapterFactory {
 	 */
 	public Image getIcon(int size) {
 		if (size == 16) {
-			return Activator.getDefault().getImage("icons/cassandra.png");
+			return Activator.getDefault().getImage("icons/cassandra.png"); //$NON-NLS-1$
 		}
 		return null;
 	}

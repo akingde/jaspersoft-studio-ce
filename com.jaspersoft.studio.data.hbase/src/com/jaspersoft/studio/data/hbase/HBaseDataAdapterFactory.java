@@ -11,6 +11,7 @@ import com.jaspersoft.hadoop.hbase.adapter.HBaseDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
+import com.jaspersoft.studio.data.hbase.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -34,12 +35,12 @@ public class HBaseDataAdapterFactory implements DataAdapterFactory {
 
 	@Override
 	public String getLabel() {
-		return "HBase Connection";
+		return Messages.HBaseDataAdapterFactory_0;
 	}
 
 	@Override
 	public String getDescription() {
-		return "HBase Connection";
+		return Messages.HBaseDataAdapterFactory_1;
 	}
 
 	@Override

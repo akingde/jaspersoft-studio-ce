@@ -34,6 +34,7 @@ public class AddTableCommand extends Command {
 			fromTable.add(ft);
 			if (main != null) {
 				main = ft;
+				ft.getValue().get
 				// join to main if the case
 			}
 		}

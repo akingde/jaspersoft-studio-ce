@@ -61,6 +61,7 @@ import org.eclipse.ui.part.PluginTransfer;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.INotInMetadata;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
@@ -98,7 +99,7 @@ public class DBMetadata {
 		gd.horizontalAlignment = SWT.CENTER;
 		gd.horizontalIndent = 20;
 		msg.setLayoutData(gd);
-		msg.setText("No Metadata.\nSelect a JDBC Data Adapter.");
+		msg.setText(Messages.DBMetadata_0);
 		msg.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -198,7 +199,7 @@ public class DBMetadata {
 		});
 		MenuManager menuMgr = new MenuManager();
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
-		menuMgr.add(new Action("&Refresh") {
+		menuMgr.add(new Action(Messages.DBMetadata_1) {
 			@Override
 			public void run() {
 				doRefreshMetadata();
@@ -233,7 +234,7 @@ public class DBMetadata {
 			public void run() {
 				if (msg.isDisposed())
 					return;
-				msg.setText("Getting metadata for\n" + da.getName() + "\nPlease wait ...");
+				msg.setText(Messages.DBMetadata_2 + da.getName() + Messages.DBMetadata_3);
 				stackLayout.topControl = mcmp;
 				mcmp.layout(true);
 				composite.layout(true);
@@ -275,7 +276,7 @@ public class DBMetadata {
 				designer.run(true, true, new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Reading Table Information", IProgressMonitor.UNKNOWN);
+						monitor.beginTask(Messages.DBMetadata_4, IProgressMonitor.UNKNOWN);
 						try {
 							monitors.add(monitor);
 							DatabaseMetaData meta = getConnection(das, false).getMetaData();
@@ -307,7 +308,7 @@ public class DBMetadata {
 				designer.run(true, true, new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Reading Schema Information", IProgressMonitor.UNKNOWN);
+						monitor.beginTask(Messages.DBMetadata_5, IProgressMonitor.UNKNOWN);
 						try {
 							monitors.add(monitor);
 							readSchema(getConnection(das, false).getMetaData(), mschema, monitor, false);
@@ -393,7 +394,7 @@ public class DBMetadata {
 				designer.refreshQueryModel();
 				setFirstSelection();
 				if (isEmptySchema(root)) {
-					msg.setText("No Metadata.\nDouble click to refresh.");
+					msg.setText(Messages.DBMetadata_6);
 					stackLayout.topControl = mcmp;
 				} else
 					stackLayout.topControl = treeViewer.getControl();
@@ -461,7 +462,7 @@ public class DBMetadata {
 
 	protected void doRefreshMetadata() {
 		if (!running) {
-			designer.showInfo("");
+			designer.showInfo(""); //$NON-NLS-1$
 			designer.updateMetadata();
 		}
 	}
@@ -470,7 +471,7 @@ public class DBMetadata {
 		List<String> tableTypes = new ArrayList<String>();
 		ResultSet rs = meta.getTableTypes();
 		while (rs.next())
-			tableTypes.add(rs.getString("TABLE_TYPE"));
+			tableTypes.add(rs.getString("TABLE_TYPE")); //$NON-NLS-1$
 		rs.close();
 		return tableTypes;
 	}

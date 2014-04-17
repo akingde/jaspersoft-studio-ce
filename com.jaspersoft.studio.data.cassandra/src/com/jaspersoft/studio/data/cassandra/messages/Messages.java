@@ -20,6 +20,8 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.cassandra.messages.messages"; //$NON-NLS-1$
 	public static String CassandraDataAdapterComposite_labelurl;
+	public static String CassandraDataAdapterFactory_0;
+	public static String CassandraDataAdapterFactory_1;
 	public static String RDDatasourceCassandraPage_desc;
 	public static String RDDatasourceCassandraPage_tiitle;
 	public static String RDDatasourceCassandraPage_title;
