@@ -67,14 +67,20 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 		labels = items;
 		if (cellEditor != null && !cellEditor.getComboBox().isDisposed())
 			cellEditor.setItems(items);
+		if (combo != null && !combo.getControl().isDisposed()){
+			combo.setNewItems(this);
+		}
 	}
 
 	public String[] getItems() {
 		return labels;
 	}
+	
+	private SPRWCombo combo;
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPRWCombo(parent, section, this);
+		combo = new SPRWCombo(parent, section, this);
+		return combo;
 	}
 
 	private IHelpRefBuilder refBuilder;
