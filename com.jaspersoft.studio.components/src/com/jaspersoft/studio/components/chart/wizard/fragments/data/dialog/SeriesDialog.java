@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
+import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.ISeriesFactory;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
@@ -77,12 +78,12 @@ public class SeriesDialog<T> extends FormDialog implements IExpressionContextSet
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Series");
+		newShell.setText(Messages.SeriesDialog_0);
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		mform.getForm().setText("Chart Dataset Series");
+		mform.getForm().setText(Messages.SeriesDialog_1);
 
 		mform.getForm().getBody().setLayout(new GridLayout(2, false));
 
@@ -98,7 +99,7 @@ public class SeriesDialog<T> extends FormDialog implements IExpressionContextSet
 			public Object newElement(List<?> input, int pos) {
 				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRExpressionEditor wizard = new JRExpressionEditor();
-					wizard.setValue(new JRDesignExpression("\"SERIES " + (input.size() + 1) + "\""));
+					wizard.setValue(new JRDesignExpression("\"SERIES " + (input.size() + 1) + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 					wizard.setExpressionContext(expContext);
 					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(bGroup.getShell(), wizard);
 					dialog.create();
@@ -142,7 +143,7 @@ public class SeriesDialog<T> extends FormDialog implements IExpressionContextSet
 
 		TableColumn[] column = new TableColumn[1];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Name expression");
+		column[0].setText(Messages.SeriesDialog_4);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();

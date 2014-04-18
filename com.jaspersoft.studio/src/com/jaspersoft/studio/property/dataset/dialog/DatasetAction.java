@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -85,6 +86,9 @@ public class DatasetAction extends SelectionAction {
 	 */
 	private MDataset getMDatasetToShow() {
 		ISelection selection = getSelection();
+		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
+		IContentOutlinePage outline = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
+
 		if (selection instanceof IStructuredSelection) {
 			Object firstElement = ((IStructuredSelection) selection).getFirstElement();
 			// Selection of an EditPart that wraps the MDataset element, or one of its children.
@@ -101,7 +105,6 @@ public class DatasetAction extends SelectionAction {
 			}
 		}
 
-		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
 		if (part.getModel() != null && !part.getModel().getChildren().isEmpty() && part instanceof ReportEditor) {
 			MReport mreport = (MReport) part.getModel().getChildren().get(0);
 			// get report main dataset

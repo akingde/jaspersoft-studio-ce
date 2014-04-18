@@ -64,6 +64,7 @@ public class Messages extends NLS {
 	public static String MarkerDialog_ValueOrExpression;
 	public static String MarkerEditor_Title;
 	public static String MarkerLabelProvider_MarkersNum;
+	public static String MarkerPage_0;
 	public static String MarkerPage_Description;
 	public static String MarkerPage_IdColumn;
 	public static String MarkerPage_LabelColumn;

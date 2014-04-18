@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class NameComposite extends ADataAdapterComposite {
 	private DataAdapterDescriptor dataAdapterDesc = null;
 	private Text textName;
@@ -36,7 +38,7 @@ public class NameComposite extends ADataAdapterComposite {
 		setLayout(new GridLayout(2, false));
 
 		Label lblName = new Label(this, SWT.NONE);
-		lblName.setText("Name:");
+		lblName.setText(Messages.NameComposite_0);
 
 		textName = new Text(this, SWT.BORDER);
 		textName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -50,7 +52,7 @@ public class NameComposite extends ADataAdapterComposite {
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		bindingContext.bindValue(SWTObservables.observeText(textName, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "name"));
+				PojoObservables.observeValue(dataAdapter, "name")); //$NON-NLS-1$
 	}
 
 	@Override

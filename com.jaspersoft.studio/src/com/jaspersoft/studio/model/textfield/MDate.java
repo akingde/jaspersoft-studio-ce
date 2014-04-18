@@ -80,7 +80,7 @@ public class MDate extends MTextField {
 		JRDesignExpression expression = new JRDesignExpression();
 		expression.setText("new java.util.Date()"); //$NON-NLS-1$
 		jrDesignTextField.setExpression(expression);
-		jrDesignTextField.setPattern("MMMMM dd, yyyy");
+		jrDesignTextField.setPattern("MMMMM dd, yyyy"); //$NON-NLS-1$
 		return jrDesignTextField;
 	}
 

@@ -42,11 +42,11 @@ public class TitleSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite group = getWidgetFactory().createSectionTitle(parent, "Title",
+		Composite group = getWidgetFactory().createSectionTitle(parent, Messages.TitleSection_0,
 				true, 4, 1);
 		section = (ExpandableComposite)group.getParent();
 
-		getWidgetFactory().createCLabel(group, "Expression");
+		getWidgetFactory().createCLabel(group, Messages.TitleSection_1);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		createWidget4Property(group,

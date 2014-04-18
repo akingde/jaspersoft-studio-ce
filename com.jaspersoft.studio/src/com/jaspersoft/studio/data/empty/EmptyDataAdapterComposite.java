@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Spinner;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.messages.Messages;
 
 public class EmptyDataAdapterComposite extends ADataAdapterComposite {
 
@@ -46,7 +47,7 @@ public class EmptyDataAdapterComposite extends ADataAdapterComposite {
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setText("Number of empty records" + " :");
+		lblNewLabel.setText(Messages.EmptyDataAdapterComposite_0);
 
 		spinnerRecords = new Spinner(this, SWT.BORDER);
 		spinnerRecords.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
@@ -56,7 +57,7 @@ public class EmptyDataAdapterComposite extends ADataAdapterComposite {
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		bindingContext.bindValue(SWTObservables.observeSelection(spinnerRecords),
-				PojoObservables.observeValue(dataAdapter, "recordCount"));
+				PojoObservables.observeValue(dataAdapter, "recordCount")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -70,6 +71,6 @@ public class EmptyDataAdapterComposite extends ADataAdapterComposite {
 	
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_empty");
+		return PREFIX.concat("adapter_empty"); //$NON-NLS-1$
 	}
 }

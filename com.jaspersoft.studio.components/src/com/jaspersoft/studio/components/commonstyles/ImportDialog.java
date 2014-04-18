@@ -209,7 +209,7 @@ public class ImportDialog extends FormDialog {
 	 * Set and show the help data on the provided context
 	 */
 	public void performHelp() {
-		String id = "com.jaspersoft.studio.doc.ImportStyleDialog";
+		String id = "com.jaspersoft.studio.doc.ImportStyleDialog"; //$NON-NLS-1$
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(body, id);
 		PlatformUI.getWorkbench().getHelpSystem().displayHelp(id);
 	};

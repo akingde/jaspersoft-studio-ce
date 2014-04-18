@@ -52,7 +52,7 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 	public JRDesignExpression getValue() {
 		if(contributedComposite!=null){
 			JRDesignExpression expression = (JRDesignExpression) contributedComposite.getExpression();
-			if(expression!=null && !Misc.nvl(expression.getText()).equals("")){
+			if(expression!=null && !Misc.nvl(expression.getText()).equals("")){ //$NON-NLS-1$
 				RecentExpressions.addNewExpression(expression.getText());
 			}
 			return expression;
@@ -122,7 +122,7 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 			gd.horizontalSpan = 2;
 			lbl1.setLayoutData(gd);
 	
-			valueType = new ClassType(composite, "Expression Class type (deprecated)");
+			valueType = new ClassType(composite, Messages.JRExpressionPage_1);
 			valueType.addListener(new ModifyListener() {
 	
 				public void modifyText(ModifyEvent e) {
@@ -161,7 +161,7 @@ public class JRExpressionPage extends JSSHelpWizardPage {
 	}
 	
 	private void setWidgets() {
-		queryText.setText(Misc.nvl(value.getText(), ""));
+		queryText.setText(Misc.nvl(value.getText(), "")); //$NON-NLS-1$
 		valueType.setClassType(value.getValueClassName());
 	}
 

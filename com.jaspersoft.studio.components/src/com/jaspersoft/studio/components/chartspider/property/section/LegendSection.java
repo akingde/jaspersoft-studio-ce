@@ -43,7 +43,7 @@ public class LegendSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		Composite group = getWidgetFactory().createSectionTitle(parent,
-				"Legend", true, 6, 1);
+				Messages.LegendSection_0, true, 6, 1);
 		section = (ExpandableComposite)group.getParent();
 
 		GridData gd = new GridData();
@@ -52,15 +52,15 @@ public class LegendSection extends AbstractSection {
 		createWidget4Property(group, StandardChartSettings.PROPERTY_SHOW_LEGEND)
 				.getControl().setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(group, "Position");
+		getWidgetFactory().createCLabel(group, Messages.LegendSection_1);
 		createWidget4Property(group,
 				StandardChartSettings.PROPERTY_LEGEND_POSITION, false);
 
-		getWidgetFactory().createCLabel(group, "F");
+		getWidgetFactory().createCLabel(group, Messages.LegendSection_2);
 		createWidget4Property(group,
 				StandardChartSettings.PROPERTY_LEGEND_COLOR, false);
 
-		getWidgetFactory().createCLabel(group, "B");
+		getWidgetFactory().createCLabel(group, Messages.LegendSection_3);
 		createWidget4Property(group,
 				StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR, false);
 

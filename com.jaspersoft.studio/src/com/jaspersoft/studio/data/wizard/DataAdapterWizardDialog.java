@@ -29,6 +29,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class DataAdapterWizardDialog extends WizardDialog {
 
 	List<SelectionListener> listeners = new ArrayList<SelectionListener>();
@@ -61,7 +63,7 @@ public class DataAdapterWizardDialog extends WizardDialog {
 		((GridLayout) parent.getLayout()).numColumns = 1;
 		testButton = new Button(parent, SWT.NONE);
 		testButton.setFont(parent.getFont());
-		testButton.setText("Test");
+		testButton.setText(Messages.DataAdapterWizardDialog_0);
 		setButtonLayoutData(testButton);
 		testButton.setEnabled(false);
 		testButton.addSelectionListener(new SelectionAdapter() {

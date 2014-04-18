@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
@@ -70,7 +71,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 				boolean en = !dsetCombo.getText().equals(ModelUtils.MAIN_DATASET);
 				setDatasetEnabled(en);
 				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText()
-						: "");
+						: ""); //$NON-NLS-1$
 			}
 		});
 
@@ -78,7 +79,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			@Override
 			protected void setNoConnection() {
 				super.setNoConnection();
-				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, "");
+				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, ""); //$NON-NLS-1$
 			}
 
 			@Override
@@ -113,7 +114,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		gd.horizontalSpan = 2;
 		c.setLayoutData(gd);
 
-		params = section.getWidgetFactory().createButton(c, "Parameters", SWT.PUSH | SWT.FLAT);
+		params = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_2, SWT.PUSH | SWT.FLAT);
 		params.addSelectionListener(new SelectionAdapter() {
 
 			private ParameterDTO prmDTO;
@@ -146,7 +147,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 
 		});
 
-		paramMap = section.getWidgetFactory().createButton(c, "Parameters Map", SWT.PUSH | SWT.FLAT);
+		paramMap = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_3, SWT.PUSH | SWT.FLAT);
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

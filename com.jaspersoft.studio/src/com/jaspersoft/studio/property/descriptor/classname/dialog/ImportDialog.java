@@ -62,9 +62,9 @@ public class ImportDialog extends Dialog {
 	}
 
 	public String getImports() {
-		value = "";
+		value = ""; //$NON-NLS-1$
 		for (String str : imports) {
-			value += str + ";";
+			value += str + ";"; //$NON-NLS-1$
 		}
 
 		return value;
@@ -76,7 +76,7 @@ public class ImportDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		shell.setText("Java Import");
+		shell.setText(Messages.ImportDialog_2);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class ImportDialog extends Dialog {
 				String[] results = null;
 				SelectionDialog dialog = JavaUI.createPackageDialog(getShell(), new ProgressMonitorDialog(getShell()),
 						SearchEngine.createWorkspaceScope(), true, true, null);
-				dialog.setTitle("Import Packages");
+				dialog.setTitle(Messages.ImportDialog_3);
 				if (dialog.open() == Dialog.OK) {
 					Object[] objects = dialog.getResult();
 					if (objects != null && objects.length > 0) {
@@ -114,7 +114,7 @@ public class ImportDialog extends Dialog {
 				return results;
 			}
 		});
-		bnew.setButtonText("Add Package");
+		bnew.setButtonText(Messages.ImportDialog_4);
 
 		bnew = new NewButton();
 		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
@@ -146,7 +146,7 @@ public class ImportDialog extends Dialog {
 				return null;
 			}
 		});
-		bnew.setButtonText("Add Class");
+		bnew.setButtonText(Messages.ImportDialog_5);
 
 		DeleteButton bdel = new DeleteButton();
 		bdel.createDeleteButton(bGroup, tableViewer);

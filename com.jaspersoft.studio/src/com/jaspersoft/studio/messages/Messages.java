@@ -263,6 +263,7 @@ public class Messages extends NLS {
 	public static String CategoriesPage_typeLabel;
 	public static String CenterInParentAction_actionDescription;
 	public static String CenterInParentAction_actionName;
+	public static String ClasspathComponent_1;
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;
 	public static String ColorDialog_advancedColorsLabel;
@@ -377,16 +378,30 @@ public class Messages extends NLS {
 	public static String CustomDeleteAction_messageListStart;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;
+	public static String DataAdapterAction_0;
+	public static String DataAdapterAction_1;
+	public static String DataAdapterAction_2;
 	public static String DataAdapterDragSourceListener_EncondingErrorMsg;
 	public static String DataAdapterDragSourceListener_IOErrorMsg;
+	public static String DataAdapterEditorPage_2;
+	public static String DataAdapterEditorPage_3;
+	public static String DataAdapterEditorPage_4;
+	public static String DataAdapterEditorPage_5;
+	public static String DataAdapterEditorPage_6;
+	public static String DataAdapterEditorPage_7;
+	public static String DataAdapterEditorPage_8;
 	public static String DataAdapterEditorPart_testButton;
 	public static String DataAdapterManager_nodataadapterfound;
 	public static String DataAdapterManager_oneemptyrecord;
+	public static String DataAdaptersListPage_1;
+	public static String DataAdaptersListPage_2;
+	public static String DataAdaptersListPage_3;
 	public static String DataAdapterWizard_errortestingdataadapter;
 	public static String DataAdapterWizard_newdataadaptername;
 	public static String DataAdapterWizard_testbutton;
 	public static String DataAdapterWizard_testsuccesful;
 	public static String DataAdapterWizard_windowtitle;
+	public static String DataAdapterWizardDialog_0;
 	public static String DataPreviewScriptlet_InterruptErrorMsg;
 	public static String DataPreviewTable_CancelButton;
 	public static String DataPreviewTable_ErrorMsgNoDataAdapter;
@@ -523,6 +538,7 @@ public class Messages extends NLS {
 	public static String ElementWithValueExpressionDialog_NameLbl;
 	public static String ElementWithValueExpressionDialog_Title;
 	public static String ElementWithValueExpressionDialog_ValueExprLbl;
+	public static String EmptyDataAdapterComposite_0;
 	public static String EmptyDataAdapterFactory_description;
 	public static String EmptyDataAdapterFactory_label;
 	public static String EmptyDatasourcePage_description;
@@ -769,6 +785,10 @@ public class Messages extends NLS {
 	public static String ImportDataAdapterAction_description;
 	public static String ImportDataAdapterAction_name;
 	public static String ImportDataAdapterAction_tooltip;
+	public static String ImportDialog_2;
+	public static String ImportDialog_3;
+	public static String ImportDialog_4;
+	public static String ImportDialog_5;
 	public static String IncreaseHSpaceAction_actionDescription;
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
@@ -808,6 +828,7 @@ public class Messages extends NLS {
 	public static String JRExporterPreferencePage_7;
 	public static String JRExporterPreferencePage_8;
 	public static String JRExporterPreferencePage_9;
+	public static String JRExpressionPage_1;
 	public static String JRExpressionPage_description;
 	public static String JRExpressionPage_value_class_name;
 	public static String JRPropertyDialog_propName;
@@ -920,6 +941,7 @@ public class Messages extends NLS {
 	public static String MDatasetRun_dataset_name_description;
 	public static String MDatasetRun_parameters_description;
 	public static String MDatasetRun_parameters_map_expression_description;
+	public static String MDummy_1;
 	public static String MElementDataset_dataset_run;
 	public static String MElementDataset_dataset_run_description;
 	public static String MElementDataset_increment_group_description;
@@ -1074,6 +1096,7 @@ public class Messages extends NLS {
 	public static String MLinePen_line_style_description;
 	public static String MLinePen_line_width;
 	public static String MLinePen_line_width_description;
+	public static String ModelUtils_13;
 	public static String ModelUtils_detail_section;
 	public static String ModelUtils_groupfooter_section;
 	public static String ModelUtils_groupheader_section;
@@ -1252,6 +1275,7 @@ public class Messages extends NLS {
 	public static String MVariable_reset_type_description;
 	public static String MVariableSystem_name_description;
 	public static String MVariableSystem_value_class_name_description;
+	public static String NameComposite_0;
 	public static String NullEnum_NullEnum_Undefined;
 	public static String NumericPattern_decimal_places;
 	public static String NumericPattern_description;
@@ -1445,6 +1469,8 @@ public class Messages extends NLS {
 	public static String PreviewEditor_starting;
 	public static String PreviousPageAction_actionName;
 	public static String PreviousPageAction_actionTolltip;
+	public static String PropertiesComponent_0;
+	public static String PropertiesComponent_1;
 	public static String PropertiesPage_availableColName;
 	public static String PropertiesPage_description;
 	public static String PropertiesPage_importColName;
@@ -1631,6 +1657,8 @@ public class Messages extends NLS {
 	public static String SP3Boolean_Undefined_Value;
 	public static String SPButon_Size_Decrement;
 	public static String SPButon_Size_Increment;
+	public static String SPDatasetRun_2;
+	public static String SPDatasetRun_3;
 	public static String SPLegendAlignementEnum_bottom;
 	public static String SPLegendAlignementEnum_default;
 	public static String SPLegendAlignementEnum_left;

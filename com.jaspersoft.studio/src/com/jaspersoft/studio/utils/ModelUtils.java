@@ -103,9 +103,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class ModelUtils {
 
-	public static final String[] FONT_SIZES = new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20",
-			"22", "24", "26" };
-	public static final String MAIN_DATASET = "[Main Dataset]";
+	public static final String[] FONT_SIZES = new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+			"22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static final String MAIN_DATASET = Messages.ModelUtils_13;
 
 	public static JRDesignDataset getDataset(ANode node) {
 		ANode n = node.getParent();
@@ -226,7 +226,7 @@ public class ModelUtils {
 	}
 
 	public static List<JRParameter> getParameters4Datasource(JasperDesign jd, String ds) {
-		if (ds == null || ds.equals("")) {
+		if (ds == null || ds.equals("")) { //$NON-NLS-1$
 			List<JRParameter> res = new ArrayList<JRParameter>(jd.getParametersList());
 			return res;
 		}
@@ -256,7 +256,7 @@ public class ModelUtils {
 	}
 
 	public static List<JRVariable> getVariables4Datasource(JasperDesign jd, String ds) {
-		if (ds == null || ds.equals("")) {
+		if (ds == null || ds.equals("")) { //$NON-NLS-1$
 			List<JRVariable> fieldsList = jd.getVariablesList();
 			List<JRVariable> res = new ArrayList<JRVariable>(fieldsList);
 			return res;
@@ -274,7 +274,7 @@ public class ModelUtils {
 	}
 
 	public static List<JRField> getFields4Datasource(JasperDesign jd, String ds) {
-		if (ds == null || ds.equals("")) {
+		if (ds == null || ds.equals("")) { //$NON-NLS-1$
 			List<JRField> fieldsList = jd.getFieldsList();
 			List<JRField> res = new ArrayList<JRField>(fieldsList);
 			return res;
@@ -943,7 +943,7 @@ public class ModelUtils {
 	}
 
 	public static String getNameFormat(String name, int index) {
-		return name + "_" + index;
+		return name + "_" + index; //$NON-NLS-1$
 	}
 
 	public static String[] getQueryLanguages(JasperReportsConfiguration context) {
@@ -951,15 +951,15 @@ public class ModelUtils {
 			context = JasperReportsConfiguration.getDefaultJRConfig();
 		String[] langs = getQueryLanguagesOnly(context);
 		String[] res = new String[langs.length + 1];
-		res[0] = "";
+		res[0] = ""; //$NON-NLS-1$
 		System.arraycopy(langs, 0, res, 1, langs.length);
 
 		return res;
 	}
 
 	public static String getLanguage(String lang) {
-		if (lang != null && lang.contains(","))
-			return lang.substring(0, lang.indexOf(","));
+		if (lang != null && lang.contains(",")) //$NON-NLS-1$
+			return lang.substring(0, lang.indexOf(",")); //$NON-NLS-1$
 		return lang;
 	}
 
@@ -975,7 +975,7 @@ public class ModelUtils {
 				String[] languages = bundle.getLanguages();
 				for (String l : languages) {
 					// check for depricated languages
-					if (l.equalsIgnoreCase("xlsx"))
+					if (l.equalsIgnoreCase("xlsx")) //$NON-NLS-1$
 						continue;
 					if (!langs.contains(l)) {
 						boolean exists = false;
@@ -995,7 +995,7 @@ public class ModelUtils {
 				String[] languages = bundle.getLanguages();
 				for (String l : languages) {
 					// check for depricated languages
-					if (l.equalsIgnoreCase("xlsx"))
+					if (l.equalsIgnoreCase("xlsx")) //$NON-NLS-1$
 						continue;
 					if (!langs.contains(l)) {
 						boolean exists = false;
@@ -1035,7 +1035,7 @@ public class ModelUtils {
 			}
 		}
 		String[] langs = new String[compilers.size() + 1];
-		langs[0] = "";
+		langs[0] = ""; //$NON-NLS-1$
 		int i = 1;
 		for (String lang : compilers)
 			langs[i++] = lang;
@@ -1420,10 +1420,10 @@ public class ModelUtils {
 		}
 		// Add also the contributed hyperlink types
 		IConfigurationElement[] contributedElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio.hyperlinkTypes");
+				"com.jaspersoft.studio.hyperlinkTypes"); //$NON-NLS-1$
 		if (contributedElements != null) {
 			for (IConfigurationElement el : contributedElements) {
-				String type = el.getAttribute("type");
+				String type = el.getAttribute("type"); //$NON-NLS-1$
 				alltypes.add(type);
 			}
 		}

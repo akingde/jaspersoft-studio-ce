@@ -157,6 +157,16 @@ public class Messages extends NLS {
 	public static String HyperlinkDialog_deleteHyperlinkAction;
 	public static String HyperlinkDialog_hyperlinkDialogName;
 	public static String HyperlinkDialog_hyperlinkDialogTitle;
+	public static String ImportDialog_deselectAllButton;
+	public static String ImportDialog_dialogLabel;
+	public static String ImportDialog_dialogName;
+	public static String ImportDialog_pathLabel;
+	public static String ImportDialog_selectAllButton;
+	public static String ImportExportDialog_browseButtonText;
+	public static String LegendSection_0;
+	public static String LegendSection_1;
+	public static String LegendSection_2;
+	public static String LegendSection_3;
 	public static String MAreaPlot_area_plot;
 	public static String MAreaPlot_category_axis_label_color_description;
 	public static String MAreaPlot_category_axis_label_expression_description;
@@ -719,8 +729,16 @@ public class Messages extends NLS {
 	public static String SeriesColorPage_move_down;
 	public static String SeriesColorPage_move_up;
 	public static String SeriesColorPage_table_is_empty;
+	public static String SeriesDialog_0;
+	public static String SeriesDialog_1;
+	public static String SeriesDialog_4;
 	public static String SPMeterInterval_intervalsNumber;
 	public static String SPMeterInterval_sectionTitle;
+	public static String SubTitleSection_0;
+	public static String SubTitleSection_1;
+	public static String SubTitleSection_2;
+	public static String TitleSection_0;
+	public static String TitleSection_1;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

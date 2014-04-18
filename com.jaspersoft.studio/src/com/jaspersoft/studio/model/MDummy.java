@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 public class MDummy extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -29,11 +30,11 @@ public class MDummy extends ANode {
 	}
 
 	public ImageDescriptor getImagePath() {
-		return JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/hourglass.png");
+		return JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/hourglass.png"); //$NON-NLS-1$
 	}
 
 	public String getDisplayText() {
-		return "Pending ...";
+		return Messages.MDummy_1;
 	}
 
 }

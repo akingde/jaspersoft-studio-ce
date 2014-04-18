@@ -43,14 +43,14 @@ public class SubTitleSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		Composite group = getWidgetFactory().createSectionTitle(parent,
-				"Subtitle", true, 2, 1);
+				Messages.SubTitleSection_0, true, 2, 1);
 		section = (ExpandableComposite)group.getParent();
 
-		getWidgetFactory().createCLabel(group, "Expression");
+		getWidgetFactory().createCLabel(group, Messages.SubTitleSection_1);
 		createWidget4Property(group,
 				StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION, false);
 
-		getWidgetFactory().createCLabel(group, "Color");
+		getWidgetFactory().createCLabel(group, Messages.SubTitleSection_2);
 		createWidget4Property(group,
 				StandardChartSettings.PROPERTY_SUBTITLE_COLOR, false);
 

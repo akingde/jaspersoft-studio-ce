@@ -42,9 +42,9 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		setId(ID);
 		setMenuCreator(this);
 
-		setText(" -- No Data Adapter -- ");
-		setDescription("Select a Data Adapter");
-		setToolTipText("Select a Data Adapter");
+		setText(Messages.DataAdapterAction_0);
+		setDescription(Messages.DataAdapterAction_1);
+		setToolTipText(Messages.DataAdapterAction_2);
 		this.editor = editor;
 		this.dastorages = dastorages;
 	}
@@ -80,7 +80,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				MenuItem menuItem = (MenuItem) e.getSource();
 				menuItem.setSelection(true);
 
-				setSelected((DataAdapterDescriptor) menuItem.getData("da.key"));
+				setSelected((DataAdapterDescriptor) menuItem.getData("da.key")); //$NON-NLS-1$
 				// do run
 				run();
 			}
@@ -91,12 +91,12 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
 					final MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 					if (s instanceof FileDataAdapterStorage)
-						m1.setText(d.getName() + " - [" + s.getUrl(d) + "]");
+						m1.setText(d.getName() + " - [" + s.getUrl(d) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 					else
 						m1.setText(d.getName());
 					m1.setImage(JaspersoftStudioPlugin.getInstance().getImage(d.getIcon16()));
 					m1.addSelectionListener(listener);
-					m1.setData("da.key", d);
+					m1.setData("da.key", d); //$NON-NLS-1$
 				}
 				if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1
 						&& !dastorages[i + 1].getDataAdapterDescriptors().isEmpty())
@@ -155,7 +155,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		// set current
 		String name = d.getName();
 		if (name.length() > 17)
-			name = name.substring(0, 17) + "...";
+			name = name.substring(0, 17) + "..."; //$NON-NLS-1$
 		setText(name);
 		setDescription(d.getDescription());
 		setToolTipText(d.getName());

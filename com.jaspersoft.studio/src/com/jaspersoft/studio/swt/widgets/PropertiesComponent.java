@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -121,11 +122,11 @@ public class PropertiesComponent {
 
 		TableColumn[] col = new TableColumn[2];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Property");
+		col[0].setText(Messages.PropertiesComponent_0);
 		col[0].pack();
 
 		col[1] = new TableColumn(wtable, SWT.NONE);
-		col[1].setText("Value");
+		col[1].setText(Messages.PropertiesComponent_1);
 		col[1].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -146,7 +147,7 @@ public class PropertiesComponent {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				return new Property("property", "value");
+				return new Property("property", "value"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 		});

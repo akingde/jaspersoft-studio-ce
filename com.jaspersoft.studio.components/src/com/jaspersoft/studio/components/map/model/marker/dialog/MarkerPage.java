@@ -117,7 +117,7 @@ public class MarkerPage extends WizardPage {
 		setControl(composite);
 		
 		FormText mapPickSuggestion=new FormText(composite, SWT.NONE);
-		mapPickSuggestion.setText("<form><p><b>You can easily pickup static markers using the</b><a href=\"\">map preview</a></p></form>", true, false);
+		mapPickSuggestion.setText(Messages.MarkerPage_0, true, false);
 		mapPickSuggestion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
 		mapPickSuggestion.setWhitespaceNormalized(true);
 		mapPickSuggestion.addHyperlinkListener(new HyperlinkAdapter() {

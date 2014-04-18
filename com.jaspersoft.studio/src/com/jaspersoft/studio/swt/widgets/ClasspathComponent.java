@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -43,7 +44,7 @@ public class ClasspathComponent {
 		public Image getColumnImage(Object element, int columnIndex) {
 			File file = (File) element;
 			if (!file.exists())
-				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif");
+				return JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/error_tsk.gif"); //$NON-NLS-1$
 			return null;
 		}
 
@@ -102,7 +103,7 @@ public class ClasspathComponent {
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Jar Files Path");
+		col[0].setText(Messages.ClasspathComponent_1);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -126,13 +127,13 @@ public class ClasspathComponent {
 
 			public Object newElement(List<?> input, int pos) {
 				FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN | SWT.MULTI);
-				dialog.setFilterNames(new String[] { "JAR Files", "All Files (*.*)" });
-				dialog.setFilterExtensions(new String[] { "*.jar", "*.*" });
+				dialog.setFilterNames(new String[] { "JAR Files", "All Files (*.*)" }); //$NON-NLS-1$ //$NON-NLS-2$
+				dialog.setFilterExtensions(new String[] { "*.jar", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 				if (dialog.open() != null) {
 					String dir = dialog.getFilterPath();
 					String[] jars = dialog.getFileNames();
-					String delimiter = System.getProperty("file.separator");
+					String delimiter = System.getProperty("file.separator"); //$NON-NLS-1$
 					File[] files = new File[jars.length];
 					for (int i = 0; i < jars.length; i++) {
 						files[i] = new File(dir + delimiter + jars[i]);

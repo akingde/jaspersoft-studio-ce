@@ -30,6 +30,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.WizardEndingStateListener;
@@ -37,7 +38,7 @@ import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 public class DataAdapterEditorPage extends WizardPage implements WizardEndingStateListener {
 
 	private DataAdapterEditor dataAdapterEditor = null;
-	private String subTitle = "";
+	private String subTitle = ""; //$NON-NLS-1$
 	private Composite mainContainer = null;
 	private Composite staticContainer = null;
 	private Composite customContainer = null;
@@ -60,9 +61,9 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 	 * Create the wizard.
 	 */
 	public DataAdapterEditorPage() {
-		super("dataAdaptereditorpage");
-		setTitle("Data Adapter");
-		setDescription("Edit your Data Adapter");
+		super("dataAdaptereditorpage"); //$NON-NLS-1$
+		setTitle(Messages.DataAdapterEditorPage_2);
+		setDescription(Messages.DataAdapterEditorPage_3);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 		staticContainer.setLayout(gl_staticContainer);
 
 		Label lblName = new Label(staticContainer, SWT.NONE);
-		lblName.setText("Name:");
+		lblName.setText(Messages.DataAdapterEditorPage_4);
 
 		textName = new Text(staticContainer, SWT.BORDER);
 		textName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -119,16 +120,16 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 				} else {
 
 					if (name.length() > 0) {
-						setMessage("Data Adapter \"" + name + "\" already exists. Please specify another name.", ERROR);
+						setMessage(Messages.DataAdapterEditorPage_5 + name + Messages.DataAdapterEditorPage_6, ERROR);
 					} else {
-						setMessage("Please specify a name for this Data Adapter.", ERROR);
+						setMessage(Messages.DataAdapterEditorPage_7, ERROR);
 					}
 				}
 			}
 		});
 
 		setPageComplete(false);
-		setMessage("Please specify a name for this Data Adapter.", ERROR);
+		setMessage(Messages.DataAdapterEditorPage_8, ERROR);
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 		dataAdapterEditor.setDataAdapter(newDataAdapterDescriptor);
 
 		// 5. fill the name if the new data adapter has one
-		textName.setText(Misc.nvl(newDataAdapterDescriptor.getName(), ""));
+		textName.setText(Misc.nvl(newDataAdapterDescriptor.getName(), "")); //$NON-NLS-1$
 
 		// 6. resize the dialog properly
 		customContainer.layout();
@@ -247,7 +248,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 	 */
 	private boolean isDataAdapterNameValid(String dataAdapterName) {
 
-		if (dataAdapterName == null || "".equals(dataAdapterName))
+		if (dataAdapterName == null || "".equals(dataAdapterName)) //$NON-NLS-1$
 			return false;
 		if (storage != null) {
 			// remove the currently edited data adapter from the list

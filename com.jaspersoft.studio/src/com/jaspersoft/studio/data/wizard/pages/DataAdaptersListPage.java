@@ -31,6 +31,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class DataAdaptersListPage extends WizardPage {
@@ -44,9 +45,9 @@ public class DataAdaptersListPage extends WizardPage {
 	 * Create the wizard.
 	 */
 	public DataAdaptersListPage() {
-		super("dataAdapterslistpage");
-		setTitle("Data Adapters");
-		setDescription("Select a DataAdapter");
+		super("dataAdapterslistpage"); //$NON-NLS-1$
+		setTitle(Messages.DataAdaptersListPage_1);
+		setDescription(Messages.DataAdaptersListPage_2);
 		setPageComplete(false);
 	}
 
@@ -70,7 +71,7 @@ public class DataAdaptersListPage extends WizardPage {
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(wtable, SWT.NONE);
-		col[0].setText("Jar Files Path");
+		col[0].setText(Messages.DataAdaptersListPage_3);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -140,6 +141,6 @@ public class DataAdaptersListPage extends WizardPage {
 
 	@Override
 	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.dataAdapters_wizard_list");
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.dataAdapters_wizard_list"); //$NON-NLS-1$
 	}
 }
