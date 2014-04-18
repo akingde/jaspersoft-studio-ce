@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.JREnum;
 
 import org.apache.commons.lang.StringUtils;
@@ -407,15 +408,38 @@ public class StylesListSection extends AbstractSection {
 		if (styleContainer != null) {
 			MStyle styleModel = styleContainer.getStyle();
 			result.addLast(styleModel);
-			JRStyle nextStyle = ((JRStyle) styleModel.getValue()).getStyle();
-			while (nextStyle != null) {
-				styleModel = styleMaps.get(nextStyle.getName()).getStyle();
+			String nextStyleName = getParentStyleName((JRStyle) styleModel.getValue());
+			while (nextStyleName != null) {
+				styleModel = styleMaps.get(nextStyleName).getStyle();
 				result.addLast(styleModel);
-				nextStyle = ((JRStyle) styleModel.getValue()).getStyle();
+				nextStyleName = getParentStyleName((JRStyle) styleModel.getValue());
 			}
 
 		}
 		return result;
+	}
+	
+	/**
+	 * Return the name of the parent style of a style, check also if the style is an 
+	 * internal of an external one
+	 * 
+	 * @param child a jr style
+	 * @return the name of the style for the passed parameter, indipendently if it is
+	 * external or internal. Null if it has not a parent style of it has a not valid internal
+	 * parent style (a style that was removed)
+	 */
+	private String getParentStyleName(JRStyle child){
+		if (child.getStyleNameReference() != null){
+			//it's an external style, return the name
+			return child.getStyleNameReference();
+		} else {
+			String styleName = null;
+			JasperDesign jd = getElement().getJasperDesign();
+			if (child.getStyle() != null && jd != null && jd.getStylesMap().containsKey(child.getStyle().getName())){
+				styleName = child.getStyle().getName();
+			}
+			return styleName;
+		}
 	}
 
 	/**
