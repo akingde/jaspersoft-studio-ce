@@ -23,12 +23,12 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.ui.gef.layout.GraphLayoutManager;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.FromContainerEditPolicy;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 
 public class QueryEditPart extends AbstractGraphicalEditPart {
 
@@ -41,6 +41,11 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
+	public MSQLRoot getModel() {
+		return (MSQLRoot) super.getModel();
+	}
+
+	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new FromContainerEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, null);
@@ -48,7 +53,7 @@ public class QueryEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		MRoot root = (MRoot) getModel();
+		MSQLRoot root = getModel();
 		List<MFrom> list = new ArrayList<MFrom>();
 		for (INode n : root.getChildren()) {
 			if (n instanceof MFrom && !n.getChildren().isEmpty())

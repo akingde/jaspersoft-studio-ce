@@ -28,6 +28,14 @@ public class ForeignKey implements Serializable {
 		return fkName;
 	}
 
+	public MSQLColumn[] getSrcColumns() {
+		return srcColumns;
+	}
+
+	public MSQLColumn[] getDestColumns() {
+		return destColumns;
+	}
+
 	private String sql;
 
 	public String toSqlString() {

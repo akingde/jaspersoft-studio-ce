@@ -323,8 +323,14 @@ public class Util {
 
 			@Override
 			public boolean visit(INode n) {
+				if (n instanceof MSqlSchema) {
+					if (n.getValue().equals(schema))
+						return true;
+					else
+						return false;
+				}
 				if (n instanceof MSqlTable) {
-					if (n.getValue().equals(table) && ((MSqlTable) n).toSQLString().equals(fullname)) {
+					if (n.getValue().equals(table)) {
 						setObject((MSqlTable) n);
 						stop();
 					}

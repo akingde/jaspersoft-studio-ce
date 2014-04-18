@@ -28,9 +28,12 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 
+import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.ui.gef.command.AddTableCommand;
+import com.jaspersoft.studio.data.sql.ui.gef.parts.QueryEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.TableEditPart;
 
 public class FromContainerEditPolicy extends ContainerEditPolicy {
@@ -47,8 +50,14 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 	 */
 	protected Command getCreateCommand(CreateRequest request) {
 		Object newObject = request.getNewObject();
-		if (getHost().getModel() instanceof MFrom) {
-			MFrom parent = (MFrom) getHost().getModel();
+		MFrom parent = null;
+		if (getHost() instanceof QueryEditPart) {
+			MSQLRoot mroot = ((QueryEditPart) getHost()).getModel();
+			parent = Util.getKeyword(mroot, MFrom.class);
+		}
+		if (getHost().getModel() instanceof MFrom)
+			parent = (MFrom) getHost().getModel();
+		if (parent != null)
 			if (newObject instanceof Collection<?>) {
 				Rectangle r = new Rectangle(10, 10, 100, 100);
 				if (request.getLocation() != null) {
@@ -59,9 +68,9 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 					r.width = request.getSize().width;
 					r.height = request.getSize().height;
 				}
+				System.out.println("addTAbleCommand");
 				return new AddTableCommand(parent, (Collection<MSqlTable>) newObject, r);
 			}
-		}
 		return null;
 	}
 

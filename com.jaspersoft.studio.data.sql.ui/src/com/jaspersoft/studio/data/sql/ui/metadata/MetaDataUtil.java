@@ -148,16 +148,26 @@ public class MetaDataUtil {
 		List<MSQLColumn> srcCols = new ArrayList<MSQLColumn>();
 		List<MSQLColumn> dstCols = new ArrayList<MSQLColumn>();
 
+		List<String[]> fks = new ArrayList<String[]>();
 		while (rs.next()) {
-			String pkcolname = rs.getString("PKCOLUMN_NAME");
-			String fkcatalog = rs.getString("FKTABLE_CAT");
-			String fkschema = rs.getString("FKTABLE_SCHEM");
-			String fktable = rs.getString("FKTABLE_NAME");
-			String fkcolname = rs.getString("FKCOLUMN_NAME");
+			fks.add(new String[] { rs.getString("PKTABLE_CAT"), rs.getString("PKTABLE_SCHEM"), rs.getString("PKTABLE_NAME"), rs.getString("PKCOLUMN_NAME"), rs.getString("FKCOLUMN_NAME"),
+					rs.getString("FK_NAME") });
+		}
+		SchemaUtil.close(rs);
+		for (String[] f : fks) {
+			String pkcatalog = f[0];
+			String pkschema = f[1];
+			String pktable = f[2];
+			String pkcolname = f[3];
+			String fkcolname = f[4];
 			MSqlTable dTable = null;
 			if (fk == null || !fk.getFkName().equals(pkcolname)) {
-				fk = new ForeignKey(rs.getString("FK_NAME"));
-				dTable = Util.getTable((MRoot) tables.getRoot(), fkcatalog, fkschema, fktable);
+				fk = new ForeignKey(f[5]);
+				dTable = Util.getTable((MRoot) tables.getRoot(), pkcatalog, pkschema, pktable);
+				if (dTable.getChildren().isEmpty() || dTable.getChildren().get(0) instanceof MDummy) {
+					readTableColumns(meta, dTable, monitor);
+					readTableKeys(meta, dTable, monitor);
+				}
 			}
 			// short keySeq = rs.getShort("PKKEY_SEQ");
 			for (INode n : mt.getChildren()) {
@@ -182,7 +192,7 @@ public class MetaDataUtil {
 			if (monitor.isCanceled())
 				break;
 		}
-		SchemaUtil.close(rs);
+
 		if (fk != null)
 			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
 	}

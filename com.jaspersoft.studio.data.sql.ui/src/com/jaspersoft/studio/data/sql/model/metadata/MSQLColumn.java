@@ -117,6 +117,10 @@ public class MSQLColumn extends AMSQLObject implements IDragable {
 		this.primaryKey = primaryKey;
 	}
 
+	public List<ForeignKey> getForeignKeys() {
+		return foreignKeys;
+	}
+
 	public void addForeignKey(ForeignKey fk) {
 		if (foreignKeys == null)
 			foreignKeys = new ArrayList<ForeignKey>();
