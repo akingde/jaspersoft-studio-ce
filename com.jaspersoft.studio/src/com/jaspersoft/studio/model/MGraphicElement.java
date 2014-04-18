@@ -620,6 +620,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
+						//FIXME: It is important to set a null first the external style, because it is returned first on the getPropertyValue and this raise a lot of events
 						jrElement.setStyleNameReference(null);
 						jrElement.setStyle(style);
 					} else {
@@ -629,8 +630,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 					}
 				}
 			} else {
-				jrElement.setStyle(null);
 				jrElement.setStyleNameReference(null);
+				jrElement.setStyle(null);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION))
 			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value));

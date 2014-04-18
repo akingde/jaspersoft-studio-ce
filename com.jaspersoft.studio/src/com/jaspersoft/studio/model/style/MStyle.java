@@ -649,12 +649,17 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				if (!Misc.isNullOrEmpty((String) value)) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
-						jrstyle.setParentStyle(style);
+						//FIXME: It is important to set a null first the external style, because it is returned first on the getPropertyValue and this raise a lot of events
 						jrstyle.setParentStyleNameReference(null);
+						jrstyle.setParentStyle(style);
 					} else {
 						jrstyle.setParentStyleNameReference((String) value);
 						jrstyle.setParentStyle(null);
 					}
+				} else {
+					//remove the style
+					jrstyle.setParentStyleNameReference(null);
+					jrstyle.setParentStyle(null);
 				}
 			}
 		}

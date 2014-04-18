@@ -80,12 +80,17 @@ public class SPRWCombo extends ASPropertyWidget {
 		refresh = true;
 		this.pnode = pnode;
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
-
 		String str = (String) b;
+		setComboSelection(str, pd.isCaseSensitive());
+		combo.setEnabled(pnode.isEditable());
+		refresh = false;
+	}
+	
+	private void setComboSelection(String str, boolean isCaseSensitive){
 		String[] items = combo.getItems();
 		int selection = -1;
 		for (int i = 0; i < items.length; i++) {
-			if (Misc.compare(items[i], str, pd.isCaseSensitive())) {
+			if (Misc.compare(items[i], str, isCaseSensitive)) {
 				selection = i;
 				break;
 			}
@@ -96,11 +101,14 @@ public class SPRWCombo extends ASPropertyWidget {
 
 		combo.setSelection(new Point(stringLength, stringLength));
 		combo.getParent().layout(true);
-		combo.setEnabled(pnode.isEditable());
-		refresh = false;
 	}
 
 	public void setNewItems(final RWComboBoxPropertyDescriptor pd) {
+		//Block the update and reset the previously selected item
+		refresh = true;
+		String oldSelection = combo.getText();
 		combo.setItems(pd.getItems());
+		setComboSelection(oldSelection, pd.isCaseSensitive());
+		refresh = false;
 	}
 }
