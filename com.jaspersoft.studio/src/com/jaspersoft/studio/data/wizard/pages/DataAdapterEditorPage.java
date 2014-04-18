@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.wizard.pages;
 
+import java.text.MessageFormat;
+
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
@@ -120,7 +122,7 @@ public class DataAdapterEditorPage extends WizardPage implements WizardEndingSta
 				} else {
 
 					if (name.length() > 0) {
-						setMessage(Messages.DataAdapterEditorPage_5 + name + Messages.DataAdapterEditorPage_6, ERROR);
+						setMessage(MessageFormat.format(Messages.DataAdapterEditorPage_5, new Object[]{name}), ERROR);
 					} else {
 						setMessage(Messages.DataAdapterEditorPage_7, ERROR);
 					}

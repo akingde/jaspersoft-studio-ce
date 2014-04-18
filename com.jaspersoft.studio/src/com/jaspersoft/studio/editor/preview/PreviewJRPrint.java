@@ -187,6 +187,20 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	private String currentViewer;
+	
+	/**
+	 * Set the current preview type
+	 * 
+	 * @param viewerKey key of the type to show
+	 * @param refresh flag to set if the preview should also be refreshed
+	 */
+	public void setCurrentViewer(String viewerKey, boolean refresh){
+		if (ViewsFactory.getKeys().contains(viewerKey)){
+			currentViewer = viewerKey;
+			if (refresh) rightContainer.switchView(currentViewer);
+		}
+	}
+	
 
 	public String getDefaultViewerKey() {
 		if (currentViewer == null)

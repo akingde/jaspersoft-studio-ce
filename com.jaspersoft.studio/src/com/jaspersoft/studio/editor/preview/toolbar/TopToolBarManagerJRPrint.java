@@ -44,4 +44,11 @@ public class TopToolBarManagerJRPrint extends ATopToolBarManager {
 
 		tbManager.add(new Separator());
 	}
+	
+	/**
+	 * Set the text of the action
+	 */
+	public void setActionText(String text){
+		pvModeAction.setText(text);
+	}
 }

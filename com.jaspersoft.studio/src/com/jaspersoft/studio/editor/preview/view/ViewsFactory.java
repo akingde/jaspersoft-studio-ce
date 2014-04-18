@@ -12,6 +12,7 @@ package com.jaspersoft.studio.editor.preview.view;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -76,6 +77,20 @@ public class ViewsFactory {
 
 		pcmap.put("XML", XMLViewer.class);
 		pcmap.put("XML With Images", XMLImagesViewer.class);
+	}
+	
+	/**
+	 * Return the available keys for the preview area, may contains separator
+	 */
+	public static Set<String> getKeys(){
+		return pcmap.keySet();
+	}
+	
+	/**
+	 * Return true if a key is invalid or a separator
+	 */
+	public static boolean isSeparator(String key){
+		return pcmap.get(key) == null;
 	}
 
 	public static LinkedHashMap<String, APreview> createPreviews(final Composite composite,

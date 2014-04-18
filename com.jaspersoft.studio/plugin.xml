@@ -2247,4 +2247,10 @@
              ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory">
        </dataAdapter>
     </extension>
+    <extension
+          point="com.jaspersoft.studio.EditorSettingsMenu">
+       <EditorSettingsMenu
+             ClassFactory="com.jaspersoft.studio.editor.PreviewAndDatasetMenuContributor">
+       </EditorSettingsMenu>
+    </extension>
 </plugin>

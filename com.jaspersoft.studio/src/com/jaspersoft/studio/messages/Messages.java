@@ -1605,6 +1605,7 @@ public class Messages extends NLS {
 	public static String RVPropertyPage_subreport_variable;
 	public static String RVPropertyPage_to_variable;
 	public static String ScientificPattern_description;
+	public static String SelectDataAdapterAction_actionTitle;
 	public static String SelectWorkspacePage_description;
 	public static String SelectWorkspacePage_openTitle;
 	public static String SelectWorkspacePage_title;
@@ -1898,6 +1899,7 @@ public class Messages extends NLS {
 	public static String VerticalRowLayout_name;
 	public static String VerticalRowLayout_tooltip;
 	public static String ViewExecutionInfoAction_tooltip;
+	public static String ViewSettingsDropDownAction_previewFormatMenu;
 	public static String ViewSettingsDropDownAction_settingsName;
 	public static String WizardDataSourcePage_lblDataset_text;
 	public static String WizardDataSourcePage_lblNewLabel_text;

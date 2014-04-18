@@ -93,8 +93,14 @@ public class ViewSettingsDropDownAction extends Action implements IMenuCreator {
 	 * Adds an item to the existing menu using, using the contributed action.
 	 */
 	private void addActionToMenu(Menu parent, IAction action) {
-		ActionContributionItem item = new ActionContributionItem(action);
-		item.fill(parent, -1);
+		//If the action is a menu creator the create it as submenu
+		if (action instanceof IMenuCreator){
+			IMenuCreator creator = (IMenuCreator) action;
+			creator.getMenu(parent);
+		} else {
+			ActionContributionItem item = new ActionContributionItem(action);
+			item.fill(parent, -1);
+		}
 	}
 
 	@Override

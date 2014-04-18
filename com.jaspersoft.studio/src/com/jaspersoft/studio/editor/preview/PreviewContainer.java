@@ -314,6 +314,19 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			};
 		return topToolBarManager;
 	}
+	
+	/**
+	 * Set the current preview type
+	 * 
+	 * @param viewerKey key of the type to show
+	 * @param refresh flag to set if the preview should also be refreshed
+	 */
+	@Override
+	public void setCurrentViewer(String viewerKey, boolean refresh) {
+		super.setCurrentViewer(viewerKey, refresh);
+		//Set the name of the action to align the showed name with the actual type
+		topToolBarManager.setActionText(viewerKey);
+	}
 
 	protected void createLeft(Composite parent, SashForm sf) {
 		Composite leftComposite = new Composite(sf, SWT.BORDER);
@@ -520,4 +533,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		runReport(null);
 	}
 
+	/**
+	 * Set the dirty flag of the preview area
+	 */
+	public void setDirty(boolean dirty) {
+			this.isDirty = dirty;
+			if (dirty)
+				isRunDirty = true;
+	}
 }

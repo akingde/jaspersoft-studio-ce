@@ -159,15 +159,16 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				super.runReport(myDataAdapterDesc);
 			}
 		}
-
+		
+		/**
+		 * Set the dirty flag of the preview area, but only 
+		 * if it isn't refreshing
+		 */
 		public void setDirty(boolean dirty) {
 			if (!isRefresh) {
-				this.isDirty = dirty;
-				if (dirty)
-					isRunDirty = true;
+				super.setDirty(dirty);
 			}
 		}
-
 	}
 
 	/** The Constant PAGE_DESIGNER. */
@@ -718,6 +719,36 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	private PreviewEditor previewEditor;
 	private boolean toXML = false;
+	
+	/**
+	 * Set the current preview type
+	 * 
+	 * @param viewerKey key of the type to show
+	 * @param refresh flag to set if the preview should also be refreshed
+	 */
+	public void setPreviewOutput(String key, boolean refresh){
+		previewEditor.setCurrentViewer(key, refresh);
+	}
+	
+	/**
+	 * Return the actual preview type key on the preview editor
+	 * 
+	 * @return String representing the actual output of the preview editor
+	 */
+	public String getDefaultViewerKey() {
+		return previewEditor.getDefaultViewerKey();
+	}
+	
+	/**
+	 * Set the preview editor to dirty, this will refresh the preview
+	 * when switching into it 
+	 * 
+	 * @param dirty true to set the editor dirty, false otherwise
+	 */
+	public void setPreviewDirty(boolean dirty){
+		previewEditor.setDirty(dirty);
+	}
+
 
 	/**
 	 * Calculates the contents of page 2 when the it is activated.
