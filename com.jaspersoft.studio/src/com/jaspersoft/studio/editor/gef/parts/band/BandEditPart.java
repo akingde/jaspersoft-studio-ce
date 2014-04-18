@@ -60,10 +60,10 @@ import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.JSSSnapFeedBackPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -212,7 +212,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy("Snap Feedback", new JSSSnapFeedBackPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new BandMoveEditPolicy() {
 			@Override

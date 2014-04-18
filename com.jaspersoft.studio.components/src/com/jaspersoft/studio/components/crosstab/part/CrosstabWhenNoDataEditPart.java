@@ -53,8 +53,8 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.jasper.JSSDrawVisitor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -82,7 +82,7 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 		if (getModel() instanceof MCrosstabWhenNoData)
 			super.createEditPolicies();
 		else {
-			installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
 				private RectangleFigure targetFeedback;

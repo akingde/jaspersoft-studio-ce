@@ -63,9 +63,9 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.APrefFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -107,7 +107,7 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
 			private RectangleFigure targetFeedback;

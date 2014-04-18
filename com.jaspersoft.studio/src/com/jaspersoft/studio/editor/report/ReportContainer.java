@@ -301,6 +301,15 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			return editors.get(0);
 		return null;
 	}
+	
+	/**
+	 * Check if there are subeditors opened
+	 * 
+	 * @return true if there are subeditors opened, false otherwise
+	 */
+	public boolean hasSubeditorOpened(){
+		return (ccMap != null && !ccMap.isEmpty());
+	}
 
 	/**
 	 * Gets the model.

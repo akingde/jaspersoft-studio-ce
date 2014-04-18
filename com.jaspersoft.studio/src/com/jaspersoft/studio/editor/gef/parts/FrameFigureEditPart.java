@@ -34,10 +34,10 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ColoredRectangle;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -80,7 +80,7 @@ public class FrameFigureEditPart extends FigureEditPart implements IContainer {
 	@Override
 	protected void createEditPolicies() {
 		// super.createEditPolicies();
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new FigureSelectionEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 

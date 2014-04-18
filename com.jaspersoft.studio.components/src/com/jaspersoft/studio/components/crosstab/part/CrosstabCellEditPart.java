@@ -52,8 +52,8 @@ import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellRes
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -92,7 +92,7 @@ public class CrosstabCellEditPart extends ACrosstabCellEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new CloseSubeditorDeletePolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
 
 			private RectangleFigure targetFeedback;
