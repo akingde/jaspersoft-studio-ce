@@ -45,34 +45,35 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 
 	@Override
 	protected void doDeleteMore(ANode parent, MFromTable todel) {
-		for (INode n : parent.getRoot().getChildren()) {
-			if (n instanceof MSelect) {
-				List<ANode> toRemove = new ArrayList<ANode>();
-				for (INode gb : n.getChildren()) {
-					MSelectColumn gbc = (MSelectColumn) gb;
-					if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
-						toRemove.add(gbc);
-				}
-				((MSelect) n).removeChildren(toRemove);
-			} else if (n instanceof MGroupBy) {
-				List<ANode> toRemove = new ArrayList<ANode>();
-				for (INode gb : n.getChildren()) {
-					MGroupByColumn gbc = (MGroupByColumn) gb;
-					if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
-						toRemove.add(gbc);
-				}
-				((MGroupBy) n).removeChildren(toRemove);
-			} else if (n instanceof MOrderBy) {
-				List<ANode> toRemove = new ArrayList<ANode>();
-				for (INode gb : n.getChildren()) {
-					if (gb instanceof MOrderByColumn) {
-						MOrderByColumn gbc = (MOrderByColumn) gb;
+		if (parent.getRoot() != null)
+			for (INode n : parent.getRoot().getChildren()) {
+				if (n instanceof MSelect) {
+					List<ANode> toRemove = new ArrayList<ANode>();
+					for (INode gb : n.getChildren()) {
+						MSelectColumn gbc = (MSelectColumn) gb;
 						if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
 							toRemove.add(gbc);
 					}
+					((MSelect) n).removeChildren(toRemove);
+				} else if (n instanceof MGroupBy) {
+					List<ANode> toRemove = new ArrayList<ANode>();
+					for (INode gb : n.getChildren()) {
+						MGroupByColumn gbc = (MGroupByColumn) gb;
+						if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+							toRemove.add(gbc);
+					}
+					((MGroupBy) n).removeChildren(toRemove);
+				} else if (n instanceof MOrderBy) {
+					List<ANode> toRemove = new ArrayList<ANode>();
+					for (INode gb : n.getChildren()) {
+						if (gb instanceof MOrderByColumn) {
+							MOrderByColumn gbc = (MOrderByColumn) gb;
+							if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+								toRemove.add(gbc);
+						}
+					}
+					((MOrderBy) n).removeChildren(toRemove);
 				}
-				((MOrderBy) n).removeChildren(toRemove);
 			}
-		}
 	}
 }

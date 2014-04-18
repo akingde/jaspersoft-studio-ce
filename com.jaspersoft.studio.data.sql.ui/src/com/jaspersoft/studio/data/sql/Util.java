@@ -317,8 +317,11 @@ public class Util {
 		}.getObject();
 	}
 
+	public static MSqlTable getTable(MRoot rmeta, MSqlTable mtable) {
+		return getTable(rmeta, null, mtable.getSchema().getValue(), mtable.getValue());
+	}
+
 	public static MSqlTable getTable(MRoot rmeta, final String cat, final String schema, final String table) {
-		final String fullname = schema + "." + table;
 		ModelVisitor<MSqlTable> v = new ModelVisitor<MSqlTable>(rmeta) {
 
 			@Override

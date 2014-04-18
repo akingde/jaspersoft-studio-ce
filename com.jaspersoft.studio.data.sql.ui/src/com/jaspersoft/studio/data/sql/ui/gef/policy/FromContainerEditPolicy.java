@@ -68,7 +68,6 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 					r.width = request.getSize().width;
 					r.height = request.getSize().height;
 				}
-				System.out.println("addTAbleCommand");
 				return new AddTableCommand(parent, (Collection<MSqlTable>) newObject, r);
 			}
 		return null;

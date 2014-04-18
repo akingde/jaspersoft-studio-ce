@@ -36,20 +36,13 @@ public class AddTableCommand extends Command {
 		if (fromTable == null) {
 			fromTable = new ArrayList<MFromTable>();
 			Map<ForeignKey, MFromTable> fks = new HashMap<ForeignKey, MFromTable>();
-			MFromTable main = null;
 			for (MSqlTable mtlb : child) {
 				MFromTable ft = new MFromTable(parent, mtlb);
-				if (location != null) {
+				if (location != null && child.size() == 1) {
 					ft.setPropertyValue(MFromTable.PROP_X, location.x);
 					ft.setPropertyValue(MFromTable.PROP_Y, location.y);
 				}
 				fromTable.add(ft);
-				if (main != null)
-					main = ft;
-				if (mtlb.getChildren().isEmpty())
-					continue;
-				// if (mtlb.getChildren().get(0) instanceof MDummy)
-				// MetaDataUtil.readTableColumns(meta, mtable, monitor);
 				for (INode n : mtlb.getChildren()) {
 					if (n instanceof MSQLColumn) {
 						List<ForeignKey> lfk = ((MSQLColumn) n).getForeignKeys();
@@ -62,10 +55,10 @@ public class AddTableCommand extends Command {
 			if (fromTable.size() > 1 && !fks.keySet().isEmpty())
 				// ok, we have all the keys, now let's join
 				for (ForeignKey fk : fks.keySet()) {
-					for (MSQLColumn c : fk.getSrcColumns()) {
-						MFromTable dest = hasTable(c);
-						if (dest != null) {
-							if (!(dest instanceof MFromTableJoin)) {
+					if (fk != null && fk.getSrcColumns() != null)
+						for (MSQLColumn c : fk.getSrcColumns()) {
+							MFromTable dest = hasTable(c);
+							if (dest != null && !(dest instanceof MFromTableJoin)) {
 								MFromTable src = fks.get(fk);
 								MFromTable p = src instanceof MFromTableJoin ? (MFromTable) src.getParent() : src;
 
@@ -81,8 +74,6 @@ public class AddTableCommand extends Command {
 								fks.put(fk, join);
 							}
 						}
-					}
-					break;
 				}
 		} else {
 			for (MFromTable mft : fromTable)

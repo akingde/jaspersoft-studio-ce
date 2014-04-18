@@ -160,28 +160,26 @@ public class MetaDataUtil {
 			String pktable = f[2];
 			String pkcolname = f[3];
 			String fkcolname = f[4];
+			String fkname = f[5];
 			MSqlTable dTable = null;
-			if (fk == null || !fk.getFkName().equals(pkcolname)) {
-				fk = new ForeignKey(f[5]);
+			if (fk == null || !fk.getFkName().equals(fkname)) {
+				closeForeignKey(fk, srcCols, dstCols);
+				fk = new ForeignKey(fkname);
 				dTable = Util.getTable((MRoot) tables.getRoot(), pkcatalog, pkschema, pktable);
 				if (dTable.getChildren().isEmpty() || dTable.getChildren().get(0) instanceof MDummy) {
 					readTableColumns(meta, dTable, monitor);
 					readTableKeys(meta, dTable, monitor);
 				}
 			}
-			// short keySeq = rs.getShort("PKKEY_SEQ");
 			for (INode n : mt.getChildren()) {
 				if (n.getValue().equals(pkcolname)) {
-					((MSQLColumn) n).addForeignKey(fk);
 					srcCols.add((MSQLColumn) n);
 					break;
 				}
 			}
-			// short keySeq = rs.getShort("FKKEY_SEQ");
 			if (dTable != null)
 				for (INode n : dTable.getChildren()) {
 					if (n.getValue().equals(fkcolname)) {
-						((MSQLColumn) n).addForeignKey(fk);
 						dstCols.add((MSQLColumn) n);
 						break;
 					}
@@ -192,9 +190,17 @@ public class MetaDataUtil {
 			if (monitor.isCanceled())
 				break;
 		}
+		closeForeignKey(fk, srcCols, dstCols);
+	}
 
-		if (fk != null)
+	private static void closeForeignKey(ForeignKey fk, List<MSQLColumn> srcCols, List<MSQLColumn> dstCols) {
+		if (fk != null) {
+			for (MSQLColumn c : srcCols)
+				c.addForeignKey(fk);
+			for (MSQLColumn c : dstCols)
+				c.addForeignKey(fk);
 			fk.setColumns(srcCols.toArray(new MSQLColumn[srcCols.size()]), dstCols.toArray(new MSQLColumn[dstCols.size()]));
+		}
 	}
 
 	public synchronized static void readProcedures(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor) {

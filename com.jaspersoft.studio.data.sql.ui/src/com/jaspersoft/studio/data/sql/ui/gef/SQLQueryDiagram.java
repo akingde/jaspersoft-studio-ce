@@ -251,9 +251,15 @@ public class SQLQueryDiagram {
 				// Forcing the loading of the tables information so the user can use
 				// smoothly
 				// the graphical editor (Diagram Tab) without NPE.
+				Set<MSqlTable> tmp = new LinkedHashSet<MSqlTable>();
 				for (MSqlTable t : tablesset) {
-					designer.getDbMetadata().loadTable(t);
+					MSqlTable mt = Util.getTable(designer.getDbMetadata().getRoot(), t);
+					designer.getDbMetadata().loadTable(mt);
+					tmp.add(mt);
 				}
+				tablesset.clear();
+				tablesset.addAll(tmp);
+
 				CreateTable ct = designer.getOutline().getAfactory().getAction(CreateTable.class);
 				if (ct.calculateEnabled(new Object[] { mfrom })) {
 					// ct.run(tablesset);

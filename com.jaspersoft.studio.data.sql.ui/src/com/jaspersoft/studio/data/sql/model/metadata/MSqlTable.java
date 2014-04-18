@@ -81,6 +81,12 @@ public class MSqlTable extends AMSQLObject implements IDragable, INotInMetadata 
 		return remarks;
 	}
 
+	public MSqlSchema getSchema() {
+		if (getParent() != null && getParent().getParent() != null && getParent().getParent() instanceof MSqlSchema)
+			return (MSqlSchema) getParent().getParent();
+		return null;
+	}
+
 	public boolean isCurrentSchema() {
 		return getParent() != null && getParent().getParent() != null && getParent().getParent() instanceof MSqlSchema && ((MSqlSchema) getParent().getParent()).isCurrent();
 	}
