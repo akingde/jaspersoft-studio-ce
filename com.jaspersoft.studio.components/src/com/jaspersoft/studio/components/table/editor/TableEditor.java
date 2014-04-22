@@ -22,7 +22,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -42,6 +41,7 @@ import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCe
 import com.jaspersoft.studio.components.table.model.column.action.DeleteRowAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
+import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -99,7 +99,7 @@ public class TableEditor extends AbstractVisualEditor {
 				isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(
+		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(
 				graphicalViewer));
 	}
 

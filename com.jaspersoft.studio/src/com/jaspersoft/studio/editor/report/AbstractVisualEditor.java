@@ -175,7 +175,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
 		DefaultEditDomain ed = new DefaultEditDomain(this);
-		ed.setDefaultTool(new MovableSelectionTool());
 		setEditDomain(ed);
 		this.jrContext = jrContext;
 	}

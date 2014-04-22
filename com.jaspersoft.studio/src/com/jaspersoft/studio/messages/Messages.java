@@ -853,6 +853,7 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_select_all;
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;
+	public static String JSSGraphicalViewerKeyHandler_ErrorNoArrowKey;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage1;
 	public static String JSSTemplateTransferDropTargetListener_createLabelMessage2;
 	public static String JSSTemplateTransferDropTargetListener_createLabelTitle;

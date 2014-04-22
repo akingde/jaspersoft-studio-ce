@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2010 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, 
@@ -13,7 +13,7 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.report;
+package com.jaspersoft.studio.editor.gef.parts;
 
 import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -23,54 +23,57 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Handle;
+import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.tools.SelectionTool;
+import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
- * This selection tool should be used in order to enable the movements on
- * the primary-selected {@link EditPart} simply using the keyboard arrows,
+ * This custom {@link KeyHandler} adds the support for movements of the selected
+ * {@link EditPart} elements simply using the keyboard arrows,
  * without the need to iterate through all the available {@link Handle handles}
  * via the PERIOD keystroke.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- * @deprecated No longer used, we now replaced this feature using the dedicated 
- * {@link JSSGraphicalViewerKeyHandler} on the graphical viewer
  * 
  */
-public class MovableSelectionTool extends SelectionTool {
+public class JSSGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler {
+
+	public JSSGraphicalViewerKeyHandler(GraphicalViewer viewer) {
+		super(viewer);
+	}
 	
 	@Override
-	protected boolean handleKeyDown(KeyEvent e) {
-		if (isInState(STATE_INITIAL) && UIUtil.isArrowKey(e.keyCode)) {
-			EditPartViewer viewer = getCurrentViewer();
+	public boolean keyPressed(KeyEvent event) {
+		if (UIUtil.isArrowKey(event.keyCode)) {
+			EditPartViewer viewer = getViewer();
 			if (viewer instanceof GraphicalViewer) {
 				JSSCompoundCommand ccmd = new JSSCompoundCommand(null);
-				for(Object selectedEditPart : getCurrentViewer().getSelectedEditParts()) {
+				for(Object selectedEditPart : getViewer().getSelectedEditParts()) {
 					if (selectedEditPart instanceof GraphicalEditPart) {
 						Object modelObj = ((EditPart) selectedEditPart).getModel();
 						if(modelObj instanceof MGraphicElement) {
 							MGraphicElement node = (MGraphicElement) modelObj;
-							ccmd.add(getNewXYCommand(e.keyCode,node));
+							ccmd.add(getNewXYCommand(event.keyCode,node));
 						}
 					}
 				}
 				if(!ccmd.isEmpty()) {
-					getDomain().getCommandStack().execute(ccmd);
+					getViewer().getEditDomain().getCommandStack().execute(ccmd);
 					return true;
 				}	
 			}
 		}
-		return super.handleKeyDown(e);
+		return super.keyPressed(event);
 	}
-	
+		
 	/*
 	 * Gets a new command that modify the x or y coordinate depending on the 
 	 * arrow key pressed.
@@ -101,9 +104,9 @@ public class MovableSelectionTool extends SelectionTool {
 			newXYCmd.setPropertyValue(x+step);
 			break;
 		default:
-			throw new RuntimeException("Only arrow keys can be accepted!");
+			throw new RuntimeException(Messages.JSSGraphicalViewerKeyHandler_ErrorNoArrowKey);
 		}
 		return newXYCmd;
 	}
-	
+
 }
