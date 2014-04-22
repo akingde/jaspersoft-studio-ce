@@ -29,6 +29,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.wizard.pages.ServerProfilePage;
 
@@ -37,7 +38,7 @@ public class ServerProfileWizard extends Wizard {
 
 	public ServerProfileWizard(MServerProfile sprofile) {
 		super();
-		setWindowTitle("Server profile wizard");
+		setWindowTitle(Messages.ServerProfileWizard_0);
 		this.serverProfile = sprofile;
 		setNeedsProgressMonitor(true);
 	}
@@ -89,14 +90,14 @@ public class ServerProfileWizard extends Wizard {
 	private void connectionOK() {
 		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				MessageDialog.openInformation(getShell(), "Connection to JasperServer", "Successful");
+				MessageDialog.openInformation(getShell(), Messages.ServerProfileWizard_1, Messages.ServerProfileWizard_2);
 			}
 		});
 	}
 
 	private IStatus connect(final boolean onlycheck, IProgressMonitor monitor) throws InvocationTargetException {
 		try {
-			monitor.beginTask("Connecting to the server", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(Messages.ServerProfileWizard_3, IProgressMonitor.UNKNOWN);
 			if (onlycheck) {
 				if (WSClientHelper.checkConnection(serverProfile, monitor))
 					connectionOK();

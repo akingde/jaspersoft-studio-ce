@@ -59,17 +59,9 @@ public class ExportExecution {
 		condition = lock.newCondition();
 	}
 
-	private String id;
-
 	@XmlElement
 	public String getId() {
-		if (id != null)
-			return id;
 		return options.toString();
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@XmlTransient

@@ -39,6 +39,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Callback;
@@ -52,7 +53,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class MServerProfile extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	public static final String MAPPINGFILE = "com/jaspersoft/studio/server/model/server/ServerProfileImpl.xml";
+	public static final String MAPPINGFILE = "com/jaspersoft/studio/server/model/server/ServerProfileImpl.xml"; //$NON-NLS-1$
 
 	public MServerProfile(ANode parent, ServerProfile server) {
 		super(parent, -1);
@@ -122,30 +123,30 @@ public class MServerProfile extends ANode {
 		if (v != null && v.getName() != null && !v.getName().isEmpty()) {
 			String tt = v.getName();
 			if (v.getUrl() != null)
-				tt += "\n" + v.getUrl();
+				tt += "\n" + v.getUrl(); //$NON-NLS-1$
 			if (v.getUser() != null)
-				tt += "\nUser: " + v.getUser();
+				tt += Messages.MServerProfile_2 + v.getUser();
 			String ci = getConnectionInfo();
 			if (!Misc.isNullOrEmpty(ci))
-				tt += "\n\n" + ci;
+				tt += "\n\n" + ci; //$NON-NLS-1$
 			return tt;
 		}
 		return getIconDescriptor().getTitle();
 	}
 
 	public String getConnectionInfo() {
-		String tt = "";
+		String tt = ""; //$NON-NLS-1$
 		if (wsClient != null) {
 			try {
 				ServerInfo info = wsClient.getServerInfo(null);
-				tt += "Version: " + info.getVersion();
-				tt += "\nEdition: " + Misc.nvl(info.getEditionName()) + " " + (info.getEdition() != null ? info.getEdition() : "");
-				tt += "\nBuild: " + Misc.nvl(info.getBuild());
-				tt += "\nLicence Type: " + Misc.nvl(info.getLicenseType());
-				tt += "\nExpiration: " + Misc.nvl(info.getExpiration());
-				tt += "\nFeatures: " + Misc.nvl(info.getFeatures());
-				tt += "\nDate Format: " + Misc.nvl(info.getDateFormatPattern());
-				tt += "\nTimestamp Format: " + Misc.nvl(info.getDatetimeFormatPattern());
+				tt += Messages.MServerProfile_5 + info.getVersion();
+				tt += Messages.MServerProfile_6 + Misc.nvl(info.getEditionName()) + " " + (info.getEdition() != null ? info.getEdition() : ""); //$NON-NLS-2$ //$NON-NLS-3$
+				tt += Messages.MServerProfile_9 + Misc.nvl(info.getBuild());
+				tt += Messages.MServerProfile_10 + Misc.nvl(info.getLicenseType());
+				tt += Messages.MServerProfile_11 + Misc.nvl(info.getExpiration());
+				tt += Messages.MServerProfile_12 + Misc.nvl(info.getFeatures());
+				tt += Messages.MServerProfile_13 + Misc.nvl(info.getDateFormatPattern());
+				tt += Messages.MServerProfile_14 + Misc.nvl(info.getDatetimeFormatPattern());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -161,10 +162,10 @@ public class MServerProfile extends ANode {
 
 	public IConnection getWsClient(final Callback<IConnection> c) {
 		if (wsClient == null) {
-			Job job = new Job("Building report") {
+			Job job = new Job(Messages.MServerProfile_15) {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					monitor.beginTask("", IProgressMonitor.UNKNOWN);
+					monitor.beginTask("", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 					try {
 						getWsClient(monitor);
 					} catch (Exception e) {
@@ -228,13 +229,14 @@ public class MServerProfile extends ANode {
 				String path = prjpath.trim();
 				if (path.charAt(0) == '/')
 					path = path.substring(1);
-				int indx = path.indexOf("/");
-				String ppath = path.substring(0, indx);
-				String fpath = path.substring(indx);
+				int indx = path.indexOf("/"); //$NON-NLS-1$
+				String ppath = indx >= 0 ? path.substring(0, indx) : path;
+				String fpath = indx >= 0 ? path.substring(indx) : "/"; //$NON-NLS-1$
+
 				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ppath);
 				tmpDir = prj.getFolder(fpath);
 			} else
-				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor);
+				tmpDir = FileUtils.getInProjectFolder(FileUtils.createTempDir(getValue().getName().replace(" ", "") + "-").toURI(), monitor); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (!tmpDir.exists())
 				tmpDir.create(true, true, monitor);
 		}

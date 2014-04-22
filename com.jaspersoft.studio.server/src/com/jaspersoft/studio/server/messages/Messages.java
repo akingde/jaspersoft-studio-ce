@@ -95,6 +95,16 @@ public class Messages extends NLS {
 	public static String JrxmlPublishAction_title;
 	public static String JrxmlPublishAction_tooltip;
 	public static String LovPageContent_lov;
+	public static String MServerProfile_10;
+	public static String MServerProfile_11;
+	public static String MServerProfile_12;
+	public static String MServerProfile_13;
+	public static String MServerProfile_14;
+	public static String MServerProfile_15;
+	public static String MServerProfile_2;
+	public static String MServerProfile_5;
+	public static String MServerProfile_6;
+	public static String MServerProfile_9;
 	public static String OLAPXmlaPageContent_catalog;
 	public static String OLAPXmlaPageContent_datasource;
 	public static String OLAPXmlaPageContent_pass;
@@ -262,6 +272,10 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_connectiontimeout;
 	public static String ServerProfilePage_daterangeexpression;
 	public static String ServerProfilePage_jrversion;
+	public static String ServerProfileWizard_0;
+	public static String ServerProfileWizard_1;
+	public static String ServerProfileWizard_2;
+	public static String ServerProfileWizard_3;
 	public static String ServerProfileWizardDialog_testButton;
 	public static String ShowPublishDialogAction_1;
 	public static String ShowPublishDialogAction_2;

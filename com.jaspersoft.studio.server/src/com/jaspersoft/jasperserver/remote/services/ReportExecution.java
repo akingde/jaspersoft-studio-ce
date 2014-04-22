@@ -25,12 +25,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.jaspersoft.jasperserver.api.JSException;
 import com.jaspersoft.jasperserver.api.engine.jasperreports.domain.impl.ReportUnitResult;
 import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
 
@@ -50,7 +54,16 @@ public class ReportExecution {
 	private Map<ExportExecutionOptions, ExportExecution> exports = new ConcurrentHashMap<ExportExecutionOptions, ExportExecution>();
 	private ReportUnitResult reportUnitResult;
 	private Map<String, String[]> rawParameters;
+	private String requestId;
+	private String reportURI;
 	private ReportExecutionOptions options;
+	private final Lock resultLock;
+	private final Condition resultExist;
+
+	public ReportExecution() {
+		resultLock = new ReentrantLock();
+		resultExist = resultLock.newCondition();
+	}
 
 	@XmlTransient
 	public Map<String, String[]> getRawParameters() {
@@ -71,12 +84,34 @@ public class ReportExecution {
 	}
 
 	@XmlTransient
+	public ReportUnitResult getFinalReportUnitResult() {
+		resultLock.lock();
+		try {
+			while (reportUnitResult == null && status != ExecutionStatus.cancelled && status != ExecutionStatus.failed) {
+				resultExist.await();
+			}
+		} catch (InterruptedException e) {
+			throw new JSException(e);
+		} finally {
+			resultLock.unlock();
+		}
+
+		return reportUnitResult;
+	}
+
+	@XmlTransient
 	public ReportUnitResult getReportUnitResult() {
 		return reportUnitResult;
 	}
 
 	public void setReportUnitResult(ReportUnitResult reportUnitResult) {
-		this.reportUnitResult = reportUnitResult;
+		resultLock.lock();
+		try {
+			this.reportUnitResult = reportUnitResult;
+			resultExist.signalAll();
+		} finally {
+			resultLock.unlock();
+		}
 	}
 
 	public Integer getCurrentPage() {
@@ -87,15 +122,12 @@ public class ReportExecution {
 		this.currentPage = currentPage;
 	}
 
-	@XmlElement
 	public String getRequestId() {
-		return reportUnitResult != null ? reportUnitResult.getRequestId() : null;
+		return requestId;
 	}
 
-	public void setRequestId(String id) {
-		if (reportUnitResult == null)
-			reportUnitResult = new ReportUnitResult(getReportURI(), null);
-		reportUnitResult.setRequestId(id);
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
 
 	@XmlElement(name = "export")
@@ -114,7 +146,6 @@ public class ReportExecution {
 		} else {
 			setExports(null);
 		}
-
 	}
 
 	@XmlTransient
@@ -134,15 +165,12 @@ public class ReportExecution {
 		this.errorDescriptor = errorDescriptor;
 	}
 
-	@XmlElement
 	public String getReportURI() {
-		return reportUnitResult != null ? reportUnitResult.getReportUnitURI() : null;
+		return reportURI;
 	}
 
-	public void setReportURI(String uri) {
-		String id = getRequestId();
-		reportUnitResult = new ReportUnitResult(uri, null);
-		reportUnitResult.setRequestId(id);
+	public void setReportURI(String reportURI) {
+		this.reportURI = reportURI;
 	}
 
 	public ExecutionStatus getStatus() {
@@ -150,7 +178,17 @@ public class ReportExecution {
 	}
 
 	public void setStatus(ExecutionStatus status) {
-		this.status = status;
+		resultLock.lock();
+		try {
+			this.status = status;
+			// status has been changed. Let's signal result condition to check the
+			// updated status
+			// and stop waiting if cancelled or failed
+			resultExist.signalAll();
+		} finally {
+			resultLock.unlock();
+		}
+
 	}
 
 	public Integer getTotalPages() {

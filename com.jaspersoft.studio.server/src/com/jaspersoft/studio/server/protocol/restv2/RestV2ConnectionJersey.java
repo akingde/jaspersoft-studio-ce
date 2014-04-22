@@ -47,11 +47,12 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.AttachmentDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ExportDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.OutputResourceDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ReportExecutionDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
 import com.jaspersoft.jasperserver.jaxrs.report.ReportExecutionRequest;
-import com.jaspersoft.jasperserver.remote.services.ExportExecution;
-import com.jaspersoft.jasperserver.remote.services.ReportExecution;
-import com.jaspersoft.jasperserver.remote.services.ReportOutputResource;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -409,17 +410,17 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		Builder req = tgt.request();
 		Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
-		ReportExecution res = toObj(r, ReportExecution.class, monitor);
+		ReportExecutionDescriptor res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		if (res != null && res.getErrorDescriptor() == null) {
-			if (res.getExportsSet() != null) {
+			if (res.getExports() != null) {
 				int i = 0;
-				for (ExportExecution ee : res.getExportsSet()) {
+				for (ExportDescriptor ee : res.getExports()) {
 					tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
 					req = tgt.request(ee.getOutputResource().getContentType());
 					byte[] d = readFile(connector.get(req, monitor), monitor);
 					addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
-					if (ee.getAttachmentsSet() != null)
-						for (ReportOutputResource ror : ee.getAttachmentsSet()) {
+					if (ee.getAttachments() != null)
+						for (AttachmentDescriptor ror : ee.getAttachments()) {
 							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
 							req = tgt.request(ror.getContentType());
 							d = readFile(connector.get(req, monitor), monitor);
@@ -442,7 +443,18 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		return map;
 	}
 
-	private void addFileContent(byte[] d, Map<String, FileContent> map, ReportOutputResource r, String id, String key) {
+	private void addFileContent(byte[] d, Map<String, FileContent> map, AttachmentDescriptor r, String id, String key) {
+		if (d != null) {
+			FileContent content = new FileContent();
+			content.setData(d);
+			content.setMimeType(r.getContentType());
+			content.setName(Misc.nvl(r.getFileName(), id));
+
+			map.put(key, content);
+		}
+	}
+
+	private void addFileContent(byte[] d, Map<String, FileContent> map, OutputResourceDescriptor r, String id, String key) {
 		if (d != null) {
 			FileContent content = new FileContent();
 			content.setData(d);
