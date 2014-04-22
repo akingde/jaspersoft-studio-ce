@@ -235,7 +235,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				if (isVisible() && JasperReportsPlugin.isPressed(getOsDependantKey()) && event.time != lastTime){
 					setActions();
 					lastTime = event.time;
-					if (event.count > 0 && zoomInAction != null && zoomInAction.isActionEnabled()){
+					if (event.character == '+' && zoomInAction != null && zoomInAction.isActionEnabled()){
+						zoomInAction.run();
+					} else if (event.character == '-' && zoomOutAction != null && zoomOutAction.isActionEnabled()){
+						zoomOutAction.run();
+					} else if (event.count > 0 && zoomInAction != null && zoomInAction.isActionEnabled()){
 						zoomInAction.run();
 					} else if (event.count < 0 && zoomOutAction != null && zoomOutAction.isActionEnabled()){
 						zoomOutAction.run();
@@ -250,6 +254,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	@Override
 	public void dispose() {
 		actualDisplay.removeFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
+		actualDisplay.removeFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
 		super.dispose();
 	}
 	
@@ -288,6 +293,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		//Set the mouse wheel listener for the zoom operation
 		actualDisplay = container.getDisplay();
 		actualDisplay.addFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
+		actualDisplay.addFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
 	}
 
 	@Override
