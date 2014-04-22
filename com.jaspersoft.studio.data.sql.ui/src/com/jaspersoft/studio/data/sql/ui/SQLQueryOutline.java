@@ -279,6 +279,15 @@ public class SQLQueryOutline {
 
 			protected void doDropTable(Object target, Set<MSqlTable> tablesset) {
 				if (!tablesset.isEmpty()) {
+					Set<MSqlTable> tmp = new LinkedHashSet<MSqlTable>();
+					for (MSqlTable t : tablesset) {
+						MSqlTable mt = Util.getTable(designer.getDbMetadata().getRoot(), t);
+						designer.getDbMetadata().loadTable(mt);
+						tmp.add(mt);
+					}
+					tablesset.clear();
+					tablesset.addAll(tmp);
+
 					for (MSqlTable t : tablesset)
 						designer.getDbMetadata().loadTable(t);
 					if (target instanceof MSelect || target instanceof MSelectColumn || target instanceof MSelectExpression) {

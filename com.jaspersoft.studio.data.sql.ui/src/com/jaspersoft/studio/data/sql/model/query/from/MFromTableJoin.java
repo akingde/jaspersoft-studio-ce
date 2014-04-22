@@ -100,7 +100,7 @@ public class MFromTableJoin extends MFromTable {
 	}
 
 	public String toSQLString() {
-		return getDisplayText();
+		return "\n\t" + getDisplayText();
 	}
 
 }

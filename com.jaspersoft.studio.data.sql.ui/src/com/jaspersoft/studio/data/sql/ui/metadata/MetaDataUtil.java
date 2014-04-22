@@ -164,7 +164,7 @@ public class MetaDataUtil {
 			MSqlTable dTable = null;
 			if (fk == null || !fk.getFkName().equals(fkname)) {
 				closeForeignKey(fk, srcCols, dstCols);
-				fk = new ForeignKey(fkname);
+				fk = new ForeignKey(fkname, mt);
 				dTable = Util.getTable((MRoot) tables.getRoot(), pkcatalog, pkschema, pktable);
 				if (dTable.getChildren().isEmpty() || dTable.getChildren().get(0) instanceof MDummy) {
 					readTableColumns(meta, dTable, monitor);
@@ -185,6 +185,7 @@ public class MetaDataUtil {
 					}
 				}
 			else {
+				fk = null;
 				// the link is not good, what we do?
 			}
 			if (monitor.isCanceled())

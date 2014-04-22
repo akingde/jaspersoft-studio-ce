@@ -13,10 +13,12 @@ public class ForeignKey implements Serializable {
 	private String fkName;
 	private MSQLColumn[] srcColumns;
 	private MSQLColumn[] destColumns;
+	private MSqlTable tbl;
 
-	public ForeignKey(String fkName) {
+	public ForeignKey(String fkName, MSqlTable tbl) {
 		super();
 		this.fkName = fkName;
+		this.tbl = tbl;
 	}
 
 	public void setColumns(MSQLColumn[] srcColumns, MSQLColumn[] destColumns) {
@@ -34,6 +36,20 @@ public class ForeignKey implements Serializable {
 
 	public MSQLColumn[] getDestColumns() {
 		return destColumns;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return fkName.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return fkName.hashCode();
+	}
+
+	public MSqlTable getTable() {
+		return tbl;
 	}
 
 	private String sql;

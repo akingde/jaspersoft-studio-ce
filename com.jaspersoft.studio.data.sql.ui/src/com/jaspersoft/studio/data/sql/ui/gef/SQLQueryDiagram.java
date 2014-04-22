@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -31,10 +33,14 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
+import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IMenuManager;
@@ -45,6 +51,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.w3c.tools.codec.Base64Decoder;
@@ -86,7 +93,44 @@ public class SQLQueryDiagram {
 		viewer.setEditDomain(new DefaultEditDomain(null));
 		viewer.setRootEditPart(new SQLDesignerRootEditPart());
 		viewer.setEditPartFactory(new SQLDesignerEditPartFactory());
-		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
+		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer) {
+			@Override
+			public boolean keyPressed(KeyEvent event) {
+				if (event.keyCode == SWT.DEL) {
+					List<EditPart> parts = viewer.getSelectedEditParts();
+					CompoundCommand cc = new CompoundCommand() {
+						private boolean firstRun = false;
+						private boolean run = true;
+
+						@Override
+						public void execute() {
+							if (!firstRun)
+								run = UIUtils.showConfirmation("Delete ", "Are you sure you want to delete the table(s)?");
+							firstRun = true;
+							if (run)
+								super.execute();
+						}
+
+						@Override
+						public void undo() {
+							if (run)
+								super.undo();
+						}
+					};
+					for (EditPart p : parts) {
+						GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
+						Map<String, String> extendedData = new HashMap<String, String>();
+						extendedData.put("Delete", "Delete from diagram");
+						deleteReq.setExtendedData(extendedData);
+						deleteReq.setEditParts(p);
+						cc.add(p.getCommand(deleteReq));
+					}
+					viewer.getEditDomain().getCommandStack().execute(cc);
+					refreshViewer();
+				}
+				return super.keyPressed(event);
+			}
+		});
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 		viewer.setProperty(SQLQUERYDIAGRAM, designer);
 		viewer.setContextMenu(new ContextMenuProvider(viewer) {
@@ -118,6 +162,11 @@ public class SQLQueryDiagram {
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(viewer, NodeTransfer.getInstance()));
 
+		ZoomManager zoomManager = (ZoomManager) viewer.getProperty(ZoomManager.class.toString());
+
+		// viewer.registerAction(new ZoomInAction(zoomManager));
+		// viewer.registerAction(new ZoomOutAction(zoomManager));
+		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 		refreshViewer();
 
 		return viewer.getControl();

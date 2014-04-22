@@ -17,6 +17,7 @@ import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
 public class AddTableCommand extends Command {
@@ -24,6 +25,7 @@ public class AddTableCommand extends Command {
 	private MFrom parent;
 	private Collection<MSqlTable> child;
 	private List<MFromTable> fromTable;
+	private Map<MFromTable, ANode> parentMap;
 
 	public AddTableCommand(MFrom parent, Collection<MSqlTable> child, Rectangle location) {
 		this.location = location;
@@ -35,7 +37,7 @@ public class AddTableCommand extends Command {
 	public void execute() {
 		if (fromTable == null) {
 			fromTable = new ArrayList<MFromTable>();
-			Map<ForeignKey, MFromTable> fks = new HashMap<ForeignKey, MFromTable>();
+			Map<ForeignKey, MFromTable> keys = new HashMap<ForeignKey, MFromTable>();
 			for (MSqlTable mtlb : child) {
 				MFromTable ft = new MFromTable(parent, mtlb);
 				if (location != null && child.size() == 1) {
@@ -44,36 +46,37 @@ public class AddTableCommand extends Command {
 				}
 				fromTable.add(ft);
 				for (INode n : mtlb.getChildren()) {
-					if (n instanceof MSQLColumn) {
-						List<ForeignKey> lfk = ((MSQLColumn) n).getForeignKeys();
-						if (lfk != null && !lfk.isEmpty())
-							for (ForeignKey fk : lfk)
-								fks.put(fk, ft);
-					}
+					List<ForeignKey> lfk = ((MSQLColumn) n).getForeignKeys();
+					if (lfk != null)
+						for (ForeignKey fk : lfk)
+							if (fk.getTable().equals(mtlb))
+								keys.put(fk, ft);
 				}
 			}
-			if (fromTable.size() > 1 && !fks.keySet().isEmpty())
-				// ok, we have all the keys, now let's join
-				for (ForeignKey fk : fks.keySet()) {
-					if (fk != null && fk.getSrcColumns() != null)
-						for (MSQLColumn c : fk.getSrcColumns()) {
-							MFromTable dest = hasTable(c);
-							if (dest != null && !(dest instanceof MFromTableJoin)) {
-								MFromTable src = fks.get(fk);
-								MFromTable p = src instanceof MFromTableJoin ? (MFromTable) src.getParent() : src;
+			if (fromTable.size() > 1)
+				for (ForeignKey fk : keys.keySet()) {
+					for (MSQLColumn c : fk.getDestColumns()) {
+						MFromTable src = keys.get(fk);
+						MFromTable dest = hasTable(c);
+						if (dest == null)
+							break;
+						if (src == dest)
+							break;
+						if (!(src instanceof MFromTableJoin)) {
+							MFromTable p = dest instanceof MFromTableJoin ? (MFromTable) dest.getParent() : dest;
 
-								dest.setParent(null, -1);
-								fromTable.remove(dest);
+							src.setParent(null, -1);
+							fromTable.remove(src);
 
-								MFromTableJoin join = new MFromTableJoin(p, dest.getValue());
-								MExpression mexpr = new MExpression(join, src, -1);
-								mexpr.getOperands().add(new FieldOperand(fk.getSrcColumns()[0], join, mexpr));
-								mexpr.getOperands().add(new FieldOperand(c, src, mexpr));
+							MFromTableJoin join = new MFromTableJoin(p, src.getValue());
+							MExpression mexpr = new MExpression(join, dest, -1);
+							mexpr.getOperands().add(new FieldOperand(fk.getSrcColumns()[0], join, mexpr));
+							mexpr.getOperands().add(new FieldOperand(c, dest, mexpr));
 
-								fromTable.add(join);
-								fks.put(fk, join);
-							}
+							fromTable.add(join);
 						}
+						break;
+					}
 				}
 		} else {
 			for (MFromTable mft : fromTable)
@@ -90,7 +93,11 @@ public class AddTableCommand extends Command {
 
 	@Override
 	public void undo() {
-		for (MFromTable mft : fromTable)
-			parent.removeChild(mft);
+		if (parentMap == null)
+			parentMap = new HashMap<MFromTable, ANode>();
+		for (MFromTable p : parentMap.keySet()) {
+			parentMap.put(p, p.getParent());
+			p.setParent(null, -1);
+		}
 	}
 }

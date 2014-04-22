@@ -30,8 +30,11 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
+import org.eclipse.gef.requests.GroupRequest;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -48,6 +51,7 @@ import com.jaspersoft.studio.data.sql.text2model.ConvertUtil;
 import com.jaspersoft.studio.data.sql.ui.gef.SQLQueryDiagram;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.BottomAnchor;
 import com.jaspersoft.studio.data.sql.ui.gef.anchors.TopAnchor;
+import com.jaspersoft.studio.data.sql.ui.gef.command.DeleteCommand;
 import com.jaspersoft.studio.data.sql.ui.gef.figures.SqlTableFigure;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.TableLayoutEditPolicy;
 import com.jaspersoft.studio.data.sql.ui.gef.policy.TableNodeEditPolicy;
@@ -145,6 +149,13 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
+			@Override
+			protected Command createDeleteCommand(GroupRequest deleteRequest) {
+				return new DeleteCommand(getModel());
+			}
+		});
+
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new TableNodeEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new TableLayoutEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionEditPolicy() {
