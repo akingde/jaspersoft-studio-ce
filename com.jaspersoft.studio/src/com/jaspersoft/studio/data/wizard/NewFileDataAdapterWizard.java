@@ -75,7 +75,7 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	/** The wizard ID */
 	public static final String WIZARD_ID = "com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"; //$NON-NLS-1$
 	/* default name for data adapter file */
-	private static final String NEW_DATAADAPTER_XML = "NEW_DATAADAPTER.xml";
+	private static final String NEW_DATAADAPTER_XML = "NEW_DATAADAPTER.xml"; //$NON-NLS-1$
 	private ISelection selection;
 	private WizardNewFileCreationPage step1;
 
@@ -149,8 +149,8 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 	public void addPages() {
 		step1 = new WizardNewAdapterPage(
 				"newFilePage1", (IStructuredSelection) selection, ContextHelpIDs.WIZARD_NEW_DATAAPDATER);//$NON-NLS-1$
-		step1.setTitle("DataAdapter File");
-		step1.setDescription("Create a DataAdapter in a file");
+		step1.setTitle(Messages.NewFileDataAdapterWizard_1);
+		step1.setDescription(Messages.NewFileDataAdapterWizard_2);
 		step1.setFileExtension("xml");//$NON-NLS-1$
 		setupNewFileName();
 		addPage(step1);
@@ -175,12 +175,12 @@ public class NewFileDataAdapterWizard extends AbstractDataAdapterWizard implemen
 				if (s.getFirstElement() instanceof IFile) {
 					IFile file = (IFile) s.getFirstElement();
 
-					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename; //$NON-NLS-1$
 
 					int i = 1;
 					while (file.getProject().getFile(f).exists()) {
-						filename = "NEW_DATAADAPTER" + i + ".xml";
-						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+						filename = "NEW_DATAADAPTER" + i + ".xml"; //$NON-NLS-1$ //$NON-NLS-2$
+						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename; //$NON-NLS-1$
 						i++;
 					}
 				}

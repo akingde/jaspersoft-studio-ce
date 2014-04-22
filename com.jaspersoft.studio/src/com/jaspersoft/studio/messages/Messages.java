@@ -1910,6 +1910,8 @@ public class Messages extends NLS {
 	public static String WizardSortFieldPage_Col1;
 	public static String WizardSortFieldPage_Description;
 	public static String WizardSortFieldPage_Title;
+	public static String NewFileDataAdapterWizard_1;
+	public static String NewFileDataAdapterWizard_2;
 	public static String NewSubreportPage_useReport_text;
 	public static String NewSubreportPage_newReport_text;
 	public static String NewSubreportPage_useReportB_text;
