@@ -34,6 +34,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
@@ -654,7 +655,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 						jrstyle.setParentStyle(style);
 					} else {
 						jrstyle.setParentStyleNameReference((String) value);
-						jrstyle.setParentStyle(null);
+						//Set the external style as parent style if existing, to resolve JR resolving problem at design time
+						fixExternalStyleReference((String) value);
 					}
 				} else {
 					//remove the style
@@ -715,6 +717,29 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (linePen != null) {
 			linePen.setPropertyValue(id, value);
 		}
+	}
+	
+	/**
+	 * When the external style change we need also to set the reference to the JRStyle 
+	 * as parent style. This normally should be done by jasper reports when the reports
+	 * is executed, but since we need to show it at design time we need this trick
+	 * to have the external styles resolved correctly when an element is painted. Anyway
+	 * if the selected styles can't be found this method set the style to null
+	 * 
+	 * @param externalStyleName name of the external style
+	 */
+	private void fixExternalStyleReference(String externalStyleName){
+		if (externalStyleName != null){
+			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
+			jrstyle.setParentStyle(ExternalStylesManager.getExternalStyle((String) externalStyleName, getJasperConfiguration()));
+		}
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		//Set the external style as parent style if existing, to resolve JR resolving problem at design time
+		fixExternalStyleReference(((JRBaseStyle)value).getStyleNameReference());
 	}
 
 	/**

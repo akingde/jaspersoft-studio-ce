@@ -368,5 +368,43 @@ public class ExternalStylesManager {
 		}
 		return new ArrayList<JRStyle>();
 	}
+	
+	/**
+	 * Given a list of JRStyles and a styles name search inside the list a JRStyle
+	 * with that name and return it
+	 * 
+	 * @param jrStylesList list where the style is searched
+	 * @param searchedName name of the searched style
+	 * @return the style in the list with the requested name, or null if it can't be found
+	 */
+	private static JRStyle searchStyleInList(List<JRStyle> jrStylesList, String searchedName){
+		for(JRStyle style : jrStylesList){
+			if (searchedName.equals(style.getName())){
+				return style;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Search in all the external styles template of a report a style with a specific name
+	 * and return it. If it can't be found it return null, and if there are more styles in 
+	 * different templates with the searched name then the first one found is returned
+	 * 
+	 * @param styleName the name of the style searched
+	 * @param jConfig jasper configuration of the report 
+	 * @return a JRStyle reference of the searched style or null if it can't be found between 
+	 * the defined external styles
+	 */
+	public static JRStyle getExternalStyle(String styleName, JasperReportsConfiguration jConfig){
+		JasperDesign design = jConfig.getJasperDesign();
+		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		for (JRReportTemplate template : design.getTemplatesList()){
+			List<JRStyle> loadedStyles = getStyles(template, project, jConfig);
+			JRStyle searchedStyle = searchStyleInList(loadedStyles, styleName);
+			if (searchedStyle != null) return searchedStyle;
+		}
+		return null;
+	}
 
 }
