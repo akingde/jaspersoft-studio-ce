@@ -32,7 +32,7 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateInput {
 	public DateInput() {
-		super(true, true);
+		super(false, true);
 	}
 
 	@Override
