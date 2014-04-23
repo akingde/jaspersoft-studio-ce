@@ -162,22 +162,23 @@ public class DatasetReader {
 				jrobj = JasperCompileManager.getInstance(jConfig).compile(dataJD);
 
 			// 7. Prepare parameters
-			Map<String, Object> hm = jConfig.getJRParameters();
-			if (hm == null)
-				hm = new HashMap<String, Object>();
-			hm = ReportControler.resetParameters(hm, jConfig);
-
-			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
-			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
-			if (maxRecords > 0)
-				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
-			// add also prompting parameters that may have previously
-			// set during a preview phase. This way we can get a more
-			// likely "default" value.
+			Map<String, Object> hm = new HashMap<String, Object>();
 			if (jConfig.getJRParameters() != null) {
+				// add also prompting parameters that may have previously
+				// set during a preview phase. This way we can get a more
+				// likely "default" value.
 				hm.putAll(jConfig.getJRParameters());
 			}
-
+			hm = ReportControler.resetParameters(hm, jConfig);
+			hm.put(DataPreviewScriptlet.PARAM_COLUMNS, columns);
+			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
+			if (maxRecords > 0) {
+				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
+			}
+			else {
+				hm.remove(JRDesignParameter.REPORT_MAX_COUNT);
+			}
+			
 			// 8. Contribute parameters from the data adapter
 			if (dataAdapterDesc != null)
 				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
