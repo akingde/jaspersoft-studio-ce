@@ -239,17 +239,18 @@ public class Rest2Soap {
 	}
 
 	private static void getVirtualDataSource(ARestV2Connection rc, ClientVirtualDataSource cr, ResourceDescriptor rd) throws ParseException {
-		for (ClientSubDataSourceReference sds : cr.getSubDataSources()) {
-			ResourceDescriptor r = new ResourceDescriptor();
-			r.setName(rd.getName());
-			r.setLabel(rd.getLabel());
-			r.setIsReference(true);
-			r.setReferenceUri(sds.getUri());
-			r.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
-			r.setIsNew(true);
-			r.setResourceProperty("PROP_DATASOURCE_SUB_DS_ID", sds.getId());
-			rd.getChildren().add(r);
-		}
+		if (cr.getSubDataSources() != null)
+			for (ClientSubDataSourceReference sds : cr.getSubDataSources()) {
+				ResourceDescriptor r = new ResourceDescriptor();
+				r.setName(rd.getName());
+				r.setLabel(rd.getLabel());
+				r.setIsReference(true);
+				r.setReferenceUri(sds.getUri());
+				r.setWsType(ResourceDescriptor.TYPE_DATASOURCE);
+				r.setIsNew(true);
+				r.setResourceProperty("PROP_DATASOURCE_SUB_DS_ID", sds.getId());
+				rd.getChildren().add(r);
+			}
 	}
 
 	private static void getDataType(ARestV2Connection rc, ClientDataType cr, ResourceDescriptor rd) throws ParseException {
