@@ -15,8 +15,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.querydesigner.json;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,6 +28,8 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
+
+import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,15 +60,26 @@ public class JsonDataManager implements ISelectableNodes<JsonSupportNode> {
 	 * specified stream as input source.
 	 * 
 	 * @param filename the name of the json file
-	 * @throws JsonProcessingException
 	 * @throws IOException
 	 */
-	public void loadJsonDataFile(String filename) throws JsonProcessingException, IOException {
+	public void loadJsonDataFile(String filename) throws IOException{
 		getJsonNodesMap().clear();
-		FileInputStream ins=new FileInputStream(filename);
-		jsonRoot=getJsonMapper().readTree(ins);
-		ins.close();
-		buildJsonSupportTree();
+		InputStream ins = null;
+		try {
+			File f = new File(filename);
+			if(f.exists()) {
+				ins = new FileInputStream(f);
+			}
+			else {
+				ins=new URL(filename).openStream();	
+			}
+			jsonRoot=getJsonMapper().readTree(ins);
+			buildJsonSupportTree();
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(ins);
+		}
 	}
 	
 	/**
