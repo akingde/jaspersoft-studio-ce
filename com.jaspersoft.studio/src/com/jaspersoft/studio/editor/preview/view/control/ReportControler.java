@@ -159,11 +159,11 @@ public class ReportControler {
 					continue;
 				if (p.getName().equals(JRParameter.REPORT_CONNECTION))
 					continue;
-				if (p.getName().startsWith(Messages.ReportControler_0) || p.getName().startsWith(Messages.ReportControler_1)
-						|| p.getName().startsWith(Messages.ReportControler_2) || p.getName().startsWith(Messages.ReportControler_3)
-						|| p.getName().startsWith(Messages.ReportControler_4) || p.getName().startsWith(Messages.ReportControler_5)
-						|| p.getName().startsWith(Messages.ReportControler_6) || p.getName().startsWith(Messages.ReportControler_7)
-						|| p.getName().contains(Messages.ReportControler_8) || p.getName().startsWith(Messages.ReportControler_9))
+				if (p.getName().startsWith("XML_") || p.getName().startsWith("MONDRIAN_") //$NON-NLS-1$ //$NON-NLS-1$
+						|| p.getName().startsWith("XLSX_") || p.getName().startsWith("XLS_") //$NON-NLS-1$ //$NON-NLS-1$
+						|| p.getName().startsWith("JSON_") || p.getName().startsWith("HIBERNATE_") //$NON-NLS-1$ //$NON-NLS-1$
+						|| p.getName().startsWith("JPA_") || p.getName().startsWith("CSV_") //$NON-NLS-1$ //$NON-NLS-1$
+						|| p.getName().contains("csv.source") || p.getName().startsWith("XMLA_")) //$NON-NLS-1$ //$NON-NLS-1$
 					continue;
 				try {
 					if (obj != null && p.getValueClass().isAssignableFrom(obj.getClass()) && p.isForPrompting()) {
