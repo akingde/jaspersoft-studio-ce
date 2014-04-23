@@ -91,13 +91,13 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 					CompoundCommand cc = new CompoundCommand();
 					SetValueCommand cmd = new SetValueCommand();
 					cmd.setPropertyId(MFromTable.PROP_X);
-					cmd.setPropertyValue(r.x);
+					cmd.setPropertyValue(Math.max(0, r.x));
 					cmd.setTarget(((TableEditPart) child).getModel());
 					cc.add(cmd);
 
 					cmd = new SetValueCommand();
 					cmd.setPropertyId(MFromTable.PROP_Y);
-					cmd.setPropertyValue(r.y);
+					cmd.setPropertyValue(Math.max(0, r.y));
 					cmd.setTarget(((TableEditPart) child).getModel());
 					cc.add(cmd);
 					return cc;
@@ -221,6 +221,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 	}
 
 	class FromLayout extends XYLayout {
+
 		protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
 			container.validate();
 			List<IFigure> children = container.getChildren();
