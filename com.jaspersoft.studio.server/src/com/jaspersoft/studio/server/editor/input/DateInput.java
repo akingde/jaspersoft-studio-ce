@@ -27,12 +27,13 @@ import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.view.control.VParameters;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.swt.widgets.DRDateTime;
 import com.jaspersoft.studio.utils.Misc;
 
 public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateInput {
 	public DateInput() {
-		super(false, true);
+		super(true, true);
 	}
 
 	@Override
@@ -42,6 +43,7 @@ public class DateInput extends com.jaspersoft.studio.editor.preview.input.DateIn
 			ServerProfile sp = WSClientHelper.getServerProfile(p.getWsClient());
 			if (sp != null)
 				setSupportDateRange(sp.isSupportsDateRanges());
+			isNumeric = !p.getWsClient().isSupported(Feature.SEARCHREPOSITORY);
 		}
 		this.params = params;
 		this.param = param;

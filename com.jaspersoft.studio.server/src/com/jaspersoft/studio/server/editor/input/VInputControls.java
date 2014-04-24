@@ -37,19 +37,17 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VInputControls extends AVParameters {
 
-	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
-	static {
-		inputs.add(new DateInput());
-		inputs.add(new ListOfValuesInput());
-		inputs.add(new QueryInput());
-		inputs.addAll(ReportControler.inputs);
-	}
+	public List<IDataInput> inputs = new ArrayList<IDataInput>();
 
 	private InputControlsManager icm;
 	private ResourceDescriptor rdrepunit;
 
 	public VInputControls(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
+		inputs.add(new DateInput());
+		inputs.add(new ListOfValuesInput());
+		inputs.add(new QueryInput());
+		inputs.addAll(ReportControler.inputs);
 	}
 
 	public void setReportUnit(ResourceDescriptor rdrepunit) {

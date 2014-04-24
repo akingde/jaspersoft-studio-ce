@@ -99,7 +99,7 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public ServerInfo getServerInfo(IProgressMonitor monitor) throws Exception {
-		return c.getServerInfo(monitor);
+		return c != null ? c.getServerInfo(monitor) : null;
 	}
 
 	private boolean useSoap(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
