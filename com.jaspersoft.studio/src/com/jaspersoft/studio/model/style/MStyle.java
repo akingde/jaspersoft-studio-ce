@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -769,7 +770,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					graphicalElement.setChangedProperty(true);
 				}
 			}
-			setStyleRefresh(child.getChildren());
+			setStyleRefresh(new ArrayList<INode>(child.getChildren()));
 		}
 		
 	}
@@ -826,7 +827,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	  		//Avoid the refresh if the style is not in the hierarchy
 	    	INode root = getRoot();
 	    	if (root != null) {
-	  			setStyleRefresh(root.getChildren());
+		  		setStyleRefresh(new ArrayList<INode>(root.getChildren()));
 	  		}
 	    }
 		};

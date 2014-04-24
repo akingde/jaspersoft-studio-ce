@@ -51,17 +51,29 @@ public class CloseSubeditorsCommand extends Command{
 	/**
 	 * The parent element
 	 */
-	private INode parent;
+	private INode element;
 	
 	/**
 	 * Create the command to close the editor (even for its children) of an element that will be deleted
 	 * 
 	 * @param deleteCommand the command to delete the element
+	 * @param element the element that will be deleted, must be not null
+	 */
+	public CloseSubeditorsCommand(Command deleteCommand, INode element){
+		this.deleteCommand = deleteCommand;
+		this.element = element;
+	}
+	
+	/**
+	 * Create the command to close the editor (even for its children) of an element
+	 * 
 	 * @param parent the element that will be deleted, must be not null
 	 */
-	public CloseSubeditorsCommand(Command deleteCommand, INode parent){
-		this.deleteCommand = deleteCommand;
-		this.parent = parent;
+	public CloseSubeditorsCommand(INode parent){
+		//Create the dummy command
+		this.deleteCommand = new Command() {
+		};
+		this.element = parent;
 	}
 	
 	/**
@@ -87,7 +99,7 @@ public class CloseSubeditorsCommand extends Command{
 	@Override
 	public void execute() {
 		//Send the event only if there are subeditors opened
-		if (areSubeditorOpened(parent)) sendDeleteEvent(getChildren(parent));
+		if (areSubeditorOpened(element)) sendDeleteEvent(getChildren(element));
 		deleteCommand.execute();
 	}
 	

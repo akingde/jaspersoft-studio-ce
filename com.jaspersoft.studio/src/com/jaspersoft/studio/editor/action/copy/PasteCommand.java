@@ -10,9 +10,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRCloneable;
@@ -26,8 +28,10 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.command.CloseSubeditorsCommand;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.command.CopyDatasetCommand;
 
@@ -35,6 +39,12 @@ public class PasteCommand extends Command {
 	protected Map<ANode, Command> list;
 	protected IPastable parent;
 	protected int createdNodes;
+	
+	
+	/**
+	 * List of the graphical nodes created by the paste command
+	 */
+	private List<INode> createdElements;
 
 	public PasteCommand(IPastable parent) {
 		super();
@@ -68,6 +78,7 @@ public class PasteCommand extends Command {
 		if (list == null && !canExecute())
 			return;
 		createdNodes = 0;
+		createdElements = new ArrayList<INode>();
 		for (ANode node : list.keySet()) {
 			JSSCompoundCommand cmd = new JSSCompoundCommand(node);
 			// create new Node put, clone into it
@@ -76,11 +87,16 @@ public class PasteCommand extends Command {
 				if (value instanceof JRCloneable) {
 					ANode n = node.getClass().newInstance();
 					Rectangle rect = null;
+					n.setJasperConfiguration(node.getJasperConfiguration());
 					n.setValue(((JRCloneable) value).clone());
+					
 					if (node.isCut() && node.getParent() != null) {
-						Command cmdd = OutlineTreeEditPartFactory.getDeleteCommand((ANode) node.getParent(), node);
-						if (cmd != null)
+						ANode parent = (ANode) node.getParent();
+						Command deleteCommand = OutlineTreeEditPartFactory.getDeleteCommand(parent, node);
+						if (deleteCommand != null){
+							Command cmdd = new CloseSubeditorsCommand(deleteCommand, node);
 							cmd.add(cmdd);
+						}
 					} else if (n instanceof MGraphicElement) {
 						MGraphicElement mge = (MGraphicElement) n;
 						JRDesignElement de = (JRDesignElement) mge.getValue();
@@ -100,6 +116,7 @@ public class PasteCommand extends Command {
 						// create command
 						Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, rect, -1);
 						if (cmdc != null) {
+							createdElements.add(n);
 							cmd.add(cmdc);
 							createdNodes++;
 						}
@@ -139,7 +156,12 @@ public class PasteCommand extends Command {
 	}
 
 	@Override
-	public void undo() {
+	public void undo() {	
+		//close the subeditor opened for the created nodes or their subchildrens
+		for(INode createdElement : createdElements) {
+			new CloseSubeditorsCommand(createdElement).execute();
+		}
+		
 		Iterator<Command> it = list.values().iterator();
 		while (it.hasNext()) {
 			Command cmd = it.next();

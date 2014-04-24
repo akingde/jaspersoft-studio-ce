@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.frame;
 
-import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
@@ -39,6 +39,7 @@ import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.model.util.ReportFactory;
 
 /*
  * The Class MFrame.
@@ -176,6 +177,20 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
+	
+	/**
+	 * If the model has the children not in sync with the JRElement the build
+	 * the correct list
+	 */
+	@Override
+	public List<INode> initModel() {
+		if (getValue().getChildren().size()>0 && (getChildren() == null || getChildren().size() == 0)){
+			MFrame copy = new MFrame();
+			copy.setValue(getValue());
+			ReportFactory.createElementsForBand(copy,getValue().getChildren() );
+			return copy.getChildren();
+		} else return getChildren();
+	}
 
 	
 	@Override
@@ -195,11 +210,5 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		result.add(JRDesignFrame.PROPERTY_CHILDREN);
 		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
 		return result;
-	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		super.propertyChange(evt);
 	}
 }
