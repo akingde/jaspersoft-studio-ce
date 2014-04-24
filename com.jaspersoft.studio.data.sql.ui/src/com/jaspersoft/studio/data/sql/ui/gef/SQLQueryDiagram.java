@@ -43,6 +43,9 @@ import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -62,6 +65,7 @@ import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.LayoutAction;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
+import com.jaspersoft.studio.data.sql.action.table.DeleteTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -96,38 +100,8 @@ public class SQLQueryDiagram {
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer) {
 			@Override
 			public boolean keyPressed(KeyEvent event) {
-				if (event.keyCode == SWT.DEL) {
-					List<EditPart> parts = viewer.getSelectedEditParts();
-					CompoundCommand cc = new CompoundCommand() {
-						private boolean firstRun = false;
-						private boolean run = true;
-
-						@Override
-						public void execute() {
-							if (!firstRun)
-								run = UIUtils.showConfirmation("Delete ", "Are you sure you want to delete the table(s)?");
-							firstRun = true;
-							if (run)
-								super.execute();
-						}
-
-						@Override
-						public void undo() {
-							if (run)
-								super.undo();
-						}
-					};
-					for (EditPart p : parts) {
-						GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
-						Map<String, String> extendedData = new HashMap<String, String>();
-						extendedData.put("Delete", "Delete from diagram");
-						deleteReq.setExtendedData(extendedData);
-						deleteReq.setEditParts(p);
-						cc.add(p.getCommand(deleteReq));
-					}
-					viewer.getEditDomain().getCommandStack().execute(cc);
-					refreshViewer();
-				}
+				if (event.keyCode == SWT.DEL)
+					doDeleteTable();
 				return super.keyPressed(event);
 			}
 		});
@@ -157,6 +131,16 @@ public class SQLQueryDiagram {
 						selection = models.toArray();
 				}
 				designer.getOutline().getAfactory().fillMenu(selection, menu);
+				for (IContributionItem c : menu.getItems()) {
+					if (c instanceof ActionContributionItem && ((ActionContributionItem) c).getAction() instanceof DeleteTable) {
+						menu.insertAfter(c.getId(), new Action("&Delete Table") {
+							public void run() {
+								doDeleteTable();
+							}
+						});
+						menu.remove(c);
+					}
+				}
 				menu.add(new LayoutAction(designer));
 			}
 		});
@@ -255,6 +239,39 @@ public class SQLQueryDiagram {
 
 	public void dispose() {
 
+	}
+
+	protected void doDeleteTable() {
+		List<EditPart> parts = viewer.getSelectedEditParts();
+		CompoundCommand cc = new CompoundCommand() {
+			private boolean firstRun = false;
+			private boolean run = true;
+
+			@Override
+			public void execute() {
+				if (!firstRun)
+					run = UIUtils.showConfirmation("Delete ", "Are you sure you want to delete the table(s)?");
+				firstRun = true;
+				if (run)
+					super.execute();
+			}
+
+			@Override
+			public void undo() {
+				if (run)
+					super.undo();
+			}
+		};
+		for (EditPart p : parts) {
+			GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
+			Map<String, String> extendedData = new HashMap<String, String>();
+			extendedData.put("Delete", "Delete from diagram");
+			deleteReq.setExtendedData(extendedData);
+			deleteReq.setEditParts(p);
+			cc.add(p.getCommand(deleteReq));
+		}
+		viewer.getEditDomain().getCommandStack().execute(cc);
+		refreshViewer();
 	}
 
 	public class QueryDesignerDropTargetListener extends AbstractTransferDropTargetListener {

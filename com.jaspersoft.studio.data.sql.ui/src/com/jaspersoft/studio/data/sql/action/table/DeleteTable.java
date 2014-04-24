@@ -36,6 +36,7 @@ public class DeleteTable extends DeleteAction<MFromTable> {
 
 	public DeleteTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
 		super(designer, treeViewer, "Table", MFromTable.class);
+		setId(getClass().getCanonicalName());
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
+import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupBy;
 import com.jaspersoft.studio.data.sql.model.query.groupby.MGroupByColumn;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
@@ -20,8 +21,11 @@ import com.jaspersoft.studio.model.INode;
 public class DeleteCommand extends Command {
 	private MFromTable node;
 	private ANode parent;
-	private Map<ANode, ANode> map;
-	private Map<ANode, Integer> mapIndex;
+	private Map<ANode, ANode> mapDel;
+	private Map<ANode, Integer> mapDelIndex;
+
+	private Map<ANode, ANode> mapAdd;
+	private Map<ANode, Integer> mapAddIndex;
 
 	public DeleteCommand(MFromTable node) {
 		this.node = node;
@@ -30,20 +34,42 @@ public class DeleteCommand extends Command {
 
 	@Override
 	public void execute() {
-		if (map == null) {
-			map = new HashMap<ANode, ANode>();
-			mapIndex = new HashMap<ANode, Integer>();
-			map.put(node, parent);
-			mapIndex.put(node, node.getParent().getChildren().indexOf(node));
+		if (mapDel == null) {
+			mapDel = new HashMap<ANode, ANode>();
+			mapDelIndex = new HashMap<ANode, Integer>();
+
+			mapAdd = new HashMap<ANode, ANode>();
+			mapAddIndex = new HashMap<ANode, Integer>();
+
+			mapDel.put(node, parent);
+			int indx = node.getParent().getChildren().indexOf(node);
+			mapDelIndex.put(node, indx);
+			if (!(node instanceof MFromTableJoin) && !node.getChildren().isEmpty()) {
+				int i = 0;
+				for (INode n : node.getChildren()) {
+					if (n instanceof MFromTable) {
+						MFromTable mft = new MFromTable(null, ((MFromTable) n).getValue());
+						mft.setAlias(((MFromTable) n).getAlias());
+						mft.setAliasKeyword(((MFromTable) n).getAliasKeyword());
+						mapAdd.put(mft, node.getParent());
+						mapAddIndex.put(mft, indx + i);
+					}
+					i++;
+				}
+			}
 			doDeleteMore(parent, node);
 		}
-		for (ANode mft : map.keySet())
+		for (ANode mft : mapDel.keySet())
 			mft.setParent(null, -1);
+		for (ANode mft : mapAdd.keySet())
+			mft.setParent(mapAdd.get(mft), mapAddIndex.get(mft));
 	}
 
 	public void undo() {
-		for (ANode key : map.keySet())
-			key.setParent(map.get(key), mapIndex.get(key));
+		for (ANode mft : mapAdd.keySet())
+			mft.setParent(null, -1);
+		for (ANode key : mapDel.keySet())
+			key.setParent(mapDel.get(key), mapDelIndex.get(key));
 	}
 
 	protected void doDeleteMore(ANode parent, MFromTable todel) {
@@ -76,8 +102,8 @@ public class DeleteCommand extends Command {
 					((MOrderBy) n).removeChildren(toRemove);
 				}
 				for (ANode rem : toRemove) {
-					map.put(rem, rem.getParent());
-					mapIndex.put(rem, rem.getParent().getChildren().indexOf(rem));
+					mapDel.put(rem, rem.getParent());
+					mapDelIndex.put(rem, rem.getParent().getChildren().indexOf(rem));
 				}
 			}
 	}

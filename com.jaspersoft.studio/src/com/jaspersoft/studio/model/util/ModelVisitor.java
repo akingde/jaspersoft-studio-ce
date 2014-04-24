@@ -24,12 +24,13 @@ public abstract class ModelVisitor<T> {
 	}
 
 	public void iterate(INode node) {
-		for (INode n : node.getChildren()) {
-			if (visit(n)) {
-				iterate(n);
-				postChildIteration(n);
+		if (node != null && node.getChildren() != null)
+			for (INode n : node.getChildren()) {
+				if (visit(n)) {
+					iterate(n);
+					postChildIteration(n);
+				}
 			}
-		}
 	}
 
 	protected void postChildIteration(INode n) {
