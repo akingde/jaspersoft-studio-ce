@@ -147,7 +147,7 @@ public class AuthenticationDialog extends Dialog{
 
 		Label lblPassword = new Label(dialogArea, SWT.NONE);
 		lblPassword.setText(Messages.AuthenticationDialog_passwordLbl);
-		passwordText = new Text(dialogArea, SWT.BORDER);
+		passwordText = new Text(dialogArea, SWT.BORDER | SWT.PASSWORD);
 		passwordText.setText(password);
 		passwordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		passwordText.addModifyListener(new ModifyListener() {

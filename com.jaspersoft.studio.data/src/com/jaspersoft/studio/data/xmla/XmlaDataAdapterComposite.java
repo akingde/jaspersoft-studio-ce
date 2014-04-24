@@ -143,6 +143,10 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 				if (loginSuccesfull) {
 					try {
 						PasswordAuthentication auth = authenticationMap.get(url);
+						if (auth == null){
+							//The access to the server dosen't need a username or a password
+							auth = new PasswordAuthentication("", "".toCharArray());
+						}
 						MetadataDiscover discover = new MetadataDiscover(url, auth.getUserName(), new String(auth.getPassword()));
 						handleMetaDataChanged(discover);
 						UIUtils.showInformation(Messages.XmlaDataAdapterComposite_successTitle, Messages.XmlaDataAdapterComposite_successText);
@@ -324,6 +328,8 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			 * Set the dialog as authenticator
 			 */
 			Authenticator.setDefault(new Authenticator() {
+				
+				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
 					//If the user used the cancel key on the dialog then the operation is aborted to the 
 					//authenticator must return null
@@ -349,7 +355,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			URL endpoint = new URL(url);
 			HttpURLConnection urlConnection = (HttpURLConnection) endpoint.openConnection();
 			int code = urlConnection.getResponseCode();
-			return (!ad.cancelOperation() && code == 405);
+			return (!ad.cancelOperation() && (code == 405 || code == 500));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
