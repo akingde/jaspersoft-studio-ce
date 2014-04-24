@@ -284,11 +284,22 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 		}
 
 		if (dataAdapterDescriptors.size() > 0) {
-			dataAdaptersCombo.select(0);
+			if (!selectDataAdapter("One Empty Record"))
+				if (!selectDataAdapter("Sample DB"))
+					dataAdaptersCombo.select(0);
 			// update the editor control state
 			handleDataAdapterSelectionEvent(null);
 		}
+	}
 
+	private boolean selectDataAdapter(String name) {
+		for (int i = 0; i < dataAdaptersCombo.getItemCount(); i++) {
+			if (dataAdaptersCombo.getItem(i).equals(name)) {
+				dataAdaptersCombo.select(i);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void cleanDataAdapterStorageListeners() {
