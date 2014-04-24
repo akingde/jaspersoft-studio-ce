@@ -49,23 +49,24 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 			return "(...)";
 		else {
 			String IQ = r.getIdentifierQuote();
+			boolean onlyException = r.isQuoteExceptions();
 			while (p != null) {
 				if (p instanceof AMSQLObject) {
 					if (p instanceof MSqlSchema) {
 						if ((((MSqlSchema) p).isCurrent()))
-							return Misc.quote(getValue(), IQ);
+							return Misc.quote(getValue(), IQ, onlyException);
 					}
 					String s = ((AMSQLObject) p).toSQLString();
 					if (Misc.isNullOrEmpty(s))
-						return Misc.quote(getValue(), IQ);
-					return s + "." + Misc.quote(getValue(), IQ);
+						return Misc.quote(getValue(), IQ, onlyException);
+					return s + "." + Misc.quote(getValue(), IQ, onlyException);
 				}
 				p = p.getParent();
 			}
 			if (this instanceof MSqlSchema)
-				return Misc.quote(getValue(), IQ);
+				return Misc.quote(getValue(), IQ, onlyException);
 			else if (this instanceof MSqlTable)
-				return Misc.quote(getValue(), IQ);
+				return Misc.quote(getValue(), IQ, onlyException);
 		}
 		return str;
 	}

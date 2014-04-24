@@ -21,6 +21,15 @@ public class MSQLRoot extends MRoot {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private String iq = "";
+	private boolean quoteExceptions = true;
+
+	public void setQuoteExceptions(boolean quoteExceptions) {
+		this.quoteExceptions = quoteExceptions;
+	}
+
+	public boolean isQuoteExceptions() {
+		return quoteExceptions;
+	}
 
 	public String getIdentifierQuote() {
 		return iq;

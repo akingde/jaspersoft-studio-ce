@@ -84,14 +84,14 @@ public class MOrderByColumn extends AMOrderByMember<MSQLColumn> {
 	@Override
 	public String toSQLString() {
 		String IQ = getRoot().getIdentifierQuote();
-
+		boolean onlyException = getRoot().isQuoteExceptions();
 		StringBuffer ss = new StringBuffer();
 		if (msColumn == null || msColumn.getAlias() == null) {
 			if (mfTable.getAlias() != null && !mfTable.getAlias().trim().isEmpty())
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
-			ss.append("." + Misc.quote(getValue().getDisplayText(), IQ));
+			ss.append("." + Misc.quote(getValue().getDisplayText(), IQ, onlyException));
 			ss.append(addDirection());
 		} else
 			ss.append(msColumn.getAlias());

@@ -203,7 +203,18 @@ public class Misc {
 		return sortedMap;
 	}
 
-	public static String quote(String value, String q) {
+	public static String quote(String value, String q, boolean onlyException) {
+		if (onlyException) {
+			boolean useQuote = false;
+			for (char c : value.toCharArray()) {
+				if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-') || Character.isUpperCase(c)) {
+					useQuote = true;
+					break;
+				}
+			}
+			if (!useQuote)
+				return value;
+		}
 		String str = q + value;
 		if (q.equals("["))
 			q = "]";

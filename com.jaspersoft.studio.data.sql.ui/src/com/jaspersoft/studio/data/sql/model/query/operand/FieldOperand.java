@@ -56,7 +56,7 @@ public class FieldOperand extends AOperand {
 	@Override
 	public String toSQLString() {
 		String IQ = expression.getRoot().getIdentifierQuote();
-
+		boolean onlyException = expression.getRoot().isQuoteExceptions();
 		if (column == null)
 			return "___";
 		StringBuffer ss = new StringBuffer();
@@ -64,7 +64,7 @@ public class FieldOperand extends AOperand {
 			ss.append(fromTable.getAlias());
 		else
 			ss.append(fromTable.getValue().toSQLString());
-		ss.append("." + Misc.quote(column.getDisplayText(), IQ));
+		ss.append("." + Misc.quote(column.getDisplayText(), IQ, onlyException));
 		return ss.toString();
 	}
 

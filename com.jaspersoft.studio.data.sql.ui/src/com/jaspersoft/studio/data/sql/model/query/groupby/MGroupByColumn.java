@@ -88,14 +88,14 @@ public class MGroupByColumn extends AMQueryObject<MSQLColumn> {
 	@Override
 	public String toSQLString() {
 		String IQ = getRoot().getIdentifierQuote();
-
+		boolean onlyException = getRoot().isQuoteExceptions();
 		StringBuffer ss = new StringBuffer();
 		if (msColumn == null || msColumn.getAlias() == null) {
 			if (mfTable.getAlias() != null)
 				ss.append(mfTable.getAlias());
 			else
 				ss.append(mfTable.getValue().toSQLString());
-			ss.append("." + Misc.quote(getValue().getDisplayText(), IQ));
+			ss.append("." + Misc.quote(getValue().getDisplayText(), IQ, onlyException));
 		} else
 			ss.append(msColumn.getAlias());
 		return isFirst() ? ss.toString() : ",\n\t" + ss.toString();
