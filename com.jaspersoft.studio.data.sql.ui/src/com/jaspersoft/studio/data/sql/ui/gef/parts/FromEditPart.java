@@ -33,7 +33,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -88,19 +87,11 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 				Rectangle r = (Rectangle) constraint;
 				if (child instanceof TableEditPart) {
-					CompoundCommand cc = new CompoundCommand();
 					SetValueCommand cmd = new SetValueCommand();
 					cmd.setPropertyId(MFromTable.PROP_X);
-					cmd.setPropertyValue(Math.max(0, r.x));
+					cmd.setPropertyValue(new Point(Math.max(0, r.x), Math.max(0, r.y)));
 					cmd.setTarget(((TableEditPart) child).getModel());
-					cc.add(cmd);
-
-					cmd = new SetValueCommand();
-					cmd.setPropertyId(MFromTable.PROP_Y);
-					cmd.setPropertyValue(Math.max(0, r.y));
-					cmd.setTarget(((TableEditPart) child).getModel());
-					cc.add(cmd);
-					return cc;
+					return cmd;
 				}
 				return super.createChangeConstraintCommand(request, child, constraint);
 			}

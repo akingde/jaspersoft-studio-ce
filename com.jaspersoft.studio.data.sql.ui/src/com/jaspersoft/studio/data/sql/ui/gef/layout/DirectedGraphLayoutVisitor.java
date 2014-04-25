@@ -37,7 +37,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import com.jaspersoft.studio.data.sql.ui.gef.parts.RelationshipPart;
 
 public class DirectedGraphLayoutVisitor {
-	private static final Insets PADDING = new Insets(10, 8, 10, 12);
+	private static final Insets PADDING = new Insets(10, 10, 10, 10);
 	private Map<AbstractGraphicalEditPart, Object> partToNodesMap;
 	private DirectedGraph graph;
 

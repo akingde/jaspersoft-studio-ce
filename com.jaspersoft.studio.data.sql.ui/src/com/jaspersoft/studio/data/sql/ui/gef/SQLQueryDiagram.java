@@ -41,6 +41,8 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.ui.actions.ZoomInAction;
+import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.Action;
@@ -80,6 +82,7 @@ import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 
 public class SQLQueryDiagram {
@@ -97,11 +100,30 @@ public class SQLQueryDiagram {
 		viewer.setEditDomain(new DefaultEditDomain(null));
 		viewer.setRootEditPart(new SQLDesignerRootEditPart());
 		viewer.setEditPartFactory(new SQLDesignerEditPartFactory());
+
+		final ZoomManager zoomManager = (ZoomManager) viewer.getProperty(ZoomManager.class.toString());
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer) {
 			@Override
 			public boolean keyPressed(KeyEvent event) {
 				if (event.keyCode == SWT.DEL)
 					doDeleteTable();
+				else if ((event.stateMask & SWT.CTRL) != 0) {
+					if (event.keyCode == '=') {
+						if (zoomManager.canZoomOut())
+							zoomManager.zoomOut();
+					} else if (event.keyCode == '-') {
+						if (zoomManager.canZoomIn())
+							zoomManager.zoomIn();
+					} else if (event.keyCode == '0')
+						zoomManager.setZoom(1);
+					else if (event.keyCode == 'z') {
+						if (viewer.getEditDomain().getCommandStack().canUndo())
+							viewer.getEditDomain().getCommandStack().undo();
+					} else if (event.keyCode == 'y' || ((event.stateMask & SWT.ALT) != 0 && event.keyCode == 'z')) {
+						if (viewer.getEditDomain().getCommandStack().canRedo())
+							viewer.getEditDomain().getCommandStack().redo();
+					}
+				}
 				return super.keyPressed(event);
 			}
 		});
@@ -142,15 +164,13 @@ public class SQLQueryDiagram {
 					}
 				}
 				menu.add(new LayoutAction(designer));
+				menu.add(new org.eclipse.jface.action.Separator());
+				menu.add(new ZoomInAction(zoomManager));
+				menu.add(new ZoomOutAction(zoomManager));
 			}
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(viewer, NodeTransfer.getInstance()));
 
-		ZoomManager zoomManager = (ZoomManager) viewer.getProperty(ZoomManager.class.toString());
-
-		// viewer.registerAction(new ZoomInAction(zoomManager));
-		// viewer.registerAction(new ZoomOutAction(zoomManager));
-		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 		refreshViewer();
 
 		return viewer.getControl();
@@ -166,7 +186,7 @@ public class SQLQueryDiagram {
 		if (designer.getjDataset() != null) {
 			String tbls = designer.getjDataset().getPropertiesMap().getProperty(SQL_EDITOR_TABLES);
 			if (tbls != null) {
-				final Map<String, Point> map = new HashMap<String, Point>();
+				final List<KeyValue<String, Point>> map = new ArrayList<KeyValue<String, Point>>();
 				try {
 					StringTokenizer st = new StringTokenizer(new Base64Decoder(tbls).processString(), ";");
 					while (st.hasMoreTokens()) {
@@ -176,7 +196,7 @@ public class SQLQueryDiagram {
 						String ys = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
 
 						if (tbl != null && xs != null && ys != null)
-							map.put(tbl, new Point(Integer.parseInt(xs), Integer.parseInt(ys)));
+							map.add(new KeyValue<String, Point>(tbl, new Point(Integer.parseInt(xs), Integer.parseInt(ys))));
 					}
 					new ModelVisitor<Object>(designer.getRoot()) {
 
@@ -185,13 +205,18 @@ public class SQLQueryDiagram {
 							if (n instanceof MFromTable) {
 								MFromTable ft = (MFromTable) n;
 								String t = ft.getValue().toSQLString() + ft.getAliasKeyString();
-								Point p = map.get(t);
-								if (p != null) {
-									ft.setNoEvents(true);
-									ft.setPropertyValue(MFromTable.PROP_X, p.x);
-									ft.setPropertyValue(MFromTable.PROP_Y, p.y);
-									ft.setNoEvents(false);
+								KeyValue<String, Point> key = null;
+								for (KeyValue<String, Point> kv : map) {
+									if (kv.key.equals(t)) {
+										ft.setNoEvents(true);
+										ft.setPropertyValue(MFromTable.PROP_X, kv.value.x);
+										ft.setPropertyValue(MFromTable.PROP_Y, kv.value.y);
+										ft.setNoEvents(false);
+										key = kv;
+									}
 								}
+								if (key != null)
+									map.remove(key);
 							}
 							return true;
 						}

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.AbstractEditPolicy;
@@ -61,8 +62,14 @@ public class FromContainerEditPolicy extends ContainerEditPolicy {
 			if (newObject instanceof Collection<?>) {
 				Rectangle r = new Rectangle(10, 10, 100, 100);
 				if (request.getLocation() != null) {
-					r.x = request.getLocation().x;
-					r.y = request.getLocation().y;
+					r.setLocation(request.getLocation().getCopy());
+					GraphicalEditPart ep = (GraphicalEditPart) getHost();
+					if (getHost() instanceof QueryEditPart) {
+						r.translate(-20, -20);
+					} else {
+						Rectangle ca = ep.getFigure().getClientArea();
+						r.translate(-ca.x, -ca.y);
+					}
 				}
 				if (request.getSize() != null) {
 					r.width = request.getSize().width;

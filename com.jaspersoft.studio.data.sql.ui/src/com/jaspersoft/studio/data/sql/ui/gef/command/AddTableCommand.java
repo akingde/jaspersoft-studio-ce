@@ -41,8 +41,10 @@ public class AddTableCommand extends Command {
 			for (MSqlTable mtlb : child) {
 				MFromTable ft = new MFromTable(parent, mtlb);
 				if (location != null && child.size() == 1) {
+					ft.setNoEvents(true);
 					ft.setPropertyValue(MFromTable.PROP_X, location.x);
 					ft.setPropertyValue(MFromTable.PROP_Y, location.y);
+					ft.setNoEvents(false);
 				}
 				fromTable.add(ft);
 				for (INode n : mtlb.getChildren()) {

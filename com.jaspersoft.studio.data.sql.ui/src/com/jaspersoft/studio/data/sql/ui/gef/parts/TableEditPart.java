@@ -123,7 +123,6 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		if (fromTable.getPropertyActualValue(MFromTable.PROP_Y) != null)
 			location.y = (Integer) fromTable.getPropertyValue(MFromTable.PROP_Y);
 		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
-
 		f.setToolTip(new Label(fromTable.getToolTip()));
 	}
 

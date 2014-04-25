@@ -96,8 +96,10 @@ public class JoinTable extends AAction {
 		srcTbl.setParent(null, -1);
 
 		MFromTableJoin mtbljoin = new MFromTableJoin(destTbl, srcTbl.getValue());
+		mtbljoin.setNoEvents(true);
 		mtbljoin.setPropertyValue(MFromTable.PROP_X, srcTbl.getPropertyActualValue(MFromTable.PROP_X));
 		mtbljoin.setPropertyValue(MFromTable.PROP_Y, srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
+		mtbljoin.setNoEvents(false);
 		mtbljoin.setAlias(srcTbl.getAlias());
 		mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
 

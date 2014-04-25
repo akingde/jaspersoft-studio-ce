@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
@@ -82,6 +83,18 @@ public class MFromTable extends AMQueryAliased<MSqlTable> {
 
 	public List<TableJoin> getTableJoins() {
 		return tableJoins;
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+		if (id.equals(PROP_X) && value instanceof Point) {
+			setNoEvents(true);
+			super.setPropertyValue(PROP_X, ((Point) value).x);
+			setNoEvents(false);
+			super.setPropertyValue(PROP_Y, ((Point) value).y);
+			return;
+		}
+		super.setPropertyValue(id, value);
 	}
 
 	public static final String PROP_X = "x";
