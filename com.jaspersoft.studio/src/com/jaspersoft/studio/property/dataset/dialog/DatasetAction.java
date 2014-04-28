@@ -84,10 +84,16 @@ public class DatasetAction extends SelectionAction {
 	/*
 	 * Gets the MDataset instance for which we should open the "Dataset & Query" dialog.
 	 */
-	private MDataset getMDatasetToShow() {
-		ISelection selection = getSelection();
+	protected MDataset getMDatasetToShow() {
 		final AbstractVisualEditor part = (AbstractVisualEditor) getWorkbenchPart();
-		IContentOutlinePage outline = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
+		//Reinitialize the outline if disposed
+		part.getAdapter(IContentOutlinePage.class);
+		//Get the selection from the outline view, since they are synchronized it the same of the editor
+		ISelection selection = 	part.getOutlineSelection();
+		//If it is empty (for example outline closed) fallback
+		if (selection.isEmpty()){
+			selection = getSelection();
+		}
 
 		if (selection instanceof IStructuredSelection) {
 			Object firstElement = ((IStructuredSelection) selection).getFirstElement();

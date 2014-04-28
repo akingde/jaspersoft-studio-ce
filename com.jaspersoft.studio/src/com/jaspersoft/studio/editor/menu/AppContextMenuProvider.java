@@ -81,7 +81,7 @@ import com.jaspersoft.studio.formatting.actions.SameWidthMinAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.plugin.IComponentFactory;
-import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
+import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
 import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAction;
 
@@ -515,7 +515,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
-		action = getActionRegistry().getAction(DatasetAction.ID);
+		action = getActionRegistry().getAction(ContextualDatasetAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 

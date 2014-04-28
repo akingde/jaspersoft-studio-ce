@@ -48,6 +48,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -165,6 +166,10 @@ public class TableEditor extends AbstractVisualEditor {
 		selectionActions.add(DeleteRowAction.ID);
 
 		action = new DatasetAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new ContextualDatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 	}

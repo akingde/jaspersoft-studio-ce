@@ -49,6 +49,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.graphics.Image;
@@ -225,6 +226,13 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	public INode getModel() {
 		return model;
+	}
+	
+	public ISelection getOutlineSelection(){
+		if (outlinePage != null && !outlinePage.isDisposed()){
+			return outlinePage.getSelection();
+		}
+		return StructuredSelection.EMPTY;
 	}
 
 	/*
@@ -440,11 +448,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	}
 
 	protected JDReportOutlineView getOutlineView() {
-		// if (outlinePage == null) {
-		TreeViewer viewer = new TreeViewer();
-		outlinePage = new JDReportOutlineView(this, viewer);
+		if (outlinePage == null || outlinePage.isDisposed()) {
+			TreeViewer viewer = new TreeViewer();
+			outlinePage = new JDReportOutlineView(this, viewer);
+		}
 		outlinePage.setContents(getModel());
-		// }
 		return outlinePage;
 	}
 

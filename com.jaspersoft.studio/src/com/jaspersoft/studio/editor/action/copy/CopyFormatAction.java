@@ -24,6 +24,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * Action to copy the appearance of an element and that can be 
@@ -112,7 +113,7 @@ public class CopyFormatAction extends ACachedSelectionAction {
 				Object modelObj = ep.getModel();
 				// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
 				// it is also directly selected with also its container (ie a frame) selected
-				if (modelObj instanceof APropertyNode){
+				if (modelObj instanceof MGraphicElement){
 					result.add((APropertyNode)modelObj);
 				}
 			}

@@ -53,6 +53,7 @@ import com.jaspersoft.studio.editor.outline.actions.ResetStyleAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.property.section.report.action.PageFormatAction;
 import com.jaspersoft.studio.property.section.report.action.PageRemoveMarginsAction;
@@ -113,72 +114,73 @@ public class ReportEditor extends AbstractVisualEditor {
 	protected List<String> getIgnorePalleteElements() {
 		return null;
 	}
-
+	
+	
 	protected JDReportOutlineView getOutlineView() {
-		// if (outlinePage == null) {
-		TreeViewer viewer = new TreeViewer();
-		// viewer.setSelectionManager(new JSelectionManager());
-		outlinePage = new JDReportOutlineView(this, viewer) {
-			protected void initActions(ActionRegistry registry, IActionBars bars) {
-				String id = DeleteGroupReportAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateFieldAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateSortFieldAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateVariableAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateScriptletAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateParameterAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateGroupAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateDatasetAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateStyleAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateConditionalStyleAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-				
-				id = ExportStyleAsTemplateAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-				
-				id = RefreshTemplateStyleExpression.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-				
-				id = ResetStyleAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateStyleTemplateAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CreateBandAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = PageFormatAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = PageRemoveMarginsAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = DatasetAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-
-				id = CompileAction.ID;
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-			}
-		};
-		// }
+		//Rebuild the outline only if it's closed or disposed
+		if (outlinePage == null || outlinePage.isDisposed()) {
+			TreeViewer viewer = new TreeViewer();
+			outlinePage = new JDReportOutlineView(this, viewer) {
+				protected void initActions(ActionRegistry registry, IActionBars bars) {
+					String id = DeleteGroupReportAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateFieldAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateSortFieldAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateVariableAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateScriptletAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateParameterAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateGroupAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateDatasetAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateStyleAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateConditionalStyleAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = ExportStyleAsTemplateAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = RefreshTemplateStyleExpression.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = ResetStyleAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateStyleTemplateAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CreateBandAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = PageFormatAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = PageRemoveMarginsAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = DatasetAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+	
+					id = CompileAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+				}
+			};
+		}
 		return outlinePage;
 	}
 
@@ -216,6 +218,10 @@ public class ReportEditor extends AbstractVisualEditor {
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
+		action = new ContextualDatasetAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 		action = new CompileAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
