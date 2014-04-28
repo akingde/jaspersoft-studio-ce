@@ -123,6 +123,10 @@ public class ProxyConnection implements IConnection {
 						rd = soap.get(monitor, rd, f);
 						rd.setDirty(false);
 						return rd;
+					} else if (he.getStatusCode() == 403) {
+						rd = soap.get(monitor, rd, f);
+						rd.setDirty(false);
+						return rd;
 					}
 				}
 				throw e;
