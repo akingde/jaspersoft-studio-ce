@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SQL Query Editor
 Bundle-Vendor: Jaspersoft Corporation
-Bundle-Version: 5.6.0.qualifier
+Bundle-Version: 5.5.2.final
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui;singleton:=true
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.6.0",
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="5.5.2",
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared;bundle-version="2.3.1",
- com.jaspersoft.studio.data.sql;bundle-version="5.6.0",
+ com.jaspersoft.studio.data.sql;bundle-version="5.5.2",
  org.eclipse.xtext.builder,
  org.antlr.runtime,
  org.eclipse.xtext.ui.codetemplates.ui,
