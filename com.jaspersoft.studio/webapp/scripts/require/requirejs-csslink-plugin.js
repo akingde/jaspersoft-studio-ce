@@ -1,7 +1,6 @@
 /**
  * requirejs plugin to put css link tags inside the head element
  */
-
 define({
     load: function (name, require, onload, config) {
         var link = document.createElement("link");
