@@ -364,6 +364,8 @@ public class SQLQueryOutline {
 
 			@Override
 			public void run() {
+				if (treeViewer.getTree().isDisposed())
+					return;
 				treeViewer.setInput(designer.getRoot());
 				treeViewer.expandToLevel(1);
 			}
