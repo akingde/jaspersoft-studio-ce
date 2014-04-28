@@ -12,9 +12,9 @@ package com.jaspersoft.studio.editor.preview.view.control;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.BasePrintBookmark;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.PrintBookmark;
+import net.sf.jasperreports.engine.base.BasePrintBookmark;
 
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
