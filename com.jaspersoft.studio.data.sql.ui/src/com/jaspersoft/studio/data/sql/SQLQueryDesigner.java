@@ -415,8 +415,11 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		new MOrderBy(root);
 	}
 
-	protected void doRefreshRoots(boolean updateText) {
+	public void doRefreshRoots(boolean updateText) {
 		String iq = jConfig.getProperty(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTE, ""); //$NON-NLS-1$
+		boolean useJDBCQuote = jConfig.getPropertyBoolean(SQLEditorPreferencesPage.P_USE_JDBC_QUOTE, true); //$NON-NLS-1$
+		if (useJDBCQuote)
+			iq = dbMetadata.getIdentifierQuote();
 		boolean quoteExceptions = jConfig.getPropertyBoolean(SQLEditorPreferencesPage.P_IDENTIFIER_QUOTEONLYEXCEPTIONS, true); //$NON-NLS-1$
 		for (MSQLRoot r : roots) {
 			r.setIdentifierQuote(iq);

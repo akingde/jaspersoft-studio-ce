@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 
@@ -373,7 +374,29 @@ public class DBMetadata {
 		if (readCurrentSchema && c != null) {
 			schema = SchemaUtil.getSchemaPath(c);
 		}
+		try {
+			identifierQuote = c.getMetaData().getIdentifierQuoteString();
+			designer.doRefreshRoots(false);
+			System.out.println("JDBC Quotes: " + c.getMetaData().getIdentifierQuoteString());
+			System.out.println("getExtraNameCharacters: " + c.getMetaData().getExtraNameCharacters());
+			System.out.println("storesLowerCaseIdentifiers: " + c.getMetaData().storesLowerCaseIdentifiers());
+			System.out.println("storesLowerCaseQuotedIdentifiers: " + c.getMetaData().storesLowerCaseQuotedIdentifiers());
+			System.out.println("storesMixedCaseIdentifiers: " + c.getMetaData().storesMixedCaseIdentifiers());
+			System.out.println("storesMixedCaseQuotedIdentifiers: " + c.getMetaData().storesMixedCaseQuotedIdentifiers());
+			System.out.println("storesUpperCaseIdentifiers: " + c.getMetaData().storesUpperCaseIdentifiers());
+			System.out.println("storesUpperCaseQuotedIdentifiers: " + c.getMetaData().storesUpperCaseQuotedIdentifiers());
+			System.out.println("supportsMixedCaseIdentifiers: " + c.getMetaData().supportsMixedCaseIdentifiers());
+			System.out.println("supportsMixedCaseQuotedIdentifiers: " + c.getMetaData().supportsMixedCaseQuotedIdentifiers());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return c;
+	}
+
+	private String identifierQuote = "";
+
+	public String getIdentifierQuote() {
+		return identifierQuote;
 	}
 
 	private String[] schema;
@@ -383,7 +406,7 @@ public class DBMetadata {
 	}
 
 	protected void updateUI(final MSQLRoot root) {
-		Display.getDefault().syncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 			public void run() {
 				if (treeViewer.getControl().isDisposed())
 					return;
