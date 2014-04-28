@@ -260,10 +260,77 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 	 * problems in JSS nodes model
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	private String getSortFieldKey(JRSortField sortField) {
-		return sortField.getName() + "|" + sortField.getType().getName();
+		return getSortFieldKey(sortField.getName(), sortField.getType().getName());
+	}
+	
+	private String getSortFieldKey(String name, String type){
+		return name + "|" + type;
 	}
 
+	
+	/**
+	 * Change the name and the type of the sortfields updating also its entry
+	 * in the dataset map
+	 * 
+	 * @param oldName the old name
+	 * @param oldType the old type
+	 * @param newName the new name
+	 * @param newType the new type
+	 * @param field the field
+	 */
+	private void changeNameAndType(String oldName, String oldType, String newName, SortFieldTypeEnum newType, JRSortField field){
+		JRDesignDataset d = ModelUtils.getDataset(this);
+		if (d != null) {
+			String oldKey = getSortFieldKey(oldName, oldType);
+			d.getSortFieldsMap().remove(oldKey);
+			d.getSortFieldsMap().put(getSortFieldKey(newName, newType.getName()), field);
+			JRDesignSortField jrField = (JRDesignSortField) field;
+			jrField.setName(newName);
+			jrField.setType(newType);
+		}
+	}
+	
+	/**
+	 * Change the type of the sort fields and give to it also a new available name 
+	 * according the its new type (the first free name). If there aren't free names 
+	 * available for that type then the type is not change either
+	 * 
+	 * @param newType the new type of the sort field
+	 * @return true if the type and renaming option was successful, false otherwise
+	 */
+	private boolean selectFirstAvailableName(SortFieldTypeEnum newType){
+		JRDesignDataset d = ModelUtils.getDataset(this);
+		JRDesignSortField jrField = (JRDesignSortField) getValue();
+		//chek if the type is the same
+		if (!newType.equals(jrField.getType())){
+			String oldType = jrField.getType().getName();
+			if (newType.equals(SortFieldTypeEnum.FIELD)) {
+				List<JRField> fields = d.getFieldsList();
+				for (JRField field : fields){
+					String newName = field.getName();
+					String key = getSortFieldKey(newName, SortFieldTypeEnum.FIELD.getName());
+					if (!d.getSortFieldsMap().containsKey(key)){
+						changeNameAndType(jrField.getName(), oldType, newName, SortFieldTypeEnum.FIELD, jrField);
+						return true;
+					}
+				}
+			} else {
+				List<JRVariable> variables = d.getVariablesList();
+				for (JRVariable variable : variables){
+					String newName = variable.getName();
+					String key = getSortFieldKey(newName, SortFieldTypeEnum.VARIABLE.getName());
+					if (!d.getSortFieldsMap().containsKey(key)){
+						changeNameAndType(jrField.getName(), oldType, newName, SortFieldTypeEnum.VARIABLE, jrField);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -273,33 +340,17 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME)) {
 			if (!value.equals("")) { //$NON-NLS-1$
-				String oldKey = getSortFieldKey(jrField);
-				jrField.setName((String) value);
-				JRDesignDataset d = ModelUtils.getDataset(this);
-				if (d != null) {
-					d.getSortFieldsMap().remove(oldKey);
-					d.getSortFieldsMap().put(getSortFieldKey(jrField), jrField);
-				}
+				String oldName = jrField.getName();
+				String oldType = jrField.getType().getName();
+				String newName = (String) value;
+				//The type is the same
+				changeNameAndType(oldName, oldType, newName,  jrField.getType(), jrField);
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))
 			jrField.setOrder((SortOrderEnum) orderD.getEnumValue(value));
 		else if (id.equals(JRDesignSortField.PROPERTY_TYPE)) {
 			SortFieldTypeEnum type = (SortFieldTypeEnum) typeD.getEnumValue(value);
-			if (!type.equals(jrField.getType())) {
-				jrField.setType(type);
-				JRDesignDataset ds = getDataSet();
-				String newName = ""; //$NON-NLS-1$
-				if (type.equals(SortFieldTypeEnum.FIELD)) {
-					List<JRField> f = ds.getFieldsList();
-					if (!f.isEmpty())
-						newName = f.get(0).getName();
-				} else {
-					List<JRVariable> f = ds.getVariablesList();
-					if (!f.isEmpty())
-						newName = f.get(0).getName();
-				}
-				jrField.setName(newName);
-			}
+			selectFirstAvailableName(type);
 		}
 	}
 
