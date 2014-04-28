@@ -623,10 +623,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			((JRDesignCategoryDataset) jrChart.getDataset()).addCategorySeries(catSeries);
 		} else if (jrChart.getDataset() instanceof JRDesignValueDataset) {
 			JRDesignValueDataset valueDataset = (JRDesignValueDataset) jrChart.getDataset();
-			if(jrChart.getChartType()==JRDesignChart.CHART_TYPE_METER) {
+			if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_METER) {
 				valueDataset.setValueExpression(new JRDesignExpression("50"));
-			}
-			else {
+			} else {
 				valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
 			}
 		} else if (jrChart.getDataset() instanceof JRDesignXyDataset) {
@@ -909,7 +908,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		JRChart oldObject = (JRChart) getValue();
 		if (oldObject != null && oldObject.getDataset() != null) {
 			List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-			datasetList.add(new MDatasetRun(oldObject.getDataset().getDatasetRun(), getJasperDesign()));
+			MDatasetRun mDatasetRun = new MDatasetRun(oldObject.getDataset().getDatasetRun(), getJasperDesign());
+			mDatasetRun.setJasperConfiguration(getJasperConfiguration());
+			datasetList.add(mDatasetRun);
 			return datasetList;
 		} else
 			return null;

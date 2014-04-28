@@ -75,7 +75,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author sanda zaharia
  * 
  */
-public class MMap extends MGraphicElement implements IDatasetContainer{
+public class MMap extends MGraphicElement implements IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MMap() {
@@ -223,9 +223,8 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		imageTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_IMAGE_TYPE, Messages.MMap_imageTypeTitle, MapImageTypeEnum.class, NullEnum.NOTNULL);
 		imageTypeD.setDescription(Messages.MMap_imageTypeDescription);
 		desc.add(imageTypeD);
-		
-		onErrorTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, Messages.MMap_OnErrorType,
-				OnErrorTypeEnum.class, NullEnum.NULL);
+
+		onErrorTypeD = new JSSEnumPropertyDescriptor(StandardMapComponent.PROPERTY_ON_ERROR_TYPE, Messages.MMap_OnErrorType, OnErrorTypeEnum.class, NullEnum.NULL);
 		onErrorTypeD.setDescription(Messages.MMap_OnErrorTypeDescription);
 		desc.add(onErrorTypeD);
 
@@ -241,7 +240,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		NTextPropertyDescriptor mapKeyD = new NTextPropertyDescriptor(MapComponent.PROPERTY_KEY, Messages.MMap_ApiKeyText);
 		mapKeyD.setDescription(Messages.MMap_ApiKeyDescription);
 		desc.add(mapKeyD);
-		
+
 		NTextPropertyDescriptor mapClientIdD = new NTextPropertyDescriptor(MapComponent.PROPERTY_CLIENT_ID, Messages.MMap_ClientIdText);
 		mapClientIdD.setDescription(Messages.MMap_ClientIdDescription);
 		desc.add(mapClientIdD);
@@ -253,15 +252,15 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		NTextPropertyDescriptor mapVersionD = new NTextPropertyDescriptor(MapComponent.PROPERTY_VERSION, Messages.MMap_VersionText);
 		mapVersionD.setDescription(Messages.MMap_VersionDescription);
 		desc.add(mapVersionD);
-		
+
 		MapPathsDescriptor mapPathsD = new MapPathsDescriptor(StandardMapComponent.PROPERTY_PATH_DATA_LIST, Messages.MMap_MapPaths);
 		mapPathsD.setDescription(Messages.MMap_MapPathsDescription);
 		desc.add(mapPathsD);
-		
+
 		MapStylesDescriptor mapPathStylesD = new MapStylesDescriptor(StandardMapComponent.PROPERTY_PATH_STYLE_LIST, Messages.MMap_MapStyles);
 		mapPathStylesD.setDescription(Messages.MMap_MapStylesDescription);
 		desc.add(mapPathStylesD);
-		
+
 		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/components.schema.reference.html#"); //$NON-NLS-1$
 
 		markersD.setCategory(Messages.MMap_common_map_properties);
@@ -276,12 +275,12 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		latitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		longitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		zoomExprD.setCategory(Messages.MMap_common_map_properties);
-		
+
 		mapKeyD.setCategory(Messages.MMap_Category_Authentication);
 		mapClientIdD.setCategory(Messages.MMap_Category_Authentication);
 		mapClientSignatureD.setCategory(Messages.MMap_Category_Authentication);
 		mapVersionD.setCategory(Messages.MMap_Category_Authentication);
-		
+
 		mapPathStylesD.setCategory(Messages.MMap_PathsStylesCategory);
 		mapPathsD.setCategory(Messages.MMap_PathsStylesCategoryDesc);
 
@@ -327,6 +326,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 				mDatasetRun.setValue(j);
 			else {
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				mDatasetRun.setJasperConfiguration(getJasperConfiguration());
 				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
@@ -359,39 +359,34 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		// map authentication info
 		if (id.equals(MapComponent.PROPERTY_KEY)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_KEY);
-		}
-		else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
+		} else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_CLIENT_ID);
-		}
-		else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
+		} else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_SIGNATURE);
-		}
-		else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
 			return getJasperDesign().getProperty(MapComponent.PROPERTY_VERSION);
 		}
-		
-		if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)){
+
+		if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)) {
 			List<ItemData> pathDataList = component.getPathDataList();
-			if(pathDataList == null) {
+			if (pathDataList == null) {
 				pathDataList = new ArrayList<ItemData>();
-			}
-			else {
+			} else {
 				pathDataList = JRCloneUtils.cloneList(pathDataList);
 			}
-			return ElementDataHelper.convertFromElementDataInformation(pathDataList,Messages.MMap_PathLabel);
+			return ElementDataHelper.convertFromElementDataInformation(pathDataList, Messages.MMap_PathLabel);
 		}
-		
-		if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)){
+
+		if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)) {
 			List<ItemData> pathStylesList = component.getPathStyleList();
-			if(pathStylesList == null) {
+			if (pathStylesList == null) {
 				pathStylesList = new ArrayList<ItemData>();
-			}
-			else {
+			} else {
 				pathStylesList = JRCloneUtils.cloneList(pathStylesList);
 			}
-			return ElementDataHelper.convertFromElementDataInformation(pathStylesList,Messages.MMap_StyleLabel);
+			return ElementDataHelper.convertFromElementDataInformation(pathStylesList, Messages.MMap_StyleLabel);
 		}
-		
+
 		return super.getPropertyValue(id);
 	}
 
@@ -453,60 +448,49 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 			component.setImageType((MapImageTypeEnum) imageTypeD.getEnumValue(value));
 		else if (id.equals(StandardMapComponent.PROPERTY_ON_ERROR_TYPE)) {
 			component.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
-		}
-		else if (id.equals(MapComponent.PROPERTY_KEY)) {
-			if(value instanceof String){
+		} else if (id.equals(MapComponent.PROPERTY_KEY)) {
+			if (value instanceof String) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_KEY, (String) value);
-			}
-			else {
+			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_KEY);
 			}
-		}
-		else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
-			if(value instanceof String) {
+		} else if (id.equals(MapComponent.PROPERTY_CLIENT_ID)) {
+			if (value instanceof String) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_CLIENT_ID, (String) value);
-			}
-			else {
+			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_CLIENT_ID);
 			}
-		}
-		else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
-			if(value instanceof String) {
+		} else if (id.equals(MapComponent.PROPERTY_SIGNATURE)) {
+			if (value instanceof String) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_SIGNATURE, (String) value);
-			}
-			else {
+			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_SIGNATURE);
 			}
-		}
-		else if (id.equals(MapComponent.PROPERTY_VERSION)) {
-			if(value instanceof String) {
+		} else if (id.equals(MapComponent.PROPERTY_VERSION)) {
+			if (value instanceof String) {
 				getJasperDesign().setProperty(MapComponent.PROPERTY_VERSION, (String) value);
-			}
-			else {
+			} else {
 				getJasperDesign().removeProperty(MapComponent.PROPERTY_VERSION);
 			}
-		}
-		else if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)) {
+		} else if (id.equals(StandardMapComponent.PROPERTY_PATH_DATA_LIST)) {
 			List<ItemData> pathDataList = ElementDataHelper.convertToElementDataInformation((MapDataElementsConfiguration) value);
 			Object[] existingPaths = component.getPathDataList().toArray();
-			for(Object p : existingPaths) {
+			for (Object p : existingPaths) {
 				component.removePathData((ItemData) p);
 			}
-			for(ItemData n : pathDataList){
+			for (ItemData n : pathDataList) {
 				component.addPathData(n);
 			}
-		}
-		else if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)) {
+		} else if (id.equals(StandardMapComponent.PROPERTY_PATH_STYLE_LIST)) {
 			List<ItemData> pathStyleList = ElementDataHelper.convertToElementDataInformation((MapDataElementsConfiguration) value);
 			Object[] existingStyles = component.getPathStyleList().toArray();
-			for(Object p : existingStyles) {
+			for (Object p : existingStyles) {
 				component.removePathStyle((ItemData) p);
 			}
-			for(ItemData n : pathStyleList){
+			for (ItemData n : pathStyleList) {
 				component.addPathStyle(n);
 			}
-		}
-		else
+		} else
 			super.setPropertyValue(id, value);
 	}
 
@@ -587,42 +571,43 @@ public class MMap extends MGraphicElement implements IDatasetContainer{
 		markerData.setDataset(new JRDesignElementDataset());
 		return designMap;
 	}
-	
+
 	/**
-	 * The table dataset update the value of the inner JRDesignDatasetRun only when a 
-	 * set of the property of the datasetrun is done directly on the map element.
-	 * If the set of the value is done only on the inner dataset run model
-	 * then the change will be overwritten on the first get property value of the dataset
-	 * run property
+	 * The table dataset update the value of the inner JRDesignDatasetRun only
+	 * when a set of the property of the datasetrun is done directly on the map
+	 * element. If the set of the value is done only on the inner dataset run
+	 * model then the change will be overwritten on the first get property value
+	 * of the dataset run property
 	 * 
 	 * @author Orlandin Marco
-	 *
+	 * 
 	 */
-	private class MapDatasetRun extends MDatasetRun{
+	private class MapDatasetRun extends MDatasetRun {
 
 		private static final long serialVersionUID = -7526842349391237513L;
 		private MMap mapModel;
-		
+
 		public MapDatasetRun(JRDatasetRun value, MMap mapModel) {
 			super(value, mapModel.getJasperDesign());
 			this.mapModel = mapModel;
 		}
-		
+
 		@Override
 		public void setPropertyValue(Object id, Object value) {
-			if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)){
+			if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
 				super.setPropertyValue(id, value);
 				mapModel.setPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN, this);
-			} else super.setPropertyValue(id, value);
+			} else
+				super.setPropertyValue(id, value);
 		}
-		
+
 	}
 
 	@Override
 	public List<MDatasetRun> getDatasetRunList() {
 		List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
 		MDatasetRun datasetRun = (MDatasetRun) getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
-		datasetList.add(new MapDatasetRun(datasetRun.getValue(),this));
+		datasetList.add(new MapDatasetRun(datasetRun.getValue(), this));
 		return datasetList;
 	}
 

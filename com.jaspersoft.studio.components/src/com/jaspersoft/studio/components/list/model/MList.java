@@ -206,6 +206,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				mDatasetRun.setValue(j);
 			else {
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				mDatasetRun.setJasperConfiguration(getJasperConfiguration());
 				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
@@ -338,11 +339,10 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		HashSet<String> graphicalProperties = getGraphicalProperties();
-		if (graphicalProperties.contains(evt.getPropertyName())){
+		if (graphicalProperties.contains(evt.getPropertyName())) {
 			setChangedProperty(true);
 		}
-		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) || 
-				evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP)) {
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) || evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP)) {
 			fullModelList = null;
 		}
 		if (evt.getSource() == getValue()) {
@@ -354,9 +354,10 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 				StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
 				((DesignListContents) jrList.getContents()).setWidth((Integer) evt.getNewValue());
-			} 
+			}
 		}
-		//Add the children at the model only if the list is opned into a separate editor
+		// Add the children at the model only if the list is opned into a separate
+		// editor
 		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN) && getParent() instanceof MPage) {
 			if (evt.getSource() == getJRElementGroup()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
@@ -423,43 +424,42 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		datasetList.add((MDatasetRun) getPropertyValue(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN));
 		return datasetList;
 	}
-	
+
 	/**
-	 * Cache for the real model. The cache is build only we needed and is discarded when elements are
-	 * added or removed to the model
+	 * Cache for the real model. The cache is build only we needed and is
+	 * discarded when elements are added or removed to the model
 	 */
 	private ANode fullModelList = null;
-	
-	private void fillUsedStyles(List<INode> children, HashSet<String> map){
-		for(INode node : children){
-			if (node instanceof IGraphicalPropertiesHandler){
-				map.addAll(((IGraphicalPropertiesHandler)node).getUsedStyles());
+
+	private void fillUsedStyles(List<INode> children, HashSet<String> map) {
+		for (INode node : children) {
+			if (node instanceof IGraphicalPropertiesHandler) {
+				map.addAll(((IGraphicalPropertiesHandler) node).getUsedStyles());
 			}
 			fillUsedStyles(node.getChildren(), map);
 		}
 	}
-	
+
 	@Override
 	public HashSet<String> getUsedStyles() {
 		initModel();
 		HashSet<String> result = super.getUsedStyles();
-		fillUsedStyles(fullModelList.getChildren(),result);
+		fillUsedStyles(fullModelList.getChildren(), result);
 		return result;
 	}
-	
+
 	@Override
 	public List<INode> initModel() {
-		if (fullModelList == null){
+		if (fullModelList == null) {
 			if (getChildren().isEmpty()) {
-				fullModelList = ListComponentFactory.INST().createNode(null, getValue(),  -1);
+				fullModelList = ListComponentFactory.INST().createNode(null, getValue(), -1);
 				StandardListComponent list = (StandardListComponent) getValue().getComponent();
 				ReportFactory.createElementsForBand(fullModelList, list.getContents().getChildren());
-			}
-			else fullModelList = this;
+			} else
+				fullModelList = this;
 		}
 		return fullModelList.getChildren();
 	}
-	
 
 	@Override
 	public HashSet<String> generateGraphicalProperties() {

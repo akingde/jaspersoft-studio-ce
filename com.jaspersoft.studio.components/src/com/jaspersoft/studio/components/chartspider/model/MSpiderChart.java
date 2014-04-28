@@ -650,7 +650,9 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 			SpiderChartComponent component = (SpiderChartComponent) jrElement.getComponent();
 			if (component != null && component.getDataset() != null) {
 				List<MDatasetRun> datasetList = new ArrayList<MDatasetRun>();
-				datasetList.add(new MDatasetRun(component.getDataset().getDatasetRun(), getJasperDesign()));
+				MDatasetRun mDatasetRun = new MDatasetRun(component.getDataset().getDatasetRun(), getJasperDesign());
+				mDatasetRun.setJasperConfiguration(getJasperConfiguration());
+				datasetList.add(mDatasetRun);
 				return datasetList;
 			}
 		}

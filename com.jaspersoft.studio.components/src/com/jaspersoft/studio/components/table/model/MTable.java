@@ -188,6 +188,7 @@ public class MTable extends MGraphicElement implements IContainer,
 				mDatasetRun.setValue(j);
 			else {
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				mDatasetRun.setJasperConfiguration(getJasperConfiguration());
 				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
