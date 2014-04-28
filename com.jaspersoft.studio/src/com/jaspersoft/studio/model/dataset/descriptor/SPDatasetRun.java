@@ -125,14 +125,15 @@ public class SPDatasetRun extends ASPropertyWidget {
 				if (prmDTO == null) {
 					prmDTO = new ParameterDTO();
 					prmDTO.setJasperDesign(mDataSet.getJasperDesign());
-					prmDTO.setValue(datasetRun.getParameters());
+
 				}
+				prmDTO.setValue(datasetRun.getParameters());
 
 				ComboParameterEditor wizard = new ComboParameterEditor();
-				wizard.setValue(prmDTO,mDataSet);
-				//get always the selected element, because the getElement of some sections (i.e. MCrosstab) 
-				//return something else for their tricky dirty purposes. getSelectedElement return always
-				//the selected element for the section
+				wizard.setValue(prmDTO, mDataSet);
+				// get always the selected element, because the getElement of some sections (i.e. MCrosstab)
+				// return something else for their tricky dirty purposes. getSelectedElement return always
+				// the selected element for the section
 				JasperReportsConfiguration config = section.getSelectedElement().getJasperConfiguration();
 				JRDesignDataset parentDatset = ModelUtils.getFirstDatasetInHierarchy(section.getSelectedElement());
 				wizard.setExpressionContext(new ExpressionContext(parentDatset, config));
@@ -151,12 +152,11 @@ public class SPDatasetRun extends ASPropertyWidget {
 		paramMap.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
+				if (!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
 					JRDesignDatasetRun datasetRun = mDataSet.getValue();
 					JRExpressionEditor wizard = new JRExpressionEditor();
 					wizard.setValue((JRDesignExpression) datasetRun.getParametersMapExpression());
-					WizardDialog dialog = 
-							ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(paramMap.getShell(), wizard);
+					WizardDialog dialog = ExpressionEditorSupportUtil.getExpressionEditorWizardDialog(paramMap.getShell(), wizard);
 					if (dialog.open() == Dialog.OK) {
 						changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION,
 								wizard.getValue());
@@ -215,6 +215,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			jDatasetRun = new JRDesignDatasetRun();
 			jDatasetRun.setDatasetName((String) value);
 			mDataSet = new MDatasetRun(jDatasetRun, pnode.getJasperDesign());
+			mDataSet.setJasperConfiguration(pnode.getJasperConfiguration());
 			dsRunWidget.setData(jDatasetRun);
 			section.changeProperty(property, mDataSet);
 		} else {
@@ -227,6 +228,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			if (property != null) {
 				mDataSet.setValue(null);
 				mDataSet = new MDatasetRun(jDatasetRun, pnode.getJasperDesign());
+				mDataSet.setJasperConfiguration(pnode.getJasperConfiguration());
 				mDataSet.setPropertyValue(prop, value);
 				dsRunWidget.setData(jDatasetRun);
 				section.changePropertyOn(property, mDataSet, pnode);

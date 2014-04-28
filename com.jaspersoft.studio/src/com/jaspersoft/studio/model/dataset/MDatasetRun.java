@@ -35,7 +35,9 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 
 public class MDatasetRun extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -180,20 +182,22 @@ public class MDatasetRun extends APropertyNode {
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
-				
-				ParameterDTO internalDTO = (ParameterDTO)getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
-				//The parameter must be updated also into the referenced dataset since the JRDatasetRunParameterExpressionFactory check that every parameter in the dataset run
-				//is associated to a parameter with the same name in the referenced dataset
-				JRDesignDataset originalDataset = ModelUtils.getDesignDatasetByName(getJasperDesign(), getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).toString());
-				
-				for (JRDatasetParameter prm : internalDTO.getValue()){
+
+				ParameterDTO internalDTO = (ParameterDTO) getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+				// The parameter must be updated also into the referenced dataset since the
+				// JRDatasetRunParameterExpressionFactory check that every parameter in the dataset run
+				// is associated to a parameter with the same name in the referenced dataset
+				JRDesignDataset originalDataset = ModelUtils.getDesignDatasetByName(getJasperDesign(),
+						getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).toString());
+
+				for (JRDatasetParameter prm : internalDTO.getValue()) {
 					jrElement.removeParameter(prm);
 				}
 
-				for (JRDatasetParameter param : v.getValue()){
+				for (JRDatasetParameter param : v.getValue()) {
 					try {
 						jrElement.addParameter(param);
-						if (!originalDataset.getParametersMap().containsKey(param.getName())){
+						if (!originalDataset.getParametersMap().containsKey(param.getName())) {
 							JRDesignParameter designParam = new JRDesignParameter();
 							designParam.setName(param.getName());
 							originalDataset.addParameter(designParam);
@@ -205,19 +209,24 @@ public class MDatasetRun extends APropertyNode {
 				propertyDTO = v;
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
-			if (value != null && !value.equals(""))//$NON-NLS-1$
-				jrElement.setDatasetName((String) value);
-			else
-				jrElement.setDatasetName(null);
+			String oldValue = jrElement.getDatasetName();
+			if (Misc.isNullOrEmpty((String) value))
+				value = null;
+			jrElement.setDatasetName((String) value);
+			try {
+				SyncDatasetRunParameters.syncDatasetRun(this, oldValue, (String) value);
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);
-		//The propertyDTO is a cache for the property of the JRDatasetRun. when the 
-		//JRDatasetRun change i need to clear the propertyDTO to avoid to have as 
-		//value a JRDatasetRun and as propertyDTO the properties of another JRDatasetRun
+		// The propertyDTO is a cache for the property of the JRDatasetRun. when the
+		// JRDatasetRun change i need to clear the propertyDTO to avoid to have as
+		// value a JRDatasetRun and as propertyDTO the properties of another JRDatasetRun
 		propertyDTO = null;
 	}
 

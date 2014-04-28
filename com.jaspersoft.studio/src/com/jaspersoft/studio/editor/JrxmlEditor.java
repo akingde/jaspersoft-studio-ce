@@ -100,6 +100,7 @@ import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.JRXMLUtils;
+import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -146,7 +147,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		@Override
 		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 			boolean shiftPressed = JasperReportsPlugin.isPressed(SWT.SHIFT);
-			if (!shiftPressed){
+			if (!shiftPressed) {
 				if (myDataAdapterDesc != null) {
 					JasperDesign jasperDesign = getJasperDesign();
 					String oldp = jasperDesign.getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
@@ -159,10 +160,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				super.runReport(myDataAdapterDesc);
 			}
 		}
-		
+
 		/**
-		 * Set the dirty flag of the preview area, but only 
-		 * if it isn't refreshing
+		 * Set the dirty flag of the preview area, but only if it isn't refreshing
 		 */
 		public void setDirty(boolean dirty) {
 			if (!isRefresh) {
@@ -561,6 +561,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// monitor.beginTask("Initialising " + getPartName(), IProgressMonitor.UNKNOWN);
 				// try {
 				doInitModel(monitor, getEditorInput(), inp, ifile);
+
 				// } finally {
 				// monitor.done();
 				// }
@@ -591,11 +592,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			// }
 
 			jrContext.setJasperDesign(jd);
+
 			Display.getDefault().syncExec(new Runnable() {
 
 				@Override
 				public void run() {
 					setModel(ReportFactory.createReport(jrContext));
+					SyncDatasetRunParameters.sync(getMReport());
 				}
 			});
 		} catch (ResourceException e) {
@@ -719,17 +722,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	private PreviewEditor previewEditor;
 	private boolean toXML = false;
-	
+
 	/**
 	 * Set the current preview type
 	 * 
-	 * @param viewerKey key of the type to show
-	 * @param refresh flag to set if the preview should also be refreshed
+	 * @param viewerKey
+	 *          key of the type to show
+	 * @param refresh
+	 *          flag to set if the preview should also be refreshed
 	 */
-	public void setPreviewOutput(String key, boolean refresh){
+	public void setPreviewOutput(String key, boolean refresh) {
 		previewEditor.setCurrentViewer(key, refresh);
 	}
-	
+
 	/**
 	 * Return the actual preview type key on the preview editor
 	 * 
@@ -738,17 +743,16 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public String getDefaultViewerKey() {
 		return previewEditor.getDefaultViewerKey();
 	}
-	
+
 	/**
-	 * Set the preview editor to dirty, this will refresh the preview
-	 * when switching into it 
+	 * Set the preview editor to dirty, this will refresh the preview when switching into it
 	 * 
-	 * @param dirty true to set the editor dirty, false otherwise
+	 * @param dirty
+	 *          true to set the editor dirty, false otherwise
 	 */
-	public void setPreviewDirty(boolean dirty){
+	public void setPreviewDirty(boolean dirty) {
 		previewEditor.setDirty(dirty);
 	}
-
 
 	/**
 	 * Calculates the contents of page 2 when the it is activated.
@@ -758,12 +762,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void pageChange(final int newPageIndex) {
-		//Set the visibility flag of the previeweditor
-		if (previewEditor != null){
+		// Set the visibility flag of the previeweditor
+		if (previewEditor != null) {
 			previewEditor.setVisible(newPageIndex == PAGE_PREVIEW);
 		}
-		
-		
+
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
 			if (activePage == PAGE_DESIGNER) {
 				if (outlinePage != null)
