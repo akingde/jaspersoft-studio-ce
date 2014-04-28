@@ -398,11 +398,13 @@ public class ExternalStylesManager {
 	 */
 	public static JRStyle getExternalStyle(String styleName, JasperReportsConfiguration jConfig){
 		JasperDesign design = jConfig.getJasperDesign();
-		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		for (JRReportTemplate template : design.getTemplatesList()){
-			List<JRStyle> loadedStyles = getStyles(template, project, jConfig);
-			JRStyle searchedStyle = searchStyleInList(loadedStyles, styleName);
-			if (searchedStyle != null) return searchedStyle;
+		if (design != null){
+			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			for (JRReportTemplate template : design.getTemplatesList()){
+				List<JRStyle> loadedStyles = getStyles(template, project, jConfig);
+				JRStyle searchedStyle = searchStyleInList(loadedStyles, styleName);
+				if (searchedStyle != null) return searchedStyle;
+			}
 		}
 		return null;
 	}

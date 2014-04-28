@@ -97,14 +97,17 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 	 */
 	@Override
 	protected Object doGetValue() {
-		int selectionIndex = comboBox.getSelectionIndex();
-		if (selectionIndex < 0) {
-			getItems()[0] = comboBox.getText().trim();
-			selectionIndex = 0;
-			comboBox.setItems(getItems());
-			comboBox.select(selectionIndex);
+		if (getItems().length > 0){
+			int selectionIndex = comboBox.getSelectionIndex();
+			if (selectionIndex < 0) {
+				getItems()[0] = comboBox.getText().trim();
+				selectionIndex = 0;
+				comboBox.setItems(getItems());
+				comboBox.select(selectionIndex);
+			}
+			return getItems()[selectionIndex];
 		}
-		return getItems()[selectionIndex];
+		return null;
 	}
 
 	public CCombo getComboBox() {
