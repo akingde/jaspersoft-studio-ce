@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Properties
 Bundle-SymbolicName: com.jaspersoft.studio.properties;singleton:=true
-Bundle-Version: 5.5.2.final
+Bundle-Version: 5.6.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.properties.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui;bundle-version="3.6.0";visibility:=reexport,
  org.eclipse.ui.forms;bundle-version="3.5.0";visibility:=reexport,
  org.eclipse.ui.views;bundle-version="3.5.0";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.6.0";visibility:=reexport,
- com.jaspersoft.studio.babel.editor;bundle-version="5.5.2"
+ com.jaspersoft.studio.babel.editor;bundle-version="5.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.jaspersoft.studio.properties;uses:="org.eclipse.ui.plugin,org.osgi.framework",
