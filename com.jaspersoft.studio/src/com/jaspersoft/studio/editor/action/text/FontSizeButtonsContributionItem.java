@@ -144,15 +144,15 @@ public class FontSizeButtonsContributionItem extends ContributionItem implements
 		for (APropertyNode model : models){
 			Object fontSize = model.getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
 			if (fontSize.equals("")) fontSize = model.getPropertyActualValue(JRBaseFont.PROPERTY_FONT_SIZE);
-			Integer newValue = 2;
+			Float newValue = 2.0f;
 			if (fontSize != null && fontSize.toString().length()>0){
-				newValue = Integer.valueOf(fontSize.toString());
+				newValue = Float.valueOf(fontSize.toString());
 				Integer plus = null;
 				if (increment) plus = Math.round((new Float(newValue) / 100)*factor)+1;
 				else plus =  Math.round((new Float(newValue) / 100)*-factor)-1;
-				if ((newValue+plus)>99) newValue = 99;
+				if ((newValue+plus)>99) newValue = 99.0f;
 				else if ((newValue+plus)>0) newValue += plus;
-				
+
 				Command c = getChangePropertyCommand(JRBaseFont.PROPERTY_FONT_SIZE, newValue.toString(), model);
 				changeSizeCommands.setReferenceNodeIfNull(model);
 				if (c != null) {

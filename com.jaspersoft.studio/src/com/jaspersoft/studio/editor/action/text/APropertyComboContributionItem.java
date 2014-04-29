@@ -58,8 +58,8 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 					cc.add(changeValueCmd);
 					cc.setReferenceNodeIfNull(obj);
 				}
-				getCommandStack().execute(cc);
 			}
+			getCommandStack().execute(cc);
 		}
 
 		@Override
@@ -180,7 +180,7 @@ public abstract class APropertyComboContributionItem extends ContributionItem im
 
 	protected abstract Object getPropertyName();
 
-	private ISelection selection;
+	protected ISelection selection;
 
 	@Override
 	public void setSelection(ISelection selection) {
