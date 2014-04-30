@@ -19,11 +19,11 @@ import java.util.List;
 
 import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.DefaultPositionUpdater;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IPositionUpdater;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.xml.sax.helpers.LocatorImpl;
 
@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.xml.xml.XMLParser;
 public class OutlineContentProvider implements ITreeContentProvider {
 
 	private XMLElement root = null;
-	private IEditorInput input;
+	private Object input;
 	private IDocumentProvider documentProvider;
 
 	protected final static String TAG_POSITIONS = "__tag_positions";
@@ -85,11 +85,22 @@ public class OutlineContentProvider implements ITreeContentProvider {
 
 	public void dispose() {
 	}
+	
+	/**
+	 * Return the document by the type of the input
+	 * 
+	 * @param input the input must be a string or an IEditorInput
+	 * @return an IDocument build from the input
+	 */
+	private IDocument getDocument(Object input){
+		if (input instanceof String) return new Document((String)input);
+		else return documentProvider.getDocument(input);
+	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
 		if (oldInput != null) {
-			IDocument document = documentProvider.getDocument(oldInput);
+			IDocument document = getDocument(oldInput);
 			if (document != null) {
 				try {
 					document.removePositionCategory(TAG_POSITIONS);
@@ -99,10 +110,10 @@ public class OutlineContentProvider implements ITreeContentProvider {
 			}
 		}
 
-		input = (IEditorInput) newInput;
+		input = newInput;
 
 		if (newInput != null) {
-			IDocument document = documentProvider.getDocument(newInput);
+			IDocument document = getDocument(newInput);
 			if (document != null) {
 				document.addPositionCategory(TAG_POSITIONS);
 				document.addPositionUpdater(positionUpdater);

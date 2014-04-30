@@ -21,7 +21,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
@@ -32,7 +31,7 @@ public class EditorContentOutlinePage extends ContentOutlinePage
 {
 
 	private ITextEditor editor;
-	private IEditorInput input;
+	private Object input;
 	private OutlineContentProvider outlineContentProvider;
 	private OutlineLabelProvider outlineLabelProvider;
 
@@ -62,7 +61,7 @@ public class EditorContentOutlinePage extends ContentOutlinePage
 	 */
 	public void setInput(Object input)
 	{
-		this.input = (IEditorInput) input;
+		this.input = input;
 		update();
 	}
 

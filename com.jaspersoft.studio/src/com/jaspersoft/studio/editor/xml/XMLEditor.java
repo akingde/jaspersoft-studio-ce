@@ -14,7 +14,10 @@ import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.jface.text.ITextListener;
+import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.TextOperationAction;
@@ -50,6 +53,29 @@ public class XMLEditor extends TextEditor {
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new XMLConfiguration(colorManager));
 		setDocumentProvider(new XMLDocumentProvider(jrContext));
+	}
+	
+	/**
+	 * When the editor is graphically created then add a text change listener
+	 * to the viewer
+	 */
+	@Override
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		getSourceViewer().addTextListener(new ITextListener() {
+			
+			@Override
+			public void textChanged(TextEvent event) {
+				if (outlinePage != null) {
+					String text = getSourceViewer().getTextWidget().getText();
+					try{
+						outlinePage.setInput(text);
+					}catch(Exception ex){
+						
+					}
+				}
+			}
+		});
 	}
 
 	@Override
