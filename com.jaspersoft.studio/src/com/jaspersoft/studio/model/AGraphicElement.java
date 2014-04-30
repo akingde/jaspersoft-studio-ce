@@ -5,13 +5,13 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.AMapElement;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public abstract class AGraphicElement extends AMapElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -25,10 +25,20 @@ public abstract class AGraphicElement extends AMapElement {
 	}
 
 	public static final String PROP_NAME = "name";
+	public static final String PROP_DESCRIPTION = "description";
 	public static final String PROP_X = "x";
 	public static final String PROP_Y = "y";
 	public static final String PROP_W = "w";
 	public static final String PROP_H = "h";
+
+	@Override
+	public String getToolTip() {
+		String tt = super.getToolTip();
+		String desc = (String) getPropertyValue(AGraphicElement.PROP_DESCRIPTION);
+		if (!Misc.isNullOrEmpty(desc))
+			tt += "\n" + desc;
+		return tt;
+	}
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
@@ -55,6 +65,11 @@ public abstract class AGraphicElement extends AMapElement {
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(PROP_NAME, Messages.common_name);
 		nameD.setDescription(Messages.common_name);
 		desc.add(nameD);
+
+		NTextPropertyDescriptor description = new NTextPropertyDescriptor(PROP_DESCRIPTION,
+				Messages.common_descriptionLabel, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
+		description.setDescription(Messages.common_description);
+		desc.add(description);
 
 		defaultsMap.put(PROP_X, 10);
 		defaultsMap.put(PROP_Y, 10);
