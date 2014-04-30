@@ -97,15 +97,15 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 
 	private void listenMap() {
 		StandardMapComponent m = getMapComponent();
-		if (m != null && m.getMarkerData() != null) {
-			((StandardItemData) m.getMarkerData()).getEventSupport().addPropertyChangeListener(this);
+		if (m != null && ModelUtils.getSingleMarkerData(m) != null) {
+			((StandardItemData) ModelUtils.getSingleMarkerData(m)).getEventSupport().addPropertyChangeListener(this);
 		}
 	}
 
 	private void unlistenMap() {
 		StandardMapComponent m = getMapComponent();
-		if (m != null && m.getMarkerData() != null) {
-			((StandardItemData) m.getMarkerData()).getEventSupport().removePropertyChangeListener(this);
+		if (m != null && ModelUtils.getSingleMarkerData(m) != null) {
+			((StandardItemData) ModelUtils.getSingleMarkerData(m)).getEventSupport().removePropertyChangeListener(this);
 		}
 	}
 
@@ -308,8 +308,8 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 			return new MarkersDTO(markers, this);
 		}
 		if (id.equals(StandardItemData.PROPERTY_DATASET)) {
-			if (component.getMarkerData() != null) {
-				return component.getMarkerData().getDataset();
+			if (ModelUtils.getSingleMarkerData(component) != null) {
+				return ModelUtils.getSingleMarkerData(component).getDataset();
 			}
 			return null;
 		}
@@ -394,7 +394,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 	public void setPropertyValue(Object id, Object value) {
 		StandardMapComponent component = getMapComponent();
 
-		StandardItemData markerdata = (StandardItemData) component.getMarkerData();
+		StandardItemData markerdata = (StandardItemData) ModelUtils.getSingleMarkerData(component);
 		if (id.equals(StandardItemData.PROPERTY_ITEMS)) {
 			if (value instanceof MarkersDTO) {
 				markerdata = safeGetMarkerData(component, markerdata);
@@ -497,7 +497,7 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 	private StandardItemData safeGetMarkerData(StandardMapComponent component, StandardItemData markerdata) {
 		if (markerdata == null) {
 			markerdata = new StandardItemData();
-			component.setMarkerData(markerdata);
+			component.addMarkerData(markerdata);
 			listenMap();
 		}
 		return markerdata;

@@ -1448,11 +1448,11 @@ public class ModelUtils {
 	 */
 	public static ItemData safeGetMarkerData(MapComponent mapComponent, boolean update) {
 		StandardMapComponent map = ((StandardMapComponent) mapComponent);
-		ItemData markerData = map.getMarkerData();
+		ItemData markerData = getSingleMarkerData(map);
 		if (markerData == null) {
 			markerData = new StandardItemData();
 			if (update) {
-				map.setMarkerData(markerData);
+				map.addMarkerData(markerData);
 			}
 		}
 		return markerData;
@@ -1537,4 +1537,13 @@ public class ModelUtils {
 		return !allowed;
 	}
 
+	public static ItemData getSingleMarkerData(MapComponent map) {
+		List<ItemData> markerDataList = map.getMarkerDataList();
+		if(markerDataList!=null && !markerDataList.isEmpty()) {
+			return markerDataList.get(0);
+		}
+		else {
+			return null;
+		}
+	}	
 }

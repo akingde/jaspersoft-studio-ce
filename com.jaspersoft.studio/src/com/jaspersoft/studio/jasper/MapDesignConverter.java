@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -165,8 +166,8 @@ public class MapDesignConverter extends ElementIconConverter implements Componen
 					JasperDesign jd = jrContext.getJasperDesign();
 					JRDataset jrd = jd.getMainDataset();
 					JRElementDataset dataset = null;
-					if (map.getMarkerData() != null) {
-						dataset = map.getMarkerData().getDataset();
+					if (ModelUtils.getSingleMarkerData(map) != null) {
+						dataset = ModelUtils.getSingleMarkerData(map).getDataset();
 					}
 					if (dataset != null && dataset.getDatasetRun() != null) {
 						String dname = dataset.getDatasetRun().getDatasetName();
