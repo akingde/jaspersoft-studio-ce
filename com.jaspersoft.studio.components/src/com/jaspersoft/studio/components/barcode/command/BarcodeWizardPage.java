@@ -132,7 +132,7 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 
 		final Table table = new Table(composite, SWT.V_SCROLL | SWT.SINGLE
 				| SWT.FULL_SELECTION | SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 500;
 		gd.widthHint = 250;
 		table.setLayoutData(gd);
@@ -153,7 +153,7 @@ public class BarcodeWizardPage extends JSSHelpWizardPage {
 
 		final Table table2 = new Table(composite, SWT.V_SCROLL | SWT.SINGLE
 				| SWT.FULL_SELECTION | SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 500;
 		gd.widthHint = 250;
 		table2.setLayoutData(gd);
