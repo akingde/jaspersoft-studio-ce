@@ -19,6 +19,7 @@ import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,6 +67,93 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	 * Map with all the authentication for each url
 	 */
 	private static Map<String, PasswordAuthentication> authenticationMap = new HashMap<String, PasswordAuthentication>();
+	
+	/**
+	 * Inner class used only to store the result of a connection 
+	 * operation
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class ReturnResponse{
+		
+		/**
+		 * Return code of the connection operation
+		 */
+		private int returnCode;
+		
+		/**
+		 * Flag to store if the operation was successful or not
+		 */
+		private boolean successful;
+		
+		/**
+		 * Exception raised during the operation, null if there wasen't exceptions
+		 */
+		private Exception ex;
+		
+		/**
+		 * Create an instance of the class
+		 * 
+		 * @param successfull Flag to store if the operation was successful or not
+		 * @param returnCode Return code of the connection operation
+		 */
+		public ReturnResponse(boolean successfull, int returnCode){
+			this.successful = successfull;
+			this.returnCode = returnCode;
+			ex = null;
+		}
+		
+		/**
+		 * Create an instance of the class, the return code is always -1 and
+		 * the successful flag is false, since there was an exception
+		 * 
+		 * @param ex Exception raised during the operation
+		 */
+		public ReturnResponse(Exception ex){
+			this.successful = false;
+			this.returnCode = -1;
+			this.ex = ex;
+		}
+		
+		/**
+		 * Return if there was an exception
+		 * 
+		 * @return true if there was an exception, false otherwise
+		 */
+		public boolean isException(){
+			return ex != null;
+		}
+		
+		/**
+		 * Return the exception raised
+		 * 
+		 * @return return the exception, or null if isException is false
+		 */
+		public Exception getException(){
+			return ex;
+		}
+		
+		/**
+		 * Check if the connection operation is successful
+		 * 
+		 * @return true if the connection is working good, false otherwise
+		 */
+		public boolean isSuccessfull(){
+			return this.successful;
+		}
+		
+		/**
+		 * Return the return code of the connection operation
+		 * 
+		 * @return an integer representing the return code of the operation. It 
+		 * is -1 in case of exception since the procedure was interrupted before try
+		 * the connection
+		 */
+		public int getReturnCode(){
+			return returnCode;
+		}
+	}
 	
 	
 	/**
@@ -139,13 +227,14 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String url = xmlaUri.getText();
-				boolean loginSuccesfull = validateUsernamePassword(url);
+				ReturnResponse response = validateUsernamePassword(url);
+				boolean loginSuccesfull = response.isSuccessfull();
 				if (loginSuccesfull) {
 					try {
 						PasswordAuthentication auth = authenticationMap.get(url);
 						if (auth == null){
 							//The access to the server dosen't need a username or a password
-							auth = new PasswordAuthentication("", "".toCharArray());
+							auth = new PasswordAuthentication("", "".toCharArray()); //$NON-NLS-1$ //$NON-NLS-2$
 						}
 						MetadataDiscover discover = new MetadataDiscover(url, auth.getUserName(), new String(auth.getPassword()));
 						handleMetaDataChanged(discover);
@@ -154,7 +243,13 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 						e1.printStackTrace();
 					}
 				} else {
-					UIUtils.showInformation(Messages.XmlaDataAdapterComposite_failedTitle, Messages.XmlaDataAdapterComposite_failedText);
+					String message;
+					if (response.isException()){
+						message =  Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorException, new Object[]{response.getException().getMessage()}); //$NON-NLS-1$
+					} else {
+						message =  Messages.XmlaDataAdapterComposite_failedText + "\n" + MessageFormat.format(Messages.XmlaDataAdapterComposite_errorCode, new Object[]{response.getReturnCode()}); //$NON-NLS-1$
+					}
+					UIUtils.showInformation(Messages.XmlaDataAdapterComposite_failedTitle, message);
 				}
 			}
 		});
@@ -316,7 +411,7 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 	 * @param url the url of the server
 	 * @return true if the operation was aborted, false otherwise
 	 */
-	private boolean validateUsernamePassword(final String url) {
+	private ReturnResponse validateUsernamePassword(final String url) {
 		try {
 			/**
 			 * Create the dialog
@@ -355,11 +450,12 @@ public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 			URL endpoint = new URL(url);
 			HttpURLConnection urlConnection = (HttpURLConnection) endpoint.openConnection();
 			int code = urlConnection.getResponseCode();
-			return (!ad.cancelOperation() && (code == 405 || code == 500));
+			ReturnResponse response = new ReturnResponse(!ad.cancelOperation() && (code == 405 || code == 500), code);
+			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new ReturnResponse(e);
 		}
-		return false;
 	}
 
 	@Override
