@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.infoList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -32,6 +33,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
@@ -53,6 +56,11 @@ public class SelectableComposite extends ScrolledComposite {
 	 * composite of the selected element
 	 */
 	private Composite selectedComposite;
+	
+	/**
+	 * List of the clickable composites associated with each ElementDescriptor
+	 */
+	private List<Composite> compositeList;
 
 	/**
 	 * color used as background for the unselected elements
@@ -114,6 +122,63 @@ public class SelectableComposite extends ScrolledComposite {
 		} else
 			widgetSelected(((Control) source).getParent());
 	}
+	
+	/**
+	 * Listener to move the selected element up and down when the up and 
+	 * down keys are pressed
+	 */
+	private Listener arrowListener = new Listener() {
+		
+		/**
+		 * Return the index of the actually selected element (there
+		 * must be a selected element or it will return the first element)
+		 */
+		private int getActualSelectionIndex(){
+			int index = 0;
+			if (selectedComposite == null) return 0;
+			for(ElementDescription item : items){
+				if (selectedComposite.getData() == item){
+					break;
+				} else {
+					index++;
+				}
+			}
+			return index;
+		}
+		
+		@Override
+		public void handleEvent(Event event) {
+			if (event.keyCode == SWT.ARROW_UP || event.keyCode == SWT.ARROW_DOWN){
+				int selectionIndex = getActualSelectionIndex();
+				int newSelectionIndex = -1;
+				if (event.keyCode == SWT.ARROW_UP && selectionIndex > 0 ){
+					newSelectionIndex = selectionIndex-1;
+				} else if (event.keyCode == SWT.ARROW_DOWN && selectionIndex < (items.size()-1)){
+					newSelectionIndex =  selectionIndex+1;
+				}
+				if (newSelectionIndex != -1){
+					ElementDescription elementToSelect = items.get(newSelectionIndex);
+					//Search the next element
+					for(Composite comp : compositeList){
+						if (comp.getData() == elementToSelect){
+							//Element found, deselect the old one if any
+							if (selectedComposite != null) {
+								selectedComposite.setBackground(unselectedColor);
+								setChildrenColor(selectedComposite, unselectedColor);
+							}
+							//Select the new element and exit from the for
+							selectedComposite = comp;
+							showControl(selectedComposite);
+							selectedComposite.setBackground(selectedColor);
+							setChildrenColor(selectedComposite, selectedColor);
+							setScrolledFocus();
+							break;
+						}
+					}
+				}
+			}
+		}
+	};
 
 	public SelectableComposite(Composite parent) {
 		super(parent, SWT.V_SCROLL);
@@ -194,6 +259,7 @@ public class SelectableComposite extends ScrolledComposite {
 		mainComposite.setLayout(mainCompLayout);
 		setContent(mainComposite);
 		mainComposite.setRedraw(false);
+		compositeList = new ArrayList<Composite>();
 		for (ElementDescription item : items) {
 			Composite comp = new Composite(mainComposite, SWT.BORDER);
 			comp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -213,6 +279,7 @@ public class SelectableComposite extends ScrolledComposite {
 
 			comp.addMouseListener(compositeMouseAction);
 			setChildrenColor(comp, unselectedColor);
+			compositeList.add(comp);
 		}
 		mainComposite.setRedraw(true);
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -224,6 +291,8 @@ public class SelectableComposite extends ScrolledComposite {
 			}
 
 		});
+		
+		PlatformUI.getWorkbench().getDisplay().addFilter(org.eclipse.swt.SWT.KeyDown, arrowListener);
 	}
 
 	private void createDescription(String text, Composite comp, StyleRange[] styles) {
@@ -249,6 +318,7 @@ public class SelectableComposite extends ScrolledComposite {
 	@Override
 	public void dispose() {
 		super.dispose();
+		PlatformUI.getWorkbench().getDisplay().removeFilter(org.eclipse.swt.SWT.KeyDown, arrowListener);
 		selectedColor.dispose();
 		unselectedColor.dispose();
 	}

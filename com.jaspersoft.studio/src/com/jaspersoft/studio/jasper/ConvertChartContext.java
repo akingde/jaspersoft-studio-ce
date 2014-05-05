@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.jfree.data.category.CategoryDataset;
@@ -149,7 +150,14 @@ public class ConvertChartContext implements ChartContext {
 	}
 
 	public Locale getLocale() {
-		return null;// FIXMETHEME
+		Locale locale = null;
+		if (context != null){
+			String locProperty = context.getProperty(JRParameter.REPORT_LOCALE);
+			if (locProperty != null){
+				locale = new Locale(locProperty);
+			}
+		}
+		return locale != null ? locale : Locale.getDefault();
 	}
 
 	public TimeZone getTimeZone() {
