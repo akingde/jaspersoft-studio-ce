@@ -1482,6 +1482,8 @@ public class Messages extends NLS {
 	public static String PropertyDialog_2;
 	public static String PropertyDialog_3;
 	public static String PropertyListFieldEditor_duplicateButton;
+	public static String PropertyListFieldEditor_ErrMsg;
+	public static String PropertyListFieldEditor_ErrTitle;
 	public static String PropertyListFieldEditor_exampleValue;
 	public static String PropertyListFieldEditor_newPropertyName;
 	public static String PropertyListFieldEditor_newPropertyTitle;

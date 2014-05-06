@@ -22,29 +22,37 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
 	public static final String NET_SF_JASPERREPORTS_JRPROPERTIES = "net.sf.jasperreports.JRPROPERTIES"; //$NON-NLS-1$
+	
+	protected Button editButton;
 
 	public PropertyListFieldEditor() {
 		super();
@@ -64,70 +72,84 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	protected String[][] parseString(String string) {
 		return new String[0][0];
 	}
+	
+	private class PEditDialog extends Dialog {
+		
+		private String pname;
+		private String pvalue;
+
+		protected PEditDialog(Shell parentShell) {
+			this(parentShell,null,null);
+		}
+		
+		protected PEditDialog(Shell parentShell, String pname, String pvalue) {
+			super(parentShell);
+			this.pname = pname;
+			this.pvalue = pvalue;
+		}
+		
+		protected Control createDialogArea(Composite parent) {
+			Composite composite = (Composite) super.createDialogArea(parent);
+			composite.setLayout(new GridLayout(2, false));
+			Label label = new Label(composite, SWT.NONE);
+			label.setText(Messages.PropertyListFieldEditor_newPropertyName);
+
+			final Text text = new Text(composite, SWT.BORDER);
+			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+			text.setText(Misc.nvl(pname,"net.sf.jaspersoft.")); //$NON-NLS-1$
+			text.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					pname = text.getText();
+				}
+			});
+
+			label = new Label(composite, SWT.NONE);
+			label.setText(Messages.PropertyListFieldEditor_newPropertyValue);
+
+			final Text tname = new Text(composite, SWT.BORDER);
+			tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+			tname.setText(Misc.nvl(pvalue,Messages.PropertyListFieldEditor_exampleValue));
+			tname.addModifyListener(new ModifyListener() {
+
+				@Override
+				public void modifyText(ModifyEvent e) {
+					pvalue = tname.getText();
+				}
+			});
+			applyDialogFont(composite);
+			return composite;
+		}
+		
+		@Override
+		protected boolean isResizable() {
+			return true;
+		}
+		
+		protected void configureShell(Shell newShell) {
+			super.configureShell(newShell);
+			newShell.setSize(500, 200);
+			newShell.setText(Messages.PropertyListFieldEditor_newPropertyTitle);
+		}
+
+		public String getPName() {
+			return this.pname;
+		}
+
+		public String getPValue() {
+			return this.pvalue;
+		}
+		
+	}
+	
 
 	@Override
 	protected String[] getNewInputObject() {
-		final String[] prop = new String[2];
-		Dialog dialog = new Dialog(UIUtils.getShell()) {
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
-			 */
-			protected Control createDialogArea(Composite parent) {
-				Composite composite = (Composite) super.createDialogArea(parent);
-				composite.setLayout(new GridLayout(2, false));
-				Label label = new Label(composite, SWT.NONE);
-				label.setText(Messages.PropertyListFieldEditor_newPropertyName);
-
-				final Text text = new Text(composite, SWT.BORDER);
-				text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-				text.setText("net.sf.jaspersoft."); //$NON-NLS-1$
-				text.addModifyListener(new ModifyListener() {
-
-					@Override
-					public void modifyText(ModifyEvent e) {
-						prop[0] = text.getText();
-					}
-				});
-
-				label = new Label(composite, SWT.NONE);
-				label.setText(Messages.PropertyListFieldEditor_newPropertyValue);
-
-				final Text tname = new Text(composite, SWT.BORDER);
-				tname.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-				tname.setText(Messages.PropertyListFieldEditor_exampleValue);
-				tname.addModifyListener(new ModifyListener() {
-
-					@Override
-					public void modifyText(ModifyEvent e) {
-						prop[1] = tname.getText();
-					}
-				});
-				applyDialogFont(composite);
-				return composite;
-			}
-			
-			@Override
-			protected boolean isResizable() {
-				return true;
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
-			 */
-			protected void configureShell(Shell newShell) {
-				super.configureShell(newShell);
-				newShell.setSize(500, 200);
-				newShell.setText(Messages.PropertyListFieldEditor_newPropertyTitle);
-			}
-
-		};
-		if (dialog.open() == Window.OK)
-			return prop;
+		PEditDialog dialog = new PEditDialog(UIUtils.getShell());
+		if (dialog.open() == Window.OK) {
+			return new String[]{dialog.getPName(),dialog.getPValue()};
+		}
 		return null;
 	}
 
@@ -140,9 +162,9 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			String key = item.getText(0);
 			String value = item.getText(1);
 			props.setProperty(key, value);
-			if (key.equals("net.sf.jasperreports.default.font.name"))
+			if (key.equals("net.sf.jasperreports.default.font.name")) //$NON-NLS-1$
 				JRProperties.setProperty(key, value);
-			else if (key.equals("net.sf.jasperreports.default.font.size"))
+			else if (key.equals("net.sf.jasperreports.default.font.size")) //$NON-NLS-1$
 				JRProperties.setProperty(key, value);
 		}
 		getPreferenceStore().setValue(NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
@@ -234,9 +256,68 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	}
 
 	@Override
+	public void createSelectionListener() {
+		selectionListener = new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				Widget widget = event.widget;
+				if (widget == addButton) {
+					addPressed();
+				} else if (widget == duplicateButton) {
+					duplicatePressed();
+				} else if (widget == removeButton) {
+					removePressed();
+				} else if (widget == editButton) {
+					editPressed();
+				}	else if (widget == table) {
+					selectionChanged();
+				}
+			}
+		};
+	}
+	
+	private void editPressed() {
+		int selIdx = table.getSelectionIndex();
+		if(selIdx!=-1){
+			TableItem item = table.getItem(selIdx);
+			String pname = item.getText(0);
+			String pvalue = item.getText(1);
+			PEditDialog dialog = new PEditDialog(UIUtils.getShell(), pname, pvalue);
+			if(dialog.open() == Window.OK) {
+				String newPName = dialog.getPName();
+				String newPValue = dialog.getPValue();
+				if(!pname.equals(newPName)){
+					// ensure no duplicates
+					for(int i=0;i<table.getItemCount();i++) {
+						if(i!=selIdx && newPName.equals(table.getItem(i).getText(0))) {
+							MessageDialog.openError(UIUtils.getShell(), Messages.PropertyListFieldEditor_ErrTitle, Messages.PropertyListFieldEditor_ErrMsg);
+							return;
+						}
+					}
+				}
+				item.setText(0,newPName);
+				item.setText(1,newPValue);
+			}
+		}
+	}
+	
+	protected void selectionChanged() {
+		super.selectionChanged();
+		int index = table.getSelectionIndex();
+		int size = table.getItemCount();
+		boolean isMultiSelection = table.getSelectionCount() > 1;
+		if (editButton != null)
+			editButton.setEnabled(!isMultiSelection && size >= 1 && index >= 0 && index < size && isEditable(index));
+	}
+	
+	protected boolean isEditable(int row) {
+		return true;
+	}
+	
+	@Override
 	protected void createButtons(Composite box) {
 		addButton = createPushButton(box, Messages.common_add);
 		duplicateButton = createPushButton(box, Messages.PropertyListFieldEditor_duplicateButton);
 		removeButton = createPushButton(box, Messages.common_delete);
+		editButton = createPushButton(box, Messages.common_edit);
 	}
 }
