@@ -64,7 +64,7 @@ public class RESTv2ExceptionHandler {
 						msg += "\n" + str;
 				throw new HttpResponseException(status, msg);
 			} else if (res.getHeaderString("Content-Type").contains("text/html")) {
-				res.readEntity(String.class);
+				System.out.println(res.readEntity(String.class));
 				msg = res.getStatusInfo().getReasonPhrase() + "\n";
 				throw new HttpResponseException(status, msg);
 			}

@@ -16,14 +16,20 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.repo.RepositoryUtil;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -89,7 +95,48 @@ public abstract class AImpObject {
 		return mres;
 	}
 
+	private static File tmpDir;
+
+	private static File getTempDir() {
+		if (tmpDir == null) {
+			try {
+				tmpDir = FileUtils.createTempDir();
+			} catch (IOException e) {
+				tmpDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
+			}
+		}
+		return tmpDir;
+	}
+
+	protected static File getTmpFile(String str) {
+		String fname = str;
+		int ind = str.lastIndexOf("/");
+		if (ind >= 0)
+			fname = fname.substring(ind + 1);
+		File f = new File(getTempDir(), fname);
+		f.deleteOnExit();
+		return f;
+	}
+
 	protected File findFile(IFile file, String str) {
+		try {
+			InputStream is = RepositoryUtil.getInstance(jrConfig).getInputStreamFromLocation(str);
+			if (is != null) {
+				File f = getTmpFile(str);
+				FileOutputStream fos = new FileOutputStream(f);
+				try {
+					IOUtils.copy(is, fos);
+					return f;
+				} finally {
+					FileUtils.closeStream(is);
+					FileUtils.closeStream(fos);
+				}
+			}
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return FileUtils.findFile(file, str);
 	}
 

@@ -16,21 +16,24 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.util.Set;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
+import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.publish.PublishOptions;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpSubreport extends AImpObject {
@@ -41,18 +44,32 @@ public class ImpSubreport extends AImpObject {
 
 	@Override
 	protected File findFile(IFile file, String str) {
-		File f = super.findFile(file, str.replaceAll(".jasper", ".jrxml"));
-		if (f == null)
+		File f = super.findFile(file, str.replaceAll(FileExtension.PointJASPER, FileExtension.PointJRXML));
+		if (f == null) {
 			f = super.findFile(file, str);
-		return f;
-	}
+			if (f != null) {
+				try {
+					Object obj = JRLoader.loadObject(jrConfig, f);
+					if (obj != null && obj instanceof JasperReport) {
+						JasperReport jrReport = (JasperReport) obj;
+						f = getTmpFile(str);
+						FileOutputStream fos = null;
+						try {
+							fos = new FileOutputStream(f);
+							JRXmlWriter.writeReport(jrReport, fos, "UTF-8");
+							return f;
+						} catch (FileNotFoundException e) {
+							FileUtils.closeStream(fos);
+							e.printStackTrace();
+						}
 
-	@Override
-	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
-		String exp = popt.getExpression();
-		if (!Misc.isNullOrEmpty(exp))
-			popt.setExpression(exp.replaceAll(".jasper", ".jrxml"));
-		return super.addResource(monitor, mrunit, fileset, f, popt);
+					}
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return f;
 	}
 
 	protected ResourceDescriptor createResource(MReportUnit mrunit) {

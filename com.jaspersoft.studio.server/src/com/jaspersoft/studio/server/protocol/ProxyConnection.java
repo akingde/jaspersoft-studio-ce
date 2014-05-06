@@ -148,7 +148,9 @@ public class ProxyConnection implements IConnection {
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
+				if (he.getStatusCode() == 500) {// &&
+																				// he.getMessage().contains("Unexpected error"))
+																				// {
 					list = soap.list(monitor, rd);
 					for (ResourceDescriptor r : list)
 						r.setDirty(false);
