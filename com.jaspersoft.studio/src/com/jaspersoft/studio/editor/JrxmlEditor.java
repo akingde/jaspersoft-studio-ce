@@ -598,7 +598,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				@Override
 				public void run() {
 					setModel(ReportFactory.createReport(jrContext));
-					SyncDatasetRunParameters.sync(getMReport());
+					MReport report = getMReport();
+					if (report != null){
+						SyncDatasetRunParameters.sync(report);
+					}
 				}
 			});
 		} catch (ResourceException e) {
