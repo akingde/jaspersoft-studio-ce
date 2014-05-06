@@ -108,6 +108,11 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 				applyDialogFont(composite);
 				return composite;
 			}
+			
+			@Override
+			protected boolean isResizable() {
+				return true;
+			}
 
 			/*
 			 * (non-Javadoc)
