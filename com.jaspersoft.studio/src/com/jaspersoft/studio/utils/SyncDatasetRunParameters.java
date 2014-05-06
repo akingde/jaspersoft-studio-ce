@@ -95,27 +95,31 @@ public class SyncDatasetRunParameters {
 	}
 
 	public static void sync(MReport mrep) {
-		JasperReportsConfiguration jConf = mrep.getJasperConfiguration();
-		JRQueryExecuterUtils qeUtil = JRQueryExecuterUtils.getInstance(jConf);
-		JasperDesign jd = mrep.getValue();
-		JRQuery query = jd.getMainDataset().getQuery();
-		if (query != null){
-			String mlang = query.getLanguage();
-			for (JRDataset subds : jd.getDatasetsList())
-				if (subds.getQuery() != null && mlang.equals(subds.getQuery().getLanguage())) {
-					try {
-						// find query executer, look if there are built-in parameters
-						QueryExecuterFactory qef = qeUtil.getExecuterFactory(mlang);
-						Object[] bprms = qef.getBuiltinParameters();
-						if (qef != null && bprms != null) {
-							// find all datasetrun that point to subdataset
-							for (JRDesignDatasetRun dr : getDatasetRun(mrep, subds))
-								setupDatasetRun(bprms, dr);
+		try {
+			JasperReportsConfiguration jConf = mrep.getJasperConfiguration();
+			JRQueryExecuterUtils qeUtil = JRQueryExecuterUtils.getInstance(jConf);
+			JasperDesign jd = mrep.getValue();
+			JRQuery query = jd.getMainDataset().getQuery();
+			if (query != null) {
+				String mlang = query.getLanguage();
+				for (JRDataset subds : jd.getDatasetsList())
+					if (subds.getQuery() != null && mlang.equals(subds.getQuery().getLanguage())) {
+						try {
+							// find query executer, look if there are built-in parameters
+							QueryExecuterFactory qef = qeUtil.getExecuterFactory(mlang);
+							Object[] bprms = qef.getBuiltinParameters();
+							if (qef != null && bprms != null) {
+								// find all datasetrun that point to subdataset
+								for (JRDesignDatasetRun dr : getDatasetRun(mrep, subds))
+									setupDatasetRun(bprms, dr);
+							}
+						} catch (JRException e) {
+							e.printStackTrace();
 						}
-					} catch (JRException e) {
-						e.printStackTrace();
 					}
-				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 

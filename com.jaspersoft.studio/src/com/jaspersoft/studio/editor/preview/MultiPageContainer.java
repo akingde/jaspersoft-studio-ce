@@ -45,6 +45,8 @@ public class MultiPageContainer {
 
 	public void switchView(Statistics stats, APreview view) {
 		this.stats = stats;
+		if (composite.isDisposed())
+			return;
 		((StackLayout) composite.getLayout()).topControl = view.getControl();
 		composite.layout();
 		// here should update exporters properties

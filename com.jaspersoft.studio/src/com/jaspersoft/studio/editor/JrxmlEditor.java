@@ -593,7 +593,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			jrContext.setJasperDesign(jd);
 
-			Display.getDefault().syncExec(new Runnable() {
+			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
 				public void run() {
