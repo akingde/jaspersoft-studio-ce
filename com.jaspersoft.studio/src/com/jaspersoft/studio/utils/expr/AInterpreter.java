@@ -19,6 +19,7 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.JRFiller;
@@ -106,6 +107,22 @@ public abstract class AInterpreter {
 			if (!literals.contains(pnameLiteral))
 				recursiveInterpreter(recursion, pr);
 		}
+		
+		//Try to evaluate the variable
+		while (expression.indexOf("$V{") >= 0) {
+			String vname = Misc.extract(expression, "$V{", "}");
+			JRVariable vr = null;
+			vr = dataset.getVariablesMap().get(vname);
+			if (vr == null)
+				throw new JRException("Variable $V{" + vname + "} does not exists in the dataset");
+			String pnameLiteral = getVariableLiteral(vname);
+			expression = Misc.strReplace(pnameLiteral, "$V{" + vname + "}", expression);
+
+			if (!literals.contains(pnameLiteral))
+				recursiveInterpreter(recursion, vr);
+		}
+		
+		
 		while (expression.indexOf("$R{") >= 0) {
 			String pname = Misc.extract(expression, "$R{", "}");
 			String baseName = getBundleName();
@@ -131,6 +148,19 @@ public abstract class AInterpreter {
 			return getNull(pliteral, prm);
 		return setValue(eval(prepareExpression(exp.getText(), recursion)), pliteral);
 	}
+	
+	protected Object recursiveInterpreter(int recursion, JRVariable vrb) throws Exception {
+		++recursion;
+		String pliteral = getVariableLiteral(vrb.getName());
+		if (literals.contains(pliteral))
+			return get(pliteral);
+		JRExpression exp = vrb.getInitialValueExpression();
+		if (recursion > 100 || exp == null || Misc.isNullOrEmpty(exp.getText())){
+			if (vrb.getValueClass().equals(String.class)) return setValue("", pliteral);
+			else return setValue(null, pliteral);
+		}
+		return setValue(eval(prepareExpression(exp.getText(), recursion)), pliteral);
+	}
 
 	private Object getNull(String pliteral, JRParameter prm) throws Exception {
 		if (isConvertNullParams() && prm.getValueClass().equals(String.class))
@@ -146,6 +176,10 @@ public abstract class AInterpreter {
 
 	private String getLiteral(String pname) {
 		return "param_" + JRStringUtil.escapeJavaStringLiteral(pname).replace(".", "_");
+	}
+	
+	private String getVariableLiteral(String vname) {
+		return "var_" + JRStringUtil.escapeJavaStringLiteral(vname).replace(".", "_");
 	}
 
 	private boolean convertNullParams = false;

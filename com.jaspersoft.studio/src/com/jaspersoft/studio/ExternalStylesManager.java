@@ -20,11 +20,9 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -44,7 +42,7 @@ import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
-import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
@@ -60,10 +58,6 @@ public class ExternalStylesManager {
 	 */
 	private static HashMap<String, List<JRStyle>> externalStylesCache = new HashMap<String, List<JRStyle>>();
 	
-	/**
-	 * Cache of the expression interpreter for a report, the key is the absolute path of the report
-	 */
-	private static HashMap<String, ExpressionInterpreter> interpreterMaps = new HashMap<String, ExpressionInterpreter>();
 
 	/**
 	 * Listener called when a file is saved
@@ -91,7 +85,7 @@ public class ExternalStylesManager {
 			if (part instanceof JrxmlEditor){
 				JrxmlEditor editor = (JrxmlEditor)part;
 				String key = ((FileEditorInput)editor.getEditorInput()).getFile().getLocation().toPortableString();
-				interpreterMaps.remove(key);
+				ExpressionUtil.removeCachedInterpreter(key);
 			}	
 		}
 		
@@ -177,7 +171,7 @@ public class ExternalStylesManager {
 			IPath rawLocation = resource.getResource().getRawLocation();
 			if (rawLocation != null){
 				String key = rawLocation.toOSString();
-				interpreterMaps.remove(key);
+				ExpressionUtil.removeCachedInterpreter(key);
 			}
 		}
 	}
@@ -302,23 +296,7 @@ public class ExternalStylesManager {
 		try{
 			//Check first if there are previous failed attempt to evaluate the expression
 			if (!isNotValuable(projectPath, expString)){
-				evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(styleExpression);
-				if (evaluatedExpression == null){
-					//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
-					ExpressionInterpreter interpreter = interpreterMaps.get(projectPath);
-					if (interpreter == null){
-						JasperDesign jd = jConfig.getJasperDesign();
-						JRDesignDataset jrd = jd.getMainDesignDataset();
-						if (styleExpression != null && jrd != null && jd != null){
-							interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig);
-							interpreterMaps.put(projectPath, interpreter);
-						}
-					}
-					if (interpreter != null){
-						Object expressionValue = interpreter.interpretExpression(expString);
-						if (expressionValue != null) evaluatedExpression = expressionValue.toString();
-					}
-				}
+				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluation(styleExpression, project, jConfig); 
 				if (evaluatedExpression == null){
 					//The expression is not valuable, add it to the map
 					addNotValuableExpression(projectPath, expString);

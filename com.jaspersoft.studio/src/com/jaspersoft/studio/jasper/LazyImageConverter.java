@@ -263,10 +263,11 @@ public class LazyImageConverter extends ElementConverter {
 	 */
 	private ExpressionInterpreter getInterpreter(JasperReportsConfiguration jConf, MGraphicElement modelElement){
 		 JRDesignDataset jrd = ModelUtils.getDataset(modelElement);
+		 
 		 ExpressionInterpreter interpreter = null;
 		 if (jrd != null){
 			 interpreter = interpreterMaps.get(jrd);
-			 if (interpreter == null){
+			 if (interpreter == null || !interpreter.isCorrectInterpreter(jConf.getJasperDesign())){
 					JasperDesign jd = jConf.getJasperDesign();
 					if (jrd != null && jd != null){
 						interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConf);

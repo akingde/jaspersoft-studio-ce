@@ -16,7 +16,6 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class ImpResourceBundle extends AImpObject {
 		File f = null;
 		URL url = jConfig.getClassLoader().getResource(dpath + ".properties");
 		if (url != null)
-			f = new File(new URI(url.getProtocol(), url.getAuthority(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
+			f = new File(url.toURI());
 		else
 			f = findFile(file, dpath + ".properties");
 		if (f != null && f.exists()) {

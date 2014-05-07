@@ -30,14 +30,12 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSubreport;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.apache.commons.io.FileUtils;
@@ -73,7 +71,7 @@ import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
-import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -130,12 +128,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 * Boolean flag, true if there are conflict on the resource names, otherwise false
 	 */
 	private boolean conflictResources;
-	
-	/**
-	 * Cache of the expression interpreter for a report, the key is the absolute path of the report
-	 */
-	private static HashMap<String, ExpressionInterpreter> interpreterMaps = new HashMap<String, ExpressionInterpreter>();
-	
+		
 	/**
 	 * Build the class
 	 * 
@@ -379,31 +372,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 */
 	private String evalResourceName(JRExpression exp)
 	{
-		String evaluatedExpression = null;
-		String projectPath = reportFile.getLocation().toPortableString();
-		String expString = exp != null ? exp.getText() : "";
-		try{
-			evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
-			if (evaluatedExpression == null){
-				//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
-				ExpressionInterpreter interpreter = interpreterMaps.get(projectPath);
-				if (interpreter == null){
-					JasperDesign jd = jrContext.getJasperDesign();
-					JRDesignDataset jrd = jd.getMainDesignDataset();
-					if (exp != null && jrd != null && jd != null){
-						interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jrContext);
-						interpreterMaps.put(projectPath, interpreter);
-					}
-				}
-				if (interpreter != null){
-					Object expressionValue = interpreter.interpretExpression(expString);
-					if (expressionValue != null) evaluatedExpression = expressionValue.toString();
-				}
-			}
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return evaluatedExpression;
+		return ExpressionUtil.cachedExpressionEvaluation(exp, reportFile, jrContext);
 	}
 	
 	

@@ -43,6 +43,25 @@ public class ExpressionInterpreter {
 			ex.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Check if this intepreter is valid for the current report language
+	 * 
+	 * @return true if the iterpreter is valid, fals otherwise
+	 */
+	public boolean isCorrectInterpreter(JasperDesign jasperDesign){
+		try {
+			if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_JAVA) && interpreter instanceof JavaInterpreter)
+				return true;
+			else if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_GROOVY)  && interpreter instanceof GroovyInterpretter)
+				return true;
+			else if (jasperDesign.getLanguage().equalsIgnoreCase("bsh") && interpreter instanceof JavaInterpreter)
+				return true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return false;
+	}
 
 	/**
 	 * Try to interpret the java expression passed as argument. If dataset is provided, the parameters are recursively

@@ -50,7 +50,7 @@ public abstract class AImpObject {
 	}
 
 	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset, JRDesignExpression exp, IFile file) {
-		String str = ExpressionUtil.eval(exp, jrConfig, jd);
+		String str = ExpressionUtil.cachedExpressionEvaluation(exp, file, jrConfig); 
 		if (str == null || fileset.contains(str))
 			return null;
 
