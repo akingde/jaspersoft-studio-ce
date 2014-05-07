@@ -99,26 +99,32 @@ public class SyncDatasetRunParameters {
 			JasperReportsConfiguration jConf = mrep.getJasperConfiguration();
 			JRQueryExecuterUtils qeUtil = JRQueryExecuterUtils.getInstance(jConf);
 			JasperDesign jd = mrep.getValue();
-			JRQuery query = jd.getMainDataset().getQuery();
-			if (query != null) {
-				String mlang = query.getLanguage();
-				for (JRDataset subds : jd.getDatasetsList())
-					if (subds.getQuery() != null && mlang.equals(subds.getQuery().getLanguage())) {
-						try {
-							// find query executer, look if there are built-in parameters
-							QueryExecuterFactory qef = qeUtil.getExecuterFactory(mlang);
-							Object[] bprms = qef.getBuiltinParameters();
-							if (qef != null && bprms != null) {
-								// find all datasetrun that point to subdataset
-								for (JRDesignDatasetRun dr : getDatasetRun(mrep, subds))
-									setupDatasetRun(bprms, dr);
+			if (jd != null && jd.getMainDataset() != null) {
+				JRQuery query = jd.getMainDataset().getQuery();
+				if (query != null && query.getLanguage() != null) {
+					String mlang = query.getLanguage();
+					for (JRDataset subds : jd.getDatasetsList())
+						if (subds.getQuery() != null && mlang.equals(subds.getQuery().getLanguage())) {
+							try {
+								// find query executer, look if there are built-in parameters
+								QueryExecuterFactory qef = qeUtil.getExecuterFactory(mlang);
+								Object[] bprms = qef.getBuiltinParameters();
+								if (qef != null && bprms != null) {
+									// find all datasetrun that point to subdataset
+									for (JRDesignDatasetRun dr : getDatasetRun(mrep, subds))
+										setupDatasetRun(bprms, dr);
+								}
+							} catch (JRException e) {
+								// it's not necessary to log this, because, it's very possible query executer does not exists for some
+								// languages
+								// it depends on environment, and this is not critical for the user
+								e.printStackTrace();
 							}
-						} catch (JRException e) {
-							e.printStackTrace();
 						}
-					}
+				}
 			}
 		} catch (Throwable e) {
+			// it's not necessary to log this, errors could happen
 			e.printStackTrace();
 		}
 	}
