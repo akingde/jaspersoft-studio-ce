@@ -19,6 +19,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
@@ -48,6 +49,7 @@ import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.ExpressionInterpreter;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -249,39 +251,22 @@ public class LazyImageConverter extends ElementConverter {
 	}
 	
 	/**
-	 * Cache of the expression interpreter for a report, the key is the dataset for which the interpreter is created
-	 */
-	private static HashMap<JRDesignDataset, ExpressionInterpreter> interpreterMaps = new HashMap<JRDesignDataset, ExpressionInterpreter>();
-	
-	
-	/**
-	 * Return the expression interpreter for a report. If it is cached is returned the cached one, otherwise a new one is created and the cached
+	 * Return the expression interpreter for a dataset.
 	 * 
 	 * @param jConf the configuration of the report 
-	 * @param modelElement the model of the element, necessary to get its dataset
+	 * @param dataset the dataset for the interpreter
 	 * @return the interpreter for the element
 	 */
-	private ExpressionInterpreter getInterpreter(JasperReportsConfiguration jConf, MGraphicElement modelElement){
-		 JRDesignDataset jrd = ModelUtils.getDataset(modelElement);
-		 
-		 ExpressionInterpreter interpreter = null;
-		 if (jrd != null){
-			 interpreter = interpreterMaps.get(jrd);
-			 if (interpreter == null || !interpreter.isCorrectInterpreter(jConf.getJasperDesign())){
-					JasperDesign jd = jConf.getJasperDesign();
-					if (jrd != null && jd != null){
-						interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConf);
-						interpreterMaps.put(jrd, interpreter);
-					}
-				}
-		 }
+	private ExpressionInterpreter getInterpreter(JasperReportsConfiguration jConf, JRDesignDataset dataset){
+		 JasperDesign jd = jConf.getJasperDesign();
+		 ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, jd, jConf);
 		 return interpreter;
 	}
 	
 	/**
-	 * Interpret the expression of an element. The expression is evaluated first with a simple and fast interpreter. 
-	 * If that interpreter can not evaluate the expression a more complex one is taken (from the cache or created, since
-	 * create the complex interpreter take a lot of time), 
+	 * Interpret the expression of an element. If the element uses the main dataset then uses the standard evaluation 
+	 * function (that provides a caching functins) otherwise create a simple interpreter to evaluate the expression. 
+	 * If that interpreter can not evaluate the expression a more complex one is taken
 	 * 
 	 * @param jConf the configuration of the report
 	 * @param modelElement the element that contains the expression
@@ -289,15 +274,22 @@ public class LazyImageConverter extends ElementConverter {
 	 * @return the value of the expression or null if it can not be evaluated
 	 */
 	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement, JRExpression expr){
-		String evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(expr);
-		if (evaluatedExpression == null && expr != null){
-			ExpressionInterpreter interpreter = getInterpreter(jConf, modelElement);
-			if (interpreter != null){
-				Object expressionValue = interpreter.interpretExpression(expr.getText());
-				if (expressionValue != null) evaluatedExpression = expressionValue.toString();
+		JRDesignDataset jrd = ModelUtils.getDataset(modelElement);
+		JRDataset mainDataset = modelElement.getJasperDesign().getMainDataset();
+		//If it uses the main dataset search in the interprerter cache map with the standard evaluation function
+		if (mainDataset == jrd) return ExpressionUtil.cachedExpressionEvaluation(expr, jConf);
+		else {
+			//Otherwise uses a new dataset
+			String evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(expr);
+			if (evaluatedExpression == null && expr != null){
+				ExpressionInterpreter interpreter = getInterpreter(jConf, jrd);
+				if (interpreter != null){
+					Object expressionValue = interpreter.interpretExpression(expr.getText());
+					if (expressionValue != null) evaluatedExpression = expressionValue.toString();
+				}
 			}
+			return evaluatedExpression;
 		}
-		return evaluatedExpression;
 	}
 	
 	/**
