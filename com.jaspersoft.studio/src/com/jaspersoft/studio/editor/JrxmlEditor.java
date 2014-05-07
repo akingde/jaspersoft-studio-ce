@@ -834,7 +834,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						monitor.beginTask("Compiling subreport", IProgressMonitor.UNKNOWN);
 						if (jrContext.getPropertyBoolean(DesignerPreferencePage.P_SAVE_ON_PREVIEW, Boolean.FALSE)) {
 							monitor.subTask("Saving Report");
-							Display.getDefault().syncExec(new Runnable() {
+							UIUtils.getDisplay().syncExec(new Runnable() {
 
 								@Override
 								public void run() {
@@ -842,7 +842,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 								}
 							});
 						}
-						Display.getDefault().syncExec(new Runnable() {
+						UIUtils.getDisplay().syncExec(new Runnable() {
 							@Override
 							public void run() {
 								model2preview();

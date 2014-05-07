@@ -31,6 +31,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.view.control.AVParameters;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -84,10 +85,10 @@ public class VInputControls extends AVParameters {
 	}
 
 	public void setupDefaultValues() {
-		Job job = new Job("Calculating Default Values") {
+		Job job = new Job(Messages.VParameters_calculate_default_values) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Resetting input parameters", IProgressMonitor.UNKNOWN);
+				monitor.beginTask(Messages.VParameters_resetparameters, IProgressMonitor.UNKNOWN);
 				try {
 					rdrepunit = icm.getWsClient().initInputControls(rdrepunit.getUriString(), monitor);
 					icm.initInputControls(rdrepunit);

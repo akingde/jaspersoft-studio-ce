@@ -1894,6 +1894,8 @@ public class Messages extends NLS {
 	public static String ViewExecutionInfoAction_tooltip;
 	public static String ViewSettingsDropDownAction_previewFormatMenu;
 	public static String ViewSettingsDropDownAction_settingsName;
+	public static String VParameters_calculate_default_values;
+	public static String VParameters_resetparameters;
 	public static String WizardDataSourcePage_lblDataset_text;
 	public static String WizardDataSourcePage_lblNewLabel_text;
 	public static String WizardDataSourcePage_btnNew_text;
