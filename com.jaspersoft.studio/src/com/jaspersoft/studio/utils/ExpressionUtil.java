@@ -92,6 +92,19 @@ public class ExpressionUtil {
 		interpreterMaps.remove(projectPath);
 	}
 	
+	/**
+	 * Remove an expression interpreter from the cache
+	 * 
+	 * @param jConfig JasperReportConfiguration project for which the interpreter should be removed
+	 */
+	public static void removeCachedInterpreter(JasperReportsConfiguration jConfig){
+		if (jConfig != null){
+			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
+			String projectPath = project != null ? project.getLocation().toPortableString() : null;
+			removeCachedInterpreter(projectPath);
+		}
+	}
+	
 	public static final String eval(JRExpression expr, JasperReportsConfiguration jConfig, JasperDesign jd) {
 		if (expr == null)
 			return null;
