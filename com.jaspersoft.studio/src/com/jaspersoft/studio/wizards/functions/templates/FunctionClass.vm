@@ -1,6 +1,7 @@
 #set( $clazzSuffix = ".class" )
+#if($packageName && !("$packageName" == ""))
 package $packageName;
-
+#end
 import net.sf.jasperreports.functions.annotations.Function;
 import net.sf.jasperreports.functions.annotations.FunctionCategories;
 import net.sf.jasperreports.functions.annotations.FunctionParameter;

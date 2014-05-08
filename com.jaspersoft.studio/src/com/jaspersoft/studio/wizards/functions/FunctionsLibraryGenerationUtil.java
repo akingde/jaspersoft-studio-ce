@@ -35,6 +35,8 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 
+import com.jaspersoft.studio.utils.Misc;
+
 /**
  * Utility class for the tasks to be performed during the new functions library creation.
  * 
@@ -103,7 +105,11 @@ public class FunctionsLibraryGenerationUtil {
 			IFile functionsLibraryI18nPropertiesFile = javaProject.getProject().getFile(packagePath.append(JR_MESSAGES_PROPERTIES));
 			Template functionsLibraryI18nTemplate = ve.getTemplate(LIBRARY_MESSAGES_TEMPLATE_LOCATION);
 			VelocityContext functionsLibContext = new VelocityContext();
-			functionsLibContext.put("functionsLibraryClass", packageName+"."+libraryName);
+			String functionsLibraryClass = libraryName;
+			if(!Misc.isNullOrEmpty(packageName)){
+				functionsLibraryClass=packageName+"."+libraryName;
+			}
+			functionsLibContext.put("functionsLibraryClass", functionsLibraryClass);
 			StringWriter flibsw = new StringWriter();
 			functionsLibraryI18nTemplate.merge(functionsLibContext, flibsw);
 			if(functionsLibraryI18nPropertiesFile.exists()) {
@@ -126,7 +132,10 @@ public class FunctionsLibraryGenerationUtil {
 	public void createCategoryClass(String categoryClass, String categoryLabel, String categoryDescription) throws CoreException{
 		// Create category class (pay attention it could exist)
 		int lastDotIdx = categoryClass.lastIndexOf('.');
-		String categoryPackage = categoryClass.substring(0, lastDotIdx);
+		String categoryPackage = "";
+		if(lastDotIdx!=-1){
+			categoryPackage=categoryClass.substring(0, lastDotIdx);
+		}
 		String categoryClassName = categoryClass.substring(lastDotIdx+1);
 		IType categoryClassType = javaProject.findType(categoryClass);
 		IPath categoryPackagePath = null;
@@ -177,9 +186,13 @@ public class FunctionsLibraryGenerationUtil {
 		// If it exists we should append the information.
 		IPath srcFolderPath = packageFragmentRoot.getPath().makeRelativeTo(javaProject.getPath());
 		IFile extensionsFile = javaProject.getProject().getFile(srcFolderPath.append(JR_EXTENSION_PROPERTIES));
+		String libraryClass = libraryName;
+		if(!Misc.isNullOrEmpty(packageName)){
+			libraryClass=packageName+"."+libraryName;
+		}
 		if(extensionsFile.exists()) {
 			// we should append the new library information
-			String newLibrary = "\nnet.sf.jasperreports.extension.functions." + libraryName.toLowerCase() + "=" + packageName+"."+libraryName ;
+			String newLibrary = "\nnet.sf.jasperreports.extension.functions." + libraryName.toLowerCase() + "=" + libraryClass ;
 			extensionsFile.appendContents(new ByteArrayInputStream(newLibrary.getBytes()), IResource.FORCE, monitor);
 		}
 		else {
@@ -187,7 +200,7 @@ public class FunctionsLibraryGenerationUtil {
 			Template extensionTemplate = ve.getTemplate(JR_EXTENSION_TEMPLATE_LOCATION);			
 			VelocityContext extensionContext = new VelocityContext();
 			extensionContext.put("libraryName", libraryName.toLowerCase());
-			extensionContext.put("libraryClass", packageName+"."+libraryName);
+			extensionContext.put("libraryClass", libraryClass);
 			StringWriter extsw = new StringWriter();
 			extensionTemplate.merge(extensionContext, extsw);
 			extensionsFile.create(new ByteArrayInputStream(extsw.toString().getBytes()), IResource.FORCE, monitor);	
