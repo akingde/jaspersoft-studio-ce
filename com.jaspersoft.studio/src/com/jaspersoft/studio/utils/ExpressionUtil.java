@@ -12,9 +12,6 @@ package com.jaspersoft.studio.utils;
 
 import java.util.HashMap;
 
-import org.eclipse.core.resources.IFile;
-
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -27,9 +24,9 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ExpressionUtil {
 	
 	/**
-	 * Cache of the expression interpreter for every report, the key is the absolute path of the report
+	 * Cache of the expression interpreter for every dataset, the key is the reference to the dataset for whose the interpreter was created
 	 */
-	private static HashMap<String, ExpressionInterpreter> interpreterMaps = new HashMap<String, ExpressionInterpreter>();
+	private static HashMap<JRDesignDataset, ExpressionInterpreter> datasetsIntepreters = new HashMap<JRDesignDataset, ExpressionInterpreter>();
 	
 	/**
 	 * Resolve an expression and return its value or null if it can not be resolve. First it will try to use a simple evaluation
@@ -39,23 +36,22 @@ public class ExpressionUtil {
 	 * @param exp expression to resolve
 	 * @param project project of the report
 	 * @param jConfig Configuration of the report to evaluate the expression
+	 * @param dataset the context of the expression resolution
 	 * @return resolved expression or null it it can't be resolved
 	 */
-	public static String cachedExpressionEvaluation(JRExpression exp, IFile project, JasperReportsConfiguration jConfig){	
+	public static String cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig, JRDesignDataset dataset){	
 		String evaluatedExpression = null;
-		String projectPath = project.getLocation().toPortableString();
 		String expString = exp != null ? exp.getText() : "";
 		try{
 			evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
 			if (evaluatedExpression == null){
 				//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
 				JasperDesign jd = jConfig.getJasperDesign();
-				ExpressionInterpreter interpreter = interpreterMaps.get(projectPath);
+				ExpressionInterpreter interpreter = datasetsIntepreters.get(dataset);
 				if (interpreter == null || !interpreter.isCorrectInterpreter(jd)){
-					JRDesignDataset jrd = jd.getMainDesignDataset();
-					if (exp != null && jrd != null && jd != null){
-						interpreter = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig);
-						interpreterMaps.put(projectPath, interpreter);
+					if (exp != null && jd != null){
+						interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
+						datasetsIntepreters.put(dataset, interpreter);
 					}
 				}
 				if (interpreter != null){
@@ -79,17 +75,17 @@ public class ExpressionUtil {
 	 * @return resolved expression or null it it can't be resolved
 	 */
 	public static String cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig){	
-		IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
-		return cachedExpressionEvaluation(exp, project, jConfig);
+		return cachedExpressionEvaluation(exp, jConfig, jConfig.getJasperDesign().getMainDesignDataset());
 	}
 	
 	/**
-	 * Remove an expression interpreter from the cache
+	 * Remove an expression interpreter from the cache. An intepreter must be removed when something change in the dataset
+	 * that has generated it
 	 * 
-	 * @param projectPath path of the project for which the interpreter should be removed
+	 * @param dataset dataset for whose the intepreter was created
 	 */
-	public static void removeCachedInterpreter(String projectPath){
-		interpreterMaps.remove(projectPath);
+	public static void removeCachedInterpreter(JRDesignDataset dataset){
+		datasetsIntepreters.remove(dataset);
 	}
 	
 	/**
@@ -99,9 +95,7 @@ public class ExpressionUtil {
 	 */
 	public static void removeCachedInterpreter(JasperReportsConfiguration jConfig){
 		if (jConfig != null){
-			IFile project = (IFile) jConfig.get(FileUtils.KEY_FILE);
-			String projectPath = project != null ? project.getLocation().toPortableString() : null;
-			removeCachedInterpreter(projectPath);
+			removeCachedInterpreter(jConfig.getJasperDesign().getMainDesignDataset());
 		}
 	}
 	

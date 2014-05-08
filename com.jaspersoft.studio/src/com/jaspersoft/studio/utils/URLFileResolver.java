@@ -21,6 +21,10 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Path;
+
 /**
  * Extends the default SimpleFileResolver by adding 
  * the decode of the path as url, when the simple file
@@ -37,6 +41,21 @@ public class URLFileResolver extends SimpleFileResolver {
 	
 	public URLFileResolver(List<File> parentFolders) {
 		super(parentFolders);
+	}
+	
+	/**
+	 * Search a resources by searching it inside the workspace (this for example 
+	 * can resolve the linked resources)
+	 * 
+	 * @param filename the name of the resource
+	 * @param resource the project requesting the resource (the resource is searched inside the parent)
+	 * @return the resource or null if it can't be found
+	 */
+	public File resoolveInTheWorkspace(String filename, IResource resource){
+		IFile file = resource.getParent().getFile(new Path(filename));
+		if (file != null && file.exists()) return file.getLocation().toFile();
+		//fallback with the standard resolver
+		else return resolveFile(filename);
 	}
 
 	@Override

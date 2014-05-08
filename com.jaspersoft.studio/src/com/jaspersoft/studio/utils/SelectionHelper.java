@@ -243,7 +243,7 @@ public class SelectionHelper {
 		return fileResolver;
 	}
 
-	public static FileResolver getFileResolver(IFile file) {
+	public static URLFileResolver getFileResolver(IFile file) {
 		URLFileResolver fileResolver = null;
 		if (file == null)
 			fileResolver = new URLFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$

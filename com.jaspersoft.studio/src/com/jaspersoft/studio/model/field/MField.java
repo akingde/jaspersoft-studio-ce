@@ -37,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSValidatedTextPropertyDescriptor;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -213,6 +214,8 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 			}
 		}
 		super.propertyChange(evt);
+		JRDesignDataset dataset = ModelUtils.getDataset(this);
+		ExpressionUtil.removeCachedInterpreter(dataset);
 	}
 
 	/*
@@ -279,4 +282,6 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		}
 		return super.getAdapter(adapter);
 	}
+	
+	
 }

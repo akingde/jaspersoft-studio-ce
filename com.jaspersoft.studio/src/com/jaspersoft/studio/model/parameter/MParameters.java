@@ -15,7 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
+import java.beans.PropertyChangeEvent;
+
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -24,6 +27,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MParameters.
@@ -74,6 +79,14 @@ public class MParameters<T> extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
+		//Clean the cache of the interpreter for this dataset since it must be reinitialized
+		JRDesignDataset dataset = ModelUtils.getDataset(this);
+		ExpressionUtil.removeCachedInterpreter(dataset);
 	}
 
 }

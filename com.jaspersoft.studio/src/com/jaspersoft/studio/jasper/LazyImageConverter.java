@@ -19,7 +19,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRImage;
@@ -33,7 +32,6 @@ import net.sf.jasperreports.engine.convert.ElementConverter;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
@@ -48,7 +46,6 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.KeyValue;
-import com.jaspersoft.studio.utils.ExpressionInterpreter;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -251,19 +248,6 @@ public class LazyImageConverter extends ElementConverter {
 	}
 	
 	/**
-	 * Return the expression interpreter for a dataset.
-	 * 
-	 * @param jConf the configuration of the report 
-	 * @param dataset the dataset for the interpreter
-	 * @return the interpreter for the element
-	 */
-	private ExpressionInterpreter getInterpreter(JasperReportsConfiguration jConf, JRDesignDataset dataset){
-		 JasperDesign jd = jConf.getJasperDesign();
-		 ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, jd, jConf);
-		 return interpreter;
-	}
-	
-	/**
 	 * Interpret the expression of an element. If the element uses the main dataset then uses the standard evaluation 
 	 * function (that provides a caching functins) otherwise create a simple interpreter to evaluate the expression. 
 	 * If that interpreter can not evaluate the expression a more complex one is taken
@@ -274,22 +258,8 @@ public class LazyImageConverter extends ElementConverter {
 	 * @return the value of the expression or null if it can not be evaluated
 	 */
 	private String evaluatedExpression(JasperReportsConfiguration jConf, MGraphicElement modelElement, JRExpression expr){
-		JRDesignDataset jrd = ModelUtils.getDataset(modelElement);
-		JRDataset mainDataset = modelElement.getJasperDesign().getMainDataset();
-		//If it uses the main dataset search in the interprerter cache map with the standard evaluation function
-		if (mainDataset == jrd) return ExpressionUtil.cachedExpressionEvaluation(expr, jConf);
-		else {
-			//Otherwise uses a new dataset
-			String evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(expr);
-			if (evaluatedExpression == null && expr != null){
-				ExpressionInterpreter interpreter = getInterpreter(jConf, jrd);
-				if (interpreter != null){
-					Object expressionValue = interpreter.interpretExpression(expr.getText());
-					if (expressionValue != null) evaluatedExpression = expressionValue.toString();
-				}
-			}
-			return evaluatedExpression;
-		}
+		JRDesignDataset jrd = ModelUtils.getFirstDatasetInHierarchy(modelElement);
+		return ExpressionUtil.cachedExpressionEvaluation(expr, jConf, jrd);
 	}
 	
 	/**

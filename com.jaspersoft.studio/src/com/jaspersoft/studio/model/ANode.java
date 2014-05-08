@@ -19,9 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -43,7 +41,6 @@ import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -370,14 +367,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(),
 		// evt.getNewValue());
 		// }
-		
-		//Clear the interpreter when something used by it changes
-		if (evt.getSource() instanceof JRDataset || evt.getNewValue() instanceof JRExpression || evt.getOldValue() instanceof JRExpression) {
-			ExpressionUtil.removeCachedInterpreter(getJasperConfiguration());
-		}
 		firePropertyChange(evt);
 	}
-	
 	
 	protected void firePropertyChange(PropertyChangeEvent evt){
 		getPropertyChangeSupport().firePropertyChange(evt);

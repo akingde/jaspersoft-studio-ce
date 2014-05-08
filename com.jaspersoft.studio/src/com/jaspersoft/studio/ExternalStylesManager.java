@@ -31,12 +31,9 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -68,7 +65,7 @@ public class ExternalStylesManager {
 			HashSet<String> removedStyles = new HashSet<String>();
 			if (event.getDelta() != null){
 				removeStyle(event.getDelta().getAffectedChildren(), removedStyles);
-				if (event.getType() == IResourceChangeEvent.PRE_CLOSE) removeReport(event.getDelta().getAffectedChildren());
+				//if (event.getType() == IResourceChangeEvent.PRE_CLOSE) removeReport(event.getDelta().getAffectedChildren());
 				refreshStyles(removedStyles);
 			}
 		}	
@@ -78,14 +75,13 @@ public class ExternalStylesManager {
 	 * Listener used to know when an editor is closed and if it has an interpreter saved than it can be removed
 	 * 
 	 */
-	private static IPartListener documentClosedListener = new IPartListener() {
+	/*private static IPartListener documentClosedListener = new IPartListener() {
 		
 		@Override
 		public void partClosed(IWorkbenchPart part) {
 			if (part instanceof JrxmlEditor){
 				JrxmlEditor editor = (JrxmlEditor)part;
-				String key = ((FileEditorInput)editor.getEditorInput()).getFile().getLocation().toPortableString();
-				ExpressionUtil.removeCachedInterpreter(key);
+				ExpressionUtil.removeCachedInterpreter(editor.getModel().getJasperDesign().getMainDesignDataset());
 			}	
 		}
 		
@@ -100,7 +96,7 @@ public class ExternalStylesManager {
 		
 		@Override
 		public void partActivated(IWorkbenchPart part) {}
-	};
+	};*/
 	
 	/**
 	 * Initialize the appropriate listener
@@ -109,7 +105,7 @@ public class ExternalStylesManager {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListenr,
 				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 		
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(documentClosedListener);
+		//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(documentClosedListener);
 	}
 	
 	/**
@@ -163,7 +159,7 @@ public class ExternalStylesManager {
 	 * from the cache
 	 * 
 	 */
-	private static void removeReport(IResourceDelta[] editedResources){
+	/*private static void removeReport(IResourceDelta[] editedResources){
 		for(IResourceDelta resource : editedResources){
 			if (resource.getAffectedChildren().length>0) {
 				removeReport(resource.getAffectedChildren());
@@ -174,7 +170,7 @@ public class ExternalStylesManager {
 				ExpressionUtil.removeCachedInterpreter(key);
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * Map of the expression that was already attempt to evaluate, but since their evaluation
@@ -296,7 +292,7 @@ public class ExternalStylesManager {
 		try{
 			//Check first if there are previous failed attempt to evaluate the expression
 			if (!isNotValuable(projectPath, expString)){
-				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluation(styleExpression, project, jConfig); 
+				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluation(styleExpression, jConfig); 
 				if (evaluatedExpression == null){
 					//The expression is not valuable, add it to the map
 					addNotValuableExpression(projectPath, expString);

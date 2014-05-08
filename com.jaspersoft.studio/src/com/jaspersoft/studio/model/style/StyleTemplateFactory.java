@@ -82,6 +82,7 @@ public class StyleTemplateFactory {
 	}
 
 	public static final File getFile(String location, IFile file) {
+		//return SelectionHelper.getFileResolver(file).resoolveInTheWorkspace(location, file);
 		return SelectionHelper.getFileResolver(file).resolveFile(location);
 	}
 
