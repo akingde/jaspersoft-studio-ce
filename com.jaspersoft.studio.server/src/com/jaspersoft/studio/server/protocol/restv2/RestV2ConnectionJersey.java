@@ -2,6 +2,7 @@ package com.jaspersoft.studio.server.protocol.restv2;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.IDN;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			url = url.substring(0, url.lastIndexOf("/services/repository"));
 		if (!url.endsWith("/"))
 			url += "/";
-		target = client.target(url + SUFFIX);
+		target = client.target(IDN.toASCII(url + SUFFIX));
 		getServerInfo(monitor);
 		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0;
 	}

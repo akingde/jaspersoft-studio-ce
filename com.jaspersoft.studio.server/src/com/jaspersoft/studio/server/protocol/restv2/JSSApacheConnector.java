@@ -14,6 +14,8 @@ import org.glassfish.jersey.apache.connector.ApacheConnector;
 import org.glassfish.jersey.client.ClientRequest;
 import org.glassfish.jersey.client.ClientResponse;
 
+import com.jaspersoft.studio.server.utils.UrlUtil;
+
 public class JSSApacheConnector extends ApacheConnector {
 	private ClientRequest lastRequest;
 
@@ -24,6 +26,7 @@ public class JSSApacheConnector extends ApacheConnector {
 	@Override
 	public ClientResponse apply(ClientRequest req) throws ProcessingException {
 		System.out.println("call: " + req.getUri());
+		req.setUri(UrlUtil.fixUri(req.getUri()));
 		lastRequest = req;
 		return super.apply(req);
 	}
