@@ -10,7 +10,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
@@ -40,29 +43,31 @@ public class ExpressionUtil {
 	 * @return resolved expression or null it it can't be resolved
 	 */
 	public static String cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig, JRDesignDataset dataset){	
-		String evaluatedExpression = null;
-		String expString = exp != null ? exp.getText() : "";
-		try{
-			evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
-			if (evaluatedExpression == null){
-				//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
-				JasperDesign jd = jConfig.getJasperDesign();
-				ExpressionInterpreter interpreter = datasetsIntepreters.get(dataset);
-				if (interpreter == null || !interpreter.isCorrectInterpreter(jd)){
-					if (exp != null && jd != null){
-						interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
-						datasetsIntepreters.put(dataset, interpreter);
+		synchronized (datasetsIntepreters) {
+			String evaluatedExpression = null;
+			String expString = exp != null ? exp.getText() : "";
+			try{
+				evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
+				if (evaluatedExpression == null){
+					//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
+					JasperDesign jd = jConfig.getJasperDesign();
+					ExpressionInterpreter interpreter = datasetsIntepreters.get(dataset);
+					if (interpreter == null || !interpreter.isCorrectInterpreter(jd)){
+						if (exp != null && jd != null){
+							interpreter = new ExpressionInterpreter(dataset, jd, jConfig);
+							datasetsIntepreters.put(dataset, interpreter);
+						}
+					}
+					if (interpreter != null){
+						Object expressionValue = interpreter.interpretExpression(expString);
+						if (expressionValue != null) evaluatedExpression = expressionValue.toString();
 					}
 				}
-				if (interpreter != null){
-					Object expressionValue = interpreter.interpretExpression(expString);
-					if (expressionValue != null) evaluatedExpression = expressionValue.toString();
-				}
+			}catch(Exception ex){
+				ex.printStackTrace();
 			}
-		}catch(Exception ex){
-			ex.printStackTrace();
+			return evaluatedExpression;
 		}
-		return evaluatedExpression;
 	}
 	
 	/**
@@ -85,7 +90,28 @@ public class ExpressionUtil {
 	 * @param dataset dataset for whose the intepreter was created
 	 */
 	public static void removeCachedInterpreter(JRDesignDataset dataset){
-		datasetsIntepreters.remove(dataset);
+		synchronized (datasetsIntepreters) {
+			datasetsIntepreters.remove(dataset);
+		}
+	}
+	
+	/**
+	 * Remove all the interpreters cached for a report 
+	 * 
+	 * @param reportsConfiguration Configuration for the report
+	 */
+	public static void removeAllReportInterpreters(JasperReportsConfiguration reportsConfiguration){
+		synchronized (datasetsIntepreters) {
+			List<JRDesignDataset> datasetsToRemove = new ArrayList<JRDesignDataset>();
+			for(Entry<JRDesignDataset, ExpressionInterpreter> intepreter : datasetsIntepreters.entrySet()){
+				if (intepreter.getValue().getJasperReportsConfiguration() == reportsConfiguration){
+					datasetsToRemove.add(intepreter.getKey());
+				}
+			}
+			for(JRDesignDataset dataset : datasetsToRemove){
+				datasetsIntepreters.remove(dataset);
+			}
+		}
 	}
 	
 	/**

@@ -24,14 +24,18 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author gtoffoli
  */
 public class ExpressionInterpreter {
+	
 	private AInterpreter interpreter;
 
+	private JasperReportsConfiguration jConfig;
+	
 	public ExpressionInterpreter(JRDesignDataset dataset, JasperReportsConfiguration jConfig) {
 		this(dataset, jConfig.getJasperDesign(), jConfig);
 	}
 
 	public ExpressionInterpreter(JRDesignDataset dataset, JasperDesign jasperDesign, JasperReportsConfiguration jConfig) {
 		try {
+			this.jConfig = jConfig;
 			if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_JAVA))
 				interpreter = new JavaInterpreter();
 			else if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_GROOVY))
@@ -42,6 +46,15 @@ public class ExpressionInterpreter {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Return the jasper configuration of the report for whose the interpreter was created
+	 * 
+	 * @return a JasperReportsConfiguration
+	 */
+	public JasperReportsConfiguration getJasperReportsConfiguration(){
+		return jConfig;
 	}
 	
 	/**

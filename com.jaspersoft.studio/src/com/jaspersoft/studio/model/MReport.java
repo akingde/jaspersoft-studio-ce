@@ -71,6 +71,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -588,7 +589,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS)) {
+		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_IMPORTS)){
+			//If the imports changes all the interpreters cached must be discarded
+			ExpressionUtil.removeAllReportInterpreters(getJasperConfiguration());
+		} else if (evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS)) {
 			handleDatasourceChanged(evt);
 		} else if (evt.getPropertyName().equals(JasperDesign.PROPERTY_TITLE)
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_HEADER)
