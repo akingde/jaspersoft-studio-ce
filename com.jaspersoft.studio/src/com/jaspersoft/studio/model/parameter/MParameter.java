@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
-import java.beans.PropertyChangeEvent;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -282,12 +280,4 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		}
 		return super.getAdapter(adapter);
 	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		super.propertyChange(evt);
-		JRDesignDataset dataset = ModelUtils.getDataset(this);
-		ExpressionUtil.removeCachedInterpreter(dataset);
-	}
-
 }

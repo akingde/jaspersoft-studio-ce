@@ -42,7 +42,8 @@ public class ExpressionInterpreter {
 				interpreter = new GroovyInterpretter();
 			else if (jasperDesign.getLanguage().equalsIgnoreCase("bsh"))
 				interpreter = new JavaInterpreter();
-			interpreter.prepareExpressionEvaluator(dataset, jasperDesign, jConfig);
+			
+			if (interpreter != null) interpreter.prepareExpressionEvaluator(dataset, jasperDesign, jConfig);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -55,25 +56,6 @@ public class ExpressionInterpreter {
 	 */
 	public JasperReportsConfiguration getJasperReportsConfiguration(){
 		return jConfig;
-	}
-	
-	/**
-	 * Check if this intepreter is valid for the current report language
-	 * 
-	 * @return true if the iterpreter is valid, fals otherwise
-	 */
-	public boolean isCorrectInterpreter(JasperDesign jasperDesign){
-		try {
-			if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_JAVA) && interpreter instanceof JavaInterpreter)
-				return true;
-			else if (jasperDesign.getLanguage().equalsIgnoreCase(JRReport.LANGUAGE_GROOVY)  && interpreter instanceof GroovyInterpretter)
-				return true;
-			else if (jasperDesign.getLanguage().equalsIgnoreCase("bsh") && interpreter instanceof JavaInterpreter)
-				return true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return false;
 	}
 
 	/**

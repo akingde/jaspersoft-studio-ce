@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield;
 
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,6 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
-import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -373,13 +371,4 @@ public class MSortField extends APropertyNode implements ICopyable, IDragable {
 			return true;
 		return false;
 	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		super.propertyChange(evt);
-		//Clean the cache of the interpreter for this dataset since it must be reinitialized
-		JRDesignDataset dataset = ModelUtils.getDataset(this);
-		ExpressionUtil.removeCachedInterpreter(dataset);
-	}
-	
 }

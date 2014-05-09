@@ -31,8 +31,6 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MFields.
@@ -129,9 +127,5 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 		if (!(evt.getSource() instanceof ANode))
 			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
-		
-		//Clean the cache of the interpreter for this dataset since it must be reinitialized
-		JRDesignDataset dataset = ModelUtils.getDataset(this);
-		ExpressionUtil.removeCachedInterpreter(dataset);
 	}
 }
