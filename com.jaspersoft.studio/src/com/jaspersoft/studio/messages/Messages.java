@@ -1813,7 +1813,9 @@ public class Messages extends NLS {
 	public static String WizardDatasetNewPage_name_already_exists_a;
 	public static String WizardDatasetNewPage_name_already_exists_b;
 	public static String WizardDatasetNewPage_validation_not_null;
+	public static String WizardDatasetPage_createDataset;
 	public static String WizardDatasetPage_description;
+	public static String WizardDatasetPage_existingDataset;
 	public static String WizardDataSourcePage_datasource;
 	public static String WizardDataSourcePage_description;
 	public static String WizardFieldsGroupByPage_createSortfields;

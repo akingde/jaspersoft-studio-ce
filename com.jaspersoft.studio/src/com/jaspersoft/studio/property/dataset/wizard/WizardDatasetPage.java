@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.wizard;
 
+import java.text.MessageFormat;
+
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -165,7 +167,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		return null;
 	}
 
-	private String componentName = "component";
+	private String componentName = "component"; //$NON-NLS-1$
 
 	/**
 	 * Create a new WizardDatasetPage which allows to pick any dataset (including the main one).
@@ -214,7 +216,8 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		fd_addDataset.left = new FormAttachment(0, 5);
 		fd_addDataset.top = new FormAttachment(0, 10);
 		radioButtonAddDataset.setLayoutData(fd_addDataset);
-		radioButtonAddDataset.setText("Create a " + componentName + " using a new dataset");
+	
+		radioButtonAddDataset.setText(MessageFormat.format(Messages.WizardDatasetPage_createDataset, new Object[]{componentName}));
 		radioButtonAddDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -229,7 +232,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		fd_selDataset.top = new FormAttachment(0, 55);
 		fd_selDataset.left = new FormAttachment(0, 5);
 		radioButtonUseDataset.setLayoutData(fd_selDataset);
-		radioButtonUseDataset.setText("Create a " + componentName + " using an existing dataset");
+		radioButtonUseDataset.setText(MessageFormat.format(Messages.WizardDatasetPage_existingDataset, new Object[]{componentName}));
 		radioButtonUseDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
