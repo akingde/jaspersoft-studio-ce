@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -166,7 +167,9 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (getElement() != evt.getSource()) {
 			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-			refresh();
+			if (!JSSCompoundCommand.isRefreshEventsIgnored(getElement())) {
+				refresh();
+			}
 			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 	}

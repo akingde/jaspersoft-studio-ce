@@ -202,7 +202,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			//Refresh the current node
 			refresh();
 		} else {
-			refreshChildren();
+			//refreshChildren();
 			TreeItem item = (TreeItem) getWidget();
 			ANode node = (ANode) getModel();
 			refreshMap.put(item, node);
