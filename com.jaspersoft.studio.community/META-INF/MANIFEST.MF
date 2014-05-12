@@ -5,7 +5,8 @@ Bundle-SymbolicName: com.jaspersoft.studio.community;singleton:=true
 Bundle-Version: 5.6.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.community.JSSCommunityActivator
 Bundle-Vendor: %Bundle-Vendor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.jaspersoft.studio.server;bundle-version="5.6.0",
  org.apache.commons.httpclient;bundle-version="3.1.0",

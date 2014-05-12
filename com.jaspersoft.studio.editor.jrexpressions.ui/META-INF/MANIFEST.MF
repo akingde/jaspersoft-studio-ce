@@ -14,7 +14,8 @@ Require-Bundle: com.jaspersoft.studio.editor.jrexpressions;bundle-version="5.6.0
  org.eclipse.xtext.ui.codetemplates.ui;bundle-version="2.3.1",
  com.jaspersoft.studio.xtext.jface;bundle-version="5.6.0"
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
 Export-Package: com.jaspersoft.studio.editor.jrexpressions.ui.contentassist,
  com.jaspersoft.studio.editor.jrexpressions.ui.contentassist.antlr,
  com.jaspersoft.studio.editor.jrexpressions.ui
