@@ -67,6 +67,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 	public static final String P_PAGE_DEFAULT_UNITS = "pageDEFAULTUNITS"; //$NON-NLS-1$
 	public static final String P_SHOW_REPORT_BAND_NAMES = "showReportBandNames"; //$NON-NLS-1$
 	public static final String P_SAVE_ON_PREVIEW = "saveOnPreview"; //$NON-NLS-1$
+	public static final String P_CENTER_SELECTION = "centerSelectedElement"; //$NON-NLS-1$
 	public static final String P_CONTAINER_MARGIN_COLOR = "containerMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_MARGIN_COLOR = "pageMarginColor"; //$NON-NLS-1$
 	public static final String P_PAGE_BACKGROUND = "pageBackground"; //$NON-NLS-1$
@@ -120,9 +121,8 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 						{ Messages.DesignerPreferencePage_field_behavior_ask, BEHAVIOR_ASK_EVERYTIME } }, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(P_USE_FIELD_DESCRIPTION, Messages.DesignerPreferencePage_UseDescriptionForLabelText,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview,
-				getFieldEditorParent()));
-
+		addField(new BooleanFieldEditor(P_SAVE_ON_PREVIEW, Messages.DesignerPreferencePage_savereportonpreview, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_CENTER_SELECTION, Messages.DesignerPreferencePage_centerEditorOption, getFieldEditorParent()));
 	}
 
 	/*
@@ -146,6 +146,7 @@ public class DesignerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(P_USE_FIELD_DESCRIPTION, false);
 		PreferenceConverter.setDefault(store, P_INTERNAL_EDITORS_FONT, FontUtils.getTextEditorFontData());
 		store.setDefault(P_SAVE_ON_PREVIEW, false);
+		store.setDefault(P_CENTER_SELECTION, true);
 	}
 
 	@Override

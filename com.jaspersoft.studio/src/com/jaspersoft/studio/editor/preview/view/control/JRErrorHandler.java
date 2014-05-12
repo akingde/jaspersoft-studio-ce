@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 import com.jaspersoft.studio.utils.Console;
 
 public class JRErrorHandler implements JasperReportErrorHandler {
-	private boolean hasErrors = false;
+	private boolean errors = false;
 	private Console c;
 
 	public JRErrorHandler(Console c) {
@@ -28,41 +28,41 @@ public class JRErrorHandler implements JasperReportErrorHandler {
 	}
 
 	public void reset() {
-		hasErrors = false;
+		errors = false;
 	}
 
-	public boolean isHasErrors() {
-		return hasErrors;
+	public boolean hasErrors() {
+		return errors;
 	}
 	
 	public void addMarker(Throwable e) {
-		hasErrors = true;
+		errors = true;
 		if (c != null)
 			c.addError(e, null);
 	}
 
 	public void addMarker(IProblem problem, SourceLocation location) {
-		hasErrors = true;
+		errors = true;
 		if (c != null)
 			c.addProblem(problem, location);
 	}
 
 	public void addMarker(String message, SourceLocation location) {
-		hasErrors = true;
+		errors = true;
 		if (c != null)
 			c.addProblem(message, location);
 	}
 
 	@Override
 	public void addMarker(IProblem problem, SourceLocation location, JRExpression expr) {
-		hasErrors = true;
+		errors = true;
 		if (c != null)
 			c.addProblem(problem, location, expr);
 	}
 
 	@Override
 	public void addMarker(String message, SourceLocation location, JRDesignElement element) {
-		hasErrors = true;
+		errors = true;
 		if (c != null)
 			c.addProblem(message, location, element);
 	}

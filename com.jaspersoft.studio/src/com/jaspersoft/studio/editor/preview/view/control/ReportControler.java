@@ -244,7 +244,7 @@ public class ReportControler {
 	}
 
 	public void finishReport(final PreviewContainer pcontainer) {
-		if (compiler != null && ((JRErrorHandler) compiler.getErrorHandler()).isHasErrors())
+		if (compiler != null && ((JRErrorHandler) compiler.getErrorHandler()).hasErrors())
 			finishNotCompiledReport();
 		else
 			finishCompiledReport(c, prmInput, pcontainer);
@@ -393,7 +393,7 @@ public class ReportControler {
 		((JRErrorHandler) compiler.getErrorHandler()).reset();
 		JasperReport jasperReport = compiler.compileReport(jrContext, jd);// JasperCompileManager.getInstance(jrContext).compile(jd);
 		stats.endCount(ST_COMPILATIONTIME);
-		if (((JRErrorHandler) compiler.getErrorHandler()).isHasErrors()) {
+		if (((JRErrorHandler) compiler.getErrorHandler()).hasErrors()) {
 			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
