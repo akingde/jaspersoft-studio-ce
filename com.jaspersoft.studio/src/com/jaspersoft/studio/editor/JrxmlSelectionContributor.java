@@ -83,11 +83,17 @@ public class JrxmlSelectionContributor {
 			}
 			for (String id : cbarID) {
 				IContributionItem ic = ToolItemsManager.findToolbar(cbm2, id);
-				//Check if the coolrbar is disposed, because on the close of the application it could 
-				//happen that it is already disposed before this point
-				if (ic != null &&  !cbm2.getControl2().isDisposed()) {
-					cbm2.remove(ic);
-					ic.dispose();
+				try {
+					if (ic != null) {
+						cbm2.remove(ic);
+						ic.dispose();
+					}
+				}
+				catch (Exception ex) {
+					// This additional check "!cbm2.getControl2().isDisposed()" can not be used in the previous if.
+					// In Eclipse 4 cbm2 is an instance of CoolBarToTrimManager and the method #getControl2() returns
+					// always null, after raising an Exception.
+					ex.printStackTrace();
 				}
 			}
 			cbm2.refresh();
