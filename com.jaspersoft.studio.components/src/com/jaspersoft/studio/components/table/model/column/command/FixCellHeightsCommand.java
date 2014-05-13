@@ -35,8 +35,12 @@ public class FixCellHeightsCommand extends Command {
 	private TableManager tbManager;
 
 	public FixCellHeightsCommand(MColumn mcolumn) {
+		this(mcolumn.getMTable().getTableManager());
+	}
+	
+	public FixCellHeightsCommand(TableManager manager) {
 		super("Fix Table Cells Height");
-		tbManager = mcolumn.getMTable().getTableManager();
+		tbManager = manager;
 	}
 
 	private Map<DesignCell, Integer> hmap;

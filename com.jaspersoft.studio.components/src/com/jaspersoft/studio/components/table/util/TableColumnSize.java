@@ -26,7 +26,6 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 
-import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.components.table.model.MTableColumnHeader;
 import com.jaspersoft.studio.components.table.model.MTableDetail;
@@ -37,7 +36,7 @@ import com.jaspersoft.studio.components.table.model.MTableHeader;
 
 public class TableColumnSize {
 
-	public static int getType(Class<? extends AMCollection> c) {
+	public static int getType(Class<?> c) {
 		if (c.isAssignableFrom(MTableHeader.class))
 			return TableUtil.TABLE_HEADER;
 		if (c.isAssignableFrom(MTableFooter.class))

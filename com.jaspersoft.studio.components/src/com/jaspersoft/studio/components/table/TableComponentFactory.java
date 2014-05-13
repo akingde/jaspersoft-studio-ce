@@ -94,9 +94,11 @@ import com.jaspersoft.studio.components.table.model.column.action.DeleteRowActio
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.CreateColumnFromGroupCommand;
+import com.jaspersoft.studio.components.table.model.column.command.CreateColumnGroupCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnFromGroupCommand;
+import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnGroupCellCommand;
 import com.jaspersoft.studio.components.table.model.column.command.OrphanColumn4GroupCommand;
 import com.jaspersoft.studio.components.table.model.column.command.OrphanColumnCommand;
 import com.jaspersoft.studio.components.table.model.column.command.ReorderColumnCommand;
@@ -470,8 +472,8 @@ public class TableComponentFactory implements IComponentFactory {
 		}
 
 		if (child instanceof MCell) {
-			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
-				return new CreateColumnCellCommand(((MColumn) parent).getSection(), (MColumn) parent);
+			if (parent instanceof MColumnGroup)
+				return new CreateColumnGroupCellCommand(((MColumn) parent).getSection(), (MColumnGroup) parent);
 			if (parent instanceof MColumn && !(parent instanceof MCell))
 				return new CreateColumnCellCommand(((MColumn) parent).getSection(), (MColumn) parent);
 
@@ -608,7 +610,14 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public static Command getDeleteCellCommand(ANode parent, ANode child) {
-		if (child instanceof MCell) {
+		if (child instanceof MColumnGroupCell){
+			if (parent instanceof MColumnGroupCell)
+				return new DeleteColumnGroupCellCommand((ANode) parent.getParent(), (MColumnGroupCell) child);
+			if (parent instanceof MColumnGroup)
+				return new DeleteColumnGroupCellCommand((ANode) parent.getParent(), (MColumnGroupCell) child);
+			if (parent instanceof AMCollection)
+				return new DeleteColumnGroupCellCommand((ANode) parent, (MColumnGroupCell) child);
+		} else if (child instanceof MCell) {
 			if (parent instanceof MColumnGroupCell)
 				return new DeleteColumnCellCommand((ANode) parent.getParent(), (MCell) child);
 			if (parent instanceof MColumnGroup)

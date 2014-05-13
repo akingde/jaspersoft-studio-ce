@@ -115,7 +115,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 		this.name = name;
 		List<ANode> n = getAMCollection();
 		if (n != null && !n.isEmpty()) {
-			AMCollection aNode = (AMCollection) n.get(n.size() - 1);
+			ANode aNode =  n.get(n.size() - 1);
 			type = TableColumnSize.getType(aNode.getClass());
 			if (aNode instanceof MTableGroupHeader) {
 				jrGroup = ((MTableGroupHeader) aNode).getJrDesignGroup();

@@ -25,11 +25,12 @@ import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTableDetail;
-import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.DeleteColumnCellCommand;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
 /**
@@ -60,8 +61,25 @@ public class DeleteRowAction extends DeleteAction {
 	}
 	
 	/**
+	 * Recursively generate the commands to delete every element of the row
+	 * 
+	 * @param children the actual list of children
+	 * @param container the container where the commands are placed 
+	 */
+	private void createDeleteCommands(List<INode> children, JSSCompoundCommand container){
+		for(INode child : children){
+			createDeleteCommands(child.getChildren(), container);
+			if (child instanceof MColumn){
+				Command cmd = new DeleteColumnCellCommand((ANode)child.getParent(), (MColumn)child);
+				if (cmd != null)
+					container.add(cmd);
+			}
+		}
+	}
+	
+	/**
 	 * Search for every AMcollection (superclass of the row of the table)
-	 * and create a delte cell command for everyone of its children
+	 * and create a delete cell command for everyone of its children
 	 */
 	@Override
 	public Command createDeleteCommand(List objects) {
@@ -79,13 +97,7 @@ public class DeleteRowAction extends DeleteAction {
 			if (object.getModel() instanceof AMCollection && !(object.getModel() instanceof MTableDetail)) {
 				AMCollection model = (AMCollection) object.getModel();
 				compoundCmd.setReferenceNodeIfNull(model);
-				for(INode child : model.getChildren()){
-					if (child instanceof MCell){
-						Command cmd = TableComponentFactory.getDeleteCellCommand(model, (MCell)child);
-						if (cmd != null)
-							compoundCmd.add(cmd);
-					}
-				}
+				createDeleteCommands(model.getChildren(), compoundCmd);
 			}
 		}
 		return compoundCmd;
