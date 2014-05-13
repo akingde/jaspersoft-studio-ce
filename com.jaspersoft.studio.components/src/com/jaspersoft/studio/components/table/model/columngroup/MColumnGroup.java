@@ -38,6 +38,8 @@ public class MColumnGroup extends MColumn {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	public static int DEFAULT_CELL_HEIGHT = 30;
 
 	public MColumnGroup() {
 		super();

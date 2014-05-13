@@ -18,7 +18,6 @@ package com.jaspersoft.studio.components.table.model.columngroup.command;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
@@ -50,7 +49,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 		super(destNode, srcNode, index);
 	}
 
-	private int height = 40;
+
 
 	public void setResize(boolean resize) {
 		this.resize = resize;
@@ -62,7 +61,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 		StandardBaseColumn col = new StandardColumnGroup();
 		col.setWidth(0);
 
-		DesignCell cell = new DesignCell();
+		/*DesignCell cell = new DesignCell();
 		cell.setHeight(height);
 		col.setTableHeader(cell);
 
@@ -88,7 +87,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 				cell = new DesignCell();
 				cell.setHeight(height);
 				col.setGroupFooter(jrGroup.getName(), cell);
-			}
+			}*/
 
 		return col;
 	}
@@ -98,6 +97,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 		TableManager tb = new TableManager(jrTable, jrDesign);
 		super.execute();
 		if (resize) {
+			int height = MColumnGroup.DEFAULT_CELL_HEIGHT;
 			List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
 			tb.setRowHeight(jrTable.getColumns(), TableUtil.TABLE_HEADER, "",
 					height);
@@ -125,6 +125,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 	@Override
 	public void undo() {
 		if (resize) {
+			int height = MColumnGroup.DEFAULT_CELL_HEIGHT;
 			TableManager tb = new TableManager(jrTable, jrDesign);
 			List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
 			tb.setRowHeight(jrTable.getColumns(), TableUtil.TABLE_HEADER, "",
