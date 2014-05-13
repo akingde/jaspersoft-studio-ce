@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.crosstabs.CrosstabColumnCell;
 import net.sf.jasperreports.crosstabs.JRCellContents;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
@@ -68,7 +69,10 @@ public class CrosstabMatrix {
 
 		Guide north = new Guide(0);
 		hGuides.add(north);
-		Guide south = fillHeaderCellH(north, addNext(north, hGuides), crosstab);
+
+		Guide south = fillTitleCellH(north, addNext(north, hGuides), crosstab);
+		north = south;
+		south = fillHeaderCellH(north, addNext(north, hGuides), crosstab);
 
 		fillColumnGroupH(north, south, crosstab);
 
@@ -81,6 +85,7 @@ public class CrosstabMatrix {
 		fillVertical(crosstab);
 
 		fixCells();
+		// print();
 	}
 
 	public void fillVertical(JRDesignCrosstab crosstab) {
@@ -88,12 +93,14 @@ public class CrosstabMatrix {
 		vGuides.add(west);
 		Guide gwest = null;
 
-		Guide east = fillHeaderCellV(west, addNext(west, vGuides), crosstab);
+		Guide east = fillTitleCellV(west, addNext(west, vGuides), crosstab);
 
-		fillRowGroupV(west, east, crosstab);
+		Guide heast = fillHeaderCellV(west, addNext(west, vGuides), crosstab);
 
-		gwest = east;
-		fillColumnGroupV(east, addNext(east, vGuides), crosstab);
+		fillRowGroupV(west, heast, crosstab);
+
+		gwest = heast;
+		fillColumnGroupV(heast, east, crosstab);
 
 		fillDetailsV(gwest, crosstab);
 
@@ -336,6 +343,26 @@ public class CrosstabMatrix {
 		return south;
 	}
 
+	public Guide fillTitleCellH(Guide north, Guide south, JRDesignCrosstab crosstab) {
+		CrosstabColumnCell c = crosstab.getTitleCell();
+		JRCellContents cell = c != null ? c.getCellContents() : null;
+		CrosstabCell cc = createCell((JRDesignCellContents) cell, JRCrosstabOrigin.TYPE_TITLE_CELL);
+		north.addSouth(cc);
+		south.addNorth(cc);
+		south.setY(north, cell);
+		return south;
+	}
+
+	public Guide fillTitleCellV(Guide west, Guide east, JRDesignCrosstab crosstab) {
+		CrosstabColumnCell c = crosstab.getTitleCell();
+		JRCellContents cell = c != null ? c.getCellContents() : null;
+		CrosstabCell cc = createCell((JRDesignCellContents) cell, JRCrosstabOrigin.TYPE_TITLE_CELL);
+		west.addEast(cc);
+		east.addWest(cc);
+		east.setX(west, cell);
+		return east;
+	}
+
 	public Guide fillHeaderCellH(Guide north, Guide south, JRDesignCrosstab crosstab) {
 		JRCellContents c = crosstab.getHeaderCell();
 		CrosstabCell cc = createCell((JRDesignCellContents) c, JRCrosstabOrigin.TYPE_HEADER_CELL);
@@ -393,10 +420,10 @@ public class CrosstabMatrix {
 
 	public void print() {
 		System.out.println("\n\n-- NEW TABLE--------------------");
-		for (int i = 0; i < hGuides.size(); i++) {
-			Guide g = hGuides.get(i);
-			System.out.println("row:" + i + " " + g.toString() + "\n");
-		}
+		// for (int i = 0; i < hGuides.size(); i++) {
+		// Guide g = hGuides.get(i);
+		// System.out.println("row:" + i + " " + g.toString() + "\n");
+		// }
 		System.out.println("-- VERTICAL --------------------");
 		for (int i = 0; i < vGuides.size(); i++) {
 			Guide g = vGuides.get(i);

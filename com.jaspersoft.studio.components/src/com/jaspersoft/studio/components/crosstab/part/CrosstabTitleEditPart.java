@@ -27,7 +27,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.components.crosstab.model.header.MCrosstabHeader;
+import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
@@ -44,13 +44,12 @@ import com.jaspersoft.studio.model.MPage;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class CrosstabHeaderEditPart extends ACrosstabCellEditPart {
-
-	@Override
-	public MCrosstabHeader getModel() {
-		return (MCrosstabHeader) super.getModel();
-	}
-
+public class CrosstabTitleEditPart extends ACrosstabCellEditPart {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
+	 */
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
@@ -65,10 +64,15 @@ public class CrosstabHeaderEditPart extends ACrosstabCellEditPart {
 	}
 
 	@Override
+	public MTitle getModel() {
+		return (MTitle) super.getModel();
+	}
+
+	@Override
 	protected void setupFigure(IFigure rect) {
 		updateContainerSize();
-		MCrosstabHeader model = getModel();
-		rect.setToolTip(new Label(model.getToolTip()));
+		IGraphicElement model = (IGraphicElement) getModel();
+		rect.setToolTip(new Label(((ANode) model).getToolTip()));
 
 		Rectangle bounds = ((IGraphicElement) model).getBounds();
 		int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
@@ -78,7 +82,6 @@ public class CrosstabHeaderEditPart extends ACrosstabCellEditPart {
 
 		((EmptyCellFigure) rect).setJRElement(null, getDrawVisitor(), new Dimension(bounds.width, bounds.height));
 		rect.setSize(bounds.width, bounds.height);
-
 		updateRulers();
 
 		if (getSelected() == 1)

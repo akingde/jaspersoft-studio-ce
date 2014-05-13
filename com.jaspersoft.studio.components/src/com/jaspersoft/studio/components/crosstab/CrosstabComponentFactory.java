@@ -55,7 +55,6 @@ import com.jaspersoft.studio.components.crosstab.action.RemoveCrosstabStylesActi
 import com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.CrosstabFigure;
-import com.jaspersoft.studio.components.crosstab.figure.CrosstabHeaderFigure;
 import com.jaspersoft.studio.components.crosstab.figure.EmptyCellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -109,10 +108,17 @@ import com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRow
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.CreateRowCommand;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.DeleteRowGroupCommand;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.ReorderRowGroupCommand;
+import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
+import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
+import com.jaspersoft.studio.components.crosstab.model.title.action.CreateCrosstabTitleAction;
+import com.jaspersoft.studio.components.crosstab.model.title.command.CreateTitleCellCommand;
+import com.jaspersoft.studio.components.crosstab.model.title.command.DeleteTitleCommand;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabHeaderEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabPageEditPart;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleCellEditPart;
+import com.jaspersoft.studio.components.crosstab.part.CrosstabTitleEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabWhenNoDataEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -195,7 +201,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			return new MMeasure(parent, (JRCrosstabMeasure) jrObject, newIndex);
 		return null;
 	}
-	
+
 	public static ANode createCrosstab(MCrosstab mc) {
 		JRDesignCrosstab ct = (JRDesignCrosstab) mc.getValue();
 		MCrosstab mCrosstab = new MCrosstab();
@@ -220,9 +226,9 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				ReportFactory.createNode(mm, p, -1);
 		// ---------------------------------
 		createCellNodes(ct, mCrosstab);
-		
-		//MCallout.createCallouts(mCrosstab);
-		
+
+		// MCallout.createCallouts(mCrosstab);
+
 		return mCrosstab;
 	}
 
@@ -307,6 +313,12 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createCellNodes(JRDesignCrosstab ct, MCrosstab mCrosstab) {
+		if (ct.getTitleCell() == null) {
+			new MTitle(mCrosstab, -1);
+		} else {
+			MTitleCell mc = new MTitleCell(mCrosstab, ct.getTitleCell(), -1);
+			ReportFactory.createElementsForBand(mc, ct.getTitleCell().getCellContents().getChildren());
+		}
 		if (ct.getHeaderCell() == null) {
 			new MCrosstabHeader(mCrosstab, -1);
 		} else {
@@ -339,6 +351,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			MCrosstabWhenNoDataCell mc = new MCrosstabWhenNoDataCell(mCrosstab, ct.getWhenNoDataCell(), -1);
 			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell().getChildren());
 		}
+
 		if (mCrosstab.getCrosstabManager() != null)
 			mCrosstab.getCrosstabManager().refresh();
 	}
@@ -365,7 +378,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		List<INode> nodes = new ArrayList<INode>();
 		if (mCrosstab.getChildren() != null) {
 			for (INode n : mCrosstab.getChildren()) {
-				if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MCrosstabHeader)
+				if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MTitle || n instanceof MCrosstabHeader)
 					nodes.add(n);
 			}
 			mCrosstab.removeChildren(nodes);
@@ -436,8 +449,9 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 		if (child instanceof MMeasure) {
 			if (parent instanceof MCell && ((MCell) parent).getMCrosstab() != null)
-				return new CreateMeasureFieldCommand((MMeasure)child, (MCell) parent,location);
-				//return new CreateMeasureCommand((MCell) parent, (MMeasure) child, newIndex);
+				return new CreateMeasureFieldCommand((MMeasure) child, (MCell) parent, location);
+			// return new CreateMeasureCommand((MCell) parent, (MMeasure) child,
+			// newIndex);
 			if (parent instanceof MCrosstab)
 				return new CreateMeasureCommand((MCrosstab) parent, (MMeasure) child, newIndex);
 			if (parent instanceof MMeasures)
@@ -481,6 +495,13 @@ public class CrosstabComponentFactory implements IComponentFactory {
 					return new CreateCrosstabWhenNoDataCommand(crosstab, null);
 			}
 		}
+		if (child instanceof MTitleCell) {
+			if (parent instanceof MTitle) {
+				MCrosstab crosstab = ((MTitle) parent).getCrosstab();
+				if (crosstab != null)
+					return new CreateTitleCellCommand(crosstab, null);
+			}
+		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
@@ -500,6 +521,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			}
 		}
 		if (parent instanceof MCrosstab && child instanceof MGraphicElement) {
+			if (location == null)
+				return null;
 			MCrosstab mt = (MCrosstab) parent;
 			CrosstabCell ccell = mt.getCrosstabManager().getCell(new Point(location.x, location.y));
 			if (ccell == null)
@@ -551,6 +574,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (child instanceof MCrosstabWhenNoDataCell && ((MCrosstabWhenNoDataCell) child).getValue() != null) {
 			if (parent instanceof MCrosstab)
 				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent, (MCrosstabWhenNoDataCell) child);
+		}
+		if (child instanceof MTitleCell && ((MTitleCell) child).getValue() != null) {
+			if (parent instanceof MCrosstab)
+				return new DeleteTitleCommand((MCrosstab) parent, (MTitleCell) child);
 		}
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroup) {
@@ -614,6 +641,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		lst.add(CreateCrosstabHeaderAction.ID);
 		lst.add(CreateColumnCrosstabHeaderAction.ID);
 		lst.add(CreateCrosstabWhenNoDataAction.ID);
+		lst.add(CreateCrosstabTitleAction.ID);
 		lst.add(CreateCrosstabParameterAction.ID);
 		lst.add(EditCrosstabStyleAction.ID);
 		lst.add(RemoveCrosstabStylesAction.ID);
@@ -622,13 +650,15 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MCrosstab)
-			return new CrosstabFigure((MCrosstab)node);
-		if (node instanceof MCrosstabHeader || node instanceof MCrosstabWhenNoData)
+			return new CrosstabFigure((MCrosstab) node);
+		if (node instanceof MCrosstabHeader || node instanceof MCrosstabWhenNoData || node instanceof MTitle)
 			return new EmptyCellFigure();
 		if (node instanceof MCrosstabWhenNoDataCell)
 			return new WhenNoDataCellFigure();
+		if (node instanceof MTitleCell)
+			return new CellFigure();
 		if (node instanceof MColumnCrosstabHeaderCell)
-			return new CrosstabHeaderFigure();
+			return new CellFigure();
 		if (node instanceof MCell)
 			return new CellFigure();
 		return null;
@@ -648,12 +678,16 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			return new CrosstabEditPart();
 		if (model instanceof MCrosstabWhenNoDataCell)
 			return new CrosstabWhenNoDataEditPart();
+		if (model instanceof MTitleCell)
+			return new CrosstabTitleCellEditPart();
 		if (model instanceof MCell)
 			return new CrosstabCellEditPart();
 		if (model instanceof MCrosstabHeader)
 			return new CrosstabHeaderEditPart();
 		if (model instanceof MCrosstabWhenNoData)
 			return new CrosstabWhenNoDataEditPart();
+		if (model instanceof MTitle)
+			return new CrosstabTitleEditPart();
 		return null;
 	}
 

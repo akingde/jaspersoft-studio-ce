@@ -17,9 +17,12 @@ package com.jaspersoft.studio.components.crosstab.figure;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IClippingStrategy;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
@@ -30,6 +33,16 @@ import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
 public class WhenNoDataCellFigure extends CellFigure {
 	private static final String HINT = "If the crosstab will not contain any data, this cell will be printed instead.";
 	private FigureTextWriter twriter = new FigureTextWriter();
+	private Rectangle2D hintBounds;
+	private IClippingStrategy clippingStrategy = new IClippingStrategy() {
+		@Override
+		public Rectangle[] getClip(IFigure childFigure) {
+			Rectangle b = childFigure.getBounds();
+			if (hintBounds != null && childFigure == WhenNoDataCellFigure.this)
+				return new Rectangle[] { new Rectangle(b.x, b.y, Math.max(b.width, (int) hintBounds.getWidth() + APageFigure.PAGE_BORDER.left), b.height) };
+			return new Rectangle[] { b };
+		}
+	};
 
 	public WhenNoDataCellFigure() {
 		super();
@@ -52,6 +65,10 @@ public class WhenNoDataCellFigure extends CellFigure {
 
 			java.awt.Color currColor = g.getColor();
 			g.setColor(java.awt.Color.GRAY);
+
+			hintBounds = g.getFontMetrics().getStringBounds(HINT, g);
+			getParent().setClippingStrategy(clippingStrategy);
+
 			g.drawString(HINT, b.x, b.y - 15);
 			g.setColor(currColor);
 
@@ -80,7 +97,7 @@ public class WhenNoDataCellFigure extends CellFigure {
 	 * Enables/disables the showing of the band name in background.
 	 * 
 	 * @param showBandName
-	 *            flag for band name showing.
+	 *          flag for band name showing.
 	 */
 	public void setShowBandName(boolean showBandName) {
 		twriter.setShowName(showBandName);
@@ -96,7 +113,7 @@ public class WhenNoDataCellFigure extends CellFigure {
 	 * Studio-&gt;Report Designer</i> is enabled.
 	 * 
 	 * @param bandText
-	 *            the band text
+	 *          the band text
 	 */
 	public void setBandText(String bandText) {
 		twriter.setText(bandText);

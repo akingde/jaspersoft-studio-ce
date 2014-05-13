@@ -38,6 +38,7 @@ public class Messages extends NLS {
 	public static String CreateColumnGroupCommand_column_group_name_dialog;
 	public static String CreateCrosstabHeaderAction_create_crosstab_header;
 	public static String CreateCrosstabHeaderAction_create_crosstab_header_tool_tip;
+	public static String CreateCrosstabTitleAction_title;
 	public static String CreateCrosstabWhenNoDataAction_create_when_no_data_cell;
 	public static String CreateCrosstabWhenNoDataAction_create_when_no_data_cell_tool_tip;
 	public static String CreateMeasureAction_create_measure;
@@ -154,6 +155,9 @@ public class Messages extends NLS {
 	public static String MRowGroup_row_position;
 	public static String MRowGroup_row_position_description;
 	public static String MRowGroup_width_description;
+	public static String MTitle_title;
+	public static String MTitleCell_contentPosition;
+	public static String MTitleCell_titlecell;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

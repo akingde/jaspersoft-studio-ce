@@ -71,7 +71,8 @@ import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 
-public class MCell extends APropertyNode implements IGraphicElement, IPastable, IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart, ILineBox, IGroupElement, IGraphicElementContainer, IGraphicalPropertiesHandler {
+public class MCell extends APropertyNode implements IGraphicElement, IPastable, IContainerLayout, IPastableGraphic, IContainer, IContainerEditPart, ILineBox, IGroupElement, IGraphicElementContainer,
+		IGraphicalPropertiesHandler {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -352,17 +353,6 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		return null;
 	}
 
-	public MCrosstab getMCrosstab() {
-		INode node = getParent();
-		while (node != null) {
-			if (node instanceof MCrosstab) {
-				return (MCrosstab) node;
-			}
-			node = node.getParent();
-		}
-		return null;
-	}
-
 	public Rectangle getBounds() {
 		MCrosstab mc = getMCrosstab();
 		if (mc != null)
@@ -402,6 +392,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		return null;
 	}
 
+	public MCrosstab getMCrosstab() {
+		return getCrosstab();
+	}
+
 	@Override
 	public Dimension getSize() {
 		JRDesignCellContents v = getValue();
@@ -418,11 +412,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		return new JRPropertiesHolder[] { getValue(), getMCrosstab().getValue() };
 	}
 
-	
 	/**
-	 * Flag changed when some property that has graphical impact on the element is changed.
-	 * This is used to redraw the elemnt only when something graphical is changed isndie it,
-	 * all the other times can just be copied
+	 * Flag changed when some property that has graphical impact on the element is
+	 * changed. This is used to redraw the elemnt only when something graphical is
+	 * changed isndie it, all the other times can just be copied
 	 */
 	private boolean visualPropertyChanged = true;
 
@@ -430,26 +423,27 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 * True if some graphical property is changed for the element, false otherwise
 	 */
 	@Override
-	public boolean hasChangedProperty(){
+	public boolean hasChangedProperty() {
 		synchronized (this) {
 			return visualPropertyChanged;
 		}
 	}
-	
+
 	/**
 	 * Set the actual state of the property change flag
 	 */
 	@Override
-	public void setChangedProperty(boolean value){
+	public void setChangedProperty(boolean value) {
 		synchronized (this) {
-			if (value){
+			if (value) {
 				ANode parent = getParent();
-				while(parent != null){
-					if (parent instanceof IGraphicalPropertiesHandler){
-						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler)parent;
+				while (parent != null) {
+					if (parent instanceof IGraphicalPropertiesHandler) {
+						IGraphicalPropertiesHandler handler = (IGraphicalPropertiesHandler) parent;
 						handler.setChangedProperty(true);
-						//We can exit the cycle since the setChangedProperty on the parent will propagate the
-						//refresh on the upper levels
+						// We can exit the cycle since the setChangedProperty on the parent
+						// will propagate the
+						// refresh on the upper levels
 						break;
 					} else {
 						parent = parent.getParent();
@@ -461,13 +455,13 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	private static HashSet<String> cachedGraphicalProperties = null;
-	
+
 	/**
 	 * Return the graphical properties for an MGraphicalElement
 	 */
 	@Override
 	public HashSet<String> getGraphicalProperties() {
-		if (cachedGraphicalProperties == null){
+		if (cachedGraphicalProperties == null) {
 			cachedGraphicalProperties = new HashSet<String>();
 			cachedGraphicalProperties.add(JRBaseStyle.PROPERTY_MODE);
 			cachedGraphicalProperties.add(JRBaseStyle.PROPERTY_BACKCOLOR);
@@ -486,20 +480,22 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 			result.add(jrElement.getStyle().getName());
 		return result;
 	}
-	
+
 	@Override
 	public List<INode> initModel() {
 		return getChildren();
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		HashSet<String> graphicalProperties = getGraphicalProperties();
-		if (graphicalProperties.contains(evt.getPropertyName())){
+		if (graphicalProperties.contains(evt.getPropertyName())) {
 			setChangedProperty(true);
-			/*if (getParent() != null && getParent() instanceof IGraphicalPropertiesHandler) {
-				((IGraphicalPropertiesHandler)getParent()).setChangedProperty(true);
-			}*/
+			/*
+			 * if (getParent() != null && getParent() instanceof
+			 * IGraphicalPropertiesHandler) {
+			 * ((IGraphicalPropertiesHandler)getParent()).setChangedProperty(true); }
+			 */
 		}
 		super.propertyChange(evt);
 	}

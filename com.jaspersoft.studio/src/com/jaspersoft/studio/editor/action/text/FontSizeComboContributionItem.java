@@ -118,7 +118,8 @@ public class FontSizeComboContributionItem extends APropertyComboContributionIte
 	 */
 	protected void setComboText(Object value) {
 		super.setComboText(value);
-		if (value == null || combo == null) return;
+		if (value == null || combo == null || combo.isDisposed())
+			return;
 		
 		String str = removeUnnecessaryZeros((String) value);
 		String[] items = combo.getItems();

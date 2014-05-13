@@ -48,8 +48,7 @@ public class CreateElementCommand extends Command {
 	private int index = -1;
 	private JRPropertiesHolder[] pholder;
 
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode,
-			Rectangle position, int index) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
 		if (srcNode != null)
 			this.jrElement = (JRDesignElement) srcNode.getValue();
@@ -74,8 +73,7 @@ public class CreateElementCommand extends Command {
 
 	protected void setElementBounds() {
 		if (location == null)
-			location = new Rectangle(0, 0, srcNode.getDefaultWidth(),
-					srcNode.getDefaultHeight());
+			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
 		if (location.width < 0)
 			location.width = srcNode.getDefaultWidth();
 		if (location.height < 0)
@@ -141,28 +139,20 @@ public class CreateElementCommand extends Command {
 	}
 
 	private void removeElements(JRDesignElement element) {
-		com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(
-				jDesign, jrElement);
+		com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(jDesign, jrElement);
 		for (JRCrosstabCell c : crosstab.getCellsList()) {
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(element, c.getContents().getElements());
+			com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(element, c.getContents().getElements());
 		}
 
 		for (JRCrosstabRowGroup rg : crosstab.getRowGroupsList()) {
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(element, rg.getHeader().getElements());
+			com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(element, rg.getHeader().getElements());
 			if (rg.getTotalHeader() != null)
-				com.jaspersoft.studio.model.command.CreateElementCommand
-						.removeElement(element, rg.getTotalHeader()
-								.getElements());
+				com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(element, rg.getTotalHeader().getElements());
 		}
 		for (JRCrosstabColumnGroup rc : crosstab.getColumnGroupsList()) {
-			com.jaspersoft.studio.model.command.CreateElementCommand
-					.removeElement(element, rc.getHeader().getElements());
+			com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(element, rc.getHeader().getElements());
 			if (rc.getTotalHeader() != null)
-				com.jaspersoft.studio.model.command.CreateElementCommand
-						.removeElement(element, rc.getTotalHeader()
-								.getElements());
+				com.jaspersoft.studio.model.command.CreateElementCommand.removeElement(element, rc.getTotalHeader().getElements());
 		}
 	}
 }

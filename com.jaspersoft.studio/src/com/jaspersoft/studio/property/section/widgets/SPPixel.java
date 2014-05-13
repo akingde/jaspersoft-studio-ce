@@ -48,6 +48,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.report.util.Unit;
@@ -659,7 +660,10 @@ public class SPPixel extends ASPropertyWidget {
 		if (unitsMap == null) {
 			CreateDefaultUnits();
 		}
-		insertField = section.getWidgetFactory().createText(parent, "", SWT.NONE);
+		int style = SWT.NONE;
+		if (pDescriptor instanceof PixelPropertyDescriptor && ((PixelPropertyDescriptor) pDescriptor).isReadOnly())
+			style = style | SWT.READ_ONLY;
+		insertField = section.getWidgetFactory().createText(parent, "", style);
 		insertField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {

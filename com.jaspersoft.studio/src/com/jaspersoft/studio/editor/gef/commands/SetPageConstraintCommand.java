@@ -87,6 +87,23 @@ public class SetPageConstraintCommand extends Command {
 		}
 	}
 
+	public void setContext2(ANode parent, ANode child, Rectangle constraint) {
+		if (child.getValue() instanceof JRDesignElement) {
+			jrElement = (JRDesignElement) child.getValue();
+			newBounds = constraint;
+			parentBounds = ((IGraphicElement) child).getBounds();
+			destValue = parent.getValue();
+			if (parent instanceof IGroupElement)
+				jrGroup = ((IGroupElement) parent).getJRElementGroup();
+			else if (parent.getValue() instanceof JRElementGroup)
+				jrGroup = (JRElementGroup) parent.getValue();
+			if (parent instanceof IGraphicElementContainer)
+				d = ((IGraphicElementContainer) parent).getSize();
+			if (parent instanceof IContainerLayout)
+				pholder = ((IContainerLayout) parent).getPropertyHolder();
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

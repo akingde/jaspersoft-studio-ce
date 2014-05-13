@@ -42,7 +42,16 @@ public class PixelPropertyDescriptor extends TextPropertyDescriptor implements I
 	 */
 	public PixelPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
+	}
 
+	private boolean readOnly = false;
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
 	}
 
 	/**

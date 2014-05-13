@@ -38,6 +38,7 @@ import com.jaspersoft.studio.components.crosstab.model.measure.action.CreateMeas
 import com.jaspersoft.studio.components.crosstab.model.nodata.action.CreateCrosstabWhenNoDataAction;
 import com.jaspersoft.studio.components.crosstab.model.parameter.action.CreateCrosstabParameterAction;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction;
+import com.jaspersoft.studio.components.crosstab.model.title.action.CreateCrosstabTitleAction;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
@@ -138,6 +139,10 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		action = new CreateCrosstabWhenNoDataAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateCrosstabWhenNoDataAction.ID);
+
+		action = new CreateCrosstabTitleAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateCrosstabTitleAction.ID);
 
 		action = new CreateCrosstabParameterAction(this);
 		registry.registerAction(action);

@@ -135,8 +135,8 @@ public class CrosstabWhenNoDataEditPart extends ACrosstabCellEditPart {
 					if (parent instanceof MPage)
 						parent = getModel();
 					Rectangle b = ((MCell) getModel()).getBounds();
-					int x = constraint.x - b.x - ReportPageFigure.PAGE_BORDER.left;
-					int y = constraint.y - b.y - ReportPageFigure.PAGE_BORDER.top;
+					int x = constraint.x - b.x;// - ReportPageFigure.PAGE_BORDER.left;
+					int y = constraint.y - b.y;// - ReportPageFigure.PAGE_BORDER.top;
 					constraint = new Rectangle(x, y, constraint.width, constraint.height);
 
 					return super.getCreateCommand(parent, obj, constraint, index);
