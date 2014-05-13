@@ -10,10 +10,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio;
 
+import java.io.PrintStream;
+
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.console.MessageConsoleStream;
 import org.osgi.framework.BundleContext;
 
 import com.jaspersoft.studio.data.defaults.DefaultDAManager;
@@ -21,6 +27,7 @@ import com.jaspersoft.studio.editor.gef.decorator.DecoratorManager;
 import com.jaspersoft.studio.editor.gef.ui.actions.EditorSettingsContributorManager;
 import com.jaspersoft.studio.editor.preview.input.ext.InputControlTypeManager;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsManager;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.property.PostSetValueManager;
@@ -54,7 +61,7 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		// at startup.
 	}
 
-	public static final String ICONS_RESOURCES_REFRESH_16_PNG = "icons/resources/refresh-16.png";
+	public static final String ICONS_RESOURCES_REFRESH_16_PNG = "icons/resources/refresh-16.png"; //$NON-NLS-1$
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -62,17 +69,22 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		getExtensionManager();
 		// Sets the branding information
 		BrandingInfo info = new BrandingInfo();
-		info.setProductName("Jaspersoft Studio plug-in");
+		info.setProductName(Messages.JaspersoftStudioPlugin_BrandingInfoJSSPlugin);
 		info.setProductVersion(getBundle().getVersion().toString());
 		info.setProductMainBundleID(PLUGIN_ID);
 		setBrandingInformation(info);
-		logInfo(NLS.bind("Starting JaspersoftStudio bundle - Version: {0}", info.getProductVersion()));
 
 		JasperReportsConfiguration c = JasperReportsConfiguration.getDefaultInstance();
-		String key = "net.sf.jasperreports.default.font.name";
+		String key = "net.sf.jasperreports.default.font.name"; //$NON-NLS-1$
 		JRProperties.setProperty(key, c.getProperty(key));
-		key = "net.sf.jasperreports.default.font.size";
+		key = "net.sf.jasperreports.default.font.size"; //$NON-NLS-1$
 		JRProperties.setProperty(key, c.getProperty(key));
+		
+		if(getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)){
+			installJSSConsole();
+		}
+		
+		logInfo(NLS.bind(Messages.JaspersoftStudioPlugin_StartingJSSBundleMsg, info.getProductVersion()));
 	}
 
 	/**
@@ -218,6 +230,26 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 */
 	public static boolean shouldUseSecureStorage() {
 		return getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_USE_SECURE_STORAGE);
+	}
+	
+	/**
+	 * Creates an additional Console for the Console view.
+	 * Once installed, all the messages printed on the System.out and System.err streams
+	 * will be redirected here.
+	 */
+	public static void installJSSConsole() {
+		try {
+			MessageConsole jssConsole = new MessageConsole(Messages.JaspersoftStudioPlugin_JSSConsoleTitle, null);
+			ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{jssConsole});
+			MessageConsoleStream consoleStream = jssConsole.newMessageStream();
+			PrintStream pstream = new PrintStream(consoleStream);
+			System.setOut(pstream);
+			System.setErr(pstream);
+		} catch (SecurityException e) {
+			// something went wrong while trying to 
+			// re-assign the standard output and error streams.
+			e.printStackTrace();
+		}	
 	}
 
 }

@@ -723,6 +723,10 @@ public class Messages extends NLS {
 	public static String GenerateFragmentWizard_congratsText5;
 	public static String GlobalPreferencePage_flagDescription;
 	public static String GlobalPreferencePage_jettyServerTitle;
+	public static String GlobalPreferencePage_JSSConsoleFieldLabel;
+	public static String GlobalPreferencePage_JSSConsoleFieldTooltip;
+	public static String GlobalPreferencePage_LoggingPrefs;
+	public static String GlobalPreferencePage_NoteMsg;
 	public static String GlobalPreferencePage_port;
 	public static String GlobalPreferencePage_title;
 	public static String GraphicSection_Detail_Section_Title;
@@ -794,6 +798,9 @@ public class Messages extends NLS {
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
 	public static String IncreaseVSpaceAction_actionName;
+	public static String JaspersoftStudioPlugin_BrandingInfoJSSPlugin;
+	public static String JaspersoftStudioPlugin_JSSConsoleTitle;
+	public static String JaspersoftStudioPlugin_StartingJSSBundleMsg;
 	public static String JDBCDatasourcePage_browse;
 	public static String JDBCDatasourcePage_connection_established_message;
 	public static String JDBCDatasourcePage_connection_is_null_message;
