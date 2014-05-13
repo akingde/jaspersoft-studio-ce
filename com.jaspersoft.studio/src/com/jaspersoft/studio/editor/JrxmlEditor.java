@@ -420,11 +420,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					e.printStackTrace();
 				}
 			}
-			Display.getDefault().syncExec(new Runnable() {
+			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext, monitor);
+					if (isDirty())
+						JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext, monitor);
 					try {
 						String xml = model2xml(version);
 						doSaveEditors(monitor);
@@ -599,7 +600,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				public void run() {
 					setModel(ReportFactory.createReport(jrContext));
 					MReport report = getMReport();
-					if (report != null){
+					if (report != null) {
 						SyncDatasetRunParameters.sync(report);
 					}
 				}
