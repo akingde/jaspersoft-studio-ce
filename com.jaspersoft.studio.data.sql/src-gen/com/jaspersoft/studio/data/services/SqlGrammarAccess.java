@@ -28,12 +28,30 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cORDERBYKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
 		private final Assignment cOrderByEntryAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cOrderByEntryOrderByColumnsParserRuleCall_1_1_0 = (RuleCall)cOrderByEntryAssignment_1_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cLIMITKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Alternatives cAlternatives_2_1 = (Alternatives)cGroup_2.eContents().get(1);
+		private final Keyword cALLKeyword_2_1_0 = (Keyword)cAlternatives_2_1.eContents().get(0);
+		private final Group cGroup_2_1_1 = (Group)cAlternatives_2_1.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_2_1_1_0 = (RuleCall)cGroup_2_1_1.eContents().get(0);
+		private final Group cGroup_2_1_1_1 = (Group)cGroup_2_1_1.eContents().get(1);
+		private final Keyword cCommaKeyword_2_1_1_1_0 = (Keyword)cGroup_2_1_1_1.eContents().get(0);
+		private final RuleCall cINTTerminalRuleCall_2_1_1_1_1 = (RuleCall)cGroup_2_1_1_1.eContents().get(1);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cOFFSETKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final RuleCall cINTTerminalRuleCall_3_1 = (RuleCall)cGroup_3.eContents().get(1);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cFETCHFIRSTKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final RuleCall cINTTerminalRuleCall_4_1 = (RuleCall)cGroup_4.eContents().get(1);
+		private final Keyword cROWSONLYKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		
 		//Model:
-		//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?;
+		//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
+		//	("FETCH FIRST" INT "ROWS ONLY")?;
 		public ParserRule getRule() { return rule; }
 
-		//query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?
+		//query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
+		//("FETCH FIRST" INT "ROWS ONLY")?
 		public Group getGroup() { return cGroup; }
 
 		//query=SelectQuery
@@ -53,6 +71,54 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//OrderByColumns
 		public RuleCall getOrderByEntryOrderByColumnsParserRuleCall_1_1_0() { return cOrderByEntryOrderByColumnsParserRuleCall_1_1_0; }
+
+		//("LIMIT" ("ALL" | INT ("," INT)?))?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//"LIMIT"
+		public Keyword getLIMITKeyword_2_0() { return cLIMITKeyword_2_0; }
+
+		//"ALL" | INT ("," INT)?
+		public Alternatives getAlternatives_2_1() { return cAlternatives_2_1; }
+
+		//"ALL"
+		public Keyword getALLKeyword_2_1_0() { return cALLKeyword_2_1_0; }
+
+		//INT ("," INT)?
+		public Group getGroup_2_1_1() { return cGroup_2_1_1; }
+
+		//INT
+		public RuleCall getINTTerminalRuleCall_2_1_1_0() { return cINTTerminalRuleCall_2_1_1_0; }
+
+		//("," INT)?
+		public Group getGroup_2_1_1_1() { return cGroup_2_1_1_1; }
+
+		//","
+		public Keyword getCommaKeyword_2_1_1_1_0() { return cCommaKeyword_2_1_1_1_0; }
+
+		//INT
+		public RuleCall getINTTerminalRuleCall_2_1_1_1_1() { return cINTTerminalRuleCall_2_1_1_1_1; }
+
+		//("OFFSET" INT)?
+		public Group getGroup_3() { return cGroup_3; }
+
+		//"OFFSET"
+		public Keyword getOFFSETKeyword_3_0() { return cOFFSETKeyword_3_0; }
+
+		//INT
+		public RuleCall getINTTerminalRuleCall_3_1() { return cINTTerminalRuleCall_3_1; }
+
+		//("FETCH FIRST" INT "ROWS ONLY")?
+		public Group getGroup_4() { return cGroup_4; }
+
+		//"FETCH FIRST"
+		public Keyword getFETCHFIRSTKeyword_4_0() { return cFETCHFIRSTKeyword_4_0; }
+
+		//INT
+		public RuleCall getINTTerminalRuleCall_4_1() { return cINTTerminalRuleCall_4_1; }
+
+		//"ROWS ONLY"
+		public Keyword getROWSONLYKeyword_4_2() { return cROWSONLYKeyword_4_2; }
 	}
 
 	public class SelectQueryElements extends AbstractParserRuleElementFinder {
@@ -137,31 +203,40 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cSelectAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final Keyword cSelectSELECTKeyword_0_0 = (Keyword)cSelectAssignment_0.eContents().get(0);
 		private final Keyword cDISTINCTKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cColsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cColsColumnsParserRuleCall_2_0 = (RuleCall)cColsAssignment_2.eContents().get(0);
-		private final Keyword cFROMKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cTblAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cTblTablesParserRuleCall_4_0 = (RuleCall)cTblAssignment_4.eContents().get(0);
-		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
-		private final Keyword cWHEREKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
-		private final Assignment cWhereExpressionAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
-		private final RuleCall cWhereExpressionFullExpressionParserRuleCall_5_1_0 = (RuleCall)cWhereExpressionAssignment_5_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cTOPKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Alternatives cAlternatives_2_1 = (Alternatives)cGroup_2.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_2_1_0 = (RuleCall)cAlternatives_2_1.eContents().get(0);
+		private final RuleCall cSIGNED_DOUBLETerminalRuleCall_2_1_1 = (RuleCall)cAlternatives_2_1.eContents().get(1);
+		private final Keyword cPERCENTKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
+		private final Keyword cWITHTIESKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
+		private final Assignment cColsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cColsColumnsParserRuleCall_3_0 = (RuleCall)cColsAssignment_3.eContents().get(0);
+		private final Keyword cFROMKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cTblAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cTblTablesParserRuleCall_5_0 = (RuleCall)cTblAssignment_5.eContents().get(0);
 		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
-		private final Keyword cGROUPBYKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
-		private final Assignment cGroupByEntryAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
-		private final RuleCall cGroupByEntryGroupByColumnsParserRuleCall_6_1_0 = (RuleCall)cGroupByEntryAssignment_6_1.eContents().get(0);
+		private final Keyword cWHEREKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final Assignment cWhereExpressionAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cWhereExpressionFullExpressionParserRuleCall_6_1_0 = (RuleCall)cWhereExpressionAssignment_6_1.eContents().get(0);
 		private final Group cGroup_7 = (Group)cGroup.eContents().get(7);
-		private final Keyword cHAVINGKeyword_7_0 = (Keyword)cGroup_7.eContents().get(0);
-		private final Assignment cHavingEntryAssignment_7_1 = (Assignment)cGroup_7.eContents().get(1);
-		private final RuleCall cHavingEntryFullExpressionParserRuleCall_7_1_0 = (RuleCall)cHavingEntryAssignment_7_1.eContents().get(0);
+		private final Keyword cGROUPBYKeyword_7_0 = (Keyword)cGroup_7.eContents().get(0);
+		private final Assignment cGroupByEntryAssignment_7_1 = (Assignment)cGroup_7.eContents().get(1);
+		private final RuleCall cGroupByEntryGroupByColumnsParserRuleCall_7_1_0 = (RuleCall)cGroupByEntryAssignment_7_1.eContents().get(0);
+		private final Group cGroup_8 = (Group)cGroup.eContents().get(8);
+		private final Keyword cHAVINGKeyword_8_0 = (Keyword)cGroup_8.eContents().get(0);
+		private final Assignment cHavingEntryAssignment_8_1 = (Assignment)cGroup_8.eContents().get(1);
+		private final RuleCall cHavingEntryFullExpressionParserRuleCall_8_1_0 = (RuleCall)cHavingEntryAssignment_8_1.eContents().get(0);
 		
 		//Select:
-		//	select="SELECT" "DISTINCT"? cols=Columns "FROM" tbl=Tables ("WHERE" whereExpression=FullExpression)? ("GROUP BY"
-		//	groupByEntry=GroupByColumns)? ("HAVING" havingEntry=FullExpression)?;
+		//	select="SELECT" "DISTINCT"? ("TOP" (INT | SIGNED_DOUBLE) "PERCENT"? "WITH TIES"?)? cols=Columns "FROM" tbl=Tables
+		//	("WHERE" whereExpression=FullExpression)? ("GROUP BY" groupByEntry=GroupByColumns)? ("HAVING"
+		//	havingEntry=FullExpression)?;
 		public ParserRule getRule() { return rule; }
 
-		//select="SELECT" "DISTINCT"? cols=Columns "FROM" tbl=Tables ("WHERE" whereExpression=FullExpression)? ("GROUP BY"
-		//groupByEntry=GroupByColumns)? ("HAVING" havingEntry=FullExpression)?
+		//select="SELECT" "DISTINCT"? ("TOP" (INT | SIGNED_DOUBLE) "PERCENT"? "WITH TIES"?)? cols=Columns "FROM" tbl=Tables
+		//("WHERE" whereExpression=FullExpression)? ("GROUP BY" groupByEntry=GroupByColumns)? ("HAVING"
+		//havingEntry=FullExpression)?
 		public Group getGroup() { return cGroup; }
 
 		//select="SELECT"
@@ -173,56 +248,77 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		//"DISTINCT"?
 		public Keyword getDISTINCTKeyword_1() { return cDISTINCTKeyword_1; }
 
+		//("TOP" (INT | SIGNED_DOUBLE) "PERCENT"? "WITH TIES"?)?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//"TOP"
+		public Keyword getTOPKeyword_2_0() { return cTOPKeyword_2_0; }
+
+		//INT | SIGNED_DOUBLE
+		public Alternatives getAlternatives_2_1() { return cAlternatives_2_1; }
+
+		//INT
+		public RuleCall getINTTerminalRuleCall_2_1_0() { return cINTTerminalRuleCall_2_1_0; }
+
+		//SIGNED_DOUBLE
+		public RuleCall getSIGNED_DOUBLETerminalRuleCall_2_1_1() { return cSIGNED_DOUBLETerminalRuleCall_2_1_1; }
+
+		//"PERCENT"?
+		public Keyword getPERCENTKeyword_2_2() { return cPERCENTKeyword_2_2; }
+
+		//"WITH TIES"?
+		public Keyword getWITHTIESKeyword_2_3() { return cWITHTIESKeyword_2_3; }
+
 		//cols=Columns
-		public Assignment getColsAssignment_2() { return cColsAssignment_2; }
+		public Assignment getColsAssignment_3() { return cColsAssignment_3; }
 
 		//Columns
-		public RuleCall getColsColumnsParserRuleCall_2_0() { return cColsColumnsParserRuleCall_2_0; }
+		public RuleCall getColsColumnsParserRuleCall_3_0() { return cColsColumnsParserRuleCall_3_0; }
 
 		//"FROM"
-		public Keyword getFROMKeyword_3() { return cFROMKeyword_3; }
+		public Keyword getFROMKeyword_4() { return cFROMKeyword_4; }
 
 		//tbl=Tables
-		public Assignment getTblAssignment_4() { return cTblAssignment_4; }
+		public Assignment getTblAssignment_5() { return cTblAssignment_5; }
 
 		//Tables
-		public RuleCall getTblTablesParserRuleCall_4_0() { return cTblTablesParserRuleCall_4_0; }
+		public RuleCall getTblTablesParserRuleCall_5_0() { return cTblTablesParserRuleCall_5_0; }
 
 		//("WHERE" whereExpression=FullExpression)?
-		public Group getGroup_5() { return cGroup_5; }
-
-		//"WHERE"
-		public Keyword getWHEREKeyword_5_0() { return cWHEREKeyword_5_0; }
-
-		//whereExpression=FullExpression
-		public Assignment getWhereExpressionAssignment_5_1() { return cWhereExpressionAssignment_5_1; }
-
-		//FullExpression
-		public RuleCall getWhereExpressionFullExpressionParserRuleCall_5_1_0() { return cWhereExpressionFullExpressionParserRuleCall_5_1_0; }
-
-		//("GROUP BY" groupByEntry=GroupByColumns)?
 		public Group getGroup_6() { return cGroup_6; }
 
-		//"GROUP BY"
-		public Keyword getGROUPBYKeyword_6_0() { return cGROUPBYKeyword_6_0; }
+		//"WHERE"
+		public Keyword getWHEREKeyword_6_0() { return cWHEREKeyword_6_0; }
 
-		//groupByEntry=GroupByColumns
-		public Assignment getGroupByEntryAssignment_6_1() { return cGroupByEntryAssignment_6_1; }
-
-		//GroupByColumns
-		public RuleCall getGroupByEntryGroupByColumnsParserRuleCall_6_1_0() { return cGroupByEntryGroupByColumnsParserRuleCall_6_1_0; }
-
-		//("HAVING" havingEntry=FullExpression)?
-		public Group getGroup_7() { return cGroup_7; }
-
-		//"HAVING"
-		public Keyword getHAVINGKeyword_7_0() { return cHAVINGKeyword_7_0; }
-
-		//havingEntry=FullExpression
-		public Assignment getHavingEntryAssignment_7_1() { return cHavingEntryAssignment_7_1; }
+		//whereExpression=FullExpression
+		public Assignment getWhereExpressionAssignment_6_1() { return cWhereExpressionAssignment_6_1; }
 
 		//FullExpression
-		public RuleCall getHavingEntryFullExpressionParserRuleCall_7_1_0() { return cHavingEntryFullExpressionParserRuleCall_7_1_0; }
+		public RuleCall getWhereExpressionFullExpressionParserRuleCall_6_1_0() { return cWhereExpressionFullExpressionParserRuleCall_6_1_0; }
+
+		//("GROUP BY" groupByEntry=GroupByColumns)?
+		public Group getGroup_7() { return cGroup_7; }
+
+		//"GROUP BY"
+		public Keyword getGROUPBYKeyword_7_0() { return cGROUPBYKeyword_7_0; }
+
+		//groupByEntry=GroupByColumns
+		public Assignment getGroupByEntryAssignment_7_1() { return cGroupByEntryAssignment_7_1; }
+
+		//GroupByColumns
+		public RuleCall getGroupByEntryGroupByColumnsParserRuleCall_7_1_0() { return cGroupByEntryGroupByColumnsParserRuleCall_7_1_0; }
+
+		//("HAVING" havingEntry=FullExpression)?
+		public Group getGroup_8() { return cGroup_8; }
+
+		//"HAVING"
+		public Keyword getHAVINGKeyword_8_0() { return cHAVINGKeyword_8_0; }
+
+		//havingEntry=FullExpression
+		public Assignment getHavingEntryAssignment_8_1() { return cHavingEntryAssignment_8_1; }
+
+		//FullExpression
+		public RuleCall getHavingEntryFullExpressionParserRuleCall_8_1_0() { return cHavingEntryFullExpressionParserRuleCall_8_1_0; }
 	}
 
 	public class ColumnsElements extends AbstractParserRuleElementFinder {
@@ -2458,7 +2554,8 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Model:
-	//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?;
+	//	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
+	//	("FETCH FIRST" INT "ROWS ONLY")?;
 	public ModelElements getModelAccess() {
 		return (pModel != null) ? pModel : (pModel = new ModelElements());
 	}
@@ -2488,8 +2585,9 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Select:
-	//	select="SELECT" "DISTINCT"? cols=Columns "FROM" tbl=Tables ("WHERE" whereExpression=FullExpression)? ("GROUP BY"
-	//	groupByEntry=GroupByColumns)? ("HAVING" havingEntry=FullExpression)?;
+	//	select="SELECT" "DISTINCT"? ("TOP" (INT | SIGNED_DOUBLE) "PERCENT"? "WITH TIES"?)? cols=Columns "FROM" tbl=Tables
+	//	("WHERE" whereExpression=FullExpression)? ("GROUP BY" groupByEntry=GroupByColumns)? ("HAVING"
+	//	havingEntry=FullExpression)?;
 	public SelectElements getSelectAccess() {
 		return (pSelect != null) ? pSelect : (pSelect = new SelectElements());
 	}

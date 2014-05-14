@@ -89,11 +89,13 @@ protected class ThisRootNode extends RootToken {
 /************ begin Rule Model ****************
  *
  * Model:
- * 	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?;
+ * 	query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
+ * 	("FETCH FIRST" INT "ROWS ONLY")?;
  *
  **/
 
-// query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)?
+// query=SelectQuery ("ORDER BY" orderByEntry=OrderByColumns)? ("LIMIT" ("ALL" | INT ("," INT)?))? ("OFFSET" INT)?
+// ("FETCH FIRST" INT "ROWS ONLY")?
 protected class Model_Group extends GroupToken {
 	
 	public Model_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -557,13 +559,15 @@ protected class SelectSubSet_QueryAssignment_2 extends AssignmentToken  {
 /************ begin Rule Select ****************
  *
  * Select:
- * 	select="SELECT" "DISTINCT"? cols=Columns "FROM" tbl=Tables ("WHERE" whereExpression=FullExpression)? ("GROUP BY"
- * 	groupByEntry=GroupByColumns)? ("HAVING" havingEntry=FullExpression)?;
+ * 	select="SELECT" "DISTINCT"? ("TOP" (INT | SIGNED_DOUBLE) "PERCENT"? "WITH TIES"?)? cols=Columns "FROM" tbl=Tables
+ * 	("WHERE" whereExpression=FullExpression)? ("GROUP BY" groupByEntry=GroupByColumns)? ("HAVING"
+ * 	havingEntry=FullExpression)?;
  *
  **/
 
-// select="SELECT" "DISTINCT"? cols=Columns "FROM" tbl=Tables ("WHERE" whereExpression=FullExpression)? ("GROUP BY"
-// groupByEntry=GroupByColumns)? ("HAVING" havingEntry=FullExpression)?
+// select="SELECT" "DISTINCT"? ("TOP" (INT | SIGNED_DOUBLE) "PERCENT"? "WITH TIES"?)? cols=Columns "FROM" tbl=Tables
+// ("WHERE" whereExpression=FullExpression)? ("GROUP BY" groupByEntry=GroupByColumns)? ("HAVING"
+// havingEntry=FullExpression)?
 protected class Select_Group extends GroupToken {
 	
 	public Select_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -578,10 +582,10 @@ protected class Select_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_Group_7(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new Select_Group_6(lastRuleCallOrigin, this, 1, inst);
-			case 2: return new Select_Group_5(lastRuleCallOrigin, this, 2, inst);
-			case 3: return new Select_TblAssignment_4(lastRuleCallOrigin, this, 3, inst);
+			case 0: return new Select_Group_8(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new Select_Group_7(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new Select_Group_6(lastRuleCallOrigin, this, 2, inst);
+			case 3: return new Select_TblAssignment_5(lastRuleCallOrigin, this, 3, inst);
 			default: return null;
 		}	
 	}
@@ -629,15 +633,15 @@ protected class Select_SelectAssignment_0 extends AssignmentToken  {
 }
 
 // cols=Columns
-protected class Select_ColsAssignment_2 extends AssignmentToken  {
+protected class Select_ColsAssignment_3 extends AssignmentToken  {
 	
-	public Select_ColsAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_ColsAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getSelectAccess().getColsAssignment_2();
+		return grammarAccess.getSelectAccess().getColsAssignment_3();
 	}
 
     @Override
@@ -656,7 +660,7 @@ protected class Select_ColsAssignment_2 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getColumnsRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSelectAccess().getColsColumnsParserRuleCall_2_0(); 
+				element = grammarAccess.getSelectAccess().getColsColumnsParserRuleCall_3_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -675,21 +679,21 @@ protected class Select_ColsAssignment_2 extends AssignmentToken  {
 }
 
 // "FROM"
-protected class Select_FROMKeyword_3 extends KeywordToken  {
+protected class Select_FROMKeyword_4 extends KeywordToken  {
 	
-	public Select_FROMKeyword_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_FROMKeyword_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getSelectAccess().getFROMKeyword_3();
+		return grammarAccess.getSelectAccess().getFROMKeyword_4();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_ColsAssignment_2(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Select_ColsAssignment_3(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -697,15 +701,15 @@ protected class Select_FROMKeyword_3 extends KeywordToken  {
 }
 
 // tbl=Tables
-protected class Select_TblAssignment_4 extends AssignmentToken  {
+protected class Select_TblAssignment_5 extends AssignmentToken  {
 	
-	public Select_TblAssignment_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_TblAssignment_5(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getSelectAccess().getTblAssignment_4();
+		return grammarAccess.getSelectAccess().getTblAssignment_5();
 	}
 
     @Override
@@ -724,7 +728,7 @@ protected class Select_TblAssignment_4 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getTablesRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSelectAccess().getTblTablesParserRuleCall_4_0(); 
+				element = grammarAccess.getSelectAccess().getTblTablesParserRuleCall_5_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -736,28 +740,28 @@ protected class Select_TblAssignment_4 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new Select_FROMKeyword_3(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new Select_FROMKeyword_4(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 // ("WHERE" whereExpression=FullExpression)?
-protected class Select_Group_5 extends GroupToken {
+protected class Select_Group_6 extends GroupToken {
 	
-	public Select_Group_5(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_Group_6(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Group getGrammarElement() {
-		return grammarAccess.getSelectAccess().getGroup_5();
+		return grammarAccess.getSelectAccess().getGroup_6();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_WhereExpressionAssignment_5_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Select_WhereExpressionAssignment_6_1(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -765,21 +769,21 @@ protected class Select_Group_5 extends GroupToken {
 }
 
 // "WHERE"
-protected class Select_WHEREKeyword_5_0 extends KeywordToken  {
+protected class Select_WHEREKeyword_6_0 extends KeywordToken  {
 	
-	public Select_WHEREKeyword_5_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_WHEREKeyword_6_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getSelectAccess().getWHEREKeyword_5_0();
+		return grammarAccess.getSelectAccess().getWHEREKeyword_6_0();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_TblAssignment_4(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Select_TblAssignment_5(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -787,15 +791,15 @@ protected class Select_WHEREKeyword_5_0 extends KeywordToken  {
 }
 
 // whereExpression=FullExpression
-protected class Select_WhereExpressionAssignment_5_1 extends AssignmentToken  {
+protected class Select_WhereExpressionAssignment_6_1 extends AssignmentToken  {
 	
-	public Select_WhereExpressionAssignment_5_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_WhereExpressionAssignment_6_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getSelectAccess().getWhereExpressionAssignment_5_1();
+		return grammarAccess.getSelectAccess().getWhereExpressionAssignment_6_1();
 	}
 
     @Override
@@ -814,7 +818,7 @@ protected class Select_WhereExpressionAssignment_5_1 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getFullExpressionRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSelectAccess().getWhereExpressionFullExpressionParserRuleCall_5_1_0(); 
+				element = grammarAccess.getSelectAccess().getWhereExpressionFullExpressionParserRuleCall_6_1_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -826,7 +830,7 @@ protected class Select_WhereExpressionAssignment_5_1 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new Select_WHEREKeyword_5_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new Select_WHEREKeyword_6_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
@@ -834,21 +838,21 @@ protected class Select_WhereExpressionAssignment_5_1 extends AssignmentToken  {
 
 
 // ("GROUP BY" groupByEntry=GroupByColumns)?
-protected class Select_Group_6 extends GroupToken {
+protected class Select_Group_7 extends GroupToken {
 	
-	public Select_Group_6(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_Group_7(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Group getGrammarElement() {
-		return grammarAccess.getSelectAccess().getGroup_6();
+		return grammarAccess.getSelectAccess().getGroup_7();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_GroupByEntryAssignment_6_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Select_GroupByEntryAssignment_7_1(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -856,22 +860,22 @@ protected class Select_Group_6 extends GroupToken {
 }
 
 // "GROUP BY"
-protected class Select_GROUPBYKeyword_6_0 extends KeywordToken  {
+protected class Select_GROUPBYKeyword_7_0 extends KeywordToken  {
 	
-	public Select_GROUPBYKeyword_6_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_GROUPBYKeyword_7_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getSelectAccess().getGROUPBYKeyword_6_0();
+		return grammarAccess.getSelectAccess().getGROUPBYKeyword_7_0();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_Group_5(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new Select_TblAssignment_4(lastRuleCallOrigin, this, 1, inst);
+			case 0: return new Select_Group_6(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new Select_TblAssignment_5(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
 	}
@@ -879,15 +883,15 @@ protected class Select_GROUPBYKeyword_6_0 extends KeywordToken  {
 }
 
 // groupByEntry=GroupByColumns
-protected class Select_GroupByEntryAssignment_6_1 extends AssignmentToken  {
+protected class Select_GroupByEntryAssignment_7_1 extends AssignmentToken  {
 	
-	public Select_GroupByEntryAssignment_6_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_GroupByEntryAssignment_7_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getSelectAccess().getGroupByEntryAssignment_6_1();
+		return grammarAccess.getSelectAccess().getGroupByEntryAssignment_7_1();
 	}
 
     @Override
@@ -906,7 +910,7 @@ protected class Select_GroupByEntryAssignment_6_1 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getGroupByColumnsRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSelectAccess().getGroupByEntryGroupByColumnsParserRuleCall_6_1_0(); 
+				element = grammarAccess.getSelectAccess().getGroupByEntryGroupByColumnsParserRuleCall_7_1_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -918,7 +922,7 @@ protected class Select_GroupByEntryAssignment_6_1 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new Select_GROUPBYKeyword_6_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new Select_GROUPBYKeyword_7_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
@@ -926,21 +930,21 @@ protected class Select_GroupByEntryAssignment_6_1 extends AssignmentToken  {
 
 
 // ("HAVING" havingEntry=FullExpression)?
-protected class Select_Group_7 extends GroupToken {
+protected class Select_Group_8 extends GroupToken {
 	
-	public Select_Group_7(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_Group_8(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Group getGrammarElement() {
-		return grammarAccess.getSelectAccess().getGroup_7();
+		return grammarAccess.getSelectAccess().getGroup_8();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_HavingEntryAssignment_7_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Select_HavingEntryAssignment_8_1(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -948,23 +952,23 @@ protected class Select_Group_7 extends GroupToken {
 }
 
 // "HAVING"
-protected class Select_HAVINGKeyword_7_0 extends KeywordToken  {
+protected class Select_HAVINGKeyword_8_0 extends KeywordToken  {
 	
-	public Select_HAVINGKeyword_7_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_HAVINGKeyword_8_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getSelectAccess().getHAVINGKeyword_7_0();
+		return grammarAccess.getSelectAccess().getHAVINGKeyword_8_0();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Select_Group_6(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new Select_Group_5(lastRuleCallOrigin, this, 1, inst);
-			case 2: return new Select_TblAssignment_4(lastRuleCallOrigin, this, 2, inst);
+			case 0: return new Select_Group_7(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new Select_Group_6(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new Select_TblAssignment_5(lastRuleCallOrigin, this, 2, inst);
 			default: return null;
 		}	
 	}
@@ -972,15 +976,15 @@ protected class Select_HAVINGKeyword_7_0 extends KeywordToken  {
 }
 
 // havingEntry=FullExpression
-protected class Select_HavingEntryAssignment_7_1 extends AssignmentToken  {
+protected class Select_HavingEntryAssignment_8_1 extends AssignmentToken  {
 	
-	public Select_HavingEntryAssignment_7_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Select_HavingEntryAssignment_8_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getSelectAccess().getHavingEntryAssignment_7_1();
+		return grammarAccess.getSelectAccess().getHavingEntryAssignment_8_1();
 	}
 
     @Override
@@ -999,7 +1003,7 @@ protected class Select_HavingEntryAssignment_7_1 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getFullExpressionRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getSelectAccess().getHavingEntryFullExpressionParserRuleCall_7_1_0(); 
+				element = grammarAccess.getSelectAccess().getHavingEntryFullExpressionParserRuleCall_8_1_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -1011,7 +1015,7 @@ protected class Select_HavingEntryAssignment_7_1 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new Select_HAVINGKeyword_7_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new Select_HAVINGKeyword_8_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	

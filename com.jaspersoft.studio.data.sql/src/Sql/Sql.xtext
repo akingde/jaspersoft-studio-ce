@@ -5,7 +5,10 @@ generate sql "http://www.com.jaspersoft.studio.data.Sql"
 
 Model:
 	query=SelectQuery
-	('ORDER BY' orderByEntry=OrderByColumns)?;
+	('ORDER BY' orderByEntry=OrderByColumns)?
+	('LIMIT' ('ALL' | (INT (',' INT)?)))?
+	('OFFSET' INT)?
+	('FETCH FIRST' INT 'ROWS ONLY')?;
 
 SelectQuery returns SelectQuery:
 	Select (op+=SelectSubSet)*;
@@ -14,7 +17,9 @@ SelectSubSet:
 	op=('UNION' | 'INTERSECT' | 'MINUS' | 'EXCEPT') all=('ALL')? query=Select;
 
 Select:
-	select='SELECT' ('DISTINCT')? cols=Columns 'FROM' tbl=Tables ('WHERE' whereExpression=FullExpression)? ('GROUP BY'
+	select='SELECT' ('DISTINCT')? ('TOP' (INT | SIGNED_DOUBLE) 'PERCENT'? 'WITH TIES'?)? cols=Columns 'FROM' tbl=Tables
+	('WHERE' whereExpression=FullExpression)?
+	('GROUP BY'
 	groupByEntry=GroupByColumns)? ('HAVING' havingEntry=FullExpression)?;
 
 Columns returns OrColumn:

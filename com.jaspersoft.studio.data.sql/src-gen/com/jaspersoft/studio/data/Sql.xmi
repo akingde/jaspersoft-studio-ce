@@ -21,6 +21,28 @@
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.14"/>
           </elements>
         </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="LIMIT"/>
+          <elements xsi:type="xtext:Alternatives">
+            <elements xsi:type="xtext:Keyword" value="ALL"/>
+            <elements xsi:type="xtext:Group">
+              <elements xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
+              <elements xsi:type="xtext:Group" cardinality="?">
+                <elements xsi:type="xtext:Keyword" value=","/>
+                <elements xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
+              </elements>
+            </elements>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="OFFSET"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
+        </elements>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="FETCH FIRST"/>
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
+          <elements xsi:type="xtext:Keyword" value="ROWS ONLY"/>
+        </elements>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="SelectQuery">
@@ -64,6 +86,15 @@
           <terminal xsi:type="xtext:Keyword" value="SELECT"/>
         </elements>
         <elements xsi:type="xtext:Keyword" cardinality="?" value="DISTINCT"/>
+        <elements xsi:type="xtext:Group" cardinality="?">
+          <elements xsi:type="xtext:Keyword" value="TOP"/>
+          <elements xsi:type="xtext:Alternatives">
+            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.57"/>
+            <elements xsi:type="xtext:RuleCall" rule="/0/@rules.61"/>
+          </elements>
+          <elements xsi:type="xtext:Keyword" cardinality="?" value="PERCENT"/>
+          <elements xsi:type="xtext:Keyword" cardinality="?" value="WITH TIES"/>
+        </elements>
         <elements xsi:type="xtext:Assignment" feature="cols" operator="=">
           <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.4"/>
         </elements>
