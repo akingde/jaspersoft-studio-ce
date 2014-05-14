@@ -19,14 +19,11 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
-import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
-import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 
 /*
  * The Class CreateGroupAction.
  */
-public class CreateColumnEndAction extends ACreateAction {
+public class CreateColumnEndAction extends CreateColumnAction {
 
 	/** The Constant ID. */
 	public static final String ID = "create_table_column"; //$NON-NLS-1$
@@ -39,7 +36,6 @@ public class CreateColumnEndAction extends ACreateAction {
 	 */
 	public CreateColumnEndAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MColumn.class));
 	}
 
 	/**

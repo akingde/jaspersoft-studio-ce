@@ -104,7 +104,7 @@ import com.jaspersoft.studio.components.table.model.column.command.OrphanColumnC
 import com.jaspersoft.studio.components.table.model.column.command.ReorderColumnCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroupCell;
-import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
+import com.jaspersoft.studio.components.table.model.columngroup.action.GroupColumnsAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
@@ -680,7 +680,7 @@ public class TableComponentFactory implements IComponentFactory {
 		lst.add(CreateColumnEndAction.ID);
 		lst.add(AContextMenuProvider.SEPARATOR);
 
-		lst.add(CreateColumnGroupAction.ID);
+		lst.add(GroupColumnsAction.ID);
 		lst.add(UnGroupColumnsAction.ID);
 		lst.add(CreateColumnCellAction.ID);
 

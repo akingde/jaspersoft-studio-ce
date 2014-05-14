@@ -25,15 +25,13 @@ import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.gef.util.CreateRequestUtil;
-import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
-import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
 /*
  * The Class CreateGroupAction.
  */
-public class CreateColumnBeforeAction extends ACreateAction {
+public class CreateColumnBeforeAction extends CreateColumnAction {
 
 	/** The Constant ID. */
 	public static final String ID = "create_table_column_before"; //$NON-NLS-1$
@@ -46,7 +44,6 @@ public class CreateColumnBeforeAction extends ACreateAction {
 	 */
 	public CreateColumnBeforeAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MColumn.class));
 	}
 
 	/**

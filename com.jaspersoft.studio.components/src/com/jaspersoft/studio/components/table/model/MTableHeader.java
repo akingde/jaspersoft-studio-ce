@@ -34,7 +34,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
-import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -157,7 +156,7 @@ public class MTableHeader extends AMCollection {
 				}
 
 				mTable.getTableManager().refresh();
-				TableColumnNumerator.renumerateColumnNames(mTable);
+				//TableColumnNumerator.renumerateColumnNames(mTable);
 			}
 		}
 		super.propertyChange(evt);

@@ -84,6 +84,8 @@ public abstract class ACreateAction extends ACachedSelectionAction {
 			Object obj = objects.get(i);
 			if (obj instanceof EditPart) {
 				EditPart object = (EditPart) obj;
+				//Set the node if necessary to disable the refresh
+				jssCcmd.setReferenceNodeIfNull(object.getModel());	
 				Command cmd = object.getCommand(createReq);
 				if (cmd != null) {
 					jssCcmd.add(cmd);

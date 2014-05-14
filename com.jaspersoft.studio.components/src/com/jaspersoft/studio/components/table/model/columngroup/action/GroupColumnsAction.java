@@ -16,6 +16,7 @@
 package com.jaspersoft.studio.components.table.model.columngroup.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
@@ -27,8 +28,10 @@ import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.CheckColumnsOrder;
 import com.jaspersoft.studio.components.table.model.column.command.FixCellHeightsCommand;
 import com.jaspersoft.studio.components.table.model.column.command.MoveColumnCommand;
+import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
 import com.jaspersoft.studio.components.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.components.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
@@ -38,10 +41,13 @@ import com.jaspersoft.studio.model.ANode;
 /*
  * The Class CreateGroupAction.
  */
-public class CreateColumnGroupAction extends ACreateAction {
+public class GroupColumnsAction extends ACreateAction {
 
-	/** The Constant ID. */
+	/**
+	 *  The Constant ID. 
+	 */
 	public static final String ID = "create_table_column_group"; //$NON-NLS-1$
+	
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -49,7 +55,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 	 * @param part
 	 *            The part for this action
 	 */
-	public CreateColumnGroupAction(IWorkbenchPart part) {
+	public GroupColumnsAction(IWorkbenchPart part) {
 		super(part);
 		setCreationFactory(new JDPaletteCreationFactory(MColumnGroup.class));
 	}
@@ -62,7 +68,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 		super.init();
 		setText(Messages.CreateColumnAction_create_column_group);
 		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
-		setId(CreateColumnGroupAction.ID);
+		setId(GroupColumnsAction.ID);
 		setImageDescriptor(
 				Activator.getDefault().getImageDescriptor("icons/table-join-row.png"));
 		setDisabledImageDescriptor(
@@ -74,8 +80,6 @@ public class CreateColumnGroupAction extends ACreateAction {
 	public Command createCommand(List<?> objects) {
 		if (objects.isEmpty())
 			return null;
-		// if (objects.size() == 1)
-		// return super.createCreateCommand(objects);
 		List<MColumn> columns = new ArrayList<MColumn>();
 		for (Object obj : objects) {
 			if (!(obj instanceof EditPart))
@@ -89,18 +93,33 @@ public class CreateColumnGroupAction extends ACreateAction {
 
 		MColumn fmc = columns.get(0);
 		ANode mparent = fmc.getParent();
-		JSSCompoundCommand c = new JSSCompoundCommand("New Column Group", mparent);
+		JSSCompoundCommand c = new JSSCompoundCommand(Messages.CreateColumnAction_create_column_group, mparent);
 		MColumnGroup mcolgr = new MColumnGroup();
 		int index = mparent.getChildren().indexOf(fmc);
 		CreateColumnGroupCommand cmd = createGroup(index, mparent, mcolgr);
 		mcolgr.setValue(cmd.createColumn(fmc.getJasperDesign(), fmc.getMTable()
 				.getStandardTable()));
-		c.add(createGroup(index, mparent, mcolgr));
+		
+		c.add(new RefreshColumnNamesCommand(mparent, false, true));
 
-		for (MColumn src : columns)
+		//Create the commands to fix the order on the undo
+		List<CheckColumnsOrder> fixOrderCommandList = new ArrayList<CheckColumnsOrder>();
+		for (MColumn src : columns){
+			fixOrderCommandList.add(new CheckColumnsOrder(src));
+		}
+		Collections.sort(fixOrderCommandList);
+		//This commands are executed on the undo, so the list must be reversed
+		Collections.reverse(fixOrderCommandList);
+		c.addAll(fixOrderCommandList);
+		
+		//Add tge commands to move the columns
+		c.add(createGroup(index, mparent, mcolgr));
+		for (MColumn src : columns){
 			c.add(new MoveColumnCommand(src, mcolgr, false));
+		}
 
 		c.add(new FixCellHeightsCommand(fmc));
+		c.add(new RefreshColumnNamesCommand(mparent, true, false));
 		return c;
 	}
 

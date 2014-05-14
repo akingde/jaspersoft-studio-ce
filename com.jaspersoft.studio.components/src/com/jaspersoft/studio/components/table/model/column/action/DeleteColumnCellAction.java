@@ -81,8 +81,7 @@ public class DeleteColumnCellAction extends DeleteAction {
 				compoundCmd.setReferenceNodeIfNull(model);
 				//The cell of the detail can not be deleted
 				if (!(parent instanceof MTableDetail)){
-					Command cmd = TableComponentFactory.getDeleteCellCommand(
-							model.getParent(), model);
+					Command cmd = TableComponentFactory.getDeleteCellCommand(model.getParent(), model);
 					if (cmd != null)
 						compoundCmd.add(cmd);
 				}

@@ -24,13 +24,14 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
-import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MCollection;
 
 public abstract class AMCollection extends MCollection {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	public static final String REFRESH_COLUM_NAMES = "refreshColumnNamesRequest";
 
 	public AMCollection(ANode parent, JRDesignComponentElement jrDataset,
 			String property) {
@@ -86,14 +87,15 @@ public abstract class AMCollection extends MCollection {
 							n.setValue(evt.getNewValue());
 					}
 				}
+
 				MTable mTable = (MTable) getParent();
 				mTable.getTableManager().refresh();
-				TableColumnNumerator.renumerateColumnNames(mTable);
+				//TableColumnNumerator.renumerateColumnNames(mTable);
 			}
 		}
 		super.propertyChange(evt);
 	}
-
+	
 	public abstract String getCellEvent();
 
 	public abstract void createColumn(ANode mth, BaseColumn bc, int i, int index);

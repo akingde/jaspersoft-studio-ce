@@ -39,7 +39,7 @@ import com.jaspersoft.studio.components.table.model.column.action.CreateColumnEn
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteColumnCellAction;
 import com.jaspersoft.studio.components.table.model.column.action.DeleteRowAction;
-import com.jaspersoft.studio.components.table.model.columngroup.action.CreateColumnGroupAction;
+import com.jaspersoft.studio.components.table.model.columngroup.action.GroupColumnsAction;
 import com.jaspersoft.studio.components.table.model.columngroup.action.UnGroupColumnsAction;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
@@ -121,9 +121,9 @@ public class TableEditor extends AbstractVisualEditor {
 		List<String> selectionActions = getSelectionActions();
 		selectionActions.add(CreateColumnEndAction.ID);
 
-		action = new CreateColumnGroupAction(this);
+		action = new GroupColumnsAction(this);
 		registry.registerAction(action);
-		selectionActions.add(CreateColumnGroupAction.ID);
+		selectionActions.add(GroupColumnsAction.ID);
 		
 		action = new EditStyleAction(this);
 		registry.registerAction(action);

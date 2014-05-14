@@ -29,7 +29,6 @@ import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.model.AMCollection;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.components.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -118,7 +117,6 @@ public class MColumnGroup extends MColumn {
 			}
 			MTable mTable = (MTable) section.getParent();
 			mTable.getTableManager().refresh();
-			TableColumnNumerator.renumerateColumnNames(mTable);
 		}
 		super.propertyChange(evt);
 	}

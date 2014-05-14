@@ -39,17 +39,17 @@ import com.jaspersoft.studio.model.ANode;
 
 public class MoveColumnCommand extends Command {
 	private JasperDesign jDesign;
-	private int oldIndex, newIndex = -1;
+	protected int oldIndex, newIndex = -1;
 
-	private StandardBaseColumn srcColumn;
+	protected StandardBaseColumn srcColumn;
 
 	private StandardColumnGroup pdestColGroup;
-	private StandardColumnGroup psrcColGroup;
+	protected StandardColumnGroup psrcColGroup;
 
 	private List<Integer> deltas;
 
-	private StandardTable jrTable;
-	private TableManager tbManager;
+	protected StandardTable jrTable;
+	protected TableManager tbManager;
 	private boolean resize = true;
 
 	public MoveColumnCommand(MColumn src, MColumn dest, boolean resize) {
@@ -74,15 +74,20 @@ public class MoveColumnCommand extends Command {
 		if (dest == null)
 			return;
 		ANode destparent = dest.getParent();
-		if (destparent != null) {
-			if (destparent instanceof AMCollection)
+		if (dest instanceof MColumnGroup) {
+			pdestColGroup = (StandardColumnGroup) dest.getValue();
+		} else if (destparent != null) {
+			if (destparent instanceof AMCollection) {
 				newIndex = jrTable.getColumns().indexOf(dest.getValue());
-			else if (destparent.getValue() instanceof StandardColumnGroup) {
+			} else if (destparent.getValue() instanceof StandardColumnGroup) {
 				pdestColGroup = (StandardColumnGroup) destparent.getValue();
 				newIndex = pdestColGroup.getColumns().indexOf(dest.getValue());
 			}
-		} else if (dest instanceof MColumnGroup)
-			pdestColGroup = (StandardColumnGroup) dest.getValue();
+		} 
+	}
+	
+	public void setNewIndex(int index){
+		newIndex = index;
 	}
 
 	@Override
@@ -122,7 +127,7 @@ public class MoveColumnCommand extends Command {
 			deltas.set(i, -deltas.get(i));
 	}
 
-	private void delColumn(StandardColumnGroup colGroup, StandardBaseColumn col) {
+	protected void delColumn(StandardColumnGroup colGroup, StandardBaseColumn col) {
 		if (colGroup != null) {
 			colGroup.removeColumn(col);
 			updateColumnWidth();
@@ -130,8 +135,7 @@ public class MoveColumnCommand extends Command {
 			jrTable.removeColumn(col);
 	}
 
-	private void addColumn(StandardColumnGroup colGroup, int index,
-			StandardBaseColumn col) {
+	protected void addColumn(StandardColumnGroup colGroup, int index, StandardBaseColumn col) {
 		if (colGroup != null) {
 			if (index >= 0 && index < colGroup.getColumns().size())
 				colGroup.addColumn(index, col);

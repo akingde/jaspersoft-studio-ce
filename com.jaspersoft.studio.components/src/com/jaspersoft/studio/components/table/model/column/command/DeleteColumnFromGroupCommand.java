@@ -45,6 +45,7 @@ public class DeleteColumnFromGroupCommand extends Command {
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.jrTable = TableManager.getTable(destNode.getMTable());
+		elementPosition = jrGroup.getColumns().indexOf(jrColumn);
 	}
 
 	public DeleteColumnFromGroupCommand(MColumnGroupCell destNode, MColumn srcNode) {
@@ -52,6 +53,7 @@ public class DeleteColumnFromGroupCommand extends Command {
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		this.jrTable = TableManager.getTable(destNode.getMTable());
+		elementPosition = jrGroup.getColumns().indexOf(jrColumn);
 	}
 
 	/*
@@ -61,8 +63,6 @@ public class DeleteColumnFromGroupCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrGroup.getColumns().indexOf(jrColumn);
-
 		jrGroup.removeColumn(jrColumn);
 		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, -jrColumn.getWidth());
 	}
@@ -87,9 +87,9 @@ public class DeleteColumnFromGroupCommand extends Command {
 	@Override
 	public void undo() {
 		if (elementPosition < 0 || elementPosition > jrGroup.getColumns().size())
-			jrGroup.addColumn(elementPosition, jrColumn);
-		else
 			jrGroup.addColumn(jrColumn);
+		else
+			jrGroup.addColumn(elementPosition, jrColumn);
 		jrGroup.setWidth(jrGroup.getWidth() + jrColumn.getWidth());
 		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, jrColumn.getWidth());
 	}

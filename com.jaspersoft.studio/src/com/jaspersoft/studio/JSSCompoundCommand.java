@@ -35,6 +35,8 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  *
  */
 public class JSSCompoundCommand extends CompoundCommand {
+	
+	public static final String REFRESH_UI_EVENT = "refreshUIEvent";
 
 	/**
 	 * Node used to go back into the model until the mpage or an mreport (
@@ -193,7 +195,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 	protected void refreshVisuals(){
 			 ANode report = getNode();
 			 if (report != null){
-				 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), "refresh", null, null);
+				 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), REFRESH_UI_EVENT, null, null);
 				 report.getPropertyChangeSupport().firePropertyChange(event);
 			 }
 	}
@@ -277,6 +279,27 @@ public class JSSCompoundCommand extends CompoundCommand {
 			setIgnoreEvents(false);
 			if (!isIgnoreEvents()) refreshVisuals();
 		}
+	}
+	
+	/**
+	 * Add a command to the head of the list
+	 * 
+	 * @param command command to add
+	 */
+	public void addFirst(Command command){
+		@SuppressWarnings("unchecked")
+		List<Object> commands = getCommands();
+		commands.add(0, command);
+	}
+	
+	/**
+	 * Add a list of command to the commands to executed
+	 * 
+	 * @param commands not null list of commands to add
+	 */
+	@SuppressWarnings("unchecked")
+	public void addAll(List<?> commands){
+		getCommands().addAll(commands);
 	}
 }
 

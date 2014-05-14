@@ -28,6 +28,7 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
 
 /*
  * The Class CreateGroupAction.
@@ -69,10 +70,12 @@ public class DeleteColumnAction extends DeleteAction {
 		deleteReq.setEditParts(objects);
 
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand(getText(), null);
+		MColumn col = null;
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart object = (EditPart) objects.get(i);
 			if (object.getModel() instanceof MColumn) {
 				MColumn model = (MColumn) object.getModel();
+				col = model;
 				compoundCmd.setReferenceNodeIfNull(model);
 				Command cmd = TableComponentFactory.getDeleteColumnCommand(
 						model.getParent(), model);
@@ -80,6 +83,9 @@ public class DeleteColumnAction extends DeleteAction {
 					compoundCmd.add(cmd);
 			}
 		}
+		//Commands to refresh the columns names on undo or execute
+		compoundCmd.addFirst(new RefreshColumnNamesCommand(col, false, true));
+		compoundCmd.add(new RefreshColumnNamesCommand(col, true, false));
 		return compoundCmd;
 	}
 }

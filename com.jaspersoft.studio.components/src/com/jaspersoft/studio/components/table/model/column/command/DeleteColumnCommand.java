@@ -43,18 +43,21 @@ public class DeleteColumnCommand extends Command {
 		super();
 		this.jrTable = TableManager.getTable(destNode);
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		elementPosition = jrTable.getColumns().indexOf(jrColumn);
 	}
 
 	public DeleteColumnCommand(MTableGroupHeader destNode, MColumn srcNode) {
 		super();
 		this.jrTable = TableManager.getTable((ANode) destNode.getParent());
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		elementPosition = jrTable.getColumns().indexOf(jrColumn);
 	}
 
 	public DeleteColumnCommand(MTableGroupFooter destNode, MColumn srcNode) {
 		super();
 		this.jrTable = TableManager.getTable((ANode) destNode.getParent());
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		elementPosition = jrTable.getColumns().indexOf(jrColumn);
 	}
 
 	/*
@@ -64,8 +67,6 @@ public class DeleteColumnCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrTable.getColumns().indexOf(jrColumn);
-
 		jrTable.removeColumn(jrColumn);
 	}
 
@@ -89,9 +90,9 @@ public class DeleteColumnCommand extends Command {
 	@Override
 	public void undo() {
 		if (elementPosition < 0 || elementPosition > jrTable.getColumns().size())
-			jrTable.addColumn(elementPosition, jrColumn);
-		else
 			jrTable.addColumn(jrColumn);
+		else
+			jrTable.addColumn(elementPosition, jrColumn);
 	}
 
 }
