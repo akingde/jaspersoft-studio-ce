@@ -78,7 +78,7 @@ public class FontFaceFragment {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String selected = txt.getText();
-				if (selected.isEmpty())
+				if (selected.trim().isEmpty())
 					selected = null;
 				if (type.equals("ttf"))
 					fontFace.setTtf(selected);
@@ -114,6 +114,7 @@ public class FontFaceFragment {
 				String selected = fd.open();
 				setLastLocation(fd, selected);
 				if (selected != null) {
+					selected = selected.trim();
 					if (type.equals("ttf"))
 						fontFace.setTtf(selected);
 					else if (type.equals("eot"))
