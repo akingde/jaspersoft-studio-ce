@@ -294,7 +294,7 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 
 	private boolean selectDataAdapter(String name) {
 		for (int i = 0; i < dataAdaptersCombo.getItemCount(); i++) {
-			if (dataAdaptersCombo.getItem(i).equals(name)) {
+			if (dataAdapterDescriptors.get(i).getName().equals(name)) {
 				dataAdaptersCombo.select(i);
 				return true;
 			}
