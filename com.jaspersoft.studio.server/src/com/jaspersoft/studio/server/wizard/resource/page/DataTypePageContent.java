@@ -170,7 +170,7 @@ public class DataTypePageContent extends APageContent {
 	@Override
 	protected void rebind() {
 		final ResourceDescriptor rd = res.getValue();
-		final IConnection con = res.getWsClient();
+		final IConnection con = getWsClient();
 		if (tlenght != null) {
 			NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 			numberFormat.setGroupingUsed(false);
