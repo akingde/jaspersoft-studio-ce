@@ -372,7 +372,7 @@ public class ReportControler {
 					jiveViewer.setURL(url);
 					pcontainer.getRightContainer().switchView(null, jiveViewer);
 
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					UIUtils.showError(e);
 				}
 			}
