@@ -199,7 +199,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		String uri = rd.getUriString();
 		if (!uri.startsWith("/"))
 			uri = "/" + uri;
-		WebTarget tgt = target.path("resources" + uri.replaceAll("repo:", ""));
+		WebTarget tgt = target.path("resources" + uri.replaceAll("repo:", "").replaceAll("//", "/"));
 		tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
