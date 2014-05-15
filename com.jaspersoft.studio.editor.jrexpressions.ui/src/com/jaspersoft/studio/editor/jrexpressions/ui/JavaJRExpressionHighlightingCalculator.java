@@ -18,6 +18,7 @@ package com.jaspersoft.studio.editor.jrexpressions.ui;
 import java.util.Iterator;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.xtext.TerminalRule;
 import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
@@ -59,30 +60,47 @@ public class JavaJRExpressionHighlightingCalculator implements ISemanticHighligh
 		while (leafNodesIt.hasNext()){
 			ILeafNode nextLeaf = leafNodesIt.next();
 			EObject semanticElement = nextLeaf.getSemanticElement();
-			if(semanticElement instanceof StringLiteral){
-				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.STRING_ID);
-			}
-			else if(semanticElement instanceof JRParameterObj){
-				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.PARAM_TOKEN);
-			}
-			else if(semanticElement instanceof JRVariableObj){
-				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.VARIABLE_TOKEN);
-			}
-			else if(semanticElement instanceof JRFieldObj){
-				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.FIELD_TOKEN);
-			}
-			else if(semanticElement instanceof JRResourceBundleKeyObj) {
-				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.RESOURCE_BUNDLE_KEY);
-			}
-			else if(semanticElement instanceof FullMethodName){
-				if(JRExpressionsModelUtil.isFunctionLibrary((FullMethodName)semanticElement)){
-					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.FUNCTION_METHOD);
+			EObject grammarElement = nextLeaf.getGrammarElement();
+			if(!isHiddenToken(grammarElement)) {
+				if(semanticElement instanceof StringLiteral){
+					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.STRING_ID);
+				}
+				else if(semanticElement instanceof JRParameterObj){
+					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.PARAM_TOKEN);
+				}
+				else if(semanticElement instanceof JRVariableObj){
+					System.out.println(nextLeaf.getGrammarElement());
+					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.VARIABLE_TOKEN);
+				}
+				else if(semanticElement instanceof JRFieldObj){
+					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.FIELD_TOKEN);
+				}
+				else if(semanticElement instanceof JRResourceBundleKeyObj) {
+					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.RESOURCE_BUNDLE_KEY);
+				}
+				else if(semanticElement instanceof FullMethodName){
+					if(JRExpressionsModelUtil.isFunctionLibrary((FullMethodName)semanticElement)){
+						acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), JavaJRExpressionHighlightingConfiguration.FUNCTION_METHOD);
+					}
+				}
+				else if(isNumberElement(semanticElement)){
+					acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), DefaultHighlightingConfiguration.NUMBER_ID);
 				}
 			}
-			else if(isNumberElement(semanticElement)){
-				acceptor.addPosition(nextLeaf.getOffset(), nextLeaf.getLength(), DefaultHighlightingConfiguration.NUMBER_ID);
-			}
 		}
+	}
+
+	/*
+	 * Checks if the specified element can be a hidden rule
+	 * like single/multiline comments or spaces. 
+	 */
+	private static final boolean isHiddenToken(EObject element) {
+		if (element instanceof TerminalRule) {
+			String name = ((TerminalRule) element).getName();
+			return "ML_COMMENT".equals(name) || "SL_COMMENT".equals(name)
+					|| "WS".equals(name);
+		}
+		return false;
 	}
 	
 	/*
