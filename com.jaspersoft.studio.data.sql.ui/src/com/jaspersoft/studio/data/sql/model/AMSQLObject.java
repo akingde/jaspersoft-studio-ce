@@ -41,7 +41,7 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 
 	public String toSQLString() {
 		String str = getValue();
-		if (str.isEmpty())
+		if (str == null || str.isEmpty())
 			return "";
 		ANode p = getParent();
 		MSQLRoot r = getRoot();

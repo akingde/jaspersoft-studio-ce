@@ -195,13 +195,12 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
 	protected IResource getResource() {
 		IResource resource = null;
-		if (getElement() instanceof IResource) {
+		if (getElement() instanceof IResource)
 			resource = (IResource) getElement();
-		} else if (getElement() instanceof IFileEditorInput) {
+		else if (getElement() instanceof IFileEditorInput)
 			resource = ((IFileEditorInput) getElement()).getFile();
-		} else {
+		else
 			resource = (IResource) getElement().getAdapter(IResource.class);
-		}
 		return resource;
 	}
 
@@ -272,7 +271,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				confPrjButton.setEnabled(false);
 
 			IResource r = getResource();
-			String use = r.getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS));
+			String use = r != null ? r.getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS)) : "";
 			if (PROJECT.equals(use)) {
 				useProjectSettingsButton.setSelection(true);
 				if (confPrjButton != null)
