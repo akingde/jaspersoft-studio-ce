@@ -230,11 +230,38 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	 */
 	public static Runnable getImagePrecacheThread() {
 		return new Runnable() {
+			
+			/**
+			 * Return the color that in the current os is the SWT.COLOR_GRAY if it is
+			 * available, otherwise it return a standard gray
+			 * 
+			 * @return rgb of a grey color
+			 */
+			private RGB getGrayColor(){
+				//Grey color for the shadow effect
+				final RGB greyColor =  new RGB(192, 192, 192);
+				//Try to get the correct grey system color
+				/*	try{
+					UIUtils.getDisplay().syncExec(new Runnable() {
+						@Override
+						public void run() {
+							RGB systemGray = UIUtils.getDisplay().getSystemColor(SWT.COLOR_GRAY).getRGB();
+							greyColor.red = systemGray.red;
+							greyColor.green = systemGray.green;
+							greyColor.blue = systemGray.blue;
+						}
+					});
+				} catch(Exception ex){
+					ex.printStackTrace();
+				}*/
+				return greyColor;
+			}
 
 			@Override
 			public void run() {
-				
-				RGB greyColor = new Display().getSystemColor(SWT.COLOR_GRAY).getRGB();
+				System.out.println("start sync");
+				RGB greyColor =  getGrayColor();
+				System.out.println("end sync");
 				List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 				for (TemplateBundle b : bundles) {
 					if (b instanceof JrxmlTemplateBundle) {
