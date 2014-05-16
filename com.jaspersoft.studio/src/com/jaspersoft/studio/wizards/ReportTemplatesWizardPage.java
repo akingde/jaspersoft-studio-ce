@@ -235,6 +235,8 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 			 * Return the color that in the current os is the SWT.COLOR_GRAY if it is
 			 * available, otherwise it return a standard gray
 			 * 
+			 * FIXME: dynamic resolution commented for now for performance problem
+			 * 
 			 * @return rgb of a grey color
 			 */
 			private RGB getGrayColor(){
@@ -259,9 +261,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 			@Override
 			public void run() {
-				System.out.println("start sync");
 				RGB greyColor =  getGrayColor();
-				System.out.println("end sync");
 				List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 				for (TemplateBundle b : bundles) {
 					if (b instanceof JrxmlTemplateBundle) {
