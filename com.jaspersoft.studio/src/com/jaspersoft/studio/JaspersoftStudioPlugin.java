@@ -34,6 +34,7 @@ import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.ReportTemplatesWizardPage;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -85,6 +86,10 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		}
 		
 		logInfo(NLS.bind(Messages.JaspersoftStudioPlugin_StartingJSSBundleMsg, info.getProductVersion()));
+		
+		//Precache report images
+		Thread thread = new Thread(ReportTemplatesWizardPage.getImagePrecacheThread());
+	  	thread.start();
 	}
 
 	/**

@@ -36,6 +36,7 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -217,6 +218,53 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		});
 		return gal;
 	}
+	
+	/**
+	 * Return a runnable thread that pre-cache the images used by the new report wizard.
+	 * This thread iterate the report bundles and check if their preview image is cached, if
+	 * it isn't then it create and cache it, otherwise it dosen't do nothing.
+	 * This runnable can be executed as a thread at the start of the application to speedup the 
+	 * first opening of the new Report wizard dialog
+	 * 
+	 * @return a Runnable thread
+	 */
+	public static Runnable getImagePrecacheThread() {
+		return new Runnable() {
+
+			@Override
+			public void run() {
+				
+				RGB greyColor = new Display().getSystemColor(SWT.COLOR_GRAY).getRGB();
+				List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
+				for (TemplateBundle b : bundles) {
+					if (b instanceof JrxmlTemplateBundle) {
+						// itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
+						JrxmlTemplateBundle jrxmlBundle = (JrxmlTemplateBundle) b;
+						Image itemImage = jrxmlBundle.getIcon();
+
+						if (itemImage != null) {
+							// Add viewer required effects to the images shown...
+							String selectedImageKey = jrxmlBundle.getTemplateURL().toExternalForm() + "selectedImage"; //$NON-NLS-1$
+							Image selectedImg = ResourceManager.getImage(selectedImageKey);
+							if (selectedImg == null) {
+								selectedImg = new Image(UIUtils.getDisplay(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
+								ResourceManager.addImage(selectedImageKey, selectedImg);
+							}
+							String standardShadowedImgeKey = jrxmlBundle.getTemplateURL().toExternalForm() + "standardShadowedImg"; //$NON-NLS-1$
+							Image standardShadowedImg = ResourceManager.getImage(standardShadowedImgeKey);
+							if (standardShadowedImg == null) {
+								standardShadowedImg = new Image(UIUtils.getDisplay(), Glow.glow(itemImage.getImageData(),	ResourceManager.getColor(greyColor), 40, 0, 255));
+								ResourceManager.addImage(standardShadowedImgeKey, standardShadowedImg);
+							}
+							// The images are cached into the ResourceManager and disposed only when the application is closed
+						}
+					}
+				}
+			}
+		};
+	}
+	
+	
 
 	/**
 	 * For a gallery create all the preview of a precise category
