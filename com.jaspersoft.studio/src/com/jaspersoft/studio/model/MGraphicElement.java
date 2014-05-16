@@ -273,11 +273,16 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				return new Rectangle(0, 0, jr.getWidth(), jr.getHeight());
 			} else if (node instanceof IGraphicElement) {
 				Rectangle b = ((IGraphicElement) node).getBounds();
-				if (node instanceof IGraphicElementContainer && b != null) {
+				if (b == null) {
+					// FIXME - Need to be verified, temporary solve the issue reported here: 
+					// http://community.jaspersoft.com/questions/826441/javalangnullpointerexception-crosstabs
+					return new Rectangle(jr.getX(), jr.getY(), jr.getWidth(), jr.getHeight());
+				}
+				if (node instanceof IGraphicElementContainer) {
 					int x = ((IGraphicElementContainer) node).getLeftPadding();
 					int y = ((IGraphicElementContainer) node).getTopPadding();
 					b.setLocation(b.x + x, b.y + y);
-				} else b = new Rectangle(0,0, jr.getWidth(), jr.getHeight());
+				}
 				return new Rectangle(b.x + jr.getX(), b.y + jr.getY(), jr.getWidth(), jr.getHeight());
 			}
 			node = node.getParent();
