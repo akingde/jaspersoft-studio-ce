@@ -165,6 +165,30 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
+		List<ResourceDescriptor> list = null;
+		try {
+			list = c.listDatasources(monitor, f);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 500) {// &&
+																				// he.getMessage().contains("Unexpected error"))
+																				// {
+					list = soap.listDatasources(monitor, f);
+					for (ResourceDescriptor r : list)
+						r.setDirty(false);
+					return list;
+				}
+			}
+			throw e;
+		}
+		for (ResourceDescriptor r : list)
+			r.setDirty(false);
+		return list;
+	}
+
+	@Override
 	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		rd = c.move(monitor, rd, destFolderURI);
 		rd.setDirty(false);
@@ -205,14 +229,6 @@ public class ProxyConnection implements IConnection {
 	@Override
 	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
 		return c.runReport(monitor, rd, prm, args);
-	}
-
-	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
-		List<ResourceDescriptor> list = c.listDatasources(monitor, f);
-		for (ResourceDescriptor r : list)
-			r.setDirty(false);
-		return list;
 	}
 
 	@Override
