@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Properties;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.util.JRProperties;
@@ -50,8 +51,6 @@ import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
-	public static final String NET_SF_JASPERREPORTS_JRPROPERTIES = "net.sf.jasperreports.JRPROPERTIES"; //$NON-NLS-1$
-	
 	protected Button editButton;
 
 	public PropertyListFieldEditor() {
@@ -167,7 +166,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			else if (key.equals("net.sf.jasperreports.default.font.size")) //$NON-NLS-1$
 				JRProperties.setProperty(key, value);
 		}
-		getPreferenceStore().setValue(NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
+		getPreferenceStore().setValue(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
 	}
 
 	/*
@@ -179,7 +178,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			// Collections.sort(lst, new PropertyComparator());
 			Properties props = null;
 			try {
-				props = FileUtils.load(getPreferenceStore().getString(NET_SF_JASPERREPORTS_JRPROPERTIES));
+				props = FileUtils.load(getPreferenceStore().getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
 				List<String> keys = new ArrayList<String>();
 				for (Object key : props.keySet())
 					keys.add((String) key);

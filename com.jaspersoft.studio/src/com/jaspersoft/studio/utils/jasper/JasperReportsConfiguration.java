@@ -31,6 +31,7 @@ import net.sf.jasperreports.components.ComponentsManager;
 import net.sf.jasperreports.data.AbstractClasspathAwareDataAdapterService;
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.util.query.EmptyQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -62,7 +63,6 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
-import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
 import com.jaspersoft.studio.utils.Misc;
@@ -102,7 +102,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			String property = event.getProperty();
 			if (property.equals(FontsPreferencePage.FPP_FONT_LIST)
-					|| property.equals(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
+					|| property.equals(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES)) {
 				refreshFonts = true;
 				refreshBundles = true;
 				fontList = null;
@@ -355,7 +355,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			isPropsCached = false;
 			try {
 				pstore.setWithDefault(false);
-				props = FileUtils.load(pstore.getString(PropertyListFieldEditor.NET_SF_JASPERREPORTS_JRPROPERTIES));
+				props = FileUtils.load(pstore.getString(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES));
 			} catch (IOException e) {
 				e.printStackTrace();
 				props = new Properties();
