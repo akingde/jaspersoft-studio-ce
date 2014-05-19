@@ -68,8 +68,8 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 	public void setJRPRint(final Statistics stats, JasperPrint jrprint, boolean refresh) throws Exception {
 		if (this.jrprint != jrprint || refresh) {
 			rptviewer.setReport(jrprint);
-
-			tmpFile = File.createTempFile("report", getExtension(), getTmpPath());
+			if (tmpFile == null)
+				tmpFile = File.createTempFile("report", getExtension(), getTmpPath());
 
 			AExportAction exp = createExporter(rptviewer);
 			stats.startCount(ReportControler.ST_EXPORTTIME);
@@ -147,7 +147,6 @@ public class HTMLViewer extends ABrowserViewer implements IJRPrintable, IPrefere
 
 			@Override
 			public void run() {
-				System.out.println("dorefresh");
 				newRequest = false;
 				browser.refresh();
 				isRefresh = false;
