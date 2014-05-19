@@ -13,6 +13,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/hive-service-0.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libfb303-0.9.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.9.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/js-hive-datasource-1.0.7-SNAPSHOT.jar" sourcepath="/js-hive-datasource"/>
+	<classpathentry exported="true" kind="lib" path="lib/js-hive-datasource-1.0.7.jar" sourcepath="/js-hive-datasource"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
