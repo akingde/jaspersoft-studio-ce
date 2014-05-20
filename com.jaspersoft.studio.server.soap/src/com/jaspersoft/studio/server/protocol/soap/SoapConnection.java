@@ -158,8 +158,11 @@ public class SoapConnection implements IConnection {
 		if (rd.getIsReference())
 			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 		List<ResourceDescriptor> children = rd.getChildren();
-		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
+		ResourceDescriptor mainDs = null;
+		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			for (ResourceDescriptor r : children) {
+				if (rd.getIsNew() && SelectorDatasource.isDatasource(r))
+					mainDs = r;
 				if (r.isMainReport() || (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) {
 					r.setMainReport(true);
 					if (r.getHasData() && r.getData() != null) {
@@ -169,6 +172,9 @@ public class SoapConnection implements IConnection {
 					break;
 				}
 			}
+			if (mainDs != null)
+				rd.getChildren().remove(mainDs);
+		}
 		rd = client.addOrModifyResource(rd, inputFile);
 		List<ResourceDescriptor> oldChildren = list(monitor, rd);
 		for (ResourceDescriptor r : oldChildren)
@@ -202,6 +208,12 @@ public class SoapConnection implements IConnection {
 					r = client.modifyReportUnitResource(rd.getUriString(), r, inputFile);
 				}
 				rd.getChildren().add(r);
+			}
+			if (mainDs != null) {
+				rd = get(monitor, rd, null);
+				mainDs.setIsNew(false);
+				rd.getChildren().add(0, mainDs);
+				client.addOrModifyResource(rd, null);
 			}
 		}
 		return rd;

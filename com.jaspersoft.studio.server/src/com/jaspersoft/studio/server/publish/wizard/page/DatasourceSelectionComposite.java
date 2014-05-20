@@ -237,7 +237,7 @@ public class DatasourceSelectionComposite extends Composite {
 			ref = MRDatasource.createDescriptor(null);
 			ref.setName("SemanticLayerDataSource");
 			ref.setLabel("SemanticLayerDataSource");
-			ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN);
+			ref.setWsType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN1);
 		}
 		if (ref == null) {
 			AddResourceWizard wizard = new AddResourceWizard(res, true);

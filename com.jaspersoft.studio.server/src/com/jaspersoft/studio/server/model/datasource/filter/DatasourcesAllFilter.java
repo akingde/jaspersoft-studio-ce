@@ -34,6 +34,7 @@ public class DatasourcesAllFilter implements IDatasourceFilter {
 		types.add(MRDatasourceAWS.TYPE_AWS);
 		types.add(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW);
 		types.add(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN);
+		types.add(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN1);
 		types.add(ResourceDescriptor.TYPE_OLAP_MONDRIAN_CONNECTION);
 		types.add(ResourceDescriptor.TYPE_SECURE_MONDRIAN_CONNECTION);
 		types.add(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION);

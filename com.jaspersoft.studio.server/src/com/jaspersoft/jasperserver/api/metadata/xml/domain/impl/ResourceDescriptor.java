@@ -50,6 +50,7 @@ public class ResourceDescriptor implements Serializable {
 	public static final String TYPE_DASHBOARD = "dashboard";
 	public static final String TYPE_REPORT_OPTIONS = "reportOptions";
 	public static final String TYPE_DATASOURCE_DOMAIN = "domain";
+	public static final String TYPE_DATASOURCE_DOMAIN1 = "Domain";
 	public static final String TYPE_DOMAIN_TOPICS = "domainTopic";
 	public static final String TYPE_ADHOC_REPORT = "adhocReport";
 	public static final String TYPE_ADHOC_DATA_VIEW = "adhocDataView";
