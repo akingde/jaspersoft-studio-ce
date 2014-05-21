@@ -74,6 +74,11 @@ public class DatasourceSelectionComposite extends Composite {
 	private Button rbNoDS;
 	private List<DatasourceSelectionListener> dsListeners;
 	private boolean isConfiguringPage;
+	private String[] excludeTypes;
+
+	public void setExcludeTypes(String[] excludeTypes) {
+		this.excludeTypes = excludeTypes;
+	}
 
 	/**
 	 * Create the composite.
@@ -81,9 +86,10 @@ public class DatasourceSelectionComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public DatasourceSelectionComposite(Composite parent, int style, boolean mandatory) {
+	public DatasourceSelectionComposite(Composite parent, int style, boolean mandatory, String[] excludeTypes) {
 		super(parent, style);
 		this.mandatory = mandatory;
+		this.excludeTypes = excludeTypes;
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.horizontalSpacing = 0;
 		setLayout(gridLayout);
@@ -281,13 +287,25 @@ public class DatasourceSelectionComposite extends Composite {
 			String[] dsArray = WsTypes.INST().getDatasourcesArray();
 			if (res.getValue().getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS))
 				dsArray = new String[] { WsTypes.INST().toRestType(ResourceDescriptor.TYPE_DATASOURCE_DOMAIN) };
-			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, dsArray, null);
+			String[] exclude = null;
+			if (excludeTypes != null && excludeTypes.length > 0) {
+				exclude = new String[excludeTypes.length];
+				for (int i = 0; i < excludeTypes.length; i++)
+					exclude[i] = WsTypes.INST().toRestType(excludeTypes[i]);
+			}
+
+			ResourceDescriptor rd = FindResourceJob.doFindResource(msp, dsArray, exclude);
 			if (rd != null)
 				setResource(res, rd);
 		} else {
 			RepositoryDialog rd = new RepositoryDialog(UIUtils.getShell(), msp) {
 				@Override
 				public boolean isResourceCompatible(MResource r) {
+					String type = r.getValue().getWsType();
+					if (excludeTypes != null)
+						for (String t : excludeTypes)
+							if (type.equals(t))
+								return false;
 					return SelectorDatasource.isDatasource(r.getValue());
 				}
 			};

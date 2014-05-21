@@ -29,6 +29,14 @@ public class Version {
 		return si.getVersion().startsWith("5.");
 	}
 
+	public static boolean isXMLACoonnectionSupported(IConnection c) {
+		if (c.isSupported(Feature.SEARCHREPOSITORY)) {
+			ServerInfo si = c.getServerInfo();
+			return si.getVersion().startsWith("5.5") || si.getVersion().startsWith("5.6");
+		}
+		return true;
+	}
+
 	public static boolean isGreaterThan(ServerInfo si, String version) {
 		return si.getVersion().compareTo(version) >= 0;
 	}

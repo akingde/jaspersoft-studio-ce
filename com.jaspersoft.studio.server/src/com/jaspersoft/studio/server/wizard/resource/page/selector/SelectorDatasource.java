@@ -52,14 +52,14 @@ public class SelectorDatasource {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText(Messages.SelectorDatasource_TabTitle);
 
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(tabFolder, SWT.NONE, mandatory);
-		dsSelectionCmp.configurePage(parent, res);
+		DatasourceSelectionComposite dsSelectionCmp = createDatasource(tabFolder, parent, res, mandatory);
+
 		item.setControl(dsSelectionCmp);
 		return dsSelectionCmp;
 	}
 
-	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final MResource res, boolean mandatory) {
-		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(parent, SWT.NONE, mandatory);
+	public DatasourceSelectionComposite createDatasource(Composite parent, final ANode pnode, final MResource res, boolean mandatory, String[] excludeTypes) {
+		DatasourceSelectionComposite dsSelectionCmp = new DatasourceSelectionComposite(parent, SWT.NONE, mandatory, excludeTypes);
 		dsSelectionCmp.configurePage(pnode, res);
 		return dsSelectionCmp;
 	}

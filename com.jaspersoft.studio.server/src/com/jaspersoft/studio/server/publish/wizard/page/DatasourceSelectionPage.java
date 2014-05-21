@@ -25,6 +25,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
@@ -60,7 +61,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE, false);
+		datasourceCmp = new DatasourceSelectionComposite(parent, SWT.NONE, false, new String[] { ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION });
 		setControl(datasourceCmp);
 	}
 
@@ -76,7 +77,7 @@ public class DatasourceSelectionPage extends JSSHelpWizardPage {
 				// e.printStackTrace();
 			}
 		}
-
+		datasourceCmp.setExcludeTypes(ReportUnitDatasourceContent.getExcludedTypes(resource));
 		datasourceCmp.configurePage(parent, resource);
 	}
 }

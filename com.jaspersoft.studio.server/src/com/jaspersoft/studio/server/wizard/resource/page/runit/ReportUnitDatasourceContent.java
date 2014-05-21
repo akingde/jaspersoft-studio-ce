@@ -19,9 +19,11 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionComposite;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionListener;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
@@ -59,9 +61,17 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 		return "com.jaspersoft.studio.doc.editReportUnitDSContent";
 	}
 
+	public static String[] getExcludedTypes(MResource r) {
+		if (r != null && r.getWsClient() != null) {
+			if (Version.isXMLACoonnectionSupported(r.getWsClient()))
+				return new String[] { ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION };
+		}
+		return null;
+	}
+
 	@Override
 	public Control createContent(Composite parent) {
-		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res, mandatory);
+		datasourceSelectionCmp = new SelectorDatasource().createDatasource(parent, pnode, res, mandatory, getExcludedTypes(res));
 		datasourceSelectionCmp.addDatasourceSelectionListener(this);
 		rebind();
 		return datasourceSelectionCmp;
