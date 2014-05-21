@@ -30,6 +30,7 @@ import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
+import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
@@ -187,9 +188,15 @@ public class ImpDataAdapter extends AImpObject {
 			fname = ((JsonDataAdapter) da).getFileName();
 		else if (da instanceof CsvDataAdapter)
 			fname = ((CsvDataAdapter) da).getFileName();
-		else if (da instanceof XmlDataAdapter)
+		else if (da instanceof XmlDataAdapter) {
+			if (da instanceof RemoteXmlDataAdapter) {
+				String f = ((XmlDataAdapter) da).getFileName();
+				if (f.toLowerCase().startsWith("https://") || f.toLowerCase().startsWith("http://") || f.toLowerCase().startsWith("file:") || f.toLowerCase().startsWith("ftp://")
+						|| f.toLowerCase().startsWith("sftp://"))
+					return null;
+			}
 			fname = ((XmlDataAdapter) da).getFileName();
-		else if (da instanceof XlsDataAdapter)
+		} else if (da instanceof XlsDataAdapter)
 			fname = ((XlsDataAdapter) da).getFileName();
 		else if (da instanceof XlsxDataAdapter)
 			fname = ((XlsxDataAdapter) da).getFileName();

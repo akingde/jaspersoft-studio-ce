@@ -42,16 +42,8 @@ public class RESTv2ExceptionHandler {
 		case 400:
 			if (res.getHeaderString("Content-Type").equals("application/xml"))
 				handleErrorDescriptor(res, monitor, status);
-			else if (res.getHeaderString("Content-Type").contains("xml")) {
-				List<ErrorDescriptor> list = res.readEntity(new GenericType<List<ErrorDescriptor>>() {
-				});
-				if (list != null) {
-					msg = "";
-					for (ErrorDescriptor ed : list)
-						msg += buildMessage(monitor, msg, ed);
-					throw new HttpResponseException(status, msg);
-				}
-			}
+			else if (res.getHeaderString("Content-Type").contains("xml"))
+				handleErrorDescriptorList(res, monitor, status);
 		case 401:
 			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
 		case 403:
@@ -74,13 +66,30 @@ public class RESTv2ExceptionHandler {
 		}
 	}
 
+	protected void handleErrorDescriptorList(Response res, IProgressMonitor monitor, int status) throws HttpResponseException {
+		String msg;
+		List<ErrorDescriptor> list = res.readEntity(new GenericType<List<ErrorDescriptor>>() {
+		});
+		if (list != null) {
+			msg = "";
+			for (ErrorDescriptor ed : list)
+				msg += buildMessage(monitor, msg, ed);
+			throw new HttpResponseException(status, msg);
+		}
+	}
+
 	protected void handleErrorDescriptor(Response res, IProgressMonitor monitor, int status) throws HttpResponseException {
-		ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-		String msg = buildMessage(monitor, "", ed);
-		if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
-			for (String str : ed.getParameters())
-				msg += "\n" + str;
-		throw new HttpResponseException(status, msg);
+		res.bufferEntity();
+		try {
+			ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
+			String msg = buildMessage(monitor, "", ed);
+			if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
+				for (String str : ed.getParameters())
+					msg += "\n" + str;
+			throw new HttpResponseException(status, msg);
+		} catch (Throwable e) {
+			handleErrorDescriptorList(res, monitor, status);
+		}
 	}
 
 	protected String buildMessage(IProgressMonitor monitor, String msg, ErrorDescriptor ed) {
