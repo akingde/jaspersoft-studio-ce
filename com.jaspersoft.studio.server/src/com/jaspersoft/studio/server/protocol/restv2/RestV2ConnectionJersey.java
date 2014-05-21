@@ -145,7 +145,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			tgt = tgt.queryParam("folderUri", rd.getUriString());
 			tgt = tgt.queryParam("recursive", "false");
 			tgt = tgt.queryParam("sortBy", "label");
-			tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
+			tgt = tgt.queryParam("limit", 0);
 
 			Builder req = tgt.request();
 			ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
@@ -267,6 +267,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
+		prepareResource(monitor, rd, inFile);
+
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
 		Response r = null;
@@ -313,6 +315,17 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			rd = doGet(monitor, rd, crl);
 
 		return rd;
+	}
+
+	private void prepareResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
+		if (!rd.getIsNew() && rd.getChildren() != null) {
+			for (ResourceDescriptor r : rd.getChildren()) {
+				if (!r.getIsNew() && r.isDirty()) {
+					addOrModifyResource(monitor, r, null);
+					r.setDirty(false);
+				}
+			}
+		}
 	}
 
 	private ResourceDescriptor doGet(IProgressMonitor monitor, ResourceDescriptor rd, ClientResource<?> crl) throws Exception, ParseException {
@@ -475,7 +488,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		for (String type : f.getFilterTypes())
 			tgt = tgt.queryParam("type", WsTypes.INST().toRestType(type));
 		tgt = tgt.queryParam("sortBy", "label");
-		tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
+		tgt = tgt.queryParam("limit", 0);
 
 		Builder req = tgt.request();
 		ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
@@ -497,7 +510,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		for (String type : callback.getTypes())
 			tgt = tgt.queryParam("type", type);
 		tgt = tgt.queryParam("sortBy", "label");
-		tgt = tgt.queryParam("limit", Integer.toString(Integer.MAX_VALUE));
+		tgt = tgt.queryParam("limit", 0);
 
 		Builder req = tgt.request();
 		ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);

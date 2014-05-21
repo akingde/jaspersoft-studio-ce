@@ -55,6 +55,8 @@ public class Soap2Rest {
 			rd.setIsReference(true);
 		if (rd.getIsReference())
 			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
+		if (!rd.getIsNew() && !rd.isDirty())
+			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
 		ClientResource<?> res = getResource(rc, rd);
 		if (rd.getIsNew())
 			res.setVersion(-1);

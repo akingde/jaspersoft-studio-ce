@@ -40,7 +40,9 @@ public class RESTv2ExceptionHandler {
 		int status = res.getStatus();
 		switch (status) {
 		case 400:
-			if (res.getHeaderString("Content-Type").contains("xml")) {
+			if (res.getHeaderString("Content-Type").equals("application/xml"))
+				handleErrorDescriptor(res, monitor, status);
+			else if (res.getHeaderString("Content-Type").contains("xml")) {
 				List<ErrorDescriptor> list = res.readEntity(new GenericType<List<ErrorDescriptor>>() {
 				});
 				if (list != null) {
@@ -56,14 +58,9 @@ public class RESTv2ExceptionHandler {
 		case 409:
 		case 404:
 		case 500:
-			if (res.getHeaderString("Content-Type").contains("xml")) {
-				ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
-				msg = buildMessage(monitor, "", ed);
-				if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
-					for (String str : ed.getParameters())
-						msg += "\n" + str;
-				throw new HttpResponseException(status, msg);
-			} else if (res.getHeaderString("Content-Type").contains("text/html")) {
+			if (res.getHeaderString("Content-Type").contains("xml"))
+				handleErrorDescriptor(res, monitor, status);
+			else if (res.getHeaderString("Content-Type").contains("text/html")) {
 				System.out.println(res.readEntity(String.class));
 				msg = res.getStatusInfo().getReasonPhrase() + "\n";
 				throw new HttpResponseException(status, msg);
@@ -75,6 +72,15 @@ public class RESTv2ExceptionHandler {
 			msg = res.getStatusInfo().getReasonPhrase() + "\n" + cnt;
 			throw new HttpResponseException(status, msg);
 		}
+	}
+
+	protected void handleErrorDescriptor(Response res, IProgressMonitor monitor, int status) throws HttpResponseException {
+		ErrorDescriptor ed = res.readEntity(ErrorDescriptor.class);
+		String msg = buildMessage(monitor, "", ed);
+		if (!ed.getErrorCode().contains("{0}") && ed.getParameters() != null)
+			for (String str : ed.getParameters())
+				msg += "\n" + str;
+		throw new HttpResponseException(status, msg);
 	}
 
 	protected String buildMessage(IProgressMonitor monitor, String msg, ErrorDescriptor ed) {
