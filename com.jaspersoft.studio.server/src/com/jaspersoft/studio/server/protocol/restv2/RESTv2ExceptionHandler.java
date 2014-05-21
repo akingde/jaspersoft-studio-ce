@@ -42,8 +42,6 @@ public class RESTv2ExceptionHandler {
 		case 400:
 			if (res.getHeaderString("Content-Type").equals("application/xml"))
 				handleErrorDescriptor(res, monitor, status);
-			else if (res.getHeaderString("Content-Type").contains("xml"))
-				handleErrorDescriptorList(res, monitor, status);
 		case 401:
 			throw new HttpResponseException(status, res.getStatusInfo().getReasonPhrase());
 		case 403:
@@ -88,7 +86,8 @@ public class RESTv2ExceptionHandler {
 					msg += "\n" + str;
 			throw new HttpResponseException(status, msg);
 		} catch (Throwable e) {
-			handleErrorDescriptorList(res, monitor, status);
+			if (status == 400)
+				handleErrorDescriptorList(res, monitor, status);
 		}
 	}
 
