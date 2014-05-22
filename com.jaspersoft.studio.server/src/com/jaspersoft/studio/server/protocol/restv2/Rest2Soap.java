@@ -28,6 +28,8 @@ import com.jaspersoft.jasperserver.dto.resources.ClientMondrianXmlaDefinition;
 import com.jaspersoft.jasperserver.dto.resources.ClientOlapUnit;
 import com.jaspersoft.jasperserver.dto.resources.ClientProperty;
 import com.jaspersoft.jasperserver.dto.resources.ClientQuery;
+import com.jaspersoft.jasperserver.dto.resources.ClientReference;
+import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableDataSource;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableFile;
 import com.jaspersoft.jasperserver.dto.resources.ClientReferenceableInputControl;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
@@ -64,6 +66,17 @@ public class Rest2Soap {
 			rd.setReferenceUri(cr.getUri());
 		}
 		return rd;
+	}
+
+	public static ResourceDescriptor getDataSource(ARestV2Connection rc, ClientReferenceableDataSource crds) throws ParseException {
+		if (crds instanceof ClientReference) {
+			ResourceDescriptor rd = new ResourceDescriptor();
+			rd.setReferenceUri(crds.getUri());
+			rd.setIsReference(true);
+			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+			return rd;
+		}
+		return getRDContainer(rc, (ClientResource<?>) crds);
 	}
 
 	public static ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
@@ -132,14 +145,14 @@ public class Rest2Soap {
 
 	private static void getAdhocDataView(ARestV2Connection rc, ClientAdhocDataView cr, ResourceDescriptor rd) throws ParseException {
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
 	}
 
 	private static void getQuery(ARestV2Connection rc, ClientQuery cr, ResourceDescriptor rd) throws ParseException {
 		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, cr.getLanguage());
 		rd.setSql(cr.getValue());
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
 	}
 
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) throws ParseException {
@@ -156,14 +169,14 @@ public class Rest2Soap {
 
 	private static void getMondrianConnection(ARestV2Connection rc, ClientMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
 		if (cr.getSchema() != null)
 			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
 	}
 
 	private static void getSecureMondrianConnection(ARestV2Connection rc, ClientSecureMondrianConnection cr, ResourceDescriptor rd) throws ParseException {
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
 		if (cr.getSchema() != null)
 			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getSchema()));
 		if (cr.getAccessGrants() != null) {
@@ -279,7 +292,7 @@ public class Rest2Soap {
 		rd.getChildren().clear();
 
 		if (cr.getDataSource() != null)
-			rd.getChildren().add(getRDContainer(rc, (ClientResource<?>) cr.getDataSource()));
+			rd.getChildren().add(getDataSource(rc, cr.getDataSource()));
 		if (cr.getQuery() != null)
 			rd.getChildren().add(getRDContainer(rc, (ClientQuery) cr.getQuery()));
 		if (cr.getJrxml() != null) {
