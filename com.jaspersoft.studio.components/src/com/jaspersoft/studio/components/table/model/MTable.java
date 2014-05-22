@@ -369,6 +369,7 @@ public class MTable extends MGraphicElement implements IContainer,
 		properties.add(StandardBaseColumn.PROPERTY_COLUMN_FOOTER);
 		properties.add(StandardBaseColumn.PROPERTY_GROUP_HEADERS);
 		properties.add(StandardBaseColumn.PROPERTY_GROUP_FOOTERS);
+		properties.add(StandardTable.PROPERTY_COLUMNS);
 		return properties;
 	}
 

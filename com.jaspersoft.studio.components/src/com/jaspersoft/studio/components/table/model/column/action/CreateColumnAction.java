@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.AMCollection;
+import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.components.table.model.column.command.RefreshColumnNamesCommand;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
@@ -58,6 +59,8 @@ public abstract class CreateColumnAction extends ACreateAction {
 					return (MColumn)object.getModel();
 				} else if (object.getModel() instanceof AMCollection){
 					return ((AMCollection)object.getModel()).getParent();
+				} else if (object.getModel() instanceof MTable){
+					return (ANode)object.getModel();
 				}
 			}
 		}
