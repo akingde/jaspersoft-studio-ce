@@ -40,7 +40,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -196,7 +195,8 @@ public class DatasetReader {
 			// This exception should occur only when
 			// a stop on the reading has been invoked.
 		} catch (Exception e) {
-			UIUtils.showError(Messages.DatasetReader_GenericErrorMsg, e);
+			UIUtils.showError(e);
+			// UIUtils.showError(Messages.DatasetReader_GenericErrorMsg, e);
 		} finally {
 			FileUtils.closeStream(is);
 			running = false;

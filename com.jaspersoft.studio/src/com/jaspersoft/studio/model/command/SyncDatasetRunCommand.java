@@ -30,6 +30,8 @@ public class SyncDatasetRunCommand extends Command {
 	@Override
 	public void execute() {
 		try {
+			for (IQueryLanguageChanged exec : SyncDatasetRunParameters.changed)
+				exec.syncDataset(dataset.getValue(), oldLang, newLang);
 			SyncDatasetRunParameters.syncDataset(dataset, oldLang, newLang);
 		} catch (JRException e) {
 			e.printStackTrace();
@@ -39,9 +41,12 @@ public class SyncDatasetRunCommand extends Command {
 	@Override
 	public void undo() {
 		try {
+			for (IQueryLanguageChanged exec : SyncDatasetRunParameters.changed)
+				exec.syncDataset(dataset.getValue(), newLang, oldLang);
 			SyncDatasetRunParameters.syncDataset(dataset, newLang, oldLang);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
 	}
+
 }

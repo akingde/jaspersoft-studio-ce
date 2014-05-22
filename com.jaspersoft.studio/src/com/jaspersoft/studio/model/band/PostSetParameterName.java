@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
@@ -40,10 +35,9 @@ import com.jaspersoft.studio.property.IPostSetValue;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 
 /**
- * Class used when a property is changed. Check if the changed property is a name 
- * of a dataset parameter and in this case search all the associated dataset run
- * and check if they are using that parameter. If it is so then also the parameter 
- * name into the dataset run is changed
+ * Class used when a property is changed. Check if the changed property is a name of a dataset parameter and in this
+ * case search all the associated dataset run and check if they are using that parameter. If it is so then also the
+ * parameter name into the dataset run is changed
  * 
  * @author Orlandin Marco
  */
@@ -52,77 +46,80 @@ public class PostSetParameterName implements IPostSetValue {
 	/**
 	 * Command to change a dataset parameter name, support the undo operation
 	 */
-	private class SetParameterName extends Command{
-		
+	private class SetParameterName extends Command {
+
 		/**
 		 * Dataset run with the parameter that will be changed
 		 */
 		private MDatasetRun element;
-		
+
 		/**
 		 * Name of the dataset parameter before the change, stored to allow the undo operation
 		 */
 		private String oldName;
-		
+
 		/**
 		 * The name that will be assigned to the dataset parameter
 		 */
 		private String newName;
-		
+
 		/**
-		 * Boolean flag used to know if the MDatasetRun element has inside
-		 * the parameter that has been renamed. This is used for the undo operation
+		 * Boolean flag used to know if the MDatasetRun element has inside the parameter that has been renamed. This is used
+		 * for the undo operation
 		 */
 		private boolean parameterFound = false;
-		
+
 		/**
 		 * Create the command
 		 * 
-		 * @param element the dataset run that can contains the parameter. If the dataset dosen't
-		 * contains the searched parameter then the command and its undo does nothing
-		 * @param oldName The name of the parameter renamed
-		 * @param newName The new name of the parameter
+		 * @param element
+		 *          the dataset run that can contains the parameter. If the dataset dosen't contains the searched parameter
+		 *          then the command and its undo does nothing
+		 * @param oldName
+		 *          The name of the parameter renamed
+		 * @param newName
+		 *          The new name of the parameter
 		 */
-		public SetParameterName(MDatasetRun element, String oldName, String newName){
+		public SetParameterName(MDatasetRun element, String oldName, String newName) {
 			this.element = element;
 			this.oldName = oldName;
 			this.newName = newName;
 		}
-		
+
 		@Override
 		public void execute() {
-			ParameterDTO parameters = (ParameterDTO)element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+			ParameterDTO parameters = (ParameterDTO) element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
 			List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(parameters.getValue()));
-			for(JRDatasetParameter param : lst){
-				if (param.getName() != null && param.getName().equals(oldName)){
+			for (JRDatasetParameter param : lst) {
+				if (param.getName() != null && param.getName().equals(oldName)) {
 					try {
-						//The parameter is removed and readded to have JR to update its internal structure (list and map)
+						// The parameter is removed and readded to have JR to update its internal structure (list and map)
 						element.getValue().removeParameter(param);
-						((JRDesignDatasetParameter)param).setName(newName);
+						((JRDesignDatasetParameter) param).setName(newName);
 						element.getValue().addParameter(param);
 						parameterFound = true;
 					} catch (JRException e) {
 						e.printStackTrace();
 					}
-					//element.setPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS, parameters);
-					//The parameter was found, i mark the flag to support the undo and exit the cycle when the parameter is found
-					//since the aren't two parameters with the same name
+					// element.setPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS, parameters);
+					// The parameter was found, i mark the flag to support the undo and exit the cycle when the parameter is found
+					// since the aren't two parameters with the same name
 					break;
 				}
 			}
 		}
-		
+
 		@Override
 		public void undo() {
 			if (parameterFound) {
-				ParameterDTO parameters = (ParameterDTO)element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+				ParameterDTO parameters = (ParameterDTO) element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
 				List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(parameters.getValue()));
-				for(JRDatasetParameter param : lst){
-					if (param.getName() != null && param.getName().equals(newName)){
+				for (JRDatasetParameter param : lst) {
+					if (param.getName() != null && param.getName().equals(newName)) {
 						try {
-							//The parameter is removed and readded to have JR to update its internal structure (list and map)
+							// The parameter is removed and readded to have JR to update its internal structure (list and map)
 							element.getValue().removeParameter(param);
-							((JRDesignDatasetParameter)param).setName(oldName);
+							((JRDesignDatasetParameter) param).setName(oldName);
 							element.getValue().addParameter(param);
 						} catch (JRException e) {
 							e.printStackTrace();
@@ -134,27 +131,31 @@ public class PostSetParameterName implements IPostSetValue {
 			}
 		}
 	}
-	
+
 	/**
-	 * Get a list of all the datasets run used by every element, and if one or more of this are references to the dataset 
-	 * with the changed parameter search create a command that search inside them the reference to the parameter and if 
+	 * Get a list of all the datasets run used by every element, and if one or more of this are references to the dataset
+	 * with the changed parameter search create a command that search inside them the reference to the parameter and if
 	 * found rename it
 	 */
 	@Override
 	public Command postSetValue(IPropertySource target, Object prop, Object newValue, Object oldValue) {
 		JSSCompoundCommand c = new JSSCompoundCommand(null);
-		//Check if the updated element is a dataset and the updated property is the name
+		// Check if the updated element is a dataset and the updated property is the name
 		if (target instanceof MParameter && prop.equals(JRDesignParameter.PROPERTY_NAME)) {
-			//Get all the references to this dataset
-			ANode parentElement = ((MParameter)target).getParent().getParent();
-			c.setReferenceNodeIfNull(parentElement);
-			if (parentElement instanceof MDataset){
-				MDataset parentDataset = (MDataset)parentElement;
-				List<IDatasetContainer> references = DeleteDatasetCommand.getDatasetUsage(parentDataset.getRoot().getChildren(), parentDataset.getPropertyActualValue(JRDesignDataset.PROPERTY_NAME).toString());
-				for(IDatasetContainer datasetRun : references){
-					List<MDatasetRun> datasetList = datasetRun.getDatasetRunList();
-					for (MDatasetRun actualDataset : datasetList){
-						c.add(new SetParameterName(actualDataset, oldValue.toString(), newValue.toString()));
+			MParameter mprm = (MParameter) target;
+			if (mprm.getParent() != null && mprm.getParent().getParent() != null) {
+				// Get all the references to this dataset
+				ANode parentElement = mprm.getParent().getParent();
+				c.setReferenceNodeIfNull(parentElement);
+				if (parentElement instanceof MDataset) {
+					MDataset parentDataset = (MDataset) parentElement;
+					List<IDatasetContainer> references = DeleteDatasetCommand.getDatasetUsage(parentDataset.getRoot()
+							.getChildren(), parentDataset.getPropertyActualValue(JRDesignDataset.PROPERTY_NAME).toString());
+					for (IDatasetContainer datasetRun : references) {
+						List<MDatasetRun> datasetList = datasetRun.getDatasetRunList();
+						for (MDatasetRun actualDataset : datasetList) {
+							c.add(new SetParameterName(actualDataset, oldValue.toString(), newValue.toString()));
+						}
 					}
 				}
 			}

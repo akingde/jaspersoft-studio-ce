@@ -1,7 +1,9 @@
 package com.jaspersoft.studio.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
@@ -18,12 +20,45 @@ import net.sf.jasperreports.engine.util.JRQueryExecuterUtils;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.command.IQueryLanguageChanged;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SyncDatasetRunParameters {
+	private static Map<String, Object[]> bipMap = new HashMap<String, Object[]>();
+
+	public static void addMoreParameters(String lang, Object[] params) {
+		bipMap.put(lang, params);
+	}
+
+	public static List<IQueryLanguageChanged> changed = new ArrayList<IQueryLanguageChanged>();
+
+	public static void add(IQueryLanguageChanged executer) {
+		if (!changed.contains(executer))
+			changed.add(executer);
+	}
+
+	public static Object[] getBuiltInParameters(JasperReportsConfiguration jConf, String mLang) throws JRException {
+		JRQueryExecuterUtils qeUtils = JRQueryExecuterUtils.getInstance(jConf);
+		QueryExecuterFactory qef = qeUtils.getExecuterFactory(mLang);
+		if (qef != null) {
+			Object[] prms = qef.getBuiltinParameters();
+			if (bipMap.containsKey(mLang)) {
+				Object[] params = bipMap.get(mLang);
+				if (prms == null || prms.length == 0)
+					return params;
+
+				Object[] tmp = new Object[prms.length + params.length];
+				System.arraycopy(prms, 0, tmp, 0, prms.length);
+				System.arraycopy(params, 0, tmp, prms.length, params.length);
+				return tmp;
+			}
+			return prms;
+		}
+		return null;
+	}
 
 	public static void syncDatasetRun(MDatasetRun mDsRun, String oldName, String newName) throws JRException {
 		JasperDesign jd = mDsRun.getJasperDesign();
@@ -33,10 +68,8 @@ public class SyncDatasetRunParameters {
 			if (jConf == null)
 				return;
 			String mDsName = jd.getMainDataset().getName();
-			JRQueryExecuterUtils qeUtils = JRQueryExecuterUtils.getInstance(jConf);
-			QueryExecuterFactory qef = qeUtils.getExecuterFactory(mLang);
-			Object[] bprms = qef.getBuiltinParameters();
-			if (qef != null && bprms != null) {
+			Object[] bprms = getBuiltInParameters(jConf, mLang);
+			if (bprms != null) {
 				if (oldName != null && !mDsName.equals(newName))
 					for (JRDataset ds : jd.getDatasetsList())
 						if (ds.getName().equals(oldName) && ds.getQuery().getLanguage().equals(mLang)) {
@@ -54,7 +87,7 @@ public class SyncDatasetRunParameters {
 	}
 
 	public static void syncDataset(MDataset mDsRun, String oldLang, String newLang) throws JRException {
-		MReport mrep = (MReport) mDsRun.getRoot();
+		MReport mrep = (MReport) mDsRun.getMreport();
 		if (mrep == null)
 			return;
 		JasperDesign jd = mDsRun.getJasperDesign();
@@ -65,22 +98,24 @@ public class SyncDatasetRunParameters {
 			JasperReportsConfiguration jConf = mDsRun.getJasperConfiguration();
 			if (jConf == null)
 				return;
-			JRQueryExecuterUtils qeUtils = JRQueryExecuterUtils.getInstance(jConf);
-			QueryExecuterFactory qef = qeUtils.getExecuterFactory(mLang);
-			Object[] bprms = qef.getBuiltinParameters();
-			if (qef != null && bprms != null) {
-				if (subDS == jd.getMainDesignDataset() || mDsName.equals(subDS.getName())) {
+			if (subDS == jd.getMainDesignDataset() || mDsName.equals(subDS.getName())) {
+				Object[] bprms = getBuiltInParameters(jConf, oldLang);
+				if (bprms != null)
 					for (JRDataset ds : jd.getDatasetsList()) {
-						if (ds.getName().equals(oldLang))
+						if (ds.getQuery() != null && ds.getQuery().getLanguage().equals(oldLang))
 							for (JRDesignDatasetRun dr : getDatasetRun(mrep, ds))
 								cleanDatasetRun(bprms, dr);
 					}
+				bprms = getBuiltInParameters(jConf, newLang);
+				if (bprms != null)
 					for (JRDataset ds : jd.getDatasetsList()) {
-						if (ds.getName().equals(newLang))
+						if (ds.getQuery() != null && ds.getQuery().getLanguage().equals(newLang))
 							for (JRDesignDatasetRun dr : getDatasetRun(mrep, ds))
 								setupDatasetRun(bprms, dr);
 					}
-				} else {
+			} else {
+				Object[] bprms = getBuiltInParameters(jConf, mLang);
+				if (bprms != null) {
 					if (oldLang.equals(mLang)) {
 						for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS))
 							cleanDatasetRun(bprms, dr);
@@ -94,11 +129,31 @@ public class SyncDatasetRunParameters {
 		}
 	}
 
+	private static void prepareDatasets(JasperDesign jd) {
+		for (IQueryLanguageChanged qlc : changed) {
+			prepareDataSet(jd.getMainDesignDataset(), qlc);
+			for (JRDataset ds : jd.getDatasetsList())
+				prepareDataSet((JRDesignDataset) ds, qlc);
+		}
+	}
+
+	protected static void prepareDataSet(JRDesignDataset ds, IQueryLanguageChanged qlc) {
+		try {
+			if (ds.getQuery() != null)
+				qlc.syncDataset(ds, null, ds.getQuery().getLanguage());
+		} catch (JRException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void sync(MReport mrep) {
 		try {
 			JasperReportsConfiguration jConf = mrep.getJasperConfiguration();
 			JRQueryExecuterUtils qeUtil = JRQueryExecuterUtils.getInstance(jConf);
 			JasperDesign jd = mrep.getValue();
+
+			prepareDatasets(jd);
+
 			if (jd != null && jd.getMainDataset() != null) {
 				JRQuery query = jd.getMainDataset().getQuery();
 				if (query != null && query.getLanguage() != null) {
@@ -107,9 +162,8 @@ public class SyncDatasetRunParameters {
 						if (subds.getQuery() != null && mlang.equals(subds.getQuery().getLanguage())) {
 							try {
 								// find query executer, look if there are built-in parameters
-								QueryExecuterFactory qef = qeUtil.getExecuterFactory(mlang);
-								Object[] bprms = qef.getBuiltinParameters();
-								if (qef != null && bprms != null) {
+								Object[] bprms = getBuiltInParameters(jConf, mlang);
+								if (bprms != null) {
 									// find all datasetrun that point to subdataset
 									for (JRDesignDatasetRun dr : getDatasetRun(mrep, subds))
 										setupDatasetRun(bprms, dr);

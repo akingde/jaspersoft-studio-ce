@@ -34,7 +34,8 @@ public class PostDatasetObjectSet implements IPostSetValue {
 			return new RenameDatasetObjectNameCommand((MField) target, (String) oldValue);
 		if (target instanceof MVariable && prop.equals(JRDesignVariable.PROPERTY_NAME))
 			return new RenameDatasetObjectNameCommand((MVariable) target, (String) oldValue);
-		if (target instanceof MParameter && prop.equals(JRDesignParameter.PROPERTY_NAME))
+		if (target instanceof MParameter && prop.equals(JRDesignParameter.PROPERTY_NAME)
+				&& ((MParameter) target).getParent() != null)
 			return new RenameDatasetObjectNameCommand((MParameter) target, (String) oldValue);
 		if (target instanceof MDataset && prop.equals(JRDesignDataset.PROPERTY_QUERY))
 			return new SyncDatasetRunCommand((MDataset) target, (MQuery) newValue, (MQuery) oldValue);
