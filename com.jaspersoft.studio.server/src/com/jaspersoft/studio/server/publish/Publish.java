@@ -30,6 +30,7 @@ import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -101,6 +102,7 @@ public class Publish {
 		PublishUtil.savePreferences(ifile, resources);
 
 		if (mrunit != null && !jrxml.getValue().getIsReference()) {
+			ResourceDescriptor oldRU = mrunit.getValue();
 			ResourceDescriptor r = mrunit.getValue();
 			try {
 				r = mrunit.getWsClient().get(monitor, mrunit.getValue(), null);
@@ -110,7 +112,28 @@ public class Publish {
 					throw e;
 			} catch (Exception e) {
 			}
+			// setup datasource
+			ResourceDescriptor ds = null;
+			for (ResourceDescriptor rd : oldRU.getChildren()) {
+				if (SelectorDatasource.isDatasource(rd)) {
+					ds = rd;
+					ds.setDirty(false);
+					break;
+				}
+			}
+			ResourceDescriptor newDs = null;
+			for (ResourceDescriptor rd : r.getChildren()) {
+				if (SelectorDatasource.isDatasource(rd)) {
+					newDs = rd;
+					break;
+				}
+			}
+			if (newDs != null)
+				r.getChildren().remove(newDs);
+			if (ds != null)
+				r.getChildren().add(0, ds);
 
+			// setup main jrxml
 			boolean isMain = true;
 			for (ResourceDescriptor rd : r.getChildren()) {
 				if (rd.getUriString() == null)

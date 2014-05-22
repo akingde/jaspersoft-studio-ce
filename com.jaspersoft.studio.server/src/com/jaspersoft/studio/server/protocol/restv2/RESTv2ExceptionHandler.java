@@ -86,8 +86,12 @@ public class RESTv2ExceptionHandler {
 					msg += "\n" + str;
 			throw new HttpResponseException(status, msg);
 		} catch (Throwable e) {
-			if (status == 400)
+			if (e instanceof HttpResponseException)
+				throw (HttpResponseException) e;
+			else if (status == 400)
 				handleErrorDescriptorList(res, monitor, status);
+			else
+				throw new RuntimeException(e);
 		}
 	}
 
