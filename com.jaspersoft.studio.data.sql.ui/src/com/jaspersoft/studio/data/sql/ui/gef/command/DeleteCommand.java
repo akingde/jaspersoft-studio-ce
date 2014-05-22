@@ -102,8 +102,11 @@ public class DeleteCommand extends Command {
 					((MOrderBy) n).removeChildren(toRemove);
 				}
 				for (ANode rem : toRemove) {
-					mapDel.put(rem, rem.getParent());
-					mapDelIndex.put(rem, rem.getParent().getChildren().indexOf(rem));
+					ANode p = rem.getParent();
+					if (p == null)
+						continue;
+					mapDel.put(rem, p);
+					mapDelIndex.put(rem, p.getChildren().indexOf(rem));
 				}
 			}
 	}

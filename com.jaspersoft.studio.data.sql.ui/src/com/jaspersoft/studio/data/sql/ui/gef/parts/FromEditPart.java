@@ -181,6 +181,7 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 				}
 			}.getObject(), Boolean.TRUE)) {
 				getFigure().setLayoutManager(new FromLayout());
+				isRunning = false;
 			} else {
 				getFigure().setLayoutManager(new GraphLayoutManager(this));
 				UIUtils.getDisplay().asyncExec(new Runnable() {

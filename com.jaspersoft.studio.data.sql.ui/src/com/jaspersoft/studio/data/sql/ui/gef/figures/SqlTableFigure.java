@@ -47,7 +47,7 @@ public class SqlTableFigure extends Figure {
 
 	public SqlTableFigure(String name) {
 		ToolbarLayout layout = new ToolbarLayout();
-		layout.setSpacing(3);
+		layout.setSpacing(5);
 		setLayoutManager(layout);
 		setBorder(border);
 		setBackgroundColor(classColor);
