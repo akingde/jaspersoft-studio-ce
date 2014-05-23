@@ -182,8 +182,9 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 
 		getActionRegistry().registerAction(new ZoomInAction(zoomManager));
 		getActionRegistry().registerAction(new ZoomOutAction(zoomManager));
+		getActionRegistry().registerAction(new ZoomActualAction(zoomManager));
+		
 		graphicalViewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-
 		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}
 

@@ -15,8 +15,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.eclipse.JasperReportsPlugin;
 import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
+import net.sf.jasperreports.eclipse.viewer.action.ZoomActualSizeAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomInAction;
 import net.sf.jasperreports.eclipse.viewer.action.ZoomOutAction;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -29,7 +29,6 @@ import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
@@ -41,8 +40,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
@@ -74,6 +71,21 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunnable, IParametrable, IRunReport {
 
+	/**
+	 * Zoom in action
+	 */
+	private AReportAction zoomInAction = null;
+
+	/**
+	 * Zoom out action
+	 */
+	private AReportAction zoomOutAction = null;
+
+	/**
+	 * the zoom to 100% action
+	 */
+	private AReportAction zoomActualAction = null;
+
 	public PreviewContainer() {
 		super(true);
 	}
@@ -87,7 +99,40 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-
+	
+	/**
+	 * Retrieve the action from the contribution items. If the action were already retrieved 
+	 * it dosen't do nothing
+	 */
+	private void setActions(){
+		for(IContributionItem item : topToolBarManager.getContributions()){
+			if (zoomInAction != null && zoomOutAction != null && zoomActualAction != null) return;
+				if (ZoomInAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
+				zoomInAction = (AReportAction)((ActionContributionItem)item).getAction();
+			} else if (ZoomOutAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
+				zoomOutAction = (AReportAction)((ActionContributionItem)item).getAction();
+			} else if (ZoomActualSizeAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
+				zoomActualAction = (AReportAction)((ActionContributionItem)item).getAction();
+			}
+		}
+	}
+	
+	public AReportAction getZoomInAction(){
+		setActions();
+		return zoomInAction;
+	}
+	
+	public AReportAction getZoomOutAction(){
+		setActions();
+		return zoomOutAction;
+	}
+	
+	public AReportAction getZoomActualAction(){
+		setActions();
+		return zoomActualAction;
+	}
+	
+	
 	@Override
 	protected void loadJRPrint(IEditorInput input) throws PartInitException {
 		setJasperPrint(null, null);
@@ -141,120 +186,12 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private LeftToolBarManager leftToolbar;
 
-	//Code for the zoom with the mouse wheel into the report preview
-	
-	/**
-	 * Display where the filter for the mouse wheel was added, used to remove
-	 * the filter on the dispose
-	 */
-	private Display actualDisplay;
-	
-	/**
-	 * Flag used to know when this editor is visible and avoid to call the listener
-	 * when it's not
-	 */
-	private boolean visilbe = false;
-	
-	/**
-	 * Return if this editor is visible
-	 * 
-	 * @return true if it's visible, false otherwise
-	 */
-	public boolean isVisible(){
-		return visilbe;
-	}
-	
-	/**
-	 * Set the editor visible, it's only a flag that is 
-	 * useful into a context of a multi page editor
-	 * 
-	 * @param visible true if it is visible, false otherwise
-	 */
-	public void setVisible(boolean visible){
-		this.visilbe = visible;
-	}
-	
-	/**
-	 * Return the hotkey used with the mousewheel to request a zoom
-	 * operation
-	 * 
-	 * @return SWT.command is the os is mac, SWT.ctrl otherwise
-	 */
-	private int getOsDependantKey(){
-		if (Util.isMac()) return SWT.COMMAND;
-		else return SWT.CTRL;
-	}
-	
-	/**
-	 * Listener to execute the zoom in or zoomout operation when requested
-	 */
-	private Listener mouseWheelListener = new Listener() {
-			
-		/**
-		 * Zoom in action
-		 */
-			private AReportAction zoomInAction = null;
-			
-			/**
-			 * Zoom out action
-			 */
-			private AReportAction zoomOutAction = null;
-			
-			/**
-			 * Since the action is triggered more times (once for every control) the trigger
-			 * time is used to repeat many times and actions that was actually requested once. So
-			 * from the action with the same trigger time only one is executed. (it would me more
-			 * correct consider a time interval, but essentially the trigger is so fast that they
-			 * have the same trigger time).
-			 */
-			private int lastTime = -1;
-			
-			/**
-			 * Retrieve the action from the contribution items. If the action were already retreived 
-			 * it dosen't do nothingh
-			 */
-			private void setActions(){
-				for(IContributionItem item : topToolBarManager.getContributions()){
-					if (zoomInAction != null && zoomOutAction != null) return;
- 					if (ZoomInAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
-						zoomInAction = (AReportAction)((ActionContributionItem)item).getAction();
-					} else if (ZoomOutAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
-						zoomOutAction = (AReportAction)((ActionContributionItem)item).getAction();
-					}
-				}
-			}
-			
-			/**
-			 * Execute the zoomin action if they can be retrieved, if the preview page is visible and
-			 * if the executed action is enabled, otherwise it dosen't do nothing
-			 * 
-			 * @param event
-			 */
-			@Override
-			public void handleEvent(Event event) {			
-				if (isVisible() && JasperReportsPlugin.isPressed(getOsDependantKey()) && event.time != lastTime){
-					setActions();
-					lastTime = event.time;
-					if (event.character == '+' && zoomInAction != null && zoomInAction.isActionEnabled()){
-						zoomInAction.run();
-					} else if (event.character == '-' && zoomOutAction != null && zoomOutAction.isActionEnabled()){
-						zoomOutAction.run();
-					} else if (event.count > 0 && zoomInAction != null && zoomInAction.isActionEnabled()){
-						zoomInAction.run();
-					} else if (event.count < 0 && zoomOutAction != null && zoomOutAction.isActionEnabled()){
-						zoomOutAction.run();
-					}
-				}
-			}
-	};
 	
 	/**
 	 * When disposed the mouse wheel filter is removed
 	 */
 	@Override
 	public void dispose() {
-		actualDisplay.removeFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
-		actualDisplay.removeFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
 		super.dispose();
 	}
 	
@@ -289,11 +226,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		createRight(sashform);
 
 		sashform.setWeights(new int[] { 40, 60 });
-		
-		//Set the mouse wheel listener for the zoom operation
-		actualDisplay = container.getDisplay();
-		actualDisplay.addFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
-		actualDisplay.addFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import net.sf.jasperreports.eclipse.builder.Markers;
 import net.sf.jasperreports.eclipse.builder.jdt.JRErrorHandler;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.viewer.action.AReportAction;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -48,16 +49,20 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -88,6 +93,7 @@ import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -100,6 +106,7 @@ import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.JRXMLUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -189,6 +196,76 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private XMLEditor xmlEditor;
 
 	private JasperReportsConfiguration jrContext;
+	
+	/**
+	 * Listener to execute the zoom in or zoomout operation when requested. It is static becuase
+	 * it is placed on the display, so one get all the events
+	 */
+	private static Listener mouseWheelListener = new Listener() {
+			
+			/**
+			 * Since the action is triggered more times (once for every control) the trigger
+			 * time is used to repeat many times and actions that was actually requested once. So
+			 * from the action with the same trigger time only one is executed. (it would me more
+			 * correct consider a time interval, but essentially the trigger is so fast that they
+			 * have the same trigger time).
+			 */
+			private int lastTime = -1;
+			
+			/**
+			 * Return the hotkey used with the mousewheel to request a zoom
+			 * operation
+			 * 
+			 * @return SWT.command is the os is mac, SWT.ctrl otherwise
+			 */
+			private int getOsDependantKey(){
+				if (Util.isMac()) return SWT.COMMAND;
+				else return SWT.CTRL;
+			}
+			
+			/**
+			 * Execute the zoom in action if they can be retrieved, if the preview page is visible and
+			 * if the executed action is enabled, otherwise it dosen't do nothing
+			 * 
+			 * @param event
+			 */
+			@Override
+			public void handleEvent(Event event) {			
+				if (event.time != lastTime && JasperReportsPlugin.isPressed(getOsDependantKey())){
+					IEditorPart currentEditor = SelectionHelper.getActiveJRXMLEditor();
+					if (currentEditor != null && currentEditor instanceof JrxmlEditor) {
+						JrxmlEditor jrxmlEditor = (JrxmlEditor)currentEditor;
+						if (jrxmlEditor.getActivePage() == PAGE_PREVIEW){
+							lastTime = event.time;
+							PreviewContainer previewEditor = (PreviewContainer)jrxmlEditor.getEditor(PAGE_PREVIEW);
+							AReportAction action = null;
+							if (event.character == '+' || event.character == '=' || event.keyCode == 43){
+								action = previewEditor.getZoomInAction();
+							} else if (event.character == '-' || event.keyCode == 45){
+								action = previewEditor.getZoomOutAction();
+							} else if (event.count > 0){
+								action = previewEditor.getZoomInAction();
+							} else if (event.count < 0){
+								action = previewEditor.getZoomOutAction();
+							} else if (event.character == '0' || event.keyCode == 48){
+								action = previewEditor.getZoomActualAction();
+							}
+							if (action != null && action.isActionEnabled()){
+								action.run();
+							}
+						
+					} else if (jrxmlEditor.getActivePage() == PAGE_DESIGNER && (event.character == '0' || event.keyCode == 48)){
+							IEditorPart editor = ((ReportContainer)jrxmlEditor.getEditor(PAGE_DESIGNER)).getActiveEditor();
+							if (editor instanceof AbstractVisualEditor){
+								IAction action = ((AbstractVisualEditor) editor).getActionRegistry().getAction(ZoomActualAction.ID);
+								if (action != null) action.run();
+							}
+					}
+				}
+			}		
+		}
+	};
+	
 
 	/**
 	 * Creates a multi-page editor example.
@@ -198,8 +275,20 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
 				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 		ExternalStylesManager.initListeners();
-		JasperReportsPlugin.initializeKeyListener();
+		JasperReportsPlugin.initializeKeyListener();	
 	}
+	
+	/**
+	 * Bind some key combination to specific, it remove eventually the old ones to assure to have only 
+	 * on filter
+	 */
+	private void bindActionToKeys(){
+		getContainer().getDisplay().removeFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
+		getContainer().getDisplay().removeFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
+		getContainer().getDisplay().addFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
+		getContainer().getDisplay().addFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
+	}
+	
 
 	/**
 	 * Creates page 1 of the multi-page editor, which allows you to change the font used in page 2.
@@ -271,12 +360,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				public void run() {
 					try {
 						createPage2();
+						bindActionToKeys();
 					} catch (PartInitException e) {
 						UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 					}
 				}
 			});
-
 		} catch (PartInitException e) {
 			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 		} catch (Throwable e) {
@@ -350,6 +439,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void dispose() {
+		//getContainer().getDisplay().removeFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
+		//getContainer().getDisplay().removeFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		setModel(null);
 		if (jrContext != null)
@@ -766,11 +857,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void pageChange(final int newPageIndex) {
-		// Set the visibility flag of the previeweditor
-		if (previewEditor != null) {
-			previewEditor.setVisible(newPageIndex == PAGE_PREVIEW);
-		}
-
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
 			if (activePage == PAGE_DESIGNER) {
 				if (outlinePage != null)

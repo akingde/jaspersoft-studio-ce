@@ -66,6 +66,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
+import com.jaspersoft.studio.editor.ZoomActualAction;
 import com.jaspersoft.studio.editor.action.CustomDeleteAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
@@ -371,6 +372,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		getActionRegistry().registerAction(new ZoomInAction(zoomManager));
 		getActionRegistry().registerAction(new ZoomOutAction(zoomManager));
+		getActionRegistry().registerAction(new  ZoomActualAction(zoomManager));
 		graphicalViewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 
 		// set context menu
@@ -383,8 +385,12 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		JaspersoftStudioPlugin.getDecoratorManager().registerActions(getActionRegistry(), getSelectionActions(),
 				getGraphicalViewer(), this);
 		JaspersoftStudioPlugin.getEditorSettingsManager().registerActions(getActionRegistry(), jrContext);
+		
+
 	}
 
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 

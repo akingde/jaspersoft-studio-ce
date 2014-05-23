@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -358,7 +359,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 				@Override
 				public void run() {
-					selectionContributor.contributeToContextBars(getActionBars(), selection);
+					//selectionContributor.contributeToContextBars(getActionBars(), selection);
+					//ToolbarControlContribution.ContributeToContextBars(getActionBars(), selection);
+					//((IActionBars2) getActionBars()).getCoolBarManager().getItems();
+					((IActionBars2) getActionBars()).getCoolBarManager().update(true);
 				}
 			});
 		}
