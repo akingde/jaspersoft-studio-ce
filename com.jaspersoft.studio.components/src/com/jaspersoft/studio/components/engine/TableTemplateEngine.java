@@ -522,11 +522,12 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
 
 		//Remove the main dataset query
-		((JRDesignQuery)jd.getMainDataset().getQuery()).setText("");
-		JRDesignDataset mainDataset = (JRDesignDataset)jd.getMainDataset();
-		for(JRField field : mainDataset.getFields()){
+		JRDesignDataset mainDataset = jd.getMainDesignDataset();
+
+		((JRDesignQuery) mainDataset.getQuery()).setText(null);
+		((JRDesignQuery) mainDataset.getQuery()).setLanguage(null);
+		for (JRField field : mainDataset.getFields())
 			mainDataset.removeField(field);
-		}
 	}
 
 	

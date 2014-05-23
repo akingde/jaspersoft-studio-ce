@@ -62,27 +62,28 @@ public class SyncDatasetRunParameters {
 
 	public static void syncDatasetRun(MDatasetRun mDsRun, String oldName, String newName) throws JRException {
 		JasperDesign jd = mDsRun.getJasperDesign();
-		if (jd.getMainDataset().getQuery() != null && jd.getMainDataset().getQuery().getLanguage() != null) {
+		if (jd.getMainDataset().getQuery() != null) {
 			String mLang = jd.getMainDataset().getQuery().getLanguage();
 			JasperReportsConfiguration jConf = mDsRun.getJasperConfiguration();
 			if (jConf == null)
 				return;
 			String mDsName = jd.getMainDataset().getName();
-			Object[] bprms = getBuiltInParameters(jConf, mLang);
-			if (bprms != null) {
-				if (oldName != null && !mDsName.equals(newName))
-					for (JRDataset ds : jd.getDatasetsList())
-						if (ds.getName().equals(oldName) && ds.getQuery().getLanguage().equals(mLang)) {
+			if (oldName != null && !mDsName.equals(newName))
+				for (JRDataset ds : jd.getDatasetsList())
+					if (ds.getName().equals(oldName) && (mLang == null || ds.getQuery().getLanguage().equals(mLang))) {
+						Object[] bprms = getBuiltInParameters(jConf, ds.getQuery().getLanguage());
+						if (bprms != null)
 							cleanDatasetRun(bprms, mDsRun.getValue());
-							break;
-						}
-				if (newName != null && !mDsName.equals(newName))
-					for (JRDataset ds : jd.getDatasetsList())
-						if (ds.getName().equals(newName) && ds.getQuery().getLanguage().equals(mLang)) {
+						break;
+					}
+			if (newName != null && !mDsName.equals(newName))
+				for (JRDataset ds : jd.getDatasetsList())
+					if (ds.getName().equals(newName) && (mLang == null || ds.getQuery().getLanguage().equals(mLang))) {
+						Object[] bprms = getBuiltInParameters(jConf, ds.getQuery().getLanguage());
+						if (bprms != null)
 							setupDatasetRun(bprms, mDsRun.getValue());
-							break;
-						}
-			}
+						break;
+					}
 		}
 	}
 
@@ -91,7 +92,7 @@ public class SyncDatasetRunParameters {
 		if (mrep == null)
 			return;
 		JasperDesign jd = mDsRun.getJasperDesign();
-		if (jd.getMainDataset().getQuery() != null && jd.getMainDataset().getQuery().getLanguage() != null) {
+		if (jd.getMainDataset().getQuery() != null) {
 			JRDesignDataset subDS = mDsRun.getValue();
 			String mDsName = jd.getMainDataset().getName();
 			String mLang = jd.getMainDataset().getQuery().getLanguage();
@@ -114,14 +115,17 @@ public class SyncDatasetRunParameters {
 								setupDatasetRun(bprms, dr);
 					}
 			} else {
-				Object[] bprms = getBuiltInParameters(jConf, mLang);
-				if (bprms != null) {
-					if (oldLang.equals(mLang)) {
-						for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS))
+				if (mLang == null || oldLang.equals(mLang)) {
+					for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS)) {
+						Object[] bprms = getBuiltInParameters(jConf, oldLang);
+						if (bprms != null)
 							cleanDatasetRun(bprms, dr);
 					}
-					if (newLang.equals(mLang)) {
-						for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS))
+				}
+				if (mLang == null || newLang.equals(mLang)) {
+					for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS)) {
+						Object[] bprms = getBuiltInParameters(jConf, newLang);
+						if (bprms != null)
 							setupDatasetRun(bprms, dr);
 					}
 				}
@@ -131,16 +135,16 @@ public class SyncDatasetRunParameters {
 
 	private static void prepareDatasets(JasperDesign jd) {
 		for (IQueryLanguageChanged qlc : changed) {
-			prepareDataSet(jd.getMainDesignDataset(), qlc);
+			prepareDataSet(jd, jd.getMainDesignDataset(), qlc);
 			for (JRDataset ds : jd.getDatasetsList())
-				prepareDataSet((JRDesignDataset) ds, qlc);
+				prepareDataSet(jd, (JRDesignDataset) ds, qlc);
 		}
 	}
 
-	protected static void prepareDataSet(JRDesignDataset ds, IQueryLanguageChanged qlc) {
+	protected static void prepareDataSet(JasperDesign jd, JRDesignDataset ds, IQueryLanguageChanged qlc) {
 		try {
 			if (ds.getQuery() != null)
-				qlc.syncDataset(ds, null, ds.getQuery().getLanguage());
+				qlc.syncDataset(jd, ds, null, ds.getQuery().getLanguage());
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
@@ -149,20 +153,22 @@ public class SyncDatasetRunParameters {
 	public static void sync(MReport mrep) {
 		try {
 			JasperReportsConfiguration jConf = mrep.getJasperConfiguration();
-			JRQueryExecuterUtils qeUtil = JRQueryExecuterUtils.getInstance(jConf);
 			JasperDesign jd = mrep.getValue();
 
 			prepareDatasets(jd);
 
 			if (jd != null && jd.getMainDataset() != null) {
 				JRQuery query = jd.getMainDataset().getQuery();
-				if (query != null && query.getLanguage() != null) {
+				if (query != null) {
 					String mlang = query.getLanguage();
+					if (mlang.equals("sql") && Misc.isNullOrEmpty(query.getText())) {
+						mlang = null;
+					}
 					for (JRDataset subds : jd.getDatasetsList())
-						if (subds.getQuery() != null && mlang.equals(subds.getQuery().getLanguage())) {
+						if (subds.getQuery() != null && (mlang == null || mlang.equals(subds.getQuery().getLanguage()))) {
 							try {
 								// find query executer, look if there are built-in parameters
-								Object[] bprms = getBuiltInParameters(jConf, mlang);
+								Object[] bprms = getBuiltInParameters(jConf, subds.getQuery().getLanguage());
 								if (bprms != null) {
 									// find all datasetrun that point to subdataset
 									for (JRDesignDatasetRun dr : getDatasetRun(mrep, subds))
@@ -207,10 +213,9 @@ public class SyncDatasetRunParameters {
 	}
 
 	private static JRDatasetParameter getParameter(JRDesignDatasetRun dr, String name) {
-		for (JRDatasetParameter p : dr.getParameters()) {
+		for (JRDatasetParameter p : dr.getParameters())
 			if (p.getName().equals(name))
 				return p;
-		}
 		return null;
 	}
 

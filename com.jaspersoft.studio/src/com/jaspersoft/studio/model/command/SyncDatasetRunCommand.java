@@ -31,7 +31,7 @@ public class SyncDatasetRunCommand extends Command {
 	public void execute() {
 		try {
 			for (IQueryLanguageChanged exec : SyncDatasetRunParameters.changed)
-				exec.syncDataset(dataset.getValue(), oldLang, newLang);
+				exec.syncDataset(dataset.getJasperDesign(), dataset.getValue(), oldLang, newLang);
 			SyncDatasetRunParameters.syncDataset(dataset, oldLang, newLang);
 		} catch (JRException e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class SyncDatasetRunCommand extends Command {
 	public void undo() {
 		try {
 			for (IQueryLanguageChanged exec : SyncDatasetRunParameters.changed)
-				exec.syncDataset(dataset.getValue(), newLang, oldLang);
+				exec.syncDataset(dataset.getJasperDesign(), dataset.getValue(), newLang, oldLang);
 			SyncDatasetRunParameters.syncDataset(dataset, newLang, oldLang);
 		} catch (JRException e) {
 			e.printStackTrace();
