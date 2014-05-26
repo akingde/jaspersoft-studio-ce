@@ -59,6 +59,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.wb.swt.Keyboard;
 import org.w3c.tools.codec.Base64Decoder;
 import org.w3c.tools.codec.Base64FormatException;
 
@@ -107,22 +108,34 @@ public class SQLQueryDiagram {
 			public boolean keyPressed(KeyEvent event) {
 				if (event.keyCode == SWT.DEL)
 					doDeleteTable();
-				else if ((event.stateMask & SWT.CTRL) != 0) {
-					if (event.keyCode == '=') {
+				else if ((event.stateMask & Keyboard.getCtrlKey()) != 0)
+					switch (event.keyCode) {
+					case SWT.KEYPAD_ADD:
+					case '+':
+					case '=':
 						if (zoomManager.canZoomOut())
 							zoomManager.zoomOut();
-					} else if (event.keyCode == '-') {
+						break;
+					case '-':
+					case SWT.KEYPAD_SUBTRACT:
 						if (zoomManager.canZoomIn())
 							zoomManager.zoomIn();
-					} else if (event.keyCode == '0')
+						break;
+					case '0':
 						zoomManager.setZoom(1);
-					else if (event.keyCode == 'z') {
+						break;
+					case 'z':
 						if (viewer.getEditDomain().getCommandStack().canUndo())
 							viewer.getEditDomain().getCommandStack().undo();
-					} else if (event.keyCode == 'y' || ((event.stateMask & SWT.ALT) != 0 && event.keyCode == 'z')) {
+						break;
+					case 'y':
 						if (viewer.getEditDomain().getCommandStack().canRedo())
 							viewer.getEditDomain().getCommandStack().redo();
+						break;
 					}
+				else if (((event.stateMask & SWT.ALT) != 0 && event.keyCode == 'z')) {
+					if (viewer.getEditDomain().getCommandStack().canRedo())
+						viewer.getEditDomain().getCommandStack().redo();
 				}
 				return super.keyPressed(event);
 			}
@@ -296,6 +309,7 @@ public class SQLQueryDiagram {
 			cc.add(p.getCommand(deleteReq));
 		}
 		viewer.getEditDomain().getCommandStack().execute(cc);
+		designer.refreshQueryText();
 		refreshViewer();
 	}
 
