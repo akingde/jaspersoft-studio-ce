@@ -276,7 +276,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		desc.add(columnSpaceD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				Messages.common_language, ModelUtils.getExpressionLanguages(getJasperConfiguration()), NullEnum.NOTNULL, false);
+				Messages.common_language, ModelUtils.getDefaultReportLanguages(), NullEnum.NOTNULL, false);
 		languageD.setDescription(Messages.MReport_language_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
