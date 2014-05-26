@@ -28,6 +28,7 @@ public class ExpObject implements Comparable<ExpObject>{
 	public static final int TYPE_FIELD = 0;
 	public static final int TYPE_VARIABLE = 1;
 	public static final int TYPE_PARAM = 2;
+	public static final int TYPE_RBKEY = 3;
 
 	private String name = "";
 	private int type = TYPE_FIELD;
@@ -96,6 +97,8 @@ public class ExpObject implements Comparable<ExpObject>{
 			return "$V{" + getName() + "}";
 		if (getType() == TYPE_PARAM)
 			return "$P{" + getName() + "}";
+		if (getType() == TYPE_RBKEY)
+			return "$R{" + getName() + "}";
 		return getName();
 	}
 

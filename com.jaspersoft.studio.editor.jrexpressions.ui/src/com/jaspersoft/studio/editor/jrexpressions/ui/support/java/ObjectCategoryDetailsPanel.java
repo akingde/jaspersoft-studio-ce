@@ -274,6 +274,20 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	            }
 	            categoryDetails.addAll(fieldsList);
 	            break;
+			case RESOURCE_KEYS:
+				hideBuiltinVariables.setEnabled(false);
+				hideBuiltinVariables.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInVariables());
+				hideBuiltinParams.setEnabled(false);
+				hideBuiltinParams.setSelection(!ExpressionEditorSupportUtil.isShowBuiltInParameters());
+	            List<ExpObject> rbKeysList=new ArrayList<ExpObject>();
+	            Object rbKeysListData = selItem.getData();
+	            if(rbKeysListData instanceof List<?>){
+	            	for(String rbk : (List<String>)rbKeysListData){
+	            		rbKeysList.add(new ExpObject(rbk, ExpObject.TYPE_RBKEY, "java.lang.String"));
+	            	}
+	            }
+	            categoryDetails.addAll(rbKeysList);
+				break;
 			case FUNCTION_CATEGORY:
 				List<JRExprFunctionBean> categoryFunctions = FunctionsLibraryUtil.getFunctionsByCategory((String)selItem.getData());
 				Collections.sort(categoryFunctions);

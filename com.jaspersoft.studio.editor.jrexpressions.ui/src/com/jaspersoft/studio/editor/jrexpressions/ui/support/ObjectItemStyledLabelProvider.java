@@ -44,6 +44,8 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 	public static final Styler VARIABLE_STYLER;
 	/** Styler for the fields */
 	public static final Styler FIELD_STYLER;
+	/** Styler for the resource bundle keys */
+	public static final Styler RBKEY_STYLER;
 	/** Styler for the class types */
 	public static final Styler CLASSTYPE_STYLER;
 	
@@ -54,10 +56,12 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 		JFaceResources.getColorRegistry().put("PARAMETER_RED_COLOR", new RGB(190, 39, 39)); //$NON-NLS-1$
 		JFaceResources.getColorRegistry().put("VARIABLE_BLUE_COLOR", new RGB(41, 41, 255)); //$NON-NLS-1$
 		JFaceResources.getColorRegistry().put("FIELD_GREEN_COLOR", new RGB(39, 144, 39)); //$NON-NLS-1$
+		JFaceResources.getColorRegistry().put("RBKEY_GREEN_COLOR", new RGB(102, 46, 153)); //$NON-NLS-1$
 		JFaceResources.getColorRegistry().put("GRAY_CLASS_TYPE", new RGB(143, 143, 143)); //$NON-NLS-1$
 		PARAMETER_STYLER=StyledString.createColorRegistryStyler("PARAMETER_RED_COLOR", null); //$NON-NLS-1$
 		VARIABLE_STYLER=StyledString.createColorRegistryStyler("VARIABLE_BLUE_COLOR", null); //$NON-NLS-1$
 		FIELD_STYLER=StyledString.createColorRegistryStyler("FIELD_GREEN_COLOR", null); //$NON-NLS-1$
+		RBKEY_STYLER=StyledString.createColorRegistryStyler("RBKEY_GREEN_COLOR", null); //$NON-NLS-1$
 		CLASSTYPE_STYLER=StyledString.createColorRegistryStyler("GRAY_CLASS_TYPE", null); //$NON-NLS-1$
 	}
 	
@@ -82,7 +86,12 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 			else if (obj.getType()==ExpObject.TYPE_FIELD){
 				text.append(name);
 				text.append(" Field ", FIELD_STYLER);						 //$NON-NLS-1$
-				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER);					 //$NON-NLS-1$
+				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER); //$NON-NLS-1$
+			}
+			else if (obj.getType()==ExpObject.TYPE_RBKEY){
+				text.append(name);
+				text.append(" Key ", RBKEY_STYLER);						 //$NON-NLS-1$
+				text.append(classType.substring(classType.lastIndexOf(".")+1), CLASSTYPE_STYLER); //$NON-NLS-1$
 			}
 		}
 		else if (element instanceof JRExprFunctionBean){

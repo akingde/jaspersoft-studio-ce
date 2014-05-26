@@ -121,6 +121,7 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 	private ObjectCategoryItem parametersCategoryItem;
 	private ObjectCategoryItem fieldsCategoryItem;
 	private ObjectCategoryItem variablesCategoryItem;
+	private ObjectCategoryItem resourceKeysCategoryItem;	
 	private List<ObjectCategoryItem> rootCategories;
 
 
@@ -382,6 +383,11 @@ public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 				rootCategories.add(fieldsCategoryItem);
 				rootCategories.add(variablesCategoryItem);
 			}
+			
+			// Add resource keys category
+			resourceKeysCategoryItem = new ObjectCategoryItem(Category.RESOURCE_KEYS);
+			resourceKeysCategoryItem.setData(ExpressionContextUtils.getResourceBundleKeys(exprContext));
+			rootCategories.add(resourceKeysCategoryItem);
 
 			int i = 0;
 			for (JRDesignCrosstab crosstab : exprContext.getCrosstabs()) {

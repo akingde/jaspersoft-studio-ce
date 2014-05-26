@@ -41,6 +41,7 @@ public class ObjectCategoryItem {
 	public static final String ICON_FOLDER_FORMULAS = ICON_FOLDER;
 	public static final String ICON_CROSSTAB = "/resources/icons/crosstab-16.png"; //$NON-NLS-1$
 	public static final String ICON_DATASET = "/resources/icons/dataset-16.png"; //$NON-NLS-1$
+	public static final String ICON_FOLDER_RESOURCEKEYS = "/resources/icons/resourcebundles-16-icon.png"; //$NON-NLS-1$
 
 	// Attributes
 	private String displayName = null;
@@ -135,7 +136,8 @@ public class ObjectCategoryItem {
 		CROSSTAB("Crosstab", ICON_CROSSTAB), //$NON-NLS-1$
 		PDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
 		VDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
-		FDATASET("Dataset", ICON_DATASET); //$NON-NLS-1$
+		FDATASET("Dataset", ICON_DATASET), //$NON-NLS-1$
+		RESOURCE_KEYS("Resources", ICON_FOLDER_RESOURCEKEYS); //$NON-NLS-1$
 		
 		private String dislayName;
 		private String iconPath;
