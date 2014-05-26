@@ -51,7 +51,6 @@ public class TableNodeEditPolicy extends GraphicalNodeEditPolicy {
 		SQLQueryDesigner designer = ((TableEditPart) getHost()).getDesigner();
 		if (tep.getModel() == tj.getJoinTable())
 			return null;
-		System.out.println(tep.getModel() + " : " + tj.getJoinTable());
 		return new MoveJoinCommand(tep.getModel(), tj, designer);
 	}
 
@@ -61,6 +60,9 @@ public class TableNodeEditPolicy extends GraphicalNodeEditPolicy {
 	protected Command getReconnectTargetCommand(ReconnectRequest request) {
 		TableJoin tj = ((RelationshipPart) request.getConnectionEditPart()).getModel();
 		TableEditPart tep = (TableEditPart) getHost();
+		if (tep.getModel() == tj.getFromTable())
+			return null;
+
 		SQLQueryDesigner designer = ((TableEditPart) getHost()).getDesigner();
 		return new MoveJoinCommand(tj, tep.getModel(), designer);
 	}
