@@ -48,10 +48,9 @@
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86}/jaspersoftstudio" />
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.win32.x86}/${productRootFolder}" />
-		<copy todir="${dirlocation.win32.x86}/${productRootFolder}" >  
-		    <fileset dir="${basedir}/rootfiles/license">  
-		        <include name="${basedir}/license/license-text-files/**"/>
-		    </fileset>
+		<mkdir dir="${dirlocation.win32.x86}/${productRootFolder}/license-text-files"/>
+		<copy todir="${dirlocation.win32.x86}/${productRootFolder}/license-text-files" >  
+		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
 		</copy>
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
@@ -80,11 +79,10 @@
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.win32.x86_64}/${productRootFolder}" />
-		<copy todir="${dirlocation.win32.x86_64}/${productRootFolder}" >  
-		    <fileset dir="${basedir}/rootfiles/license">  
-		        <include name="${basedir}/license/license-text-files/**"/>
-		    </fileset>
-		</copy>		
+		<mkdir dir="${dirlocation.win32.x86_64}/${productRootFolder}/license-text-files"/>
+		<copy todir="${dirlocation.win32.x86_64}/${productRootFolder}/license-text-files" >  
+		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
+		</copy>	
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller64.nsi">
@@ -112,10 +110,9 @@
 		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.linux.x86}/${productRootFolder}" />
-		<copy todir="${dirlocation.linux.x86}/${productRootFolder}" >  
-		    <fileset dir="${basedir}/rootfiles/license">  
-		        <include name="${basedir}/license/license-text-files/**"/>
-		    </fileset>
+		<mkdir dir="${dirlocation.linux.x86}/${productRootFolder}/license-text-files"/>
+		<copy todir="${dirlocation.linux.x86}/${productRootFolder}/license-text-files" >  
+		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
 		</copy>				
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
@@ -159,11 +156,10 @@
 		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
-		<copy todir="${dirlocation.linux.x86_64}/${productRootFolder}" >  
-		    <fileset dir="${basedir}/rootfiles/license">  
-		        <include name="${basedir}/license/license-text-files/**"/>
-		    </fileset>
-		</copy>				
+		<mkdir dir="${dirlocation.linux.x86_64}/${productRootFolder}/license-text-files"/>
+		<copy todir="${dirlocation.linux.x86_64}/${productRootFolder}/license-text-files" >  
+		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
+		</copy>					
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
 		<!-- rename the folder -->
@@ -201,11 +197,10 @@
 
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
-		<copy todir="${dirlocation.mac.x86_64}/${productRootFolder}" >  
-		    <fileset dir="${basedir}/rootfiles/license">  
-		        <include name="${basedir}/license/license-text-files/**"/>
-		    </fileset>
-		</copy>
+		<mkdir dir="${dirlocation.mac.x86_64}/${productRootFolder}/license-text-files"/>
+		<copy todir="${dirlocation.mac.x86_64}/${productRootFolder}/license-text-files" >  
+		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
+		</copy>		
 		
 		<zip destfile="${mac.x86_64.zipfile}">
 			<fileset dir="${dirlocation.mac.x86_64}"/>
