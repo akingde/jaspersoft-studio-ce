@@ -17,10 +17,12 @@ package com.jaspersoft.studio.editor.style;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.MessageFormat;
 
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
@@ -40,6 +42,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.style.editpolicy.ElementEditPolicy;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.text.MStaticText;
@@ -54,6 +57,10 @@ public class StyleEditPart extends FigureEditPart {
 	private JRDesignImage imageE;
 	private MImage imageModel;
 	private GridData gd;
+	
+	public StyleEditPart() {
+		super();
+	}
 
 	@Override
 	protected IFigure createFigure() {
@@ -74,7 +81,7 @@ public class StyleEditPart extends FigureEditPart {
 		textE.setY(20);
 		textE.setWidth(200);
 		textE.setHeight(100);
-		textE.setText("Static Text for style: " + style.getName());
+		textE.setText(getStylePartText(style.getName()));
 		textE.setStyle(style);
 		textModel.setValue(textE);
 
@@ -113,13 +120,31 @@ public class StyleEditPart extends FigureEditPart {
 		st.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent arg0) {
+				if (JRDesignStyle.PROPERTY_NAME.equals(arg0.getPropertyName())){
+					textE.setText(getStylePartText(arg0.getNewValue() != null ? arg0.getNewValue() : ""));
+				}
 				imageModel.setChangedProperty(true);
 				textModel.setChangedProperty(true);
-				refresh();
+				if (getParent() != null) {
+					refresh();
+				} else {
+					//This edit part was removed, delete the listener for that editpart from the model
+					getModel().getPropertyChangeSupport().removePropertyChangeListener(this);
+				}
 			}
 		});
 		
 		return rf;
+	}
+	
+	/**
+	 * Return the composed string to use as name for the edit part
+	 * 
+	 * @param styleName the name of the style
+	 * @return text to draw inside the style edit part
+	 */
+	private String getStylePartText(Object styleName){
+		return MessageFormat.format(Messages.StyleEditPart_styleTemplatePrefix, new Object[]{styleName});
 	}
 
 	public void setPrefsBorder(IFigure rect) {
