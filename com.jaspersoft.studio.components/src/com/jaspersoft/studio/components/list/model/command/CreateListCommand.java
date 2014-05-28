@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.components.list.model.command.wizard.ListWizard;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
@@ -93,6 +94,31 @@ public class CreateListCommand extends CreateElementCommand {
 	public CreateListCommand(ANode destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
+	}
+	
+	/**
+	 * Check if the source is inside the destination recursively 
+	 * 
+	 * @param dest the destination node
+	 * @param actaulSource the actual source node of the recursion
+	 * @return true if the destination node is the same as the source node or one of its
+	 * children, false otherwise
+	 */
+	private boolean sourceContainsDestination(INode dest, INode actaulSource){
+		if (dest == actaulSource) return true;
+		else {
+			for(INode child : actaulSource.getChildren()){
+				boolean contains = sourceContainsDestination(dest, child);
+				if (contains) return true;
+			}
+		}
+		return false;
+		
+	}
+	
+	@Override
+	public boolean canExecute() {
+		return !sourceContainsDestination(destNode, srcNode) && super.canExecute();
 	}
 
 	/**
