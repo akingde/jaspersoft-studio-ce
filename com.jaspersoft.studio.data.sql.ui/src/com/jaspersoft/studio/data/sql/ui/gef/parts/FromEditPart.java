@@ -107,6 +107,12 @@ public class FromEditPart extends AbstractGraphicalEditPart {
 					return new NoSelectionEditPolicy();
 				return super.createChildEditPolicy(child);
 			}
+
+			@Override
+			protected Command createChangeConstraintCommand(EditPart child,
+					Object constraint) {
+				return createChangeConstraintCommand(null, child, constraint);
+			}
 		});
 	}
 
