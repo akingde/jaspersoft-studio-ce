@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>aggregator</artifactId>
-	<version>5.6.0.final</version>
+	<version>5.6.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
