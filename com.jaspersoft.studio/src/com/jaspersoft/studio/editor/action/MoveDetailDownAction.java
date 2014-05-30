@@ -16,7 +16,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -37,7 +36,7 @@ import com.jaspersoft.studio.model.band.command.ReorderBandCommand;
  * @author Orlandin Marco
  * 
  */
-public class MoveDetailDownAction extends SelectionAction implements IGlobalAction {
+public class MoveDetailDownAction extends SetWorkbenchAction implements IGlobalAction {
 
 	/** The Constant ID. */
 	public static final String ID = "move_detail_down"; //$NON-NLS-1$

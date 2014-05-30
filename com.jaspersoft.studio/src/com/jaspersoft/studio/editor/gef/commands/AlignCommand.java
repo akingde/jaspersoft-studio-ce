@@ -38,9 +38,12 @@ public class AlignCommand extends Command {
 	private int oldX, oldY;
 
 	public AlignCommand(int alignement, EditPart editPart) {
+		this(alignement,(MGraphicElement) editPart.getModel());
+	}
+	
+	public AlignCommand(int alignement, MGraphicElement m){
 		super();
 		this.alignement = alignement;
-		MGraphicElement m = (MGraphicElement) editPart.getModel();
 		jrElement = (JRDesignElement) m.getValue();
 
 		INode n = m.getParent();

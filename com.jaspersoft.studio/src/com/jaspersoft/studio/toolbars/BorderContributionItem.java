@@ -13,24 +13,18 @@
  * Contributors:
  *     Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.action.border;
+package com.jaspersoft.studio.toolbars;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.action.ContributionItem;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -39,17 +33,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
-import com.jaspersoft.studio.editor.toolitems.ISelectionContributionItem;
+import com.jaspersoft.studio.editor.action.border.TemplateBorder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
@@ -65,13 +53,7 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  * @author Orlandin Marco
  *
  */
-public class ATableComboContribution extends ContributionItem implements ISelectionContributionItem, Listener {
-		
-		/**
-		 * The item that will placed in the toolbard
-		 */
-		private ToolItem toolitem;
-		
+public class BorderContributionItem extends CommonToolbarHandler {
 		/**
 		 * The composite that will displayed in the toolbar, it contains a label and the combo
 		 */
@@ -82,44 +64,16 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 */
 		private TableCombo combo;
 
-		/**
-		 * The workbench
-		 */
-		private IWorkbenchPart workbenchPart;
-		
-		/**
-		 * The selected element
-		 */
-		private ISelection selection;
 		
 		/**
 		 * The list of available presets
 		 */
-		private List<TemplateBorder> exampleImages;
+		private static List<TemplateBorder> exampleImages;
 		
 		/**
-		 * The model of the selected element
+		 * Create some presets
 		 */
-		protected List<MGraphicElementLineBox> models = new ArrayList<MGraphicElementLineBox>();
-		
-		/**
-		 * A listener to uniform in the toolbar change done by the property tab
-		 */
-		private ModelListener modelListener = new ModelListener();
-		
-		private class ModelListener implements PropertyChangeListener {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				setCorrectValue();
-			}
-		}
-		
-		/**
-		 * Create the class and some presets
-		 */
-		public ATableComboContribution(){
-			super("BordersTemplateCombo"); //$NON-NLS-1$
+		static{
 			exampleImages = new ArrayList<TemplateBorder>();
 			exampleImages.add(new TemplateBorder(null, LineStyleEnum.SOLID));
 			exampleImages.add(new TemplateBorder(1f, LineStyleEnum.SOLID));
@@ -134,6 +88,21 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			exampleImages.add(new TemplateBorder(4f, LineStyleEnum.DASHED));
 			exampleImages.add(new TemplateBorder(4f, LineStyleEnum.DOTTED));
 			exampleImages.add(new TemplateBorder(4f, LineStyleEnum.DOUBLE));
+		};
+		
+		/**
+		 * A listener to uniform in the toolbar change done by the property tab
+		 */
+		private ModelListener modelListener = new ModelListener();
+		
+		private APropertyNode showedNode = null;
+		
+		private class ModelListener implements PropertyChangeListener {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setCorrectValue();
+			}
 		}
 		
 		/**
@@ -142,11 +111,11 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * image will be used
 		 */
 		protected void setCorrectValue(){
-			if (combo != null && !combo.isDisposed() && models != null && !models.isEmpty()){
+			if (combo != null && !combo.isDisposed()){
 				TemplateBorder actualBorder = getElementAttributes();
 				int index = exampleImages.indexOf(actualBorder);
-					if (index != -1) combo.select(index);
-					else combo.select(exampleImages.size());
+				if (index != -1) combo.select(index);
+				else combo.select(exampleImages.size());
 			}
 		}
 			
@@ -161,7 +130,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		protected Command getChangePropertyCommand(Object property, Object newValue, APropertyNode n) {
 			Object oldValue = n.getPropertyValue(property);
 			if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
-					.equals(oldValue))) && workbenchPart!= null) {
+					.equals(oldValue))) ) {
 				SetValueCommand setCommand = new SetValueCommand(n.getDisplayText());
 				setCommand.setTarget(n);
 				setCommand.setPropertyId(property);
@@ -202,16 +171,19 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 * @return
 		 */
 		private TemplateBorder getElementAttributes(){
-			MGraphicElementLineBox model = models.get(0);
-			MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
-			TemplateBorder top = getElementAttribute(MLineBox.LINE_PEN_TOP, lb);
-			TemplateBorder left = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
-			if (!top.equals(left)) return null;
-			TemplateBorder right = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
-			if (!top.equals(right)) return null;
-			TemplateBorder bottom = getElementAttribute(MLineBox.LINE_PEN_BOTTOM, lb);
-			if (!top.equals(bottom)) return null;
-			return top;
+			List<Object> selection = getSelectionForType(MGraphicElementLineBox.class);
+			if (selection.size() > 0){
+				MGraphicElementLineBox model = (MGraphicElementLineBox)selection.get(0);
+				MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX); 
+				TemplateBorder top = getElementAttribute(MLineBox.LINE_PEN_TOP, lb);
+				TemplateBorder left = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
+				if (!top.equals(left)) return null;
+				TemplateBorder right = getElementAttribute(MLineBox.LINE_PEN_RIGHT, lb);
+				if (!top.equals(right)) return null;
+				TemplateBorder bottom = getElementAttribute(MLineBox.LINE_PEN_BOTTOM, lb);
+				if (!top.equals(bottom)) return null;
+				return top;
+			} else return null;
 	}
 		
 		
@@ -220,8 +192,10 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 		 */
 		private void changeProperty() {
 			  if (combo.getSelectionIndex()<exampleImages.size()){
-					JSSCompoundCommand cc = new JSSCompoundCommand("Change border", models.isEmpty() ? null : models.get(0)); //$NON-NLS-1$
-			  	for(MGraphicElementLineBox model : models){
+					List<Object> selection = getSelectionForType(MGraphicElementLineBox.class);
+					JSSCompoundCommand cc = new JSSCompoundCommand("Change border", selection.isEmpty() ? null : (APropertyNode)selection.get(0)); //$NON-NLS-1$
+					for(Object obj : selection){
+						MGraphicElementLineBox model = (MGraphicElementLineBox)obj;
 						TemplateBorder selectedElement = exampleImages.get(combo.getSelectionIndex());
 						MLineBox lb = (MLineBox) model.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 						
@@ -243,29 +217,14 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			  setCorrectValue();
 		}
 
-		/**
-		 * Returns the editor's command stack. This is done by asking the workbench part for its CommandStack via
-		 * {@link org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)}.
-		 * 
-		 * @return the command stack
-		 */
-		protected CommandStack getCommandStack() {
-			return (CommandStack) workbenchPart.getAdapter(CommandStack.class);
-		}
-		
-		private void onSelection() {
-			if (selection.isEmpty())
-				return;
-			changeProperty();
-		}
-		
+
 		/**
 		 * Crate the  control 
 		 * @param parent
 		 * @return a composite with a label and the combo preview inside
 		 */
-		@SuppressWarnings("unchecked")
 		protected Control createControl(Composite parent) {
+			super.createControl(parent);
 			control = new Composite(parent, SWT.None);
 			GridLayout layout = new GridLayout(2,false);
 			layout.marginHeight = 0;
@@ -278,7 +237,7 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			combo.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-							onSelection();
+						changeProperty();
 					}
 			});
 			
@@ -289,77 +248,26 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			comboData.minimumWidth = 130;
 			comboData.minimumHeight = 20;
 			combo.setLayoutData(comboData);
-			models.clear();
-			if (selection != null) {
-				StructuredSelection ss = (StructuredSelection) selection;
-				for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
-					Object obj = it.next();
-					if (obj instanceof EditPart)
-						obj = ((EditPart) obj).getModel();
-					if (obj instanceof MGraphicElementLineBox) {
-						MGraphicElementLineBox model = (MGraphicElementLineBox) obj;
-						model.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
-						models.add(model);
-					}
-				}
-			}
 			loadImages();
-			setCorrectValue();
+			setAllControlsData();
 			return control;
 		}
 		
-		@Override
-		public void setWorkbenchPart(IWorkbenchPart workbenchPart) {
-			this.workbenchPart = workbenchPart;
-		}
-	
-		@Override
-		public void handleEvent(Event event) {
-			switch (event.type) {
-			case SWT.FocusIn:
-				break;
-			case SWT.Selection:
-			case SWT.DefaultSelection:
-				break;
-			}
-		}
-		
 		/**
-		 * Insert the element inside the toolbar
+		 * Set the state of the combo according to the borders of the first element
+		 * inside the selection
 		 */
-		@Override
-		public void fill(ToolBar parent, int index) {
-			toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
-			createControl(parent);
-			toolitem.setWidth(250);
-			toolitem.setControl(control);
-		}
-		
-		public void dispose() {
-			combo = null;
-			control = null;
-		}
-		
-		public final void fill(Composite parent) {
-			createControl(parent);
-		}
-		
-		public final void fill(Menu parent, int index) {
-			Assert.isTrue(false, Messages.ATableComboContribution_error_message); 
-		}
-		
-		/**
-		 * Called when an element is selected, it add a change listener to element to keep uniformed 
-		 * the toolbar and the properties tab
-		 */
-		@Override
-		public void setSelection(ISelection selection) {
-			this.selection = selection;
-			if (models != null) {
-				for (MGraphicElementLineBox model : models)
-					model.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
-			}
-			models.clear();
+		protected void setAllControlsData(){
+			if (combo == null || combo.isDisposed()) return;
+			List<Object> selection = getSelectionForType(MGraphicElementLineBox.class);
+			if (selection.size() == 1){
+				APropertyNode node = (APropertyNode)selection.get(0);
+				setCorrectValue();
+				if (showedNode != null) showedNode.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
+				showedNode = node;
+				showedNode.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+				
+			} 
 		}
 		
 		/**
@@ -375,5 +283,27 @@ public class ATableComboContribution extends ContributionItem implements ISelect
 			ti.setImage(TemplateBorder.getCustomImage());
 		}		
 		
-
+		@Override
+		public boolean isVisible() {
+			if (!super.isVisible()) return false;
+			List<Object> selection = getSelectionForType(MGraphicElementLineBox.class);
+			return !selection.isEmpty();
+		}
+		
+		@Override
+		public void dispose() {
+			super.dispose();
+			if (combo != null){
+				combo.dispose();
+				combo = null;
+			}
+			if (control != null){
+				control.dispose();
+				control = null;
+			}
+			if (showedNode != null) {
+				showedNode.getPropertyChangeSupport().removePropertyChangeListener(modelListener);
+				showedNode = null;
+			}
+		}
 }

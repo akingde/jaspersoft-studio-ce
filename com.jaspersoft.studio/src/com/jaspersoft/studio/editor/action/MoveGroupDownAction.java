@@ -22,7 +22,6 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -43,7 +42,7 @@ import com.jaspersoft.studio.model.group.command.DeleteGroupCommand;
  * @author Orlandin Marco
  *
  */
-public class MoveGroupDownAction extends SelectionAction implements IGlobalAction  {
+public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAction  {
 
 	/** The Constant ID. */
 	public static final String ID = "move_group_down"; //$NON-NLS-1$

@@ -38,11 +38,14 @@ public class ResizeCommand extends Command {
 	private int oldX, oldY, oldWidth, oldHeight;
 
 	public ResizeCommand(int alignement, EditPart editPart) {
+		this(alignement,(MGraphicElement) editPart.getModel());
+		
+	}
+	
+	public ResizeCommand(int alignement, MGraphicElement m) {
 		super();
 		this.alignement = alignement;
-		MGraphicElement m = (MGraphicElement) editPart.getModel();
 		jrElement = (JRDesignElement) m.getValue();
-
 		INode n = m.getParent();
 		if (n instanceof IContainer) {
 			if (n instanceof MBand) {

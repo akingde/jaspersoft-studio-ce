@@ -848,98 +848,6 @@
       </postsetvalue>
    </extension>
    <extension
-         point="com.jaspersoft.studio.toolitems">
-      <toolitems
-            ActionID="create_table_column_begin"
-            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction"
-            tooltip="%createTabelColBeginningTooltip">
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTable">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.column.MColumn">
-         </selectedObject>
-      </toolitems>
-      <toolitems
-            ActionID="create_table_column"
-            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction"
-            tooltip="%createTabelColEndTooltip">
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.MTable">
-         </selectedObject>
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.column.MColumn">
-         </selectedObject>
-      </toolitems>
-      <toolitems
-            ActionID="create_rowgroup"
-            id="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction"
-            tooltip="%createNewRowGroup">
-         <selectedObject
-               class="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
-         </selectedObject>
-      </toolitems>
-      <toolitems
-            ActionID="create_crosstab_columngroup"
-            id="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateColumnGroupAction"
-            tooltip="%createNewColGroup">
-         <selectedObject
-               class="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
-         </selectedObject>
-      </toolitems>
-      <toolitems
-            ActionID="create_table_column_before"
-            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction"
-            tooltip="%createTabelColBeforeSelected">
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.column.MCell">
-         </selectedObject>
-      </toolitems>
-      <toolitems
-            ActionID="create_table_column_after"
-            id="com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction"
-            tooltip="%createTabelColAfterSelected">
-         <selectedObject
-               class="com.jaspersoft.studio.components.table.model.column.MCell">
-         </selectedObject>
-      </toolitems>
-   </extension>
-   <extension
-         point="com.jaspersoft.studio.toolitemsets">
-      <toolitemsets
-            description="table columns action"
-            id="com.jaspersoft.studio.components.tableactions"
-            name="%TableAction"
-            toolbaruri="com.jaspersoft.studio.components.tableactions"
-            visibility="true">
-         <toolitem
-               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction">
-         </toolitem>
-         <toolitem
-               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnEndAction">
-         </toolitem>
-         <toolitem
-               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction">
-         </toolitem>
-         <toolitem
-               toolitemID="com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction">
-         </toolitem>
-      </toolitemsets>
-      <toolitemsets
-            description="action on the crosstab element"
-            id="com.jaspersoft.studio.components.crosstabaction"
-            name="%CrosstabAction"
-            toolbaruri="com.jaspersoft.studio.components.tableactions"
-            visibility="true">
-         <toolitem
-               toolitemID="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction">
-         </toolitem>
-         <toolitem
-               toolitemID="com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateColumnGroupAction">
-         </toolitem>
-      </toolitemsets>
-   </extension>
-   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="com.jaspersoft.studio.components.chart.editor.JRctxEditor"
@@ -991,5 +899,40 @@
       <input
             class="com.jaspersoft.studio.components.messages.ResourcePublisher">
       </input>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.toolitemsets">
+      <toolitemsets
+            id="com.jaspersoft.studio.components.tableactions"
+            label="%TableAction">
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateColumnBeginContributionItem"
+               id="com.jaspersoft.studio.editor.action.createcolumn_begin">
+         </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateColumnEndContributionItem"
+               id="com.jaspersoft.studio.editor.action.createcolumn_end">
+         </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateColumnBeforeContributionItem"
+               id="com.jaspersoft.studio.editor.action.createcolumn_before">
+         </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateColumnAfterContributionItem"
+               id="com.jaspersoft.studio.editor.action.createcolumn_after">
+         </toolitem>
+      </toolitemsets>
+      <toolitemsets
+            id="com.jaspersoft.studio.components.crosstabaction"
+            label="%CrosstabAction">
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateRowGroupContributionItem"
+               id="com.jaspersoft.studio.editor.action.createrowgroup">
+         </toolitem>
+         <toolitem
+               class="com.jaspersoft.studio.toolbars.CreateColumnGroupContributionItem"
+               id="com.jaspersoft.studio.editor.action.createcolumngroup">
+         </toolitem>
+      </toolitemsets>
    </extension>
 </plugin>

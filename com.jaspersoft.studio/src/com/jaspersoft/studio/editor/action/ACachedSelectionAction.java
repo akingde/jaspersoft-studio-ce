@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -13,7 +12,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public abstract class ACachedSelectionAction extends SelectionAction {
+public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 
 	public ACachedSelectionAction(IWorkbenchPart part) {
 		super(part);

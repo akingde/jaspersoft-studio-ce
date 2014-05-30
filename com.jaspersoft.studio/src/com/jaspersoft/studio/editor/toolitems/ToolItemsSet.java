@@ -18,15 +18,16 @@ package com.jaspersoft.studio.editor.toolitems;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+
+
 public class ToolItemsSet {
 	private String id;
 	private String name;
 	private String description;
-	private String toolbarUri;
-	private String menuUri;
 	private boolean visibility;
-	private List<ToolItem> toolItems = new ArrayList<ToolItem>();
-
+	private List<IConfigurationElement> controlsConfigurationElements = new ArrayList<IConfigurationElement>();
+	
 	public String getId() {
 		return id;
 	}
@@ -51,35 +52,20 @@ public class ToolItemsSet {
 		this.description = description;
 	}
 
-	public String getToolbarUri() {
-		return toolbarUri;
-	}
 
-	public void setToolbarUri(String toolbarUri) {
-		this.toolbarUri = toolbarUri;
-	}
-
-	public String getMenuUri() {
-		return menuUri;
-	}
-
-	public void setMenuUri(String menuUri) {
-		this.menuUri = menuUri;
-	}
-
-	public boolean isVisibility() {
+	public boolean isVisible() {
 		return visibility;
 	}
 
-	public void setVisibility(boolean visibility) {
+	public void setVisible(boolean visibility) {
 		this.visibility = visibility;
 	}
-
-	public List<ToolItem> getToolItems() {
-		return toolItems;
+	
+	public List<IConfigurationElement> getControlsConfiguration(){
+		return controlsConfigurationElements;
 	}
-
-	public void addToolItems(ToolItem ti) {
-		toolItems.add(ti);
+	
+	public void addControlConfiguration(IConfigurationElement controlDefinition){
+		controlsConfigurationElements.add(controlDefinition);
 	}
 }

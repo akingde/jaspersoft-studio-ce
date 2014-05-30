@@ -765,6 +765,7 @@ public class Messages extends NLS {
 	public static String HyperlinkSection_hyperlinkSectionTitle;
 	public static String ImageSelectionDialog_Browse;
 	public static String ImageSectionDialog_bytes;
+	public static String ImageContributionItem_actionName;
 	public static String ImageCreationDialog_CreationModeGroupTitle;
 	public static String ImageSelectionDialog_Dimension;
 	public static String ImageSelectionDialog_EnterExpression;
@@ -1674,6 +1675,7 @@ public class Messages extends NLS {
 	public static String StudioPreferencePage_message2;
 	public static String StudioPreferencePage_showCompDialog;
 	public static String StudioPreferencePage_versionLabel;
+	public static String StyleEditPart_styleTemplatePrefix;
 	public static String StylesListSection_Inherited_From_Default_Style;
 	public static String StylesListSection_NotEditable_Message;
 	public static String StylesListSection_NotEditable_Title;

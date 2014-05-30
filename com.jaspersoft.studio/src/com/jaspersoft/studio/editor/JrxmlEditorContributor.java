@@ -35,8 +35,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -58,6 +58,7 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
 
 /*
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
@@ -223,8 +224,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		ISelection selection = selectionProvider != null ? selectionProvider.getSelection() : null;
 
 		if (lastEditor != null && selectionListener != null) {
-			if (!(activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor))
-				selectionListener.clearBars(selection);
 			if (lastEditor.getSite().getSelectionProvider() != null)
 				lastEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionListener);
 		}
@@ -283,14 +282,12 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	private ISelectionChangedListener getSelectionChangeListener(ActionRegistry registry) {
 		if (selectionListener == null)
 			selectionListener = new SelectionListener();
-		selectionListener.setRegistry(registry);
 		return selectionListener;
 	}
 
 	private final class PartListener implements IPartListener2 {
 		@Override
 		public void partActivated(IWorkbenchPartReference partRef) {
-			// System.out.println("partActivated " + partRef.getId());
 			IEditorPart activeEditor = partRef.getPage().getActiveEditor();
 			if (activeEditor instanceof JrxmlEditor) {
 				activeEditor = ((JrxmlEditor) activeEditor).getActiveEditor();
@@ -299,53 +296,39 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		}
 
 		@Override
-		public void partBroughtToTop(IWorkbenchPartReference partRef) {
-			// setActivePage(partRef.getPage().getActiveEditor());
-			// System.out.println("partBroughtToTop " + partRef.getId());
+		public void partBroughtToTop(IWorkbenchPartReference partRef) {;
 		}
 
 		@Override
 		public void partClosed(IWorkbenchPartReference partRef) {
-			// System.out.println("partClosed " + partRef.getId());
+			//Clear the toolbar selection
+			if (selectionListener != null){
+				selectionListener.contributeToContextBars(StructuredSelection.EMPTY);
+			}
 		}
 
 		@Override
 		public void partDeactivated(IWorkbenchPartReference partRef) {
-			// System.out.println("partDeactivated " + partRef.getId());
 		}
 
 		@Override
 		public void partOpened(IWorkbenchPartReference partRef) {
-			// System.out.println("partOpened " + partRef.getId());
 		}
 
 		@Override
 		public void partHidden(IWorkbenchPartReference partRef) {
-			// System.out.println("partHidden " + partRef.getId());
 		}
 
 		@Override
 		public void partVisible(IWorkbenchPartReference partRef) {
-			// System.out.println("partVisible " + partRef.getId());
 		}
 
 		@Override
 		public void partInputChanged(IWorkbenchPartReference partRef) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 
 	private class SelectionListener implements ISelectionChangedListener {
-		private JrxmlSelectionContributor selectionContributor = new JrxmlSelectionContributor(JrxmlEditorContributor.this);
-
-		public void setRegistry(ActionRegistry registry) {
-			selectionContributor.setRegistry(registry);
-		}
-
-		public void clearBars(ISelection selection) {
-			selectionContributor.cleanBars(getActionBars(), selection);
-		}
 
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
@@ -353,16 +336,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		}
 
 		public void contributeToContextBars(final ISelection selection) {
-			if (selection.isEmpty())
-				return;
 			UIUtils.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					//selectionContributor.contributeToContextBars(getActionBars(), selection);
-					//ToolbarControlContribution.ContributeToContextBars(getActionBars(), selection);
-					//((IActionBars2) getActionBars()).getCoolBarManager().getItems();
-					((IActionBars2) getActionBars()).getCoolBarManager().update(true);
+					//Update the selection on the toolbar manager
+					CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), selection, getActionBars());
+					//Force the re-evaluation of the toolbar condition, used in the standard contribution system
+					//((IActionBars2) getActionBars()).getToolBarManager().update(true); 
 				}
 			});
 		}
@@ -423,12 +404,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			// bars.setGlobalActionHandler(s, getAction(s));
 			tbm.add(getAction(s));
 		}
-		tbm.update(true);
-	}
-
-	private void removeGlobal(IToolBarManager tbm) {
-		for (String s : glRetargetAction)
-			tbm.remove(s);
 		tbm.update(true);
 	}
 

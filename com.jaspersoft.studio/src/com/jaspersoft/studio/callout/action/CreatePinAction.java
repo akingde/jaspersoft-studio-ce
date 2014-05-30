@@ -49,6 +49,13 @@ public class CreatePinAction extends SelectionAction {
 	public void run() {
 		execute(createCommand(getSelectedObjects()));
 	}
+	
+	public static CreatePinCommand getCreationCommand(MCallout mcallout){
+		Rectangle location = new Rectangle();
+		location.x = 20 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_X);
+		location.y = -24 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_Y);
+		return new CreatePinCommand(mcallout, location);
+	}
 
 	private Command createCommand(List<?> selectedObjects) {
 		if (selectedObjects.isEmpty() || selectedObjects.size() != 1)
@@ -59,11 +66,7 @@ public class CreatePinAction extends SelectionAction {
 				obj = ((CalloutEditPart) obj).getModel();
 
 			MCallout mcallout = (MCallout) obj;
-			Rectangle location = new Rectangle();
-			location.x = 20 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_X);
-			location.y = -24 + (Integer) mcallout.getPropertyValue(JRDesignElement.PROPERTY_Y);
-
-			return new CreatePinCommand(mcallout, location);
+			return getCreationCommand(mcallout);
 		}
 		return null;
 	}

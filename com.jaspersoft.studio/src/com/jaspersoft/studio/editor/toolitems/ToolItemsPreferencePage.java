@@ -27,23 +27,19 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 public class ToolItemsPreferencePage extends FieldEditorOverlayPage {
-
+	
 	public ToolItemsPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
 		setDescription(Messages.ToolItemsPreferencePage_0);
 	}
 
-	/**
-	 *
-	 */
+
 	public void createFieldEditors() {
 		Composite fieldEditorParent = getFieldEditorParent();
-
 		List<ToolItemsSet> list = JaspersoftStudioPlugin.getToolItemsManager().getSets();
 		for (ToolItemsSet tis : list) {
 			BooleanFieldEditor beditor = new BooleanFieldEditor(tis.getId(), tis.getName(), fieldEditorParent);
-			beditor.getDescriptionControl(fieldEditorParent).setToolTipText(tis.getDescription());
 			addField(beditor);
 		}
 	}
@@ -51,7 +47,7 @@ public class ToolItemsPreferencePage extends FieldEditorOverlayPage {
 	public static void getDefaults(IPreferenceStore store) {
 		List<ToolItemsSet> list = JaspersoftStudioPlugin.getToolItemsManager().getSets();
 		for (ToolItemsSet tis : list) {
-			store.setDefault(tis.getId(), new Boolean(tis.isVisibility()));
+			store.setDefault(tis.getId(), tis.isVisible());
 		}
 	}
 

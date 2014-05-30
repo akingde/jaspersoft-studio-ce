@@ -59,7 +59,7 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="name" type="string" use="required">
+         <attribute name="label" type="string" use="required">
             <annotation>
                <documentation>
                   name of the toolbar
@@ -69,43 +69,22 @@
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="description" type="string">
-            <annotation>
-               <documentation>
-                  description of the toolbar
-               </documentation>
-               <appInfo>
-                  <meta.attribute translatable="true"/>
-               </appInfo>
-            </annotation>
-         </attribute>
-         <attribute name="visibility" type="boolean" use="required">
-            <annotation>
-               <documentation>
-                  if toolbar is visible by default
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="toolbaruri" type="string">
-            <annotation>
-               <documentation>
-                  address of the toolbar
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="menuuri" type="string">
-            <annotation>
-               <documentation>
-                  address of menu
-               </documentation>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 
    <element name="toolitem">
       <complexType>
-         <attribute name="toolitemID" type="string">
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.jface.action.ControlContribution:"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
                   id of the toolitem

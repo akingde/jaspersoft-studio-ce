@@ -30,6 +30,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.image.MImage;
 
 public class ChangeImageExpression  extends SelectionAction implements IGlobalAction {
@@ -41,6 +42,8 @@ public class ChangeImageExpression  extends SelectionAction implements IGlobalAc
 	public ChangeImageExpression(IWorkbenchPart part) {
 		super(part);
 		setId(ID);
+		setText(Messages.ImageContributionItem_actionName);
+		setToolTipText(Messages.ImageContributionItem_actionName);
 		loadImageModel();
 	}
 	
@@ -69,8 +72,7 @@ public class ChangeImageExpression  extends SelectionAction implements IGlobalAc
 		loadImageModel();
 	}
 	
-	@Override
-	public void run() {
+	public static void setImageExpression(MImage imageModel){
 		if (imageModel != null){
 			ImageSelectionDialog d=new ImageSelectionDialog(UIUtils.getShell());
 			d.configureDialog(imageModel.getJasperConfiguration());
@@ -85,6 +87,11 @@ public class ChangeImageExpression  extends SelectionAction implements IGlobalAc
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void run() {
+		setImageExpression(imageModel);
 	}
 
 }
