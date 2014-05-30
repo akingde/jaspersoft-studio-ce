@@ -20,6 +20,8 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -274,7 +276,7 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 	private Listener spaceKeyListener = new Listener() {
 		
 		public void handleEvent(Event e) {	
-			if (e.keyCode == SWT.SPACE){
+			if (e.keyCode == UIUtils.SWT_SPACE){
 				if (!isAcquiring){
 					isAcquiring = true;
 					colorPickerThread.setStop(false);
