@@ -321,8 +321,7 @@ public class JSSScrollableThumbnail extends Figure {
 				
 		int offset_x = (e.x * width) / fullSize.width; 
 		int offset_y = (e.y * height) / fullSize.height; 
-		targetSize.setWidth(width + offset_x);
-		targetSize.setHeight(height + offset_y);
+		targetSize.setSize(new Dimension(width + offset_x, height + offset_y));
 		
 		palette = new PaletteData(0x0000ff, 0x00ff00,0xff0000);
 		ImageData resizedImageData = new ImageData(width,height,24,palette);
