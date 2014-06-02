@@ -28,7 +28,7 @@ public class SQLEditorPreferencesPage extends FieldEditorOverlayPage {
 	@Override
 	protected void createFieldEditors() {
 		addField(new BooleanFieldEditor(P_IDENTIFIER_QUOTEONLYEXCEPTIONS, Messages.SQLEditorPreferencesPage_0, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_USE_JDBC_QUOTE, "Use Identifier Quote provided by JDBC connection", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(P_USE_JDBC_QUOTE, Messages.SQLEditorPreferencesPage_1, getFieldEditorParent()));
 		addField(new ComboFieldEditor(P_IDENTIFIER_QUOTE, Messages.SQLEditorPreferencesPage_comboLabel,
 				new String[][] { { "id", "" }, { "\"id\"", "\"" }, { "`id`", "`" }, { "[id]", "[" } }, getFieldEditorParent()));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 	}

@@ -16,6 +16,7 @@ public class Messages extends NLS {
 	public static String SQLQueryDesigner_readmetadata;
 	public static String SQLQueryDesigner_text;
 	public static String SQLEditorPreferencesPage_0;
+	public static String SQLEditorPreferencesPage_1;
 	public static String SQLEditorPreferencesPage_comboLabel;
 	public static String SQLEditorPreferencesPage_dialogTitle;
 	public static String Text2Model_warn;

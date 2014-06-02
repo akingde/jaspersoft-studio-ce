@@ -1342,7 +1342,7 @@
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.wizards.ReportNewWizard"
-            name="Jasper Report">
+            name="%JasperReport">
          <description>
             Create a new JasperReport
          </description>
@@ -1353,7 +1353,7 @@
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
             icon="icons/resources/jasperreports_jrtx.png"
             id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard"
-            name="Style Template File">
+            name="%StyleTemplateFile">
          <description>
             Create a new Style Template for JasperReport
          </description>
@@ -1364,7 +1364,7 @@
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
             icon="icons/data_source.png"
             id="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"
-            name="Data Adapter">
+            name="%DataAdapter">
          <description>
             Create a new Data Adapter
          </description>
@@ -1375,7 +1375,7 @@
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
             icon="icons/functions_icon.png"
             id="com.jaspersoft.studio.wizards.NewFunctionsLibraryWizard"
-            name="Functions Library">
+            name="%FunctionsLibrary">
          <description>
             Create a new Functions Library
          </description>
@@ -1774,7 +1774,7 @@
        <dataAdapter
              ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory">
        </dataAdapter>
-    </extension>
+        </extension>
     <extension
           point="com.jaspersoft.studio.EditorSettingsMenu">
        <EditorSettingsMenu

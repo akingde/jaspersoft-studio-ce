@@ -833,6 +833,9 @@ public class Messages extends NLS {
 	public static String JRExporterPreferencePage_16;
 	public static String JRExporterPreferencePage_17;
 	public static String JRExporterPreferencePage_18;
+	public static String JRExporterPreferencePage_3;
+	public static String JRExporterPreferencePage_4;
+	public static String JRExporterPreferencePage_5;
 	public static String JRExporterPreferencePage_6;
 	public static String JRExporterPreferencePage_7;
 	public static String JRExporterPreferencePage_8;
@@ -1388,6 +1391,7 @@ public class Messages extends NLS {
 	public static String PDF508ElementDecorator_Menu_TableDetails;
 	public static String PDF508ElementDecorator_Menu_TableHeader;
 	public static String PDF508ElementDecorator_Menu_TableRow;
+	public static String PDFExporterPreferencePage_1;
 	public static String PDFExporterPreferencePage_24;
 	public static String PDFExporterPreferencePage_25;
 	public static String PDFExporterPreferencePage_26;
@@ -1414,6 +1418,7 @@ public class Messages extends NLS {
 	public static String PDFExporterPreferencePage_47;
 	public static String PDFExporterPreferencePage_48;
 	public static String PDFExporterPreferencePage_49;
+	public static String PDFExporterPreferencePage_5;
 	public static String PDFExporterPreferencePage_50;
 	public static String PDFExporterPreferencePage_51;
 	public static String PDFExporterPreferencePage_52;
@@ -1424,6 +1429,7 @@ public class Messages extends NLS {
 	public static String PDFExporterPreferencePage_57;
 	public static String PDFExporterPreferencePage_58;
 	public static String PDFExporterPreferencePage_59;
+	public static String PDFExporterPreferencePage_6;
 	public static String PDFExporterPreferencePage_60;
 	public static String PDFExporterPreferencePage_61;
 	public static String PDFExporterPreferencePage_62;
@@ -1443,6 +1449,7 @@ public class Messages extends NLS {
 	public static String PDFExporterPreferencePage_76;
 	public static String PDFExporterPreferencePage_77;
 	public static String PDFExporterPreferencePage_78;
+	public static String PDFExporterPreferencePage_8;
 	public static String PDFExporterPreferencePage_83;
 	public static String PDFExporterPreferencePage_84;
 	public static String PDFPermissionFieldEditor_allowAssembly;

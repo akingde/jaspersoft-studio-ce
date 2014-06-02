@@ -122,7 +122,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 				PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_PDFA_CONFORMANCE),
 				PdfaConformanceEnum.NONE.getName()));
 		store.setDefault(PdfExporterConfiguration.PROPERTY_PDFA_ICC_PROFILE_PATH,
-				Misc.nvl(PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_PDFA_ICC_PROFILE_PATH), ""));
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(PdfExporterConfiguration.PROPERTY_PDFA_ICC_PROFILE_PATH), "")); //$NON-NLS-1$
 	}
 
 	/**
@@ -246,9 +246,9 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(cfe);
 		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
-		cfe = new JSSComboFieldEditor(PdfExporterConfiguration.PROPERTY_PDFA_CONFORMANCE, "PDF/A Conformance",
-				new String[][] { { PdfaConformanceEnum.NONE.getName(), "none" },
-						{ PdfaConformanceEnum.PDFA_1A.getName(), "1A" }, { PdfaConformanceEnum.PDFA_1B.getName(), "1B" } }, sc);
+		cfe = new JSSComboFieldEditor(PdfExporterConfiguration.PROPERTY_PDFA_CONFORMANCE, Messages.PDFExporterPreferencePage_1,
+ new String[][] { { PdfaConformanceEnum.NONE.getName(), "none" },
+						{ PdfaConformanceEnum.PDFA_1A.getName(), "1A" }, { PdfaConformanceEnum.PDFA_1B.getName(), "1B" } }, sc); //$NON-NLS-1$ //$NON-NLS-2$
 		addField(cfe);
 		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 
@@ -256,7 +256,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		fcompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		FileFieldEditor ffe = new FileFieldEditor(PdfExporterConfiguration.PROPERTY_PDFA_ICC_PROFILE_PATH,
-				"ICC Profile File", fcompo);
+				Messages.PDFExporterPreferencePage_5, fcompo);
 		ffe.setFileExtensions(new String[] { ".icc" }); //$NON-NLS-1$
 		addField(ffe);
 		HelpSystem.setHelp(ffe.getTextControl(fcompo), StudioPreferencePage.REFERENCE_PREFIX + ffe.getPreferenceName());
@@ -286,7 +286,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		HelpSystem.setHelp(bf.getDescriptionControl(sc), StudioPreferencePage.REFERENCE_PREFIX + bf.getPreferenceName());
 
 		cfe = new JSSComboFieldEditor(PdfExporterConfiguration.PROPERTY_PRINT_SCALING,
-				Messages.PDFExporterPreferencePage_78, new String[][] { { "Default", "default" }, { "None", "none" } }, sc);
+				Messages.PDFExporterPreferencePage_78, new String[][] { { Messages.PDFExporterPreferencePage_6, "default" }, { Messages.PDFExporterPreferencePage_8, "none" } }, sc); //$NON-NLS-2$ //$NON-NLS-4$
 		addField(cfe); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		HelpSystem.setHelp(cfe.getComboBoxControl(sc), StudioPreferencePage.REFERENCE_PREFIX + cfe.getPreferenceName());
 

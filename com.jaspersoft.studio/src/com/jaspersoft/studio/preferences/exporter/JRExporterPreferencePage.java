@@ -36,9 +36,9 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
-	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML = "com.jaspersoft.studio.exporter.show.xhtml";
-	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA = "com.jaspersoft.studio.exporter.show.excelapi.metadata";
-	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI = "com.jaspersoft.studio.exporter.show.excelapi";
+	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML = "com.jaspersoft.studio.exporter.show.xhtml"; //$NON-NLS-1$
+	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA = "com.jaspersoft.studio.exporter.show.excelapi.metadata"; //$NON-NLS-1$
+	public static final String COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI = "com.jaspersoft.studio.exporter.show.excelapi"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_LEGACY_BORDER_OFFSET = "net.sf.jasperreports.export.legacy.border.offset"; //$NON-NLS-1$
 	public static final String EXPPARAM_OFFSET_X = "expparam.offset.x"; //$NON-NLS-1$
 	public static final String EXPPARAM_OFFSET_Y = "expparam.offset.y"; //$NON-NLS-1$
@@ -84,15 +84,15 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new PagesFieldEditor(EXPPARAM_INDEX_PAGE, Messages.JRExporterPreferencePage_18, getFieldEditorParent()));
 
-		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, "Show Excel API Exporter",
+		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI, Messages.JRExporterPreferencePage_3,
 				getFieldEditorParent());
 		addField(bf);
 
 		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_EXCELAPI_METADATA,
-				"Show Excel API Metadata Exporter", getFieldEditorParent());
+				Messages.JRExporterPreferencePage_4, getFieldEditorParent());
 		addField(bf);
 
-		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, "Show xHTML Exporter",
+		bf = new BooleanFieldEditor(COM_JASPERSOFT_STUDIO_EXPORTER_SHOW_XHTML, Messages.JRExporterPreferencePage_5,
 				getFieldEditorParent());
 		addField(bf);
 
