@@ -1,6 +1,8 @@
 define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperreports-url-manager"], function(Loader, Report, $, UrlManager) {
 	var Viewer = function(o) {
-        this.config = {
+        var it = this;
+
+        it.config = {
             at: null,
             reporturi: null,
             async: true,
@@ -9,17 +11,31 @@ define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperrepo
             applicationContextPath: null
         };
 
-        $.extend(this.config, o);
+        $.extend(it.config, o);
 
-        this.config.applicationContextPath && (UrlManager.applicationContextPath = this.config.applicationContextPath);
+        it.config.applicationContextPath && (UrlManager.applicationContextPath = it.config.applicationContextPath);
 
-        this.reportInstance = null;
-        this.container = null;
-        this.hyperlinkHandlers = {};
-        this.undoRedoCounters = {
+        it.reportInstance = null;
+        it.container = null;
+        it.undoRedoCounters = {
             undos: 0,
             redos: 0
         };
+
+        it.isUndoRedo = false;
+        it.renderReportLater = false;
+        it.dfds = {
+            'jive.inactive': null
+        };
+
+        $('body').on({
+            'jive.initialized': function(evt, jive) {
+                it.jive = jive;
+            },
+            'jive.inactive': function() {
+                it.dfds['jive.inactive'] && it.dfds['jive.inactive'].resolve();
+            }
+        });
     };
     
     Loader.prototype._errHandler = function(jqXHR, textStatus, errorThrown) {
@@ -84,9 +100,25 @@ define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperrepo
                 toolbar = $("#toolbar");
 
             report.on("reportHtmlReady", function() {
-                it._render(this.html);
+                it.renderReportLater = false;
+                it.dfds['jive.inactive'] = new $.Deferred();
+
+                if(it.jive) {
+                    if(!it.jive.active || it.isUndoRedo) {
+                        it.isUndoRedo && it.jive.hide();
+                        it._render(this.html);
+                        it.dfds['jive.inactive'].resolve();
+                    } else {
+                        it.renderReportLater = true;
+                    }
+                } else {
+                    it._render(this.html);
+                    it.dfds['jive.inactive'].resolve();
+                }
+
                 it._updateToolbarPaginationButtons(toolbar);
             }).on("action", function() {
+                it.isUndoRedo = false;
                 this.gotoPage(0);
                 it.undoRedoCounters.undos++;
                 it.undoRedoCounters.redos = 0;
@@ -94,6 +126,7 @@ define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperrepo
             }).on("beforeAction", function() {
                 this.cancelStatusUpdates();
             }).on("undo", function() {
+                it.isUndoRedo = true;
                 this.gotoPage(0);
                 it.undoRedoCounters.redos ++;
                 it.undoRedoCounters.undos --;
@@ -102,6 +135,7 @@ define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperrepo
                 }
                 it._updateUndoRedoButtons(toolbar);
             }).on("redo", function() {
+                it.isUndoRedo = true;
                 this.gotoPage(0);
                 it.undoRedoCounters.undos ++;
                 it.undoRedoCounters.redos --;
@@ -110,6 +144,7 @@ define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperrepo
                 }
                 it._updateUndoRedoButtons(toolbar);
             }).on("search", function(data) {
+                it.isUndoRedo = false;
                 if (data.actionResult.searchResults && data.actionResult.searchResults.length) {
                     var results = data.actionResult.searchResults;
 
@@ -146,14 +181,17 @@ define(["jasperreports-loader", "jasperreports-report", "jquery.ui", "jasperrepo
                     }
                 });
 
-                if(uimodules.length) {
-                    require(uimodules, function() {
-                        $.each(arguments, function(i, thisModule) {
-                            thisModule.init(it.reportInstance);
+                it.dfds['jive.inactive'].then(function() {
+                    it.renderReportLater && it._render(it.reportInstance.html);
+                    if(uimodules.length) {
+                        require(uimodules, function() {
+                            $.each(arguments, function(i, thisModule) {
+                                thisModule.init(it.reportInstance);
+                            });
                         });
-                    });
-                }
-
+                    }
+                });
+                
                 /*
                  If Highcharts are present render them  // FIXMEJIVE: should revert back to components being able to render themselves
                  */
