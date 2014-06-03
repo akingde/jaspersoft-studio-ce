@@ -509,9 +509,12 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			value = Misc.nullValue((String) value);
 			jrElement.setTheme((String) value);
 		} else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_GROUP)) {
-			if (!value.equals("")) { //$NON-NLS-1$
+			if (value!=null && !value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setEvaluationGroup(group);
+			}
+			else {
+				jrElement.setEvaluationGroup(null);
 			}
 		}
 
