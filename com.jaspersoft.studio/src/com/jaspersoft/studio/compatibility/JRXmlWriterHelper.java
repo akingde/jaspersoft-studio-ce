@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
@@ -103,8 +105,11 @@ public class JRXmlWriterHelper {
 		if (report != null) {
 			// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
 			String xml = new JRXmlWriter(jrContext).write(report, encoding);
-			xml = xml.replaceFirst(
-					"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+			// request Bug 37455 - [Case #48613] Simple jrxml timestamp on Save or Save As
+			String timestamp = "<!--" + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + "-->\r\n";
+			xml = xml
+					.replaceFirst(
+							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 			return xml;
 		}
 		return null;
@@ -238,7 +243,7 @@ public class JRXmlWriterHelper {
 	 */
 	private static String getCompatibleVersion(JasperReportsConfiguration jconfig) {
 		// assume last version as safe fall-back
-		String ver = Misc.nvl(jconfig.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION),LAST_VERSION);
+		String ver = Misc.nvl(jconfig.getProperty(StudioPreferencePage.JSS_COMPATIBILITY_VERSION), LAST_VERSION);
 		if (LAST_VERSION.equals(ver)) {
 			return net.sf.jasperreports.engine.JasperCompileManager.class.getPackage().getImplementationVersion();
 		} else {
