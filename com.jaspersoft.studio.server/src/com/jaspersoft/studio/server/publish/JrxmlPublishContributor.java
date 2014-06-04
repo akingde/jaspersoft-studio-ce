@@ -42,6 +42,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
@@ -55,6 +59,7 @@ import com.jaspersoft.studio.server.publish.imp.ImpStyleTemplate;
 import com.jaspersoft.studio.server.publish.imp.ImpSubreport;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.utils.JRXMLUtils;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -141,10 +146,24 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		List<JRDataset> datasetsList = jasper.getDatasetsList();
 		if (datasetsList != null && !datasetsList.isEmpty())
 			ds.addAll(datasetsList);
+		boolean syncDA = mrunit.getWsClient().getServerProfile().isSyncDA();
 		for (JRDataset d : ds) {
 			String dapath = d.getPropertiesMap().getProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
-			if (dapath == null || dapath.isEmpty())
+			if (syncDA && Misc.isNullOrEmpty(dapath)) {
+				String name = d.getPropertiesMap().getProperty(DataQueryAdapters.DEFAULT_DATAADAPTER);
+				if (!Misc.isNullOrEmpty(name)) {
+					ADataAdapterStorage storage = DataAdapterManager.getProjectStorage(((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject());
+					for (DataAdapterDescriptor dad : storage.getDataAdapterDescriptors()) {
+						if (dad.getDataAdapter().getName().equals(name)) {
+							dapath = storage.getUrl(dad).toString();
+							break;
+						}
+					}
+				}
+			}
+			if (Misc.isNullOrEmpty(dapath))
 				continue;
+
 			impDa.publish((JRDesignDataset) d, dapath, mrunit, monitor, fileset, file);
 		}
 	}

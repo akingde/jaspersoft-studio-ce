@@ -78,6 +78,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private Combo bmime;
 	private Button bdaterange;
 	private Button bUseSoap;
+	private Button bSyncDA;
 	private Button blpath;
 	private VersionCombo cversion;
 	private DataBindingContext dbc;
@@ -189,6 +190,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		dbc.bindValue(SWTObservables.observeSelection(bdaterange), PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
 		dbc.bindValue(SWTObservables.observeSelection(bUseSoap), PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()), PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
@@ -228,9 +230,16 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		bUseSoap = new Button(cmp, SWT.CHECK);
 		bUseSoap.setText(Messages.ServerProfilePage_6);
+		// gd = new GridData();
+		// gd.horizontalSpan = 3;
+		// bUseSoap.setLayoutData(gd);
+
+		bSyncDA = new Button(cmp, SWT.CHECK);
+		bSyncDA.setText("Synchronize DataAdapter Properties");
+		bSyncDA.setToolTipText("Synchronize JR DataAdapter property when publishing to Jaspersoft Server");
 		gd = new GridData();
-		gd.horizontalSpan = 3;
-		bUseSoap.setLayoutData(gd);
+		gd.horizontalSpan = 2;
+		bSyncDA.setLayoutData(gd);
 
 		String ttip = Messages.ServerProfilePage_7;
 		Label lbl = new Label(cmp, SWT.NONE);

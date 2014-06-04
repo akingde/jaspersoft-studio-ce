@@ -38,6 +38,15 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	private boolean mime = true;
 	private String projectPath;
 	private boolean useOnlySOAP = false;
+	private boolean syncDA = false;
+
+	public boolean isSyncDA() {
+		return syncDA;
+	}
+
+	public void setSyncDA(boolean syncDA) {
+		this.syncDA = syncDA;
+	}
 
 	public boolean isUseOnlySOAP() {
 		return useOnlySOAP;

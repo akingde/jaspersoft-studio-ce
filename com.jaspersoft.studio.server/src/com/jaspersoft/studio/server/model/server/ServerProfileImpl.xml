@@ -1,19 +1,7 @@
 <?xml version="1.0"?>
-<!--
-  Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
-  http://www.jaspersoft.com
-  
-  Unless you have purchased a commercial license agreement from Jaspersoft, 
-  the following license terms apply:
-  
-  This program and the accompanying materials
-  are made available under the terms of the Eclipse Public License v1.0
-  which accompanies this distribution, and is available at
-  http://www.eclipse.org/legal/epl-v10.html
-  
-  Contributors:
-      Jaspersoft Studio Team - initial API and implementation
--->
+<!-- Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms 
+	apply: This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html 
+	Contributors: Jaspersoft Studio Team - initial API and implementation -->
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN" "http://castor.org/mapping.dtd">
 
 <mapping>
@@ -43,6 +31,9 @@
 		</field>
 		<field name="useOnlySOAP" type="boolean">
 			<bind-xml name="useOnlySOAP" node="element" />
+		</field>
+		<field name="syncDA" type="boolean">
+			<bind-xml name="syncDA" node="element" />
 		</field>
 		<field name="chunked" type="boolean">
 			<bind-xml name="chunked" node="element" />
