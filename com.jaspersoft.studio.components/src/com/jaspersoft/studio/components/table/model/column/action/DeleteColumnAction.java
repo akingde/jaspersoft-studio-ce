@@ -83,6 +83,8 @@ public class DeleteColumnAction extends DeleteAction {
 					compoundCmd.add(cmd);
 			}
 		}
+		//There are no column selected, must return null since the action is not valid
+		if (compoundCmd.isEmpty()) return null;
 		//Commands to refresh the columns names on undo or execute
 		compoundCmd.addFirst(new RefreshColumnNamesCommand(col, false, true));
 		compoundCmd.add(new RefreshColumnNamesCommand(col, true, false));
