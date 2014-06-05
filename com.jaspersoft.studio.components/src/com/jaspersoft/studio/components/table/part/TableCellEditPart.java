@@ -246,20 +246,19 @@ public class TableCellEditPart extends APrefFigureEditPart implements IContainer
 			StandardBaseColumn col = (StandardBaseColumn) model.getValue();
 
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
-			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
-			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
-
-			rect.setLocation(new Point(x, y));
-
-			if (model instanceof MCell) {
-				CellFigure f = (CellFigure) rect;
-				f.setJRElement(((MCell) model).getCell(), col, getDrawVisitor());
-			} else {
-				rect.setSize(bounds.width, bounds.height);
-				((EmptyCellFigure) rect).setJRElement(col, getDrawVisitor(), bounds.height);
+			if (bounds != null){
+				int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+				int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+				rect.setLocation(new Point(x, y));
+				if (model instanceof MCell) {
+					CellFigure f = (CellFigure) rect;
+					f.setJRElement(((MCell) model).getCell(), col, getDrawVisitor());
+				} else {
+					rect.setSize(bounds.width, bounds.height);
+					((EmptyCellFigure) rect).setJRElement(col, getDrawVisitor(), bounds.height);
+				}
+				updateRulers();
 			}
-			updateRulers();
-
 		}
 		if (getSelected() == 1)
 			updateRulers();

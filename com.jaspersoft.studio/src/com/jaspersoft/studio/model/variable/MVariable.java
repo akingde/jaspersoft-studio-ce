@@ -111,6 +111,19 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
+	
+	/**
+	 * When the descriptor are read the group information are updated
+	 */
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		String[] items = getGroupList();
+		if (items != null) {
+			resetGroupD.setItems(items);
+			incrementGroupD.setItems(items);
+		}
+	}
 
 	/**
 	 * Creates the property descriptors.
@@ -199,35 +212,17 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			return s;
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
 			if (jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP) && resetGroupD != null) {
-				JRDesignDataset jrDataset = getDataSet();
-				JRGroup[] groups = jrDataset.getGroups();
-				if (groups != null) {
-					String[] items = new String[groups.length + 1];
-					items[0] = ""; //$NON-NLS-1$
-					for (int j = 0; j < groups.length; j++) {
-						items[j + 1] = groups[j].getName();
-					}
-					resetGroupD.setItems(items);
-					if (jrVariable.getResetGroup() != null)
+					if (jrVariable.getResetGroup() != null){
 						return jrVariable.getResetGroup().getName();
-				}
+					}
 			}
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
 			if (jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP) && incrementGroupD != null) {
-				JRDesignDataset jrDataset = getDataSet();
-				JRGroup[] groups = jrDataset.getGroups();
-				if (groups != null) {
-					String[] items = new String[groups.length + 1];
-					items[0] = ""; //$NON-NLS-1$
-					for (int j = 0; j < groups.length; j++) {
-						items[j + 1] = groups[j].getName();
-					}
-					incrementGroupD.setItems(items);
-					if (jrVariable.getIncrementGroup() != null)
+					if (jrVariable.getIncrementGroup() != null){
 						return jrVariable.getIncrementGroup().getName();
-				}
+					}
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -247,6 +242,27 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		}
 		return null;
 	}
+	
+	/**
+	 * Return the list of group for the dataset parent of the variable
+	 * or null if there isn't any group
+	 * 
+	 * @return An array of string with the name of every group inside 
+	 * the variable dataset, or null if there aren't groups
+	 */
+	private String[] getGroupList(){
+		JRDesignDataset jrDataset = getDataSet();
+		JRGroup[] groups = jrDataset.getGroups();
+		String[] items = null;
+		if (groups != null) {
+			items = new String[groups.length + 1];
+			items[0] = ""; //$NON-NLS-1$
+			for (int j = 0; j < groups.length; j++) {
+				items[j + 1] = groups[j].getName();
+			}
+		}
+		return items;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -258,7 +274,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super.setPropertyValue(id, value);
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
-			if (!value.equals("") && jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP)) { //$NON-NLS-1$
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
@@ -268,7 +284,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION))
 			jrVariable.setInitialValueExpression(ExprUtil.setValues(jrVariable.getInitialValueExpression(), value));
 		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
-			if (!value.equals("") && jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) { //$NON-NLS-1$
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setIncrementGroup(group);
@@ -292,14 +308,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		}
 	}
 
-	private JRDesignDataset dataset;
 	private static JSSEnumPropertyDescriptor calculationD;
 	private static JSSEnumPropertyDescriptor resetTypeD;
 	private static JSSEnumPropertyDescriptor incrementTypeD;
 
 	protected JRDesignDataset getDataSet() {
-		if (dataset != null)
-			return dataset;
 		return ModelUtils.getDataset(this);
 	}
 

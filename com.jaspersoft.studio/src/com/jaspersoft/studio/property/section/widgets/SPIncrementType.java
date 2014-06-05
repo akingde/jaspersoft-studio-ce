@@ -35,9 +35,11 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class SPIncrementType extends ASPropertyWidget {
 	private Combo evalTime;
@@ -69,9 +71,10 @@ public class SPIncrementType extends ASPropertyWidget {
 				} else {
 					et = EnumHelper.getValue(IncrementTypeEnum.getByName(str), 1, false);
 				}
-
-				section.changeProperty(pDescriptor.getId(), et);
+				//It is important to set first the group name and then the eval type, to have the event propagated
+				//correctly
 				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
+				section.changeProperty(pDescriptor.getId(), et);
 			}
 
 		});
@@ -83,13 +86,17 @@ public class SPIncrementType extends ASPropertyWidget {
 		JasperDesign jasperDesign = pnode.getJasperDesign();
 		JRDataset dataset = null;
 		MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+
 		if (mdataset != null) {
 			JRDesignDatasetRun datasetRun = mdataset.getValue();
 			if (datasetRun != null) {
 				String dsname = datasetRun.getDatasetName();
 				dataset = jasperDesign.getDatasetMap().get(dsname);
 			}
+		} else if (pnode instanceof MVariable) {
+			dataset = ModelUtils.getDataset(pnode);
 		}
+
 		if (dataset == null)
 			dataset = jasperDesign.getMainDataset();
 
