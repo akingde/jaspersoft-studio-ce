@@ -39,6 +39,7 @@ import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
@@ -64,9 +65,9 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 			// REPORT_PARAMETERS_MAP parameter to be defined and not null
 			Map<String, JRValueParameter> tmpMap = ParameterUtil.convertMap(parameters, jDataset);
 			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String, JRValueParameter>()));
-
 			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset, tmpMap);
 			qe.createDatasource();
+
 			ResultSet rs = qe.getResultSet();
 			if (rs != null) {
 				ResultSetMetaData metaData = rs.getMetaData();
@@ -75,7 +76,8 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 				List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
 				for (int i = 1; i <= cc; i++) {
 					String name = metaData.getColumnLabel(i);
-					System.out.println("name: " + metaData.getColumnName(i) + " Label: " + name);
+					// System.out.println("name: " + metaData.getColumnName(i) +
+					// " Label: " + name);
 					if (colset.contains(name))
 						name = JRResultSetDataSource.INDEXED_COLUMN_PREFIX + i;
 					colset.add(name);
@@ -87,10 +89,12 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 						String catalog = metaData.getCatalogName(i);
 						String schema = metaData.getSchemaName(i);
 						String table = metaData.getTableName(i);
-						ResultSet rsmc = c.getMetaData().getColumns(catalog, schema, table, name);
-						while (rsmc.next()) {
-							field.setDescription(StringUtils.xmlEncode(rsmc.getString("REMARKS"), null));
-							break;
+						if (!(Misc.isNullOrEmpty(catalog) && Misc.isNullOrEmpty(schema) && Misc.isNullOrEmpty(table))) {
+							ResultSet rsmc = c.getMetaData().getColumns(catalog, schema, table, name);
+							while (rsmc.next()) {
+								field.setDescription(StringUtils.xmlEncode(rsmc.getString("REMARKS"), null));
+								break;
+							}
 						}
 					} catch (SQLException se) {
 						se.printStackTrace();
