@@ -49,7 +49,7 @@ public abstract class ATextFileResourcePageContent extends AFileResourcePageCont
 						f = File.createTempFile("jrsimgfile", ".properties"); //$NON-NLS-1$ //$NON-NLS-2$
 						f.deleteOnExit();
 						f.createNewFile();
-						WSClientHelper.getResource(new NullProgressMonitor(), res, res.getValue(), f);
+						WSClientHelper.getResource(new NullProgressMonitor(), res.getRoot() != null ? res : pnode, res.getValue(), f);
 					}
 					if (f != null && f.exists())
 						txt.setText(FileUtils.readFileAsAString(f));
