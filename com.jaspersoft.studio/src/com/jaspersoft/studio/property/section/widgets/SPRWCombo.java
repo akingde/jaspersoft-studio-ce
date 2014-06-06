@@ -85,8 +85,10 @@ public class SPRWCombo extends ASPropertyWidget {
 		combo.setEnabled(pnode.isEditable());
 		refresh = false;
 	}
-	
-	private void setComboSelection(String str, boolean isCaseSensitive){
+
+	private void setComboSelection(String str, boolean isCaseSensitive) {
+		Point oldSel = combo.getSelection();
+		int oldLenght = combo.getText().length();
 		String[] items = combo.getItems();
 		int selection = -1;
 		for (int i = 0; i < items.length; i++) {
@@ -95,16 +97,24 @@ public class SPRWCombo extends ASPropertyWidget {
 				break;
 			}
 		}
-		if (selection != -1) combo.select(selection);
-		else combo.setText(Misc.nvl(str));
-		int stringLength = combo.getText().length();
-
-		combo.setSelection(new Point(stringLength, stringLength));
+		if (selection != -1)
+			combo.select(selection);
+		else
+			combo.setText(Misc.nvl(str));
+		String t = combo.getText();
+		// if (oldSel.x != oldSel.y) {
+		if (oldSel.y - oldSel.x == t.length()) {
+			int stringLength = t.length();
+			combo.setSelection(new Point(stringLength, stringLength));
+		} else {
+			int stringLength = Math.min(t.length() - (oldLenght - oldSel.y), t.length());
+			combo.setSelection(new Point(stringLength, stringLength));
+		}
 		combo.getParent().layout(true);
 	}
 
 	public void setNewItems(final RWComboBoxPropertyDescriptor pd) {
-		//Block the update and reset the previously selected item
+		// Block the update and reset the previously selected item
 		refresh = true;
 		String oldSelection = combo.getText();
 		combo.setItems(pd.getItems());
