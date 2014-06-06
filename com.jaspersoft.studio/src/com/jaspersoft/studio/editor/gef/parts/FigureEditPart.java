@@ -238,15 +238,17 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		ANode model = getModel().getParent();
 		if (model instanceof IGraphicElement && model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
-			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
-			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
-
-			getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, x);
-			getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, y);
-			getViewer().setProperty(ReportRuler.PROPERTY_HEND, bounds.width); //$NON-NLS-1$
-			getViewer().setProperty(ReportRuler.PROPERTY_VEND, bounds.height);//$NON-NLS-1$
-
-			getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(x, y));
+			if (bounds != null){
+				int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+				int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+	
+				getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, x);
+				getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, y);
+				getViewer().setProperty(ReportRuler.PROPERTY_HEND, bounds.width); //$NON-NLS-1$
+				getViewer().setProperty(ReportRuler.PROPERTY_VEND, bounds.height);//$NON-NLS-1$
+	
+				getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(x, y));
+			}
 		}
 	}
 

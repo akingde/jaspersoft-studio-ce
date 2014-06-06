@@ -34,9 +34,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class SPEvaluationTime extends ASPropertyWidget {
 	private Combo evalTime;
@@ -86,13 +89,19 @@ public class SPEvaluationTime extends ASPropertyWidget {
 		JasperDesign jasperDesign = pnode.getJasperDesign();
 		JRDataset dataset = null;
 		MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		
 		if (mdataset != null) {
 			JRDesignDatasetRun datasetRun = mdataset.getValue();
 			if (datasetRun != null) {
 				String dsname = datasetRun.getDatasetName();
 				dataset = jasperDesign.getDatasetMap().get(dsname);
 			}
+		} else if (pnode instanceof MVariable) {
+			dataset = ModelUtils.getDataset(pnode);
+		} else if (pnode instanceof MGraphicElement){
+			dataset = ((MGraphicElement) pnode).getElementDataset();
 		}
+		
 		if (dataset == null && jasperDesign != null)
 			dataset = jasperDesign.getMainDataset();
 

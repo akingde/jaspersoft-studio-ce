@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -62,6 +63,7 @@ import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.utils.AlfaRGB;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The Class MGeneric.
@@ -324,16 +326,31 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			if (styleD != null ) {
 					styleD.setItems(newitems);
 			}
-			
+			JRDataset dataset = getElementDataset();
 			// initialize groups
-			JRGroup[] groups = jd.getGroups();
-			String[] items = new String[groups.length + 1];
-			items[0] = ""; //$NON-NLS-1$
-			for (int j = 0; j < groups.length; j++) {
-				items[j + 1] = groups[j].getName();
+			if (dataset != null){
+				JRGroup[] groups = dataset.getGroups();
+				String[] items = new String[groups.length + 1];
+				items[0] = ""; //$NON-NLS-1$
+				for (int j = 0; j < groups.length; j++) {
+					items[j + 1] = groups[j].getName();
+				}
+				setGroupItems(items);
 			}
-			setGroupItems(items);
 		}
+	}
+	
+	/**
+	 * Return the dataset used by the element
+	 * 
+	 * @return the dataset nearest to this element
+	 */
+	public JRDataset getElementDataset(){
+		JRDataset dataset =  ModelUtils.getDataset(this);
+		if (dataset == null && getJasperDesign() != null){
+			dataset = getJasperDesign().getMainDataset();
+		}
+		return dataset;
 	}
 
 	protected void setGroupItems(String[] items) {

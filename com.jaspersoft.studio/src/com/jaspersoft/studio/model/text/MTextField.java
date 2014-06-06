@@ -18,10 +18,14 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -36,8 +40,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.MHyperLink;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -54,7 +60,7 @@ import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
 /*
  * The Class MTextField.
  */
-public class MTextField extends MTextElement {
+public class MTextField extends MTextElement{
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -113,10 +119,45 @@ public class MTextField extends MTextElement {
 
 	@Override
 	protected void setGroupItems(String[] items) {
+		//Called by the post descriptors of MGraphicalElement
 		super.setGroupItems(items);
 		if (evalGroupD != null)
 			evalGroupD.setItems(items);
 	}
+	
+	@Override
+	public JRDataset getElementDataset(){
+		return getElementDataset(this);
+	}
+	
+	/**
+	 * Return the dataset nearest to this element
+	 * 
+	 * @param node the actual node
+	 * @return the dataset nearest to this element or null if it can't be found
+	 */
+	private JRDataset getElementDataset(ANode node){
+		if (node instanceof APropertyNode){
+			APropertyNode pnode = (APropertyNode)node;
+			MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+			if (mdataset != null) {
+					JRDesignDatasetRun datasetRun = mdataset.getValue();
+					if (datasetRun != null) {
+						String dsname = datasetRun.getDatasetName();
+						return getJasperDesign().getDatasetMap().get(dsname);
+					}
+			} 
+		}
+		ANode parent = node.getParent();
+		if (parent != null){
+			return getElementDataset(parent);
+		} else if (getJasperDesign() != null){
+			return getJasperDesign().getMainDataset();
+		} else {
+			return null;
+		}
+	}
+	
 
 	private RComboBoxPropertyDescriptor evalGroupD;
 
@@ -284,7 +325,8 @@ public class MTextField extends MTextElement {
 			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
 			if (value != null && !value.equals("")) { //$NON-NLS-1$
-				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
+				JRDesignDataset dataset = (JRDesignDataset)getElementDataset();
+				JRGroup group = (JRGroup) dataset.getGroupsMap().get(value);
 				jrElement.setEvaluationGroup(group);
 			} else
 				jrElement.setEvaluationGroup(null);
