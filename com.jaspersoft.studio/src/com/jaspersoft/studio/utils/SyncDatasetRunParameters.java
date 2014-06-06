@@ -115,14 +115,14 @@ public class SyncDatasetRunParameters {
 								setupDatasetRun(bprms, dr);
 					}
 			} else {
-				if (mLang == null || oldLang.equals(mLang)) {
+				if (mLang == null || (oldLang != null && oldLang.equals(mLang))) {
 					for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS)) {
 						Object[] bprms = getBuiltInParameters(jConf, oldLang);
 						if (bprms != null)
 							cleanDatasetRun(bprms, dr);
 					}
 				}
-				if (mLang == null || newLang.equals(mLang)) {
+				if (mLang == null || (newLang != null && newLang.equals(mLang))) {
 					for (JRDesignDatasetRun dr : getDatasetRun(mrep, subDS)) {
 						Object[] bprms = getBuiltInParameters(jConf, newLang);
 						if (bprms != null)
