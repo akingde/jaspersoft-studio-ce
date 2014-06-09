@@ -112,6 +112,15 @@ public class SPRWCombo extends ASPropertyWidget {
 		}
 		combo.getParent().layout(true);
 	}
+	
+	/**
+	 * Return the items inside the combo control
+	 * 
+	 * @return a list of string 
+ 	 */
+	public String[] getItems(){
+		return combo.getItems();
+	}
 
 	public void setNewItems(final RWComboBoxPropertyDescriptor pd) {
 		// Block the update and reset the previously selected item

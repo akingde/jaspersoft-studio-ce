@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.combo;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
@@ -65,9 +67,11 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 
 	public void setItems(String[] items) {
 		labels = items;
-		if (cellEditor != null && !cellEditor.getComboBox().isDisposed())
+		//Avoid to set the items if they are already the same
+		if (cellEditor != null && !cellEditor.getComboBox().isDisposed() && !Arrays.equals(labels, cellEditor.getItems())){
 			cellEditor.setItems(items);
-		if (combo != null && !combo.getControl().isDisposed()){
+		}
+		if (combo != null && !combo.getControl().isDisposed() && !Arrays.equals(labels, combo.getItems())){
 			combo.setNewItems(this);
 		}
 	}
