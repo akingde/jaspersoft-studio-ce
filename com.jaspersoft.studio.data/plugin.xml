@@ -81,5 +81,16 @@
             class="com.jaspersoft.studio.data.messages.ResourcePublisher">
       </input>
    </extension>
+   
+   <!-- Preference page for the XML query editor -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.jaspersoft.studio.preferences.EditorsPreferencePage"
+            class="com.jaspersoft.studio.data.xml.XMLQueryEditorPreferencePage"
+            id="com.jaspersoft.studio.data.xml.XMLQueryEditorPreferencePage"
+            name="XML Query Editor">
+      </page>
+   </extension>
 
 </plugin>

@@ -35,6 +35,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -50,6 +51,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider, IWizardDataEditorProvider {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	private boolean recursiveFind;
 
 	@Override
 	public XmlDataAdapterImpl getDataAdapter() {
@@ -84,6 +86,7 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 
 	@Override
 	public List<JRDesignField> getFields(DataAdapterService con, JasperReportsConfiguration jConfig, JRDataset jDataset) throws JRException, UnsupportedOperationException {
+		setRecursiveRetrieval(jConfig);
 		ArrayList<JRDesignField> fields = new ArrayList<JRDesignField>();
 		String fileName = getDataAdapter().getFileName();
 		File in = new File(fileName);
@@ -112,32 +115,73 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor implements I
 		LinkedHashMap<String, JRDesignField> fieldsMap = new LinkedHashMap<String, JRDesignField>();
 		for (int nIdx = 0; nIdx < nodes.getLength(); nIdx++) {
 			Node currNode = nodes.item(nIdx);
+			findDirectChildrenAttributes(currNode,fieldsMap,"");
 			if(currNode.getNodeType() == Node.ELEMENT_NODE) {
 				NodeList childNodes = currNode.getChildNodes();
-				for (int i = 0; i < childNodes.getLength(); i++) {
-					Node item = childNodes.item(i);
-					String nodeName = item.getNodeName();
-					if(!fieldsMap.containsKey(nodeName) && 
-							(item.getNodeType() == Node.ATTRIBUTE_NODE || 
-							item.getNodeType() == Node.ELEMENT_NODE)) {
-						addNewField(nodeName, fieldsMap, item);
-					}
-				}
+				findChildFields(childNodes, fieldsMap,"");
 			}
 		}
 		return new ArrayList<JRDesignField>(fieldsMap.values());
 	}
+	
+	/*
+	 * Finds and adds a possible list of attributes for the specified node.
+	 */
+	private void findDirectChildrenAttributes(Node node,LinkedHashMap<String, JRDesignField> fieldsMap,String prefix) {
+		NamedNodeMap attributes = node.getAttributes();
+		for(int i=0;i<attributes.getLength();i++){
+			Node item = attributes.item(i);
+			if(item.getNodeType()==Node.ATTRIBUTE_NODE){
+				addNewField(item.getNodeName(), fieldsMap, item, prefix);
+			}
+		}
+	}
 
+	/*
+	 * Finds and adds a possible list of children nodes for the specified node.
+	 */
+	private void findChildFields(NodeList nodes, LinkedHashMap<String, JRDesignField> fieldsMap,String prefix) {
+		if(nodes!=null) {
+			List<String> childrenNames = new ArrayList<String>(); // temp list to avoid duplicates at the same level
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Node item = nodes.item(i);
+				String nodeName = item.getNodeName();
+				if((item.getNodeType() == Node.ELEMENT_NODE || item.getNodeType() == Node.ATTRIBUTE_NODE) && 
+						!childrenNames.contains(nodeName)) {
+					if(recursiveFind) {
+						findDirectChildrenAttributes(item,fieldsMap,prefix+nodeName+"/");
+					}
+					addNewField(nodeName, fieldsMap, item, prefix);
+					if(recursiveFind && item.hasChildNodes()){
+						findChildFields(item.getChildNodes(), fieldsMap,prefix+nodeName+"/");
+					}
+				}
+			}
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	private void setRecursiveRetrieval(JasperReportsConfiguration jconfig) {
+		recursiveFind = jconfig
+				.getPropertyBoolean(XMLQueryEditorPreferencePage.P_USE_RECURSIVE_RETRIEVAL, false);
+	}
+
+	/*
+	 * Adds a new JRDesignField to the current map.
+	 * A proper name is generated if the node one can not be used.
+	 */
 	private void addNewField(String nodeName,
-			LinkedHashMap<String, JRDesignField> fieldsMap, Node item) {
+			LinkedHashMap<String, JRDesignField> fieldsMap, Node item, String prefix) {
 		JRDesignField f = new JRDesignField();
 		f.setName(ModelUtils.getNameForField(
 				new ArrayList<JRDesignField>(fieldsMap.values()), nodeName));
 		f.setValueClass(String.class);
 		if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
-			f.setDescription("@" + item.getNodeName()); //$NON-NLS-1$
+			f.setDescription(prefix + "@" + item.getNodeName()); //$NON-NLS-1$
 		} else {
-			f.setDescription(item.getNodeName());
+			f.setDescription(prefix + item.getNodeName());
 		}
 		fieldsMap.put(nodeName, f);
 	}
