@@ -85,7 +85,7 @@ public class MetaDataUtil {
 		}
 	}
 
-	private static void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MTables mview, LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
+	public static void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MTables mview, LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
 		try {
 			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { mview.getValue() });
 			while (rs.next()) {

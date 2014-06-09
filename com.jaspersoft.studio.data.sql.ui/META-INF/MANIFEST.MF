@@ -31,6 +31,7 @@ Export-Package: com.jaspersoft.studio.data.sql.model,
  com.jaspersoft.studio.data.sql.model.query.orderby,
  com.jaspersoft.studio.data.sql.model.query.select,
  com.jaspersoft.studio.data.sql.model.query.subquery,
+ com.jaspersoft.studio.data.sql.ui.metadata,
  com.jaspersoft.studio.data.ui.contentassist,
  com.jaspersoft.studio.data.ui.contentassist.antlr
 Import-Package: org.apache.log4j,
