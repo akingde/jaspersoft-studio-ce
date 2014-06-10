@@ -48,7 +48,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -157,37 +156,14 @@ public class TableComponentFactory implements IComponentFactory {
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
 				if (parent instanceof MPage) {
 					createTable(mt);
-
-					// listen for datasets
-					final JasperDesign jd = mt.getJasperDesign();
+					//Removed a lot of old listener in this class on the 10-06-2014, need test
+					//to see if all it's working
+					JasperDesign jd = mt.getJasperDesign();
 					ReportFactory.createStyles(parent.getJasperConfiguration(), jd, parent, 0);
 
-					final MTable finaltable = mt;
-					final PropertyChangeListener listener = new PropertyChangeListener() {
-
-						public void propertyChange(PropertyChangeEvent evt) {
-							Display.getDefault().asyncExec(new Runnable() {
-
-								public void run() {
-									refreshTable(finaltable);
-								}
-							});
-
-						}
-					};
-					PropertyChangeListener dlistener = new PropertyChangeListener() {
-
-						public void propertyChange(PropertyChangeEvent evt) {
-							listenDatasets(jd, listener);
-						}
-					};
-					jd.getEventSupport().addPropertyChangeListener(JasperDesign.PROPERTY_DATASETS, dlistener);
-
-					listenDatasets(jd, listener);
-
-					final StandardTable st = TableManager.getTable(mt);
+					StandardTable st = TableManager.getTable(mt);
 					DSListener dslistner = new DSListener(parent, jd, st);
-					setDataset(parent, jd, st, dslistner);
+					setDataset(parent, jd, st);
 
 					st.getEventSupport().addPropertyChangeListener(dslistner);
 
@@ -199,6 +175,13 @@ public class TableComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	/**
+	 * Listener to update the dataset inside the table designer when the dataset
+	 * run is changed
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
 	class DSListener implements PropertyChangeListener {
 		private ANode parent;
 		private JasperDesign jd;
@@ -211,42 +194,40 @@ public class TableComponentFactory implements IComponentFactory {
 		}
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			setDataset(parent, jd, st, this);
+			if (StandardTable.PROPERTY_DATASET_RUN.equals(evt.getPropertyName())){
+					setDataset(parent, jd, st);
+			}
 		}
 	};
 
-	public void setDataset(ANode parent, final JasperDesign jd, StandardTable st, DSListener dslistner) {
-		for (INode n : parent.getChildren())
-			if (n instanceof MDataset)
-				parent.removeChild((ANode) n);
+	/**
+	 * Remove the old dataset from the mpage of a table and add the new one, read
+	 * from the dataset run of the table
+	 * 
+	 * @param parent the mpage of the table editor
+	 * @param jd the jasperdesign
+	 * @param st the table element inside the table editor
+	 */
+	public void setDataset(ANode parent, final JasperDesign jd, StandardTable st) {
+		//Remove all the old dataset inside the page
+		for (INode n : parent.getChildren()){
+			if (n instanceof MDataset) parent.removeChild((ANode) n);
+		}
 		JRDesignDatasetRun dr = (JRDesignDatasetRun) st.getDatasetRun();
 		if (dr != null) {
-			dr.getEventSupport().removePropertyChangeListener(dslistner);
 			String dbname = dr.getDatasetName();
 			JRDesignDataset dataset;
-			if (dbname != null)
+			if (dbname != null){
 				dataset = (JRDesignDataset) jd.getDatasetMap().get(dbname);
-			else
-				dataset = (JRDesignDataset) jd.getMainDataset();
+			} else {
+ 				dataset = (JRDesignDataset) jd.getMainDataset();
+			}
 			if (dataset != null) {
 				MDataset nDataset = new MDataset(parent, dataset, 1);
 				ReportFactory.createDataset(nDataset, dataset, true);
 			}
 
-			dr.getEventSupport().addPropertyChangeListener(dslistner);
 		}
-	}
-
-	private static void listenDatasets(final JasperDesign jd, final PropertyChangeListener listener) {
-		for (Object jddt : jd.getDatasetsList()) {
-			((JRDesignDataset) jddt).getEventSupport().removePropertyChangeListener(JRDesignDataset.PROPERTY_GROUPS, listener);
-			((JRDesignDataset) jddt).getEventSupport().addPropertyChangeListener(JRDesignDataset.PROPERTY_GROUPS, listener);
-		}
-	}
-
-	public static void refreshTable(MTable mt) {
-		mt.removeChildren();
-		createTable(mt);
 	}
 
 	public static ANode createTable(MTable mt) {
@@ -752,25 +733,26 @@ public class TableComponentFactory implements IComponentFactory {
 		if (node instanceof MColumn) {
 			MColumn model = (MColumn) node;
 			ColumnCell cc = new ColumnCell(model.getType(), model.getGrName(), model.getValue());
-
-			Dimension d = model.getMTable().getTableManager().getCellPackSize(cc);
-			if (d.height > 0 && d.width > 0) {
-				JSSCompoundCommand c = new JSSCompoundCommand("Resize to container",model);
-
-				SetValueCommand cmd = new SetValueCommand();
-
-				cmd.setTarget(model);
-				cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
-				cmd.setPropertyValue(d.height);
-				c.add(cmd);
-
-				cmd = new SetValueCommand();
-				cmd.setTarget(model);
-				cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
-				cmd.setPropertyValue(d.width);
-				c.add(cmd);
-
-				return c;
+			if (model.getMTable()!= null && model.getMTable().getTableManager() != null){
+				Dimension d = model.getMTable().getTableManager().getCellPackSize(cc);
+				if (d.height > 0 && d.width > 0) {
+					JSSCompoundCommand c = new JSSCompoundCommand("Resize to container",model);
+	
+					SetValueCommand cmd = new SetValueCommand();
+	
+					cmd.setTarget(model);
+					cmd.setPropertyId(DesignCell.PROPERTY_HEIGHT);
+					cmd.setPropertyValue(d.height);
+					c.add(cmd);
+	
+					cmd = new SetValueCommand();
+					cmd.setTarget(model);
+					cmd.setPropertyId(StandardColumn.PROPERTY_WIDTH);
+					cmd.setPropertyValue(d.width);
+					c.add(cmd);
+	
+					return c;
+				}
 			}
 		}
 		return null;
