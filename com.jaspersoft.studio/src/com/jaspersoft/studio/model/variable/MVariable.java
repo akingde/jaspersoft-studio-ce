@@ -274,21 +274,21 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super.setPropertyValue(id, value);
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
-			if (!value.equals("")) { //$NON-NLS-1$
+			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
-			}
+			} else jrVariable.setResetGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION))
 			jrVariable.setExpression(ExprUtil.setValues(jrVariable.getExpression(), value));
 		else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION))
 			jrVariable.setInitialValueExpression(ExprUtil.setValues(jrVariable.getInitialValueExpression(), value));
 		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
-			if (!value.equals("")) { //$NON-NLS-1$
+			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setIncrementGroup(group);
-			}
+			}  else jrVariable.setIncrementGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			jrVariable.setCalculation((CalculationEnum) calculationD.getEnumValue(value));
 		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {

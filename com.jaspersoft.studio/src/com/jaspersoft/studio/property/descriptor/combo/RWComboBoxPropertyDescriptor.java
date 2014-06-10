@@ -26,12 +26,19 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPRWCombo;
 
-public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget,
-		IHelp {
+public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget,IHelp {
+	
 	private String[] labels;
+	
 	private NullEnum canBeNull;
+	
 	private RWComboBoxCellEditor cellEditor;
+	
 	private boolean caseSensitive;
+	
+	private SPRWCombo combo;
+
+	private IHelpRefBuilder refBuilder;
 
 	public RWComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray, NullEnum canBeNull) {
 		this(id, displayName, labelsArray, canBeNull, true);
@@ -43,10 +50,6 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 		labels = labelsArray;
 		this.canBeNull = canBeNull;
 		this.caseSensitive = caseSensitive;
-	}
-
-	public boolean isCaseSensitive() {
-		return caseSensitive;
 	}
 
 	@Override
@@ -80,14 +83,14 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 		return labels;
 	}
 	
-	private SPRWCombo combo;
-
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+	
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
 		combo = new SPRWCombo(parent, section, this);
 		return combo;
 	}
-
-	private IHelpRefBuilder refBuilder;
 
 	@Override
 	public void setHelpRefBuilder(IHelpRefBuilder refBuilder) {

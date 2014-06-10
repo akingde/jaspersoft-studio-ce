@@ -49,7 +49,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
@@ -159,7 +159,7 @@ public class MTextField extends MTextElement{
 	}
 	
 
-	private RComboBoxPropertyDescriptor evalGroupD;
+	private RWComboBoxPropertyDescriptor evalGroupD;
 
 	/**
 	 * Creates the property descriptors.
@@ -176,8 +176,8 @@ public class MTextField extends MTextElement{
 		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evalGroupD = new RComboBoxPropertyDescriptor(JRDesignTextField.PROPERTY_EVALUATION_GROUP,
-				Messages.MTextField_evaluation_group, new String[] { "" }); //$NON-NLS-1$
+		evalGroupD = new RWComboBoxPropertyDescriptor(JRDesignTextField.PROPERTY_EVALUATION_GROUP,
+				Messages.MTextField_evaluation_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		evalGroupD.setDescription(Messages.MTextField_evaluation_group_description);
 		desc.add(evalGroupD);
 

@@ -15,128 +15,33 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.JREnum;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.ModelUtils;
 
-public class SPIncrementType extends ASPropertyWidget {
-	private Combo evalTime;
-	private IPropertyDescriptor gDescriptor;
+public class SPIncrementType extends SPGroupTypeCombo {
 
 	public SPIncrementType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
 			IPropertyDescriptor gDescriptor) {
-		super(parent, section, pDescriptor);
-		this.gDescriptor = gDescriptor;
+		super(parent, section, pDescriptor,gDescriptor);
 	}
 
 	@Override
-	public Control getControl() {
-		return evalTime;
-	}
-
-	public void createComponent(Composite parent) {
-		evalTime = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
-		evalTime.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String group = null;
-				Integer et = new Integer(1);
-
-				String str = evalTime.getItem(evalTime.getSelectionIndex());
-				if (str.startsWith(GROUPPREFIX)) {
-					group = str.substring(GROUPPREFIX.length());
-					et = EnumHelper.getValue(IncrementTypeEnum.GROUP, 1, false);
-				} else {
-					et = EnumHelper.getValue(IncrementTypeEnum.getByName(str), 1, false);
-				}
-				//It is important to set first the group name and then the eval type, to have the event propagated
-				//correctly
-				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
-				section.changeProperty(pDescriptor.getId(), et);
-			}
-
-		});
-		evalTime.setToolTipText(pDescriptor.getDescription());
+	protected JREnum[] getEnumValues() {
+		return IncrementTypeEnum.values();
 	}
 
 	@Override
-	public void setData(APropertyNode pnode, Object value) {
-		JasperDesign jasperDesign = pnode.getJasperDesign();
-		JRDataset dataset = null;
-		MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
-
-		if (mdataset != null) {
-			JRDesignDatasetRun datasetRun = mdataset.getValue();
-			if (datasetRun != null) {
-				String dsname = datasetRun.getDatasetName();
-				dataset = jasperDesign.getDatasetMap().get(dsname);
-			}
-		} else if (pnode instanceof MVariable) {
-			dataset = ModelUtils.getDataset(pnode);
-		}
-
-		if (dataset == null)
-			dataset = jasperDesign.getMainDataset();
-
-		setData((Integer) pnode.getPropertyValue(pDescriptor.getId()),
-				(String) pnode.getPropertyValue(gDescriptor.getId()), SPIncrementType.getItems(dataset));
+	protected JREnum getGroupEnum() {
+		return IncrementTypeEnum.GROUP;
 	}
 
-	public void setData(Integer et, String group, String[] items) {
-		evalTime.setItems(items);
-		int selection = 0;
-		IncrementTypeEnum sel = (IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), et, 1, false);
-
-		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(sel.getName())) {
-				selection = i;
-				break;
-			}
-			if (items[i].startsWith(GROUPPREFIX) && sel.equals(IncrementTypeEnum.GROUP)) {
-				if (items[i].substring(GROUPPREFIX.length()).equals(group)) {
-					selection = i;
-					break;
-				}
-			}
-		}
-		evalTime.select(selection);
+	@Override
+	protected JREnum getByName(String name) {
+		return IncrementTypeEnum.getByName(name);
 	}
-
-	public static String[] getItems(JRDataset dataset) {
-		List<String> lsIncs = new ArrayList<String>();
-		for (IncrementTypeEnum en : IncrementTypeEnum.values()) {
-			if (en.equals(IncrementTypeEnum.GROUP)) {
-				if (dataset != null)
-					for (JRGroup gr : dataset.getGroups())
-						lsIncs.add(GROUPPREFIX + gr.getName());
-			} else {
-				lsIncs.add(en.getName());
-			}
-		}
-		return lsIncs.toArray(new String[lsIncs.size()]);
-	}
-
-	private static final String GROUPPREFIX = "[Group] ";
 }

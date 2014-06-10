@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,7 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
@@ -320,20 +322,19 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		JasperDesign jd = getJasperDesign();
 		if (jd != null && getValue() != null) {
 			String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), getValue());
-			if (styleitems == null || newitems != styleitems) {
+			if (!Arrays.equals(styleitems, newitems)) {
 				styleitems = newitems;
 			}
 			if (styleD != null ) {
 					styleD.setItems(newitems);
 			}
 			JRDataset dataset = getElementDataset();
-			// initialize groups
+			//Calculate the groups list for the current element
 			if (dataset != null){
 				JRGroup[] groups = dataset.getGroups();
-				String[] items = new String[groups.length + 1];
-				items[0] = ""; //$NON-NLS-1$
+				String[] items = new String[groups.length];
 				for (int j = 0; j < groups.length; j++) {
-					items[j + 1] = groups[j].getName();
+					items[j] = groups[j].getName();
 				}
 				setGroupItems(items);
 			}
@@ -354,8 +355,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	protected void setGroupItems(String[] items) {
-		if (groupChangesD != null)
-			groupChangesD.setItems(items);
+		if (groupChangesD != null){
+			//Appen to the array the element to unselect the group
+			String[] itemsEmpty = new String[items.length+1];
+			itemsEmpty[0] = "";
+			int j = 1;
+			for(String item : items){
+				itemsEmpty[j] = item;
+				j++;
+			}
+			groupChangesD.setItems(itemsEmpty);
+		}
 	}
 
 	@Override
@@ -658,7 +668,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value));
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
 			if (!value.equals("")) { //$NON-NLS-1$
-				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
+				JRDesignDataset jrDataset = (JRDesignDataset)getElementDataset();
+				JRGroup group = jrDataset.getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
