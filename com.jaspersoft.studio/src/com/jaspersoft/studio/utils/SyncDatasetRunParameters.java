@@ -70,7 +70,7 @@ public class SyncDatasetRunParameters {
 			String mDsName = jd.getMainDataset().getName();
 			if (oldName != null && !mDsName.equals(newName))
 				for (JRDataset ds : jd.getDatasetsList())
-					if (ds.getName().equals(oldName) && (mLang == null || ds.getQuery().getLanguage().equals(mLang))) {
+					if (ds.getName().equals(oldName) && (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
 						Object[] bprms = getBuiltInParameters(jConf, ds.getQuery().getLanguage());
 						if (bprms != null)
 							cleanDatasetRun(bprms, mDsRun.getValue());
@@ -78,7 +78,7 @@ public class SyncDatasetRunParameters {
 					}
 			if (newName != null && !mDsName.equals(newName))
 				for (JRDataset ds : jd.getDatasetsList())
-					if (ds.getName().equals(newName) && (mLang == null || ds.getQuery().getLanguage().equals(mLang))) {
+					if (ds.getName().equals(newName) && (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
 						Object[] bprms = getBuiltInParameters(jConf, ds.getQuery().getLanguage());
 						if (bprms != null)
 							setupDatasetRun(bprms, mDsRun.getValue());
