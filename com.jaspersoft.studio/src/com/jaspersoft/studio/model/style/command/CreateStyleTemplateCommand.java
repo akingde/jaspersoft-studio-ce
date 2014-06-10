@@ -18,6 +18,7 @@ package com.jaspersoft.studio.model.style.command;
 import java.io.File;
 
 import net.sf.jasperreports.eclipse.messages.Messages;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -27,7 +28,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -39,6 +39,7 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 /*
  * link nodes & together.
@@ -55,6 +56,11 @@ public class CreateStyleTemplateCommand extends Command {
 
 	/** The index. */
 	private int index;
+	
+	/**
+	 * The configuration of the actual report
+	 */
+	private JasperReportsConfiguration jConfig;
 
 	/**
 	 * Instantiates a new creates the style template command.
@@ -69,6 +75,7 @@ public class CreateStyleTemplateCommand extends Command {
 	public CreateStyleTemplateCommand(MStyles destNode, MStyleTemplate srcNode, int index) {
 		super();
 		this.jrDesign = destNode.getJasperDesign();
+		this.jConfig = destNode.getJasperConfiguration();
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrTemplate = (JRDesignReportTemplate) srcNode.getValue();
@@ -107,15 +114,29 @@ public class CreateStyleTemplateCommand extends Command {
 		
 	}
 	
+	/**
+	 * This method try to return a relative path for the style from the current opened report. If it isn't
+	 * Possible to find a relative path then the absolute one is returned
+	 * 
+	 * @param styleFile the style file resource
+	 * @return and absolute or relative path to the style resource
+	 */
+	private String getStylePath(IFile styleFile){
+		IFile reportFile = (IFile) jConfig.get(FileUtils.KEY_FILE);
+		if (reportFile != null){
+			if (reportFile.getParent().equals(styleFile.getParent())) return styleFile.getName();
+			else if (reportFile.getProject().equals(styleFile.getProject())) return styleFile.getProjectRelativePath().toPortableString();
+		}
+	 return styleFile.getRawLocation().makeAbsolute().toOSString();
+	}
+	
 	private void createObject() {
 		if (jrTemplate == null) {
-			FilteredResourcesSelectionDialog fd = new FilteredHelpDialog(Display.getCurrent().getActiveShell(),
-					false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+			FilteredResourcesSelectionDialog fd = new FilteredHelpDialog(Display.getCurrent().getActiveShell(),false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
 			if (fd.open() == Dialog.OK) {
 				IFile file = (IFile) fd.getFirstResult();
-				IPath path2 = file.getLocation();
-				File  fileToBeOpened = path2.toFile();
+				File  fileToBeOpened = file.getRawLocation().makeAbsolute().toFile();
 				boolean showErrorMessage = false;
 				//Check if the file is a valid template before add it to the model
 				if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
@@ -123,9 +144,8 @@ public class CreateStyleTemplateCommand extends Command {
 						//Try to load the file to see if it is a valid template
 						JRXmlTemplateLoader.load(fileToBeOpened);
 						this.jrTemplate = MStyleTemplate.createJRTemplate();
-		
 						JRDesignExpression jre = new JRDesignExpression();
-						jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+						jre.setText("\"" + getStylePath(file) + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 						((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
 					} catch(Exception ex){
 						showErrorMessage = true;
