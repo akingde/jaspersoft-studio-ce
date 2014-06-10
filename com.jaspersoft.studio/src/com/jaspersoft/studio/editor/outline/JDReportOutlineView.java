@@ -337,7 +337,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						TreeItem[] ti = t.getSelection();
 						if (ti != null && ti.length > 0) {
 							Object obj = ti[0].getData();
-							if (obj instanceof TreeEditPart) {
+							if (obj instanceof TreeEditPart && editor instanceof AbstractVisualEditor) {
 
 								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry()
 										.get(((TreeEditPart) obj).getModel());
