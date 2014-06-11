@@ -268,8 +268,12 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		List<TransferDragSourceListener> dragListeners = new ArrayList<TransferDragSourceListener>();
 		List<TransferDropTargetListener> dropListeners = new ArrayList<TransferDropTargetListener>();
 		for (IRepositoryViewProvider rp : rprovs) {
-			dragListeners.addAll(rp.getTransferDragSourceListeners(treeViewer));
-			dropListeners.addAll(rp.getTransferDropTargetListeners(treeViewer));
+			List<TransferDragSourceListener> tdsl = rp.getTransferDragSourceListeners(treeViewer);
+			if (tdsl != null)
+				dragListeners.addAll(tdsl);
+			List<TransferDropTargetListener> tdtl = rp.getTransferDropTargetListeners(treeViewer);
+			if (tdtl != null)
+				dropListeners.addAll(tdtl);
 		}
 		// In case its needed add the related delegating adapter for both drag and drop operations
 		if (!dragListeners.isEmpty()) {
