@@ -52,6 +52,12 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	private EditDomain editDomain;
 	private APropertyNode element;
 	protected TabbedPropertySheetPage atabbedPropertySheetPage;
+	
+	/**
+	 * The last defined root entry
+	 */
+	private JRPropertySheetEntry rootEntry = null;
+	
 
 	private ControlAdapter viewResize = new ControlAdapter() {
 
@@ -78,14 +84,26 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		UpdatePageContent();
 	}
 	
+
 	private void UpdatePageContent(){
 		if (page != null && element != null && getEditDomain() != null){
 			page.selectionChanged(getPart(), new StructuredSelection(element));
-			JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(), (ANode) element);
-			page.setRootEntry(propertySheetEntry);			
+			//Dispose the previous root entry (if one) before to create the new one
+			disposeRootEntry();
+			rootEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(), (ANode) element);
+			page.setRootEntry(rootEntry);			
 		}
 	}
-
+	
+	/**
+	 * Dispose the root entry if it wasen't already disposed
+	 */
+	private void disposeRootEntry(){
+		if (rootEntry != null){
+			rootEntry.dispose();
+			rootEntry = null;
+		}
+	}
 
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
@@ -140,6 +158,8 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 */
 	public void aboutToBeHidden() {
 		if (getTabbedPropertySheetPage() != null){
+			//disposeRootEntry();
+			
 			ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
 			if (!comp.isDisposed()) comp.removeControlListener(viewResize);
 			

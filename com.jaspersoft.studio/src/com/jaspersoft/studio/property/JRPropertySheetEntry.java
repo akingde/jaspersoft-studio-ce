@@ -54,14 +54,23 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	/**
 	 * Instantiates a new jR property sheet entry.
 	 * 
-	 * @param stack
-	 *          the stack
-	 * @param model
-	 *          the model
+	 * @param stack the stack
+	 * @param model the model
 	 */
 	public JRPropertySheetEntry(CommandStack stack, ANode model) {
+		this(stack, model, true);
+	}
+	
+	/**
+	 * Instantiates a new jR property sheet entry.
+	 * 
+	 * @param stack the stack
+	 * @param model the model
+	 * @param addListener flag to add or not the listener on the command stack to refresh all the entries
+	 */
+	public JRPropertySheetEntry(CommandStack stack, ANode model, boolean addListener) {
 		super();
-		setCommandStack(stack);
+		setCommandStack(stack, addListener);
 		setModel(model);
 	}
 
@@ -129,29 +138,37 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 		super.setValues(objects);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.PropertySheetEntry#createChildEntry()
+	/**
+	 * The child dosen't have the listener on the stack because the listener
+	 * refresh always from root to all the children, so one listener on the root
+	 * is the only one needed
 	 */
 	protected JRPropertySheetEntry createChildEntry() {
-		return new JRPropertySheetEntry(stack, model);
+		return new JRPropertySheetEntry(stack, model, false);
 	}
 
 	/**
 	 * Sets the command stack.
 	 * 
-	 * @param stack
-	 *          the new command stack
+	 * @param stack the new commands stack
+	 * @param addListener flag to add or not the listener on the command stack to refresh all the entries
 	 */
-	void setCommandStack(CommandStack stack) {
+	void setCommandStack(CommandStack stack, boolean addListener) {
 		this.stack = stack;
-		commandStackListener = new CommandStackListener() {
-			public void commandStackChanged(EventObject e) {
-				refreshFromRoot();
+		if (addListener){
+			//First remove any previous listener
+			if (commandStackListener != null){
+				stack.removeCommandStackListener(commandStackListener);
+				commandStackListener = null;
 			}
-		};
-		stack.addCommandStackListener(commandStackListener);
+			//Then create and add the new one
+			commandStackListener = new CommandStackListener() {
+				public void commandStackChanged(EventObject e) {
+					refreshFromRoot();
+				}
+			};
+			stack.addCommandStackListener(commandStackListener);
+		}
 	}
 
 	/**
