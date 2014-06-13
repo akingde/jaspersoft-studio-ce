@@ -84,7 +84,10 @@ public class JSSFileRepositoryService implements RepositoryService {
 					JasperCompileManager.getInstance(jConfig).compileToFile(new URI(nuri).getRawPath(), dUri.getRawPath());
 				} else {
 					OutputStreamResource or = new OutputStreamResource();
-					or.setOutputStream(new ByteArrayOutputStream());
+					if (rs instanceof FileRepositoryService)
+						or.setOutputStream(((FileRepositoryService) rs).getOutputStream(uri));
+					else
+						or.setOutputStream(new ByteArrayOutputStream());
 					JasperCompileManager.getInstance(jConfig).compileToStream(inr.getInputStream(), or.getOutputStream());
 					rs.saveResource(uri, or);
 				}
