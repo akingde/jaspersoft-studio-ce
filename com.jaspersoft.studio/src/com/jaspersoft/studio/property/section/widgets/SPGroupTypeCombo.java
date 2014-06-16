@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
@@ -32,43 +27,44 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
- * Can offer a generic combo to select an evaluation, reset, increment
- * time for a components handling the presence of groups. Can also provide
- * an error message when a previously selected group is not found. The list of groups 
- * is read directly by the property descriptor.
+ * Can offer a generic combo to select an evaluation, reset, increment time for a components handling the presence of
+ * groups. Can also provide an error message when a previously selected group is not found. The list of groups is read
+ * directly by the property descriptor.
  * 
  * @author Orlandin Marco
- *
+ * 
  */
 public abstract class SPGroupTypeCombo extends ASPropertyWidget {
-	
+
 	/**
 	 * Prefix string for the group elements
 	 */
 	protected static final String GROUPPREFIX = "[Group] "; //$NON-NLS-1$
-	
+
 	/**
 	 * Combo where the elements are shown
 	 */
 	protected Combo combo;
-	
+
 	/**
 	 * Boolean flag to know if the first element is a missing group error message
 	 */
 	protected boolean hasFirstFakeElement = false;
-	
+
 	/**
 	 * The property descriptor of the group
 	 */
 	protected IPropertyDescriptor gDescriptor;
 
-	public SPGroupTypeCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, IPropertyDescriptor gDescriptor) {
+	public SPGroupTypeCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+			IPropertyDescriptor gDescriptor) {
 		super(parent, section, pDescriptor);
 		this.gDescriptor = gDescriptor;
 	}
@@ -83,8 +79,9 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 		combo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				//If the selected entry is the first and it is fake then don't do anything
-				if (hasFirstFakeElement && combo.getSelectionIndex() == 0) return;
+				// If the selected entry is the first and it is fake then don't do anything
+				if (hasFirstFakeElement && combo.getSelectionIndex() == 0)
+					return;
 				String group = null;
 				Integer et = new Integer(1);
 
@@ -95,9 +92,9 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 				} else {
 					et = EnumHelper.getValue(getByName(str), 1, false);
 				}
-				//It is important to set first the group because the group changing dosen't trigger an event
-				//so otherwise setting the type first trigger the event but the group has not been set to the 
-				//setData method dosen't find the group and set always the element 0.
+				// It is important to set first the group because the group changing dosen't trigger an event
+				// so otherwise setting the type first trigger the event but the group has not been set to the
+				// setData method dosen't find the group and set always the element 0.
 				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
 				section.changeProperty(pDescriptor.getId(), et);
 			}
@@ -135,10 +132,10 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 			}
 		}
 		String[] comboItems = items;
-		//If the group can't be found set a fake item
-		if (!found && group != null && !group.isEmpty()){
+		// If the group can't be found set a fake item
+		if (!found && group != null && !group.isEmpty()) {
 			List<String> newItems = new ArrayList<String>();
-			newItems.add(MessageFormat.format(Messages.SPGroupTypeCombo_groupNotFounError,group));
+			newItems.add(MessageFormat.format(Messages.SPGroupTypeCombo_groupNotFounError, group));
 			newItems.addAll(new ArrayList<String>(Arrays.asList(items)));
 			comboItems = newItems.toArray(new String[newItems.size()]);
 			hasFirstFakeElement = true;
@@ -148,10 +145,9 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 	}
 
 	/**
-	 * Return the items selectable on the combo. Essentially they are 
-	 * the elements in the enumeration. but if in the enumeration is there 
-	 * a value for the group elements then also the available groups will
-	 * be added to the items. The available groups are read from the property descriptor
+	 * Return the items selectable on the combo. Essentially they are the elements in the enumeration. but if in the
+	 * enumeration is there a value for the group elements then also the available groups will be added to the items. The
+	 * available groups are read from the property descriptor
 	 * 
 	 * @return
 	 */
@@ -159,24 +155,29 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 		List<String> lsIncs = new ArrayList<String>();
 		for (JREnum en : getEnumValues()) {
 			if (en.equals(getGroupEnum())) {
-					String[] groupItems = ((RWComboBoxPropertyDescriptor)gDescriptor).getItems();
-					for (String gr : groupItems){
+				if (gDescriptor instanceof RWComboBoxPropertyDescriptor) {
+					String[] groupItems = ((RWComboBoxPropertyDescriptor) gDescriptor).getItems();
+					for (String gr : groupItems)
 						lsIncs.add(GROUPPREFIX + gr);
-					}
+				} else if (gDescriptor instanceof RComboBoxPropertyDescriptor) {
+					String[] groupItems = ((RComboBoxPropertyDescriptor) gDescriptor).getItems();
+					for (String gr : groupItems)
+						lsIncs.add(GROUPPREFIX + gr);
+				}
 			} else {
 				lsIncs.add(en.getName());
 			}
 		}
 		return lsIncs.toArray(new String[lsIncs.size()]);
 	}
-	
+
 	/**
 	 * Return the enumerations selectable on this element
 	 * 
 	 * @return the list of enumerations that can be selected
 	 */
 	protected abstract JREnum[] getEnumValues();
-	
+
 	/**
 	 * Return the group enumeration for the element
 	 * 
@@ -187,7 +188,8 @@ public abstract class SPGroupTypeCombo extends ASPropertyWidget {
 	/**
 	 * Return the enumeration value starting from it's name
 	 * 
-	 * @param name string representation of the enumeration value
+	 * @param name
+	 *          string representation of the enumeration value
 	 * @return the enumeration value
 	 */
 	protected abstract JREnum getByName(String name);
