@@ -22,6 +22,7 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -57,6 +58,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.IEditableDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /** 
  * This generic composite can be reused in dialogs/wizards when there is the need to edit the dataset run information of
@@ -482,6 +484,26 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
 			l.selectionChanged();
 		}
+		fixDSParametersList();
+	}
+
+	/* 
+	 * Fixes the dataset run parameters in the list.
+	 * We can keep the ones with the same name, discard others.
+	 */
+	private void fixDSParametersList() {
+		JRDatasetParameter[] currParams = (JRDatasetParameter[]) tableViewerDatasetRunParams.getInput();
+		String datasetName = datasetRunInstance.getJRDatasetRun().getDatasetName();
+		List<JRParameter> parameters4Datasource = ModelUtils.getParameters4Datasource(datasetRunInstance.getEditableDataset().getJasperDesign(), datasetName);
+		for(JRDatasetParameter p1 : currParams) {
+			for(JRParameter p2 : parameters4Datasource) {
+				if(p2.getName().equals(p1.getName())){
+					datasetRunInstance.addParameter((JRDatasetParameter) p1.clone());
+					break;
+				}
+			}
+		}
+		tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
 	}
 
 	/*
