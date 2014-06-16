@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
@@ -56,6 +57,7 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
 import com.jaspersoft.studio.server.wizard.find.FindResourceJob;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 
@@ -98,8 +100,9 @@ public class ReferencePageContent extends APageContent {
 				MServerProfile msp = ServerManager.getMServerProfileCopy((MServerProfile) pnode.getRoot());
 				ResourceDescriptor resrd = res.getValue();
 				if (res.isSupported(Feature.SEARCHREPOSITORY)) {
-					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, null, new String[] { ResourceMediaType.FOLDER_CLIENT_TYPE, ResourceMediaType.REPORT_UNIT_CLIENT_TYPE,
-							ResourceMediaType.DOMAIN_TOPIC_TYPE });
+					List<String> restTypes = WsTypes.INST().getRestTypes();
+					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, restTypes.toArray(new String[restTypes.size()]), new String[] { ResourceMediaType.FOLDER_CLIENT_TYPE,
+							ResourceMediaType.REPORT_UNIT_CLIENT_TYPE, ResourceMediaType.DOMAIN_TOPIC_TYPE });
 					if (rd != null) {
 						resrd.setReferenceUri(rd.getUriString());
 						resrd.setIsReference(true);
@@ -225,6 +228,11 @@ public class ReferencePageContent extends APageContent {
 		bindingContext.updateTargets();
 	}
 
+	@Override
+	public boolean isPageComplete() {
+		return super.isPageComplete() && ref != null;
+	}
+
 	private ResourceDescriptor ref;
 	private Text trefuri;
 	private Text tparent;
@@ -244,6 +252,7 @@ public class ReferencePageContent extends APageContent {
 					res.getValue().setWsType(ResourceDescriptor.TYPE_REFERENCE);
 				else
 					res.getValue().setWsType(ref.getWsType());
+				setPageComplete(isPageComplete());
 			}
 
 		} catch (Exception e) {
