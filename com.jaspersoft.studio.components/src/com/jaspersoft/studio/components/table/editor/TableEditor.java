@@ -15,8 +15,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.editor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.jasperreports.components.headertoolbar.HeaderToolbarElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
@@ -47,9 +52,13 @@ import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -61,8 +70,30 @@ public class TableEditor extends AbstractVisualEditor {
 	public TableEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
 		setPartName(Messages.TableEditor_table);
-		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(
-				MTable.getIconDescriptor().getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MTable.getIconDescriptor().getIcon16()));
+	}
+
+	private PropertyChangeListener mListener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent arg0) {
+			setupPartName();
+		}
+	};
+
+	@Override
+	public void setModel(INode model) {
+		INode oldModel = getModel();
+		if (oldModel != null && oldModel instanceof MRoot && oldModel.getChildren().size() > 0) {
+			INode n = oldModel.getChildren().get(0);
+			n.getPropertyChangeSupport().removePropertyChangeListener(mListener);
+		}
+		super.setModel(model);
+		if (model != null && model instanceof MRoot && model.getChildren().size() > 0) {
+			INode n = model.getChildren().get(0);
+			n.getPropertyChangeSupport().addPropertyChangeListener(mListener);
+		}
+		setupPartName();
 	}
 
 	/*
@@ -83,25 +114,18 @@ public class TableEditor extends AbstractVisualEditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true,
-				RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER,
-				provider);
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
 
-		provider = new ReportRulerProvider(new ReportRuler(false,
-				RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
-				provider);
+		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
-		Boolean isRulerVisible = jrContext
-				.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
+		Boolean isRulerVisible = jrContext.getPropertyBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
-				isRulerVisible);
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(
-				graphicalViewer));
+		graphicalViewer.setKeyHandler(new JSSGraphicalViewerKeyHandler(graphicalViewer));
 	}
 
 	@Override
@@ -114,7 +138,7 @@ public class TableEditor extends AbstractVisualEditor {
 	@Override
 	protected void createEditorActions(ActionRegistry registry) {
 		createDatasetAndStyleActions(registry);
-		
+
 		IAction action = new CreateColumnEndAction(this);
 		registry.registerAction(action);
 		@SuppressWarnings("unchecked")
@@ -124,11 +148,11 @@ public class TableEditor extends AbstractVisualEditor {
 		action = new GroupColumnsAction(this);
 		registry.registerAction(action);
 		selectionActions.add(GroupColumnsAction.ID);
-		
+
 		action = new EditStyleAction(this);
 		registry.registerAction(action);
 		selectionActions.add(EditStyleAction.ID);
-		
+
 		action = new CreateColumnBeginAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateColumnBeginAction.ID);
@@ -160,7 +184,7 @@ public class TableEditor extends AbstractVisualEditor {
 		action = new DeleteColumnCellAction(this);
 		registry.registerAction(action);
 		selectionActions.add(DeleteColumnCellAction.ID);
-		
+
 		action = new DeleteRowAction(this);
 		registry.registerAction(action);
 		selectionActions.add(DeleteRowAction.ID);
@@ -168,7 +192,7 @@ public class TableEditor extends AbstractVisualEditor {
 		action = new DatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
-		
+
 		action = new ContextualDatasetAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
@@ -179,5 +203,33 @@ public class TableEditor extends AbstractVisualEditor {
 		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
+	}
+
+	protected void setupPartName() {
+		INode model = getModel();
+		if (model != null) {
+			ModelVisitor<MTable> mv = new ModelVisitor<MTable>(model) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MTable) {
+						setObject((MTable) n);
+						stop();
+					}
+					return true;
+				}
+
+			};
+			MTable mtab = mv.getObject();
+			if (mtab != null) {
+				JRDesignElement el = mtab.getValue();
+				String name = el.getPropertiesMap().getProperty(HeaderToolbarElement.PROPERTY_TABLE_NAME);
+				if (!Misc.isNullOrEmpty(name)) {
+					setPartName(name);
+					return;
+				}
+			}
+		}
+		setPartName(Messages.TableEditor_table);
 	}
 }

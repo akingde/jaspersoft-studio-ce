@@ -710,6 +710,14 @@
                   type="com.jaspersoft.studio.components.crosstab.model.title.MTitleCell">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.table.properties.TableSection"
+               id="com.jaspersoft.studio.components.table.properties.TableSection"
+               tab="com.jaspersoft.studio.components.table">
+            <input
+                  type="com.jaspersoft.studio.components.table.model.MTable">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
@@ -835,6 +843,13 @@
                id="com.jaspersoft.studio.components.chart.axis"
                indented="true"
                label="%labelAxis">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
+               category="element"
+               id="com.jaspersoft.studio.components.table"
+               image="icons/table-16.png"
+               label="%labelTable">
          </propertyTab>
       </propertyTabs>
    </extension>

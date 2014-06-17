@@ -44,7 +44,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -82,12 +84,11 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 	/** The editors. */
 	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
-	
+
 	/**
-	 * Property used by an element to ask to the container to check if for that element
-	 * there is an editor opened and in that case close it. The property change event
-	 * must have the old value set with the JRelement that it is requesting the editor
-	 * closing
+	 * Property used by an element to ask to the container to check if for that element there is an editor opened and in
+	 * that case close it. The property change event must have the old value set with the JRelement that it is requesting
+	 * the editor closing
 	 */
 	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
 
@@ -180,8 +181,8 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	private PropertyChangeListener modelListener = new PropertyChangeListener() {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			
-			if (evt.getPropertyName().equals(CLOSE_EDITOR_PROPERTY)){
+
+			if (evt.getPropertyName().equals(CLOSE_EDITOR_PROPERTY)) {
 				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());
 				if (obj != null)
 					removeEditorPage(evt, obj);
@@ -234,15 +235,17 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				ave = m.getEditor(obj, jrContext);
 				if (ave != null) {
 					ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
-					int index = addPage(ave, getEditorInput());
+					final int index = addPage(ave, getEditorInput());
 
 					editors.add(ave);
 					ccMap.put(node.getValue(), ave);
 					ave.setModel(root);
 					setPageText(index, ave.getPartName());
 					setPageImage(index, ave.getPartImage());
-				
+
 					rep.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+
+					ave.addPropertyListener(titleListener);
 				}
 			}
 		} catch (PartInitException e) {
@@ -251,10 +254,22 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 		return ave;
 	}
 
+	private IPropertyListener titleListener = new IPropertyListener() {
+
+		@Override
+		public void propertyChanged(Object source, int propId) {
+			if (propId == IWorkbenchPart.PROP_TITLE) {
+				int ind = editors.indexOf((AbstractVisualEditor) source);
+				setPageText(ind, ((AbstractVisualEditor) source).getPartName());
+			}
+		}
+	};
+
 	private void removeEditorPage(PropertyChangeEvent evt, AbstractVisualEditor ave) {
 		if (ave.getModel() != null && modelListener != null)
 			ave.getModel().getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		ave.setModel(null);
+		ave.removePropertyListener(titleListener);
 		int ind = editors.indexOf(ave);
 		if (ind >= 0 && ind < getPageCount())
 			removePage(ind);
@@ -301,13 +316,13 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			return editors.get(0);
 		return null;
 	}
-	
+
 	/**
 	 * Check if there are subeditors opened
 	 * 
 	 * @return true if there are subeditors opened, false otherwise
 	 */
-	public boolean hasSubeditorOpened(){
+	public boolean hasSubeditorOpened() {
 		return (ccMap != null && !ccMap.isEmpty());
 	}
 
@@ -440,15 +455,15 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 			setActivePage(0);
 		} else {
 			AbstractVisualEditor ave = createEditorPage(obj);
-			if(ave!=null) {
+			if (ave != null) {
 				/**
-				 * If was created another editor with inside an mpage the i save the parent of the 
-				 * current node inside the page. Doing this it is always possible from a node get its
-				 * real parent and go back into the hierarchy. This information need only to be saved here
-				 * since when an element change parent all the open editors for the element are closed
+				 * If was created another editor with inside an mpage the i save the parent of the current node inside the page.
+				 * Doing this it is always possible from a node get its real parent and go back into the hierarchy. This
+				 * information need only to be saved here since when an element change parent all the open editors for the
+				 * element are closed
 				 */
-				if (ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage){
-					MPage pageElement = (MPage)ave.getModel().getChildren().get(0);
+				if (ave.getModel().getChildren().size() > 0 && ave.getModel().getChildren().get(0) instanceof MPage) {
+					MPage pageElement = (MPage) ave.getModel().getChildren().get(0);
 					pageElement.setRealParent(node.getParent());
 				}
 				if (getActiveEditor() != ave) {
@@ -464,7 +479,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 								prnt.getParent().setSize(size.x, size.y);
 							}
 						});
-	
+
 						// if (obj instanceof JRDesignElement)
 						// SelectionHelper.setSelection((JRDesignElement) obj, true);
 						// ave.getGraphicalViewer().setSelection(new StructuredSelection(obj));
