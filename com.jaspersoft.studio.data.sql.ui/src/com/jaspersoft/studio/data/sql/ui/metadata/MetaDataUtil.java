@@ -22,6 +22,7 @@ import com.jaspersoft.studio.data.sql.model.metadata.keys.PrimaryKey;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MetaDataUtil {
 	public synchronized static List<MSqlSchema> readSchemas(IProgressMonitor monitor, MRoot root, DatabaseMetaData meta, String[] cschemas) throws SQLException {
@@ -39,6 +40,10 @@ public class MetaDataUtil {
 				break;
 		}
 		rs.close();
+		if (Misc.isNullOrEmpty(root.getChildren())) {
+			MSqlSchema mschema = new MSqlSchema(root, null, null);
+			new MDummy(mschema);
+		}
 		if (cschemas != null)
 			for (String s : cschemas) {
 				for (INode n : root.getChildren()) {
@@ -56,17 +61,25 @@ public class MetaDataUtil {
 		try {
 			boolean isSchema = meta.supportsSchemasInTableDefinitions();
 			boolean isCatalog = meta.supportsCatalogsInTableDefinitions();
-			rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
-			while (rs.next()) {
-				String tableCatalog = isCatalog && !isSchema ? rs.getString("TABLE_CAT") : null;// rs.getString("TABLE_CATALOG");
-				String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
+			if (!isSchema && !isCatalog && schema.getValue() == null) {
+				schema.removeChildren();
+				schema.setNotInMetadata(false);
 
-				if (tableSchema.equals(schema.getValue())) {
-					schema.removeChildren();
-					schema.setNotInMetadata(false);
+				for (String ttype : tableTypes)
+					new MTables(schema, ttype);
+			} else {
+				rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
+				while (rs.next()) {
+					String tableCatalog = isCatalog && !isSchema ? rs.getString("TABLE_CAT") : null;// rs.getString("TABLE_CATALOG");
+					String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
 
-					for (String ttype : tableTypes)
-						new MTables(schema, ttype);
+					if (tableSchema.equals(schema.getValue())) {
+						schema.removeChildren();
+						schema.setNotInMetadata(false);
+
+						for (String ttype : tableTypes)
+							new MTables(schema, ttype);
+					}
 				}
 			}
 		} catch (SQLException e) {

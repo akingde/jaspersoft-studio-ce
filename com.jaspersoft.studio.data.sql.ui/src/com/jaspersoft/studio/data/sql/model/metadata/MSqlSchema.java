@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.StyledString;
 import com.jaspersoft.studio.data.sql.model.AMSQLObject;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MSqlSchema extends AMSQLObject {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -78,7 +79,7 @@ public class MSqlSchema extends AMSQLObject {
 
 	@Override
 	public StyledString getStyledDisplayText() {
-		StyledString dt = new StyledString(super.getDisplayText());
+		StyledString dt = new StyledString(Misc.nvl(super.getDisplayText()));
 		if (isCurrent)
 			dt.append(" (CURRENT)", FontUtils.FIELD_STYLER);
 		return dt;

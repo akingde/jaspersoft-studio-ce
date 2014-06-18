@@ -48,6 +48,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class Util {
 	public static boolean columnExists(MSQLColumn c, MDBObjects orderBy, List<MSqlTable> tables) {
@@ -326,12 +327,8 @@ public class Util {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof MSqlSchema) {
-					if (n.getValue().equals(schema))
-						return true;
-					else
-						return false;
-				}
+				if (n instanceof MSqlSchema)
+					return Misc.nvl(((MSqlSchema) n).getValue()).equals(Misc.nvl(schema));
 				if (n instanceof MSqlTable) {
 					if (n.getValue().equals(table)) {
 						setObject((MSqlTable) n);
