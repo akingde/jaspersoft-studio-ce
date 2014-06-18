@@ -69,6 +69,9 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:cloudscape:/{1}"), //$NON-NLS-1$
 
+			new JDBCDriverDefinition("Firebird", "org.firebirdsql.jdbc.FBDriver", //$NON-NLS-1$ //$NON-NLS-2$
+							"jdbc:firebirdsql://{0}:3050/{1}"), //$NON-NLS-1$
+
 			new JDBCDriverDefinition("IBM DB2 (Type 4)", //$NON-NLS-1$
 					"com.ibm.db2.jcc.DB2Driver", "jdbc:db2://{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
 			new JDBCDriverDefinition("IBM DB2 (IBM Cloudscape® server)", //$NON-NLS-1$
