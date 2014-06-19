@@ -26,8 +26,6 @@ import org.apache.http.entity.ContentType;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
@@ -39,6 +37,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.ConnectionManager;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
 
@@ -216,9 +215,13 @@ public class RestV2Connection extends ARestV2Connection {
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 	}
 
 	@Override

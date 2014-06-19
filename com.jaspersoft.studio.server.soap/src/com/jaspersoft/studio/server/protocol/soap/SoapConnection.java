@@ -23,7 +23,6 @@ import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -38,6 +37,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
@@ -241,8 +241,14 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
-		return client.runReport(rd, prm, args);
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+		repExec.setFiles(client.runReport(repExec.getResourceDescriptor(), repExec.getPrm(), repExec.getArgs()));
+		repExec.setStatus("ready");
+		return repExec;
+	}
+
+	@Override
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 	}
 
 	@Override

@@ -34,7 +34,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
@@ -54,6 +53,7 @@ import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ProxyConnection;
+import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 
 public class WSClientHelper {
@@ -393,26 +393,40 @@ public class WSClientHelper {
 		});
 	}
 
-	public static Map<String, FileContent> runReportUnit(IProgressMonitor monitor, MReportUnit res) throws Exception {
-		ResourceDescriptor rd = res.getValue();
-		MServerProfile sp = (MServerProfile) res.getRoot();
+	//
+	// public static ReportExecution runReportUnit(IProgressMonitor monitor,
+	// MReportUnit res) throws Exception {
+	// ResourceDescriptor rd = res.getValue();
+	// MServerProfile sp = (MServerProfile) res.getRoot();
+	//
+	// ReportExecution repExec = new ReportExecution();
+	//
+	// Map<String, Object> parameters = new HashMap<String, Object>();
+	//
+	// List<Argument> args = new ArrayList<Argument>();
+	// args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
+	// Argument.RUN_OUTPUT_FORMAT_JRPRINT));
+	//
+	// return sp.getWsClient(monitor).runReport(monitor, rd, parameters, args);
+	// }
 
-		Map<String, Object> parameters = new HashMap<String, Object>();
-
-		List<Argument> args = new ArrayList<Argument>();
-		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_JRPRINT));
-
-		return sp.getWsClient(monitor).runReport(monitor, rd, parameters, args);
+	public static ReportExecution runReportUnit(IProgressMonitor monitor, ReportExecution repExec, Map<String, Object> parameters) throws Exception {
+		if (repExec.getResourceDescriptor() == null) {
+			ResourceDescriptor rd = new ResourceDescriptor();
+			rd.setUriString(repExec.getReportURI());
+			repExec.setResourceDescriptor(rd);
+		}
+		repExec.setPrm(parameters);
+		if (repExec.getArgs() == null) {
+			List<Argument> args = new ArrayList<Argument>();
+			args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_JRPRINT));
+			repExec.setArgs(args);
+		}
+		return getClient(monitor, repExec.getReportURIFull()).runReport(monitor, repExec);
 	}
 
-	public static Map<String, FileContent> runReportUnit(IProgressMonitor monitor, String uri, Map<String, Object> parameters) throws Exception {
-		List<Argument> args = new ArrayList<Argument>();
-		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_JRPRINT));
-
-		ResourceDescriptor rd = new ResourceDescriptor();
-		rd.setUriString(getReportUnitUri(uri));
-
-		return getClient(monitor, uri).runReport(monitor, rd, parameters, args);
+	public static void cancelReportUnit(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+		getClient(monitor, repExec.getReportURIFull()).cancelReport(monitor, repExec);
 	}
 
 	public static ResourceDescriptor getReportUnit(IProgressMonitor monitor, String uri) throws Exception {

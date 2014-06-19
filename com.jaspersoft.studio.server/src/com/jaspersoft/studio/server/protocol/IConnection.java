@@ -3,12 +3,9 @@ package com.jaspersoft.studio.server.protocol;
 import java.io.File;
 import java.text.Format;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
@@ -57,7 +54,9 @@ public interface IConnection {
 
 	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception;
 
-	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, java.util.Map<String, Object> prm, List<Argument> args) throws Exception;
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception;
+
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception;
 
 	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter filter) throws Exception;
 

@@ -49,6 +49,7 @@ import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -74,6 +75,7 @@ public class ReportRunControler {
 
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Initialising Input Controls", IProgressMonitor.UNKNOWN);
 						try {
 							cli = WSClientHelper.getClient(monitor, reportUnit);
 							icm.setWsclient(cli);
@@ -152,6 +154,7 @@ public class ReportRunControler {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Running Report", IProgressMonitor.UNKNOWN);
 				try {
 					prmInput.setReportUnit(icm.getReportUnit());
 					if (!prmInput.checkFieldsFilled())
@@ -165,41 +168,57 @@ public class ReportRunControler {
 								prmcopy.put(p.getName(), icm.getParameters().get(p.getName()));
 						}
 					}
-
-					Map<String, FileContent> files = WSClientHelper.runReportUnit(monitor, reportUnit, prmcopy);
-					stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-					for (String key : files.keySet()) {
-						FileContent fc = (FileContent) files.get(key);
-						if (key.equals("jasperPrint")) { //$NON-NLS-1$
-							final File f = File.createTempFile(FileExtension.JRPRINT, "." + FileExtension.JRPRINT); //$NON-NLS-1$  
-							f.deleteOnExit();
-							f.createNewFile();
-							FileOutputStream htmlFile = new FileOutputStream(f);
-							htmlFile.write(fc.getData());
-							htmlFile.close();
+					ReportExecution re = new ReportExecution();
+					re.setStatus("queued");
+					re.setReportURIFull(reportUnit);
+					re.setReportURI(WSClientHelper.getReportUnitUri(reportUnit));
+					while (re.getStatus().equals("queued") || re.getStatus().equals("execution")) {
+						re = WSClientHelper.runReportUnit(monitor, re, prmcopy);
+						if (re.getStatus().equals("ready")) {
+							Map<String, FileContent> files = re.getFiles();
 							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-							stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
-							final Object obj = JRLoader.loadObject(f);
-							if (obj instanceof JasperPrint)
-								UIUtils.getDisplay().asyncExec(new Runnable() {
+							for (String key : files.keySet()) {
+								FileContent fc = (FileContent) files.get(key);
+								if (key.equals("jasperPrint")) { //$NON-NLS-1$
+									final File f = File.createTempFile(FileExtension.JRPRINT, "." + FileExtension.JRPRINT); //$NON-NLS-1$  
+									f.deleteOnExit();
+									f.createNewFile();
+									FileOutputStream htmlFile = new FileOutputStream(f);
+									htmlFile.write(fc.getData());
+									htmlFile.close();
+									stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
+									stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
+									final Object obj = JRLoader.loadObject(f);
+									if (obj instanceof JasperPrint)
+										UIUtils.getDisplay().asyncExec(new Runnable() {
 
-									@Override
-									public void run() {
-										stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
-										APreview pv = pcontainer.getDefaultViewer();
-										if (pv instanceof IJRPrintable)
-											try {
-												((IJRPrintable) pv).setJRPRint(stats, ((JasperPrint) obj), true);
-												VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
-												vs.setJasperPrint(((JasperPrint) obj));
-											} catch (Exception e) {
-												e.printStackTrace();
+											@Override
+											public void run() {
+												stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
+												APreview pv = pcontainer.getDefaultViewer();
+												if (pv instanceof IJRPrintable)
+													try {
+														((IJRPrintable) pv).setJRPRint(stats, ((JasperPrint) obj), true);
+														VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
+														vs.setJasperPrint(((JasperPrint) obj));
+													} catch (Exception e) {
+														e.printStackTrace();
+													}
+												pcontainer.setJasperPrint(stats, (JasperPrint) obj);
 											}
-										pcontainer.setJasperPrint(stats, (JasperPrint) obj);
-									}
-								});
-							break;
+										});
+									break;
+								}
+							}
+						} else if (re.getStatus().equals("queued") || re.getStatus().equals("execution")) {
+							Thread.sleep(500);
+						} else if (re.getStatus().equals("failed")) {
+
+						} else if (re.getStatus().equals("cancelled")) {
+
 						}
+						if (monitor.isCanceled())
+							WSClientHelper.cancelReportUnit(monitor, re);
 					}
 				} catch (Throwable e) {
 					ReportControler.showRunReport(c, pcontainer, e);
@@ -209,7 +228,6 @@ public class ReportRunControler {
 				}
 				return Status.OK_STATUS;
 			}
-
 		};
 		job.setPriority(Job.LONG);
 		job.schedule();

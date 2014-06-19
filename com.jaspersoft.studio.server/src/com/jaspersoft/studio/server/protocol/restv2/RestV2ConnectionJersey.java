@@ -62,6 +62,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.DatasourcesAllFilter
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.HttpUtils;
@@ -389,57 +390,67 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 		Map<String, FileContent> map = new HashMap<String, FileContent>();
-
-		ReportExecutionRequest rer = new ReportExecutionRequest();
-		rer.setReportUnitUri(rd.getUriString());
-		rer.setAsync(false);
-		rer.setFreshData(true);
-		rer.setIgnorePagination(false);
-		rer.setInteractive(false);
-		String ouput = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
-		rer.setOutputFormat(ouput);
-		// rer.setTransformerKey(transformerKey);
-		rer.setSaveDataSnapshot(false);
-		if (prm != null && !prm.isEmpty()) {
-			List<ReportParameter> list = new ArrayList<ReportParameter>();
-			for (String key : prm.keySet()) {
-				ReportParameter rprm = new ReportParameter();
-				rprm.setName(key);
-				Object item = prm.get(key);
-				List<String> vals = new ArrayList<String>();
-				if (item instanceof Collection<?>) {
-					Collection<?> c = (Collection<?>) item;
-					for (Object obj : c)
-						vals.add(toRestString(obj));
-				} else
-					vals.add(toRestString(item));
-				rprm.setValues(vals);
-				list.add(rprm);
+		ReportExecutionDescriptor res = null;
+		WebTarget tgt = null;
+		Builder req = null;
+		if (repExec.getRequestId() != null) {
+			tgt = target.path("reportExecutions/" + repExec.getRequestId());
+			req = tgt.request();
+			res = toObj(connector.get(req, monitor), ReportExecutionDescriptor.class, monitor);
+		} else {
+			ReportExecutionRequest rer = new ReportExecutionRequest();
+			rer.setReportUnitUri(repExec.getReportURI());
+			rer.setAsync(true);
+			rer.setFreshData(true);
+			rer.setIgnorePagination(false);
+			rer.setInteractive(false);
+			String ouput = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
+			rer.setOutputFormat(ouput);
+			// rer.setTransformerKey(transformerKey);
+			rer.setSaveDataSnapshot(false);
+			Map<String, Object> prm = repExec.getPrm();
+			if (prm != null && !prm.isEmpty()) {
+				List<ReportParameter> list = new ArrayList<ReportParameter>();
+				for (String key : prm.keySet()) {
+					ReportParameter rprm = new ReportParameter();
+					rprm.setName(key);
+					Object item = prm.get(key);
+					List<String> vals = new ArrayList<String>();
+					if (item instanceof Collection<?>) {
+						Collection<?> c = (Collection<?>) item;
+						for (Object obj : c)
+							vals.add(toRestString(obj));
+					} else
+						vals.add(toRestString(item));
+					rprm.setValues(vals);
+					list.add(rprm);
+				}
+				rer.setParameters(new ReportParameters(list));
 			}
-			rer.setParameters(new ReportParameters(list));
+			tgt = target.path("reportExecutions");
+			req = tgt.request();
+			Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
+			res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		}
-		WebTarget tgt = target.path("reportExecutions");
-
-		Builder req = tgt.request();
-		Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
-		ReportExecutionDescriptor res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		if (res != null && res.getErrorDescriptor() == null) {
 			if (res.getExports() != null) {
 				int i = 0;
 				for (ExportDescriptor ee : res.getExports()) {
-					tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
-					req = tgt.request(ee.getOutputResource().getContentType());
-					byte[] d = readFile(connector.get(req, monitor), monitor);
-					addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
-					if (ee.getAttachments() != null)
-						for (AttachmentDescriptor ror : ee.getAttachments()) {
-							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
-							req = tgt.request(ror.getContentType());
-							d = readFile(connector.get(req, monitor), monitor);
-							addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
-						}
+					if (ee.getOutputResource() != null) {
+						tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
+						req = tgt.request(ee.getOutputResource().getContentType());
+						byte[] d = readFile(connector.get(req, monitor), monitor);
+						addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
+						if (ee.getAttachments() != null)
+							for (AttachmentDescriptor ror : ee.getAttachments()) {
+								tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
+								req = tgt.request(ror.getContentType());
+								d = readFile(connector.get(req, monitor), monitor);
+								addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
+							}
+					}
 				}
 			} else {
 				tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + Argument.RUN_OUTPUT_FORMAT_JRPRINT + "/outputResource");
@@ -454,7 +465,21 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				// addFileContent(d, map, , "attachment-0", "jasperPrint");
 			}
 		}
-		return map;
+		repExec.setFiles(map);
+		repExec.setCurrentPage(res.getCurrentPage());
+		repExec.setErrorDescriptor(res.getErrorDescriptor());
+		repExec.setRequestId(res.getRequestId());
+		repExec.setStatus(res.getStatus());
+		repExec.setTotalPages(res.getTotalPages());
+		System.out.println(res.getStatus());
+		return repExec;
+	}
+
+	@Override
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+		WebTarget tgt = target.path("reportExecutions/" + repExec.getRequestId() + "/status");
+		Builder req = tgt.request();
+		connector.put(req, Entity.entity("<status>cancelled</status>", MediaType.APPLICATION_XML_TYPE), monitor);
 	}
 
 	private void addFileContent(byte[] d, Map<String, FileContent> map, AttachmentDescriptor r, String id, String key) {

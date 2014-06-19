@@ -4,14 +4,11 @@ import java.io.File;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
@@ -227,8 +224,13 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public Map<String, FileContent> runReport(IProgressMonitor monitor, ResourceDescriptor rd, Map<String, Object> prm, List<Argument> args) throws Exception {
-		return c.runReport(monitor, rd, prm, args);
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+		return c.runReport(monitor, repExec);
+	}
+
+	@Override
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+		c.cancelReport(monitor, repExec);
 	}
 
 	@Override
