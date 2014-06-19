@@ -367,6 +367,10 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 
 		return propertySheetPage;
 	}
+	
+	public CommonSelectionCacheProvider getSelectionCache(){
+		return reportEditor.getSelectionCache();
+	}
 
 	/*
 	 * (non-Javadoc)

@@ -55,6 +55,7 @@ import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -341,7 +342,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				@Override
 				public void run() {
 					//Update the selection on the toolbar manager
-					CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), selection, getActionBars());
+					((CachedSelectionProvider)getPage().getActiveEditor()).getSelectionCache().selectionChanged(selection);
+					CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), getActionBars());
 					//Force the re-evaluation of the toolbar condition, used in the standard contribution system
 					//((IActionBars2) getActionBars()).getToolBarManager().update(true); 
 				}

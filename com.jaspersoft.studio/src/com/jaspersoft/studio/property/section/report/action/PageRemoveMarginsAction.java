@@ -20,10 +20,10 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
 
-public class PageRemoveMarginsAction extends SelectionAction {
+public class PageRemoveMarginsAction extends ACachedSelectionAction {
 	public static final String ID = "pageRemoveMarginsAction"; //$NON-NLS-1$
 
 	/**
@@ -90,12 +90,13 @@ public class PageRemoveMarginsAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		List<Object> selection = getSelectedObjects();
-		if (!selection.isEmpty() && selection.size() == 1) {
-			Object obj = selection.get(0);
-			if (obj instanceof ReportPageEditPart || obj instanceof BandEditPart)
-				return true;
-		}
+		if (getSelectedObjects().size()>1) return false;
+		
+		List<Object> pageEditPart = editor.getSelectionCache().getSelectionPartForType(ReportPageEditPart.class);
+		if (pageEditPart.size() > 0) return true;
+		
+		List<Object> bandEditParts = editor.getSelectionCache().getSelectionPartForType(BandEditPart.class);
+		if (bandEditParts.size() > 0) return true;
 
 		return false;
 	}

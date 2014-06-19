@@ -15,8 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.csv;
 
-import java.util.List;
-
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.gef.commands.Command;
@@ -38,6 +36,8 @@ import com.jaspersoft.studio.property.SetValueCommand;
  *
  */
 public class CSVRootAction extends CSVAction {
+	
+	private String columnsName;
 	
 	public CSVRootAction(IWorkbenchPart part,String actionId, String actionName){
 		super(part,actionId,actionName);
@@ -79,7 +79,8 @@ public class CSVRootAction extends CSVAction {
 		NameChooserDialog dialog = new NameChooserDialog(Display.getCurrent().getActiveShell(), getDialogTitle(), getPropertyValue(root,"")); //$NON-NLS-1$
 		int dialogResult = dialog.open();
 		if (dialogResult == NameChooserDialog.OK)
-			execute(createAlignmentCommand(dialog.getName()));
+			columnsName = dialog.getName();
+			execute(createCommand());
 	}
 	
 
@@ -90,19 +91,15 @@ public class CSVRootAction extends CSVAction {
 	 * @param fieldValue the value inserted by the user for the field
 	 * @return the command to set the value of the attribute to fieldValue
 	 */
-	protected JSSCompoundCommand createAlignmentCommand(String fieldValue) {
+	@Override
+	protected Command createCommand() {
 		APropertyNode root = getRoot();
 		JSSCompoundCommand command = new JSSCompoundCommand(root);
 		command.setDebugLabel(getText());
 		if (root != null){
-			command.add(createCommand(root, fieldValue));
+			command.add(createCommand(root, columnsName));
 		}
 		return command;
-	}
-	
-	@Override
-	protected JSSCompoundCommand createCommand(List<?> selectedObjects) {
-		return createAlignmentCommand(""); //$NON-NLS-1$
 	}
 	
 	/**

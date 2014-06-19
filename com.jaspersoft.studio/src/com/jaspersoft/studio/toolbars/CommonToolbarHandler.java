@@ -18,12 +18,9 @@ package com.jaspersoft.studio.toolbars;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
@@ -34,7 +31,6 @@ import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -43,10 +39,9 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.toolitems.ToolItemsSet;
 
 /**
@@ -58,30 +53,6 @@ import com.jaspersoft.studio.editor.toolitems.ToolItemsSet;
  *
  */
 public abstract class CommonToolbarHandler extends ContributionItem {
-
-	/**
-	 * When an element request a subset of the selection of a specific type the result
-	 * is cached to allow for the future request until the selection changes. 
-	 * In this way the request is processed once to search the elements of a specific type
-	 * and any other request for the same type will be returned from the cache
-	 */
-	private static Map<Class<?>, List<Object>> cachedTypedRequest = new HashMap<Class<?>, List<Object>>();
-	
-	/**
-	 * List of the models inside the edit part of the last selection
-	 */
-	private static List<Object> lastSelection = new ArrayList<Object>();
-	
-	/**
-	 * The last selection
-	 */
-	private static ISelection lastSelectionRaw;
-	
-	/**
-	 * Flag to control how the request for a type should return a result only if all the elements 
-	 * inside the selection are the requested type or a subclass of the requested type. 
-	 */
-	public static final boolean allowDishomogeneousSelection = false;
 	
 	/**
 	 * The custom controls are dynamically loaded starting from the class specified in the 
@@ -99,27 +70,6 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 */
 	private IEditorPart workbenchPart = null;
 	
-	/**
-	 * Listener to call when the selection change. Essentially it clear the selection
-	 * cache and update the fields that store the last selection
-	 */
-	private static ISelectionListener changedSelection = new ISelectionListener() {
-
-		@Override
-		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-			if (selection instanceof IStructuredSelection){
-				IStructuredSelection sSel = (IStructuredSelection)selection;
-				Iterator<?> elements = sSel.iterator();
-				lastSelection.clear();
-				cachedTypedRequest.clear();
-				lastSelectionRaw = selection;
-				while (elements.hasNext()) {
-					EditPart editPart = (EditPart) elements.next();
-					lastSelection.add(editPart.getModel());
-				}
-			}
-		}
-	}; 
 	
 	/**
 	 * Method to call when the selection changes. It will update the current selection and 
@@ -130,8 +80,7 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 * @param selection the new selection
 	 * @param bars the current action bars, where the new controls will be placed
 	 */
-	public static void updateSelection(IEditorPart activeEditor, ISelection selection, IActionBars bars){
-		changedSelection.selectionChanged(activeEditor, selection);
+	public static void updateSelection(IEditorPart activeEditor, IActionBars bars){
 		if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
 			ICoolBarManager cbm = (ICoolBarManager) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager()).getParent();
 			for(ToolItemsSet toolbar : JaspersoftStudioPlugin.getToolItemsManager().getSets()){
@@ -141,6 +90,7 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 				List<IContributionItem> notVisibleControls = new ArrayList<IContributionItem>();
 				for(IConfigurationElement control : toolbar.getControlsConfiguration()){
 					CommonToolbarHandler citem = createContributionItem(control);
+					citem.setWorkbenchPart(activeEditor);
 					if (citem.isVisible()){
 						visibleControls.add(citem);
 						isToolbarVisible = true;
@@ -152,7 +102,7 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 					removeToolbar(cbm, toolbar.getId());
 				} else {
 					removeToolbarContribution(cbm, toolbar.getId(), notVisibleControls);
-					addContributionsToCoolbar(cbm, toolbar.getId(), visibleControls, activeEditor);
+					addContributionsToCoolbar(cbm, toolbar.getId(), visibleControls);
 				}
 			}
 			cbm.update(true);
@@ -160,45 +110,6 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 		}
 	}
 
-	/**
-	 * Called when the request for a type is not in the cache. It will
-	 * resolve the request by iterating the elements in the last selection,
-	 * searching for the requested type. The result will be cached and returned
-	 * 
-	 * @param type the selected type
-	 * @return a not null list of the elements of the desired type or of one
-	 * of its subclasses
-	 */
-	private List<Object> createCacheForType(Class<?> type){
-		List<Object> result = new ArrayList<Object>();
-		for(Object obj : lastSelection){
-			if (type.isInstance(obj)){
-				result.add(obj);
-			} else if (!allowDishomogeneousSelection){
-				return new ArrayList<Object>();
-			}
-		}
-		return result;
-	}
-	
-	/**
-	 * Return a list of object of a specific type inside the selection
-	 * If the allowDishomogeneousSelection is false (default value) then
-	 * all the element inside the selection must be of the requested type
-	 * or a subclass of it
-	 * 
-	 * @param type the desired type
-	 * @return a not null list of the elements of the desired type or of one
-	 * of its subclasses
-	 */
-	protected List<Object> getSelectionForType(Class<?> type){
-		List<Object> cachedValue = cachedTypedRequest.get(type);
-		if (cachedValue == null){
-			cachedValue = createCacheForType(type);
-			cachedTypedRequest.put(type, cachedValue);
-		}
-		return cachedValue;
-	}
 	
 	/**
 	 * Returns the editor's command stack. This is done by asking the workbench part for its CommandStack via
@@ -210,6 +121,15 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 		return (CommandStack) workbenchPart.getAdapter(CommandStack.class);
 	}
 	
+	
+	protected List<Object> getSelectionForType(Class<?> type){
+		return ((CachedSelectionProvider)workbenchPart).getSelectionCache().getSelectionModelForType(type);
+	}
+	
+	protected ISelection getLastRawSelection(){
+		return ((CachedSelectionProvider)workbenchPart).getSelectionCache().getLastRawSelection();
+	}
+	
 	/**
 	 * Add a list of controls to a toolbar
 	 * 
@@ -218,7 +138,7 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 * @param elementsToAdd the list of the element to add
 	 * @param part the current editor part, that will be stored inside the elements 
 	 */
-	private static void addContributionsToCoolbar(ICoolBarManager cbm2, String toolBarID,  List<CommonToolbarHandler> elementsToAdd, IEditorPart part) {
+	private static void addContributionsToCoolbar(ICoolBarManager cbm2, String toolBarID,  List<CommonToolbarHandler> elementsToAdd) {
 		//Get toolbar will build a bar with the reuqested if if it isn't already present
 		IContributionItem item = getToolbarContributionItem(cbm2, toolBarID);
 		if (item != null) {
@@ -229,7 +149,6 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 					String id = elementToAdd.getId();
 					if (id != null && !isElementPresentInToolbar(tbitem, elementToAdd)){
 						tbmanager.add(elementToAdd);
-						elementToAdd.setWorkbenchPart(part);
 					}
 				}
 				tbmanager.update(true);
@@ -370,10 +289,6 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 				tbmanager.update(true);
 			}
 		}
-	}
-	
-	public static ISelection getLastRawSelection(){
-		return lastSelectionRaw;
 	}
 	
 	/**

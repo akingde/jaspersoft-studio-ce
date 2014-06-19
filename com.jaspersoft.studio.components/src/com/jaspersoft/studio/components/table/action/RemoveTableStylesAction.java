@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.action;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -33,7 +32,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -41,6 +39,7 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.command.ForceRefreshCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
@@ -51,7 +50,7 @@ import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
  * @author Orlandin Marco
  *
  */
-public class RemoveTableStylesAction extends SelectionAction {
+public class RemoveTableStylesAction extends ACachedSelectionAction {
 	
 	/**
 	 * The id of the action
@@ -86,18 +85,8 @@ public class RemoveTableStylesAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		List<?> selectedObjects = getSelectedObjects();
-		if (getSelectedObjects().size() >=0){
-			for(Object selectedObject : selectedObjects){
-				if (selectedObject instanceof EditPart){
-					EditPart editPart = (EditPart)selectedObject;
-					if (editPart != null){
-						if (editPart.getModel() instanceof MTable) return true;
-					}
-				}
-			}
-		}
-		return false;
+		List<Object> tables = editor.getSelectionCache().getSelectionModelForType(MTable.class);
+		return tables.size() > 0;
 	}
 	
 	/**
@@ -106,15 +95,7 @@ public class RemoveTableStylesAction extends SelectionAction {
 	 * @return a not null list of edit part with an MTable as model
 	 */
 	private List<EditPart> getSelectedTables(){
-		List<EditPart> result = new ArrayList<EditPart>();
-		for(Object selectedObject : getSelectedObjects()){
-			if (selectedObject instanceof EditPart){
-				EditPart editPart = (EditPart)selectedObject;
-				if (editPart.getModel() != null && editPart.getModel() instanceof MTable){
-					result.add(editPart);
-				}
-			}
-		}
+		List<EditPart> result = editor.getSelectionCache().getSelectionModelPartForType(MTable.class);
 		return result;
 	}
 

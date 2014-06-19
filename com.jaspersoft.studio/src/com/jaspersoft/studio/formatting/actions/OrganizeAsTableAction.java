@@ -47,8 +47,8 @@ public class OrganizeAsTableAction extends AbstractFormattingAction {
 		return getOperationSet().size()>0;
 	} 
 
-  	
-	protected Command createAlignmentCommand() {
+  @Override
+	protected Command createCommand() {
 		List<APropertyNode> nodes = getOperationSet();
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());

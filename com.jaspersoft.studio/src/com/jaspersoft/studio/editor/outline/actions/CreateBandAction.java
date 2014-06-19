@@ -47,7 +47,7 @@ public class CreateBandAction extends ACreateAndSelectAction {
 			return false;
 		}
 		else {
-			command = createCommand(getSelectedObjects());
+			command = createCommand();
 			return command != null && command.canExecute();
 		}
 	}

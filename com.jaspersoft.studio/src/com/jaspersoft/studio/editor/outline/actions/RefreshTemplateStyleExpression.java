@@ -18,14 +18,12 @@ package com.jaspersoft.studio.editor.outline.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 
 /**
@@ -34,7 +32,7 @@ import com.jaspersoft.studio.model.style.MStyleTemplate;
  * @author Orlandin Marco
  *
  */
-public class RefreshTemplateStyleExpression extends SelectionAction {
+public class RefreshTemplateStyleExpression extends ACachedSelectionAction {
 
 	/** The Constant ID. */
 	public static final String ID = "refresh_template_style_expression"; //$NON-NLS-1$
@@ -86,17 +84,10 @@ public class RefreshTemplateStyleExpression extends SelectionAction {
 	 * @return a not null list of MStyleTemplate
 	 */
 	private List<MStyleTemplate> getSelectedStyles(){
-		List<?> objects = getSelectedObjects();
-		if (objects == null || objects.isEmpty())
-			return new ArrayList<MStyleTemplate>();
+		List<Object> templates = editor.getSelectionCache().getSelectionModelForType(MStyleTemplate.class);
 		List<MStyleTemplate> result = new ArrayList<MStyleTemplate>();
-		for (Object obj : objects){
-			if (obj instanceof EditPart) {
-				ANode n = (ANode) ((EditPart) obj).getModel();
-				if (n instanceof MStyleTemplate){
-					result.add((MStyleTemplate)n);
-				}
-			}
+		for (Object template : templates){
+			result.add((MStyleTemplate)template);
 		}
 		return result;
 	}

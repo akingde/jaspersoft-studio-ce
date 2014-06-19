@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
@@ -84,22 +83,19 @@ public class XLSAction extends CustomSelectionAction {
 	}
 
 	public boolean isChecked() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)) {
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty()) {
 			return false;
 		}
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement) {
-				MGraphicElement model = (MGraphicElement) editpart.getModel();
-				JRPropertiesMap v = (JRPropertiesMap) model.getPropertiesMap();
-				if (v == null)
+		for (Object element : graphicalElements) {
+			MGraphicElement model = (MGraphicElement) element;
+			JRPropertiesMap v = (JRPropertiesMap) model.getPropertiesMap();
+			if (v == null)
+				return false;
+			else {
+				Object oldValue = v.getProperty(attributeId);
+				if (oldValue == null || !oldValue.equals(value))
 					return false;
-				else {
-					Object oldValue = v.getProperty(attributeId);
-					if (oldValue == null || !oldValue.equals(value))
-						return false;
-				}
 			}
 		}
 		return true;
@@ -149,21 +145,20 @@ public class XLSAction extends CustomSelectionAction {
 	 */
 	@Override
 	public void run() {
-		execute(createCommand4Execute(getSelectedObjects()));
+		execute(createCommand());
 	}
 
-	protected Command createCommand4Execute(List<?> editparts) {
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
+	@Override
+	protected Command createCommand() {
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty())
 			return null;
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement){
-				MGraphicElement graphElement = (MGraphicElement) editpart.getModel();
-				command.add(createCommand(graphElement));
-				command.setReferenceNodeIfNull(graphElement);
-			}
+		for (Object element : graphicalElements) {
+			MGraphicElement graphElement = (MGraphicElement) element;
+			command.add(createCommand(graphElement));
+			command.setReferenceNodeIfNull(graphElement);
 		}
 		freshChecked = false;
 		return command;

@@ -17,6 +17,7 @@ package com.jaspersoft.studio.editor.action.size;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -28,18 +29,19 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.tools.ToolUtilities;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.gef.commands.ResizeCommand;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-public class Size2BorderAction extends SelectionAction implements IGlobalAction {
+public class Size2BorderAction extends ACachedSelectionAction implements IGlobalAction {
 
 	/**
 	 * Indicates that the bottom edges should be aligned.
@@ -61,7 +63,11 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 	public final static int BOTH = 2;
 
 	private int alignment;
-	private List<?> operationSet;
+	
+	/**
+	 * The elements that will be aligned
+	 */
+	private static HashMap<CachedSelectionProvider, List<?>> cachedOperationSet = new HashMap<CachedSelectionProvider, List<?>>();
 
 	public Size2BorderAction(IWorkbenchPart part, int alignment) {
 		super(part);
@@ -86,18 +92,8 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 		return rect;
 	}
 
-	/**
-	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
-	 */
-	protected boolean calculateEnabled() {
-		operationSet = null;
-		Command cmd = createAlignmentCommand();
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
-	}
-
-	private Command createAlignmentCommand() {
+	@Override
+	protected Command createCommand() {
 		AlignmentRequest request = new AlignmentRequest(RequestConstants.REQ_ALIGN);
 		request.setAlignmentRectangle(calculateAlignmentRectangle(request));
 		request.setAlignment(alignment);
@@ -121,7 +117,7 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 	 * @see org.eclipse.gef.Disposable#dispose()
 	 */
 	public void dispose() {
-		operationSet = Collections.EMPTY_LIST;
+		cachedOperationSet.remove(editor);
 		super.dispose();
 	}
 
@@ -133,6 +129,7 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 	 * @return the list of parts which will be aligned
 	 */
 	protected List<?> getOperationSet(Request request) {
+		List<?> operationSet = 	cachedOperationSet.get(editor);
 		if (operationSet != null)
 			return operationSet;
 		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
@@ -149,6 +146,7 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 			if (part.getParent() != parent)
 				return Collections.EMPTY_LIST;
 		}
+		cachedOperationSet.put(editor, editparts);
 		return editparts;
 	}
 
@@ -193,7 +191,13 @@ public class Size2BorderAction extends SelectionAction implements IGlobalAction 
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		operationSet = null;
-		execute(createAlignmentCommand());
+		execute(createCommand());
 	}
+	
+	@Override
+	protected void handleSelectionChanged() {
+		cachedOperationSet.remove(editor);
+		super.handleSelectionChanged();
+	}
+
 }

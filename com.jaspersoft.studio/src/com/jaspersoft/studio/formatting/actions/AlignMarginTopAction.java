@@ -55,7 +55,8 @@ public class AlignMarginTopAction extends AbstractFormattingAction {
 		return command;
 	}
 
-	protected Command createAlignmentCommand() {
+	@Override
+	protected Command createCommand() {
 			List<APropertyNode> nodes = getOperationSet();
 			Command command = null;
 			if (!nodes.isEmpty()) {

@@ -94,6 +94,8 @@ import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -116,7 +118,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * order </ul>
  */
 public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor,
-		IMultiEditor {
+		IMultiEditor, CachedSelectionProvider {
 
 	private class StateListener implements IElementStateListener {
 
@@ -1135,6 +1137,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		 * ((AEditPartFactory)reportContainer.getMainEditor().getGraphicalViewer().getEditPartFactory()).getReportConverter
 		 * (); if (reportConverter != null) reportConverter.resetStyles(jrDesign);
 		 */
+	}
+
+	@Override
+	public CommonSelectionCacheProvider getSelectionCache() {
+		return reportContainer.getSelectionCache();
 	}
 
 }

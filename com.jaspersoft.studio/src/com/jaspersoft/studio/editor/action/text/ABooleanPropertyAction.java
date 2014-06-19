@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
@@ -23,6 +22,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.text.MTextElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 public abstract class ABooleanPropertyAction extends ACachedSelectionAction {
@@ -33,38 +33,25 @@ public abstract class ABooleanPropertyAction extends ACachedSelectionAction {
 
 	@Override
 	public boolean isChecked() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty())
-			return false;
-		Object obj = editparts.get(0);
-		if (obj instanceof EditPart)
-			obj = ((EditPart) obj).getModel();
-		if (checkSelection(obj))
-			return getBooleanValue(obj);
-		return false;
+		List<Object> textElements = editor.getSelectionCache().getSelectionModelForType(MTextElement.class);
+		if (textElements.isEmpty()) return false;
+		return getBooleanValue(textElements.get(0));
 	}
 
 	public void run() {
-		execute(createCommand(getSelectedObjects()));
+		execute(createCommand());
 		setChecked(!isChecked());
 	}
 
-	protected Command createCommand(List<?> editparts) {
-		if (editparts.isEmpty())
+	protected Command createCommand() {
+		List<Object> textElements = editor.getSelectionCache().getSelectionModelForType(MTextElement.class);
+		if (textElements.isEmpty() || textElements.size() != getSelectedObjects().size())
 			return null;
 		boolean checked = !isChecked();
 		JSSCompoundCommand cc = new JSSCompoundCommand(getText(), null);
-		for (Object obj : editparts) {
-			if (obj instanceof EditPart){
-				EditPart part = (EditPart) obj;
-				cc.setReferenceNodeIfNull(part.getModel());
-				obj = part.getModel();
-			}
-			
-			if (checkSelection(obj)) {
-				cc.add(createCommand(obj, checked));
-			} else
-				return null;
+		for (Object element : textElements) {
+			cc.setReferenceNodeIfNull(element);
+			cc.add(createCommand(element, checked));
 		}
 		return cc;
 	}
@@ -77,8 +64,6 @@ public abstract class ABooleanPropertyAction extends ACachedSelectionAction {
 			return (Boolean) res;
 		return false;
 	}
-
-	protected abstract boolean checkSelection(Object obj);
 
 	protected Command createCommand(Object model, Object v) {
 		if (!(model instanceof IPropertySource))
@@ -102,19 +87,13 @@ public abstract class ABooleanPropertyAction extends ACachedSelectionAction {
 
 	@Override
 	protected void setSelection(ISelection selection) {
-		List<?> editparts = getSelectedObjects();
-		for (Object obj : editparts) {
-			if (obj instanceof EditPart)
-				obj = ((EditPart) obj).getModel();
-			if (obj instanceof APropertyNode)
-				((APropertyNode) obj).getPropertyChangeSupport().removePropertyChangeListener(modelListener);
+		List<Object> nodes = editor.getSelectionCache().getSelectionModelForType(APropertyNode.class);
+		for (Object node : nodes) {
+			((APropertyNode) node).getPropertyChangeSupport().removePropertyChangeListener(modelListener);
 		}
 		super.setSelection(selection);
-		for (Object obj : editparts) {
-			if (obj instanceof EditPart)
-				obj = ((EditPart) obj).getModel();
-			if (obj instanceof APropertyNode)
-				((APropertyNode) obj).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+		for (Object node : nodes) {
+			((APropertyNode) node).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		}
 	}
 

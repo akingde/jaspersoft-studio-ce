@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.action;
 
-import org.eclipse.gef.EditPart;
+import java.util.List;
+
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,6 +36,7 @@ import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.components.table.model.dialog.TableStyle;
 import com.jaspersoft.studio.components.table.model.table.command.UpdateStyleCommand;
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableStyleWizard;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 
 /**
  * Action to open the Style dialog and use it to change the style of a table
@@ -43,14 +44,14 @@ import com.jaspersoft.studio.components.table.model.table.command.wizard.TableSt
  * @author Orlandin Marco
  *
  */
-public class EditStyleAction extends SelectionAction {
+public class EditTableStyleAction extends ACachedSelectionAction {
 	
 	/**
 	 * The id of the action
 	 */
 	public static final String ID = "com.jaspersoft.studio.components.table.action.EditStyle"; 
 	
-	public EditStyleAction(IWorkbenchPart part) {
+	public EditTableStyleAction(IWorkbenchPart part) {
 		super(part);
 		setText(Messages.EditStyleAction_actionName);
 		setId(ID);
@@ -63,16 +64,8 @@ public class EditStyleAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		if (getSelectedObjects().size() >=1){
-			Object selectedObject = getSelectedObjects().get(0);
-			if (selectedObject instanceof EditPart){
-				EditPart editPart = (EditPart)selectedObject;
-				if (editPart != null){
-					return (editPart.getModel() instanceof MTable);
-				}
-			}
-		}
-		return false;
+		List<Object> tables = editor.getSelectionCache().getSelectionModelForType(MTable.class);
+		return (tables.size() ==1);
 	}
 
 	/**
@@ -100,8 +93,8 @@ public class EditStyleAction extends SelectionAction {
 			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
 			if (response == 0 || response == 1){
 				TableStyle selectedStyle = wizard.getTableStyle();
-				EditPart editPart = (EditPart)getSelectedObjects().get(0);
-				MTable tableModel = (MTable)editPart.getModel();
+				List<Object> tables = editor.getSelectionCache().getSelectionModelForType(MTable.class);
+				MTable tableModel = (MTable)tables.get(0);
 				execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
 			} 
 		}

@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -39,6 +38,8 @@ import com.jaspersoft.studio.property.SetValueCommand;
  */
 public class CSVColDataAction extends CSVAction {
 
+	private String columnName;
+	
 	/**
 	 * Create the action with id @CSVAction.COL_DATA
 	 * 
@@ -186,49 +187,45 @@ public class CSVColDataAction extends CSVAction {
 			if (!dialogResult)
 				return;
 		}
-		if (isChecked())
-			execute(createAlignmentCommand("")); //$NON-NLS-1$
-		else {
+		if (isChecked()){
+			columnName = "";//$NON-NLS-1$
+			execute(createCommand()); 
+		} else {
 			NameChooserDialog dialog = new NameChooserDialog(Display.getCurrent().getActiveShell(),
 					Messages.CSVColDataAction_InsertColNameDialog);
 			int dialogResult = dialog.open();
-			if (dialogResult == NameChooserDialog.OK)
-				execute(createAlignmentCommand(dialog.getName()));
+			if (dialogResult == NameChooserDialog.OK){
+				columnName = dialog.getName();
+				execute(createCommand());
+			}
 		}
 	}
 
 	@Override
 	public boolean isChecked() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)) {
+		List<Object> textElements = editor.getSelectionCache().getSelectionModelForType(MTextElement.class);
+		if (textElements.isEmpty() || textElements.size() != getSelectedObjects().size()) {
 			return false;
 		}
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MTextElement) {
-				MTextElement model = (MTextElement) editpart.getModel();
-				JRPropertiesMap colDataMap = (JRPropertiesMap) model.getPropertiesMap();
-				boolean hasColData = colDataMap.containsProperty(CSVAction.COL_DATA);
-				if (!hasColData)
-					return false;
-			} else
+		for (Object element : textElements) {
+			MTextElement model = (MTextElement) element;
+			JRPropertiesMap colDataMap = (JRPropertiesMap) model.getPropertiesMap();
+			boolean hasColData = colDataMap.containsProperty(CSVAction.COL_DATA);
+			if (!hasColData)
 				return false;
 		}
 		return true;
 	}
 
 	private boolean checkFrameParent() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || editparts.size() > 1) {
+		List<Object> textElements = editor.getSelectionCache().getSelectionModelForType(MTextElement.class);
+		if (textElements.isEmpty() || getSelectedObjects().size() > 1) {
 			return false;
 		}
-		EditPart editpart = (EditPart) editparts.get(0);
-		if (editpart.getModel() instanceof MTextElement) {
-			MTextElement element = (MTextElement) editpart.getModel();
-			if (element.getParent() instanceof MFrame)
-				return true;
-		}
-		return false;
+		MTextElement element = (MTextElement)textElements.get(0);
+		if (element.getParent() instanceof MFrame)
+			return true;
+		else return false;
 	}
 
 	/**
@@ -236,22 +233,20 @@ public class CSVColDataAction extends CSVAction {
 	 * csv column
 	 * 
 	 */
-	protected Command createAlignmentCommand(String columnName) {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
+	@Override
+	protected Command createCommand() {
+		List<Object> textElements = editor.getSelectionCache().getSelectionModelForType(MTextElement.class);
+		if (textElements.isEmpty())
 			return null;
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
 		command.setDebugLabel(getText());
-		EditPart editpart = (EditPart) editparts.get(0);
 		APropertyNode columnValue = null;
-		if (editpart.getModel() instanceof MTextElement) {
-			columnValue = (APropertyNode) editpart.getModel();
-			command.setReferenceNodeIfNull(columnValue);
-			if (isChecked())
-				removeProperty(columnValue, command);
-			else
-				createCommand(columnName, columnValue, command);
-		}
+		columnValue = (APropertyNode) textElements.get(0);
+		command.setReferenceNodeIfNull(columnValue);
+		if (isChecked())
+			removeProperty(columnValue, command);
+		else
+			createCommand(columnName, columnValue, command);
 		return command;
 	}
 }

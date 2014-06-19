@@ -37,6 +37,8 @@ import com.jaspersoft.studio.property.SetValueCommand;
  */
 public class CSVColOrderAction extends CSVAction {
 	
+	private String columnNames;
+	
 	public CSVColOrderAction(IWorkbenchPart part, String actionName){
 		super(part,CSVAction.COL_NAMES, actionName);
 	}
@@ -82,8 +84,10 @@ public class CSVColOrderAction extends CSVAction {
 				colNames = rootMap.getProperty(CSVAction.COL_NAMES);
 		ColumnsOrderDialog dialog = new ColumnsOrderDialog(Display.getCurrent().getActiveShell(), colNames);
 		int dialogResult = dialog.open();
-		if (dialogResult == NameChooserDialog.OK)
-			execute(createAlignmentCommand(dialog.getOrders()));
+		if (dialogResult == NameChooserDialog.OK){
+			columnNames = dialog.getOrders();
+			execute(createCommand());
+		}
 	}
 	
 	
@@ -92,7 +96,8 @@ public class CSVColOrderAction extends CSVAction {
 	 * 
 	 * @param columnNames initial column order, name of the columns comma separated
 	 */
-	protected Command createAlignmentCommand(String columnNames) {
+	@Override
+	protected Command createCommand() {
 		APropertyNode columnValue = getRoot();
 		JSSCompoundCommand command = new JSSCompoundCommand(columnValue);
 		command.setDebugLabel(getText());

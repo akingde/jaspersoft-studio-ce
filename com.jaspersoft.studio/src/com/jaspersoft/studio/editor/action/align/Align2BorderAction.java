@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.editor.action.align;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
@@ -32,6 +33,7 @@ import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.gef.commands.AlignCommand;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -68,7 +70,10 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 	public static final String ID_ALIGN_TOP = "band_" + GEFActionConstants.ALIGN_TOP; //$NON-NLS-1$
 	private int alignment;
 
-	private List<?> operationSet;
+	/**
+	 * The elements that will be aligned
+	 */
+	private static HashMap<CachedSelectionProvider, List<?>> cachedOperationSet = new HashMap<CachedSelectionProvider, List<?>>();
 
 	/**
 	 * Constructs an AlignmentAction with the given part and alignment ID. The alignment ID must by one of:
@@ -115,15 +120,14 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 		return null;
 	}
 
-	/**
-	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
-	 */
-	protected boolean calculateEnabled() {
-		operationSet = null;
-		return super.calculateEnabled();
+	@Override
+	protected void handleSelectionChanged() {
+		cachedOperationSet.remove(editor);
+		super.handleSelectionChanged();
 	}
 
-	protected Command createCommand(List<?> selectedObjects) {
+	@Override
+	protected Command createCommand() {
 		AlignmentRequest request = new AlignmentRequest(RequestConstants.REQ_ALIGN);
 		request.setAlignmentRectangle(calculateAlignmentRectangle(request));
 		request.setAlignment(alignment);
@@ -147,7 +151,7 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 	 * @see org.eclipse.gef.Disposable#dispose()
 	 */
 	public void dispose() {
-		operationSet = Collections.EMPTY_LIST;
+		cachedOperationSet.remove(editor);
 		super.dispose();
 	}
 
@@ -159,6 +163,7 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 	 * @return the list of parts which will be aligned
 	 */
 	protected List<?> getOperationSet(Request request) {
+		List<?> operationSet = 	cachedOperationSet.get(editor);
 		if (operationSet != null)
 			return operationSet;
 		List<?> editparts = getSelectedObjects();
@@ -175,6 +180,7 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 			if (part.getParent() != parent)
 				return Collections.EMPTY_LIST;
 		}
+		cachedOperationSet.put(editor, editparts);
 		return editparts;
 	}
 
@@ -248,8 +254,8 @@ public class Align2BorderAction extends ACachedSelectionAction implements IGloba
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		operationSet = null;
-		execute(createCommand(getSelectedObjects()));
+		execute(command);
+		//cachedOperationSet.remove(editor);
 	}
 
 }

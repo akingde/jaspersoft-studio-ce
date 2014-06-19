@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
@@ -79,20 +78,18 @@ public class CSVAction extends CustomSelectionAction {
 	 * @return the root of the report (typically an MReport or a MPage), or null is the root is unreachable
 	 */
 	protected APropertyNode getRoot() {
-		List<?> editparts = getSelectedObjects();
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart) || editparts.size() > 1) {
+		List<Object> nodes = editor.getSelectionCache().getSelectionModelForType(APropertyNode.class);
+		if (nodes.isEmpty() && getSelectedObjects().size() > 1) {
 			return null;
 		}
-		EditPart editpart = (EditPart) editparts.get(0);
-		if (editpart.getModel() instanceof APropertyNode) {
-			APropertyNode columnValue = (APropertyNode) editpart.getModel();
-			if (columnValue.getRoot() instanceof MRoot) {
-				INode rootChildren = columnValue.getRoot().getChildren().get(0);
-				// Return the MPage
-				if (rootChildren instanceof APropertyNode)
-					return (APropertyNode) rootChildren;
-			} else
-				return (APropertyNode) columnValue.getRoot();
+		APropertyNode columnValue = (APropertyNode) nodes.get(0);
+		if (columnValue.getRoot() instanceof MRoot) {
+			INode rootChildren = columnValue.getRoot().getChildren().get(0);
+			// Return the MPage
+			if (rootChildren instanceof APropertyNode)
+				return (APropertyNode) rootChildren;
+		} else {
+			return (APropertyNode) columnValue.getRoot();
 		}
 		return null;
 	}
@@ -165,7 +162,7 @@ public class CSVAction extends CustomSelectionAction {
 	 */
 	@Override
 	public void run() {
-		execute(createCommand4Execute(getSelectedObjects()));
+		execute(createCommand());
 	}
 
 	/**
@@ -175,18 +172,21 @@ public class CSVAction extends CustomSelectionAction {
 	 * @return a stack of commands that contain only the command to change a single attribute on the root of the document.
 	 *         If the root is not found the stack will be empty
 	 */
-	protected JSSCompoundCommand createCommand(List<?> selectedObjects) {
+	protected JSSCompoundCommand createCompoundCommand() {
 		ANode root = getRoot();
 		return root != null ? new JSSCompoundCommand(root) : null;
 	}
 
-	protected Command createCommand4Execute(List<?> selectedObjects) {
-		JSSCompoundCommand command = createCommand(selectedObjects);
+	@Override
+	protected Command createCommand() {
+		JSSCompoundCommand command = createCompoundCommand();
 		if (command != null) {
 			command.setDebugLabel(getText());
 			APropertyNode model = getRoot();
 			if (model != null)
 				command.add(createCommand(model));
+			else 
+				return null;
 		}
 		freshChecked = false;
 		return command;

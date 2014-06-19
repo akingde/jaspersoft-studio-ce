@@ -17,7 +17,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -86,7 +85,7 @@ public class CopyFormatAction extends ACachedSelectionAction {
 
 	@Override
 	public void run() {
-		List<APropertyNode> nodes = getNodes(getSelectedObjects());
+		List<APropertyNode> nodes = getNodes();
 		if (nodes.size() == 1){
 			copiedValues = new HashMap<String, Object>();
 			APropertyNode node = nodes.get(0);
@@ -103,20 +102,15 @@ public class CopyFormatAction extends ACachedSelectionAction {
 	 * @param selectedObjects the actual selection
 	 * @return a not null list of APropertyNode
 	 */
-	protected List<APropertyNode> getNodes(List<?> selectedObjects) {
+	protected List<APropertyNode> getNodes() {
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
-		if (selectedObjects.isEmpty())
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty())
 			return result;
-		for (Object it : selectedObjects) {
-			if (it instanceof EditPart) {
-				EditPart ep = (EditPart) it;
-				Object modelObj = ep.getModel();
-				// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
-				// it is also directly selected with also its container (ie a frame) selected
-				if (modelObj instanceof MGraphicElement){
-					result.add((APropertyNode)modelObj);
-				}
-			}
+		for (Object it : graphicalElements) {
+			// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
+			// it is also directly selected with also its container (ie a frame) selected
+			result.add((APropertyNode)it);
 		}
 		return result;
 	}
@@ -126,7 +120,7 @@ public class CopyFormatAction extends ACachedSelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		return getNodes(getSelectedObjects()).size() == 1;
+		return getNodes().size() == 1;
 	}
 	
 	/**

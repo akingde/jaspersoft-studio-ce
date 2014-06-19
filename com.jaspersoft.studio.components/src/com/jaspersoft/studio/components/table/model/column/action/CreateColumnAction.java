@@ -69,7 +69,7 @@ public abstract class CreateColumnAction extends ACreateAction {
 	
 	@Override
 	public void run() {
-		JSSCompoundCommand executedCommand = (JSSCompoundCommand)createCommand(getSelectedObjects());
+		JSSCompoundCommand executedCommand = (JSSCompoundCommand)createCommand();
 		//Append the command to refresh the column names
 		ANode tableNode = getTableNode();
 		executedCommand.addFirst(new RefreshColumnNamesCommand(tableNode, false, true));

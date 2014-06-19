@@ -17,13 +17,12 @@ package com.jaspersoft.studio.editor.action.order;
 
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.messages.Messages;
@@ -33,7 +32,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 /*
  * /* The Class BringForwardAction.
  */
-public class BringForwardAction extends SelectionAction implements IGlobalAction {
+public class BringForwardAction extends ACachedSelectionAction implements IGlobalAction {
 
 	/** The Constant ID. */
 	public static final String ID = "bring_forward"; //$NON-NLS-1$
@@ -50,48 +49,30 @@ public class BringForwardAction extends SelectionAction implements IGlobalAction
 	}
 
 	/**
-	 * Returns <code>true</code> if the selected objects can be created. Returns <code>false</code> if there are no
-	 * objects selected or the selected objects are not {@link EditPart}s.
-	 * 
-	 * @return if the command should be enabled
-	 */
-	protected boolean calculateEnabled() {
-		Command cmd = createReorderCommand(getSelectedObjects());
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
-	}
-
-	/**
 	 * Create a command to create the selected objects.
 	 * 
 	 * @param objects
 	 *          The objects to be deleted.
 	 * @return The command to remove the selected objects.
 	 */
-	public Command createReorderCommand(List<?> objects) {
-		if (objects.isEmpty())
-			return null;
-		if (!(objects.get(0) instanceof EditPart))
-			return null;
+	@Override
+	public Command createCommand() {
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty()) return null;
 
 		JSSCompoundCommand compoundCmd = new JSSCompoundCommand("Bring Forward", null); //$NON-NLS-1$
-		for (int i = objects.size() - 1; i >= 0; i--) {
-			EditPart part = (EditPart) objects.get(i);
+		for (Object model : graphicalElements) {
 			Command cmd = null;
-			Object model = part.getModel();
-			if (model instanceof MGraphicElement) {
-				ANode parent = (ANode) ((MGraphicElement) model).getParent();
-				compoundCmd.setReferenceNodeIfNull(parent);
-				if (parent != null && parent.getChildren() != null) {
-					int newIndex = parent.getChildren().indexOf(model) + 1;
-					if (newIndex < parent.getChildren().size()) {
-						cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
-					} else
-						return null;
-					if (cmd != null)
-						compoundCmd.add(cmd);
-				}
+			ANode parent = (ANode) ((MGraphicElement) model).getParent();
+			compoundCmd.setReferenceNodeIfNull(parent);
+			if (parent != null && parent.getChildren() != null) {
+				int newIndex = parent.getChildren().indexOf(model) + 1;
+				if (newIndex < parent.getChildren().size()) {
+					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
+				} else
+					return null;
+				if (cmd != null)
+					compoundCmd.add(cmd);
 			}
 		}
 		return compoundCmd;
@@ -101,7 +82,7 @@ public class BringForwardAction extends SelectionAction implements IGlobalAction
 	 * Performs the create action on the selected objects.
 	 */
 	public void run() {
-		execute(createReorderCommand(getSelectedObjects()));
+		execute(command);
 	}
 
 	/**

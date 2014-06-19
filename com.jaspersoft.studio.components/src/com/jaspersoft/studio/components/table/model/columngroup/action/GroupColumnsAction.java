@@ -77,18 +77,19 @@ public class GroupColumnsAction extends ACreateAction {
 	}
 
 	@Override
-	public Command createCommand(List<?> objects) {
+	public Command createCommand() {
+		List<Object> objects = getSelectedObjects();
 		if (objects.isEmpty())
 			return null;
 		List<MColumn> columns = new ArrayList<MColumn>();
 		for (Object obj : objects) {
 			if (!(obj instanceof EditPart))
-				return super.createCommand(objects);
+				return super.createCommand();
 			EditPart ep = (EditPart) obj;
 			if (ep.getModel() instanceof MColumn)
 				columns.add((MColumn) ep.getModel());
 			else
-				return super.createCommand(objects);
+				return super.createCommand();
 		}
 
 		MColumn fmc = columns.get(0);

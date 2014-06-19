@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
 import java.util.List;
@@ -34,6 +49,8 @@ import com.jaspersoft.studio.editor.action.copy.PasteAction;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditor;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.properties.view.ITabbedPropertySheetPageContributor;
@@ -41,9 +58,11 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabbedPropertySheetPageContributor,
-		IGraphicalEditor {
+		IGraphicalEditor, CachedSelectionProvider  {
 
 	protected JasperReportsConfiguration jrContext;
+	
+	protected CommonSelectionCacheProvider cachedSelection = new CommonSelectionCacheProvider();
 
 	public AGraphicEditor(JasperReportsConfiguration jrContext) {
 		super();
@@ -154,7 +173,13 @@ public abstract class AGraphicEditor extends J2DGraphicalEditor implements ITabb
 	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		cachedSelection.selectionChanged(selection);
 		updateActions(getSelectionActions());
+	}
+	
+	@Override
+	public CommonSelectionCacheProvider getSelectionCache() {
+		return cachedSelection;
 	}
 
 	/*

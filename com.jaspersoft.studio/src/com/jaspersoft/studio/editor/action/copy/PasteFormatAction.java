@@ -13,7 +13,7 @@ package com.jaspersoft.studio.editor.action.copy;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -46,32 +46,20 @@ public class PasteFormatAction extends ACachedSelectionAction {
 		setEnabled(false);
 	}
 
-	@Override
-	protected boolean calculateEnabled() {
-		if (!CopyFormatAction.hasCopiedValues()) return false;
-		List<?> selection = getSelectedObjects();
-		//Search if there is at least one target node
-		boolean found = false;
-		for (Object it : selection) {
-			if (it instanceof EditPart) {
-				EditPart ep = (EditPart) it;
-				Object modelObj = ep.getModel();
-				if (modelObj instanceof APropertyNode){
-					found = true;
-					//Nod found we can break the search
-					break;
-				}
-			}
-		}
-		return found;
-	}
 
 	@Override
 	public void run() {
-		List<APropertyNode> selectedNodes = getNodes(getSelectedObjects());
-		PasteFormatCommand command = new PasteFormatCommand(selectedNodes);
-		execute(command);
+		execute(createCommand());
 	}
+	
+	@Override
+	protected Command createCommand() {
+		if (!CopyFormatAction.hasCopiedValues()) return null;
+		List<APropertyNode> selectedNodes = getNodes();
+		if (selectedNodes.isEmpty()) return null;
+		PasteFormatCommand command = new PasteFormatCommand(selectedNodes);
+		return command;
+	};
 
 	/**
 	 * Return the list of APropertyNode inside the selection
@@ -79,20 +67,13 @@ public class PasteFormatAction extends ACachedSelectionAction {
 	 * @param selectedObjects the actual selection
 	 * @return a not null list of APropertyNode
 	 */
-	protected List<APropertyNode> getNodes(List<?> selectedObjects) {
+	protected List<APropertyNode> getNodes() {
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
-		if (selectedObjects.isEmpty())
-			return result;
-		for (Object it : selectedObjects) {
-			if (it instanceof EditPart) {
-				EditPart ep = (EditPart) it;
-				Object modelObj = ep.getModel();
-				// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
-				// it is also directly selected with also its container (ie a frame) selected
-				if (modelObj instanceof APropertyNode){
-					result.add((APropertyNode)modelObj);
-				}
-			}
+		List<Object> nodes = editor.getSelectionCache().getSelectionModelForType(APropertyNode.class);
+		for (Object it : nodes) {
+			// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
+			// it is also directly selected with also its container (ie a frame) selected
+			result.add((APropertyNode)it);
 		}
 		return result;
 	}

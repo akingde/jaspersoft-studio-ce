@@ -65,7 +65,7 @@ public class JoinRightAction extends AbstractFormattingAction {
 	}
 
 	@Override
-	protected Command createAlignmentCommand() {
+	protected Command createCommand() {
 		List<APropertyNode> nodes = getOperationSet();
 		JSSCompoundCommand command = null;
 		if (!nodes.isEmpty()){

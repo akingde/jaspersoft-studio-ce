@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.crosstab.action;
 
-import org.eclipse.gef.EditPart;
+import java.util.List;
+
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,6 +36,7 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.UpdateCrosstabStyleCommand;
 import com.jaspersoft.studio.components.crosstab.model.crosstab.command.wizard.CrosstabStyleWizard;
 import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 
 /**
  * Action to open the Style dialog and use it to change the style of a Crosstab
@@ -43,7 +44,7 @@ import com.jaspersoft.studio.components.crosstab.model.dialog.CrosstabStyle;
  * @author Orlandin Marco
  *
  */
-public class EditCrosstabStyleAction extends SelectionAction {
+public class EditCrosstabStyleAction extends ACachedSelectionAction {
 	
 	/**
 	 * The id of the action
@@ -63,16 +64,8 @@ public class EditCrosstabStyleAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		if (getSelectedObjects().size() >=1){
-			Object selectedObject = getSelectedObjects().get(0);
-			if (selectedObject instanceof EditPart){
-				EditPart editPart = (EditPart)selectedObject;
-				if (editPart != null){
-					return (editPart.getModel() instanceof MCrosstab);
-				}
-			}
-		}
-		return false;
+		List<Object> crosstabs = editor.getSelectionCache().getSelectionModelForType(MCrosstab.class);
+		return (crosstabs.size() ==1);
 	}
 
 	/**
@@ -102,8 +95,8 @@ public class EditCrosstabStyleAction extends SelectionAction {
 			//response == 0 update the old styles, response == 1 create new styles, response == 2 cancel the operation
 			if (response == 0 || response == 1){
 				CrosstabStyle selectedStyle = wizard.getTableStyle();
-				EditPart editPart = (EditPart)getSelectedObjects().get(0);
-				MCrosstab tableModel = (MCrosstab)editPart.getModel();
+				List<Object> crosstabs = editor.getSelectionCache().getSelectionModelForType(MCrosstab.class);
+				MCrosstab tableModel = (MCrosstab)crosstabs.get(0);
 				execute(changeStyleCommand(tableModel, selectedStyle,response == 0));
 			} 
 		}

@@ -1,57 +1,91 @@
+/*******************************************************************************
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, 
+ * the following license terms apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Jaspersoft Studio Team - initial API and implementation
+ ******************************************************************************/
 package com.jaspersoft.studio.editor.action;
 
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.utils.ModelUtils;
 
+/**
+ * 
+ * Abstract class to implement to define a selection action that caches
+ * the command and the selection set to provide better performance
+ *
+ */
 public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 
+	protected boolean fresh = false;
+	protected boolean freshChecked = false;
+	
+	/**
+	 * The cached command
+	 */
+	protected Command command;
+	
+	protected boolean ischecked = false;
+	
+	/**
+	 * Editor that provide the common selection provider, class that cache the actual
+	 * selection and all the request for a subselection and stuff
+	 */
+	protected CachedSelectionProvider editor = null;
+	
 	public ACachedSelectionAction(IWorkbenchPart part) {
 		super(part);
+		editor = (CachedSelectionProvider) part;
 	}
 
 	public ACachedSelectionAction(IWorkbenchPart part, int style) {
 		super(part, style);
+		editor = (CachedSelectionProvider) part;
 	}
 
 	@Override
 	protected void handleSelectionChanged() {
 		fresh = false;
 		freshChecked = false;
+		if (editor != null){
+			editor.getSelectionCache().selectionChanged(getSelection());
+		}
 		super.handleSelectionChanged();
 	}
 
-	protected boolean fresh = false;
-	protected boolean freshChecked = false;
-	protected Command command;
-	protected boolean ischecked = false;
 
 	@Override
 	protected boolean calculateEnabled() {
 		if (!fresh)
-			command = createCommand(getSelectedObjects());
+			command = createCommand();
 		fresh = true;
 		return command != null && command.canExecute();
 	}
 
-	protected Command createCommand(List<?> editparts) {
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
-			return null;
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement) {
-				JSSCompoundCommand cmd = new JSSCompoundCommand((ANode)editpart.getModel());
-				cmd.add(new SetValueCommand());
-				return cmd;
-			}
+	protected Command createCommand() {
+		List<Object> mGraphElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		for(Object obj : mGraphElements){
+			JSSCompoundCommand cmd = new JSSCompoundCommand((ANode)obj);
+			cmd.add(new SetValueCommand());
+			return cmd;
 		}
 		return null;
 	}
@@ -65,9 +99,13 @@ public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 	 * 					one of the allowed types,<code>false</code> otherwise
 	 */
 	public boolean checkSingleSelectedObject(Class<?>...classes) {
-		List<?> selectedObjects = getSelectedObjects();
-		if(selectedObjects.size()!=1) return false;
-		return ModelUtils.checkTypesForSingleEditPartModel(getSelectedObjects().get(0), true, classes);
+		if (getSelectedObjects().size() != 1) return false;
+		CommonSelectionCacheProvider cache = editor.getSelectionCache();
+		for (Class<?> clazz : classes) {
+			if (!cache.getSelectionModelForType(clazz).isEmpty())
+				return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -78,8 +116,9 @@ public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 	 * @return <code>true</code> all model objects are instances of 
 	 * 					one of the allowed types,<code>false</code> otherwise
 	 */
-	public boolean checkAllSelectedObjects(Class<?>... classes){
-		return ModelUtils.checkTypesForAllEditParModels(getSelectedObjects(), true, classes);
+	public boolean checkAllSelectedObjects(Class<?> searchedClass){
+		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(searchedClass);
+		return (!elements.isEmpty() && elements.size() == getSelectedObjects().size());
 	}
 	
 }

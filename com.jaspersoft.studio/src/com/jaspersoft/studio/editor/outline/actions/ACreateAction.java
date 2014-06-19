@@ -65,7 +65,8 @@ public abstract class ACreateAction extends ACachedSelectionAction {
 	 * @return The command to remove the selected objects.
 	 */
 	@Override
-	public Command createCommand(List<?> objects) {
+	public Command createCommand() {
+		List<Object> objects = getSelectedObjects();
 		if (objects.isEmpty())
 			return null;
 		if (!(objects.get(0) instanceof EditPart))
@@ -109,7 +110,7 @@ public abstract class ACreateAction extends ACachedSelectionAction {
 	 */
 	@Override
 	public void run() {
-		execute(createCommand(getSelectedObjects()));
+		execute(createCommand());
 	}
 
 }

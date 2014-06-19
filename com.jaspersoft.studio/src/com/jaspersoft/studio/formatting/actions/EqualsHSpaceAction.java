@@ -101,7 +101,8 @@ public class EqualsHSpaceAction extends AbstractFormattingAction{
 		return command;
 	}
 
-	protected Command createAlignmentCommand() {
+	@Override
+	protected Command createCommand() {
 			List<APropertyNode> nodes = getOperationSet();
 			JSSCompoundCommand command = null;
 			if (!nodes.isEmpty()){

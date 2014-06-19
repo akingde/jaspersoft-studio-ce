@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.text;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
@@ -27,13 +26,12 @@ import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
@@ -51,7 +49,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Orlandin Marco
  *
  */
-public class ConvertStaticIntoText extends SelectionAction {
+public class ConvertStaticIntoText extends ACachedSelectionAction {
 
 	/**
 	 * The id of the action
@@ -64,22 +62,6 @@ public class ConvertStaticIntoText extends SelectionAction {
 		setText(Messages.ConvertStaticIntoText_actionName);
 		setToolTipText(Messages.ConvertStaticIntoText_actionTooltip);
 		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/convert_to_field.png")); //$NON-NLS-1$
-	}
-
-	@Override
-	protected boolean calculateEnabled() {
-		return true;
-	}
-	
-	/**
-	 * Action visible if it is selected at least one StaticTextFigureEdit Part
-	 */
-	@Override
-	public boolean isEnabled() {
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		for(Object part : editparts)
-			if (part instanceof StaticTextFigureEditPart) return true;
-		return false;
 	}
 
 	/**
@@ -198,35 +180,34 @@ public class ConvertStaticIntoText extends SelectionAction {
 	 * @return a compound command with two commands in it, one to remove the selected static texts, and one to 
 	 * create in their place similar text fields
 	 */
-	protected Command createAlignmentCommand() {
+	@Override
+	protected Command createCommand() {
+		List<Object> editparts = editor.getSelectionCache().getSelectionPartForType(StaticTextFigureEditPart.class);
+		if (editparts.isEmpty())
+			return null;
 		JSSCompoundCommand command = new JSSCompoundCommand(null);
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
-			return command;
 		for(Object part : editparts){
-			if (part instanceof StaticTextFigureEditPart){
-				StaticTextFigureEditPart editPart = (StaticTextFigureEditPart)part;
-				MStaticText staticText = (MStaticText)editPart.getModel();
+			StaticTextFigureEditPart editPart = (StaticTextFigureEditPart)part;
+			MStaticText staticText = (MStaticText)editPart.getModel();
 
-				command.setReferenceNodeIfNull(staticText);
-				
-				DeleteElementCommand deleteCommand = new DeleteElementCommand(null, staticText);
-				MTextField modelText = new MTextField();
-				
-				JRDesignStaticText labelObject = (JRDesignStaticText)staticText.getValue();
-				JRDesignTextField textObject =  (JRDesignTextField)modelText.createJRElement(staticText.getJasperDesign());
+			command.setReferenceNodeIfNull(staticText);
+			
+			DeleteElementCommand deleteCommand = new DeleteElementCommand(null, staticText);
+			MTextField modelText = new MTextField();
+			
+			JRDesignStaticText labelObject = (JRDesignStaticText)staticText.getValue();
+			JRDesignTextField textObject =  (JRDesignTextField)modelText.createJRElement(staticText.getJasperDesign());
 
-				cloneTextField(textObject, labelObject);
-				
-				modelText.setValue(textObject);
-				Rectangle position = new Rectangle(labelObject.getX(),labelObject.getY(),labelObject.getWidth(),labelObject.getHeight());
+			cloneTextField(textObject, labelObject);
+			
+			modelText.setValue(textObject);
+			Rectangle position = new Rectangle(labelObject.getX(),labelObject.getY(),labelObject.getWidth(),labelObject.getHeight());
 
-				int oldIndex = ModelUtils.getChildrenPosition(staticText);
-				CreateElementCommand createCommand = new CreateElementCommand(staticText.getParent(), modelText, position, oldIndex);
-				
-				command.add(deleteCommand);
-				command.add(createCommand);
-			}
+			int oldIndex = ModelUtils.getChildrenPosition(staticText);
+			CreateElementCommand createCommand = new CreateElementCommand(staticText.getParent(), modelText, position, oldIndex);
+			
+			command.add(deleteCommand);
+			command.add(createCommand);
 		}
 		return command;
 	}
@@ -235,6 +216,6 @@ public class ConvertStaticIntoText extends SelectionAction {
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		execute(createAlignmentCommand());
+		execute(createCommand());
 	}
 }

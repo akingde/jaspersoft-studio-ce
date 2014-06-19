@@ -12,7 +12,6 @@ package com.jaspersoft.studio.editor.action.copy;
 
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
@@ -44,20 +43,17 @@ public class CutAction extends ACachedSelectionAction {
 
 	@Override
 	public void run() {
-		execute(createCommand(getSelectedObjects()));
+		execute(createCommand());
 	}
 
-	protected Command createCommand(List<?> selectedObjects) {
-		if (selectedObjects.isEmpty())
+	@Override
+	protected Command createCommand() {
+		List<Object> copiableObjects = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
+		if (copiableObjects.isEmpty())
 			return null;
 		CutCommand cmd = new CutCommand();
-		for (Object it : selectedObjects) {
-			if (it instanceof EditPart) {
-				EditPart ep = (EditPart) it;
-				Object modelObj = ep.getModel();
-				if (modelObj instanceof ICopyable)
-					cmd.addElement((ICopyable) modelObj);
-			}
+		for (Object it : copiableObjects) {
+			cmd.addElement((ICopyable) it);
 		}
 		return cmd;
 	}

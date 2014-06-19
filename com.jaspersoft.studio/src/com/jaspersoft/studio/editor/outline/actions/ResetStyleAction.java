@@ -15,14 +15,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.outline.actions;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.command.ResetConditionalStyleCommand;
@@ -34,7 +35,7 @@ import com.jaspersoft.studio.model.style.command.ResetStyleCommand;
  * @author Orlandin Marco
  *
  */
-public class ResetStyleAction extends SelectionAction {
+public class ResetStyleAction extends ACachedSelectionAction {
 
 	/** The Constant ID. */
 	public static final String ID = "reset_style_properites"; //$NON-NLS-1$
@@ -62,18 +63,13 @@ public class ResetStyleAction extends SelectionAction {
 	@Override
 	public void run() {
 		JSSCompoundCommand commands = new JSSCompoundCommand(null);
-		for (Object obj : getSelectedObjects()){
-			if (obj instanceof EditPart){
-				EditPart part = (EditPart)obj;
-				commands.setReferenceNodeIfNull(part.getModel());
-				if (part.getModel() instanceof MStyle){
-					MStyle style = (MStyle)part.getModel();
-					Command resetCommand = null;
- 					if (style.getValue() instanceof JRDesignStyle) resetCommand = new ResetStyleCommand(style.getJasperDesign(), style);
- 					else resetCommand = new ResetConditionalStyleCommand(style.getJasperDesign(), style);
-					commands.add(resetCommand);
-				}
-			}
+		List<Object> styles = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
+		for (Object rawStyle : styles){
+			MStyle style = (MStyle)rawStyle;
+			Command resetCommand = null;
+			if (style.getValue() instanceof JRDesignStyle) resetCommand = new ResetStyleCommand(style.getJasperDesign(), style);
+			else resetCommand = new ResetConditionalStyleCommand(style.getJasperDesign(), style);
+			commands.add(resetCommand);
 		}
 		execute(commands);
 	}
@@ -83,13 +79,8 @@ public class ResetStyleAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		if (getSelectedObjects().isEmpty()) return false;
-		for (Object obj : getSelectedObjects()){
-			if (obj instanceof EditPart){
-				if (!(((EditPart)obj).getModel() instanceof MStyle)) return false;
-			}
-		}
-		return true;
+		List<Object> styles = editor.getSelectionCache().getSelectionModelForType(MStyle.class);
+		return (styles.size() > 0 && styles.size() == getSelectedObjects().size());
 	}
 
 }

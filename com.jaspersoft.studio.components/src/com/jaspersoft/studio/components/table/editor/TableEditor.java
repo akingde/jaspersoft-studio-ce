@@ -32,7 +32,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.components.table.action.EditStyleAction;
+import com.jaspersoft.studio.components.table.action.EditTableStyleAction;
 import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.MTable;
@@ -149,9 +149,9 @@ public class TableEditor extends AbstractVisualEditor {
 		registry.registerAction(action);
 		selectionActions.add(GroupColumnsAction.ID);
 
-		action = new EditStyleAction(this);
+		action = new EditTableStyleAction(this);
 		registry.registerAction(action);
-		selectionActions.add(EditStyleAction.ID);
+		selectionActions.add(EditTableStyleAction.ID);
 
 		action = new CreateColumnBeginAction(this);
 		registry.registerAction(action);

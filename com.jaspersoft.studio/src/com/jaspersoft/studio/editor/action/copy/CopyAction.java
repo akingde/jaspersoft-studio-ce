@@ -13,7 +13,6 @@ package com.jaspersoft.studio.editor.action.copy;
 import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
@@ -53,7 +52,7 @@ public class CopyAction extends ACachedSelectionAction {
 
 	@Override
 	public void run() {
-		execute(createCommand(getSelectedObjects()));
+		execute(command);
 	}
 
 	/**
@@ -84,30 +83,26 @@ public class CopyAction extends ACachedSelectionAction {
 	 */
 	private HashSet<INode> getNotNestedSelection(List<?> selectedObjects) {
 		HashSet<INode> nestedElements = new HashSet<INode>();
-		for (Object it : selectedObjects) {
-			if (it instanceof EditPart) {
-				EditPart ep = (EditPart) it;
-				if (ep.getModel() instanceof IContainer)
-					getNestedElementsRecursive((INode) ep.getModel(), nestedElements);
-			}
+		List<Object> containers = editor.getSelectionCache().getSelectionModelForType(IContainer.class);
+		for (Object container : containers) {
+				getNestedElementsRecursive((INode) container, nestedElements);
 		}
 		return nestedElements;
 	}
 
-	protected Command createCommand(List<?> selectedObjects) {
+	@Override
+	protected Command createCommand() {
+		List<Object> selectedObjects = getSelectedObjects();
 		if (selectedObjects.isEmpty())
 			return null;
 		CopyCommand cmd = new CopyCommand();
 		HashSet<INode> nestedElements = getNotNestedSelection(selectedObjects);
-		for (Object it : selectedObjects) {
-			if (it instanceof EditPart) {
-				EditPart ep = (EditPart) it;
-				Object modelObj = ep.getModel();
-				// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
-				// it is also directly selected with also its container (ie a frame) selected
-				if (modelObj instanceof ICopyable && !nestedElements.contains(modelObj))
-					cmd.addElement((ICopyable) modelObj);
-			}
+		List<Object> copiableNodes = editor.getSelectionCache().getSelectionModelForType(ICopyable.class);
+		for (Object node : copiableNodes) {
+			// Before to add an element it is checked if its nested, this is done to avoid to copy twice an element because
+			// it is also directly selected with also its container (ie a frame) selected
+			if (!nestedElements.contains(node))
+				cmd.addElement((ICopyable) node);
 		}
 		return cmd;
 	}

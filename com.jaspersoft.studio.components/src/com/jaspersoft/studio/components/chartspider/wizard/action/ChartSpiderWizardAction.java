@@ -17,9 +17,7 @@ package com.jaspersoft.studio.components.chartspider.wizard.action;
 
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -27,13 +25,13 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chartspider.model.MSpiderChart;
 import com.jaspersoft.studio.components.chartspider.model.command.EditSpiderChartCommand;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 
-public class ChartSpiderWizardAction extends SelectionAction {
+public class ChartSpiderWizardAction extends ACachedSelectionAction {
 	public static final String ID = "chartspidereditaction"; //$NON-NLS-1$
 
 	/**
@@ -47,43 +45,27 @@ public class ChartSpiderWizardAction extends SelectionAction {
 		setLazyEnablementCalculation(false);
 	}
 
+
 	@Override
-	protected boolean calculateEnabled() {
-		Command cmd = createEditCommand(getSelectedObjects());
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
-	}
-
-	public Command createEditCommand(List<?> objects) {
-		if (objects.isEmpty())
+	public Command createCommand() {
+		List<Object> spiderCharts = editor.getSelectionCache().getSelectionModelForType(MSpiderChart.class);
+		
+		if (spiderCharts.isEmpty())
 			return null;
-		if (!(objects.get(0) instanceof EditPart))
-			return null;
-
-		for (int i = 0; i < objects.size(); i++) {
-			EditPart object = (EditPart) objects.get(i);
-			ANode node = (ANode) object.getModel();
-			if (node instanceof MSpiderChart) {
-				INode parent = node.getParent();
-				if (parent instanceof MFrame)
-					return new EditSpiderChartCommand((MFrame) parent,
-							(MSpiderChart) node);
-				if (parent instanceof MBand)
-					return new EditSpiderChartCommand((MBand) parent,
-							(MSpiderChart) node);
-				if (parent instanceof MElementGroup)
-					return new EditSpiderChartCommand((MElementGroup) parent,
-							(MSpiderChart) node);
-			}
+		
+		for (Object spiderChart : spiderCharts) {
+			MSpiderChart node = (MSpiderChart) spiderChart;
+			INode parent = node.getParent();
+			if (parent instanceof MFrame) return new EditSpiderChartCommand((MFrame) parent, node);
+			if (parent instanceof MBand) return new EditSpiderChartCommand((MBand) parent, node);
+			if (parent instanceof MElementGroup) return new EditSpiderChartCommand((MElementGroup) parent, node);
 		}
-
 		return null;
 	}
 
 	@Override
 	public void run() {
-		execute(createEditCommand(getSelectedObjects()));
+		execute(command);
 	}
 
 	/**

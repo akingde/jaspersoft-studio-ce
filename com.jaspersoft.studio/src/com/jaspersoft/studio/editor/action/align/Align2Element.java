@@ -17,6 +17,7 @@ package com.jaspersoft.studio.editor.action.align;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,13 +34,14 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
@@ -49,7 +51,7 @@ import com.jaspersoft.studio.messages.Messages;
  * @author Orlandin Marco
  * 
  */
-public class Align2Element extends SelectionAction implements IGlobalAction {
+public class Align2Element extends ACachedSelectionAction implements IGlobalAction {
 
 	/**
 	 * Indicates that the bottom edges should be aligned.
@@ -89,7 +91,7 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 	/**
 	 * The elements that will be aligned
 	 */
-	private List<?> operationSet;
+	private static HashMap<CachedSelectionProvider, List<?>> cachedOperationSet = new HashMap<CachedSelectionProvider, List<?>>();
 
 	/**
 	 * Constructs an AlignmentAction with the given part and alignment ID. The alignment ID must by one of:
@@ -133,22 +135,12 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 	}
 
 	/**
-	 * @see org.eclipse.gef.ui.actions.WorkbenchPartAction#calculateEnabled()
-	 */
-	protected boolean calculateEnabled() {
-		operationSet = null;
-		Command cmd = createAlignmentCommand();
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
-	}
-
-	/**
 	 * Create the alignment command for the selected elements
 	 * 
 	 * @return the alignment command
 	 */
-	private Command createAlignmentCommand() {
+	@Override
+	protected Command createCommand() {
 		AlignmentRequest request = new AlignmentRequest(RequestConstants.REQ_ALIGN);
 		// Validation of selected elements and choose of the primary
 		Pair<List<?>, Object> editPartsAndPrimary = getOperationSet(request);
@@ -174,7 +166,7 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 	 * @see org.eclipse.gef.Disposable#dispose()
 	 */
 	public void dispose() {
-		operationSet = Collections.EMPTY_LIST;
+		cachedOperationSet.remove(editor);
 		super.dispose();
 	}
 
@@ -209,6 +201,7 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 	 *         reference to set the position of all the others
 	 */
 	protected Pair<List<?>, Object> getOperationSet(Request request) {
+		List<?> operationSet = 	cachedOperationSet.get(editor);
 		if (operationSet != null) {
 			Object primary = getPrimary(operationSet);
 			return new Pair<List<?>, Object>(operationSet, primary);
@@ -227,7 +220,14 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 			if (part.getParent() != parent)
 				return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
 		}
+		cachedOperationSet.put(editor, editparts);
 		return new Pair<List<?>, Object>(editparts, primary);
+	}
+	
+	@Override
+	protected void handleSelectionChanged() {
+		cachedOperationSet.remove(editor);
+		super.handleSelectionChanged();
 	}
 
 	/**
@@ -301,8 +301,8 @@ public class Align2Element extends SelectionAction implements IGlobalAction {
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		operationSet = null;
-		execute(createAlignmentCommand());
+		execute(command);
+		//cachedOperationSet.remove(editor);
 	}
 
 }

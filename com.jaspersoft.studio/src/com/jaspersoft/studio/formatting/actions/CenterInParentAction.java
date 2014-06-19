@@ -88,10 +88,8 @@ public class CenterInParentAction extends AbstractFormattingAction {
 		return command;
 	}
 	
-
-
 	@Override
-	protected Command createAlignmentCommand() {
+	protected Command createCommand() {
 		List<APropertyNode> nodes = getOperationSet();
 		Command command = null;
 		if (!nodes.isEmpty()) {

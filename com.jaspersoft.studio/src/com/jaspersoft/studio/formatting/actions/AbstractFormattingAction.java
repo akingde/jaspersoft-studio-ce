@@ -18,17 +18,16 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 
-public abstract class AbstractFormattingAction extends SelectionAction implements IGlobalAction {
+public abstract class AbstractFormattingAction extends ACachedSelectionAction implements IGlobalAction {
 
 	public AbstractFormattingAction(IWorkbenchPart part) {
 		super(part);
@@ -45,17 +44,11 @@ public abstract class AbstractFormattingAction extends SelectionAction implement
 	}
 
 	protected List<APropertyNode> getOperationSet() {
-		@SuppressWarnings("unchecked")
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		if (editparts.isEmpty())
-			return new ArrayList<APropertyNode>();
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
-		for (Object element : editparts) {
-			if (element instanceof EditPart) {
-				EditPart part = (EditPart) element;
-				if (part.getModel() instanceof MGraphicElement && !(part.getModel() instanceof MBand))
-					result.add((MGraphicElement) ((EditPart) element).getModel());
-			}
+		for (Object element : graphicalElements) {
+			if (!(element instanceof MBand))
+				result.add((MGraphicElement)element);
 		}
 		return result;
 	}
@@ -151,10 +144,11 @@ public abstract class AbstractFormattingAction extends SelectionAction implement
 
 	@Override
 	public void run() {
-		execute(createAlignmentCommand());
+		execute(createCommand());
 	}
 
-	protected abstract Command createAlignmentCommand();
+	@Override
+	protected abstract Command createCommand();
 
 	/**
 	 * Convenient funtion to create the undo operation...

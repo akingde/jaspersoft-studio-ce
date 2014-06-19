@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchPart;
@@ -80,26 +79,23 @@ public abstract class PdfActionAbstact extends CustomSelectionAction {
 		if (!freshChecked) {
 			freshChecked = true;
 			ischecked = true;
-			List<?> editparts = getSelectedObjects();
-			if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart)) {
+			List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+			if (graphicalElements.isEmpty()) {
 				ischecked = false;
 			} else {
 				String attributeId = GetPropertyName();
 				String value = GetPropertyValue();
-				for (int i = 0; i < editparts.size(); i++) {
-					EditPart editpart = (EditPart) editparts.get(i);
-					if (editpart.getModel() instanceof MGraphicElement) {
-						MGraphicElement model = (MGraphicElement) editpart.getModel();
-						JRPropertiesMap v = (JRPropertiesMap) model.getPropertiesMap();
-						if (v == null) {
+				for (Object element : graphicalElements) {
+					MGraphicElement model = (MGraphicElement) element;
+					JRPropertiesMap v = (JRPropertiesMap) model.getPropertiesMap();
+					if (v == null) {
+						ischecked = false;
+						break;
+					} else {
+						Object oldValue = v.getProperty(attributeId);
+						if (oldValue == null || !oldValue.equals(value)) {
 							ischecked = false;
 							break;
-						} else {
-							Object oldValue = v.getProperty(attributeId);
-							if (oldValue == null || !oldValue.equals(value)) {
-								ischecked = false;
-								break;
-							}
 						}
 					}
 				}
@@ -198,17 +194,16 @@ public abstract class PdfActionAbstact extends CustomSelectionAction {
 		return cmd;
 	}
 
-	protected Command createCommand4execute(List<?> editparts) {
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof EditPart))
+	@Override
+	protected Command createCommand() {
+		List<Object> graphicalElements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
+		if (graphicalElements.isEmpty())
 			return null;
 		JSSCompoundCommand command = new JSSCompoundCommand(getText(), null);
-		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			if (editpart.getModel() instanceof MGraphicElement){
-				MGraphicElement grModel = (MGraphicElement) editpart.getModel();
-				command.setReferenceNodeIfNull(grModel);
-				command.add(createCommand(grModel));
-			}
+		for (Object element : graphicalElements) {
+			MGraphicElement grModel = (MGraphicElement) element;
+			command.setReferenceNodeIfNull(grModel);
+			command.add(createCommand(grModel));
 		}
 		freshChecked = false;
 		return command;
@@ -218,7 +213,7 @@ public abstract class PdfActionAbstact extends CustomSelectionAction {
 	 * Performs the create action on the selected objects.
 	 */
 	public void run() {
-		execute(createCommand4execute(getSelectedObjects()));
+		execute(createCommand());
 	}
 
 }

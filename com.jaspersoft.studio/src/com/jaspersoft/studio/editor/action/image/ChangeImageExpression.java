@@ -15,25 +15,23 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.image;
 
-import java.util.Iterator;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
 import com.jaspersoft.studio.jface.dialogs.ImageSelectionDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.image.MImage;
 
-public class ChangeImageExpression  extends SelectionAction implements IGlobalAction {
+public class ChangeImageExpression  extends ACachedSelectionAction implements IGlobalAction {
 
 	private MImage imageModel;
 	
@@ -48,16 +46,10 @@ public class ChangeImageExpression  extends SelectionAction implements IGlobalAc
 	}
 	
 	private void loadImageModel(){
-		if ((getSelection() != null) && (getSelection() instanceof StructuredSelection)) {
-			StructuredSelection ss = (StructuredSelection) getSelection();
-			for (Iterator<Object> it = ss.iterator(); it.hasNext();) {
-				Object obj = it.next();
-				if (obj instanceof EditPart)
-					obj = ((EditPart) obj).getModel();
-				if (obj instanceof MImage) {
-					imageModel = (MImage) obj;
-				}
-			}
+		imageModel = null;
+		List<Object> images = editor.getSelectionCache().getSelectionModelForType(MImage.class); 
+		if (!images.isEmpty()){
+			imageModel = (MImage) images.get(0);
 		}
 	}
 

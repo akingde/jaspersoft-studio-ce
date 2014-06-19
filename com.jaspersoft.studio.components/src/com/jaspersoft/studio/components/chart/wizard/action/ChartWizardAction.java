@@ -19,9 +19,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRChart;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -29,13 +27,13 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.command.EditChartCommand;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.frame.MFrame;
 
-public class ChartWizardAction extends SelectionAction {
+public class ChartWizardAction extends ACachedSelectionAction {
 	public static final String ID = "charteditaction"; //$NON-NLS-1$
 
 	/**
@@ -50,43 +48,26 @@ public class ChartWizardAction extends SelectionAction {
 	}
 
 	@Override
-	protected boolean calculateEnabled() {
-		Command cmd = createEditCommand(getSelectedObjects());
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
-	}
-
-	public Command createEditCommand(List<?> objects) {
-		if (objects.isEmpty())
+	public Command createCommand() {
+		List<Object> charts = editor.getSelectionCache().getSelectionModelForType(MChart.class);
+		if (charts.isEmpty())
 			return null;
-		if (!(objects.get(0) instanceof EditPart))
-			return null;
-
-		for (int i = 0; i < objects.size(); i++) {
-			EditPart object = (EditPart) objects.get(i);
-			ANode node = (ANode) object.getModel();
-			if (node instanceof MChart) {
-				MChart n = (MChart) node;
+		
+		for (Object chart : charts) {
+				MChart n = (MChart) chart;
 				if (n.getValue().getChartType() == JRChart.CHART_TYPE_MULTI_AXIS)
 					continue;
-				INode parent = node.getParent();
-				if (parent instanceof MFrame)
-					return new EditChartCommand((MFrame) parent, (MChart) node);
-				if (parent instanceof MBand)
-					return new EditChartCommand((MBand) parent, (MChart) node);
-				if (parent instanceof MElementGroup)
-					return new EditChartCommand((MElementGroup) parent,
-							(MChart) node);
-			}
+				INode parent = n.getParent();
+				if (parent instanceof MFrame) return new EditChartCommand((MFrame) parent, n);
+				if (parent instanceof MBand) return new EditChartCommand((MBand) parent, n);
+				if (parent instanceof MElementGroup) return new EditChartCommand((MElementGroup) parent, n);
 		}
-
 		return null;
 	}
 
 	@Override
 	public void run() {
-		execute(createEditCommand(getSelectedObjects()));
+		execute(command);
 	}
 
 	/**
