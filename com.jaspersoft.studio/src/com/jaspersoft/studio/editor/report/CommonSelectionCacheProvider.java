@@ -208,9 +208,12 @@ public class CommonSelectionCacheProvider {
 		lastEditPartSelection.clear();
 		cachedEditPartTypedRequest.clear();
 		while (elements.hasNext()) {
-			EditPart editPart = (EditPart) elements.next();
-			lastModelSelection.add(editPart);
-			lastEditPartSelection.add(editPart);
+			Object obj = elements.next();
+			if(obj instanceof EditPart) {
+				EditPart editPart = (EditPart) obj;
+				lastModelSelection.add(editPart);
+				lastEditPartSelection.add(editPart);
+			}
 		}
 	}
 	
