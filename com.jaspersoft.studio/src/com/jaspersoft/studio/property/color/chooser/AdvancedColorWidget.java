@@ -258,7 +258,8 @@ public class AdvancedColorWidget extends Composite implements IColorProvider{
 						AlfaRGB rgbColor = hexParser(hex.getText());
 						if (rgbColor != null){
 							colorsSelector.setSelectedColor(rgbColor.getRgb(), false);
-							alphaText.setSelection(rgbColor.getAlfa());
+							//The alpha widget is optional so we need to check if it is present
+							if (alphaText != null) alphaText.setSelection(rgbColor.getAlfa());
 							updateText(rgbColor.getRgb(), rgbColor.getRgb().getHSB(), e.widget);
 						}
 					}
