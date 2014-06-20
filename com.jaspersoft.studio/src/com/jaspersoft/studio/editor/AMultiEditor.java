@@ -75,8 +75,9 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		}
 		switch (newPageIndex) {
 		case 0:
-			if (activePage == 1 && !xmlFresh)
+			if (activePage == 1 && !xmlFresh){
 				xml2model();
+			}
 			setModel(model);
 			Display.getDefault().syncExec(new Runnable() {
 
@@ -93,7 +94,9 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			});
 			break;
 		case 1:
-			model2xml();
+			if(isDirty()) {
+				model2xml();
+			}
 			break;
 		}
 		super.pageChange(newPageIndex);
@@ -107,16 +110,24 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		isRefresh = true;
-		String xml = model2xml();
+		String xml = null;
+		if(activePage==0){
+			xml = model2xml();
+		}
+		else if(activePage==1){
+			xml2model();
+		}
 		doSaveParticipate(monitor);
 		xmlEditor.doSave(monitor);
 
-		try {
-			IFile f = getCurrentFile();
-			if (f != null)
-				f.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
-		} catch (Throwable e) {
-			UIUtils.showError(e);
+		if(xml!=null){
+			try {
+				IFile f = getCurrentFile();
+				if (f != null)
+					f.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE, monitor);
+			} catch (Throwable e) {
+				UIUtils.showError(e);
+			}
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
