@@ -115,7 +115,7 @@ public class Publish {
 			// setup datasource
 			ResourceDescriptor ds = null;
 			for (ResourceDescriptor rd : oldRU.getChildren()) {
-				if (SelectorDatasource.isDatasource(rd)) {
+				if (rd != null && SelectorDatasource.isDatasource(rd)) {
 					ds = rd;
 					ds.setDirty(false);
 					break;
@@ -123,7 +123,7 @@ public class Publish {
 			}
 			ResourceDescriptor newDs = null;
 			for (ResourceDescriptor rd : r.getChildren()) {
-				if (SelectorDatasource.isDatasource(rd)) {
+				if (rd != null && SelectorDatasource.isDatasource(rd)) {
 					newDs = rd;
 					break;
 				}
