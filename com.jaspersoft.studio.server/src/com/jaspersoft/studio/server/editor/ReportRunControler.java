@@ -18,9 +18,13 @@ package com.jaspersoft.studio.server.editor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.ws.rs.core.NewCookie;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileExtension;
@@ -36,6 +40,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
@@ -44,12 +49,15 @@ import com.jaspersoft.studio.editor.preview.view.control.VBookmarks;
 import com.jaspersoft.studio.editor.preview.view.control.VExporter;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
 import com.jaspersoft.studio.server.editor.input.VInputControls;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
+import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
+import com.jaspersoft.studio.server.protocol.restv2.RESTv2ExceptionHandler;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -172,50 +180,59 @@ public class ReportRunControler {
 					re.setStatus("queued");
 					re.setReportURIFull(reportUnit);
 					re.setReportURI(WSClientHelper.getReportUnitUri(reportUnit));
+
+					List<Argument> args = new ArrayList<Argument>();
+					args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, pcontainer.getCurrentViewer()));
+					re.setArgs(args);
+
 					while (re.getStatus().equals("queued") || re.getStatus().equals("execution")) {
 						re = WSClientHelper.runReportUnit(monitor, re, prmcopy);
 						if (re.getStatus().equals("ready")) {
-							Map<String, FileContent> files = re.getFiles();
 							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-							for (String key : files.keySet()) {
-								FileContent fc = (FileContent) files.get(key);
-								if (key.equals("jasperPrint")) { //$NON-NLS-1$
-									final File f = File.createTempFile(FileExtension.JRPRINT, "." + FileExtension.JRPRINT); //$NON-NLS-1$  
-									f.deleteOnExit();
-									f.createNewFile();
-									FileOutputStream htmlFile = new FileOutputStream(f);
-									htmlFile.write(fc.getData());
-									htmlFile.close();
-									stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-									stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
-									final Object obj = JRLoader.loadObject(f);
-									if (obj instanceof JasperPrint)
-										UIUtils.getDisplay().asyncExec(new Runnable() {
+							stats.setValue(ReportControler.ST_PAGECOUNT, re.getTotalPages());
+							if (re.getReportOutputURL() != null) {
+								showURL(re);
+							} else {
+								Map<String, FileContent> files = re.getFiles();
+								for (String key : files.keySet()) {
+									FileContent fc = (FileContent) files.get(key);
+									if (key.equals("jasperPrint")) { //$NON-NLS-1$
+										final File f = File.createTempFile(FileExtension.JRPRINT, "." + FileExtension.JRPRINT); //$NON-NLS-1$  
+										f.deleteOnExit();
+										f.createNewFile();
+										FileOutputStream htmlFile = new FileOutputStream(f);
+										htmlFile.write(fc.getData());
+										htmlFile.close();
+										stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
+										final Object obj = JRLoader.loadObject(f);
+										if (obj instanceof JasperPrint)
+											UIUtils.getDisplay().asyncExec(new Runnable() {
 
-											@Override
-											public void run() {
-												stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
-												APreview pv = pcontainer.getDefaultViewer();
-												if (pv instanceof IJRPrintable)
-													try {
-														((IJRPrintable) pv).setJRPRint(stats, ((JasperPrint) obj), true);
-														VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
-														vs.setJasperPrint(((JasperPrint) obj));
-													} catch (Exception e) {
-														e.printStackTrace();
-													}
-												pcontainer.setJasperPrint(stats, (JasperPrint) obj);
-											}
-										});
-									break;
+												@Override
+												public void run() {
+													stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
+													APreview pv = pcontainer.getDefaultViewer();
+													if (pv instanceof IJRPrintable)
+														try {
+															((IJRPrintable) pv).setJRPRint(stats, ((JasperPrint) obj), true);
+															VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
+															vs.setJasperPrint(((JasperPrint) obj));
+														} catch (Exception e) {
+															e.printStackTrace();
+														}
+													pcontainer.setJasperPrint(stats, (JasperPrint) obj);
+												}
+											});
+										break;
+									}
 								}
 							}
 						} else if (re.getStatus().equals("queued") || re.getStatus().equals("execution")) {
+							showURL(re);
 							Thread.sleep(500);
-						} else if (re.getStatus().equals("failed")) {
-
-						} else if (re.getStatus().equals("cancelled")) {
-
+						} else if (re.getStatus().equals("failed") || re.getStatus().equals("cancelled")) {
+							RESTv2ExceptionHandler reh = new RESTv2ExceptionHandler((ARestV2Connection) WSClientHelper.getClient(monitor, re.getReportURIFull()));
+							throw new Exception(reh.buildMessage(monitor, "", re.getErrorDescriptor()));
 						}
 						if (monitor.isCanceled())
 							WSClientHelper.cancelReportUnit(monitor, re);
@@ -227,6 +244,30 @@ public class ReportRunControler {
 					finishReport();
 				}
 				return Status.OK_STATUS;
+			}
+
+			private void showURL(ReportExecution re) {
+				if (re.getReportOutputURL() != null) {
+					final String url = re.getReportOutputURL();
+					final Map<String, NewCookie> cookie = re.getReportOutputCookie();
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							APreview pv = pcontainer.getDefaultViewer();
+							if (pv instanceof ABrowserViewer)
+								try {
+									Map<String, String> cmap = new HashMap<String, String>();
+									for (String key : cookie.keySet())
+										cmap.put(key, cookie.get(key).toCookie().toString());
+									((ABrowserViewer) pv).setURL(url, cmap);
+									pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+						}
+					});
+				}
 			}
 		};
 		job.setPriority(Job.LONG);

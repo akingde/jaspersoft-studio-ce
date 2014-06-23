@@ -3,6 +3,8 @@ package com.jaspersoft.studio.server.protocol;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.NewCookie;
+
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -111,6 +113,25 @@ public class ReportExecution {
 
 	public void setFiles(Map<String, FileContent> files) {
 		this.files = files;
+	}
+
+	private String reportOutputURL;
+	private Map<String, NewCookie> reportOutputCookie;
+
+	public String getReportOutputURL() {
+		return reportOutputURL;
+	}
+
+	public void setReportOutputURL(String reportURL) {
+		this.reportOutputURL = reportURL;
+	}
+
+	public Map<String, NewCookie> getReportOutputCookie() {
+		return reportOutputCookie;
+	}
+
+	public void setReportOutputCookie(Map<String, NewCookie> reportOutputCookie) {
+		this.reportOutputCookie = reportOutputCookie;
 	}
 
 	private Map<String, FileContent> files;

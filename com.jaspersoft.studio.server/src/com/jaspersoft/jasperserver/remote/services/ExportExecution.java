@@ -33,8 +33,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
 import com.jaspersoft.jasperserver.remote.exception.RemoteException;
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
 
 /**
  * <p>

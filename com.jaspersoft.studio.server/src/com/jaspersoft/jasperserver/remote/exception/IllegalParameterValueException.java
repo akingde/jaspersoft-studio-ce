@@ -20,7 +20,7 @@
 */
 package com.jaspersoft.jasperserver.remote.exception;
 
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
 
 /**
  * @author Yaroslav.Kovalchyk

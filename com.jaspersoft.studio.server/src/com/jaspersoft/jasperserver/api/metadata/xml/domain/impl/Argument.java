@@ -47,7 +47,7 @@ public class Argument {
     public static final String RUN_OUTPUT_FORMAT_XLS_NOPAG = "XLS_NOPAG";
     public static final String RUN_OUTPUT_FORMAT_XLSX = "XLSX";
     public static final String RUN_OUTPUT_FORMAT_XLSX_NOPAG = "XLSX_NOPAG";
-    public static final String RUN_OUTPUT_FORMAT_RTF = "ODT";
+	public static final String RUN_OUTPUT_FORMAT_RTF = "RTF";
 
     
     public static final String RUN_OUTPUT_IMAGES_URI = "IMAGES_URI";

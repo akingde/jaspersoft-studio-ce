@@ -1,5 +1,7 @@
 package com.jaspersoft.studio.editor.preview.view.report.html;
 
+import java.util.Map;
+
 import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
 
 import org.eclipse.jface.action.Action;
@@ -58,11 +60,20 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 	protected String url;
 	private URLContributionItem urlBar;
 
-	public void setURL(String url) throws Exception {
+	public void setURL(String url, Map<String, String> cookie) throws Exception {
 		this.url = Misc.nvl(url);
 		if (urlBar != null)
 			urlBar.setUrl(url);
-		if (browser != null)
+		if (browser != null) {
+			if (cookie != null) {
+				for (String c : cookie.values())
+					Browser.setCookie(c, url);
+			}
 			browser.setUrl(url);
+		}
+	}
+
+	public void setURL(String url) throws Exception {
+		setURL(url, null);
 	}
 }

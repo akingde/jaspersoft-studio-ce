@@ -233,7 +233,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Builder req = tgt.request().header("Content-Location", rd.getUriString());
+		Builder req = tgt.request().header("Content-Location", rd.getUriString()).header("Content-Length", "0");
 		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {
@@ -282,6 +282,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			ReportParameters rprms = new ReportParameters(new ArrayList<ReportParameter>());
 
 			Builder req = tgt.request();
+
 			r = connector.post(req, Entity.entity(rprms, MediaType.APPLICATION_XML_TYPE), monitor);
 
 			try {
@@ -398,7 +399,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (repExec.getRequestId() != null) {
 			tgt = target.path("reportExecutions/" + repExec.getRequestId());
 			req = tgt.request();
-			res = toObj(connector.get(req, monitor), ReportExecutionDescriptor.class, monitor);
+			Response r = connector.get(req, monitor);
+			repExec.setReportOutputCookie(r.getCookies());
+			res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		} else {
 			ReportExecutionRequest rer = new ReportExecutionRequest();
 			rer.setReportUnitUri(repExec.getReportURI());
@@ -406,8 +409,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			rer.setFreshData(true);
 			rer.setIgnorePagination(false);
 			rer.setInteractive(false);
-			String ouput = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
-			rer.setOutputFormat(ouput);
+			for (Argument arg : repExec.getArgs()) {
+				if (arg.getName().equals(Argument.RUN_OUTPUT_FORMAT))
+					rer.setOutputFormat(arg.getValue());
+			}
+			if (rer.getOutputFormat() == null)
+				rer.setOutputFormat(Argument.RUN_OUTPUT_FORMAT_JRPRINT);
+			System.out.println(rer.getOutputFormat());
 			// rer.setTransformerKey(transformerKey);
 			rer.setSaveDataSnapshot(false);
 			Map<String, Object> prm = repExec.getPrm();
@@ -432,6 +440,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			tgt = target.path("reportExecutions");
 			req = tgt.request();
 			Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
+			repExec.setReportOutputCookie(r.getCookies());
 			res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		}
 		if (res != null && res.getErrorDescriptor() == null) {
@@ -439,17 +448,21 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				int i = 0;
 				for (ExportDescriptor ee : res.getExports()) {
 					if (ee.getOutputResource() != null) {
-						tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
-						req = tgt.request(ee.getOutputResource().getContentType());
-						byte[] d = readFile(connector.get(req, monitor), monitor);
-						addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
-						if (ee.getAttachments() != null)
-							for (AttachmentDescriptor ror : ee.getAttachments()) {
-								tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
-								req = tgt.request(ror.getContentType());
-								d = readFile(connector.get(req, monitor), monitor);
-								addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
-							}
+						if (ee.getOutputResource().getContentType().equals("text/html")) {
+							repExec.setReportOutputURL(target.getUri() + "reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
+						} else {
+							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
+							req = tgt.request(ee.getOutputResource().getContentType());
+							byte[] d = readFile(connector.get(req, monitor), monitor);
+							addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
+							if (ee.getAttachments() != null)
+								for (AttachmentDescriptor ror : ee.getAttachments()) {
+									tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
+									req = tgt.request(ror.getContentType());
+									d = readFile(connector.get(req, monitor), monitor);
+									addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
+								}
+						}
 					}
 				}
 			} else {

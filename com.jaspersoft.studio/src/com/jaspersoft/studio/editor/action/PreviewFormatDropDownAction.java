@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action;
 
@@ -28,40 +23,43 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.editor.AMultiEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Action to switch the preview format of the Preview area. This is not a real 
- * action since the run method is empty. It instead create a separated menu 
- * with the appropriated selection listener to do the switch. However it 
- * must extend action to be contributed
+ * Action to switch the preview format of the Preview area. This is not a real action since the run method is empty. It
+ * instead create a separated menu with the appropriated selection listener to do the switch. However it must extend
+ * action to be contributed
  * 
  * @author Orlandin Marco
  * 
  */
 public class PreviewFormatDropDownAction extends Action implements IMenuCreator {
-	
+
 	/**
 	 * Id of the action
 	 */
 	public static final String ID = "SettingOutputAction";
-	
+
 	/**
 	 * The last menu generated
 	 */
 	private Menu menu;
-	
+
 	/**
 	 * Configuration of the current report
 	 */
 	private JasperReportsConfiguration jConfig;
 
+	private AViewsFactory viewFactory;
+
 	/**
-	 * Create the action 
+	 * Create the action
 	 * 
-	 * @param jConfig the jasper configuration of the current report
+	 * @param jConfig
+	 *          the jasper configuration of the current report
 	 */
 	public PreviewFormatDropDownAction(JasperReportsConfiguration jConfig) {
 		setText(Messages.ViewSettingsDropDownAction_settingsName);
@@ -69,20 +67,18 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 		setId(ID);
 		this.jConfig = jConfig;
 	}
-	
+
 	/**
 	 * Return the JRXML editor where the current editor is opened
 	 * 
 	 * @return a JRXMLeditor
 	 */
-	private JrxmlEditor getEditor(){
-		return (JrxmlEditor)jConfig.get(AMultiEditor.THEEDITOR);
+	private JrxmlEditor getEditor() {
+		return (JrxmlEditor) jConfig.get(AMultiEditor.THEEDITOR);
 	}
 
-	
 	/**
-	 * If the last menu generated is not null
-	 * the it is disposed
+	 * If the last menu generated is not null the it is disposed
 	 */
 	@Override
 	public void dispose() {
@@ -91,16 +87,14 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 			menu = null;
 		}
 	}
-	
+
 	/**
-	 * Generate the contextual menu that list all the available data 
-	 * preview formats and when one of them is choose then it is set 
-	 * on the preview editor. The selected one is also highlighted 
-	 * inside the list
+	 * Generate the contextual menu that list all the available data preview formats and when one of them is choose then
+	 * it is set on the preview editor. The selected one is also highlighted inside the list
 	 */
 	@Override
 	public Menu getMenu(Menu parent) {
-		createOutputMenu(parent);			
+		createOutputMenu(parent);
 		return menu;
 	}
 
@@ -114,51 +108,56 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 		menu = rootMenu;
 		return menu;
 	}
-	
+
 	/**
 	 * Create a single menu item of the list
 	 * 
-	 * @param key the key of the preview output format that this item select
-	 * @param editor The jrxml editor
+	 * @param key
+	 *          the key of the preview output format that this item select
+	 * @param editor
+	 *          The jrxml editor
 	 */
-	private void creteItem(final String key, final JrxmlEditor editor){
-		MenuItem item = new MenuItem(menu, SWT.CHECK);
-		item.setText(key);
+	private void creteItem(final String key, final JrxmlEditor editor) {
+		final MenuItem item = new MenuItem(menu, SWT.CHECK);
+		item.setText(viewFactory.getLabel(key));
+		item.setData("KEY", key);
 		item.addSelectionListener(new SelectionAdapter() {
-		
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				editor.setPreviewOutput(key, false);
+				editor.setPreviewOutput((String) item.getData("KEY"), false);
 				editor.setPreviewDirty(true);
 			}
-			
+
 		});
 	}
-	
+
 	/**
 	 * Generate the list of all the previews output format
 	 * 
 	 * @param parent
 	 */
-	private void createOutputMenu(Menu parent){
+	private void createOutputMenu(Menu parent) {
 		MenuItem root = new MenuItem(parent, SWT.CASCADE);
-		menu = new Menu (parent);
-		root.setMenu (menu);
+		menu = new Menu(parent);
+		root.setMenu(menu);
 		root.setText(Messages.ViewSettingsDropDownAction_previewFormatMenu);
 		JrxmlEditor editor = getEditor();
-		for(String key : ViewsFactory.getKeys()){
-			if (ViewsFactory.isSeparator(key)){
+		PreviewContainer preview = (PreviewContainer) editor.getEditor(JrxmlEditor.PAGE_PREVIEW);
+		viewFactory = preview.getViewFactory();
+		for (String key : viewFactory.getKeys()) {
+			if (viewFactory.isSeparator(key)) {
 				new MenuItem(menu, SWT.SEPARATOR);
 			} else {
 				creteItem(key, editor);
 			}
 		}
-		
+
 		menu.addMenuListener(new MenuAdapter() {
 			@Override
 			public void menuShown(MenuEvent e) {
 				String actualPreview = getEditor().getDefaultViewerKey();
-				for(MenuItem item : menu.getItems()){
+				for (MenuItem item : menu.getItems()) {
 					item.setSelection(item.getText().equals(actualPreview));
 				}
 			}

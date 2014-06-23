@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
@@ -186,21 +187,27 @@ public class PreviewJRPrint extends ABasicEditor {
 		});
 	}
 
-	private String currentViewer;
-	
+	protected String currentViewer;
+
+	public String getCurrentViewer() {
+		return currentViewer;
+	}
+
 	/**
 	 * Set the current preview type
 	 * 
-	 * @param viewerKey key of the type to show
-	 * @param refresh flag to set if the preview should also be refreshed
+	 * @param viewerKey
+	 *          key of the type to show
+	 * @param refresh
+	 *          flag to set if the preview should also be refreshed
 	 */
-	public void setCurrentViewer(String viewerKey, boolean refresh){
-		if (ViewsFactory.getKeys().contains(viewerKey)){
+	public void setCurrentViewer(String viewerKey, boolean refresh) {
+		if (getViewFactory().getKeys().contains(viewerKey)) {
 			currentViewer = viewerKey;
-			if (refresh) rightContainer.switchView(currentViewer);
+			if (refresh)
+				rightContainer.switchView(currentViewer);
 		}
 	}
-	
 
 	public String getDefaultViewerKey() {
 		if (currentViewer == null)
@@ -319,7 +326,7 @@ public class PreviewJRPrint extends ABasicEditor {
 		return topToolBarManager1;
 	}
 
-	private VSimpleErrorPreview errorPreview;
+	protected VSimpleErrorPreview errorPreview;
 
 	public VSimpleErrorPreview getErrorView() {
 		return errorPreview;
@@ -349,11 +356,19 @@ public class PreviewJRPrint extends ABasicEditor {
 		StackLayout stacklayoutView = new StackLayout();
 		rightComposite.setLayout(stacklayoutView);
 
-		getRightContainer().populate(rightComposite, ViewsFactory.createPreviews(rightComposite, jrContext));
+		getRightContainer().populate(rightComposite, getViewFactory().createPreviews(rightComposite, jrContext));
 
 		errorPreview = new VSimpleErrorPreview(rightComposite, jrContext);
 
 		return rightComposite;
+	}
+
+	protected AViewsFactory viewFactory;
+
+	public AViewsFactory getViewFactory() {
+		if (viewFactory == null)
+			viewFactory = new ViewsFactory();
+		return viewFactory;
 	}
 
 	@Override

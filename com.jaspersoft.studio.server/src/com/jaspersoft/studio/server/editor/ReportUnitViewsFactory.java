@@ -8,68 +8,63 @@
  * 
  * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
-package com.jaspersoft.studio.editor.preview.view;
+package com.jaspersoft.studio.server.editor;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import com.jaspersoft.studio.editor.preview.view.report.file.CSVMetadataViewer;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
+import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.report.file.CSVViewer;
-import com.jaspersoft.studio.editor.preview.view.report.file.TXTViewer;
-import com.jaspersoft.studio.editor.preview.view.report.file.XMLImagesViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.HTMLViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.LayeredHTMLViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.XHTMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.DocxViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.ExcelAPIViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.OdsViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.OdtViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.PdfViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.PowerPointViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.XlsMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 
-public class ViewsFactory extends AViewsFactory {
-	public static final String VIEWER_JAVA = "Java";
+public class ReportUnitViewsFactory extends AViewsFactory {
+	public static final String DEFAULT = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
+
 	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<String, Class<? extends APreview>>();
 	static {
-		pcmap.put(VIEWER_JAVA, SWTViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_JRPRINT, SWTViewer.class);
 
 		pcmap.put("SEPARATOR1", null);
 
-		pcmap.put("Layered HTML", LayeredHTMLViewer.class);
-		pcmap.put("HTML", HTMLViewer.class);
-		pcmap.put("xHTML", XHTMLViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_HTML, HTMLViewer.class);
 		pcmap.put("SEPARATOR1", null);
-		pcmap.put("SEPARATOR1", null);
-		pcmap.put("PDF", PdfViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_PDF, PdfViewer.class);
 
 		pcmap.put("SEPARATOR2", null);
 
-		pcmap.put("RTF", RTFViewer.class);
-		pcmap.put("DOCx", DocxViewer.class);
-		pcmap.put("ODT", OdtViewer.class);
-		pcmap.put("ODS", OdsViewer.class);
-		pcmap.put("PPTx", PowerPointViewer.class);
-		pcmap.put("Text", TXTViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_RTF, RTFViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_DOCX, DocxViewer.class);
+		// pcmap.put("ODT", OdtViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_ODS, OdsViewer.class);
+		// pcmap.put("PPTx", PowerPointViewer.class);
+		// pcmap.put("Text", TXTViewer.class);
 
 		pcmap.put("SEPARATOR3", null);
 
-		pcmap.put("XLS", XlsViewer.class);
-		pcmap.put("XLS Metadata", XlsMetadataViewer.class);
-		pcmap.put("XLSx", XlsxViewer.class);
-		pcmap.put("ExcelAPI", ExcelAPIViewer.class);
-		pcmap.put("CSV", CSVViewer.class);
-		pcmap.put("CSV Metadata", CSVMetadataViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XLS, XlsViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XLSX, XlsxViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_CSV, CSVViewer.class);
 
 		pcmap.put("SEPARATOR4", null);
 
-		pcmap.put("XML", XMLViewer.class);
-		pcmap.put("XML With Images", XMLImagesViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XML, XMLViewer.class);
+	}
+
+	@Override
+	public String getLabel(String key) {
+		if (key.equals(DEFAULT))
+			return "Java";
+		return super.getLabel(key);
 	}
 
 	/**

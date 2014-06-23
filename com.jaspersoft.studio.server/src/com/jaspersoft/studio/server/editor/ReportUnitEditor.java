@@ -41,6 +41,7 @@ import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.editor.action.RunStopAction;
@@ -201,6 +202,19 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 	public boolean switchRightView(APreview view, Statistics stats, MultiPageContainer container) {
 		reportControler.viewerChanged(view);
 		return super.switchRightView(view, stats, container);
+	}
+
+	public String getDefaultViewerKey() {
+		if (currentViewer == null)
+			currentViewer = ReportUnitViewsFactory.DEFAULT;
+		return currentViewer;
+	}
+
+	@Override
+	public AViewsFactory getViewFactory() {
+		if (viewFactory == null)
+			viewFactory = new ReportUnitViewsFactory();
+		return viewFactory;
 	}
 
 	public void showParameters(boolean showprm) {

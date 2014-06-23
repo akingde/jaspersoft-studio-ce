@@ -20,11 +20,11 @@
 */
 package com.jaspersoft.jasperserver.remote.services;
 
-import com.jaspersoft.jasperserver.remote.exception.IllegalParameterValueException;
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
+import com.jaspersoft.jasperserver.remote.exception.IllegalParameterValueException;
 
 /**
  * <p></p>

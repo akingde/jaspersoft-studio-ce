@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.toolbar;
 
@@ -32,23 +27,25 @@ public class TopToolBarManagerJRPrint extends ATopToolBarManager {
 
 	protected SwitchViewsAction pvModeAction;
 
-	public IContributionItem[] getContributions(){
-		if (tbManager == null) return new IContributionItem[0];
+	public IContributionItem[] getContributions() {
+		if (tbManager == null)
+			return new IContributionItem[0];
 		return tbManager.getItems();
 	}
-	
+
 	protected void fillToolbar(IToolBarManager tbManager) {
 		if (pvModeAction == null)
-			pvModeAction = new SwitchViewsAction(container.getRightContainer(), "Java", true);
+			pvModeAction = new SwitchViewsAction(container.getRightContainer(), container.getViewFactory().getLabel(
+					container.getDefaultViewerKey()), true);
 		tbManager.add(pvModeAction);
 
 		tbManager.add(new Separator());
 	}
-	
+
 	/**
 	 * Set the text of the action
 	 */
-	public void setActionText(String text){
+	public void setActionText(String text) {
 		pvModeAction.setText(text);
 	}
 }

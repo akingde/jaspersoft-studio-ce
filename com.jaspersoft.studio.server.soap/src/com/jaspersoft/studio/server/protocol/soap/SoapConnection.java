@@ -214,6 +214,18 @@ public class SoapConnection implements IConnection {
 				mainDs.setIsNew(false);
 				rd.getChildren().add(0, mainDs);
 				client.addOrModifyResource(rd, null);
+			} else {
+				// ResourceDescriptor mds = null;
+				// for (ResourceDescriptor r : oldChildren) {
+				// if (SelectorDatasource.isDatasource(r)) {
+				// mds = r;
+				// break;
+				// }
+				// }
+				// if (mds != null) {
+				// rd.getChildren().remove(mds);
+				// client.addOrModifyResource(rd, null);
+				// }
 			}
 		}
 		return rd;

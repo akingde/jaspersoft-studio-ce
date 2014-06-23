@@ -12,7 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class RESTv2ExceptionHandler {
@@ -95,7 +95,7 @@ public class RESTv2ExceptionHandler {
 		}
 	}
 
-	protected String buildMessage(IProgressMonitor monitor, String msg, ErrorDescriptor ed) {
+	public String buildMessage(IProgressMonitor monitor, String msg, ErrorDescriptor ed) {
 		if (!msg.isEmpty())
 			msg += "\n";
 		if (ed.getMessage() != null) {

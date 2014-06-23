@@ -31,7 +31,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.jaspersoft.jasperserver.api.JSException;
 import com.jaspersoft.jasperserver.api.engine.jasperreports.domain.impl.ReportUnitResult;
-import com.jaspersoft.jasperserver.remote.exception.xml.ErrorDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
 
 /**
  * <p>
