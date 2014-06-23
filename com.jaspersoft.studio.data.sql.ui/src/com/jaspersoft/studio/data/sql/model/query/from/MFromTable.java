@@ -73,7 +73,8 @@ public class MFromTable extends AMQueryAliased<MSqlTable> {
 	public void addTableJoin(TableJoin tjoin) {
 		if (tableJoins == null)
 			tableJoins = new ArrayList<TableJoin>();
-		tableJoins.add(tjoin);
+		if (!tableJoins.contains(tjoin))
+			tableJoins.add(tjoin);
 	}
 
 	public void removeTableJoin(TableJoin tjoin) {

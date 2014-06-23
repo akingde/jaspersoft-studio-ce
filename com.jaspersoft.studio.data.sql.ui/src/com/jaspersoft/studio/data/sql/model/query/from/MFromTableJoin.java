@@ -40,10 +40,13 @@ public class MFromTableJoin extends MFromTable {
 	@Override
 	public void setParent(ANode newparent, int newIndex) {
 		if (newparent == null) {
-			tableJoin.getFromTable().removeTableJoin(tableJoin);
+			if (tableJoin != null)
+				tableJoin.getFromTable().removeTableJoin(tableJoin);
 			tableJoin = null;
-		} else
+		} else {
+			((MFromTable) newparent).removeTableJoin(tableJoin);
 			tableJoin = new TableJoin(this, (MFromTable) newparent);
+		}
 		super.setParent(newparent, newIndex);
 	}
 

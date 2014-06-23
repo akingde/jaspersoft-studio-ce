@@ -15,9 +15,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.table;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
@@ -53,7 +54,7 @@ public class EditTableJoin extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(UIUtils.getShell(), designer);
 		MFromTableJoin clone = (MFromTableJoin) mcol.clone();
 		ANode parent = mcol.getParent();
 		int indx = parent.getChildren().indexOf(mcol);

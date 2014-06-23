@@ -46,4 +46,5 @@ public class TableJoin implements Serializable {
 	public void setJoinTable(MFromTableJoin sourceForeignKey) {
 		this.joinTable = sourceForeignKey;
 	}
+
 }
