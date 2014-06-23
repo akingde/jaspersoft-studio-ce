@@ -52,10 +52,8 @@ public class AMSQLObject extends MDBObjects implements IQueryString {
 			boolean onlyException = r.isQuoteExceptions();
 			while (p != null) {
 				if (p instanceof AMSQLObject) {
-					if (p instanceof MSqlSchema) {
-						if ((((MSqlSchema) p).isCurrent()))
-							return Misc.quote(getValue(), IQ, onlyException);
-					}
+					if (p instanceof MSqlSchema && (((MSqlSchema) p).isCurrent()))
+						return Misc.quote(getValue(), IQ, onlyException);
 					String s = ((AMSQLObject) p).toSQLString();
 					if (Misc.isNullOrEmpty(s))
 						return Misc.quote(getValue(), IQ, onlyException);

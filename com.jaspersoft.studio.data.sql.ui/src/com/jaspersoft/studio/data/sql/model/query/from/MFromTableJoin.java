@@ -103,7 +103,7 @@ public class MFromTableJoin extends MFromTable {
 	}
 
 	public String toSQLString() {
-		return "\n\t" + getDisplayText();
+		return "\n\t" + join + " " + super.toSQLString() + " ON ";
 	}
 
 }
