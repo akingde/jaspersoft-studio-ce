@@ -15,9 +15,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.model.column.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -49,8 +56,7 @@ public abstract class CreateColumnAction extends ACreateAction {
 	 * 
 	 * @return a ANode of the table contained in the selection or null if it can't be found
 	 */
-	protected ANode getTableNode(){
-		List<?> objects = getSelectedObjects();
+	protected ANode getTableNode(List<?> objects){
 		for (int i = 0; i < objects.size(); i++) {
 			Object obj = objects.get(i);
 			if (obj instanceof EditPart) {
@@ -67,13 +73,73 @@ public abstract class CreateColumnAction extends ACreateAction {
 		return null;
 	}
 	
+	public void execute(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			execute(((IStructuredSelection) selection).toList());
+	}
+	
+	public void execute(List<?> editparts){
+		JSSCompoundCommand executedCommand = (JSSCompoundCommand)createCommand(editparts);
+		execute(executedCommand);
+	}
+	
+	public boolean canExecute(List<?> editparts){
+		Command cmd = createCommand(editparts);
+		return (cmd != null && cmd.canExecute());
+	}
+	
+	public boolean canExecute(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			return canExecute(((IStructuredSelection) selection).toList());
+		return false;
+	}
+	
+	@Override
+	public Command createCommand(){
+		return createCommand(getSelectedObjects());
+	}
+	
+	public Command createCommand(List<?> objects) {
+		if (objects.isEmpty())
+			return null;
+		if (!(objects.get(0) instanceof EditPart))
+			return null;
+
+		CreateRequest createReq = new CreateRequest(RequestConstants.REQ_CREATE);
+		createReq.setLocation(location);
+		createReq.setFactory(creationFactory);
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		if (!setExtendedData(map, objects))
+			return null;
+		createReq.setExtendedData(map);
+
+		JSSCompoundCommand jssCcmd = new JSSCompoundCommand(null);		
+		for (int i = 0; i < objects.size(); i++) {
+			Object obj = objects.get(i);
+			if (obj instanceof EditPart) {
+				EditPart object = (EditPart) obj;
+				//Set the node if necessary to disable the refresh
+				jssCcmd.setReferenceNodeIfNull(object.getModel());	
+				Command cmd = object.getCommand(createReq);
+				if (cmd != null) {
+					jssCcmd.add(cmd);
+				}
+			}
+		}
+		if(!jssCcmd.isEmpty()) {
+			//Append the command to refresh the column names
+			ANode tableNode = getTableNode(objects);
+			jssCcmd.addFirst(new RefreshColumnNamesCommand(tableNode, false, true));
+			jssCcmd.add(new RefreshColumnNamesCommand(tableNode, true, false));
+			return jssCcmd;
+		}
+		else {
+			return null;
+		}
+	}
+	
 	@Override
 	public void run() {
-		JSSCompoundCommand executedCommand = (JSSCompoundCommand)createCommand();
-		//Append the command to refresh the column names
-		ANode tableNode = getTableNode();
-		executedCommand.addFirst(new RefreshColumnNamesCommand(tableNode, false, true));
-		executedCommand.add(new RefreshColumnNamesCommand(tableNode, true, false));
-		execute(executedCommand);
+		execute(getSelectedObjects());
 	}
 }

@@ -15,11 +15,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.toolbars;
 
-import org.eclipse.jface.viewers.ISelection;
-
 import com.jaspersoft.studio.components.table.model.column.MCell;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
-import com.jaspersoft.studio.editor.action.SetWorkbenchAction;
 
 /**
  * Create the toolbar button to add a column to the selected table
@@ -33,13 +31,8 @@ public class CreateColumnAfterContributionItem extends CreateColumnContributionI
 	 * Action that will be executed to add the column
 	 */
 	@Override
-	protected SetWorkbenchAction getAction(){ 
-		return new CreateColumnAfterAction(null){
-			@Override
-			protected ISelection getSelection() {
-				return getLastRawSelection();
-			}
-		};
+	protected CreateColumnAction getAction(){ 
+		return new CreateColumnAfterAction(null);
 	}
 	
 	@Override

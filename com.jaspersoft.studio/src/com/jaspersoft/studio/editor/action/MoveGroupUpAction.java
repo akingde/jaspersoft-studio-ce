@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -63,10 +65,10 @@ public class MoveGroupUpAction extends SetWorkbenchAction implements IGlobalActi
 	 * 
 	 * @return if the command should be enabled
 	 */
-	protected boolean calculateEnabled() {
-		List<APropertyNode> selection = getOperationSet();
+	protected boolean calculateEnabled(List<?> editparts) {
+		List<APropertyNode> selection = getOperationSet(editparts);
 		if (selection.size() == 1) {
-			APropertyNode groupNode = getOperationSet().get(0);
+			APropertyNode groupNode = getOperationSet(editparts).get(0);
 			MGroup groupElement = null;
 			if (groupNode instanceof MBandGroupHeader) {
 				groupElement = ((MBandGroupHeader) groupNode).getMGroup();
@@ -80,6 +82,17 @@ public class MoveGroupUpAction extends SetWorkbenchAction implements IGlobalActi
 		}
 		return false;
 	}
+	
+	public boolean calculateEnabled(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			return calculateEnabled(((IStructuredSelection) selection).toList());
+		return false;
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		return calculateEnabled(getSelectedObjects());
+	}
 
 	/**
 	 * Return a list of every MBandGroupFooter or MBandGroupHeader selected
@@ -87,9 +100,7 @@ public class MoveGroupUpAction extends SetWorkbenchAction implements IGlobalActi
 	 * 
 	 * @return a not null list of MBandGroupHeader or MBandGroupFotter
 	 */
-	protected List<APropertyNode> getOperationSet() {
-		@SuppressWarnings("unchecked")
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+	protected List<APropertyNode> getOperationSet(List<?> editparts) {
 		if (editparts.isEmpty())
 			return new ArrayList<APropertyNode>();
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
@@ -127,31 +138,40 @@ public class MoveGroupUpAction extends SetWorkbenchAction implements IGlobalActi
 		}
 	}
 
+	public void execute(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			execute(((IStructuredSelection) selection).toList());
+	}
+	
+	public void execute(List<?> editparts){
+		EditPart selectionParent = ((EditPart)editparts.get(0)).getParent();
+
+		APropertyNode groupNode = getOperationSet(editparts).get(0);
+		// Remove the group...
+
+		JSSCompoundCommand cmd = new JSSCompoundCommand(groupNode);
+		MGroup groupElement = null;
+		if (groupNode instanceof MBandGroupHeader) {
+			cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupHeader) groupNode));
+			groupElement = ((MBandGroupHeader) groupNode).getMGroup();
+		} else if (groupNode instanceof MBandGroupFooter) {
+			cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupFooter) groupNode));
+			groupElement = ((MBandGroupFooter) groupNode).getMGroup();
+		}
+
+		int index = groupNode.getJasperDesign().getGroupsList().indexOf(groupElement.getValue());
+		cmd.add(new CreateGroupCommand((MReport) groupNode.getParent(), groupElement, index - 1));
+		execute(cmd);
+		setSelection(selectionParent, groupNode);
+	}
+	
 	/**
 	 * Performs the create action on the selected objects.
 	 */
 	public void run() {
 		@SuppressWarnings("unchecked")
 		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		EditPart selectionParent = ((EditPart)editparts.get(0)).getParent();
-		
-    APropertyNode groupNode = getOperationSet().get(0);
-    // Remove the group...
-
-    JSSCompoundCommand cmd = new JSSCompoundCommand(groupNode);
-	   MGroup groupElement = null;
-		 if (groupNode instanceof MBandGroupHeader) {
-				cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupHeader) groupNode));
-				groupElement = ((MBandGroupHeader)groupNode).getMGroup();
-			} else if (groupNode instanceof MBandGroupFooter) {
-				cmd.add(new DeleteGroupCommand((MReport) groupNode.getParent(), (MBandGroupFooter) groupNode));
-				groupElement = ((MBandGroupFooter)groupNode).getMGroup();
-			}
-			
-			int index = groupNode.getJasperDesign().getGroupsList().indexOf(groupElement.getValue());
-			cmd.add(new CreateGroupCommand((MReport) groupNode.getParent(), groupElement, index-1)); 
-			execute(cmd);
-			setSelection(selectionParent,groupNode);
+		execute(editparts);
 	}
 	
 

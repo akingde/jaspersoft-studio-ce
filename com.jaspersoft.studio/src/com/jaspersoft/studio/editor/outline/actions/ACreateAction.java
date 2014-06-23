@@ -31,10 +31,10 @@ import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 public abstract class ACreateAction extends ACachedSelectionAction {
 
 	/** The creation factory. */
-	private CreationFactory creationFactory;
+	protected CreationFactory creationFactory;
 
 	/** The location. */
-	private Point location = new Point(0, 0);
+	protected Point location = new Point(0, 0);
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.

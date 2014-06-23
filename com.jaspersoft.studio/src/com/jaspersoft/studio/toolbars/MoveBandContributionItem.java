@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.toolbars;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,7 +28,6 @@ import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
 import com.jaspersoft.studio.editor.action.MoveGroupUpAction;
-import com.jaspersoft.studio.editor.action.SetWorkbenchAction;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
@@ -57,37 +55,13 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 	 */
 	private boolean isGroup = false;
 
-	private MoveDetailDownAction moveDetailDownAction = new MoveDetailDownAction(null){
-
-		@Override
-		protected ISelection getSelection() {
-			return getLastRawSelection();
-		}
-	};
+	private MoveDetailDownAction moveDetailDownAction = new MoveDetailDownAction(null);
 	
-	private  MoveDetailUpAction moveDetailUpAction = new MoveDetailUpAction(null){
-		
-		@Override
-		protected ISelection getSelection() {
-			return getLastRawSelection();
-		}
-	};
+	private MoveDetailUpAction moveDetailUpAction = new MoveDetailUpAction(null);
 	
-	private MoveGroupDownAction moveGroupDownAction = new MoveGroupDownAction(null){
-		
-		@Override
-		protected ISelection getSelection() {
-			return getLastRawSelection();
-		}
-	};
+	private MoveGroupDownAction moveGroupDownAction = new MoveGroupDownAction(null);
 	
-	private MoveGroupUpAction moveGroupUpAction = new MoveGroupUpAction(null){
-		
-		@Override
-		protected ISelection getSelection() {
-			return getLastRawSelection();
-		}
-	};
+	private MoveGroupUpAction moveGroupUpAction = new MoveGroupUpAction(null);
 	
 	/**
 	 * Selection listener that create the right command when a button is pushed
@@ -96,17 +70,22 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 		
 	
 		public void widgetSelected(SelectionEvent e) {
-			SetWorkbenchAction action = null;
 			if (e.widget == moveDown){
-				if (isGroup) action = moveGroupDownAction;
-				else action = moveDetailDownAction;
+				if (isGroup)  {
+					moveGroupDownAction.setWorkbenchPart(getWorkbenchPart());
+					moveGroupDownAction.execute(getLastRawSelection());
+				} else {
+					moveDetailDownAction.setWorkbenchPart(getWorkbenchPart());
+					moveDetailDownAction.execute(getLastRawSelection());
+				}
 			} else {
-				if (isGroup) action = moveGroupUpAction;
-				else action = moveDetailUpAction;
-			}
-			if (action != null) {
-				action.setWorkbenchPart(getWorkbenchPart());
-				action.run();
+				if (isGroup) {
+					moveGroupUpAction.setWorkbenchPart(getWorkbenchPart());
+					moveGroupUpAction.execute(getLastRawSelection());
+				} else {
+					moveDetailUpAction.setWorkbenchPart(getWorkbenchPart());
+					moveDetailUpAction.execute(getLastRawSelection());
+				}
 			}
 		}
 	};
@@ -133,18 +112,22 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 	private void setEnablement(){
 		if (getWorkbenchPart() != null){
 			if (moveDown != null && !moveDown.isDisposed()){
-				SetWorkbenchAction action =  null;
-				if (isGroup) action = moveGroupDownAction;
-				else action = moveDetailDownAction;
-				action.setWorkbenchPart(getWorkbenchPart());
-				moveDown.setEnabled(action.isEnabled());
+				if (isGroup) {
+					moveGroupDownAction.setWorkbenchPart(getWorkbenchPart());
+					moveDown.setEnabled(moveGroupDownAction.calculateEnabled(getLastRawSelection()));
+				} else {
+					moveDetailDownAction.setWorkbenchPart(getWorkbenchPart());
+					moveDown.setEnabled(moveDetailDownAction.calculateEnabled(getLastRawSelection()));
+				}
 			}
 			if (moveUp != null && !moveUp.isDisposed()){
-				SetWorkbenchAction action =  null;
-				if (isGroup) action = moveGroupUpAction;
-				else action = moveDetailUpAction;
-				action.setWorkbenchPart(getWorkbenchPart());
-				moveUp.setEnabled(action.isEnabled());
+				if (isGroup) {
+					moveGroupUpAction.setWorkbenchPart(getWorkbenchPart());
+					moveUp.setEnabled(moveGroupUpAction.calculateEnabled(getLastRawSelection()));
+				} else {
+					moveDetailUpAction.setWorkbenchPart(getWorkbenchPart());
+					moveUp.setEnabled(moveDetailUpAction.calculateEnabled(getLastRawSelection()));
+				}
 			}
 		}
 	}

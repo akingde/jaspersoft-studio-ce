@@ -16,6 +16,8 @@ import java.util.List;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -61,10 +63,10 @@ public class MoveDetailUpAction extends SetWorkbenchAction implements IGlobalAct
 	 * 
 	 * @return if the command should be enabled
 	 */
-	protected boolean calculateEnabled() {
-		List<APropertyNode> selection = getOperationSet();
+	protected boolean calculateEnabled(List<?> editparts) {
+		List<APropertyNode> selection = getOperationSet(editparts);
 		if (selection.size() == 1) {
-			APropertyNode selectedNode = getOperationSet().get(0);
+			APropertyNode selectedNode = getOperationSet(editparts).get(0);
 			if (selectedNode instanceof MBand) {
 				MBand mband = (MBand) selectedNode;
 				if (MBand.isMultiBand(mband)) {
@@ -78,6 +80,17 @@ public class MoveDetailUpAction extends SetWorkbenchAction implements IGlobalAct
 			}
 		}
 		return false;
+	}
+	
+	public boolean calculateEnabled(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			return calculateEnabled(((IStructuredSelection) selection).toList());
+		return false;
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		return calculateEnabled(getSelectedObjects());
 	}
 
 	private void setSelection(EditPart parent, int selectionIndex) {
@@ -96,9 +109,7 @@ public class MoveDetailUpAction extends SetWorkbenchAction implements IGlobalAct
 	 * 
 	 * @return a not null list of MBand with type Detail selected
 	 */
-	protected List<APropertyNode> getOperationSet() {
-		@SuppressWarnings("unchecked")
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+	protected List<APropertyNode> getOperationSet(List<?> editparts) {
 		if (editparts.isEmpty())
 			return new ArrayList<APropertyNode>();
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
@@ -115,14 +126,15 @@ public class MoveDetailUpAction extends SetWorkbenchAction implements IGlobalAct
 		}
 		return result;
 	}
-
-	/**
-	 * Performs the create action on the selected objects.
-	 */
-	public void run() {
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+	
+	public void execute(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			execute(((IStructuredSelection) selection).toList());
+	}
+	
+	public void execute(List<?> editparts){
 		EditPart selectionParent = ((EditPart) editparts.get(0)).getParent();
-		APropertyNode node = getOperationSet().get(0);
+		APropertyNode node = getOperationSet(editparts).get(0);
 		// Remove the band
 		MBand bandNode = (MBand) node;
 		JSSCompoundCommand cmd = new JSSCompoundCommand(bandNode);
@@ -143,14 +155,17 @@ public class MoveDetailUpAction extends SetWorkbenchAction implements IGlobalAct
 		else if (bandNode instanceof MBand && bandNode.getBandType() == BandTypeEnum.DETAIL)
 			cmd.add(new ReorderBandCommand(bandNode, (MReport) bandNode.getParent(), location));
 
-		// DeleteBandDetailCommand deleteBand = new DeleteBandDetailCommand(bandNode.getParent(), bandNode);
-		// cmd.add(deleteBand);
-		// int index = ((JRDesignSection) bandNode.getJasperDesign().getDetailSection()).getBandsList().indexOf(
-		// bandNode.getValue());
-		// CreateBandDetailCommand createBand = new CreateBandDetailCommand((MBand) bandNode, (MBand) bandNode, index - 1);
-		// cmd.add(createBand);
 		execute(cmd);
 		setSelection(selectionParent, selectionIndex - 1);
+	}
+
+	/**
+	 * Performs the create action on the selected objects.
+	 */
+	public void run() {
+		@SuppressWarnings("unchecked")
+		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+		execute(editparts);
 	}
 
 	/**

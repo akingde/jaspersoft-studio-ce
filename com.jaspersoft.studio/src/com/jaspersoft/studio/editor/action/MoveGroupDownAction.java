@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -62,10 +64,10 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 	 * 
 	 * @return if the command should be enabled
 	 */
-	protected boolean calculateEnabled() {
-		List<APropertyNode> selection = getOperationSet();
+	protected boolean calculateEnabled(List<?> editparts) {
+		List<APropertyNode> selection = getOperationSet(editparts);
 		if (selection.size() == 1) {
-			APropertyNode groupNode = getOperationSet().get(0);
+			APropertyNode groupNode = getOperationSet(editparts).get(0);
 			MGroup groupElement = null;
 			if (groupNode instanceof MBandGroupHeader) {
 				groupElement = ((MBandGroupHeader) groupNode).getMGroup();
@@ -80,6 +82,18 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 		}
 		return false;
 	}
+	
+	public boolean calculateEnabled(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			return calculateEnabled(((IStructuredSelection) selection).toList());
+		return false;
+	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		return calculateEnabled(getSelectedObjects());
+	}
+
 
 	/**
 	 * Return a list of every MBandGroupFooter or MBandGroupHeader selected
@@ -87,9 +101,7 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 	 * 
 	 * @return a not null list of MBandGroupHeader or MBandGroupFotter
 	 */
-	protected List<APropertyNode> getOperationSet() {
-		@SuppressWarnings("unchecked")
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+	protected List<APropertyNode> getOperationSet(List<?> editparts) {
 		if (editparts.isEmpty())
 			return new ArrayList<APropertyNode>();
 		List<APropertyNode> result = new ArrayList<APropertyNode>();
@@ -125,15 +137,14 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 		}
 	}
 
-
-	/**
-	 * Performs the create action on the selected objects.
-	 */
-	public void run() {
-		@SuppressWarnings("unchecked")
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+	public void execute(ISelection selection){
+		if (selection instanceof IStructuredSelection)
+			execute(((IStructuredSelection) selection).toList());
+	}
+	
+	public void execute(List<?> editparts){
 		EditPart selectionParent = ((EditPart)editparts.get(0)).getParent();
-		APropertyNode groupNode = getOperationSet().get(0);
+		APropertyNode groupNode = getOperationSet(editparts).get(0);
     // Remove the group...
 		JSSCompoundCommand cmd = new JSSCompoundCommand(groupNode);
     MGroup groupElement = null;
@@ -148,6 +159,15 @@ public class MoveGroupDownAction extends SetWorkbenchAction implements IGlobalAc
 		cmd.add(new CreateGroupCommand((MReport) groupNode.getParent(), groupElement, index+1)); 
 		execute(cmd);
 		setSelection(selectionParent,groupNode);
+	}
+
+	/**
+	 * Performs the create action on the selected objects.
+	 */
+	public void run() {
+		@SuppressWarnings("unchecked")
+		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
+		execute(editparts);
 	}
 
 	/**

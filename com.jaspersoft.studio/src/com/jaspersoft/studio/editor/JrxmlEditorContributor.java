@@ -342,8 +342,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				@Override
 				public void run() {
 					//Update the selection on the toolbar manager
-					((CachedSelectionProvider)getPage().getActiveEditor()).getSelectionCache().selectionChanged(selection);
-					CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), getActionBars());
+					if (getPage() != null && getPage().getActiveEditor() != null){
+						((CachedSelectionProvider)getPage().getActiveEditor()).getSelectionCache().selectionChanged(selection);
+						CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), getActionBars());
+					}
 					//Force the re-evaluation of the toolbar condition, used in the standard contribution system
 					//((IActionBars2) getActionBars()).getToolBarManager().update(true); 
 				}

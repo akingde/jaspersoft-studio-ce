@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.jaspersoft.studio.editor.action.SetWorkbenchAction;
+import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAction;
 
 /**
  * Create the toolbar button to add a column to the selected table. The places where
@@ -43,7 +43,7 @@ public abstract class CreateColumnContributionItem extends CommonToolbarHandler 
 	/**
 	 * Action that will be executed to add the column, executed when the button is pressed
 	 */
-	protected SetWorkbenchAction createColumnAction = getAction();
+	protected CreateColumnAction createColumnAction = getAction();
 	
 	/**
 	 * Method defined from the subclasses to get the correct action to create the column before,
@@ -51,7 +51,7 @@ public abstract class CreateColumnContributionItem extends CommonToolbarHandler 
 	 * 
 	 * @return the action to create the column, must be not null
 	 */
-	protected abstract SetWorkbenchAction getAction();
+	protected abstract CreateColumnAction getAction();
 	
 	/**
 	 * Selection listener that create the right command when a button is pushed
@@ -61,7 +61,7 @@ public abstract class CreateColumnContributionItem extends CommonToolbarHandler 
 	
 		public void widgetSelected(SelectionEvent e) {
 			createColumnAction.setWorkbenchPart(getWorkbenchPart());
-			createColumnAction.run();
+			createColumnAction.execute(getLastRawSelection());
 		}
 	};
 	
@@ -71,9 +71,8 @@ public abstract class CreateColumnContributionItem extends CommonToolbarHandler 
 	protected void setEnablement(){
 		if (getWorkbenchPart() != null){
 			if (button != null && !button.isDisposed()){
-				createColumnAction.setLazyEnablementCalculation(true);
 				createColumnAction.setWorkbenchPart(getWorkbenchPart());
-				button.setEnabled(createColumnAction.isEnabled());
+				button.setEnabled(createColumnAction.canExecute(getLastRawSelection()));
 			}
 		}
 	}

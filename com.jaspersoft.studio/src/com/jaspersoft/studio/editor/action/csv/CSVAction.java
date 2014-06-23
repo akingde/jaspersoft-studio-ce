@@ -79,7 +79,7 @@ public class CSVAction extends CustomSelectionAction {
 	 */
 	protected APropertyNode getRoot() {
 		List<Object> nodes = editor.getSelectionCache().getSelectionModelForType(APropertyNode.class);
-		if (nodes.isEmpty() && getSelectedObjects().size() > 1) {
+		if (nodes.isEmpty() || getSelectedObjects().size() > 1) {
 			return null;
 		}
 		APropertyNode columnValue = (APropertyNode) nodes.get(0);
