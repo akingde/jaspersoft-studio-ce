@@ -65,6 +65,7 @@ public class JSSApacheConnector extends ApacheConnector {
 	}
 
 	public Response put(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
+		builder.header("Content-Lenght", 0);
 		return doWait(builder.async().put(entity), monitor);
 	}
 }
