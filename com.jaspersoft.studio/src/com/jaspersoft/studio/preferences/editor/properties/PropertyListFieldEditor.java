@@ -95,7 +95,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 
 			final Text text = new Text(composite, SWT.BORDER);
 			text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-			text.setText(Misc.nvl(pname,"net.sf.jaspersoft.")); //$NON-NLS-1$
+			text.setText(Misc.nvl(pname, "net.sf.jasperreports.")); //$NON-NLS-1$
 			text.addModifyListener(new ModifyListener() {
 
 				@Override
