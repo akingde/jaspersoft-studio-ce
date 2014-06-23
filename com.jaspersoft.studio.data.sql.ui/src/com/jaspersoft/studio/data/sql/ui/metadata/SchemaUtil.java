@@ -64,6 +64,15 @@ public class SchemaUtil {
 		return null;
 	}
 
+	public static void close(Connection c) {
+		if (c != null)
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
+
 	public static void close(ResultSet rs) {
 		if (rs != null)
 			try {

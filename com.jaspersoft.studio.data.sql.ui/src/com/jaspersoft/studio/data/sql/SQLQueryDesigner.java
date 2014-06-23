@@ -294,6 +294,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 						runningthread = Thread.currentThread();
 						try {
 							monitor.beginTask(Messages.SQLQueryDesigner_readmetadata, IProgressMonitor.UNKNOWN);
+							dbMetadata.closeConnection();
 							DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 							dbMetadata.updateMetadata(da, das, monitor);
 						} finally {

@@ -223,6 +223,10 @@ public class DBMetadata {
 	private Composite composite;
 	private DataAdapterService das;
 
+	public void closeConnection() {
+		SchemaUtil.close(connection);
+	}
+
 	public void updateMetadata(final DataAdapterDescriptor da, DataAdapterService das, final IProgressMonitor monitor) {
 		if (running)
 			return;
@@ -244,7 +248,7 @@ public class DBMetadata {
 		root.removeChildren();
 		if (tblMap != null)
 			tblMap.clear();
-		Connection connection = getConnection(das, true);
+		connection = getConnection(das, true);
 		if (connection != null)
 			try {
 				DatabaseMetaData meta = connection.getMetaData();
@@ -258,7 +262,7 @@ public class DBMetadata {
 				designer.showError(e);
 			}
 		updateItermediateUI();
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -360,6 +364,7 @@ public class DBMetadata {
 
 	public Connection getConnection(final DataAdapterService das, boolean readCurrentSchema) {
 		schema = null;
+		SchemaUtil.close(connection);
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		try {
 			if (das != null)
@@ -369,28 +374,28 @@ public class DBMetadata {
 			designer.showError(e1);
 		}
 
-		Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
+		connection = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
 		// TODO implement some compatibility, getSchema() available since 1.7
-		if (readCurrentSchema && c != null) {
-			schema = SchemaUtil.getSchemaPath(c);
+		if (readCurrentSchema && connection != null) {
+			schema = SchemaUtil.getSchemaPath(connection);
 		}
 		try {
-			identifierQuote = c.getMetaData().getIdentifierQuoteString();
+			identifierQuote = connection.getMetaData().getIdentifierQuoteString();
 			designer.doRefreshRoots(false);
-			System.out.println("JDBC Quotes: " + c.getMetaData().getIdentifierQuoteString());
-			System.out.println("getExtraNameCharacters: " + c.getMetaData().getExtraNameCharacters());
-			System.out.println("storesLowerCaseIdentifiers: " + c.getMetaData().storesLowerCaseIdentifiers());
-			System.out.println("storesLowerCaseQuotedIdentifiers: " + c.getMetaData().storesLowerCaseQuotedIdentifiers());
-			System.out.println("storesMixedCaseIdentifiers: " + c.getMetaData().storesMixedCaseIdentifiers());
-			System.out.println("storesMixedCaseQuotedIdentifiers: " + c.getMetaData().storesMixedCaseQuotedIdentifiers());
-			System.out.println("storesUpperCaseIdentifiers: " + c.getMetaData().storesUpperCaseIdentifiers());
-			System.out.println("storesUpperCaseQuotedIdentifiers: " + c.getMetaData().storesUpperCaseQuotedIdentifiers());
-			System.out.println("supportsMixedCaseIdentifiers: " + c.getMetaData().supportsMixedCaseIdentifiers());
-			System.out.println("supportsMixedCaseQuotedIdentifiers: " + c.getMetaData().supportsMixedCaseQuotedIdentifiers());
+			System.out.println("JDBC Quotes: " + connection.getMetaData().getIdentifierQuoteString());
+			System.out.println("getExtraNameCharacters: " + connection.getMetaData().getExtraNameCharacters());
+			System.out.println("storesLowerCaseIdentifiers: " + connection.getMetaData().storesLowerCaseIdentifiers());
+			System.out.println("storesLowerCaseQuotedIdentifiers: " + connection.getMetaData().storesLowerCaseQuotedIdentifiers());
+			System.out.println("storesMixedCaseIdentifiers: " + connection.getMetaData().storesMixedCaseIdentifiers());
+			System.out.println("storesMixedCaseQuotedIdentifiers: " + connection.getMetaData().storesMixedCaseQuotedIdentifiers());
+			System.out.println("storesUpperCaseIdentifiers: " + connection.getMetaData().storesUpperCaseIdentifiers());
+			System.out.println("storesUpperCaseQuotedIdentifiers: " + connection.getMetaData().storesUpperCaseQuotedIdentifiers());
+			System.out.println("supportsMixedCaseIdentifiers: " + connection.getMetaData().supportsMixedCaseIdentifiers());
+			System.out.println("supportsMixedCaseQuotedIdentifiers: " + connection.getMetaData().supportsMixedCaseQuotedIdentifiers());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return c;
+		return connection;
 	}
 
 	private String identifierQuote = "";
@@ -470,6 +475,7 @@ public class DBMetadata {
 	private LinkedHashMap<String, MSqlTable> tblMap;
 	private List<IProgressMonitor> monitors = new ArrayList<IProgressMonitor>();
 	private List<String> tableTypes;
+	private Connection connection;
 
 	public LinkedHashMap<String, MSqlTable> getTables() {
 		if (tblMap == null)
@@ -478,6 +484,7 @@ public class DBMetadata {
 	}
 
 	public void dispose() {
+		closeConnection();
 		if (monitors != null)
 			for (IProgressMonitor m : monitors)
 				m.setCanceled(true);
