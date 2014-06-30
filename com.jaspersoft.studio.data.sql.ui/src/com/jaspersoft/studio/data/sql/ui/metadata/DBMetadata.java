@@ -375,10 +375,11 @@ public class DBMetadata {
 		}
 
 		connection = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
+		if (connection == null)
+			return connection;
 		// TODO implement some compatibility, getSchema() available since 1.7
-		if (readCurrentSchema && connection != null) {
+		if (readCurrentSchema)
 			schema = SchemaUtil.getSchemaPath(connection);
-		}
 		try {
 			identifierQuote = connection.getMetaData().getIdentifierQuoteString();
 			designer.doRefreshRoots(false);
