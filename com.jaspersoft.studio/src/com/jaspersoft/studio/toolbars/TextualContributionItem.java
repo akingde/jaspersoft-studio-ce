@@ -119,6 +119,13 @@ public class TextualContributionItem extends CommonToolbarHandler {
 	 */
 	private boolean refreshing = false;
 	
+	/**
+	 * The last font list set on the combo. Set or read the font list directly from the 
+	 * combo has a little overhead because the status of the widget is check (about 100ms in some cases)
+	 * so it is better to compare it with this one first
+	 */
+	private String[] fontList = null;
+	
 	//Used listener
 	
 	/**
@@ -311,15 +318,17 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		layout.marginRight = 0;
 		controlsArea.setLayout(layout);
 		
+		fontList = null;
 		fontName = new Combo(controlsArea, SWT.DROP_DOWN);
 		fontName.setData(JRDesignStyle.PROPERTY_FONT_NAME);
 		fontName.addSelectionListener(fontNameComboSelect);
 		setAvailableFonts();
-
+		
 		fontSizeCombo = new Combo(controlsArea, SWT.DROP_DOWN);
 		fontSizeCombo.setData(JRDesignStyle.PROPERTY_FONT_SIZE);
 		fontSizeCombo.setItems(ModelUtils.FONT_SIZES);
 		fontSizeCombo.addModifyListener(fontSizeComboModify);
+
 		RowData data = new RowData();
 		data.width = 50;
 		fontSizeCombo.setLayoutData(data);
@@ -437,6 +446,17 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		cmd.setPropertyValue(value);
 		return cmd;
 	}
+	
+	/**
+	 * Check if the font in the combo should be updated or not
+	 * 
+	 * @param newFont the new fonts
+	 * @return Return true if the new font are different from the fonts previously stored
+	 * false otherwise
+	 */
+	private boolean needFontsUpdate(String[] newFont){
+		return (fontList == null || !fontList.equals(newFont));
+	}
 
 	/**
 	 * Set the available fonts inside the combo for the current report
@@ -446,7 +466,10 @@ public class TextualContributionItem extends CommonToolbarHandler {
 		if (selection.size() > 0){
 			APropertyNode node = (APropertyNode)selection.get(0);
 			String[] fonts = JaspersoftStudioPlugin.getToolItemsManager().getFonts(node.getJasperConfiguration());
-			if (fontName != null && !fontName.isDisposed()) fontName.setItems(fonts);
+			if (needFontsUpdate(fonts) &&  fontName != null && !fontName.isDisposed()) {
+				fontName.setItems(fonts);
+				fontList = fonts;
+			}
 		}
 	}
 

@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.action.ContributionItem;
@@ -80,34 +82,42 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 * @param selection the new selection
 	 * @param bars the current action bars, where the new controls will be placed
 	 */
-	public static void updateSelection(IEditorPart activeEditor, IActionBars bars){
-		if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
-			ICoolBarManager cbm = (ICoolBarManager) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager()).getParent();
-			for(ToolItemsSet toolbar : JaspersoftStudioPlugin.getToolItemsManager().getSets()){
-				//if no item of a toolbar contribution is visible then all the toolbar is removed
-				boolean isToolbarVisible = false;
-				List<CommonToolbarHandler> visibleControls = new ArrayList<CommonToolbarHandler>();
-				List<IContributionItem> notVisibleControls = new ArrayList<IContributionItem>();
-				for(IConfigurationElement control : toolbar.getControlsConfiguration()){
-					CommonToolbarHandler citem = createContributionItem(control);
-					citem.setWorkbenchPart(activeEditor);
-					if (citem.isVisible()){
-						visibleControls.add(citem);
-						isToolbarVisible = true;
-					} else {
-						notVisibleControls.add(citem);
+	public static void updateSelection(final IEditorPart activeEditor, final IActionBars bars){
+		//Executed inside a thread to have more responsive ui
+		UIUtils.getDisplay().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
+					ICoolBarManager cbm = (ICoolBarManager) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager()).getParent();
+					for(ToolItemsSet toolbar : JaspersoftStudioPlugin.getToolItemsManager().getSets()){
+						//if no item of a toolbar contribution is visible then all the toolbar is removed
+						boolean isToolbarVisible = false;
+						List<CommonToolbarHandler> visibleControls = new ArrayList<CommonToolbarHandler>();
+						List<IContributionItem> notVisibleControls = new ArrayList<IContributionItem>();
+						for(IConfigurationElement control : toolbar.getControlsConfiguration()){
+							CommonToolbarHandler citem = createContributionItem(control);
+							citem.setWorkbenchPart(activeEditor);
+							if (citem.isVisible()){
+								visibleControls.add(citem);
+								isToolbarVisible = true;
+							} else {
+								notVisibleControls.add(citem);
+							}
+						}
+						if (!isToolbarVisible){
+							removeToolbar(cbm, toolbar.getId());
+						} else {
+							removeToolbarContribution(cbm, toolbar.getId(), notVisibleControls);
+							addContributionsToCoolbar(cbm, toolbar.getId(), visibleControls);
+						}
 					}
-				}
-				if (!isToolbarVisible){
-					removeToolbar(cbm, toolbar.getId());
-				} else {
-					removeToolbarContribution(cbm, toolbar.getId(), notVisibleControls);
-					addContributionsToCoolbar(cbm, toolbar.getId(), visibleControls);
+					cbm.update(true);
+					bars.updateActionBars();
 				}
 			}
-			cbm.update(true);
-			bars.updateActionBars();
-		}
+		});
+
 	}
 
 	
