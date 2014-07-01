@@ -2,7 +2,7 @@
 <feature
       id="jre.linux.gtk.x86_64.feature"
       label="JRE for Linux 64-bit systems"
-      version="1.7.0.u25"
+      version="1.7.0.u60"
       provider-name="Jaspersoft Corporation"
       os="linux"
       ws="gtk"

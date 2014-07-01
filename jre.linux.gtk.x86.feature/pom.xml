@@ -12,7 +12,7 @@
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>jre.linux.gtk.x86.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<version>1.7.0.u25</version>
+	<version>1.7.0.u60</version>
 
 	<build>
 		<plugins>
@@ -26,8 +26,8 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<target>
-								<gunzip src="${jre.packages.location}/jre-7u25-linux-i586.tar.gz" />
-								<untar src="${jre.packages.location}/jre-7u25-linux-i586.tar" dest="${project.build.directory}/../"/>
+								<gunzip src="${jre.packages.location}/jre-7u60-linux-i586.tar.gz" />
+								<untar src="${jre.packages.location}/jre-7u60-linux-i586.tar" dest="${project.build.directory}/../"/>
 							</target>
 						</configuration>
 						<goals>

@@ -2,7 +2,7 @@
 <feature
       id="jre.macosx.cocoa.x86_64.feature"
       label="JRE for Mac OS X 64-bit systems"
-      version="1.7.0.u25"
+      version="1.7.0.u60"
       provider-name="Jaspersoft Corporation"
       os="macosx"
       ws="cocoa"
