@@ -146,6 +146,7 @@ public class InputControlPageContent extends APageContent implements IPageComple
 		// cSelector = null;
 		if (s < 1) {
 			stackLayout.topControl = cvalue;
+			res.getValue().getChildren().clear();
 		} else {
 			if (s < 2) {
 				stackLayout.topControl = csinglevalue;
@@ -161,7 +162,7 @@ public class InputControlPageContent extends APageContent implements IPageComple
 			setPageComplete(newSelector.isPageComplete());
 		}
 		if (newSelector != cSelector) {
-			if (cSelector != null) {
+			if (cSelector != null && newSelector != null) {
 				cleanResource();
 				newSelector.resetResource();
 			}

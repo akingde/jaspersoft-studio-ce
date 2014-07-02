@@ -1084,4 +1084,15 @@ public class ResourceDescriptor implements Serializable {
 		return icValues;
 	}
 
+	public void fixStructure() {
+		for (ResourceDescriptor rd : getChildren()) {
+			ResourceProperty rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+			if (Misc.isNullOrEmpty(rp.getValue()))
+				rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+			rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
+			if (Misc.isNullOrEmpty(rp.getValue()))
+				rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
+			rd.fixStructure();
+		}
+	}
 }
