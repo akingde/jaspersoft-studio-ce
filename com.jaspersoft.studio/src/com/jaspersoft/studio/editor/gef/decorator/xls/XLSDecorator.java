@@ -46,6 +46,9 @@ import com.jaspersoft.studio.editor.java2d.J2DUtils;
  *
  */
 public class XLSDecorator implements IDecorator, TextDecoratorInterface {
+	
+	public static String START = "Start";
+	public static String END = "End";
 
 	/**
 	 * Left upper corner image
@@ -116,10 +119,10 @@ public class XLSDecorator implements IDecorator, TextDecoratorInterface {
 						if (tagValue.equals("true")) {
 							drawstart = true;
 							fullString += label + " ";
-						} else if (tagValue.equals("start")) {
+						} else if (tagValue.equals(START)) {
 							drawstart = true;
 							startString += label + " ";
-						} else if (tagValue.equals("end")) {
+						} else if (tagValue.equals(END)) {
 							drawend = true;
 							endString = label + " " + endString;
 						}
@@ -235,10 +238,10 @@ public class XLSDecorator implements IDecorator, TextDecoratorInterface {
 					else 	endString += label.concat("-Bottom") + " ";
 				} else if (tagValue.equals("true")) {
 					endString += label + " ";
-				} else if (tagValue.equals("start")) {
+				} else if (tagValue.equals(START)) {
 					startString += label.concat("-Start") + " ";
-				} else if (tagValue.equals("end")) {
-					endString = label.concat("End") + " " + endString;
+				} else if (tagValue.equals(END)) {
+					endString = label.concat(END) + " " + endString;
 				} 
 			}
 

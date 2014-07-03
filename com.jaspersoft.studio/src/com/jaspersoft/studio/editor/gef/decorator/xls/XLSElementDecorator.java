@@ -83,12 +83,12 @@ public class XLSElementDecorator extends TextElementDecorator {
 	}
 
 	private void registerAutoFilter(ActionRegistry registry, IWorkbenchPart part, List<String> selectionActions) {
-		IAction action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("start"), XLSAction.AUTOFILTER_ID, "start", //$NON-NLS-1$ //$NON-NLS-2$
+		IAction action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat(XLSDecorator.START), XLSAction.AUTOFILTER_ID, XLSDecorator.START, //$NON-NLS-1$ //$NON-NLS-2$
 				Messages.XLSElementDecorator_startAction);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat("end"), XLSAction.AUTOFILTER_ID, "end", Messages.XLSElementDecorator_endAction); //$NON-NLS-1$ //$NON-NLS-2$
+		action = new XLSAction(part, XLSAction.AUTOFILTER_ID.concat(XLSDecorator.END), XLSAction.AUTOFILTER_ID, XLSDecorator.END, Messages.XLSElementDecorator_endAction); //$NON-NLS-1$ //$NON-NLS-2$
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
@@ -203,9 +203,9 @@ public class XLSElementDecorator extends TextElementDecorator {
 		fitMenu.add(action);
 
 		// Adding actions for the autofilter
-		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("start")); //$NON-NLS-1$
+		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat(XLSDecorator.START)); //$NON-NLS-1$
 		autoFilterMenu.add(action);
-		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("end")); //$NON-NLS-1$
+		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat(XLSDecorator.END)); //$NON-NLS-1$
 		autoFilterMenu.add(action);
 		action = registry.getAction(XLSAction.AUTOFILTER_ID.concat("none")); //$NON-NLS-1$
 		autoFilterMenu.add(action);
