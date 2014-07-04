@@ -40,6 +40,11 @@ import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 public class TabbedPropertyComposite extends Composite {
 
 	/**
+	 * State of a tab
+	 */
+	public enum TabState{TAB_NOT_DEFINED, TAB_ALREADY_VISIBLE, TAB_SET_VISIBLE};
+	
+	/**
 	 * Factory widget, used to build stuff
 	 */
 	private TabbedPropertySheetWidgetFactory factory;
@@ -199,18 +204,24 @@ public class TabbedPropertyComposite extends Composite {
 	 * use the createTabContents method
 	 * 
 	 * @param tab descriptor of the tab to show
-	 * @return true if the tab was found in the cache and it's now on the top
-	 * of the stack, otherwise false
+	 * @return the state of a tab, it can be
+	 * TabState.TAB_NOT_DEFINED if the tab was still undefined and must be created
+	 * TabState.TAB_SET_VISIBLE the tab was created before but it was not visible, now it is visible
+	 * TabState.TAB_ALREADY_VISIBLE the tab was created before and it is already visible
 	 */
-	public boolean showTabContents(ITabDescriptor tab){
+	public TabState showTabContents(ITabDescriptor tab){
 		if (tab == null) showEmptyPage(true);
 		Control control = cacheMap.get(tab);
-		if (control == null) return false;
+		if (control == null) return TabState.TAB_NOT_DEFINED;
 		else {
-			if (cachedLayout.topControl != control) cachedLayout.topControl = control;
-			return true;
+			if (cachedLayout.topControl != control) {
+				cachedLayout.topControl = control;
+				return TabState.TAB_SET_VISIBLE;
+			}
+			return TabState.TAB_ALREADY_VISIBLE;
 		}
 	}
+	
 	
 	/**
 	 * do the layout of the tab composite area

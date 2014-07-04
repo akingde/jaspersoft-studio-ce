@@ -52,6 +52,7 @@ import org.eclipse.ui.part.Page;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import com.jaspersoft.studio.properties.internal.TabbedPropertyComposite;
+import com.jaspersoft.studio.properties.internal.TabbedPropertyComposite.TabState;
 import com.jaspersoft.studio.properties.internal.TabbedPropertyRegistry;
 import com.jaspersoft.studio.properties.internal.TabbedPropertyRegistryFactory;
 import com.jaspersoft.studio.properties.internal.TabbedPropertyTitle;
@@ -173,7 +174,9 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 					if (tabbedPropertyViewer != null && tabbedPropertyViewer.getInput() != null) {
 						// force widgets to be resized
 						tab.setInput(tabbedPropertyViewer.getWorkbenchPart(), (ISelection) tabbedPropertyViewer.getInput());
-						if (!tabbedPropertyComposite.showTabContents(descriptor)){
+						TabState state = tabbedPropertyComposite.showTabContents(descriptor);
+						if (state == TabState.TAB_NOT_DEFINED){
+							//Tab not defined, it need to be created
 							Composite tabComposite = createTabComposite(descriptor);
 							tabToComposite.put(tab, tabComposite);
 							tab.createControls(tabComposite, TabbedPropertySheetPage.this);
@@ -183,11 +186,14 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						// store tab selection
 						storeCurrentTabSelection(descriptor);
 						tab.refresh();
+						currentTab = tab;
+						currentTab.aboutToBeShown();
+						if (state != TabState.TAB_ALREADY_VISIBLE) {
+							//The layout is done only if the tab was not visible
+							tabbedPropertyComposite.layout();
+						}
 					}
 				}
-				currentTab = tab;
-				currentTab.aboutToBeShown();
-				tabbedPropertyComposite.layout();
 			}
 		}
 	}
