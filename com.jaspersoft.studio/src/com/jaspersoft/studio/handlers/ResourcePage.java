@@ -145,6 +145,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 			//Build the bundle and the jasper configuration
 			this.jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), reportFile);
 			this.bundle = new JrxmlTemplateBundle(reportFile.getLocationURI().toURL(), true, jrContext);
+			jrContext.setJasperDesign(bundle.getJasperDesign());
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -454,7 +455,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 				JRDesignImage im = (JRDesignImage) el;
 				String res = evalResourceName(im.getExpression());
 				File resFile = findFile(reportFile, res);
-				im.setExpression(new JRDesignExpression(resFile.getName()));
+				if (resFile != null) im.setExpression(new JRDesignExpression(resFile.getName()));
 			}
 
 			if (el instanceof JRDesignSubreport) {
