@@ -15,54 +15,96 @@
  ******************************************************************************/
 package com.jaspersoft.studio.properties.internal;
 
+import java.util.HashMap;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.properties.view.ITabDescriptor;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 
 /**
  * Composite responsible for drawing the tabbed property sheet page.
  * 
- * @author Anthony Hunter
+ * @author Anthony Hunter & Orlandin Marco
  */
 public class TabbedPropertyComposite extends Composite {
 
+	/**
+	 * Factory widget, used to build stuff
+	 */
 	private TabbedPropertySheetWidgetFactory factory;
+	
+	/**
+	 * The page of the property sheet
+	 */
+	private TabbedPropertySheetPage page;
 
+	/**
+	 * The main container of all the controls
+	 */
 	private Composite mainComposite;
 
+	/**
+	 * The scroll composite
+	 */
 	private ScrolledComposite scrolledComposite;
 
+	/**
+	 * The composite where the controls of the selected tab are placed
+	 */
 	private Composite tabComposite;
 
+	/**
+	 * The title control
+	 */
 	private TabbedPropertyTitle title;
 
+	/**
+	 * The search control
+	 */
 	private TabbedPropertySearch searchBar;
 
+	/**
+	 * The control with the list of the available tabs
+	 */
 	private TabbedPropertyList listComposite;
 
+	/**
+	 * Flag to show or not the title control
+	 */
 	private boolean displayTitle;
+	
+	/**
+	 * Stack layout of the tabComposite
+	 */
+	private StackLayout cachedLayout;
+	
+	/**
+	 * Map of the stacked controls
+	 */
+	private HashMap<ITabDescriptor, Control> cacheMap;
 
 	/**
 	 * Constructor for a TabbedPropertyComposite
 	 * 
-	 * @param parent
-	 *            the parent widget.
-	 * @param factory
-	 *            the widget factory.
-	 * @param displayTitle
-	 *            if <code>true</code>, then the title bar will be displayed.
+	 * @param parent the parent widget.
+	 * @param page the page that contains this control 
+	 * @param displayTitle if true then the title bar will be displayed.
 	 */
-	public TabbedPropertyComposite(Composite parent,
-			TabbedPropertySheetWidgetFactory factory, boolean displayTitle) {
+	public TabbedPropertyComposite(Composite parent, TabbedPropertySheetPage page, boolean displayTitle) {
 		super(parent, SWT.NO_FOCUS);
-		this.factory = factory;
+		this.page = page;
+		this.factory = page.getWidgetFactory();
 		this.displayTitle = displayTitle;
 
 		createMainComposite();
@@ -107,7 +149,7 @@ public class TabbedPropertyComposite extends Composite {
 			title.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 		//Create the search bar for the properties
-		searchBar = new TabbedPropertySearch(parent, factory);
+		searchBar = new TabbedPropertySearch(parent, page);
 		searchBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		listComposite = new TabbedPropertyList(mainComposite);
@@ -116,7 +158,7 @@ public class TabbedPropertyComposite extends Composite {
 
 		new Label(mainComposite, SWT.SEPARATOR | SWT.HORIZONTAL)
 				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		
 		scrolledComposite = factory.createScrolledComposite(mainComposite,
 				SWT.H_SCROLL | SWT.V_SCROLL | SWT.NO_FOCUS);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -127,41 +169,86 @@ public class TabbedPropertyComposite extends Composite {
 		scrolledComposite.setShowFocusedControl(true);
 
 		tabComposite = factory.createComposite(scrolledComposite, SWT.NO_FOCUS);
+		tabComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		cachedLayout = new StackLayout();
+		tabComposite.setLayout(cachedLayout);
+		cacheMap = new HashMap<ITabDescriptor, Control>();
+		scrolledComposite.setContent(tabComposite);
+	}
+	
+	/**
+	 * Can make the page appear empty, by hiding all it contents
+	 * 
+	 * @param value true if the page should appear empty, false otherwise
+	 */
+	public void showEmptyPage(boolean value){
+		if (value){
+			title.setVisible(false);
+			searchBar.setVisible(false);
+			tabComposite.setVisible(false);
+		} else {
+			if (!title.isVisible()) title.setVisible(true);
+			if (!searchBar.isVisible()) searchBar.setVisible(true);
+			if (!tabComposite.isVisible()) tabComposite.setVisible(true);
+		}
+	}
+	
+	/**
+	 * Put on the top of the stack layout the tab of a specific descriptor.
+	 * The composite of the tab must be created and cached before. To do this
+	 * use the createTabContents method
+	 * 
+	 * @param tab descriptor of the tab to show
+	 * @return true if the tab was found in the cache and it's now on the top
+	 * of the stack, otherwise false
+	 */
+	public boolean showTabContents(ITabDescriptor tab){
+		if (tab == null) showEmptyPage(true);
+		Control control = cacheMap.get(tab);
+		if (control == null) return false;
+		else {
+			if (cachedLayout.topControl != control) cachedLayout.topControl = control;
+			return true;
+		}
+	}
+	
+	/**
+	 * do the layout of the tab composite area
+	 * 
+	 * @param all flag to do also the layout of the children of the composite 
+	 */
+	public void layout(){
+		tabComposite.layout();
+		mainComposite.layout();
+	}
+	
+	/**
+	 * do the layout of the page area
+	 */
+	public void setupScrolledComposite() {
+		mainComposite.layout();
+	}
+
+	/**
+	 * Create a composite for a tab and cache it. The composite
+	 * is also returned. This composite can be shown on the page
+	 * using the showTabContents content method
+	 * 
+	 * @param tab Tab for which the composite is created, it's also
+	 * its key in the cache 
+	 * @return a composite with a grid layout with one column
+	 */
+	public Composite createTabContents(ITabDescriptor tab){
+		Composite comp = new Composite(tabComposite, SWT.NONE);
 		GridLayout layout2 = new GridLayout();
 		layout2.marginWidth = 0;
 		layout2.marginHeight = 0;
 		layout2.makeColumnsEqualWidth = true;
-		tabComposite.setLayout(layout2);
-		
-//		tabComposite.addControlListener(new ControlAdapter() {
-//			@Override
-//			public void controlResized(ControlEvent e) {
-//				setupScrolledComposite();
-//			}
-//		});
-		
-		scrolledComposite.setContent(tabComposite);
-//		setupScrolledComposite();
+		comp.setLayout(layout2);
+		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
+		cacheMap.put(tab, comp);
+		return comp;
 	}
-
-	public void setupScrolledComposite() {
-		//Point minSize = getScrolledBoxMinSize();
-		//scrolledComposite.setMinSize(minSize.x, minSize.y);
-		mainComposite.layout();
-	}
-
-	/*
-	private Point getScrolledBoxMinSize() {
-		for (Control c : tabComposite.getChildren()){
-			if(c.isVisible()){
-				Rectangle scrolledBounds = c.getBounds();
-				Point defaultSize = c.computeSize(SWT.DEFAULT,SWT.DEFAULT);
-				return c.computeSize(defaultSize.x,Math.max(scrolledBounds.height, defaultSize.y));
-			}
-		}
-		return new Point(0,0);
-	}
-	*/
 
 	/**
 	 * Get the tabbed property list, which is the list of tabs on the left hand
@@ -190,14 +277,6 @@ public class TabbedPropertyComposite extends Composite {
 		return searchBar;
 	}
 	
-	/**
-	 * Get the tab composite where sections display their property contents.
-	 * 
-	 * @return the tab composite.
-	 */
-	public Composite getTabComposite() {
-		return tabComposite;
-	}
 
 	/**
 	 * Get the scrolled composite which surrounds the title bar and tab
@@ -228,4 +307,5 @@ public class TabbedPropertyComposite extends Composite {
 		}
 		super.dispose();
 	}
+	
 }

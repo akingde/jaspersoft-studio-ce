@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -129,6 +128,21 @@ public class TabbedPropertyViewer extends StructuredViewer {
 			list.select(index);
 		}
 	}
+	
+	public void setSelectionToWidget(String id, int defaultIndex) {
+		if (elements.size()>0){
+			int index = -1;
+			for (int i = 0; i < elements.size(); i++) {
+				if (elements.get(i).getId().equals(id)) {
+					index = i;
+					break;
+				}
+			}
+			if (index == -1) index = defaultIndex;
+			Assert.isTrue(!(index <0 || index > elements.size()), "Could not set the selected tab in the tabbed property viewer");//$NON-NLS-1$
+			list.select(index);
+		}
+	}
 
 	/**
 	 * Force the selection to change on the tab with id equals to the one inside
@@ -195,12 +209,6 @@ public class TabbedPropertyViewer extends StructuredViewer {
 
 	@Override
 	protected void updateSelection(final ISelection selection) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				TabbedPropertyViewer.super.updateSelection(selection);
-			}
-		});
+		TabbedPropertyViewer.super.updateSelection(selection);
 	}
 }

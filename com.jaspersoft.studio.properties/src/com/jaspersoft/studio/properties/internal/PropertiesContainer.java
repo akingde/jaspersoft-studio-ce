@@ -40,6 +40,13 @@ public class PropertiesContainer{
 	}
 	
 	/**
+	 * Build an empty container with no properties inside
+	 */
+	public PropertiesContainer(){
+		this.properties = new PropertyContainer[0];
+	}
+	
+	/**
 	 * Return the number of properties
 	 * 
 	 * @return number of properties

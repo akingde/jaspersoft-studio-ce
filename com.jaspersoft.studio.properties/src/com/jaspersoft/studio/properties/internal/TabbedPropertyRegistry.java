@@ -84,8 +84,6 @@ public class TabbedPropertyRegistry {
 
 	private static final String ATT_TAB_DESCRIPTOR_PROVIDER = "tabDescriptorProvider"; //$NON-NLS-1$
 
-	private static final String ATT_OVERRIDABLE_TAB_LIST_CONTENT_PROVIDER = "overridableTabListContentProvider"; //$NON-NLS-1$
-
 	private static final String TOP = "top"; //$NON-NLS-1$
 
 	protected String contributorId;
@@ -107,8 +105,6 @@ public class TabbedPropertyRegistry {
 	protected ITabDescriptor[] tabDescriptors;
 
 	protected static final AbstractTabDescriptor[] EMPTY_DESCRIPTOR_ARRAY = new TabDescriptor[0];
-
-	protected boolean overridableTabListContentProvider = false;
 
 	/**
 	 * There is one details registry for each contributor type.
@@ -147,13 +143,6 @@ public class TabbedPropertyRegistry {
 						.getAttribute(ATT_TAB_DESCRIPTOR_PROVIDER) != null) {
 					tabDescriptorProvider = (ITabDescriptorProvider) configurationElement
 							.createExecutableExtension(ATT_TAB_DESCRIPTOR_PROVIDER);
-				}
-				if (configurationElement
-						.getAttribute(ATT_OVERRIDABLE_TAB_LIST_CONTENT_PROVIDER) != null) {
-					String attributeBoolean = configurationElement
-							.getAttribute(ATT_OVERRIDABLE_TAB_LIST_CONTENT_PROVIDER);
-					overridableTabListContentProvider = attributeBoolean
-							.equals("true");//$NON-NLS-1$
 				}
 			} catch (CoreException exception) {
 				handleConfigurationError(id, exception);
@@ -520,9 +509,6 @@ public class TabbedPropertyRegistry {
 	 * @return the tab list content provider for the contributor.
 	 */
 	public IStructuredContentProvider getTabListContentProvider() {
-		if (overridableTabListContentProvider) {
-			return new OverridableTabListContentProvider(this);
-		}
 		return new TabListContentProvider(this);
 	}
 

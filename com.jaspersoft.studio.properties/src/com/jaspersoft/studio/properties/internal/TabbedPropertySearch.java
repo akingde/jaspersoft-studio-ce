@@ -49,6 +49,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import com.jaspersoft.studio.properties.messages.Messages;
 import com.jaspersoft.studio.properties.view.ISection;
 import com.jaspersoft.studio.properties.view.TabContents;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 
 
@@ -70,7 +71,12 @@ public class TabbedPropertySearch extends Composite {
 	private Text textArea;
 	
 	/**
-	 * The factory of the property sheet
+	 * The page of the property sheet
+	 */
+	private TabbedPropertySheetPage page;
+	
+	/**
+	 * Factory widget, used to build stuff
 	 */
 	private TabbedPropertySheetWidgetFactory factory;
 	
@@ -119,12 +125,12 @@ public class TabbedPropertySearch extends Composite {
 	 * Constructor for TabbedPropertySearch.
 	 * 
 	 * @param parent the parent composite.
-	 * @param factory the widget factory for the tabbed property sheet
+	 * @param page the page where the control is placed
 	 */
-	public TabbedPropertySearch(Composite parent,
-			TabbedPropertySheetWidgetFactory factory) {
+	public TabbedPropertySearch(Composite parent, TabbedPropertySheetPage page) {
 		super(parent, SWT.NO_FOCUS);
-		this.factory = factory;
+		this.page = page;
+		this.factory = page.getWidgetFactory();
 
 		this.addPaintListener(new PaintListener() {
 
@@ -302,10 +308,13 @@ public class TabbedPropertySearch extends Composite {
 		} else {
 			//Maybe i have already the element cached
 			Object actualSelectedElement = getSelectedElement();
-			if (actualSelectedElement != null && !actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
+			if (actualSelectedElement == null){
+				cachedProperties = new PropertiesContainer();
+				lastSelectedElement = null;
+			} else if (!actualSelectedElement.getClass().equals(lastSelectedElement.getClass())){
 				//The cache was build for an element with different type\properties, i need to rebuild it
 				cachedProperties = createElements();
-				lastSelectedElement = getSelectedElement();
+				lastSelectedElement = actualSelectedElement;
 			}
 		}
 		textArea.setText(""); //$NON-NLS-1$
@@ -314,23 +323,10 @@ public class TabbedPropertySearch extends Composite {
 	
 	
 	/**
-	 * Get the element actually selected, i need to search in all section until i not found the one
-	 * where the element is not null because the element is set only in the already created sections, 
-	 * so at first i don't know which section already store the element
-	 * 
-	 * @return
+	 * Get the element actually selected
 	 */
 	private Object getSelectedElement(){
-		List<TabContents> lst = factory.getAvailableTabContents();
-		for(TabContents actualContents : lst){
-			for(ISection section : actualContents.getSections()){
-				if (section instanceof IWidgetsProviderSection){
-					Object selectedElement = ((IWidgetsProviderSection)section).getSelectedElement();
-					if (selectedElement != null) return selectedElement;
-				}
-			}
-		}
-		return null;
+		return page.getSelectedObject();
 	}
 	
 	/**
@@ -341,7 +337,7 @@ public class TabbedPropertySearch extends Composite {
 	 */
 	private PropertiesContainer createElements(){
 		List<PropertyContainer> listToOrder = new ArrayList<PropertyContainer>();
-		List<TabContents> lst = factory.getAvailableTabContents();
+		List<TabContents> lst = page.getCurrentTabs();
 		
 		for(TabContents actualContents : lst){
 			for(ISection section : actualContents.getSections()){
@@ -382,7 +378,7 @@ public class TabbedPropertySearch extends Composite {
 	 * @param id the id of the property
 	 */
 	private void selectElement(Object id){
-		List<TabContents> lst = factory.getAvailableTabContents();
+		List<TabContents> lst = page.getCurrentTabs();
 		for(TabContents actualContents : lst){
 			for(ISection section : actualContents.getSections()){
 				if (section instanceof IWidgetsProviderSection){
@@ -390,7 +386,7 @@ public class TabbedPropertySearch extends Composite {
 					//search the section that contains the property
 					if (actualSection.getHandledProperties().contains(id)){
 						//Select the section, it will also create it
-						factory.setSelection(actualContents);
+						page.setSelection(actualContents);
 						//Expand the properties expandable composite, if it is inside one of it
 						actualSection.expandForProperty(id);
 						//Get the widget from the section and highlight it for 2000ms
@@ -417,7 +413,7 @@ public class TabbedPropertySearch extends Composite {
 			checkSelection(id);
 			return;
 		}
-		List<TabContents> lst = factory.getAvailableTabContents();
+		List<TabContents> lst = page.getCurrentTabs();
 		for(TabContents actualContents : lst){
 			for(ISection section : actualContents.getSections()){
 				if (section instanceof IWidgetsProviderSection){
@@ -425,7 +421,7 @@ public class TabbedPropertySearch extends Composite {
 					//search the section that contains the property
 					if (actualSection.getClass().equals(sectionType) && actualSection.getHandledProperties().contains(id)){
 						//Select the section, it will also create it
-						factory.setSelection(actualContents);
+						page.setSelection(actualContents);
 						//Expand the properties expandable composite, if it is inside one of it
 						actualSection.expandForProperty(id);
 						//Get the widget from the section and highlight it for 2000ms
