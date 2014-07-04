@@ -188,7 +188,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 				tabbedPropertyComposite.layout();
 				currentTab = tab;
 				currentTab.aboutToBeShown();
-				updatePageMinimumSize();
 			}
 		}
 	}
@@ -246,36 +245,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	}
 
 	/**
-	 * Update the minimum height of the scrolled composite, to make the scrollbars
-	 * appear only when they are needed
-	 */
-	public void updatePageMinimumSize() {
-		Composite tabComposite = tabToComposite.get(currentTab);
-		if (tabComposite != null) {
-			int height = computeHeight(tabComposite);
-			int actualMinheight = tabbedPropertyComposite.getScrolledComposite().getMinHeight();
-			boolean barVisible = tabbedPropertyComposite.getScrolledComposite().getVerticalBar().isVisible();
-			if ((!barVisible && height > actualMinheight)) tabbedPropertyComposite.getScrolledComposite().setMinHeight(height);
-		}
-	}
-
-	/**
-	 * Calculate the real height of displayed sections in the properties tab
-	 * 
-	 * @param parentComposite composite that contain the sections
-	 * @return the minimum height to view all the sections
-	 */
-	private int computeHeight(Composite parentComposite) {
-		Composite sectionComposite = (Composite) parentComposite.getChildren()[0];
-		int height = 0;
-		int width = tabbedPropertyComposite.getBounds().width;
-		// When i calculate the height it is really important to give the real width
-		// of the composite, since it is used to calculate the number of columns
-		height = sectionComposite.computeSize(width, SWT.DEFAULT).y;
-		return height;
-	}
-
-	/**
 	 * Create the page control
 	 * 
 	 * @param parent parent of the page
@@ -292,7 +261,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 				 * Check the page height when the composite area is resized because the
 				 * column layout could be changed
 				 */
-				updatePageMinimumSize();
+				tabbedPropertyComposite.updatePageMinimumSize();
 			}
 		});
 

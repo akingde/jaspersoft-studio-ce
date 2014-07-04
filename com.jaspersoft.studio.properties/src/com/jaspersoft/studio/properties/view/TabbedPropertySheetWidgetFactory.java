@@ -107,7 +107,7 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		sectionSizeChange = new ExpansionAdapter() {
 			@Override
 			public void expansionStateChanged(ExpansionEvent e) {
-				page.updatePageMinimumSize();
+				page.getTabbedPropertyComposite().updatePageMinimumSize();
 			}
 		};
 

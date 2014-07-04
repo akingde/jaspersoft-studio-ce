@@ -217,7 +217,9 @@ public class TabbedPropertyComposite extends Composite {
 	 * 
 	 * @param all flag to do also the layout of the children of the composite 
 	 */
+	@Override
 	public void layout(){
+		updatePageMinimumSize();
 		tabComposite.layout();
 		mainComposite.layout();
 	}
@@ -226,9 +228,32 @@ public class TabbedPropertyComposite extends Composite {
 	 * do the layout of the page area
 	 */
 	public void setupScrolledComposite() {
+		updatePageMinimumSize();
 		mainComposite.layout();
 	}
 
+	/**
+	 * Calculate the real height of displayed sections in the properties tab.
+	 * Then Update the minimum height of the scrolled composite, to make the scrollbars
+	 * appear only when they are needed. The update is done only if it is necessary
+	 *
+	 */
+	public void updatePageMinimumSize(){
+		Control topControl = cachedLayout.topControl;
+		if (topControl != null){
+			int height = 0;
+			int width = getBounds().width;
+			// When i calculate the height it is really important to give the real width
+			// of the composite, since it is used to calculate the number of columns
+			height = topControl.computeSize(width, SWT.DEFAULT).y;
+			int actualMinheight = scrolledComposite.getMinHeight();
+			boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
+			if (barVisible || height > actualMinheight) {
+				scrolledComposite.setMinHeight(height);
+			}
+		}
+	}
+	
 	/**
 	 * Create a composite for a tab and cache it. The composite
 	 * is also returned. This composite can be shown on the page
