@@ -77,7 +77,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class ReportContainer extends MultiPageToolbarEditorPart implements ITabbedPropertySheetPageContributor,
-		IJROBjectEditor {
+		IJROBjectEditor, CachedSelectionProvider {
 
 	/** The model. */
 	private INode model = null;

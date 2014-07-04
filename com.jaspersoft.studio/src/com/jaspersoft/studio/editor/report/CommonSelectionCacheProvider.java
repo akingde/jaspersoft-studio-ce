@@ -96,6 +96,11 @@ public class CommonSelectionCacheProvider {
 	private List<Object> lastEditPartSelection = new ArrayList<Object>();
 	
 	/**
+	 * List of selection listeners, called when the selection changes
+	 */
+	private List<SelectionChangedListener> selectionChangeListeners = new ArrayList<SelectionChangedListener>();
+	
+	/**
 	 * Flag to control how the request for a type should return a result only if all the elements 
 	 * inside the selection are the requested type or a subclass of the requested type. 
 	 */
@@ -252,7 +257,36 @@ public class CommonSelectionCacheProvider {
 		if (!selection.equals(lastSelection) && selection instanceof IStructuredSelection){
 			lastSelection = selection;
 			reinitializeMaps();
+			//Call the listener
+			for(SelectionChangedListener listener : selectionChangeListeners){
+				listener.selectionChanged();
+			}
 		}
 	}
 	
+	/**
+	 * Add a listener called when the selection change. The same listener can be 
+	 * added only once
+	 * 
+	 * @param listener the listener
+	 * @return true if the listener was added, false it not (because the same listener
+	 * was already added before).
+	 */
+	public boolean addSelectionChangeListener(SelectionChangedListener listener){
+		if (!selectionChangeListeners.contains(listener)){
+			selectionChangeListeners.add(listener);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Remove a previously added listener
+	 *
+	 * @param listener the listener to remove
+	 * @return true if the listener was found and removed, false otherwise
+	 */
+	public boolean removeSelectionChangeListener(SelectionChangedListener listener){
+		return selectionChangeListeners.remove(listener);
+	}
 }

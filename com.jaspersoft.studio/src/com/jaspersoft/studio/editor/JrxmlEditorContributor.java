@@ -31,10 +31,6 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
@@ -57,6 +53,7 @@ import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
 import com.jaspersoft.studio.editor.report.ReportContainer;
+import com.jaspersoft.studio.editor.report.SelectionChangedListener;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
@@ -81,6 +78,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 	/** The zoom combo. */
 	private RZoomComboContributionItem zoomCombo;
+	
+	/**
+	 * The selection listener that will update the toolbar when a selection change
+	 */
+	private SelectionChangedListener selectionListener;
 
 	/**
 	 * Creates a multi-page contributor.
@@ -219,14 +221,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
-		ISelectionProvider selectionProvider = null;
-		if (activeEditor != null && activeEditor.getSite() != null)
-			selectionProvider = activeEditor.getSite().getSelectionProvider();
-		ISelection selection = selectionProvider != null ? selectionProvider.getSelection() : null;
-
-		if (lastEditor != null && selectionListener != null) {
-			if (lastEditor.getSite().getSelectionProvider() != null)
-				lastEditor.getSite().getSelectionProvider().removeSelectionChangedListener(selectionListener);
+		if (lastEditor instanceof CachedSelectionProvider && selectionListener != null) {
+			((CachedSelectionProvider)lastEditor).getSelectionCache().removeSelectionChangeListener(selectionListener);
 		}
 		IActionBars bars = getActionBars();
 		removeZoom(bars.getToolBarManager());
@@ -259,8 +255,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 						bars.setGlobalActionHandler(action.getId(), action);
 				}
 			}
-			selectionProvider.addSelectionChangedListener(getSelectionChangeListener(registry));
-			selectionListener.contributeToContextBars(selection);
+			((CachedSelectionProvider)lastEditor).getSelectionCache().addSelectionChangeListener(getSelectionChangeListener(registry));
 		} else if (activeEditor instanceof PreviewJRPrint) {
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null) {
@@ -280,9 +275,27 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		return lastEditor;
 	}
 
-	private ISelectionChangedListener getSelectionChangeListener(ActionRegistry registry) {
-		if (selectionListener == null)
-			selectionListener = new SelectionListener();
+	/**
+	 * Return a selection listener that will request the update of the toolbar
+	 * when the selection changes
+	 */
+	private SelectionChangedListener getSelectionChangeListener(ActionRegistry registry) {
+		if (selectionListener == null){
+			selectionListener = new SelectionChangedListener() {	
+				@Override
+				public void selectionChanged() {
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+							if (getPage() != null && getPage().getActiveEditor() != null){
+								CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), getActionBars());
+							}
+						}
+					});
+				}
+			};
+		}
 		return selectionListener;
 	}
 
@@ -302,9 +315,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 		@Override
 		public void partClosed(IWorkbenchPartReference partRef) {
-			//Clear the toolbar selection
-			if (selectionListener != null){
-				selectionListener.contributeToContextBars(StructuredSelection.EMPTY);
+			if (lastEditor instanceof CachedSelectionProvider && selectionListener != null) {
+				((CachedSelectionProvider)lastEditor).getSelectionCache().selectionChanged(StructuredSelection.EMPTY);
 			}
 		}
 
@@ -328,32 +340,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		public void partInputChanged(IWorkbenchPartReference partRef) {
 		}
 	}
-
-	private class SelectionListener implements ISelectionChangedListener {
-
-		@Override
-		public void selectionChanged(SelectionChangedEvent event) {
-			contributeToContextBars(event.getSelection());
-		}
-
-		public void contributeToContextBars(final ISelection selection) {
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					//Update the selection on the toolbar manager
-					if (getPage() != null && getPage().getActiveEditor() != null){
-						((CachedSelectionProvider)getPage().getActiveEditor()).getSelectionCache().selectionChanged(selection);
-						CommonToolbarHandler.updateSelection(getPage().getActiveEditor(), getActionBars());
-					}
-					//Force the re-evaluation of the toolbar condition, used in the standard contribution system
-					//((IActionBars2) getActionBars()).getToolBarManager().update(true); 
-				}
-			});
-		}
-	}
-
-	private SelectionListener selectionListener;
 
 	/**
 	 * Returns the action registed with the given text editor.
