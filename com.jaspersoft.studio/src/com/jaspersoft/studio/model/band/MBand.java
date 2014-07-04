@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.band;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -291,6 +293,26 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
+	}
+	
+	/**
+	 * For a model band it can be normal to not have a 
+	 * jr object inside, in this case it should anyway
+	 * return it's descriptors
+	 */
+	public IPropertyDescriptor[] getPropertyDescriptors() {
+		IPropertyDescriptor[] descriptors = getDescriptors();
+		if (descriptors == null) {
+			Map<String, Object> defaultsMap = new HashMap<String, Object>();
+			List<IPropertyDescriptor> desc = new ArrayList<IPropertyDescriptor>();
+
+			createPropertyDescriptors(desc, defaultsMap);
+
+			descriptors = desc.toArray(new IPropertyDescriptor[desc.size()]);
+			setDescriptors(descriptors, defaultsMap);
+		}
+		postDescriptors(descriptors);
+		return descriptors;
 	}
 
 	/**

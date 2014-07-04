@@ -27,6 +27,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.editor.layout.ILayout;
 import com.jaspersoft.studio.editor.layout.LayoutCommand;
@@ -46,7 +47,9 @@ import com.jaspersoft.studio.property.section.widgets.SPReadCombo;
 public class LayoutSection extends AbstractSection {
 	private JSSComboPropertyDescriptor pd;
 	private ILayout[] layouts;
-
+	private Section section;
+	
+	
 	public LayoutSection() {
 		super();
 		layouts = LayoutManager.getAllLayouts();
@@ -68,14 +71,12 @@ public class LayoutSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
 
-		if (getElement().getValue() == null)
-			return;
+		section = getWidgetFactory().createAndGetSection(parent, Messages.LayoutSection_sectiontitle, false, 2);
+		Composite container = (Composite)section.getClient();
+		
+		getWidgetFactory().createCLabel(container, Messages.LayoutSection_propertylable, SWT.RIGHT);
 
-		parent = getWidgetFactory().createSection(parent, Messages.LayoutSection_sectiontitle, false, 2);
-
-		getWidgetFactory().createCLabel(parent, Messages.LayoutSection_propertylable, SWT.RIGHT);
-
-		widgets.put(pd.getId(), new SPReadCombo(parent, this, pd) {
+		widgets.put(pd.getId(), new SPReadCombo(container, this, pd) {
 			protected void handlePropertyChange() {
 				int ind = combo.getSelectionIndex();
 				if (ind == index)
@@ -162,4 +163,13 @@ public class LayoutSection extends AbstractSection {
 			}
 		});
 	}
+	
+	@Override
+	public void aboutToBeShown() {
+		super.aboutToBeShown();
+		//The properties are not visible if the band is not created (the layout section is used
+		// also for bands)
+		section.setVisible(getElement().getValue() != null);
+	}
+	
 }

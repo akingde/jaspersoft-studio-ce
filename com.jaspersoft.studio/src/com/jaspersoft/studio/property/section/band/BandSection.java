@@ -18,6 +18,7 @@ package com.jaspersoft.studio.property.section.band;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -30,21 +31,27 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class BandSection extends AbstractSection {
 
+	private Section section;
+	
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		if (getElement().getValue() != null) {
-			parent = getWidgetFactory().createSection(parent, Messages.BandSection_title, false, 2);
-
-			createWidget4Property(parent, JRDesignBand.PROPERTY_HEIGHT);
-
-			createWidget4Property(parent, JRDesignBand.PROPERTY_SPLIT_TYPE);
-
-			createWidget4Property(parent, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
-		}
+		section = getWidgetFactory().createAndGetSection(parent, Messages.BandSection_title, false, 2);
+		Composite container = (Composite)section.getClient();
+		createWidget4Property(container, JRDesignBand.PROPERTY_HEIGHT);
+		createWidget4Property(container, JRDesignBand.PROPERTY_SPLIT_TYPE);
+		createWidget4Property(container, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
+	}
+	
+	@Override
+	public void aboutToBeShown() {
+		super.aboutToBeShown();
+		//The properties are not visible if the band is not created
+		section.setVisible(getElement().getValue() != null);
+		((Composite)section.getClient()).getChildren();
 	}
 	
 	@Override

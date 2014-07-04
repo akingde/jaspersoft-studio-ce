@@ -401,6 +401,44 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		section.setClient(cmp);
 		return cmp;
 	}
+	
+	/**
+	 * Create a section and return it. The client of the section is a composite where the control can be created
+	 */
+	public Section createAndGetSection(Composite parent, String text, boolean expandable, int columns) {
+		return createAndGetSection(parent, text, expandable, columns, 1, SWT.NONE);
+	}
+	
+	/**
+	 * Create a section and return it. The client of the section is a composite where the control can be created
+	 */
+	public Section createAndGetSection(Composite parent, String text, boolean expandable, int columns, int span, int style) {
+		style = style | Section.EXPANDED;
+		if (expandable)
+			style = style | Section.TREE_NODE;
+		Section section = new NotifyExpandSection(parent, style, sectionSizeChange);
+		section.titleBarTextMarginWidth = 0;
+
+		section.setFont(SWTResourceManager.getBoldFont(section.getFont()));
+
+		if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = span;
+			section.setLayoutData(gd);
+		}
+		section.setText(text);
+		section.setSeparatorControl(new Label(section, SWT.SEPARATOR | SWT.HORIZONTAL));
+		if (sectionSizeChange != null)
+			section.addExpansionListener(sectionSizeChange);
+		Composite cmp = createComposite(section, SWT.NONE);
+		GridLayout layout = new GridLayout(columns, false);
+		layout.marginHeight = 4;
+		layout.marginWidth = 2;
+		cmp.setLayout(layout);
+
+		section.setClient(cmp);
+		return section;
+	}
 
 	public void dispose() {
 		if (getColors() != null) {

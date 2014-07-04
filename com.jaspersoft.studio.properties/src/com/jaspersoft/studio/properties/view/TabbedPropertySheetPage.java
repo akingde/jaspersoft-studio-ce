@@ -185,9 +185,9 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						tab.refresh();
 					}
 				}
-				tabbedPropertyComposite.layout();
 				currentTab = tab;
 				currentTab.aboutToBeShown();
+				tabbedPropertyComposite.layout();
 			}
 		}
 	}
