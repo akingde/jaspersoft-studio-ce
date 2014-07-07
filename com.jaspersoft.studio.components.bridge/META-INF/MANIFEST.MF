@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Bridge Component
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.jaspersoft.studio.components.bridge;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 5.6.1.qualifier
 Bundle-Activator: com.jaspersoft.studio.components.bridge.Activator
-Bundle-Vendor: Jaspersoft Corporation
+Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: com.jaspersoft.studio;bundle-version="5.6.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7

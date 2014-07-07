@@ -16,7 +16,7 @@
                category="element"
                id="com.jaspersoft.studio.components.bridge.tab"
                image="icons/bridgecomponent-16.png"
-               label="Bridge">
+               label="%propertyTab.label">
          </propertyTab>
       </propertyTabs>
    </extension>
