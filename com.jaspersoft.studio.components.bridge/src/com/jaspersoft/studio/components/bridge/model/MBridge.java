@@ -225,6 +225,7 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		BridgeDesignComponent bridgeComp = (BridgeDesignComponent) jrElement.getComponent();

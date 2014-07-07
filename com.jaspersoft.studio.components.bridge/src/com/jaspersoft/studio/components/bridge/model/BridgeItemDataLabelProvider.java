@@ -35,7 +35,7 @@ public class BridgeItemDataLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		if(element instanceof List<?>) {
-			return NLS.bind(Messages.BridgeItemDataLabelProvider_TextStr,((List) element).size());
+			return NLS.bind(Messages.BridgeItemDataLabelProvider_TextStr,((List<?>) element).size());
 		}
 		return super.getText(element);
 	}

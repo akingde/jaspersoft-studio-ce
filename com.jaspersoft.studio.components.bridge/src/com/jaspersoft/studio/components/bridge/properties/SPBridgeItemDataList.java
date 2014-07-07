@@ -166,6 +166,7 @@ public class SPBridgeItemDataList extends ASPropertyWidget {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void setData(APropertyNode pnode, Object value) {
 		itemDataElements = (List<BridgeItemData>) value;
 		itemDataTV.setInput(itemDataElements);
