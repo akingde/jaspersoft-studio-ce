@@ -43,14 +43,17 @@
       <import plugin="org.apache.log4j" version="1.2.15" match="greaterOrEqual"/>
       <import plugin="org.eclipse.nebula.widgets.cdatetime" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.babel.editor" version="5.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="com.jaspersoft.studio" version="5.6.1" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.server" version="5.6.1" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.pool" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.lang" version="2.6.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="com.buzzcoders.yasw.widgets.map" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.net" version="1.2.100" match="greaterOrEqual"/>
       <import plugin="com.jaspersoft.studio.data" version="5.6.1" match="greaterOrEqual"/>
+      <import plugin="com.ibm.icu" version="4.2.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.views" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
@@ -80,15 +83,14 @@
       <import plugin="org.eclipse.emf.common" version="2.6.0" match="compatible"/>
       <import plugin="org.eclipse.xtext.ui" version="2.0.0" match="compatible"/>
       <import plugin="org.eclipse.help" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jface.text" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ltk.core.refactoring" version="3.5.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ltk.ui.refactoring" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.editors" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.ide" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jdt.ui" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.expressions" version="3.4.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.discovery" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.ibm.icu" version="4.4.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -226,6 +228,13 @@
 
    <plugin
          id="com.jaspersoft.studio.server.soap"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.components.bridge"
          download-size="0"
          install-size="0"
          version="0.0.0"
