@@ -236,11 +236,43 @@ public class TabbedPropertyComposite extends Composite {
 	}
 	
 	/**
+	 * Used to do the layout or the setMinHeight only if 
+	 * needed
+	 */
+	public void smartLayout(){
+		int scrollHeight = needPageMinimumSizeUpdate();
+		if (scrollHeight == -1){
+			tabComposite.layout();
+		} else {
+			scrolledComposite.setMinHeight(scrollHeight);
+		}
+		
+		mainComposite.layout();
+	}
+	
+	/**
 	 * do the layout of the page area
 	 */
 	public void setupScrolledComposite() {
 		updatePageMinimumSize();
 		mainComposite.layout();
+	}
+	
+	private int needPageMinimumSizeUpdate(){
+		Control topControl = cachedLayout.topControl;
+		if (topControl != null){
+			int height = 0;
+			int width = getBounds().width;
+			// When i calculate the height it is really important to give the real width
+			// of the composite, since it is used to calculate the number of columns
+			height = topControl.computeSize(width, SWT.DEFAULT).y;
+			int actualMinheight = scrolledComposite.getMinHeight();
+			boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
+			if (barVisible || height > actualMinheight) {
+				return height;
+			}
+		}
+		return -1;
 	}
 
 	/**
