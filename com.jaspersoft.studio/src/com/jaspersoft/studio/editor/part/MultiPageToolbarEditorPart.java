@@ -235,8 +235,9 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			public void widgetSelected(SelectionEvent e) {
 				ToolItem ti = (ToolItem) e.getSource();
 				int newPageIndex = newContainer.indexOf((TFItem) ti.getData());
+				int oldPageIndex = getActivePage();
 				container.setSelection(newPageIndex);
-				pageChange(newPageIndex);
+				pageChange(newPageIndex, oldPageIndex);
 				// TODO, workaround here, after selection, container is not refreshed
 				final Point size = parent.getParent().getSize();
 				parent.getParent().setSize(size.x - 2, size.y - 2);
@@ -674,7 +675,8 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		return false;
 	}
 
-	protected void pageChange(final int newPageIndex) {
+	protected void pageChange(final int newPageIndex, final int oldPageIndex) {
+		getActiveEditor();
 		deactivateSite(false, false);
 
 		IPartService partService = (IPartService) getSite().getService(IPartService.class);
@@ -711,7 +713,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 
 		activateSite();
 
-		postPageChange(newPageIndex);
+		postPageChange(newPageIndex, oldPageIndex);
 
 		Object selectedPage = getSelectedPage();
 		if (selectedPage != null) {
@@ -719,7 +721,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		}
 	}
 
-	protected abstract void postPageChange(int newPageIndex);
+	protected abstract void postPageChange(int newPageIndex, int oldPageIndex);
 
 	/**
 	 * This method can be used by implementors of {@link MultiPageEditorPart#createPageContainer(Composite)} to deactivate
@@ -903,8 +905,9 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 */
 	protected void setActivePage(int pageIndex) {
 		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
+		int oldPageIndex = getActivePage();
 		getTabFolder().setSelection(pageIndex);
-		pageChange(pageIndex);
+		pageChange(pageIndex, oldPageIndex);
 		final Composite prnt = getContainer().getParent();
 		final Point size = prnt.getSize();
 		prnt.getParent().setSize(size.x - 2, size.y - 2);

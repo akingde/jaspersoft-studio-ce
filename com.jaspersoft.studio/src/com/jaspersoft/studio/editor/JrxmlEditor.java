@@ -351,6 +351,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 		} catch (Throwable e) {
 			closeEditor();
+			JaspersoftStudioPlugin.getInstance().logError(e);
 		}
 	}
 

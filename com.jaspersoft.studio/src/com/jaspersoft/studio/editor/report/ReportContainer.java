@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -55,12 +56,14 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
@@ -380,12 +383,44 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	public String getContributorId() {
 		return "com.jaspersoft.studio.editor.report.ReportContainer"; //$NON-NLS-1$
 	}
+	
+	/**
+	 * Create a fake command to force the refresh of the editor and outline panels, this override
+	 * the disable refresh flag, so calling this the editor area is always updated
+	 */
+	protected void refreshVisuals(INode report){
+			 if (report != null){
+				 PropertyChangeEvent event = new PropertyChangeEvent(report.getJasperDesign(), JSSCompoundCommand.REFRESH_UI_EVENT, null, null);
+				 report.getPropertyChangeSupport().firePropertyChange(event);
+			 }
+	}
+	
+	/**
+	 * Get the object that is modified by a subeditor. It calculated searching the last node 
+	 * of the mpage of the subeditor (since the first are the styles, the dataset...)
+	 * 
+	 * @param searchNode the starting node
+	 * @return the node modified by the subeditor
+	 */
+	private INode getInnerModel(INode searchNode){
+		INode actualNode = searchNode;
+		if (actualNode instanceof MRoot && actualNode.getChildren().size() >0){
+			return getInnerModel(actualNode.getChildren().get(0));
+		} else if (actualNode instanceof MPage && actualNode.getChildren().size()>0){
+			return actualNode.getChildren().get(actualNode.getChildren().size()-1);
+		}
+		return actualNode;
+	}
 
 	@Override
-	protected void postPageChange(int newPageIndex) {
+	protected void postPageChange(int newPageIndex, int oldPageIndex) {
 		AbstractVisualEditor activeEditor = editors.get(newPageIndex);
-		activeEditor.setModel(activeEditor.getModel());
-
+		//request the rapaint of the element on the main editor node when switching between the subeditors, supposing they were modified in the subeditor
+		if (oldPageIndex > 0){
+			AbstractVisualEditor oldEditor = editors.get(oldPageIndex);
+			INode subModel = getInnerModel(oldEditor.getModel());
+			((JRChangeEventsSupport)subModel.getValue()).getEventSupport().firePropertyChange(MGraphicElement.FORCE_GRAPHICAL_REFRESH, null, null);
+		}
 		IEditorActionBarContributor contributor = parent.getEditorSite().getActionBarContributor();
 		if (contributor != null && contributor instanceof MultiPageEditorActionBarContributor) {
 
