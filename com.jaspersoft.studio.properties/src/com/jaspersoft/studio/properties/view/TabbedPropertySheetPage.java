@@ -512,7 +512,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * Update the title bar of the contributor has a label provider.
 	 */
 	private void refreshTitleBar() {
-		if (hasTitleBar) {
+		if (hasTitleBar && registry != null) {
 			TabbedPropertyTitle title = tabbedPropertyComposite.getTitle();
 			if (currentTab == null) {
 				/**

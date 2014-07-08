@@ -782,7 +782,7 @@ public class StylesListSection extends AbstractSection {
 		if (titleValue != null) {
 			Label titleLabel = printTitle(parent, titleValue);
 			final StyleContainer styleReference = styleMaps.get(((JRStyle) element.getValue()).getName());
-			if (styleReference.isExternal()) {
+			if (styleReference != null && styleReference.isExternal()) {
 				// If the style is external i made its editor open by double clicking on the style title
 				titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
 				titleLabel.addMouseListener(new MouseListener() {
@@ -927,6 +927,7 @@ public class StylesListSection extends AbstractSection {
 			}
 		}
 		shown = true;
+		createContent();
 	}
 
 	/**
@@ -1071,13 +1072,22 @@ public class StylesListSection extends AbstractSection {
 		super.dispose();
 		colorCache.dispose();
 	}
+	
+	/**
+	 * Delete the old controls created for the tab
+	 */
+	private void clearOldContent(){
+		for(Control control : parent.getChildren()){
+			control.dispose();
+		}
+	}
 
 	/**
-	 * Initialize the styles widget, create the control and set them
+	 * Clear and populate the inerithance container where the controls
+	 * are shown
 	 */
-	@Override
-	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
+	private void createContent(){
+		clearOldContent();
 		initStyleMaps();
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
@@ -1094,6 +1104,13 @@ public class StylesListSection extends AbstractSection {
 		printStyles(styles, parent);
 		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
 		ovverridenAttributes = null;
-		// styleMaps = null;
+	}
+	
+	/**
+	 * Initialize the styles widget, create the control and set them
+	 */
+	@Override
+	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
+		super.createControls(parent, tabbedPropertySheetPage);
 	}
 }

@@ -438,6 +438,7 @@ public class TabbedPropertySearch extends Composite {
 	 * @param e
 	 */
 	protected void drawTitleBackground(PaintEvent e) {
+		if (factory.getColors() == null) return;
 		Rectangle bounds = getClientArea();
 		Color bg = factory.getColors().getColor(IFormColors.H_GRADIENT_END);
 		Color gbg = factory.getColors().getColor(IFormColors.H_GRADIENT_START);

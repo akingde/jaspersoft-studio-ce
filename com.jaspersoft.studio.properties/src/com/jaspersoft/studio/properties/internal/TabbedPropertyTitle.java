@@ -123,6 +123,7 @@ public class TabbedPropertyTitle
 	 * @param e
 	 */
 	protected void drawTitleBackground(PaintEvent e) {
+		if (factory.getColors() == null) return;
 		Rectangle bounds = getClientArea();
 		label.setBackground(new Color[] {
 				factory.getColors().getColor(IFormColors.H_GRADIENT_END),
