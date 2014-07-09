@@ -11,6 +11,7 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRConditionalStyle;
@@ -25,6 +26,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IGraphicalPropertiesHandler;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -95,6 +97,13 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 		return getIconDescriptor().getToolTip();
 	}
 	
+	/**
+	 * Starting from the children of the Mstyles search the 
+	 * first default style and return it
+	 * 
+	 * @param children the recursive children (of the mstyles or mstyle reference)
+	 * @return the current jrsrtle of the default style or null if there isn't a default style
+	 */
 	private JRStyle getDefaultStyle(List<INode> children){
 		for(INode node : children){
 			if (node instanceof MStyleTemplate){
@@ -108,6 +117,11 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 		return null;
 	}
 	
+	/**
+	 * When something that can change the default styles changes it check
+	 * if the default style is changed, and if yes it is updated in the
+	 * jasperdesign and the redrwan of the elements is requested
+	 */
 	public void updateDefaulStyle(){
 		JasperDesign jd = getJasperDesign();
 		if (jd != null){
@@ -116,12 +130,49 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 			if (oldDefault != newDefault){
 				//remove the flag from the old style, but only if it is an internal style
 				if (oldDefault != null && jd.getStylesList().contains(oldDefault)){
+					//If the style is internal by setting the default value will cause already the refresh of the elements
 					((JRDesignStyle)oldDefault).setDefault(false);
+				} else {
+					//If the style is external must be refresh all the elements
+					fireUpdateForElements();
 				}
 				jd.setDefaultStyle(newDefault);
 			}
 		}
 	}
+	
+	/**
+	 * Set the flag to repaint the element for each element
+	 * 
+	 * @param childerns the actual children
+	 */
+	private void refreshAllElements(List<INode> childerns){
+		for(INode child : childerns){
+			if (child instanceof IGraphicalPropertiesHandler){
+				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)child;
+				graphicalElement.setChangedProperty(true);
+			}
+			refreshAllElements(new ArrayList<INode>(child.getChildren()));
+		}
+	}
+	
+	/**
+	 * Set the refresh of  the elements that are using this styles and mark them for the refresh, in background
+	 * to speed up the application
+	 */
+	private void fireUpdateForElements(){
+		Runnable notifier = new Runnable() {
+	    public void run() {
+	  		//Avoid the refresh if the style is not in the hierarchy
+	    	INode root = getRoot();
+	    	if (root != null) {
+	    		refreshAllElements(new ArrayList<INode>(root.getChildren()));
+	  		}
+	    }
+		};
+		new Thread(notifier).start();
+	}
+	
 	
 	/*
 	 * (non-Javadoc)
@@ -162,7 +213,8 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 				}
 			}
 			super.propertyChange(evt);
-		} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT) || evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES)){
+		} 
+		if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT) || evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES) || evt.getPropertyName().equals(JasperDesign.PROPERTY_STYLES)){
 			//A style default flag has been changed or a external style has been added removed, need to update the default styles
 			updateDefaulStyle();
 		}
