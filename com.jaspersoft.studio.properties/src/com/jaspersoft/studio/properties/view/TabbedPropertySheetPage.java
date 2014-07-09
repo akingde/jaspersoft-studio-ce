@@ -42,10 +42,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.Page;
@@ -123,36 +121,9 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	private Map<Object, String> lastSelectedTabForElement;
 
 	/**
-	 * The current workbench windows
-	 */
-	private IWorkbenchWindow cachedWorkbenchWindow;
-
-	/**
 	 * Flag to show or not the title bar
 	 */
 	private boolean hasTitleBar;
-
-	/**
-	 * a listener that is interested in part activation events.
-	 */
-	private IPartListener partActivationListener = new IPartListener() {
-
-		public void partActivated(IWorkbenchPart part) {
-		}
-
-		public void partBroughtToTop(IWorkbenchPart part) {
-		}
-
-		public void partClosed(IWorkbenchPart part) {
-			dispose();
-		}
-
-		public void partDeactivated(IWorkbenchPart part) {
-		}
-
-		public void partOpened(IWorkbenchPart part) {
-		}
-	};
 
 	/**
 	 * SelectionChangedListener for the ListViewer.
@@ -287,12 +258,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 		tabbedPropertyViewer.setContentProvider(tabListContentProvider);
 		tabbedPropertyViewer.addSelectionChangedListener(new SelectionChangedListener());
 
-		/**
-		 * Add a part activation listener.
-		 */
-		cachedWorkbenchWindow = getSite().getWorkbenchWindow();
-		cachedWorkbenchWindow.getPartService().addPartListener(partActivationListener);
-
 		
 		if (hasTitleBar && registry == null) {
 			initContributor(currentContributorId);
@@ -335,13 +300,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 			widgetFactory = null;
 		}
 		
-		/**
-		 * Remove the part activation listener.
-		 */
-		if (cachedWorkbenchWindow != null) {
-			cachedWorkbenchWindow.getPartService().removePartListener(partActivationListener);
-			cachedWorkbenchWindow = null;
-		}
 
 		if (registry != null) {
 			TabbedPropertyRegistryFactory.getInstance().disposeRegistry(contributor);
