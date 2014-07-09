@@ -11,9 +11,11 @@
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRConditionalStyle;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -92,7 +94,35 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-
+	
+	private JRStyle getDefaultStyle(List<INode> children){
+		for(INode node : children){
+			if (node instanceof MStyleTemplate){
+				JRStyle result = getDefaultStyle(node.getChildren());
+				if (result != null) return result;
+			} else if (node instanceof MStyle){
+				JRStyle style = (JRStyle)node.getValue();
+				if (style.isDefault()) return style;
+			}
+		}
+		return null;
+	}
+	
+	public void updateDefaulStyle(){
+		JasperDesign jd = getJasperDesign();
+		if (jd != null){
+			JRStyle oldDefault = jd.getDefaultStyle();
+			JRStyle newDefault = getDefaultStyle(getChildren());
+			if (oldDefault != newDefault){
+				//remove the flag from the old style, but only if it is an internal style
+				if (oldDefault != null && jd.getStylesList().contains(oldDefault)){
+					((JRDesignStyle)oldDefault).setDefault(false);
+				}
+				jd.setDefaultStyle(newDefault);
+			}
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -100,8 +130,7 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_STYLES)
-				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES) && evt.getSource() == getValue()) {
+		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_STYLES) || evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES) && evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
 				if (evt instanceof CollectionElementAddedEvent) {
@@ -133,6 +162,9 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 				}
 			}
 			super.propertyChange(evt);
+		} else if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_DEFAULT) || evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES)){
+			//A style default flag has been changed or a external style has been added removed, need to update the default styles
+			updateDefaulStyle();
 		}
 	}
 

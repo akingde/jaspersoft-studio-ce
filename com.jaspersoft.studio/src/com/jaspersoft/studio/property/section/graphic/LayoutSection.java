@@ -169,7 +169,7 @@ public class LayoutSection extends AbstractSection {
 		super.aboutToBeShown();
 		//The properties are not visible if the band is not created (the layout section is used
 		// also for bands)
-		section.setVisible(getElement().getValue() != null);
+		if (section != null) section.setVisible(getElement().getValue() != null);
 	}
 	
 }

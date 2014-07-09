@@ -226,7 +226,7 @@ public class ReportFactory {
 	}
 
 	public static void createStyles(JasperReportsConfiguration jConfig, JasperDesign jd, ANode report, int index) {
-		ANode nStyle = new MStyles(report, index);
+		MStyles nStyle = new MStyles(report, index);
 		if (jd.getTemplates() != null)
 			for (Iterator<JRReportTemplate> it = jd.getTemplatesList().iterator(); it.hasNext();)
 				createNode(nStyle, it.next(), -1, (IFile) jConfig.get(FileUtils.KEY_FILE));
@@ -238,6 +238,7 @@ public class ReportFactory {
 						createNode(mstyle, jrc, -1);
 			}
 		}
+		nStyle.updateDefaulStyle();
 	}
 
 	/**

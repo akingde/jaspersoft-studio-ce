@@ -20,11 +20,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.JREnum;
 
 import org.apache.commons.lang.StringUtils;
@@ -99,9 +98,10 @@ public class StylesListSection extends AbstractSection {
 			"icons/resources/remove-16.png"); //$NON-NLS-1$
 
 	/**
-	 * Map of all the styles, where the name of the style is it's key
+	 * Map of all the styles, where the key is the style value for the internal style and
+	 * the style name for the external ones
 	 */
-	private HashMap<String, StyleContainer> styleMaps;
+	private HashMap<Object, StyleContainer> styleMaps;
 
 	/**
 	 * List of attributes overridden by others of an upper level in the hierarchy (the hierarchy is element-styles-default
@@ -388,6 +388,29 @@ public class StylesListSection extends AbstractSection {
 		}
 
 	}
+	
+	/**
+	 * Return the key of the parent style of an element, check also if the style is an 
+	 * internal of an external one. In the first case the key is the jrstyle, in the second 
+	 * one it is the name of the style
+	 * 
+	 * @param child a JRElement or a JRStyle
+	 * @return the key of the style for the passed parameter, independently if it is
+	 * external or internal. Null if it has not a parent style of it has a not valid internal
+	 * parent style (a style that was removed)
+	 */
+	private Object getStyleKey(APropertyNode element){
+		if (element.getValue() instanceof JRElement){
+			JRElement jrElement = (JRElement)element.getValue();
+			if (jrElement.getStyle() != null) return jrElement.getStyle();
+			else return jrElement.getStyleNameReference();
+		} else if (element.getValue() instanceof JRStyle){
+			JRStyle jrStyle = (JRStyle)element.getValue();
+			if (jrStyle.getStyle() != null) return jrStyle.getStyle();
+			else return jrStyle.getStyleNameReference();
+		}
+		return null;
+	}
 
 	/**
 	 * Build the hierarchy of styles of an element
@@ -399,48 +422,28 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private LinkedList<MStyle> buildStylesGerarchy(APropertyNode element) {
 		LinkedList<MStyle> result = new LinkedList<MStyle>();
-		Object styleName;
-		if (element instanceof MConditionalStyle)
-			styleName = ((MStyle) element.getParent()).getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
-		else
-			styleName = element.getPropertyValue(JRDesignElement.PROPERTY_PARENT_STYLE);
-		StyleContainer styleContainer = styleMaps.get(styleName.toString());
+		Object styleKey;
+		if (element instanceof MConditionalStyle){
+			//The external style dosen't allow a conditional style, so the parent must be a jrstyle
+			styleKey = ((MStyle) element.getParent()).getValue();
+		} else {
+			styleKey = getStyleKey(element);
+		}
+		StyleContainer styleContainer = styleMaps.get(styleKey);
 		if (styleContainer != null) {
 			MStyle styleModel = styleContainer.getStyle();
 			result.addLast(styleModel);
-			String nextStyleName = getParentStyleName((JRStyle) styleModel.getValue());
-			while (nextStyleName != null) {
-				styleModel = styleMaps.get(nextStyleName).getStyle();
+			Object nextStylKey = getStyleKey(styleModel);
+			while (nextStylKey != null) {
+				styleModel = styleMaps.get(nextStylKey).getStyle();
 				result.addLast(styleModel);
-				nextStyleName = getParentStyleName((JRStyle) styleModel.getValue());
+				nextStylKey = getStyleKey(styleModel);
 			}
 
 		}
 		return result;
 	}
 	
-	/**
-	 * Return the name of the parent style of a style, check also if the style is an 
-	 * internal of an external one
-	 * 
-	 * @param child a jr style
-	 * @return the name of the style for the passed parameter, indipendently if it is
-	 * external or internal. Null if it has not a parent style of it has a not valid internal
-	 * parent style (a style that was removed)
-	 */
-	private String getParentStyleName(JRStyle child){
-		if (child.getStyleNameReference() != null){
-			//it's an external style, return the name
-			return child.getStyleNameReference();
-		} else {
-			String styleName = null;
-			JasperDesign jd = getElement().getJasperDesign();
-			if (child.getStyle() != null && jd != null && jd.getStylesMap().containsKey(child.getStyle().getName())){
-				styleName = child.getStyle().getName();
-			}
-			return styleName;
-		}
-	}
 
 	/**
 	 * Add to a styledtext a new style to made the text with a middle black line (strike trought)
@@ -781,7 +784,7 @@ public class StylesListSection extends AbstractSection {
 			HashMap<String, Object> localElementAttributes, boolean addHandler) {
 		if (titleValue != null) {
 			Label titleLabel = printTitle(parent, titleValue);
-			final StyleContainer styleReference = styleMaps.get(((JRStyle) element.getValue()).getName());
+			final StyleContainer styleReference = styleMaps.get(getStyleKey(element));
 			if (styleReference != null && styleReference.isExternal()) {
 				// If the style is external i made its editor open by double clicking on the style title
 				titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
@@ -851,15 +854,15 @@ public class StylesListSection extends AbstractSection {
 	 * 
 	 * @param stylesList
 	 */
-	private void recursiveReadStyles(List<INode> stylesList, MStyleTemplate parentReference) {
+	private void recursiveReadStyles(List<INode> stylesList, MStyleTemplate parentReference, JRStyle defaultValue) {
 		for (INode style : stylesList) {
 			if (style instanceof MStyle) {
 				MStyle element = (MStyle) style;
 				String name = element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString();
-				if (!styleMaps.containsKey(name))
-					styleMaps.put(name, new StyleContainer(element, parentReference));
+				if (element.getValue() == defaultValue) defaultStyle = element;
+				styleMaps.put(name, new StyleContainer(element, parentReference));
 			} else if (style instanceof MStyleTemplate) {
-				recursiveReadStyles(style.getChildren(), (MStyleTemplate) style);
+				recursiveReadStyles(style.getChildren(), (MStyleTemplate) style, defaultValue);
 			}
 		}
 	}
@@ -868,24 +871,24 @@ public class StylesListSection extends AbstractSection {
 	 * Initialize the map of the styles
 	 */
 	private void initStyleMaps() {
-		styleMaps = new HashMap<String, StyleContainer>();
+		styleMaps = new HashMap<Object, StyleContainer>();
 		ovverridenAttributes = new HashSet<String>();
 		if (leftStringColor == null) {
 			leftStringColor = SWTResourceManager.getColor(42, 96, 213);
 		}
+		JRStyle defaultValue = getElement().getJasperDesign().getDefaultStyle();
 		List<INode> list = getStylesRoot(getElement()).getChildren();
 		List<INode> externalList = new ArrayList<INode>();
 		for (INode style : list) {
 			if (style instanceof MStyle) {
 				MStyle element = (MStyle) style;
-				styleMaps.put(element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString(), new StyleContainer(element));
-				if ((Boolean) element.getPropertyValue(JRDesignStyle.PROPERTY_DEFAULT))
-					defaultStyle = element;
+				styleMaps.put(element.getValue(), new StyleContainer(element));
+				if (element.getValue() == defaultValue) defaultStyle = element;
 			} else if (style instanceof MStyleTemplate) {
 				externalList.add(style);
 			}
 		}
-		recursiveReadStyles(externalList, null);
+		recursiveReadStyles(externalList, null,defaultValue);
 	}
 
 	/**
@@ -1022,9 +1025,7 @@ public class StylesListSection extends AbstractSection {
 			trackerListener.refresh();
 			elementAttributes = getElement().getStylesDescriptors();
 			// Dispose the old widgets
-			for (Control kid : parent.getChildren()) {
-				kid.dispose();
-			}
+			clearOldContent();
 			GridLayout layout = new GridLayout(2, false);
 			layout.marginWidth = 0;
 			parent.setLayout(layout);

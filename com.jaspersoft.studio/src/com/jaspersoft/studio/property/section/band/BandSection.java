@@ -50,8 +50,7 @@ public class BandSection extends AbstractSection {
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
 		//The properties are not visible if the band is not created
-		section.setVisible(getElement().getValue() != null);
-		((Composite)section.getClient()).getChildren();
+		if (section != null) section.setVisible(getElement().getValue() != null);
 	}
 	
 	@Override

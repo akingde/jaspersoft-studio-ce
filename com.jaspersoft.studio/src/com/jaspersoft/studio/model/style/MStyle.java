@@ -641,12 +641,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			if (id.equals(JRDesignStyle.PROPERTY_NAME)){
 				jrstyle.setName((String) value);
 			} else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT)) {
-				// getJasperDesign().resetDefaultStyle();
-				JRDesignStyle style = (JRDesignStyle) getJasperDesign().getDefaultStyle();
-				if (style != null)
-					style.setDefault(false);
 				jrstyle.setDefault(((Boolean) value).booleanValue());
-				getJasperDesign().setDefaultStyle(jrstyle);
 			} else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
 				if (!Misc.isNullOrEmpty((String) value)) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
@@ -766,7 +761,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		for(INode child : childerns){
 			if (child instanceof IGraphicalPropertiesHandler){
 				IGraphicalPropertiesHandler graphicalElement = (IGraphicalPropertiesHandler)child;
-				if (graphicalElement.getUsedStyles().contains(getValue().getName())){
+				if (getValue().isDefault() || graphicalElement.getUsedStyles().contains(getValue().getName())){
 					graphicalElement.setChangedProperty(true);
 				}
 			}
