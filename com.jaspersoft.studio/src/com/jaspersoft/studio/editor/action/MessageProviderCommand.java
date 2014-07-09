@@ -22,9 +22,9 @@ package com.jaspersoft.studio.editor.action;
 public interface MessageProviderCommand {
 	
 	/**
-	 * Return a textual message if the command want to notify something or null otherwise
-	 * @return  a textual message if the command want to notify something or null otherwise
+	 * Return a message if the command want to notify something or null otherwise
+	 * @return  a message if the command want to notify something or null otherwise
 	 */
-		public String getMessage();
+		public CommandMessage getMessage();
 		
 }

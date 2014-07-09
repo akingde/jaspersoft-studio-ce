@@ -25,7 +25,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteParameterCommand extends ADatasetObjectDeleteCommand {
+public class DeleteParameterCommand extends ADatasetObjectDeleteCommand{
 
 	private JRDesignParameter jrParameter;
 
@@ -63,8 +63,6 @@ public class DeleteParameterCommand extends ADatasetObjectDeleteCommand {
 	 */
 	@Override
 	public void execute() {
-		if (!checkExpressions())
-			return;
 		elementPosition = jrDataset.getParametersList().indexOf(jrParameter);
 		jrDataset.removeParameter(jrParameter);
 	}

@@ -10,19 +10,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.field.command;
 
-import java.text.MessageFormat;
-import java.util.List;
-
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
-import com.jaspersoft.studio.editor.action.MessageProviderCommand;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.command.ADatasetObjectDeleteCommand;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
@@ -33,7 +26,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteFieldCommand extends ADatasetObjectDeleteCommand implements MessageProviderCommand {
+public class DeleteFieldCommand extends ADatasetObjectDeleteCommand{
 	private JRDesignField jrField;
 	private JRSortField jrSortField;
 	private int oldSortFieldindex = 0;
@@ -123,21 +116,4 @@ public class DeleteFieldCommand extends ADatasetObjectDeleteCommand implements M
 
 	}
 	
-	/**
-	 * Check if the deleted field is used somewhere, in this case return a warning message
-	 * otherwise null.
-	 */
-	@Override
-	public String getMessage() {
-		JRExpressionCollector reportCollector = JRExpressionCollector.collector(jContext, jd);
-		JRExpressionCollector datasetCollector = reportCollector.getCollector(jrDataset);
-		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
-		for (JRExpression expr : datasetExpressions) {
-			String s = expr.getText();
-			if (s != null && s.length() > 4 && s.contains(objectName)) {
-				return MessageFormat.format(Messages.ADatasetObjectDeleteCommand_confirmationquestion, objectName);
-			}
-		}
-		return null;
-	}
 }

@@ -31,7 +31,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteVariableCommand extends ADatasetObjectDeleteCommand {
+public class DeleteVariableCommand extends ADatasetObjectDeleteCommand{
 
 	private JRDesignVariable jrVariable;
 	private JRSortField jrSortField;
@@ -65,8 +65,6 @@ public class DeleteVariableCommand extends ADatasetObjectDeleteCommand {
 	 */
 	@Override
 	public void execute() {
-		if (!checkExpressions())
-			return;
 		elementPosition = jrDataset.getVariablesList().indexOf(jrVariable);
 		jrDataset.removeVariable(jrVariable);
 

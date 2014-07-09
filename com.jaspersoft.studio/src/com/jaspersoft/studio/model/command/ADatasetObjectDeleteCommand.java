@@ -13,7 +13,6 @@ package com.jaspersoft.studio.model.command;
 import java.text.MessageFormat;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -21,10 +20,12 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.action.CommandMessage;
+import com.jaspersoft.studio.editor.action.MessageProviderCommand;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class ADatasetObjectDeleteCommand extends Command {
+public abstract class ADatasetObjectDeleteCommand extends Command implements MessageProviderCommand{
 	/** The jr dataset. */
 	protected JRDesignDataset jrDataset;
 
@@ -43,27 +44,26 @@ public abstract class ADatasetObjectDeleteCommand extends Command {
 	public ADatasetObjectDeleteCommand(Boolean canceled) {
 		this.canceled = canceled;
 	}
-
-	protected boolean checkExpressions() {
-		if (canceled != null)
-			return false;
-
+	
+	/**
+	 * Check if the deleted field is used somewhere, in this case return a warning message
+	 * otherwise null.
+	 */
+	@Override
+	public CommandMessage getMessage() {
 		JRExpressionCollector reportCollector = JRExpressionCollector.collector(jContext, jd);
 		JRExpressionCollector datasetCollector = reportCollector.getCollector(jrDataset);
 		List<JRExpression> datasetExpressions = datasetCollector.getExpressions();
 		for (JRExpression expr : datasetExpressions) {
 			String s = expr.getText();
 			if (s != null && s.length() > 4 && s.contains(objectName)) {
-				if (UIUtils.showConfirmation(Messages.ADatasetObjectDeleteCommand_confirmationtitle,
-						MessageFormat.format(Messages.ADatasetObjectDeleteCommand_confirmationquestion, objectName)))
-					break;
-				else {
-					canceled = Boolean.TRUE;
-					return false;
-				}
+				return
+						new CommandMessage(
+								CommandMessage.Status.WARNING,
+								MessageFormat.format(Messages.ADatasetObjectDeleteCommand_confirmationquestion, objectName));
 			}
 		}
-		canceled = Boolean.FALSE;
-		return true;
+		return null;
 	}
+
 }

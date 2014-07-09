@@ -63,9 +63,9 @@ public class CustomDeleteAction extends DeleteAction{
 		for(Object oCommand : compCommand.getCommands()){
 			if (oCommand instanceof MessageProviderCommand){
 				MessageProviderCommand messageCommand = (MessageProviderCommand)oCommand;
-				String message = messageCommand.getMessage();
+				CommandMessage message = messageCommand.getMessage();
 				if (message != null) {
-					messages.append(message+"\n"); //$NON-NLS-1$
+					messages.append(message.getMessage()+"\n"); //$NON-NLS-1$
 					messageFound = true;
 				}
 			}
