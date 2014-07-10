@@ -79,6 +79,17 @@ public class CSVAction extends CustomSelectionAction {
 	 */
 	protected APropertyNode getRoot() {
 		List<Object> nodes = editor.getSelectionCache().getSelectionModelForType(APropertyNode.class);
+		return getRoot(nodes);
+	}
+	
+	/** Take the passed list of nodes and use the first of them to reach the root. The root could be and MReport if
+	 * we are in the main editor or an MRoot if we are editing an element in its own editor (table, list and crosstab). In
+	 * this last case we need to reach the MPage of the subeditor and from there it is possible read and write the
+	 * properties of the root.
+	 * 
+	 * @return the root of the report (typically an MReport or a MPage), or null is the root is unreachable
+	 */
+	protected APropertyNode getRoot(List<Object> nodes) {
 		if (nodes.isEmpty() || getSelectedObjects().size() > 1) {
 			return null;
 		}

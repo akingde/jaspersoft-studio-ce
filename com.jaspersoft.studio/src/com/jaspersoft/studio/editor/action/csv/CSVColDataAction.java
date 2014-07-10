@@ -62,7 +62,7 @@ public class CSVColDataAction extends CSVAction {
 	 *          the stack of commands where the command to add the required attributes are added
 	 * @return the commands to execute
 	 */
-	public void createCommand(String columnName, APropertyNode columnValue, JSSCompoundCommand commandStack) {
+	public void createCommand(String columnName, APropertyNode columnValue, JSSCompoundCommand commandStack, List<Object> selectedNodes) {
 		SetValueCommand setColDataCommand = new SetValueCommand();
 		setColDataCommand.setTarget(columnValue);
 		setColDataCommand.setPropertyId(MGraphicElement.PROPERTY_MAP);
@@ -76,7 +76,7 @@ public class CSVColDataAction extends CSVAction {
 		if (setColDataCommand.canExecute()) {
 			// If the set of the element attributes can be executed than the name of the columns is added on the report root
 			commandStack.add(setColDataCommand);
-			JRPropertiesMap rootMap = (JRPropertiesMap) getRoot().getPropertyValue(MGraphicElement.PROPERTY_MAP);
+			JRPropertiesMap rootMap = (JRPropertiesMap) getRoot(selectedNodes).getPropertyValue(MGraphicElement.PROPERTY_MAP);
 			if (rootMap == null)
 				rootMap = new JRPropertiesMap();
 			String colNames = rootMap.getProperty(CSVAction.COL_NAMES);
@@ -246,7 +246,7 @@ public class CSVColDataAction extends CSVAction {
 		if (isChecked())
 			removeProperty(columnValue, command);
 		else
-			createCommand(columnName, columnValue, command);
+			createCommand(columnName, columnValue, command,textElements);
 		return command;
 	}
 }
