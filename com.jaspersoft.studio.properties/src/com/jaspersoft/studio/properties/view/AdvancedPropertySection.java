@@ -73,14 +73,6 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 
 			public void controlResized(ControlEvent e) {
 				setupComposite();
-				atabbedPropertySheetPage.resizeScrolledComposite();
-			}
-		});
-
-		parent.getParent().addControlListener(new ControlAdapter() {
-			@Override
-			public void controlResized(ControlEvent e) {
-				setupComposite();
 			}
 		});
 		setupComposite();
@@ -93,7 +85,6 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 			rd.width = size.x;
 			rd.height = size.y - 25;
 			composite.setLayoutData(rd);
-			composite.getParent().layout();
 		}
 	}
 
