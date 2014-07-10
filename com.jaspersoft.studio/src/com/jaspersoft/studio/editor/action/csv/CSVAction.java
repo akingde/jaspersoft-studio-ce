@@ -90,7 +90,7 @@ public class CSVAction extends CustomSelectionAction {
 	 * @return the root of the report (typically an MReport or a MPage), or null is the root is unreachable
 	 */
 	protected APropertyNode getRoot(List<Object> nodes) {
-		if (nodes.isEmpty() || getSelectedObjects().size() > 1) {
+		if (nodes.isEmpty()) {
 			return null;
 		}
 		APropertyNode columnValue = (APropertyNode) nodes.get(0);
