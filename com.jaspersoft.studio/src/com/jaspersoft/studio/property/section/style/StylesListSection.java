@@ -27,6 +27,9 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.type.JREnum;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -50,10 +53,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.progress.WorkbenchJob;
 import org.eclipse.wb.swt.ResourceCache;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
@@ -73,6 +78,7 @@ import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.GridDataUtil;
 import com.jaspersoft.studio.utils.UIUtil;
 
@@ -133,9 +139,43 @@ public class StylesListSection extends AbstractSection {
 	private Boolean mainElementEvent;
 
 	/**
-	 * Store the field of the last change event received, used to avoid multiple refreshing for the same event
+	 * When a property of the element change an update job is runned. This update job is delayed and cancelled
+	 * if another update job is requested before it start
 	 */
-	private ArrayList<Object> lastChangeEvent = null;
+	private UpdatePanelJob updatePanelJob = new UpdatePanelJob();
+	
+	/**
+	 * Job to update the panel UI when expression text changes or
+	 * when caret is moved. 
+	 * This job is supposed to be delayed in order not to call
+	 * UI-update events too often (avoiding flickering effects).
+	 */
+	private class UpdatePanelJob extends WorkbenchJob {
+		
+		public UpdatePanelJob(){
+			super("Update Styles Tab");
+			setSystem(true);
+		}
+		
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			if(shown){
+				monitor.beginTask("Update Styles Tab", IProgressMonitor.UNKNOWN);
+				createContent();
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+			else{
+				return Status.CANCEL_STATUS;
+			}
+		}
+	}
+	
+	
+	/**
+	 * The delay of the update job
+	 */
+	private static final int UPDATE_DELAY=100;
 
 	/**
 	 * Boolean flag to take trace it the tab is shown
@@ -219,16 +259,10 @@ public class StylesListSection extends AbstractSection {
 				if (c != null)
 					cc.add(c);
 				if (!cc.getCommands().isEmpty()) {
-					Object oldValue = targetElement.getPropertyValue(property);
 					cs.execute(cc);
 					// Force a refresh
-					refresh();
+					createContent();
 					parent.setFocus();
-					lastChangeEvent = new ArrayList<Object>();
-					lastChangeEvent.add(oldValue);
-					lastChangeEvent.add(null);
-					lastChangeEvent.add(targetElement);
-					lastChangeEvent.add(property);
 				}
 			}
 		}
@@ -951,54 +985,23 @@ public class StylesListSection extends AbstractSection {
 	}
 
 	/**
-	 * Check if the actual old value and new value are equals to those received in the last refresh
-	 * 
-	 * @param oldValue
-	 *          the new oldValue
-	 * @param newValue
-	 *          the new newValue
-	 * @return true if the new oldValue and the new newValue are equals to those received in the precedent call of a
-	 *         proprty change false otherwise
-	 */
-	private boolean checkValuesEqual(Object oldValue, Object newValue) {
-		boolean oldValueEqual = false;
-		// If the values are not null use the equals operator, otherwise ==
-		oldValueEqual = oldValue != null ? oldValue.equals(lastChangeEvent.get(0)) : oldValue == lastChangeEvent.get(0);
-		boolean newValueEqual = false;
-		if (oldValueEqual)
-			newValueEqual = newValue != null ? newValue.equals(lastChangeEvent.get(1)) : newValue == lastChangeEvent.get(1);
-		return (newValueEqual && oldValueEqual);
-	}
-
-	/**
 	 * Override of the property change handler, check if the last event received was already notified
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (!isDisposed() && !isRefreshing()) {
-			if (lastChangeEvent == null) {
-				lastChangeEvent = new ArrayList<Object>();
-				lastChangeEvent.add(evt.getOldValue());
-				lastChangeEvent.add(evt.getNewValue());
-				lastChangeEvent.add(evt.getSource());
-				lastChangeEvent.add(evt.getPropertyName());
-				refresh();
-			} else {
-				// Print only if the event is changed and the tab is shown
-				if ((!checkValuesEqual(evt.getOldValue(), evt.getNewValue()) || !lastChangeEvent.get(2).equals(evt.getSource()) || !lastChangeEvent
-						.get(3).equals(evt.getPropertyName())) && shown) {
-					refresh();
-					lastChangeEvent = new ArrayList<Object>();
-					lastChangeEvent.add(evt.getOldValue());
-					lastChangeEvent.add(evt.getNewValue());
-					lastChangeEvent.add(evt.getSource());
-					lastChangeEvent.add(evt.getPropertyName());
-				}
-			}
+		if (!evt.getPropertyName().equals(ExternalStylesManager.STYLE_FOUND_EVENT)){
+			updatePanelJob.cancel();
+			updatePanelJob.schedule(UPDATE_DELAY);
 		}
 	}
 
+	/**
+	 * convert an awt color to an swt rgb
+	 * 
+	 * @param awtColor the color, must be not null
+	 * @return the rgb fo the color
+	 */
 	private RGB getSWTColorFromAWT(java.awt.Color awtColor) {
-		return new RGB(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue());
+		return Colors.getSWTRGB4AWTGBColor(awtColor).getRgb();
 	}
 
 	private void printWindowTitle(Composite parent) {
@@ -1014,12 +1017,12 @@ public class StylesListSection extends AbstractSection {
 		label.setText(Messages.StylesListSection_Title);
 		label.setEnabled(false);
 	}
-
+	
 	/**
-	 * Refresh the style widget deleting the old component and recreating the updated ones
+	 * Clear and populate the inheritance container where the controls
+	 * are shown
 	 */
-	@Override
-	public void refresh() {
+	private void createContent(){
 		if (!isRefreshing()){
 			setRefreshing(true);
 			trackerListener.refresh();
@@ -1039,7 +1042,6 @@ public class StylesListSection extends AbstractSection {
 			mainElementEvent = false;
 			printStyles(styles, parent);
 			printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
-			// styleMaps = null;
 			parent.layout();
 			setRefreshing(false);
 		}
@@ -1072,6 +1074,7 @@ public class StylesListSection extends AbstractSection {
 	public void dispose() {
 		super.dispose();
 		colorCache.dispose();
+		updatePanelJob.cancel();
 	}
 	
 	/**
@@ -1081,30 +1084,6 @@ public class StylesListSection extends AbstractSection {
 		for(Control control : parent.getChildren()){
 			control.dispose();
 		}
-	}
-
-	/**
-	 * Clear and populate the inerithance container where the controls
-	 * are shown
-	 */
-	private void createContent(){
-		clearOldContent();
-		initStyleMaps();
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		parent.setLayout(layout);
-		printWindowTitle(parent);
-		initStyleMaps();
-		LinkedList<MStyle> styles = buildStylesGerarchy(getElement());
-		elementAttributes = getElement().getStylesDescriptors();
-		// Printing the main attribute, opening the guard
-		mainElementEvent = true;
-		printElementAttribute(parent, getElement(), Messages.StylesSectionList_Element_Attributes);
-		// Element printed, closing the guard
-		mainElementEvent = false;
-		printStyles(styles, parent);
-		printDefaultValues(parent, DefaultValuesMap.getPropertiesByType(getElement()));
-		ovverridenAttributes = null;
 	}
 	
 	/**

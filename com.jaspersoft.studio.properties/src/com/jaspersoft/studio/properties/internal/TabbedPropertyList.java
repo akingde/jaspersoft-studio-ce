@@ -197,8 +197,15 @@ public class TabbedPropertyList {
 	 *            the index of the element to select.
 	 */
 	protected void select(int index) {
-		if (getSelectionIndex() == index)
+		if (getSelectionIndex() == index){
+			IContributionItem item = toolBarManager.getItems()[index];
+			//Code to keep the button pressed when it is clicked more than once
+			if (item instanceof ActionContributionItem){
+				ActionContributionItem aItem = (ActionContributionItem)item;
+				aItem.getAction().setChecked(true);
+			}
 			return;
+		}
 		deselectAll();
 		IContributionItem[] items = toolBarManager.getItems();
 		if (index >= 0 && index < items.length) {
