@@ -1067,6 +1067,7 @@
             </input>
          </propertySection>
          <propertySection
+         	   afterSection="com.jaspersoft.studio.property.section.graphic.LayoutSection"
                class="com.jaspersoft.studio.property.section.band.BandSection"
                id="com.jaspersoft.studio.property.section.band.BandSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
@@ -1075,7 +1076,6 @@
             </input>
          </propertySection>
          <propertySection
-               afterSection="com.jaspersoft.studio.property.section.band.BandSection"
                class="com.jaspersoft.studio.property.section.band.BandGroupSection"
                id="com.jaspersoft.studio.property.section.band.BandGroupSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
@@ -1250,6 +1250,7 @@
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.property.section.band.BandGroupSection"
                class="com.jaspersoft.studio.property.section.graphic.LayoutSection"
                id="com.jaspersoft.studio.property.section.graphic.LayoutSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">

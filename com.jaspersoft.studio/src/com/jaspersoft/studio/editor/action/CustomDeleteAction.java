@@ -74,11 +74,23 @@ public class CustomDeleteAction extends DeleteAction{
 		if (messageFound){
 			if (UIUtils.showConfirmation(Messages.ADatasetObjectDeleteCommand_confirmationtitle,messages.toString())){
 				execute(compCommand);
+				deselectAll();
 			}
 		} else {
 			execute(compCommand);
+			deselectAll();
 		}
 	}
 	
-
+	/**
+	 * Deselect all the all the selected elements in the current viewer
+	 */
+	private void deselectAll(){
+		for(Object obj : getSelectedObjects()){
+			if (obj instanceof EditPart){
+				((EditPart)obj).getViewer().deselectAll();
+				return;
+			}
+		}
+	}
 }
