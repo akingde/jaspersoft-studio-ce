@@ -17,13 +17,9 @@ package com.jaspersoft.studio.properties.view;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -42,6 +38,8 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	protected PropertySheetPage page;
 	
 	protected Composite composite;
+	
+	protected GridData treeData;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ISection#createControls(org.eclipse.swt.widgets.Composite,
@@ -49,41 +47,35 @@ public class AdvancedPropertySection extends AbstractPropertySection {
 	 */
 	public void createControls(Composite parent, final TabbedPropertySheetPage atabbedPropertySheetPage) {
 		super.createControls(parent, atabbedPropertySheetPage);
-
-		parent.setLayout(new RowLayout());
-
 		composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(1,false));
-
+		GridData rd = new GridData(GridData.FILL_BOTH);
+		composite.setLayoutData(rd);
 		page = new PropertySheetPage();
-
 		page.createControl(composite);
-		GridData data = new GridData();
-		data.grabExcessHorizontalSpace = true;
-		data.grabExcessVerticalSpace = true;
-		data.minimumHeight = 1;
-		data.minimumWidth = 1;
-		data.widthHint = SWT.DEFAULT;
-		data.heightHint = SWT.DEFAULT;
-		data.horizontalAlignment = SWT.FILL;
-		data.verticalAlignment = SWT.FILL;
-		page.getControl().setLayoutData(data);
-		
-		page.getControl().addControlListener(new ControlAdapter() {
-
-			public void controlResized(ControlEvent e) {
-				setupComposite();
-			}
-		});
+		treeData = new GridData();
+		treeData.grabExcessHorizontalSpace = true;
+		treeData.grabExcessVerticalSpace = true;
+		treeData.minimumHeight = 1;
+		treeData.minimumWidth = 1;
+		treeData.widthHint = SWT.DEFAULT;
+		treeData.heightHint = SWT.DEFAULT;
+		treeData.horizontalAlignment = SWT.FILL;
+		treeData.verticalAlignment = SWT.FILL;
+		page.getControl().setLayoutData(treeData);
+	}
+	
+	@Override
+	public void aboutToBeShown() {
 		setupComposite();
 	}
 
 	protected void setupComposite() {
 		if (!composite.isDisposed()){
 			Point size = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite().getSize();
-			RowData rd = new RowData();
-			rd.width = size.x;
-			rd.height = size.y - 25;
+			//System.out.println(size);
+			GridData rd = new GridData(GridData.FILL_HORIZONTAL);
+			rd.heightHint = size.y - 30;
 			composite.setLayoutData(rd);
 		}
 	}

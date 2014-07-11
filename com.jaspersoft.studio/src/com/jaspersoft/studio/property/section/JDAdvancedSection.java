@@ -136,6 +136,7 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeShown()
 	 */
 	public void aboutToBeShown() {
+		super.aboutToBeShown();
 		if (getTabbedPropertySheetPage() != null){
 			ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
 			if (!comp.isDisposed()) comp.addControlListener(viewResize);

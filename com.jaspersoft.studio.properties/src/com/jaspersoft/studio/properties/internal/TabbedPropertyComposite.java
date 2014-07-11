@@ -297,6 +297,14 @@ public class TabbedPropertyComposite extends Composite {
 		}
 	}
 	
+	public void setPageMinimumHeight(int height){
+		int actualMinheight = scrolledComposite.getMinHeight();
+		boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
+		if (barVisible || height > actualMinheight) {
+			scrolledComposite.setMinHeight(height);
+		}
+	}
+	
 	/**
 	 * Create a composite for a tab and cache it. The composite
 	 * is also returned. This composite can be shown on the page
