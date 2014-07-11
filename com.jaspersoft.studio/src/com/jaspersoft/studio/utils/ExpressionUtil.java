@@ -127,7 +127,7 @@ public class ExpressionUtil {
 			String expString = exp != null ? exp.getText() : "";
 			try{
 				evaluatedExpression = JRExpressionUtil.getSimpleExpressionText(exp);
-				if (evaluatedExpression == null){
+				if (evaluatedExpression == null && dataset != null){
 					//Unable to interpret the expression, lets try with a more advanced (and slow, so its cached) interpreter
 					JasperDesign jd = jConfig.getJasperDesign();
 					ExpressionInterpreter interpreter = datasetsIntepreters.get(dataset);
@@ -162,7 +162,11 @@ public class ExpressionUtil {
 	 * @return resolved expression or null it it can't be resolved
 	 */
 	public static String cachedExpressionEvaluation(JRExpression exp, JasperReportsConfiguration jConfig){	
-		return cachedExpressionEvaluation(exp, jConfig, jConfig.getJasperDesign().getMainDesignDataset());
+		JRDesignDataset dataset = null;
+		if (jConfig.getJasperDesign() != null){
+			dataset = jConfig.getJasperDesign().getMainDesignDataset();
+		}
+		return cachedExpressionEvaluation(exp, jConfig, dataset);
 	}
 	
 	/**
