@@ -155,7 +155,9 @@ public class ExcelDataAdapterComposite extends AFileDataAdapterComposite {
 		gl_composite_3.marginWidth = 0;
 		gl_composite_3.marginHeight = 0;
 		composite_3.setLayout(gl_composite_3);
-		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gdComposite3 = new GridData(SWT.FILL,SWT.FILL,true,true);
+		gdComposite3.heightHint=150;
+		composite_3.setLayoutData(gdComposite3);
 
 		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		tableViewer.setContentProvider(new XLSContentProvider());

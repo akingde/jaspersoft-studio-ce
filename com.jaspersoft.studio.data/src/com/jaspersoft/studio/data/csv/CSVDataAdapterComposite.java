@@ -168,7 +168,9 @@ public class CSVDataAdapterComposite extends AFileDataAdapterComposite {
 		gl_composite_3.marginWidth = 0;
 		gl_composite_3.marginHeight = 0;
 		composite_3.setLayout(gl_composite_3);
-		composite_3.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gdComposite3 = new GridData(SWT.FILL,SWT.FILL,true,true);
+		gdComposite3.heightHint=150;
+		composite_3.setLayoutData(gdComposite3);
 		composite_3.setBounds(0, 0, 64, 64);
 
 		table = new Table(composite_3, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
