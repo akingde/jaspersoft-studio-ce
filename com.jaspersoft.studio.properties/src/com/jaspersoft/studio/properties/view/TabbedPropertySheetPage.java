@@ -161,8 +161,9 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						currentTab.aboutToBeShown();
 						if (state != TabState.TAB_ALREADY_VISIBLE) {
 							//The layout is done only if the tab was not visible
-							if (state != TabState.TAB_SET_VISIBLE) tabbedPropertyComposite.layout();
-							else tabbedPropertyComposite.smartLayout();
+							tabbedPropertyComposite.layout();
+							//if (state != TabState.TAB_SET_VISIBLE) tabbedPropertyComposite.layout();
+							//else tabbedPropertyComposite.smartLayout();
 						}
 					}
 				}
