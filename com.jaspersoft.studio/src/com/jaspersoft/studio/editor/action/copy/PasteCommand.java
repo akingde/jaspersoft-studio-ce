@@ -12,8 +12,8 @@ package com.jaspersoft.studio.editor.action.copy;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +58,7 @@ public class PasteCommand extends Command {
 			Object obj = Clipboard.getDefault().getContents();
 			if (obj == null)
 				return false;
-			list = new HashMap<ANode, Command>();
+			list = new LinkedHashMap<ANode, Command>();
 			if (obj instanceof Collection<?>) {
 				Collection<ANode> bList = (Collection<ANode>) obj;
 				if (bList.isEmpty())
