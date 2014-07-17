@@ -152,9 +152,14 @@ public class PasteAction extends ACachedSelectionAction {
 		HashSet<INode> pastedModels = new HashSet<INode>();
 		int elementsToInsert = createdElements;
 		List<INode> childrens = parentModel.getChildren();
-		while (elementsToInsert > 0) {
-			pastedModels.add(childrens.get(childrens.size() - elementsToInsert));
-			elementsToInsert--;
+		// the list children can be empty in specific use case
+		// for example when the elements were pasted into a node
+		// that is not expanded in the main editor (i.e: list component)
+		if(childrens.size()>=elementsToInsert) {
+			while (elementsToInsert > 0) {
+				pastedModels.add(childrens.get(childrens.size() - elementsToInsert));
+				elementsToInsert--;
+			}
 		}
 
 		List children = viewer.getContents().getChildren();
