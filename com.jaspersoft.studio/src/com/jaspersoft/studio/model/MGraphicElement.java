@@ -11,7 +11,6 @@
 package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +44,6 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -54,6 +52,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDe
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.propexpr.JPropertyExpressionsDescriptor;
@@ -312,22 +311,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-
-	private String[] styleitems;
-
+	
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 		// initialize style
 		JasperDesign jd = getJasperDesign();
 		if (jd != null && getValue() != null) {
-			String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), getValue());
-			if (!Arrays.equals(styleitems, newitems)) {
-				styleitems = newitems;
-			}
-			if (styleD != null ) {
-					styleD.setItems(newitems);
-			}
 			JRDataset dataset = getElementDataset();
 			//Calculate the groups list for the current element
 			if (dataset != null){
@@ -388,8 +378,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
-				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
 		styleD.setHelpRefBuilder(new HelpReferenceBuilder(

@@ -64,6 +64,7 @@ import com.jaspersoft.studio.property.descriptor.combo.ButtonPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.FontNamePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWFloatComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWStyleComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
@@ -180,21 +181,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
 	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
-
-	private String[] styleitems;
 	
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		// initialize style
-		JasperDesign jd = getJasperDesign();
-		if (jd != null && styleD != null && getValue() != null) {
-				String[] newitems = StyleTemplateFactory.getAllStyles(getJasperConfiguration(), (JRBaseStyle)getValue());
-				if (styleitems == null || newitems != styleitems) {
-					styleitems = newitems;
-					styleD.setItems(newitems);
-				}
-		}
 		//Set into the validator the actual reference
 		validator.setTargetNode(this);
 	}
@@ -239,9 +229,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
-				new String[] { "" }, //$NON-NLS-1$
-				NullEnum.NULL);
+		styleD = new RWStyleComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style, new String[] { "" }, 	NullEnum.NULL);
 		styleD.setDescription(Messages.MStyle_parent_style_description);
 		styleD.setHelpRefBuilder(new HelpReferenceBuilder(
 				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#reportElement_style"));

@@ -40,7 +40,7 @@ public class SPRWCombo extends ASPropertyWidget {
 		return combo;
 	}
 
-	private boolean refresh = false;
+	protected boolean refresh = false;
 
 	protected void createComponent(Composite parent) {
 		combo = new Combo(parent, SWT.FLAT);

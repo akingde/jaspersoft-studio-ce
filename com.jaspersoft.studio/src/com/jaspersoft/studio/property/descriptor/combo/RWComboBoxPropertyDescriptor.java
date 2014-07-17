@@ -28,15 +28,15 @@ import com.jaspersoft.studio.property.section.widgets.SPRWCombo;
 
 public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget,IHelp {
 	
-	private String[] labels;
+	protected String[] labels;
 	
+	protected boolean caseSensitive;
+	
+	protected SPRWCombo combo;
+
 	private NullEnum canBeNull;
 	
 	private RWComboBoxCellEditor cellEditor;
-	
-	private boolean caseSensitive;
-	
-	private SPRWCombo combo;
 
 	private IHelpRefBuilder refBuilder;
 
