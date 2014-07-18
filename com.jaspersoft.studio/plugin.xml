@@ -597,7 +597,8 @@
                category="advanced"
                id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab"
                image="icons/resources/eclipse/properties_view.gif"
-               label="%advanced">
+               label="%advanced"
+               scrollable="false">
          </propertyTab>
          <propertyTab
                category="element"

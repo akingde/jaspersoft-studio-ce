@@ -162,8 +162,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						if (state != TabState.TAB_ALREADY_VISIBLE) {
 							//The layout is done only if the tab was not visible
 							tabbedPropertyComposite.layout();
-							//if (state != TabState.TAB_SET_VISIBLE) tabbedPropertyComposite.layout();
-							//else tabbedPropertyComposite.smartLayout();
+							tabbedPropertyComposite.updatePageMinimumSize();
 						}
 					}
 				}
@@ -393,16 +392,6 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	}
 
 	/**
-	 * Resize the scrolled composite enclosing the sections, which may result in
-	 * the addition or removal of scroll bars.
-	 * 
-	 * @since 3.5
-	 */
-	public void resizeScrolledComposite() {
-		tabbedPropertyComposite.setupScrolledComposite();
-	}
-
-	/**
 	 * Return the first element of the current selection or null if it is not available. 
 	 * 
 	 * @return the first element of the selection or null if it's empty or not a structured selection
@@ -419,13 +408,17 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	 * @return the property tab composite.
 	 */
 	private Composite createTabComposite(ITabDescriptor tab) {
-		Composite result = widgetFactory.createComposite(tabbedPropertyComposite.createTabContents(tab), SWT.NO_FOCUS);
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		result.setLayout(layout);
-		result.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		return result;
+		if (tab.getSectionDescriptors().size()>1){
+			Composite result = widgetFactory.createComposite(tabbedPropertyComposite.createTabContents(tab), SWT.NO_FOCUS);
+			GridLayout layout = new GridLayout();
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
+			result.setLayout(layout);
+			result.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			return result;
+		} else {
+			return tabbedPropertyComposite.createTabContents(tab);
+		}
 	}
 	
 

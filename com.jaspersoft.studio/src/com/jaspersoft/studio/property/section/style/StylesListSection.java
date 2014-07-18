@@ -1092,5 +1092,6 @@ public class StylesListSection extends AbstractSection {
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+		createContent();
 	}
 }

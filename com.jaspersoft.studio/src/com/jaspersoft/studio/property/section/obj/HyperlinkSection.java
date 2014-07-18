@@ -428,6 +428,16 @@ public class HyperlinkSection extends AbstractSection {
 	}
 	
 	@Override
+	public void aboutToBeShown() {
+		super.aboutToBeShown();
+		//Force the content to relayout to get the correct size first for the container
+		//then for the contents
+		getTabbedPropertySheetPage().getTabbedPropertyComposite().layout();
+		getTabbedPropertySheetPage().getTabbedPropertyComposite().layout(false, true);
+	}
+	
+	
+	@Override
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
 		if (JRDesignHyperlink.PROPERTY_LINK_TARGET.equals(propertyId)){
 			return new ASHighlightControl(targetCombo, new BackgroundHighlight(targetCombo));

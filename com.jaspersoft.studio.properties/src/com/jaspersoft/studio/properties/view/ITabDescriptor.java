@@ -78,4 +78,9 @@ public interface ITabDescriptor extends ITabItem {
 	 * @return the list of section descriptors for the tab.
 	 */
 	public List<ISectionDescriptor> getSectionDescriptors();
+	
+	/**
+	 * Return if the tab should be scrollable or not.
+	 */
+	public boolean getScrollable();
 }

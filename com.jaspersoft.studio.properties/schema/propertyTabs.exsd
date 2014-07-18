@@ -62,13 +62,13 @@
    <element name="propertyTab">
       <complexType>
          <attribute name="label" type="string" use="required">
-         	<annotation>
-            	<appInfo>
-                  <meta.attribute translatable="true"/>
-               	</appInfo>
+            <annotation>
                <documentation>
                   The label to be displayed on the tab.
                </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="category" type="string" use="required">
@@ -107,6 +107,13 @@
                <appinfo>
                   <meta.attribute kind="resource"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="scrollable" type="boolean" use="default" value="true">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

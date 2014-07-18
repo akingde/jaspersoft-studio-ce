@@ -21,9 +21,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
@@ -58,14 +55,6 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 */
 	private JRPropertySheetEntry rootEntry = null;
 	
-
-	private ControlAdapter viewResize = new ControlAdapter() {
-
-		public void controlResized(ControlEvent e) {
-			if (!composite.isDisposed()) setupComposite();
-			else getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite().removeControlListener(this);
-		}
-	};
 
 	public JDAdvancedSection() {
 		super();
@@ -138,9 +127,6 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
 		if (getTabbedPropertySheetPage() != null){
-			ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
-			if (!comp.isDisposed()) comp.addControlListener(viewResize);
-			
 			if (getElement() != null)
 				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 			if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {
@@ -159,11 +145,6 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 */
 	public void aboutToBeHidden() {
 		if (getTabbedPropertySheetPage() != null){
-			//disposeRootEntry();
-			
-			ScrolledComposite comp = getTabbedPropertySheetPage().getTabbedPropertyComposite().getScrolledComposite();
-			if (!comp.isDisposed()) comp.removeControlListener(viewResize);
-			
 			if (getElement() != null)
 				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 			if (atabbedPropertySheetPage != null && atabbedPropertySheetPage.getSite() != null) {

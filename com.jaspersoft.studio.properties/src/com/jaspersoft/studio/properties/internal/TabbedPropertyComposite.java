@@ -60,11 +60,6 @@ public class TabbedPropertyComposite extends Composite {
 	private Composite mainComposite;
 
 	/**
-	 * The scroll composite
-	 */
-	private ScrolledComposite scrolledComposite;
-
-	/**
 	 * The composite where the controls of the selected tab are placed
 	 */
 	private Composite tabComposite;
@@ -163,22 +158,12 @@ public class TabbedPropertyComposite extends Composite {
 
 		new Label(mainComposite, SWT.SEPARATOR | SWT.HORIZONTAL)
 				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		scrolledComposite = factory.createScrolledComposite(mainComposite,
-				SWT.H_SCROLL | SWT.V_SCROLL | SWT.NO_FOCUS);
-		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
-		scrolledComposite.setAlwaysShowScrollBars(false);
-		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setShowFocusedControl(true);
 
-		tabComposite = factory.createComposite(scrolledComposite, SWT.NO_FOCUS);
+		tabComposite = factory.createComposite(mainComposite, SWT.NO_FOCUS);
 		tabComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cachedLayout = new StackLayout();
 		tabComposite.setLayout(cachedLayout);
 		cacheMap = new HashMap<ITabDescriptor, Control>();
-		scrolledComposite.setContent(tabComposite);
 	}
 	
 	/**
@@ -230,49 +215,8 @@ public class TabbedPropertyComposite extends Composite {
 	 */
 	@Override
 	public void layout(){
-		updatePageMinimumSize();
 		tabComposite.layout();
 		mainComposite.layout();
-	}
-	
-	/**
-	 * Used to do the layout or the setMinHeight only if 
-	 * needed
-	 */
-	public void smartLayout(){
-		int scrollHeight = needPageMinimumSizeUpdate();
-		if (scrollHeight == -1){
-			tabComposite.layout();
-		} else {
-			scrolledComposite.setMinHeight(scrollHeight);
-		}
-		
-		mainComposite.layout();
-	}
-	
-	/**
-	 * do the layout of the page area
-	 */
-	public void setupScrolledComposite() {
-		updatePageMinimumSize();
-		mainComposite.layout();
-	}
-	
-	private int needPageMinimumSizeUpdate(){
-		Control topControl = cachedLayout.topControl;
-		if (topControl != null){
-			int height = 0;
-			int width = getBounds().width;
-			// When i calculate the height it is really important to give the real width
-			// of the composite, since it is used to calculate the number of columns
-			height = topControl.computeSize(width, SWT.DEFAULT).y;
-			int actualMinheight = scrolledComposite.getMinHeight();
-			boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
-			if (barVisible || height > actualMinheight) {
-				return height;
-			}
-		}
-		return -1;
 	}
 
 	/**
@@ -283,25 +227,18 @@ public class TabbedPropertyComposite extends Composite {
 	 */
 	public void updatePageMinimumSize(){
 		Control topControl = cachedLayout.topControl;
-		if (topControl != null){
+		if (topControl != null && topControl instanceof ScrolledComposite){
 			int height = 0;
 			int width = getBounds().width;
+			ScrolledComposite scrolledComposite = (ScrolledComposite)topControl;
 			// When i calculate the height it is really important to give the real width
 			// of the composite, since it is used to calculate the number of columns
-			height = topControl.computeSize(width, SWT.DEFAULT).y;
+			height = scrolledComposite.getContent().computeSize(width, SWT.DEFAULT).y;
 			int actualMinheight = scrolledComposite.getMinHeight();
 			boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
 			if (barVisible || height > actualMinheight) {
 				scrolledComposite.setMinHeight(height);
 			}
-		}
-	}
-	
-	public void setPageMinimumHeight(int height){
-		int actualMinheight = scrolledComposite.getMinHeight();
-		boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
-		if (barVisible || height > actualMinheight) {
-			scrolledComposite.setMinHeight(height);
 		}
 	}
 	
@@ -315,14 +252,37 @@ public class TabbedPropertyComposite extends Composite {
 	 * @return a composite with a grid layout with one column
 	 */
 	public Composite createTabContents(ITabDescriptor tab){
-		Composite comp = new Composite(tabComposite, SWT.NONE);
-		GridLayout layout2 = new GridLayout();
-		layout2.marginWidth = 0;
-		layout2.marginHeight = 0;
-		layout2.makeColumnsEqualWidth = true;
-		comp.setLayout(layout2);
-		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
-		cacheMap.put(tab, comp);
+		Composite comp = null;
+		
+		if (tab.getScrollable()){
+			ScrolledComposite scrolledComposite = factory.createScrolledComposite(tabComposite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.NO_FOCUS);
+			scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			scrolledComposite.setAlwaysShowScrollBars(false);
+			scrolledComposite.setExpandVertical(true);
+			scrolledComposite.setExpandHorizontal(true);
+			scrolledComposite.setShowFocusedControl(true);
+		
+			comp = new Composite(scrolledComposite, SWT.NONE);
+			GridLayout layout2 = new GridLayout();
+			layout2.marginWidth = 0;
+			layout2.marginHeight = 0;
+			layout2.makeColumnsEqualWidth = true;
+			comp.setLayout(layout2);
+			comp.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+			scrolledComposite.setContent(comp);
+			comp.setData(scrolledComposite);
+			cacheMap.put(tab, scrolledComposite);
+		} else {
+			comp = new Composite(tabComposite, SWT.NONE);
+			GridLayout layout2 = new GridLayout();
+			layout2.marginWidth = 0;
+			layout2.marginHeight = 0;
+			layout2.makeColumnsEqualWidth = true;
+			comp.setLayout(layout2);
+			comp.setLayoutData(new GridData(GridData.FILL_BOTH));
+			cacheMap.put(tab, comp);
+		}
 		return comp;
 	}
 
@@ -351,17 +311,6 @@ public class TabbedPropertyComposite extends Composite {
 	 */
 	public TabbedPropertySearch getSearchBar(){
 		return searchBar;
-	}
-	
-
-	/**
-	 * Get the scrolled composite which surrounds the title bar and tab
-	 * composite.
-	 * 
-	 * @return the scrolled composite.
-	 */
-	public ScrolledComposite getScrolledComposite() {
-		return scrolledComposite;
 	}
 
 	/**

@@ -49,6 +49,8 @@ public class TabDescriptor extends AbstractTabDescriptor {
 	private static final String ATT_CATEGORY = "category"; //$NON-NLS-1$
 
 	private static final String ATT_AFTER_TAB = "afterTab"; //$NON-NLS-1$
+	
+	private static final String ATT_SCROLLABLE = "scrollable"; //$NON-NLS-1$
 
 	private final static String TAB_ERROR = Messages.TabDescriptor_Tab_error;
 
@@ -65,6 +67,8 @@ public class TabDescriptor extends AbstractTabDescriptor {
 	private String category;
 
 	private String afterTab;
+	
+	private boolean scrollable;
 
 	/**
 	 * Constructor for TabDescriptor.
@@ -83,9 +87,10 @@ public class TabDescriptor extends AbstractTabDescriptor {
 						configurationElement.getDeclaringExtension()
 								.getNamespaceIdentifier(), imageString);
 			}
-			String indentedString = configurationElement
-					.getAttribute(ATT_INDENTED);
+			String indentedString = configurationElement.getAttribute(ATT_INDENTED);
 			indented = indentedString != null && indentedString.equals("true"); //$NON-NLS-1$
+			String scrollableString = configurationElement.getAttribute(ATT_SCROLLABLE);
+			scrollable= scrollableString == null || scrollableString.toLowerCase().equals("true"); //$NON-NLS-1$
 			category = configurationElement.getAttribute(ATT_CATEGORY);
 			afterTab = configurationElement.getAttribute(ATT_AFTER_TAB);
 			if (id == null || label == null || category == null) {
@@ -289,6 +294,13 @@ public class TabDescriptor extends AbstractTabDescriptor {
 	 */
 	public String getText() {
 		return label;
+	}
+	
+	/**
+	 * Return if the tab should be scrollable or not.
+	 */
+	public boolean getScrollable(){
+		return scrollable;
 	}
 
 	/**

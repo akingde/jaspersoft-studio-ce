@@ -91,33 +91,33 @@ public final class TabContents {
 	 * @param page
 	 */
 	public void createControls(final Composite parent, final TabbedPropertySheetPage page) {
-		Composite pageComposite = page.getWidgetFactory().createComposite(parent, SWT.NO_FOCUS);
-		ColumnLayout layout = new ColumnLayout();
-		layout.minNumColumns = 1;
-		layout.maxNumColumns = 5;
-		layout.leftMargin = 0;
-		layout.topMargin = 0;
-		layout.verticalSpacing = 0;
-		// RowLayout layout = new RowLayout(SWT.HORIZONTAL);
-		// layout.wrap = true;
-		// layout.marginHeight = 0;
-		// layout.marginWidth = 0;
-		// layout.spacing = 0;
-		// // layout.fill = true;
-		// layout.pack = false;
-		// layout.justify = true;
-		pageComposite.setLayout(layout);
-		pageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		for (int i = 0; i < sections.length; i++) {
-			final ISection section = sections[i];
-			final Composite sectionComposite = page.getWidgetFactory().createComposite(pageComposite, SWT.NO_FOCUS);
-			// sectionComposite.setLayoutData(new ColumnLayoutData(
-			// ColumnLayoutData.FILL));
-			// RowLayout l = new RowLayout();
-			// l.wrap = true;
-			// GridLayout l = new GridLayout();
-			sectionComposite.setLayout(new GridLayout());
+		//If there is only a section then a standard composite is used as container
+		if (sections.length > 1){
+			Composite pageComposite = page.getWidgetFactory().createComposite(parent, SWT.NO_FOCUS);
+			ColumnLayout layout = new ColumnLayout();
+			layout.minNumColumns = 1;
+			layout.maxNumColumns = 5;
+			layout.leftMargin = 0;
+			layout.topMargin = 0;
+			layout.verticalSpacing = 0;
+			pageComposite.setLayout(layout);
+			pageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+			for (int i = 0; i < sections.length; i++) {
+				final ISection section = sections[i];
+				final Composite sectionComposite = page.getWidgetFactory().createComposite(pageComposite, SWT.NO_FOCUS);
+				sectionComposite.setLayout(new GridLayout());
+				ISafeRunnable runnable = new SafeRunnable() {
+	
+					public void run() throws Exception {
+						if (section.getElement() != null)
+							section.createControls(sectionComposite, page);
+					}
+				};
+				SafeRunnable.run(runnable);
+			}
+		} else if (sections.length > 0){
+			final ISection section = sections[0];
+			final Composite sectionComposite = parent;
 			ISafeRunnable runnable = new SafeRunnable() {
 
 				public void run() throws Exception {
