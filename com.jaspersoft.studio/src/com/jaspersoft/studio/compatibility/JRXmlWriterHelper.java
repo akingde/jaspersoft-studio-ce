@@ -106,10 +106,17 @@ public class JRXmlWriterHelper {
 			// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
 			String xml = new JRXmlWriter(jrContext).write(report, encoding);
 			// request Bug 37455 - [Case #48613] Simple jrxml timestamp on Save or Save As
-			String timestamp = "<!--" + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + "-->\r\n";
+			String timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n";
+			// Replace with a more meaningful JR version
+			if(version.equals(LAST_VERSION)){
+				version = getInstalledJasperReportsVersion();
+			}
+			// Get JSS bundle version
+			String jssPluginVersion = JaspersoftStudioPlugin.getInstance().getBundle().getVersion().toString();
+			String jrVersionTxt = " using JasperReports Library version " + version + " ";
 			xml = xml
 					.replaceFirst(
-							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + jssPluginVersion + jrVersionTxt + " -->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 			return xml;
 		}
 		return null;
