@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Plugin formatting preference page.
@@ -256,6 +257,11 @@ public class FormattingPrefPage extends AbstractPrefPage {
         }
         prefs.putBoolean(MsgEditorPreferences.KEEP_EMPTY_FIELDS,keepEmptyFields.getSelection());
         prefs.putBoolean(MsgEditorPreferences.SORT_KEYS, sortKeys.getSelection());
+        try {
+			prefs.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
         refreshEnabledStatuses();
         return super.performOk();
     }

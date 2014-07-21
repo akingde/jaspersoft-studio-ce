@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Plugin preference page for reporting/performance options.
@@ -166,6 +167,11 @@ public class ReportingPrefPage extends AbstractPrefPage {
         	precision = textPrecision;
         } catch (NumberFormatException ex){}
         prefs.putDouble(MsgEditorPreferences.REPORT_SIM_VALUES_PRECISION, precision);
+        try {
+			prefs.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
         refreshEnabledStatuses();
         return super.performOk();
     }

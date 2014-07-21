@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Plugin generic preference page.
@@ -140,6 +141,11 @@ public class GeneralPrefPage extends AbstractPrefPage {
         prefs.putBoolean(MsgEditorPreferences.KEY_TREE_HIERARCHICAL, keyTreeHierarchical.getSelection());
         prefs.putBoolean(MsgEditorPreferences.KEY_TREE_EXPANDED,  keyTreeExpanded.getSelection());
         prefs.putBoolean(MsgEditorPreferences.FIELD_TAB_INSERTS, fieldTabInserts.getSelection());
+        try {
+			prefs.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
         refreshEnabledStatuses();
         return super.performOk();
     }
