@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -479,7 +480,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @return the first matching element or null.
 	 */
 	public static JRDesignStaticText findStaticTextElement(StandardTable parent, String exp) {
-		StandardColumn col = (StandardColumn)parent.getColumns().get(0);
+		StandardColumn col = getStandadColumn(parent.getColumns().get(0));
 		if (col != null){
 			JRDesignStaticText result = null;
 			if (col.getTableHeader() != null) result = DefaultTemplateEngine.findStaticTextElement(col.getTableHeader(), exp);
@@ -498,10 +499,10 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @return the first matching element or null.
 	 */
 	public static JRDesignTextField findTextFieldElement(StandardTable parent, String exp) {
-		StandardColumn col = (StandardColumn)parent.getColumns().get(0);
+		StandardColumn col = getStandadColumn(parent.getColumns().get(0));
 		if (col != null){
 			JRDesignTextField result = null;
-			if (col.getTableHeader() != null) DefaultTemplateEngine.findTextFieldElement(col.getTableHeader(), exp);
+			if (col.getTableHeader() != null) result = DefaultTemplateEngine.findTextFieldElement(col.getTableHeader(), exp);
 			if (col.getColumnHeader() != null && result == null) result = DefaultTemplateEngine.findTextFieldElement(col.getColumnHeader(), exp);
 			if (col.getDetailCell() != null && result == null) result = DefaultTemplateEngine.findTextFieldElement(col.getDetailCell(), exp);
 			return result;
@@ -509,14 +510,22 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		return null;
 	}
 	
-
+	private static StandardColumn getStandadColumn(BaseColumn container){
+		if (container instanceof StandardColumnGroup){
+			return getStandadColumn(((StandardColumnGroup)container).getColumns().get(0));
+		} else if (container instanceof StandardColumn){
+			return (StandardColumn)container;
+		}
+		return null;
+	}
+	
 	@Override
 	public void setReportDataAdapter(ReportBundle bundle, DataAdapterDescriptor dataadapter, JRPropertiesMap properties) {
-		JRDesignDataset tableDataset = (JRDesignDataset)bundle.getJasperDesign().getDatasetMap().get("tableDataset");
+		JRDesignDataset tableDataset = (JRDesignDataset)bundle.getJasperDesign().getDatasetMap().get("tableDataset"); //$NON-NLS-1$
 		JasperDesign jd = bundle.getJasperDesign();
 		for (String key : properties.getPropertyNames()){
 			jd.setProperty(key, properties.getProperty(key));
-			if (key.contains("ireport")) tableDataset.setProperty(key, properties.getProperty(key));
+			if (key.contains("ireport")) tableDataset.setProperty(key, properties.getProperty(key)); //$NON-NLS-1$
 		}
 		tableDataset.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
 		jd.setProperty(DataQueryAdapters.DEFAULT_DATAADAPTER, dataadapter.getName());
@@ -626,7 +635,6 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		return reportBundle;
 	}
 	
-	
 	/**
 	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
 	 * by this engine. 
@@ -656,8 +664,17 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		if (tableComponent == null) errorsList.add(Messages.TableTemplateEngine_missingTable);
 		else{
 			StandardTable table = (StandardTable)tableComponent.getComponent();
-			if (findStaticTextElement(table,"label") == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
-			if (findTextFieldElement(table,"DetailField") == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
+			
+			if (table.getColumns().size()>1 || table.getColumns().size() < 1) {
+				errorsList.add(Messages.TableTemplateEngine_oneColumnError); 
+			} else {
+				BaseColumn col = table.getColumns().get(0);
+				if (col instanceof ColumnGroup){
+					errorsList.add(Messages.TableTemplateEngine_groupError);
+				}
+				if (findStaticTextElement(table,"label") == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
+				if (findTextFieldElement(table,"Field") == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
+			}
 		}
 		
 		return errorsList;
