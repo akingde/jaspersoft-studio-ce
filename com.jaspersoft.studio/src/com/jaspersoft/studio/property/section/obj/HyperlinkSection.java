@@ -344,12 +344,13 @@ public class HyperlinkSection extends AbstractSection {
 		
 		mainComposite = getWidgetFactory().createSection(parent, Messages.HyperlinkSection_hyperlinkSectionTitle, true, 3);
 		section = (ExpandableComposite)mainComposite.getParent();
-		
+		section.setExpanded(false);
 		mainComposite.setLayout(new GridLayout(3, false));
 		GridData parentData = new GridData(SWT.FILL,SWT.FILL, true, true);
 		//the composite must have a fixed height because for some reason, when the components are hided it 
 		//is resized to a smaller dimension, but when components are shown it is not resized to a bigger one
 		parentData.minimumHeight = 280;
+		parentData.heightHint = 280;
 		section.setLayoutData(parentData);
 		mainComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
@@ -426,16 +427,6 @@ public class HyperlinkSection extends AbstractSection {
 			}
 		});
 	}
-	
-	@Override
-	public void aboutToBeShown() {
-		super.aboutToBeShown();
-		//Force the content to relayout to get the correct size first for the container
-		//then for the contents
-		getTabbedPropertySheetPage().getTabbedPropertyComposite().layout();
-		getTabbedPropertySheetPage().getTabbedPropertyComposite().layout(false, true);
-	}
-	
 	
 	@Override
 	public IHighlightPropertyWidget getWidgetForProperty(Object propertyId) {
