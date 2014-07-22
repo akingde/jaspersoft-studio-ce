@@ -54,6 +54,8 @@ public class PropertiesList {
 	}
 
 	public static PropertyDTO getDTO(String name) {
+		//Called to initialize the properties list
+		getJRProperties();
 		for (PropertyDTO dto : props)
 			if (dto.getProperty().equalsIgnoreCase(name))
 				return dto;
