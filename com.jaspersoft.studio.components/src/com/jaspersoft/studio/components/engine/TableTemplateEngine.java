@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.GroupCell;
@@ -31,6 +32,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -67,7 +69,6 @@ import com.jaspersoft.studio.components.table.model.table.command.wizard.TableSe
 import com.jaspersoft.studio.components.table.model.table.command.wizard.TableWizardLayoutPage;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.color.ColorSchemaGenerator;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
@@ -87,6 +88,21 @@ import com.jaspersoft.templates.TemplateEngineException;
 public class TableTemplateEngine extends DefaultTemplateEngine {
 
 	/**
+	 * Text inside a textfield placeholder
+	 */
+	public static final String FIELD_MARKER = "field";
+	
+	/**
+	 * Text inside a textfield placeholder, before JSS the 5.6.1
+	 */
+	private static final String FIELD_COMPATIBILITY_MARKER = "detailfield";
+	
+	/**
+	 * Text inside a static text placeholder
+	 */
+	public static final String TEXT_MARKER = "label";
+	
+	/**
 	 * The list of styles that will applied to the table, the styles order is important, and it should be
 	 * Table Style, Table Header, Column Header and detail
 	 */
@@ -103,14 +119,19 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private List<Object> groupFields;
 	
 	/**
-	 * Sample of the Static Text element that should be used inside the column header\footer cells
+	 * List of the design element that are inside the column header of the template
 	 */
-	private JRDesignStaticText colHeaderLabel;
+	private List<JRDesignElement> colHeaderContent;
 	
 	/**
-	 * Sample of the text element that should be used inside the table header\footer cells
+	 * List of the design element that are inside the column footer of the template
 	 */
-	//private JRDesignTextField tableHeaderField;
+	private List<JRDesignElement> colFooterContent;
+	
+	/**
+	 * List of the design element that are inside the table header of the template
+	 */
+	private List<JRDesignElement> tableHeaderContent;
 	
 	/**
 	 * Sample of the text element that should be used inside the table group cells
@@ -118,9 +139,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private JRDesignTextField tableGroupField;
 	
 	/**
-	 * Sample of the text element that should be used inside the detail cells
+	 * List of the design element that are inside the detail of the template
 	 */
-	private JRDesignTextField cellField;
+	private List<JRDesignElement> detailContent;
+	
+	/**
+	 * List of the design element that are inside the table footer of the template
+	 */
+	private List<JRDesignElement> tableFooterContent;
 	
 	/**
 	 * Width of the table
@@ -131,6 +157,11 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * Height of the table
 	 */
 	private int tableHeight = 200;
+	
+	/**
+	 * The width of the column
+	 */
+	private int columnWidth = 40;
 	
 	/**
 	 * X position of the table
@@ -153,7 +184,11 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private int summaryHeight;
 	
 	/**
-	 * Create a column 
+	 * Create a column of the table of the specified width. The section in the new column
+	 * will be the same one of the column of the template and also the content. The size
+	 * and position of the content will be relative to the width of the new column that 
+	 * may be different from the one of the template.
+	 * 
 	 *  
 	 * @param tbl the table 
 	 * @param jd the jasper design
@@ -167,37 +202,126 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				sections.isColumnHeader(), sections.isColumnFooter(),
 				sections.isGroupHeader(), sections.isGroupFooter(), -1);
 		col.setWidth(colWidth);
-		DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-		DesignCell detCell = (DesignCell) col.getDetailCell();
+		
+		
+		if (sections.isTableHeader()){
+			DesignCell tableHeader = (DesignCell)col.getTableHeader();
+			for(JRDesignElement element : tableHeaderContent){
+				JRDesignElement copyElement = (JRDesignElement)element.clone();
+				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
+				copyElement.setWidth(getRelativeWidth(colWidth, copyElement.getWidth()));
+				tableHeader.addElement(copyElement);
+			}
+		}
+		
+		if (sections.isTableFooter()){
+			DesignCell tableFooter = (DesignCell)col.getTableFooter();
+			for(JRDesignElement element : tableFooterContent){
+				JRDesignElement copyElement = (JRDesignElement)element.clone();
+				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
+				copyElement.setWidth(getRelativeWidth(colWidth, copyElement.getWidth()));
+				tableFooter.addElement(copyElement);
+			}
+		}
+		
+		if (sections.isColumnFooter()){
+			DesignCell columnFooter = (DesignCell)col.getColumnFooter();
+			for(JRDesignElement element : colFooterContent){
+				JRDesignElement copyElement = (JRDesignElement)element.clone();
+				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
+				copyElement.setWidth(getRelativeWidth(colWidth, copyElement.getWidth()));
+				columnFooter.addElement(copyElement);
+			}
+		}
 		
 		//Create the column header
 		if (sections.isColumnHeader()) {
-			JRDesignStaticText sText = null;
-			//Create the cell detail by duplicating the sample content if it exist
-			if (colHeaderLabel != null) sText = (JRDesignStaticText)colHeaderLabel.clone();
-			else sText = (JRDesignStaticText) new MStaticText().createJRElement(jd);
-			sText.setWidth(col.getWidth());
-			sText.setHeight(colHeadCell.getHeight());
-			sText.setX(0);
-			sText.setY(0);
-			sText.setText(fieldName);
-			colHeadCell.addElement(sText);
+			DesignCell columnHeader = (DesignCell)col.getColumnHeader();
+			for(JRDesignElement element : colHeaderContent){
+				JRDesignElement copyElement = (JRDesignElement)element.clone();
+				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
+				copyElement.setWidth(getRelativeWidth(colWidth, copyElement.getWidth()));
+				
+				if (copyElement instanceof JRDesignStaticText){
+					JRDesignStaticText text = (JRDesignStaticText)copyElement;
+					if (isColumnHeaderPlaceholder(text)){
+						text.setText(fieldName);
+					}
+				}
+		
+				columnHeader.addElement(copyElement);
+			}
 		}
 		
-		JRDesignTextField fText = null;
-		//Create the cell detail by duplicating the sample content if it exist
-		if (cellField != null) fText = (JRDesignTextField) cellField.clone();
-		else fText = (JRDesignTextField) new MTextField().createJRElement(jd);
-		fText.setWidth(col.getWidth());
-		fText.setHeight(detCell.getHeight());
-		fText.setX(0);
-		fText.setY(0);
-		JRDesignExpression jre = new JRDesignExpression();
-		jre.setText(fieldValue);
-		fText.setExpression(jre);
-		detCell.addElement(fText);
+		DesignCell detailCell = (DesignCell)col.getDetailCell();
+		for(JRDesignElement element : detailContent){
+			JRDesignElement copyElement = (JRDesignElement)element.clone();
+			copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
+			copyElement.setWidth(getRelativeWidth(colWidth, copyElement.getWidth()));
 			
+			if (copyElement instanceof JRDesignTextField){
+				JRDesignTextField field = (JRDesignTextField)copyElement;
+				if (isDetailPlaceholder(field)){
+					JRDesignExpression jre = new JRDesignExpression();
+					jre.setText(fieldValue);
+					field.setExpression(jre);
+				}
+			}
+	
+			detailCell.addElement(copyElement);
+		}
 		return col;
+	}
+	
+	/**
+	 * Check if a JRDesignText element is a placeholder for the static text appearance in
+	 * the column header
+	 * 
+	 * @param element the element
+	 * @return true if it is a place holder, false otherwise
+	 */
+	private boolean isColumnHeaderPlaceholder(JRDesignStaticText element){
+		if (element.getText() != null && element.getText().toLowerCase().equals(TEXT_MARKER)){
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if a JRDesignTextField element is a placeholder for the text field appearance in
+	 * the detail
+	 * 
+	 * @param element the element
+	 * @return true if it is a place holder, false otherwise
+	 */
+	private boolean isDetailPlaceholder(JRDesignTextField element){
+		JRExpression expression = element.getExpression();
+		if (expression != null && expression.getText() != null){
+			String text = expression.getText().toLowerCase();
+			if (text.startsWith("\"")) { //$NON-NLS-1$
+				text = text.substring(1);
+			}
+			if (text.endsWith("\"")) { //$NON-NLS-1$
+				text = text.substring(0, text.length() - 1);
+			}
+			if (text.equals(FIELD_MARKER) || text.equals(FIELD_COMPATIBILITY_MARKER)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Calculate a relative width for an element using a proportion between
+	 * the width of the column in the template and the width in the generated
+	 * report
+	 * 
+	 * @param newColwidth width of the column in the report
+	 * @param elementWidth width of the element in the template
+	 * @return width of the element in the report
+	 */
+	private int getRelativeWidth(int newColwidth, int elementWidth){
+		return (newColwidth*elementWidth)/columnWidth;
 	}
 	
 	/**
@@ -278,8 +402,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		
 		
 		if (tableFields != null && tableFields.size()>0) {
-			int colWidth = 40;
-			if (tableFields.size() > 0)	colWidth = tableWidth / tableFields.size();
+			int colWidth = columnWidth;
+			if (columnWidth * tableFields.size() > tableWidth) colWidth = tableWidth / tableFields.size();
 			if (sections == null) sections = TableWizardLayoutPage.getDefaultSection();
 			
 			//If there are at least one group then a Group column will be build
@@ -390,6 +514,34 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		//No table found, create a default one
 		return null;
 	}
+	
+	private void addSectionElementsToList(Cell section, List<JRDesignElement> currentList){
+		if (section != null){
+			for(JRChild child : section.getChildren()){
+				if (child instanceof JRDesignElement) currentList.add((JRDesignElement)child);
+			}
+		}
+	}
+	
+	private void generateTableContentList(StandardTable table){
+		StandardColumn firstCol = getStandadColumn(table.getColumns().get(0));
+		
+		tableHeaderContent = new ArrayList<JRDesignElement>();
+		addSectionElementsToList(firstCol.getTableHeader(), tableHeaderContent);
+		
+		tableFooterContent = new ArrayList<JRDesignElement>();
+		addSectionElementsToList(firstCol.getTableFooter(), tableFooterContent);
+		
+		colHeaderContent = new ArrayList<JRDesignElement>();
+		addSectionElementsToList(firstCol.getColumnHeader(), colHeaderContent);
+		
+		colFooterContent = new ArrayList<JRDesignElement>();
+		addSectionElementsToList(firstCol.getColumnFooter(), colFooterContent);
+		
+		detailContent = new ArrayList<JRDesignElement>();
+		addSectionElementsToList(firstCol.getDetailCell(), detailContent);
+	}
+	
 
 	/**
 	 * Initialize the fields needed to build the style of the report
@@ -407,13 +559,12 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		if (tableComponent != null){
 			StandardTable table = (StandardTable)tableComponent.getComponent();
 			
-			colHeaderLabel = findStaticTextElement(table,"label"); //$NON-NLS-1$
-			cellField = findTextFieldElement(table,"DetailField"); //$NON-NLS-1$
 			tableGroupField = new MTextField().createJRElement(jd);
-			//tableHeaderField = findTextFieldElement(table,"Header");
+			generateTableContentList(table);
 			
 			tableWidth = tableComponent.getWidth();
 			tableHeight = tableComponent.getHeight();
+			columnWidth = table.getColumns().get(0).getWidth();
 			tableX = tableComponent.getX();
 			tableY = tableComponent.getY();
 			if (table.getColumns().size()>0){
@@ -429,8 +580,15 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			removeElement(jd.getSummary(), tableComponent);
 		} else {
 			//If the table is not found try to build the template with some default values
-			colHeaderLabel = DefaultTemplateEngine.findStaticTextElement(jd.getColumnHeader(), "Label"); //$NON-NLS-1$
-			cellField = DefaultTemplateEngine.findTextFieldElement(jd.getDetailSection().getBands()[0], "Field"); //$NON-NLS-1$
+			JRDesignStaticText colHeaderLabel = DefaultTemplateEngine.findStaticTextElement(jd.getColumnHeader(), "Label"); //$NON-NLS-1$
+			JRDesignTextField cellField = DefaultTemplateEngine.findTextFieldElement(jd.getDetailSection().getBands()[0], "Field"); //$NON-NLS-1$
+			tableHeaderContent = new ArrayList<JRDesignElement>();
+			tableFooterContent = new ArrayList<JRDesignElement>();
+			colFooterContent = new ArrayList<JRDesignElement>();
+			colHeaderContent = new ArrayList<JRDesignElement>();
+			detailContent = new ArrayList<JRDesignElement>();
+			if (colHeaderLabel != null) colHeaderContent.add(colHeaderLabel);
+			if (cellField != null) detailContent.add(cellField);
 			
 			JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(0);
 			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
@@ -672,8 +830,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				if (col instanceof ColumnGroup){
 					errorsList.add(Messages.TableTemplateEngine_groupError);
 				}
-				if (findStaticTextElement(table,"label") == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
-				if (findTextFieldElement(table,"Field") == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
+				if (findStaticTextElement(table, TEXT_MARKER) == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
+				if (findTextFieldElement(table, FIELD_MARKER) == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
 			}
 		}
 		

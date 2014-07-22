@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.propexpr.dialog;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -148,7 +149,12 @@ public class JRPropertyDialog extends Dialog {
 
 		cprop = new Combo(composite, SWT.BORDER);
 		cprop.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-		cprop.setItems(PropertiesList.getSortedProperitesNames());
+		
+		List<String> comboItems = new ArrayList<String>();
+		for(ElementDescription hint : getHints()){
+			comboItems.add(hint.getName());
+		}
+		cprop.setItems(comboItems.toArray(new String[comboItems.size()]));
 		cprop.addModifyListener(getModifyListener());
 
 		createAdditionalControls(composite);
