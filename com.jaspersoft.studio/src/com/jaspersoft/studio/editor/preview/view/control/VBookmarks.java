@@ -40,6 +40,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VBookmarks extends APreview {
@@ -54,7 +55,7 @@ public class VBookmarks extends APreview {
 
 	public void setJasperPrint(JasperPrint jrPrint) {
 		BasePrintBookmark root = new BasePrintBookmark("Root", 0, "");
-		if (jrPrint.getBookmarks() != null)
+		if (jrPrint != null && jrPrint.getBookmarks() != null)
 			for (PrintBookmark pb : jrPrint.getBookmarks())
 				root.addBookmark(pb);
 		treeViewer.setInput(root);
@@ -104,8 +105,10 @@ public class VBookmarks extends APreview {
 
 		@Override
 		public StyledString getStyledText(Object element) {
-			if (element instanceof PrintBookmark)
-				return new StyledString(((PrintBookmark) element).getLabel());
+			if (element instanceof PrintBookmark) {
+				String label = ((PrintBookmark) element).getLabel();
+				return new StyledString(Misc.nvl(label));
+			}
 			return new StyledString("");
 		}
 

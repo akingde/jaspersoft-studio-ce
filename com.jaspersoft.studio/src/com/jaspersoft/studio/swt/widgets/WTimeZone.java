@@ -81,4 +81,8 @@ public class WTimeZone extends Composite {
 			return TimeZone.getTimeZone(timezones[combo.getSelectionIndex()]);
 		return null;
 	}
+
+	public Combo getCombo() {
+		return combo;
+	}
 }

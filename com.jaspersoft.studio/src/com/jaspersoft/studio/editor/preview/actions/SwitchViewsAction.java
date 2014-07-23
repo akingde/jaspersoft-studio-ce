@@ -1,17 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
+ * Copyright (C) 2010 - 2013 Jaspersoft Corporation. All rights reserved. http://www.jaspersoft.com
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, 
- * the following license terms apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Jaspersoft Studio Team - initial API and implementation
+ * Contributors: Jaspersoft Studio Team - initial API and implementation
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.actions;
 
@@ -25,6 +20,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
+import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.messages.Messages;
 
 public class SwitchViewsAction extends Action implements IMenuCreator {
@@ -32,11 +28,13 @@ public class SwitchViewsAction extends Action implements IMenuCreator {
 	private MultiPageContainer container;
 	protected String view;
 	private boolean changeName = true;
+	private AViewsFactory viewFactory;
 
-	public SwitchViewsAction(MultiPageContainer container, String view, boolean changeName) {
+	public SwitchViewsAction(MultiPageContainer container, String view, boolean changeName, AViewsFactory viewFactory) {
 		super(view, AS_DROP_DOWN_MENU);
 		setToolTipText(Messages.SwitchViewsAction_actionTooltip);
 		setMenuCreator(this);
+		this.viewFactory = viewFactory;
 		this.container = container;
 		this.view = view;
 		this.changeName = changeName;
@@ -69,7 +67,7 @@ public class SwitchViewsAction extends Action implements IMenuCreator {
 				new MenuItem(listMenu, SWT.SEPARATOR);
 			} else {
 				MenuItem m1 = new MenuItem(listMenu, SWT.RADIO);
-				m1.setText(key);
+				m1.setText(viewFactory.getLabel(key));
 				m1.addSelectionListener(listener);
 				m1.setData("view.key", key); //$NON-NLS-1$
 			}
@@ -85,8 +83,9 @@ public class SwitchViewsAction extends Action implements IMenuCreator {
 	public void run() {
 		if (view != null) {
 			if (changeName)
-				setText(view);
+				setText(viewFactory.getLabel(view));
 			container.switchView(view);
+			container.afterSwitchView();
 		}
 	}
 }

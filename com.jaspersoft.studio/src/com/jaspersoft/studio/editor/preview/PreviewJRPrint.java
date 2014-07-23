@@ -12,6 +12,7 @@ package com.jaspersoft.studio.editor.preview;
 
 import java.io.InputStream;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
@@ -172,14 +173,14 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	public void setJasperPrint(final Statistics stats, JasperPrint jasperPrint) {
 		this.jasperPrint = jasperPrint;
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				if (getDefaultViewer() instanceof IJRPrintable) {
 					JasperPrint jrprint = getJasperPrint();
 					if (jrprint != null) {
 						getRightContainer().switchView(stats, getDefaultViewerKey());
 					} else {
-						// errorPreview.setclear("Document is empty");
+						// errorPreview.setMessage("Document is empty");
 						getRightContainer().switchView(stats, errorPreview);
 					}
 				}
@@ -229,12 +230,21 @@ public class PreviewJRPrint extends ABasicEditor {
 		return viewer;
 	}
 
-	private MultiPageContainer rightContainer;
+	protected void afterRightSwitchView() {
+
+	}
+
+	protected MultiPageContainer rightContainer;
 
 	public MultiPageContainer getRightContainer() {
 		if (rightContainer == null) {
 			rightContainer = new MultiPageContainer() {
 				private boolean same = false;
+
+				@Override
+				public void afterSwitchView() {
+					afterRightSwitchView();
+				}
 
 				public void switchView(Statistics stats, String key) {
 					same = currentViewer == key;

@@ -99,40 +99,39 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-	
+
 	/**
-	 * Retrieve the action from the contribution items. If the action were already retrieved 
-	 * it dosen't do nothing
+	 * Retrieve the action from the contribution items. If the action were already retrieved it dosen't do nothing
 	 */
-	private void setActions(){
-		for(IContributionItem item : topToolBarManager.getContributions()){
-			if (zoomInAction != null && zoomOutAction != null && zoomActualAction != null) return;
-				if (ZoomInAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
-				zoomInAction = (AReportAction)((ActionContributionItem)item).getAction();
-			} else if (ZoomOutAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
-				zoomOutAction = (AReportAction)((ActionContributionItem)item).getAction();
-			} else if (ZoomActualSizeAction.ID.equals(item.getId()) && item instanceof ActionContributionItem){
-				zoomActualAction = (AReportAction)((ActionContributionItem)item).getAction();
+	private void setActions() {
+		for (IContributionItem item : topToolBarManager.getContributions()) {
+			if (zoomInAction != null && zoomOutAction != null && zoomActualAction != null)
+				return;
+			if (ZoomInAction.ID.equals(item.getId()) && item instanceof ActionContributionItem) {
+				zoomInAction = (AReportAction) ((ActionContributionItem) item).getAction();
+			} else if (ZoomOutAction.ID.equals(item.getId()) && item instanceof ActionContributionItem) {
+				zoomOutAction = (AReportAction) ((ActionContributionItem) item).getAction();
+			} else if (ZoomActualSizeAction.ID.equals(item.getId()) && item instanceof ActionContributionItem) {
+				zoomActualAction = (AReportAction) ((ActionContributionItem) item).getAction();
 			}
 		}
 	}
-	
-	public AReportAction getZoomInAction(){
+
+	public AReportAction getZoomInAction() {
 		setActions();
 		return zoomInAction;
 	}
-	
-	public AReportAction getZoomOutAction(){
+
+	public AReportAction getZoomOutAction() {
 		setActions();
 		return zoomOutAction;
 	}
-	
-	public AReportAction getZoomActualAction(){
+
+	public AReportAction getZoomActualAction() {
 		setActions();
 		return zoomActualAction;
 	}
-	
-	
+
 	@Override
 	protected void loadJRPrint(IEditorInput input) throws PartInitException {
 		setJasperPrint(null, null);
@@ -186,7 +185,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private LeftToolBarManager leftToolbar;
 
-	
 	/**
 	 * When disposed the mouse wheel filter is removed
 	 */
@@ -194,7 +192,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void dispose() {
 		super.dispose();
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
@@ -244,7 +242,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
 						if (pvModeAction == null)
 							pvModeAction = new SwitchViewsAction(container.getRightContainer(), Messages.PreviewContainer_javatitle,
-									true);
+									true, getViewFactory());
 						tbManager.add(pvModeAction);
 					}
 					tbManager.add(new Separator());
@@ -252,17 +250,19 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			};
 		return topToolBarManager;
 	}
-	
+
 	/**
 	 * Set the current preview type
 	 * 
-	 * @param viewerKey key of the type to show
-	 * @param refresh flag to set if the preview should also be refreshed
+	 * @param viewerKey
+	 *          key of the type to show
+	 * @param refresh
+	 *          flag to set if the preview should also be refreshed
 	 */
 	@Override
 	public void setCurrentViewer(String viewerKey, boolean refresh) {
 		super.setCurrentViewer(viewerKey, refresh);
-		//Set the name of the action to align the showed name with the actual type
+		// Set the name of the action to align the showed name with the actual type
 		topToolBarManager.setActionText(viewerKey);
 	}
 
@@ -475,8 +475,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	 * Set the dirty flag of the preview area
 	 */
 	public void setDirty(boolean dirty) {
-			this.isDirty = dirty;
-			if (dirty)
-				isRunDirty = true;
+		this.isDirty = dirty;
+		if (dirty)
+			isRunDirty = true;
 	}
 }

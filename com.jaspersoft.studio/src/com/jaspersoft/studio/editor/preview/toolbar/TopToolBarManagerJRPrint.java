@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
+import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 
 public class TopToolBarManagerJRPrint extends ATopToolBarManager {
 
@@ -34,9 +35,11 @@ public class TopToolBarManagerJRPrint extends ATopToolBarManager {
 	}
 
 	protected void fillToolbar(IToolBarManager tbManager) {
-		if (pvModeAction == null)
-			pvModeAction = new SwitchViewsAction(container.getRightContainer(), container.getViewFactory().getLabel(
-					container.getDefaultViewerKey()), true);
+		if (pvModeAction == null) {
+			AViewsFactory viewFactory = container.getViewFactory();
+			pvModeAction = new SwitchViewsAction(container.getRightContainer(), viewFactory.getLabel(container
+					.getDefaultViewerKey()), true, viewFactory);
+		}
 		tbManager.add(pvModeAction);
 
 		tbManager.add(new Separator());

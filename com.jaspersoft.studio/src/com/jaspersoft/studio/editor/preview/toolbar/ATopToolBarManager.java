@@ -51,7 +51,7 @@ public abstract class ATopToolBarManager {
 	protected abstract void fillToolbar(IToolBarManager tbManager);
 
 	public void removeAll() {
-		for (IContributionItem it : tbManager.getItems()) {
+		for (IContributionItem it : tbManager.getItems()) {	
 			if (it instanceof ActionContributionItem && ((ActionContributionItem) it).getAction() instanceof IDisposable)
 				((IDisposable) ((ActionContributionItem) it).getAction()).dispose();
 			else if (it instanceof ContributionItem)

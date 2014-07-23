@@ -50,6 +50,10 @@ public class WLocale extends Composite {
 		combo.removeSelectionListener(m);
 	}
 
+	public Combo getCombo() {
+		return combo;
+	}
+
 	private String[] getLocales() {
 		if (locales == null) {
 			locales = Locale.getAvailableLocales();

@@ -1,15 +1,17 @@
-package com.jaspersoft.studio.editor.preview.view.report.html;
+package com.jaspersoft.studio.editor.preview.view.report.file;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-import javax.servlet.http.Cookie;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import net.sf.jasperreports.eclipse.viewer.BrowserUtils;
-
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -18,13 +20,14 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
+import com.jaspersoft.studio.editor.preview.view.report.html.URLContributionItem;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class ABrowserViewer extends APreview implements IURLViewable {
-	protected Browser browser;
+public class TextFileViewer extends APreview implements IURLViewable {
+	protected StyledText browser;
 
-	public ABrowserViewer(Composite parent, JasperReportsConfiguration jContext) {
+	public TextFileViewer(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
 	}
 
@@ -36,9 +39,8 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
 		try {
-			browser = BrowserUtils.getSWTBrowserWidget(composite, SWT.NONE);
+			browser = new StyledText(composite, SWT.WRAP | SWT.READ_ONLY);
 			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
-			browser.setJavascriptEnabled(true);
 		} catch (Error e) {
 			e.printStackTrace();
 		}
@@ -54,7 +56,13 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 				JaspersoftStudioPlugin.ICONS_RESOURCES_REFRESH_16_PNG)) {
 			@Override
 			public void run() {
-				browser.refresh();
+				try {
+					showData(TextFileViewer.this.url);
+				} catch (MalformedURLException e) {
+					UIUtils.showError(e);
+				} catch (IOException e) {
+					UIUtils.showError(e);
+				}
 			}
 		});
 	}
@@ -66,11 +74,16 @@ public class ABrowserViewer extends APreview implements IURLViewable {
 		this.url = Misc.nvl(url);
 		if (urlBar != null)
 			urlBar.setUrl(url);
-		if (browser != null) {
-			browser.clearSessions();
-			if (urlcookie != null && scookie != null)
-				Browser.setCookie(scookie, urlcookie);
-			browser.setUrl(url);
+		if (browser != null)
+			showData(url);
+	}
+
+	protected void showData(String url) throws IOException, MalformedURLException {
+		InputStream in = new URL(url).openStream();
+		try {
+			browser.setText(IOUtils.toString(in));
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
 	}
 
