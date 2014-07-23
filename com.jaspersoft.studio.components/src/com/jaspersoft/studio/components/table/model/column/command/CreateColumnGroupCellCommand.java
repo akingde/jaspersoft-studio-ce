@@ -124,6 +124,14 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	}
 	
 	/**
+	 * If the commands has size zero it still can execute because this means that
+	 * there are no resize of other cell needed, table with one column for example
+	 */
+	public boolean canExecute() {
+		return getCommands().size() == 0 || super.canExecute();
+	};
+	
+	/**
 	 * Recursively search the minimum valid value to resize all the cell, to avoid to
 	 * set a minimum height
 	 * 
