@@ -18,6 +18,8 @@ package com.jaspersoft.studio.data.sql.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.action.IMenuListener;

@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 
 import org.eclipse.core.databinding.DataBindingContext;

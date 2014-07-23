@@ -18,6 +18,8 @@ package com.jaspersoft.studio.data.sql.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;

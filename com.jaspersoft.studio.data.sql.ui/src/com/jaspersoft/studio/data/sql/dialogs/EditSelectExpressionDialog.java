@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.dialogs;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.ValidatorUtil;
 

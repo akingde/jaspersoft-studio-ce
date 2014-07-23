@@ -17,6 +17,8 @@ package com.jaspersoft.studio.data.sql.dialogs;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
+
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;

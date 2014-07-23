@@ -17,6 +17,7 @@ package com.jaspersoft.studio.data.sql.dialogs;
 
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
