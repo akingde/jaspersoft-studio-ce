@@ -35,93 +35,86 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 
 /**
- *
+ * 
  * @author gtoffoli
  */
 public class RunReportUnit {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception {
-        // TODO code application logic here
+	/**
+	 * @param args
+	 *          the command line arguments
+	 */
+	public static void main(String[] args) throws Exception {
+		// TODO code application logic here
 
-        JServer server = new JServer();
+		JServer server = new JServer();
 
-        server.setUrl("http://127.0.0.1:8080/jasperserver-pro/services/repository");
-        server.setUsername("jasperadmin|organization_1");
-        server.setPassword("jasperadmin");
+		server.setUrl("http://build-master.jaspersoft.com:5980/jrs-pro-trunk/");
+		server.setUsername("superuser");
+		server.setPassword("superuser");
 
-        WSClient client = new WSClient(server);
+		WSClient client = new WSClient(server);
 
-        runReportUnit(client, "/MY_FOLDER/MY_REPORT", "A");
-    }
+		runReportUnit(client, "/public/Samples/Reports/01._Geographic_Results_by_Segment_Report", "");
+	}
 
-    /**
-     * Run a report and save the output in PDF and HTML
-     *
-     * @param client
-     * @param reportUri
-     * @param parameter1
-     * @throws Exception
-     */
-    public static void runReportUnit(WSClient client, String reportUri,  String parameter1) throws Exception
-    {
+	/**
+	 * Run a report and save the output in PDF and HTML
+	 * 
+	 * @param client
+	 * @param reportUri
+	 * @param parameter1
+	 * @throws Exception
+	 */
+	public static void runReportUnit(WSClient client, String reportUri, String parameter1) throws Exception {
 
-        ResourceDescriptor rd = new ResourceDescriptor();
-        rd.setUriString(reportUri);
+		ResourceDescriptor rd = new ResourceDescriptor();
+		rd.setUriString(reportUri);
 
+		Map parameters = new HashMap();
+		// parameters.put("parameter1", "A");
 
-        Map parameters = new HashMap();
-        parameters.put("parameter1", "A");
+		List arguments = new ArrayList();
+		arguments.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_PDF));
 
-        List arguments = new ArrayList();
-        arguments.add( new Argument( Argument.RUN_OUTPUT_FORMAT , Argument.RUN_OUTPUT_FORMAT_PDF ));
+		Map files = client.runReport(rd, parameters, arguments);
 
-        Map files = client.runReport(rd, parameters, arguments);
+		FileContent fc = (FileContent) files.get("report");
 
-        FileContent fc = (FileContent)files.get("report");
+		FileOutputStream pdfFile = new FileOutputStream("/tmp/myreport.pdf");
+		pdfFile.write(fc.getData());
+		pdfFile.close();
 
-        FileOutputStream pdfFile = new FileOutputStream( "c:\\myreport.pdf" );
-        pdfFile.write( fc.getData() );
-        pdfFile.close();
+		System.out.println("PDF file saved to: c:\\myreport.pdf");
 
-        System.out.println("PDF file saved to: c:\\myreport.pdf");
-        
-        arguments.clear();
-        arguments.add( new Argument( Argument.RUN_OUTPUT_FORMAT , Argument.RUN_OUTPUT_FORMAT_HTML));
+		arguments.clear();
+		arguments.add(new Argument(Argument.RUN_OUTPUT_FORMAT, Argument.RUN_OUTPUT_FORMAT_HTML));
 
-        files = client.runReport(rd, parameters, arguments);
+		files = client.runReport(rd, parameters, arguments);
 
-        Iterator iter = files.keySet().iterator();
-        while (iter.hasNext())
-        {
-            String key = (String) iter.next();
-            fc = (FileContent)files.get(key);
+		Iterator iter = files.keySet().iterator();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			fc = (FileContent) files.get(key);
 
-            if (key.equals("report"))
-            {
-                FileOutputStream htmlFile = new FileOutputStream( "c:\\myreport.html" );
-                htmlFile.write( fc.getData() );
-                htmlFile.close();
-            }
-            else
-            {
-                File f = new File("c:\\images");
-                if (!f.exists()) f.mkdirs();
+			if (key.equals("report")) {
+				FileOutputStream htmlFile = new FileOutputStream("/tmp/myreport.html");
+				htmlFile.write(fc.getData());
+				htmlFile.close();
+			} else {
+				File f = new File("/tmp/images");
+				if (!f.exists())
+					f.mkdirs();
 
-                FileOutputStream imageFile = new FileOutputStream( "c:\\images\\" + key );
-                imageFile.write( fc.getData() );
-                imageFile.close();
-            }
+				FileOutputStream imageFile = new FileOutputStream("/tmp/images/" + key);
+				imageFile.write(fc.getData());
+				imageFile.close();
+			}
 
-        }
+		}
 
+		System.out.println("Html file saved to: c:\\myreport.html");
 
-        System.out.println("Html file saved to: c:\\myreport.html");
-
-       
-    }
-
+	}
 
 }

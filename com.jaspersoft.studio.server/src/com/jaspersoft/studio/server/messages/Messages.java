@@ -256,10 +256,16 @@ public class Messages extends NLS {
 	public static String ServerProfilePage_11;
 	public static String ServerProfilePage_12;
 	public static String ServerProfilePage_13;
+	public static String ServerProfilePage_14;
+	public static String ServerProfilePage_15;
 	public static String ServerProfilePage_16;
 	public static String ServerProfilePage_17;
+	public static String ServerProfilePage_18;
 	public static String ServerProfilePage_19;
 	public static String ServerProfilePage_2;
+	public static String ServerProfilePage_20;
+	public static String ServerProfilePage_21;
+	public static String ServerProfilePage_22;
 	public static String ServerProfilePage_3;
 	public static String ServerProfilePage_4;
 	public static String ServerProfilePage_5;

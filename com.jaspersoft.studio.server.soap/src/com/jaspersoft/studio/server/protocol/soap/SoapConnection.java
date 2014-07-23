@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.apache.axis.components.net.DefaultCommonsHTTPClientProperties;
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -155,6 +157,7 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
+		rd.fixStructure();
 		if (rd.getIsReference())
 			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 		List<ResourceDescriptor> children = rd.getChildren();
@@ -233,6 +236,7 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+		rd.fixStructure();
 		if (rd.getIsReference()) {
 			if (!rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
 				rd.setIsReference(false);
@@ -254,8 +258,9 @@ public class SoapConnection implements IConnection {
 
 	@Override
 	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
-		repExec.setFiles(client.runReport(repExec.getResourceDescriptor(), repExec.getPrm(), repExec.getArgs()));
 		repExec.setStatus("ready");
+		repExec.setFiles(new HashMap<String, FileContent>());
+		repExec.setFiles(client.runReport(repExec.getResourceDescriptor(), repExec.getPrm(), repExec.getArgs()));
 		return repExec;
 	}
 

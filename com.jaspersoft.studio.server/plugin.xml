@@ -346,5 +346,14 @@
            ClassFactory="com.jaspersoft.studio.server.publish.action.ServerSettingsEditorMenuContributor">
      </EditorSettingsMenu>
   </extension>
+  <extension
+        point="org.eclipse.ui.preferencePages">
+     <page
+           category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+           class="com.jaspersoft.studio.server.preferences.CASPreferencePage"
+           id="com.jaspersoft.studio.server.preferences.CASPreferencePage.property"
+           name="Single Sign On Servers">
+     </page>
+  </extension>
 
 </plugin>

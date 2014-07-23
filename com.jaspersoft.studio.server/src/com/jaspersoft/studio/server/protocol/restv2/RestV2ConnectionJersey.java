@@ -19,11 +19,13 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.cookie.Cookie;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
@@ -50,6 +52,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.AttachmentDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ExportDescriptor;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ExportExecutionOptions;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.OutputResourceDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ReportExecutionDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
@@ -98,7 +101,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		String user = sp.getUser();
 		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
 			user += "|" + sp.getOrganisation();
-		client.register(new HttpBasicAuthFilter(user, Pass.getPass(sp.getPass())));
+		// client.register(new HttpBasicAuthFilter(user,
+		// Pass.getPass(sp.getPass())));
 		String url = sp.getUrl().trim();
 		if (url.endsWith("/services/repository/"))
 			url = url.substring(0, url.lastIndexOf("/services/repository/"));
@@ -106,6 +110,25 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			url = url.substring(0, url.lastIndexOf("/services/repository"));
 		if (!url.endsWith("/"))
 			url += "/";
+
+		target = client.target(url + "j_spring_security_check");
+		target = target.queryParam("forceDefaultRedirect", "false");
+		if (sp.isUseSSO()) {
+			String token = CASUtil.getToken(sp);
+			target = target.queryParam("ticket", token);
+		} else {
+			target = target.queryParam("j_username", sp.getUser());
+			target = target.queryParam("j_password", Pass.getPass(sp.getPass()));
+			target = target.queryParam("orgId", sp.getOrganisation());
+			if (!Misc.isNullOrEmpty(sp.getLocale()))
+				target = target.queryParam("userLocale", "true");
+			if (!Misc.isNullOrEmpty(sp.getTimeZone()))
+				target = target.queryParam("userTimezone", "true");
+		}
+		Builder req = target.request();
+		toObj(connector.get(req, monitor), String.class, monitor);
+
+		// ok, now check others
 		target = client.target(IDN.toASCII(url + SUFFIX));
 		getServerInfo(monitor);
 		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0;
@@ -396,26 +419,51 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		ReportExecutionDescriptor res = null;
 		WebTarget tgt = null;
 		Builder req = null;
-		if (repExec.getRequestId() != null) {
+		if (repExec.getRequestId() != null && !repExec.getStatus().equals("refresh")) {
+			// if (repExec.getStatus().equals("refresh")) {
+			// tgt = target.path("reportExecutions/" + repExec.getRequestId() +
+			// "/exports");
+			// req = tgt.request();
+			// ExportExecutionOptions ed = new ExportExecutionOptions();
+			// ed.setAttachmentsPrefix("");
+			// ed.setPages("1");
+			// for (Argument arg : repExec.getArgs()) {
+			// if (arg.getName().equals(Argument.RUN_OUTPUT_FORMAT)) {
+			// ed.setOutputFormat(arg.getValue());
+			// break;
+			// }
+			// }
+			// Response r = connector.post(req, Entity.entity(ed,
+			// MediaType.APPLICATION_XML_TYPE), monitor);
+			// res = toObj(r, ReportExecutionExport.class, monitor);
+			// } else {
 			tgt = target.path("reportExecutions/" + repExec.getRequestId());
 			req = tgt.request();
 			Response r = connector.get(req, monitor);
-			repExec.setReportOutputCookie(r.getCookies());
 			res = toObj(r, ReportExecutionDescriptor.class, monitor);
+			// }
 		} else {
 			ReportExecutionRequest rer = new ReportExecutionRequest();
 			rer.setReportUnitUri(repExec.getReportURI());
 			rer.setAsync(true);
 			rer.setFreshData(true);
 			rer.setIgnorePagination(false);
-			rer.setInteractive(false);
+			rer.setAllowInlineScripts(true);
+			rer.setInteractive(true);
+			rer.setAttachmentsPrefix("");
+			String format = null;
 			for (Argument arg : repExec.getArgs()) {
-				if (arg.getName().equals(Argument.RUN_OUTPUT_FORMAT))
-					rer.setOutputFormat(arg.getValue());
+				if (arg.getName().equals(Argument.RUN_OUTPUT_FORMAT)) {
+					format = arg.getValue();
+					break;
+				}
 			}
-			if (rer.getOutputFormat() == null)
-				rer.setOutputFormat(Argument.RUN_OUTPUT_FORMAT_JRPRINT);
-			System.out.println(rer.getOutputFormat());
+			if (format == null)
+				format = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
+			if (format.equals(Argument.RUN_OUTPUT_FORMAT_JRPRINT))
+				rer.setPages("1");
+			rer.setOutputFormat(format);
+
 			// rer.setTransformerKey(transformerKey);
 			rer.setSaveDataSnapshot(false);
 			Map<String, Object> prm = repExec.getPrm();
@@ -437,33 +485,61 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				}
 				rer.setParameters(new ReportParameters(list));
 			}
+			// if (rer.getOutputFormat().equals(Argument.RUN_OUTPUT_FORMAT_HTML)) {
+			// String rourl = target.getUri().toASCIIString() + "reports" +
+			// repExec.getReportURI() + ".html";
+			// if (rer.getParameters() != null) {
+			// String del = "?";
+			// for (ReportParameter rp : rer.getParameters().getReportParameters()) {
+			// rourl += del;
+			// rourl += rp.getName() + "=";
+			// for (String v : rp.getValues()) {
+			// rourl += v;
+			// }
+			// del = "&";
+			// }
+			// }
+			// repExec.setBaseUrl(target.getUri().toASCIIString());
+			// repExec.setPathUrl("reports" + repExec.getReportURI() + ".html");
+			// repExec.setReportOutputCookie(connector.getCookieStore().getCookies());
+			// repExec.setStatus("ready");
+			// return repExec;
+			// }
+
 			tgt = target.path("reportExecutions");
 			req = tgt.request();
 			Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
-			repExec.setReportOutputCookie(r.getCookies());
 			res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		}
 		if (res != null && res.getErrorDescriptor() == null) {
 			if (res.getExports() != null) {
 				int i = 0;
 				for (ExportDescriptor ee : res.getExports()) {
-					if (ee.getOutputResource() != null) {
-						if (ee.getOutputResource().getContentType().equals("text/html")) {
-							repExec.setReportOutputURL(target.getUri() + "reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
-						} else {
-							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
-							req = tgt.request(ee.getOutputResource().getContentType());
-							byte[] d = readFile(connector.get(req, monitor), monitor);
-							addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "jasperPrint");
-							if (ee.getAttachments() != null)
-								for (AttachmentDescriptor ror : ee.getAttachments()) {
-									tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
-									req = tgt.request(ror.getContentType());
-									d = readFile(connector.get(req, monitor), monitor);
-									addFileContent(d, map, ror, "attachment-" + i++, "attachment-" + i++);
-								}
-						}
+					// System.out.println(ee.getOutputResource());
+					if (ee.getStatus().equals("queued"))
+						continue;
+
+					tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
+					if (ee.getOutputResource() != null)
+						req = tgt.request(ee.getOutputResource().getContentType());
+					else
+						req = tgt.request();
+					Response r = connector.get(req, monitor);
+					if (ee.getOutputResource() == null) {
+						OutputResourceDescriptor or = new OutputResourceDescriptor();
+						or.setContentType(r.getHeaderString("Content-Type"));
+						or.setFileName("file");
+						ee.setOutputResource(or);
 					}
+					byte[] d = readFile(r, monitor);
+					addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "report");
+					if (ee.getAttachments() != null)
+						for (AttachmentDescriptor ror : ee.getAttachments()) {
+							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
+							req = tgt.request(ror.getContentType());
+							d = readFile(connector.get(req, monitor), monitor);
+							addFileContent(d, map, ror, "attachment-" + i++, ror.getFileName());
+						}
 				}
 			} else {
 				tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + Argument.RUN_OUTPUT_FORMAT_JRPRINT + "/outputResource");
@@ -484,7 +560,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		repExec.setRequestId(res.getRequestId());
 		repExec.setStatus(res.getStatus());
 		repExec.setTotalPages(res.getTotalPages());
-		System.out.println(res.getStatus());
+		// System.out.println(res.getStatus() + " : " + res.getTotalPages() + " : "
+		// + map.size());
 		return repExec;
 	}
 

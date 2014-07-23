@@ -88,11 +88,12 @@ public class InputControlsManager {
 	public void initInputControls(ResourceDescriptor rdrepunit) {
 		this.rdrepunit = rdrepunit;
 		inputcontrols = new ArrayList<ResourceDescriptor>();
-		for (ResourceDescriptor sub_rd : rdrepunit.getChildren()) {
-			String wsType = sub_rd.getWsType();
-			if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-				inputcontrols.add(sub_rd);
-		}
+		if (rdrepunit != null)
+			for (ResourceDescriptor sub_rd : rdrepunit.getChildren()) {
+				String wsType = sub_rd.getWsType();
+				if (wsType.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					inputcontrols.add(sub_rd);
+			}
 	}
 
 	private List<IDataInput> icontrols = new ArrayList<IDataInput>();

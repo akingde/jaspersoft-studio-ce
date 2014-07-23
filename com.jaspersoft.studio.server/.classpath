@@ -45,5 +45,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey/validation-api-1.1.0.Final.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js_axis-1.4patched.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasig/cas-client-core-3.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

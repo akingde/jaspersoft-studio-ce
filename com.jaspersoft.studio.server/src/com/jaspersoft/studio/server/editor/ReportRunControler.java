@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -24,13 +25,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.NewCookie;
-
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileExtension;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.util.JRLoader;
 
+import org.apache.http.cookie.Cookie;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -49,6 +48,7 @@ import com.jaspersoft.studio.editor.preview.view.control.VBookmarks;
 import com.jaspersoft.studio.editor.preview.view.control.VExporter;
 import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -75,6 +75,12 @@ public class ReportRunControler {
 	}
 
 	public void setReportUnit(String key) {
+		if (!key.equals(reportUnit)) {
+			repExec = new ReportExecution();
+			repExec.setStatus("queued");
+			repExec.setReportURIFull(key);
+			repExec.setReportURI(WSClientHelper.getReportUnitUri(key));
+		}
 		this.reportUnit = key;
 		if (viewmap != null && prmInput == null) {
 			try {
@@ -139,11 +145,13 @@ public class ReportRunControler {
 	private Console c;
 
 	private IConnection cli;
-
+	private static File tempDir = new File(System.getProperty("java.io.tmpdir"));
 	private Statistics stats;
 
+	private ReportExecution repExec;
+
 	public void runReport() {
-		VSimpleErrorPreview errorView = pcontainer.getErrorView();
+		final VSimpleErrorPreview errorView = pcontainer.getErrorView();
 		pcontainer.getRightContainer().switchView(null, errorView);
 		errorView.setMessage(com.jaspersoft.studio.messages.Messages.ReportControler_generating);
 
@@ -176,66 +184,88 @@ public class ReportRunControler {
 								prmcopy.put(p.getName(), icm.getParameters().get(p.getName()));
 						}
 					}
-					ReportExecution re = new ReportExecution();
-					re.setStatus("queued");
-					re.setReportURIFull(reportUnit);
-					re.setReportURI(WSClientHelper.getReportUnitUri(reportUnit));
 
 					List<Argument> args = new ArrayList<Argument>();
-					args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, pcontainer.getCurrentViewer()));
-					re.setArgs(args);
+					String reptype = pcontainer.getCurrentViewer();
+					args.add(new Argument(Argument.RUN_OUTPUT_FORMAT, reptype));
+					args.add(new Argument(Argument.RUN_OUTPUT_IMAGES_URI, ""));
+					repExec.setArgs(args);
+					repExec.setStatus("refresh");
 
-					while (re.getStatus().equals("queued") || re.getStatus().equals("execution")) {
-						re = WSClientHelper.runReportUnit(monitor, re, prmcopy);
-						if (re.getStatus().equals("ready")) {
+					while (repExec.getStatus().equals("refresh") || repExec.getStatus().equals("queued") || repExec.getStatus().equals("execution")) {
+						monitor.setTaskName(repExec.getStatus());
+						repExec = WSClientHelper.runReportUnit(monitor, repExec, prmcopy);
+						if (repExec.getStatus().equals("ready")) {
 							stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
-							stats.setValue(ReportControler.ST_PAGECOUNT, re.getTotalPages());
-							if (re.getReportOutputURL() != null) {
-								showURL(re);
+							if (repExec.getTotalPages() != null)
+								stats.setValue(ReportControler.ST_PAGECOUNT, repExec.getTotalPages());
+							if (repExec.getReportOutputURL() != null) {
+								showURL(repExec);
 							} else {
-								Map<String, FileContent> files = re.getFiles();
+								Map<String, FileContent> files = repExec.getFiles();
+								if (files.isEmpty())
+									showReport(null);
 								for (String key : files.keySet()) {
 									FileContent fc = (FileContent) files.get(key);
-									if (key.equals("jasperPrint")) { //$NON-NLS-1$
-										final File f = File.createTempFile(FileExtension.JRPRINT, "." + FileExtension.JRPRINT); //$NON-NLS-1$  
-										f.deleteOnExit();
-										f.createNewFile();
+									stats.setValue(ReportControler.ST_REPORTSIZE, fc.getData().length);
+									if (reptype.equals(Argument.RUN_OUTPUT_FORMAT_JRPRINT)) { //$NON-NLS-1$
+										Object obj = JRLoader.loadObject(new ByteArrayInputStream(fc.getData()));
+										if (obj instanceof JasperPrint)
+											showReport((JasperPrint) obj);
+										break;
+									} else {
+										// System.out.println(new String(fc.getMimeType()));
+										File f = null;
+										if (fc.getName().contains("/"))
+											f = new File(fc.getName());
+										else
+											f = new File(tempDir, fc.getName());
+										if (f == null || !f.exists()) {
+											f.deleteOnExit();
+											f.createNewFile();
+										}
+										if (!key.equals("report")) {
+											if (!f.getName().equals(key)) {
+												File dest = new File(tempDir, key);
+												f.renameTo(dest);
+												f = dest;
+											}
+										} else if (f.getName().endsWith(".att")) {
+											int ind = fc.getMimeType().indexOf("/");
+											if (ind >= 0) {
+												String str = fc.getMimeType().substring(ind + 1);
+												File dest = new File(f.getAbsolutePath().replaceAll(".att$", "." + str));
+												f.renameTo(dest);
+												f = dest;
+											}
+										}
 										FileOutputStream htmlFile = new FileOutputStream(f);
 										htmlFile.write(fc.getData());
 										htmlFile.close();
-										stats.setValue(ReportControler.ST_REPORTSIZE, f.length());
-										final Object obj = JRLoader.loadObject(f);
-										if (obj instanceof JasperPrint)
-											UIUtils.getDisplay().asyncExec(new Runnable() {
-
-												@Override
-												public void run() {
-													stats.setValue(ReportControler.ST_PAGECOUNT, ((JasperPrint) obj).getPages().size());
-													APreview pv = pcontainer.getDefaultViewer();
-													if (pv instanceof IJRPrintable)
-														try {
-															((IJRPrintable) pv).setJRPRint(stats, ((JasperPrint) obj), true);
-															VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
-															vs.setJasperPrint(((JasperPrint) obj));
-														} catch (Exception e) {
-															e.printStackTrace();
-														}
-													pcontainer.setJasperPrint(stats, (JasperPrint) obj);
-												}
-											});
-										break;
+										if (key.equals("report"))
+											showURL(f.toURI().toASCIIString());
+										// UIUtils.getDisplay().asyncExec(new Runnable() {
+										//
+										// @Override
+										// public void run() {
+										// errorView.setMessage("This file will be opened in an external editor");
+										// SelectionHelper.openEditor(f);
+										// }
+										// });
 									}
 								}
 							}
-						} else if (re.getStatus().equals("queued") || re.getStatus().equals("execution")) {
-							showURL(re);
-							Thread.sleep(500);
-						} else if (re.getStatus().equals("failed") || re.getStatus().equals("cancelled")) {
-							RESTv2ExceptionHandler reh = new RESTv2ExceptionHandler((ARestV2Connection) WSClientHelper.getClient(monitor, re.getReportURIFull()));
-							throw new Exception(reh.buildMessage(monitor, "", re.getErrorDescriptor()));
+						} else if (repExec.getStatus().equals("queued") || repExec.getStatus().equals("execution")) {
+							showURL(repExec);
+							Thread.sleep(100);
+						} else if (repExec.getStatus().equals("failed") || repExec.getStatus().equals("cancelled")) {
+							RESTv2ExceptionHandler reh = new RESTv2ExceptionHandler((ARestV2Connection) WSClientHelper.getClient(monitor, repExec.getReportURIFull()));
+							throw new Exception(reh.buildMessage(monitor, "", repExec.getErrorDescriptor()));
 						}
-						if (monitor.isCanceled())
-							WSClientHelper.cancelReportUnit(monitor, re);
+						if (monitor.isCanceled()) {
+							WSClientHelper.cancelReportUnit(monitor, repExec);
+							break;
+						}
 					}
 				} catch (Throwable e) {
 					ReportControler.showRunReport(c, pcontainer, e);
@@ -246,10 +276,48 @@ public class ReportRunControler {
 				return Status.OK_STATUS;
 			}
 
-			private void showURL(ReportExecution re) {
+			private void showReport(final JasperPrint obj) {
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						stats.setValue(ReportControler.ST_PAGECOUNT, obj == null ? 0 : obj.getPages().size());
+						APreview pv = pcontainer.getDefaultViewer();
+						if (pv instanceof IJRPrintable)
+							try {
+								((IJRPrintable) pv).setJRPRint(stats, obj, true);
+								VBookmarks vs = (VBookmarks) viewmap.get(ReportControler.FORM_BOOKMARKS);
+								vs.setJasperPrint(obj);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						pcontainer.setJasperPrint(stats, obj);
+						pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
+						if (obj == null)
+							errorView.setMessage("Document is Empty");
+					}
+				});
+			}
+
+			private void showURL(final String url) {
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						APreview pv = pcontainer.getDefaultViewer();
+						if (pv instanceof IURLViewable)
+							try {
+								((IURLViewable) pv).setURL(url);
+								pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+					}
+				});
+			}
+
+			private void showURL(final ReportExecution re) {
 				if (re.getReportOutputURL() != null) {
-					final String url = re.getReportOutputURL();
-					final Map<String, NewCookie> cookie = re.getReportOutputCookie();
 					UIUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override
@@ -257,10 +325,15 @@ public class ReportRunControler {
 							APreview pv = pcontainer.getDefaultViewer();
 							if (pv instanceof ABrowserViewer)
 								try {
-									Map<String, String> cmap = new HashMap<String, String>();
-									for (String key : cookie.keySet())
-										cmap.put(key, cookie.get(key).toCookie().toString());
-									((ABrowserViewer) pv).setURL(url, cmap);
+									String urlcookie = re.getBaseUrl();
+									String scookie = null;
+									for (Cookie c : re.getReportOutputCookie()) {
+										if (c.getName().equals("JSESSIONID")) {
+											scookie = c.getName() + "=" + c.getValue();
+											break;
+										}
+									}
+									((ABrowserViewer) pv).setURL(re.getReportOutputURL(), urlcookie, scookie);
 									pcontainer.setCurrentViewer(pcontainer.getDefaultViewerKey(), true);
 								} catch (Exception e) {
 									e.printStackTrace();

@@ -32,6 +32,9 @@
 		<field name="useOnlySOAP" type="boolean">
 			<bind-xml name="useOnlySOAP" node="element" />
 		</field>
+		<field name="useSSO" type="boolean">
+			<bind-xml name="useSSO" node="element" />
+		</field>
 		<field name="syncDA" type="boolean">
 			<bind-xml name="syncDA" node="element" />
 		</field>
@@ -46,6 +49,15 @@
 		</field>
 		<field name="projectPath" type="string">
 			<bind-xml name="projectPath" node="element" />
+		</field>
+		<field name="locale" type="string">
+			<bind-xml name="locale" node="element" />
+		</field>
+		<field name="timeZone" type="string">
+			<bind-xml name="timeZone" node="element" />
+		</field>
+		<field name="ssoUuid" type="string">
+			<bind-xml name="ssoUuid" node="element" />
 		</field>
 	</class>
 </mapping>

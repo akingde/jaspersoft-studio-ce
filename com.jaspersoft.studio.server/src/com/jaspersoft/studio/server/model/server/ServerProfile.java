@@ -39,6 +39,42 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	private String projectPath;
 	private boolean useOnlySOAP = false;
 	private boolean syncDA = false;
+	private String locale;
+	private String timeZone;
+	private boolean useSSO = false;
+	private String ssoUuid;
+
+	public String getSsoUuid() {
+		return ssoUuid;
+	}
+
+	public void setSsoUuid(String ssoUuid) {
+		this.ssoUuid = ssoUuid;
+	}
+
+	public boolean isUseSSO() {
+		return useSSO;
+	}
+
+	public void setUseSSO(boolean useSSO) {
+		this.useSSO = useSSO;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
 
 	public boolean isSyncDA() {
 		return syncDA;

@@ -22,8 +22,7 @@ import org.osgi.framework.ServiceReference;
 import com.jaspersoft.studio.server.Activator;
 
 public class HttpUtils31 {
-	public static HttpMethod get(HttpClient client, String url)
-			throws HttpException, IOException {
+	public static HttpMethod get(HttpClient client, String url) throws HttpException, IOException {
 		HttpMethod method = new GetMethod(url);
 		method.setRequestHeader("Accept", "application/json");
 
@@ -35,13 +34,18 @@ public class HttpUtils31 {
 	}
 
 	public static IProxyService getProxyService() {
-		BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
-		ServiceReference serviceReference = bc.getServiceReference(IProxyService.class.getName());
-		return (IProxyService) bc.getService(serviceReference);
+		if (Activator.getDefault() != null) {
+			BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
+			ServiceReference serviceReference = bc.getServiceReference(IProxyService.class.getName());
+			return (IProxyService) bc.getService(serviceReference);
+		}
+		return null;
 	}
 
 	public static void setupProxy(HttpClient c, URL arg2, HostConfiguration config) {
 		IProxyService proxyService = getProxyService();
+		if (proxyService == null)
+			return;
 		IProxyData[] proxyDataForHost;
 		try {
 			proxyDataForHost = proxyService.select(arg2.toURI());

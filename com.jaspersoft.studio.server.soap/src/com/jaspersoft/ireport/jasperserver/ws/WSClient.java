@@ -34,6 +34,8 @@ import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.util.SecretsUtil;
 
 import org.apache.axis.EngineConfiguration;
@@ -55,6 +57,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Request;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.ws.xml.Marshaller;
 import com.jaspersoft.jasperserver.ws.xml.Unmarshaller;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -481,9 +484,15 @@ public class WSClient {
 
 	public String getPassword() {
 		if (secretsUtil == null) {
-			secretsUtil = SecretsUtil.getInstance(JasperReportsConfiguration.getDefaultInstance());
+			secretsUtil = SecretsUtil.getInstance(getJrContext());
 		}
 		return secretsUtil.getSecret(JRServerSecretsProvider.SECRET_NODE_ID, getServer().getPassword());
+	}
+
+	protected JasperReportsContext getJrContext() {
+		if (JaspersoftStudioPlugin.getInstance() == null)
+			return DefaultJasperReportsContext.getInstance();
+		return JasperReportsConfiguration.getDefaultInstance();
 	}
 
 	public int getTimeout() {

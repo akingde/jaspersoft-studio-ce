@@ -15,10 +15,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.pages;
 
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyIFolderValidator;
+import net.sf.jasperreports.util.CastorUtil;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -34,6 +40,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -60,18 +67,25 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.preferences.CASListFieldEditor;
+import com.jaspersoft.studio.server.preferences.CASPreferencePage;
+import com.jaspersoft.studio.server.preferences.SSOServer;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
+import com.jaspersoft.studio.swt.widgets.WLocale;
 import com.jaspersoft.studio.swt.widgets.WSecretText;
+import com.jaspersoft.studio.swt.widgets.WTimeZone;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.WizardEndingStateListener;
 
 public class ServerProfilePage extends WizardPage implements WizardEndingStateListener {
 	private MServerProfile sprofile;
 	private WSecretText tpass;
+	private Text tuser;
 	private Text ttimeout;
 	private Text lpath;
 	private Button bchunked;
@@ -83,6 +97,10 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	private VersionCombo cversion;
 	private DataBindingContext dbc;
 	private Text txtInfo;
+	private WLocale loc;
+	private WTimeZone tz;
+	private Button bSSO;
+	private Combo ccas;
 
 	public ServerProfilePage(MServerProfile sprofile) {
 		super("serverprofilepage"); //$NON-NLS-1$
@@ -126,13 +144,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		Text torg = new Text(gr, SWT.BORDER);
 		torg.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(gr, SWT.NONE).setText(Messages.ServerProfilePage_10);
-		Text tuser = new Text(gr, SWT.BORDER);
-		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		new Label(gr, SWT.NONE).setText(Messages.ServerProfilePage_11);
-		tpass = new WSecretText(gr, SWT.BORDER | SWT.PASSWORD);
-		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createCredentials(gr);
 
 		final Section expcmp = new Section(composite, ExpandableComposite.TREE_NODE);
 		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -187,10 +199,13 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		dbc.bindValue(SWTObservables.observeSelection(bchunked), PojoObservables.observeValue(value, "chunked")); //$NON-NLS-1$
 		dbc.bindValue(SWTObservables.observeText(bmime), PojoObservables.observeValue(proxy, "mime")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(loc.getCombo()), PojoObservables.observeValue(value, "locale")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeText(tz.getCombo()), PojoObservables.observeValue(value, "timeZone")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeSelection(bdaterange), PojoObservables.observeValue(value, "supportsDateRanges")); //$NON-NLS-1$
 		dbc.bindValue(SWTObservables.observeSelection(bUseSoap), PojoObservables.observeValue(value, "useOnlySOAP")); //$NON-NLS-1$
 		dbc.bindValue(SWTObservables.observeSelection(bSyncDA), PojoObservables.observeValue(value, "syncDA")); //$NON-NLS-1$
+		dbc.bindValue(SWTObservables.observeSelection(bSSO), PojoObservables.observeValue(value, "useSSO")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(cversion.getControl()), PojoObservables.observeValue(proxy, "jrVersion")); //$NON-NLS-1$
 
@@ -198,6 +213,68 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 
 		showServerInfo();
 	}
+
+	protected void createCredentials(Group gr) {
+		cmpCredential = new Composite(gr, SWT.NONE);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		cmpCredential.setLayoutData(gd);
+		stackLayout = new StackLayout();
+		stackLayout.marginWidth = 0;
+		cmpCredential.setLayout(stackLayout);
+
+		cmpUP = new Composite(cmpCredential, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		cmpUP.setLayout(layout);
+
+		new Label(cmpUP, SWT.NONE).setText(Messages.ServerProfilePage_10);
+		tuser = new Text(cmpUP, SWT.BORDER);
+		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		new Label(cmpUP, SWT.NONE).setText(Messages.ServerProfilePage_11);
+		tpass = new WSecretText(cmpUP, SWT.BORDER | SWT.PASSWORD);
+		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		cmpCAS = new Composite(cmpCredential, SWT.NONE);
+		layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		cmpCAS.setLayout(layout);
+
+		new Label(cmpCAS, SWT.NONE).setText("SSO Server");
+		ccas = new Combo(cmpCAS, SWT.READ_ONLY | SWT.SINGLE | SWT.BORDER);
+
+		String v = null;
+		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore().getString(CASPreferencePage.CAS);
+		for (String line : v.split("\n")) {
+			if (line.isEmpty())
+				continue;
+			SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.mapping);
+			ssoservers.add(srv);
+		}
+		final ServerProfile value = sprofile.getValue();
+		String[] items = new String[ssoservers.size()];
+		int sel = 0;
+		for (int i = 0; i < ssoservers.size(); i++) {
+			SSOServer srv = ssoservers.get(i);
+			items[i] = srv.getUrl();
+			if (srv.getUuid().equals(value.getSsoUuid()))
+				sel = i;
+		}
+		ccas.setItems(items);
+		ccas.select(sel);
+
+		if (value.isUseSSO())
+			stackLayout.topControl = cmpCAS;
+		else
+			stackLayout.topControl = cmpUP;
+	}
+
+	private List<SSOServer> ssoservers = new ArrayList<SSOServer>();
+	private Composite cmpUP;
+	private Composite cmpCAS;
+	private StackLayout stackLayout;
+	private Composite cmpCredential;
 
 	private Composite createAdvancedSettings(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
@@ -235,11 +312,28 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		// bUseSoap.setLayoutData(gd);
 
 		bSyncDA = new Button(cmp, SWT.CHECK);
-		bSyncDA.setText("Synchronize DataAdapter Properties");
-		bSyncDA.setToolTipText("Synchronize JR DataAdapter property when publishing to Jaspersoft Server");
+		bSyncDA.setText(Messages.ServerProfilePage_14);
+		bSyncDA.setToolTipText(Messages.ServerProfilePage_15);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		bSyncDA.setLayoutData(gd);
+
+		bSSO = new Button(cmp, SWT.CHECK);
+		bSSO.setText(Messages.ServerProfilePage_18);
+		bSSO.setToolTipText(Messages.ServerProfilePage_20);
+		gd = new GridData();
+		gd.horizontalSpan = 3;
+		bSSO.setLayoutData(gd);
+		bSSO.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (bSSO.getSelection())
+					stackLayout.topControl = cmpCAS;
+				else
+					stackLayout.topControl = cmpUP;
+				cmpCredential.layout();
+			}
+		});
 
 		String ttip = Messages.ServerProfilePage_7;
 		Label lbl = new Label(cmp, SWT.NONE);
@@ -280,6 +374,22 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				}
 			}
 		});
+
+		lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(Messages.ServerProfilePage_21);
+
+		loc = new WLocale(cmp, SWT.BORDER);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		loc.setLayoutData(gd);
+
+		lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(Messages.ServerProfilePage_22);
+
+		tz = new WTimeZone(cmp, SWT.BORDER);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		tz.setLayoutData(gd);
 
 		return cmp;
 	}

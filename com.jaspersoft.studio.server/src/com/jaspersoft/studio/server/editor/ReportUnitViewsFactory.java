@@ -17,8 +17,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.report.file.CSVViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.TextFileViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.HTMLViewer;
+import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.DocxViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.OdsViewer;
@@ -28,7 +29,7 @@ import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
 import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 
 public class ReportUnitViewsFactory extends AViewsFactory {
-	public static final String DEFAULT = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
+	public static final String DEFAULT = Argument.RUN_OUTPUT_FORMAT_HTML;
 
 	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<String, Class<? extends APreview>>();
 	static {
@@ -36,33 +37,33 @@ public class ReportUnitViewsFactory extends AViewsFactory {
 
 		pcmap.put("SEPARATOR1", null);
 
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_HTML, HTMLViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_HTML, ABrowserViewer.class);
 		pcmap.put("SEPARATOR1", null);
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_PDF, PdfViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_PDF, ABrowserViewer.class);
 
 		pcmap.put("SEPARATOR2", null);
 
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_RTF, RTFViewer.class);
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_DOCX, DocxViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_RTF, ABrowserViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_DOCX, ABrowserViewer.class);
 		// pcmap.put("ODT", OdtViewer.class);
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_ODS, OdsViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_ODS, ABrowserViewer.class);
 		// pcmap.put("PPTx", PowerPointViewer.class);
 		// pcmap.put("Text", TXTViewer.class);
 
 		pcmap.put("SEPARATOR3", null);
 
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XLS, XlsViewer.class);
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XLSX, XlsxViewer.class);
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_CSV, CSVViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XLS, ABrowserViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XLSX, ABrowserViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_CSV, TextFileViewer.class);
 
 		pcmap.put("SEPARATOR4", null);
 
-		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XML, XMLViewer.class);
+		pcmap.put(Argument.RUN_OUTPUT_FORMAT_XML, TextFileViewer.class);
 	}
 
 	@Override
 	public String getLabel(String key) {
-		if (key.equals(DEFAULT))
+		if (key.equals(Argument.RUN_OUTPUT_FORMAT_JRPRINT))
 			return "Java";
 		return super.getLabel(key);
 	}

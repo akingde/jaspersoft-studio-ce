@@ -3,12 +3,13 @@ package com.jaspersoft.studio.server.protocol;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.NewCookie;
+import org.apache.http.cookie.Cookie;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class ReportExecution {
 	// in
@@ -115,22 +116,45 @@ public class ReportExecution {
 		this.files = files;
 	}
 
-	private String reportOutputURL;
-	private Map<String, NewCookie> reportOutputCookie;
+	private String baseUrl;
+	private String pathUrl;
+	// private String reportOutputURL;
+	private List<Cookie> reportOutputCookie;
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public String getPathUrl() {
+		return pathUrl;
+	}
+
+	public void setPathUrl(String pathUrl) {
+		this.pathUrl = pathUrl;
+	}
 
 	public String getReportOutputURL() {
-		return reportOutputURL;
+		String url = null;
+		if (baseUrl != null)
+			url = baseUrl;
+		if (pathUrl != null)
+			url = Misc.nvl(url) + pathUrl;
+		return url;
 	}
 
-	public void setReportOutputURL(String reportURL) {
-		this.reportOutputURL = reportURL;
-	}
+	// public void setReportOutputURL(String reportURL) {
+	// this.reportOutputURL = reportURL;
+	// }
 
-	public Map<String, NewCookie> getReportOutputCookie() {
+	public List<Cookie> getReportOutputCookie() {
 		return reportOutputCookie;
 	}
 
-	public void setReportOutputCookie(Map<String, NewCookie> reportOutputCookie) {
+	public void setReportOutputCookie(List<Cookie> reportOutputCookie) {
 		this.reportOutputCookie = reportOutputCookie;
 	}
 

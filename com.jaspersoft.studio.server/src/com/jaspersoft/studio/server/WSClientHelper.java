@@ -414,6 +414,7 @@ public class WSClientHelper {
 		if (repExec.getResourceDescriptor() == null) {
 			ResourceDescriptor rd = new ResourceDescriptor();
 			rd.setUriString(repExec.getReportURI());
+			rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
 			repExec.setResourceDescriptor(rd);
 		}
 		repExec.setPrm(parameters);

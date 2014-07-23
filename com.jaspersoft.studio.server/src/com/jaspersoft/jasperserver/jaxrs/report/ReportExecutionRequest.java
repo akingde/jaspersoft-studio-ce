@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2005 - 2009 Jaspersoft Corporation. All rights  reserved.
+1* Copyright (C) 2005 - 2009 Jaspersoft Corporation. All rights  reserved.
 * http://www.jaspersoft.com.
 *
 * Unless you have purchased  a commercial license agreement from Jaspersoft,
@@ -39,6 +39,7 @@ public class ReportExecutionRequest {
     private Boolean interactive = true;
     private Boolean ignorePagination = false;
     private Boolean async = false;
+    private Boolean allowInlineScripts = false;
     private String transformerKey;
     private String outputFormat;
     private String attachmentsPrefix;
@@ -53,7 +54,15 @@ public class ReportExecutionRequest {
         this.reportUnitUri = reportUnitUri;
     }
 
-    public Boolean getFreshData() {
+    public Boolean getAllowInlineScripts() {
+			return allowInlineScripts;
+		}
+
+		public void setAllowInlineScripts(Boolean allowInlineScripts) {
+			this.allowInlineScripts = allowInlineScripts;
+		}
+
+		public Boolean getFreshData() {
         return freshData;
     }
 

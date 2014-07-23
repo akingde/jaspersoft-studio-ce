@@ -29,6 +29,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
@@ -42,13 +43,15 @@ import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.editor.action.RunStopAction;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 
-public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IParametrable {
+public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IParametrable, CachedSelectionProvider {
 	public static final String ID = "com.jaspersoft.studio.server.editor.ReportUnitEditor";
 	private String reportUnitURI;
 
@@ -70,6 +73,18 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 			}
 		});
 
+	}
+
+	@Override
+	public void setCurrentViewer(String viewerKey, boolean refresh) {
+		super.setCurrentViewer(viewerKey, refresh);
+
+		getTopToolBarManager(null).contributeItems(getRightContainer().getViewer(viewerKey));
+	}
+
+	@Override
+	protected void afterRightSwitchView() {
+		runReport();
 	}
 
 	public void runReport() {
@@ -234,7 +249,13 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 
 	@Override
 	public void setMode(String mode) {
-		// TODO Auto-generated method stub
 
+	}
+
+	private CommonSelectionCacheProvider selectionCache = new CommonSelectionCacheProvider();
+
+	@Override
+	public CommonSelectionCacheProvider getSelectionCache() {
+		return selectionCache;
 	}
 }
