@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.preferences.ElementsDefaultPreferencePage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
@@ -466,7 +468,7 @@ public class MTextField extends MTextElement{
 	 */
 	@Override
 	public int getDefaultHeight() {
-		return 20;
+		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getInt(ElementsDefaultPreferencePage.TEXT_FIELD_HEIGHT);
 	}
 
 	/*
@@ -476,7 +478,7 @@ public class MTextField extends MTextElement{
 	 */
 	@Override
 	public int getDefaultWidth() {
-		return 100;
+		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getInt(ElementsDefaultPreferencePage.TEXT_FIELD_WIDTH);
 	}
 
 	/*

@@ -331,6 +331,12 @@
             class="com.jaspersoft.studio.preferences.EditorsPreferencePage"
             id="com.jaspersoft.studio.preferences.EditorsPreferencePage"
             name="%Editors">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            class="com.jaspersoft.studio.preferences.ElementsDefaultPreferencePage"
+            id="com.jaspersoft.studio.editor.elementsdefault"
+            name="%defaultsPage">
       </page>      
    </extension>
    <extension

@@ -531,6 +531,11 @@ public class Messages extends NLS {
 	public static String EditDataSourceAction_tool_tip;
 	public static String ElementLabelProvider_items_selected;
 	public static String ElementLabelProvider_no_items_selected;
+	public static String ElementsDefaultPreferencePage_fieldHeight;
+	public static String ElementsDefaultPreferencePage_fieldWidth;
+	public static String ElementsDefaultPreferencePage_staticHeight;
+	public static String ElementsDefaultPreferencePage_staticWidth;
+	public static String ElementsDefaultPreferencePage_tooltip;
 	public static String ElementWithValueExpressionDialog_AssertCustomNameLblNotNull;
 	public static String ElementWithValueExpressionDialog_AssertCustomTitleNotNull;
 	public static String ElementWithValueExpressionDialog_AssertCustomValueExprLblNotNull;

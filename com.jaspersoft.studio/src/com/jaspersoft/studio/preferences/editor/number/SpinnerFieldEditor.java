@@ -98,7 +98,8 @@ public class SpinnerFieldEditor extends FieldEditor {
 	}
 
 	public int getNumberOfControls() {
-		return (1);
+		if (getLabelControl() == null) return 1;
+		return 2;
 	}
 
 	public void setIncrement(int increment) {
