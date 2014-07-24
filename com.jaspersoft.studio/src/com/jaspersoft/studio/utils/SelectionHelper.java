@@ -298,4 +298,12 @@ public class SelectionHelper {
 		return true;
 	}
 
+	public static boolean isMainEditorOpened() {
+		IEditorPart activeJRXMLEditor = getActiveJRXMLEditor();
+		if(activeJRXMLEditor instanceof JrxmlEditor) {
+			return ((JrxmlEditor)activeJRXMLEditor).getReportContainer().getActivePage() == 0;
+		}
+		return false;
+	}
+	
 }

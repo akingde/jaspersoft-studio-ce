@@ -30,6 +30,7 @@ import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class CreateE4ObjectCommand extends CreateElementCommand {
 	protected ANode child;
@@ -79,7 +80,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		try {
-			if (child.getParent().getParent() instanceof MDataset) {
+			if (SelectionHelper.isMainEditorOpened() && child.getParent().getParent() instanceof MDataset) {
 				operationCancelled = true;
 				UIUtils.showInformation(Messages.CreateE4ObjectCommand_subdataseterror);
 				return;
