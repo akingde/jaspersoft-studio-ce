@@ -12,63 +12,58 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.protocol.restv2;
 
+import java.io.ByteArrayInputStream;
+
+import net.sf.jasperreports.util.CastorUtil;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.client.utils.URIBuilder;
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.preferences.CASListFieldEditor;
+import com.jaspersoft.studio.server.preferences.CASPreferencePage;
+import com.jaspersoft.studio.server.preferences.SSOServer;
+import com.jaspersoft.studio.server.utils.HttpUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CASUtil {
-	public static String getToken(ServerProfile sp) {
-		String user = null;
-		String errorCode = null;
-		String errorMessage = null;
-		String xmlResponse = null;
+	public static String getToken(ServerProfile sp, IProgressMonitor monitor) throws Exception {
+		String v = null;
+		v = JasperReportsConfiguration.getDefaultInstance().getPrefStore().getString(CASPreferencePage.CAS);
+		for (String line : v.split("\n")) {
+			if (line.isEmpty())
+				continue;
+			SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.mapping);
+			if (srv.getUuid().equals(sp.getSsoUuid())) {
+				return doGetTocken(sp, srv, monitor);
+			}
+		}
+		throw new Exception("Could not find SSO Server in the list.");
+	}
 
-		/* instantiate a new ServiceTicketValidator */
-		// ServiceTicketValidator sv = new ServiceTicketValidator();
-		//
-		// /* set its parameters */
-		// sv.setCasValidateUrl("https://secure.its.yale.edu/cas/serviceValidate");
-		// sv.setService(urlOfThisService);
-		// sv.setServiceTicket(request.getParameter("ticket"));
-		//
-		// /*
-		// * If we want to be able to acquire proxy tickets (requires callback
-		// servlet
-		// * to be set up in web.xml - see below)
-		// */
-		//
-		// String urlOfProxyCallbackServlet =
-		// "https://portal.yale.edu/CasProxyServlet";
-		//
-		// sv.setProxyCallbackUrl(urlOfProxyCallbackServlet);
-		//
-		// /* contact CAS and validate */
-		// sv.validate();
-		//
-		// /* if we want to look at the raw response, we can use getResponse() */
-		// xmlResponse = sv.getResponse();
-		//
-		// /* read the response */
-		//
-		// // Yes, this method is misspelled in this way
-		// // in the ServiceTicketValidator implementation.
-		// // Sorry.
-		// if (sv.isAuthenticationSuccesful()) {
-		// user = sv.getUser();
-		// } else {
-		// errorCode = sv.getErrorCode();
-		// errorMessage = sv.getErrorMessage();
-		// /* handle the error */
-		// }
-		//
-		// /* The user is now authenticated. */
-		//
-		// /* If we did set the proxy callback url, we can get proxy tickets with:
-		// */
-		//
-		// String urlOfTargetService =
-		// "http://hkg2.its.yale.edu/someApp/portalFeed";
-		//
-		// String proxyTicket = ProxyTicketReceptor.getProxyTicket(sv.getPgtIou(),
-		// urlOfTargetService);
-		return "";
+	public static String doGetTocken(ServerProfile sp, SSOServer srv, IProgressMonitor monitor) throws Exception {
+		Executor exec = Executor.newInstance();
+
+		String url = srv.getUrl();
+		if (!url.endsWith("/"))
+			url += "/";
+		URIBuilder ub = new URIBuilder(srv.getUrl() + "cas/v1/tickets");
+		ub.addParameter("username", srv.getUser());
+		ub.addParameter("password", srv.getPassword());
+
+		Request req = HttpUtils.post(ub.build().toASCIIString(), sp);
+
+		String tgtID = "TGT ID";
+
+		ub = new URIBuilder(srv.getUrl() + "cas/v1/tickets/" + tgtID);
+		ub.addParameter("username", srv.getUser());
+		ub.addParameter("password", srv.getPassword());
+
+		req = HttpUtils.post(ub.build().toASCIIString(), sp);
+
+		return null;
 	}
 }

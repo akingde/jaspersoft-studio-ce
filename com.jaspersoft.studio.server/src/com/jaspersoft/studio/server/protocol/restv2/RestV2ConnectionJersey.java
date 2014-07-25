@@ -126,7 +126,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		target = client.target(url + "j_spring_security_check");
 		target = target.queryParam("forceDefaultRedirect", "false");
 		if (sp.isUseSSO()) {
-			String token = CASUtil.getToken(sp);
+			String token = CASUtil.getToken(sp, monitor);
 			target = target.queryParam("ticket", token);
 		} else {
 			target = target.queryParam("j_username", sp.getUser());

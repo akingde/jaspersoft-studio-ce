@@ -260,6 +260,14 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		}
 		ccas.setItems(items);
 		ccas.select(sel);
+		ccas.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int ind = ccas.getSelectionIndex();
+				if (ind >= 0 && ind < ssoservers.size())
+					value.setSsoUuid(ssoservers.get(ind).getUuid());
+			}
+		});
 
 		if (value.isUseSSO())
 			stackLayout.topControl = cmpCAS;
