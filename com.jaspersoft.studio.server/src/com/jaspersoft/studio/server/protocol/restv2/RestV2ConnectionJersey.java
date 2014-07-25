@@ -497,26 +497,26 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				}
 				rer.setParameters(new ReportParameters(list));
 			}
-			// if (rer.getOutputFormat().equals(Argument.RUN_OUTPUT_FORMAT_HTML)) {
-			// String rourl = target.getUri().toASCIIString() + "reports" +
-			// repExec.getReportURI() + ".html";
-			// if (rer.getParameters() != null) {
-			// String del = "?";
-			// for (ReportParameter rp : rer.getParameters().getReportParameters()) {
-			// rourl += del;
-			// rourl += rp.getName() + "=";
-			// for (String v : rp.getValues()) {
-			// rourl += v;
-			// }
-			// del = "&";
-			// }
-			// }
-			// repExec.setBaseUrl(target.getUri().toASCIIString());
-			// repExec.setPathUrl("reports" + repExec.getReportURI() + ".html");
-			// repExec.setReportOutputCookie(connector.getCookieStore().getCookies());
-			// repExec.setStatus("ready");
-			// return repExec;
-			// }
+			// if (!getServerInfo().getVersion().equals("5.6.0"))
+			if (rer.getOutputFormat().equals(Argument.RUN_OUTPUT_FORMAT_HTML)) {
+				String rourl = "reports" + repExec.getReportURI() + ".html";
+				if (rer.getParameters() != null) {
+					String del = "?";
+					for (ReportParameter rp : rer.getParameters().getReportParameters()) {
+						rourl += del;
+						rourl += rp.getName() + "=";
+						for (String v : rp.getValues()) {
+							rourl += v;
+						}
+						del = "&";
+					}
+				}
+				repExec.setBaseUrl(target.getUri().toASCIIString());
+				repExec.setPathUrl(rourl);
+				repExec.setReportOutputCookie(connector.getCookieStore().getCookies());
+				repExec.setStatus("ready");
+				return repExec;
+			}
 
 			tgt = target.path("reportExecutions");
 			req = tgt.request();
