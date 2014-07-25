@@ -16,7 +16,9 @@ import java.util.List;
 
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.components.table.StandardGroupCell;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.table.model.MTable;
@@ -46,18 +48,20 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 	private Cell jrCell;
 	private int height = 0;
 	private List<INode> columns;
+	private ANode parent;
 
 	@SuppressWarnings("unchecked")
 	public CreateColumnGroupCellCommand(ANode parent, MColumnGroup srcNode) {
 		super(parent);
 		columns = srcNode.getChildren();
 		type = (Class<ANode>) parent.getClass();
-		if (parent instanceof MTableGroupHeader)
-			groupName = ((MTableGroupHeader) parent).getJrDesignGroup()
-					.getName();
-		if (parent instanceof MTableGroupFooter)
-			groupName = ((MTableGroupFooter) parent).getJrDesignGroup()
-					.getName();
+		this.parent = parent;
+		if (parent instanceof MTableGroupHeader){
+			groupName = ((MTableGroupHeader) parent).getJrDesignGroup().getName();
+		}
+		if (parent instanceof MTableGroupFooter){
+			groupName = ((MTableGroupFooter) parent).getJrDesignGroup().getName();
+		}
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
 		height = searchSuggestedHeight(srcNode.getParent());
 		if (height == -1){
@@ -71,6 +75,31 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 			height = getMinCellHeight(columns, height);
 			setCellHeightDelta(columns, -height);
 		}
+	}
+	
+	private int getGroupIndex(ANode groupNode){
+		if (groupNode instanceof MTableGroupHeader){
+			int startIndex = -1;
+			for(INode node : groupNode.getParent().getChildren()){
+				if (startIndex == -1 && node instanceof MTableGroupHeader){
+					startIndex = 0;
+				}
+				if (node == groupNode) break;
+				else if (startIndex > -1) startIndex++;
+			}
+			return startIndex;
+		} else if (groupNode instanceof MTableGroupFooter){
+			int startIndex = -1;
+			for(INode node : groupNode.getParent().getChildren()){
+				if (startIndex == -1 && node instanceof MTableGroupFooter){
+					startIndex = 0;
+				}
+				if (node == groupNode) break;
+				else if (startIndex > -1) startIndex++;
+			}
+			return startIndex;
+		}
+		return -1;
 	}
 	
 	/**
@@ -186,10 +215,29 @@ public class CreateColumnGroupCellCommand extends JSSCompoundCommand {
 		else if (type.isAssignableFrom(MTableColumnFooter.class))
 			jrColumn.setColumnFooter(jrCell);
 
-		else if (type.isAssignableFrom(MTableGroupHeader.class))
-			jrColumn.setGroupHeader(groupName, jrCell);
-		else if (type.isAssignableFrom(MTableGroupFooter.class))
-			jrColumn.setGroupFooter(groupName, jrCell);
+		else if (type.isAssignableFrom(MTableGroupHeader.class)){
+			int groupIndex = getGroupIndex(parent);
+			List<GroupCell> groupHeaders = jrColumn.getGroupHeaders();
+			if (groupIndex != -1 && groupHeaders.size()> groupIndex){
+				StandardGroupCell groupCell = new StandardGroupCell(groupName, jrCell);
+				groupHeaders.add(groupIndex, groupCell);
+				jrColumn.getEventSupport().fireCollectionElementAddedEvent(StandardBaseColumn.PROPERTY_GROUP_HEADERS, groupCell, groupIndex);
+			} else {
+				jrColumn.setGroupHeader(groupName, jrCell);
+			}
+
+		}
+		else if (type.isAssignableFrom(MTableGroupFooter.class)){
+			int groupIndex = getGroupIndex(parent);
+			List<GroupCell> groupFooters = jrColumn.getGroupFooters();
+			if (groupIndex != -1 && groupFooters.size()>groupIndex){
+				StandardGroupCell groupCell = new StandardGroupCell(groupName, jrCell);
+				groupFooters.add(groupIndex, groupCell);
+				jrColumn.getEventSupport().fireCollectionElementAddedEvent(StandardBaseColumn.PROPERTY_GROUP_FOOTERS, groupCell, groupIndex);
+			} else {
+				jrColumn.setGroupFooter(groupName, jrCell);
+			}
+		}
 		
 		super.execute();
 	}

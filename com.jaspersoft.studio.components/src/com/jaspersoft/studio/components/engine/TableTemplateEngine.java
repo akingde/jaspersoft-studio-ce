@@ -20,7 +20,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
-import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -89,6 +88,9 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 */
 	public static final String FIELD_MARKER = "field";
 	
+	
+	public static final String GROUP_MARKER = "groupfield";
+	
 	/**
 	 * Text inside a textfield placeholder, before JSS the 5.6.1
 	 */
@@ -133,7 +135,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	/**
 	 * Sample of the text element that should be used inside the table group cells
 	 */
-	private JRDesignTextField tableGroupField;
+	private List<List<JRDesignElement>> tableGroupField;
 	
 	/**
 	 * List of the design element that are inside the detail of the template
@@ -146,7 +148,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private List<JRDesignElement> tableFooterContent;
 	
 	/**
-	 * Width of the table
+	 * Width of the table in the template
 	 */
 	private int tableWidth = 200;
 	
@@ -156,9 +158,14 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	private int tableHeight = 200;
 	
 	/**
-	 * The width of the column
+	 * The width of the column in the template
 	 */
 	private int columnWidth = 40;
+
+	/**
+	 * The width of the group in the template
+	 */
+	private int templateGroupWidth = 200;
 	
 	/**
 	 * X position of the table
@@ -271,6 +278,52 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	}
 	
 	/**
+	 * Create a group column of the table, with a width of the whole table. the content in the new column
+ 	 * The size and position of the content will be relative to the width of the new column that 
+	 * may be different from the one of the template.
+	 * 
+	 *  
+	 * @param groupCell cell of the group where the element read from the template are placed
+	 * @param groupIndex number of the group
+	 * @param newGroupWidth width of the group in the resulting table
+	 * @param groupExpression the expression of the groupfield
+	 * @param jd the jasperdesign
+	 */
+	private void createGroupCell(DesignCell groupCell, int groupIndex, int newGroupWidth, JRDesignExpression groupExpression, JasperDesign jd){
+		List<JRDesignElement> groupHeaderContent = null;
+		if (tableGroupField.size() > groupIndex){
+			groupHeaderContent = tableGroupField.get(groupIndex);
+		} else if (!tableGroupField.isEmpty()){
+			groupHeaderContent = tableGroupField.get(tableGroupField.size()-1);
+		}
+		if (groupHeaderContent != null){
+			for(JRDesignElement element : groupHeaderContent){
+				JRDesignElement copyElement = (JRDesignElement)element.clone();
+				copyElement.setX(getRelativeWidth(newGroupWidth, copyElement.getX(), templateGroupWidth));
+				copyElement.setWidth(getRelativeWidth(newGroupWidth, copyElement.getWidth(), templateGroupWidth));
+				
+				if (copyElement instanceof JRDesignTextField){
+					JRDesignTextField field = (JRDesignTextField)copyElement;
+					if (isGroupPlaceholder(field)){
+						field.setExpression(groupExpression);
+					}
+				}
+				
+				groupCell.addElement(copyElement);
+			}
+		} else {
+			JRDesignTextField sText = new MTextField().createJRElement(jd);
+			sText.setWidth(newGroupWidth);
+			sText.setHeight(groupCell.getHeight());
+			sText.setX(0);
+			sText.setY(0);
+			sText.setExpression(groupExpression);
+			groupCell.addElement(sText);
+		}
+	}
+	
+	
+	/**
 	 * Check if a JRDesignText element is a placeholder for the static text appearance in
 	 * the column header
 	 * 
@@ -309,6 +362,30 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	}
 	
 	/**
+	 * Check if a JRDesignTextField element is a placeholder for the text field appearance in
+	 * the detail
+	 * 
+	 * @param element the element
+	 * @return true if it is a place holder, false otherwise
+	 */
+	private boolean isGroupPlaceholder(JRDesignTextField element){
+		JRExpression expression = element.getExpression();
+		if (expression != null && expression.getText() != null){
+			String text = expression.getText().toLowerCase();
+			if (text.startsWith("\"")) { //$NON-NLS-1$
+				text = text.substring(1);
+			}
+			if (text.endsWith("\"")) { //$NON-NLS-1$
+				text = text.substring(0, text.length() - 1);
+			}
+			if (text.equals(GROUP_MARKER)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Calculate a relative width for an element using a proportion between
 	 * the width of the column in the template and the width in the generated
 	 * report
@@ -318,7 +395,11 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 	 * @return width of the element in the report
 	 */
 	private int getRelativeWidth(int newColwidth, int elementWidth){
-		return (newColwidth*elementWidth)/columnWidth;
+		return getRelativeWidth(newColwidth,elementWidth,columnWidth);
+	}
+	
+	private int getRelativeWidth(int newColwidth, int elementWidth, int colWidth){
+		return (newColwidth*elementWidth)/colWidth;
 	}
 	
 	/**
@@ -417,19 +498,15 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				//Use col header as sample for the group cells
 				int height = parentCol.getColumns().get(0).getColumnHeader().getHeight();
 				//Create a spanned cell inside the column group, that take the field with the name of the group
+				int groupIndex = 0;
 				for(Object field : groupFields){
 					JRDesignField groupField = (JRDesignField) field;
 					DesignCell cell = new DesignCell();
 					cell.setHeight(height);
-					JRDesignTextField sText = (JRDesignTextField)tableGroupField.clone();
-					sText.setWidth(parentCol.getWidth());
-					sText.setHeight(cell.getHeight());
-					sText.setX(0);
-					sText.setY(0);
 					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + groupField.getName() + "}", groupField.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
-					sText.setExpression(groupExpression);
-					cell.addElement(sText);
+					createGroupCell(cell, groupIndex, groupColWidth, groupExpression, jd);
 					parentCol.setGroupHeader(groupField.getName(), cell);
+					groupIndex++;
 				}
 				tbl.addColumn(parentCol);
 				int minimumHeight = getTableHeight(parentCol);
@@ -537,6 +614,19 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		
 		detailContent = new ArrayList<JRDesignElement>();
 		addSectionElementsToList(firstCol.getDetailCell(), detailContent);
+		
+		tableGroupField = new ArrayList<List<JRDesignElement>>();
+		StandardColumnGroup groupColumn = getStandadGroupColumn(table.getColumns().get(0));
+		if (groupColumn != null){
+			templateGroupWidth = groupColumn.getWidth();
+			for(GroupCell cell : groupColumn.getGroupHeaders()){
+				if (cell.getCell() != null){
+					List<JRDesignElement> cellContent = new ArrayList<JRDesignElement>();
+					addSectionElementsToList(cell.getCell(), cellContent);
+					tableGroupField.add(cellContent);
+				}
+			}
+		}
 	}
 	
 
@@ -556,16 +646,17 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		if (tableComponent != null){
 			StandardTable table = (StandardTable)tableComponent.getComponent();
 			
-			tableGroupField = new MTextField().createJRElement(jd);
-			generateTableContentList(table);
-			
 			tableWidth = tableComponent.getWidth();
+			templateGroupWidth = tableComponent.getWidth();
 			tableHeight = tableComponent.getHeight();
 			columnWidth = table.getColumns().get(0).getWidth();
 			tableX = tableComponent.getX();
 			tableY = tableComponent.getY();
+			
+			generateTableContentList(table);
+			
 			if (table.getColumns().size()>0){
-				StandardColumn col = (StandardColumn) table.getColumns().get(0);
+				StandardColumn col = getStandadColumn(table.getColumns().get(0));
 				boolean tableHeader = col.getTableHeader() != null;
 				boolean tableFooter = col.getTableFooter() != null;
 				boolean columnHeader = col.getColumnHeader() != null;
@@ -584,15 +675,16 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			colFooterContent = new ArrayList<JRDesignElement>();
 			colHeaderContent = new ArrayList<JRDesignElement>();
 			detailContent = new ArrayList<JRDesignElement>();
+			tableGroupField = new ArrayList<List<JRDesignElement>>();
+			List<JRDesignElement> fakeGroupPlaceHolder = new ArrayList<JRDesignElement>();
+			JRDesignTextField groupElement = new MTextField().createJRElement(jd);
+			groupElement.setExpression(ExprUtil.setValues(new JRDesignExpression(), "$F{Group1}", "java.Lang.Object"));
+			fakeGroupPlaceHolder.add(groupElement);
+			tableGroupField.add(fakeGroupPlaceHolder);
+			
 			if (colHeaderLabel != null) colHeaderContent.add(colHeaderLabel);
 			if (cellField != null) detailContent.add(cellField);
-			
-			JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(0);
-			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
-				JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
-				tableGroupField = DefaultTemplateEngine.findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$
-			} else tableGroupField = new MTextField().createJRElement(jd);
-			
+		
 			tableWidth = jd.getPageWidth()-jd.getLeftMargin()-jd.getRightMargin();
 			
 			if (jd.getSummary() == null){
@@ -665,12 +757,31 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		return null;
 	}
 	
+	/**
+	 * Return the first standard group column, drilling down if the current column is a group
+	 * 
+	 * @return a standard group column or null if it can't be found
+	 */
 	private static StandardColumn getStandadColumn(BaseColumn container){
 		if (container instanceof StandardColumnGroup){
 			return getStandadColumn(((StandardColumnGroup)container).getColumns().get(0));
 		} else if (container instanceof StandardColumn){
 			return (StandardColumn)container;
 		}
+		return null;
+	}
+	
+	/**
+	 * Check if the passed column is a group column and return it
+	 * 
+	 * @param the column to check
+	 * @return the parameter column casted to the correct type if it is a standard group column
+	 * null otherwise
+	 */
+	private static StandardColumnGroup getStandadGroupColumn(BaseColumn container){
+		if (container instanceof StandardColumnGroup){
+			return (StandardColumnGroup)container;
+		} 
 		return null;
 	}
 	
@@ -693,8 +804,6 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		for (JRField field : mainDataset.getFields())
 			mainDataset.removeField(field);
 	}
-
-	
 
 	/**
 	 * Create the report with the table inside
@@ -823,10 +932,6 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			if (table.getColumns().size()>1 || table.getColumns().size() < 1) {
 				errorsList.add(Messages.TableTemplateEngine_oneColumnError); 
 			} else {
-				BaseColumn col = table.getColumns().get(0);
-				if (col instanceof ColumnGroup){
-					errorsList.add(Messages.TableTemplateEngine_groupError);
-				}
 				if (findStaticTextElement(table, TEXT_MARKER) == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
 				if (findTextFieldElement(table, FIELD_MARKER) == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
 			}
