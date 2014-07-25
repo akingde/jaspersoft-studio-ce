@@ -15,7 +15,6 @@ package com.jaspersoft.studio.components.table;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -78,7 +77,6 @@ import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementC
 import com.jaspersoft.studio.components.table.model.cell.command.ReorderElementGroupCommand;
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
-import com.jaspersoft.studio.components.table.model.column.MColumnComparator;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnAfterAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeforeAction;
 import com.jaspersoft.studio.components.table.model.column.action.CreateColumnBeginAction;
@@ -280,7 +278,6 @@ public class TableComponentFactory implements IComponentFactory {
 
 			createCellTableFooter(mtf, bc, i + 1, i);
 		}
-		Collections.sort(mtd.getChildren(), MColumnComparator.inst());
 	}
 
 	public static int createCellGroupHeader(ANode mth, BaseColumn bc, int i, String grName, int index) {
@@ -313,7 +310,7 @@ public class TableComponentFactory implements IComponentFactory {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
 			for (BaseColumn bcg : scg.getColumns())
-				i = createCellDetail(mth, bcg, i, index);
+				i = createCellDetail(mth, bcg, i, i);
 		} else {
 			createColumnCell(mth, bc, i, ((StandardColumn) bc).getDetailCell(), index);
 			return ++i;

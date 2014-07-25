@@ -27,12 +27,12 @@ import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.TableManager;
@@ -467,18 +467,18 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 					final MColumn child = this;
 					final int newIndex = parent.getChildren().indexOf(this);
 
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							parent.removeChild(child);
+					parent.removeChild(child);
 
-							section.createColumn(parent, bc, 122, newIndex);
+					section.createColumn(parent, bc, 122, newIndex);
 
-							MTable mtable = (MTable) section.getParent();
-							mtable.getTableManager().refresh();
-							TableColumnNumerator.renumerateColumnNames(mtable);
-							parent.propertyChange(evt);
-						}
-					});
+					MTable mtable = (MTable) section.getParent();
+					if (mtable == null){
+						((JRPropertyChangeSupport)evt.getSource()).removePropertyChangeListener(child);
+					} else {
+						mtable.getTableManager().refresh();
+						TableColumnNumerator.renumerateColumnNames(mtable);
+						parent.propertyChange(evt);
+					}
 				}
 			}
 		}

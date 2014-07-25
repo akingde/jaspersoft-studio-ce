@@ -20,6 +20,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -86,8 +87,11 @@ public abstract class AMCollection extends MCollection {
 				}
 
 				MTable mTable = (MTable) getParent();
-				mTable.getTableManager().refresh();
-				//TableColumnNumerator.renumerateColumnNames(mTable);
+				if (mTable == null) {
+					((JRChangeEventsSupport)evt.getSource()).getEventSupport().removePropertyChangeListener(this);
+				} else {
+					mTable.getTableManager().refresh();
+				}
 			}
 		}
 		super.propertyChange(evt);

@@ -18,6 +18,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -113,7 +114,12 @@ public class MColumnGroup extends MColumn {
 				}
 			}
 			MTable mTable = (MTable) section.getParent();
-			mTable.getTableManager().refresh();
+			if (mTable == null){
+				//its a removed group, delete the listener
+				if (evt.getSource() instanceof JRChangeEventsSupport){
+					((JRChangeEventsSupport)evt.getSource()).getEventSupport().removePropertyChangeListener(this);	
+				}
+			} else mTable.getTableManager().refresh();
 		}
 		super.propertyChange(evt);
 	}

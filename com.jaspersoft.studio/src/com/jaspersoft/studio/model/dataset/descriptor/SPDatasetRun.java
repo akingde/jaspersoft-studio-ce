@@ -46,14 +46,20 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SPDatasetRun extends ASPropertyWidget {
+	
 	private Combo dsetCombo;
 
 	private Button params;
+	
 	private Button paramMap;
 
-	private MDatasetRun mDataSet;
+	private boolean alldatasets = true;
+	
+	protected APropertyNode pnode;
+	
+	protected MDatasetRun mDataSet;
 
-	private DatasetRunWidgetRadio dsRunWidget;
+	protected DatasetRunWidgetRadio dsRunWidget;
 
 	public SPDatasetRun(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor, boolean alldatasets) {
 		this(parent, section, pDescriptor);
@@ -72,8 +78,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 			public void widgetSelected(SelectionEvent e) {
 				boolean en = !dsetCombo.getText().equals(ModelUtils.MAIN_DATASET);
 				setDatasetEnabled(en);
-				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText()
-						: ""); //$NON-NLS-1$
+				changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_DATASET_NAME, en ? dsetCombo.getText(): ""); //$NON-NLS-1$
 			}
 		});
 
@@ -169,9 +174,6 @@ public class SPDatasetRun extends ASPropertyWidget {
 		});
 	}
 
-	private boolean alldatasets = true;
-	private APropertyNode pnode;
-
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
 		this.pnode = pnode;
@@ -211,7 +213,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 		return null;
 	}
 
-	private void changeProperty(AbstractSection section, Object property, Object prop, Object value) {
+	protected void changeProperty(AbstractSection section, Object property, Object prop, Object value) {
 		JRDesignDatasetRun jDatasetRun = null;
 		if (mDataSet == null && prop.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
 			jDatasetRun = new JRDesignDatasetRun();

@@ -24,7 +24,8 @@ import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 
 public class DatasetRunPropertyDescriptor extends PropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
-	private boolean alldataset = true;
+	
+	protected boolean alldataset = true;
 
 	public DatasetRunPropertyDescriptor(Object id, String displayName, boolean alldataset) {
 		super(id, displayName);

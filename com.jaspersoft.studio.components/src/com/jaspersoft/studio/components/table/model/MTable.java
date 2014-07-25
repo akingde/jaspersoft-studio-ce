@@ -13,12 +13,14 @@
 package com.jaspersoft.studio.components.table.model;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.headertoolbar.HeaderToolbarElement;
+import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardTable;
@@ -29,9 +31,11 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
@@ -40,6 +44,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.TableComponentFactory;
+import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
 import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -55,27 +60,66 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class MTable extends MGraphicElement implements IContainer, IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor;
 
+	private static IIconDescriptor iconDescriptor;
+	
+	private TableManager ctManager;
+	
 	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
+	 * The dataset where the group listener was placed last
 	 */
-	public static IIconDescriptor getIconDescriptor() {
-		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("table"); //$NON-NLS-1$
-		return iconDescriptor;
-	}
+	private JRDesignDataset datasetWithListener = null;
+	
+	/**
+	 * Listener put on the current dataset to refresh the group node on the tables
+	 * when a group is added on removed on his dataset
+	 */
+	private PropertyChangeListener datasetGroupListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)){
+				//this need to be done only inside the table editor
+				if (evt.getNewValue() != null && evt.getOldValue() == null && getChildren().size()>0){
+					MTableDetail detailNode = null;
+					for(INode child : getChildren()){
+						if (detailNode == null && child instanceof MTableDetail){
+							detailNode = (MTableDetail) child;
+							break;
+						}
+					}
+					int detailIndex = getChildren().indexOf(detailNode);
+					JRDesignGroup jrGroup = (JRDesignGroup)evt.getNewValue();
+					MTableGroupHeader newHeader = new MTableGroupHeader(MTable.this, (JRDesignComponentElement)getValue(), jrGroup, "");
+					addChild(newHeader, detailIndex);
+					detailIndex+=2;
+					MTableGroupFooter newFooter = new MTableGroupFooter(MTable.this, (JRDesignComponentElement)getValue(), jrGroup, "");
+					addChild(newFooter, detailIndex);
+					List<BaseColumn> columns = getStandardTable().getColumns();
+					for (int i = 0; i < columns.size(); i++) {
+						BaseColumn bc = columns.get(i);
+						TableComponentFactory.createCellGroupHeader(newHeader, bc, i + 1, jrGroup.getName(), i);
+						TableComponentFactory.createCellGroupFooter(newFooter, bc, i + 1, jrGroup.getName(), i);
+					}
+				} else if (evt.getNewValue() == null && evt.getOldValue() != null){
+					JRDesignGroup jrGroup = (JRDesignGroup)evt.getOldValue();
+					deleteGroup(jrGroup.getName());
+				}
+				//Run an event on the table to force a grapghical refresh of the columnss
+				setChangedProperty(true);
+				MTable.this.propertyChange(new PropertyChangeEvent(getValue(), StandardTable.PROPERTY_COLUMNS, null, null));
+			} 
+		}
+	};
+	
 
 	/**
 	 * Instantiates a new m chart.
@@ -88,12 +132,22 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		super(parent, newIndex);
 		this.ctManager = ctManager;
 	}
-
-	private TableManager ctManager;
-
+	
 	public TableManager getTableManager() {
 		return ctManager;
 	}
+	
+	/**
+	 * Gets the icon descriptor.
+	 * 
+	 * @return the icon descriptor
+	 */
+	public static IIconDescriptor getIconDescriptor() {
+		if (iconDescriptor == null)
+			iconDescriptor = new TableNodeIconDescriptor("table"); //$NON-NLS-1$
+		return iconDescriptor;
+	}
+	
 
 	/**
 	 * 
@@ -139,7 +193,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run, false);
+		TableDatasetRunProperyDescriptor datasetRunD = new TableDatasetRunProperyDescriptor(StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run, false);
 		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
 		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
@@ -160,8 +214,6 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	@Override
 	public void setGroupItems(String[] items) {
 		super.setGroupItems(items);
-		// if (mCrosstabDataset != null)
-		// mCrosstabDataset.setGroupItems(items);
 	}
 
 	@Override
@@ -235,27 +287,9 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		JRDesignComponentElement jrElement = new JRDesignComponentElement();
 		StandardTable component = new StandardTable();
 
-		// jrElement.setKey((String) wizardDescriptor.getProperty("basename"));
 		((JRDesignComponentElement) jrElement).setComponent(component);
 		((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		// JRDesignDataset newDataset = new JRDesignDataset(false);
-		//		String name = "Table Dataset "; //$NON-NLS-1$
-		// for (int i = 1;; i++) {
-		// if (!jasperDesign.getDatasetMap().containsKey(name + i)) {
-		// newDataset.setName(name + i);
-		// break;
-		// }
-		// }
-		//
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
-		//
-		// datasetRun.setDatasetName(newDataset.getName());
-		// JRDesignExpression exp = new JRDesignExpression();
-		//		exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");// NOI18N //$NON-NLS-1$
-		//		exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");// NOI18N //$NON-NLS-1$
-		//
-		// datasetRun.setDataSourceExpression(exp);
 		component.setDatasetRun(datasetRun);
 		return jrElement;
 	}
@@ -297,12 +331,10 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		/*
-		 * if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) &&
-		 * evt.getNewValue() != null){ JRBaseElement element =
-		 * (JRBaseElement)evt.getNewValue(); new StyleChangeNotifier(this, element);
-		 * }
-		 */
+
+		if (evt.getPropertyName().equals(StandardTable.PROPERTY_DATASET_RUN)){
+			addDatasetGroupListener();
+		}
 		if (evt.getPropertyName().equals(JRDesignFrame.PROPERTY_CHILDREN) || evt.getPropertyName().equals(JRDesignElement.PROPERTY_ELEMENT_GROUP) || evt.getPropertyName().equals(MColumn.PROPERTY_NAME)) {
 			// The children are changed, need to build a new full model when it will
 			// be necessary
@@ -383,6 +415,50 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	public void setValue(Object value) {
 		super.setValue(value);
 		fullModelTable = null;
+		addDatasetGroupListener();
+	}
+	
+	/**
+	 * Delete a group node from the table, both header
+	 * and footer if present
+	 * 
+	 * @param groupName the name of the group
+	 */
+	private void deleteGroup(String groupName){
+		MTableGroupFooter footer = null;
+		MTableGroupHeader header = null;
+		for(INode child : getChildren()){
+			if (child instanceof MTableGroupHeader){
+				MTableGroupHeader groupHeader = (MTableGroupHeader)child;
+				if (groupHeader.getJrDesignGroup().getName().equals(groupName)){
+					header = groupHeader;
+				}
+			} else if (child instanceof MTableGroupFooter){
+				MTableGroupFooter groupFooter = (MTableGroupFooter)child;
+				if (groupFooter.getJrDesignGroup().getName().equals(groupName)){
+					footer = groupFooter;
+				}
+			}
+			if (footer != null && header != null) break;
+		}
+		if (footer != null) removeChild(footer);
+		if (header != null) removeChild(header);
+	}
+	
+	/**
+	 * Add the dataset group listener to the current table dataset, but before remove
+	 * the old one if present
+	 */
+	private void addDatasetGroupListener(){
+		if (datasetWithListener != null){
+			datasetWithListener.getEventSupport().removePropertyChangeListener(datasetGroupListener);
+		}
+		JRDatasetRun datasetRun = getStandardTable().getDatasetRun();
+		JRDesignDataset dataset = (JRDesignDataset)getJasperDesign().getDatasetMap().get(datasetRun.getDatasetName());
+		datasetWithListener = dataset;
+		if (dataset != null){
+			dataset.getEventSupport().addPropertyChangeListener(datasetGroupListener);
+		}
 	}
 
 	@Override
