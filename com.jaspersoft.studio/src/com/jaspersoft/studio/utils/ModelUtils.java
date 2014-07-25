@@ -87,6 +87,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
@@ -1556,4 +1557,32 @@ public class ModelUtils {
 	public static String[] getDefaultReportLanguages() {
 		return DEFAULT_LANGUAGES;
 	}
+	
+	/**
+	 * Verifies if the specified element belongs to a dataset.
+	 * It makes sense for the element to be a field, variable or parameter.
+	 * 
+	 * @param element the element to check
+	 * @param datasetName the (target) dataset name
+	 * @return <code>true</code> if the element belongs to the dataset, <code>false</code> otherwise
+	 */
+	public static boolean belongsToDataset(APropertyNode element, String datasetName) {
+		Assert.isNotNull(element);
+		Assert.isNotNull(datasetName);
+		if(datasetName!=null) {
+			ANode upperParent = element.getParent().getParent();
+			if(upperParent instanceof MDataset) {
+				JRDesignDataset value = ((MDataset)upperParent).getValue();
+				String fDsName = value.getName();
+				return datasetName.equals(fDsName);
+			}
+			else if(upperParent instanceof MReport) {
+				MDataset mainDS = (MDataset) ((MReport)upperParent).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+				String mainDSName = (String) mainDS.getPropertyValue(JRDesignDataset.PROPERTY_NAME);
+				return datasetName.equals(mainDSName);				
+			}
+		}
+		return false;
+	}
+
 }

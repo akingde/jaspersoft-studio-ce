@@ -59,6 +59,7 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.command.DeleteElementGroupCommand;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.frame.MFrame;
 import com.jaspersoft.studio.model.image.MImage;
@@ -184,13 +185,28 @@ public class ListComponentFactory implements IComponentFactory {
 			cmd.setPropertyValue(style.getName());
 			return cmd;
 		}
-		if (child instanceof MField && (child.getValue() != null && parent instanceof MList))
-			return new CreateListElement4ObjectCommand(child, (MList) parent,location, newIndex);
-		if (child instanceof MParameterSystem && (child.getValue() != null && parent instanceof MList))
-			return new CreateListElement4ObjectCommand(child, (MList) parent, location, newIndex);
-		if (child instanceof MVariableSystem && (child.getValue() != null && parent instanceof MList))
-			return new CreateListElement4ObjectCommand(child, (MList) parent, location, newIndex);
-
+		
+		if((child instanceof MField || child instanceof MParameterSystem || child instanceof MVariableSystem) && child.getValue()!=null) {
+			MList list = null;
+			if(parent instanceof MList) {
+				list = (MList) parent;
+			}
+			else if(parent.getParent() instanceof MList) {
+				// remember that we allow to drop also upon other elements
+				list = (MList) parent.getParent();
+			}
+			
+			if(list != null) {
+				MDatasetRun dsRun = (MDatasetRun) list.getPropertyValue(MList.PREFIX + StandardListComponent.PROPERTY_DATASET_RUN);
+				if(dsRun!=null){
+					String datasetName = (String) dsRun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+					if(ModelUtils.belongsToDataset((MField)child, datasetName)){
+						return new CreateListElement4ObjectCommand(child, list, location, newIndex);						
+					}
+				}
+			}
+		}
+		
 		if (child instanceof MList) {
 			if (parent instanceof MElementGroup)
 				return new CreateListCommand((MElementGroup) parent, (MGraphicElement) child, location, newIndex);
