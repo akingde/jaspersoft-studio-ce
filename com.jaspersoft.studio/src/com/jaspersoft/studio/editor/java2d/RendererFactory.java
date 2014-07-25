@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.java2d;
 
-import org.eclipse.core.runtime.Platform;
 /*
  * A factory for creating Renderer objects.
  */
@@ -39,19 +38,19 @@ public final class RendererFactory {
 	 * @return the image renderer
 	 */
 	private static ImageRenderer createRenderer() {
-		try {
-			if ((Platform.getOS().equals(Platform.OS_WIN32)) && (Platform.getOSArch().equals(Platform.ARCH_X86))) {
-				return new Win32ImageRenderer();
-			} 
-
-			// else if ((Platform.getOS().equals(Platform.OS_LINUX)) && (Platform.getWS().equals(Platform.WS_GTK))) {
-			// return new LinuxImageRenderer();
-			// }
-		} catch (NoClassDefFoundError e) {
-			e.printStackTrace();
-		} catch (UnsatisfiedLinkError e) {
-			e.printStackTrace();
-		}
+//		try {
+//			if ((Platform.getOS().equals(Platform.OS_WIN32)) && (Platform.getOSArch().equals(Platform.ARCH_X86))) {
+//				return new Win32ImageRenderer();
+//			} 
+//
+//			// else if ((Platform.getOS().equals(Platform.OS_LINUX)) && (Platform.getWS().equals(Platform.WS_GTK))) {
+//			// return new LinuxImageRenderer();
+//			// }
+//		} catch (NoClassDefFoundError e) {
+//			e.printStackTrace();
+//		} catch (UnsatisfiedLinkError e) {
+//			e.printStackTrace();
+//		}
 		return new GenericImageRenderer();
 	}
 }
