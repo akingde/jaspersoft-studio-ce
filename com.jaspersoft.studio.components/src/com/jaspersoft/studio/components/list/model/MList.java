@@ -165,6 +165,11 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		heightD.setDescription(Messages.MList_cell_height_description);
 		desc.add(heightD);
 		heightD.setHelpRefBuilder(new HelpReferenceBuilder("net.sf.jasperreports.doc/docs/components.schema.reference.html#listContents_height"));
+		
+		ListSizePropertyDescriptor cellSizeDescriptor = new ListSizePropertyDescriptor();
+		cellSizeDescriptor.setCategory(Messages.MList_list_properties_category);
+		cellSizeDescriptor.setDescription(Messages.MList_cell_height_description);
+		desc.add(cellSizeDescriptor);
 
 		PixelPropertyDescriptor widthD = new PixelPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_WIDTH, Messages.MList_cell_width);
 		widthD.setCategory(Messages.MList_list_properties_category);
@@ -467,6 +472,8 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		properties.add(JRDesignElementGroup.PROPERTY_CHILDREN);
 		properties.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
 		properties.add(JRDesignElement.PROPERTY_PARENT_STYLE_NAME_REFERENCE);
+		properties.add(PREFIX + DesignListContents.PROPERTY_WIDTH);
+		properties.add(PREFIX + DesignListContents.PROPERTY_HEIGHT);
 		return properties;
 	}
 

@@ -454,10 +454,13 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 			datasetWithListener.getEventSupport().removePropertyChangeListener(datasetGroupListener);
 		}
 		JRDatasetRun datasetRun = getStandardTable().getDatasetRun();
-		JRDesignDataset dataset = (JRDesignDataset)getJasperDesign().getDatasetMap().get(datasetRun.getDatasetName());
-		datasetWithListener = dataset;
-		if (dataset != null){
-			dataset.getEventSupport().addPropertyChangeListener(datasetGroupListener);
+		JasperDesign design = getJasperDesign();
+		if (design != null){
+			JRDesignDataset dataset = (JRDesignDataset)design.getDatasetMap().get(datasetRun.getDatasetName());
+			datasetWithListener = dataset;
+			if (dataset != null){
+				dataset.getEventSupport().addPropertyChangeListener(datasetGroupListener);
+			}
 		}
 	}
 

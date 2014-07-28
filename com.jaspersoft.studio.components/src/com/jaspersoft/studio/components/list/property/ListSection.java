@@ -15,10 +15,13 @@ package com.jaspersoft.studio.components.list.property;
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.list.messages.Messages;
+import com.jaspersoft.studio.components.list.model.ListSizePropertyDescriptor;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -35,14 +38,23 @@ public class ListSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
-		createWidget4Property(parent, 
-				StandardListComponent.PROPERTY_IGNORE_WIDTH);
-		createWidget4Property(parent, MList.PREFIX
-				+ DesignListContents.PROPERTY_HEIGHT);
-		createWidget4Property(parent, MList.PREFIX
-				+ DesignListContents.PROPERTY_WIDTH);
-		createWidget4Property(parent,
-				StandardListComponent.PROPERTY_PRINT_ORDER);
+		createWidget4Property(parent, StandardListComponent.PROPERTY_IGNORE_WIDTH);
+		createWidget4Property(parent, MList.PREFIX + DesignListContents.PROPERTY_HEIGHT);
+		createWidget4Property(parent, MList.PREFIX + DesignListContents.PROPERTY_WIDTH);
+		
+		Composite buttonContainer = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(1,false);
+		layout.verticalSpacing = 0;
+		layout.horizontalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		buttonContainer.setLayout(layout);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		data.horizontalSpan = 2;
+		buttonContainer.setLayoutData(data);
+		
+		createWidget4Property(buttonContainer, ListSizePropertyDescriptor.PROPERTY_ID, false);
+		createWidget4Property(parent,StandardListComponent.PROPERTY_PRINT_ORDER);
 	}
 	
 	@Override
