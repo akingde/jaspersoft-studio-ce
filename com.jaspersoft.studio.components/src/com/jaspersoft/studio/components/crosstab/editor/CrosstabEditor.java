@@ -36,12 +36,15 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.action.CreateCross
 import com.jaspersoft.studio.components.crosstab.model.parameter.action.CreateCrosstabParameterAction;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.action.CreateRowGroupAction;
 import com.jaspersoft.studio.components.crosstab.model.title.action.CreateCrosstabTitleAction;
+import com.jaspersoft.studio.components.section.name.NamedSubeditor;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
@@ -52,10 +55,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class CrosstabEditor extends AbstractVisualEditor {
+public class CrosstabEditor extends NamedSubeditor {
 	public CrosstabEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
-		setPartName(Messages.CrosstabEditor_crosstab);
+		setPartName(getDefaultPartName());
 		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MCrosstab.getIconDescriptor().getIcon16()));
 	}
 
@@ -159,6 +162,32 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		toolbarManager.add(getActionRegistry().getAction(DatasetAction.ID));
 		toolbarManager.add(new Separator());
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
+	}
+
+	@Override
+	public String getDefaultPartName() {
+		return Messages.CrosstabEditor_crosstab;
+	}
+
+	@Override
+	public ANode getEditedNode() {
+		INode model = getModel();
+		if (model != null) {
+			ModelVisitor<MCrosstab> mv = new ModelVisitor<MCrosstab>(model) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MCrosstab) {
+						setObject((MCrosstab) n);
+						stop();
+					}
+					return true;
+				}
+
+			};
+			return mv.getObject();
+		}
+		return null;
 	}
 
 }

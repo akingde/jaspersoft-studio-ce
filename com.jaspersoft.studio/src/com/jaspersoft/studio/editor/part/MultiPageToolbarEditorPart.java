@@ -987,7 +987,9 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          the text label
 	 */
 	protected void setPageText(int pageIndex, String text) {
-		getItem(pageIndex).setText(text);
+		if (!getTabFolder().isDisposed()){
+			getItem(pageIndex).setText(text);
+		}
 	}
 
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {

@@ -42,6 +42,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
+import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -65,6 +66,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MList extends MGraphicElement implements IPastable, IPastableGraphic, IContainerLayout, IContainer, IContainerEditPart, IGroupElement, IGraphicElementContainer, ICopyable,
 		IDatasetContainer {
@@ -278,7 +280,8 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
+		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
 	}
 
 	/*

@@ -159,13 +159,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
-		IGraphicalEditor, CachedSelectionProvider {
-	private Image partImage = JaspersoftStudioPlugin.getInstance().getImage(MReport.getIconDescriptor().getIcon16());
-	private FlyoutPreferences palettePreferences;
-	protected JasperReportsConfiguration jrContext;
+public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable, IGraphicalEditor, CachedSelectionProvider {
 	
-	private CommonSelectionCacheProvider selectionCache = new CommonSelectionCacheProvider();
+	private Image partImage = JaspersoftStudioPlugin.getInstance().getImage(MReport.getIconDescriptor().getIcon16());
+	
+	private FlyoutPreferences palettePreferences;
+	
+	protected JasperReportsConfiguration jrContext;
 
 	public JasperReportsConfiguration getJrContext() {
 		return jrContext;
@@ -587,8 +587,11 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		};
 	}
 	
+	/**
+	 * Return the selection cache extracting it from the current jr context
+	 */
 	public CommonSelectionCacheProvider getSelectionCache(){
-		return selectionCache;
+		return  (CommonSelectionCacheProvider)jrContext.get(ReportContainer.SELECTION_CACHE_KEY);
 	}
 
 	/**

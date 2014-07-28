@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.components.headertoolbar.HeaderToolbarElement;
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
@@ -43,6 +42,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementRemovedEvent;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.components.table.TableComponentFactory;
 import com.jaspersoft.studio.components.table.TableDatasetRunProperyDescriptor;
 import com.jaspersoft.studio.components.table.TableManager;
@@ -301,7 +301,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 */
 	@Override
 	public String getDisplayText() {
-		String name = getPropertiesMap().getProperty(HeaderToolbarElement.PROPERTY_TABLE_NAME);
+		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
 		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
 	}
 

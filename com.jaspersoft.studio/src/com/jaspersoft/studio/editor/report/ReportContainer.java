@@ -81,21 +81,37 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class ReportContainer extends MultiPageToolbarEditorPart implements ITabbedPropertySheetPageContributor,
-		IJROBjectEditor, CachedSelectionProvider {
+public class ReportContainer extends MultiPageToolbarEditorPart implements ITabbedPropertySheetPageContributor, IJROBjectEditor, CachedSelectionProvider {
 
-	/** The model. */
-	private INode model = null;
-
-	/** The editors. */
-	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
-
+	/**
+	 * Key used to save, retrieve the selection cache from the jasper reprots configuration
+	 */
+	public static final String SELECTION_CACHE_KEY = "SELECTION_CACHE_PROVIDER";
+	
 	/**
 	 * Property used by an element to ask to the container to check if for that element there is an editor opened and in
 	 * that case close it. The property change event must have the old value set with the JRelement that it is requesting
 	 * the editor closing
 	 */
 	public static final String CLOSE_EDITOR_PROPERTY = "closeElementEditor";
+	
+	/** 
+	 * The model. 
+	 */
+	private INode model = null;
+
+	/** 
+	 * The editors. 
+	 */
+	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
+
+	
+	/**
+	 * The selection cache used by all the editors in this container (report editor and eventually its subeditors)
+	 * The selection cache is passed to the subeditors trough the jasper configuration. The cached is stored
+	 * when this container is created and can be retrieved with the SELECTION_CACHE_KEY
+	 */
+	private CommonSelectionCacheProvider selectionCache;
 
 	/** The parent. */
 	private EditorPart parent;
@@ -117,6 +133,9 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	public ReportContainer(EditorPart parent, JasperReportsConfiguration jrContext) {
 		this.parent = parent;
 		this.jrContext = jrContext;
+		this.selectionCache = new CommonSelectionCacheProvider();
+		//Store the selection cache
+		jrContext.put(SELECTION_CACHE_KEY, selectionCache);
 	}
 
 	/*
@@ -374,7 +393,7 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 	}
 	
 	public CommonSelectionCacheProvider getSelectionCache(){
-		return reportEditor.getSelectionCache();
+		return selectionCache;
 	}
 
 	/*

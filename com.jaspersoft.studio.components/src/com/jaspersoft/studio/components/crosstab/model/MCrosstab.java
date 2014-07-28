@@ -52,6 +52,7 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDat
 import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
+import com.jaspersoft.studio.components.section.name.NameSection;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -73,6 +74,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class MCrosstab extends MGraphicElementLineBox implements IContainer, IContainerEditPart, IGroupElement, IContainerLayout, IDatasetContainer {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -303,7 +305,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 	 */
 	@Override
 	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
+		String name = getPropertiesMap().getProperty(NameSection.getNamePropertyId(this));
+		return getIconDescriptor().getTitle() + " " + Misc.nvl(name);
 	}
 
 	/*

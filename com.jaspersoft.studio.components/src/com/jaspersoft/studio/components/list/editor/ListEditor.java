@@ -26,12 +26,15 @@ import org.eclipse.jface.action.Separator;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.list.model.MList;
+import com.jaspersoft.studio.components.section.name.NamedSubeditor;
 import com.jaspersoft.studio.editor.gef.parts.JSSGraphicalViewerKeyHandler;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
@@ -42,12 +45,11 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class ListEditor extends AbstractVisualEditor {
+public class ListEditor extends NamedSubeditor {
 	public ListEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
-		setPartName(Messages.common_list);
-		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(
-				MList.getIconDescriptor().getIcon16()));
+		setPartName(getDefaultPartName());
+		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MList.getIconDescriptor().getIcon16()));
 	}
 
 	/*
@@ -119,6 +121,32 @@ public class ListEditor extends AbstractVisualEditor {
 		List<String> lst = new ArrayList<String>();
 		lst.add("com.jaspersoft.studio.components.crosstab.model.MCrosstab"); //$NON-NLS-1$
 		return lst;
+	}
+
+	@Override
+	public String getDefaultPartName() {
+		return Messages.common_list;
+	}
+
+	@Override
+	public ANode getEditedNode() {
+		INode model = getModel();
+		if (model != null) {
+			ModelVisitor<MList> mv = new ModelVisitor<MList>(model) {
+
+				@Override
+				public boolean visit(INode n) {
+					if (n instanceof MList) {
+						setObject((MList) n);
+						stop();
+					}
+					return true;
+				}
+
+			};
+			return mv.getObject();
+		}
+		return null;
 	}
 
 }

@@ -711,11 +711,27 @@
             </input>
          </propertySection>
          <propertySection
-               class="com.jaspersoft.studio.components.table.properties.TableSection"
-               id="com.jaspersoft.studio.components.table.properties.TableSection"
+               class="com.jaspersoft.studio.components.section.name.NameSection"
+               id="com.jaspersoft.studio.components.table.properties.NameSectionTable"
                tab="com.jaspersoft.studio.components.table">
             <input
                   type="com.jaspersoft.studio.components.table.model.MTable">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.section.name.NameSection"
+               id="com.jaspersoft.studio.components.table.properties.NameSectionCrosstab"
+               tab="com.jaspersoft.studio.components.crosstab">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.section.name.NameSection"
+               id="com.jaspersoft.studio.components.table.properties.NameSectionList"
+               tab="com.jaspersoft.studio.components.list">
+            <input
+                  type="com.jaspersoft.studio.components.list.model.MList">
             </input>
          </propertySection>
       </propertySections>

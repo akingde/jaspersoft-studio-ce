@@ -12,13 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.table.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.jasperreports.components.headertoolbar.HeaderToolbarElement;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
@@ -29,6 +24,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.components.section.name.NamedSubeditor;
 import com.jaspersoft.studio.components.table.action.EditTableStyleAction;
 import com.jaspersoft.studio.components.table.action.RemoveTableStylesAction;
 import com.jaspersoft.studio.components.table.messages.Messages;
@@ -48,14 +44,12 @@ import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.ContextualDatasetAction;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -63,34 +57,11 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class TableEditor extends AbstractVisualEditor {
+public class TableEditor extends NamedSubeditor {
 	public TableEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
-		setPartName(Messages.TableEditor_table);
+		setPartName(getDefaultPartName());
 		setPartImage(JaspersoftStudioPlugin.getInstance().getImage(MTable.getIconDescriptor().getIcon16()));
-	}
-
-	private PropertyChangeListener mListener = new PropertyChangeListener() {
-
-		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
-			setupPartName();
-		}
-	};
-
-	@Override
-	public void setModel(INode model) {
-		INode oldModel = getModel();
-		if (oldModel != null && oldModel instanceof MRoot && oldModel.getChildren().size() > 0) {
-			INode n = oldModel.getChildren().get(0);
-			n.getPropertyChangeSupport().removePropertyChangeListener(mListener);
-		}
-		super.setModel(model);
-		if (model != null && model instanceof MRoot && model.getChildren().size() > 0) {
-			INode n = model.getChildren().get(0);
-			n.getPropertyChangeSupport().addPropertyChangeListener(mListener);
-		}
-		setupPartName();
 	}
 
 	/*
@@ -202,7 +173,13 @@ public class TableEditor extends AbstractVisualEditor {
 		super.contributeItemsToEditorTopToolbar(toolbarManager);
 	}
 
-	protected void setupPartName() {
+	@Override
+	public String getDefaultPartName() {
+		return Messages.TableEditor_table;
+	}
+
+	@Override
+	public ANode getEditedNode() {
 		INode model = getModel();
 		if (model != null) {
 			ModelVisitor<MTable> mv = new ModelVisitor<MTable>(model) {
@@ -217,16 +194,8 @@ public class TableEditor extends AbstractVisualEditor {
 				}
 
 			};
-			MTable mtab = mv.getObject();
-			if (mtab != null) {
-				JRDesignElement el = mtab.getValue();
-				String name = el.getPropertiesMap().getProperty(HeaderToolbarElement.PROPERTY_TABLE_NAME);
-				if (!Misc.isNullOrEmpty(name)) {
-					setPartName(name);
-					return;
-				}
-			}
+			return mv.getObject();
 		}
-		setPartName(Messages.TableEditor_table);
+		return null;
 	}
 }
