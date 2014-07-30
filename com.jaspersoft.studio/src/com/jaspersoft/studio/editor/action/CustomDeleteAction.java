@@ -19,6 +19,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.DeleteAction;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
@@ -76,23 +77,12 @@ public class CustomDeleteAction extends DeleteAction{
 		if (messageFound){
 			if (UIUtils.showConfirmation(Messages.ADatasetObjectDeleteCommand_confirmationtitle,messages.toString())){
 				execute(compCommand);
-				deselectAll();
+				setSelection(StructuredSelection.EMPTY);
 			}
 		} else {
 			execute(compCommand);
-			deselectAll();
+			setSelection(StructuredSelection.EMPTY);
 		}
 	}
 	
-	/**
-	 * Deselect all the all the selected elements in the current viewer
-	 */
-	private void deselectAll(){
-		for(Object obj : getSelectedObjects()){
-			if (obj instanceof EditPart){
-				((EditPart)obj).getViewer().deselectAll();
-				return;
-			}
-		}
-	}
 }
