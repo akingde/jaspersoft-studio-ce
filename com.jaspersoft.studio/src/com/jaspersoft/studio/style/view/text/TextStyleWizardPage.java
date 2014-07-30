@@ -272,7 +272,7 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 		font.setStrikeThrough(strikeTrought.getSelection());
 		font.setFontName(fontName.getText());
 		String fontSizeText = fontSize.getText();
-		int size = Integer.valueOf(fontSizeText);
+		float size = Float.valueOf(fontSizeText);
 		font.setFontSize(size);
 		
 		element.setHorizontalAlignmen(getHorizonltalAlignment());
@@ -456,7 +456,7 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 			settingData = true;
 			JRFont font = element.getFont();
 			fontName.setText(font.getOwnFontName());
-			fontSize.setText(String.valueOf(font.getOwnFontSize()));
+			fontSize.setText(String.valueOf(font.getOwnFontsize()));
 			bold.setSelection(font.isOwnBold());
 			italic.setSelection(font.isOwnItalic());
 			underline.setSelection(font.isOwnUnderline());
@@ -506,7 +506,7 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 		
 		JRBaseFont font = new JRBaseFont();
 		font.setFontName("Arial"); //$NON-NLS-1$
-		font.setFontSize(8);
+		font.setFontSize(8f);
 		font.setBold(false);
 		font.setItalic(false);
 		font.setUnderline(false);

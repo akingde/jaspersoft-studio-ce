@@ -18,34 +18,32 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.jaspersoft.studio.callout.CalloutEditPart;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.callout.pin.command.CreatePinCommand;
+import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
+import com.jaspersoft.studio.messages.Messages;
 
-public class CreatePinAction extends SelectionAction {
-	public static String ID = "com.jaspersoft.studio.callout.action.CreatePinAction";
+public class CreatePinAction extends ACachedSelectionAction {
+	public static String ID = "com.jaspersoft.studio.callout.action.CreatePinAction"; //$NON-NLS-1$
 
 	public CreatePinAction(IWorkbenchPart part) {
 		super(part);
-		setId(ID);
 		setLazyEnablementCalculation(true);
 	}
-
+	
 	@Override
-	protected boolean calculateEnabled() {
-		Command cmd = createCommand(getSelectedObjects());
-		if (cmd == null)
-			return false;
-		return cmd.canExecute();
+	protected void init() {
+		super.init();
+		setText(Messages.CreatePinAction_name);
+		setToolTipText(Messages.CreatePinAction_tooltip);
+		setId(ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/pin-16.png")); //$NON-NLS-1$
+		setEnabled(false);
 	}
-
-	@Override
-	public void run() {
-		execute(createCommand(getSelectedObjects()));
-	}
+	
 	
 	public static CreatePinCommand getCreationCommand(MCallout mcallout){
 		Rectangle location = new Rectangle();
@@ -54,17 +52,14 @@ public class CreatePinAction extends SelectionAction {
 		return new CreatePinCommand(mcallout, location);
 	}
 
-	private Command createCommand(List<?> selectedObjects) {
-		if (selectedObjects.isEmpty() || selectedObjects.size() != 1)
+	@Override
+	protected Command createCommand() {
+		List<Object> calloutSelection = editor.getSelectionCache().getSelectionModelForType(MCallout.class);
+		if (calloutSelection.isEmpty() || calloutSelection.size() != 1){
 			return null;
-		Object obj = selectedObjects.get(0);
-		if (obj instanceof MCallout || obj instanceof CalloutEditPart) {
-			if (obj instanceof CalloutEditPart)
-				obj = ((CalloutEditPart) obj).getModel();
-
-			MCallout mcallout = (MCallout) obj;
-			return getCreationCommand(mcallout);
 		}
-		return null;
+		MCallout mcallout = (MCallout) calloutSelection.get(0);
+		return getCreationCommand(mcallout);
 	}
+
 }

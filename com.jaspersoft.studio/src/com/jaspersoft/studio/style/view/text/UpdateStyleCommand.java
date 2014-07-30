@@ -105,7 +105,7 @@ public class UpdateStyleCommand extends Command{
 		style.setMode(newStyleTemplate.isTransparent() ? ModeEnum.TRANSPARENT : ModeEnum.OPAQUE);
 		JRFont font = newStyleTemplate.getFont();
 		style.setFontName(font.getOwnFontName());
-		style.setFontSize(font.getOwnFontSize());
+		style.setFontSize(font.getOwnFontsize());
 		style.setBold(font.isOwnBold());
 		style.setItalic(font.isOwnItalic());
 		style.setUnderline(font.isOwnUnderline());
@@ -167,7 +167,7 @@ public class UpdateStyleCommand extends Command{
 		element.setMode(style.isTransparent() ? ModeEnum.TRANSPARENT : ModeEnum.OPAQUE);
 		JRFont font = style.getFont();
 		element.setFontName(font.getOwnFontName());
-		element.setFontSize(font.getOwnFontSize());
+		element.setFontSize(font.getOwnFontsize());
 		element.setBold(font.isOwnBold());
 		element.setItalic(font.isOwnItalic());
 		element.setUnderline(font.isOwnUnderline());

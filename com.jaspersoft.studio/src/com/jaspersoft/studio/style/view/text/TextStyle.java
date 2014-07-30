@@ -82,7 +82,7 @@ public class TextStyle extends TemplateStyle {
 		font.setUnderline(new Boolean(style.isOwnUnderline() != null ? style.isOwnUnderline() : false));
 		font.setStrikeThrough(new Boolean(style.isOwnStrikeThrough() != null ? style.isOwnStrikeThrough() : false));
 		font.setFontName(new String(style.getOwnFontName()));
-		font.setFontSize(new Integer(style.getOwnFontSize()));
+		font.setFontSize(new Float(style.getOwnFontsize()));
 		setFont(font);
 		
 		JRLineBox originBox = style.getLineBox();
@@ -190,7 +190,7 @@ public class TextStyle extends TemplateStyle {
 	
 	private String getFontXML(JRFont value){
 		String result = "<font name=\"" + value.getOwnFontName() +"\" ";
-		result += "size=\""+value.getOwnFontSize().toString()+"\" ";
+		result += "size=\""+value.getOwnFontsize().toString()+"\" ";
 		result += "isBold=\""+value.isOwnBold()+"\" isItalic=\""+value.isOwnItalic()+"\" ";
 		result += "isUnderline=\""+value.isOwnUnderline()+"\" isStriketrought=\""+value.isOwnStrikeThrough()+"\"/>";
 		return result;
@@ -199,7 +199,7 @@ public class TextStyle extends TemplateStyle {
 	private static JRFont buildFont(Node xmlFontNode){
 		NamedNodeMap fontAttributes = xmlFontNode.getAttributes();
 		String fontName = fontAttributes.getNamedItem("name").getNodeValue();
-		int size = Integer.parseInt(fontAttributes.getNamedItem("size").getNodeValue());
+		float size = Float.parseFloat(fontAttributes.getNamedItem("size").getNodeValue());
 		boolean isBold = fontAttributes.getNamedItem("isBold").getNodeValue().equals("true"); 
 		boolean isItalic = fontAttributes.getNamedItem("isItalic").getNodeValue().equals("true"); 
 		boolean isUnderline = fontAttributes.getNamedItem("isUnderline").getNodeValue().equals("true"); 
@@ -409,7 +409,7 @@ public class TextStyle extends TemplateStyle {
 		copyFont.setUnderline(new Boolean(originFont.isOwnUnderline()));
 		copyFont.setStrikeThrough(new Boolean(originFont.isOwnStrikeThrough()));
 		copyFont.setFontName(new String(originFont.getOwnFontName()));
-		copyFont.setFontSize(new Integer(originFont.getOwnFontSize()));
+		copyFont.setFontSize(new Float(originFont.getOwnFontsize()));
 		copy.setFont(copyFont);
 		JRLineBox originBox = getBorders();
 		JRBaseLineBox copyBox = new JRBaseLineBox(null);
@@ -453,7 +453,7 @@ public class TextStyle extends TemplateStyle {
 			if (!AbstractResourceDefinition.safeEquals(font1.isOwnUnderline(), font2.isOwnUnderline())) return false;
 			if (!AbstractResourceDefinition.safeEquals(font1.isOwnStrikeThrough(), font2.isOwnStrikeThrough())) return false;
 			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontName(), font2.getOwnFontName())) return false;
-			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontSize(), font2.getOwnFontSize())) return false;
+			if (!AbstractResourceDefinition.safeEquals(font1.getOwnFontsize(), font2.getOwnFontsize())) return false;
 			JRLineBox box1 = getBorders();
 			JRLineBox box2 = element2.getBorders();
 			if (!AbstractResourceDefinition.safeEquals(box1.getOwnPadding(), box2.getOwnPadding())) return false;

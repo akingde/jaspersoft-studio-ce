@@ -344,6 +344,8 @@ public class Messages extends NLS {
 	public static String CreateParameterAction_create_parameter_tool_tip;
 	public static String CreateParameterCommand_parameter_name;
 	public static String CreateParameterCommand_parameter_name_dialog_text;
+	public static String CreatePinAction_name;
+	public static String CreatePinAction_tooltip;
 	public static String CreateScriptletAction_create_scriptlet;
 	public static String CreateScriptletAction_create_scriptlet_tool_tip;
 	public static String CreateScriptletCommand_scriptlet_name;

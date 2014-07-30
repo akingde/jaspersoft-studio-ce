@@ -473,7 +473,7 @@ public class TextStyleView implements TemplateViewProvider {
 						String text = originalStyle.getDescription();
 						if (text == null || text.isEmpty()) text = Messages.TextStyleView_sampleText; 
 						normalized.setDescription(text);
-						if (normalized.getFont().getOwnFontSize() >12) normalized.getFont().setFontSize(12);
+						if (normalized.getFont().getOwnFontsize() >12f) normalized.getFont().setFontSize(12f);
 						if (RotationEnum.LEFT.equals(normalized.getRotation()) || RotationEnum.RIGHT.equals(normalized.getRotation())) normalized.setRotation(RotationEnum.NONE);
 						normalizeLinePen(normalized.getBorders().getPen(), 3.0f);
 						normalizeLinePen(normalized.getBorders().getLeftPen(), 3.0f);
