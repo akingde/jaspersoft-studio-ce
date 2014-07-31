@@ -68,6 +68,12 @@ public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 		super.handleSelectionChanged();
 	}
 
+	@Override
+	public void run() {
+		if (fresh && command != null){
+			execute(command);
+		}
+	}
 
 	@Override
 	protected boolean calculateEnabled() {
