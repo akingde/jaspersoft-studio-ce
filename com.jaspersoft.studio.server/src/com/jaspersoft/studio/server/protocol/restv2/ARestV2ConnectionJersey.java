@@ -34,7 +34,11 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 	protected WebTarget target;
 	protected JSSApacheConnector connector;
 
-	protected <T> T toObj(Response res, Class<T> clazz, IProgressMonitor monitor) throws IOException {
+	public JSSApacheConnector getConnector() {
+		return connector;
+	}
+
+	public <T> T toObj(Response res, Class<T> clazz, IProgressMonitor monitor) throws IOException {
 		T r = null;
 		try {
 			switch (res.getStatus()) {
@@ -171,6 +175,10 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 
 	public ARestV2ConnectionJersey() {
 		setParent(this);
+	}
+
+	public WebTarget getTarget() {
+		return target;
 	}
 
 	protected IConnection parent;

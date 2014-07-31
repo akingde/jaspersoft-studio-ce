@@ -83,4 +83,5 @@ public interface IConnection {
 	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception;
 
 	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception;
+
 }

@@ -202,10 +202,14 @@ public class CASListFieldEditor extends TableFieldEditor {
 			for (String line : v.split("\n")) {
 				if (line.isEmpty())
 					continue;
-				SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), mapping);
-				items.add(srv);
-				TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-				tableItem.setText(new String[] { srv.getType().name(), srv.getUrl() });
+				try {
+					SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), mapping);
+					items.add(srv);
+					TableItem tableItem = new TableItem(getTable(), SWT.NONE);
+					tableItem.setText(new String[] { srv.getType().name(), srv.getUrl() });
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			// Add an help listener to the table
 			TableHelpListener.setTableHelp(getTable());

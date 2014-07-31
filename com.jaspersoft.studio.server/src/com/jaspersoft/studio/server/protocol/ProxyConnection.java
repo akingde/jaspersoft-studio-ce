@@ -62,6 +62,10 @@ public class ProxyConnection implements IConnection {
 		return c.toArray(new IConnection[c.size()]);
 	}
 
+	public IConnection[] getActiveConnections() {
+		return cons;
+	}
+
 	private IConnection c;
 	private IConnection soap;
 

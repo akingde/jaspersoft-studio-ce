@@ -260,6 +260,8 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		}
 		ccas.setItems(items);
 		ccas.select(sel);
+		if (sel >= 0 && sel < ssoservers.size())
+			value.setSsoUuid(ssoservers.get(sel).getUuid());
 		ccas.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

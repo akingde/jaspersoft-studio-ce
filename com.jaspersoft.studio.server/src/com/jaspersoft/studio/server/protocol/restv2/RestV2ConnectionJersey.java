@@ -31,19 +31,16 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.cookie.Cookie;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -64,7 +61,6 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.AttachmentDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ExportDescriptor;
-import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ExportExecutionOptions;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.OutputResourceDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ReportExecutionDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
