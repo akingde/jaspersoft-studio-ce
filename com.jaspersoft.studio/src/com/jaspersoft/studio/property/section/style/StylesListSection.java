@@ -729,11 +729,16 @@ public class StylesListSection extends AbstractSection {
 					namePrefix.concat("_").concat(name), ((MLinePen) localContext.get(name)).getStylesDescriptors(), addListener); //$NON-NLS-1$
 		} else if (value instanceof MParagraph) {
 			MParagraph lineValue = (MParagraph) value;
+			MParagraph ctxMParagraph = (MParagraph) localContext.get(name);
+			HashMap<String, Object> stylesDescriptors = null;
+			if(ctxMParagraph!=null){
+				stylesDescriptors = ctxMParagraph.getStylesDescriptors();
+			}
 			printStyleAttribute(
 					parent,
 					lineValue,
 					null,
-					namePrefix.concat("_").concat(name), ((MParagraph) localContext.get(name)).getStylesDescriptors(), addListener); //$NON-NLS-1$
+					namePrefix.concat("_").concat(name), stylesDescriptors, addListener); //$NON-NLS-1$
 		} else if (value instanceof MLineBox) {
 			MLineBox lineValue = (MLineBox) value;
 			printStyleAttribute(parent, lineValue, null,
