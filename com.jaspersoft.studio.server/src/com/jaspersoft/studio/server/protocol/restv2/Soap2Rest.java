@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
@@ -292,7 +294,7 @@ public class Soap2Rest {
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) {
 		cr.setType(WsTypes.INST().toRestFileType(rd.getWsType()));
 		if (rd.getData() != null) {
-			String content = new String(rd.getData());
+			String content = new String(rd.getData());//new String(Base64.decodeBase64(content))
 			if (content.isEmpty())
 				content = "    "; // if empty, jrs throw an exception
 			cr.setContent(content);

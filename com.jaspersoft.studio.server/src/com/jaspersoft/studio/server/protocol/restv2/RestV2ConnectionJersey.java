@@ -118,26 +118,27 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			url = url.substring(0, url.lastIndexOf("/services/repository"));
 		if (!url.endsWith("/"))
 			url += "/";
-
-		target = client.target(url + "j_spring_security_check");
-		target = target.queryParam("forceDefaultRedirect", "false");
-		if (sp.isUseSSO()) {
-			String token = CASUtil.getToken(sp, monitor);
-			target = target.queryParam("ticket", token);
-		} else {
-			target = target.queryParam("j_username", sp.getUser());
-			target = target.queryParam("j_password", Pass.getPass(sp.getPass()));
-			target = target.queryParam("orgId", sp.getOrganisation());
-			if (!Misc.isNullOrEmpty(sp.getLocale()))
-				target = target.queryParam("userLocale", "true");
-			if (!Misc.isNullOrEmpty(sp.getTimeZone()))
-				target = target.queryParam("userTimezone", "true");
+		try {
+			target = client.target(url + "j_spring_security_check");
+			target = target.queryParam("forceDefaultRedirect", "false");
+			if (sp.isUseSSO()) {
+				String token = CASUtil.getToken(sp, monitor);
+				target = target.queryParam("ticket", token);
+			} else {
+				target = target.queryParam("j_username", sp.getUser());
+				target = target.queryParam("j_password", Pass.getPass(sp.getPass()));
+				target = target.queryParam("orgId", sp.getOrganisation());
+				if (!Misc.isNullOrEmpty(sp.getLocale()))
+					target = target.queryParam("userLocale", "true");
+				if (!Misc.isNullOrEmpty(sp.getTimeZone()))
+					target = target.queryParam("userTimezone", "true");
+			}
+			Builder req = target.request();
+			toObj(connector.get(req, monitor), String.class, monitor);
+		} finally {
+			// ok, now check others
+			target = client.target(IDN.toASCII(url + SUFFIX));
 		}
-		Builder req = target.request();
-		toObj(connector.get(req, monitor), String.class, monitor);
-
-		// ok, now check others
-		target = client.target(IDN.toASCII(url + SUFFIX));
 		getServerInfo(monitor);
 		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0;
 	}

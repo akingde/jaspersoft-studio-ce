@@ -107,5 +107,6 @@ Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  org.apache.axis.encoding.ser,
  org.apache.axis.soap,
  org.apache.axis.transport.http,
- org.apache.axis.utils
+ org.apache.axis.utils,
+ org.apache.http.client
 
