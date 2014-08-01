@@ -49,8 +49,10 @@ public class CreateConditionalStyleCommand extends Command {
 		super();
 		this.index = index;
 		this.jrStyle = (JRDesignStyle) destNode.getValue();
-		if (srcNode != null && srcNode.getValue() != null)
+		if (srcNode != null && srcNode.getValue() != null) {
+			srcNode.setParent(destNode, -1);
 			this.jrConditionalStyle = (JRDesignConditionalStyle) srcNode.getValue();
+		}
 	}
 
 	/*
