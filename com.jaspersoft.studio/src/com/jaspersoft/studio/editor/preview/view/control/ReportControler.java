@@ -580,6 +580,7 @@ public class ReportControler {
 					}
 
 				pcontainer.setJasperPrint(stats, jPrint);
+				c.setStatistics(stats);
 				finished = false;
 			}
 		});
