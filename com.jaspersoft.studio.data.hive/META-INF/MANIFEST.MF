@@ -12,15 +12,10 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: com.jaspersoft.studio.data
-Bundle-ClassPath: lib/js-hive-datasource-1.0.7.jar,
+Bundle-ClassPath: lib/js-hive-datasource-1.1.0-cdh5.jar,
+ lib/hive-jdbc-0.12.0-cdh5.0.3.jar,
+ lib/hive-service-0.12.0-cdh5.0.3.jar,
+ lib/hive-exec-0.12.0-cdh5.0.3.jar,
+ lib/httpcore-4.3.2.jar,
  lib/hadoop-core-1.2.1.jar,
- lib/hive-common-0.11.0.jar,
- lib/hive-exec-0.11.0.jar,
- lib/hive-jdbc-0.11.0.jar,
- lib/hive-metastore-0.11.0.jar,
- lib/hive-serde-0.11.0.jar,
- lib/hive-shims-0.11.0.jar,
- lib/hive-service-0.11.0.jar,
- lib/libfb303-0.9.0.jar,
- lib/libthrift-0.9.0.jar,
  .
