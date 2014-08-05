@@ -29,6 +29,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.editor.style.StyleTemplateEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -36,10 +38,17 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 
-public class JRtxEditor extends AMultiEditor {
+public class JRtxEditor extends AMultiEditor implements CachedSelectionProvider{
 
+	
+	/**
+	 * The selection cache
+	 */
+	private CommonSelectionCacheProvider selectionCache;
+	
 	public JRtxEditor() {
 		super();
+		selectionCache = new CommonSelectionCacheProvider();
 	}
 
 	@Override
@@ -99,6 +108,11 @@ public class JRtxEditor extends AMultiEditor {
 		} catch (PartInitException e) {
 			UIUtils.showError(e);
 		}
+	}
+
+	@Override
+	public CommonSelectionCacheProvider getSelectionCache() {
+		return selectionCache;
 	}
 
 }
