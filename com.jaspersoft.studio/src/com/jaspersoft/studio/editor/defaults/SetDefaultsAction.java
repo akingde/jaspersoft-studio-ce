@@ -43,6 +43,10 @@ public class SetDefaultsAction extends ACachedSelectionAction {
 	 */
   public static final String ID = "SetDefaultElementAction"; //$NON-NLS-1$
 
+  /**
+   * Element to add to the Template Set
+   */
+	private MGraphicElement element;
 	
 	public SetDefaultsAction(IWorkbenchPart part) {
 		super(part);
@@ -60,8 +64,6 @@ public class SetDefaultsAction extends ACachedSelectionAction {
 	
 	@Override
 	public void run() {
-		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-		MGraphicElement element = (MGraphicElement)elements.get(0);
 		if (DefaultManager.INSTANCE.hasDefault()){
 			String message = MessageFormat.format(Messages.SetDefaultsAction_message1, new Object[]{DefaultManager.INSTANCE.getDefaultName()});
 			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SetDefaultsAction_messageTitle, null, message, MessageDialog.QUESTION, new String[]{Messages.common_yes, Messages.common_no}, 1); 
@@ -89,7 +91,13 @@ public class SetDefaultsAction extends ACachedSelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		List<Object> elements = editor.getSelectionCache().getSelectionModelForType(MGraphicElement.class);
-		return (elements.size() == 1);
+		if (elements.size() == 1){
+			element = (MGraphicElement)elements.get(0);
+			return true;
+		} {
+			element = null;
+			return false;
+		}
 	}
 
 }
