@@ -49,6 +49,7 @@ import net.sf.jasperreports.charts.type.ValueLocationEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRGroup;
@@ -58,6 +59,7 @@ import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
@@ -82,6 +84,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeP
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeSerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XyzSerie;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -568,30 +571,24 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
 	public static JRDesignChart createJRElement(JasperDesign jasperDesign, byte chartType) {
 		JRDesignChart jrChart = new JRDesignChart(jasperDesign, chartType);
 		setupChart(jrChart);
-
+			
+		DefaultManager.INSTANCE.applyDefault(MChart.class, jrChart);
+		
 		return jrChart;
 	}
 
@@ -914,5 +911,28 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			return datasetList;
 		} else
 			return null;
+	}
+	
+
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignChart jrSource = (JRDesignChart) getValue();
+		if (jrSource != null){
+			JRDesignChart jrTarget = (JRDesignChart)target;
+
+			jrTarget.setTitleFont(getFontClone(jrSource.getTitleFont()));
+			jrTarget.setSubtitleFont(getFontClone(jrSource.getSubtitleFont()));
+			jrTarget.setLegendFont(getFontClone(jrSource.getLegendFont()));
+			jrTarget.setTitlePosition(jrSource.getTitlePositionValue());
+			jrTarget.setLegendPosition(jrSource.getLegendPositionValue());
+			jrTarget.setShowLegend(jrSource.getShowLegend());
+			jrTarget.setRenderType(jrSource.getRenderType());
+			jrTarget.setTitleColor(getColorClone(jrSource.getTitleColor()));
+			jrTarget.setSubtitleColor(getColorClone(jrSource.getSubtitleColor()));
+			jrTarget.setLegendColor(getColorClone(jrSource.getLegendColor()));
+			jrTarget.setLegendBackgroundColor(getColorClone(jrSource.getLegendBackgroundColor()));
+		}
 	}
 }

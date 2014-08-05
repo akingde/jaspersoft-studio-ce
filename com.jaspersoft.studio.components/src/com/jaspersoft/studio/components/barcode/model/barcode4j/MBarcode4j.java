@@ -18,6 +18,7 @@ import java.util.Map;
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -81,7 +82,6 @@ public class MBarcode4j extends MBarcode {
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
-
 		return el;
 	}
 
@@ -258,5 +258,22 @@ public class MBarcode4j extends MBarcode {
 					jrList.getCodeExpression(), value, null));
 		} else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		BarcodeComponent jrSourceBarcode = (BarcodeComponent) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		BarcodeComponent jrTargetBarcode = (BarcodeComponent) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setModuleWidth(jrSourceBarcode.getModuleWidth());
+		jrTargetBarcode.setQuietZone(jrSourceBarcode.getQuietZone());
+		jrTargetBarcode.setVerticalQuietZone(jrSourceBarcode.getVerticalQuietZone());
+		jrTargetBarcode.setOrientation(jrSourceBarcode.getOrientation());
+		jrTargetBarcode.setTextPosition(jrSourceBarcode.getTextPosition());
 	}
 }

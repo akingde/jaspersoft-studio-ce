@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 
 public class MRoyalMail extends MFourStateBarcode {
@@ -41,9 +42,10 @@ public class MRoyalMail extends MFourStateBarcode {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
-				"RoyalMailCustomer")); //$NON-NLS-1$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "RoyalMailCustomer")); //$NON-NLS-1$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
@@ -39,7 +40,7 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -49,7 +50,6 @@ import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.preferences.ElementsDefaultPreferencePage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
@@ -466,26 +466,6 @@ public class MTextField extends MTextElement{
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
-	@Override
-	public int getDefaultHeight() {
-		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getInt(ElementsDefaultPreferencePage.TEXT_FIELD_HEIGHT);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
-	@Override
-	public int getDefaultWidth() {
-		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getInt(ElementsDefaultPreferencePage.TEXT_FIELD_WIDTH);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
@@ -493,10 +473,10 @@ public class MTextField extends MTextElement{
 		JRDesignTextField jrDesignTextField = new JRDesignTextField();
 		jrDesignTextField.setX(0);
 		jrDesignTextField.setY(0);
-		jrDesignTextField.setWidth(getDefaultWidth());
-		jrDesignTextField.setHeight(getDefaultHeight());
-		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat( //$NON-NLS-1$
-				"\""))); //$NON-NLS-1$
+		jrDesignTextField.setExpression(new JRDesignExpression("\"".concat(Messages.MTextField_common_text_field).concat("\""))); //$NON-NLS-1$
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignTextField);
+
 		return jrDesignTextField;
 	}
 
@@ -543,5 +523,15 @@ public class MTextField extends MTextElement{
 		result.add(JRDesignTextField.PROPERTY_EXPRESSION);
 		return result;
 	}
-
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		JRDesignTextField jrSource = (JRDesignTextField) getValue();
+		JRDesignTextField jrTarget = (JRDesignTextField)target;
+		
+		jrTarget.setBlankWhenNull(jrSource.isBlankWhenNull());
+		jrTarget.setPattern(getStringClone(jrSource.getPattern()));
+		jrTarget.setStretchWithOverflow(jrSource.isStretchWithOverflow());
+	}
 }

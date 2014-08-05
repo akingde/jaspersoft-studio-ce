@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.sort.SortComponent;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -31,6 +32,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.sort.SortNodeIconDescriptor;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -61,6 +63,50 @@ public class MSort extends MGraphicElement {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
+	
+	private RComboBoxPropertyDescriptor evaluationGroupNameD;
+
+	@Override
+	public void setValue(Object value) {
+		if (getValue() != null) {
+			Object obj = getComponent();
+			if (obj instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.removePropertyChangeListener(this);
+		}
+		if (value != null) {
+			Object obj = getComponent(value);
+			if (value instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.addPropertyChangeListener(this);
+		}
+		super.setValue(value);
+	}
+
+	private Object getComponent() {
+		return getComponent(getValue());
+	}
+
+	private Object getComponent(Object value) {
+		if (value != null) {
+			JRDesignComponentElement jrElement = (JRDesignComponentElement) value;
+			return jrElement.getComponent();
+		}
+		return null;
+	}
+
+	@Override
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+		JRDesignComponentElement jrcomponent = new JRDesignComponentElement();
+		SortComponent component = new SortComponent();
+		component.setSortFieldType(SortFieldTypeEnum.FIELD);
+		jrcomponent.setComponent(component);
+		jrcomponent.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "c", "sort")); //$NON-NLS-1$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrcomponent);
+		
+		return jrcomponent;
+	}
 
 	/**
 	 * Gets the icon descriptor.
@@ -202,6 +248,13 @@ public class MSort extends MGraphicElement {
 				SortFieldTypeEnum.FIELD);
 
 	}
+	
+	@Override
+	protected void setGroupItems(String[] items) {
+		super.setGroupItems(items);
+		if (evaluationGroupNameD != null)
+			evaluationGroupNameD.setItems(items);
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -259,54 +312,17 @@ public class MSort extends MGraphicElement {
 	}
 
 	@Override
-	protected void setGroupItems(String[] items) {
-		super.setGroupItems(items);
-		if (evaluationGroupNameD != null)
-			evaluationGroupNameD.setItems(items);
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		SortComponent jrSourceSort = (SortComponent) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		SortComponent jrTargetSort = (SortComponent) jrTargetElement.getComponent();
+		
+		jrTargetSort.setHandlerColor(getColorClone(jrSourceSort.getHandlerColor()));
+		jrTargetSort.setHandlerHorizontalAlign(jrSourceSort.getHandlerHorizontalAlign());
+		jrTargetSort.setHandlerVerticalAlign(jrSourceSort.getHandlerVerticalAlign());
 	}
-
-	private RComboBoxPropertyDescriptor evaluationGroupNameD;
-
-	@Override
-	public void setValue(Object value) {
-		if (getValue() != null) {
-			Object obj = getComponent();
-			if (obj instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport()
-						.removePropertyChangeListener(this);
-		}
-		if (value != null) {
-			Object obj = getComponent(value);
-			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport()
-						.addPropertyChangeListener(this);
-		}
-		super.setValue(value);
-	}
-
-	private Object getComponent() {
-		return getComponent(getValue());
-	}
-
-	private Object getComponent(Object value) {
-		if (value != null) {
-			JRDesignComponentElement jrElement = (JRDesignComponentElement) value;
-			return jrElement.getComponent();
-		}
-		return null;
-	}
-
-	@Override
-	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignComponentElement jrcomponent = new JRDesignComponentElement();
-		SortComponent component = new SortComponent();
-		component.setSortFieldType(SortFieldTypeEnum.FIELD);
-		jrcomponent.setComponent(component);
-		jrcomponent
-				.setComponentKey(new ComponentKey(
-						"http://jasperreports.sourceforge.net/jasperreports/components", "c", //$NON-NLS-1$ //$NON-NLS-2$
-						"sort")); //$NON-NLS-1$
-		return jrcomponent;
-	}
-
 }

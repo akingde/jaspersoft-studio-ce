@@ -743,6 +743,20 @@ public class Messages extends NLS {
 	public static String GroupSection_SameNameErrorTitle;
 	public static String GroupSection_SectionTitle;
 	public static String GroupSection_SameVariableNameErrorMsg;
+	public static String HandleDefaultsAction_Abort;
+	public static String HandleDefaultsAction_actionText;
+	public static String HandleDefaultsAction_actualTemplateTag;
+	public static String HandleDefaultsAction_createTemplate;
+	public static String HandleDefaultsAction_deleteAll;
+	public static String HandleDefaultsAction_deleteMessage;
+	public static String HandleDefaultsAction_deleteTemplate;
+	public static String HandleDefaultsAction_deleteTitle;
+	public static String HandleDefaultsAction_delteMenu;
+	public static String HandleDefaultsAction_editTemplate;
+	public static String HandleDefaultsAction_importTemplate;
+	public static String HandleDefaultsAction_menuTitle;
+	public static String HandleDefaultsAction_unsetTemplate;
+	public static String HandleDefaultsAction_useTemplate;
 	public static String HeadingAction_heading;
 	public static String HorizontalRowLayout_name;
 	public static String HorizontalRowLayout_toolTip;
@@ -1627,6 +1641,11 @@ public class Messages extends NLS {
 	public static String SelectWorkspacePage_description;
 	public static String SelectWorkspacePage_openTitle;
 	public static String SelectWorkspacePage_title;
+	public static String SetDefaultsAction_message1;
+	public static String SetDefaultsAction_message2;
+	public static String SetDefaultsAction_messageTitle;
+	public static String SetDefaultsAction_text;
+	public static String SetDefaultsAction_tooltip;
 	public static String SetValueCommand_set_zero_property;
 	public static String ShowGridAction_show_grid_tool_tip;
 	public static String ShowParametersAction_description;
@@ -1945,6 +1964,8 @@ public class Messages extends NLS {
 	public static String QueryDesigner_readFieldsButton;
 	public static String DefaultDataAdapterEditorComposite_alredyExistingMessage;
 
+	public static String DefaultNewWizard_defaultsHint;
+	public static String DefaultNewWizard_title;
 	public static String DuplicateDataAdapterAction_duplicateDescription;
 	public static String DuplicateDataAdapterAction_duplicateName;
 	public static String DuplicateDataAdapterAction_duplicateToolTip;

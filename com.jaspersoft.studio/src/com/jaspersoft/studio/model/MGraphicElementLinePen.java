@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
@@ -88,6 +90,21 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 			return linePen;
 		}
 		return super.getPropertyValue(id);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		JRDesignGraphicElement jrSourceElement = (JRDesignGraphicElement) getValue();
+		JRPen jrSourceBox = (JRPen)jrSourceElement.getLinePen();
+		
+		JRDesignGraphicElement jrTargetElement = (JRDesignGraphicElement) target;
+		JRPen jrTargetBox = (JRPen)jrTargetElement.getLinePen();
+		if (jrSourceBox != null && jrTargetBox != null){
+			jrTargetBox.setLineColor(getColorClone(jrSourceBox.getLineColor()));
+			jrTargetBox.setLineStyle(jrSourceBox.getLineStyleValue());
+			jrTargetBox.setLineWidth(jrSourceBox.getLineWidth());
+		}
 	}
 
 	/**

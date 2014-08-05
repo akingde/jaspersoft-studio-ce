@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
@@ -28,6 +29,7 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -256,24 +258,16 @@ public class MSubreport extends MGraphicElement {
 		super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
 	/*
@@ -283,7 +277,11 @@ public class MSubreport extends MGraphicElement {
 	 */
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		return new JRDesignSubreport(jasperDesign);
+		JRDesignSubreport subreport = new JRDesignSubreport(jasperDesign);
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), subreport);
+
+		return subreport;
 	}
 
 	/*
@@ -315,5 +313,15 @@ public class MSubreport extends MGraphicElement {
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignSubreport jrSource = (JRDesignSubreport) getValue();
+		if (jrSource != null){
+			JRDesignSubreport jrTarget = (JRDesignSubreport)target;
+			jrTarget.setRunToBottom(jrSource.isRunToBottom());
+		}
+	}
 }

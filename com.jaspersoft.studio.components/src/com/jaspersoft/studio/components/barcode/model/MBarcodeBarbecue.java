@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -29,6 +30,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -90,9 +92,10 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		exp.setText("\"1234\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
-				"barbecue")); //$NON-NLS-1$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "barbecue")); //$NON-NLS-1$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -291,5 +294,22 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		} else
 			super.setPropertyValue(id, value);
 	}
-
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		StandardBarbecueComponent jrSourceCode = (StandardBarbecueComponent) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		StandardBarbecueComponent jrTargetCode = (StandardBarbecueComponent) jrTargetElement.getComponent();
+		
+		jrTargetCode.setChecksumRequired(jrSourceCode.isChecksumRequired());
+		jrTargetCode.setDrawText(jrSourceCode.isDrawText());
+		jrTargetCode.setType(getStringClone(jrSourceCode.getType()));
+		jrTargetCode.setBarHeight(jrSourceCode.getBarHeight());
+		jrTargetCode.setBarWidth(jrSourceCode.getBarWidth());
+		jrTargetCode.setRotation(jrSourceCode.getRotation());
+	}
 }

@@ -47,6 +47,7 @@ import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
 import com.jaspersoft.studio.editor.action.text.ConvertStaticIntoText;
 import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
+import com.jaspersoft.studio.editor.defaults.SetDefaultsAction;
 import com.jaspersoft.studio.editor.layout.LayoutManager;
 import com.jaspersoft.studio.editor.outline.actions.ConnectToDomainAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
@@ -145,6 +146,10 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 		
 		action = getActionRegistry().getAction(PasteFormatAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
+		
+		action = getActionRegistry().getAction(SetDefaultsAction.ID);
 		if (action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 

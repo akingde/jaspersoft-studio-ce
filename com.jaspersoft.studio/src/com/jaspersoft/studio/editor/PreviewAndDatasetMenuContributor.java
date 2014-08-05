@@ -19,6 +19,7 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 
 import com.jaspersoft.studio.editor.action.PreviewFormatDropDownAction;
 import com.jaspersoft.studio.editor.action.SelectDataAdapterAction;
+import com.jaspersoft.studio.editor.defaults.HandleDefaultsAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.IEditorSettingsMenuContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -36,12 +37,14 @@ public class PreviewAndDatasetMenuContributor implements IEditorSettingsMenuCont
 	static {
 		actions.add(SelectDataAdapterAction.ID);
 		actions.add(PreviewFormatDropDownAction.ID);
+		actions.add(HandleDefaultsAction.ID);
 	}
 	
 	@Override
 	public void registerActions(ActionRegistry actionRegistry, JasperReportsConfiguration jConfig) {
 		actionRegistry.registerAction(new PreviewFormatDropDownAction(jConfig));
 		actionRegistry.registerAction(new SelectDataAdapterAction(jConfig));
+		actionRegistry.registerAction(new HandleDefaultsAction());
 	}
 
 	@Override

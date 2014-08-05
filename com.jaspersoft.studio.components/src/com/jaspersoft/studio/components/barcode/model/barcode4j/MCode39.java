@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.Code39Component;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -51,8 +53,10 @@ public class MCode39 extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Code39")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Code39")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -180,5 +184,23 @@ public class MCode39 extends MBarcode4j {
 			jrList.setExtendedCharSetEnabled((Boolean) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		Code39Component jrSourceBarcode = (Code39Component) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		Code39Component jrTargetBarcode = (Code39Component) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setWideFactor(jrSourceBarcode.getWideFactor());
+		jrTargetBarcode.setIntercharGapWidth(jrSourceBarcode.getIntercharGapWidth());
+		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
+		jrTargetBarcode.setDisplayChecksum(jrSourceBarcode.isDisplayChecksum());
+		jrTargetBarcode.setDisplayStartStop(jrSourceBarcode.isDisplayStartStop());
+		jrTargetBarcode.setExtendedCharSetEnabled(jrSourceBarcode.isExtendedCharSetEnabled());
 	}
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 import net.sf.jasperreports.components.barcode4j.Code39Component;
 import net.sf.jasperreports.components.barcode4j.Interleaved2Of5Component;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -26,6 +27,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -52,9 +54,10 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
-				"Interleaved2Of5")); //$NON-NLS-1$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "Interleaved2Of5")); //$NON-NLS-1$
+			
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -146,5 +149,20 @@ public class MInterleaved2Of5 extends MBarcode4j {
 			jrList.setDisplayChecksum((Boolean) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		Interleaved2Of5Component jrSourceBarcode = (Interleaved2Of5Component) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		Interleaved2Of5Component jrTargetBarcode = (Interleaved2Of5Component) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
+		jrTargetBarcode.setWideFactor(jrSourceBarcode.getWideFactor());
+		jrTargetBarcode.setDisplayChecksum(jrSourceBarcode.isDisplayChecksum());
 	}
 }

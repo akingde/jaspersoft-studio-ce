@@ -28,6 +28,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.components.crosstab.model.nodata.MCrosstabWhenNoDat
 import com.jaspersoft.studio.components.crosstab.model.title.MTitle;
 import com.jaspersoft.studio.components.crosstab.model.title.MTitleCell;
 import com.jaspersoft.studio.components.section.name.NameSection;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -269,25 +271,18 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
+
 
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
@@ -295,6 +290,9 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		JRDesignCrosstabDataset dataset = new JRDesignCrosstabDataset();
 		dataset.setDatasetRun(new JRDesignDatasetRun());
 		jrDesignElement.setDataset(dataset);
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
+		
 		return jrDesignElement;
 	}
 
@@ -560,4 +558,20 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 		return fullModelCrosstab.getChildren();
 	}
 
-}
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignCrosstab jrSource = (JRDesignCrosstab) getValue();
+		if (jrSource != null){
+			JRDesignCrosstab jrTarget = (JRDesignCrosstab)target;
+			jrTarget.setRepeatColumnHeaders(jrSource.isRepeatColumnHeaders());
+			jrTarget.setRepeatRowHeaders(jrSource.isRepeatRowHeaders());
+			jrTarget.setHorizontalPosition(jrSource.getHorizontalPosition());
+			jrTarget.setIgnoreWidth(jrSource.getIgnoreWidth());
+			jrTarget.setColumnBreakOffset(jrSource.getColumnBreakOffset());
+			jrTarget.setRunDirection(jrSource.getRunDirectionValue());
+		}
+	}
+}		
+

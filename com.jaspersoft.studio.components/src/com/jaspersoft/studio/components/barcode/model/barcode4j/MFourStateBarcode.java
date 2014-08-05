@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -141,5 +142,21 @@ public class MFourStateBarcode extends MBarcode4j {
 			jrList.setTrackHeight((Double) value);
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		FourStateBarcodeComponent jrSourceBarcode = (FourStateBarcodeComponent) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		FourStateBarcodeComponent jrTargetBarcode = (FourStateBarcodeComponent) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setIntercharGapWidth(jrSourceBarcode.getIntercharGapWidth());
+		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
+		jrTargetBarcode.setAscenderHeight(jrSourceBarcode.getAscenderHeight());
+		jrTargetBarcode.setTrackHeight(jrSourceBarcode.getTrackHeight());
 	}
 }

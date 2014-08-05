@@ -42,7 +42,12 @@ import com.jaspersoft.templates.TemplateBundle;
 
 public class NewFileCreationWizard extends WizardNewFileCreationPage implements ContextData {
 
-	IStructuredSelection currentSelection = null;
+	protected IStructuredSelection currentSelection = null;
+	
+	/**
+	 * Base name for the new file
+	 */
+	private String baseName = ReportNewWizard.NEW_REPORT_JRXML;
 
 	/**
 	 * This variable is used to load default file name in case this page is shown for the first time, otherwise the page
@@ -122,6 +127,13 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 
 		validatePage();
 	}
+	
+	/**
+	 * Set the base name for the file that will be created
+	 */
+	public void setBaseName(String newBaseName){
+		this.baseName = newBaseName;
+	}
 
 	/**
 	 * This procedure look if a file name has been set already for this dialog page. If not, the dialog page will try to
@@ -135,9 +147,6 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 		// return;
 
 		// firstLoad = false;
-
-		String baseName = ReportNewWizard.NEW_REPORT_JRXML;
-
 		// If a template has been selected, let's try use its name as file name...
 		if (getWizard() != null && getWizard() instanceof JSSWizard) {
 			JSSWizard jssw = (JSSWizard) getWizard();

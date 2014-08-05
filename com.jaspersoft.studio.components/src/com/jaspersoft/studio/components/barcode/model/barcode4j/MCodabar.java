@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.CodabarComponent;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 
@@ -48,9 +50,10 @@ public class MCodabar extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
-				"Codabar")); //$NON-NLS-1$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr","Codabar")); //$NON-NLS-1$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -114,5 +117,18 @@ public class MCodabar extends MBarcode4j {
 			jrList.setWideFactor((Double) value);
 
 		super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		CodabarComponent jrSourceBarcode = (CodabarComponent) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		CodabarComponent jrTargetBarcode = (CodabarComponent) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setWideFactor(jrSourceBarcode.getWideFactor());
 	}
 }

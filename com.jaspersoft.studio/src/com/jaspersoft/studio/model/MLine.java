@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.base.JRBaseLine;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -28,6 +30,7 @@ import net.sf.jasperreports.engine.type.LineDirectionEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -145,24 +148,16 @@ public class MLine extends MGraphicElementLinePen {
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 30;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 30;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 100;
 	}
 
 	/*
@@ -173,6 +168,9 @@ public class MLine extends MGraphicElementLinePen {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignLine jrDesignLine = new JRDesignLine(jasperDesign);
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignLine);
+
 		jrDesignLine.setWidth(getDefaultWidth());
 		jrDesignLine.setHeight(getDefaultHeight());
 		return jrDesignLine;
@@ -214,4 +212,17 @@ public class MLine extends MGraphicElementLinePen {
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		return result;
 	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRLine jrSource = (JRLine) getValue();
+		if (jrSource != null){
+			JRLine jrTarget = (JRLine)target;
+			jrTarget.setFill(jrSource.getFillValue());
+			jrTarget.setDirection(jrSource.getDirectionValue());
+		}
+	}
+	
 }

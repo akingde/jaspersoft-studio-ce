@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.EAN128Component;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
@@ -48,8 +50,10 @@ public class MEAN128 extends MBarcode4j {
 		exp.setText("12345678901234567890");
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "EAN128")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "EAN128")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -114,5 +118,18 @@ public class MEAN128 extends MBarcode4j {
 					.getChecksumMode4Pos((Integer) value));
 
 		super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		EAN128Component jrSourceBarcode = (EAN128Component) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		EAN128Component jrTargetBarcode = (EAN128Component) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
 	}
 }

@@ -24,9 +24,11 @@ import net.sf.jasperreports.components.spiderchart.StandardSpiderPlot;
 import net.sf.jasperreports.components.spiderchart.type.SpiderRotationEnum;
 import net.sf.jasperreports.components.spiderchart.type.TableOrderEnum;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -37,6 +39,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
@@ -613,19 +616,22 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 	@Override
 	public int getDefaultHeight() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
+
 
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement jrcomponent = new JRDesignComponentElement();
-		jrcomponent.setWidth(200);
-		jrcomponent.setHeight(200);
+		jrcomponent.setWidth(getDefaultWidth());
+		jrcomponent.setHeight(getDefaultHeight());
 
 		SpiderChartComponent component = new SpiderChartComponent();
 		component.setChartSettings(new StandardChartSettings());
@@ -635,8 +641,10 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		component.setPlot(spiderPlot);
 
 		jrcomponent.setComponent(component);
-		jrcomponent.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "sc", //$NON-NLS-1$ //$NON-NLS-2$
-				"spiderChart")); //$NON-NLS-1$
+		jrcomponent.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "sc", "spiderChart")); //$NON-NLS-1$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrcomponent);
+		
 		return jrcomponent;
 	}
 
@@ -655,5 +663,43 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		}
 		return null;
 	}
-
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		SpiderChartComponent jrSourceComponent = (SpiderChartComponent) jrSourceElement.getComponent();
+		StandardChartSettings jrSourceSetting = (StandardChartSettings) jrSourceComponent.getChartSettings();
+		StandardSpiderPlot jrSourcePlot = (StandardSpiderPlot) jrSourceComponent.getPlot();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) getValue();
+		SpiderChartComponent jrTargetComponent = (SpiderChartComponent) jrTargetElement.getComponent();
+		StandardChartSettings jrTargetSetting = (StandardChartSettings) jrTargetComponent.getChartSettings();
+		StandardSpiderPlot jrTargetPlot = (StandardSpiderPlot) jrTargetComponent.getPlot();
+		
+		jrTargetPlot.setAxisLineColor(getColorClone(jrSourcePlot.getAxisLineColor()));
+		jrTargetPlot.setAxisLineWidth(jrSourcePlot.getAxisLineWidth());
+		jrTargetPlot.setLabelColor(getColorClone(jrSourcePlot.getLabelColor()));
+		jrTargetPlot.setLabelGap(jrSourcePlot.getLabelGap());
+		jrTargetPlot.setLabelFont(getFontClone(jrSourcePlot.getLabelFont()));
+		jrTargetPlot.setRotation(jrSourcePlot.getRotation());
+		jrTargetPlot.setTableOrder(jrSourcePlot.getTableOrder());
+		jrTargetPlot.setWebFilled(jrSourcePlot.getWebFilled());
+		jrTargetPlot.setStartAngle(jrSourcePlot.getStartAngle());
+		jrTargetPlot.setInteriorGap(jrSourcePlot.getInteriorGap());
+		jrTargetPlot.setHeadPercent(jrSourcePlot.getHeadPercent());
+		
+		jrTargetSetting.setTitleFont(getFontClone(jrSourceSetting.getTitleFont()));
+		jrTargetSetting.setSubtitleFont(getFontClone(jrSourceSetting.getSubtitleFont()));
+		jrTargetSetting.setLegendFont(getFontClone(jrSourceSetting.getLegendFont()));
+		jrTargetSetting.setTitlePosition(jrSourceSetting.getTitlePosition());
+		jrTargetSetting.setLegendPosition(jrSourceSetting.getLegendPosition());
+		jrTargetSetting.setShowLegend(jrSourceSetting.getShowLegend());
+		jrTargetSetting.setRenderType(jrSourceSetting.getRenderType());
+		jrTargetSetting.setTitleColor(getColorClone(jrSourceSetting.getTitleColor()));
+		jrTargetSetting.setLegendColor(getColorClone(jrSourceSetting.getLegendColor()));
+		jrTargetSetting.setSubtitleColor(getColorClone(jrSourceSetting.getSubtitleColor()));
+		jrTargetSetting.setLegendBackgroundColor(getColorClone(jrSourceSetting.getLegendBackgroundColor()));
+	}
 }

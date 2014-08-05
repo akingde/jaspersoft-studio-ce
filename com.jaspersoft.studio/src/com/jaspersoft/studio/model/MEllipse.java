@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JREllipse;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
@@ -27,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -136,24 +139,16 @@ public class MEllipse extends MGraphicElementLinePen {
 		setValue(jrEllipse);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 50;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 100;
 	}
 
 	/*
@@ -164,6 +159,9 @@ public class MEllipse extends MGraphicElementLinePen {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignEllipse jrDesignEllipse = new JRDesignEllipse(jasperDesign);
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignEllipse);
+
 		jrDesignEllipse.setWidth(getDefaultWidth());
 		jrDesignEllipse.setWidth(getDefaultHeight());
 		return jrDesignEllipse;
@@ -210,6 +208,17 @@ public class MEllipse extends MGraphicElementLinePen {
 		return null;
 	}
 	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JREllipse jrSource = (JREllipse) getValue();
+		if (jrSource != null){
+			((JREllipse)target).setFill(jrSource.getFillValue());
+		}
+	}
+	
+	@Override
 	public HashSet<String> generateGraphicalProperties(){
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRBaseStyle.PROPERTY_FILL);

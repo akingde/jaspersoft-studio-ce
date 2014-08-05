@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.UPCEComponent;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
@@ -47,8 +49,10 @@ public class MUPCE extends MBarcode4j {
 		exp.setText("\"1234567\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "UPCE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "UPCE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -112,5 +116,18 @@ public class MUPCE extends MBarcode4j {
 					.getChecksumMode4Pos((Integer) value));
 		else
 			super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		UPCEComponent jrSourceBarcode = (UPCEComponent) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		UPCEComponent jrTargetBarcode = (UPCEComponent) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setChecksumMode(jrSourceBarcode.getChecksumMode());
 	}
 }

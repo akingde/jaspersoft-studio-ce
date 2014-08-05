@@ -49,6 +49,7 @@ import com.jaspersoft.studio.components.table.TableManager;
 import com.jaspersoft.studio.components.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.components.table.messages.Messages;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -262,24 +263,16 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		return jrTable;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
 	@Override
@@ -291,6 +284,9 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		component.setDatasetRun(datasetRun);
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrElement);
+
 		return jrElement;
 	}
 

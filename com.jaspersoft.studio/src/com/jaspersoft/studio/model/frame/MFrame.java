@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -80,24 +81,16 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		setValue(jrFrame);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 200;
 	}
 
 	/*
@@ -108,6 +101,9 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignElement jrDesignElement = new JRDesignFrame();
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
+
 		jrDesignElement.setWidth(getDefaultWidth());
 		jrDesignElement.setHeight(getDefaultHeight());
 		return jrDesignElement;

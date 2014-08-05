@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRRectangle;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignRectangle;
@@ -26,6 +28,7 @@ import net.sf.jasperreports.engine.type.FillEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -143,24 +146,16 @@ public class MRectangle extends MGraphicElementLinePen {
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 50;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 100;
 	}
 
 	/*
@@ -171,6 +166,9 @@ public class MRectangle extends MGraphicElementLinePen {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignRectangle jrDesignRectangle = new JRDesignRectangle(jasperDesign);
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignRectangle);
+
 		jrDesignRectangle.setWidth(getDefaultWidth());
 		jrDesignRectangle.setHeight(getDefaultHeight());
 		return jrDesignRectangle;
@@ -211,5 +209,17 @@ public class MRectangle extends MGraphicElementLinePen {
 		result.add(JRBaseStyle.PROPERTY_FILL);
 		result.add(JRBaseStyle.PROPERTY_RADIUS);
 		return result;
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRRectangle jrSource = (JRRectangle) getValue();
+		if (jrSource != null){
+			JRRectangle jrTarget = (JRRectangle)target;
+			jrTarget.setFill(jrSource.getFillValue());
+			jrTarget.setRadius(jrSource.getRadius());
+		}
 	}
 }

@@ -26,6 +26,7 @@ import net.sf.jasperreports.components.map.type.MapScaleEnum;
 import net.sf.jasperreports.components.map.type.MapTypeEnum;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -50,6 +51,7 @@ import com.jaspersoft.studio.components.map.model.marker.MarkerDescriptor;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
 import com.jaspersoft.studio.components.map.model.path.MapPathsDescriptor;
 import com.jaspersoft.studio.components.map.model.style.MapStylesDescriptor;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.model.ANode;
@@ -566,6 +568,9 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 				"map")); //$NON-NLS-1$
 		StandardItemData markerData = safeGetMarkerData(component, null);
 		markerData.setDataset(new JRDesignElementDataset());
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), designMap);
+		
 		return designMap;
 	}
 
@@ -608,4 +613,18 @@ public class MMap extends MGraphicElement implements IDatasetContainer {
 		return datasetList;
 	}
 
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+
+		StandardMapComponent jrSourceMap = getMapComponent();
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		StandardMapComponent jrTargetMap = (StandardMapComponent) jrTargetElement.getComponent();
+		
+		jrTargetMap.setMapType(jrSourceMap.getMapType());
+		jrTargetMap.setMapScale(jrSourceMap.getMapScale());
+		jrTargetMap.setImageType(jrSourceMap.getImageType());
+		jrTargetMap.setOnErrorType(jrSourceMap.getOnErrorType());
+
+	}
 }

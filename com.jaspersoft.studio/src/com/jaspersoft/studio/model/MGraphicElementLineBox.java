@@ -19,12 +19,16 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 
@@ -114,5 +118,41 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		result.add(JRBasePen.PROPERTY_LINE_STYLE);
 		result.add(JRBasePen.PROPERTY_LINE_WIDTH);
 		return result;
+	}
+	
+	private void transferLinePenProeprties(JRPen jrTarget, JRPen source){
+		if (jrTarget != null && source != null){
+			jrTarget.setLineColor(getColorClone(source.getLineColor()));
+			jrTarget.setLineStyle(source.getLineStyleValue());
+			jrTarget.setLineWidth(source.getLineWidth().floatValue());
+		}
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRLineBox jrSourceBox = (JRLineBox) getBoxContainer().getLineBox();
+		if (jrSourceBox != null && target instanceof JRBoxContainer){
+			JRLineBox jrTargetBox = ((JRBoxContainer) target).getLineBox();
+			
+			jrTargetBox.setPadding(jrSourceBox.getPadding());
+			jrTargetBox.setTopPadding(jrSourceBox.getTopPadding());
+			jrTargetBox.setBottomPadding(jrSourceBox.getBottomPadding());
+			jrTargetBox.setLeftPadding(jrSourceBox.getLeftPadding());
+			jrTargetBox.setRightPadding(jrSourceBox.getRightPadding());
+
+			transferLinePenProeprties(jrTargetBox.getPen(), jrSourceBox.getPen());
+			transferLinePenProeprties(jrTargetBox.getLeftPen(), jrSourceBox.getLeftPen());
+			transferLinePenProeprties(jrTargetBox.getRightPen(), jrSourceBox.getRightPen());
+			transferLinePenProeprties(jrTargetBox.getTopPen(), jrSourceBox.getTopPen());
+			transferLinePenProeprties(jrTargetBox.getBottomPen(), jrSourceBox.getBottomPen());
+		}
+	}
+	
+	protected void applyDefaultValue(){
+		if (DefaultManager.INSTANCE.hasDefault()){
+			
+		}
 	}
 }

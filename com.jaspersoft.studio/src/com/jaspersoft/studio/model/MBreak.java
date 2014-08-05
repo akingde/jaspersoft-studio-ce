@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.base.JRBaseBreak;
 import net.sf.jasperreports.engine.design.JRDesignBreak;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.type.BreakTypeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -131,24 +133,16 @@ public class MBreak extends MGraphicElement {
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 3;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 3;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 100;
 	}
 
 	/*
@@ -161,6 +155,9 @@ public class MBreak extends MGraphicElement {
 		JRDesignBreak brk = new JRDesignBreak();
 		brk.setWidth(getDefaultWidth());
 		brk.setHeight(getDefaultHeight());
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), brk);
+		
 		return brk;
 	}
 
@@ -192,6 +189,17 @@ public class MBreak extends MGraphicElement {
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignBreak jrSource = (JRDesignBreak) getValue();
+		if (jrSource != null){
+			JRDesignBreak jrTarget = (JRDesignBreak)target;
+			jrTarget.setType(jrSource.getTypeValue());
+		}
 	}
 
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.PDF417Component;
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -25,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
@@ -49,8 +51,10 @@ public class MPDF417 extends MBarcode4j {
 		exp.setText("\"123456789\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "PDF417")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "PDF417")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 
@@ -169,5 +173,23 @@ public class MPDF417 extends MBarcode4j {
 			jrList.setErrorCorrectionLevel((Integer) value);
 
 		super.setPropertyValue(id, value);
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignComponentElement jrSourceElement = (JRDesignComponentElement) getValue();
+		PDF417Component jrSourceBarcode = (PDF417Component) jrSourceElement.getComponent();
+		
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement) target;
+		PDF417Component jrTargetBarcode = (PDF417Component) jrTargetElement.getComponent();
+		
+		jrTargetBarcode.setMinColumns(jrSourceBarcode.getMinColumns());
+		jrTargetBarcode.setMaxColumns(jrSourceBarcode.getMaxColumns());
+		jrTargetBarcode.setMinRows(jrSourceBarcode.getMinRows());
+		jrTargetBarcode.setMaxRows(jrSourceBarcode.getMaxRows());
+		jrTargetBarcode.setWidthToHeightRatio(jrSourceBarcode.getWidthToHeightRatio());
+		jrTargetBarcode.setErrorCorrectionLevel(jrSourceBarcode.getErrorCorrectionLevel());
 	}
 }

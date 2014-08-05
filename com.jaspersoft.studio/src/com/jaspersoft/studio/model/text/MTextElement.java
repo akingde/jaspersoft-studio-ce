@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
@@ -199,6 +200,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 		return super.getPropertyValue(id);
 	}
+	
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
@@ -248,4 +250,40 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		result.add(JRBaseFont.PROPERTY_FONT_NAME);
 		return result;
 	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		JRDesignTextElement jrSource = (JRDesignTextElement) getValue();
+		JRDesignTextElement jrTarget = (JRDesignTextElement)target;
+		
+		jrTarget.setHorizontalAlignment(jrSource.getHorizontalAlignmentValue());
+		jrTarget.setVerticalAlignment(jrSource.getVerticalAlignmentValue());
+		jrTarget.setMarkup(getStringClone(jrSource.getMarkup()));
+		jrTarget.setRotation(jrSource.getRotationValue());
+		
+		jrTarget.setBold(jrSource.isBold());
+		jrTarget.setItalic(jrSource.isItalic());
+		jrTarget.setUnderline(jrSource.isUnderline());
+		jrTarget.setStrikeThrough(jrSource.isStrikeThrough());
+		jrTarget.setPdfEmbedded(jrSource.isPdfEmbedded());
+		jrTarget.setFontName(getStringClone(jrSource.getFontName()));
+		jrTarget.setFontSize(jrSource.getFontsize());
+		jrTarget.setPdfFontName(getStringClone(jrSource.getPdfFontName()));
+		jrTarget.setPdfEncoding(getStringClone(jrSource.getPdfEncoding()));
+		
+		JRBaseParagraph jrTargetParagraph = (JRBaseParagraph)jrTarget.getParagraph();
+		JRBaseParagraph jrSourceParagraph = (JRBaseParagraph) jrSource.getParagraph();
+		if (jrTargetParagraph != null && jrSourceParagraph != null){
+			jrTargetParagraph.setLineSpacing(jrSourceParagraph.getLineSpacing());
+			jrTargetParagraph.setLineSpacingSize(jrSourceParagraph.getLineSpacingSize());
+			jrTargetParagraph.setFirstLineIndent(jrSourceParagraph.getFirstLineIndent());
+			jrTargetParagraph.setLeftIndent(jrSourceParagraph.getLeftIndent());
+			jrTargetParagraph.setRightIndent(jrSourceParagraph.getRightIndent());
+			jrTargetParagraph.setSpacingAfter(jrSourceParagraph.getSpacingAfter());
+			jrTargetParagraph.setSpacingBefore(jrTargetParagraph.getSpacingBefore());
+			jrTargetParagraph.setTabStopWidth(jrSourceParagraph.getTabStopWidth());
+		}
+	}
+
 }

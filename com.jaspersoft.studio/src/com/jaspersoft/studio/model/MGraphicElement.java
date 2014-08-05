@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,11 +22,14 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JRTextElement;
 import net.sf.jasperreports.engine.base.JRBaseElement;
+import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -42,12 +46,14 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDescriptor;
@@ -209,22 +215,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		super.setValue(value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultHeight()
-	 */
 	public int getDefaultHeight() {
-		return 30;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 30;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultWidth()
-	 */
+
 	public int getDefaultWidth() {
-		return 100;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 100;
 	}
 
 	/*
@@ -862,5 +861,59 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	public List<INode> initModel() {
 		return getChildren();
+	}
+	
+	protected SetValueCommand generateSetCommand(APropertyNode target, String propertyId, Object value){
+		SetValueCommand result = new SetValueCommand();
+		result.setTarget(target);
+		result.setPropertyId(propertyId);
+		result.setPropertyValue(value);
+		return result;
+	}
+	
+	protected Color getColorClone(Color source){
+		if (source == null) return null;
+		else return new Color(source.getRed(), source.getGreen(), source.getBlue(), source.getAlpha());
+	}
+	
+	protected String getStringClone(String source){
+		if (source == null) return null;
+		else return new String(source);
+	}
+	
+	protected JRFont getFontClone(JRFont sourceFont){
+		if (sourceFont == null) return null;
+		if (sourceFont instanceof JRBaseFont){
+			return (JRBaseFont)((JRBaseFont)sourceFont).clone();
+		}
+		if (sourceFont instanceof JRTextElement){
+			return (JRTextElement)((JRTextElement)sourceFont).clone();
+		}
+		return null;
+	}
+	
+	/**
+	 * Copy all the report independent properties from this element to 
+	 * the target one. The target must have the same type, or a subtype,
+	 * of the value of this element. The report dependent properties are 
+	 * expressions, groups and styles essentially
+	 * 
+	 * @param target the target of the copy
+	 */
+	public void trasnferProperties(JRElement target){
+		JRDesignElement jrTarget = (JRDesignElement)target;
+		JRDesignElement jrSource = getValue();
+		jrTarget.setKey(getStringClone(jrSource.getKey()));
+		jrTarget.setWidth(jrSource.getWidth());
+		jrTarget.setHeight(jrSource.getHeight());
+		jrTarget.setBackcolor(jrSource.getBackcolor());
+		jrTarget.setForecolor(jrSource.getForecolor());
+		jrTarget.setMode(jrSource.getModeValue());
+		jrTarget.setPositionType(jrSource.getPositionTypeValue());
+		jrTarget.setStretchType(jrSource.getStretchTypeValue());
+		jrTarget.setPrintRepeatedValues(jrSource.isPrintRepeatedValues());
+		jrTarget.setRemoveLineWhenBlank(jrSource.isRemoveLineWhenBlank());
+		jrTarget.setPrintInFirstWholeBand(jrSource.isPrintInFirstWholeBand());
+		jrTarget.setPrintWhenDetailOverflows(jrSource.isPrintWhenDetailOverflows());
 	}
 }

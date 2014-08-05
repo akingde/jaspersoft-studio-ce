@@ -22,6 +22,7 @@ import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.section.name.NameSection;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
@@ -275,6 +277,9 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 
 		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
 		componentImpl.setDatasetRun(datasetRun);
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), component);
+
 		return component;
 	}
 
@@ -475,6 +480,21 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		properties.add(PREFIX + DesignListContents.PROPERTY_WIDTH);
 		properties.add(PREFIX + DesignListContents.PROPERTY_HEIGHT);
 		return properties;
+	}
+
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+
+		StandardListComponent jrSourceList = getList();
+		JRDesignComponentElement jrTargetElement = (JRDesignComponentElement)target;
+		StandardListComponent jrTargetList = (StandardListComponent) jrTargetElement.getComponent();
+		
+		jrTargetList.setIgnoreWidth(jrSourceList.getIgnoreWidth());
+		jrTargetList.setPrintOrderValue(jrSourceList.getPrintOrderValue());
+		((DesignListContents)jrTargetList.getContents()).setHeight(jrSourceList.getContents().getHeight());
+		((DesignListContents)jrTargetList.getContents()).setWidth(jrSourceList.getContents().getWidth());
+
 	}
 
 }

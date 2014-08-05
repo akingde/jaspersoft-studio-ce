@@ -90,6 +90,7 @@ import com.jaspersoft.studio.ExternalStylesManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
@@ -136,6 +137,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 
 		public void elementDeleted(Object element) {
+			IFile resource = getCurrentFile();
+			String path = resource.getRawLocation().toOSString();
+			DefaultManager.INSTANCE.removeDefaultFile(path);
+			
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					getSite().getPage().closeEditor(JrxmlEditor.this, false);
@@ -256,8 +261,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public JrxmlEditor() {
 		super();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
-				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 		ExternalStylesManager.initListeners();
 		JasperReportsPlugin.initializeKeyListener();
 	}
@@ -482,7 +486,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 																	// we'll do it manually
 					resource.setContents(new ByteArrayInputStream(doc.get().getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
 							monitor);
-					finishSave();
+					finishSave(resource);
 					return;
 				}
 			}
@@ -504,9 +508,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						String xml = model2xml(version);
 						doSaveEditors(monitor);
 						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
-						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
-								monitor);
-						finishSave();
+						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,	monitor);
+						finishSave(resource);
 					} catch (Throwable e) {
 						UIUtils.showError(e);
 					}
@@ -535,7 +538,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		xmlFresh = true;
 	}
 
-	protected void finishSave() {
+	protected void finishSave(IFile resource) {
+		String resourceAbsolutePath = resource.getRawLocation().toOSString();
+		if (DefaultManager.INSTANCE.isCurrentDefault(resourceAbsolutePath)){
+			DefaultManager.INSTANCE.reloadCurrentDefault();
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				isRefresh = false;

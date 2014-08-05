@@ -28,13 +28,12 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.preferences.ElementsDefaultPreferencePage;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 /*
@@ -145,25 +144,7 @@ public class MStaticText extends MTextElement {
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
-	@Override
-	public int getDefaultHeight() {
-		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getInt(ElementsDefaultPreferencePage.STATIC_TEXT_HEIGHT);
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
-	@Override
-	public int getDefaultWidth() {
-		return JaspersoftStudioPlugin.getInstance().getPreferenceStore().getInt(ElementsDefaultPreferencePage.STATIC_TEXT_WIDTH);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -174,6 +155,9 @@ public class MStaticText extends MTextElement {
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignStaticText jrDesignStaticText = new JRDesignStaticText();
 		jrDesignStaticText.setText(Messages.common_static_text);
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignStaticText);
+
 		return jrDesignStaticText;
 	}
 

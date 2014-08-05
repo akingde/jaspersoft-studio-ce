@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -252,6 +253,9 @@ public class MGenericElement extends MGraphicElement {
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignGenericElement el = new JRDesignGenericElement(jasperDesign);
 		el.setGenericType(new JRGenericElementType("namespace", "name"));
+
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), el);
+		
 		return el;
 	}
 }

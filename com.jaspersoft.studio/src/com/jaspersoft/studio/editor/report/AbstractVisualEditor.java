@@ -105,6 +105,7 @@ import com.jaspersoft.studio.editor.action.text.ConvertTextIntoStatic;
 import com.jaspersoft.studio.editor.action.text.ItalicAction;
 import com.jaspersoft.studio.editor.action.text.StrikethroughAction;
 import com.jaspersoft.studio.editor.action.text.UnderlineAction;
+import com.jaspersoft.studio.editor.defaults.SetDefaultsAction;
 import com.jaspersoft.studio.editor.dnd.ImageResourceDropTargetListener;
 import com.jaspersoft.studio.editor.dnd.ImageURLTransfer;
 import com.jaspersoft.studio.editor.dnd.JSSTemplateTransferDropTargetListener;
@@ -689,6 +690,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
+		action = new SetDefaultsAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
 		action = new MatchWidthAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());

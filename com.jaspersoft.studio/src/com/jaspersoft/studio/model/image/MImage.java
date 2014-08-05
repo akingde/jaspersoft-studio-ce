@@ -18,6 +18,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseImage;
@@ -39,6 +40,7 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.defaults.DefaultManager;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -455,24 +457,16 @@ public class MImage extends MGraphicElementLineBox {
 		super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
-		return 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer)defaultValue : 50;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
-		return 50;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer)defaultValue : 50;
 	}
 
 	/*
@@ -483,6 +477,9 @@ public class MImage extends MGraphicElementLineBox {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignElement jrDesignElement = new JRDesignImage(jasperDesign);
+		
+		DefaultManager.INSTANCE.applyDefault(this.getClass(), jrDesignElement);
+
 		jrDesignElement.setWidth(getDefaultWidth());
 		jrDesignElement.setHeight(getDefaultHeight());
 		return jrDesignElement;
@@ -536,5 +533,22 @@ public class MImage extends MGraphicElementLineBox {
 		result.add(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
 		result.add(JRDesignImage.PROPERTY_EXPRESSION);
 		return result;
+	}
+	
+	@Override
+	public void trasnferProperties(JRElement target){
+		super.trasnferProperties(target);
+		
+		JRDesignImage jrSource = (JRDesignImage) getValue();
+		if (jrSource != null){
+			JRDesignImage jrTarget = (JRDesignImage)target;
+			jrTarget.setFill(jrSource.getFillValue());
+			jrTarget.setScaleImage(jrSource.getScaleImageValue());
+			jrTarget.setHorizontalAlignment(jrSource.getHorizontalAlignmentValue());
+			jrTarget.setVerticalAlignment(jrSource.getVerticalAlignmentValue());
+			jrTarget.setOnErrorType(jrSource.getOnErrorTypeValue());
+			jrTarget.setUsingCache(jrSource.getUsingCache());
+			jrTarget.setLazy(jrSource.isLazy());
+		}
 	}
 }
