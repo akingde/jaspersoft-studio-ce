@@ -672,6 +672,8 @@ public class BordersSection extends AbstractSection {
 		if (m != null) {
 			MLineBox lb = (MLineBox) m.getPropertyActualValue(MGraphicElementLineBox.LINE_BOX);
 			refreshPadding(lb);
+			bd.unselectAll();
+			updateRightPanel();
 			enableControls(m.isEditable());
 		}
 		if (square != null)
