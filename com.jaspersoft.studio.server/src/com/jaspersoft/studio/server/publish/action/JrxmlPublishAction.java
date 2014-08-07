@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish.action;
 
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -24,8 +26,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.Publish;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
 import com.jaspersoft.studio.utils.AContributorAction;
 
@@ -34,6 +42,7 @@ public class JrxmlPublishAction extends AContributorAction {
 
 	private int startpage = 1;
 	private IProgressMonitor monitor;
+	private boolean silent = false;
 
 	public JrxmlPublishAction(int startpage, IProgressMonitor monitor) {
 		this();
@@ -44,7 +53,12 @@ public class JrxmlPublishAction extends AContributorAction {
 	public JrxmlPublishAction() {
 		super(ID, Messages.JrxmlPublishAction_title);
 		setToolTipText(Messages.JrxmlPublishAction_tooltip);
-		setImageDescriptor(Activator.getDefault().getImageDescriptor("icons/server--upload.png")); //$NON-NLS-1$
+		setImageDescriptor(Activator.getDefault().getImageDescriptor(
+				"icons/server--upload.png")); //$NON-NLS-1$
+	}
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
 	}
 
 	@Override
@@ -56,7 +70,8 @@ public class JrxmlPublishAction extends AContributorAction {
 				Job job = new Job(Messages.FindReportUnit_jobname) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Publishing the Report", IProgressMonitor.UNKNOWN);
+						monitor.beginTask("Publishing the Report",
+								IProgressMonitor.UNKNOWN);
 						try {
 							status = doRun(monitor);
 						} finally {
@@ -91,16 +106,44 @@ public class JrxmlPublishAction extends AContributorAction {
 		return status;
 	}
 
-	public IStatus publishReportUnit(JasperDesign jd, int startpage, IProgressMonitor monitor) {
+	public IStatus publishReportUnit(JasperDesign jd, int startpage,
+			IProgressMonitor monitor) {
 		IStatus status = Status.CANCEL_STATUS;
 		IFile file = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 		try {
-			Publish2ServerWizard wizard = new Publish2ServerWizard(jd, jrConfig, startpage);
+			if (silent) {
+				// let's look if server exists, and url exists
+				MServerProfile msrv = ServerManager.getServerProfile(jd,
+						jrConfig);
+				if (msrv != null) {
+					ANode n = FindResources.findReportUnit(msrv, monitor, jd,
+							file);
+					if (n != null && n instanceof AMJrxmlContainer) {
+						// let's check if there are new resources?
+						try {
+							List<?> resources = FindResources.findResources(
+									monitor, (AMJrxmlContainer) n, jd);
+							if (resources != null) {
+
+							}
+							// publish
+							new Publish(jrConfig).publish((AMJrxmlContainer) n,
+									jd, monitor);
+							return Status.OK_STATUS;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			Publish2ServerWizard wizard = new Publish2ServerWizard(jd,
+					jrConfig, startpage);
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			if (dialog.open() == Dialog.OK) {
 				// ANode node = wizard.getNode();
 				// if (node instanceof AMJrxmlContainer)
-				// status = new Publish(jrConfig).publish((AMJrxmlContainer) node, jd,
+				// status = new Publish(jrConfig).publish((AMJrxmlContainer)
+				// node, jd,
 				// monitor);
 				status = Status.OK_STATUS;
 			}

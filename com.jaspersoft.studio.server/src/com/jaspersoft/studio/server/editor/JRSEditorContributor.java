@@ -113,8 +113,11 @@ public class JRSEditorContributor implements IEditorContributor {
 		// jConfig.put(KEY_PUBLISH2JSS, run);
 		// jConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
 
-		if (run)
-			getAction(monitor, jConfig).run();
+		if (run) {
+			JrxmlPublishAction action = getAction(monitor, jConfig);
+			action.setSilent(allways);
+			action.run();
+		}
 	}
 
 	public static String getServerURL(JasperDesign jd, IFile f) {
