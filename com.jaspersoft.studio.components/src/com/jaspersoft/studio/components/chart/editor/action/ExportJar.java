@@ -77,7 +77,6 @@ public class ExportJar extends Action {
 				new Label(composite, SWT.NONE).setText("Theme Name");
 
 				final Text txt = new Text(composite, SWT.BORDER);
-				txt.setText(getChartThemeName());
 				txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				txt.addModifyListener(new ModifyListener() {
 
@@ -86,6 +85,7 @@ public class ExportJar extends Action {
 						name = txt.getText();
 					}
 				});
+				txt.setText(getChartThemeName());
 
 				final Button btn = new Button(composite, SWT.CHECK);
 				btn.setText("Add the jar to the CLASSPATH to use the theme in the report designer.");
