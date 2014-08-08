@@ -184,8 +184,10 @@ public class ComboParametersPage extends WizardPage implements IExpressionContex
 		JRDataset dataset = datasetRun.getJasperDesign().getDatasetMap().get(datasetRun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME));
 		if (dataset != null) {
 			List<JRParameter> userParameters = new ArrayList<JRParameter>();
+			//flag to add or not the system parameters
+			boolean addSystemParameters = true;
 			for(JRParameter param : dataset.getParameters()){
-				if (!param.isSystemDefined()) userParameters.add(param);
+				if (!param.isSystemDefined() || addSystemParameters) userParameters.add(param);
 			}
 			//the original dataset parameters are cached
 			datasetParameters = userParameters.toArray(new JRParameter[userParameters.size()]);
