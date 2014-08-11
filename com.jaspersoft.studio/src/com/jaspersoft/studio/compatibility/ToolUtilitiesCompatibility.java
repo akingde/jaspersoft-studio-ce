@@ -88,7 +88,7 @@ public class ToolUtilitiesCompatibility {
 	public static EditPart getPageEditPart(EditPart node){
 		if (node == null) return null;
 		EditPart parent = node.getParent();
-		if (parent instanceof PageEditPart) return parent;
+		if (node instanceof PageEditPart) return node;
 		else return getPageEditPart(parent);
 	}
 	
