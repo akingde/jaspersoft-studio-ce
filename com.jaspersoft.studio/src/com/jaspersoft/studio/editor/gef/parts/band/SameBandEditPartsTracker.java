@@ -304,7 +304,8 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 		Collection marqueeSelectedEditParts = new ArrayList();
 		if (!editPartsToProcess.isEmpty()) {
 			EditPart pageEditPart = ToolUtilitiesCompatibility.getPageEditPart((EditPart)editPartsToProcess.iterator().next());
-			editPartsToProcess.remove(pageEditPart.getChildren().get(0));
+			if (pageEditPart != null) 
+				editPartsToProcess.remove(pageEditPart.getChildren().get(0));
 		}
 		for (Iterator iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
 			GraphicalEditPart editPart = (GraphicalEditPart) iterator.next();
