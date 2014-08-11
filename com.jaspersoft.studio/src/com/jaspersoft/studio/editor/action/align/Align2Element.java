@@ -13,23 +13,11 @@
 package com.jaspersoft.studio.editor.action.align;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.Pair;
-
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.AlignmentRequest;
-import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -38,8 +26,9 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.action.IGlobalAction;
-import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.gef.commands.Align2ElementCommand;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * This class copy an alignment action to add the primary element checking, to take it as reference to move all the
@@ -86,11 +75,6 @@ public class Align2Element extends ACachedSelectionAction implements IGlobalActi
 	private int alignment;
 
 	/**
-	 * The elements that will be aligned
-	 */
-	private static HashMap<CachedSelectionProvider, List<?>> cachedOperationSet = new HashMap<CachedSelectionProvider, List<?>>();
-
-	/**
 	 * Constructs an AlignmentAction with the given part and alignment ID. The alignment ID must by one of:
 	 * <UL>
 	 * <LI>GEFActionConstants.ALIGN_LEFT
@@ -112,60 +96,37 @@ public class Align2Element extends ACachedSelectionAction implements IGlobalActi
 		initUI();
 	}
 
-	/**
-	 * Returns the alignment rectangle to which all selected parts should be aligned. The rectangle coordinate are the
-	 * same of the primary element
-	 * 
-	 * @param request
-	 *          the alignment Request
-	 * @param primary
-	 *          the object used as primary during the alignment
-	 * @return the alignment rectangle
-	 */
-	protected Rectangle calculateAlignmentRectangle(List<?> editparts, Object primary) {
-		if (editparts == null || editparts.isEmpty())
-			return null;
-		GraphicalEditPart part = (GraphicalEditPart) primary;
-		Rectangle rect = new PrecisionRectangle(part.getFigure().getBounds());
-		part.getFigure().translateToAbsolute(rect);
-		return rect;
-	}
 
 	/**
 	 * Create the alignment command for the selected elements
 	 * 
 	 * @return the alignment command
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Command createCommand() {
-		AlignmentRequest request = new AlignmentRequest(RequestConstants.REQ_ALIGN);
-		// Validation of selected elements and choose of the primary
-		Pair<List<?>, Object> editPartsAndPrimary = getOperationSet(request);
-		List<?> editparts = editPartsAndPrimary.first();
-		Object primary = editPartsAndPrimary.second();
-		request.setAlignmentRectangle(calculateAlignmentRectangle(editparts, primary));
-		request.setAlignment(alignment);
+		List<EditPart> editparts = editor.getSelectionCache().getSelectionModelPartForType(MGraphicElement.class);
+		editparts = (List<EditPart>)ToolUtilitiesCompatibility.getSelectionWithoutDependants(editparts);
+		EditPart primary = getPrimary(editparts);
 
-		if (editparts.size() < 2)
+		if (editparts.size() < 2 || primary == null)
 			return null;
 
-		JSSCompoundCommand command = new JSSCompoundCommand(null);
+		MGraphicElement primaryModel = (MGraphicElement)primary.getModel();
+		JSSCompoundCommand command = new JSSCompoundCommand(primaryModel);
+	
+		List<MGraphicElement> selection = new ArrayList<MGraphicElement>();
+		for(EditPart part : editparts){
+			selection.add((MGraphicElement)part.getModel());
+		}
+		
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
-			EditPart editpart = (EditPart) editparts.get(i);
-			command.setReferenceNodeIfNull(editpart.getModel());
-			command.add(editpart.getCommand(request));
+			command.add(new Align2ElementCommand(alignment, primaryModel, selection));
 		}
 		return command;
 	}
 
-	/**
-	 * @see org.eclipse.gef.Disposable#dispose()
-	 */
-	public void dispose() {
-		cachedOperationSet.remove(editor);
-		super.dispose();
-	}
 
 	/**
 	 * Return the primary object of the selections, or the last object if none of them is the primary
@@ -174,58 +135,19 @@ public class Align2Element extends ACachedSelectionAction implements IGlobalActi
 	 *          List of selected objects
 	 * @return The primary object or a substitute if itsn't present
 	 */
-	protected Object getPrimary(List<?> editparts) {
-		// editparts must be already checked to be sure that the list is not void
-		Iterator<?> it = editparts.iterator();
-		boolean primaryFound = false;
-		EditPart actualPart = null;
-		while (it.hasNext() && !primaryFound) {
-			actualPart = (EditPart) it.next();
-			if (actualPart.getSelected() == EditPart.SELECTED_PRIMARY) {
-				primaryFound = true;
+	protected EditPart getPrimary(List<EditPart> editparts) {
+		EditPart partialResult = null;
+		for (EditPart part : editparts){
+			if (part.getModel() instanceof MGraphicElement){
+				partialResult = part;
+				if (partialResult.getSelected() == EditPart.SELECTED_PRIMARY) {
+					break;
+				}
 			}
 		}
-		return actualPart;
+		return partialResult;
 	}
 
-	/**
-	 * Returns the list of editparts which will participate in alignment and the primary object used to calculate the
-	 * position
-	 * 
-	 * @param request
-	 *          the alignment request
-	 * @return A pair of element: a list of the editparts that take part in the selection and an edit part to take a
-	 *         reference to set the position of all the others
-	 */
-	protected Pair<List<?>, Object> getOperationSet(Request request) {
-		List<?> operationSet = 	cachedOperationSet.get(editor);
-		if (operationSet != null) {
-			Object primary = getPrimary(operationSet);
-			return new Pair<List<?>, Object>(operationSet, primary);
-		}
-		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
-		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
-			return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
-		Object primary = getPrimary(editparts);// editparts.get(editparts.size() - 1);
-		editparts = ToolUtilitiesCompatibility.getSelectionWithoutDependants(editparts);
-		ToolUtilities.filterEditPartsUnderstanding(editparts, request);
-		if (editparts.size() < 2 || !editparts.contains(primary))
-			return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
-		EditPart parent = ((EditPart) editparts.get(0)).getParent();
-		for (int i = 1; i < editparts.size(); i++) {
-			EditPart part = (EditPart) editparts.get(i);
-			if (part.getParent() != parent)
-				return new Pair<List<?>, Object>(Collections.EMPTY_LIST, null);
-		}
-		cachedOperationSet.put(editor, editparts);
-		return new Pair<List<?>, Object>(editparts, primary);
-	}
-	
-	@Override
-	protected void handleSelectionChanged() {
-		cachedOperationSet.remove(editor);
-		super.handleSelectionChanged();
-	}
 
 	/**
 	 * Initializes the actions UI presentation.
@@ -292,14 +214,6 @@ public class Align2Element extends ACachedSelectionAction implements IGlobalActi
 					JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/eclipse/disabled/align-middle.gif")); //$NON-NLS-1$ 
 			break;
 		}
-	}
-
-	/**
-	 * @see org.eclipse.jface.action.IAction#run()
-	 */
-	public void run() {
-		execute(command);
-		//cachedOperationSet.remove(editor);
 	}
 
 }

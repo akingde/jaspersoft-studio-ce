@@ -25,6 +25,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.band.MBand;
 
 public class ResizeCommand extends Command {
@@ -44,6 +45,11 @@ public class ResizeCommand extends Command {
 		this.alignement = alignement;
 		jrElement = (JRDesignElement) m.getValue();
 		INode n = m.getParent();
+		//Get the real parent of the element if it's inside a subeditor
+		if (n instanceof MPage){
+			MPage page = (MPage)n;
+			n = page.getRealParent();
+		}
 		if (n instanceof IContainer) {
 			if (n instanceof MBand) {
 				// height of band, width of Report - margins

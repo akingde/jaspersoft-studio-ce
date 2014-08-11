@@ -46,8 +46,9 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
+import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
 
 /**
@@ -290,24 +291,26 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 		Collection editPartsToProcess = new HashSet();
 		if (marqueeBehavior != BEHAVIOR_CONNECTIONS_CONTAINED && marqueeBehavior != BEHAVIOR_CONNECTIONS_TOUCHED) {
 			// process nodes
-			editPartsToProcess.addAll(EditPartUtilities.getAllChildren((GraphicalEditPart) getCurrentViewer()
-					.getRootEditPart()));
+			editPartsToProcess.addAll(EditPartUtilities.getAllChildren((GraphicalEditPart) getCurrentViewer().getRootEditPart()));
 		}
 
 		if (marqueeBehavior != BEHAVIOR_NODES_CONTAINED && marqueeBehavior != BEHAVIOR_NODES_TOUCHED) {
 			// process connections
-			editPartsToProcess.addAll(EditPartUtilities
-					.getAllNestedConnectionEditParts((GraphicalEditPart) getCurrentViewer().getRootEditPart()));
+			editPartsToProcess.addAll(EditPartUtilities.getAllNestedConnectionEditParts((GraphicalEditPart) getCurrentViewer().getRootEditPart()));
 		}
 
 		// process all edit parts and determine which are affected by the
 		// current marquee selection
 		Collection marqueeSelectedEditParts = new ArrayList();
+		if (!editPartsToProcess.isEmpty()) {
+			EditPart pageEditPart = ToolUtilitiesCompatibility.getPageEditPart((EditPart)editPartsToProcess.iterator().next());
+			editPartsToProcess.remove(pageEditPart.getChildren().get(0));
+		}
 		for (Iterator iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
 			GraphicalEditPart editPart = (GraphicalEditPart) iterator.next();
-			//The page and the bands are not valid selectable items
-			if (isMarqueeSelectable(editPart) && isPrimaryMarqueeSelectedEditPart(editPart)
-					&& !(editPart instanceof BandEditPart) && !(editPart instanceof ReportPageEditPart)) {
+			//The page and the bands are not valid selectable items, so the isMarqueeSelectable retrun false for every element that it isn't an
+			//MGraphical element
+			if (isMarqueeSelectable(editPart) && isPrimaryMarqueeSelectedEditPart(editPart)) {
 				marqueeSelectedEditParts.add(editPart);
 			}
 		}
@@ -341,9 +344,13 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 		// process all edit parts and decide, whether they are indirectly
 		// affected by marquee selection
 		Collection secondaryMarqueeSelectedEditParts = new HashSet();
+		if (!editPartsToProcess.isEmpty()) {
+			EditPart pageEditPart = ToolUtilitiesCompatibility.getPageEditPart((EditPart)editPartsToProcess.iterator().next());
+			editPartsToProcess.remove(pageEditPart.getChildren().get(0));
+		}
 		for (Iterator iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
 			GraphicalEditPart editPart = (GraphicalEditPart) iterator.next();
-			if (isSecondaryMarqueeSelectedEditPart(directlyMarqueeSelectedEditParts, editPart)) {
+			if (isMarqueeSelectable(editPart) && isSecondaryMarqueeSelectedEditPart(directlyMarqueeSelectedEditParts, editPart)) {
 				secondaryMarqueeSelectedEditParts.add(editPart);
 			}
 		}
@@ -533,7 +540,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 		// state of the edit part's figure has to be taken into consideration as
 		// well.
 		return editPart.getTargetEditPart(MARQUEE_REQUEST) == editPart && editPart.isSelectable()
-				&& FigureUtilities.isNotFullyClipped(editPart.getFigure());
+				&& FigureUtilities.isNotFullyClipped(editPart.getFigure()) && editPart.getModel() instanceof MGraphicElement;
 	}
 
 	/**

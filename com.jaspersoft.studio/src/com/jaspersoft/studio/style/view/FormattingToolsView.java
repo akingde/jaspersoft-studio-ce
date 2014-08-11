@@ -15,13 +15,9 @@ package com.jaspersoft.studio.style.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -37,17 +33,18 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IContributedContentsView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.align.Align2Element;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.SelectionChangedListener;
 import com.jaspersoft.studio.formatting.actions.CenterInParentAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseHSpaceAction;
 import com.jaspersoft.studio.formatting.actions.DecreaseVSpaceAction;
@@ -86,6 +83,11 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	private class FakeActionEnabler extends Action{
 		
 		/**
+		 * The id of the incapsulated action
+		 */
+		private String actionId;
+		
+		/**
 		 * Minimum number of MGraphicalElements selected in order to have the isEnabled return the true value
 		 */
 		private int requiredElementSelected;
@@ -94,8 +96,9 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		 * 
 		 * @param requiredElements Minimum number of MGraphicalElements selected in order to have the isEnabled return the true value
 		 */
-		public FakeActionEnabler(int requiredElements){
+		public FakeActionEnabler(int requiredElements, String actionId){
 			this.requiredElementSelected = requiredElements;
+			this.actionId = actionId;
 		}
 		
 		/**
@@ -107,6 +110,12 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 			return selectedGraphicalElements>=requiredElementSelected;
 		}
 		
+		@Override
+		public void run() {
+			ActionRegistry registry = (ActionRegistry)getContributingPart().getAdapter(ActionRegistry.class);
+			IAction action = registry.getAction(actionId);
+			action.run();
+		}
 	}
 	
 	/**
@@ -193,15 +202,16 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
   /**
    * Selection listener called everytime something is selected
    */
-  private ISelectionListener selectionListener = new ISelectionListener() {
+  private SelectionChangedListener selectionListener = new SelectionChangedListener() {
 		
 		@Override
-		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		public void selectionChanged() {
 			//Initialize contend will do nothing if the buttons was already initialized
 			initializeContent();	
-			updateSelectedElements((StructuredSelection)selection);
+			updateSelectedElements();
 			refresh();
 		}
+		
 	};
 	
 	/**
@@ -231,14 +241,14 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	 * 
 	 * @param selection the actually selected elements
 	 */
-	private void updateSelectedElements(StructuredSelection selection){
+	private void updateSelectedElements(){
+		IWorkbenchPart editor = getContributingPart();
 		selectedGraphicalElements = 0;
-		for(Object part : selection.toList()){
-			if (part instanceof EditPart && ((EditPart)part).getModel() instanceof MGraphicElement){
-				selectedGraphicalElements++;
-				if (selectedGraphicalElements>=2) break;
-			}
-		}
+		if (editor instanceof CachedSelectionProvider){
+			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider)editor;
+			List<?> editparts = cachedSelEditor.getSelectionCache().getSelectionModelPartForType(MGraphicElement.class);
+			selectedGraphicalElements = ToolUtilitiesCompatibility.getSelectionWithoutDependants(editparts).size();
+		} 
 	}
 	
 
@@ -259,8 +269,12 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		scrollComp.setContent(mainContainer);
     mainContainer.setLayout(new ButtonFillLayout());
-	  ISelectionService service = getSite().getWorkbenchWindow().getSelectionService();
-    service.addSelectionListener(selectionListener);
+    
+		IWorkbenchPart editor = getContributingPart();
+		if (editor instanceof CachedSelectionProvider){
+			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider)editor;
+			cachedSelEditor.getSelectionCache().addSelectionChangeListener(selectionListener);
+		} 
 	}
 	
 	/**
@@ -305,13 +319,13 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	    	generateButton(registry.getAction(IncreaseVSpaceAction.ID),2);
 	    	generateButton(registry.getAction(DecreaseVSpaceAction.ID),2);
 	    	generateButton(registry.getAction(RemoveVSpaceAction.ID),2);
-	    	generateButton(registry.getAction(GEFActionConstants.MATCH_WIDTH),2);
+	    	generateButton(registry.getAction(MatchSizeAction.ID_SIZE_WIDTH),2);
 	    	generateButton(registry.getAction(SameWidthMinAction.ID),2);
 	    	generateButton(registry.getAction(SameWidthMaxAction.ID),2);
-	    	generateButton(registry.getAction(GEFActionConstants.MATCH_HEIGHT),2);
+	    	generateButton(registry.getAction(MatchSizeAction.ID_SIZE_HEIGHT),2);
 	    	generateButton(registry.getAction(SameHeightMinAction.ID),2);
 	    	generateButton(registry.getAction(SameHeightMaxAction.ID),2);
-	    	generateButton(registry.getAction(MatchSizeAction.ID),2);
+	    	generateButton(registry.getAction(MatchSizeAction.ID_SIZE_BOTH),2);
 	    	generateButton(registry.getAction(Size2BorderAction.ID_SIZE_BOTH),1);
 	    	generateButton(registry.getAction(Size2BorderAction.ID_SIZE_WIDTH),1);
 	    	generateButton(registry.getAction(Size2BorderAction.ID_SIZE_HEIGHT),1);
@@ -328,46 +342,19 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	/**
 	 * Create a button for a formatting action. Image and text of the button are
 	 * taken from the action. the enable state of the button will be dependent 
-	 * from the enable state of the format action
-	 * 
-	 * @param action format action
-	 */
-	@SuppressWarnings("unused")
-	private void generateButton(final IAction action){
-		if (action == null) return;
-		Button button = new Button(mainContainer, SWT.PUSH);
-		button.setText(action.getText());
-		button.setImage(ResourceManager.getImage(action.getImageDescriptor()));
-		button.setToolTipText(action.getToolTipText());
-		button.setEnabled(action.isEnabled());
-		button.setData(action);
-		RowData buttonData = new RowData();
-		button.setLayoutData(buttonData);
-		controlList.add(button);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				action.run();
-			}
-		});
-	}
-	
-	/**
-	 * Create a button for a formatting action. Image and text of the button are
-	 * taken from the action. the enable state of the button will be dependent 
 	 * from the number of MGraphicalElement selected at the moment
 	 * 
 	 * @param action format action
-	 * @param numberOfSelectedElements minumum number of selected MGraphicalElment needed
+	 * @param numberOfSelectedElements minimum number of selected MGraphicalElment needed
 	 * to have the button enable
 	 */
-	private void generateButton(final IAction action, int numberOfSelectedElements){
+	private void generateButton(IAction action, int numberOfSelectedElements){
 		if (action == null) return;
 		Button button = new Button(mainContainer, SWT.PUSH);
 		button.setText(action.getText());
 		button.setImage(ResourceManager.getImage(action.getImageDescriptor()));
 		button.setToolTipText(action.getToolTipText());
-		FakeActionEnabler enablerAction = new FakeActionEnabler(numberOfSelectedElements);
+		FakeActionEnabler enablerAction = new FakeActionEnabler(numberOfSelectedElements, action.getId());
 		button.setEnabled(enablerAction.isEnabled());
 		button.setData(enablerAction);
 		RowData buttonData = new RowData();
@@ -377,6 +364,7 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				IAction action = (IAction)e.widget.getData();
 				action.run();
 			}
 		});
@@ -386,8 +374,11 @@ public class FormattingToolsView extends ViewPart implements IContributedContent
 	@Override
 	public void dispose() {
 		super.dispose();
-    ISelectionService service = getSite().getWorkbenchWindow().getSelectionService();
-    service.removeSelectionListener(selectionListener);
+		IWorkbenchPart editor = getContributingPart();
+  		if (editor instanceof CachedSelectionProvider){
+			CachedSelectionProvider cachedSelEditor = (CachedSelectionProvider)editor;
+			cachedSelEditor.getSelectionCache().removeSelectionChangeListener(selectionListener);
+		} 
 	}
 	
 	@Override

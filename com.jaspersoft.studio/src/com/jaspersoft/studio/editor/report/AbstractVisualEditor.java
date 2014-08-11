@@ -792,15 +792,15 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		// ---------------------
 
-		action = new MatchWidthAction(this);
+		action = new MatchSizeAction(this, MatchSizeAction.TYPE.WIDTH);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new MatchHeightAction(this);
+		action = new MatchSizeAction(this, MatchSizeAction.TYPE.HEIGHT);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 
-		action = new MatchSizeAction(this);
+		action = new MatchSizeAction(this, MatchSizeAction.TYPE.BOTH);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 

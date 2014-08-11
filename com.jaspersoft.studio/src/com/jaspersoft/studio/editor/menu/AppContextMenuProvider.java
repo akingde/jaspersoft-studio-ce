@@ -363,7 +363,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		submenu = new MenuManager(Messages.AppContextMenuProvider_size_components, InternalImages.DESC_MATCH_WIDTH,
 				GEFActionConstants.MATCH_WIDTH);
 
-		action = getActionRegistry().getAction(GEFActionConstants.MATCH_WIDTH);
+		action = getActionRegistry().getAction(MatchSizeAction.ID_SIZE_WIDTH);
 		if (action.isEnabled())
 			submenu.add(action);
 
@@ -377,7 +377,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		submenu.add(new Separator());
 
-		action = getActionRegistry().getAction(GEFActionConstants.MATCH_HEIGHT);
+		action = getActionRegistry().getAction(MatchSizeAction.ID_SIZE_HEIGHT);
 		if (action.isEnabled())
 			submenu.add(action);
 
@@ -391,7 +391,7 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 
 		submenu.add(new Separator());
 
-		action = getActionRegistry().getAction(MatchSizeAction.ID);
+		action = getActionRegistry().getAction(MatchSizeAction.ID_SIZE_BOTH);
 		if (action.isEnabled())
 			submenu.add(action);
 

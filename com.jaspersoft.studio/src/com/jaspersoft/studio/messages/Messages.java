@@ -942,8 +942,12 @@ public class Messages extends NLS {
 	public static String LocationSection_xCoordinateLabel;
 	public static String LocationSection_y_position_tool_tip;
 	public static String LocationSection_yCoordinateLabel;
+	public static String MatchSizeAction_heightText;
+	public static String MatchSizeAction_heightTooltip;
 	public static String MatchSizeAction_match_size;
 	public static String MatchSizeAction_match_size_tool_tip;
+	public static String MatchSizeAction_widthText;
+	public static String MatchSizeAction_widthTooltip;
 	public static String MaximizeContainerAction_name;
 	public static String MaximizeContainerAction_tooltip;
 	public static String MBand_detail;
