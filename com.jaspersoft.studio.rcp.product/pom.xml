@@ -11,7 +11,7 @@
 
 	<properties>
 		<jre.product.version>
-			1.7.0.u60
+			1.7.0.u67
 		</jre.product.version>
 		<macosx.cocoa.x86_64.jre.relative.location>
 			macosx/cocoa/x86_64/jaspersoftstudio/features/jre.macosx.cocoa.x86_64.feature_${jre.product.version}/jre/Contents/Home/bin
