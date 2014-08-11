@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.jre.feature"
       label="JRE for Jaspersoft Studio"
-      version="1.7.0.u60"
+      version="1.7.0.u67"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://www.example.com/description">
