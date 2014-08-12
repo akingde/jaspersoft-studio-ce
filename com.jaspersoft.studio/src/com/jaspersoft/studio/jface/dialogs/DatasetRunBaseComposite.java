@@ -18,6 +18,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -490,17 +491,28 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 	 */
 	private void fixDSParametersList() {
 		JRDatasetParameter[] currParams = (JRDatasetParameter[]) tableViewerDatasetRunParams.getInput();
-		String datasetName = datasetRunInstance.getJRDatasetRun().getDatasetName();
-		List<JRParameter> parameters4Datasource = ModelUtils.getParameters4Datasource(datasetRunInstance.getEditableDataset().getJasperDesign(), datasetName);
-		for(JRDatasetParameter p1 : currParams) {
-			for(JRParameter p2 : parameters4Datasource) {
-				if(p2.getName().equals(p1.getName())){
-					datasetRunInstance.addParameter((JRDatasetParameter) p1.clone());
-					break;
+		String datasetName = "";
+		JRDatasetRun jrDatasetRun = datasetRunInstance.getJRDatasetRun();
+		if(jrDatasetRun!=null) {
+			datasetName = jrDatasetRun.getDatasetName();
+			List<JRParameter> parameters4Datasource = ModelUtils.getParameters4Datasource(datasetRunInstance.getEditableDataset().getJasperDesign(), datasetName);
+			if(currParams!=null) {
+				for(JRDatasetParameter p1 : currParams) {
+					for(JRParameter p2 : parameters4Datasource) {
+						if(p2.getName().equals(p1.getName())){
+							datasetRunInstance.addParameter((JRDatasetParameter) p1.clone());
+							break;
+						}
+					}
 				}
 			}
+			tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
 		}
-		tableViewerDatasetRunParams.setInput(datasetRunInstance.getJRDatasetRun().getParameters());
+		else {
+			// switching to main one
+			tableViewerDatasetRunParams.getTable().clearAll();
+		}
+		
 	}
 
 	/*
