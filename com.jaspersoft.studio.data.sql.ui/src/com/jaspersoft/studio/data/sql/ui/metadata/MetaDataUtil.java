@@ -104,7 +104,8 @@ public class MetaDataUtil {
 	public synchronized static void readSchemaTables(DatabaseMetaData meta, MSqlSchema schema, LinkedHashMap<String, MSqlTable> tables, IProgressMonitor monitor) {
 		try {
 			for (INode n : schema.getChildren())
-				MetaDataUtil.readTables(meta, schema.getValue(), schema.getTableCatalog(), (MTables) n, tables, monitor);
+				if (n instanceof MTables)
+					MetaDataUtil.readTables(meta, schema.getValue(), schema.getTableCatalog(), (MTables) n, tables, monitor);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
