@@ -12,18 +12,18 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.publish;
 
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 /**
  * @author slavic
  * 
  */
 public class PublishOptions {
-	private boolean isOverwrite = true;
+	private Boolean isOverwrite ;
 	private JRDesignExpression jExpression;
 	private String expression;
 	private JRDesignDataset dataset;
@@ -36,11 +36,15 @@ public class PublishOptions {
 		return dataset;
 	}
 
-	public boolean isOverwrite() {
+	public Boolean getOverwrite() {
 		return isOverwrite;
 	}
 
-	public void setOverwrite(boolean isOverwrite) {
+	public boolean isOverwrite() {
+		return Misc.nvl(isOverwrite, true);
+	}
+
+	public void setOverwrite(Boolean isOverwrite) {
 		this.isOverwrite = isOverwrite;
 	}
 

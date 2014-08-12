@@ -31,6 +31,8 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
+import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;
 import com.jaspersoft.studio.server.publish.Publish;
@@ -121,15 +123,26 @@ public class JrxmlPublishAction extends AContributorAction {
 					if (n != null && n instanceof AMJrxmlContainer) {
 						// let's check if there are new resources?
 						try {
+							boolean showdialog = false;
 							List<?> resources = FindResources.findResources(
 									monitor, (AMJrxmlContainer) n, jd);
 							if (resources != null) {
-
+								for (Object obj : resources) {
+									if (obj instanceof MResource
+											&& ((MResource) obj)
+													.getPublishOptions()
+													.getOverwrite() == null) {
+										showdialog = true;
+										break;
+									}
+								}
 							}
-							// publish
-							new Publish(jrConfig).publish((AMJrxmlContainer) n,
-									jd, monitor);
-							return Status.OK_STATUS;
+							if (!showdialog) {
+								// publish
+								new Publish(jrConfig).publish(
+										(AMJrxmlContainer) n, jd, monitor);
+								return Status.OK_STATUS;
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
