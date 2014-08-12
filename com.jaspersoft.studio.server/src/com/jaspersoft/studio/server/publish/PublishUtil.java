@@ -158,29 +158,33 @@ public class PublishUtil {
 		if (parent == null || parent.getValue() == null || parent.getValue().getIsNew())
 			return;
 		for (MResource f : files) {
-			PublishOptions popt = f.getPublishOptions();
-			String prefix = f.getValue().getName();
-			try {
-				String ovw = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"));
-				if (ovw != null)
-					popt.setOverwrite(Boolean.parseBoolean(ovw));
-				String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
-				if (ref != null) {
-					popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
-					String path = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
-					if (path != null) {
-						ResourceDescriptor rd = new ResourceDescriptor();
-						rd.setParentFolder(RDUtil.getParentFolder(path));
-						rd.setUriString(path);
-						rd.setWsType(f.getValue().getWsType());
-						popt.setReferencedResource(WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
-					} else
-						popt.setPublishMethod(ResourcePublishMethod.LOCAL);
-				}
-			} catch (Exception e) {
-				popt.setPublishMethod(ResourcePublishMethod.LOCAL);
-				e.printStackTrace();
+			loadPreferences(monitor, ifile, f);
+		}
+	}
+
+	public static void loadPreferences(IProgressMonitor monitor, IFile ifile, MResource f) {
+		PublishOptions popt = f.getPublishOptions();
+		String prefix = f.getValue().getName();
+		try {
+			String ovw = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"));
+			if (ovw != null)
+				popt.setOverwrite(Boolean.parseBoolean(ovw));
+			String ref = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"));
+			if (ref != null) {
+				popt.setPublishMethod(ResourcePublishMethod.valueOf(ref));
+				String path = ifile.getPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".refPATH"));
+				if (path != null) {
+					ResourceDescriptor rd = new ResourceDescriptor();
+					rd.setParentFolder(RDUtil.getParentFolder(path));
+					rd.setUriString(path);
+					rd.setWsType(f.getValue().getWsType());
+					popt.setReferencedResource(WSClientHelper.getResource(monitor, f, rd, FileUtils.createTempFile("tmp", "")));
+				} else
+					popt.setPublishMethod(ResourcePublishMethod.LOCAL);
 			}
+		} catch (Exception e) {
+			popt.setPublishMethod(ResourcePublishMethod.LOCAL);
+			e.printStackTrace();
 		}
 	}
 

@@ -100,12 +100,13 @@ public class JRSEditorContributor implements IEditorContributor {
 		String sAllways = Misc.nullIfEmpty(pStore.getString(KEY_PUBLISH2JSS_SILENT));
 		pStore.setWithDefault(true);
 
-		boolean run = sRun != null ? Boolean.parseBoolean(sRun) : false;
-		boolean allways = sAllways != null ? Boolean.parseBoolean(sAllways) : true;
+		boolean run = Misc.nvl(Boolean.parseBoolean(sRun), false);
+		boolean allways = Misc.nvl(Boolean.parseBoolean(sAllways), true);
 		if (allways) {
 			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);
 			pStore.setValue(KEY_PUBLISH2JSS_SILENT, Boolean.toString(!dialog.getAllways()));
+			allways = !allways;
 		}
 
 		pStore.setValue(KEY_PUBLISH2JSS, Boolean.toString(run));
@@ -115,7 +116,7 @@ public class JRSEditorContributor implements IEditorContributor {
 
 		if (run) {
 			JrxmlPublishAction action = getAction(monitor, jConfig);
-			action.setSilent(allways);
+			action.setSilent(!allways);
 			action.run();
 		}
 	}

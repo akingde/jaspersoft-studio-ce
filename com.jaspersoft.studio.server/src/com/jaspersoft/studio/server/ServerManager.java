@@ -272,10 +272,12 @@ public class ServerManager {
 
 	public static MServerProfile getServerProfile(JasperDesign jd, JasperReportsConfiguration jConfig) {
 		final MRoot root = new MRoot(null, null);
+		root.setJasperConfiguration(jConfig);
 		MServerProfile sp = null;
 		List<ServerProfile> servers = getServerList();
 		for (ServerProfile s : servers) {
 			sp = new MServerProfile(root, s);
+			sp.setJasperConfiguration(jConfig);
 			new MDummy(sp);
 		}
 
