@@ -106,7 +106,6 @@ public class JRSEditorContributor implements IEditorContributor {
 			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);
 			pStore.setValue(KEY_PUBLISH2JSS_SILENT, Boolean.toString(!dialog.getAllways()));
-			allways = !allways;
 		}
 
 		pStore.setValue(KEY_PUBLISH2JSS, Boolean.toString(run));
@@ -116,7 +115,7 @@ public class JRSEditorContributor implements IEditorContributor {
 
 		if (run) {
 			JrxmlPublishAction action = getAction(monitor, jConfig);
-			action.setSilent(!allways);
+			action.setSilent(run);
 			action.run();
 		}
 	}
