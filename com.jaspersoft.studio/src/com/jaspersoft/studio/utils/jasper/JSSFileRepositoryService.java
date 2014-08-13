@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils.jasper;
 
@@ -86,7 +82,10 @@ public class JSSFileRepositoryService implements RepositoryService {
 		} catch (JRRuntimeException e) {
 		}
 		try {
-			if (ReportResource.class.equals(resourceType) && uri.endsWith(FileExtension.PointJASPER)) {
+			if (ReportResource.class.equals(resourceType) && uri.endsWith(FileExtension.PointJRXML)) {
+				return doGetResource(uri.replaceAll(FileExtension.PointJRXML + "$", FileExtension.PointJASPER), resourceType,
+						rs);
+			} else if (ReportResource.class.equals(resourceType) && uri.endsWith(FileExtension.PointJASPER)) {
 				String nuri = uri.replaceAll(FileExtension.PointJASPER + "$", FileExtension.PointJRXML);
 				InputStreamResource inr = rs.getResource(nuri, InputStreamResource.class);
 				if (inr == null)
