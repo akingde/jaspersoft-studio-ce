@@ -31,7 +31,6 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.publish.FindResources;

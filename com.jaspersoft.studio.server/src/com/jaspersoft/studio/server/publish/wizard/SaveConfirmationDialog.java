@@ -15,8 +15,8 @@ package com.jaspersoft.studio.server.publish.wizard;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -54,15 +54,12 @@ public class SaveConfirmationDialog extends Dialog {
 
 		final Button b = new Button(container, SWT.CHECK);
 		b.setText(Messages.VersionDialog_checkbox);
-		b.addSelectionListener(new SelectionListener() {
+		b.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				allways = b.getSelection();
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
 
 		return container;
@@ -70,10 +67,8 @@ public class SaveConfirmationDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID,
-				IDialogConstants.YES_LABEL, true);
-		createButton(parent, IDialogConstants.NO_ID, IDialogConstants.NO_LABEL,
-				false);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.YES_LABEL, true);
+		createButton(parent, IDialogConstants.NO_ID, IDialogConstants.NO_LABEL, false);
 	}
 
 	@Override
