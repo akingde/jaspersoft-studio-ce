@@ -35,6 +35,7 @@ import com.jaspersoft.studio.preferences.GlobalPreferencePage;
 import com.jaspersoft.studio.property.PostSetValueManager;
 import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
+import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ReportTemplatesWizardPage;
 
@@ -91,7 +92,19 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 		
 		//Precache report images
 		Thread thread = new Thread(ReportTemplatesWizardPage.getImagePrecacheThread());
-	  	thread.start();
+	  thread.start();
+	  //Precache the common extensions and the digester
+	  thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				//Force the properties to cache
+			  ExtensionLoader.loadDefaultProperties();
+				//Force the digester cache
+				JasperReportsConfiguration.getJRXMLDigester();
+			}
+		});
+	  thread.start();
 	}
 
 	/**

@@ -171,7 +171,7 @@ public class SubreportWizard extends JSSWizard {
 			{
 				try {
 					JasperReportsConfiguration jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-					JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(new InputSource(file.getContents()));
+					JasperDesign jd = new JRXmlLoader(JasperReportsConfiguration.getJRXMLDigester()).loadXML(new InputSource(file.getContents()));
 					jrContext.setJasperDesign(jd);
 					for(JRSubreportParameter param : map){
 						if (!jd.getParametersMap().containsKey(param.getName())){

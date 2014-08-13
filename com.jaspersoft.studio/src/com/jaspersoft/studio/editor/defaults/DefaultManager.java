@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.apache.commons.io.FileUtils;
@@ -229,8 +228,8 @@ public class DefaultManager {
 			File defaultFile = new File(actualDefault);
 			if (defaultFile.exists()){
 				in = new ByteArrayInputStream(FileUtils.readFileToByteArray(defaultFile));
-				JasperReportsConfiguration jConfig = getDefaultJRConfig(null);
-				JasperDesign jd = new JRXmlLoader(jConfig, JRXmlDigesterFactory.createDigester()).loadXML(in);
+				JasperReportsConfiguration jConfig = getDefaultJRConfig();
+				JasperDesign jd = new JRXmlLoader(jConfig, JasperReportsConfiguration.getJRXMLDigester()).loadXML(in);
 				jConfig.setJasperDesign(jd);
 				defaultReport = ReportFactory.createReport(jConfig);
 				defaultReport.getChildren().get(0).setValue(jd);
@@ -271,8 +270,8 @@ public class DefaultManager {
 	 * @param the file to the JRXML of the template set
 	 * @return a not null jasperreports configuration
 	 */
-	private JasperReportsConfiguration getDefaultJRConfig(IFile f) {
-		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), f);
+	private JasperReportsConfiguration getDefaultJRConfig() {
+		return new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null);
 	}
 	
 	/**

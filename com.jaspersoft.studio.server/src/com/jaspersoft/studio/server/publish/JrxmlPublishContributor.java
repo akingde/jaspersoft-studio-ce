@@ -29,7 +29,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -113,7 +112,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		if (fs != null && fs.length > 0) {
 			InputStream jrxmlInputStream = JRXMLUtils.getJRXMLInputStream(jrConfig, fs[0].getContents(), fs[0].getFileExtension(), fs[0].getCharset(true), version);
 			InputSource is = new InputSource(new InputStreamReader(jrxmlInputStream, "UTF-8"));
-			JasperDesign jrd = new JRXmlLoader(jrConfig, JRXmlDigesterFactory.createDigester()).loadXML(is);
+			JasperDesign jrd = new JRXmlLoader(jrConfig, JasperReportsConfiguration.getJRXMLDigester()).loadXML(is);
 			if (jrd != null) {
 				fres.setJd(jrd);
 				publishJrxml(fres, monitor, jrd, fileset, fs[0]);

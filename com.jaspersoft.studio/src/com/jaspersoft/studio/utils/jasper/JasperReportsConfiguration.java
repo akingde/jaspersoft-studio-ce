@@ -48,6 +48,8 @@ import net.sf.jasperreports.engine.util.CompositeClassloader;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.engine.util.ResourceBundleMessageProviderFactory;
+import net.sf.jasperreports.engine.xml.JRXmlDigester;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.extensions.DefaultExtensionsRegistry;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 import net.sf.jasperreports.functions.FunctionsBundle;
@@ -97,7 +99,31 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * The key which identified the file being edited
 	 */
 	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
+	
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
+	
+	/**
+	 * The digester used to load an xml can be cached since it is build 
+	 * statically, so we store it
+	 */
+	private static JRXmlDigester jrxmlDigester = null;
+	
+	/**
+	 * Return the jrxml digester, it return the cached one if it was
+	 * builded before, otherwise it create a new one and return it
+	 * 
+	 * @return an JRXMLDigester, not null
+	 */
+	public synchronized static JRXmlDigester getJRXMLDigester(){
+		if (jrxmlDigester == null){
+			try {
+				jrxmlDigester = JRXmlDigesterFactory.createDigester();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return jrxmlDigester;
+	}
 
 	private final class PreferenceListener implements IPropertyChangeListener {
 
@@ -150,6 +176,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public JasperReportsConfiguration(JasperReportsContext parent, IFile file) {
 		super(parent);
 		init(file);
+		//Run a thread to precache on this context the context dependents jr extensions
+		if (file != null){
+			new ExtensionLoader().loadExtension(this);
+		}
 	}
 
 	private MScopedPreferenceStore pstore;

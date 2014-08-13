@@ -29,7 +29,6 @@ import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
@@ -63,6 +62,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
@@ -405,7 +405,7 @@ public class RVPropertyPage extends JSSHelpWizardPage {
 			in = RepositoryUtil.getInstance(dto.getjConfig()).getInputStreamFromLocation(path);
 			if (in != null) {
 				InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
-				jd = new JRXmlLoader(dto.getjConfig(), JRXmlDigesterFactory.createDigester()).loadXML(is);
+				jd = new JRXmlLoader(dto.getjConfig(), JasperReportsConfiguration.getJRXMLDigester()).loadXML(is);
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();
