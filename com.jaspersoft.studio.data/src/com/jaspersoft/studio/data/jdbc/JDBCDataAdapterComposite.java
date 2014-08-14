@@ -115,7 +115,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 						"com.internetcds.jdbc.tds.Driver", //$NON-NLS-1$
 						"jdbc:freetds:sqlserver://{0}/{1}"), //$NON-NLS-1$
 				new JDBCDriverDefinition("MS SQLServer (TIBCO Jaspersoft)", //$NON-NLS-1$
-						"tibcosoftware.jdbc.sqlserver.SQLServerDriver", "jdbc:tibcosoftware:db2://{0}:1433;databaseName={1}"), //$NON-NLS-1$ //$NON-NLS-2$
+						"tibcosoftware.jdbc.sqlserver.SQLServerDriver", "jdbc:tibcosoftware:sqlserver://{0}:1433;databaseName={1}"), //$NON-NLS-1$ //$NON-NLS-2$
 
 				new JDBCDriverDefinition("MySQL", "org.gjt.mm.mysql.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
