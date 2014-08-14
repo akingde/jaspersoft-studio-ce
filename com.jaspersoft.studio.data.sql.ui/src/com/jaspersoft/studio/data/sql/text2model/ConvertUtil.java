@@ -149,8 +149,12 @@ public class ConvertUtil {
 		table = getDbName(table);
 		MSqlSchema msqlschem = ConvertUtil.findSchema(dbroot, Misc.nvl(schema), designer);
 		MSqlTable mtbl = findTable(dbroot, schema, Misc.nvl(table), designer);
-		if (mtbl == null)
-			return new MSqlTable(msqlschem, Misc.nvl(table), true);
+		if (mtbl == null) {
+			for (INode n : msqlschem.getChildren())
+				if (n instanceof MTables)
+					return new MSqlTable((MTables) n, Misc.nvl(table), true);
+			return new MSqlTable(new MTables(msqlschem, "Table"), Misc.nvl(table), true);
+		}
 		return mtbl;
 	}
 

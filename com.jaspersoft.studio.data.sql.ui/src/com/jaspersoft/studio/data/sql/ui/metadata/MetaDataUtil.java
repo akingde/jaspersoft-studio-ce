@@ -43,15 +43,18 @@ public class MetaDataUtil {
 		boolean isSchema = meta.supportsSchemasInTableDefinitions();
 		boolean isCatalog = meta.supportsCatalogsInTableDefinitions();
 		ResultSet rs = isSchema ? meta.getSchemas() : meta.getCatalogs();
-		while (rs.next()) {
-			String tableCatalog = isCatalog && !isSchema ? rs.getString("TABLE_CAT") : null;// rs.getString("TABLE_CATALOG");
-			String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
-			MSqlSchema mschema = new MSqlSchema(root, tableSchema, tableCatalog);
-			new MDummy(mschema);
-			if (monitor.isCanceled())
-				break;
+		try {
+			while (rs.next()) {
+				String tableCatalog = isCatalog && !isSchema ? rs.getString("TABLE_CAT") : null;// rs.getString("TABLE_CATALOG");
+				String tableSchema = isSchema ? rs.getString("TABLE_SCHEM") : tableCatalog;
+				MSqlSchema mschema = new MSqlSchema(root, tableSchema, tableCatalog);
+				new MDummy(mschema);
+				if (monitor.isCanceled())
+					break;
+			}
+		} finally {
+			SchemaUtil.close(rs);
 		}
-		rs.close();
 		if (Misc.isNullOrEmpty(root.getChildren())) {
 			MSqlSchema mschema = new MSqlSchema(root, null, null);
 			new MDummy(mschema);
@@ -112,8 +115,9 @@ public class MetaDataUtil {
 	}
 
 	public static void readTables(DatabaseMetaData meta, String tableSchema, String tableCatalog, MTables mview, LinkedHashMap<String, MSqlTable> tblMap, IProgressMonitor monitor) {
+		ResultSet rs = null;
 		try {
-			ResultSet rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { mview.getValue() });
+			rs = meta.getTables(tableCatalog, tableSchema, "%", new String[] { mview.getValue() });
 			while (rs.next()) {
 				MSqlTable mt = new MSqlTable(mview, rs.getString("TABLE_NAME"), rs);
 				new MDummy(mt);
@@ -121,19 +125,24 @@ public class MetaDataUtil {
 				if (monitor.isCanceled())
 					break;
 			}
-			rs.close();
 		} catch (Throwable e) {
 			e.printStackTrace();
+		} finally {
+			SchemaUtil.close(rs);
 		}
 	}
 
 	public synchronized static void readTableColumns(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
+		
 		MTables tables = (MTables) mtable.getParent();
 		mtable.removeChildren();
 		ResultSet rs = meta.getColumns(tables.getTableCatalog(), tables.getTableSchema(), mtable.getValue(), "%");
-		while (rs.next())
-			new MSQLColumn(mtable, rs.getString("COLUMN_NAME"), rs);
-		SchemaUtil.close(rs);
+		try {
+			while (rs.next())
+				new MSQLColumn(mtable, rs.getString("COLUMN_NAME"), rs);
+		} finally {
+			SchemaUtil.close(rs);
+		}
 	}
 
 	public synchronized static void readTableKeys(DatabaseMetaData meta, MSqlTable mtable, IProgressMonitor monitor) throws SQLException {
@@ -147,22 +156,25 @@ public class MetaDataUtil {
 		ResultSet rs = meta.getPrimaryKeys(tables.getTableCatalog(), tables.getTableSchema(), mt.getValue());
 		PrimaryKey pk = null;
 		List<MSQLColumn> cols = new ArrayList<MSQLColumn>();
-		while (rs.next()) {
-			if (pk == null)
-				pk = new PrimaryKey(rs.getString("PK_NAME"));
-			String cname = rs.getString("COLUMN_NAME");
-			// short keySeq = rs.getShort("KEY_SEQ");
-			for (INode n : mt.getChildren()) {
-				if (n.getValue().equals(cname)) {
-					((MSQLColumn) n).setPrimaryKey(pk);
-					cols.add((MSQLColumn) n);
-					break;
+		try {
+			while (rs.next()) {
+				if (pk == null)
+					pk = new PrimaryKey(rs.getString("PK_NAME"));
+				String cname = rs.getString("COLUMN_NAME");
+				// short keySeq = rs.getShort("KEY_SEQ");
+				for (INode n : mt.getChildren()) {
+					if (n.getValue().equals(cname)) {
+						((MSQLColumn) n).setPrimaryKey(pk);
+						cols.add((MSQLColumn) n);
+						break;
+					}
 				}
+				if (monitor.isCanceled())
+					break;
 			}
-			if (monitor.isCanceled())
-				break;
+		} finally {
+			SchemaUtil.close(rs);
 		}
-		SchemaUtil.close(rs);
 		if (pk != null)
 			pk.setColumns(cols.toArray(new MSQLColumn[cols.size()]));
 	}
@@ -173,13 +185,15 @@ public class MetaDataUtil {
 		ForeignKey fk = null;
 		List<MSQLColumn> srcCols = new ArrayList<MSQLColumn>();
 		List<MSQLColumn> dstCols = new ArrayList<MSQLColumn>();
-
 		List<String[]> fks = new ArrayList<String[]>();
-		while (rs.next()) {
-			fks.add(new String[] { rs.getString("PKTABLE_CAT"), rs.getString("PKTABLE_SCHEM"), rs.getString("PKTABLE_NAME"), rs.getString("PKCOLUMN_NAME"), rs.getString("FKCOLUMN_NAME"),
-					rs.getString("FK_NAME") });
+		try {
+			while (rs.next()) {
+				fks.add(new String[] { rs.getString("PKTABLE_CAT"), rs.getString("PKTABLE_SCHEM"), rs.getString("PKTABLE_NAME"), rs.getString("PKCOLUMN_NAME"), rs.getString("FKCOLUMN_NAME"),
+						rs.getString("FK_NAME") });
+			}
+		} finally {
+			SchemaUtil.close(rs);
 		}
-		SchemaUtil.close(rs);
 		for (String[] f : fks) {
 			String pkcatalog = f[0];
 			String pkschema = f[1];
@@ -231,25 +245,28 @@ public class MetaDataUtil {
 	}
 
 	public synchronized static void readProcedures(DatabaseMetaData meta, MSqlSchema schema, IProgressMonitor monitor) {
+		ResultSet rs = null;
 		try {
-			ResultSet rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
+			rs = meta.getProcedures(schema.getTableCatalog(), schema.getValue(), "%");
 			MDBObjects mprocs = new MDBObjects(schema, "Procedures", "icons/function.png");
 			while (rs.next())
 				new MProcedure(mprocs, rs.getString("PROCEDURE_NAME"), rs);
-			SchemaUtil.close(rs);
 		} catch (Throwable e) {
 			e.printStackTrace();
+		} finally {
+			SchemaUtil.close(rs);
 		}
 		if (monitor.isCanceled())
 			return;
 		try {
-			ResultSet rs = meta.getFunctions(schema.getTableCatalog(), schema.getValue(), "%");
+			rs = meta.getFunctions(schema.getTableCatalog(), schema.getValue(), "%");
 			MDBObjects mfunct = new MDBObjects(schema, "Functions", "icons/function.png");
 			while (rs.next())
 				new MFunction(mfunct, rs.getString("FUNCTION_NAME"), rs);
-			SchemaUtil.close(rs);
 		} catch (Throwable e) {
 			e.printStackTrace();
+		} finally {
+			SchemaUtil.close(rs);
 		}
 	}
 }

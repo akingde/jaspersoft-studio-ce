@@ -18,16 +18,16 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
+import com.jaspersoft.studio.data.sql.model.metadata.MTables;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelect;
 import com.jaspersoft.studio.data.sql.model.query.select.MSelectColumn;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
 public class MQueryTable extends MSqlTable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MQueryTable(ANode parent) {
+	public MQueryTable(MTables parent) {
 		super(parent, "(...)", (String) null);
 	}
 

@@ -17,12 +17,11 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.apache.commons.lang.WordUtils;
 
 import com.jaspersoft.studio.data.sql.model.MDBObjects;
-import com.jaspersoft.studio.model.ANode;
 
 public class MTables extends MDBObjects {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MTables(ANode parent, String value) {
+	public MTables(MSqlSchema parent, String value) {
 		super(parent, value, "icons/table.png");
 	}
 

@@ -25,12 +25,12 @@ public class MSqlTable extends AMSQLObject implements IDragable, INotInMetadata 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private boolean isNotInMetadata = false;
 
-	public MSqlTable(ANode parent, String value, boolean isNotInMetadata) {
+	public MSqlTable(MTables parent, String value, boolean isNotInMetadata) {
 		super(parent, value, null);
 		this.isNotInMetadata = isNotInMetadata;
 	}
 
-	protected MSqlTable(ANode parent, String value, String image) {
+	protected MSqlTable(MTables parent, String value, String image) {
 		super(parent, value, image);
 	}
 
