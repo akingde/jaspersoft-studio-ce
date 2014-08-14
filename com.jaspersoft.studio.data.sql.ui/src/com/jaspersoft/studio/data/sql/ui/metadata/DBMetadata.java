@@ -252,8 +252,13 @@ public class DBMetadata {
 				tableTypes = DBMetadata.readTableTypes(meta);
 				List<MSqlSchema> mcurrent = MetaDataUtil.readSchemas(monitor, root, meta, schema);
 				updateUI(root);
-				for (MSqlSchema mcs : mcurrent)
+				for (MSqlSchema mcs : mcurrent){
+					if(meta.getConnection().isClosed()){
+						connection = getConnection(das, true);
+						meta = connection.getMetaData();
+					}
 					readSchema(meta, mcs, monitor, true);
+				}
 			} catch (Throwable e) {
 				updateUI(root);
 				designer.showError(e);
