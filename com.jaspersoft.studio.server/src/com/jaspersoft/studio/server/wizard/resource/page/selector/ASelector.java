@@ -338,6 +338,7 @@ public abstract class ASelector {
 
 		rnew.setData(rd.getData());
 		rnew.setHasData(rd.getHasData());
+		rnew.setSql(rd.getSql());
 	}
 
 	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {

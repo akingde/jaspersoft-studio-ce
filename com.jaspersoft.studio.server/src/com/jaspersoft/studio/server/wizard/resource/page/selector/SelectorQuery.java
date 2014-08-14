@@ -14,6 +14,7 @@ package com.jaspersoft.studio.server.wizard.resource.page.selector;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ResourceMediaType;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.Misc;
@@ -23,7 +24,7 @@ public class SelectorQuery extends ASelector {
 	@Override
 	protected ResourceDescriptor createLocal(MResource res) {
 		ResourceDescriptor rd = MRQuery.createDescriptor(res);
-		rd.setName("Query");
+		rd.setName(Messages.SelectorQuery_0);
 		rd.setLabel(rd.getName());
 		return rd;
 	}
@@ -54,7 +55,7 @@ public class SelectorQuery extends ASelector {
 		if (b) {
 			ResourceDescriptor rd = res.getValue();
 			String[] qvc = rd.getQueryVisibleColumns();
-			b = b && qvc != null && qvc.length > 0 && !Misc.isNullOrEmpty(rd.getQueryValueColumn());
+			b = qvc != null && qvc.length > 0 && !Misc.isNullOrEmpty(rd.getQueryValueColumn());
 		}
 		return b;
 	}

@@ -117,7 +117,6 @@ public class InputControlPageContent extends APageContent implements IPageComple
 			}
 		});
 
-		handleTypeChanged(ctype, stackLayout);
 		rebind();
 		return composite;
 	}
@@ -244,7 +243,8 @@ public class InputControlPageContent extends APageContent implements IPageComple
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				page.setPageComplete(sQuery.isPageComplete());
+				pageCompleted(sQuery.isPageComplete());
+				// page.setPageComplete(sQuery.isPageComplete());
 			}
 		});
 

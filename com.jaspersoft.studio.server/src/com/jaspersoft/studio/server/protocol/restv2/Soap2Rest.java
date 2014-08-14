@@ -294,7 +294,8 @@ public class Soap2Rest {
 	private static void getFile(ARestV2Connection rc, ClientFile cr, ResourceDescriptor rd) {
 		cr.setType(WsTypes.INST().toRestFileType(rd.getWsType()));
 		if (rd.getData() != null) {
-			String content = new String(rd.getData());//new String(Base64.decodeBase64(content))
+			String content = new String(rd.getData());// new
+																								// String(Base64.decodeBase64(content))
 			if (content.isEmpty())
 				content = "    "; // if empty, jrs throw an exception
 			cr.setContent(content);

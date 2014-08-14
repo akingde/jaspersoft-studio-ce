@@ -243,6 +243,7 @@ public class Messages extends NLS {
 	public static String RUnitLocationPage_reportunitlabel;
 	public static String RUnitLocationPage_title;
 	public static String SelectorDatasource_TabTitle;
+	public static String SelectorQuery_0;
 	public static String SelectorQuery_browse;
 	public static String SelectorQuery_localresource;
 	public static String SelectorQuery_selectfromrepository;
