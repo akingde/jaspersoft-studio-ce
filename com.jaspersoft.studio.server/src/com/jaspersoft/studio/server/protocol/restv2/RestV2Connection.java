@@ -44,6 +44,7 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.common.ErrorDescriptor;
+import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -52,6 +53,8 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
+import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
+import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 
 public class RestV2Connection extends ARestV2Connection {
 
@@ -278,6 +281,16 @@ public class RestV2Connection extends ARestV2Connection {
 	public void setParent(IConnection parent) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
+		return null;
+	}
+
+	@Override
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
+		return null;
 	}
 
 }

@@ -21,9 +21,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
+import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 
 public interface IConnection {
 	public void setParent(IConnection parent);
@@ -84,4 +87,7 @@ public interface IConnection {
 
 	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception;
 
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception;
+
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception;
 }

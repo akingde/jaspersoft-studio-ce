@@ -24,12 +24,15 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
+import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
+import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 
 public class ProxyConnection implements IConnection {
 	public Format getDateFormat() {
@@ -455,6 +458,36 @@ public class ProxyConnection implements IConnection {
 
 	@Override
 	public void setParent(IConnection parent) {
+	}
+
+	@Override
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
+		try {
+			return c.importMetaData(options, monitor);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 401) {
+					return c.importMetaData(options, monitor);
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
+		try {
+			return c.exportMetaData(options, monitor);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 401) {
+					return c.exportMetaData(options, monitor);
+				}
+			}
+		}
+		return null;
 	}
 
 }

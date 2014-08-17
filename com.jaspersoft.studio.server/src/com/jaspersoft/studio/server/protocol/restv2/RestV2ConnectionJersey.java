@@ -65,6 +65,7 @@ import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.OutputResourceDescri
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ReportExecutionDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
 import com.jaspersoft.jasperserver.jaxrs.report.ReportExecutionRequest;
+import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -79,6 +80,8 @@ import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
+import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
+import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.utils.Misc;
 
 public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
@@ -651,6 +654,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		case DATASOURCENAME:
 		case INPUTCONTROLS_ORDERING:
 		case MAXLENGHT:
+		case IMPORTMETADATA:
+		case EXPORTMETADATA:
 			return true;
 		}
 		return super.isSupported(f);
@@ -832,5 +837,57 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (val instanceof java.sql.Time)
 			return getTimeFormat().format(val);
 		return val.toString();
+	}
+
+	@Override
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
+		if (options.getState() != null) {
+			WebTarget tgt = target.path("import/" + options.getState().getId() + "/state");
+
+			Builder req = tgt.request();
+			Response r = connector.get(req, monitor);
+			StateDto state = toObj(r, StateDto.class, monitor);
+			options.setState(state);
+		} else {
+			WebTarget tgt = target.path("import");
+			tgt = tgt.queryParam("update", options.isUpdate());
+			if (options.isUpdate())
+				tgt = tgt.queryParam("skipUserUpdate", options.isSkipUserUpdates());
+			tgt = tgt.queryParam("includeAccessEvents", options.isInclAccessEvents());
+			tgt = tgt.queryParam("includeAuditEvents", options.isInclAuditEvents());
+			tgt = tgt.queryParam("includeMonitoringEvents", options.isInclMonitorEvents());
+			tgt = tgt.queryParam("includeServerSettings", options.isInclSrvSettings());
+
+			File file = new File(options.getFile());
+
+			Builder req = tgt.request();
+			Response r = connector.post(req, Entity.entity(file, "application/zip"), monitor);
+			StateDto state = toObj(r, StateDto.class, monitor);
+			options.setState(state);
+		}
+		return options.getState();
+	}
+
+	@Override
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
+		if (options.getState() != null) {
+			WebTarget tgt = target.path("export/" + options.getState().getId() + "/state");
+
+			Builder req = tgt.request();
+			Response r = connector.get(req, monitor);
+			StateDto state = toObj(r, StateDto.class, monitor);
+			options.setState(state);
+		} else {
+			WebTarget tgt = target.path("export");
+
+			tgt = tgt.queryParam("repository-permissions", options.isIncRepositoryPermission());
+
+			// Builder req = tgt.request();
+			// Response r = connector.post(req, Entity.entity(file,
+			// "application/zip"), monitor);
+			// StateDto state = toObj(r, StateDto.class, monitor);
+			// options.setState(state);
+		}
+		return options.getState();
 	}
 }
