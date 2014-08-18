@@ -70,6 +70,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.report.PageFormatUtils;
 import com.jaspersoft.studio.property.section.report.util.PHolderUtil;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
@@ -590,7 +591,13 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS)) {
+		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_COUNT) || 
+				evt.getPropertyName().equals(JasperDesign.PROPERTY_LEFT_MARGIN) ||
+				evt.getPropertyName().equals(JasperDesign.PROPERTY_RIGHT_MARGIN) || 
+				evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_WIDTH) || 
+				evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_SPACING)){
+			PageFormatUtils.updateColumnWidth(getValue());
+		} else if (evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS)) {
 			handleDatasourceChanged(evt);
 		} else if (evt.getPropertyName().equals(JasperDesign.PROPERTY_TITLE)
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_PAGE_HEADER)
