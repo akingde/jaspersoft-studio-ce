@@ -12,8 +12,12 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.exp;
 
+import java.io.File;
+import java.io.IOException;
+
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 
+import org.apache.commons.lang.SystemUtils;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -55,6 +59,11 @@ public class ExportMetadataPage extends WizardPage {
 		setTitle("Export Metadata");
 		setDescription("Export Metadata");
 		bindingContext = new DataBindingContext();
+		try {
+			value.setFile(SystemUtils.getUserDir().getCanonicalPath() + File.separator + "export.zip");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

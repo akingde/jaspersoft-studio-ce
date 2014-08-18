@@ -71,6 +71,7 @@ public class ExportMetadataWizard extends Wizard {
 										opt.getPaths().add(uri);
 									}
 								}
+
 								while (opt.getState() == null || opt.getState().getPhase().equals("inprogress")) {
 									StateDto state = conn.exportMetaData(opt, monitor);
 
