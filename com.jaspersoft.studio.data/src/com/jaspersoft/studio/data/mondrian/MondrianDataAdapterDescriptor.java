@@ -12,11 +12,16 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.mondrian;
 
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.widgets.Composite;
+
 import net.sf.jasperreports.data.mondrian.MondrianDataAdapterImpl;
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.AWizardDataEditorComposite;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
+import com.jaspersoft.studio.data.ui.WizardQueryEditorComposite;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -45,6 +50,11 @@ public class MondrianDataAdapterDescriptor extends JDBCDataAdapterDescriptor {
 	public boolean supportsGetFieldsOperation(JasperReportsConfiguration jConfig) {
 		getFieldProvider();
 		return fprovider.supportsGetFieldsOperation(jConfig);
+	}
+	
+	@Override
+	public AWizardDataEditorComposite createDataEditorComposite(Composite parent, WizardPage page) {
+		return new WizardQueryEditorComposite(parent, page, this, "mdx");
 	}
 
 }
