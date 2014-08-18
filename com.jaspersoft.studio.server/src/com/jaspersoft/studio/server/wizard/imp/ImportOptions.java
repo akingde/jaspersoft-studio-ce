@@ -1,6 +1,6 @@
 package com.jaspersoft.studio.server.wizard.imp;
 
-import com.jaspersoft.jasperserver.remote.services.async.StateDto;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 
 public class ImportOptions {
 	private String file;

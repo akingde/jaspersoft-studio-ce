@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
-import com.jaspersoft.jasperserver.remote.services.async.StateDto;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;

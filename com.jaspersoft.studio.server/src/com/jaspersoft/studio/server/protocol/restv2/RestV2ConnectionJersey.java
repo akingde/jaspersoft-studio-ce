@@ -59,13 +59,14 @@ import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.ExportTaskDto;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.AttachmentDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ExportDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.OutputResourceDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.reports.ReportExecutionDescriptor;
 import com.jaspersoft.jasperserver.jaxrs.report.InputControlStateListWrapper;
 import com.jaspersoft.jasperserver.jaxrs.report.ReportExecutionRequest;
-import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -877,16 +878,35 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			Response r = connector.get(req, monitor);
 			StateDto state = toObj(r, StateDto.class, monitor);
 			options.setState(state);
+			if (state.getPhase().equals("finished")) {
+				tgt = target.path("export/" + options.getState().getId() + "/export.zip");
+
+				req = tgt.request();
+				r = connector.get(req, monitor);
+				monitor.subTask("Writing File: " + options.getFile());
+				File file = new File(options.getFile());
+				readFile(r, file, monitor);
+			}
 		} else {
 			WebTarget tgt = target.path("export");
 
-			tgt = tgt.queryParam("repository-permissions", options.isIncRepositoryPermission());
+			ExportTaskDto taskDTO = new ExportTaskDto();
+			List<String> parameters = options.getParameters();
+			if (!parameters.isEmpty())
+				taskDTO.setParameters(parameters);
+			if (!options.getRoles().isEmpty())
+				taskDTO.setRoles(options.getRoles());
+			if (!options.getJobs().isEmpty())
+				taskDTO.setScheduledJobs(options.getJobs());
+			if (!options.getUsers().isEmpty())
+				taskDTO.setUsers(options.getUsers());
+			if (!options.getPaths().isEmpty())
+				taskDTO.setUris(options.getPaths());
 
-			// Builder req = tgt.request();
-			// Response r = connector.post(req, Entity.entity(file,
-			// "application/zip"), monitor);
-			// StateDto state = toObj(r, StateDto.class, monitor);
-			// options.setState(state);
+			Builder req = tgt.request();
+			Response r = connector.post(req, Entity.entity(taskDTO, MediaType.APPLICATION_JSON_TYPE), monitor);
+			StateDto state = toObj(r, StateDto.class, monitor);
+			options.setState(state);
 		}
 		return options.getState();
 	}

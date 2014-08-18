@@ -20,9 +20,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.jasperserver.remote.services.async.StateDto;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 
 public class ImportMetadataWizard extends Wizard {
 	private ImportMetadataPage page0;
@@ -59,7 +60,10 @@ public class ImportMetadataWizard extends Wizard {
 								break;
 						}
 						if (opt.getState() != null)
-							UIUtils.showInformation(opt.getState().getMessage());
+							if (opt.getState().getErrorDescriptor() != null)
+								UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor()));
+							else
+								UIUtils.showInformation(opt.getState().getMessage());
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					} finally {

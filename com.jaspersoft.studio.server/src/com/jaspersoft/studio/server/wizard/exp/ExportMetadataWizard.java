@@ -19,16 +19,14 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.jasperserver.remote.services.async.StateDto;
-import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
-import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
+import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 
 public class ExportMetadataWizard extends Wizard {
 	private ExportMetadataPage page0;
@@ -65,6 +63,14 @@ public class ExportMetadataWizard extends Wizard {
 								conn = ((MResource) firstElement).getWsClient();
 							if (conn != null) {
 								ExportOptions opt = page0.getValue();
+								for (Object obj : selection.toList()) {
+									if (obj instanceof MServerProfile)
+										opt.getPaths().add("");
+									else if (obj instanceof MResource) {
+										String uri = ((MResource) obj).getValue().getUriString();
+										opt.getPaths().add(uri);
+									}
+								}
 								while (opt.getState() == null || opt.getState().getPhase().equals("inprogress")) {
 									StateDto state = conn.exportMetaData(opt, monitor);
 
@@ -73,7 +79,10 @@ public class ExportMetadataWizard extends Wizard {
 										break;
 								}
 								if (opt.getState() != null)
-									UIUtils.showInformation(opt.getState().getMessage());
+									if (opt.getState().getErrorDescriptor() != null)
+										UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor()));
+									else
+										UIUtils.showInformation(opt.getState().getMessage());
 							}
 						}
 					} catch (Exception e) {

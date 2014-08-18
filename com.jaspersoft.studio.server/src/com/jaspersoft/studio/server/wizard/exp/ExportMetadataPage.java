@@ -12,7 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.exp;
 
-import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -37,7 +37,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ExportMetadataPage extends WizardPage {
@@ -81,9 +80,9 @@ public class ExportMetadataPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
-				// fd.setFileName(textFileName.getText());
+				fd.setFileName("export.zip");
 				fd.setFilterPath(root.getLocation().toOSString());
-				//				fd.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
+				fd.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
 				String selection = fd.open();
 				tfile.setText(Misc.nvl(selection));
 			}
@@ -104,7 +103,7 @@ public class ExportMetadataPage extends WizardPage {
 		bIncRepJobs.setSelection(true);
 
 		Binding binding = bindingContext.bindValue(SWTObservables.observeText(tfile, SWT.Modify), PojoObservables.observeValue(value, "file"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyFileValidator(null)), null);
+				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
 		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepPerm), PojoObservables.observeValue(value, "incRepositoryPermission")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepJobs), PojoObservables.observeValue(value, "incReportJobs")); //$NON-NLS-1$
