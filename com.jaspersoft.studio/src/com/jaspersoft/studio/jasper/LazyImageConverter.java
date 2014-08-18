@@ -288,6 +288,7 @@ public class LazyImageConverter extends ElementConverter {
 								@Override
 								public void run() {
 									PropertyChangeEvent event = new PropertyChangeEvent(modelElement.getValue(), JRDesignImage.PROPERTY_EXPRESSION, null,  expr);
+									modelElement.setChangedProperty(true);
 									AMultiEditor.refreshElement(jrContext, event);
 								}
 							});
