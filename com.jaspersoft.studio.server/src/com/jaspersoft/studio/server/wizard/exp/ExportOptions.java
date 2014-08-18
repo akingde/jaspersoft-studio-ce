@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.server.wizard.exp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 
 public class ExportOptions {
@@ -7,6 +10,15 @@ public class ExportOptions {
 	private boolean incRepositoryPermission = true;
 	private boolean incReportJobs = true;
 	private StateDto state;
+	private List<String> paths = new ArrayList<String>();
+
+	public List<String> getPaths() {
+		return paths;
+	}
+
+	public void setPaths(List<String> paths) {
+		this.paths = paths;
+	}
 
 	public StateDto getState() {
 		return state;

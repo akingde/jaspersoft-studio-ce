@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -120,7 +116,8 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * text editor. <li>page 1 allows you to change the font used in page 2 <li>page 2 shows the words in page 0 in sorted
  * order </ul>
  */
-public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor, IMultiEditor, CachedSelectionProvider {
+public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor,
+		IMultiEditor, CachedSelectionProvider {
 
 	private class StateListener implements IElementStateListener {
 
@@ -140,7 +137,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			IFile resource = getCurrentFile();
 			String path = resource.getRawLocation().toOSString();
 			DefaultManager.INSTANCE.removeDefaultFile(path);
-			
+
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					getSite().getPage().closeEditor(JrxmlEditor.this, false);
@@ -261,7 +258,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public JrxmlEditor() {
 		super();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+				IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 		ExternalStylesManager.initListeners();
 		JasperReportsPlugin.initializeKeyListener();
 	}
@@ -508,7 +506,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						String xml = model2xml(version);
 						doSaveEditors(monitor);
 						// on eclipse 4.2.1 on first first save, for some reasons save is not working .., so we'll do it manually
-						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,	monitor);
+						resource.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), IFile.KEEP_HISTORY | IFile.FORCE,
+								monitor);
 						finishSave(resource);
 					} catch (Throwable e) {
 						UIUtils.showError(e);
@@ -540,7 +539,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	protected void finishSave(IFile resource) {
 		String resourceAbsolutePath = resource.getRawLocation().toOSString();
-		if (DefaultManager.INSTANCE.isCurrentDefault(resourceAbsolutePath)){
+		if (DefaultManager.INSTANCE.isCurrentDefault(resourceAbsolutePath)) {
 			DefaultManager.INSTANCE.reloadCurrentDefault();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -663,7 +662,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			in = getXML(jrContext, editorInput, file.getCharset(true), in, version);
 
-			JasperDesign jd = new JRXmlLoader(jrContext, JasperReportsConfiguration.getJRXMLDigester()).loadXML(new InputSource(in));
+			JasperDesign jd = new JRXmlLoader(jrContext, JasperReportsConfiguration.getJRXMLDigester())
+					.loadXML(new InputSource(in));
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			// NO LONGER AVAILABLE IN GLOBAL TOOLBAR SINCE
 			// THEY WILL BE VISIBLE IN THE ReportContainer toolbar.
@@ -1048,6 +1048,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			try {
 				DeltaVisitor visitor = new DeltaVisitor(this);
 				event.getDelta().accept(visitor);
+				jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -45,7 +41,7 @@ public class DeltaVisitor implements IResourceDeltaVisitor {
 		case IResourceDelta.REMOVED:
 			if ((IResourceDelta.MOVED_TO & delta.getFlags()) == 0) {
 				// file removed
-				Display.getDefault().asyncExec(new Runnable() {
+				UIUtils.getDisplay().asyncExec(new Runnable() {
 					public void run() {
 						part.getSite().getPage().closeEditor(part, false);
 					}
@@ -64,7 +60,7 @@ public class DeltaVisitor implements IResourceDeltaVisitor {
 
 	private void changeInput(IPath toPath) {
 		final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(toPath);
-		Display.getDefault().asyncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 			public void run() {
 				try {
 					ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();

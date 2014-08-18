@@ -208,6 +208,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			try {
 				DeltaVisitor visitor = new DeltaVisitor(this);
 				event.getDelta().accept(visitor);
+				jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}

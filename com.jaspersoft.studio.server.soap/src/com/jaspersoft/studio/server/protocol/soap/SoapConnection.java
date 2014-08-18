@@ -44,6 +44,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
+import com.jaspersoft.jasperserver.remote.services.async.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -53,6 +54,8 @@ import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
+import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -521,5 +524,15 @@ public class SoapConnection implements IConnection {
 			FileUtils.closeStream(out);
 		}
 		return inputFile;
+	}
+
+	@Override
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
+		return null;
+	}
+
+	@Override
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
+		return null;
 	}
 }

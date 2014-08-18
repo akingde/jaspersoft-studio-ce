@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils.jasper;
 
@@ -99,23 +95,22 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	 * The key which identified the file being edited
 	 */
 	public static final String REPORT_FILE = "REPORTFILEWIZARD"; //$NON-NLS-1$
-	
+
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD"; //$NON-NLS-1$
-	
+
 	/**
-	 * The digester used to load an xml can be cached since it is build 
-	 * statically, so we store it
+	 * The digester used to load an xml can be cached since it is build statically, so we store it
 	 */
 	private static JRXmlDigester jrxmlDigester = null;
-	
+
 	/**
-	 * Return the jrxml digester, it return the cached one if it was
-	 * builded before, otherwise it create a new one and return it
+	 * Return the jrxml digester, it return the cached one if it was builded before, otherwise it create a new one and
+	 * return it
 	 * 
 	 * @return an JRXMLDigester, not null
 	 */
-	public synchronized static JRXmlDigester getJRXMLDigester(){
-		if (jrxmlDigester == null){
+	public synchronized static JRXmlDigester getJRXMLDigester() {
+		if (jrxmlDigester == null) {
 			try {
 				jrxmlDigester = JRXmlDigesterFactory.createDigester();
 			} catch (Exception e) {
@@ -176,8 +171,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public JasperReportsConfiguration(JasperReportsContext parent, IFile file) {
 		super(parent);
 		init(file);
-		//Run a thread to precache on this context the context dependents jr extensions
-		if (file != null){
+		// Run a thread to precache on this context the context dependents jr extensions
+		if (file != null) {
 			new ExtensionLoader().loadExtension(this);
 		}
 	}
