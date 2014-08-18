@@ -121,6 +121,8 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 						"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
 				new JDBCDriverDefinition("MySQL", "com.mysql.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
 						"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
+				new JDBCDriverDefinition("MariaDB", "org.mariadb.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+						"jdbc:mariadb://{0}:3306/{1}"), //$NON-NLS-1$
 
 				new JDBCDriverDefinition("Oracle", //$NON-NLS-1$
 						"oracle.jdbc.driver.OracleDriver", //$NON-NLS-1$
