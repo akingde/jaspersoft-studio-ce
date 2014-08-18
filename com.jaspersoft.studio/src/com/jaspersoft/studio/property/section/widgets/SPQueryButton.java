@@ -87,7 +87,8 @@ public class SPQueryButton extends ASPropertyWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PatternEditor wizard = new PatternEditor();
-				wizard.setValue(mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT).toString());
+				Object queryText = mquery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
+				wizard.setValue(queryText != null ? queryText.toString() : "");
 				new DatasetDialog(editQueryButton.getShell(), mdataset, mquery.getJasperConfiguration(), section
 						.getEditDomain().getCommandStack()).open();
 			}
