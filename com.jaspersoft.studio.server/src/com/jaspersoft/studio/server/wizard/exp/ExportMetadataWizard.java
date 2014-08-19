@@ -65,7 +65,7 @@ public class ExportMetadataWizard extends Wizard {
 								ExportOptions opt = page0.getValue();
 								for (Object obj : selection.toList()) {
 									if (obj instanceof MServerProfile)
-										opt.getPaths().add("");
+										opt.getPaths().add("/");
 									else if (obj instanceof MResource) {
 										String uri = ((MResource) obj).getValue().getUriString();
 										opt.getPaths().add(uri);
