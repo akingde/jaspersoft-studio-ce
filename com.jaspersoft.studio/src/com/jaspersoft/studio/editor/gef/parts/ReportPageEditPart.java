@@ -31,7 +31,7 @@ import org.eclipse.swt.graphics.RGB;
 import com.jaspersoft.studio.callout.MCallout;
 import com.jaspersoft.studio.editor.gef.figures.APageFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
-import com.jaspersoft.studio.editor.gef.parts.band.SameBandEditPartsTracker;
+import com.jaspersoft.studio.editor.gef.parts.band.NotMovablePartDragTracker;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -55,7 +55,7 @@ public class ReportPageEditPart extends PageEditPart implements PropertyChangeLi
 
 	@Override
 	public DragTracker getDragTracker(Request request) {
-		return new SameBandEditPartsTracker(this);
+		return new NotMovablePartDragTracker(this);
 	}
 
 	/**

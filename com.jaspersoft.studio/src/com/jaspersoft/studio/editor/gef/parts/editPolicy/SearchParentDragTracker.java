@@ -39,8 +39,8 @@ import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
  * This drag tracker redefine the behavior when an element is moved or resized. Usually an element can not be moved over
- * other edit part, and can not be resized to overlap them. This dragtracker change this behavior taking as the target
- * edit part an icontainer, that could be the actual target or the container of the actual target
+ * other edit part, and can not be resized to overlap them. This drag tracker change this behavior taking as the target
+ * edit part an IContainer, that could be the actual target or the container of the actual target
  * 
  * @author Orlandin Marco
  * 

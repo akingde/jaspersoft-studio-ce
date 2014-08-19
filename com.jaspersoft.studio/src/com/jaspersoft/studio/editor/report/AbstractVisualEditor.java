@@ -150,7 +150,9 @@ import com.jaspersoft.studio.formatting.actions.SameHeightMinAction;
 import com.jaspersoft.studio.formatting.actions.SameWidthMaxAction;
 import com.jaspersoft.studio.formatting.actions.SameWidthMinAction;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -990,5 +992,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		toolbarManager.add(new Separator());
 		// Global "View" menu items
 		toolbarManager.add(new ViewSettingsDropDownAction(getActionRegistry()));
+	}
+	
+	/**
+	 * Return the main element managed by this editor, page and root are excluded
+	 */
+	public INode getManagedElement(){
+		INode node = model;
+		while(node != null && !node.getChildren().isEmpty() && (node instanceof MRoot || node instanceof MPage)){
+			node = node.getChildren().get(node.getChildren().size()-1);
+		}
+		return node;
 	}
 }

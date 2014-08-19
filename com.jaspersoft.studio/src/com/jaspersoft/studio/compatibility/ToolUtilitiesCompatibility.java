@@ -17,11 +17,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.ui.IEditorPart;
 
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * On eclipse 3.6 gef has a bug on the library method getSelectionWithoutDependants
@@ -142,6 +146,22 @@ public class ToolUtilitiesCompatibility {
 			if (c.contains(ep))
 				return true;
 			ep = ep.getParent();
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if the passed edit part is the main element inside a subeditor.
+	 */
+	public static boolean isSubeditorMainElement(EditPart part){
+		IEditorPart editorPart = SelectionHelper.getActiveJRXMLEditor();
+		if (editorPart instanceof JrxmlEditor){
+			JrxmlEditor editor = (JrxmlEditor)editorPart;
+			if (editor != null && editor.getReportContainer().getActivePage() > 0 && editor.getReportContainer().getActiveEditor() instanceof AbstractVisualEditor){
+				AbstractVisualEditor visualEditor = (AbstractVisualEditor)editor.getReportContainer().getActiveEditor();
+				INode managedNode = visualEditor.getManagedElement();
+				return managedNode == part.getModel();
+			}
 		}
 		return false;
 	}

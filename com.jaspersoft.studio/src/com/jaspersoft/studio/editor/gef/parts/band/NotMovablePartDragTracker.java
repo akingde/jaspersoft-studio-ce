@@ -59,10 +59,12 @@ import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
  * only elements Completely enclosed in the selection will be selected, otherwise an element will be selected even if
  * it's only touched.
  * 
+ * This drag tracker is used by the elements that cant be moved, like bands for example
+ * 
  * @author Orlandin Marco
  * 
  */
-public class SameBandEditPartsTracker extends SelectEditPartTracker {
+public class NotMovablePartDragTracker extends SelectEditPartTracker {
 
 	private static Color borderColor = null;
 	private static Color fillColor = null;
@@ -171,16 +173,12 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	 */
 	private int dragStart = -1;
 
-	public SameBandEditPartsTracker(EditPart owner) {
+	public NotMovablePartDragTracker(EditPart owner) {
 		super(owner);
 		if (borderColor == null) {
 			fillColor = new java.awt.Color(168, 202, 236, 128);
 			borderColor = new java.awt.Color(0, 50, 200, 128);
 		}
-	}
-
-	public SameBandEditPartsTracker() {
-		this(null);
 	}
 
 	/**
@@ -191,7 +189,7 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	public void mouseUp(MouseEvent me, EditPartViewer viewer) {
 
 		boolean wasDragging = movedPastThreshold();
-		if (me.button == 1 && !wasDragging) {
+ 		if (me.button == 1 && !wasDragging) {
 			EditPart clickedPart = viewer.findObjectAt(new Point(me.x, me.y));
 			if (clickedPart instanceof BandEditPart) {
 				viewer.select(clickedPart);
@@ -680,9 +678,9 @@ public class SameBandEditPartsTracker extends SelectEditPartTracker {
 	protected void performMarqueeSelect() {
 
 		if (getLocation().y < dragStart) {
-			marqueeBehavior = SameBandEditPartsTracker.BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS;
+			marqueeBehavior = NotMovablePartDragTracker.BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS;
 		} else {
-			marqueeBehavior = SameBandEditPartsTracker.DEFAULT_MARQUEE_BEHAVIOR;
+			marqueeBehavior = NotMovablePartDragTracker.DEFAULT_MARQUEE_BEHAVIOR;
 		}
 
 		// determine which edit parts are affected by the current marquee

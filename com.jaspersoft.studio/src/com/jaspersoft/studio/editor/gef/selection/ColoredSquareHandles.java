@@ -20,13 +20,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.ResizeHandle;
-import org.eclipse.gef.handles.SquareHandle;
-import org.eclipse.swt.graphics.Cursor;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ANode;
@@ -65,15 +62,6 @@ public class ColoredSquareHandles extends ResizeHandle {
 	 * The color of a not focused element
 	 */
 	protected static Color[] JSS_NOT_FOCUSED_COLOR = null;
-
-	/**
-	 * Creates a new ResizeHandle for the given GraphicalEditPart.
-	 * 
-	 * @see SquareHandle#SquareHandle(GraphicalEditPart, Locator, Cursor)
-	 */
-	public ColoredSquareHandles(GraphicalEditPart owner, Locator loc, Cursor c) {
-		super(owner, loc, c);
-	}
 
 	/**
 	 * Creates a new ResizeHandle for the given GraphicalEditPart. <code>direction</code> is the relative direction from

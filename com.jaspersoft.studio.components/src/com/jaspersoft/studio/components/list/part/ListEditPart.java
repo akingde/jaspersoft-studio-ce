@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -37,6 +38,8 @@ import com.jaspersoft.studio.callout.CalloutEditPart;
 import com.jaspersoft.studio.callout.command.CalloutSetConstraintCommand;
 import com.jaspersoft.studio.callout.pin.PinEditPart;
 import com.jaspersoft.studio.callout.pin.command.PinSetConstraintCommand;
+import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
+import com.jaspersoft.studio.components.SubEditorEditPartTracker;
 import com.jaspersoft.studio.components.list.ListComponentFactory;
 import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
@@ -46,6 +49,7 @@ import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.SnapToGeometryThreshold;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
@@ -248,4 +252,11 @@ public class ListEditPart extends EditableFigureEditPart {
 		}
 		return super.getAdapter(key);
 	}
+	
+	@Override
+	public DragTracker getDragTracker(Request request) {
+		if (ToolUtilitiesCompatibility.isSubeditorMainElement(this)) return new SubEditorEditPartTracker(this);
+		else return new SearchParentDragTracker(this);
+	}
+
 }

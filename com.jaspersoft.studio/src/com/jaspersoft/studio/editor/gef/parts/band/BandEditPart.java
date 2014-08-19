@@ -149,7 +149,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 	 */
 	@Override
 	public DragTracker getDragTracker(Request request) {
-		return new SameBandEditPartsTracker(this);
+		return new NotMovablePartDragTracker(this);
 	}
 
 	/*

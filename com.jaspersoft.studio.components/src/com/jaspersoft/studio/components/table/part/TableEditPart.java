@@ -14,12 +14,17 @@ package com.jaspersoft.studio.components.table.part;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
 
+import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
+import com.jaspersoft.studio.components.SubEditorEditPartTracker;
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigurePageLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.FigureSelectionEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.SearchParentDragTracker;
 import com.jaspersoft.studio.editor.outline.editpolicy.CloseSubeditorDeletePolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
@@ -51,4 +56,9 @@ public class TableEditPart extends EditableFigureEditPart {
 		}
 	}
 
+	@Override
+	public DragTracker getDragTracker(Request request) {
+		if (ToolUtilitiesCompatibility.isSubeditorMainElement(this)) return new SubEditorEditPartTracker(this);
+		else return new SearchParentDragTracker(this);
+	}
 }
