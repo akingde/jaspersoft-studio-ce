@@ -17,6 +17,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -27,18 +33,28 @@ import net.sf.jasperreports.util.CastorUtil;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HttpContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -56,13 +72,15 @@ public class CASUtil {
 		for (String line : v.split("\n")) {
 			if (line.isEmpty())
 				continue;
+			SSOServer srv = null;
 			try {
-				SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.mapping);
-				if (srv.getUuid().equals(sp.getSsoUuid()))
-					return doGetTocken(sp, srv, monitor);
+				srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.getMapping());
 			} catch (Exception e) {
 				e.printStackTrace();
+				continue;
 			}
+			if (srv.getUuid().equals(sp.getSsoUuid()))
+				return doGetTocken(sp, srv, monitor);
 		}
 		throw new Exception("Could not find SSO Server in the list.");
 	}
@@ -89,28 +107,119 @@ public class CASUtil {
 		// Allow TLSv1 protocol only
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[] { "TLSv1" }, null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-		CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+		CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).setRedirectStrategy(new DefaultRedirectStrategy() {
+			@Override
+			protected boolean isRedirectable(String arg0) {
+				// TODO Auto-generated method stub
+				return super.isRedirectable(arg0);
+			}
+
+			@Override
+			public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+				// TODO Auto-generated method stub
+				return super.isRedirected(request, response, context);
+			}
+		}).setDefaultCookieStore(new BasicCookieStore()).setUserAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0").build();
 
 		Executor exec = Executor.newInstance(httpclient);
 
 		String url = srv.getUrl();
 		if (!url.endsWith("/"))
 			url += "/";
-		URIBuilder ub = new URIBuilder(srv.getUrl() + "cas/v1/tickets");
-		ub.addParameter("username", srv.getUser());
-		ub.addParameter("password", srv.getPassword());
+		URIBuilder ub = new URIBuilder(url + "cas/login");
 
-		Request req = HttpUtils.post(ub.build().toASCIIString(), sp);
+		Request req = HttpUtils.get(ub.build().toASCIIString(), sp);
 
 		String tgtID = readData(exec, req, monitor);
+		String action = getFormAction(tgtID);
+		action = action.replaceFirst("/", "");
+		ub = new URIBuilder(url + action);
+		Map<String, String> map = getInputs(tgtID);
+		Form form = Form.form();
+		for (String key : map.keySet()) {
+			if (key.equals("btn-reset"))
+				continue;
+			else if (key.equals("username")) {
+				form.add(key, srv.getUser());
+				continue;
+			} else if (key.equals("password")) {
+				form.add(key, srv.getPassword());
+				continue;
+			}
+			form.add(key, map.get(key));
+		}
+		//
+		req = HttpUtils.post(ub.build().toASCIIString(), form, sp);
+		// Header header = null;
+		readData(exec, req, monitor);
+		// for (Header h : headers) {
+		// for (HeaderElement he : h.getElements()) {
+		// if (he.getName().equals("CASTGC")) {
+		// header = new BasicHeader("Cookie", h.getValue());
+		// break;
+		// }
+		// }
+		// }
+		ub = new URIBuilder(url + "cas/login");
+		url = sp.getUrl();
+		if (!url.endsWith("/"))
+			url += "/";
+		ub.addParameter("service", url + "j_spring_security_check");
 
-		ub = new URIBuilder(srv.getUrl() + "cas/v1/tickets/" + tgtID);
-		ub.addParameter("username", srv.getUser());
-		ub.addParameter("password", srv.getPassword());
-
-		req = HttpUtils.post(ub.build().toASCIIString(), sp);
-
+		req = HttpUtils.get(ub.build().toASCIIString(), sp);
+		// req.addHeader("Accept",
+		// "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8, value");
+		req.addHeader("Referrer", sp.getUrl());
+		// req.addHeader(header);
+		String html = readData(exec, req, monitor);
+		Matcher matcher = ahrefPattern.matcher(html);
+		while (matcher.find()) {
+			Map<String, String> attributes = parseAttributes(matcher.group(1));
+			String v = attributes.get("href");
+			int ind = v.indexOf("ticket=");
+			if (ind > 0) {
+				return v.substring(ind + "ticket=".length());
+			}
+		}
 		return null;
+	}
+
+	private static Map<String, String> getInputs(String html) {
+		Map<String, String> map = new HashMap<String, String>();
+		Matcher matcher = inputPattern.matcher(html);
+		while (matcher.find()) {
+			Map<String, String> attributes = parseAttributes(matcher.group(1));
+			map.put(attributes.get("name"), attributes.get("value"));
+		}
+		return map;
+	}
+
+	private static String getFormAction(String html) {
+		Matcher matcher = formPattern.matcher(html);
+		while (matcher.find()) {
+			Map<String, String> attributes = parseAttributes(matcher.group(1));
+			return attributes.get("action");
+		}
+		return null;
+	}
+
+	private static final Pattern formPattern = Pattern.compile("<form(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern inputPattern = Pattern.compile("<input(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern ahrefPattern = Pattern.compile("<a(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern attributePattern = Pattern.compile("(\\w+)=\"(.*?)\"");
+
+	private static Map<String, String> parseAttributes(String attributesStr) {
+		Map<String, String> attributes = new HashMap<String, String>();
+		Matcher matcher = attributePattern.matcher(attributesStr);
+		while (matcher.find()) {
+			String key = matcher.group(1);
+			String value = "";
+			String g = matcher.group(2).trim();
+			if (g != null)
+				value = g;
+			attributes.put(key, value.trim());
+		}
+		return attributes;
 	}
 
 	private static String readData(Executor exec, Request req, IProgressMonitor monitor) throws IOException {
@@ -122,18 +231,21 @@ public class CASUtil {
 				public String handleResponse(final HttpResponse response) throws IOException {
 					HttpEntity entity = response.getEntity();
 					InputStream in = null;
+					String res = null;
 					try {
 						StatusLine statusLine = response.getStatusLine();
 						switch (statusLine.getStatusCode()) {
 						case 200:
 							in = getContent(entity);
-							return IOUtils.toString(in);
+							res = IOUtils.toString(in);
+							break;
 						default:
 							throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
 						}
 					} finally {
 						FileUtils.closeStream(in);
 					}
+					return res;
 				}
 
 				protected InputStream getContent(HttpEntity entity) throws ClientProtocolException, IOException {
@@ -150,4 +262,53 @@ public class CASUtil {
 		}
 		return obj;
 	}
+
+	private static List<Header> readCookies(Executor exec, Request req, IProgressMonitor monitor) throws IOException {
+		List<Header> obj = null;
+		ConnectionManager.register(monitor, req);
+		try {
+			obj = exec.execute(req).handleResponse(new ResponseHandler<List<Header>>() {
+
+				public List<Header> handleResponse(final HttpResponse response) throws IOException {
+					HttpEntity entity = response.getEntity();
+					InputStream in = null;
+					Header[] headers = null;
+					try {
+						StatusLine statusLine = response.getStatusLine();
+						switch (statusLine.getStatusCode()) {
+						case 302:
+							System.out.println("haha");
+						case 200:
+							in = getContent(entity);
+							headers = response.getAllHeaders();
+							break;
+						default:
+							throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
+						}
+					} finally {
+						FileUtils.closeStream(in);
+					}
+					List<Header> res = new ArrayList<Header>();
+					for (Header h : headers) {
+						if (h.getName().equals("Set-Cookie"))
+							res.add(h);
+					}
+					return res;
+				}
+
+				protected InputStream getContent(HttpEntity entity) throws ClientProtocolException, IOException {
+					if (entity == null)
+						throw new ClientProtocolException("Response contains no content");
+					return entity.getContent();
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			ConnectionManager.unregister(req);
+		}
+		return obj;
+	}
+
 }

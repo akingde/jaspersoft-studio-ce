@@ -246,8 +246,12 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		for (String line : v.split("\n")) {
 			if (line.isEmpty())
 				continue;
-			SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.mapping);
-			ssoservers.add(srv);
+			try {
+				SSOServer srv = (SSOServer) CastorUtil.read(new ByteArrayInputStream(Base64.decodeBase64(line)), CASListFieldEditor.mapping);
+				ssoservers.add(srv);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		final ServerProfile value = sprofile.getValue();
 		String[] items = new String[ssoservers.size()];

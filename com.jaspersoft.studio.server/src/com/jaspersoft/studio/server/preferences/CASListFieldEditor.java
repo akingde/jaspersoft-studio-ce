@@ -183,6 +183,9 @@ public class CASListFieldEditor extends TableFieldEditor {
 	static {
 		mapping.loadMapping(new InputSource(CASListFieldEditor.class.getResourceAsStream("/com/jaspersoft/studio/server/preferences/SSOServer.xml")));
 	}
+	public static Mapping getMapping() {
+		return mapping;
+	}
 
 	protected void doStore() {
 		String v = "";

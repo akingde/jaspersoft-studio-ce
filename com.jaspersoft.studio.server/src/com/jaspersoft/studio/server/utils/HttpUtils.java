@@ -25,6 +25,7 @@ import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import org.eclipse.core.net.proxy.IProxyChangeEvent;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
@@ -85,6 +86,11 @@ public class HttpUtils {
 	public static Request post(String url, ServerProfile sp) throws HttpException, IOException {
 		System.out.println(url);
 		return HttpUtils.setRequest(Request.Post(url), sp);
+	}
+
+	public static Request post(String url, Form form, ServerProfile sp) throws HttpException, IOException {
+		System.out.println(url);
+		return HttpUtils.setRequest(Request.Post(url).bodyForm(form.build()), sp);
 	}
 
 	public static Request delete(String url, ServerProfile sp) throws HttpException, IOException {
