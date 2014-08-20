@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.internal.resources.ResourceException;
@@ -334,28 +333,28 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void createPages() {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getContainer(), "com.jaspersoft.studio.doc.editor_jrxml");
+		if (jrContext != null)
+			try {
+				createPage0();
+				createPage1();
+				Display.getDefault().asyncExec(new Runnable() {
 
-		try {
-			createPage0();
-			createPage1();
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					try {
-						createPage2();
-						bindActionToKeys();
-					} catch (PartInitException e) {
-						UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
+					@Override
+					public void run() {
+						try {
+							createPage2();
+							bindActionToKeys();
+						} catch (PartInitException e) {
+							UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
+						}
 					}
-				}
-			});
-		} catch (PartInitException e) {
-			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
-		} catch (Throwable e) {
-			closeEditor();
-			JaspersoftStudioPlugin.getInstance().logError(e);
-		}
+				});
+			} catch (PartInitException e) {
+				UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
+			} catch (Throwable e) {
+				closeEditor();
+				JaspersoftStudioPlugin.getInstance().logError(e);
+			}
 	}
 
 	@Override
@@ -620,11 +619,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				if (!file.getProject().isOpen()) {
 					file.getProject().open(monitor);
 				}
+				file.refreshLocal(0, monitor);
 				if (!file.exists()) {
 					closeEditor();
 					return;
 				}
-				file.refreshLocal(0, monitor);
 
 				in = file.getContents();
 			} else if (editorInput instanceof JarEntryEditorInput) {
