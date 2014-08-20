@@ -145,6 +145,7 @@ public class JrxmlPublishAction extends AContributorAction {
 					}
 				}
 			}
+			
 			Publish2ServerWizard wizard = new Publish2ServerWizard(jd, jrConfig, startpage);
 			WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 			if (dialog.open() == Dialog.OK) {

@@ -102,14 +102,15 @@ public class Publish {
 
 		File file = FileUtils.createTempFile("jrsres", FileExtension.PointJRXML); //$NON-NLS-1$ 
 		String version = ServerManager.getVersion(Misc.nvl(mrunit, jrxml));
-		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
-		jrxml.setFile(file);
 		ResourceDescriptor rdjrxml = jrxml.getValue();
 		if (rdjrxml.getParentFolder() != null && !rdjrxml.getParentFolder().endsWith("_files"))
 			rdjrxml.setIsReference(true);
 
 		List<MResource> resources = ((JasperReportsConfiguration) jrConfig).get(PublishUtil.KEY_PUBLISH2JSS_DATA, new ArrayList<MResource>());
 		updSelectedResources(monitor, resources, version);
+		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jrConfig, jd, version));
+		jrxml.setFile(file);
+
 		IFile ifile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
 		PublishUtil.savePreferences(ifile, resources);
 
