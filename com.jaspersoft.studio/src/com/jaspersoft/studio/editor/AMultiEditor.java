@@ -288,11 +288,11 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 				if (!file.getProject().isOpen()) {
 					file.getProject().open(monitor);
 				}
+				file.refreshLocal(0, monitor);
 				if (!file.exists()) {
 					closeEditor();
 					return;
 				}
-				file.refreshLocal(0, monitor);
 				in = file.getContents();
 			} else if (input instanceof JarEntryEditorInput) {
 				in = ((JarEntryEditorInput) input).getStorage().getContents();
