@@ -1048,7 +1048,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			try {
 				DeltaVisitor visitor = new DeltaVisitor(this);
 				event.getDelta().accept(visitor);
-				jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
+				if (jrContext != null && getEditorInput() != null)
+					jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -87,7 +83,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 		}
 		switch (newPageIndex) {
 		case 0:
-			if (activePage == 1 && !xmlFresh){
+			if (activePage == 1 && !xmlFresh) {
 				xml2model();
 			}
 			setModel(model);
@@ -106,7 +102,7 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			});
 			break;
 		case 1:
-			if(isDirty()) {
+			if (isDirty()) {
 				model2xml();
 			}
 			break;
@@ -123,16 +119,15 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 	public void doSave(IProgressMonitor monitor) {
 		isRefresh = true;
 		String xml = null;
-		if(activePage==0){
+		if (activePage == 0) {
 			xml = model2xml();
-		}
-		else if(activePage==1){
+		} else if (activePage == 1) {
 			xml2model();
 		}
 		doSaveParticipate(monitor);
 		xmlEditor.doSave(monitor);
 
-		if(xml!=null){
+		if (xml != null) {
 			try {
 				IFile f = getCurrentFile();
 				if (f != null)
@@ -208,7 +203,8 @@ public abstract class AMultiEditor extends MultiPageEditorPart implements IResou
 			try {
 				DeltaVisitor visitor = new DeltaVisitor(this);
 				event.getDelta().accept(visitor);
-				jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
+				if (jrContext != null && getEditorInput() != null)
+					jrContext.init(((IFileEditorInput) getEditorInput()).getFile());
 			} catch (CoreException e) {
 				UIUtils.showError(e);
 			}
