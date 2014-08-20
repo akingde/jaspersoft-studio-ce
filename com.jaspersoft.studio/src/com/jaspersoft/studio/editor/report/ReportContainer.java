@@ -259,6 +259,9 @@ public class ReportContainer extends MultiPageToolbarEditorPart implements ITabb
 				ave = m.getEditor(obj, jrContext);
 				if (ave != null) {
 					ave.getEditDomain().setCommandStack(reportEditor.getEditDomain().getCommandStack());
+					//Necessary to create element with the drag and drop inside a subeditor
+					ave.getEditDomain().setPaletteViewer(reportEditor.getEditDomain().getPaletteViewer());
+					
 					final int index = addPage(ave, getEditorInput());
 
 					editors.add(ave);

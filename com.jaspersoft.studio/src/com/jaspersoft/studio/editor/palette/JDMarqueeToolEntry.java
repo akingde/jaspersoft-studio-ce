@@ -20,13 +20,13 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.compatibility.SharedImages;
 
 /**
- * Refactoring of the original MarqueeToolEntry to use the drag manager SameBandEditPartsTracker instead of 
- * the MaqrqueeSelectionTool 
+ * Palette tool to used the NotMoveablePartDragTracker from any location
  * 
  * @author Orlandin Marco
  *
  */
 public class JDMarqueeToolEntry extends ToolEntry {
+	
 	/**
 	 * Creates a new MarqueeToolEntry that can select nodes
 	 */
@@ -37,20 +37,8 @@ public class JDMarqueeToolEntry extends ToolEntry {
 	/**
 	 * Constructor for MarqueeToolEntry.
 	 * 
-	 * @param label
-	 *            the label
-	 */
-	public JDMarqueeToolEntry(String label) {
-		this(label, null);
-	}
-
-	/**
-	 * Constructor for MarqueeToolEntry.
-	 * 
-	 * @param label
-	 *            the label; can be <code>null</code>
-	 * @param description
-	 *            the description (can be <code>null</code>)
+	 * @param label the label; can be <code>null</code>
+	 * @param description the description (can be <code>null</code>)
 	 */
 	public JDMarqueeToolEntry(String label, String description) {
 		super(label, description, null, null, NotMovablePartDragTracker.class);
@@ -62,29 +50,18 @@ public class JDMarqueeToolEntry extends ToolEntry {
 	/**
 	 * @see org.eclipse.gef.palette.PaletteEntry#getDescription()
 	 */
+	@Override
 	public String getDescription() {
 		String description = super.getDescription();
 		if (description != null)
 			return description;
 
 		int marqueeBehavior = getMarqueeBehavior();
-		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_CONNECTIONS_TOUCHED) {
-			return Messages.JDMarqueeToolEntry_Behavior_Connections_Touched;
-		}
-		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_CONNECTIONS_CONTAINED) {
-			return Messages.JDMarqueeToolEntry_Behavior_Connections_Contained;
-		}
 		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_TOUCHED) {
 			return Messages.JDMarqueeToolEntry_Behavior_Nodes_Touched;
 		}
 		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_CONTAINED) {
 			return Messages.JDMarqueeToolEntry_Behavior_Nodes_Contained;
-		}
-		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS) {
-			return Messages.JDMarqueeToolEntry_Behavior_Connections_Nodes;
-		}
-		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS) {
-			return Messages.JDMarqueeToolEntry_Behavior_Connections_Nodes_fully;
 		}
 		throw new IllegalArgumentException("Unknown marquee behavior"); //$NON-NLS-1$
 	}
@@ -92,22 +69,13 @@ public class JDMarqueeToolEntry extends ToolEntry {
 	/**
 	 * @see org.eclipse.gef.palette.PaletteEntry#getLargeIcon()
 	 */
+	@Override
 	public ImageDescriptor getLargeIcon() {
 		ImageDescriptor imageDescriptor = super.getLargeIcon();
 		if (imageDescriptor != null) {
 			return imageDescriptor;
 		}
-		// infer icon from behavior mode
-		int marqueeBehavior = getMarqueeBehavior();
-		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_CONNECTIONS_CONTAINED
-				|| marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_CONNECTIONS_TOUCHED) {
-			return SharedImages.DESC_MARQUEE_TOOL_CONNECTIONS_24;
-		} else if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_CONTAINED
-				|| marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_TOUCHED) {
-			return SharedImages.DESC_MARQUEE_TOOL_NODES_24;
-		} else {
-			return SharedImages.DESC_MARQUEE_TOOL_24;
-		}
+		return SharedImages.DESC_MARQUEE_TOOL_NODES_24;
 	}
 
 	private int getMarqueeBehavior() {
@@ -128,17 +96,7 @@ public class JDMarqueeToolEntry extends ToolEntry {
 		if (imageDescriptor != null) {
 			return imageDescriptor;
 		}
-		// infer icon from marquee behavior
-		int marqueeBehavior = getMarqueeBehavior();
-		if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_CONNECTIONS_CONTAINED
-				|| marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_CONNECTIONS_TOUCHED) {
-			return SharedImages.DESC_MARQUEE_TOOL_CONNECTIONS_16;
-		} else if (marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_CONTAINED
-				|| marqueeBehavior == NotMovablePartDragTracker.BEHAVIOR_NODES_TOUCHED) {
-			return SharedImages.DESC_MARQUEE_TOOL_NODES_16;
-		} else {
-			return SharedImages.DESC_MARQUEE_TOOL_16;
-		}
+		return SharedImages.DESC_MARQUEE_TOOL_NODES_16;
 	}
 
 }

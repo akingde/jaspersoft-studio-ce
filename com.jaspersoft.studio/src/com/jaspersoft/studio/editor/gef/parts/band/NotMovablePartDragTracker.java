@@ -20,15 +20,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
-import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -46,28 +43,32 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.compatibility.ToolUtilitiesCompatibility;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.compatibility.FigureUtilities;
 
 /**
- * This class override the original MarqueeDragTracker to add the drag selection without selecting the marquee tool.
- * Despite the fact that it share many method with the standard MarqueeDragTracker it's not an extension but a copy.
- * This because MarqueeDragTracker dosen't provide an easy way to change the selection appearance. So this extended copy
- * was done to give this possibility. This class handle a double type of selection, in fact when selecting up to down
+ * This class define a marquee selection tool to select the edit parts by simply dragging on the elements.
+ * This class handle a double type of selection, in fact when selecting up to down
  * only elements Completely enclosed in the selection will be selected, otherwise an element will be selected even if
  * it's only touched.
  * 
- * This drag tracker is used by the elements that cant be moved, like bands for example
+ * This drag tracker is used by the elements that can't be moved, like bands for example
  * 
  * @author Orlandin Marco
  * 
  */
 public class NotMovablePartDragTracker extends SelectEditPartTracker {
 
-	private static Color borderColor = null;
-	private static Color fillColor = null;
+	/**
+	 * Border color for the selection figure
+	 */
+	private static Color borderColor = new java.awt.Color(0, 50, 200, 128);
+	
+	/**
+	 * Fill color for the selection figure
+	 */
+	private static Color fillColor = new java.awt.Color(168, 202, 236, 128);
 
 	/**
 	 * The Figure painted by the selection
@@ -112,73 +113,93 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	}
 
 	/**
-	 * This behavior selects connections that intersect the marquee rectangle.
-	 * 
-	 * @since 3.7
-	 */
-	public static final int BEHAVIOR_CONNECTIONS_CONTAINED = new Integer(6).intValue();
-
-	/**
-	 * This behavior selects connections that intersect the marquee rectangle.
-	 * 
-	 * @since 3.1
-	 */
-	public static final int BEHAVIOR_CONNECTIONS_TOUCHED = new Integer(2).intValue();
-
-	/**
 	 * This behavior selects nodes completely encompassed by the marquee rectangle. This is the default behavior for this
-	 * tool.
-	 * 
-	 * @since 3.1
+	 * tool. 
 	 */
 	public static final int BEHAVIOR_NODES_CONTAINED = new Integer(1).intValue();
 
 	/**
-	 * This behavior selects nodes completely encompassed by the marquee rectangle, and all connections between those
-	 * nodes.
-	 * 
-	 * @since 3.7
-	 */
-	public static final int BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS = new Integer(3).intValue();
-
-	/**
 	 * This behavior selects nodes that intersect the marquee rectangle.
-	 * 
-	 * @since 3.7
 	 */
 	public static final int BEHAVIOR_NODES_TOUCHED = new Integer(4).intValue();
 
 	/**
-	 * This behavior selects nodes that intersect the marquee rectangle.
-	 * 
-	 * @since 3.7
+	 * The request done by the marquee operation
 	 */
-	public static final int BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS = new Integer(5).intValue();
+	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
 
 	/**
-	 * This behavior selects nodes completely encompassed by the marquee rectangle, and all connections between those
-	 * nodes.
-	 * 
-	 * @since 3.1
-	 * @deprecated use {@link #BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS} instead.
+	 * The property to be used in {@link AbstractTool#setProperties(java.util.Map)} for {@link #setMarqueeBehavior(int)}.
 	 */
-	public static final int BEHAVIOR_NODES_AND_CONNECTIONS = BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS;
-
-	static final int DEFAULT_MODE = 0;
-	static final int TOGGLE_MODE = 1;
-	static final int APPEND_MODE = 2;
+	public static final Object PROPERTY_MARQUEE_BEHAVIOR = "marqueeBehavior"; //$NON-NLS-1$
 
 	/**
-	 * Point from where the drag selection action start
+	 * Constant defining the default marquee selection behavior.
+	 */
+	public static final int DEFAULT_MARQUEE_BEHAVIOR = BEHAVIOR_NODES_CONTAINED;
+	
+	/**
+	 * Value for the mode to set as selected the elements into the selection
+	 */
+	private static final int DEFAULT_MODE = 0;
+	
+	/**
+	 * Value for the mode to set as selected the elements previously selected without the elements into the current selection 
+	 */
+	private static final int TOGGLE_MODE = 1;
+	
+	/**
+	 * Value for the mode to set as selected the elements previously selected plus the elements into the current selection 
+	 */
+	private static final int APPEND_MODE = 2;
+
+	/**
+	 * The current marquee behavior
+	 */
+	private int marqueeBehavior = DEFAULT_MARQUEE_BEHAVIOR;
+	
+	/**
+	 * The feedback figure
+	 */
+	private Figure marqueeRectangleFigure;
+	
+	/**
+	 * The mode defined by the keyboard key pressed during the selection (CTRL or SHIFT)
+	 */
+	private int mode;
+
+	/**
+	 * The last selected edit parts
+	 */
+	private Collection<EditPart> selectedEditParts;
+
+	/**
+	 * The current request
+	 */
+	private Request targetRequest;
+
+	/**
+	 * Point on the y axes from where the drag selection action start
 	 */
 	private int dragStart = -1;
 
+	/**
+	 * Create the drag tracker for an edit part 
+	 * 
+	 * @param owner the parent edit part
+	 */
 	public NotMovablePartDragTracker(EditPart owner) {
 		super(owner);
-		if (borderColor == null) {
-			fillColor = new java.awt.Color(168, 202, 236, 128);
-			borderColor = new java.awt.Color(0, 50, 200, 128);
-		}
+	}
+	
+	/**
+	 * Creates a new Marquee Selection Tool of default type {@link #BEHAVIOR_NODES_CONTAINED}.
+	 * The no param constructor is necessary to have the JDMarqueeToolEntry working
+	 */
+	public NotMovablePartDragTracker() {
+		super(null);
+		setDefaultCursor(SharedCursors.CROSS);
+		setUnloadWhenFinished(false);
 	}
 
 	/**
@@ -211,29 +232,6 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 			reactivate();
 	}
 
-	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
-
-	/**
-	 * The property to be used in {@link AbstractTool#setProperties(java.util.Map)} for {@link #setMarqueeBehavior(int)}.
-	 */
-	public static final Object PROPERTY_MARQUEE_BEHAVIOR = "marqueeBehavior"; //$NON-NLS-1$
-
-	/**
-	 * Constant defining the default marquee selection behavior.
-	 * 
-	 * @since 3.7
-	 */
-	public static final int DEFAULT_MARQUEE_BEHAVIOR = BEHAVIOR_NODES_CONTAINED;
-
-	private Set<?> allChildren = new HashSet<Object>();
-	private int marqueeBehavior = DEFAULT_MARQUEE_BEHAVIOR;
-	private Figure marqueeRectangleFigure;
-	private int mode;
-
-	private Collection<?> selectedEditParts;
-
-	private Request targetRequest;
-
 	/**
 	 * @see org.eclipse.gef.tools.AbstractTool#applyProperty(java.lang.Object, java.lang.Object)
 	 */
@@ -255,23 +253,20 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * Calculation is delegated to {@link #calculatePrimaryMarqueeSelectedEditParts()} and
 	 * {@link #calculateSecondaryMarqueeSelectedEditParts(Collection)} to compute the set of marquee selected edit parts
 	 * in a two step-process, where all directly affected edit parts are determined first, and those indirectly affected
-	 * (related connections in case of {@link #BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS}, or
-	 * {@link #BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS}) afterwards.
 	 * 
 	 * Clients may overwrite to customize the calculation of marquee selected edit parts.
 	 * 
 	 * @return A collection containing all edit parts that should be regarded as being included in the current marquee
 	 *         selection, i.e. which should get selected in default or append mode, and whose selection state should get
 	 *         inverted in toggle mode.
-	 * @since 3.7
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Collection calculateMarqueeSelectedEditParts() {
-		Collection marqueeSelectedEditParts = new HashSet();
+	protected Collection<EditPart> calculateMarqueeSelectedEditParts() {
+		Collection<EditPart> marqueeSelectedEditParts = new HashSet<EditPart>();
 		marqueeSelectedEditParts.addAll(calculatePrimaryMarqueeSelectedEditParts());
 		marqueeSelectedEditParts.addAll(calculateSecondaryMarqueeSelectedEditParts(marqueeSelectedEditParts));
 		return marqueeSelectedEditParts;
 	}
+	
 
 	/**
 	 * Responsible of calculating those edit parts that should be regarded as directly affected by the current marquee
@@ -282,30 +277,15 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * 
 	 * @return A {@link Collection} containing all {@link EditPart}s that should be regarded as being directly affected by
 	 *         the current marquee selection.
-	 * @since 3.7
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection calculatePrimaryMarqueeSelectedEditParts() {
-		Collection editPartsToProcess = new HashSet();
-		if (marqueeBehavior != BEHAVIOR_CONNECTIONS_CONTAINED && marqueeBehavior != BEHAVIOR_CONNECTIONS_TOUCHED) {
-			// process nodes
-			editPartsToProcess.addAll(EditPartUtilities.getAllChildren((GraphicalEditPart) getCurrentViewer().getRootEditPart()));
-		}
-
-		if (marqueeBehavior != BEHAVIOR_NODES_CONTAINED && marqueeBehavior != BEHAVIOR_NODES_TOUCHED) {
-			// process connections
-			editPartsToProcess.addAll(EditPartUtilities.getAllNestedConnectionEditParts((GraphicalEditPart) getCurrentViewer().getRootEditPart()));
-		}
-
-		// process all edit parts and determine which are affected by the
-		// current marquee selection
-		Collection marqueeSelectedEditParts = new ArrayList();
-		if (!editPartsToProcess.isEmpty()) {
-			EditPart pageEditPart = ToolUtilitiesCompatibility.getPageEditPart((EditPart)editPartsToProcess.iterator().next());
-			if (pageEditPart != null) 
-				editPartsToProcess.remove(pageEditPart.getChildren().get(0));
-		}
-		for (Iterator iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
+	@SuppressWarnings("unchecked")
+	protected Collection<EditPart> calculatePrimaryMarqueeSelectedEditParts() {
+		
+		Collection<EditPart> editPartsToProcess = new HashSet<EditPart>();
+		editPartsToProcess.addAll(EditPartUtilities.getAllChildren((GraphicalEditPart) getCurrentViewer().getRootEditPart()));
+		
+		Collection<EditPart> marqueeSelectedEditParts = new ArrayList<EditPart>();
+		for (Iterator<EditPart> iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
 			GraphicalEditPart editPart = (GraphicalEditPart) iterator.next();
 			//The page and the bands are not valid selectable items, so the isMarqueeSelectable retrun false for every element that it isn't an
 			//MGraphical element
@@ -328,34 +308,60 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 *          the marquee selection
 	 * @return A {@link Collection} containing all {@link EditPart}s that are indirectly affected by the current marquee
 	 *         selection
-	 * @since 3.7
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection calculateSecondaryMarqueeSelectedEditParts(Collection directlyMarqueeSelectedEditParts) {
+	@SuppressWarnings("unchecked")
+	protected Collection<EditPart> calculateSecondaryMarqueeSelectedEditParts(Collection<EditPart> directlyMarqueeSelectedEditParts) {
 
-		Collection editPartsToProcess = new HashSet();
-		for (Iterator iterator = directlyMarqueeSelectedEditParts.iterator(); iterator.hasNext();) {
+		Collection<EditPart> editPartsToProcess = new HashSet<EditPart>();
+		for (Iterator<?> iterator = directlyMarqueeSelectedEditParts.iterator(); iterator.hasNext();) {
 			GraphicalEditPart marqueeSelectedEditPart = (GraphicalEditPart) iterator.next();
 			editPartsToProcess.addAll(marqueeSelectedEditPart.getSourceConnections());
 			editPartsToProcess.addAll(marqueeSelectedEditPart.getTargetConnections());
 		}
 
-		// process all edit parts and decide, whether they are indirectly
-		// affected by marquee selection
-		Collection secondaryMarqueeSelectedEditParts = new HashSet();
-		if (!editPartsToProcess.isEmpty()) {
-			EditPart pageEditPart = ToolUtilitiesCompatibility.getPageEditPart((EditPart)editPartsToProcess.iterator().next());
-			editPartsToProcess.remove(pageEditPart.getChildren().get(0));
-		}
-		for (Iterator iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
+		Collection<EditPart> secondaryMarqueeSelectedEditParts = new HashSet<EditPart>();
+		for (Iterator<?> iterator = editPartsToProcess.iterator(); iterator.hasNext();) {
 			GraphicalEditPart editPart = (GraphicalEditPart) iterator.next();
-			if (isMarqueeSelectable(editPart) && isSecondaryMarqueeSelectedEditPart(directlyMarqueeSelectedEditParts, editPart)) {
+			if (isMarqueeSelectable(editPart)) {
 				secondaryMarqueeSelectedEditParts.add(editPart);
 			}
 		}
 		return secondaryMarqueeSelectedEditParts;
 	}
+	
+	/**
+	 * Determines which edit parts are directly affected by the current marquee selection. Calculation is performed by
+	 * regarding the current marquee selection rectangle ( {@link #getCurrentMarqueeSelectionRectangle()}), taking into
+	 * consideration the current marquee behavior (contained vs. touched) that was provided (
+	 * {@link #setMarqueeBehavior(int)} ).
+	 * 
+	 * @param editPart
+	 *          the {@link EditPart} whose state is to be determined
+	 * @return <code>true</code> if the {@link EditPart} should be regarded as being included in the current marquee
+	 *         selection, <code>false</code> otherwise.
+	 */
+	private boolean isPrimaryMarqueeSelectedEditPart(GraphicalEditPart editPart) {
+		// figure bounds are used to determine if edit part is included in
+		// selection
+		IFigure figure = editPart.getFigure();
+		Rectangle r = figure.getBounds().getCopy();
+		figure.translateToAbsolute(r);
 
+		boolean included = false;
+		Rectangle marqueeSelectionRectangle = getCurrentMarqueeSelectionRectangle();
+		// otherwise children will only be 'node' edit parts
+		if (marqueeBehavior == BEHAVIOR_NODES_TOUCHED) {
+			included = marqueeSelectionRectangle.intersects(r);
+		} else if (marqueeBehavior == BEHAVIOR_NODES_CONTAINED) {
+			included = marqueeSelectionRectangle.contains(r);
+		}
+		return included;
+	}
+
+
+	/**
+	 * Create the target request
+	 */
 	protected Request createTargetRequest() {
 		return MARQUEE_REQUEST;
 	}
@@ -369,23 +375,28 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 			eraseTargetFeedback();
 		}
 		super.deactivate();
-		allChildren.clear();
 		setState(STATE_TERMINAL);
 	}
 
+	/**
+	 * Erase the feedback figure if it isn't already erased
+	 */
 	protected void eraseMarqueeFeedback() {
 		if (marqueeRectangleFigure != null) {
 			removeFeedback(marqueeRectangleFigure);
 			marqueeRectangleFigure = null;
 		}
 	}
-
+	
+	/**
+	 * Erase the feedbkac from the single selected edit parts
+	 */
 	protected void eraseTargetFeedback() {
 		if (selectedEditParts == null)
 			return;
-		Iterator<?> oldEditParts = selectedEditParts.iterator();
+		Iterator<EditPart> oldEditParts = selectedEditParts.iterator();
 		while (oldEditParts.hasNext()) {
-			EditPart editPart = (EditPart) oldEditParts.next();
+			EditPart editPart = oldEditParts.next();
 			editPart.eraseTargetFeedback(getTargetRequest());
 		}
 	}
@@ -401,7 +412,6 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * Returns the current marquee selection rectangle.
 	 * 
 	 * @return A {@link Rectangle} representing the current marquee selection.
-	 * @since 3.7
 	 */
 	protected Rectangle getCurrentMarqueeSelectionRectangle() {
 		return new Rectangle(getStartLocation(), getLocation());
@@ -411,19 +421,16 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * Returns the current selection mode, i.e. default, append, or toggle
 	 * 
 	 * @return on of {@link #DEFAULT_MODE}, {@link #APPEND_MODE}, or {@link #TOGGLE_MODE}
-	 * @since 3.7
 	 */
 	protected int getCurrentSelectionMode() {
 		return mode;
 	}
 
 	/**
-	 * @see org.eclipse.gef.tools.AbstractTool#getDebugName()
+	 * Return the current selection feedback figure
+	 * 
+	 * @return the current figure, could be null
 	 */
-	protected String getDebugName() {
-		return "SameBand Marquee: " + marqueeBehavior;//$NON-NLS-1$
-	}
-
 	protected IFigure getMarqueeFeedbackFigure() {
 		if (marqueeRectangleFigure == null) {
 			marqueeRectangleFigure = new MarqueeRectangleFigure();
@@ -432,6 +439,9 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 		return marqueeRectangleFigure;
 	}
 
+	/**
+	 * Return the target request
+	 */
 	protected Request getTargetRequest() {
 		if (targetRequest == null)
 			targetRequest = createTargetRequest();
@@ -439,10 +449,14 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	}
 
 	/**
-	 * @see org.eclipse.gef.tools.AbstractTool#handleButtonDown(int)
+	 * When the mouse button is pressed if it is the left one 
+	 * start with the selection and set the mode according 
+	 * to the current keyboard key pressed
+	 * 
+	 * @param mouse button pressed
 	 */
 	protected boolean handleButtonDown(int button) {
-		if (!isCurrentViewerGraphical())
+		if (!isViewerImportant(null))
 			return true;
 		if (button != 1) {
 			setState(STATE_INVALID);
@@ -462,6 +476,7 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	/**
 	 * @see org.eclipse.gef.tools.AbstractTool#handleButtonUp(int)
 	 */
+	@Override
 	protected boolean handleButtonUp(int button) {
 		if (stateTransition(STATE_DRAG_IN_PROGRESS, STATE_TERMINAL)) {
 			eraseTargetFeedback();
@@ -475,10 +490,13 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	/**
 	 * @see org.eclipse.gef.tools.AbstractTool#handleDragInProgress()
 	 */
+	@Override
 	protected boolean handleDragInProgress() {
 		if (isInState(STATE_DRAG | STATE_DRAG_IN_PROGRESS)) {
 			if (dragStart == -1) {
 				dragStart = getLocation().y;
+			} else if (getLocation().y<dragStart){
+				marqueeBehavior = BEHAVIOR_NODES_TOUCHED;
 			}
 			showMarqueeFeedback();
 			eraseTargetFeedback();
@@ -491,6 +509,7 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	/**
 	 * @see org.eclipse.gef.tools.AbstractTool#handleFocusLost()
 	 */
+	@Override
 	protected boolean handleFocusLost() {
 		if (isInState(STATE_DRAG | STATE_DRAG_IN_PROGRESS)) {
 			handleFinished();
@@ -531,124 +550,11 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 *          the {@link EditPart} of interest
 	 * @return <code>true</code> if the given edit part may be included into the marquee selection, <code>false</code>
 	 *         otherwise
-	 * @since 3.7
 	 */
 	protected boolean isMarqueeSelectable(GraphicalEditPart editPart) {
-		// IMPORTANT: MarqueeSelectionTool is not a TargetingTool, thus the
-		// pre-selection does not depend on hit-testing. Therefore, the visible
-		// state of the edit part's figure has to be taken into consideration as
-		// well.
-		return editPart.getTargetEditPart(MARQUEE_REQUEST) == editPart && editPart.isSelectable()
-				&& FigureUtilities.isNotFullyClipped(editPart.getFigure()) && editPart.getModel() instanceof MGraphicElement;
+		return editPart.isSelectable() && FigureUtilities.isNotFullyClipped(editPart.getFigure()) && editPart.getModel() instanceof MGraphicElement;
 	}
 
-	/**
-	 * Determines which edit parts are directly affected by the current marquee selection. Calculation is performed by
-	 * regarding the current marquee selection rectangle ( {@link #getCurrentMarqueeSelectionRectangle()}), taking into
-	 * consideration the current marquee behavior (contained vs. touched) that was provided (
-	 * {@link #setMarqueeBehavior(int)} ).
-	 * 
-	 * @param editPart
-	 *          the {@link EditPart} whose state is to be determined
-	 * @return <code>true</code> if the {@link EditPart} should be regarded as being included in the current marquee
-	 *         selection, <code>false</code> otherwise.
-	 * @since 3.7
-	 */
-	private boolean isPrimaryMarqueeSelectedEditPart(GraphicalEditPart editPart) {
-		// figure bounds are used to determine if edit part is included in
-		// selection
-		IFigure figure = editPart.getFigure();
-		Rectangle r = figure.getBounds().getCopy();
-		figure.translateToAbsolute(r);
-
-		boolean included = false;
-		Rectangle marqueeSelectionRectangle = getCurrentMarqueeSelectionRectangle();
-		if (editPart instanceof ConnectionEditPart) {
-			if (marqueeBehavior == BEHAVIOR_CONNECTIONS_TOUCHED || marqueeBehavior == BEHAVIOR_CONNECTIONS_CONTAINED) {
-				if (marqueeSelectionRectangle.intersects(r)) {
-					// children will contain ConnectionEditParts only in case
-					// behavior is BEHAVIOR_CONNECTIONS_TOUCHED or
-					// BEHAVIOR_CONNECTIONS_CONTAINED
-					Rectangle relMarqueeRect = Rectangle.SINGLETON;
-					figure.translateToRelative(relMarqueeRect.setBounds(marqueeSelectionRectangle));
-					if (marqueeBehavior == BEHAVIOR_CONNECTIONS_TOUCHED) {
-						included = ((Connection) figure).getPoints().intersects(relMarqueeRect);
-					} else if (marqueeBehavior == BEHAVIOR_CONNECTIONS_CONTAINED) {
-						included = relMarqueeRect.contains(((Connection) figure).getPoints().getBounds());
-					}
-				}
-			}
-		} else {
-			// otherwise children will only be 'node' edit parts
-			if (marqueeBehavior == BEHAVIOR_NODES_TOUCHED
-					|| marqueeBehavior == BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS) {
-				included = marqueeSelectionRectangle.intersects(r);
-			} else if (marqueeBehavior == BEHAVIOR_NODES_CONTAINED
-					|| marqueeBehavior == BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS) {
-				included = marqueeSelectionRectangle.contains(r);
-			}
-		}
-		return included;
-	}
-
-	/**
-	 * Determines which edit parts are indirectly affected by the current marquee selection through those edit parts being
-	 * directly affected. In case of {@link #BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS} or
-	 * {@link #BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS} marquee behavior, this method will be used to calculate the
-	 * related connections after all respective nodes have been identified as primary selected edit parts.
-	 * 
-	 * @param directlyMarqueeSelectedEditParts
-	 *          A collection of {@link EditPart}s which are regarded to be directly included in the current marquee
-	 *          selection.
-	 * @param editPart
-	 *          the {@link EditPart} of concern
-	 * @return <code>true</code> if the {@link EditPart} should be regarded as being included in the current marquee
-	 *         selection, <code>false</code> otherwise.
-	 * @since 3.7
-	 */
-	private boolean isSecondaryMarqueeSelectedEditPart(Collection<?> directlyMarqueeSelectedEditParts, EditPart editPart) {
-		boolean included = false;
-		if (editPart instanceof ConnectionEditPart
-				&& (marqueeBehavior == BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS || marqueeBehavior == BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS)) {
-			// connections are included, if related nodes are included
-			ConnectionEditPart connection = (ConnectionEditPart) editPart;
-			GraphicalEditPart source = (GraphicalEditPart) connection.getSource();
-			GraphicalEditPart target = (GraphicalEditPart) connection.getTarget();
-			boolean sourceIncludedInMarqueeSelection = directlyMarqueeSelectedEditParts.contains(source);
-			boolean targetIncludedInMarqueeSelection = directlyMarqueeSelectedEditParts.contains(target);
-
-			if (mode == DEFAULT_MODE) {
-				// in default mode, select connection if source and
-				// target are included in marqee selection
-				included = sourceIncludedInMarqueeSelection && targetIncludedInMarqueeSelection;
-			} else if (mode == APPEND_MODE) {
-				// in append mode, the current viewer selection is of interest
-				// as well, so select connection if not already selected and
-				// source and target are already selected or will get selected
-				included = connection.getSelected() == EditPart.SELECTED_NONE
-						&& (getCurrentViewer().getSelectedEditParts().contains(source) || sourceIncludedInMarqueeSelection)
-						&& (getCurrentViewer().getSelectedEditParts().contains(target) || targetIncludedInMarqueeSelection);
-			} else if (mode == TOGGLE_MODE) {
-				if (connection.getSelected() == EditPart.SELECTED_NONE) {
-					// connection is currently deselected, include it in the
-					// marquee selection, i.e. select it, if one of
-					// source or target will become selected in the new viewer
-					// selection
-					included = ((source.getSelected() == EditPart.SELECTED_NONE && sourceIncludedInMarqueeSelection) || (source
-							.getSelected() != EditPart.SELECTED_NONE && !sourceIncludedInMarqueeSelection))
-							&& ((target.getSelected() == EditPart.SELECTED_NONE && targetIncludedInMarqueeSelection) || (target
-									.getSelected() != EditPart.SELECTED_NONE && !targetIncludedInMarqueeSelection));
-				} else {
-					// connection is currently selected, include it in marquee
-					// selection, i.e. deselect it, if one of source or target
-					// will become deselected in the new viewer selection
-					included = (source.getSelected() != EditPart.SELECTED_NONE && sourceIncludedInMarqueeSelection)
-							|| (target.getSelected() != EditPart.SELECTED_NONE && targetIncludedInMarqueeSelection);
-				}
-			}
-		}
-		return included;
-	}
 
 	/**
 	 * MarqueeSelectionTool is only interested in GraphicalViewers, not TreeViewers.
@@ -656,10 +562,6 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * @see org.eclipse.gef.tools.AbstractTool#isViewerImportant(org.eclipse.gef.EditPartViewer)
 	 */
 	protected boolean isViewerImportant(EditPartViewer viewer) {
-		return isCurrentViewerGraphical();
-	}
-
-	private boolean isCurrentViewerGraphical() {
 		return getCurrentViewer() instanceof GraphicalViewer;
 	}
 
@@ -672,27 +574,20 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * tool ( {@link #getCurrentSelectionMode()}), as well as the current selection of the viewer (in case of APPEND
 	 * mode), which is then passed to the current viewer.
 	 * 
-	 * @since 3.7
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	protected void performMarqueeSelect() {
-
-		if (getLocation().y < dragStart) {
-			marqueeBehavior = NotMovablePartDragTracker.BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS;
-		} else {
-			marqueeBehavior = NotMovablePartDragTracker.DEFAULT_MARQUEE_BEHAVIOR;
-		}
 
 		// determine which edit parts are affected by the current marquee
 		// selection
-		Collection marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
+		Collection<EditPart> marqueeSelectedEditParts = calculateMarqueeSelectedEditParts();
 
 		// calculate nodes/connections that are to be selected/deselected,
 		// dependent on the current mode of the tool
-		Collection editPartsToSelect = new LinkedHashSet();
-		Collection editPartsToDeselect = new HashSet();
-		for (Iterator iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
-			EditPart affectedEditPart = (EditPart) iterator.next();
+		Collection<EditPart> editPartsToSelect = new LinkedHashSet<EditPart>();
+		Collection<EditPart> editPartsToDeselect = new HashSet<EditPart>();
+		for (Iterator<EditPart> iterator = marqueeSelectedEditParts.iterator(); iterator.hasNext();) {
+			EditPart affectedEditPart = iterator.next();
 			if (affectedEditPart.getSelected() == EditPart.SELECTED_NONE || getCurrentSelectionMode() != TOGGLE_MODE)
 				editPartsToSelect.add(affectedEditPart);
 			else
@@ -710,23 +605,24 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 
 	/**
 	 * Sets the type of parts that this tool will select. This method should only be invoked once: when the tool is being
-	 * initialized.
+	 * initialized
 	 * 
-	 * @param type
-	 *          {@link #BEHAVIOR_CONNECTIONS_TOUCHED} or {@link #BEHAVIOR_CONNECTIONS_CONTAINED}
-	 *          {@link #BEHAVIOR_NODES_TOUCHED} or {@link #BEHAVIOR_NODES_CONTAINED} or
-	 *          {@link #BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS} or
-	 *          {@link #BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS}
-	 * @since 3.1
+	 * @param type {@link #BEHAVIOR_NODES_TOUCHED} or {@link #BEHAVIOR_NODES_CONTAINED}
 	 */
 	public void setMarqueeBehavior(int type) {
-		if (type != BEHAVIOR_CONNECTIONS_TOUCHED && type != BEHAVIOR_CONNECTIONS_CONTAINED
-				&& type != BEHAVIOR_NODES_TOUCHED && type != BEHAVIOR_NODES_TOUCHED_AND_RELATED_CONNECTIONS
-				&& type != BEHAVIOR_NODES_CONTAINED && type != BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS)
+		if (type != BEHAVIOR_NODES_TOUCHED && type != BEHAVIOR_NODES_CONTAINED){
 			throw new IllegalArgumentException("Invalid marquee behaviour specified."); //$NON-NLS-1$
-		marqueeBehavior = type;
+		} else {
+			marqueeBehavior = type;
+		}
 	}
 
+	/**
+	 * Set the current selection mode, that define 
+	 * how manage the newly selected elements
+	 * 
+	 * @param mode the mode
+	 */
 	private void setSelectionMode(int mode) {
 		this.mode = mode;
 	}
@@ -736,6 +632,7 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	 * 
 	 * @see org.eclipse.gef.tools.AbstractTool#handleDoubleClick(int)
 	 */
+	@Override
 	protected boolean handleDoubleClick(int button) {
 		if (getSourceEditPart() != null) {
 			super.handleDoubleClick(button);
@@ -746,6 +643,7 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 	/**
 	 * @see org.eclipse.gef.Tool#setViewer(org.eclipse.gef.EditPartViewer)
 	 */
+	@Override
 	public void setViewer(EditPartViewer viewer) {
 		if (viewer == getCurrentViewer())
 			return;
@@ -756,6 +654,9 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 			setDefaultCursor(SharedCursors.NO);
 	}
 
+	/**
+	 * Show the marquee figure
+	 */
 	private void showMarqueeFeedback() {
 		Rectangle rect = getCurrentMarqueeSelectionRectangle().getCopy();
 		IFigure marqueeFeedbackFigure = getMarqueeFeedbackFigure();
@@ -764,11 +665,25 @@ public class NotMovablePartDragTracker extends SelectEditPartTracker {
 		marqueeFeedbackFigure.validate();
 	}
 
+	/**
+	 * Show the marquee selection (highlighted borders) on the selected elements
+	 */
 	protected void showTargetFeedback() {
-		for (Iterator<?> itr = selectedEditParts.iterator(); itr.hasNext();) {
-			EditPart editPart = (EditPart) itr.next();
+		for (Iterator<EditPart> itr = selectedEditParts.iterator(); itr.hasNext();) {
+			EditPart editPart = itr.next();
 			editPart.showTargetFeedback(getTargetRequest());
 		}
 	}
-
+	
+	/**
+	 * This method define when the mouse is moved enough to consider the operation
+	 * a drag operation. In normal condition the supermethod is good, but when 
+	 * the drag tracker is created with the palette tool then every drag must
+	 * be considered the start of a selection, so in that case this return always
+	 * true
+	 */
+	protected boolean movedPastThreshold() {
+		if (getSourceEditPart() == null) return true;
+		else return super.movedPastThreshold();
+	}
 }

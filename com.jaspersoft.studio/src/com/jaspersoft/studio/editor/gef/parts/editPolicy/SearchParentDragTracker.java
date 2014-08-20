@@ -50,6 +50,15 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 	/** defines the range where autoscroll is active inside a viewer */
 	private static final int DEFAULT_EXPOSE_THRESHOLD = 50;
 
+
+	/**
+	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
+	 * one of his descendant. To avoid excessive calculations this variable is initialized ad the drag start and 
+	 * clear at the drag end
+	 */
+	private HashSet<INode> selectionHierarchy = null; 
+		
+	
 	/**
 	 * An implementation of {@link org.eclipse.gef.AutoexposeHelper} that performs autoscrolling of a
 	 * <code>Viewport</code> figure. This helper is for use with graphical editparts that contain a viewport figure.
@@ -301,8 +310,6 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			if (child instanceof IContainer) getSelectionDesendentRecursive(child.getChildren(), foundedElements);
 		}
 	}
-
-
 	
 	/**
 	 * Recursive method that take a frame and the element actually in the selection,
@@ -413,14 +420,6 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 		firstMovment = MOUSE_DIRECTION.UNDEFINED;
 	}
 	
-
-	/**
-	 * This variable contains all the hierarchy of the elements dragged, to avoid that an element is placed inside
-	 * one of his descendant. To avoid excessive calculations this variable is initialized ad the drag start and 
-	 * clear at the drag end
-	 */
-	private HashSet<INode> selectionHierarchy = null; 
-	
 	/**
 	 * Called to get the destination edit part during a drag and drop, if the destination its not a container the it
 	 * parent its taken
@@ -435,10 +434,7 @@ public class SearchParentDragTracker extends DragEditPartsTracker {
 			parent = searchParent(target);
 		return parent != null ? parent : target;
 	}
-	
-
-	
-	
+		
 	/**
 	 * Modify the drag behavior when the shift key is pressed. when it is pressed if the mouse
 	 * if moved over an offset (actually ten pixel) in horizontal or in vertical then the element
