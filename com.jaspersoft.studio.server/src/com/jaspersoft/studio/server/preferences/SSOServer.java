@@ -61,6 +61,15 @@ public class SSOServer implements Cloneable {
 
 	private String user;
 	private String password;
+	private String passuuid;
+
+	public String getPassuuid() {
+		return passuuid;
+	}
+
+	public void setPassuuid(String passuuid) {
+		this.passuuid = passuuid;
+	}
 
 	@Override
 	public SSOServer clone() {

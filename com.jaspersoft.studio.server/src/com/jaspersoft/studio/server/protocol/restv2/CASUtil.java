@@ -63,6 +63,7 @@ import com.jaspersoft.studio.server.preferences.CASPreferencePage;
 import com.jaspersoft.studio.server.preferences.SSOServer;
 import com.jaspersoft.studio.server.protocol.ConnectionManager;
 import com.jaspersoft.studio.server.utils.HttpUtils;
+import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CASUtil {
@@ -143,7 +144,7 @@ public class CASUtil {
 				form.add(key, srv.getUser());
 				continue;
 			} else if (key.equals("password")) {
-				form.add(key, srv.getPassword());
+				form.add(key, Pass.getPass(srv.getPassword()));
 				continue;
 			}
 			form.add(key, map.get(key));

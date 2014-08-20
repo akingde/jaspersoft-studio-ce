@@ -23,10 +23,12 @@ import net.sf.jasperreports.eclipse.ui.ATitledDialog;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.eclipse.util.SecureStorageUtils;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
@@ -55,6 +57,8 @@ import com.jaspersoft.studio.help.TableHelpListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.server.secret.JRServerSecretsProvider;
+import com.jaspersoft.studio.swt.widgets.WSecretText;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 
@@ -83,6 +87,7 @@ public class CASListFieldEditor extends TableFieldEditor {
 	private class PEditDialog extends ATitledDialog {
 
 		private SSOServer value;
+		private WSecretText tpass;
 
 		protected PEditDialog(Shell parentShell, SSOServer value) {
 			super(parentShell);
@@ -145,14 +150,15 @@ public class CASListFieldEditor extends TableFieldEditor {
 			label = new Label(composite, SWT.NONE);
 			label.setText("Password");
 
-			final Text tpass = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+			tpass = new WSecretText(composite, SWT.BORDER | SWT.PASSWORD);
+			tpass.loadSecret(JRServerSecretsProvider.SECRET_NODE_ID, Misc.nvl(value.getPassword()));
 			tpass.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-			tpass.setText(Misc.nvl(value.getPassword()));
 			tpass.addModifyListener(new ModifyListener() {
 
 				@Override
 				public void modifyText(ModifyEvent e) {
 					value.setPassword(tpass.getText());
+					value.setPassuuid(tpass.getUUIDKey());
 				}
 			});
 
@@ -183,14 +189,21 @@ public class CASListFieldEditor extends TableFieldEditor {
 	static {
 		mapping.loadMapping(new InputSource(CASListFieldEditor.class.getResourceAsStream("/com/jaspersoft/studio/server/preferences/SSOServer.xml")));
 	}
+
 	public static Mapping getMapping() {
 		return mapping;
 	}
 
 	protected void doStore() {
 		String v = "";
-		for (SSOServer srv : items)
+		for (SSOServer srv : items) {
 			v += Base64.encodeBase64String(CastorUtil.write(srv, mapping).getBytes()) + "\n";
+			try {
+				SecureStorageUtils.saveToDefaultSecurePreferences(JRServerSecretsProvider.SECRET_NODE_ID, srv.getPassuuid(), srv.getPassword());
+			} catch (StorageException e) {
+				e.printStackTrace();
+			}
+		}
 		getPreferenceStore().setValue(CASPreferencePage.CAS, v);
 	}
 
