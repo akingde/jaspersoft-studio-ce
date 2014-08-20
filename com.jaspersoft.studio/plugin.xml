@@ -1855,4 +1855,10 @@
                 id="com.jaspersoft.studio.editor.action.movedetailband"></toolitem>
        </toolitemsets>
     </extension>
+    <extension
+          point="net.sf.jasperreports.samples.samples">
+       <resources
+             resources="com.jaspersoft.studio.SamplesProvider">
+       </resources>
+    </extension>
 </plugin>
