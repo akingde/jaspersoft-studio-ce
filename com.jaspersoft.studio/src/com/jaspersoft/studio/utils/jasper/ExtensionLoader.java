@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils.jasper;
 
+import java.util.HashSet;
+
 import net.sf.jasperreports.data.DataAdapterServiceFactory;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -60,7 +62,46 @@ public class ExtensionLoader {
 		SecretsProviderFactory.class,
 		FunctionsBundle.class
 	};
+	
+	/**
+	 * Keep track of the common extensions currently loading, if an extensions
+	 * key is in the map means that its loading is started but not finished yet
+	 */
+	private static HashSet<Class<?>> loadingExtensions = new HashSet<Class<?>>();  
 
+	/**
+	 * Thread safe method to mark an extension key as currently loading
+	 * 
+	 * @param extensionKey key of the extension
+	 */
+	private static void setLoadingStart(Class<?> extensionKey) {
+		synchronized (loadingExtensions) {
+			loadingExtensions.add(extensionKey);
+		}
+	}
+	
+	/**
+	 * Thread safe method to mark an extension key as not currently loading
+	 * 
+	 * @param extensionKey key of the extension
+	 */
+	private static void setLoadingEnd(Class<?> extensionKey) {
+		synchronized (loadingExtensions) {
+			loadingExtensions.remove(extensionKey);
+		}
+	}
+	
+	/**
+	 * Thread safe method to check if an extension key is currently loading
+	 * 
+	 * @param extensionKey key of the extension
+	 * @return true if the extension is currently loading, false otherwise
+	 */
+	private static boolean isCurrentlyLoading(Class<?> extensionKey){
+		synchronized (loadingExtensions) {
+			return loadingExtensions.contains(extensionKey);
+		}
+	}
 	
 	//CODE USED TO TRACK THE PERFORMANCE OF THE EXTENSIONS PRECACHE
 	
@@ -93,7 +134,7 @@ public class ExtensionLoader {
 	 * 
 	 * @param context where the properties are loaded
 	 */
- public void loadExtension(final JasperReportsContext context){
+ public static void loadExtension(final JasperReportsContext context){
 	// timeStartLoading = System.currentTimeMillis();
 	 for(Class<?> extensionKey : reportDependentExtensionsKey){
 		 final Class<?> key = extensionKey;
@@ -121,9 +162,32 @@ public class ExtensionLoader {
 			
 			@Override
 			public void run() {
+				setLoadingStart(key);
 				context.getExtensions(key);
+				setLoadingEnd(key);
 			}
 		}).start();
+	 }
+ }
+ 
+ /**
+  * Should be called before someone load a common extension; if the extension is 
+  * currently in a loading state the caller is blocked untie
+  * the load is not complete. The check to see if the loading
+  * is finished is done every amount of a fixed time (by default
+  * 500 ms)
+  * 
+  * @param extensionKey the key of the extension
+  */
+ public static void waitIfLoading(Class<?> extensionKey){
+	 int checkTime = 500;
+	 while(isCurrentlyLoading(extensionKey)){
+		 try {
+			 //the extension is loading, wait 500ms and recheck if it was loaded
+			Thread.sleep(checkTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	 }
  }
 }

@@ -173,7 +173,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		init(file);
 		// Run a thread to precache on this context the context dependents jr extensions
 		if (file != null) {
-			new ExtensionLoader().loadExtension(this);
+			ExtensionLoader.loadExtension(this);
 		}
 	}
 
@@ -558,6 +558,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
+		
+		//This call avoid to double twice an extension because maybe  the ExtensionLoader has a thread started for it, 
+		//but that still has not completed and in the meantime another request for the same extensions arrive. 
+		//With this code the loading of the extension is paused until the thread complete if there is one
+		ExtensionLoader.waitIfLoading(extensionType);
+		
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		List<T> result = null;
 		try {
