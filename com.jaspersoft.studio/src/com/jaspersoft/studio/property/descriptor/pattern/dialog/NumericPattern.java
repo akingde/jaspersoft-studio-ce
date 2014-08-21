@@ -37,7 +37,13 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class NumericPattern extends APattern {
 
+	private Spinner zeroes;
 	
+	private Spinner decimals;
+	
+	private Button sep;
+	
+	private boolean isRefreshing = false;
 	
 	public NumericPattern(Composite parent, String value) {
 		this(parent, NumberFormat.getNumberInstance(), value);
@@ -47,6 +53,33 @@ public class NumericPattern extends APattern {
 		super(parent, formatter, new BigDecimal("-10023.1234567654"), value); //$NON-NLS-1$
 		setDescription(Messages.NumericPattern_description);
 	}
+	
+	@Override
+	public void setValue(String value) {
+		super.setValue(value);
+		backparsePattern();
+	}
+	
+	private void backparsePattern(){
+		if (!value.isEmpty()){
+			isRefreshing = true;
+			try{
+				DecimalFormat backParser = new DecimalFormat(value);
+				zeroes.setSelection(backParser.getMinimumIntegerDigits());
+				decimals.setSelection(backParser.getMinimumFractionDigits());
+				sep.setSelection(backParser.isGroupingUsed() && backParser.getGroupingSize() == 3);
+				setFormatter(backParser);
+				setPattern(backParser.toPattern());
+				formatChanged();
+			} catch (Exception ex){
+				//The pattern couldn't be parsed, log the exception but not print it to the console
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+			}
+			isRefreshing = false;
+		}
+	}
+	
+	
 
 	@Override
 	public Control createControl(Composite parent) {
@@ -58,7 +91,7 @@ public class NumericPattern extends APattern {
 		lab = new Label(container, SWT.NONE | SWT.CENTER);
 		lab.setText(Messages.NumericPattern_decimal_places + ":");
 
-		final Spinner zeroes = new Spinner(container, SWT.BORDER);
+		zeroes = new Spinner(container, SWT.BORDER);
 		zeroes.setMinimum(0);
 		zeroes.setMaximum(100);
 		zeroes.setSelection(1);
@@ -66,7 +99,7 @@ public class NumericPattern extends APattern {
 		zeroes.setPageIncrement(10);
 		zeroes.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		final Spinner decimals = new Spinner(container, SWT.BORDER);
+		decimals = new Spinner(container, SWT.BORDER);
 		decimals.setMinimum(0);
 		decimals.setMaximum(100);
 		decimals.setSelection(2);
@@ -74,7 +107,7 @@ public class NumericPattern extends APattern {
 		decimals.setPageIncrement(10);
 		decimals.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		final Button sep = new Button(container, SWT.CHECK);
+		sep = new Button(container, SWT.CHECK);
 		sep.setText(Messages.NumericPattern_use_1000_sperator);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
@@ -94,28 +127,19 @@ public class NumericPattern extends APattern {
 			list.add(f.format(getSample()));
 		}
 		
-		if (!value.isEmpty()){
-			try{
-				DecimalFormat backParser = new DecimalFormat(value);
-				zeroes.setSelection(backParser.getMinimumIntegerDigits());
-				decimals.setSelection(backParser.getMinimumFractionDigits());
-				sep.setSelection(backParser.isGroupingUsed() && backParser.getGroupingSize() == 3);
-				setFormatter(backParser);
-			} catch (Exception ex){
-				//The pattern couldn't be parsed, log the exception but not print it to the console
-				JaspersoftStudioPlugin.getInstance().logError(ex);
-			}
-		}
-		
+		backparsePattern();
 		
 		sep.addSelectionListener(new SelectionListener() {
 			
 			public void widgetSelected(SelectionEvent e) {
-				DecimalFormat d = (DecimalFormat) getFormatter();
-				d.setGroupingUsed(((Button)e.widget).getSelection());
-				d.setGroupingSize(3);
-				setPattern(d.toPattern());
-				formatChanged();
+				if (!isRefreshing){
+					DecimalFormat d = (DecimalFormat) getFormatter();
+					d.setGroupingUsed(((Button)e.widget).getSelection());
+					d.setGroupingSize(3);
+					setPattern(d.toPattern());
+					value = d.toPattern();
+					formatChanged();
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -124,19 +148,25 @@ public class NumericPattern extends APattern {
 		decimals.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				DecimalFormat d = (DecimalFormat) getFormatter();
-				d.setMinimumFractionDigits(decimals.getSelection());
-				setPattern(d.toPattern());
-				formatChanged();
+				if (!isRefreshing){
+					DecimalFormat d = (DecimalFormat) getFormatter();
+					d.setMinimumFractionDigits(decimals.getSelection());
+					setPattern(d.toPattern());
+					value = d.toPattern();
+					formatChanged();
+				}
 			}
 		});
 		zeroes.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				DecimalFormat d = (DecimalFormat) getFormatter();
-				d.setMinimumIntegerDigits(zeroes.getSelection());
-				setPattern(d.toPattern());
-				formatChanged();
+				if (!isRefreshing){
+					DecimalFormat d = (DecimalFormat) getFormatter();
+					d.setMinimumIntegerDigits(zeroes.getSelection());
+					setPattern(d.toPattern());
+					value = d.toPattern();
+					formatChanged();
+				}
 			}
 		});
 		list.addSelectionListener(new SelectionListener() {

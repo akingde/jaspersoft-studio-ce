@@ -50,7 +50,8 @@ public class PatternPage extends JSSHelpWizardPage implements PropertyChangeList
 	private Label descriptionLabel;
 	private StackLayout stackLayout;
 	private Composite configComposite;
-
+	private APattern lastSelectedPattern;
+	
 	public String getValue() {
 		return value;
 	}
@@ -80,6 +81,8 @@ public class PatternPage extends JSSHelpWizardPage implements PropertyChangeList
 		setDescription(Messages.PatternPage_description);
 
 	}
+	
+
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -137,7 +140,12 @@ public class PatternPage extends JSSHelpWizardPage implements PropertyChangeList
 				int sel = list.getSelectionIndex();
 				if (sel >= 0) {
 					APattern p = map.get(list.getItem(sel));
-
+					
+					if (lastSelectedPattern != null && lastSelectedPattern != p){
+						p.setValue(lastSelectedPattern.getValue());
+					}
+					lastSelectedPattern = p;
+					
 					descriptionLabel.setText(Misc.nvl(p.getDescription()));
 					descriptionLabel.pack();
 

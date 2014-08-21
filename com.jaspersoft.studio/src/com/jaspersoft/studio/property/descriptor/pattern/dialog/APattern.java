@@ -22,6 +22,11 @@ import org.eclipse.swt.widgets.Control;
 public abstract class APattern {
 	
 	protected String value;
+	private String pattern;
+	private Format formatter;
+	private Object sample;
+	private String description;
+	
 	
 	public APattern(Composite parent, Format formatter, Object sample, String value) {
 		super();
@@ -30,11 +35,14 @@ public abstract class APattern {
 		this.value = value;
 		control = createControl(parent);
 	}
-
-	private String pattern;
-	private Format formatter;
-	private Object sample;
-	private String description;
+	
+	public String getValue(){
+		return value;
+	}
+	
+	public void setValue(String value){
+		this.value = value;
+	}
 
 	public String getDescription() {
 		return description;
