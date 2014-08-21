@@ -21,8 +21,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class TimePattern extends DatePattern {
 
-	public TimePattern(Composite parent) {
-		super(parent);
+	public TimePattern(Composite parent, String value) {
+		super(parent, value);
 		setDescription(Messages.TimePattern_description);
 	}
 

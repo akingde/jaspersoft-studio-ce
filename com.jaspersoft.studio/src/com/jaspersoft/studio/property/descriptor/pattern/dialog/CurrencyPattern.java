@@ -29,8 +29,8 @@ public class CurrencyPattern extends NumericPattern {
 		"\u00A4#,##0.###;\u00A4(#,##0.###-)"
 	};
 	
-	public CurrencyPattern(Composite parent) {
-		super(parent, NumberFormat.getCurrencyInstance());
+	public CurrencyPattern(Composite parent, String value) {
+		super(parent, NumberFormat.getCurrencyInstance(), value);
 		setDescription(Messages.CurrencyPattern_description);
 	}
 	

@@ -24,8 +24,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class CustomPattern extends APattern {
 
-	public CustomPattern(Composite parent, String pattern, Format formatter, Object sample) {
-		super(parent, formatter, sample);
+	public CustomPattern(Composite parent, String pattern, Format formatter, Object sample, String value) {
+		super(parent, formatter, sample, value);
 		setPattern(pattern);
 		setDescription(Messages.CustomPattern_description);
 	}

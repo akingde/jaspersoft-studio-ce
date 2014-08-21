@@ -20,10 +20,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 public abstract class APattern {
-	public APattern(Composite parent, Format formatter, Object sample) {
+	
+	protected String value;
+	
+	public APattern(Composite parent, Format formatter, Object sample, String value) {
 		super();
 		this.formatter = formatter;
 		this.sample = sample;
+		this.value = value;
 		control = createControl(parent);
 	}
 

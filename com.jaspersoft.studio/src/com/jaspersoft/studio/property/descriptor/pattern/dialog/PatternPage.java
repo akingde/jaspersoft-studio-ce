@@ -70,7 +70,7 @@ public class PatternPage extends JSSHelpWizardPage implements PropertyChangeList
 
 	public APattern getPattern() {
 		if (pattern == null)
-			pattern = new CustomPattern(configComposite, value, new MessageFormat(value), null);
+			pattern = new CustomPattern(configComposite, value, new MessageFormat(value), null, getValue());
 		return pattern;
 	}
 
@@ -187,17 +187,17 @@ public class PatternPage extends JSSHelpWizardPage implements PropertyChangeList
 
 	private void createNumberPatterns(Composite parent) {
 		if (numberPatterns) {
-			map.put(Messages.PatternPage_number, new NumericPattern(parent));
-			map.put(Messages.PatternPage_currency, new CurrencyPattern(parent));
-			map.put(Messages.common_percentage, new PercentagePattern(parent));
-			map.put(Messages.PatternPage_scientific, new ScientificPattern(parent));
+			map.put(Messages.PatternPage_number, new NumericPattern(parent, getValue()));
+			map.put(Messages.PatternPage_currency, new CurrencyPattern(parent, getValue()));
+			map.put(Messages.common_percentage, new PercentagePattern(parent, getValue()));
+			map.put(Messages.PatternPage_scientific, new ScientificPattern(parent, getValue()));
 		}
 	}
 
 	private void createDatePatterns(Composite parent) {
 		if (datePatterns) {
-			map.put(Messages.PatternPage_date, new DatePattern(parent));
-			map.put(Messages.common_time, new TimePattern(parent));
+			map.put(Messages.PatternPage_date, new DatePattern(parent, getValue()));
+			map.put(Messages.common_time, new TimePattern(parent, getValue()));
 		}
 	}
 

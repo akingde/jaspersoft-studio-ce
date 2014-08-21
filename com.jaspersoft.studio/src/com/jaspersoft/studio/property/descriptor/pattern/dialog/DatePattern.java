@@ -30,8 +30,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class DatePattern extends APattern {
 
-	public DatePattern(Composite parent) {
-		super(parent, new SimpleDateFormat(), new Date());
+	public DatePattern(Composite parent, String value) {
+		super(parent, new SimpleDateFormat(), new Date(), value);
 		setDescription(Messages.DatePattern_description);
 	}
 

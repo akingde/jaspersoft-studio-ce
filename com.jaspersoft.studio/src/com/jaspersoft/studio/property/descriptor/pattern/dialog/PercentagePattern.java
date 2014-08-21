@@ -21,8 +21,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class PercentagePattern extends NumericPattern {
 
-	public PercentagePattern(Composite parent) {
-		super(parent, NumberFormat.getPercentInstance());
+	public PercentagePattern(Composite parent, String value) {
+		super(parent, NumberFormat.getPercentInstance(), value);
 		setDescription(Messages.PercentagePattern_description);
 	}
 

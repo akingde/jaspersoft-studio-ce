@@ -21,8 +21,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class ScientificPattern extends NumericPattern {
 
-	public ScientificPattern(Composite parent) {
-		super(parent, NumberFormat.getNumberInstance());
+	public ScientificPattern(Composite parent, String value) {
+		super(parent, NumberFormat.getNumberInstance(), value);
 		setDescription(Messages.ScientificPattern_description);
 	}
 

@@ -36,12 +36,14 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class NumericPattern extends APattern {
 
-	public NumericPattern(Composite parent) {
-		this(parent, NumberFormat.getNumberInstance());
+	
+	
+	public NumericPattern(Composite parent, String value) {
+		this(parent, NumberFormat.getNumberInstance(), value);
 	}
 
-	public NumericPattern(Composite parent, Format formatter) {
-		super(parent, formatter, new BigDecimal("-10023.1234567654")); //$NON-NLS-1$
+	public NumericPattern(Composite parent, Format formatter, String value) {
+		super(parent, formatter, new BigDecimal("-10023.1234567654"), value); //$NON-NLS-1$
 		setDescription(Messages.NumericPattern_description);
 	}
 
@@ -49,7 +51,6 @@ public class NumericPattern extends APattern {
 	public Control createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(2, true));
-
 		Label lab = new Label(container, SWT.NONE | SWT.CENTER);
 		lab.setText(Messages.NumericPattern_leading_zeroes);
 
@@ -63,7 +64,7 @@ public class NumericPattern extends APattern {
 		zeroes.setIncrement(1);
 		zeroes.setPageIncrement(10);
 		zeroes.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		
 		final Spinner decimals = new Spinner(container, SWT.BORDER);
 		decimals.setMinimum(0);
 		decimals.setMaximum(100);
@@ -71,7 +72,7 @@ public class NumericPattern extends APattern {
 		decimals.setIncrement(1);
 		decimals.setPageIncrement(10);
 		decimals.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		
 		final Button sep = new Button(container, SWT.CHECK);
 		sep.setText(Messages.NumericPattern_use_1000_sperator);
 		GridData gd = new GridData();
@@ -84,19 +85,28 @@ public class NumericPattern extends APattern {
 		gd.heightHint = 200;
 		gd.widthHint = 100;
 		list.setLayoutData(gd);
+	
 
 		DecimalFormat f = (DecimalFormat) getFormatter();
 		for (String s : getDefaults()) {
 			f.applyPattern(s);
 			list.add(f.format(getSample()));
 		}
+		
+		if (!value.isEmpty()){
+			DecimalFormat backParser = new DecimalFormat(value);
+			zeroes.setSelection(backParser.getMinimumIntegerDigits());
+			decimals.setSelection(backParser.getMinimumFractionDigits());
+			sep.setSelection(backParser.isGroupingUsed() && backParser.getGroupingSize() == 3);
+			setFormatter(backParser);
+		}
+		
+		
 		sep.addSelectionListener(new SelectionListener() {
-			private boolean state = false;
-
+			
 			public void widgetSelected(SelectionEvent e) {
 				DecimalFormat d = (DecimalFormat) getFormatter();
-				state = !state;
-				d.setGroupingUsed(state);
+				d.setGroupingUsed(((Button)e.widget).getSelection());
 				d.setGroupingSize(3);
 				setPattern(d.toPattern());
 				formatChanged();
@@ -143,7 +153,7 @@ public class NumericPattern extends APattern {
 		});
 		return container;
 	}
-
+	
 	protected java.util.List<String> dList;
 	protected List list;
 
