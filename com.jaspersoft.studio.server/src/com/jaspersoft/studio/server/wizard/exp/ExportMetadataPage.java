@@ -51,8 +51,10 @@ public class ExportMetadataPage extends WizardPage {
 	private ExportOptions value = new ExportOptions();
 
 	private Button bIncRepPerm;
-
 	private Button bIncRepJobs;
+	private Button bIncAccEvt;
+	private Button bIncAudEvt;
+	private Button bIncMonEvt;
 
 	protected ExportMetadataPage() {
 		super("exportmetadata"); //$NON-NLS-1$
@@ -111,12 +113,35 @@ public class ExportMetadataPage extends WizardPage {
 		bIncRepJobs.setLayoutData(gd);
 		bIncRepJobs.setSelection(true);
 
+		bIncAccEvt = new Button(cmp, SWT.CHECK);
+		bIncAccEvt.setText("Include Access Events");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		bIncAccEvt.setLayoutData(gd);
+		bIncAccEvt.setSelection(true);
+
+		bIncAudEvt = new Button(cmp, SWT.CHECK);
+		bIncAudEvt.setText("Include Audit Events");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		bIncAudEvt.setLayoutData(gd);
+		bIncAudEvt.setSelection(true);
+
+		bIncMonEvt = new Button(cmp, SWT.CHECK);
+		bIncMonEvt.setText("Include Monitoring Events");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		bIncMonEvt.setLayoutData(gd);
+		bIncMonEvt.setSelection(true);
+
 		Binding binding = bindingContext.bindValue(SWTObservables.observeText(tfile, SWT.Modify), PojoObservables.observeValue(value, "file"), //$NON-NLS-1$
 				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT, null, new ControlDecorationUpdater());
 		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepPerm), PojoObservables.observeValue(value, "incRepositoryPermission")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeSelection(bIncRepJobs), PojoObservables.observeValue(value, "incReportJobs")); //$NON-NLS-1$
-
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncAccEvt), PojoObservables.observeValue(value, "includeAccessEvents")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncAudEvt), PojoObservables.observeValue(value, "includeAuditEvents")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bIncMonEvt), PojoObservables.observeValue(value, "includeMonitoringEvents")); //$NON-NLS-1$
 	}
 
 	public ExportOptions getValue() {

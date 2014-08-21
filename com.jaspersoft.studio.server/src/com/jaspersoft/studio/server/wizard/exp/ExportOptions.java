@@ -40,6 +40,30 @@ public class ExportOptions {
 		return params;
 	}
 
+	public boolean isIncludeAccessEvents() {
+		return includeAccessEvents;
+	}
+
+	public void setIncludeAccessEvents(boolean includeAccessEvents) {
+		this.includeAccessEvents = includeAccessEvents;
+	}
+
+	public boolean isIncludeAuditEvents() {
+		return includeAuditEvents;
+	}
+
+	public void setIncludeAuditEvents(boolean includeAuditEvents) {
+		this.includeAuditEvents = includeAuditEvents;
+	}
+
+	public boolean isIncludeMonitoringEvents() {
+		return includeMonitoringEvents;
+	}
+
+	public void setIncludeMonitoringEvents(boolean includeMonitoringEvents) {
+		this.includeMonitoringEvents = includeMonitoringEvents;
+	}
+
 	public List<String> getJobs() {
 		return jobs;
 	}
