@@ -12,9 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset;
 
-import java.sql.Connection;
-
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -46,8 +43,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	}
 
 	public void setData(JRDesignDatasetRun datasetrun) {
-		if (this.datasetrun == datasetrun)
-			return;
 		this.datasetrun = datasetrun;
 
 		removeListeners();
@@ -205,7 +200,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		fd_dsRunExpr.height = 69;
 
 		listener = new Listener() {
-			int time = -1;
 
 			public void handleEvent(Event event) {
 				// if (time > 0 && event.time - time < 20)
@@ -290,7 +284,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
 			if (jde == null)
 				jde = new JRDesignExpression();
-			jde.setValueClass(JRDataSource.class);
 			jde.setText(exTxt);
 			datasetrun.setConnectionExpression(null);
 			datasetrun.setDataSourceExpression(jde);
@@ -308,7 +301,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 			JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
 			if (jde == null)
 				jde = new JRDesignExpression();
-			jde.setValueClass(Connection.class);
 			jde.setText(exTxt);
 			datasetrun.setConnectionExpression(jde);
 			datasetrun.setDataSourceExpression(null);
@@ -325,5 +317,4 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		this.datasourceExpressionBox.setExpressionContext(expContext);
 		this.connectionExpressionBox.setExpressionContext(expContext);
 	}
-
 }
