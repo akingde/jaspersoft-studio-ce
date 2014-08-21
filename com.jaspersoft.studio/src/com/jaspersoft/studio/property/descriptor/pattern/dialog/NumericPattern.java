@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 
 public class NumericPattern extends APattern {
@@ -94,11 +95,16 @@ public class NumericPattern extends APattern {
 		}
 		
 		if (!value.isEmpty()){
-			DecimalFormat backParser = new DecimalFormat(value);
-			zeroes.setSelection(backParser.getMinimumIntegerDigits());
-			decimals.setSelection(backParser.getMinimumFractionDigits());
-			sep.setSelection(backParser.isGroupingUsed() && backParser.getGroupingSize() == 3);
-			setFormatter(backParser);
+			try{
+				DecimalFormat backParser = new DecimalFormat(value);
+				zeroes.setSelection(backParser.getMinimumIntegerDigits());
+				decimals.setSelection(backParser.getMinimumFractionDigits());
+				sep.setSelection(backParser.isGroupingUsed() && backParser.getGroupingSize() == 3);
+				setFormatter(backParser);
+			} catch (Exception ex){
+				//The pattern couldn't be parsed, log the exception but not print it to the console
+				JaspersoftStudioPlugin.getInstance().logError(ex);
+			}
 		}
 		
 		
