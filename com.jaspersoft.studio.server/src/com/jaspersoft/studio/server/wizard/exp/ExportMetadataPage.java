@@ -58,11 +58,11 @@ public class ExportMetadataPage extends WizardPage {
 
 	protected ExportMetadataPage() {
 		super("exportmetadata"); //$NON-NLS-1$
-		setTitle("Export Metadata");
-		setDescription("Export Metadata");
+		setTitle(Messages.ExportMetadataPage_0);
+		setDescription(Messages.ExportMetadataPage_1);
 		bindingContext = new DataBindingContext();
 		try {
-			value.setFile(SystemUtils.getUserDir().getCanonicalPath() + File.separator + "export.zip");
+			value.setFile(SystemUtils.getUserDir().getCanonicalPath() + File.separator + "export.zip"); //$NON-NLS-1$
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -75,7 +75,7 @@ public class ExportMetadataPage extends WizardPage {
 		setControl(cmp);
 
 		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Export Data File");
+		lbl.setText(Messages.ExportMetadataPage_3);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -91,7 +91,7 @@ public class ExportMetadataPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
-				fd.setFileName("export.zip");
+				fd.setFileName("export.zip"); //$NON-NLS-1$
 				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$  
 				String selection = fd.open();
@@ -100,35 +100,35 @@ public class ExportMetadataPage extends WizardPage {
 		});
 
 		bIncRepPerm = new Button(cmp, SWT.CHECK);
-		bIncRepPerm.setText("Include Repository Permissions");
+		bIncRepPerm.setText(Messages.ExportMetadataPage_5);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncRepPerm.setLayoutData(gd);
 		bIncRepPerm.setSelection(true);
 
 		bIncRepJobs = new Button(cmp, SWT.CHECK);
-		bIncRepJobs.setText("Include Report Jobs");
+		bIncRepJobs.setText(Messages.ExportMetadataPage_6);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncRepJobs.setLayoutData(gd);
 		bIncRepJobs.setSelection(true);
 
 		bIncAccEvt = new Button(cmp, SWT.CHECK);
-		bIncAccEvt.setText("Include Access Events");
+		bIncAccEvt.setText(Messages.ExportMetadataPage_7);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncAccEvt.setLayoutData(gd);
 		bIncAccEvt.setSelection(true);
 
 		bIncAudEvt = new Button(cmp, SWT.CHECK);
-		bIncAudEvt.setText("Include Audit Events");
+		bIncAudEvt.setText(Messages.ExportMetadataPage_8);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncAudEvt.setLayoutData(gd);
 		bIncAudEvt.setSelection(true);
 
 		bIncMonEvt = new Button(cmp, SWT.CHECK);
-		bIncMonEvt.setText("Include Monitoring Events");
+		bIncMonEvt.setText(Messages.ExportMetadataPage_9);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncMonEvt.setLayoutData(gd);

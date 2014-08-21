@@ -54,8 +54,8 @@ public class ImportMetadataPage extends WizardPage {
 
 	protected ImportMetadataPage() {
 		super("importmetadata"); //$NON-NLS-1$
-		setTitle("Import Metadata");
-		setDescription("Import Metadata");
+		setTitle(Messages.ImportMetadataPage_0);
+		setDescription(Messages.ImportMetadataPage_1);
 		bindingContext = new DataBindingContext();
 	}
 
@@ -66,7 +66,7 @@ public class ImportMetadataPage extends WizardPage {
 		setControl(cmp);
 
 		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Import Data File");
+		lbl.setText(Messages.ImportMetadataPage_2);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -91,20 +91,20 @@ public class ImportMetadataPage extends WizardPage {
 		});
 
 		lbl = new Label(cmp, SWT.NONE);
-		lbl.setText("Import Options");
+		lbl.setText(Messages.ImportMetadataPage_3);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
 
 		bupdate = new Button(cmp, SWT.CHECK);
-		bupdate.setText("Update");
+		bupdate.setText(Messages.ImportMetadataPage_4);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bupdate.setLayoutData(gd);
 		bupdate.setSelection(true);
 
 		bSkipUpd = new Button(cmp, SWT.CHECK);
-		bSkipUpd.setText("Skip User Updates");
+		bSkipUpd.setText(Messages.ImportMetadataPage_5);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.horizontalIndent = 20;
@@ -117,28 +117,28 @@ public class ImportMetadataPage extends WizardPage {
 		});
 
 		bIncAuditEvt = new Button(cmp, SWT.CHECK);
-		bIncAuditEvt.setText("Include Audit Events");
+		bIncAuditEvt.setText(Messages.ImportMetadataPage_6);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncAuditEvt.setLayoutData(gd);
 		bIncAuditEvt.setSelection(true);
 
 		bIncAccEvt = new Button(cmp, SWT.CHECK);
-		bIncAccEvt.setText("Include Access Events");
+		bIncAccEvt.setText(Messages.ImportMetadataPage_7);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncAccEvt.setLayoutData(gd);
 		bIncAccEvt.setSelection(true);
 
 		bIncMonEvt = new Button(cmp, SWT.CHECK);
-		bIncMonEvt.setText("Include Monitoring Events");
+		bIncMonEvt.setText(Messages.ImportMetadataPage_8);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncMonEvt.setLayoutData(gd);
 		bIncMonEvt.setSelection(true);
 
 		bIncSrvSettings = new Button(cmp, SWT.CHECK);
-		bIncSrvSettings.setText("Include Server Settings");
+		bIncSrvSettings.setText(Messages.ImportMetadataPage_9);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		bIncSrvSettings.setLayoutData(gd);

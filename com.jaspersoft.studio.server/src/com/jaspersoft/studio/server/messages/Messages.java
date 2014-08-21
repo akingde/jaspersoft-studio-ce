@@ -56,6 +56,7 @@ public class Messages extends NLS {
 	public static String EditServerAction_jobname;
 	public static String EditServerAction_taskname;
 	public static String EditServerAction_title;
+	public static String ExportMetadataWizard_0;
 	public static String FindReportUnit_jobname;
 	public static String FindResourcePage_1;
 	public static String FindResourcePage_10;
@@ -81,6 +82,7 @@ public class Messages extends NLS {
 	public static String ImportDataSourceInJSSAction_OperationInfoMsg;
 	public static String ImportDataSourceInJSSAction_OperationInfoTitle;
 	public static String ImportDataSourceInJSSAction_UnableToGetNameError;
+	public static String ImportMetadataWizard_0;
 	public static String Common_ErrSecurePrefStorage;
 	public static String InputControlPageContent_boolean;
 	public static String InputControlPageContent_singleValue;

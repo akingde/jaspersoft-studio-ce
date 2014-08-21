@@ -49,10 +49,10 @@ public class ImportMetadataWizard extends Wizard {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Importing", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.ImportMetadataWizard_0, IProgressMonitor.UNKNOWN);
 					try {
 						ImportOptions opt = page0.getValue();
-						while (opt.getState() == null || opt.getState().getPhase().equals("inprogress")) {
+						while (opt.getState() == null || opt.getState().getPhase().equals("inprogress")) { //$NON-NLS-1$
 							StateDto state = conn.importMetaData(opt, monitor);
 
 							monitor.setTaskName(state.getMessage());
@@ -61,7 +61,7 @@ public class ImportMetadataWizard extends Wizard {
 						}
 						if (opt.getState() != null)
 							if (opt.getState().getErrorDescriptor() != null)
-								UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor()));
+								UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor())); //$NON-NLS-1$
 							else
 								UIUtils.showInformation(opt.getState().getMessage());
 					} catch (Exception e) {

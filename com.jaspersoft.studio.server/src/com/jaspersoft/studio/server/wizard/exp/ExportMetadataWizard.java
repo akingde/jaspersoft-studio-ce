@@ -52,7 +52,7 @@ public class ExportMetadataWizard extends Wizard {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Exporting", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.ExportMetadataWizard_0, IProgressMonitor.UNKNOWN);
 					try {
 						IConnection conn = null;
 						Object firstElement = selection.getFirstElement();
@@ -65,14 +65,14 @@ public class ExportMetadataWizard extends Wizard {
 								ExportOptions opt = page0.getValue();
 								for (Object obj : selection.toList()) {
 									if (obj instanceof MServerProfile)
-										opt.getPaths().add("/");
+										opt.getPaths().add("/"); //$NON-NLS-1$
 									else if (obj instanceof MResource) {
 										String uri = ((MResource) obj).getValue().getUriString();
 										opt.getPaths().add(uri);
 									}
 								}
 
-								while (opt.getState() == null || opt.getState().getPhase().equals("inprogress")) {
+								while (opt.getState() == null || opt.getState().getPhase().equals("inprogress")) { //$NON-NLS-1$
 									StateDto state = conn.exportMetaData(opt, monitor);
 
 									monitor.setTaskName(state.getMessage());
@@ -81,7 +81,7 @@ public class ExportMetadataWizard extends Wizard {
 								}
 								if (opt.getState() != null)
 									if (opt.getState().getErrorDescriptor() != null)
-										UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor()));
+										UIUtils.showInformation(((ARestV2Connection) conn).getEh().buildMessage(monitor, "", opt.getState().getErrorDescriptor())); //$NON-NLS-1$
 									else
 										UIUtils.showInformation(opt.getState().getMessage());
 							}
