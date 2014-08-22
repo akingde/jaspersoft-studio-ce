@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
@@ -49,9 +50,9 @@ public class EditExpressionDialog extends ATitledDialog {
 
 	public EditExpressionDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Expression Dialog");
-		setDescription("You can change the operand type using context menu. Right click on the operand.\n" + "- Parameter $P{} is inserted in the query quoted, this is the safe way"
-				+ "\n- Parameter $P!{} is inserted in the query as is, please use it with attention");
+		setTitle(Messages.EditExpressionDialog_0);
+		setDescription(Messages.EditExpressionDialog_1 + Messages.EditExpressionDialog_2
+				+ Messages.EditExpressionDialog_3);
 	}
 
 	public void setValue(MExpression value) {
@@ -101,12 +102,12 @@ public class EditExpressionDialog extends ATitledDialog {
 			gd.horizontalSpan = 5;
 			c.setLayoutData(gd);
 
-			new Label(c, SWT.NONE).setText("Previous condition ");
+			new Label(c, SWT.NONE).setText(Messages.EditExpressionDialog_4);
 
 			Combo prevoperator = new Combo(c, SWT.READ_ONLY);
 			prevoperator.setItems(AMKeyword.CONDITIONS);
 
-			new Label(c, SWT.NONE).setText(" this one.");
+			new Label(c, SWT.NONE).setText(Messages.EditExpressionDialog_5);
 
 			bindingContext.bindValue(SWTObservables.observeSelection(prevoperator), PojoObservables.observeValue(this, "prevcond")); //$NON-NLS-1$
 		} else {
@@ -181,7 +182,7 @@ public class EditExpressionDialog extends ATitledDialog {
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
 
-				new Label(cmp, SWT.NONE).setText("AND");
+				new Label(cmp, SWT.NONE).setText(Messages.EditExpressionDialog_6);
 
 				w = Factory.createWidget(cmp, operands, 2, value);
 				gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -209,7 +210,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		inlist.setLayoutData(gd);
 
 		Button op3 = new Button(cmp, SWT.PUSH);
-		op3.setText("&Add");
+		op3.setText(Messages.EditExpressionDialog_7);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		op3.setLayoutData(gd);
 		op3.addSelectionListener(new SelectionAdapter() {
@@ -220,7 +221,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		});
 
 		op3 = new Button(cmp, SWT.PUSH);
-		op3.setText("&Edit");
+		op3.setText(Messages.EditExpressionDialog_8);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		op3.setLayoutData(gd);
 		op3.addSelectionListener(new SelectionAdapter() {
@@ -231,7 +232,7 @@ public class EditExpressionDialog extends ATitledDialog {
 		});
 
 		op3 = new Button(cmp, SWT.PUSH);
-		op3.setText("&Delete");
+		op3.setText(Messages.EditExpressionDialog_9);
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		op3.setLayoutData(gd);
 		op3.addSelectionListener(new SelectionAdapter() {

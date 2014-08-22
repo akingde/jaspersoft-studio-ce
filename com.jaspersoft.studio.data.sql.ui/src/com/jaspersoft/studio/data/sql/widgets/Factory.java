@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.operand.AOperand;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
@@ -44,10 +45,10 @@ import com.jaspersoft.studio.data.sql.widgets.scalar.TimeWidget;
 import com.jaspersoft.studio.data.sql.widgets.scalar.TimestampWidget;
 
 public class Factory {
-	public static final String OPERANDWIDGET = "operandwidget";
-	public static final String OPERAND = "operand";
-	public static final String OPERANDS = "OPERANDS";
-	public static final String OPERANDS_INDEX = "OPERANDS_INDEX";
+	public static final String OPERANDWIDGET = "operandwidget"; //$NON-NLS-1$
+	public static final String OPERAND = "operand"; //$NON-NLS-1$
+	public static final String OPERANDS = "OPERANDS"; //$NON-NLS-1$
+	public static final String OPERANDS_INDEX = "OPERANDS_INDEX"; //$NON-NLS-1$
 
 	public static Control createWidget(Composite parent, List<AOperand> operands, int index, AMExpression<?> mexpr) {
 		return createWidget(parent, operands, index, mexpr, false);
@@ -60,8 +61,10 @@ public class Factory {
 		AOperand op = null;
 		if (index >= 0 && index < operands.size())
 			op = operands.get(index);
-		else
-			op = new ScalarOperand<String>(mexpr, "Venice");
+		else{
+			op = new ScalarOperand<String>(mexpr, "Venice"); //$NON-NLS-1$
+			operands.add(op);
+		}
 
 		AOperandWidget<?> w = createWidget(cmp, op);
 		w.setExludeField(exludeField);
@@ -133,7 +136,7 @@ public class Factory {
 			if (aOperand instanceof ScalarOperand) {
 				if (newMenu == null) {
 					MenuItem cmi = new MenuItem(pMenu, SWT.CASCADE);
-					cmi.setText("Scalar Value");
+					cmi.setText(Messages.Factory_5);
 
 					newMenu = new Menu(pMenu);
 					cmi.setMenu(newMenu);
@@ -185,15 +188,15 @@ public class Factory {
 		Map<String, AOperand> opMap = w.getOperandMap();
 		if (opMap == null) {
 			opMap = new LinkedHashMap<String, AOperand>();
-			opMap.put("Parameter $P{}", getOperand(w, new ParameterPOperand(mexpr)));
-			opMap.put("Parameter $P!{}", getOperand(w, new ParameterNotPOperand(mexpr)));
-			opMap.put("Database Field", getOperand(w, new FieldOperand(null, null, mexpr)));
-			opMap.put("String", getOperand(w, getDefaultOperand(mexpr)));
-			opMap.put("Number", getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));
-			opMap.put("Date", getOperand(w, new ScalarOperand<Date>(mexpr, new Date())));
-			opMap.put("Time", getOperand(w, new ScalarOperand<Time>(mexpr, new Time(new Date().getTime()))));
-			opMap.put("Timestamp", getOperand(w, new ScalarOperand<Timestamp>(mexpr, new Timestamp(new Date().getTime()))));
-			opMap.put("Free Text", getOperand(w, new UnknownOperand(mexpr, "")));
+			opMap.put(Messages.Factory_6, getOperand(w, new ParameterPOperand(mexpr)));
+			opMap.put(Messages.Factory_7, getOperand(w, new ParameterNotPOperand(mexpr)));
+			opMap.put(Messages.Factory_8, getOperand(w, new FieldOperand(null, null, mexpr)));
+			opMap.put(Messages.Factory_9, getOperand(w, getDefaultOperand(mexpr)));
+			opMap.put(Messages.Factory_10, getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));
+			opMap.put(Messages.Factory_11, getOperand(w, new ScalarOperand<Date>(mexpr, new Date())));
+			opMap.put(Messages.Factory_12, getOperand(w, new ScalarOperand<Time>(mexpr, new Time(new Date().getTime()))));
+			opMap.put(Messages.Factory_13, getOperand(w, new ScalarOperand<Timestamp>(mexpr, new Timestamp(new Date().getTime()))));
+			opMap.put(Messages.Factory_14, getOperand(w, new UnknownOperand(mexpr, ""))); //$NON-NLS-2$
 			w.setOperandMap(opMap);
 		}
 		return opMap;
@@ -213,6 +216,6 @@ public class Factory {
 	}
 
 	public static final AOperand getDefaultOperand(AMExpression<?> mexpr) {
-		return new ScalarOperand<String>(mexpr, "Write your text here");
+		return new ScalarOperand<String>(mexpr, Messages.Factory_16);
 	}
 }

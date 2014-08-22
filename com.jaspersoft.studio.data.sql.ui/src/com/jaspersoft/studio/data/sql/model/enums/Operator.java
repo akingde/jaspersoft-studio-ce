@@ -48,7 +48,7 @@ public enum Operator {
 			return "{0} " + op.sqlname + " ";
 		if (op.getNrOperands() == 2)
 			return "{0} " + op.sqlname + " {1}";
-		if (op == BETWEEN)
+		if (op == BETWEEN || op == NOTBETWEEN)
 			return "{0} BETWEEN {1} AND {2}";
 		if (op.getNrOperands() > 3)
 			return "{0} " + op.getSqlname() + " ({1})";

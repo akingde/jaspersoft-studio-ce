@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpressionX;
@@ -35,8 +36,8 @@ public class OperandDialog extends ATitledDialog {
 
 	protected OperandDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Operand Dialog");
-		setDescription("You can change the operand type using context menu. Right click on the operand.");
+		setTitle(Messages.OperandDialog_0);
+		setDescription(Messages.OperandDialog_1);
 	}
 
 	@Override
