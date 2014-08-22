@@ -89,4 +89,16 @@ public abstract class AMQueryAliased<T> extends AMQueryObject<T> {
 		addAlias(dt);
 		return dt;
 	}
+
+	@Override
+	public String toSQLString() {
+		String sql = "";
+		if (getValue() instanceof IQueryString)
+			sql = ((IQueryString) getValue()).toSQLString();
+		else if (getValue() instanceof String)
+			sql = (String) getValue();
+		sql += addAlias();
+
+		return (isFirst() ? sql : ",\n\t" + sql);
+	}
 }
