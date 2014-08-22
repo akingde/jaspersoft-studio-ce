@@ -50,9 +50,8 @@ public class EditExpressionDialog extends ATitledDialog {
 	public EditExpressionDialog(Shell parentShell) {
 		super(parentShell);
 		setTitle("Expression Dialog");
-		setDescription("You can change the operand type using context menu. Right click on the operand.\n" +
-				"- Parameter $P{} is inserted in the query quoted, this is the safe way" +
-				"\n- Parameter $P!{} is inserted in the query as is, please use it with attention");
+		setDescription("You can change the operand type using context menu. Right click on the operand.\n" + "- Parameter $P{} is inserted in the query quoted, this is the safe way"
+				+ "\n- Parameter $P!{} is inserted in the query as is, please use it with attention");
 	}
 
 	public void setValue(MExpression value) {
@@ -170,7 +169,7 @@ public class EditExpressionDialog extends ATitledDialog {
 				GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 				gd.widthHint = 200;
 				w.setLayoutData(gd);
-			} else if (op.getNrOperands() == 3 && op == Operator.BETWEEN) {
+			} else if (op.getNrOperands() == 3 && (op == Operator.BETWEEN || op == Operator.NOTBETWEEN)) {
 				cmp = new Composite(rcmp, SWT.NONE);
 				GridLayout layout = new GridLayout(3, false);
 				layout.marginHeight = 0;
