@@ -127,7 +127,7 @@ public class ConvertExpression {
 					me.setOperator(Operator.getOperator(like.getOpLike()));
 					LikeOperand op2 = like.getOp2();
 					if (op2.getOp2() != null)
-						opds.add(new ScalarOperand<String>(me, op2.getOp2()));
+						opds.add(new ScalarOperand<String>(me, op2.getOp2().replaceAll("^'|'$", "")));
 					else if (op2.getFop2() != null)
 						opds.add(new UnknownOperand(me, ConvertSelectColumns.getFunctionString(designer, msel, parent, op2.getFop2(), msel)));
 					else if (op2.getFcast() != null)
