@@ -90,7 +90,7 @@ public class Util {
 
 	public static ANode getQueryRoot(ANode n) {
 		ANode root = n;
-		while (!(root != null && (root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery || (root instanceof MFromTable && root.getValue() instanceof MQueryTable))))
+		while (root != null && !(root instanceof MRoot || root instanceof MUnion || root instanceof ISubQuery || (root instanceof MFromTable && root.getValue() instanceof MQueryTable)))
 			root = root.getParent();
 		return root;
 	}

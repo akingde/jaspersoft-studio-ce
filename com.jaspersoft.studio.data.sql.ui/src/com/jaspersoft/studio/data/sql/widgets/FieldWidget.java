@@ -14,6 +14,8 @@ package com.jaspersoft.studio.data.sql.widgets;
 
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,7 +24,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.sql.dialogs.FromTableColumnsDialog;
@@ -62,7 +63,7 @@ public class FieldWidget extends AOperandWidget<FieldOperand> {
 		b.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FromTableColumnsDialog dialog = new FromTableColumnsDialog(Display.getDefault().getActiveShell(), SWT.SINGLE);
+				FromTableColumnsDialog dialog = new FromTableColumnsDialog(UIUtils.getShell(), SWT.SINGLE);
 				dialog.setSelection(v.getExpression());
 				if (dialog.open() == Dialog.OK) {
 					Map<MSQLColumn, MFromTable> cmap = dialog.getColumns();
