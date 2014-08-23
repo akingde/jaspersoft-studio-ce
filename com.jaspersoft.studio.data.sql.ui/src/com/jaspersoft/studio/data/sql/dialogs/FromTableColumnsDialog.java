@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.sql.Util;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -66,7 +67,7 @@ public class FromTableColumnsDialog extends ATitledDialog {
 
 	public FromTableColumnsDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Columns Dialog");
+		setTitle(Messages.FromTableColumnsDialog_0);
 		setDefaultSize(650, 780);
 	}
 

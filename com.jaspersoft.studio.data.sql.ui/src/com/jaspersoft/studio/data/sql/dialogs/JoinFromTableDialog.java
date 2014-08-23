@@ -49,6 +49,7 @@ import com.jaspersoft.studio.data.sql.action.expression.CreateExpression;
 import com.jaspersoft.studio.data.sql.action.expression.CreateExpressionGroup;
 import com.jaspersoft.studio.data.sql.action.expression.CreateXExpression;
 import com.jaspersoft.studio.data.sql.action.expression.EditExpression;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -73,8 +74,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 
 	public JoinFromTableDialog(Shell parentShell, SQLQueryDesigner designer, boolean create) {
 		super(parentShell);
-		setTitle("Join Table Dialog");
-		setDescription("Use context menu to manage expressions.");
+		setTitle(Messages.JoinFromTableDialog_0);
+		setDescription(Messages.JoinFromTableDialog_1);
 		this.designer = designer;
 		this.create = create;
 	}
@@ -101,7 +102,8 @@ public class JoinFromTableDialog extends ATitledDialog {
 		String spStr = null;
 		if (srcTable instanceof MFromTableJoin) {
 			MFromTable sp = ((MFromTable) srcTable.getParent());
-			spStr = sp.toSQLString().replace(",", "").trim();
+			spStr = sp.toSQLString().replace(",", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
+			lst.add(sp.getDisplayText());
 		}
 		for (INode s : parent.getChildren()) {
 			if (srcTable == s)
@@ -116,7 +118,7 @@ public class JoinFromTableDialog extends ATitledDialog {
 
 	private int getFromTablesIndex() {
 		String[] fromTables = getFromTables();
-		String ftbl = fromTable.replace(",", "").trim();
+		String ftbl = fromTable.replace(",", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
 		for (int i = 0; i < fromTables.length; i++) {
 			if (fromTables[i].equals(ftbl))
 				return i;
