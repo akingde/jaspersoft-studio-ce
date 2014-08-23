@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model;
 
@@ -371,8 +367,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 		// }
 		firePropertyChange(evt);
 	}
-	
-	protected void firePropertyChange(PropertyChangeEvent evt){
+
+	protected void firePropertyChange(PropertyChangeEvent evt) {
 		getPropertyChangeSupport().firePropertyChange(evt);
 	}
 
@@ -429,7 +425,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 
 	public EditPart getFigureEditPart() {
 		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
-			if (o instanceof FigureEditPart || o instanceof CalloutEditPart || o instanceof PinEditPart || o instanceof ContainerTreeEditPart)
+			if (o instanceof FigureEditPart || o instanceof CalloutEditPart || o instanceof PinEditPart
+					|| o instanceof ContainerTreeEditPart)
 				return (EditPart) o;
 		}
 		return null;
@@ -513,8 +510,12 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			ANode clone = (ANode) super.clone();
 			if (children != null) {
 				clone.intReset();
+				// fixed java.util.ConcurrentModificationException
+				List<ANode> ch = new ArrayList<ANode>();
 				for (INode n : children)
-					clone.addChild(((ANode) n).clone());
+					ch.add(((ANode) n).clone());
+				for (ANode n : ch)
+					clone.addChild(n);
 			}
 			return clone;
 		} catch (CloneNotSupportedException e) {
@@ -538,16 +539,16 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			return parent.getChildren().indexOf(this) == 0;
 		return true;
 	}
-	
+
 	/**
-	 * This method should be overridden by sub-classes 
-	 * whenever a node during its life-cycle can be in 
-	 * a state where new children can not be added.
+	 * This method should be overridden by sub-classes whenever a node during its life-cycle can be in a state where new
+	 * children can not be added.
 	 * <p>
 	 * 
 	 * Default value is <code>true</code> in order to ensure back-compatibility
-	 *   
-	 * @param child the child that should be added to the element (useful for example for typecheck)
+	 * 
+	 * @param child
+	 *          the child that should be added to the element (useful for example for typecheck)
 	 * @return <code>true</code> if new children can be added, <code>false</code> otherwise
 	 * 
 	 */
