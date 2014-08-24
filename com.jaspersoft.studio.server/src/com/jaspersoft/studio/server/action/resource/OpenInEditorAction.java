@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -41,6 +42,7 @@ import com.jaspersoft.studio.server.export.ImageExporter;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -140,6 +142,18 @@ public class OpenInEditorAction extends Action {
 				if (file != null) {
 					JasperReportsConfiguration.getDefaultJRConfig(file).getPrefStore().setValue(JRSEditorContributor.KEY_PUBLISH2JSS_SILENT, true);
 					openEditor(file);
+				}
+				if (res.getParent() instanceof MReportUnit) {
+					for (INode n : res.getParent().getChildren()) {
+						if (n instanceof MJar) {
+							MJar mjar = (MJar) n;
+							fkeyname = ServerManager.getKey(mjar);
+							rd = WSClientHelper.getResource(new NullProgressMonitor(), mjar, mjar.getValue());
+							f = new AExporter(path).exportToIFile(mjar, rd, fkeyname, monitor);
+							if (f != null)
+								PublishUtil.savePath(f, mjar);
+						}
+					}
 				}
 				return;
 			} else if (type.equals(ResourceDescriptor.TYPE_IMAGE))

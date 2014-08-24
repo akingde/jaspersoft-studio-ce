@@ -32,6 +32,7 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -95,16 +96,23 @@ public class JrxmlExporter extends AExporter {
 	}
 
 	private void getResources(MResource res, JasperDesign jd) throws Exception {
-		List<JRDesignElement> elements = ModelUtils.getAllElements(jd);
-		for (JRDesignElement ele : elements) {
-			if (ele instanceof JRDesignImage)
-				cacheResource(res, ((JRDesignImage) ele).getExpression());
-			else if (ele instanceof JRDesignSubreport) {
-				cacheResource(res, ((JRDesignSubreport) ele).getExpression());
-				// go recursively?
+		if (res.getParent() instanceof MReportUnit) {
+			for (INode n : res.getParent().getChildren()) {
+				if (n instanceof MJar) {
+					// download 
+				}
 			}
-			// get fonts?
 		}
+		// List<JRDesignElement> elements = ModelUtils.getAllElements(jd);
+		// for (JRDesignElement ele : elements) {
+		// if (ele instanceof JRDesignImage)
+		// cacheResource(res, ((JRDesignImage) ele).getExpression());
+		// else if (ele instanceof JRDesignSubreport) {
+		// cacheResource(res, ((JRDesignSubreport) ele).getExpression());
+		// // go recursively?
+		// }
+		// // get fonts?
+		// }
 	}
 
 	protected void cacheResource(MResource res, JRExpression imgexp) throws Exception {
