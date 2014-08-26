@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.StyledString;
 
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.AMKeyword;
+import com.jaspersoft.studio.data.sql.model.query.IQueryString;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
@@ -100,7 +101,11 @@ public class MFromTableJoin extends MFromTable {
 	}
 
 	public String toSQLString() {
-		return "\n\t" + join + " " + super.toSQLString() + " ON ";
+		String sql = "";
+		if (getValue() instanceof IQueryString)
+			sql = ((IQueryString) getValue()).toSQLString();
+		sql += addAlias();
+		return "\n\t" + join + " " + sql + " ON ";
 	}
 
 }

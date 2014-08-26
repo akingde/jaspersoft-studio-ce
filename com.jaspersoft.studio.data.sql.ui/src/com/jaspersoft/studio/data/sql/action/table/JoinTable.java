@@ -20,6 +20,7 @@ import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
@@ -35,7 +36,7 @@ public class JoinTable extends AAction {
 	private SQLQueryDesigner designer;
 
 	public JoinTable(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("&Join Table", treeViewer);
+		super(Messages.JoinTable_0, treeViewer);
 		this.designer = designer;
 	}
 
@@ -121,12 +122,12 @@ public class JoinTable extends AAction {
 	}
 
 	public static MFromTable getFromTable(MFromTable mcol, JoinFromTableDialog dialog) {
-		String ft = dialog.getFromTable().replace(",", "").trim();
+		String ft = dialog.getFromTable().replace(",", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
 		MFromTable mFromTable = null;
 		for (MFromTable mft : Util.getFromTables(Util.getKeyword(mcol, MFrom.class))) {
 			if (mft == mcol)
 				continue;
-			String alias = "";
+			String alias = ""; //$NON-NLS-1$
 			if (mft.getAlias() != null)
 				alias = mft.getAliasKeyString() + mft.getAlias();
 			if ((mft.getValue().getDisplayText() + alias).trim().equals(ft)) {
