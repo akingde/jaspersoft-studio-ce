@@ -32,7 +32,8 @@ public class JoinCommand extends Command {
 	private MSQLColumn src, dest;
 	private MFromTable srcTbl, destTbl;
 
-	public JoinCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl, SQLQueryDesigner designer) {
+	public JoinCommand(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest,
+			MFromTable destTbl, SQLQueryDesigner designer) {
 		this.designer = designer;
 		this.src = src;
 		this.srcTbl = srcTbl;
@@ -40,7 +41,8 @@ public class JoinCommand extends Command {
 		this.destTbl = destTbl;
 	}
 
-	public JoinCommand(MFromTable srcTbl, MFromTable destTbl, SQLQueryDesigner designer) {
+	public JoinCommand(MFromTable srcTbl, MFromTable destTbl,
+			SQLQueryDesigner designer) {
 		this.designer = designer;
 		this.srcTbl = srcTbl;
 		this.destTbl = destTbl;
@@ -49,10 +51,14 @@ public class JoinCommand extends Command {
 	@Override
 	public void execute() {
 		ActionFactory afactory = designer.getOutline().getAfactory();
-		if (srcTbl instanceof MFromTableJoin && !(destTbl instanceof MFromTableJoin)) {
+		if (srcTbl instanceof MFromTableJoin
+				&& !(destTbl instanceof MFromTableJoin)) {
 			MFromTable tmp = srcTbl;
+			MSQLColumn tmpColumn = src;
 			srcTbl = destTbl;
+			src = dest;
 			destTbl = tmp;
+			dest = tmpColumn;
 		}
 
 		if (srcTbl instanceof MFromTableJoin) {
