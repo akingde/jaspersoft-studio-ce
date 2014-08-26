@@ -66,6 +66,7 @@ import com.jaspersoft.studio.data.sql.action.LayoutAction;
 import com.jaspersoft.studio.data.sql.action.select.CreateColumn;
 import com.jaspersoft.studio.data.sql.action.table.CreateTable;
 import com.jaspersoft.studio.data.sql.action.table.DeleteTable;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
@@ -86,7 +87,7 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 public class SQLQueryDiagram {
 	private SQLQueryDesigner designer;
 	private ScrollingGraphicalViewer viewer;
-	public static final String SQLQUERYDIAGRAM = "SQLQUERYDIAGRAM";
+	public static final String SQLQUERYDIAGRAM = "SQLQUERYDIAGRAM"; //$NON-NLS-1$
 
 	public SQLQueryDiagram(SQLQueryDesigner designer) {
 		this.designer = designer;
@@ -165,7 +166,7 @@ public class SQLQueryDiagram {
 				designer.getOutline().getAfactory().fillMenu(selection, menu);
 				for (IContributionItem c : menu.getItems()) {
 					if (c instanceof ActionContributionItem && ((ActionContributionItem) c).getAction() instanceof DeleteTable) {
-						menu.insertAfter(c.getId(), new Action("&Delete Table") {
+						menu.insertAfter(c.getId(), new Action(Messages.SQLQueryDiagram_1) {
 							public void run() {
 								doDeleteTable();
 							}
@@ -190,7 +191,7 @@ public class SQLQueryDiagram {
 		return viewer;
 	}
 
-	public static final String SQL_EDITOR_TABLES = "com.jaspersoft.studio.data.sql.tables";
+	public static final String SQL_EDITOR_TABLES = "com.jaspersoft.studio.data.sql.tables"; //$NON-NLS-1$
 
 	protected void refreshViewer() {
 		if (designer.getjDataset() != null) {
@@ -198,9 +199,9 @@ public class SQLQueryDiagram {
 			if (tbls != null) {
 				final List<KeyValue<String, Point>> map = new ArrayList<KeyValue<String, Point>>();
 				try {
-					StringTokenizer st = new StringTokenizer(new Base64Decoder(tbls).processString(), ";");
+					StringTokenizer st = new StringTokenizer(new Base64Decoder(tbls).processString(), ";"); //$NON-NLS-1$
 					while (st.hasMoreTokens()) {
-						StringTokenizer tblSt = new StringTokenizer(st.nextToken(), ",");
+						StringTokenizer tblSt = new StringTokenizer(st.nextToken(), ","); //$NON-NLS-1$
 						String tbl = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
 						String xs = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
 						String ys = tblSt.hasMoreTokens() ? tblSt.nextToken() : null;
@@ -285,7 +286,7 @@ public class SQLQueryDiagram {
 			@Override
 			public void execute() {
 				if (!firstRun)
-					run = UIUtils.showConfirmation("Delete ", "Are you sure you want to delete the table(s)?");
+					run = UIUtils.showConfirmation(Messages.SQLQueryDiagram_5, Messages.SQLQueryDiagram_6);
 				firstRun = true;
 				if (run)
 					super.execute();
@@ -300,7 +301,7 @@ public class SQLQueryDiagram {
 		for (EditPart p : parts) {
 			GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
 			Map<String, String> extendedData = new HashMap<String, String>();
-			extendedData.put("Delete", "Delete from diagram");
+			extendedData.put(Messages.SQLQueryDiagram_7, Messages.SQLQueryDiagram_8);
 			deleteReq.setExtendedData(extendedData);
 			deleteReq.setEditParts(p);
 			cc.add(p.getCommand(deleteReq));
