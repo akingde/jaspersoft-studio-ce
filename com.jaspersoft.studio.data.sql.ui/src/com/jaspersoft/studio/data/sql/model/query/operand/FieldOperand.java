@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.sql.model.query.operand;
 
 import net.sf.jasperreports.engine.JRConstants;
 
+import com.jaspersoft.studio.data.sql.model.MSQLRoot;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
@@ -52,8 +53,9 @@ public class FieldOperand extends AOperand {
 
 	@Override
 	public String toSQLString() {
-		String IQ = expression.getRoot().getIdentifierQuote();
-		boolean onlyException = expression.getRoot().isQuoteExceptions();
+		MSQLRoot mroot = expression.getRoot();
+		String IQ = mroot == null ? "": mroot.getIdentifierQuote();
+		boolean onlyException = mroot == null ? false : mroot.isQuoteExceptions();
 		if (column == null)
 			return "___";
 		StringBuffer ss = new StringBuffer();
