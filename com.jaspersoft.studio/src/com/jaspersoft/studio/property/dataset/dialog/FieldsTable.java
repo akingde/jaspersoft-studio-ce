@@ -112,7 +112,15 @@ public class FieldsTable {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
+		new NewButton() {
+			protected void afterElementAdded(Object selement) {
+				try {
+					dataset.addField((JRField) selement);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			};
+		}.createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
 				JRDesignField f = new JRDesignField();
@@ -140,7 +148,11 @@ public class FieldsTable {
 				return tmp;
 			}
 		});
-		new DeleteButton().createDeleteButton(bGroup, tviewer);
+		new DeleteButton() {
+			protected void afterElementDeleted(Object element) {
+				dataset.removeField(((JRDesignField) element).getName());
+			};
+		}.createDeleteButton(bGroup, tviewer);
 
 		new ListOrderButtons().createOrderButtons(bGroup, tviewer);
 
@@ -170,7 +182,7 @@ public class FieldsTable {
 							fields.add(f);
 						}
 					}
-					tviewer.setInput(fields);
+					setFields(fields);
 					return true;
 				}
 				return false;
