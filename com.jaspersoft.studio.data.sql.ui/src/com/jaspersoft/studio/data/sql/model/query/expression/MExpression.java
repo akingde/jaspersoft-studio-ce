@@ -35,7 +35,8 @@ public class MExpression extends AMExpression<Object> {
 	public String getDisplayText() {
 		String dt = "";
 		if (!isFirst()) {
-			if (getParent() instanceof MFromTableJoin && getParent().getValue() instanceof MQueryTable) {
+			if (getParent() instanceof MFromTableJoin
+					&& getParent().getValue() instanceof MQueryTable) {
 				MFromTableJoin mftj = (MFromTableJoin) getParent();
 				dt += ") " + mftj.addAlias() + " ON ";
 			} else
@@ -58,7 +59,9 @@ public class MExpression extends AMExpression<Object> {
 			for (int i = 0; i < ops.length; i++)
 				ops[i] = operands.get(i).toSQLString();
 		}
-		return dt + MessageFormat.format(operator.getFormat(operator), (Object[]) ops) + isLastInGroup(getParent(), this);
+		return dt
+				+ MessageFormat.format(operator.getFormat(operator),
+						(Object[]) ops) + isLastInGroup(getParent(), this);
 	}
 
 	@Override
@@ -66,7 +69,8 @@ public class MExpression extends AMExpression<Object> {
 		String dt = getDisplayText();
 		StyledString ss = new StyledString(dt);
 		if (!isFirst()) {
-			if (getParent() instanceof MFromTableJoin && getParent().getValue() instanceof MQueryTable) {
+			if (getParent() instanceof MFromTableJoin
+					&& getParent().getValue() instanceof MQueryTable) {
 				int ind = dt.indexOf(" AS ");
 				if (ind >= 0)
 					ss.setStyle(ind, " AS ".length(), FontUtils.KEYWORDS_STYLER);
@@ -74,14 +78,20 @@ public class MExpression extends AMExpression<Object> {
 				if (ind >= 0)
 					ss.setStyle(ind, " ON ".length(), FontUtils.KEYWORDS_STYLER);
 			} else
-				ss.setStyle(0, (prevCond + " ").length(), FontUtils.KEYWORDS_STYLER);
+				ss.setStyle(0, (prevCond + " ").length(),
+						FontUtils.KEYWORDS_STYLER);
 		}
-		if (operator.getNrOperands() != 2 || (operator.getNrOperands() == 2 && operator == Operator.LIKE)) {
+		if (operator.getNrOperands() != 2
+				|| (operator.getNrOperands() == 2 && operator == Operator.LIKE)) {
 			String sqlname = " " + operator.getSqlname() + " ";
-			ss.setStyle(dt.indexOf(sqlname), sqlname.length(), FontUtils.KEYWORDS_STYLER);
+			int ind = dt.indexOf(sqlname);
+			if (ind >= 0)
+				ss.setStyle(ind, sqlname.length(), FontUtils.KEYWORDS_STYLER);
 		}
-		if (operator.getNrOperands() == 3 && operator == Operator.BETWEEN)
-			ss.setStyle(dt.indexOf(" AND "), " AND ".length(), FontUtils.KEYWORDS_STYLER);
+		if (operator.getNrOperands() == 3
+				&& (operator == Operator.BETWEEN || operator == Operator.NOTBETWEEN))
+			ss.setStyle(dt.indexOf(" AND "), " AND ".length(),
+					FontUtils.KEYWORDS_STYLER);
 		return ss;
 	}
 
