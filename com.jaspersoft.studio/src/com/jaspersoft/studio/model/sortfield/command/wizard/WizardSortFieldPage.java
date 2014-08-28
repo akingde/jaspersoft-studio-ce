@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield.command.wizard;
 
@@ -43,9 +39,11 @@ import com.jaspersoft.studio.property.dataset.TLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
 public class WizardSortFieldPage extends WizardPage {
-	
-	public enum SHOW_TYPE{VARIABLES, FIELDS, BOTH};
-	
+
+	public enum SHOW_TYPE {
+		VARIABLES, FIELDS, BOTH
+	};
+
 	private SHOW_TYPE showType = SHOW_TYPE.BOTH;
 
 	private final class SFSelectionListener implements SelectionListener {
@@ -71,12 +69,11 @@ public class WizardSortFieldPage extends WizardPage {
 	private TableViewer tableView;
 	private Table table;
 
-	
 	public WizardSortFieldPage(JRDesignDataset jrDataset, JRDesignSortField jrSortField, SHOW_TYPE showType) {
 		this(jrDataset, jrSortField);
 		this.showType = showType;
 	}
-	
+
 	public WizardSortFieldPage(JRDesignDataset jrDataset, JRDesignSortField jrSortField) {
 		super("sortfieldpage"); //$NON-NLS-1$
 		this.jrDataset = jrDataset;
@@ -125,20 +122,20 @@ public class WizardSortFieldPage extends WizardPage {
 	private void fillTable() {
 		List<Object> objects = new ArrayList<Object>();
 		Map<String, JRSortField> sortFields = jrDataset.getSortFieldsMap();
-		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.FIELDS){
+		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.FIELDS) {
 			for (JRField f : jrDataset.getFieldsList()) {
 				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.FIELD.getName()); //$NON-NLS-1$
-				//If a field with the same name is not present or if it is present but with a different type then show it
-				if (checkIfPresent == null){
+				// If a field with the same name is not present or if it is present but with a different type then show it
+				if (checkIfPresent == null) {
 					objects.add(f);
 				}
 			}
 		}
 
-		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.VARIABLES){
+		if (showType == SHOW_TYPE.BOTH || showType == SHOW_TYPE.VARIABLES) {
 			for (JRVariable f : jrDataset.getVariablesList()) {
 				JRSortField checkIfPresent = sortFields.get(f.getName() + "|" + SortFieldTypeEnum.VARIABLE.getName()); //$NON-NLS-1$
-				if (checkIfPresent == null){
+				if (checkIfPresent == null) {
 					objects.add(f);
 				}
 			}

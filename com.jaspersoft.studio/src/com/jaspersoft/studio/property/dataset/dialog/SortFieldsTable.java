@@ -1,20 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
@@ -38,7 +36,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -121,10 +118,20 @@ public class SortFieldsTable {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
+				List<JRDesignSortField> fields = new ArrayList<JRDesignSortField>(getFields());
+				for (JRSortField f : dataset.getSortFields())
+					dataset.removeSortField(f);
+				for (JRDesignSortField f : fields)
+					try {
+						dataset.addSortField(f);
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
+
 				JRDesignSortField jrField = MSortField.createJRSortField(dataset);
 				SortFieldWizard wizard = new SortFieldWizard();
 				wizard.init(dataset, jrField);
-				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() != Dialog.OK)
 					return null;

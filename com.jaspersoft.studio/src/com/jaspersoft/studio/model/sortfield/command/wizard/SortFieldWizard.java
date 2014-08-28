@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.sortfield.command.wizard;
 
@@ -24,7 +20,7 @@ public class SortFieldWizard extends Wizard {
 	private WizardSortFieldPage page0;
 
 	private SHOW_TYPE shownElementsType = SHOW_TYPE.BOTH;
-	
+
 	public SortFieldWizard() {
 		super();
 		setWindowTitle(Messages.SortFieldWizard_Title);
@@ -35,11 +31,10 @@ public class SortFieldWizard extends Wizard {
 		page0 = new WizardSortFieldPage(jrDataSet, jrSortField, shownElementsType);
 		addPage(page0);
 	}
-	
-	public void setShownElementsType(SHOW_TYPE type){
+
+	public void setShownElementsType(SHOW_TYPE type) {
 		shownElementsType = type;
 	}
-	
 
 	@Override
 	public boolean performFinish() {
