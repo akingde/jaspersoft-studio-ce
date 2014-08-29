@@ -46,8 +46,10 @@ public abstract class AImpObject {
 		this.jrConfig = jrConfig;
 	}
 
-	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset, JRDesignExpression exp, IFile file) {
-		String str = ExpressionUtil.cachedExpressionEvaluation(exp, jrConfig); 
+	protected AFileResource findFile(MReportUnit mrunit,
+			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
+			JRDesignExpression exp, IFile file) {
+		String str = ExpressionUtil.cachedExpressionEvaluation(exp, jrConfig);
 		if (str == null || fileset.contains(str))
 			return null;
 
@@ -64,13 +66,14 @@ public abstract class AImpObject {
 		return null;
 	}
 
-	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor,
+			MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		ResourceDescriptor rd = null;
 		List<ResourceDescriptor> list = runit.getChildren();
 		for (ResourceDescriptor r : list) {
-			if (r.getName().equals(rname)) {
+			if (r.getName() != null && r.getName().equals(rname)) {
 				rd = r;
 				break;
 			}
@@ -84,7 +87,8 @@ public abstract class AImpObject {
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 		}
 
-		AFileResource mres = (AFileResource) ResourceFactory.getResource(mrunit, rd, -1);
+		AFileResource mres = (AFileResource) ResourceFactory.getResource(
+				mrunit, rd, -1);
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
@@ -117,7 +121,8 @@ public abstract class AImpObject {
 
 	protected File findFile(IFile file, String str) {
 		try {
-			InputStream is = RepositoryUtil.getInstance(jrConfig).getInputStreamFromLocation(str);
+			InputStream is = RepositoryUtil.getInstance(jrConfig)
+					.getInputStreamFromLocation(str);
 			if (is != null) {
 				File f = getTmpFile(str);
 				FileOutputStream fos = new FileOutputStream(f);
@@ -137,7 +142,9 @@ public abstract class AImpObject {
 		return FileUtils.findFile(file, str);
 	}
 
-	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img,
+			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
+			IFile file) throws Exception {
 		return findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 	}
 

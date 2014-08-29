@@ -303,8 +303,8 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	/**
-	 * Return the value for the property PROP_VERSION. If no version is set, 0 is
-	 * returned
+	 * Return the value for the property PROP_VERSION. If no version is set, 0
+	 * is returned
 	 */
 	public int getVersion() {
 		Integer i = getResourcePropertyValueAsInteger(PROP_VERSION);
@@ -471,7 +471,8 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	public void setAwsDbInstanceIdentifier(String awsDbInstanceIdentifier) {
-		setResourceProperty(PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER, awsDbInstanceIdentifier);
+		setResourceProperty(PROP_DATASOURCE_AWS_DB_INSTANCE_IDENTIFIER,
+				awsDbInstanceIdentifier);
 	}
 
 	public String getAwsDbInstanceIdentifier() {
@@ -513,7 +514,8 @@ public class ResourceDescriptor implements Serializable {
 
 	public void setPropertyMap(Map<String, String> map) {
 
-		ResourceProperty rp = new ResourceProperty(PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
+		ResourceProperty rp = new ResourceProperty(
+				PROP_DATASOURCE_CUSTOM_PROPERTY_MAP);
 
 		Iterator<String> ki = map.keySet().iterator();
 		while (ki.hasNext()) {
@@ -530,7 +532,8 @@ public class ResourceDescriptor implements Serializable {
 		Map<String, String> map = new HashMap<String, String>();
 		if (rp != null) {
 			for (int i = 0; i < rp.getProperties().size(); ++i) {
-				ResourceProperty rpChild = (ResourceProperty) rp.getProperties().get(i);
+				ResourceProperty rpChild = (ResourceProperty) rp
+						.getProperties().get(i);
 				map.put(rpChild.getName(), rpChild.getValue());
 			}
 		}
@@ -590,9 +593,18 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	public static boolean isFileType(String fileType) {
-		return CONTENT_TYPE_PDF.equals(fileType) || CONTENT_TYPE_HTML.equals(fileType) || CONTENT_TYPE_XLS.equals(fileType) || CONTENT_TYPE_RTF.equals(fileType) || CONTENT_TYPE_CSV.equals(fileType)
-				|| CONTENT_TYPE_IMAGE.equals(fileType) || TYPE_RESOURCE_BUNDLE.equals(fileType) || TYPE_FONT.equals(fileType) || TYPE_CLASS_JAR.equals(fileType) || TYPE_JRXML.equals(fileType)
-				|| TYPE_STYLE_TEMPLATE.equals(fileType) || TYPE_XML_FILE.equals(fileType);
+		return CONTENT_TYPE_PDF.equals(fileType)
+				|| CONTENT_TYPE_HTML.equals(fileType)
+				|| CONTENT_TYPE_XLS.equals(fileType)
+				|| CONTENT_TYPE_RTF.equals(fileType)
+				|| CONTENT_TYPE_CSV.equals(fileType)
+				|| CONTENT_TYPE_IMAGE.equals(fileType)
+				|| TYPE_RESOURCE_BUNDLE.equals(fileType)
+				|| TYPE_FONT.equals(fileType)
+				|| TYPE_CLASS_JAR.equals(fileType)
+				|| TYPE_JRXML.equals(fileType)
+				|| TYPE_STYLE_TEMPLATE.equals(fileType)
+				|| TYPE_XML_FILE.equals(fileType);
 	}
 
 	public void setStrictMin(boolean strictMin) {
@@ -657,7 +669,8 @@ public class ResourceDescriptor implements Serializable {
 			listItems = new java.util.ArrayList<ListItem>();
 			if (rp != null)
 				for (ResourceProperty rpChild : rp.getProperties())
-					listItems.add(new ListItem(Misc.nvl(rpChild.getValue(), rpChild.getName()), rpChild.getName()));
+					listItems.add(new ListItem(Misc.nvl(rpChild.getValue(),
+							rpChild.getName()), rpChild.getName()));
 		}
 		return listItems;
 	}
@@ -672,7 +685,8 @@ public class ResourceDescriptor implements Serializable {
 		ResourceProperty rp = new ResourceProperty(PROP_LOV);
 		List<ResourceProperty> prps = rp.getProperties();
 		for (ListItem li : listOfValues)
-			prps.add(new ResourceProperty(Misc.nvl(li.getValue(), ""), li.getLabel()));
+			prps.add(new ResourceProperty(Misc.nvl(li.getValue(), ""), li
+					.getLabel()));
 		setResourceProperty(rp);
 	}
 
@@ -746,8 +760,8 @@ public class ResourceDescriptor implements Serializable {
 
 	/**
 	 * Return the set of visible columns as a String array.... Columns name are
-	 * looked for in the property PROP_QUERY_VISIBLE_COLUMNS, all children of this
-	 * property with type PROP_QUERY_VISIBLE_COLUMN_NAME are in the list.
+	 * looked for in the property PROP_QUERY_VISIBLE_COLUMNS, all children of
+	 * this property with type PROP_QUERY_VISIBLE_COLUMN_NAME are in the list.
 	 */
 	public String[] getQueryVisibleColumns() {
 		ResourceProperty rp = getResourceProperty(PROP_QUERY_VISIBLE_COLUMNS);
@@ -782,7 +796,9 @@ public class ResourceDescriptor implements Serializable {
 		ResourceProperty rp = new ResourceProperty(PROP_QUERY_VISIBLE_COLUMNS);
 
 		for (int i = 0; i < queryVisibleColumns.length; ++i) {
-			rp.getProperties().add(new ResourceProperty(PROP_QUERY_VISIBLE_COLUMN_NAME, queryVisibleColumns[i]));
+			rp.getProperties().add(
+					new ResourceProperty(PROP_QUERY_VISIBLE_COLUMN_NAME,
+							queryVisibleColumns[i]));
 		}
 
 		setResourceProperty(rp);
@@ -797,11 +813,11 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	/**
-	 * Return the property PROP_QUERY_DATA as set of InputControlQueryDataRow the
-	 * structure is as follow: PROP_QUERY_DATA { PROP_QUERY_DATA_ROW {
-	 * PROP_QUERY_DATA_COLUMN_VALUE } } } This method is performed only once, and
-	 * the result is cached in queryDataCache. Subsequent calls to this method
-	 * will return always queryDataCache.
+	 * Return the property PROP_QUERY_DATA as set of InputControlQueryDataRow
+	 * the structure is as follow: PROP_QUERY_DATA { PROP_QUERY_DATA_ROW {
+	 * PROP_QUERY_DATA_COLUMN_VALUE } } } This method is performed only once,
+	 * and the result is cached in queryDataCache. Subsequent calls to this
+	 * method will return always queryDataCache.
 	 * 
 	 */
 	public java.util.List<InputControlQueryDataRow> getQueryData() {
@@ -821,9 +837,11 @@ public class ResourceDescriptor implements Serializable {
 
 					// Look for row details...
 					for (ResourceProperty rpRowChild : rpRow.getProperties()) {
-						if (rpRowChild.getName().equals(PROP_QUERY_DATA_ROW_COLUMN))
+						if (rpRowChild.getName().equals(
+								PROP_QUERY_DATA_ROW_COLUMN))
 							icqdr.getColumnValues().add(rpRowChild.getValue());
-						else if (rpRowChild.getName().equals(PROP_QUERY_DATA_ROW_SELECTED))
+						else if (rpRowChild.getName().equals(
+								PROP_QUERY_DATA_ROW_SELECTED))
 							icqdr.setSelected(true);
 					}
 
@@ -838,8 +856,8 @@ public class ResourceDescriptor implements Serializable {
 	/**
 	 * Convenient way to create the PROP_QUERY_DATA properties from a set of
 	 * InputControlQueryDataRow the structure will be create as follow:
-	 * PROP_QUERY_DATA { PROP_QUERY_DATA_ROW { PROP_QUERY_DATA_COLUMN_VALUE } } }
-	 * A call to this method will set to null the queryDataCache
+	 * PROP_QUERY_DATA { PROP_QUERY_DATA_ROW { PROP_QUERY_DATA_COLUMN_VALUE } }
+	 * } A call to this method will set to null the queryDataCache
 	 * 
 	 */
 	public void setQueryData(java.util.List<InputControlQueryDataRow> queryData) {
@@ -849,14 +867,18 @@ public class ResourceDescriptor implements Serializable {
 		ResourceProperty rp = new ResourceProperty(PROP_QUERY_DATA);
 
 		for (int i = 0; i < queryData.size(); ++i) {
-			InputControlQueryDataRow icqdr = (InputControlQueryDataRow) queryData.get(i);
+			InputControlQueryDataRow icqdr = (InputControlQueryDataRow) queryData
+					.get(i);
 
-			ResourceProperty rpRow = new ResourceProperty(PROP_QUERY_DATA_ROW, "" + icqdr.getValue());
+			ResourceProperty rpRow = new ResourceProperty(PROP_QUERY_DATA_ROW,
+					"" + icqdr.getValue());
 			List<ResourceProperty> prps = rpRow.getProperties();
 			if (icqdr.isSelected())
-				prps.add(new ResourceProperty(PROP_QUERY_DATA_ROW_SELECTED, "true"));
+				prps.add(new ResourceProperty(PROP_QUERY_DATA_ROW_SELECTED,
+						"true"));
 			for (String c : icqdr.getColumnValues())
-				prps.add(new ResourceProperty(PROP_QUERY_DATA_ROW_COLUMN, Misc.nvl(c)));
+				prps.add(new ResourceProperty(PROP_QUERY_DATA_ROW_COLUMN, Misc
+						.nvl(c)));
 
 			rp.getProperties().add(rpRow);
 		}
@@ -874,8 +896,8 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	/**
-	 * Replace all the properties with the specified list. The internal hashmap is
-	 * updated.
+	 * Replace all the properties with the specified list. The internal hashmap
+	 * is updated.
 	 */
 	public void setProperties(java.util.List<ResourceProperty> properties) {
 		this.properties = properties;
@@ -907,9 +929,9 @@ public class ResourceDescriptor implements Serializable {
 	 * Set a boolean resource property value.
 	 * 
 	 * @param resourcePropertyName
-	 *          the property name
+	 *            the property name
 	 * @param value
-	 *          the value
+	 *            the value
 	 * @see #setResourceProperty(String, String)
 	 * @see #getResourcePropertyValueAsBoolean(String)
 	 */
@@ -921,9 +943,9 @@ public class ResourceDescriptor implements Serializable {
 	 * Set an integer resource property value.
 	 * 
 	 * @param resourcePropertyName
-	 *          the property name
+	 *            the property name
 	 * @param value
-	 *          the value
+	 *            the value
 	 * @see #setResourceProperty(String, String)
 	 * @see #getResourcePropertyValueAsInteger(String)
 	 */
@@ -966,8 +988,8 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	/**
-	 * Return the value of the property resourcePropertyName as String Return null
-	 * if the property is not found or the [operty value is null.
+	 * Return the value of the property resourcePropertyName as String Return
+	 * null if the property is not found or the [operty value is null.
 	 * 
 	 */
 	public String getResourcePropertyValue(String resourcePropertyName) {
@@ -1079,11 +1101,12 @@ public class ResourceDescriptor implements Serializable {
 
 	public void fixStructure() {
 		for (ResourceDescriptor rd : getChildren()) {
-			ResourceProperty rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
-			if (Misc.isNullOrEmpty(rp.getValue()))
+			ResourceProperty rp = rd
+					.getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+			if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
 				rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
 			rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
-			if (Misc.isNullOrEmpty(rp.getValue()))
+			if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
 				rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
 			rd.fixStructure();
 		}
