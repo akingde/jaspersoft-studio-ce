@@ -57,15 +57,16 @@ public class FindResourceAction extends Action {
 					msp = (MServerProfile) n;
 			}
 			try {
-				IConnection c = msp.getWsClient(new Callback<IConnection>() {
-
-					@Override
-					public void completed(IConnection c) {
-						FindResourceAction.this.setEnabled(c != null && c.isSupported(Feature.SEARCHREPOSITORY));
-					}
-				});
-				if (c != null)
-					en = msp != null && c.isSupported(Feature.SEARCHREPOSITORY);
+				if (msp != null){
+					IConnection c = msp.getWsClient(new Callback<IConnection>() {
+	
+						@Override
+						public void completed(IConnection c) {
+							FindResourceAction.this.setEnabled(c != null && c.isSupported(Feature.SEARCHREPOSITORY));
+						}
+					});
+					if (c != null) en = msp != null && c.isSupported(Feature.SEARCHREPOSITORY);
+				}
 			} catch (Exception e) {
 				en = false;
 			}

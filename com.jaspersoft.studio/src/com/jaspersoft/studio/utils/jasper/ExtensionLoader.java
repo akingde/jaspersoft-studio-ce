@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.ParameterContributorFactory;
 import net.sf.jasperreports.engine.export.MatcherExportFilterMapping;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
+import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 import net.sf.jasperreports.engine.style.StyleProviderFactory;
 import net.sf.jasperreports.functions.FunctionsBundle;
@@ -53,7 +54,8 @@ public class ExtensionLoader {
 	 */
 	private static Class<?>[] commonExensionKeys = {
 		PersistenceServiceFactory.class,
-		JRQueryExecuterFactoryBundle.class,
+		QueryExecuterFactoryBundle.class,
+		//JRQueryExecuterFactoryBundle.class,
 		MatcherExportFilterMapping.class,
 		StyleProviderFactory.class,
 		DataAdapterServiceFactory.class,
@@ -164,6 +166,11 @@ public class ExtensionLoader {
 			public void run() {
 				setLoadingStart(key);
 				context.getExtensions(key);
+				if (key.equals(JRQueryExecuterFactoryBundle.class)){
+					System.out.println("aaa");
+					//Object bubba = context.getExtensions(QueryExecuterFactoryBundle.class);
+					System.out.println("bbb");
+				}
 				setLoadingEnd(key);
 			}
 		}).start();

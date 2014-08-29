@@ -341,11 +341,10 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 			
 			@Override
 			public void menuAboutToShow(IMenuManager manager) {
-				// TODO Auto-generated method stub
-				IStructuredSelection selection = (IStructuredSelection) treeViewer
-		                .getSelection();
+				IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
 		        KeyTreeNode node = (KeyTreeNode) selection.getFirstElement();
-				refactorAction.setEnabled(node.getChildren().length == 0);
+				refactorAction.setEnabled(node != null && node.getChildren().length == 0);
+				deleteAction.setEnabled(node != null);
 			}
 		});
         tree.setMenu(menu);

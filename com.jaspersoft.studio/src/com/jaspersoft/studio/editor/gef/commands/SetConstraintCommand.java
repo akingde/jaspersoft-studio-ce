@@ -39,8 +39,10 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class SetConstraintCommand.
@@ -61,6 +63,9 @@ public class SetConstraintCommand extends Command {
 
 	/** The jr design. */
 	private JasperDesign jrDesign;
+	
+	/** The jr configuration */
+	private JasperReportsConfiguration jrConfig;
 
 	/** The parent bounds. */
 	private Rectangle parentBounds;
@@ -85,7 +90,8 @@ public class SetConstraintCommand extends Command {
 	 *          the constraint
 	 */
 	public void setContext(ANode parent, ANode child, Rectangle constraint) {
-		jrDesign = child.getJasperDesign();
+		jrConfig = child.getJasperConfiguration();
+		jrDesign = jrConfig.getJasperDesign();
 		if (child.getValue() instanceof JRDesignElement) {
 			jrElement = (JRDesignElement) child.getValue();
 			newBounds = constraint;
@@ -130,7 +136,9 @@ public class SetConstraintCommand extends Command {
 					if (elementHeight>maxHeight){
 						jrElement.setHeight(maxHeight-jrElement.getY()-1);
 					}
-					adjustBand();
+					
+					
+					if (jrConfig.getPropertyBoolean(DesignerPreferencePage.P_RESIZE_CONTAINER, Boolean.TRUE)) adjustBand();
 				}
 			}
 

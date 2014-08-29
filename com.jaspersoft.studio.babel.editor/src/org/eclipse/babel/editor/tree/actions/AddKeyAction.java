@@ -42,7 +42,7 @@ public class AddKeyAction extends AbstractTreeAction {
     @Override
     public void run() {
         KeyTreeNode node = getNodeSelection();
-        String key = node.getMessageKey();
+        String key = node != null ? node.getMessageKey() : "new_key";
         String msgHead = Messages.dialog_add_head;
         String msgBody = Messages.dialog_add_body;
         InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key,
