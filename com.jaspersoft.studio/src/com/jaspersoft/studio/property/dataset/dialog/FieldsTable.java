@@ -10,11 +10,15 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -42,6 +46,7 @@ import com.jaspersoft.studio.dnd.NodeTableDropAdapter;
 import com.jaspersoft.studio.dnd.NodeTransfer;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.sortfield.command.wizard.WizardSortFieldPage.SHOW_TYPE;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -150,7 +155,8 @@ public class FieldsTable {
 		});
 		new DeleteButton() {
 			protected void afterElementDeleted(Object element) {
-				dataset.removeField(((JRDesignField) element).getName());
+				if (element != null)
+					dataset.removeField(((JRDesignField) element).getName());
 			};
 		}.createDeleteButton(bGroup, tviewer);
 
@@ -210,6 +216,7 @@ public class FieldsTable {
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
+
 			public boolean canModify(Object element, String property) {
 				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
@@ -244,9 +251,23 @@ public class FieldsTable {
 							break;
 					}
 					if (!exists) {
-						dataset.getFieldsMap().remove(field.getName());
+						String oldName = field.getName();
+						dataset.getFieldsMap().remove(oldName);
 						field.setName((String) value);
 						dataset.getFieldsMap().put(field.getName(), field);
+
+						Map<String, JRSortField> sortFields = dataset.getSortFieldsMap();
+						JRSortField sf = sortFields.get(oldName + "|" + SortFieldTypeEnum.FIELD.getName());
+						// If a field with the same name is not present or if it is present but with a different type then show it
+						if (sf != null) {
+							dataset.removeSortField(sf);
+							((JRDesignSortField) sf).setName(field.getName());
+							try {
+								dataset.addSortField(sf);
+							} catch (JRException e) {
+								e.printStackTrace();
+							}
+						}
 					}
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setValueClassName((String) value);

@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -37,6 +33,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -231,10 +229,10 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
 	}
-	
+
 	public void addFields(List<JRDesignField> fields) {
 		List<JRDesignField> allFields = ftable.getFields();
-		for(JRDesignField f : fields) {
+		for (JRDesignField f : fields) {
 			// Take care of having "valid" name for field
 			String newName = ModelUtils.getNameForField(allFields, f.getName());
 			f.setName(newName);
@@ -268,6 +266,14 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		createDataPreview(toolkit, tabFolder);
 
 		tabFolder.setSelection(0);
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				sftable.refresh();
+			}
+
+		});
 	}
 
 	private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {

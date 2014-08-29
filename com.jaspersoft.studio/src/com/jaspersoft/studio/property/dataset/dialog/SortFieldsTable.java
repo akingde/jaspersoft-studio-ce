@@ -115,7 +115,16 @@ public class SortFieldsTable {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(background);
 
-		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
+		new NewButton() {
+			protected void afterElementAdded(Object selement) {
+				try {
+					dataset.removeSortField((JRSortField) selement);
+					dataset.addSortField((JRSortField) selement);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
+		}.createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
 				List<JRDesignSortField> fields = new ArrayList<JRDesignSortField>(getFields());
@@ -139,7 +148,12 @@ public class SortFieldsTable {
 			}
 
 		});
-		new DeleteButton().createDeleteButton(bGroup, tviewer);
+		new DeleteButton() {
+			protected void afterElementDeleted(Object element) {
+				if (element != null)
+					dataset.removeSortField((JRSortField) element);
+			}
+		}.createDeleteButton(bGroup, tviewer);
 
 		new ListOrderButtons().createOrderButtons(bGroup, tviewer);
 
@@ -228,5 +242,9 @@ public class SortFieldsTable {
 			}
 			return null; //$NON-NLS-1$
 		}
+	}
+
+	public void refresh() {
+		tviewer.refresh();
 	}
 }
