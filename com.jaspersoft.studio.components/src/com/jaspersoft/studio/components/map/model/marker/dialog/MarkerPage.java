@@ -51,6 +51,7 @@ import com.buzzcoders.yasw.widgets.map.ui.MarkersPickupDialog;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.model.marker.MarkersDTO;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.EditButton;
 import com.jaspersoft.studio.swt.widgets.table.IEditElement;
@@ -71,7 +72,7 @@ public class MarkerPage extends WizardPage {
 				return;
 			v = (Item) v.clone();
 			MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
-			dialog.setValue((StandardItem) v, ModelUtils.getElementExpressionContext(null, value.getPnode()));
+			dialog.setValue((StandardItem) v, expContext);
 			if (dialog.open() == Window.OK)
 				input.set(pos, v);
 		}
@@ -82,6 +83,7 @@ public class MarkerPage extends WizardPage {
 	private TableViewer tableViewer;
 	private EditButton<Item> editButton;
 	private BasicMapInfo mapInfo;
+	private ExpressionContext expContext;
 
 	public MarkersDTO getValue() {
 		return new MarkersDTO(value.getMarkers(), value.getPnode());
@@ -174,7 +176,7 @@ public class MarkerPage extends WizardPage {
 
 				StandardItem v = new StandardItem(props);
 				MarkerDialog dialog = new MarkerDialog(Display.getDefault().getActiveShell());
-				dialog.setValue(v, ModelUtils.getElementExpressionContext(null, value.getPnode()));
+				dialog.setValue(v, expContext);
 				if (dialog.open() == Window.OK)
 					return v;
 				return null;
@@ -187,6 +189,10 @@ public class MarkerPage extends WizardPage {
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 
 		table.setFocus();
+		
+		if (value.getPnode() instanceof MMap) {
+			expContext = ((MMap)value.getPnode()).getMarkersExpressionContext();
+		}
 	}
 
 	private void buildTable(Composite composite) {
