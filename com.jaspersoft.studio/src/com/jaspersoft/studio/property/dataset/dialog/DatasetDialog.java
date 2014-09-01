@@ -402,7 +402,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		command.add(setValueCommand(MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset));
 
 		List<JRField> oldfields = ds.getFieldsList();
-		List<JRDesignField> newfields = ftable.getFields();
+		List<JRDesignField> newfields = ftable.getFields(); 
 		for (JRField f : oldfields) {
 			Boolean canceled = null;
 			for (JRDesignField newf : newfields)

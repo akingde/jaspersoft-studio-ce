@@ -198,11 +198,13 @@ public class FieldsTable {
 	}
 
 	public <T extends JRField> void setFields(List<T> fields) {
-		tviewer.setInput(fields);
+		List<T> newfields = new ArrayList<T>(fields);
+		tviewer.setInput(newfields);
 		tviewer.refresh();
+
 		for (JRField f : dataset.getFields())
 			dataset.removeField(f);
-		for (JRField f : fields)
+		for (JRField f : newfields)
 			try {
 				dataset.addField(f);
 			} catch (JRException e) {
