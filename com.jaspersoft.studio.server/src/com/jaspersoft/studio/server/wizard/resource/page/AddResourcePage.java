@@ -72,6 +72,7 @@ import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.model.datasource.MRSecureMondrianConnection;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
@@ -216,7 +217,8 @@ public class AddResourcePage extends WizardPage {
 
 				new MRMondrianSchema(oroot, MRMondrianSchema.createDescriptor(parent), -1);
 				// createOlap(oroot);
-				new MROlapUnit(oroot, MROlapUnit.createDescriptor(parent), -1);
+				if (!isSoap(root))
+					new MROlapUnit(oroot, MROlapUnit.createDescriptor(parent), -1);
 				new MRAccessGrantSchema(root, MRAccessGrantSchema.createDescriptor(parent), -1);
 			}
 			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
@@ -296,6 +298,18 @@ public class AddResourcePage extends WizardPage {
 		if (n instanceof MResource)
 			return getServerInfo((ANode) n.getRoot());
 		return null;
+	}
+
+	private boolean isSoap(ANode n) {
+		try {
+			if (n instanceof MServerProfile)
+				return !((MServerProfile) n).getWsClient().isSupported(Feature.SEARCHREPOSITORY);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (n instanceof MResource)
+			return isSoap((ANode) n.getRoot());
+		return true;
 	}
 
 	protected void createOlap(ANode root) {

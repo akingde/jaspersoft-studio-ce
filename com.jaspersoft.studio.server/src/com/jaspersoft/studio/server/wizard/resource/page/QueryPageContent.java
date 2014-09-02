@@ -98,7 +98,7 @@ public class QueryPageContent extends APageContent {
 	@Override
 	protected void rebind() {
 		ResourceDescriptor r = res.getValue();
-		if (clang != null)
+		if (clang != null && !clang.isDisposed())
 			bindingContext.bindValue(SWTObservables.observeText(clang), PojoObservables.observeValue(getProxy(r), "language")); //$NON-NLS-1$
 		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify), PojoObservables.observeValue(r, "sql")); //$NON-NLS-1$
 	}
