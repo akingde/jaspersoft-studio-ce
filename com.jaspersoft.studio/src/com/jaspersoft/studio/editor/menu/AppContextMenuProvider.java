@@ -27,6 +27,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.AContextMenuProvider;
+import com.jaspersoft.studio.editor.action.HideElementsAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
@@ -247,6 +248,15 @@ public class AppContextMenuProvider extends AContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.add(action);
 
+		//HIDE abd SHOW BAND ACTIONS
+		action = getActionRegistry().getAction(HideElementsAction.ID_VISIBLE);
+		if (action != null && action.isEnabled())
+			menu.add(action);
+		
+		action = getActionRegistry().getAction(HideElementsAction.ID_NOT_VISIBLE);
+		if (action != null && action.isEnabled())
+			menu.add(action);
+		
 
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
 		if (action != null && action.isEnabled())

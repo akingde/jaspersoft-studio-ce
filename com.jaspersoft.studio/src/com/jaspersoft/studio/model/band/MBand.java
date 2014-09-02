@@ -214,17 +214,23 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public String getDisplayText() {
 		JRDesignBand value = (JRDesignBand) getValue();
+		
+		String hiddenText = new String();
+		if (!isVisible()){
+			hiddenText = Messages.MBand_hiddenLabel;
+		}
+		
 		if (bandType.equals(BandTypeEnum.DETAIL)) {
-			String index = "";
+			String index = ""; //$NON-NLS-1$
 			if (bandIndex != -1)
-				index = " " + String.valueOf(bandIndex);
+				index = " " + String.valueOf(bandIndex); //$NON-NLS-1$
 			if (value != null)
-				return Messages.MBand_detail + index + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
+				return Messages.MBand_detail + index + " [" + value.getHeight() + "px]"+hiddenText;// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
 			return Messages.MBand_detail + index + " "; //$NON-NLS-1$
 		}
 		if (value == null)
 			return Messages.getString(bandType.getName());
-		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
+		return Messages.getString(value.getOrigin().getBandTypeValue().getName()+hiddenText);
 	}
 
 	/**
@@ -236,9 +242,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	public String getSimpleDisplayName() {
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (bandType.equals(BandTypeEnum.DETAIL) || value == null) {
-			String index = "";
+			String index = ""; //$NON-NLS-1$
 			if (bandIndex != -1)
-				index = " " + String.valueOf(bandIndex);
+				index = " " + String.valueOf(bandIndex); //$NON-NLS-1$
 			return Messages.getString(bandType.getName()) + index;
 		}
 		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
@@ -334,7 +340,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
 		splitStyleD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band_splitType"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band_splitType")); //$NON-NLS-1$
 
 		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
 				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
@@ -342,7 +348,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		desc.add(printWhenExpD);
 
 		printWhenExpD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#printWhenExpression")); //$NON-NLS-1$
 
 		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
 				Messages.common_properties);
@@ -353,7 +359,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
 		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, null);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#band"); //$NON-NLS-1$
 	}
 
 	/*

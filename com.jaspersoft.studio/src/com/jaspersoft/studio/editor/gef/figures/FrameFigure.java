@@ -32,7 +32,10 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * @author Chicu Veaceslav
  */
 public class FrameFigure extends AHandleBoundsFigure {
-
+	
+	/**
+	 * The model associated with the figure
+	 */
 	protected MGraphicElement model = null;
 	
 	protected StackGraphics2D cachedGraphics = null;
@@ -146,5 +149,12 @@ public class FrameFigure extends AHandleBoundsFigure {
 		int w = (int) Math.ceil(jrLineBox.getRightPen().getLineWidth() / 2) + 1;
 		int h = (int) Math.ceil(jrLineBox.getBottomPen().getLineWidth() / 2) + 1;
 		return new Rectangle(x, y, w, h);
+	}
+	
+	/**
+	 * Return the model associated to this figure, can be null
+	 */
+	public MGraphicElement getModel(){
+		return model;
 	}
 }

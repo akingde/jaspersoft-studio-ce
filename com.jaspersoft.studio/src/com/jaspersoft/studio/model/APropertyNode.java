@@ -32,8 +32,11 @@ import com.jaspersoft.studio.property.ElementLabelProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private boolean editable = true;
+	
 	/** The descriptors. */
 
 	public APropertyNode() {
@@ -42,13 +45,12 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 
 	public APropertyNode(ANode parent, int newIndex) {
 		super(parent, newIndex);
+		
 	}
 
 	public boolean isPropertyResettable(Object id) {
 		return true;
 	}
-
-	private boolean editable = true;
 
 	public boolean isEditable() {
 		return editable;
@@ -236,5 +238,4 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	public String getCustomPropertyTitle() {
 		return null;
 	}
-
 }

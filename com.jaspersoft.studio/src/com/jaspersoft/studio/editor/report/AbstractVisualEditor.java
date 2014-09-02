@@ -70,6 +70,7 @@ import com.jaspersoft.studio.callout.action.CreatePinAction;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.ZoomActualAction;
 import com.jaspersoft.studio.editor.action.CustomDeleteAction;
+import com.jaspersoft.studio.editor.action.HideElementsAction;
 import com.jaspersoft.studio.editor.action.MoveDetailDownAction;
 import com.jaspersoft.studio.editor.action.MoveDetailUpAction;
 import com.jaspersoft.studio.editor.action.MoveGroupDownAction;
@@ -396,7 +397,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 	}
 
-
+	/**
+	 * Force the refresh of the actions enablement and visibility
+	 * state
+	 */
+	public void forceUpdateActions(){
+		updateActions(getSelectionActions());
+	}
+	
 	
 	/*
 	 * (non-Javadoc)
@@ -676,6 +684,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		CustomDeleteAction deleteAction = new CustomDeleteAction(this);
 		registry.registerAction(deleteAction);
 
+		
+		action = new HideElementsAction(this,true);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new HideElementsAction(this,false);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		
 		action = new CopyAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());

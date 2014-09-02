@@ -20,11 +20,13 @@ import java.awt.Stroke;
 import net.sf.jasperreports.engine.base.JRBaseReport;
 
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
+import com.jaspersoft.studio.model.ANode;
 
 /*
  * The Class PageFigure.
@@ -114,6 +116,42 @@ public class ReportPageFigure extends APageFigure {
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
+	}
+	
+	/**
+	 * Override the original paintChildren to avoid to pain elements 
+	 * that are marked as not visible inside the model
+	 */
+	protected void paintChildren(Graphics graphics) {
+		for (int i = 0; i < getChildren().size(); i++) {
+			IFigure child = (IFigure) getChildren().get(i);
+			boolean elementVisible = true;
+			if (child instanceof FrameFigure){
+				ANode model = ((FrameFigure)child).getModel();
+				if (model != null) {
+					elementVisible = model.isVisible();
+					child.setVisible(elementVisible);
+				}
+			}
+			if (child.isVisible() && elementVisible) {
+				// determine clipping areas for child
+				Rectangle[] clipping = null;
+				if (getClippingStrategy() != null) {
+					clipping = getClippingStrategy().getClip(child);
+				} else {
+					// default clipping behaviour is to clip at bounds
+					clipping = new Rectangle[] { child.getBounds() };
+				}
+				// child may now paint inside the clipping areas
+				for (int j = 0; j < clipping.length; j++) {
+					if (clipping[j].intersects(graphics.getClip(Rectangle.SINGLETON))) {
+						graphics.clipRect(clipping[j]);
+						child.paint(graphics);
+						graphics.restoreState();
+					}
+				}
+			}
+		}
 	}
 
 	/*

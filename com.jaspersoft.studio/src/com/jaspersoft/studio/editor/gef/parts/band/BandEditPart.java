@@ -165,7 +165,7 @@ public class BandEditPart extends APrefFigureEditPart implements PropertyChangeL
 				|| bandTypeValue.equals(BandTypeEnum.GROUP_HEADER) || bandTypeValue.equals(BandTypeEnum.COLUMN_HEADER)
 				|| bandTypeValue.equals(BandTypeEnum.DETAIL);
 
-		BandFigure rect = new BandFigure(drawColumns);
+		BandFigure rect = new BandFigure(drawColumns, getModel());
 		rect.setForegroundColor(ColorConstants.blue);
 		setupBandFigure(rect);
 

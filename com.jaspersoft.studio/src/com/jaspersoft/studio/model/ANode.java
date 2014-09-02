@@ -61,12 +61,17 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 
 	/** The property change support. */
 	private PropertyChangeSupport propertyChangeSupport;
+	
+	/**
+	 * flag to know if the node is visible or not. The visibility can be 
+	 * set and in case of new nodes it is inherited by the parent
+	 */
+	private boolean visible = true;
 
 	/**
 	 * Instantiates a new a node.
 	 */
 	public ANode() {
-
 	}
 
 	/*
@@ -201,6 +206,8 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			unsetDependents();
 		}
 		if (newparent != null) {
+			//Inherit visibility
+			this.visible = newparent.visible;
 			register();
 			this.parent = newparent;
 			if (newIndex >= 0 && newIndex < newparent.getChildren().size())
@@ -554,5 +561,24 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	 */
 	public boolean canAcceptChildren(ANode child) {
 		return true;
+	}
+	
+	/**
+	 * Return the visibility of the node
+	 * 
+	 * @return true if the node is visible, false otherwise
+	 */
+	public boolean isVisible(){
+		return visible;
+	}
+	
+	/**
+	 * Set the visibility of the node. This dosen't affect
+	 * the visibility of the children
+ 	 * 
+	 * @param visible true if the node is visible, false otherwise
+	 */
+	public void setVisible(boolean visible){
+		this.visible = visible;
 	}
 }

@@ -18,6 +18,7 @@ import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
+import java.text.MessageFormat;
 
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.Graphics;
@@ -30,12 +31,20 @@ import com.jaspersoft.studio.editor.gef.decorator.pdf.PDFDecorator;
 import com.jaspersoft.studio.editor.gef.texture.EmptyTexture;
 import com.jaspersoft.studio.editor.gef.util.FigureTextWriter;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.band.MBand;
 
 /*
  * The Class BandFigure.
  */
 public class BandFigure extends RectangleFigure {
+	
 	public Color marginsColor = SWTResourceManager.getColor(170, 168, 255);
+	
+	/**
+	 * Model of the band 
+	 */
+	private MBand bandModel;
 	private int columnNumber = 1;
 	private int columnSpacing = 0;
 	private int columnWidth = 0;
@@ -44,6 +53,16 @@ public class BandFigure extends RectangleFigure {
 	private int marginRight = 0;
 
 	private boolean drawColumn = false;
+	
+	/**
+	 * Textual name of the band when the content is visible
+	 */
+	private String bandText;
+	
+	/**
+	 * Name of the band when the content is hidden
+	 */
+	private String hiddenText;
 	
 	/**
 	 * Paint used to color the restricted area
@@ -103,11 +122,12 @@ public class BandFigure extends RectangleFigure {
 	/**
 	 * Instantiates a new band figure.
 	 */
-	public BandFigure(boolean drawColumn) {
+	public BandFigure(boolean drawColumn, MBand model) {
 		super();
 		setLayoutManager(new FreeformLayout());
 		setOpaque(false);
 		this.drawColumn = drawColumn;
+		this.bandModel = model;
 		createTexture();
 	}
 	
@@ -121,7 +141,7 @@ public class BandFigure extends RectangleFigure {
   {
       if ( restrictedAreaTexture == null )
       {
-              Image img2 = (new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/restricted_area.png"))).getImage();
+              Image img2 = (new javax.swing.ImageIcon(PDFDecorator.class.getResource("/icons/resources/restricted_area.png"))).getImage(); //$NON-NLS-1$
               BufferedImage img = new BufferedImage(14, 14, BufferedImage.TYPE_INT_ARGB);
               img.getGraphics().drawImage(img2, 0, 0, null);
               restrictedAreaTexture = new TexturePaint( img, new java.awt.Rectangle(0,0, 14, 14) );
@@ -148,6 +168,15 @@ public class BandFigure extends RectangleFigure {
 			g.drawLine(b.x, b.y, b.x + b.width, b.y);
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 
+			//Change the text if the band is visible or not
+			if (!bandModel.isVisible()){
+				g.drawLine(b.x, b.y, b.x + b.width, b.y+b.height);
+				g.drawLine(b.x + b.width , b.y , b.x, b.y+b.height);
+				twriter.setText(hiddenText);
+			} else {
+				twriter.setText(bandText);
+			}
+			
 			twriter.painText(g, this);
 
 			if (drawColumn) {
@@ -202,6 +231,8 @@ public class BandFigure extends RectangleFigure {
 	 *          the band text
 	 */
 	public void setBandText(String bandText) {
+		this.bandText = bandText;
+		this.hiddenText = MessageFormat.format(Messages.BandFigure_hiddenFiguretext, new Object[]{bandText});
 		twriter.setText(bandText);
 	}
 

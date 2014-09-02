@@ -221,6 +221,7 @@ public class Messages extends NLS {
 	public static String ATableComboContribution_presets_label;
 	public static String ATreeWizardDataEditorComposite_Title;
 	public static String BandConstraintCommand_band_resized;
+	public static String BandFigure_hiddenFiguretext;
 	public static String BandGroupWizard_group_band;
 	public static String BandSection_height_tool_tip;
 	public static String BandSection_split_type_tool_tip;
@@ -767,6 +768,10 @@ public class Messages extends NLS {
 	public static String HandleDefaultsAction_unsetTemplate;
 	public static String HandleDefaultsAction_useTemplate;
 	public static String HeadingAction_heading;
+	public static String HideElementsAction_hideTitle;
+	public static String HideElementsAction_hideTooltiè;
+	public static String HideElementsAction_showTitle;
+	public static String HideElementsAction_showTooltip;
 	public static String HorizontalRowLayout_name;
 	public static String HorizontalRowLayout_toolTip;
 	public static String HTMLExporterPreferencePage_14;
@@ -971,6 +976,7 @@ public class Messages extends NLS {
 	public static String MaximizeContainerAction_tooltip;
 	public static String MBand_detail;
 	public static String MBand_height_description;
+	public static String MBand_hiddenLabel;
 	public static String MBand_print_when_expression_description;
 	public static String MBand_split_type_dscription;
 	public static String MBandGroupFooter_group_footer;

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.editor.gef.selection;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.SelectionManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -67,6 +69,23 @@ public class JSelectionManager extends SelectionManager {
 	}
 	
 	/**
+	 * Remove from the current selection the editpart that are not selectable
+	 * 
+	 * @param orderedSelection the current selection
+	 * @return a subset of the selection with only the selectable edit parts
+	 */
+	private IStructuredSelection removeUnselectableParts(List<?> orderedSelection){
+		List<EditPart> result = new ArrayList<EditPart>();
+		
+		for (Object obj : orderedSelection) {
+			EditPart part = (EditPart) obj;
+			if (part.isSelectable()) result.add(part);
+		}
+		
+		return new StructuredSelection(result);
+	}
+	
+	/**
 	 * Sets the selection, override the original method to store and give the status of selected primary
 	 * to the item that was primary before the setSelection. If the element isn't in the new selected items
 	 * the default behavior will be used (the primary element will be the last on the list of the new selected 
@@ -94,12 +113,12 @@ public class JSelectionManager extends SelectionManager {
 				if (!(focusedEditPart instanceof BandEditPart) && (focusedEditPart instanceof FigureEditPart)){
 					lastSelected = focusedEditPart;
 				} 
-				//If not found the last selected element will be choosed if it is in the selection
+				//If not found the last selected element will be chosen if it is in the selection
 				if (lastSelected != null && !orderedSelection.contains(lastSelected)){
 					lastSelected = null;
 				} 
-				super.setSelection(newSelection);
-				//If even the last selected element wasn't in the selection the first element of the selection will be choosed
+				super.setSelection(removeUnselectableParts(orderedSelection));
+				//If even the last selected element wasn't in the selection the first element of the selection will be chosen
 				if (lastSelected == null){
 					lastSelected = (EditPart)orderedSelection.get(0);
 				}
@@ -107,9 +126,9 @@ public class JSelectionManager extends SelectionManager {
 				itr = orderedSelection.iterator();
 				while (itr.hasNext()) {
 						part = (EditPart) itr.next();
-						part.setSelected(EditPart.SELECTED);
+						if (part.isSelectable()) part.setSelected(EditPart.SELECTED);
 				}
-				lastSelected.setSelected(EditPart.SELECTED_PRIMARY);
+				if (lastSelected.isSelectable()) lastSelected.setSelected(EditPart.SELECTED_PRIMARY);
 			}
 		}else {
 			super.deselectAll();

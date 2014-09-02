@@ -199,6 +199,7 @@ public class StackGraphics2D extends Graphics2D {
 	 * @author Orlandin Marco
 	 *
 	 */
+	@SuppressWarnings("unused")
 	private class CallDefinition implements ExecutableCommand{
 		
 		/**
@@ -273,11 +274,66 @@ public class StackGraphics2D extends Graphics2D {
 		 */
 		public void execute(){
 			try {
-				Method method = realDrawer.getClass().getMethod(getMethodName(), getTypes());
+				Method method = Graphics2D.class.getMethod(getMethodName(), getTypes());
 				method.invoke(realDrawer, getValues());
 			} catch (Exception e) {
 			  e.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * Command to call a generic method with any number of parameters. The return 
+	 * value is not saved or used. The call is done trough a static binding
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class StaticCallDefinition implements ExecutableCommand{
+		
+		/**
+		 * The id of the method to call
+		 */
+		private int methodId;
+		
+		/**
+		 * Values of the parameters
+		 */
+		private Object[] parametersValue;
+		
+		/**
+		 * The numer of parameter values actually added
+		 */
+		private int actualAddedParameters = 0;
+		
+		/**
+		 * Create the command
+		 * 
+		 * @param methodId id of the method to call, look at the StaticCallResolver class for the list of ids
+		 * @param parametersNumber the maximum number of parameter values passed with the addValue method
+		 */
+		public StaticCallDefinition(int methodId, int parametersNumber){
+			this.methodId = methodId;
+			parametersValue = new Object[parametersNumber];
+		}
+		
+		
+		/**
+		 * Add a new value for a parameter. 
+		 * 
+		 * @param newValue the new value
+		 */
+		public void addValue(Object newValue){
+			parametersValue[actualAddedParameters] = newValue;
+			actualAddedParameters++;
+		}
+		
+	
+		/**
+		 * Execute the specified command with the specified parameters values
+		 */
+		public void execute(){
+				StaticCallResolver.resolveCall(methodId, parametersValue, realDrawer);
 		}
 	}
 	
@@ -343,46 +399,39 @@ public class StackGraphics2D extends Graphics2D {
 	
 	@Override
 	public void addRenderingHints(Map<?, ?> arg0) {
-		CallDefinition call = new CallDefinition("addRenderingHints");
-		call.addType(Map.class);
+		StaticCallDefinition call = new StaticCallDefinition(0,1);
 		call.addValue(arg0);
 		stack.add(call);
 	}
 
 	@Override
 	public void setRenderingHints(Map<?, ?> arg0) {
-		CallDefinition call = new CallDefinition("setRenderingHints");
-		call.addType(Map.class);
+		StaticCallDefinition call = new StaticCallDefinition(1,1);
 		call.addValue(arg0);
 		stack.add(call);
 	}
 	
 	@Override
 	public void clip(Shape arg0) {
-		CallDefinition call = new CallDefinition("clip");
-		call.addType(Shape.class);
+		StaticCallDefinition call = new StaticCallDefinition(2,1);
+
 		call.addValue(arg0);
 		stack.add(call);
 	}
 
 	@Override
 	public void draw(Shape arg0) {
-		CallDefinition call = new CallDefinition("draw");
-		call.addType(Shape.class);
+		StaticCallDefinition call = new StaticCallDefinition(3,1);
 		call.addValue(arg0);
 		stack.add(call);
 	}
 
 	@Override
 	public void drawGlyphVector(GlyphVector arg0, float arg1, float arg2) {
-		CallDefinition call = new CallDefinition("drawGlyphVector");
-		call.addType(GlyphVector.class);
+		StaticCallDefinition call = new StaticCallDefinition(4,3);
+		
 		call.addValue(arg0);
-		
-		call.addType(float.class);
 		call.addValue(arg1);
-		
-		call.addType(float.class);
 		call.addValue(arg2);
 		
 		stack.add(call);
@@ -391,14 +440,10 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public boolean drawImage(Image arg0, AffineTransform arg1, ImageObserver arg2) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
+		StaticCallDefinition call = new StaticCallDefinition(5,3);
+		
 		call.addValue(arg0);
-		
-		call.addType(AffineTransform.class);
 		call.addValue(copyTransform(arg1));
-		
-		call.addType(ImageObserver.class);
 		call.addValue(arg2);
 		
 		stack.add(call);
@@ -408,17 +453,11 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawImage(BufferedImage arg0, BufferedImageOp arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(BufferedImage.class);
+		StaticCallDefinition call = new StaticCallDefinition(6,4);
+
 		call.addValue(arg0);
-		
-		call.addType(BufferedImageOp.class);
 		call.addValue(arg1);
-		
-		call.addType(int.class);
 		call.addValue(arg2);
-		
-		call.addType(int.class);
 		call.addValue(arg3);
 		
 		stack.add(call);
@@ -426,11 +465,9 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawRenderableImage(RenderableImage arg0, AffineTransform arg1) {
-		CallDefinition call = new CallDefinition("drawRenderableImage");
-		call.addType(RenderableImage.class);
-		call.addValue(arg0);
+		StaticCallDefinition call = new StaticCallDefinition(7,2);
 		
-		call.addType(AffineTransform.class);
+		call.addValue(arg0);
 		call.addValue(copyTransform(arg1));
 		
 		stack.add(call);
@@ -438,11 +475,9 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawRenderedImage(RenderedImage arg0, AffineTransform arg1) {
-		CallDefinition call = new CallDefinition("drawRenderedImage");
-		call.addType(RenderedImage.class);
+		StaticCallDefinition call = new StaticCallDefinition(8,2);
+	
 		call.addValue(arg0);
-		
-		call.addType(AffineTransform.class);
 		call.addValue(copyTransform(arg1));
 		
 		stack.add(call);
@@ -450,14 +485,10 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String arg0, int arg1, int arg2) {
-		CallDefinition call = new CallDefinition("drawString");
-		call.addType(String.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
+		StaticCallDefinition call = new StaticCallDefinition(9,3);
 
-		call.addType(int.class);
+		call.addValue(arg0);
+		call.addValue(arg1);
 		call.addValue(arg2);
 		
 		stack.add(call);
@@ -465,14 +496,10 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String arg0, float arg1, float arg2) {
-		CallDefinition call = new CallDefinition("drawString");
-		call.addType(String.class);
-		call.addValue(arg0);
-		
-		call.addType(float.class);
-		call.addValue(arg1);
+		StaticCallDefinition call = new StaticCallDefinition(10,3);
 
-		call.addType(float.class);
+		call.addValue(arg0);
+		call.addValue(arg1);
 		call.addValue(arg2);
 		
 		stack.add(call);
@@ -480,14 +507,10 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(AttributedCharacterIterator arg0, int arg1, int arg2) {
-		CallDefinition call = new CallDefinition("drawString");
-		call.addType(AttributedCharacterIterator.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
+		StaticCallDefinition call = new StaticCallDefinition(11,3);
 
-		call.addType(int.class);
+		call.addValue(arg0);
+		call.addValue(arg1);
 		call.addValue(arg2);
 		
 		stack.add(call);
@@ -495,14 +518,10 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(AttributedCharacterIterator arg0, float arg1, float arg2) {
-		CallDefinition call = new CallDefinition("drawString");
-		call.addType(AttributedCharacterIterator.class);
-		call.addValue(arg0);
-		
-		call.addType(float.class);
-		call.addValue(arg1);
+		StaticCallDefinition call = new StaticCallDefinition(12,3);
 
-		call.addType(float.class);
+		call.addValue(arg0);
+		call.addValue(arg1);
 		call.addValue(arg2);
 		
 		stack.add(call);
@@ -510,13 +529,493 @@ public class StackGraphics2D extends Graphics2D {
 
 	@Override
 	public void fill(Shape arg0) {
-		CallDefinition call = new CallDefinition("fill");
-		call.addType(Shape.class);
+		StaticCallDefinition call = new StaticCallDefinition(13,1);
+		
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+	
+
+	@Override
+	public boolean hit(Rectangle arg0, Shape arg1, boolean arg2) {
+		StaticCallDefinition call = new StaticCallDefinition(14,3);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public void rotate(double arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(15,1);
+
 		call.addValue(arg0);
 		
 		stack.add(call);
 	}
 
+	@Override
+	public void rotate(double arg0, double arg1, double arg2) {
+		StaticCallDefinition call = new StaticCallDefinition(16,3);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void scale(double arg0, double arg1) {
+		StaticCallDefinition call = new StaticCallDefinition(17,2);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setBackground(Color arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(18,1);
+
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setComposite(Composite arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(19,1);
+		
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setPaint(Paint arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(20,1);
+
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setRenderingHint(Key arg0, Object arg1) {
+		StaticCallDefinition call = new StaticCallDefinition(21,2);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		
+		stack.add(call);
+	}
+
+
+
+	@Override
+	public void setStroke(Stroke arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(22,1);
+
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setTransform(AffineTransform arg0) {
+		if (!statusRestorer.containsKey(arg0)){
+			//It's not a status restoring operation
+			StaticCallDefinition call = new StaticCallDefinition(23,1);
+			call.addValue(copyTransform(arg0));
+			stack.add(call);
+		} else {
+			//status restoring operation
+			BackupProperty backup = statusRestorer.get(arg0);
+			RestoreProperty call = new RestoreProperty("setTransform", backup);
+			stack.add(call);
+		}
+	}
+
+	@Override
+	public void shear(double arg0, double arg1) {
+		StaticCallDefinition call = new StaticCallDefinition(24,2);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void transform(AffineTransform arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(25,1);
+		
+		call.addValue(copyTransform(arg0));
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void translate(int arg0, int arg1) {
+		StaticCallDefinition call = new StaticCallDefinition(26,2);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void translate(double arg0, double arg1) {
+		StaticCallDefinition call = new StaticCallDefinition(27,2);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		
+		stack.add(call);
+
+	}
+
+	@Override
+	public void clearRect(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(28,4);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void clipRect(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(29,4);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void copyArea(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+		StaticCallDefinition call = new StaticCallDefinition(30,6);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		
+		stack.add(call);
+	}
+
+
+	@Override
+	public void drawArc(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+		StaticCallDefinition call = new StaticCallDefinition(31,6);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public boolean drawImage(Image arg0, int arg1, int arg2, ImageObserver arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(32,4);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public boolean drawImage(Image arg0, int arg1, int arg2, Color arg3, ImageObserver arg4) {
+		StaticCallDefinition call = new StaticCallDefinition(33,5);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, ImageObserver arg5) {
+		StaticCallDefinition call = new StaticCallDefinition(34,6);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, Color arg5, ImageObserver arg6) {
+		StaticCallDefinition call = new StaticCallDefinition(35,7);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		call.addValue(arg6);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, ImageObserver arg9) {
+		StaticCallDefinition call = new StaticCallDefinition(36,10);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		call.addValue(arg6);
+		call.addValue(arg7);
+		call.addValue(arg8);
+		call.addValue(arg9);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, Color arg9, ImageObserver arg10) {
+		StaticCallDefinition call = new StaticCallDefinition(37,11);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		call.addValue(arg6);
+		call.addValue(arg7);
+		call.addValue(arg8);
+		call.addValue(arg9);
+		call.addValue(arg10);
+		
+		stack.add(call);
+		return false;
+	}
+
+	@Override
+	public void drawLine(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(38,4);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void drawOval(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(39,4);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void drawPolygon(int[] arg0, int[] arg1, int arg2) {
+		StaticCallDefinition call = new StaticCallDefinition(40,3);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void drawPolyline(int[] arg0, int[] arg1, int arg2) {
+		StaticCallDefinition call = new StaticCallDefinition(41,3);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void drawRoundRect(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+		StaticCallDefinition call = new StaticCallDefinition(42,6);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void fillArc(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+		StaticCallDefinition call = new StaticCallDefinition(43,6);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void fillOval(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(44,4);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void fillPolygon(int[] arg0, int[] arg1, int arg2) {
+		StaticCallDefinition call = new StaticCallDefinition(45,3);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void fillRect(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(46,4);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void fillRoundRect(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+		StaticCallDefinition call = new StaticCallDefinition(47,6);
+
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		call.addValue(arg4);
+		call.addValue(arg5);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setClip(Shape arg0) {
+		if (!statusRestorer.containsKey(arg0)){
+			//It's not a status restoring operation
+			StaticCallDefinition call = new StaticCallDefinition(48,1);
+			call.addValue(arg0);
+			stack.add(call);
+		} else {
+			//status restoring operation
+			BackupProperty backup = statusRestorer.get(arg0);
+			RestoreProperty call = new RestoreProperty("setClip", backup);
+			stack.add(call);
+		}
+	}
+
+	@Override
+	public void setClip(int arg0, int arg1, int arg2, int arg3) {
+		StaticCallDefinition call = new StaticCallDefinition(49,4);
+		
+		call.addValue(arg0);
+		call.addValue(arg1);
+		call.addValue(arg2);
+		call.addValue(arg3);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setColor(Color arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(50,1);
+
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setFont(Font arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(51,1);
+		
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setPaintMode() {
+		StaticCallDefinition call = new StaticCallDefinition(52,0);
+		
+		stack.add(call);
+	}
+
+	@Override
+	public void setXORMode(Color arg0) {
+		StaticCallDefinition call = new StaticCallDefinition(53,1);
+		
+		call.addValue(arg0);
+		
+		stack.add(call);
+	}
+	
 	@Override
 	public Color getBackground() {
 		return realDrawer.getBackground();
@@ -565,625 +1064,7 @@ public class StackGraphics2D extends Graphics2D {
 		statusRestorer.put(bindingReference, backupCommand);
 		return bindingReference;
 	}
-
-	@Override
-	public boolean hit(Rectangle arg0, Shape arg1, boolean arg2) {
-		CallDefinition call = new CallDefinition("hit");
-		call.addType(Rectangle.class);
-		call.addValue(arg0);
-		
-		call.addType(Shape.class);
-		call.addValue(arg1);
-		
-		call.addType(boolean.class);
-		call.addValue(arg2);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public void rotate(double arg0) {
-		CallDefinition call = new CallDefinition("rotate");
-		call.addType(double.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void rotate(double arg0, double arg1, double arg2) {
-		CallDefinition call = new CallDefinition("rotate");
-		call.addType(double.class);
-		call.addValue(arg0);
-		
-		call.addType(double.class);
-		call.addValue(arg1);
-		
-		call.addType(double.class);
-		call.addValue(arg2);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void scale(double arg0, double arg1) {
-		CallDefinition call = new CallDefinition("scale");
-		call.addType(double.class);
-		call.addValue(arg0);
-		
-		call.addType(double.class);
-		call.addValue(arg1);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setBackground(Color arg0) {
-		CallDefinition call = new CallDefinition("setBackground");
-		call.addType(Color.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setComposite(Composite arg0) {
-		CallDefinition call = new CallDefinition("setComposite");
-		call.addType(Composite.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setPaint(Paint arg0) {
-		CallDefinition call = new CallDefinition("setPaint");
-		call.addType(Paint.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setRenderingHint(Key arg0, Object arg1) {
-		CallDefinition call = new CallDefinition("setRenderingHint");
-		call.addType(Key.class);
-		call.addValue(arg0);
-		
-		call.addType(Object.class);
-		call.addValue(arg1);
-		
-		stack.add(call);
-	}
-
-
-
-	@Override
-	public void setStroke(Stroke arg0) {
-		CallDefinition call = new CallDefinition("setStroke");
-		call.addType(Stroke.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setTransform(AffineTransform arg0) {
-		if (!statusRestorer.containsKey(arg0)){
-			//It's not a status restoring operation
-			CallDefinition call = new CallDefinition("setTransform");
-			call.addType(AffineTransform.class);
-			call.addValue(copyTransform(arg0));
-			stack.add(call);
-		} else {
-			//status restoring operation
-			BackupProperty backup = statusRestorer.get(arg0);
-			RestoreProperty call = new RestoreProperty("setTransform", backup);
-			stack.add(call);
-		}
-	}
-
-	@Override
-	public void shear(double arg0, double arg1) {
-		CallDefinition call = new CallDefinition("shear");
-		call.addType(double.class);
-		call.addValue(arg0);
-		
-		call.addType(double.class);
-		call.addValue(arg1);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void transform(AffineTransform arg0) {
-		CallDefinition call = new CallDefinition("transform");
-		call.addType(AffineTransform.class);
-		call.addValue(copyTransform(arg0));
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void translate(int arg0, int arg1) {
-		CallDefinition call = new CallDefinition("translate");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void translate(double arg0, double arg1) {
-		CallDefinition call = new CallDefinition("translate");
-		call.addType(double.class);
-		call.addValue(arg0);
-		
-		call.addType(double.class);
-		call.addValue(arg1);
-		
-		stack.add(call);
-
-	}
-
-	@Override
-	public void clearRect(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("clearRect");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void clipRect(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("clipRect");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void copyArea(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-		CallDefinition call = new CallDefinition("copyArea");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public Graphics create() {
-		return realDrawer.create();
-	}
-
-	@Override
-	public void dispose() {
-		realDrawer.dispose();
-	}
-
-	@Override
-	public void drawArc(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-		CallDefinition call = new CallDefinition("drawArc");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public boolean drawImage(Image arg0, int arg1, int arg2, ImageObserver arg3) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(ImageObserver.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public boolean drawImage(Image arg0, int arg1, int arg2, Color arg3, ImageObserver arg4) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(Color.class);
-		call.addValue(arg3);
-		
-		call.addType(ImageObserver.class);
-		call.addValue(arg4);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, ImageObserver arg5) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(ImageObserver.class);
-		call.addValue(arg5);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, Color arg5, ImageObserver arg6) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(Color.class);
-		call.addValue(arg5);
-		
-		call.addType(ImageObserver.class);
-		call.addValue(arg6);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, ImageObserver arg9) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		call.addType(int.class);
-		call.addValue(arg6);
-		
-		call.addType(int.class);
-		call.addValue(arg7);
-		
-		call.addType(int.class);
-		call.addValue(arg8);
-		
-		call.addType(ImageObserver.class);
-		call.addValue(arg9);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public boolean drawImage(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, Color arg9, ImageObserver arg10) {
-		CallDefinition call = new CallDefinition("drawImage");
-		call.addType(Image.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		call.addType(int.class);
-		call.addValue(arg6);
-		
-		call.addType(int.class);
-		call.addValue(arg7);
-		
-		call.addType(int.class);
-		call.addValue(arg8);
-		
-		call.addType(Color.class);
-		call.addValue(arg9);
-		
-		call.addType(ImageObserver.class);
-		call.addValue(arg10);
-		
-		stack.add(call);
-		return false;
-	}
-
-	@Override
-	public void drawLine(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("drawLine");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void drawOval(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("drawOval");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void drawPolygon(int[] arg0, int[] arg1, int arg2) {
-		CallDefinition call = new CallDefinition("drawPolygon");
-		call.addType(int[].class);
-		call.addValue(arg0);
-		
-		call.addType(int[].class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void drawPolyline(int[] arg0, int[] arg1, int arg2) {
-		CallDefinition call = new CallDefinition("drawPolyline");
-		call.addType(int[].class);
-		call.addValue(arg0);
-		
-		call.addType(int[].class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void drawRoundRect(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-		CallDefinition call = new CallDefinition("drawRoundRect");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void fillArc(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-		CallDefinition call = new CallDefinition("fillArc");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void fillOval(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("fillOval");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void fillPolygon(int[] arg0, int[] arg1, int arg2) {
-		CallDefinition call = new CallDefinition("fillPolygon");
-		call.addType(int[].class);
-		call.addValue(arg0);
-		
-		call.addType(int[].class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void fillRect(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("fillRect");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void fillRoundRect(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-		CallDefinition call = new CallDefinition("fillRoundRect");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		call.addType(int.class);
-		call.addValue(arg4);
-		
-		call.addType(int.class);
-		call.addValue(arg5);
-		
-		stack.add(call);
-	}
-
+	
 	@Override
 	public Shape getClip() {
 		BackupProperty backupCommand = new BackupProperty("getClip");
@@ -1214,71 +1095,12 @@ public class StackGraphics2D extends Graphics2D {
 	}
 
 	@Override
-	public void setClip(Shape arg0) {
-		if (!statusRestorer.containsKey(arg0)){
-			//It's not a status restoring operation
-			CallDefinition call = new CallDefinition("setClip");
-			call.addType(Shape.class);
-			call.addValue(arg0);
-			stack.add(call);
-		} else {
-			//status restoring operation
-			BackupProperty backup = statusRestorer.get(arg0);
-			RestoreProperty call = new RestoreProperty("setClip", backup);
-			stack.add(call);
-		}
+	public Graphics create() {
+		return realDrawer.create();
 	}
 
 	@Override
-	public void setClip(int arg0, int arg1, int arg2, int arg3) {
-		CallDefinition call = new CallDefinition("setClip");
-		call.addType(int.class);
-		call.addValue(arg0);
-		
-		call.addType(int.class);
-		call.addValue(arg1);
-		
-		call.addType(int.class);
-		call.addValue(arg2);
-		
-		call.addType(int.class);
-		call.addValue(arg3);
-		
-		stack.add(call);
+	public void dispose() {
+		realDrawer.dispose();
 	}
-
-	@Override
-	public void setColor(Color arg0) {
-		CallDefinition call = new CallDefinition("setColor");
-		call.addType(Color.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setFont(Font arg0) {
-		CallDefinition call = new CallDefinition("setFont");
-		call.addType(Font.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setPaintMode() {
-		CallDefinition call = new CallDefinition("setPaintMode");
-		
-		stack.add(call);
-	}
-
-	@Override
-	public void setXORMode(Color arg0) {
-		CallDefinition call = new CallDefinition("setXORMode");
-		call.addType(Color.class);
-		call.addValue(arg0);
-		
-		stack.add(call);
-	}
-
 }
