@@ -1087,13 +1087,20 @@ public class ResourceDescriptor implements Serializable {
 	}
 
 	public void fixStructure() {
+		ResourceProperty rp = getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+		if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
+			removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+		rp = getProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
+		if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
+			removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
 		for (ResourceDescriptor rd : getChildren()) {
-			ResourceProperty rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
-			if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
-				rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
-			rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
-			if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
-				rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
+			// ResourceProperty rp =
+			// rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+			// if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
+			// rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
+			// rp = rd.getProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
+			// if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
+			// rd.removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MIN_VALUE);
 			rd.fixStructure();
 		}
 	}
