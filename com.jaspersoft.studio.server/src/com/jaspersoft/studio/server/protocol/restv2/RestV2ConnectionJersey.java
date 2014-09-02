@@ -361,7 +361,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				if (!r.getIsNew() && r.isDirty1()) {
 					addOrModifyResource(monitor, r, null);
 					r.setDirty(false);
-				}
+				} else
+					prepareResource(monitor, r, null);
 			}
 		}
 	}

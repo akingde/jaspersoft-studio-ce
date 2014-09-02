@@ -241,7 +241,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					rd = c.move(monitor, rd, destFolderURI);
-				}
+				} else
+					throw e;
 			}
 		}
 		rd.setChildrenDirty(false);
@@ -258,7 +259,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					rd = c.copy(monitor, rd, destFolderURI);
-				}
+				} else
+					throw e;
 			}
 		}
 		rd.setChildrenDirty(false);
@@ -275,7 +277,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					rd = c.addOrModifyResource(monitor, rd, inputFile);
-				}
+				} else
+					throw e;
 			}
 		}
 		rd.setChildrenDirty(false);
@@ -292,7 +295,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					rd = c.modifyReportUnitResource(monitor, runit, rd, inFile);
-				}
+				} else
+					throw e;
 			}
 		}
 		rd.setChildrenDirty(false);
@@ -309,7 +313,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					c.delete(monitor, rd);
-				}
+				} else
+					throw e;
 			}
 		}
 	}
@@ -324,7 +329,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					c.delete(monitor, rd, runit);
-				}
+				} else
+					throw e;
 			}
 		}
 	}
@@ -356,7 +362,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					c.cancelReport(monitor, repExec);
-				}
+				} else
+					throw e;
 			}
 		}
 	}
@@ -386,7 +393,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					c.findResources(monitor, callback);
-				}
+				} else
+					throw e;
 			}
 		}
 	}
@@ -411,7 +419,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					c.reorderInputControls(uri, rd, monitor);
-				}
+				} else
+					throw e;
 			}
 		}
 	}
@@ -431,7 +440,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					return c.initInputControls(uri, monitor);
-				}
+				} else
+					throw e;
 			}
 		}
 		ResourceDescriptor rd = new ResourceDescriptor();
@@ -450,7 +460,8 @@ public class ProxyConnection implements IConnection {
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
 					return c.cascadeInputControls(runit, ics, monitor);
-				}
+				} else
+					throw e;
 			}
 		}
 		return null;
@@ -469,7 +480,8 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					return c.importMetaData(options, monitor);
-				}
+				} else
+					throw e;
 			}
 		}
 		return null;
@@ -484,7 +496,8 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					return c.exportMetaData(options, monitor);
-				}
+				} else
+					throw e;
 			}
 		}
 		return null;
