@@ -120,18 +120,21 @@ public class ResourcePageContent extends APageContent {
 		tname = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
+		gd.widthHint = 500;
 		tname.setLayoutData(gd);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_id);
 		tid = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
+		gd.widthHint = 500;
 		tid.setLayoutData(gd);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_description);
 		tdesc = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
 		gd = new GridData(GridData.FILL_BOTH);
-		gd.minimumHeight = 100;
+		gd.heightHint = 100;
+		gd.widthHint = 500;
 		gd.horizontalSpan = 2;
 		tdesc.setLayoutData(gd);
 
@@ -200,8 +203,6 @@ public class ResourcePageContent extends APageContent {
 	public String getHelpContext() {
 		return "com.jaspersoft.studio.doc.editResource"; //$NON-NLS-1$
 	}
-
-
 
 	@Override
 	public boolean isPageComplete() {

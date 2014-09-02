@@ -138,11 +138,11 @@ public class ProxyConnection implements IConnection {
 					HttpResponseException he = (HttpResponseException) e;
 					if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
 						rd = soap.get(monitor, rd, f);
-						rd.setDirty(false);
+						rd.setChildrenDirty(false);
 						return rd;
 					} else if (he.getStatusCode() == 403) {
 						rd = soap.get(monitor, rd, f);
-						rd.setDirty(false);
+						rd.setChildrenDirty(false);
 						return rd;
 					} else if (he.getStatusCode() == 401) {
 						if (!error401) {
@@ -156,7 +156,7 @@ public class ProxyConnection implements IConnection {
 				throw e;
 			}
 		if (rd != null)
-			rd.setDirty(false);
+			rd.setChildrenDirty(false);
 		error401 = false;
 		return rd;
 	}
@@ -180,7 +180,7 @@ public class ProxyConnection implements IConnection {
 																				// {
 					list = soap.list(monitor, rd);
 					for (ResourceDescriptor r : list)
-						r.setDirty(false);
+						r.setChildrenDirty(false);
 					return list;
 				} else if (he.getStatusCode() == 401) {
 					if (!error401) {
@@ -194,7 +194,7 @@ public class ProxyConnection implements IConnection {
 			throw e;
 		}
 		for (ResourceDescriptor r : list)
-			r.setDirty(false);
+			r.setChildrenDirty(false);
 		error401 = false;
 		return list;
 	}
@@ -212,7 +212,7 @@ public class ProxyConnection implements IConnection {
 																				// {
 					list = soap.listDatasources(monitor, f);
 					for (ResourceDescriptor r : list)
-						r.setDirty(false);
+						r.setChildrenDirty(false);
 					return list;
 				} else if (he.getStatusCode() == 401) {
 					if (!error401) {
@@ -226,7 +226,7 @@ public class ProxyConnection implements IConnection {
 			throw e;
 		}
 		for (ResourceDescriptor r : list)
-			r.setDirty(false);
+			r.setChildrenDirty(false);
 		error401 = false;
 		return list;
 	}
@@ -244,7 +244,7 @@ public class ProxyConnection implements IConnection {
 				}
 			}
 		}
-		rd.setDirty(false);
+		rd.setChildrenDirty(false);
 		return rd;
 	}
 
@@ -261,7 +261,7 @@ public class ProxyConnection implements IConnection {
 				}
 			}
 		}
-		rd.setDirty(false);
+		rd.setChildrenDirty(false);
 		return rd;
 	}
 
@@ -278,7 +278,7 @@ public class ProxyConnection implements IConnection {
 				}
 			}
 		}
-		rd.setDirty(false);
+		rd.setChildrenDirty(false);
 		return rd;
 	}
 
@@ -295,7 +295,7 @@ public class ProxyConnection implements IConnection {
 				}
 			}
 		}
-		rd.setDirty(false);
+		rd.setChildrenDirty(false);
 		return rd;
 	}
 

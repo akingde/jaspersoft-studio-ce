@@ -358,7 +358,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	private void prepareResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		if (!rd.getIsNew() && rd.getChildren() != null) {
 			for (ResourceDescriptor r : rd.getChildren()) {
-				if (!r.getIsNew() && r.isDirty()) {
+				if (!r.getIsNew() && r.isDirty1()) {
 					addOrModifyResource(monitor, r, null);
 					r.setDirty(false);
 				}
@@ -381,7 +381,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 	@Override
 	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
-		if (rd.getIsReference() && (rd.isDirty() || rd.getHasData())) {
+		if (rd.getIsReference() && (rd.hasDirtyChildren() || rd.getHasData())) {
 			// ResourceDescriptor r = new ResourceDescriptor();
 			// r.setUriString(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
 			// r.setWsType(rd.getWsType());

@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
-
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
@@ -69,7 +67,7 @@ public class Soap2Rest {
 			rd.setIsReference(true);
 		if (rd.getIsReference())
 			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
-		if (!rd.getIsNew() && !rd.isDirty())
+		if (!rd.getIsNew() && !rd.hasDirtyChildren())
 			return new ClientReference(Misc.nvl(rd.getReferenceUri(), rd.getUriString()));
 		ClientResource<?> res = getResource(rc, rd);
 		if (rd.getIsNew())
