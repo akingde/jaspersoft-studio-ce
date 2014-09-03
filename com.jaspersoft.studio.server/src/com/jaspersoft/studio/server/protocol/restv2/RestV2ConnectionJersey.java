@@ -269,7 +269,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Builder req = tgt.request().header("Content-Location", rd.getUriString()).header("Content-Length", "0");
+		Builder req = tgt.request().header("Content-Location", rd.getUriString());//.header("Content-Length", "0");
 		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {

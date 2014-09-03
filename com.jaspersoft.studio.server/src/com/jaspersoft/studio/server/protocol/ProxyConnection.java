@@ -243,7 +243,8 @@ public class ProxyConnection implements IConnection {
 					rd = c.move(monitor, rd, destFolderURI);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -261,7 +262,8 @@ public class ProxyConnection implements IConnection {
 					rd = c.copy(monitor, rd, destFolderURI);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -279,7 +281,8 @@ public class ProxyConnection implements IConnection {
 					rd = c.addOrModifyResource(monitor, rd, inputFile);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -297,7 +300,8 @@ public class ProxyConnection implements IConnection {
 					rd = c.modifyReportUnitResource(monitor, runit, rd, inFile);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -315,7 +319,8 @@ public class ProxyConnection implements IConnection {
 					c.delete(monitor, rd);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 	}
 
@@ -331,7 +336,8 @@ public class ProxyConnection implements IConnection {
 					c.delete(monitor, rd, runit);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 	}
 
@@ -364,7 +370,8 @@ public class ProxyConnection implements IConnection {
 					c.cancelReport(monitor, repExec);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 	}
 
@@ -395,7 +402,8 @@ public class ProxyConnection implements IConnection {
 					c.findResources(monitor, callback);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 	}
 
@@ -421,7 +429,8 @@ public class ProxyConnection implements IConnection {
 					c.reorderInputControls(uri, rd, monitor);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
 	}
 
@@ -442,12 +451,13 @@ public class ProxyConnection implements IConnection {
 					return c.initInputControls(uri, monitor);
 				} else
 					throw e;
-			}
+			} else
+				throw e;
 		}
-		ResourceDescriptor rd = new ResourceDescriptor();
-		rd.setUriString(WSClientHelper.getReportUnitUri(uri));
-		rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
-		return rd;
+		// ResourceDescriptor rd = new ResourceDescriptor();
+		// rd.setUriString(WSClientHelper.getReportUnitUri(uri));
+		// rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
+		// return rd;
 	}
 
 	@Override
@@ -462,9 +472,9 @@ public class ProxyConnection implements IConnection {
 					return c.cascadeInputControls(runit, ics, monitor);
 				} else
 					throw e;
-			}
-		}
-		return null;
+			} else
+				throw e;
+		} 
 	}
 
 	@Override
@@ -482,9 +492,9 @@ public class ProxyConnection implements IConnection {
 					return c.importMetaData(options, monitor);
 				} else
 					throw e;
-			}
-		}
-		return null;
+			} else
+				throw e;
+		} 
 	}
 
 	@Override
@@ -498,9 +508,9 @@ public class ProxyConnection implements IConnection {
 					return c.exportMetaData(options, monitor);
 				} else
 					throw e;
-			}
-		}
-		return null;
+			} else
+				throw e;
+		} 
 	}
 
 }

@@ -98,13 +98,13 @@ public class PasteResourceAction extends Action {
 	public void run() {
 		final ANode parent = getSelected();
 		final List<?> list = (List<?>) Clipboard.getDefault().getContents();
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+		ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 		try {
 			pm.run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
 						INode root = parent.getRoot();
-						final String puri = parent instanceof MResource ? ((MResource) parent).getValue().getUriString() : "";
+						final String puri = parent instanceof MResource ? ((MResource) parent).getValue().getUriString() : ""; //$NON-NLS-1$
 						doWork(monitor, parent, list);
 						ANode p = parent;
 						if (parent instanceof MResource)
@@ -154,7 +154,7 @@ public class PasteResourceAction extends Action {
 		IConnection ws = sp.getWsClient(monitor);
 		Set<ANode> toRefresh = new HashSet<ANode>();
 
-		monitor.beginTask("Paste elements to: " + dURI, list.size());
+		monitor.beginTask(Messages.PasteResourceAction_1 + dURI, list.size());
 		for (Object obj : list) {
 			if (obj instanceof MResource && obj instanceof ICopyable) {
 				MResource m = (MResource) obj;
@@ -166,7 +166,7 @@ public class PasteResourceAction extends Action {
 						toRefresh.add(m.getParent());
 					if (!isSameServer(parent, m)) {
 						IConnection mc = m.getWsClient();
-						File file = FileUtils.createTempFile("tmp", "file");
+						File file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
 						try {
 							origin = mc.get(monitor, origin, file);
 							origin.setData(Base64.encodeBase64(net.sf.jasperreports.eclipse.util.FileUtils.getBytes(file)));
@@ -175,7 +175,7 @@ public class PasteResourceAction extends Action {
 							file = null;
 						}
 						if (parent instanceof MFolder) {
-							origin.setUriString(dURI + "/" + origin.getName());
+							origin.setUriString(dURI + "/" + origin.getName()); //$NON-NLS-1$
 							ws.addOrModifyResource(monitor, origin, file);
 						} else if (parent instanceof MReportUnit)
 							saveToReportUnit(monitor, parent, ws, origin);
@@ -188,7 +188,7 @@ public class PasteResourceAction extends Action {
 							ws.copy(monitor, origin, dURI);
 					} else if (parent instanceof MReportUnit) {
 						if (!(m.getParent() instanceof MFolder) && m.getParent() instanceof MResource) {
-							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files"))
+							if (origin.getParentFolder() != null && !origin.getParentFolder().endsWith("_files")) //$NON-NLS-1$
 								origin.setIsReference(true);
 						}
 						saveToReportUnit(monitor, parent, ws, origin);
@@ -224,14 +224,14 @@ public class PasteResourceAction extends Action {
 			rd.setIsNew(true);
 			rd.setIsReference(true);
 			rd.setReferenceUri(origin.getUriString());
-			rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");
+			rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			if (ResourceFactory.isFileResourceType(origin))
 				rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 			else
 				rd.setWsType(origin.getWsType());
-			rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName());
+			rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			file = FileUtils.createTempFile("tmp", "file");
+			file = FileUtils.createTempFile("tmp", "file"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			try {
 				rd = ws.get(monitor, origin, file);
@@ -262,8 +262,8 @@ public class PasteResourceAction extends Action {
 
 	protected ResourceDescriptor doPasteIntoReportUnit(ResourceDescriptor prd, ResourceDescriptor origin) {
 		String ruuri = prd.getUriString();
-		origin.setParentFolder(ruuri + "_files");
-		origin.setUriString(ruuri + "_files/" + origin.getName());
+		origin.setParentFolder(ruuri + "_files"); //$NON-NLS-1$
+		origin.setUriString(ruuri + "_files/" + origin.getName()); //$NON-NLS-1$
 		origin.setIsNew(true);
 		origin.setName(getRName(origin.getName(), prd.getChildren()));
 		origin.setLabel(origin.getLabel());
@@ -277,7 +277,7 @@ public class PasteResourceAction extends Action {
 		for (int i = 0; i < children.size(); i++) {
 			ResourceDescriptor r = (ResourceDescriptor) children.get(i);
 			if (n.equals(r.getName())) {
-				n = name + "_" + j;
+				n = name + "_" + j; //$NON-NLS-1$
 				i = 0;
 				j++;
 			}
@@ -289,7 +289,7 @@ public class PasteResourceAction extends Action {
 		if (p instanceof MResource)
 			WSClientHelper.refreshResource((MResource) p, monitor);
 		else if (p instanceof MServerProfile) {
-			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(monitor), "/", monitor, 2);
+			WSClientHelper.listFolder(((MServerProfile) p), ((MServerProfile) p).getWsClient(monitor), Messages.PasteResourceAction_15, monitor, 2);
 		}
 	}
 }

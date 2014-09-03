@@ -769,7 +769,7 @@ public class Messages extends NLS {
 	public static String HandleDefaultsAction_useTemplate;
 	public static String HeadingAction_heading;
 	public static String HideElementsAction_hideTitle;
-	public static String HideElementsAction_hideTooltiè;
+	public static String HideElementsAction_hideTooltiï¿½;
 	public static String HideElementsAction_showTitle;
 	public static String HideElementsAction_showTooltip;
 	public static String HorizontalRowLayout_name;
@@ -1424,6 +1424,8 @@ public class Messages extends NLS {
 	public static String ParametersTable_isForPrompt;
 	public static String ParametersTable_name;
 	public static String PasteFormatAction_title;
+	public static String PasteResourceAction_1;
+	public static String PasteResourceAction_15;
 	public static String PatternPage_currency;
 	public static String PatternPage_date;
 	public static String PatternPage_description;
