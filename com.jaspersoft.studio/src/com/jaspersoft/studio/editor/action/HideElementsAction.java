@@ -140,7 +140,7 @@ public class HideElementsAction extends ACachedSelectionAction {
 			setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/show.png")); //$NON-NLS-1$
 		} else {
 			setText(Messages.HideElementsAction_hideTitle);
-			setToolTipText(Messages.HideElementsAction_hideTooltiè);
+			setToolTipText(Messages.HideElementsAction_hideTooltip);
 			setId(ID_NOT_VISIBLE);
 			setImageDescriptor(JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/resources/hide.png")); //$NON-NLS-1$
 		}

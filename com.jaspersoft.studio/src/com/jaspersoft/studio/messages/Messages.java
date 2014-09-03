@@ -769,7 +769,7 @@ public class Messages extends NLS {
 	public static String HandleDefaultsAction_useTemplate;
 	public static String HeadingAction_heading;
 	public static String HideElementsAction_hideTitle;
-	public static String HideElementsAction_hideToolti�;
+	public static String HideElementsAction_hideTooltip;
 	public static String HideElementsAction_showTitle;
 	public static String HideElementsAction_showTooltip;
 	public static String HorizontalRowLayout_name;
