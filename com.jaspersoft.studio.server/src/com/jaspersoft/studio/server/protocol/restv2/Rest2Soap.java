@@ -336,14 +336,15 @@ public class Rest2Soap {
 				String wsType0 = arg0.getWsType();
 				String wsType1 = arg1.getWsType();
 				if (wsType0.equals(wsType1)) {
-					if (!wsType0.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					if (wsType0.equals(ResourceDescriptor.TYPE_JRXML)) {
+						if (arg0.isMainReport())
+							return -1;
+						if (arg1.isMainReport())
+							return 1;
 						return arg0.getLabel().compareTo(arg1.getLabel());
-					return 0;
+					}
+					return arg0.getLabel().compareTo(arg1.getLabel());
 				}
-				if (arg0.isMainReport())
-					return -1;
-				if (arg1.isMainReport())
-					return 1;
 				if (DatasourcesAllFilter.getTypes().contains(wsType0))
 					return -1;
 				if (DatasourcesAllFilter.getTypes().contains(wsType1))
