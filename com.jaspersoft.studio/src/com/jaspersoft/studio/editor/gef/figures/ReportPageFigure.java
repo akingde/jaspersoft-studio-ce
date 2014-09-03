@@ -21,10 +21,14 @@ import net.sf.jasperreports.engine.base.JRBaseReport;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 
+import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 import com.jaspersoft.studio.model.ANode;
 
@@ -40,6 +44,12 @@ public class ReportPageFigure extends APageFigure {
 	protected JRBaseReport jrDesign = null;
 	/** The bands vertical lines color */
 	protected Color printMarginColor = new Color(170, 168, 255);
+	
+	private ReportPageEditPart page;
+	
+	private ZoomManager zoomManager = null;
+	
+	private Viewport viewPort = null;
 
 	public void setPrintMarginColor(Color printMarginColor) {
 		this.printMarginColor = printMarginColor;
@@ -48,14 +58,14 @@ public class ReportPageFigure extends APageFigure {
 	/**
 	 * Instantiates a new page figure.
 	 * 
-	 * @param jd
-	 *          the jd
-	 * @param viewMargins
-	 *          the view margins
+	 * @param jd the jasper design
+	 * @param viewMargins if the margins are visible
+	 * @param page the parent page
 	 */
-	public ReportPageFigure(JRBaseReport jd, boolean viewMargins) {
+	public ReportPageFigure(JRBaseReport jd, boolean viewMargins, ReportPageEditPart page) {
 		super(viewMargins);
 		this.jrDesign = jd;
+		this.page = page;
 	}
 
 	/**
@@ -67,6 +77,55 @@ public class ReportPageFigure extends APageFigure {
 	public void setBandsHeight(int bandsHeight) {
 		this.bandsHeight = bandsHeight;
 	}
+	
+	/**
+	 * Return the current viewport. The first time it is returned it's also cached
+	 * 
+	 * @return the editor viewport or null if it can't be found
+	 */
+	protected Viewport getViewPort(){
+		if (viewPort == null){
+			IFigure figure = getParent();
+			while (figure != null && !(figure instanceof Viewport)){
+				figure = figure.getParent();
+			}
+			if (figure != null) viewPort = (Viewport)figure;
+		}
+		return viewPort;
+	}
+	
+	/**
+	 * Return the current zoom level
+	 * 
+	 * @return the current zoom level or 0d if it can't be found
+	 */
+	protected double getZoom(){
+		if (zoomManager == null){
+			zoomManager = ((ScalableFreeformRootEditPart) page.getViewer().getRootEditPart()).getZoomManager();
+		}
+		return zoomManager != null ? zoomManager.getZoom() : 0d;
+	}
+	
+	/*
+	private JrxmlEditor editor = null;
+	
+	protected boolean isMainEditor(){
+		if (editor == null){
+			IEditorPart editor = SelectionHelper.getActiveJRXMLEditor();
+			
+			if (editor instanceof JrxmlEditor) {
+				this.editor = (JrxmlEditor)editor; 
+				
+				if (page.getJasperDesign() == this.editor.getReportContainer().getModel().getJasperDesign()){
+					this.editor = null;
+				}
+			}
+		}
+		if (editor != null){
+			return (editor.getActivePage() == JrxmlEditor.PAGE_DESIGNER && editor.getReportContainer().getActivePage() == 0);
+		}
+		return true;
+	}*/
 
 	/*
 	 * (non-Javadoc)
@@ -123,17 +182,19 @@ public class ReportPageFigure extends APageFigure {
 	 * that are marked as not visible inside the model
 	 */
 	protected void paintChildren(Graphics graphics) {
+		//if (!isMainEditor()) return;
+			
 		for (int i = 0; i < getChildren().size(); i++) {
 			IFigure child = (IFigure) getChildren().get(i);
-			boolean elementVisible = true;
+			boolean modelVisible = true;
 			if (child instanceof FrameFigure){
 				ANode model = ((FrameFigure)child).getModel();
 				if (model != null) {
-					elementVisible = model.isVisible();
-					child.setVisible(elementVisible);
+					modelVisible = model.isVisible();
+					child.setVisible(modelVisible);
 				}
 			}
-			if (child.isVisible() && elementVisible) {
+			if (child.isVisible() && modelVisible && isFigurevisible(child)) {
 				// determine clipping areas for child
 				Rectangle[] clipping = null;
 				if (getClippingStrategy() != null) {
@@ -152,6 +213,26 @@ public class ReportPageFigure extends APageFigure {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Check if a figure intersect the current visible area
+	 * 
+	 * @param figure a figure
+	 * @return true if the figure intersect the visible area, false otherwise
+	 */
+	protected boolean isFigurevisible(IFigure figure){
+		double zoom = getZoom();
+		Rectangle visibleArea = getViewPort().getClientArea();
+		Rectangle bounds = figure.getBounds();
+		int figureStartX = (int)Math.round(bounds.x*zoom);
+		int figureStartY = (int)Math.round(bounds.y*zoom);
+		int figureEndX = (int)Math.round(bounds.width*zoom);
+		int fiugreEndY =  (int)Math.round(bounds.height*zoom);
+		Rectangle figureArea = new Rectangle(figureStartX, figureStartY, figureEndX, fiugreEndY);
+		boolean result = figureArea.intersects(visibleArea);
+		                          
+		return result;
 	}
 
 	/*

@@ -50,7 +50,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class ReportPageEditPart extends PageEditPart implements PropertyChangeListener, IDatasetDialogSupport {
 
 	protected APageFigure newPageFigure() {
-		return new ReportPageFigure(getJasperDesign(), true);
+		return new ReportPageFigure(getJasperDesign(), true, this);
 	}
 
 	@Override
