@@ -47,11 +47,7 @@
 		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.win32.x86}/jaspersoftstudio" />
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86}/jaspersoftstudio" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.win32.x86}/${productRootFolder}" />
-		<mkdir dir="${dirlocation.win32.x86}/${productRootFolder}/license-text-files"/>
-		<copy todir="${dirlocation.win32.x86}/${productRootFolder}/license-text-files" >  
-		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
-		</copy>
+		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-5.6.1-license.txt" todir="${dirlocation.win32.x86}/${productRootFolder}" />
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller.nsi">
@@ -78,11 +74,7 @@
 		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
 		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.win32.x86_64}/${productRootFolder}" />
-		<mkdir dir="${dirlocation.win32.x86_64}/${productRootFolder}/license-text-files"/>
-		<copy todir="${dirlocation.win32.x86_64}/${productRootFolder}/license-text-files" >  
-		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
-		</copy>	
+		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-5.6.1-license.txt" todir="${dirlocation.win32.x86_64}/${productRootFolder}" />
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller64.nsi">
@@ -109,11 +101,7 @@
 		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.linux.x86}/${productRootFolder}" />
-		<mkdir dir="${dirlocation.linux.x86}/${productRootFolder}/license-text-files"/>
-		<copy todir="${dirlocation.linux.x86}/${productRootFolder}/license-text-files" >  
-		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
-		</copy>				
+		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-5.6.1-license.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
 		<!-- rename the folder -->
@@ -155,11 +143,7 @@
 		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
-		<mkdir dir="${dirlocation.linux.x86_64}/${productRootFolder}/license-text-files"/>
-		<copy todir="${dirlocation.linux.x86_64}/${productRootFolder}/license-text-files" >  
-		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
-		</copy>					
+		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-5.6.1-license.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
 		<!-- rename the folder -->
@@ -196,11 +180,7 @@
 		<property name="mac.x86_64.zipfile" value="${dist}/JaspersoftStudio-macosx.cocoa.x86_64.zip" />
 
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/Third-Party-Notices.pdf" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
-		<mkdir dir="${dirlocation.mac.x86_64}/${productRootFolder}/license-text-files"/>
-		<copy todir="${dirlocation.mac.x86_64}/${productRootFolder}/license-text-files" >  
-		  <fileset dir="${basedir}/rootfiles/license/license-text-files"/>
-		</copy>		
+		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-5.6.1-license.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
 		
 		<zip destfile="${mac.x86_64.zipfile}">
 			<fileset dir="${dirlocation.mac.x86_64}"/>
