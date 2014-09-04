@@ -14,13 +14,18 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
+import com.jaspersoft.studio.editor.gef.parts.PageEditPart;
 
 /*
  * The Class PageFigure.
@@ -35,9 +40,22 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	/** The Constant PAGE_BORDER. */
 	public static final Insets PAGE_BORDER = new Insets(10, 10, 10, 10);
 
-	/** The jr design. */
-
 	private GridLayer grid = new GridLayer();
+	
+	/**
+	 * The current page
+	 */
+	private PageEditPart page;
+	
+	/**
+	 * The zoom manager for the current page
+	 */
+	private ZoomManager zoomManager = null;
+	
+	/**
+	 * The viewport for the current page
+	 */
+	private Viewport viewPort = null;
 
 	/**
 	 * Instantiates a new page figure.
@@ -47,8 +65,9 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 * @param viewMargins
 	 *          the view margins
 	 */
-	public APageFigure(boolean viewMargins) {
+	public APageFigure(boolean viewMargins, PageEditPart page) {
 		this.viewMargins = viewMargins;
+		this.page = page;
 	}
 
 	public void setPageBackground(org.eclipse.swt.graphics.Color pageBackground) {
@@ -155,5 +174,54 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 
 	public GridLayer getGrid() {
 		return grid;
+	}
+	
+	
+	/**
+	 * Return the current viewport. The first time it is returned it's also cached
+	 * 
+	 * @return the editor viewport or null if it can't be found
+	 */
+	protected Viewport getViewPort(){
+		if (viewPort == null){
+			IFigure figure = getParent();
+			while (figure != null && !(figure instanceof Viewport)){
+				figure = figure.getParent();
+			}
+			if (figure != null) viewPort = (Viewport)figure;
+		}
+		return viewPort;
+	}
+	
+	/**
+	 * Return the current zoom level
+	 * 
+	 * @return the current zoom level or 0d if it can't be found
+	 */
+	protected double getZoom(){
+		if (zoomManager == null){
+			zoomManager = ((ScalableFreeformRootEditPart) page.getViewer().getRootEditPart()).getZoomManager();
+		}
+		return zoomManager != null ? zoomManager.getZoom() : 0d;
+	}
+	
+	/**
+	 * Check if a figure intersect the current visible area
+	 * 
+	 * @param figure a figure
+	 * @return true if the figure intersect the visible area, false otherwise
+	 */
+	protected boolean isFigurevisible(IFigure figure){
+		double zoom = getZoom();
+		Rectangle visibleArea = getViewPort().getClientArea();
+		Rectangle bounds = figure.getBounds();
+		int figureStartX = (int)Math.round(bounds.x*zoom);
+		int figureStartY = (int)Math.round(bounds.y*zoom);
+		int figureEndX = (int)Math.round(bounds.width*zoom);
+		int fiugreEndY =  (int)Math.round(bounds.height*zoom);
+		Rectangle figureArea = new Rectangle(figureStartX, figureStartY, figureEndX, fiugreEndY);
+		boolean result = figureArea.intersects(visibleArea);
+		                          
+		return result;
 	}
 }

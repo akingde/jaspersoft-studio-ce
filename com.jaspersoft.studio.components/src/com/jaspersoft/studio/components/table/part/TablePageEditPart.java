@@ -27,11 +27,6 @@ public class TablePageEditPart extends PageEditPart implements
 		IDatasetDialogSupport {
 
 	@Override
-	protected APageFigure newPageFigure() {
-		return new ContainerPageFigure(true);
-	}
-
-	@Override
 	protected void setupPageFigure(APageFigure figure2) {
 		updateContainerSize();
 		((ContainerPageFigure) figure2).setContainerSize(getContaierSize());

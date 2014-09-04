@@ -267,7 +267,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	}
 
 	protected APageFigure newPageFigure() {
-		return new ContainerPageFigure(true);
+		return new ContainerPageFigure(true, this);
 	}
 
 	/**

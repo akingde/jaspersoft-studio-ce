@@ -26,10 +26,6 @@ import com.jaspersoft.studio.property.dataset.dialog.IDatasetDialogSupport;
 public class ListPageEditPart extends PageEditPart implements
 		IDatasetDialogSupport {
 
-	@Override
-	protected APageFigure newPageFigure() {
-		return new ContainerPageFigure(true);
-	}
 
 	@Override
 	protected void setupPageFigure(APageFigure figure2) {
