@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils;
 
@@ -17,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRException;
@@ -80,22 +77,35 @@ public class SyncDatasetRunParameters {
 			if (jConf == null)
 				return;
 			String mDsName = jd.getMainDataset().getName();
+			JRDesignDatasetRun dsRun = mDsRun.getValue();
+			if (dsRun.getDataSourceExpression() != null)
+				return;
 			if (oldName != null && !mDsName.equals(newName))
-				for (JRDataset ds : jd.getDatasetsList())
-					if (ds.getName().equals(oldName) && (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
+				for (JRDataset ds : jd.getDatasetsList()) {
+					if (ds.getPropertiesMap().containsProperty(
+							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+						continue;
+					if (ds.getName().equals(oldName)
+							&& (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
 						Object[] bprms = getBuiltInParameters(jConf, ds.getQuery().getLanguage());
 						if (bprms != null)
-							cleanDatasetRun(bprms, mDsRun.getValue());
+							cleanDatasetRun(bprms, dsRun);
 						break;
 					}
+				}
 			if (newName != null && !mDsName.equals(newName))
-				for (JRDataset ds : jd.getDatasetsList())
-					if (ds.getName().equals(newName) && (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
+				for (JRDataset ds : jd.getDatasetsList()) {
+					if (ds.getPropertiesMap().containsProperty(
+							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+						continue;
+					if (ds.getName().equals(newName)
+							&& (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
 						Object[] bprms = getBuiltInParameters(jConf, ds.getQuery().getLanguage());
 						if (bprms != null)
-							setupDatasetRun(bprms, mDsRun.getValue());
+							setupDatasetRun(bprms, dsRun);
 						break;
 					}
+				}
 		}
 	}
 
@@ -110,6 +120,9 @@ public class SyncDatasetRunParameters {
 			String mLang = jd.getMainDataset().getQuery().getLanguage();
 			JasperReportsConfiguration jConf = mDsRun.getJasperConfiguration();
 			if (jConf == null)
+				return;
+			if (subDS.getPropertiesMap().containsProperty(
+					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
 				return;
 			if (subDS == jd.getMainDesignDataset() || mDsName.equals(subDS.getName())) {
 				Object[] bprms = getBuiltInParameters(jConf, oldLang);
@@ -148,12 +161,16 @@ public class SyncDatasetRunParameters {
 	private static void prepareDatasets(JasperDesign jd) {
 		for (IQueryLanguageChanged qlc : changed) {
 			prepareDataSet(jd, jd.getMainDesignDataset(), qlc);
-			for (JRDataset ds : jd.getDatasetsList())
+			for (JRDataset ds : jd.getDatasetsList()) {
+				if (ds.getPropertiesMap().containsProperty(
+						DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+					continue;
 				prepareDataSet(jd, (JRDesignDataset) ds, qlc);
+			}
 		}
 	}
 
-	protected static void prepareDataSet(JasperDesign jd, JRDesignDataset ds, IQueryLanguageChanged qlc) {
+	private static void prepareDataSet(JasperDesign jd, JRDesignDataset ds, IQueryLanguageChanged qlc) {
 		try {
 			if (ds.getQuery() != null)
 				qlc.syncDataset(jd, ds, null, ds.getQuery().getLanguage());
@@ -176,7 +193,10 @@ public class SyncDatasetRunParameters {
 					if (mlang.equals("sql") && Misc.isNullOrEmpty(query.getText())) {
 						mlang = null;
 					}
-					for (JRDataset subds : jd.getDatasetsList())
+					for (JRDataset subds : jd.getDatasetsList()) {
+						if (subds.getPropertiesMap().containsProperty(
+								DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+							continue;
 						if (subds.getQuery() != null && (mlang == null || mlang.equals(subds.getQuery().getLanguage()))) {
 							try {
 								// find query executer, look if there are built-in parameters
@@ -193,6 +213,7 @@ public class SyncDatasetRunParameters {
 								e.printStackTrace();
 							}
 						}
+					}
 				}
 			}
 		} catch (Throwable e) {
@@ -202,6 +223,8 @@ public class SyncDatasetRunParameters {
 	}
 
 	public static void setupDatasetRun(Object[] bprms, JRDesignDatasetRun dr) throws JRException {
+		if (dr.getDataSourceExpression() != null)
+			return;
 		for (int i = 0; i < bprms.length; i += 2) {
 			String pname = (String) bprms[i];
 			if (getParameter(dr, pname) != null)
@@ -215,6 +238,8 @@ public class SyncDatasetRunParameters {
 	}
 
 	public static void cleanDatasetRun(Object[] bprms, JRDesignDatasetRun dr) throws JRException {
+		if (dr.getDataSourceExpression() != null)
+			return;
 		for (int i = 0; i < bprms.length; i += 2) {
 			String pname = (String) bprms[i];
 			JRDatasetParameter p = getParameter(dr, pname);
@@ -243,6 +268,8 @@ public class SyncDatasetRunParameters {
 					if (dsRunList != null)
 						for (MDatasetRun mdsrun : dsRunList) {
 							JRDesignDatasetRun dsrun = mdsrun.getValue();
+							if (dsrun.getDataSourceExpression() != null)
+								continue;
 							if (dsrun.getDatasetName() != null && dsrun.getDatasetName().equals(dsName))
 								dsRuns.add(dsrun);
 						}
