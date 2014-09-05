@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.reader;
 
@@ -115,7 +111,7 @@ public class DatasetReader {
 			dataJD.setQuery(query);
 			// and the report language to the actual report one
 			dataJD.setLanguage(jConfig.getJasperDesign().getLanguage());
-
+			dataJD.setFilterExpression(designDataset.getFilterExpression());
 			// 3. Replace properties map
 			ModelUtils.replacePropertiesMap(jConfig.getJasperDesign().getPropertiesMap(), dataJD.getPropertiesMap());
 
@@ -175,11 +171,10 @@ public class DatasetReader {
 			hm.put(DataPreviewScriptlet.PARAM_LISTENERS, listeners);
 			if (maxRecords > 0) {
 				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
-			}
-			else {
+			} else {
 				hm.remove(JRDesignParameter.REPORT_MAX_COUNT);
 			}
-			
+
 			// 8. Contribute parameters from the data adapter
 			if (dataAdapterDesc != null)
 				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());

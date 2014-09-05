@@ -75,6 +75,8 @@ import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedEvent;
+import com.jaspersoft.studio.swt.events.ExpressionModifiedListener;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -350,7 +352,13 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			filterExpression.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
 		}
 		filterExpression.setExpression((JRDesignExpression) newdataset.getFilterExpression());
+		filterExpression.addModifyListener(new ExpressionModifiedListener() {
 
+			@Override
+			public void expressionModified(ExpressionModifiedEvent event) {
+				newdataset.setFilterExpression(event.modifiedExpression);
+			}
+		});
 		bptab.setControl(sectionClient);
 	}
 
@@ -402,7 +410,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		command.add(setValueCommand(MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset));
 
 		List<JRField> oldfields = ds.getFieldsList();
-		List<JRDesignField> newfields = ftable.getFields(); 
+		List<JRDesignField> newfields = ftable.getFields();
 		for (JRField f : oldfields) {
 			Boolean canceled = null;
 			for (JRDesignField newf : newfields)
