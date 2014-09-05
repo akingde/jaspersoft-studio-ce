@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -754,9 +753,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					InputControlQueryDataRow dr = new InputControlQueryDataRow();
 					dr.setValue(ico.getValue());
 					List<String> cols = new ArrayList<String>();
-					StringTokenizer st = new StringTokenizer(ico.getLabel(), " | ");
-					while (st.hasMoreElements())
-						cols.add(st.nextToken());
+					for (String s : ico.getLabel().split("\\s\\|\\s"))
+						cols.add(s);
 					dr.setColumnValues(cols);
 					dr.setSelected(ico.isSelected());
 					qvalues.add(dr);
