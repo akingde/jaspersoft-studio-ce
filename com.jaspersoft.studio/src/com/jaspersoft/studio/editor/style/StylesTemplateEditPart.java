@@ -47,7 +47,12 @@ public class StylesTemplateEditPart extends FigureEditPart {
 		getModel().getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {	
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				refresh();			
+				//To avoid to refresh removed elements
+				if (getViewer() != null){ 
+						refresh();			
+				} else {
+					getModel().getPropertyChangeSupport().removePropertyChangeListener(this);
+				}
 			}
 		});
 		return f;

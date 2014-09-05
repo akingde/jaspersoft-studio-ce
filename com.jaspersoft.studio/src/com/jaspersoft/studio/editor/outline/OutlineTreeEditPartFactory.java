@@ -64,7 +64,7 @@ import com.jaspersoft.studio.model.band.command.DeleteBandCommand;
 import com.jaspersoft.studio.model.band.command.DeleteBandDetailCommand;
 import com.jaspersoft.studio.model.band.command.DeleteBandGroupFooterCommand;
 import com.jaspersoft.studio.model.band.command.DeleteBandGroupHeaderCommand;
-import com.jaspersoft.studio.model.band.command.ReorderBandCommand;
+import com.jaspersoft.studio.model.band.command.ReorderBandCommandByIndex;
 import com.jaspersoft.studio.model.command.CreateE4ObjectCommand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.command.CreateElementGroupCommand;
@@ -270,7 +270,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					}
 				}
 				if (newIndex >= minIndex && newIndex <= maxIndex)
-					return new ReorderBandCommand((MBandGroupFooter) child, newIndex - minIndex);
+					return new ReorderBandCommandByIndex((MBandGroupFooter) child,  newIndex - minIndex);
 			}
 			if (child instanceof MBandGroupHeader) {
 				JRDesignGroup g = ((MBandGroupHeader) child).getJrGroup();
@@ -284,7 +284,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					}
 				}
 				if (newIndex >= minIndex && newIndex <= maxIndex)
-					return new ReorderBandCommand((MBandGroupHeader) child, newIndex - minIndex);
+					return new ReorderBandCommandByIndex((MBandGroupHeader) child, newIndex - minIndex);
 			}
 			if (child instanceof MBand && ((MBand) child).getBandType().equals(BandTypeEnum.DETAIL)) {
 				// adjust index
@@ -297,7 +297,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					}
 				}
 				if (newIndex >= minIndex && newIndex <= maxIndex)
-					return new ReorderBandCommand((MBand) child, (MReport) parent, newIndex - minIndex);
+					return new ReorderBandCommandByIndex((MBand) child, (MReport) parent, newIndex - minIndex);
 			}
 		} else if (child instanceof MGraphicElement && !(parent instanceof MPage)) {
 			return new ReorderElementCommand((MGraphicElement) child, parent, newIndex);

@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.model.band.command;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRBand;
@@ -34,13 +33,19 @@ import com.jaspersoft.studio.model.band.MBandGroup;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
 
-/*
- * /* The Class ReorderBandCommand.
+/**
+ * Move a band next to a specific sibling. The sibling can be null
+ * to move the bands on the first position
+ * 
+ * @author Orlandin Marco
+ *
  */
-public class ReorderBandCommand extends Command {
+public class ReorderBandCommandBySibling extends Command {
 
 	/** The new index. */
-	private int oldIndex, newIndex;
+	private JRBand oldUpperBand;
+	
+	private JRBand newUpperBand;
 
 	/** The jr band. */
 	private JRDesignBand jrBand;
@@ -56,10 +61,10 @@ public class ReorderBandCommand extends Command {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public ReorderBandCommand(MBandGroup child, int newIndex) {
+	public ReorderBandCommandBySibling(MBandGroup child, JRBand newUpperBand) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = Math.max(0, newIndex);
+		this.newUpperBand = newUpperBand;
 		this.jrDesignSection = (JRDesignSection) child.getSection();
 		this.jrBand = (JRDesignBand) child.getValue();
 	}
@@ -74,10 +79,10 @@ public class ReorderBandCommand extends Command {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public ReorderBandCommand(MBand child, MReport parent, int newIndex) {
+	public ReorderBandCommandBySibling(MBand child, MReport parent, JRBand newUpperBand) {
 		super(Messages.common_reorder_elements);
 
-		this.newIndex = Math.max(0, newIndex);
+		this.newUpperBand = newUpperBand;
 		this.jrDesignSection = (JRDesignSection) parent.getJasperDesign().getDetailSection();
 		this.jrBand = (JRDesignBand) child.getValue();
 	}
@@ -89,13 +94,19 @@ public class ReorderBandCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldIndex = doExecute(oldIndex, newIndex);
+		doExecute();
 	}
 
-	private int doExecute(int oldInd, int newInd) {
+	private void doExecute() {
+		int newInd = 0;
 		List<JRBand> bList = jrDesignSection.getBandsList();
-		oldInd = bList.indexOf(jrBand);
+		int oldInd = bList.indexOf(jrBand);
+		if (oldInd == 0) oldUpperBand = null;
+		else oldUpperBand = bList.get(oldInd-1);
 		bList.remove(jrBand);
+		if (newUpperBand != null){
+			newInd = bList.indexOf(newUpperBand) + 1;
+		}
 		if (newInd >= 0 && newInd < bList.size())
 			bList.add(newInd, jrBand);
 		else {
@@ -104,7 +115,6 @@ public class ReorderBandCommand extends Command {
 		}
 		//This event will not change the listener on the model, but only changes its position
 		jrDesignSection.getEventSupport().fireIndexedPropertyChange(MReport.CHANGE_BAND_POSITION, newInd, oldInd, -1);
-		return oldInd;
 	}
 
 	/*
@@ -114,7 +124,22 @@ public class ReorderBandCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		doExecute(newIndex, oldIndex);
+		List<JRBand> bList = jrDesignSection.getBandsList();
+		int oldInd = bList.indexOf(jrBand); 
+		int newInd = 0;
+		bList.remove(jrBand);
+		if (oldUpperBand != null){
+			newInd = bList.indexOf(oldUpperBand) + 1;
+		}
+	
+		if (newInd >= 0 && newInd < bList.size())
+			bList.add(newInd, jrBand);
+		else {
+			bList.add(jrBand);
+			newInd = bList.size() - 1;
+		}
+		//This event will not change the listener on the model, but only changes its position
+		jrDesignSection.getEventSupport().fireIndexedPropertyChange(MReport.CHANGE_BAND_POSITION, newInd, oldInd, -1);
 	}
 	
 	// STATIC UTILITY METHODS
@@ -127,7 +152,7 @@ public class ReorderBandCommand extends Command {
 	 * @param parentPart root node of the report tree, used to refresh its children
 	 * @return a list of command to move the selected bands
 	 */
-	public static JSSCompoundCommand moveBandsCommand(List<MBand> moved, int location, final EditPart parentPart) {
+	public static JSSCompoundCommand moveBandsCommand(List<MBand> moved, JRBand upperlocation, final EditPart parentPart) {
 		final ANode report = moved.get(0).getParent();
 		
 		/**
@@ -166,15 +191,18 @@ public class ReorderBandCommand extends Command {
 		MBand firstBand = moved.get(0);
 		if (BandTypeEnum.GROUP_HEADER.equals(firstBand.getBandType())){
 			for (MBand bandNode : moved) {
-				cmd.add(new ReorderBandCommand((MBandGroup) bandNode, location));
+				cmd.add(new ReorderBandCommandBySibling((MBandGroup) bandNode, upperlocation));
+				upperlocation = bandNode.getValue();
 			}
 		} else if (BandTypeEnum.GROUP_FOOTER.equals(firstBand.getBandType())){
 			for (MBand bandNode : moved) {
-				cmd.add(new ReorderBandCommand((MBandGroup) bandNode, location));
+				cmd.add(new ReorderBandCommandBySibling((MBandGroup) bandNode, upperlocation));
+				upperlocation = bandNode.getValue();
 			}
 		} else if (BandTypeEnum.DETAIL.equals(firstBand.getBandType())){
 			for (MBand bandNode : moved) {
-				cmd.add(new ReorderBandCommand(bandNode, (MReport) bandNode.getParent(), location));
+				cmd.add(new ReorderBandCommandBySibling(bandNode, (MReport) bandNode.getParent(), upperlocation));
+				upperlocation = bandNode.getValue();
 			}
 		}
 		
@@ -248,57 +276,5 @@ public class ReorderBandCommand extends Command {
 		}
 		return lastFound;
 	}
-	
-	/**
-	 * Return the type of the passed band, or null if the band
-	 * is null
-	 * 
-	 * @param band the band
-	 * @return the type of the band, can be null
-	 */
-	private static BandTypeEnum getBandType(MBand band){
-		if (band == null) return null;
-		else return band.getBandType();
-	}
-	
-	/**
-	 * Calculate the index where the moved bands should be placed. It assumes that 
-	 * the moved bands are placed between two other bands. On of these bands must be not null.
-	 * It assumes also that the moved bands has all the same type and if they are group the are
-	 * in the same group section. In other word it must be a valid selection for the method getMoveType
-	 * 
-	 * @param band1 The first band where the the moved bands will be placed between
-	 * @param band2 The second band where the the moved bands will be placed between
-	 * @param movedBand One of the moved bands, since this assumes that all the moved bands has the same type it 
-	 * is indifferent which ones is passed here
-	 * @return the index where the moved bands should be placed or -1 if the passed parameter are not valid (for
-	 * example because they are both null)
-	 */
-	public static int calculateIndex(MBand band1, MBand band2, MBand movedBand){
-		int destinationIndex = 1;
-		BandTypeEnum moveType = movedBand.getBandType();
-		BandTypeEnum band1Type = getBandType(band1);
-		BandTypeEnum band2Type = getBandType(band2);
-		if (moveType == BandTypeEnum.DETAIL){
-			List<JRBand> allBands = Arrays.asList(movedBand.getJasperDesign().getDetailSection().getBands());
-			if (BandTypeEnum.DETAIL.equals(band1Type) && BandTypeEnum.DETAIL.equals(band2Type)){
-				destinationIndex = allBands.indexOf(band2.getValue());
-			} else if (BandTypeEnum.DETAIL.equals(band1Type)){
-				destinationIndex = allBands.indexOf(band1.getValue())+1;
-			} else if (BandTypeEnum.DETAIL.equals(band2Type)){
-				destinationIndex = allBands.indexOf(band2.getValue());
-			}
-		} else if (moveType == BandTypeEnum.GROUP_HEADER || moveType == BandTypeEnum.GROUP_FOOTER){
-			MBandGroup group =  (MBandGroup)movedBand;
-			List<JRBand> allBands = Arrays.asList(group.getSection().getBands());
-			if (band1 != null && band2 != null){
-				destinationIndex = allBands.indexOf(band2.getValue());
-			} else if (band1 != null){
-				destinationIndex = allBands.indexOf(band1.getValue())+1;
-			} else if (band2 != null){
-				destinationIndex = allBands.indexOf(band2.getValue());
-			}
-		}
-		return destinationIndex;
-	}
+
 }

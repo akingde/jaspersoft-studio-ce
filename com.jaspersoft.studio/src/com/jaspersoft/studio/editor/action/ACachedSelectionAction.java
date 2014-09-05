@@ -124,4 +124,12 @@ public abstract class ACachedSelectionAction extends SetWorkbenchAction {
 		return (!elements.isEmpty() && elements.size() == getSelectedObjects().size());
 	}
 	
+	@Override
+	public void setWorkbenchPart(IWorkbenchPart part) {
+		super.setWorkbenchPart(part);
+		if (part instanceof CachedSelectionProvider){
+			fresh = false;
+			editor = (CachedSelectionProvider) part;
+		}
+	}
 }

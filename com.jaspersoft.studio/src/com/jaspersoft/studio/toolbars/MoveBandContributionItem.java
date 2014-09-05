@@ -72,16 +72,14 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 					moveGroupDownAction.setWorkbenchPart(getWorkbenchPart());
 					moveGroupDownAction.execute(getLastRawSelection());
 				} else {
-					moveDetailDownAction.setWorkbenchPart(getWorkbenchPart());
-					moveDetailDownAction.execute(getLastRawSelection());
+					moveDetailDownAction.run();
 				}
 			} else {
 				if (isGroup) {
 					moveGroupUpAction.setWorkbenchPart(getWorkbenchPart());
 					moveGroupUpAction.execute(getLastRawSelection());
 				} else {
-					moveDetailUpAction.setWorkbenchPart(getWorkbenchPart());
-					moveDetailUpAction.execute(getLastRawSelection());
+					moveDetailUpAction.run();
 				}
 			}
 		}
@@ -114,7 +112,7 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 					moveDown.setEnabled(moveGroupDownAction.calculateEnabled(getLastRawSelection()));
 				} else {
 					moveDetailDownAction.setWorkbenchPart(getWorkbenchPart());
-					moveDown.setEnabled(moveDetailDownAction.calculateEnabled(getLastRawSelection()));
+					moveDown.setEnabled(moveDetailDownAction.calculateEnabled());
 				}
 			}
 			if (moveUp != null && !moveUp.isDisposed()){
@@ -123,7 +121,7 @@ public class MoveBandContributionItem extends CommonToolbarHandler{
 					moveUp.setEnabled(moveGroupUpAction.calculateEnabled(getLastRawSelection()));
 				} else {
 					moveDetailUpAction.setWorkbenchPart(getWorkbenchPart());
-					moveUp.setEnabled(moveDetailUpAction.calculateEnabled(getLastRawSelection()));
+					moveUp.setEnabled(moveDetailUpAction.calculateEnabled());
 				}
 			}
 		}

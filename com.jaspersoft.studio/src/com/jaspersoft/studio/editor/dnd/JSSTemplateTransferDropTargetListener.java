@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
@@ -53,7 +54,7 @@ import com.jaspersoft.studio.model.DialogEnabledCommand;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.band.command.ReorderBandCommand;
+import com.jaspersoft.studio.model.band.command.ReorderBandCommandBySibling;
 import com.jaspersoft.studio.model.command.CreateE4ObjectCommand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.field.MField;
@@ -282,34 +283,18 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		}
 		 
 		List<MBand> movedBands = new ArrayList<MBand>();
-		BandTypeEnum moveType = ReorderBandCommand.getMoveType(selectedItems, movedBands);
+		BandTypeEnum moveType = ReorderBandCommandBySibling.getMoveType(selectedItems, movedBands);
 		if (moveType == null) return null;
 		
 		//Calculate the two element between the dragged element is moved
 		Tree tree = ((TreeItem) cEvent.item).getParent();
-		TreeItem destinationItem = (TreeItem) cEvent.item;
 		Point pt = tree.getDisplay().map(null, tree, cEvent.x, cEvent.y);
-		org.eclipse.swt.graphics.Rectangle destinationBounds = destinationItem.getBounds();
-		TreeItem firstItem = null;
-		TreeItem secondItem = null;
-		if (pt.y > (destinationBounds.y + destinationBounds.height / 2)) {
-			firstItem = destinationItem;
-			int destinationIndex = getItemIndex(destinationItem);
-			if (destinationIndex + 1 < destinationItem.getParentItem().getItemCount())
-				secondItem = destinationItem.getParentItem().getItem(destinationIndex + 1);
-			else
-				return null;
-		} else {
-			secondItem = destinationItem;
-			int destinationIndex = getItemIndex(destinationItem);
-			if (destinationIndex - 1 >= 0)
-				firstItem = destinationItem.getParentItem().getItem(destinationIndex - 1);
-			else
-				return null;
-		}
-		if (!(firstItem.getData() instanceof NotDragableContainerTreeEditPart))
+		TreeItem firstItem = tree.getItem(new Point(pt.x, pt.y-5));
+		TreeItem secondItem = tree.getItem(new Point(pt.x, pt.y+5));
+
+		if (firstItem == null || !(firstItem.getData() instanceof NotDragableContainerTreeEditPart))
 			return null;
-		if (!(secondItem.getData() instanceof NotDragableContainerTreeEditPart))
+		if (secondItem == null || !(secondItem.getData() instanceof NotDragableContainerTreeEditPart))
 			return null;
 		Object model1 = ((NotDragableContainerTreeEditPart) firstItem.getData()).getModel();
 		Object model2 = ((NotDragableContainerTreeEditPart) secondItem.getData()).getModel();
@@ -317,18 +302,17 @@ public class JSSTemplateTransferDropTargetListener extends TemplateTransferDropT
 		MBand band2 = null;
 		if (model1 instanceof MBand){
 			band1 = (MBand) model1;
-		}
+		} 
 		if (model2 instanceof MBand){
 			band2 = (MBand) model2;
 		}
 		//One of the two element must be a band, otherwise the drag can't be done
-		if (band1 == null && band2 == null) return null;
+		if (band1 == null || band2 == null) return null;
+		JRBand targetNode = null;
+		if (band1.getBandType().equals(moveType)) targetNode = band1.getValue();
+		else if (!band2.getBandType().equals(moveType)) return null; //the destination bands are both different from the dragged band
 		
-		//Calculate the destination index
-		int destinationIndex = ReorderBandCommand.calculateIndex(band1, band2, movedBands.get(0));
-
-		if (destinationIndex == -1) return null;
-		else return ReorderBandCommand.moveBandsCommand(movedBands, destinationIndex,((NotDragableContainerTreeEditPart) firstItem.getData()).getParent());
+		return ReorderBandCommandBySibling.moveBandsCommand(movedBands, targetNode, ((NotDragableContainerTreeEditPart) firstItem.getData()).getParent());
 	}
 
 	@Override
