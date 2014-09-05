@@ -28,6 +28,7 @@ import net.sf.jasperreports.eclipse.util.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
@@ -79,6 +80,34 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 			case 200:
 			case 201:
 				r = res.readEntity(type);
+			case 204:
+				break;
+			default:
+				eh.handleException(res, monitor);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			res.close();
+		}
+		return r;
+	}
+
+	public <T> T toObj(Response res, Class<T> type, IProgressMonitor monitor, ObjectMapper mapper) throws IOException {
+		T r = null;
+		try {
+			switch (res.getStatus()) {
+			case 200:
+			case 201:
+				InputStream in = res.readEntity(InputStream.class);
+				if (in != null) {
+					try {
+						r = mapper.readValue(in, type);
+					} finally {
+						FileUtils.closeStream(in);
+					}
+				}
 			case 204:
 				break;
 			default:

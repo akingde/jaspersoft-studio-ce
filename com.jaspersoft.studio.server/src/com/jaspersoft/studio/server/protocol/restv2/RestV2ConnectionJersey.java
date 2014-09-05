@@ -110,9 +110,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		HttpUtils.setupProxy(clientConfig, sp.getURL().toURI());
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
-		String user = sp.getUser();
-		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
-			user += "|" + sp.getOrganisation();
+		// String user = sp.getUser();
+		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
+		// user += "|" + sp.getOrganisation();
 		// client.register(new HttpBasicAuthFilter(user,
 		// Pass.getPass(sp.getPass())));
 		String url = sp.getUrl().trim();
@@ -131,12 +131,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			} else {
 				target = target.queryParam("j_username", sp.getUser());
 				target = target.queryParam("j_password", Pass.getPass(sp.getPass()));
-				target = target.queryParam("orgId", sp.getOrganisation());
-				if (!Misc.isNullOrEmpty(sp.getLocale()))
-					target = target.queryParam("userLocale", "true");
-				if (!Misc.isNullOrEmpty(sp.getTimeZone()))
-					target = target.queryParam("userTimezone", "true");
 			}
+			target = target.queryParam("orgId", sp.getOrganisation());
+			if (!Misc.isNullOrEmpty(sp.getLocale()))
+				target = target.queryParam("userLocale", "true");
+			if (!Misc.isNullOrEmpty(sp.getTimeZone()))
+				target = target.queryParam("userTimezone", "true");
+
 			Builder req = target.request();
 			toObj(connector.get(req, monitor), String.class, monitor);
 		} finally {
@@ -269,7 +270,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Builder req = tgt.request().header("Content-Location", rd.getUriString());//.header("Content-Length", "0");
+		Builder req = tgt.request().header("Content-Location", rd.getUriString());// .header("Content-Length",
+																																							// "0");
 		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {
