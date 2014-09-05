@@ -21,6 +21,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -72,7 +73,7 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	/**
 	 * Convenient object to be passed to the IFieldsProvider.getFields method
 	 */
-	private JRDesignDataset dataset = null;
+	protected JRDesignDataset dataset = null;
 
 	private String queryString = ""; //$NON-NLS-1$
 
@@ -330,5 +331,10 @@ public class SimpleQueryWizardDataEditorComposite extends AWizardDataEditorCompo
 	 */
 	public void setDataAdapterDescriptor(DataAdapterDescriptor dataAdapterDescriptor) {
 		this.dataAdapterDescriptor = dataAdapterDescriptor;
+	}
+
+	@Override
+	public List<JRDesignParameter> readParameters() throws Exception { 
+		return null;
 	}
 }

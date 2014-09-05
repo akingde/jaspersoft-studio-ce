@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -72,5 +73,12 @@ public abstract class AWizardDataEditorComposite extends Composite {
    */
   public abstract List<JRDesignField> readFields() throws Exception;
 
-	
+  /**
+   * Return the parameter read from the selected data adapter...
+   * This operation is run on a thread which is not in the UI event thread, so
+   * no UI update should be performed without using a proper async thread.
+   * 
+   * return a list of JRDesignParameter or null if no fields have been read
+   */
+  public abstract List<JRDesignParameter> readParameters() throws Exception;
 }

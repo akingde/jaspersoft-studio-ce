@@ -19,6 +19,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -120,6 +121,11 @@ public class EmptyWizardDataEditorComposite extends AWizardDataEditorComposite {
 	 */
 	public DataAdapterDescriptor getDataAdapterDescriptor() {
 		return dataAdapterDescriptor;
+	}
+
+	@Override
+	public List<JRDesignParameter> readParameters() throws Exception { 
+		return null;
 	}
 
 }

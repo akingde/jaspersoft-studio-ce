@@ -21,6 +21,9 @@ public class Messages extends NLS {
 	public static String ListSizePropertyDescriptor_contentFitTooltip;
 	public static String ListSizePropertyDescriptor_elementFitName;
 	public static String ListSizePropertyDescriptor_elementFitTooltip;
+	public static String ListWizard_0;
+	public static String ListWizard_1;
+	public static String ListWizard_2;
 	public static String MList_cell_height;
 	public static String MList_cell_height_description;
 	public static String MList_cell_width;

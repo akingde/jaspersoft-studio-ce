@@ -24,6 +24,7 @@ import java.util.Map;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -80,6 +81,7 @@ import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
 public class WizardDataSourcePage extends JSSWizardRunnablePage {
 
 	public static final String DISCOVERED_FIELDS = "discovered_fields"; //$NON-NLS-1$
+	public static final String DISCOVERED_PARAMETERS = "discovered_parameters"; //$NON-NLS-1$
 	public static final String DATASET_FIELDS = "dataset_fields"; //$NON-NLS-1$
 	public static final String GROUP_FIELDS = "group_fields"; //$NON-NLS-1$
 	public static final String DATASET_QUERY_LANGUAGE = "query_language"; //$NON-NLS-1$
@@ -395,6 +397,12 @@ public class WizardDataSourcePage extends JSSWizardRunnablePage {
 			if (fields != null && !fields.isEmpty()) {
 				if (getSettings() != null) {
 					getSettings().put(DISCOVERED_FIELDS, fields);
+				}
+			}
+			List<JRDesignParameter> prms = activeEditor.readParameters();
+			if (prms != null && !prms.isEmpty()) {
+				if (getSettings() != null) {
+					getSettings().put(DISCOVERED_PARAMETERS, prms);
 				}
 			}
 		} else {

@@ -41,7 +41,7 @@ public class WizardQueryEditorComposite extends SimpleQueryWizardDataEditorCompo
 		this.setDataAdapterDescriptor(dataAdapterDescriptor);
 	}
 
-	private IQueryDesigner designer;
+	protected IQueryDesigner designer;
 	private QDesignerFactory qdfactory;
 
 	@Override

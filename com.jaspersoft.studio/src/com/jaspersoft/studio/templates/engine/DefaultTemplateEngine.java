@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.templates.engine;
 
@@ -22,6 +18,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -63,7 +60,6 @@ import com.jaspersoft.templates.TemplateEngineException;
  */
 public class DefaultTemplateEngine implements TemplateEngine {
 
-	
 	final static public String DATASET = "main_dataset"; //$NON-NLS-1$
 	final static public String FIELDS = "main_fields"; //$NON-NLS-1$
 	final static public String GROUP_FIELDS = "main_group_fields"; //$NON-NLS-1$
@@ -72,12 +68,11 @@ public class DefaultTemplateEngine implements TemplateEngine {
 	final static public String ORDER_GROUP = "create_sort_fields"; //$NON-NLS-1$
 
 	protected boolean createSortFields = false;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings,
-			JasperReportsContext jContext)
-			throws TemplateEngineException {
+			JasperReportsContext jContext) throws TemplateEngineException {
 
 		JasperDesign jdCopy = null;
 		try {
@@ -87,12 +82,12 @@ public class DefaultTemplateEngine implements TemplateEngine {
 			UIUtils.showError(e);
 			return null;
 		}
-		
+
 		List<Object> fields = (List<Object>) settings.get(FIELDS);
 		List<Object> groupFields = (List<Object>) settings.get(GROUP_FIELDS);
 
 		JRDesignDataset dataset = (JRDesignDataset) settings.get(DATASET);
-		createSortFields = (Boolean)settings.get(ORDER_GROUP);
+		createSortFields = (Boolean) settings.get(ORDER_GROUP);
 		if (dataset != null) {
 			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
 
@@ -105,21 +100,28 @@ public class DefaultTemplateEngine implements TemplateEngine {
 					e.printStackTrace();
 				}
 			}
+			for (JRParameter p : dataset.getParameters()) {
+				try {
+					jdCopy.getMainDesignDataset().addParameter(p);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		processTemplate(jdCopy, fields, groupFields);
-		
+
 		/*
 		 * Check if there are some extra parameters to add to the default ones, then add them
 		 */
 		Object subreportParams = settings.get(OTHER_PARAMETERS);
-		if (subreportParams != null){
+		if (subreportParams != null) {
 			JRSubreportParameter[] otherParamters = (JRSubreportParameter[]) subreportParams;
-			for(JRSubreportParameter param: otherParamters){
-				if (!jdCopy.getParametersMap().containsKey(param.getName())){
+			for (JRSubreportParameter param : otherParamters) {
+				if (!jdCopy.getParametersMap().containsKey(param.getName())) {
 					JRDesignParameter newParam = new JRDesignParameter();
 					newParam.setName(param.getName());
-					//newParam.setDefaultValueExpression(param.getExpression());
+					// newParam.setDefaultValueExpression(param.getExpression());
 					try {
 						jdCopy.addParameter(newParam);
 					} catch (JRException e) {
@@ -147,34 +149,36 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		}
 
 		// Adjusting groups
-		if (groupFields != null){
+		if (groupFields != null) {
 			for (int i = 0; i < groupFields.size(); ++i) {
 				try {
 					String name = ((JRField) groupFields.get(i)).getName();
 					if (jd.getGroupsList().size() <= i) {
-							// Add a new group on the fly...
-							JRDesignGroup g = new JRDesignGroup();
-							g.setName(name);
-							JRDesignExpression jre = new JRDesignExpression();
-							jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-							g.setExpression(jre);
-							jd.addGroup(g);
+						// Add a new group on the fly...
+						JRDesignGroup g = new JRDesignGroup();
+						g.setName(name);
+						JRDesignExpression jre = new JRDesignExpression();
+						jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+						g.setExpression(jre);
+						jd.addGroup(g);
 					}
-					if (createSortFields){
+					if (createSortFields) {
 						JRDesignSortField sortfield = new JRDesignSortField();
 						sortfield.setType(SortFieldTypeEnum.FIELD);
 						sortfield.setOrder(SortOrderEnum.DESCENDING);
 						sortfield.setName(name);
 						jd.addSortField(sortfield);
 					}
-				} catch (JRException e) {}
+				} catch (JRException e) {
+				}
 				JRField gr = (JRField) groupFields.get(i);
 				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
 
 				// find the two elements having as expression: G1Label and G1Field
 				if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
 					JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
-					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}", gr.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
+					JRDesignExpression groupExpression = ExprUtil.setValues(new JRDesignExpression(),
+							"$F{" + gr.getName() + "}", gr.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 					group.setExpression(groupExpression);
 					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 					if (st == null)
@@ -442,22 +446,19 @@ public class DefaultTemplateEngine implements TemplateEngine {
 			((JRDesignFrame) container).setHeight(Math.max(minHeight, ((JRDesignFrame) container).getHeight()));
 		}
 	}
-	
-	
+
 	/**
-	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed
-	 * by this engine. 
+	 * Get a JasperDesign and check if that JasperDesign can be used as Template and processed by this engine.
 	 * 
-	 * @param design the design to check
+	 * @param design
+	 *          the design to check
 	 * @return a List of founded error, the list is void if no error are found
 	 */
-	public static List<String> validateJasperDesig(JasperDesign design)
-	{
+	public static List<String> validateJasperDesig(JasperDesign design) {
 		List<String> errorsList = new ArrayList<String>();
-		
+
 		int groupIndex = 0;
-		for(net.sf.jasperreports.engine.JRGroup jrGroup : design.getGroupsList())
-		{
+		for (net.sf.jasperreports.engine.JRGroup jrGroup : design.getGroupsList()) {
 			JRDesignGroup group = (JRDesignGroup) jrGroup;
 			// find the two elements having as expression: G1Label and G1Field
 			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
@@ -472,7 +473,6 @@ public class DefaultTemplateEngine implements TemplateEngine {
 				if (st == null)
 					st = findStaticTextElement(groupHeaderSection, "Group name"); //$NON-NLS-1$ 
 
-	
 				JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (groupIndex + 1) + "Field"); //$NON-NLS-1$ //$NON-NLS-2$ $NON-NLS-2$
 				if (tf == null)
 					tf = findTextFieldElement(groupHeaderSection, "GroupField"); //$NON-NLS-1$ 
@@ -480,16 +480,17 @@ public class DefaultTemplateEngine implements TemplateEngine {
 					tf = findTextFieldElement(groupHeaderSection, "Group Field"); //$NON-NLS-1$ 
 				if (tf == null)
 					tf = findTextFieldElement(groupHeaderSection, "Field"); //$NON-NLS-1$ 
-	
-				if (st == null && tf == null) errorsList.add(Messages.DefaultTemplateEngine_missingGroupFiledStatic+ (groupIndex + 1));
+
+				if (st == null && tf == null)
+					errorsList.add(Messages.DefaultTemplateEngine_missingGroupFiledStatic + (groupIndex + 1));
 			}
 			groupIndex++;
 		}
-		
+
 		String reportType = Misc.nvl(design.getProperty("template.type"), "tabular"); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		JRElementGroup detailBand = (design.getDetailSection() != null && design.getDetailSection().getBands() != null && 
-																design.getDetailSection().getBands().length > 0) ? design.getDetailSection().getBands()[0] : null;
+
+		JRElementGroup detailBand = (design.getDetailSection() != null && design.getDetailSection().getBands() != null && design
+				.getDetailSection().getBands().length > 0) ? design.getDetailSection().getBands()[0] : null;
 
 		// Adjusting detail...
 		if (reportType != null && reportType.equals("tabular")) { //$NON-NLS-1$ 
@@ -543,7 +544,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 				errorsList.add(Messages.DefaultTemplateEngine_missingTextFieldD);
 			}
 		}
-		
+
 		return errorsList;
 	}
 

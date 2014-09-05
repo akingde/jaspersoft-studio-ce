@@ -13,19 +13,11 @@
 package com.jaspersoft.studio.components.list.model.command.wizard;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -37,15 +29,11 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.list.model.MList;
-import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
@@ -70,7 +58,7 @@ public class ListWizard extends JSSWizard {
 	@Override
 	public void addPages() {
 
-		step1 = new WizardDatasetPage(false, "List");
+		step1 = new WizardDatasetPage(false, Messages.ListWizard_0);
 		addPage(step1);
 
 		step2 = new WizardConnectionPage();
@@ -78,8 +66,8 @@ public class ListWizard extends JSSWizard {
 
 		step3 = new WizardFieldsPage();
 		addPage(step3);
-		step3.setTitle("List fields");
-		step3.setDescription("You can optionally select a set of fields from the dataset used to fill this list, in this way the list will be prepopulated with a set of properly configured text fields");
+		step3.setTitle(Messages.ListWizard_1);
+		step3.setDescription(Messages.ListWizard_2);
 	}
 
 	@Override
@@ -96,6 +84,7 @@ public class ListWizard extends JSSWizard {
 			if (listDataset != null && listDataset.getFieldsList().size() > 0)
 			{
 				getSettings().put( WizardDataSourcePage.DISCOVERED_FIELDS, new ArrayList<Object>( listDataset.getFieldsList() ));
+				getSettings().put( WizardDataSourcePage.DISCOVERED_PARAMETERS, new ArrayList<Object>( listDataset.getParametersList() ));
 			}
 			else
 			{
@@ -157,8 +146,8 @@ public class ListWizard extends JSSWizard {
 				JRDesignTextField element = mtext.createJRElement(jd);
 				element.setX(x);
 				String field = ((JRField) f).getName();
-				element.setExpression(new JRDesignExpression("$F{" + field
-						+ "}"));
+				element.setExpression(new JRDesignExpression("$F{" + field //$NON-NLS-1$
+						+ "}")); //$NON-NLS-1$
 				((DesignListContents) jrList.getContents()).addElement(element);
 				x += element.getWidth();
 				jrElement.setHeight(Math.max(jrElement.getHeight(),

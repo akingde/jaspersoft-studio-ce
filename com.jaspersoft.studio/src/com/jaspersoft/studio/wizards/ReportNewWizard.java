@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
@@ -267,7 +263,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 
 			// Store the report bundle on file system
 			IContainer container = (IContainer) resource;
-			Display.getDefault().syncExec(new Runnable() {
+			UIUtils.getDisplay().syncExec(new Runnable() {
 
 				@Override
 				public void run() {
@@ -285,17 +281,19 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			// Save the all the files...
 			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);
 			stream = new ByteArrayInputStream(contents.getBytes());
-
-			if (reportFile.exists()) {
-				reportFile.setContents(stream, true, true, monitor);
-			} else {
-				reportFile.create(stream, true, monitor);
+			try {
+				if (reportFile.exists()) {
+					reportFile.setContents(stream, true, true, monitor);
+				} else {
+					reportFile.create(stream, true, monitor);
+				}
+			} finally {
+				FileUtils.closeStream(stream);
 			}
-			FileUtils.closeStream(stream);
 			saveReportBundleResources(monitor, reportBundle, container);
 
 			monitor.setTaskName(Messages.ReportNewWizard_5);
-			Display.getDefault().asyncExec(new Runnable() {
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 				public void run() {
 					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 					try {
