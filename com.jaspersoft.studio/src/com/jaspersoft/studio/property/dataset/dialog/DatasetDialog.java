@@ -58,7 +58,6 @@ import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.designer.AQueryDesignerContainer;
 import com.jaspersoft.studio.data.designer.QueryStatus;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
@@ -345,12 +344,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 		filterExpression = new WTextExpression(sectionClient, SWT.NONE);
 		filterExpression.setBackground(sectionClient.getBackground());
-		JRDesignDataset designDataset = mdataset.getValue();
-		if (designDataset != null) {
-			filterExpression.setExpressionContext(new ExpressionContext(designDataset, mdataset.getJasperConfiguration()));
-		} else {
-			filterExpression.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
-		}
+		filterExpression.setExpressionContext(new ExpressionContext(newdataset, mdataset.getJasperConfiguration()));
 		filterExpression.setExpression((JRDesignExpression) newdataset.getFilterExpression());
 		filterExpression.addModifyListener(new ExpressionModifiedListener() {
 
