@@ -33,7 +33,7 @@ public class ImageExporter extends AExporter {
 	public IFile exportToIFile(AFileResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (path == null && f != null) {
-			String filename = f.getFullPath().toPortableString();
+			String filename = f.getFullPath().toOSString();
 			int dotPos = filename.lastIndexOf(".");
 			if (dotPos >= 0)
 				filename = filename.substring(0, dotPos);
