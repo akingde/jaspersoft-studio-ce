@@ -419,7 +419,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	public void showServerInfo() {
 		try {
 			txtInfo.setText(sprofile.getConnectionInfo());
-			dbc.updateTargets();
+//			dbc.updateTargets();
 			IConnection c = sprofile.getWsClient();
 			if (c != null) {
 				ServerInfo si = c.getServerInfo(null);
