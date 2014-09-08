@@ -229,6 +229,11 @@ public class CSVColDataAction extends CSVAction {
 			return true;
 		else return false;
 	}
+	
+	@Override
+	protected boolean calculateEnabled() {
+		return !editor.getSelectionCache().getSelectionModelForType(MTextElement.class).isEmpty();
+	}
 
 	/**
 	 * Create the commands necessary to transform a textual element into a csv column or to remove it is it is already a

@@ -26,7 +26,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * This CSV action is used to display all the columns defined and to provade a dialog to change 
+ * This CSV action is used to display all the columns defined and to provide a dialog to change 
  * its order
  * 
  * @author Orlandin Marco
