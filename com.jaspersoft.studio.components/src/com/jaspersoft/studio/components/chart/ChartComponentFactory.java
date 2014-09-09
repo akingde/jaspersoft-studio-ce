@@ -115,6 +115,20 @@ import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ChartComponentFactory implements IComponentFactory {
+	
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(8);
+		knownClasses.add(MChart.class);
+		knownClasses.add(MChartAxes.class);
+		knownClasses.add(MCategorySeries.class);
+		knownClasses.add(MGanttSeries.class);
+		knownClasses.add(MPieSeries.class);
+		knownClasses.add(MTimePeriodSeries.class);
+		knownClasses.add(MTimeSeries.class);
+		knownClasses.add(MXYSeries.class);
+	}
 
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignChart)
@@ -355,4 +369,10 @@ public class ChartComponentFactory implements IComponentFactory {
 	public Command getStretchToContent(ANode node) {
 		return null;
 	}
+	
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
+	}
+
 }

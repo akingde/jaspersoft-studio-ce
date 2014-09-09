@@ -141,6 +141,16 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class TableComponentFactory implements IComponentFactory {
+	
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(4);
+		knownClasses.add(MTable.class);
+		knownClasses.add(MCell.class);
+		knownClasses.add(MColumnGroup.class);
+		knownClasses.add(MColumn.class);
+	}
 
 	public ANode createNode(final ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement) {
@@ -758,5 +768,10 @@ public class TableComponentFactory implements IComponentFactory {
 		if (inst == null)
 			inst = new TableComponentFactory();
 		return inst;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 }

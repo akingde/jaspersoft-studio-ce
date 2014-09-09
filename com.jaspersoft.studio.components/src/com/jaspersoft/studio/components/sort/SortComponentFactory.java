@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.sort;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.sort.SortComponent;
@@ -42,6 +43,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class SortComponentFactory implements IComponentFactory {
 
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(1);
+		knownClasses.add(MSort.class);
+	}
+	
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement
 				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof SortComponent) {
@@ -129,5 +137,10 @@ public class SortComponentFactory implements IComponentFactory {
 	@Override
 	public Command getStretchToContent(ANode node) {
 		return null;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 }

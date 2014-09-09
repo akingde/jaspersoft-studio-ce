@@ -5,6 +5,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.bridge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -41,6 +42,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class BridgeComponentFactory implements IComponentFactory {
+	
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(1);
+		knownClasses.add(MBridge.class);
+	}
 
 	@Override
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
@@ -142,6 +150,11 @@ public class BridgeComponentFactory implements IComponentFactory {
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
 		// FIXME - Implement this method.
 		return null;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 
 }

@@ -86,5 +86,10 @@ public interface IComponentFactory {
 	 * @see ModelUtils#getElementExpressionContext(JRDesignElement, ANode)
 	 */
 	public ExpressionContext getElementExpressionContext(Object jrObject);
+
+	/** 
+	 * Every factory knows how to create at least a minimal set of classes.
+	 */
+	public List<Class<?>> getKnownClasses();
 	
 }

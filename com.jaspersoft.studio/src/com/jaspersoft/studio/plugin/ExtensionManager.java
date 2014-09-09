@@ -50,14 +50,22 @@ import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
+	
+	private static Map<Class<?>,IComponentFactory> factoryByNodeType = new HashMap<Class<?>, IComponentFactory>();
+	
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$ 
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
-				if (o instanceof IComponentFactory)
-					nodeFactory.add((IComponentFactory) o);
+				if (o instanceof IComponentFactory) {
+					IComponentFactory compFactory = (IComponentFactory) o;
+					nodeFactory.add(compFactory);
+					for(Class<?> cl : compFactory.getKnownClasses()) {
+						factoryByNodeType.put(cl,compFactory);
+					}
+				}
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -287,7 +295,7 @@ public class ExtensionManager {
 	}
 
 	public Command getStretchToContent(ANode node) {
-		for (IComponentFactory f : nodeFactory) {
+		for (IComponentFactory f : getPrioritizedFactoryList(node)) {
 			Command c = f.getStretchToContent(node);
 			if (c != null)
 				return c;
@@ -295,17 +303,32 @@ public class ExtensionManager {
 		return null;
 	}
 
+	private List<IComponentFactory> getPrioritizedFactoryList(Object obj) {
+		if(obj != null) {
+			IComponentFactory selectedFactory = factoryByNodeType.get(obj.getClass());
+			if(selectedFactory!=null) {
+				List<IComponentFactory> copyLst = new ArrayList<IComponentFactory>(nodeFactory.size());
+				copyLst.addAll(nodeFactory);
+				copyLst.remove(selectedFactory);
+				copyLst.add(0, selectedFactory);
+				return copyLst;
+			}
+		}
+		return nodeFactory;
+	}
+	
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
-		for (IComponentFactory f : nodeFactory) {
-			Command c = f.getCreateCommand(parent, child, location, newIndex);
-			if (c != null)
-				return c;
+		for (IComponentFactory f : getPrioritizedFactoryList(child)) {
+				Command c = f.getCreateCommand(parent, child, location, newIndex);
+				if (c != null) {
+					return c;
+				}
 		}
 		return null;
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
-		for (IComponentFactory f : nodeFactory) {
+		for (IComponentFactory f : getPrioritizedFactoryList(child)) {
 			Command c = f.getDeleteCommand(parent, child);
 			if (c != null)
 				return c;
@@ -314,7 +337,7 @@ public class ExtensionManager {
 	}
 
 	public Command getReorderCommand(ANode parent, ANode child, int newIndex) {
-		for (IComponentFactory f : nodeFactory) {
+		for (IComponentFactory f : getPrioritizedFactoryList(child)) {
 			Command c = f.getReorderCommand(child, parent, newIndex);
 			if (c != null)
 				return c;
@@ -323,7 +346,7 @@ public class ExtensionManager {
 	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
-		for (IComponentFactory f : nodeFactory) {
+		for (IComponentFactory f : getPrioritizedFactoryList(child)) {
 			Command c = f.getOrphanCommand(parent, child);
 			if (c != null)
 				return c;
@@ -332,7 +355,7 @@ public class ExtensionManager {
 	}
 
 	public IFigure createFigure(ANode node) {
-		for (IComponentFactory f : nodeFactory) {
+		for (IComponentFactory f : getPrioritizedFactoryList(node)) {
 			IFigure c = f.createFigure(node);
 			if (c != null)
 				return c;
@@ -341,7 +364,7 @@ public class ExtensionManager {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
-		for (IComponentFactory f : nodeFactory) {
+		for (IComponentFactory f : getPrioritizedFactoryList(model)) {
 			EditPart c = f.createEditPart(context, model);
 			if (c != null)
 				return c;

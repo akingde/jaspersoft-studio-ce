@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.html;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.html.HtmlComponent;
@@ -43,6 +44,14 @@ import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class HtmlComponentFactory implements IComponentFactory {
+	
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(1);
+		knownClasses.add(MHtml.class);
+	}
+	
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement) {
 			if (((JRDesignComponentElement) jrObject).getComponent() instanceof HtmlComponent) {
@@ -136,6 +145,11 @@ public class HtmlComponentFactory implements IComponentFactory {
 	@Override
 	public Command getStretchToContent(ANode node) {
 		return null;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 
 }

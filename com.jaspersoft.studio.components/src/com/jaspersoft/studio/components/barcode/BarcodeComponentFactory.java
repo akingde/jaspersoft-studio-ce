@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.barcode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.barbecue.BarbecueComponent;
@@ -74,6 +75,30 @@ import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class BarcodeComponentFactory implements IComponentFactory {
+
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(18);
+		knownClasses.add(MBarcode.class);
+		knownClasses.add(MBarcode4j.class);
+		knownClasses.add(MCodabar.class);
+		knownClasses.add(MCode128.class);
+		knownClasses.add(MCode39.class);
+		knownClasses.add(MDataMatrix.class);
+		knownClasses.add(MEAN128.class);
+		knownClasses.add(MEAN13.class);
+		knownClasses.add(MEAN8.class);
+		knownClasses.add(MFourStateBarcode.class);
+		knownClasses.add(MRoyalMail.class);
+		knownClasses.add(MUSPSIntelligent.class);
+		knownClasses.add(MInterleaved2Of5.class);
+		knownClasses.add(MPDF417.class);
+		knownClasses.add(MPOSTNET.class);
+		knownClasses.add(MUPCA.class);
+		knownClasses.add(MUPCE.class);
+		knownClasses.add(MBarcodeBarbecue.class);
+	}
 
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement) {
@@ -213,5 +238,10 @@ public class BarcodeComponentFactory implements IComponentFactory {
 	@Override
 	public Command getStretchToContent(ANode node) {
 		return null;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 }

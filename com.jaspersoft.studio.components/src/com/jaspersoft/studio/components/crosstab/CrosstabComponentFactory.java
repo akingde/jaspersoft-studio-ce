@@ -146,6 +146,20 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CrosstabComponentFactory implements IComponentFactory {
+	
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(8);
+		knownClasses.add(MCrosstab.class);
+		knownClasses.add(MColumnGroup.class);
+		knownClasses.add(MRowGroup.class);
+		knownClasses.add(MColumnCrosstabHeaderCell.class);
+		knownClasses.add(MCrosstabHeaderCell.class);
+		knownClasses.add(MCrosstabWhenNoDataCell.class);
+		knownClasses.add(MTitleCell.class);
+		knownClasses.add(MCrosstabHeaderCell.class);
+	}
 
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignCrosstab) {
@@ -743,4 +757,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			inst = new CrosstabComponentFactory();
 		return inst;
 	}
+	
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
+	}
+
 }

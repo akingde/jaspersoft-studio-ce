@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.map;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.map.MapComponent;
@@ -43,6 +44,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class MapComponentFactory implements IComponentFactory {
 
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(1);
+		knownClasses.add(MMap.class);
+	}
+	
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement
 				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof MapComponent) {
@@ -129,5 +137,10 @@ public class MapComponentFactory implements IComponentFactory {
 	@Override
 	public Command getStretchToContent(ANode node) {
 		return null;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 }

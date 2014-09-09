@@ -14,6 +14,7 @@ package com.jaspersoft.studio.components.list;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.list.DesignListContents;
@@ -77,6 +78,13 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ListComponentFactory implements IComponentFactory {
 
+	private static List<Class<?>> knownClasses;
+	
+	static {
+		knownClasses = new ArrayList<Class<?>>(1);
+		knownClasses.add(MList.class);
+	}
+	
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement
 				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof StandardListComponent) {
@@ -350,5 +358,10 @@ public class ListComponentFactory implements IComponentFactory {
 		if (inst == null)
 			inst = new ListComponentFactory();
 		return inst;
+	}
+
+	@Override
+	public List<Class<?>> getKnownClasses() {
+		return knownClasses;
 	}
 }
