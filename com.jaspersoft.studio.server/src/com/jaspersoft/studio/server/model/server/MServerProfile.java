@@ -181,7 +181,7 @@ public class MServerProfile extends ANode {
 					return Status.OK_STATUS;
 				}
 			};
-			job.setPriority(Job.SHORT);
+			job.setPriority(Job.LONG);
 			job.schedule();
 		}
 		return wsClient;

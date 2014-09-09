@@ -13,12 +13,8 @@
 package com.jaspersoft.studio.server.export;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -36,7 +32,7 @@ import com.jaspersoft.studio.server.model.MJar;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlExporter extends AExporter {
@@ -79,7 +75,9 @@ public class JrxmlExporter extends AExporter {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile server = (MServerProfile) n;
-			jd.setProperty(AExporter.PROP_SERVERURL, server.getValue().getUrl());
+			ServerProfile v = server.getValue();
+			jd.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
+			jd.setProperty(AExporter.PROP_USER, v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
 		}
 	}
 
@@ -99,7 +97,7 @@ public class JrxmlExporter extends AExporter {
 		if (res.getParent() instanceof MReportUnit) {
 			for (INode n : res.getParent().getChildren()) {
 				if (n instanceof MJar) {
-					// download 
+					// download
 				}
 			}
 		}

@@ -70,6 +70,7 @@ public class JRSRepositoryService implements RepositoryService {
 		String uri = jDesign.getProperty(AExporter.PROP_SERVERURL);
 		if (uri == null)
 			return false;
+		String serverUser = jDesign.getProperty(AExporter.PROP_USER);
 		runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
 		if (!uri.equals(serverUri)) {
 			serverUri = uri;
@@ -77,7 +78,7 @@ public class JRSRepositoryService implements RepositoryService {
 		}
 		if (c == null && !isConnecting) {
 			isConnecting = true;
-			msp = ServerManager.getServerByUrl(serverUri);
+			msp = ServerManager.getServerByUrl(serverUri, serverUser);
 			setupConnection(msp.getWsClient(new Callback<IConnection>() {
 
 				@Override

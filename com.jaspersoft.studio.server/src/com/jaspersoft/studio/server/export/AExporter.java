@@ -35,10 +35,12 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 
 public class AExporter {
 	public static Map<String, IFile> fileurimap = new HashMap<String, IFile>();
 	public static final String PROP_SERVERURL = "ireport.jasperserver.url";
+	public static final String PROP_USER = "ireport.jasperserver.user";
 	public static final String PROP_REPORTRESOURCE = "ireport.jasperserver.report.resource";
 	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
 
@@ -57,8 +59,11 @@ public class AExporter {
 	public static void setServerLocation(AFileResource res, IFile f) throws CoreException {
 		if (f != null) {
 			MServerProfile sp = (MServerProfile) res.getRoot();
-			if (sp != null)
-				f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_SERVERURL), sp.getValue().getUrl());
+			if (sp != null) {
+				ServerProfile v = sp.getValue();
+				f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_SERVERURL), v.getUrl());
+				f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_USER), v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
+			}
 			f.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, PROP_REPORTRESOURCE), res.getValue().getUriString());
 		}
 	}

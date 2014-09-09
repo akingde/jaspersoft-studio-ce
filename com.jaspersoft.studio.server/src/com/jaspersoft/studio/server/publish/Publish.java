@@ -42,6 +42,7 @@ import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -260,7 +261,9 @@ public class Publish {
 				INode n = node.getRoot();
 				if (n != null && n instanceof MServerProfile) {
 					MServerProfile server = (MServerProfile) n;
-					rpt.setProperty(AExporter.PROP_SERVERURL, server.getValue().getUrl());
+					ServerProfile v = server.getValue();
+					rpt.setProperty(AExporter.PROP_SERVERURL, v.getUrl());
+					rpt.setProperty(AExporter.PROP_USER, v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : ""));
 				}
 				ResourceDescriptor rd = node.getValue();
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
