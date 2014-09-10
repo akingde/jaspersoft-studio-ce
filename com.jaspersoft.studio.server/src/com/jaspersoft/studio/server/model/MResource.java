@@ -100,6 +100,7 @@ public class MResource extends APropertyNode implements ICopyable {
 			if (getValue().isMainReport())
 				tip += "\nIs Main Report";
 			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
+			tip += "\nPermission: " + getValue().getPermissionMask();
 			return tip;
 		}
 		return getThisIconDescriptor().getToolTip();
@@ -165,7 +166,7 @@ public class MResource extends APropertyNode implements ICopyable {
 		if (parent != null) {
 			if (parent instanceof MResource)
 				if (parent instanceof MFolder)
-				rd.setParentFolder(((MResource) parent).getValue().getUriString());
+					rd.setParentFolder(((MResource) parent).getValue().getUriString());
 				else
 					rd.setParentFolder(((MResource) parent).getValue().getUriString() + "_files");
 			else

@@ -1086,9 +1086,17 @@ public class ResourceDescriptor implements Serializable {
 		return icValues;
 	}
 
+	public void setPermissionMask(int permissionMask) {
+		setResourceProperty(PROP_SECURITY_PERMISSION_MASK, permissionMask);
+	}
+
+	public int getPermissionMask() {
+		return Misc.nvl(getResourcePropertyValueAsInteger(PROP_SECURITY_PERMISSION_MASK), 1);
+	}
+
 	public void fixStructure() {
 		setListOfValues(getListOfValues());
-		
+
 		ResourceProperty rp = getProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);
 		if (rp != null && Misc.isNullOrEmpty(rp.getValue()))
 			removeResourceProperty(ResourceDescriptor.PROP_DATATYPE_MAX_VALUE);

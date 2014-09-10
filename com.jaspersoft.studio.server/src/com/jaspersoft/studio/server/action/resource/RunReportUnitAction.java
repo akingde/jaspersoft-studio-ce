@@ -59,7 +59,17 @@ public class RunReportUnitAction extends Action {
 	}
 
 	private boolean isInReportUnit(Object obj) {
-		return (obj != null && obj instanceof MReportUnit || ((ANode) obj).getParent() instanceof MReportUnit);
+		if (obj == null)
+			return false;
+		MReportUnit mrepunit = null;
+		if (obj instanceof MReportUnit)
+			mrepunit = (MReportUnit) obj;
+		else if (((ANode) obj).getParent() instanceof MReportUnit)
+			mrepunit = (MReportUnit) ((ANode) obj).getParent();
+		if (mrepunit == null)
+			return false;
+		int pmask = mrepunit.getValue().getPermissionMask();
+		return pmask == 1 || (pmask & 32) == 32 || (pmask & 2) == 2;
 	}
 
 	@Override

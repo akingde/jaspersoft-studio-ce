@@ -23,6 +23,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -44,8 +45,8 @@ public class ImportMetadataAction extends Action {
 	public ImportMetadataAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Import Metadata");
-		setToolTipText("Import Metadata");
+		setText(Messages.ImportMetadataAction_0);
+		setToolTipText(Messages.ImportMetadataAction_1);
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}

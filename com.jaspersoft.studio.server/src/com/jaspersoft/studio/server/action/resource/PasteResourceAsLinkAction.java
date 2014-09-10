@@ -22,39 +22,43 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.server.ResourceFactory;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PasteResourceAsLinkAction extends PasteResourceAction {
-	public static final String PASTE_ASLINK = "PASTEASLINK";
+	public static final String PASTE_ASLINK = "PASTEASLINK"; //$NON-NLS-1$
 
 	public PasteResourceAsLinkAction(TreeViewer treeViewer) {
 		super(treeViewer);
 		setId(PASTE_ASLINK);
-		setText("Paste As Link");
-		setToolTipText("Paste As Link");
+		setText(Messages.PasteResourceAsLinkAction_1);
+		setToolTipText(Messages.PasteResourceAsLinkAction_2);
 	}
 
 	@Override
 	public boolean isEnabled() {
+		boolean res = false;
 		ANode n = getSelected();
 		if (n instanceof MReportUnit) {
-			if (super.isEnabled() && contents != null && contents instanceof List<?>) {
+			res = super.isEnabled();
+			if (res && contents != null && contents instanceof List<?>) {
 				List<?> list = (List<?>) contents;
 				for (Object obj : list)
 					if (obj instanceof MResource && obj instanceof ICopyable) {
 						ICopyable c = (ICopyable) obj;
-						if (c.isCopyable2(n))
+						if (c.isCopyable2(n)) {
 							if (((MResource) obj).isCut())
-								return false;
+								res = false;
 							else
-								return true;
-
+								res = true;
+							break;
+						}
 					}
 			}
 		}
-		return false;
+		return res;
 	}
 
 	@Override
@@ -68,12 +72,12 @@ public class PasteResourceAsLinkAction extends PasteResourceAction {
 		rd.setIsNew(true);
 		rd.setIsReference(true);
 		rd.setReferenceUri(origin.getUriString());
-		rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files");
+		rd.setParentFolder(prd.getParentFolder() + "/" + prd.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (ResourceFactory.isFileResourceType(origin))
 			rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 		else
 			rd.setWsType(origin.getWsType());
-		rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName());
+		rd.setUriString(prd.getParentFolder() + "/" + prd.getName() + "_files/" + prd.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		prd.getChildren().add(rd);
 		ws.addOrModifyResource(monitor, prd, null);

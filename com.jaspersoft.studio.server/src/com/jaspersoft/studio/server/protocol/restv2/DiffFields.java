@@ -18,8 +18,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty
 public class DiffFields {
 
 	public static final String TIMEZONE = "timezone";
-	public static final String UPDATEDATE = "updateDate";
-	public static final String PERMISSIONMASK = "permissionMask";
+	public static final String UPDATEDATE = "updateDate"; 
 
 	public static final String DATASOURCENAME = "dataSourceName";
 

@@ -105,7 +105,7 @@ public class Rest2Soap {
 
 		rd.setCreationDate(rc.toTimestamp(cr.getCreationDate()));
 		DiffFields.setSoapValue(rd, DiffFields.UPDATEDATE, cr.getUpdateDate());
-		DiffFields.setSoapValue(rd, DiffFields.PERMISSIONMASK, Misc.nvl(cr.getPermissionMask(), 0));
+		rd.setPermissionMask(Misc.nvl(cr.getPermissionMask(), 0));
 
 		// look recursively
 		if (cr instanceof ClientDataType)

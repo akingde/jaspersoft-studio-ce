@@ -35,13 +35,21 @@ public class CopyResourceAction extends Action {
 		setId(ActionFactory.COPY.getId());
 		setText(Messages.common_copy);
 		setToolTipText(Messages.common_copy);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
+		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 		this.treeViewer = treeViewer;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		boolean b = firstElement != null && (firstElement instanceof MResource);
+		if (b) {
+			int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+			b = b && (pmask == 1 || (pmask & 2) == 2);
+		}
+		return b;
 	}
 
 	@Override

@@ -42,6 +42,17 @@ public class CutResourceAction extends Action {
 	}
 
 	@Override
+	public boolean isEnabled() {
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		boolean b = firstElement != null && (firstElement instanceof MResource);
+		if (b) {
+			int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+			b = b && (pmask == 1 || ((pmask & 2) == 2 && (pmask & 16) == 16));
+		}
+		return b;
+	}
+
+	@Override
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();

@@ -50,7 +50,12 @@ public class DeleteResourceAction extends Action {
 	@Override
 	public boolean isEnabled() {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-		return firstElement != null && (firstElement instanceof MResource);
+		boolean b = firstElement != null && (firstElement instanceof MResource);
+		if (b) {
+			int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+			b = b && (pmask == 1 || (pmask & 16) == 16);
+		}
+		return b;
 	}
 
 	@Override

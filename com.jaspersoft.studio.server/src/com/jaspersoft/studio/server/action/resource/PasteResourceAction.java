@@ -31,7 +31,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -51,7 +50,7 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 
 public class PasteResourceAction extends Action {
-	private TreeViewer treeViewer;
+	protected TreeViewer treeViewer;
 	private TreeSelection s;
 	protected Object contents;
 
@@ -69,18 +68,33 @@ public class PasteResourceAction extends Action {
 	@Override
 	public boolean isEnabled() {
 		boolean res = super.isEnabled();
+		boolean iscut = false;
 		contents = Clipboard.getDefault().getContents();
 		if (res && contents != null && contents instanceof List<?>) {
 			List<?> list = (List<?>) contents;
 			ANode parent = getSelected();
+			res = false;
 			for (Object obj : list)
 				if (obj instanceof MResource && obj instanceof ICopyable) {
 					ICopyable c = (ICopyable) obj;
-					if (c.isCopyable2(parent))
-						return true;
+					if (c.isCopyable2(parent)) {
+						iscut = ((MResource) obj).isCut();
+						res = true;
+						break;
+					}
 				}
 		}
-		return false;
+		if (res) {
+			Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+			res = firstElement != null;
+			if (res) {
+				if (firstElement instanceof MResource) {
+					int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+					res = res && (pmask == 1 || (pmask & 8) == 8);
+				}
+			}
+		}
+		return res;
 	}
 
 	protected ANode getSelected() {

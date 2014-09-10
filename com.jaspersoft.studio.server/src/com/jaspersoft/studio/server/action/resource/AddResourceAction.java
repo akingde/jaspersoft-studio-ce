@@ -12,18 +12,19 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.resource;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
 
 public class AddResourceAction extends Action {
@@ -42,16 +43,28 @@ public class AddResourceAction extends Action {
 	}
 
 	@Override
+	public boolean isEnabled() {
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		boolean b = firstElement != null;
+		if (b) {
+			if (firstElement instanceof MResource) {
+				int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+				b = b && (pmask == 1 || (pmask & 8) == 8);
+			}
+		}
+		return b;
+	}
+
+	@Override
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length;) {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof ANode) {
-				Shell shell = Display.getDefault().getActiveShell();
 				ANode parent = (ANode) obj;
 				AddResourceWizard wizard = new AddResourceWizard(parent);
-				WizardDialog dialog = new WizardDialog(shell, wizard);
+				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
 				dialog.open();
 			}

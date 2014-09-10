@@ -24,6 +24,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.Feature;
@@ -45,8 +46,8 @@ public class ExportMetadataAction extends Action {
 	public ExportMetadataAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Export Metadata");
-		setToolTipText("Export Metadata");
+		setText(Messages.ExportMetadataAction_0);
+		setToolTipText(Messages.ExportMetadataAction_1);
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor(JaspersoftStudioPlugin.PLUGIN_ID, "/icons/resources/eclipse/etool16/import_wiz.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
