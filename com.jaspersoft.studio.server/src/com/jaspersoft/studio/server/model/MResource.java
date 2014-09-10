@@ -100,7 +100,7 @@ public class MResource extends APropertyNode implements ICopyable {
 			if (getValue().isMainReport())
 				tip += "\nIs Main Report";
 			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
-			tip += "\nPermission: " + getValue().getPermissionMask();
+			tip += "\nPermission: " + getValue().getPermissionMask(getWsClient());
 			return tip;
 		}
 		return getThisIconDescriptor().getToolTip();

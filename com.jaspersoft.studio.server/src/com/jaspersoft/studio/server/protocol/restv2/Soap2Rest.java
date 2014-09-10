@@ -83,7 +83,7 @@ public class Soap2Rest {
 		cr.setUri(rd.getUriString());
 		cr.setVersion(rd.getVersion());
 		cr.setUpdateDate(DiffFields.getSoapValue(rd, DiffFields.UPDATEDATE));
-		cr.setPermissionMask(rd.getPermissionMask());
+		cr.setPermissionMask(rd.getPermissionMask(null));
 
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
 			getDataType(rc, (ClientDataType) cr, rd);

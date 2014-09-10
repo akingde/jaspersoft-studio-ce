@@ -90,4 +90,6 @@ public interface IConnection {
 	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception;
 
 	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception;
+
+	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception;
 }

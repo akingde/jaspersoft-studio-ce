@@ -535,4 +535,29 @@ public class SoapConnection implements IConnection {
 	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
 		return null;
 	}
+
+	@Override
+	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception {
+		return 1;
+
+		// FIXME, we could claculate manually the effective permission for a
+		// resource
+
+		// WSObjectPermission[] m =
+		// client.getPermissionsManagement().getPermissionsForObject("repo:" +
+		// rd.getUriString());
+		// int min = 100;
+		// for (WSObjectPermission p : m) {
+		// int pmask = p.getPermissionMask();
+		// if (pmask == 1) {
+		// min = 1;
+		// break;
+		// }
+		// min = Math.min(pmask, min);
+		// }
+		// if (min == 100)
+		// min = 0;
+		// rd.setPermissionMask(min);
+		// return min;
+	}
 }

@@ -68,7 +68,7 @@ public class RunReportUnitAction extends Action {
 			mrepunit = (MReportUnit) ((ANode) obj).getParent();
 		if (mrepunit == null)
 			return false;
-		int pmask = mrepunit.getValue().getPermissionMask();
+		int pmask = mrepunit.getValue().getPermissionMask(mrepunit.getWsClient());
 		return pmask == 1 || (pmask & 32) == 32 || (pmask & 2) == 2;
 	}
 

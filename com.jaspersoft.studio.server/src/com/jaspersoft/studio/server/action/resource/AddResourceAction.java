@@ -48,7 +48,8 @@ public class AddResourceAction extends Action {
 		boolean b = firstElement != null;
 		if (b) {
 			if (firstElement instanceof MResource) {
-				int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+				MResource mres = (MResource) firstElement;
+				int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 				b = b && (pmask == 1 || (pmask & 8) == 8);
 			}
 		}

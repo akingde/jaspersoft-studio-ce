@@ -27,7 +27,6 @@ import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.Activator;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
@@ -474,7 +473,7 @@ public class ProxyConnection implements IConnection {
 					throw e;
 			} else
 				throw e;
-		} 
+		}
 	}
 
 	@Override
@@ -494,7 +493,7 @@ public class ProxyConnection implements IConnection {
 					throw e;
 			} else
 				throw e;
-		} 
+		}
 	}
 
 	@Override
@@ -510,7 +509,23 @@ public class ProxyConnection implements IConnection {
 					throw e;
 			} else
 				throw e;
-		} 
+		}
+	}
+
+	@Override
+	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception {
+		try {
+			return c.getPermissionMask(rd);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 401) {
+					return c.getPermissionMask(rd);
+				} else
+					throw e;
+			} else
+				throw e;
+		}
 	}
 
 }

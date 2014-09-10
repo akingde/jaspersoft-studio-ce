@@ -146,4 +146,9 @@ public abstract class ARestV2Connection implements IConnection {
 	public abstract void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) throws Exception;
 
 	public abstract List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception;
+
+	@Override
+	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception {
+		return rd.getPermissionMask(null);
+	}
 }

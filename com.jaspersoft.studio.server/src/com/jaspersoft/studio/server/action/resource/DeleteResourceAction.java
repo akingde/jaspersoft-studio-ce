@@ -52,7 +52,8 @@ public class DeleteResourceAction extends Action {
 		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
 		boolean b = firstElement != null && (firstElement instanceof MResource);
 		if (b) {
-			int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+			MResource mres = (MResource) firstElement;
+			int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 			b = b && (pmask == 1 || (pmask & 16) == 16);
 		}
 		return b;

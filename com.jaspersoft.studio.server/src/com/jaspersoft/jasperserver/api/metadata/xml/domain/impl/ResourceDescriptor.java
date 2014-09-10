@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.common.domain.FileResource;
 import com.jaspersoft.jasperserver.api.metadata.common.domain.ResourceReference;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ResourceDescriptor implements Serializable {
@@ -1090,8 +1091,15 @@ public class ResourceDescriptor implements Serializable {
 		setResourceProperty(PROP_SECURITY_PERMISSION_MASK, permissionMask);
 	}
 
-	public int getPermissionMask() {
-		return Misc.nvl(getResourcePropertyValueAsInteger(PROP_SECURITY_PERMISSION_MASK), 1);
+	public int getPermissionMask(IConnection c) {
+		Integer pmask = getResourcePropertyValueAsInteger(PROP_SECURITY_PERMISSION_MASK);
+		if (pmask == null && c != null)
+			try {
+				pmask = c.getPermissionMask(this);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		return Misc.nvl(pmask, 1);
 	}
 
 	public void fixStructure() {

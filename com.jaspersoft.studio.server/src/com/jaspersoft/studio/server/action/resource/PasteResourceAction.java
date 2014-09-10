@@ -89,7 +89,8 @@ public class PasteResourceAction extends Action {
 			res = firstElement != null;
 			if (res) {
 				if (firstElement instanceof MResource) {
-					int pmask = ((MResource) firstElement).getValue().getPermissionMask();
+					MResource mres = (MResource) firstElement;
+					int pmask = mres.getValue().getPermissionMask(mres.getWsClient());
 					res = res && (pmask == 1 || (pmask & 8) == 8);
 				}
 			}
