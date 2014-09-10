@@ -169,7 +169,7 @@ public class Publish {
 						PublishUtil.setChild(r, rd);
 				}
 			}
-			mrunit.getWsClient().addOrModifyResource(monitor, r, null);
+			mrunit.getWsClient().addOrModifyResource(monitor, r, file);
 			this.resources.add(r.getUriString());
 			for (MResource res : resources)
 				if (res.getPublishOptions().isOverwrite()) {
