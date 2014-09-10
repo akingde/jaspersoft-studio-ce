@@ -19,9 +19,9 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemData;
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemProperty;
-import com.jaspersoft.jasperreports.components.bridge.design.BridgeDesignComponent;
+import com.jaspersoft.jasperreports.bridge.BridgeItemData;
+import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
+import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
 import com.jaspersoft.studio.components.bridge.BridgeNodeIconDescriptor;
 import com.jaspersoft.studio.components.bridge.messages.Messages;
 import com.jaspersoft.studio.model.ANode;

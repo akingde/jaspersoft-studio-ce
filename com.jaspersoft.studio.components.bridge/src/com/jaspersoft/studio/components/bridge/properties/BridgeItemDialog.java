@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItem;
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemProperty;
-import com.jaspersoft.jasperreports.components.bridge.design.BridgeDesignItem;
+import com.jaspersoft.jasperreports.bridge.BridgeItem;
+import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
+import com.jaspersoft.jasperreports.bridge.design.BridgeDesignItem;
 import com.jaspersoft.studio.components.bridge.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;

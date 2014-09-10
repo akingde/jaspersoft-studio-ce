@@ -7,7 +7,7 @@ package com.jaspersoft.studio.components.bridge.properties;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemProperty;
+import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
 import com.jaspersoft.studio.components.bridge.BridgeComponentUtil;
 import com.jaspersoft.studio.utils.Misc;
 

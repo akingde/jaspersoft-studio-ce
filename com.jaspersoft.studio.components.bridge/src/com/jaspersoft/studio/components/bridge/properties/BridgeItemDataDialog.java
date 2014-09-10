@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItem;
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemData;
-import com.jaspersoft.jasperreports.components.bridge.design.BridgeDesignItemData;
+import com.jaspersoft.jasperreports.bridge.BridgeItem;
+import com.jaspersoft.jasperreports.bridge.BridgeItemData;
+import com.jaspersoft.jasperreports.bridge.design.BridgeDesignItemData;
 import com.jaspersoft.studio.components.bridge.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.jface.dialogs.EditableDatasetBaseComposite;

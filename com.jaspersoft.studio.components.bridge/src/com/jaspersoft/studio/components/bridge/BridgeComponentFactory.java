@@ -17,7 +17,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeComponent;
+import com.jaspersoft.jasperreports.bridge.BridgeComponent;
 import com.jaspersoft.studio.components.bridge.figure.BridgeFigure;
 import com.jaspersoft.studio.components.bridge.model.MBridge;
 import com.jaspersoft.studio.components.bridge.model.command.CreateBridgeCommand;

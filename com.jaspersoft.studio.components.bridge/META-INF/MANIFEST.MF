@@ -11,10 +11,15 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: net.sf.jasperreports, com.jaspersoft.studio
 Bundle-ClassPath: .,
- lib/jasperreports-bridge.jar
-Export-Package: com.jaspersoft.jasperreports.components.bridge,
- com.jaspersoft.jasperreports.components.bridge.design,
- com.jaspersoft.jasperreports.components.bridge.export,
- com.jaspersoft.jasperreports.components.bridge.fill,
- com.jaspersoft.jasperreports.components.bridge.xml,
- com.jaspersoft.studio.components.bridge
+ lib/jasperreports-bridge-5.6.2-SNAPSHOT.jar
+Export-Package: com.jaspersoft.jasperreports.bridge,
+ com.jaspersoft.jasperreports.bridge.design,
+ com.jaspersoft.jasperreports.bridge.export,
+ com.jaspersoft.jasperreports.bridge.fill,
+ com.jaspersoft.jasperreports.bridge.xml,
+ com.jaspersoft.studio.components.bridge,
+ com.jaspersoft.studio.components.bridge.figure,
+ com.jaspersoft.studio.components.bridge.messages,
+ com.jaspersoft.studio.components.bridge.model,
+ com.jaspersoft.studio.components.bridge.model.command,
+ com.jaspersoft.studio.components.bridge.properties

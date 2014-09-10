@@ -9,7 +9,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.jasperreports.components.bridge.design.BridgeDesignComponent;
+import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
 import com.jaspersoft.studio.components.bridge.properties.SPBridgeItemDataList;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;

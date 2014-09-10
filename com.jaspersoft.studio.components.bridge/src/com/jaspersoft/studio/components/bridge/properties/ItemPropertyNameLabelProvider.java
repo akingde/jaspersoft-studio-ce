@@ -7,7 +7,7 @@ package com.jaspersoft.studio.components.bridge.properties;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemProperty;
+import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
 
 /**
  * Label provider for the column name of a table containing a list of

@@ -5,7 +5,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.bridge;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemProperty;
+import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
 
 /**
  * Utility class for model-like operations involving the Bridge component.

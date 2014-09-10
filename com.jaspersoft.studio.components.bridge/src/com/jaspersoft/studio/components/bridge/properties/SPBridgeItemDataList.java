@@ -26,8 +26,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.jasperreports.components.bridge.BridgeItemData;
-import com.jaspersoft.jasperreports.components.bridge.design.BridgeDesignComponent;
+import com.jaspersoft.jasperreports.bridge.BridgeItemData;
+import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
 import com.jaspersoft.studio.components.bridge.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;

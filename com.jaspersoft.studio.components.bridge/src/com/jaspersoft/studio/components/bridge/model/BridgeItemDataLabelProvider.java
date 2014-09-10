@@ -10,7 +10,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.osgi.util.NLS;
 
-import com.jaspersoft.jasperreports.components.bridge.design.BridgeDesignComponent;
+import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
 import com.jaspersoft.studio.components.bridge.messages.Messages;
 
 /**
