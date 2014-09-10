@@ -47,6 +47,11 @@ public class Messages extends NLS {
 	public static String DatasourceSelectionComposite_NoDatasource;
 	public static String DatasourceSelectionPage_Description;
 	public static String DatasourceSelectionPage_Title;
+	public static String DataTypePageContent_0;
+	public static String DataTypePageContent_3;
+	public static String DataTypePageContent_4;
+	public static String DataTypePageContent_7;
+	public static String DataTypePageContent_8;
 	public static String DeleteServerAction_desc;
 	public static String DuplicateServerAction_desc;
 	public static String DuplicateServerAction_title;

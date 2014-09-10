@@ -95,7 +95,7 @@ public class DataTypePageContent extends APageContent {
 		tpattern.setLayoutData(gd);
 
 		if (res.isSupported(Feature.MAXLENGHT)) {
-			lenghtLbl = UIUtil.createLabel(container, "Max Lenght");
+			lenghtLbl = UIUtil.createLabel(container, Messages.DataTypePageContent_0);
 			tlenght = new Text(container, SWT.BORDER | SWT.RIGHT);
 			gd = new GridData();
 			gd.widthHint = 100;
@@ -173,7 +173,7 @@ public class DataTypePageContent extends APageContent {
 			numberFormat.setGroupingUsed(false);
 			IConverter targetToModelConverter = StringToNumberConverter.toInteger(numberFormat, true);
 			IConverter modelToTargetConverter = NumberToStringConverter.fromInteger(numberFormat, true);
-			Binding b = bindingContext.bindValue(SWTObservables.observeText(tlenght, SWT.Modify), PojoObservables.observeValue(getProxy(rd), "maxLenght"),
+			Binding b = bindingContext.bindValue(SWTObservables.observeText(tlenght, SWT.Modify), PojoObservables.observeValue(getProxy(rd), "maxLenght"), //$NON-NLS-1$
 					new UpdateValueStrategy().setAfterGetValidator(tLengValidator).setConverter(targetToModelConverter), new UpdateValueStrategy().setConverter(modelToTargetConverter)); //$NON-NLS-1$
 			ControlDecorationSupport.create(b, SWT.TOP | SWT.LEFT);
 		}
@@ -182,12 +182,12 @@ public class DataTypePageContent extends APageContent {
 			IValidator minMaxValidator = new IValidator() {
 				public IStatus validate(Object value) {
 					String stringValue = (String) value;
-					String format = "";
+					String format = ""; //$NON-NLS-1$
 					try {
 						if (!Misc.isNullOrEmpty(stringValue))
 							switch (getProxy(rd).getDataType()) {
 							case 1:
-								format = "of a Decimal Number";
+								format = Messages.DataTypePageContent_3;
 								java.text.NumberFormat.getNumberInstance().parse(stringValue);
 								break;
 							case 2:
@@ -206,7 +206,7 @@ public class DataTypePageContent extends APageContent {
 
 						return Status.OK_STATUS;
 					} catch (ParseException e) {
-						return ValidationStatus.error("Value should be in format " + format);
+						return ValidationStatus.error(Messages.DataTypePageContent_4 + format.replace("'", "")); //$NON-NLS-2$ //$NON-NLS-3$
 					}
 				}
 
@@ -234,10 +234,10 @@ public class DataTypePageContent extends APageContent {
 			String stringValue = (String) value;
 			try {
 				if (new Integer(stringValue).intValue() < 0)
-					return ValidationStatus.error("Only positiv values are valid.");
+					return ValidationStatus.error(Messages.DataTypePageContent_7);
 				return Status.OK_STATUS;
 			} catch (NumberFormatException ex) {
-				return ValidationStatus.error("Value should be an Integer");
+				return ValidationStatus.error(Messages.DataTypePageContent_8);
 			}
 		}
 	};
@@ -295,7 +295,7 @@ public class DataTypePageContent extends APageContent {
 
 	@Override
 	public String getHelpContext() {
-		return "com.jaspersoft.studio.doc.editDataType";
+		return "com.jaspersoft.studio.doc.editDataType"; //$NON-NLS-1$
 	}
 
 }
