@@ -212,14 +212,14 @@ public class MetaDataUtil {
 				}
 			}
 			for (INode n : mt.getChildren()) {
-				if (n.getValue().equals(pkcolname)) {
+				if (n.getValue().equals(fkcolname)) {
 					srcCols.add((MSQLColumn) n);
 					break;
 				}
 			}
 			if (dTable != null)
 				for (INode n : dTable.getChildren()) {
-					if (n.getValue().equals(fkcolname)) {
+					if (n.getValue().equals(pkcolname)) {
 						dstCols.add((MSQLColumn) n);
 						break;
 					}
