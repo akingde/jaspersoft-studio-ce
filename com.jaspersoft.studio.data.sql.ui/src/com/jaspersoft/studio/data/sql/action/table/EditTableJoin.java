@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.JoinFromTableDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.model.ANode;
@@ -28,7 +29,7 @@ public class EditTableJoin extends AAction {
 	private SQLQueryDesigner designer;
 
 	public EditTableJoin(SQLQueryDesigner designer, TreeViewer treeViewer) {
-		super("Edit Table &Join", treeViewer);
+		super(Messages.EditTableJoin_0, treeViewer);
 		this.designer = designer;
 	}
 

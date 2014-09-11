@@ -30,6 +30,10 @@ public abstract class AOperand implements Serializable, Cloneable {
 		return expression;
 	}
 
+	public void setExpression(AMExpression<?> expression) {
+		this.expression = expression;
+	}
+
 	public abstract String toXString();
 
 	public abstract String toSQLString();

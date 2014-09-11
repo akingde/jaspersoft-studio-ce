@@ -23,6 +23,7 @@ public class Messages extends NLS {
 	public static String DBMetadata_4;
 	public static String DBMetadata_5;
 	public static String DBMetadata_6;
+	public static String EditExpression_0;
 	public static String EditExpressionDialog_0;
 	public static String EditExpressionDialog_1;
 	public static String EditExpressionDialog_2;
@@ -33,6 +34,7 @@ public class Messages extends NLS {
 	public static String EditExpressionDialog_7;
 	public static String EditExpressionDialog_8;
 	public static String EditExpressionDialog_9;
+	public static String EditTableJoin_0;
 	public static String Factory_10;
 	public static String Factory_11;
 	public static String Factory_12;

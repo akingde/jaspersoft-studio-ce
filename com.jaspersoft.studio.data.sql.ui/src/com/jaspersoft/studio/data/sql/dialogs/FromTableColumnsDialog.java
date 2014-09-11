@@ -90,12 +90,15 @@ public class FromTableColumnsDialog extends ATitledDialog {
 
 	@Override
 	public boolean close() {
-		root.getRoot().getPropertyChangeSupport().removePropertyChangeListener(metaDataListener);
+		if (root != null && root.getRoot() != null)
+			root.getRoot().getPropertyChangeSupport()
+					.removePropertyChangeListener(metaDataListener);
 		if (getReturnCode() == OK) {
 			TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 			for (TreePath tp : ts.getPaths())
 				if (tp.getSegmentCount() == 2)
-					cols.put((MSQLColumn) tp.getLastSegment(), (MFromTable) tp.getFirstSegment());
+					cols.put((MSQLColumn) tp.getLastSegment(),
+							(MFromTable) tp.getFirstSegment());
 		}
 		return super.close();
 	}
@@ -113,7 +116,8 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			@Override
 			public Object[] getChildren(Object parentElement) {
 				if (parentElement instanceof MFrom) {
-					List<MFromTable> tables = Util.getFromTables((MFrom) parentElement);
+					List<MFromTable> tables = Util
+							.getFromTables((MFrom) parentElement);
 					return tables.toArray();
 				} else if (parentElement instanceof MFromTable) {
 					MFromTable mftable = (MFromTable) parentElement;
@@ -128,9 +132,11 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			@Override
 			public Image getImage(Object element) {
 				if (element instanceof MFromTable) {
-					ImageDescriptor imagePath = ((MFromTable) element).getValue().getImagePath();
+					ImageDescriptor imagePath = ((MFromTable) element)
+							.getValue().getImagePath();
 					if (imagePath != null)
-						return JaspersoftStudioPlugin.getInstance().getImage(imagePath);
+						return JaspersoftStudioPlugin.getInstance().getImage(
+								imagePath);
 				}
 				return super.getImage(element);
 			}
@@ -139,7 +145,8 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			public StyledString getStyledText(Object element) {
 				if (element instanceof MFromTableJoin) {
 					MFromTableJoin mft = (MFromTableJoin) element;
-					StyledString ss = new StyledString(mft.getValue().toSQLString());
+					StyledString ss = new StyledString(mft.getValue()
+							.toSQLString());
 					mft.addAlias(ss);
 					return ss;
 				}
@@ -173,12 +180,15 @@ public class FromTableColumnsDialog extends ATitledDialog {
 			public void selectionChanged(SelectionChangedEvent event) {
 				TreeSelection ts = (TreeSelection) treeViewer.getSelection();
 				Object el = ts.getFirstElement();
-				getButton(IDialogConstants.OK_ID).setEnabled(el instanceof MSQLColumn);
+				getButton(IDialogConstants.OK_ID).setEnabled(
+						el instanceof MSQLColumn);
 			}
 		});
 		treeViewer.setInput(root);
 		metaDataListener = new MetaDataListener();
-		root.getRoot().getPropertyChangeSupport().addPropertyChangeListener(metaDataListener);
+		if (root != null && root.getRoot() != null)
+			root.getRoot().getPropertyChangeSupport()
+					.addPropertyChangeListener(metaDataListener);
 
 		treeViewer.expandAll();
 		return cmp;

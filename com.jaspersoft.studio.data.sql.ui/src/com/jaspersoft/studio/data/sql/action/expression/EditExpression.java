@@ -21,6 +21,7 @@ import com.jaspersoft.studio.data.sql.action.AAction;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditExpressionXDialog;
 import com.jaspersoft.studio.data.sql.dialogs.EditPNotExpressionDialog;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.enums.Operator;
 import com.jaspersoft.studio.data.sql.model.query.expression.AMExpression;
 import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
@@ -31,7 +32,7 @@ import com.jaspersoft.studio.model.ANode;
 public class EditExpression extends AAction {
 
 	public EditExpression(TreeViewer treeViewer) {
-		super("&Edit Expression", treeViewer);
+		super(Messages.EditExpression_0, treeViewer);
 	}
 
 	@Override
