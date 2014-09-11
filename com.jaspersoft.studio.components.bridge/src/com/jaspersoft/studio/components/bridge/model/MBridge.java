@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -48,6 +49,7 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	private static Map<String, Object> defaultsMap;
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	private static JSSEnumPropertyDescriptor onErrorTypeD;
 
 	public MBridge() {
 		super();
@@ -181,6 +183,13 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 		
 		defaultsMap.put(BridgeDesignComponent.PROPERTY_EVALUATION_TIME,
 				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
+		
+		onErrorTypeD = new JSSEnumPropertyDescriptor(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE, Messages.MBridge_OnErrorType,
+				OnErrorTypeEnum.class, NullEnum.NULL);
+		onErrorTypeD.setDescription(Messages.MBridge_OnErrorTypeDesc);
+		desc.add(onErrorTypeD);
+		
+		defaultsMap.put(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
 	}
 
 	@Override
@@ -208,6 +217,9 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 		}
 		else if (BridgeDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
 			return JRCloneUtils.cloneList(bridgeComp.getItemData());
+		}
+		if (id.equals(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE)) {
+			return onErrorTypeD.getEnumValue(bridgeComp.getOnErrorType());
 		}
 		else {
 			return super.getPropertyValue(id);
@@ -248,6 +260,9 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 			for (BridgeItemData i : (List<BridgeItemData>)value){
 				bridgeComp.addItemData(i);
 			}
+		}
+		else if(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE.equals(id)) {
+			bridgeComp.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
 		}
 		else {
 			super.setPropertyValue(id, value);

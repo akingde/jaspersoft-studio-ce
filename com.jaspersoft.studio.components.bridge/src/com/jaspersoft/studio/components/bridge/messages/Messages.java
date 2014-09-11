@@ -35,6 +35,7 @@ public class Messages extends NLS {
 	public static String BridgeSection_EvalGroup;
 	public static String BridgeSection_EvalTime;
 	public static String BridgeSection_InnerConfiguration;
+	public static String BridgeSection_OnErrorType;
 	public static String BridgeSection_ProcessingClass;
 	public static String MBridge_BridgePropertiesCategory;
 	public static String MBridge_EvalGroupDesc;
@@ -44,6 +45,8 @@ public class Messages extends NLS {
 	public static String MBridge_ItemDataDesc;
 	public static String MBridge_ItemProperties;
 	public static String MBridge_ItemPropertiesDesc;
+	public static String MBridge_OnErrorType;
+	public static String MBridge_OnErrorTypeDesc;
 	public static String MBridge_ProcessingClass;
 	public static String MBridge_ProcessingClassDesc;
 	public static String SPBridgeItemDataList_Add;

@@ -39,13 +39,18 @@ public class BridgeSection extends AbstractSection{
 		SPEvaluationTime eval = new SPEvaluationTime(parent, this, pd, gpd);
 		eval.getControl().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 2, 1));
 		widgets.put(pd.getId(), eval);
-		createWidget4Property(parent, BridgeDesignComponent.PROPERTY_PROCESSING_CLASS);
+		
+		createWidget4Property(parent, BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE);
+		
 		getWidgetFactory().createCLabel(parent, Messages.BridgeSection_BridgeItemProperties).setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,3,1));
 		ASPropertyWidget itemPropsW = createWidget4Property(parent, BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES,false);
 		itemPropsW.getControl().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,3,1));
+		
 		getWidgetFactory().createCLabel(parent, Messages.BridgeSection_BridgeItemData).setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,3,1));
 		ASPropertyWidget itemDataW = createWidget4Property(parent, BridgeDesignComponent.PROPERTY_ITEM_DATA,false);
 		itemDataW.getControl().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,3,1));
+		
+		createWidget4Property(parent, BridgeDesignComponent.PROPERTY_PROCESSING_CLASS);
 	}
 
 	
@@ -57,5 +62,6 @@ public class BridgeSection extends AbstractSection{
 		addProvidedProperties(BridgeDesignComponent.PROPERTY_PROCESSING_CLASS, Messages.BridgeSection_ProcessingClass);
 		addProvidedProperties(BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES, Messages.BridgeSection_BridgeItemPropertiesDesc);
 		addProvidedProperties(BridgeDesignComponent.PROPERTY_ITEM_DATA, Messages.BridgeSection_InnerConfiguration);
+		addProvidedProperties(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE, Messages.BridgeSection_OnErrorType);
 	}
 }
