@@ -61,10 +61,10 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 
 	/** The property change support. */
 	private PropertyChangeSupport propertyChangeSupport;
-	
+
 	/**
-	 * flag to know if the node is visible or not. The visibility can be 
-	 * set and in case of new nodes it is inherited by the parent
+	 * flag to know if the node is visible or not. The visibility can be set and in case of new nodes it is inherited by
+	 * the parent
 	 */
 	private boolean visible = true;
 
@@ -206,7 +206,7 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			unsetDependents();
 		}
 		if (newparent != null) {
-			//Inherit visibility
+			// Inherit visibility
 			this.visible = newparent.visible;
 			register();
 			this.parent = newparent;
@@ -517,12 +517,15 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 			ANode clone = (ANode) super.clone();
 			if (children != null) {
 				clone.intReset();
+				List<INode> oldChildren = new ArrayList<INode>(children);
 				// fixed java.util.ConcurrentModificationException
 				List<ANode> ch = new ArrayList<ANode>();
 				for (INode n : children)
 					ch.add(((ANode) n).clone());
 				for (ANode n : ch)
 					clone.addChild(n);
+				for (INode n : oldChildren)
+					addChild((ANode) n);
 			}
 			return clone;
 		} catch (CloneNotSupportedException e) {
@@ -562,23 +565,23 @@ public abstract class ANode implements INode, Serializable, IAdaptable, Cloneabl
 	public boolean canAcceptChildren(ANode child) {
 		return true;
 	}
-	
+
 	/**
 	 * Return the visibility of the node
 	 * 
 	 * @return true if the node is visible, false otherwise
 	 */
-	public boolean isVisible(){
+	public boolean isVisible() {
 		return visible;
 	}
-	
+
 	/**
-	 * Set the visibility of the node. This dosen't affect
-	 * the visibility of the children
- 	 * 
-	 * @param visible true if the node is visible, false otherwise
+	 * Set the visibility of the node. This dosen't affect the visibility of the children
+	 * 
+	 * @param visible
+	 *          true if the node is visible, false otherwise
 	 */
-	public void setVisible(boolean visible){
+	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 }
