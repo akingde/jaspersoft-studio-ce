@@ -12,9 +12,10 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.action.table;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
 import com.jaspersoft.studio.data.sql.Util;
@@ -27,6 +28,7 @@ import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFrom;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.from.TableJoin;
 import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
@@ -69,7 +71,7 @@ public class JoinTable extends AAction {
 				break;
 			}
 		}
-		JoinFromTableDialog dialog = new JoinFromTableDialog(Display.getDefault().getActiveShell(), designer, true);
+		JoinFromTableDialog dialog = new JoinFromTableDialog(UIUtils.getShell(), designer, true);
 		dialog.setValue(mfromTable);
 		if (dialog.open() == Dialog.OK) {
 			MFromTable destTbl = getFromTable(mfromTable, dialog);
@@ -82,24 +84,27 @@ public class JoinTable extends AAction {
 				mfromTable = tmp;
 			}
 
-			doRun(null, mfromTable, null, destTbl);
+			doRun(null, mfromTable, null, destTbl, destTbl);
 		}
 	}
 
-	public void doRun(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl) {
+	public void doRun(MSQLColumn src, MFromTable srcTbl, MSQLColumn dest, MFromTable destTbl, MFromTable fromTbl) {
 		if (src == null)
 			src = getColumn(srcTbl.getValue());
 		if (dest == null)
 			dest = getColumn(destTbl.getValue());
 		srcTbl.setParent(null, -1);
 
-		MFromTableJoin mtbljoin = new MFromTableJoin(destTbl, srcTbl.getValue());
+		MFromTableJoin mtbljoin = new MFromTableJoin(fromTbl, srcTbl.getValue());
 		mtbljoin.setNoEvents(true);
 		mtbljoin.setPropertyValue(MFromTable.PROP_X, srcTbl.getPropertyActualValue(MFromTable.PROP_X));
 		mtbljoin.setPropertyValue(MFromTable.PROP_Y, srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
 		mtbljoin.setNoEvents(false);
 		mtbljoin.setAlias(srcTbl.getAlias());
 		mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
+
+		fromTbl.removeTableJoin(mtbljoin.getTableJoin());
+		mtbljoin.setTableJoin(new TableJoin(mtbljoin, (MFromTable) destTbl));
 
 		Util.copySubQuery(srcTbl, mtbljoin);
 

@@ -121,6 +121,8 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 			location.y = (Integer) fromTable.getPropertyValue(MFromTable.PROP_Y);
 		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
 		f.setToolTip(new Label(fromTable.getToolTip()));
+//		System.out.println(tblName + ": " + location.x + "," + location.y);
+//		new Exception().printStackTrace();
 	}
 
 	@Override

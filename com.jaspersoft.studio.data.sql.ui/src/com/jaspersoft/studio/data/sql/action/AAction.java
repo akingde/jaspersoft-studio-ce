@@ -44,7 +44,7 @@ public abstract class AAction extends Action {
 		return true;
 	}
 
-	protected void selectInTree(Object sel) {
+	public void selectInTree(Object sel) {
 		treeViewer.refresh(true);
 		treeViewer.setSelection(new TreeSelection(new TreePath(new Object[] { sel })));
 		treeViewer.reveal(sel);

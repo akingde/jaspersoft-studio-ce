@@ -51,7 +51,11 @@ public class MoveJoinCommand extends Command {
 		else
 			dtj.runSilent();
 
+		MFromTable fromTbl = destTbl;
+		if (destTbl instanceof MFromTableJoin)
+			fromTbl = JoinCommand.getParentFromTable((MFromTableJoin) destTbl);
+
 		JoinTable jt = afactory.getAction(JoinTable.class);
-		jt.doRun(null, srcTbl, null, destTbl);
+		jt.doRun(null, srcTbl, null, destTbl, fromTbl);
 	}
 }
