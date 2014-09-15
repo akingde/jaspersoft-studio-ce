@@ -42,10 +42,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
@@ -56,6 +59,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
@@ -106,50 +110,78 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         return markers;
     }
 
-    private IPropertyChangeListener preferenceListener;
-
     /**
      * The <code>MultiPageEditorExample</code> implementation of this method
-     * checks that the input is an instance of <code>IFileEditorInput</code>.
+     * checks that the input is an instance of <code>IFileEditorInput</code> of 
+     * <code>FileStoreEditorInput</code> for the external file. In case of external
+     * file a link is created into an appropriate project folder.
      */
     @Override
-    public void init(IEditorSite site, IEditorInput editorInput)
-            throws PartInitException {
-
-        if (editorInput instanceof IFileEditorInput) {
+    public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
+        file = null;
+    	if (editorInput instanceof IFileEditorInput) {
             file = ((IFileEditorInput) editorInput).getFile();
             if (MsgEditorPreferences.isBuilderSetupAutomatically()) {
                 IProject p = file.getProject();
                 if (p != null && p.isAccessible()) {
-                    ToggleNatureAction
-                            .addOrRemoveNatureOnProject(p, true, true);
+                    ToggleNatureAction.addOrRemoveNatureOnProject(p, true, true);
                 }
             }
-            try {
-                messagesBundleGroup = MessagesBundleGroupFactory
-                        .createBundleGroup(site, file);
-            } catch (MessageException e) {
-                throw new PartInitException("Cannot create bundle group.", e); //$NON-NLS-1$
-            }
-            messagesBundleGroup.addMessagesBundleGroupListener(getMsgBundleGroupListner());
-            markers = new MessagesEditorMarkers(messagesBundleGroup);
-            setPartName(messagesBundleGroup.getName());
-            setTitleImage(UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
-            closeIfAreadyOpen(site, file);
-            super.init(site, editorInput);
-            // TODO figure out model to use based on preferences
-            keyTreeModel = new AbstractKeyTreeModel(messagesBundleGroup);
-            // markerManager = new RBEMarkerManager(this);
-        } else {
-            throw new PartInitException(
-                    "Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
+        } else if (editorInput instanceof FileStoreEditorInput) {
+        	FileStoreEditorInput input = (FileStoreEditorInput)editorInput;
+        	file = createLinkedResource(input.getURI().getRawPath());
         }
-        initRAP();
+    	
+    	if (file != null){    	
+	        try {
+	            messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(site, file);
+	        } catch (MessageException e) {
+	            throw new PartInitException("Cannot create bundle group.", e); //$NON-NLS-1$
+	        }
+	        messagesBundleGroup.addMessagesBundleGroupListener(getMsgBundleGroupListner());
+	        markers = new MessagesEditorMarkers(messagesBundleGroup);
+	        setPartName(messagesBundleGroup.getName());
+	        setTitleImage(UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
+	        closeIfAreadyOpen(site, file);
+	        super.init(site, editorInput);
+	        keyTreeModel = new AbstractKeyTreeModel(messagesBundleGroup);   
+	        initRAP();
+    	} else {
+            throw new PartInitException("Unable to load the selected file"); //$NON-NLS-1$
+        }
+    }
+    
+    /**
+     * Create a project for the external files called External Files
+     * and put a link to the external resource inside there. The project
+     * is created only if it dosen't exist and any previous link to the same
+     * file is deleted before to create the new one
+     * 
+     * @param fileName Absolute path of the file on the disk
+     * @return an IFile resource, type link, to the external file or null if 
+     * for some reason it was not possible to create the link.
+     */
+    private IFile createLinkedResource(String fileName){
+    	IFile file = null;
+    	try {
+		    IWorkspace ws = ResourcesPlugin.getWorkspace();
+		    IProject project = ws.getRoot().getProject("External Files");
+		    if (!project.exists())
+		        project.create(null);
+		    if (!project.isOpen())
+		        project.open(null);
+		    IPath location = new Path(fileName);
+		    file = project.getFile(location.lastSegment());
+		    if (file.exists()) file.delete(true, null);
+			file.createLink(location, IResource.NONE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			file = null;
+		}
+	    return file;
     }
 
-    // public RBEMarkerManager getMarkerManager() {
-    // return markerManager;
-    // }
+
 
     /**
      * Creates the pages of the multi-page editor.
@@ -343,13 +375,6 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     public void gotoMarker(IMarker marker) {
-        // String key = marker.getAttribute(RBEMarker.KEY, "");
-        // if (key != null && key.length() > 0) {
-        // setActivePage(0);
-        // setSelectedKey(key);
-        // getI18NPage().selectLocale(BabelUtils.parseLocale(
-        // marker.getAttribute(RBEMarker.LOCALE, "")));
-        // } else {
         IResource resource = marker.getResource();
         Locale[] locales = messagesBundleGroup.getLocales();
         for (int i = 0; i < locales.length; i++) {
