@@ -52,4 +52,9 @@ public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor {
 		}
 		return null;
 	}
+	
+	@Override
+	public boolean doSupportTest() {
+		return false;
+	}
 }

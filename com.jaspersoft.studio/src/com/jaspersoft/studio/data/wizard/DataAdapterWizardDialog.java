@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.messages.Messages;
 
 public class DataAdapterWizardDialog extends WizardDialog {
@@ -63,16 +65,30 @@ public class DataAdapterWizardDialog extends WizardDialog {
 		testButton.setText(Messages.DataAdapterWizardDialog_0);
 		setButtonLayoutData(testButton);
 		testButton.setEnabled(false);
+		testButton.setVisible(false);
 		testButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				fireTestPressed(event);
 			}
-
 		});
 		super.createButtonsForButtonBar(parent);
 	}
+	
+	/*
+	 * Checks if the Test button is supposed to be visible.
+	 */
+	private boolean isTestVisible() {
+		boolean isTestVisible = false;
+		if(getWizard() instanceof DataAdapterWizard && getCurrentPage() instanceof DataAdapterEditorPage) {
+			DataAdapterDescriptor dataAdapterDesc = ((DataAdapterEditorPage)getCurrentPage()).getDataAdapter();
+			isTestVisible = (dataAdapterDesc!=null) ? dataAdapterDesc.doSupportTest() : false;
+		}
+		return isTestVisible;
+	}
 
 	public void setTestButtonEnabled(boolean b) {
-		testButton.setEnabled(b);
+		boolean testVisible = isTestVisible();
+		testButton.setEnabled(b && testVisible);
+		testButton.setVisible(testVisible);
 	}
 }

@@ -129,4 +129,16 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor, Serializ
 			return ImageDescriptor.createFromImage(icon);
 		return JaspersoftStudioPlugin.getInstance().getImageDescriptor("icons/database.png");
 	}
+	
+	/**
+	 * Verifies if the Data Adapter is supposed to support a generic <i>Test</i> operation.
+	 * <p>
+	 * This kind of information can be useful when exposed in the UI.
+	 * 
+	 * @return <code>true</code> if the data adapter supports Test, <code>false</code> otherwise
+	 */
+	public boolean doSupportTest() {
+		return true;
+	}
+	
 }
