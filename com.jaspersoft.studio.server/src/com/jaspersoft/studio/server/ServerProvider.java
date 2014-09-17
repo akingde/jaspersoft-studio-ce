@@ -69,6 +69,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
+import com.jaspersoft.studio.server.protocol.Feature;
 
 public class ServerProvider implements IRepositoryViewProvider {
 	private CreateServerAction createServerAction;
@@ -240,7 +241,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			if (editAction.isEnabled())
 				lst.add(editAction);
 
-			if (showPermissionsAction.isEnabled())
+			if (((MResource) node).getWsClient().isSupported(Feature.PERMISSION) && showPermissionsAction.isEnabled())
 				lst.add(showPermissionsAction);
 
 			lst.add(new Separator());

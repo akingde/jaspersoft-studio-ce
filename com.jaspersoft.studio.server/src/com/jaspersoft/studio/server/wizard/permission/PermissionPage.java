@@ -266,7 +266,7 @@ public class PermissionPage extends WizardPage {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Saving Permissions", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.PermissionPage_15, IProgressMonitor.UNKNOWN);
 					try {
 						perms = res.getWsClient().setPermissions(res.getValue(), perms, options, monitor);
 

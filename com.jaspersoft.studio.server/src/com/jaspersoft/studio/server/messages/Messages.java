@@ -132,6 +132,7 @@ public class Messages extends NLS {
 	public static String PermissionPage_12;
 	public static String PermissionPage_13;
 	public static String PermissionPage_14;
+	public static String PermissionPage_15;
 	public static String PermissionPage_2;
 	public static String PermissionPage_3;
 	public static String PermissionPage_4;
