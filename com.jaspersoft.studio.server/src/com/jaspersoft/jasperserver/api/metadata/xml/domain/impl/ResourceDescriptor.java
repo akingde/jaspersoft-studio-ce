@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 import net.sf.jasperreports.engine.JRConstants;
 
 import com.jaspersoft.jasperserver.api.metadata.common.domain.FileResource;
@@ -1095,7 +1097,7 @@ public class ResourceDescriptor implements Serializable {
 		Integer pmask = getResourcePropertyValueAsInteger(PROP_SECURITY_PERMISSION_MASK);
 		if (pmask == null && c != null)
 			try {
-				pmask = c.getPermissionMask(this);
+				pmask = c.getPermissionMask(this, new NullProgressMonitor());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

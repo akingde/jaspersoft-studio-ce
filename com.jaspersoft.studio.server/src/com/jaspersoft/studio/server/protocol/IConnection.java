@@ -19,6 +19,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
@@ -27,6 +29,7 @@ import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
+import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 
 public interface IConnection {
 	public void setParent(IConnection parent);
@@ -91,5 +94,11 @@ public interface IConnection {
 
 	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception;
 
-	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception;
+	public Integer getPermissionMask(ResourceDescriptor rd, IProgressMonitor monitor) throws Exception;
+
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception;
+
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception;
+
+	public ClientUser getUser(IProgressMonitor monitor) throws Exception;
 }

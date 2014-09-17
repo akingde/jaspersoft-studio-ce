@@ -39,9 +39,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
+import com.jaspersoft.ireport.jasperserver.ws.WSRole;
+import com.jaspersoft.ireport.jasperserver.ws.WSUser;
+import com.jaspersoft.ireport.jasperserver.ws.permissions.WSObjectPermission;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
@@ -56,6 +61,7 @@ import com.jaspersoft.studio.server.protocol.ReportExecution;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
+import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -537,7 +543,7 @@ public class SoapConnection implements IConnection {
 	}
 
 	@Override
-	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception {
+	public Integer getPermissionMask(ResourceDescriptor rd, IProgressMonitor monitor) throws Exception {
 		return 1;
 
 		// FIXME, we could claculate manually the effective permission for a
@@ -559,5 +565,32 @@ public class SoapConnection implements IConnection {
 		// min = 0;
 		// rd.setPermissionMask(min);
 		// return min;
+	}
+
+	@Override
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception {
+		WSObjectPermission[] m = client.getPermissionsManagement().getPermissionsForObject("repo:" + rd.getUriString());
+		List<RepositoryPermission> perms = new ArrayList<RepositoryPermission>();
+		for (WSObjectPermission p : m) {
+			String uri = p.getUri();
+			if (uri != null)
+				uri = uri.replaceAll("repo:", "");
+			Object prec = p.getPermissionRecipient();
+			if (prec instanceof WSRole && !options.isRecipientTypeUser())
+				perms.add(new RepositoryPermission(uri, ((WSRole) prec).getRoleName(), p.getPermissionMask()));
+			else if (prec instanceof WSUser && options.isRecipientTypeUser())
+				perms.add(new RepositoryPermission(uri, ((WSUser) prec).getUsername(), p.getPermissionMask()));
+		}
+		return perms;
+	}
+
+	@Override
+	public ClientUser getUser(IProgressMonitor monitor) throws Exception {
+		return null;
+	}
+
+	@Override
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception {
+		return perms;
 	}
 }

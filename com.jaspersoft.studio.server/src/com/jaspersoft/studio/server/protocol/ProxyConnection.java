@@ -22,6 +22,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
@@ -32,6 +34,7 @@ import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.restv2.RestV2ConnectionJersey;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
+import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 
 public class ProxyConnection implements IConnection {
 	public Format getDateFormat() {
@@ -147,7 +150,7 @@ public class ProxyConnection implements IConnection {
 						if (!error401) {
 							c.connect(monitor, getServerProfile());
 							error401 = true;
-							get(monitor, rd, f);
+							return get(monitor, rd, f);
 						}
 					}
 				}
@@ -185,7 +188,7 @@ public class ProxyConnection implements IConnection {
 					if (!error401) {
 						c.connect(monitor, getServerProfile());
 						error401 = true;
-						list(monitor, rd);
+						return list(monitor, rd);
 					}
 				}
 			}
@@ -217,7 +220,7 @@ public class ProxyConnection implements IConnection {
 					if (!error401) {
 						c.connect(monitor, getServerProfile());
 						error401 = true;
-						listDatasources(monitor, f);
+						return listDatasources(monitor, f);
 					}
 				}
 			}
@@ -238,12 +241,15 @@ public class ProxyConnection implements IConnection {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
-					c.connect(monitor, getServerProfile());
-					rd = c.move(monitor, rd, destFolderURI);
-				} else
-					throw e;
-			} else
-				throw e;
+					if (!error401) {
+						c.connect(monitor, getServerProfile());
+						error401 = true;
+						return move(monitor, rd, destFolderURI);
+					}
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -257,12 +263,15 @@ public class ProxyConnection implements IConnection {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
-					c.connect(monitor, getServerProfile());
-					rd = c.copy(monitor, rd, destFolderURI);
-				} else
-					throw e;
-			} else
-				throw e;
+					if (!error401) {
+						c.connect(monitor, getServerProfile());
+						error401 = true;
+						return c.copy(monitor, rd, destFolderURI);
+					}
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -277,11 +286,12 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
-					rd = c.addOrModifyResource(monitor, rd, inputFile);
-				} else
-					throw e;
-			} else
-				throw e;
+					error401 = true;
+					return c.addOrModifyResource(monitor, rd, inputFile);
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -296,11 +306,12 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
-					rd = c.modifyReportUnitResource(monitor, runit, rd, inFile);
-				} else
-					throw e;
-			} else
-				throw e;
+					error401 = true;
+					return c.modifyReportUnitResource(monitor, runit, rd, inFile);
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 		rd.setChildrenDirty(false);
 		return rd;
@@ -315,11 +326,13 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					c.delete(monitor, rd);
-				} else
-					throw e;
-			} else
-				throw e;
+					return;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -332,11 +345,13 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					c.delete(monitor, rd, runit);
-				} else
-					throw e;
-			} else
-				throw e;
+					return;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -349,12 +364,15 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					return c.runReport(monitor, repExec);
 				}
 				repExec.setStatus("failed");
+				return repExec;
 			}
+			error401 = false;
+			throw e;
 		}
-		return repExec;
 	}
 
 	@Override
@@ -366,11 +384,13 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					c.cancelReport(monitor, repExec);
-				} else
-					throw e;
-			} else
-				throw e;
+					return;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -398,11 +418,13 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					c.findResources(monitor, callback);
-				} else
-					throw e;
-			} else
-				throw e;
+					return;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -425,11 +447,13 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					c.reorderInputControls(uri, rd, monitor);
-				} else
-					throw e;
-			} else
-				throw e;
+					return;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -447,11 +471,12 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					return c.initInputControls(uri, monitor);
-				} else
-					throw e;
-			} else
-				throw e;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 		// ResourceDescriptor rd = new ResourceDescriptor();
 		// rd.setUriString(WSClientHelper.getReportUnitUri(uri));
@@ -468,11 +493,12 @@ public class ProxyConnection implements IConnection {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
 					c.connect(monitor, getServerProfile());
+					error401 = true;
 					return c.cascadeInputControls(runit, ics, monitor);
-				} else
-					throw e;
-			} else
-				throw e;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -488,11 +514,13 @@ public class ProxyConnection implements IConnection {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
 					return c.importMetaData(options, monitor);
-				} else
-					throw e;
-			} else
-				throw e;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
@@ -504,27 +532,85 @@ public class ProxyConnection implements IConnection {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
 					return c.exportMetaData(options, monitor);
-				} else
-					throw e;
-			} else
-				throw e;
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 
 	@Override
-	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception {
+	public Integer getPermissionMask(ResourceDescriptor rd, IProgressMonitor monitor) throws Exception {
 		try {
-			return c.getPermissionMask(rd);
+			return c.getPermissionMask(rd, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 401) {
-					return c.getPermissionMask(rd);
-				} else
-					throw e;
-			} else
-				throw e;
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return c.getPermissionMask(rd, monitor);
+				}
+			}
+			error401 = false;
+			throw e;
+		}
+	}
+
+	@Override
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception {
+		try {
+			return c.getPermissions(rd, monitor, options);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return c.getPermissions(rd, monitor, options);
+				}
+			}
+			error401 = false;
+			throw e;
+		}
+	}
+
+	@Override
+	public ClientUser getUser(IProgressMonitor monitor) throws Exception {
+		try {
+			return c.getUser(monitor);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return c.getUser(monitor);
+				}
+			}
+			error401 = false;
+			throw e;
+		}
+	}
+
+	@Override
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception {
+		try {
+			return c.setPermissions(rd, perms, options, monitor);
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				HttpResponseException he = (HttpResponseException) e;
+				if (he.getStatusCode() == 401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return c.setPermissions(rd, perms, options, monitor);
+				}
+			}
+			error401 = false;
+			throw e;
 		}
 	}
 

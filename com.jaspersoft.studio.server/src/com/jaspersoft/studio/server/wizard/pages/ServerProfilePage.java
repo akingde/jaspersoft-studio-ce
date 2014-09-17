@@ -189,7 +189,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 				new UpdateValueStrategy().setAfterConvertValidator(new NotEmptyIFolderValidator()), null);
 		dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify), PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
 		dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify), PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
-				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
+				new UpdateValueStrategy().setAfterConvertValidator(new UsernameValidator()), null);
 		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify), PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
 
 		dbc.bindValue(SWTObservables.observeText(ttimeout, SWT.Modify), PojoObservables.observeValue(value, "timeout")); //$NON-NLS-1$
@@ -228,6 +228,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 		new Label(cmpUP, SWT.NONE).setText(Messages.ServerProfilePage_10);
 		tuser = new Text(cmpUP, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		tuser.setTextLimit(100);
 
 		new Label(cmpUP, SWT.NONE).setText(Messages.ServerProfilePage_11);
 		tpass = new WSecretText(cmpUP, SWT.BORDER | SWT.PASSWORD);
@@ -419,7 +420,7 @@ public class ServerProfilePage extends WizardPage implements WizardEndingStateLi
 	public void showServerInfo() {
 		try {
 			txtInfo.setText(sprofile.getConnectionInfo());
-//			dbc.updateTargets();
+			// dbc.updateTargets();
 			IConnection c = sprofile.getWsClient();
 			if (c != null) {
 				ServerInfo si = c.getServerInfo(null);

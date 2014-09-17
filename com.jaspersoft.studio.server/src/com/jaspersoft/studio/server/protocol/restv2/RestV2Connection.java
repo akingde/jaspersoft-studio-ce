@@ -39,6 +39,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceListWrapper;
 import com.jaspersoft.jasperserver.dto.resources.ClientResourceLookup;
@@ -55,6 +57,7 @@ import com.jaspersoft.studio.server.utils.HttpUtils;
 import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
+import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 
 public class RestV2Connection extends ARestV2Connection {
 
@@ -293,6 +296,21 @@ public class RestV2Connection extends ARestV2Connection {
 		return null;
 	}
 
-	
+	@Override
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ClientUser getUser(IProgressMonitor monitor) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception {
+		return perms;
+	}
 
 }

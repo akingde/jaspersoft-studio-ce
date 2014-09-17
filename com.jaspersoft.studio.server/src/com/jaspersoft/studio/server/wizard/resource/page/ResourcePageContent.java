@@ -17,6 +17,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.Date;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
 import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 
@@ -29,6 +30,8 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -43,6 +46,8 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.DiffFields;
+import com.jaspersoft.studio.server.wizard.permission.PermissionDialog;
+import com.jaspersoft.studio.server.wizard.permission.PermissionWizard;
 import com.jaspersoft.studio.server.wizard.resource.APageContent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtil;
@@ -58,6 +63,7 @@ public class ResourcePageContent extends APageContent {
 	private Text tcdate;
 	private Text ttype;
 	private Button bisRef;
+	private Button bPerm;
 
 	public ResourcePageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
@@ -79,12 +85,12 @@ public class ResourcePageContent extends APageContent {
 
 	public Control createContent(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_parentfolder);
 		tparent = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		tparent.setLayoutData(gd);
 		// tparent.setEnabled(false);
 
@@ -97,10 +103,25 @@ public class ResourcePageContent extends APageContent {
 		bisRef.setText(Messages.ResourcePageContent_isReference);
 		bisRef.setEnabled(false);
 
+		bPerm = new Button(composite, SWT.PUSH);
+		bPerm.setText("Permissions");
+		if (res.getValue().getIsNew())
+			bPerm.setEnabled(false);
+		else
+			bPerm.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					PermissionWizard wizard = new PermissionWizard(res);
+					PermissionDialog dialog = new PermissionDialog(UIUtils.getShell(), wizard);
+					dialog.addApplyListener(wizard);
+					dialog.open();
+				}
+			});
+
 		UIUtil.createLabel(composite, Messages.AResourcePage_creationdate);
 		tcdate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		tcdate.setLayoutData(gd);
 		// tcdate.setEnabled(false);
 
@@ -110,23 +131,23 @@ public class ResourcePageContent extends APageContent {
 			UIUtil.createLabel(composite, Messages.ResourcePageContent_UpdateDate);
 			tudate = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 2;
+			gd.horizontalSpan = 3;
 			tudate.setLayoutData(gd);
 		}
 
-		UIUtil.createSeparator(composite, 3);
+		UIUtil.createSeparator(composite, 4);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_name);
 		tname = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		gd.widthHint = 500;
 		tname.setLayoutData(gd);
 
 		UIUtil.createLabel(composite, Messages.AResourcePage_id);
 		tid = new Text(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		gd.widthHint = 500;
 		tid.setLayoutData(gd);
 
@@ -135,7 +156,7 @@ public class ResourcePageContent extends APageContent {
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 100;
 		gd.widthHint = 500;
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		tdesc.setLayoutData(gd);
 
 		tid.setEditable(rd.getIsNew());

@@ -47,6 +47,9 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQuer
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.jasperserver.dto.authority.ClientUser;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
+import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermissionListWrapper;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameter;
 import com.jaspersoft.jasperserver.dto.reports.ReportParameters;
 import com.jaspersoft.jasperserver.dto.reports.inputcontrols.InputControlOption;
@@ -82,6 +85,7 @@ import com.jaspersoft.studio.server.utils.Pass;
 import com.jaspersoft.studio.server.utils.ResourceDescriptorUtil;
 import com.jaspersoft.studio.server.wizard.exp.ExportOptions;
 import com.jaspersoft.studio.server.wizard.imp.ImportOptions;
+import com.jaspersoft.studio.server.wizard.permission.PermissionOptions;
 import com.jaspersoft.studio.utils.Misc;
 
 public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
@@ -910,5 +914,58 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			options.setState(state);
 		}
 		return options.getState();
+	}
+
+	@Override
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception {
+		WebTarget tgt = target.path("permissions" + rd.getUriString());
+		tgt = tgt.queryParam("effectivePermissions", options.isEffectivePermissions());
+		tgt = tgt.queryParam("recipientType", options.isRecipientTypeUser() ? "user" : "role");
+		if (options.getRecipientId() != null)
+			tgt = tgt.queryParam("recipientId", options.getRecipientId());
+		tgt = tgt.queryParam("resolveAll", options.isResolveAll());
+
+		Builder req = tgt.request();
+		Response r = connector.get(req, monitor);
+		RepositoryPermissionListWrapper state = toObj(r, RepositoryPermissionListWrapper.class, monitor);
+
+		return state.getPermissions();
+	}
+
+	@Override
+	public ClientUser getUser(IProgressMonitor monitor) throws Exception {
+		String path = "";
+		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
+			path += "organizations/" + sp.getOrganisation() + "/";
+		path += "users/" + sp.getUser();
+		WebTarget tgt = target.path(path);
+
+		Builder req = tgt.request();
+		Response r = connector.get(req, monitor);
+		return toObj(r, ClientUser.class, monitor);
+	}
+
+	@Override
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception {
+		for (RepositoryPermission rp : perms) {
+			// System.out.println(rp);
+			WebTarget tgt = target.path("permissions" + rd.getUriString());
+			tgt = tgt.matrixParam("recipient", rp.getRecipient());
+
+			Builder req = tgt.request();
+			if (rp.getMask() == -1) {
+				try {
+					Response r = connector.delete(req, monitor);
+					toObj(r, String.class, monitor);
+				} catch (HttpResponseException e) {
+					if (e.getStatusCode() != 404 && e.getStatusCode() != 204)
+						throw e;
+				}
+			} else if (rp.getUri() != null && rd.getUriString().equals(rp.getUri())) {
+				Response r = connector.put(req, Entity.entity(rp, MediaType.APPLICATION_XML_TYPE), monitor);
+				toObj(r, RepositoryPermission.class, monitor);
+			}
+		}
+		return getPermissions(rd, monitor, options);
 	}
 }

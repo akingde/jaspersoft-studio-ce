@@ -28,6 +28,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
@@ -68,7 +69,7 @@ public class FindResourceJob {
 	}
 
 	public static void selectResource(final ServerProvider sp, final MServerProfile msp, final ResourceDescriptor rd, final TreeViewer treeViewer) {
-		Job job = new Job("Refreshing tree") {
+		Job job = new Job(Messages.FindResourceJob_0) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				IStatus status = Status.OK_STATUS;

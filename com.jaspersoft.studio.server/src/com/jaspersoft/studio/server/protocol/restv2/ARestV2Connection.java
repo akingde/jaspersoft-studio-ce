@@ -148,7 +148,7 @@ public abstract class ARestV2Connection implements IConnection {
 	public abstract List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception;
 
 	@Override
-	public Integer getPermissionMask(ResourceDescriptor rd) throws Exception {
+	public Integer getPermissionMask(ResourceDescriptor rd, IProgressMonitor monitor) throws Exception {
 		return rd.getPermissionMask(null);
 	}
 }
