@@ -189,8 +189,16 @@ public class MResource extends APropertyNode implements ICopyable {
 		return getReportUnit() != null;
 	}
 
+	private ANode mroot;
+
+	public void setMRoot(ANode mroot) {
+		this.mroot = mroot;
+	}
+
 	public IConnection getWsClient() {
 		Object obj = getRoot();
+		if (obj == null)
+			obj = mroot;
 		if (obj instanceof MServerProfile) {
 			try {
 				return ((MServerProfile) obj).getWsClient(new NullProgressMonitor());

@@ -63,6 +63,7 @@ import com.jaspersoft.studio.server.model.datasource.MROlapMondrianConnection;
 import com.jaspersoft.studio.server.model.datasource.MROlapUnit;
 import com.jaspersoft.studio.server.model.datasource.MROlapXmlaConnection;
 import com.jaspersoft.studio.server.model.datasource.MRSecureMondrianConnection;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
@@ -106,6 +107,12 @@ public class ResourceFactory {
 	private Map<Class<? extends MResource>, IWizardPage[]> pagemap = new HashMap<Class<? extends MResource>, IWizardPage[]>();
 
 	public IWizardPage[] getResourcePage(ANode parent, MResource resource) {
+		if (resource.getWsClient() == null) {
+			if (parent instanceof MResource)
+				resource.setMRoot((ANode) parent.getRoot());
+			else if (parent instanceof MServerProfile)
+				resource.setMRoot(parent);
+		}
 		IWizardPage[] page = pagemap.get(resource.getClass());
 		if (page == null) {
 			page = Activator.getExtManager().getResourcePage(parent, resource);
