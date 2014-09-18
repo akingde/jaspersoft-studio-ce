@@ -16,6 +16,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.sql.messages.messages"; //$NON-NLS-1$
+	public static String ColumnsDialog_0;
 	public static String DBMetadata_0;
 	public static String DBMetadata_1;
 	public static String DBMetadata_2;

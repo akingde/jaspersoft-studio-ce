@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
 import com.jaspersoft.studio.data.sql.model.metadata.MSqlSchema;
 import com.jaspersoft.studio.data.sql.model.metadata.MTables;
@@ -43,7 +44,7 @@ public class ColumnsDialog extends ATitledDialog {
 
 	public ColumnsDialog(Shell parentShell) {
 		super(parentShell);
-		setTitle("Columns Dialog");
+		setTitle(Messages.ColumnsDialog_0);
 		setDefaultSize(650, 780);
 	}
 
