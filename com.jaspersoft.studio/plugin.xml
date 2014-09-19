@@ -1382,6 +1382,17 @@
             Create a new Functions Library
          </description>
       </wizard>
+   <wizard
+         category="com.jaspersoft.studio"
+         class="com.jaspersoft.studio.wizards.dataadapter.NewDataAdapterWizard"
+         finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
+         icon="icons/resources/newPluginAdapter.png"
+         id="com.jaspersoft.studio.wizards.NewDataAdapterWizard"
+         name="Plugin Data Adapter">
+      <description>
+         Create a new data adapter skeleton
+      </description>
+   </wizard>
    </extension>
     <extension
           point="com.jaspersoft.studio.repositoryview">
@@ -1467,6 +1478,10 @@
    <command
          id="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand"
          name="CreateTranslationFragmentCommand">
+   </command>
+   <command
+         id="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
+         name="CreateAdapterJarCommand">
    </command>
 	</extension>
     <extension
@@ -1637,6 +1652,10 @@
         class="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand"
         commandId="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand">
   </handler>
+  <handler
+        class="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
+        commandId="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand">
+  </handler>
 	</extension>
 	<extension id="com.jaspersoft.studio.menus.saveReportTo" point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:file?after=export">
@@ -1663,6 +1682,22 @@
               <test
                     forcePluginActivation="true"
                     property="com.jaspersoft.translation.action.checkNature">
+              </test>
+           </and>
+        </visibleWhen>
+     </command>
+     <command
+           commandId="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
+           icon="icons/resources/jarExport.png"
+           id="com.jaspersoft.studioCreateAdapterJarCommand"
+           label="%exportAsAdapter"
+           style="push">
+        <visibleWhen
+              checkEnabled="false">
+           <and>
+              <test
+                    forcePluginActivation="true"
+                    property="com.jaspersoft.studio.wizards.dataadapter.checkNature">
               </test>
            </and>
         </visibleWhen>
@@ -1860,5 +1895,22 @@
        <resources
              resources="com.jaspersoft.studio.SamplesProvider">
        </resources>
+    </extension>
+    <extension
+          point="org.eclipse.core.expressions.propertyTesters">
+       <propertyTester
+             class="com.jaspersoft.translation.action.NatureTester"
+             id="testNatureTranslation"
+             namespace="com.jaspersoft.translation.action"
+             properties="checkNature"
+             type="java.lang.Object">
+       </propertyTester>
+       <propertyTester
+             class="com.jaspersoft.studio.wizards.dataadapter.NaturePluginTester"
+             id="testNaturePlugin"
+             namespace="com.jaspersoft.studio.wizards.dataadapter"
+             properties="checkNature"
+             type="java.lang.Object">
+       </propertyTester>
     </extension>
 </plugin>

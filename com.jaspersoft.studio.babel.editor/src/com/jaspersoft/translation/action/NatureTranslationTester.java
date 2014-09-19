@@ -32,7 +32,7 @@ import com.jaspersoft.translation.resources.TranslationProjectNature;
  * @author Orlandin Marco
  *
  */
-public class NatureTester extends PropertyTester {
+public class NatureTranslationTester extends PropertyTester {
 
 	/**
 	 * Check if a project is a translation project
@@ -46,10 +46,12 @@ public class NatureTester extends PropertyTester {
 		if (receiver instanceof IProject){
 			IProject project = (IProject)receiver;  
 		     try {
-		    	if (project.hasNature(TranslationProjectNature.NATURE_ID)) return true;
-		    	else if  (project.hasNature(TranslationProjectNature.COMPATIBILITY_NATURE_ID)){
-		    		replaceNature(project, new NullProgressMonitor());
-		    		return true;
+		    	if (project.isOpen()){
+			    	if (project.hasNature(TranslationProjectNature.NATURE_ID)) return true;
+			    	else if  (project.hasNature(TranslationProjectNature.COMPATIBILITY_NATURE_ID)){
+			    		replaceNature(project, new NullProgressMonitor());
+			    		return true;
+			    	}
 		    	}
 				return false;
 			} catch (CoreException e) {
@@ -88,8 +90,9 @@ public class NatureTester extends PropertyTester {
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof Collection){
-			boolean allRight = true;
-			for (Iterator<?> it = ((Collection<?>) receiver).iterator(); it.hasNext() && allRight;) {
+			Collection<?> selection = (Collection<?>) receiver;
+			boolean allRight = !selection.isEmpty();
+			for (Iterator<?> it = selection.iterator(); it.hasNext() && allRight;) {
 				allRight = evaluateElementNature(it.next());
 			}
 			return allRight;

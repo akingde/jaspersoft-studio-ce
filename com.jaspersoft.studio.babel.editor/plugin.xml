@@ -238,7 +238,7 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
-            class="com.jaspersoft.translation.action.NatureTester"
+            class="com.jaspersoft.translation.action.NatureTranslationTester"
             id="testNature"
             namespace="com.jaspersoft.translation.action"
             properties="checkNature"

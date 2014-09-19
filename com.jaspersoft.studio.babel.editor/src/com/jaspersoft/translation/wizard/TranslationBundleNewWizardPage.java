@@ -26,7 +26,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.translation.action.NatureTester;
+import com.jaspersoft.translation.action.NatureTranslationTester;
 
 /**
  * Wizard step where the user could define one or more languages for the translation
@@ -160,7 +160,7 @@ public class TranslationBundleNewWizardPage extends ResourceBundleNewWizardPage 
 		if (!prj.exists()){
 			updateStatus(Messages.editor_wiz_error_noPrject, IMessageProvider.INFORMATION); 
 			return;
-		} else if (!NatureTester.evaluateElementNature(prj)){
+		} else if (!NatureTranslationTester.evaluateElementNature(prj)){
 			updateStatus(Messages.editor_wiz_error_wrongType, IMessageProvider.ERROR); 
 			return;
 		}

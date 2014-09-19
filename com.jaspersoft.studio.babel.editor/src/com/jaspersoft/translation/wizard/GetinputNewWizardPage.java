@@ -242,16 +242,18 @@ public class GetinputNewWizardPage extends HelpWizardPage {
 	 * @param item the last clicked element
 	 */
 	private void updateDescription(TreeItem item) {
-		if (item.getData() instanceof AbstractResourceDefinition){
-			AbstractResourceDefinition resource = (AbstractResourceDefinition)item.getData();
-			pluginLbl.setText(resource.getPluginName());
-			fileNameLbl.setText(resource.getFileName());
-			descriptionLbl.setText(resource.getDescription());
-			if (resource.getPackageName() != null) packageLbl.setText(resource.getPackageName());
-			else packageLbl.setText(Messages.resource_wiz_information_noPackage);
-			parentControl.layout(true,true);
-			getHelpData(item.getParentItem().getData());
-		} else getHelpData(item.getData());
+		if (item != null){
+			if (item.getData() instanceof AbstractResourceDefinition){
+				AbstractResourceDefinition resource = (AbstractResourceDefinition)item.getData();
+				pluginLbl.setText(resource.getPluginName());
+				fileNameLbl.setText(resource.getFileName());
+				descriptionLbl.setText(resource.getDescription());
+				if (resource.getPackageName() != null) packageLbl.setText(resource.getPackageName());
+				else packageLbl.setText(Messages.resource_wiz_information_noPackage);
+				parentControl.layout(true,true);
+				if (item.getParent() != null) getHelpData(item.getParentItem().getData());
+			} else getHelpData(item.getData());
+		}
 		setPageComplete(canFlipToNextPage());
 	}
 	
