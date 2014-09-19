@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.hibernate3.classpath;
 
 import java.util.ArrayList;
@@ -15,6 +27,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.hibernate3.messages.Messages;
+
 public class Hibernate3ClasspathContainerPage extends WizardPage implements
 		IClasspathContainerPage, IClasspathContainerPageExtension {
 
@@ -22,9 +36,9 @@ public class Hibernate3ClasspathContainerPage extends WizardPage implements
 	private IClasspathEntry containerEntry;
 	
 	public Hibernate3ClasspathContainerPage() {
-		super("Hibernate 3.2.0.GA Library");
-		setTitle("Hibernate 3.2.0.GA Library Classpath Container");
-		setDescription("Hibernate 3.2.0.GA Core and Annotations jars");
+		super(Messages.Hibernate3ClasspathContainerPage_Name);
+		setTitle(Messages.Hibernate3ClasspathContainerPage_Title);
+		setDescription(Messages.Hibernate3ClasspathContainerPage_Description);
 		setPageComplete(true);
 		fUsedPaths = new ArrayList<IPath>();
 	}
@@ -35,7 +49,7 @@ public class Hibernate3ClasspathContainerPage extends WizardPage implements
 		composite.setLayout(new GridLayout());
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Hibernate 3.2.0.GA Core and Annotations jars will be added to the project classpath once you click finish.");
+		lbl.setText(Messages.Hibernate3ClasspathContainerPage_Content);
 		lbl.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_CENTER));
 
 		setControl(composite);
