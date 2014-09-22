@@ -143,7 +143,16 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Called when the group name changes, it must search the cells
+	 * using that group and update their reference as well
+	 * 
+	 * @param oldName the old name of the group
+	 * @param newName the new name of the group
+	 */
+	protected abstract void updateGroups(String oldName, String newName);
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -153,9 +162,12 @@ public abstract class MCrosstabGroup extends APropertyNode implements
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabGroup jrField = (JRDesignCrosstabGroup) getValue();
-		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME))
+		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME)){
+			String oldName = jrField.getName();
 			jrField.setName((String) value);
-		else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
+			//Request the update of the name of the cells associated with this group
+			updateGroups(oldName, jrField.getName());
+		} else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
 			jrField.setTotalPosition((CrosstabTotalPositionEnum) totalPositionD
 					.getEnumValue(value));
 			MCrosstab cross = getMCrosstab();

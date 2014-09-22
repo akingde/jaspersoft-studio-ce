@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.crosstab.model.rowgroup;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,16 +27,18 @@ import net.sf.jasperreports.engine.JRConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.components.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstabGroup;
+import com.jaspersoft.studio.components.crosstab.model.cell.MGroupCell;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.PixelPropertyDescriptor;
 
@@ -159,6 +162,41 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 		return super.getPropertyValue(id);
 	}
 
+	/**
+	 * Called when the name of a group change
+	 * Search in the crosstab the group cells that are using a reference
+	 * to the group and update also their references.
+	 * It update the group map in the JRCrosstabElement to keep it 
+	 * in sync with the current group name.
+	 * Finally since the cell uses the group name for the model display
+	 * name it run a fake event to update the cells in the editor
+	 */
+	@Override
+	protected void updateGroups(String oldName, String newName){
+		ANode crosstab = getParent().getParent();
+		List<MGroupCell> cellsToRefresh = new ArrayList<MGroupCell>();
+		for(INode child : crosstab.getChildren()){
+			if (child instanceof MGroupCell){
+				MGroupCell cell = (MGroupCell)child;
+				String rowGroup = cell.getCell().getRowTotalGroup();
+				if (rowGroup != null && rowGroup.equals(oldName)){
+					cell.getCell().setRowTotalGroup(newName);
+					cellsToRefresh.add(cell);
+				}
+			}
+		}
+		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab)crosstab.getValue();
+		Map<String, Integer> groupMap = jrCrosstab.getRowGroupIndicesMap();
+		if (groupMap.containsKey(oldName)){
+			Integer value = groupMap.remove(oldName);
+			groupMap.put(newName, value);
+		}
+		//The refresh must be done after the update of the map
+		for(MGroupCell cell : cellsToRefresh){
+			JSSCompoundCommand.forceRefreshVisuals(cell);
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

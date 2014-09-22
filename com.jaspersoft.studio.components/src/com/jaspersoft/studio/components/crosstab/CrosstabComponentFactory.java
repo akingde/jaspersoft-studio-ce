@@ -57,6 +57,7 @@ import com.jaspersoft.studio.components.crosstab.figure.WhenNoDataCellFigure;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.components.crosstab.model.cell.MGroupCell;
 import com.jaspersoft.studio.components.crosstab.model.cell.action.CreateColumnCrosstabHeaderAction;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateColumnCrosstabHeaderCommand;
 import com.jaspersoft.studio.components.crosstab.model.cell.command.CreateCrosstabElement4ObjectCommand;
@@ -352,7 +353,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				hide = hide || isRowGroupTotal(ct, rowname);
 
 			if (!hide) {
-				MCell mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname); //$NON-NLS-1$
+				MCell mc = new MGroupCell(mCrosstab, c);
 				ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
 			}
 		}

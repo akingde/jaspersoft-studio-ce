@@ -474,8 +474,9 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer, ICo
 					});
 					return;
 				}
-			} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES))
+			} else if (pname.equals(JRDesignCrosstab.PROPERTY_MEASURES)){
 				getCrosstabManager().refresh();
+			}
 		}
 		super.propertyChange(evt);
 	}
