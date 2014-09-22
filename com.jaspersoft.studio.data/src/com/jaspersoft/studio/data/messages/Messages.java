@@ -16,7 +16,6 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.data.messages.messages"; //$NON-NLS-1$
-	public static String ATreeWizardDataEditorComposite_Title;
 	public static String AuthenticationDialog_passwordLbl;
 	public static String AuthenticationDialog_title;
 	public static String AuthenticationDialog_usernameLbl;
@@ -33,8 +32,6 @@ public class Messages extends NLS {
 	public static String BeanMappingTool_labeltitle;
 	public static String BeanMappingTool_selectfieldstitle;
 	public static String BeanMappingTool_toolname;
-	public static String CSVDataAdapterComposite_0;
-	public static String CSVDataAdapterComposite_1;
 	public static String CSVDataAdapterComposite_10;
 	public static String CSVDataAdapterComposite_11;
 	public static String CSVDataAdapterComposite_12;
@@ -93,25 +90,18 @@ public class Messages extends NLS {
 	public static String HibernateDataAdapterComposite_8;
 	public static String HibernateDataAdapterFactory_description;
 	public static String HibernateDataAdapterFactory_label;
-	public static String HQLWizardDataEditorComposite_Title;
 	public static String JDBCCreator_ErrSecurPrefStorage;
 	public static String JDBCDataAdapterComposite_attention;
 	public static String JDBCDataAdapterComposite_attentionlable;
 	public static String JDBCDataAdapterComposite_classpath;
 	public static String JDBCDataAdapterComposite_connectionproperties;
-	public static String JDBCDataAdapterComposite_database;
 	public static String JDBCDataAdapterComposite_tablocation;
 	public static String JDBCDataAdapterComposite_driverlabel;
-	public static String JDBCDataAdapterComposite_jdbcurlassistant;
-	public static String JDBCDataAdapterComposite_note;
-	public static String JDBCDataAdapterComposite_notedbname;
 	public static String JDBCDataAdapterComposite_password;
-	public static String JDBCDataAdapterComposite_serveraddress;
 	public static String JDBCDataAdapterComposite_urllabel;
 	public static String JDBCDataAdapterComposite_username;
 	public static String JDBCDataAdapterFactory_description;
 	public static String JDBCDataAdapterFactory_label;
-	public static String JDBCWizardDataEditorComposite_Title;
 	public static String JndiDataAdapterComposite_0;
 	public static String JndiDataAdapterFactory_description;
 	public static String JndiDataAdapterFactory_label;
@@ -119,8 +109,6 @@ public class Messages extends NLS {
 	public static String JrdsProviderDataAdapterComposite_1;
 	public static String JrdsProviderDataAdapterFactory_description;
 	public static String JrdsProviderDataAdapterFactory_label;
-	public static String JsonDataAdapterComposite_0;
-	public static String JsonDataAdapterComposite_1;
 	public static String JsonDataAdapterComposite_10;
 	public static String JsonDataAdapterComposite_11;
 	public static String JsonDataAdapterComposite_12;
@@ -174,8 +162,6 @@ public class Messages extends NLS {
 	public static String SpringHibernateDataAdapterComposite_4;
 	public static String SpringHibernateDataAdapterFactory_description;
 	public static String SpringHibernateDataAdapterFactory_label;
-	public static String XLSDataAdapterComposite_0;
-	public static String XLSDataAdapterComposite_1;
 	public static String XLSDataAdapterComposite_10;
 	public static String XLSDataAdapterComposite_11;
 	public static String XLSDataAdapterComposite_12;
@@ -220,8 +206,6 @@ public class Messages extends NLS {
 	public static String XmlaDataAdapterComposite_successTitle;
 	public static String XmlaDataAdapterFactory_description;
 	public static String XmlaDataAdapterFactory_label;
-	public static String XMLDataAdapterComposite_0;
-	public static String XMLDataAdapterComposite_1;
 	public static String XMLDataAdapterComposite_10;
 	public static String XMLDataAdapterComposite_11;
 	public static String XMLDataAdapterComposite_12;
@@ -244,7 +228,6 @@ public class Messages extends NLS {
 	public static String XPathQueryDesigner_CollapseAllItem;
 	public static String XPathQueryDesigner_ExpandAllItem;
 	public static String XPathQueryDesigner_InfoTitle;
-	public static String XPathQueryDesigner_JobTitle;
 	public static String XPathQueryDesigner_ReadFieldsButton;
 	public static String XPathQueryDesigner_RefreshItem;
 	public static String XPathQueryDesigner_RefreshJobTitle;
