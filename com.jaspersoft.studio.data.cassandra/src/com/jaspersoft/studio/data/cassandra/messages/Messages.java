@@ -19,8 +19,6 @@ public class Messages extends NLS {
 	public static String CassandraDataAdapterComposite_labelurl;
 	public static String CassandraDataAdapterFactory_0;
 	public static String CassandraDataAdapterFactory_1;
-	public static String RDDatasourceCassandraPage_desc;
-	public static String RDDatasourceCassandraPage_tiitle;
 	public static String RDDatasourceCassandraPage_title;
 	static {
 		// initialize resource bundle
