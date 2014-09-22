@@ -21,7 +21,6 @@ public class Messages extends NLS {
 	public static String MongoDbDataAdapterComposite_labelUsername;
 	public static String MongoDbDataAdapterFactory_description;
 	public static String MongoDbDataAdapterFactory_label;
-	public static String RDDatasourceMongoDBPage_desc;
 	public static String RDDatasourceMongoDBPage_labelurl;
 	public static String RDDatasourceMongoDBPage_pass;
 	public static String RDDatasourceMongoDBPage_title;
