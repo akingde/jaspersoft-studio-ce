@@ -21,8 +21,6 @@ public class Messages extends NLS {
 	public static String HiveDataAdapterComposite_labelUsername;
 	public static String HiveDataAdapterFactory_description;
 	public static String HiveDataAdapterFactory_label;
-	public static String RDDatasourceHivePage_desc;
-	public static String RDDatasourceHivePage_tiitle;
 	public static String RDDatasourceHivePage_title;
 	static {
 		// initialize resource bundle
