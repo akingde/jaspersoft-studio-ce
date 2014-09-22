@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.input.IParameter;
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VReportParameters extends VParameters {
@@ -36,6 +36,6 @@ public class VReportParameters extends VParameters {
 
 	@Override
 	protected void setupLabel(Label lbl, IParameter pres) {
-		lbl.setText(Messages.getString(pres.getLabel()));
+		lbl.setText(MessagesByKeys.getString(pres.getLabel()));
 	}
 }

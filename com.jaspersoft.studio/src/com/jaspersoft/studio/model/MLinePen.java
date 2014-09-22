@@ -30,6 +30,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.combomenu.ComboItem;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -64,14 +65,14 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		if (lineSpacingItems == null){
 			lineSpacingItems = new ArrayList<ComboItem>();
 			LineStyleEnum[] values = LineStyleEnum.class.getEnumConstants();
-			lineSpacingItems.add(new ComboItem(Messages.getString("LineSpacing_nullEnum"), true,  ResourceManager.getImage(this.getClass(),"/icons/resources/inherited.png"), 0, NullEnum.INHERITED, 0));
+			lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineSpacing_nullEnum"), true,  ResourceManager.getImage(this.getClass(),"/icons/resources/inherited.png"), 0, NullEnum.INHERITED, 0));
 			Image[] images = new Image[] { ResourceManager.getImage(this.getClass(), "/icons/resources/line-solid.png"),
 																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dashed.png"),
 																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-dotted.png"),
 																					ResourceManager.getImage(this.getClass(), "/icons/resources/line-double.png"), };
 			for(int i=0; i<values.length; i++){
 				LineStyleEnum value = values[i];
-				lineSpacingItems.add(new ComboItem(Messages.getString("LineStyle_".concat(value.getName())), true, images[i], i+1, value , i+1));
+				lineSpacingItems.add(new ComboItem(MessagesByKeys.getString("LineStyle_".concat(value.getName())), true, images[i], i+1, value , i+1));
 			}
 		}
 		return lineSpacingItems;

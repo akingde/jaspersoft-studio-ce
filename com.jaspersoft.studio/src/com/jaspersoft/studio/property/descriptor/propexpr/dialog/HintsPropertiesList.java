@@ -19,7 +19,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
 
 /**
@@ -37,28 +37,28 @@ public class HintsPropertiesList {
   private static List<ElementDescription> exporterHints = null;
   
 	private static ElementDescription addHint(String propName){
-		return new ElementDescription(propName,Messages.getString(propName), true);
+		return new ElementDescription(propName,MessagesByKeys.getString(propName), true);
 	}
 	
 	
 	private static List<ElementDescription> addHints() 
 	{
 		List<ElementDescription> result = new ArrayList<ElementDescription>();
-		result.add(new ElementDescription("net.sf.jasperreports.text.truncate.at.char", Messages.getString("JRPropertyDialog.List.Prop1"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.text.truncate.suffix", Messages.getString("JRPropertyDialog.List.Prop2"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.print.keep.full.text", Messages.getString("JRPropertyDialog.List.Prop3"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.text.measurer.factory",	Messages.getString("JRPropertyDialog.List.Prop4"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.chart.theme", Messages.getString("JRPropertyDialog.List.Prop11") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.h1", Messages.getString("JRPropertyDialog.List.Prop14") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.h2", Messages.getString("JRPropertyDialog.List.Prop15") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.h3", Messages.getString("JRPropertyDialog.List.Prop16") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.table", Messages.getString("JRPropertyDialog.List.Prop17") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.tr", Messages.getString("JRPropertyDialog.List.Prop22") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.th", Messages.getString("JRPropertyDialog.List.Prop18") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.td", Messages.getString("JRPropertyDialog.List.Prop19") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.colspan", Messages.getString("JRPropertyDialog.List.Prop20") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.rowspan", Messages.getString("JRPropertyDialog.List.Prop21") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.id", Messages.getString("JRPropertyDialog.List.html.id") + Messages.getString("JRPropertyDialog.List.html.id.value"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.text.truncate.at.char", MessagesByKeys.getString("JRPropertyDialog.List.Prop1"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.text.truncate.suffix", MessagesByKeys.getString("JRPropertyDialog.List.Prop2"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.print.keep.full.text", MessagesByKeys.getString("JRPropertyDialog.List.Prop3"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.text.measurer.factory",	MessagesByKeys.getString("JRPropertyDialog.List.Prop4"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.chart.theme", MessagesByKeys.getString("JRPropertyDialog.List.Prop11") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.h1", MessagesByKeys.getString("JRPropertyDialog.List.Prop14") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.h2", MessagesByKeys.getString("JRPropertyDialog.List.Prop15") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.h3", MessagesByKeys.getString("JRPropertyDialog.List.Prop16") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.table", MessagesByKeys.getString("JRPropertyDialog.List.Prop17") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.tr", MessagesByKeys.getString("JRPropertyDialog.List.Prop22") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.th", MessagesByKeys.getString("JRPropertyDialog.List.Prop18") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.td", MessagesByKeys.getString("JRPropertyDialog.List.Prop19") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.colspan", MessagesByKeys.getString("JRPropertyDialog.List.Prop20") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.rowspan", MessagesByKeys.getString("JRPropertyDialog.List.Prop21") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.id", MessagesByKeys.getString("JRPropertyDialog.List.html.id") + MessagesByKeys.getString("JRPropertyDialog.List.html.id.value"), true));
 		return result;
 	}
 	
@@ -66,23 +66,23 @@ public class HintsPropertiesList {
 	{
 		List<ElementDescription> result = new ArrayList<ElementDescription>();
 		result.add(new ElementDescription("net.sf.jasperreports.export.character.encoding", "Default: UTF-8",false));
-		result.add(new ElementDescription("net.sf.jasperreports.export.graphics2d.min.job.size", Messages.getString("JRPropertyDialog.List.Prop5") + Messages.getString("JRPropertyDialog.List.DefaultTrue"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.frames.as.nested.tables", Messages.getString("JRPropertyDialog.List.Prop6") + Messages.getString("JRPropertyDialog.List.DefaultTrue"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.remove.empty.space.between.rows", Messages.getString("JRPropertyDialog.List.Prop6") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.white.page.background", Messages.getString("JRPropertyDialog.List.Prop6") + Messages.getString("JRPropertyDialog.List.DefaultTrue"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.wrap.break.word", Messages.getString("JRPropertyDialog.List.Prop6") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.size.unit", Messages.getString("JRPropertyDialog.List.Prop6") + Messages.getString("JRPropertyDialog.List.DefaultPx"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.html.using.images.to.align", Messages.getString("JRPropertyDialog.List.Prop6") + Messages.getString("JRPropertyDialog.List.DefaultTrue"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.force.svg.shapes", Messages.getString("JRPropertyDialog.List.Prop7") + Messages.getString("JRPropertyDialog.List.DefaultTrue"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.force.linebreak.policy", Messages.getString("JRPropertyDialog.List.Prop7") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.create.batch.mode.bookmarks", Messages.getString("JRPropertyDialog.List.Prop7") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.compressed", Messages.getString("JRPropertyDialog.List.Prop7") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.encrypted", Messages.getString("JRPropertyDialog.List.Prop7") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.128.bit.key", Messages.getString("JRPropertyDialog.List.Prop7") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.csv.field.delimiter", Messages.getString("JRPropertyDialog.List.Prop10") + Messages.getString("JRPropertyDialog.List.Default"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.csv.record.delimiter", Messages.getString("JRPropertyDialog.List.Prop10") + Messages.getString("JRPropertyDialog.List.Default1"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tagged", Messages.getString("JRPropertyDialog.List.Prop12") + Messages.getString("JRPropertyDialog.List.DefaultFalse"), true));
-		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.language", Messages.getString("JRPropertyDialog.List.Prop13") + Messages.getString("JRPropertyDialog.List.DefaultNull"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.graphics2d.min.job.size", MessagesByKeys.getString("JRPropertyDialog.List.Prop5") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultTrue"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.frames.as.nested.tables", MessagesByKeys.getString("JRPropertyDialog.List.Prop6") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultTrue"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.remove.empty.space.between.rows", MessagesByKeys.getString("JRPropertyDialog.List.Prop6") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.white.page.background", MessagesByKeys.getString("JRPropertyDialog.List.Prop6") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultTrue"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.wrap.break.word", MessagesByKeys.getString("JRPropertyDialog.List.Prop6") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.size.unit", MessagesByKeys.getString("JRPropertyDialog.List.Prop6") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultPx"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.html.using.images.to.align", MessagesByKeys.getString("JRPropertyDialog.List.Prop6") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultTrue"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.force.svg.shapes", MessagesByKeys.getString("JRPropertyDialog.List.Prop7") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultTrue"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.force.linebreak.policy", MessagesByKeys.getString("JRPropertyDialog.List.Prop7") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.create.batch.mode.bookmarks", MessagesByKeys.getString("JRPropertyDialog.List.Prop7") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.compressed", MessagesByKeys.getString("JRPropertyDialog.List.Prop7") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.encrypted", MessagesByKeys.getString("JRPropertyDialog.List.Prop7") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.128.bit.key", MessagesByKeys.getString("JRPropertyDialog.List.Prop7") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.csv.field.delimiter", MessagesByKeys.getString("JRPropertyDialog.List.Prop10") + MessagesByKeys.getString("JRPropertyDialog.List.Default"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.csv.record.delimiter", MessagesByKeys.getString("JRPropertyDialog.List.Prop10") + MessagesByKeys.getString("JRPropertyDialog.List.Default1"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tagged", MessagesByKeys.getString("JRPropertyDialog.List.Prop12") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultFalse"), true));
+		result.add(new ElementDescription("net.sf.jasperreports.export.pdf.tag.language", MessagesByKeys.getString("JRPropertyDialog.List.Prop13") + MessagesByKeys.getString("JRPropertyDialog.List.DefaultNull"), true));
 		return result;    
 	}
 	

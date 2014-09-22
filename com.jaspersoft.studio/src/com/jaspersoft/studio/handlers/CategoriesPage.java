@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.swt.events.ChangeEvent;
 import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -305,7 +306,7 @@ public class CategoriesPage extends JSSWizardPage {
 		tableViewer.setLabelProvider(new LabelProvider(){
 			@Override
 			public String getText(Object element) {
-				if (Messages.hasTranslation(element.toString())) return Messages.getString(element.toString());
+				if (MessagesByKeys.hasTranslation(element.toString())) return MessagesByKeys.getString(element.toString());
 				else return element.toString();
 			}
 		});

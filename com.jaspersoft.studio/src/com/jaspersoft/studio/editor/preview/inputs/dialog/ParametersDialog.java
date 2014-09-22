@@ -44,6 +44,7 @@ import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 
 public class ParametersDialog extends FormDialog {
 	private static List<IDataInput> inputs = new ArrayList<IDataInput>();
@@ -162,7 +163,7 @@ public class ParametersDialog extends FormDialog {
 	private void createInput(FormToolkit toolkit, Composite sectionClient, JRDesignParameter p) {
 		for (IDataInput in : inputs) {
 			if (in.isForType(p.getValueClass())) {
-				toolkit.createLabel(sectionClient, Messages.getString(p.getName()) + ":", SWT.RIGHT); //$NON-NLS-1$
+				toolkit.createLabel(sectionClient, MessagesByKeys.getString(p.getName()) + ":", SWT.RIGHT); //$NON-NLS-1$
 				// lbl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				in.createInput(sectionClient, new ParameterJasper(p), params);
 				break;

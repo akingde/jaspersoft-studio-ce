@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -108,7 +109,7 @@ public class ElementLabelProvider extends LabelProvider {
 						((APropertyNode)element).getCustomPropertyTitle()!=null){
 					return ((APropertyNode)element).getCustomPropertyTitle();
 				}
-				String str = Messages.getString(name.substring(name.lastIndexOf('.') + 2));
+				String str = MessagesByKeys.getString(name.substring(name.lastIndexOf('.') + 2));
 				String displayText = element.getDisplayText();
 				if(displayText!=null){
 					displayText=displayText.replaceAll("(\\r|\\n)+", " ");//$NON-NLS-1$ //$NON-NLS-2$
@@ -117,7 +118,7 @@ public class ElementLabelProvider extends LabelProvider {
 					return str + ": " + displayText; //$NON-NLS-1$
 				}
 			}
-			return Messages.getString(name.substring(name.lastIndexOf('.') + 1));
+			return MessagesByKeys.getString(name.substring(name.lastIndexOf('.') + 1));
 		}
 	}
 

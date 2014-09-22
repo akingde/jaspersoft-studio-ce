@@ -36,6 +36,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -229,8 +230,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			return Messages.MBand_detail + index + " "; //$NON-NLS-1$
 		}
 		if (value == null)
-			return Messages.getString(bandType.getName());
-		return Messages.getString(value.getOrigin().getBandTypeValue().getName()+hiddenText);
+			return MessagesByKeys.getString(bandType.getName());
+		return MessagesByKeys.getString(value.getOrigin().getBandTypeValue().getName()+hiddenText);
 	}
 
 	/**
@@ -245,9 +246,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			String index = ""; //$NON-NLS-1$
 			if (bandIndex != -1)
 				index = " " + String.valueOf(bandIndex); //$NON-NLS-1$
-			return Messages.getString(bandType.getName()) + index;
+			return MessagesByKeys.getString(bandType.getName()) + index;
 		}
-		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
+		return MessagesByKeys.getString(value.getOrigin().getBandTypeValue().getName());
 	}
 
 	/*

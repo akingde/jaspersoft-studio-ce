@@ -65,6 +65,7 @@ import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValuesMap;
@@ -640,7 +641,7 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private Control paintCheckBox(Composite parent, String name, boolean checked, GridData gData, boolean addLine,
 			String toolTip) {
-		String stringValue = Messages.getString("common_boolean_" + checked); //$NON-NLS-1$
+		String stringValue = MessagesByKeys.getString("common_boolean_" + checked); //$NON-NLS-1$
 		return printLabels(parent, name, stringValue, gData, addLine, toolTip);
 	}
 
@@ -684,7 +685,7 @@ public class StylesListSection extends AbstractSection {
 			Control label = paintColor(
 					parent,
 					valImage,
-					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
+					MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement, name));
@@ -695,7 +696,7 @@ public class StylesListSection extends AbstractSection {
 			Control label = paintColor(
 					parent,
 					getSWTColorFromAWT(valImage),
-					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
+					MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement, name));
@@ -705,7 +706,7 @@ public class StylesListSection extends AbstractSection {
 			JREnum enumValue = (JREnum) value;
 			Control label = printLabels(
 					parent,
-					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), enumValue.getName(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
+					MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), enumValue.getName(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement, name));
@@ -714,7 +715,7 @@ public class StylesListSection extends AbstractSection {
 		} else if (value instanceof Boolean) {
 			Control label = paintCheckBox(
 					parent,
-					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), (Boolean) value, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
+					MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), (Boolean) value, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement, name));
@@ -746,7 +747,7 @@ public class StylesListSection extends AbstractSection {
 		} else {
 			Control label = printLabels(
 					parent,
-					Messages.getString("common".concat(namePrefix).concat("_").concat(name)), value.toString(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
+					MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), value.toString(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (addListener) {
 				AddListener(label);
 				label.addMouseListener(new ElementClickListener(actualElement, name));

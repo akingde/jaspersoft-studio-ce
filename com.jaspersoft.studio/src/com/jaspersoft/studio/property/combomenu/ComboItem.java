@@ -14,7 +14,7 @@ package com.jaspersoft.studio.property.combomenu;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 
 /**
  * Class that describe the content of a Combo-popup action
@@ -85,7 +85,7 @@ public class ComboItem {
 		
 		public String getText(){
 			if (printDirectly) return label;
-			else return Messages.getString(label);
+			else return MessagesByKeys.getString(label);
 		}
 		
 		public  int getOrder(){

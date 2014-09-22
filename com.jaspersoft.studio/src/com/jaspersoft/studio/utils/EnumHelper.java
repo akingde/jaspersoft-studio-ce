@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.type.JREnum;
 
 import org.eclipse.core.runtime.Assert;
 
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 public class EnumHelper {
@@ -35,7 +35,7 @@ public class EnumHelper {
 		if (nullable != NullEnum.NOTNULL)
 			res.add(nullable.getName());
 		for (int i = 0; i < jrEnum.length; i++) {
-			res.add(Messages.getString(jrEnum[i].getName()));
+			res.add(MessagesByKeys.getString(jrEnum[i].getName()));
 		}
 		return res.toArray(new String[res.size()]);
 	}
@@ -63,7 +63,7 @@ public class EnumHelper {
 			}
 
 			if (!skip) {
-				res.add(Messages.getString(jrEnum[i].getName()));
+				res.add(MessagesByKeys.getString(jrEnum[i].getName()));
 			}
 		}
 		return res.toArray(new String[res.size()]);
@@ -125,7 +125,7 @@ public class EnumHelper {
 	public static JREnum getEnumByTranslatedName(JREnum[] enums, String translatedName) {
 		Assert.isNotNull(translatedName);
 		for(JREnum e : enums){
-			if (translatedName.equals(Messages.getString(e.getName()))){
+			if (translatedName.equals(MessagesByKeys.getString(e.getName()))){
 				return e;
 			}
 		}

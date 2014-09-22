@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 import com.jaspersoft.studio.templates.StudioTemplateManager;
@@ -469,7 +470,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		tableViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return Messages.getString(element.toString());
+				return MessagesByKeys.getString(element.toString());
 			}
 		});
 		tableViewer.setInput(categoryList);
