@@ -823,7 +823,7 @@ public class Messages extends NLS {
 	public static String HyperlinkParameterPage_Title;
 	public static String HyperlinkSection_hyperlinkSectionTitle;
 	public static String ImageSelectionDialog_Browse;
-	public static String ImageSectionDialog_bytes;
+	public static String ImageSelectionDialog_bytes;
 	public static String ImageContributionItem_actionName;
 	public static String ImageCreationDialog_CreationModeGroupTitle;
 	public static String ImageSelectionDialog_Dimension;

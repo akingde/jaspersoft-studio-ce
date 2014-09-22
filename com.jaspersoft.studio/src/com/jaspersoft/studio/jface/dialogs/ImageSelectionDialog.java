@@ -466,7 +466,7 @@ public class ImageSelectionDialog extends Dialog {
 			int imgWidth = originalImg.getImageData().width;
 			String sizeInfo = Messages.ImageSelectionDialog_NoSizeInfoAvailable;
 			sizeInfo = (DecimalFormat.getNumberInstance().format(imgFileStore.fetchInfo().getLength()))
-					+ Messages.ImageSectionDialog_bytes;
+					+ Messages.ImageSelectionDialog_bytes;
 
 			// Gets a resized image for the preview area
 			Image resizedImg = ImageUtils.resize(originalImg, Math.min(imgWidth, 200), Math.min(imgHeight, 200));
@@ -501,7 +501,7 @@ public class ImageSelectionDialog extends Dialog {
 			Image remoteImg = new Image(getShell().getDisplay(), imageIS);
 
 			String sizeInfo = Messages.ImageSelectionDialog_NoSizeInfoAvailable;
-			sizeInfo = (DecimalFormat.getNumberInstance().format(imageLength)) + Messages.ImageSectionDialog_bytes;
+			sizeInfo = (DecimalFormat.getNumberInstance().format(imageLength)) + Messages.ImageSelectionDialog_bytes;
 			// Gets a resized image for the preview area
 			int imgWidth = remoteImg.getImageData().width;
 			int imgHeight = remoteImg.getImageData().height;
