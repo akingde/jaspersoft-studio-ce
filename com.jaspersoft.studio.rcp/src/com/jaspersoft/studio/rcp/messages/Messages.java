@@ -19,9 +19,6 @@ public class Messages extends NLS {
 	public static String ActionSwitchWorkspace_ActionLabel;
 	public static String ActionSwitchWorkspace_DialogTitle;
 	public static String ActionSwitchWorkspace_RestartMsg;
-	public static String ApplicationActionBarAdvisor_file;
-	public static String ApplicationActionBarAdvisor_help;
-	public static String ApplicationActionBarAdvisor_window;
 	public static String ApplicationWorkbenchAdvisor_ProductName;
 	public static String ApplicationWorkbenchAdvisor_RepositoryURLReadError;
 	public static String ApplicationWorkbenchWindowAdvisor_jasper_open_studio;
