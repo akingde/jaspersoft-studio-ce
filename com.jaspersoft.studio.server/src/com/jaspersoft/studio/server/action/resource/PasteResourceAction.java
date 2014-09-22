@@ -113,6 +113,8 @@ public class PasteResourceAction extends Action {
 	public void run() {
 		final ANode parent = getSelected();
 		final List<?> list = (List<?>) Clipboard.getDefault().getContents();
+		if (list == null)
+			return;
 		ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 		try {
 			pm.run(true, true, new IRunnableWithProgress() {
@@ -163,6 +165,10 @@ public class PasteResourceAction extends Action {
 		}
 	}
 
+	private boolean existsAll = false;
+	private boolean exists = false;
+	private PasteDialog d;
+
 	private void doWork(IProgressMonitor monitor, ANode parent, List<?> list) throws Exception {
 		MServerProfile sp = (MServerProfile) parent.getRoot();
 		String dURI = ((MResource) parent).getValue().getUriString();
@@ -172,9 +178,42 @@ public class PasteResourceAction extends Action {
 		monitor.beginTask(Messages.PasteResourceAction_1 + dURI, list.size());
 		for (Object obj : list) {
 			if (obj instanceof MResource && obj instanceof ICopyable) {
-				MResource m = (MResource) obj;
+				final MResource m = (MResource) obj;
 				if (m.isCopyable2(parent)) {
 					ResourceDescriptor origin = m.getValue();
+
+					exists = false;
+					ResourceDescriptor rd = new ResourceDescriptor();
+					try {
+						rd.setName(origin.getName());
+						rd.setUriString(dURI + "/" + origin.getName());
+						rd.setWsType(origin.getWsType());
+						if (parent instanceof MReportUnit)
+							rd.setUriString(rd.getUriString() + "_files");
+						if (ws.get(monitor, rd, null) != null)
+							exists = true;
+					} catch (Exception e) {
+					}
+					if (exists && !existsAll) {
+						UIUtils.getDisplay().syncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								d = new PasteDialog(UIUtils.getShell(), m);
+								d.open();
+							}
+						});
+						existsAll = d.getForAll();
+						switch (d.getChoise()) {
+						case PasteDialog.REPLACE:
+							break;
+						case PasteDialog.SKIP:
+							continue;
+						case PasteDialog.COPY:
+							// create new resource
+							break;
+						}
+					}
 					if (origin.isMainReport())
 						m.setCut(false);
 					if (m.isCut())
