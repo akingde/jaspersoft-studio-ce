@@ -27,7 +27,6 @@ public class Messages extends NLS {
 	public static String AdditionalStaticFunctions_strFunctionParamDescription;
 	public static String AdditionalStaticFunctions_strFunctionParamName;
 	public static String JavaJRExpressionJavaValidator_FieldNotFoundInContextError;
-	public static String JavaJRExpressionJavaValidator_FunctionLibraryAsConstructorError;
 	public static String JavaJRExpressionJavaValidator_FunctionNotFoundError;
 	public static String JavaJRExpressionJavaValidator_ParameterNotFoundInContextError;
 	public static String JavaJRExpressionJavaValidator_RBKNotFoundInContextError;
