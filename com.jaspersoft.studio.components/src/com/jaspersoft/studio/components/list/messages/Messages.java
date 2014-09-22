@@ -35,8 +35,6 @@ public class Messages extends NLS {
 	public static String MList_list_properties_category;
 	public static String MList_print_order;
 	public static String MList_print_order_description;
-	public static String OrphanListCommand_orphan_child;
-	public static String ReorderListCommand_reorder_elements;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -55,7 +55,6 @@ public class Messages extends NLS {
 	public static String MapStylesDescriptor_Styles;
 	public static String MapStylesWidgetConfiguration_MapStyles;
 	public static String MapStylesWidgetConfiguration_Style;
-	public static String MapWizard_map_wizard;
 	public static String MarkerDialog_Name;
 	public static String MarkerDialog_Title;
 	public static String MarkerDialog_ValueOrExpression;

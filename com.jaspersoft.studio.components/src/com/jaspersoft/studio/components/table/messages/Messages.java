@@ -62,10 +62,8 @@ public class Messages extends NLS {
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
 	public static String TableEditor_table;
-	public static String TableStyleView_createStyleActionText;
 	public static String TableStyleView_labelText;
 	public static String TableTemplateBunlde_tableBasedString;
-	public static String TableTemplateEngine_groupError;
 	public static String TableTemplateEngine_missingStaticText;
 	public static String TableTemplateEngine_missingStyleCH;
 	public static String TableTemplateEngine_missingStyleD;
@@ -86,7 +84,6 @@ public class Messages extends NLS {
 	public static String TableWizardLayoutPage_borders_color_label;
 	public static String TableWizardLayoutPage_borders_style_label;
 	public static String TableWizardLayoutPage_cell_border_group;
-	public static String TableWizardLayoutPage_cell_colors_group;
 	public static String TableWizardLayoutPage_changeButtonTooltip1;
 	public static String TableWizardLayoutPage_changeButtonTooltip2;
 	public static String TableWizardLayoutPage_color_schema_label;
