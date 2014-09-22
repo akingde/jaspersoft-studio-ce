@@ -29,10 +29,6 @@ public class Messages extends NLS {
 	public static String MHtml_evaluation_group_description;
 	public static String MHtml_evaluation_time;
 	public static String MHtml_evaluation_time_description;
-	public static String MHtml_width;
-	public static String MHtml_width_description;
-	public static String MHtml_height;
-	public static String MHtml_height_description;
 	public static String MHtml_scaletype;
 	public static String MHtml_scaletype_description;
 	public static String MHtml_horizontalalign;
