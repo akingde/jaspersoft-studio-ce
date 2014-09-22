@@ -198,6 +198,15 @@ public class JSSCompoundCommand extends CompoundCommand {
 	}
 	
 	/**
+	 * Create a fake command to force the refresh of the editor and outline panel on the passed node, this override
+	 * the disable refresh flag, so calling this the editor area is always updated
+	 */
+	public static void forceRefreshVisuals(ANode node){
+			PropertyChangeEvent event = new PropertyChangeEvent(node.getValue(), REFRESH_UI_EVENT, null, null);
+			node.getPropertyChangeSupport().firePropertyChange(event);
+	}
+	
+	/**
 	 * Set to ignore or not the refresh on the root of the model of the actual reference node
 	 * 
 	 * @param value true if the refresh should be disabled, false otherwise
