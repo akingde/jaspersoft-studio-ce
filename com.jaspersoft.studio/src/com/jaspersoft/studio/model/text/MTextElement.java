@@ -257,32 +257,32 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		JRDesignTextElement jrSource = (JRDesignTextElement) getValue();
 		JRDesignTextElement jrTarget = (JRDesignTextElement)target;
 		
-		jrTarget.setHorizontalAlignment(jrSource.getHorizontalAlignmentValue());
-		jrTarget.setVerticalAlignment(jrSource.getVerticalAlignmentValue());
-		jrTarget.setMarkup(getStringClone(jrSource.getMarkup()));
-		jrTarget.setRotation(jrSource.getRotationValue());
+		jrTarget.setHorizontalAlignment(jrSource.getOwnHorizontalAlignmentValue());
+		jrTarget.setVerticalAlignment(jrSource.getOwnVerticalAlignmentValue());
+		jrTarget.setMarkup(getStringClone(jrSource.getOwnMarkup()));
+		jrTarget.setRotation(jrSource.getOwnRotationValue());
 		
-		jrTarget.setBold(jrSource.isBold());
-		jrTarget.setItalic(jrSource.isItalic());
-		jrTarget.setUnderline(jrSource.isUnderline());
-		jrTarget.setStrikeThrough(jrSource.isStrikeThrough());
-		jrTarget.setPdfEmbedded(jrSource.isPdfEmbedded());
-		jrTarget.setFontName(getStringClone(jrSource.getFontName()));
-		jrTarget.setFontSize(jrSource.getFontsize());
-		jrTarget.setPdfFontName(getStringClone(jrSource.getPdfFontName()));
-		jrTarget.setPdfEncoding(getStringClone(jrSource.getPdfEncoding()));
+		jrTarget.setBold(jrSource.isOwnBold());
+		jrTarget.setItalic(jrSource.isOwnItalic());
+		jrTarget.setUnderline(jrSource.isOwnUnderline());
+		jrTarget.setStrikeThrough(jrSource.isOwnStrikeThrough());
+		jrTarget.setPdfEmbedded(jrSource.isOwnPdfEmbedded());
+		jrTarget.setFontName(getStringClone(jrSource.getOwnFontName()));
+		jrTarget.setFontSize(jrSource.getOwnFontsize());
+		jrTarget.setPdfFontName(getStringClone(jrSource.getOwnPdfFontName()));
+		jrTarget.setPdfEncoding(getStringClone(jrSource.getOwnPdfEncoding()));
 		
 		JRBaseParagraph jrTargetParagraph = (JRBaseParagraph)jrTarget.getParagraph();
 		JRBaseParagraph jrSourceParagraph = (JRBaseParagraph) jrSource.getParagraph();
 		if (jrTargetParagraph != null && jrSourceParagraph != null){
-			jrTargetParagraph.setLineSpacing(jrSourceParagraph.getLineSpacing());
-			jrTargetParagraph.setLineSpacingSize(jrSourceParagraph.getLineSpacingSize());
-			jrTargetParagraph.setFirstLineIndent(jrSourceParagraph.getFirstLineIndent());
-			jrTargetParagraph.setLeftIndent(jrSourceParagraph.getLeftIndent());
-			jrTargetParagraph.setRightIndent(jrSourceParagraph.getRightIndent());
-			jrTargetParagraph.setSpacingAfter(jrSourceParagraph.getSpacingAfter());
-			jrTargetParagraph.setSpacingBefore(jrTargetParagraph.getSpacingBefore());
-			jrTargetParagraph.setTabStopWidth(jrSourceParagraph.getTabStopWidth());
+			jrTargetParagraph.setLineSpacing(jrSourceParagraph.getOwnLineSpacing());
+			jrTargetParagraph.setLineSpacingSize(jrSourceParagraph.getOwnLineSpacingSize());
+			jrTargetParagraph.setFirstLineIndent(jrSourceParagraph.getOwnFirstLineIndent());
+			jrTargetParagraph.setLeftIndent(jrSourceParagraph.getOwnLeftIndent());
+			jrTargetParagraph.setRightIndent(jrSourceParagraph.getOwnRightIndent());
+			jrTargetParagraph.setSpacingAfter(jrSourceParagraph.getOwnSpacingAfter());
+			jrTargetParagraph.setSpacingBefore(jrTargetParagraph.getOwnSpacingBefore());
+			jrTargetParagraph.setTabStopWidth(jrSourceParagraph.getOwnTabStopWidth());
 		}
 	}
 

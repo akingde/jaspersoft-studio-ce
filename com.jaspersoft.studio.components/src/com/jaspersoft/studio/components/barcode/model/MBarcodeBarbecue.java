@@ -310,6 +310,6 @@ public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 		jrTargetCode.setType(getStringClone(jrSourceCode.getType()));
 		jrTargetCode.setBarHeight(jrSourceCode.getBarHeight());
 		jrTargetCode.setBarWidth(jrSourceCode.getBarWidth());
-		jrTargetCode.setRotation(jrSourceCode.getRotation());
+		jrTargetCode.setRotation(jrSourceCode.getOwnRotation());
 	}
 }

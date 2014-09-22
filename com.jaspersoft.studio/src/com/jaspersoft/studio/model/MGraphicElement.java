@@ -906,9 +906,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		jrTarget.setKey(getStringClone(jrSource.getKey()));
 		jrTarget.setWidth(jrSource.getWidth());
 		jrTarget.setHeight(jrSource.getHeight());
-		jrTarget.setBackcolor(jrSource.getBackcolor());
-		jrTarget.setForecolor(jrSource.getForecolor());
-		jrTarget.setMode(jrSource.getModeValue());
+		jrTarget.setBackcolor(jrSource.getOwnBackcolor());
+		jrTarget.setForecolor(jrSource.getOwnForecolor());
+		jrTarget.setMode(jrSource.getOwnModeValue());
 		jrTarget.setPositionType(jrSource.getPositionTypeValue());
 		jrTarget.setStretchType(jrSource.getStretchTypeValue());
 		jrTarget.setPrintRepeatedValues(jrSource.isPrintRepeatedValues());

@@ -122,9 +122,10 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	
 	private void transferLinePenProeprties(JRPen jrTarget, JRPen source){
 		if (jrTarget != null && source != null){
-			jrTarget.setLineColor(getColorClone(source.getLineColor()));
-			jrTarget.setLineStyle(source.getLineStyleValue());
-			jrTarget.setLineWidth(source.getLineWidth().floatValue());
+			jrTarget.setLineColor(getColorClone(source.getOwnLineColor()));
+			jrTarget.setLineStyle(source.getOwnLineStyleValue());
+			Float lineWidth = source.getOwnLineWidth();
+			jrTarget.setLineWidth(lineWidth != null ?  lineWidth.floatValue(): null);
 		}
 	}
 	
@@ -136,11 +137,11 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		if (jrSourceBox != null && target instanceof JRBoxContainer){
 			JRLineBox jrTargetBox = ((JRBoxContainer) target).getLineBox();
 			
-			jrTargetBox.setPadding(jrSourceBox.getPadding());
-			jrTargetBox.setTopPadding(jrSourceBox.getTopPadding());
-			jrTargetBox.setBottomPadding(jrSourceBox.getBottomPadding());
-			jrTargetBox.setLeftPadding(jrSourceBox.getLeftPadding());
-			jrTargetBox.setRightPadding(jrSourceBox.getRightPadding());
+			jrTargetBox.setPadding(jrSourceBox.getOwnPadding());
+			jrTargetBox.setTopPadding(jrSourceBox.getOwnTopPadding());
+			jrTargetBox.setBottomPadding(jrSourceBox.getOwnBottomPadding());
+			jrTargetBox.setLeftPadding(jrSourceBox.getOwnLeftPadding());
+			jrTargetBox.setRightPadding(jrSourceBox.getOwnRightPadding());
 
 			transferLinePenProeprties(jrTargetBox.getPen(), jrSourceBox.getPen());
 			transferLinePenProeprties(jrTargetBox.getLeftPen(), jrSourceBox.getLeftPen());

@@ -218,8 +218,8 @@ public class MRectangle extends MGraphicElementLinePen {
 		JRRectangle jrSource = (JRRectangle) getValue();
 		if (jrSource != null){
 			JRRectangle jrTarget = (JRRectangle)target;
-			jrTarget.setFill(jrSource.getFillValue());
-			jrTarget.setRadius(jrSource.getRadius());
+			jrTarget.setFill(jrSource.getOwnFillValue());
+			jrTarget.setRadius(jrSource.getOwnRadius());
 		}
 	}
 }

@@ -101,9 +101,9 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 		JRDesignGraphicElement jrTargetElement = (JRDesignGraphicElement) target;
 		JRPen jrTargetBox = (JRPen)jrTargetElement.getLinePen();
 		if (jrSourceBox != null && jrTargetBox != null){
-			jrTargetBox.setLineColor(getColorClone(jrSourceBox.getLineColor()));
-			jrTargetBox.setLineStyle(jrSourceBox.getLineStyleValue());
-			jrTargetBox.setLineWidth(jrSourceBox.getLineWidth());
+			jrTargetBox.setLineColor(getColorClone(jrSourceBox.getOwnLineColor()));
+			jrTargetBox.setLineStyle(jrSourceBox.getOwnLineStyleValue());
+			jrTargetBox.setLineWidth(jrSourceBox.getOwnLineWidth());
 		}
 	}
 

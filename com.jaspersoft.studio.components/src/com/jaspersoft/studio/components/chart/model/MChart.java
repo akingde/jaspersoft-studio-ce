@@ -929,10 +929,10 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			jrTarget.setLegendPosition(jrSource.getLegendPositionValue());
 			jrTarget.setShowLegend(jrSource.getShowLegend());
 			jrTarget.setRenderType(jrSource.getRenderType());
-			jrTarget.setTitleColor(getColorClone(jrSource.getTitleColor()));
-			jrTarget.setSubtitleColor(getColorClone(jrSource.getSubtitleColor()));
-			jrTarget.setLegendColor(getColorClone(jrSource.getLegendColor()));
-			jrTarget.setLegendBackgroundColor(getColorClone(jrSource.getLegendBackgroundColor()));
+			jrTarget.setTitleColor(getColorClone(jrSource.getOwnTitleColor()));
+			jrTarget.setSubtitleColor(getColorClone(jrSource.getOwnSubtitleColor()));
+			jrTarget.setLegendColor(getColorClone(jrSource.getOwnLegendColor()));
+			jrTarget.setLegendBackgroundColor(getColorClone(jrSource.getOwnLegendBackgroundColor()));
 		}
 	}
 }

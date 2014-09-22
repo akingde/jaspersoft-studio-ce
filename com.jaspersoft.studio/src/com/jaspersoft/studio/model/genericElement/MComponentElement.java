@@ -126,8 +126,7 @@ public class MComponentElement extends MGraphicElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignComponentElement.PROPERTY_COMPONENT_KEY,
-				"Component Key");
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignComponentElement.PROPERTY_COMPONENT_KEY, "Component Key");
 		nameD.setDescription("Component key.");
 		nameD.setReadOnly(true);
 		desc.add(nameD);

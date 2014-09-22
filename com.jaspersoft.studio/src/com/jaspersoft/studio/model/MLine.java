@@ -220,7 +220,7 @@ public class MLine extends MGraphicElementLinePen {
 		JRLine jrSource = (JRLine) getValue();
 		if (jrSource != null){
 			JRLine jrTarget = (JRLine)target;
-			jrTarget.setFill(jrSource.getFillValue());
+			jrTarget.setFill(jrSource.getOwnFillValue());
 			jrTarget.setDirection(jrSource.getDirectionValue());
 		}
 	}

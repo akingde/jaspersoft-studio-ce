@@ -530,8 +530,8 @@ public class MTextField extends MTextElement{
 		JRDesignTextField jrSource = (JRDesignTextField) getValue();
 		JRDesignTextField jrTarget = (JRDesignTextField)target;
 		
-		jrTarget.setBlankWhenNull(jrSource.isBlankWhenNull());
-		jrTarget.setPattern(getStringClone(jrSource.getPattern()));
+		jrTarget.setBlankWhenNull(jrSource.isOwnBlankWhenNull());
+		jrTarget.setPattern(getStringClone(jrSource.getOwnPattern()));
 		jrTarget.setStretchWithOverflow(jrSource.isStretchWithOverflow());
 	}
 }

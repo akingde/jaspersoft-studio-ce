@@ -542,10 +542,10 @@ public class MImage extends MGraphicElementLineBox {
 		JRDesignImage jrSource = (JRDesignImage) getValue();
 		if (jrSource != null){
 			JRDesignImage jrTarget = (JRDesignImage)target;
-			jrTarget.setFill(jrSource.getFillValue());
-			jrTarget.setScaleImage(jrSource.getScaleImageValue());
-			jrTarget.setHorizontalAlignment(jrSource.getHorizontalAlignmentValue());
-			jrTarget.setVerticalAlignment(jrSource.getVerticalAlignmentValue());
+			jrTarget.setFill(jrSource.getOwnFillValue());
+			jrTarget.setScaleImage(jrSource.getOwnScaleImageValue());
+			jrTarget.setHorizontalAlignment(jrSource.getOwnHorizontalAlignmentValue());
+			jrTarget.setVerticalAlignment(jrSource.getOwnVerticalAlignmentValue());
 			jrTarget.setOnErrorType(jrSource.getOnErrorTypeValue());
 			jrTarget.setUsingCache(jrSource.getUsingCache());
 			jrTarget.setLazy(jrSource.isLazy());

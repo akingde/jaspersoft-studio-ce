@@ -214,7 +214,7 @@ public class MEllipse extends MGraphicElementLinePen {
 		
 		JREllipse jrSource = (JREllipse) getValue();
 		if (jrSource != null){
-			((JREllipse)target).setFill(jrSource.getFillValue());
+			((JREllipse)target).setFill(jrSource.getOwnFillValue());
 		}
 	}
 	
