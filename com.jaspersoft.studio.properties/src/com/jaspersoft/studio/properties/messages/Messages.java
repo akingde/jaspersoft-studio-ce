@@ -62,11 +62,6 @@ public final class Messages extends NLS {
 	 */
 	public static String TabbedPropertyRegistry_contributor_error;
 
-	/**
-	 * No properties available message.
-	 */
-	public static String TabbedPropertyList_properties_not_available;
-
 	public static String TabbedPropertySearch_searchPropertyLabel;
 
 	static {
