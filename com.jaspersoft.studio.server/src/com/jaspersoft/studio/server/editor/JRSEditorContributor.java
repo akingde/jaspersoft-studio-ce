@@ -100,8 +100,8 @@ public class JRSEditorContributor implements IEditorContributor {
 		String sAllways = Misc.nullIfEmpty(pStore.getString(KEY_PUBLISH2JSS_SILENT));
 		pStore.setWithDefault(true);
 
-		boolean run = Misc.nvl(Boolean.parseBoolean(sRun), false);
-		boolean allways = Misc.nvl(Boolean.parseBoolean(sAllways), true);
+		boolean run = sRun == null ? true : Boolean.parseBoolean(sRun);
+		boolean allways = sAllways == null ? true : Boolean.parseBoolean(sAllways);
 		if (allways) {
 			SaveConfirmationDialog dialog = new SaveConfirmationDialog(UIUtils.getShell());
 			run = (dialog.open() == Dialog.OK);
