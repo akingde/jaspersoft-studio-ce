@@ -200,6 +200,15 @@ public class CreateElementCommand extends Command {
 			// "The element can not be created because there aren't containers where it can be placed");
 		}
 	}
+	
+	/**
+	 * Manually set the jasperdesign for the command
+	 * 
+	 * @param design the new jasper design
+	 */
+	public void setJasperDesign(JasperDesign design){
+		this.jasperDesign = design;
+	}
 
 	/**
 	 * Check if the command was cancelled during the execution

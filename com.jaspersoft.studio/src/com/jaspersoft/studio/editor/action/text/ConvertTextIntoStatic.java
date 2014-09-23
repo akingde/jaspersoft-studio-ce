@@ -31,6 +31,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
 import com.jaspersoft.studio.model.text.MStaticText;
@@ -47,6 +48,74 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class ConvertTextIntoStatic extends ACachedSelectionAction {
 
+	/**
+	 * Wrapper for the CreateElementCommand. This command allow to generate
+	 * the commands that will be executed but without generating also the new elements.
+	 * In this way the new elements are created only when the command is executed
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class LazyCreateStaticTextCommand extends Command{
+		
+		/**
+		 * The executed create command
+		 */
+		private CreateElementCommand cmd = null;
+		
+		/**
+		 * The parent of the converted node
+		 */
+		private ANode parent;
+		
+		/**
+		 * The element to copy
+		 */
+		private MTextField elementToCopy;
+		
+		public LazyCreateStaticTextCommand(MTextField elementToCopy){
+			this.elementToCopy = elementToCopy;
+			//Need to store some values because if the copied node is deleted
+			//its parent is no longer reachable
+			this.parent = elementToCopy.getParent();
+		}
+		
+		@Override
+		public void execute() {
+			MStaticText modelText = new MStaticText();
+			
+			JRDesignStaticText labelObject = (JRDesignStaticText)modelText.createJRElement(elementToCopy.getJasperDesign());
+			JRDesignTextField textObject = (JRDesignTextField)elementToCopy.getValue();
+
+			cloneTextField(labelObject, textObject);
+			
+			
+			modelText.setValue(labelObject);
+			Rectangle position = new Rectangle(textObject.getX(),textObject.getY(),textObject.getWidth(),textObject.getHeight());
+
+			int oldIndex = ModelUtils.getChildrenPosition(elementToCopy);
+			cmd = new CreateElementCommand(parent, modelText, position, oldIndex);
+			cmd.setJasperDesign(parent.getJasperDesign());
+			cmd.execute();
+		}
+		
+		@Override
+		public void undo() {
+			cmd.undo();
+			cmd = null;
+		}
+		
+		@Override
+		public boolean canExecute() {
+			return elementToCopy != null && parent != null;
+		}
+		
+		@Override
+		public boolean canUndo() {
+			return cmd != null;
+		}
+	}
+	
 	/**
 	 * The id of the action
 	 */
@@ -108,7 +177,7 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 		labelObject.setX(textObject.getX());
 		labelObject.setY(textObject.getY());
 		labelObject.setFontName(textObject.getFontName());
-		labelObject.setFontSize(textObject.getFontSize());
+		labelObject.setFontSize(textObject.getFontsize());
 		labelObject.setBackcolor(textObject.getBackcolor()); 
 		labelObject.setForecolor(textObject.getForecolor());
 		
@@ -168,19 +237,7 @@ public class ConvertTextIntoStatic extends ACachedSelectionAction {
 			command.setReferenceNodeIfNull(textField);
 			
 			DeleteElementCommand deleteCommand = new DeleteElementCommand(null, textField);
-			MStaticText modelText = new MStaticText();
-			
-			JRDesignStaticText labelObject = (JRDesignStaticText)modelText.createJRElement(textField.getJasperDesign());
-			JRDesignTextField textObject = (JRDesignTextField)textField.getValue();
-
-			cloneTextField(labelObject, textObject);
-			
-			
-			modelText.setValue(labelObject);
-			Rectangle position = new Rectangle(textObject.getX(),textObject.getY(),textObject.getWidth(),textObject.getHeight());
-
-			int oldIndex = ModelUtils.getChildrenPosition(textField);
-			CreateElementCommand createCommand = new CreateElementCommand(textField.getParent(), modelText, position, oldIndex);
+			LazyCreateStaticTextCommand createCommand = new LazyCreateStaticTextCommand(textField);
 			
 			command.add(deleteCommand);
 			command.add(createCommand);
