@@ -210,6 +210,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		
 		if (sections.isTableHeader()){
 			DesignCell tableHeader = (DesignCell)col.getTableHeader();
+			tableHeader.setHeight(sections.getTableHeaderHeight());
 			for(JRDesignElement element : tableHeaderContent){
 				JRDesignElement copyElement = (JRDesignElement)element.clone();
 				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
@@ -220,6 +221,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		
 		if (sections.isTableFooter()){
 			DesignCell tableFooter = (DesignCell)col.getTableFooter();
+			tableFooter.setHeight(sections.getTableFooterHeight());
 			for(JRDesignElement element : tableFooterContent){
 				JRDesignElement copyElement = (JRDesignElement)element.clone();
 				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
@@ -230,6 +232,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		
 		if (sections.isColumnFooter()){
 			DesignCell columnFooter = (DesignCell)col.getColumnFooter();
+			columnFooter.setHeight(sections.getColumnFooterHeight());
 			for(JRDesignElement element : colFooterContent){
 				JRDesignElement copyElement = (JRDesignElement)element.clone();
 				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
@@ -241,6 +244,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		//Create the column header
 		if (sections.isColumnHeader()) {
 			DesignCell columnHeader = (DesignCell)col.getColumnHeader();
+			columnHeader.setHeight(sections.getColumnHeaderHeight());
 			for(JRDesignElement element : colHeaderContent){
 				JRDesignElement copyElement = (JRDesignElement)element.clone();
 				copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
@@ -258,6 +262,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		}
 		
 		DesignCell detailCell = (DesignCell)col.getDetailCell();
+		detailCell.setHeight(sections.getDetailHeight());
 		for(JRDesignElement element : detailContent){
 			JRDesignElement copyElement = (JRDesignElement)element.clone();
 			copyElement.setX(getRelativeWidth(colWidth, copyElement.getX()));
@@ -473,9 +478,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 		JRDesignComponentElement jrElement = new JRDesignComponentElement();
 		StandardTable tbl = new StandardTable();
 		((JRDesignComponentElement) jrElement).setComponent(tbl);
-		((JRDesignComponentElement) jrElement)
-				.setComponentKey(new ComponentKey(
-						"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		tbl.setDatasetRun(datasetRun);
 		
 		
@@ -495,8 +498,7 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				for (Object f : tableFields) {
 					createGroupColumn(tbl,jd,((JRField) f).getName(),"$F{" + ((JRField) f).getName() + "}",colWidth,parentCol); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				//Use col header as sample for the group cells
-				int height = parentCol.getColumns().get(0).getColumnHeader().getHeight();
+				int height = sections.getGroupHeaderHeight();
 				//Create a spanned cell inside the column group, that take the field with the name of the group
 				int groupIndex = 0;
 				for(Object field : groupFields){
@@ -664,6 +666,13 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 				boolean groupHeader = col.getGroupHeaders() != null && col.getGroupHeaders().size()>0; 
 				boolean groupFooter = col.getGroupFooters() != null && col.getGroupFooters().size()>0; 
 				sections = new TableSections(tableHeader, tableFooter, columnHeader, columnFooter, groupHeader, groupFooter);
+				if (tableHeader) sections.setTableHeaderHeight(col.getTableHeader().getHeight());
+				if (tableFooter) sections.setTableFooterHeight(col.getTableFooter().getHeight());
+				if (columnHeader) sections.setColumnHeaderHeight(col.getColumnHeader().getHeight());
+				if (columnFooter) sections.setColumnFooterHeight(col.getColumnFooter().getHeight());
+				if (groupHeader) sections.setGroupHeaderHeight(col.getGroupHeaders().get(0).getCell().getHeight());
+				if (groupFooter) sections.setGroupHeaderHeight(col.getGroupFooters().get(0).getCell().getHeight());
+				sections.setDetailHeight(col.getDetailCell().getHeight());
 			}
 			removeElement(jd.getSummary(), tableComponent);
 		} else {
