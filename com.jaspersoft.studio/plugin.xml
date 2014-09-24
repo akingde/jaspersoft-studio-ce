@@ -1483,6 +1483,10 @@
          id="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
          name="CreateAdapterJarCommand">
    </command>
+   <command
+         id="com.jaspersoft.studio.compileJrxmlFile"
+         name="CompileReportCommand">
+   </command>
 	</extension>
     <extension
           point="org.eclipse.core.contenttype.contentTypes">
@@ -1656,6 +1660,10 @@
         class="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
         commandId="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand">
   </handler>
+  <handler
+        class="com.jaspersoft.studio.outline.action.compile.CompileHandler"
+        commandId="com.jaspersoft.studio.compileJrxmlFile">
+  </handler>
 	</extension>
 	<extension id="com.jaspersoft.studio.menus.saveReportTo" point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:file?after=export">
@@ -1689,7 +1697,7 @@
      <command
            commandId="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
            icon="icons/resources/jarExport.png"
-           id="com.jaspersoft.studioCreateAdapterJarCommand"
+           id="com.jaspersoft.studio.CreateAdapterJarCommand"
            label="%exportAsAdapter"
            style="push">
         <visibleWhen
@@ -1698,6 +1706,22 @@
               <test
                     forcePluginActivation="true"
                     property="com.jaspersoft.studio.wizards.dataadapter.checkNature">
+              </test>
+           </and>
+        </visibleWhen>
+     </command>
+     <command
+           commandId="com.jaspersoft.studio.compileJrxmlFile"
+           icon="icons/build_tab.gif"
+           id="com.jaspersoft.studio.CompileReport"
+           label="Compile Report"
+           style="push">
+        <visibleWhen
+              checkEnabled="false">
+           <and>
+              <test
+                    forcePluginActivation="true"
+                    property="com.jaspersoft.studio.outline.action.compile.checkNature">
               </test>
            </and>
         </visibleWhen>
@@ -1899,7 +1923,7 @@
     <extension
           point="org.eclipse.core.expressions.propertyTesters">
        <propertyTester
-             class="com.jaspersoft.translation.action.NatureTester"
+             class="com.jaspersoft.translation.action.NatureTranslationTester"
              id="testNatureTranslation"
              namespace="com.jaspersoft.translation.action"
              properties="checkNature"
@@ -1909,6 +1933,13 @@
              class="com.jaspersoft.studio.wizards.dataadapter.NaturePluginTester"
              id="testNaturePlugin"
              namespace="com.jaspersoft.studio.wizards.dataadapter"
+             properties="checkNature"
+             type="java.lang.Object">
+       </propertyTester>
+       <propertyTester
+             class="com.jaspersoft.studio.outline.action.compile.NatureJrxmlTester"
+             id="testJrxmlFile"
+             namespace="com.jaspersoft.studio.outline.action.compile"
              properties="checkNature"
              type="java.lang.Object">
        </propertyTester>
