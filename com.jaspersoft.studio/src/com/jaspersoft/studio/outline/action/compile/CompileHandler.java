@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.jaspersoft.studio.editor.action.CompileAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -49,14 +50,16 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class CompileHandler implements IHandler {
 
-	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) {
-	}
-
-	@Override
-	public void dispose() {
-	}
-	
+	/**
+	 * Check if the element is a jrxml file, in this case it is added to the founded
+	 * reports (if it wasen't added before). Otherwise if it is a folder or an opened project
+	 * then the search is done recursively inside it.
+	 * 
+	 * @param element a resource
+	 * @param foundReports a Map with the JasperReports configuration of the founded reports. The key
+	 * is the path to the report jrxml itself and it is used to avoid to add more then on time the same 
+	 * reports (for example because the jrxml and it's parent folder are both in the selection set)
+	 */
 	private void evaluateChild(HashMap<String, JasperReportsConfiguration> foundReports, Object element){
 		if (element instanceof IFolder){
 			IFolder folder = (IFolder)element;
@@ -70,7 +73,7 @@ public class CompileHandler implements IHandler {
 		} else if (element instanceof IFile){
 			IFile file = (IFile)element;
 			String extension = file.getFileExtension();
-			if (extension != null && extension.toLowerCase().equals("jrxml")){
+			if (extension != null && extension.toLowerCase().equals("jrxml")){ //$NON-NLS-1$
 				String key = file.getRawLocation().toPortableString();
 				if (!foundReports.containsKey(key)){
 					JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
@@ -91,8 +94,15 @@ public class CompileHandler implements IHandler {
 		}
 	}
 	
+	/**
+	 * Return an hasmhap of file to compile where the key is the absolute path to the file and the
+	 * value is the jasper configuration of the file to compile
+	 * 
+	 * @param event
+	 * @return a not null map of report that must be compiled. The map has no duplicates so the 
+	 * reports must be all compiled
+	 */
 	private HashMap<String, JasperReportsConfiguration> getOperationSet(ExecutionEvent event){
-		
 		HashMap<String, JasperReportsConfiguration> result = new HashMap<String, JasperReportsConfiguration>();
 	  ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
@@ -114,10 +124,10 @@ public class CompileHandler implements IHandler {
 			
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				monitor.beginTask("Compiling Reports", reportsToCompile.size());
+				monitor.beginTask(Messages.CompileHandler_compilingStart, reportsToCompile.size());
 				for (JasperReportsConfiguration jrConfig : reportsToCompile.values()) {
 					IFile mfile = (IFile) jrConfig.get(FileUtils.KEY_FILE);
-					monitor.setTaskName("Compiling: " + mfile.getName());
+					monitor.setTaskName(Messages.CompileHandler_compilingReport + mfile.getName());
 					try{
 						JrxmlTemplateBundle bundle = new JrxmlTemplateBundle(mfile.getLocationURI().toURL(), true, jrConfig);
 						jrConfig.setJasperDesign(bundle.getJasperDesign());
@@ -152,5 +162,14 @@ public class CompileHandler implements IHandler {
 	@Override
 	public void removeHandlerListener(IHandlerListener handlerListener) {
 	}
+	
+	@Override
+	public void addHandlerListener(IHandlerListener handlerListener) {
+	}
+
+	@Override
+	public void dispose() {
+	}
+	
 
 }

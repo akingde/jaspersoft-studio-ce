@@ -1714,7 +1714,7 @@
            commandId="com.jaspersoft.studio.compileJrxmlFile"
            icon="icons/build_tab.gif"
            id="com.jaspersoft.studio.CompileReport"
-           label="Compile Report"
+           label="%compileReport"
            style="push">
         <visibleWhen
               checkEnabled="false">

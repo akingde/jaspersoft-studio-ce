@@ -267,6 +267,8 @@ public class Messages extends NLS {
 	public static String CompileAction_consoleMessage2;
 	public static String CompileAction_consoleMessage3;
 	public static String CompileAction_jobName;
+	public static String CompileHandler_compilingReport;
+	public static String CompileHandler_compilingStart;
 	public static String CongratulationsWizardPage_label1;
 	public static String CongratulationsWizardPage_label2;
 	public static String CongratulationsWizardPage_label3;
