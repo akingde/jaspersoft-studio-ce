@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets.table;
 
@@ -53,7 +49,7 @@ public class NewButton {
 			}
 			int index = -1;
 			if (!s.isEmpty())
-				index = inlist.indexOf(s.getFirstElement())+1;
+				index = inlist.indexOf(s.getFirstElement()) + 1;
 			Object selement = newElement.newElement(inlist, index);
 			if (selement != null) {
 				if (selement instanceof Object[]) {
@@ -80,26 +76,28 @@ public class NewButton {
 		}
 	}
 
-	public void createNewButtons(Composite composite, TableViewer tableViewer, INewElement newElement) {
+	public Button createNewButtons(Composite composite, TableViewer tableViewer, INewElement newElement) {
 		newB = new Button(composite, SWT.PUSH);
 		newB.setText(Messages.common_add);
-		newB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		newB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		newB.addSelectionListener(new NewListener(tableViewer, newElement));
+		return newB;
 	}
 
-	public void setButtonText(String text){
+	public void setButtonText(String text) {
 		newB.setText(text);
 	}
+
 	public void setEnabled(boolean enable) {
 		newB.setEnabled(enable);
 	}
-	
+
 	/**
-	 * Additional operations to be performed once 
-	 * the new element has been added.
-	 * @param selement 
+	 * Additional operations to be performed once the new element has been added.
+	 * 
+	 * @param selement
 	 */
-	protected void afterElementAdded(Object selement){
+	protected void afterElementAdded(Object selement) {
 		// empty...
 	}
 }

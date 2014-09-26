@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.plugin;
 
@@ -17,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.CoreException;
@@ -50,9 +47,9 @@ import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
-	
-	private static Map<Class<?>,IComponentFactory> factoryByNodeType = new HashMap<Class<?>, IComponentFactory>();
-	
+
+	private static Map<Class<?>, IComponentFactory> factoryByNodeType = new HashMap<Class<?>, IComponentFactory>();
+
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$ 
@@ -62,8 +59,8 @@ public class ExtensionManager {
 				if (o instanceof IComponentFactory) {
 					IComponentFactory compFactory = (IComponentFactory) o;
 					nodeFactory.add(compFactory);
-					for(Class<?> cl : compFactory.getKnownClasses()) {
-						factoryByNodeType.put(cl,compFactory);
+					for (Class<?> cl : compFactory.getKnownClasses()) {
+						factoryByNodeType.put(cl, compFactory);
 					}
 				}
 			} catch (CoreException ex) {
@@ -169,25 +166,60 @@ public class ExtensionManager {
 		return defaultFactory;
 	}
 
-	
 	/**
 	 * Returns the list of contributed template provider, on the extension point templateProviderSupport
 	 * 
 	 * @return the list of contributed template provider, it can be empty but not null
 	 */
 	public List<TemplateProvider> getTemplateProviders() {
-		
+
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				JaspersoftStudioPlugin.PLUGIN_ID, "templateProviderSupport"); //$NON-NLS-1$ 
 
 		ArrayList<TemplateProvider> providersList = new ArrayList<TemplateProvider>();
 		for (IConfigurationElement el : config) {
-				
+
+			Object defaultSupportClazz;
+			try {
+				defaultSupportClazz = el.createExecutableExtension("providerClass");
+				if (defaultSupportClazz instanceof TemplateProvider) {
+					providersList.add((TemplateProvider) defaultSupportClazz);
+				}
+			} catch (CoreException e) {
+				JaspersoftStudioPlugin
+						.getInstance()
+						.getLog()
+						.log(
+								new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
+										"An error occurred while trying to create the new class.", e));
+			}
+		}
+		return providersList;
+	}
+
+	/**
+	 * A list of the contributed Tab to visualize a series of Template Styles
+	 */
+	private ArrayList<TemplateViewProvider> stylesViewList = null;
+
+	/**
+	 * Return a list of the contributed Tab to visualize a series of Template Styles. The read styles are cached after the
+	 * first time they are red
+	 * 
+	 * @return a list of TemplateViewProvider
+	 */
+	public List<TemplateViewProvider> getStylesViewProvider() {
+		if (stylesViewList == null) {
+			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+					JaspersoftStudioPlugin.PLUGIN_ID, "stylesViewContributor");
+			stylesViewList = new ArrayList<TemplateViewProvider>();
+			for (IConfigurationElement el : config) {
+
 				Object defaultSupportClazz;
 				try {
 					defaultSupportClazz = el.createExecutableExtension("providerClass");
-					if (defaultSupportClazz instanceof TemplateProvider) {
-						providersList.add((TemplateProvider) defaultSupportClazz);
+					if (defaultSupportClazz instanceof TemplateViewProvider) {
+						stylesViewList.add((TemplateViewProvider) defaultSupportClazz);
 					}
 				} catch (CoreException e) {
 					JaspersoftStudioPlugin
@@ -197,47 +229,10 @@ public class ExtensionManager {
 									new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
 											"An error occurred while trying to create the new class.", e));
 				}
-		}
-		return providersList;
-	}
-	
-	/**
-	 * A list of the contributed Tab to visualize a series of Template Styles
-	 */
-	private ArrayList<TemplateViewProvider> stylesViewList = null;
-	
-	/**
-	 * Return a list of the contributed Tab to visualize a series of Template Styles. The read styles
-	 * are cached after the first time they are red
-	 * 
-	 * @return a list of TemplateViewProvider
-	 */
-	public List<TemplateViewProvider> getStylesViewProvider() {
-		if (stylesViewList == null){
-			IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-					JaspersoftStudioPlugin.PLUGIN_ID, "stylesViewContributor"); 
-			stylesViewList = new ArrayList<TemplateViewProvider>();
-			for (IConfigurationElement el : config) {
-					
-					Object defaultSupportClazz;
-					try {
-						defaultSupportClazz = el.createExecutableExtension("providerClass");
-						if (defaultSupportClazz instanceof TemplateViewProvider) {
-							stylesViewList.add((TemplateViewProvider) defaultSupportClazz);
-						}
-					} catch (CoreException e) {
-						JaspersoftStudioPlugin
-								.getInstance()
-								.getLog()
-								.log(
-										new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID,
-												"An error occurred while trying to create the new class.", e));
-					}
 			}
 		}
 		return stylesViewList;
 	}
-	
 
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
@@ -304,9 +299,9 @@ public class ExtensionManager {
 	}
 
 	private List<IComponentFactory> getPrioritizedFactoryList(Object obj) {
-		if(obj != null) {
+		if (obj != null) {
 			IComponentFactory selectedFactory = factoryByNodeType.get(obj.getClass());
-			if(selectedFactory!=null) {
+			if (selectedFactory != null) {
 				List<IComponentFactory> copyLst = new ArrayList<IComponentFactory>(nodeFactory.size());
 				copyLst.addAll(nodeFactory);
 				copyLst.remove(selectedFactory);
@@ -316,13 +311,13 @@ public class ExtensionManager {
 		}
 		return nodeFactory;
 	}
-	
+
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		for (IComponentFactory f : getPrioritizedFactoryList(child)) {
-				Command c = f.getCreateCommand(parent, child, location, newIndex);
-				if (c != null) {
-					return c;
-				}
+			Command c = f.getCreateCommand(parent, child, location, newIndex);
+			if (c != null) {
+				return c;
+			}
 		}
 		return null;
 	}
@@ -422,9 +417,9 @@ public class ExtensionManager {
 		return tooltip;
 	}
 
-	public void onRun() {
+	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr, Map<String, Object> params) {
 		for (IEditorContributor f : eContributor)
-			f.onRun();
+			f.onRun(jrConfig, jr, params);
 	}
 
 	public List<AContributorAction> getActions() {
@@ -449,15 +444,16 @@ public class ExtensionManager {
 	/**
 	 * Looks for contributions related to the specified preview mode ID.
 	 * 
-	 * @param previewModeID the preview mode identifier
+	 * @param previewModeID
+	 *          the preview mode identifier
 	 * @return the list of contributed information
 	 */
 	public List<PreviewModeDetails> getAllPreviewModeDetails(String previewModeID) {
 		IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				JaspersoftStudioPlugin.PLUGIN_ID, PreviewModeDetails.EXTENSION_POINT_ID); //$NON-NLS-1$
 		List<PreviewModeDetails> allDetails = new ArrayList<PreviewModeDetails>();
-		for(IConfigurationElement ce : elements) {
-			if(previewModeID.equals(ce.getAttribute("modeID")) || previewModeID == null) {
+		for (IConfigurationElement ce : elements) {
+			if (previewModeID.equals(ce.getAttribute("modeID")) || previewModeID == null) {
 				Object clazz;
 				try {
 					clazz = ce.createExecutableExtension("class");

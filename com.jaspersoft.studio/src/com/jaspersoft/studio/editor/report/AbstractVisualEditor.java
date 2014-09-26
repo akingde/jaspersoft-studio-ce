@@ -123,6 +123,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
@@ -630,6 +631,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new CreateParameterAction(this);
 		registry.registerAction(action);
 		selectionActions.add(CreateParameterAction.ID);
+		
+		action = new CreateParameterSetAction(this);
+		registry.registerAction(action);
+		selectionActions.add(CreateParameterSetAction.ID);
 
 		action = new CreateGroupAction(this);
 		registry.registerAction(action);

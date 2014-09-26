@@ -43,6 +43,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
@@ -140,6 +141,9 @@ public class ReportEditor extends AbstractVisualEditor {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 	
 					id = CreateParameterAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+					
+					id = CreateParameterSetAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 	
 					id = CreateGroupAction.ID;

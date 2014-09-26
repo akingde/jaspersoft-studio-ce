@@ -332,6 +332,12 @@
             id="com.jaspersoft.studio.preferences.EditorsPreferencePage"
             name="%Editors">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.prm.prefs.ParameterSetPreferencePage"
+            id="com.jaspersoft.studio.preferences.ParameterSetPreferencePage"
+            name="%ParameterSet">
+      </page>
    </extension>
    <extension
          id=""
@@ -551,6 +557,17 @@
             class="com.jaspersoft.studio.preferences.EditorsPreferencePage"
             id="com.jaspersoft.studio.preferences.EditorsPreferencePage.property"
             name="%Editors">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.prm.prefs.ParameterSetPreferencePage"
+            id="com.jaspersoft.studio.preferences.ParameterSetPreferencePage.property"
+            name="Parameter Sets">
+         <enabledWhen>
+            <reference
+                  definitionId="com.jaspersoft.studio.project">
+            </reference>
+         </enabledWhen>
       </page>
    </extension>
    <extension

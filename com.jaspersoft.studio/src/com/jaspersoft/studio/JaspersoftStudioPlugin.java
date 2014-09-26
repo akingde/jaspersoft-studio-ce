@@ -15,7 +15,8 @@ package com.jaspersoft.studio;
 import java.io.PrintStream;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
-import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -80,9 +81,9 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 
 		JasperReportsConfiguration c = JasperReportsConfiguration.getDefaultInstance();
 		String key = "net.sf.jasperreports.default.font.name"; //$NON-NLS-1$
-		JRProperties.setProperty(key, c.getProperty(key));
+		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
 		key = "net.sf.jasperreports.default.font.size"; //$NON-NLS-1$
-		JRProperties.setProperty(key, c.getProperty(key));
+		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
 		
 		if(getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)){
 			installJSSConsole();

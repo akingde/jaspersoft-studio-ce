@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets.table;
 
@@ -116,12 +112,12 @@ public class ListOrderButtons {
 	public void createOrderButtons(Composite composite, TableViewer tableViewer) {
 		upField = new Button(composite, SWT.PUSH);
 		upField.setText(Messages.common_up);
-		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		upField.addSelectionListener(new ElementOrderChanger(tableViewer, true));
 
 		downFields = new Button(composite, SWT.PUSH);
 		downFields.setText(Messages.common_down);
-		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		downFields.addSelectionListener(new ElementOrderChanger(tableViewer, false));
 	}
 

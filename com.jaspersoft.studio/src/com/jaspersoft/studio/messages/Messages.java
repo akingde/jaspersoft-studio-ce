@@ -12,6 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.messages;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
@@ -313,6 +316,8 @@ public class Messages extends NLS {
 	public static String CreateParameterAction_create_parameter_tool_tip;
 	public static String CreateParameterCommand_parameter_name;
 	public static String CreateParameterCommand_parameter_name_dialog_text;
+	public static String CreateParameterSetAction_0;
+	public static String CreateParameterSetAction_1;
 	public static String CreatePinAction_name;
 	public static String CreatePinAction_tooltip;
 	public static String CreateScriptletAction_create_scriptlet;
@@ -1292,6 +1297,10 @@ public class Messages extends NLS {
 	public static String PagesFieldEditor_precisePages;
 	public static String PagesFieldEditor_to;
 	public static String PageWidthUndoableOperation_change_page_width;
+	public static String ParameterDialog_0;
+	public static String ParameterDialog_5;
+	public static String ParameterDialog_6;
+	public static String ParameterDialog_7;
 	public static String ParameterPage_dataset_parameters;
 	public static String ParameterPage_description;
 	public static String ParameterPage_generic_elements_parameters;
@@ -1300,6 +1309,11 @@ public class Messages extends NLS {
 	public static String ParametersDialog_built_in_parameters;
 	public static String ParametersDialog_report_parameters;
 	public static String ParametersDialog_user_parameters;
+	public static String ParameterSetFieldEditor_0;
+	public static String ParameterSetWizard_0;
+	public static String ParameterSetWizardPage_1;
+	public static String ParameterSetWizardPage_2;
+	public static String ParameterSetWizardPage_3;
 	public static String ParametersTable_class;
 	public static String ParametersTable_description;
 	public static String ParametersTable_isForPrompt;

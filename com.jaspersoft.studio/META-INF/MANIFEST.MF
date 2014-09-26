@@ -549,6 +549,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.core.resources,
    org.eclipse.ui.dialogs,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.prm,
  com.jaspersoft.studio.property;
   uses:="org.eclipse.gef.commands,
    org.eclipse.ui,

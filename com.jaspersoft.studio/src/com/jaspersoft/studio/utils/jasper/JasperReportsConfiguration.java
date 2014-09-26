@@ -65,6 +65,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
+import com.jaspersoft.studio.prm.ParameterSetProvider;
+import com.jaspersoft.studio.prm.ParameterSet;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -139,6 +141,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				isPropsCached = false;
 				getProperties();
 				qExecutors = null;
+			} else if (prmProvider != null && property.startsWith(ParameterSet.PARAMETER_SET)) {
+				prmProvider.reset();
 			}
 		}
 	}
@@ -326,8 +330,15 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			put(KEY_JASPERDESIGN, jd);
 	}
 
+	private ParameterSetProvider prmProvider;
+
 	public void setJRParameters(Map<String, Object> value) {
 		put(KEY_JRPARAMETERS, value);
+		if (value != null) {
+			if (prmProvider == null)
+				prmProvider = new ParameterSetProvider(this);
+			prmProvider.initParameterValues(value);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -558,12 +569,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
-		
-		//This call avoid to double twice an extension because maybe  the ExtensionLoader has a thread started for it, 
-		//but that still has not completed and in the meantime another request for the same extensions arrive. 
-		//With this code the loading of the extension is paused until the thread complete if there is one
+
+		// This call avoid to double twice an extension because maybe the ExtensionLoader has a thread started for it,
+		// but that still has not completed and in the meantime another request for the same extensions arrive.
+		// With this code the loading of the extension is paused until the thread complete if there is one
 		ExtensionLoader.waitIfLoading(extensionType);
-		
+
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		List<T> result = null;
 		try {

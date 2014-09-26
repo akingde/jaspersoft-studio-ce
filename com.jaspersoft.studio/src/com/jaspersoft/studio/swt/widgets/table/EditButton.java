@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets.table;
 
@@ -67,7 +63,7 @@ public class EditButton<T> {
 	public void createEditButtons(Composite composite, TableViewer tableViewer, IEditElement<T> editElement) {
 		editB = new Button(composite, SWT.PUSH);
 		editB.setText(Messages.common_edit);
-		editB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		editB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		listener = new EditListener(tableViewer, editElement);
 		editB.addSelectionListener(listener);
 	}
@@ -83,12 +79,13 @@ public class EditButton<T> {
 	public void setEnabled(boolean enable) {
 		editB.setEnabled(enable);
 	}
-	
+
 	/**
 	 * Additional operations to be performed once the element has been modified.
-	 * @param object 
+	 * 
+	 * @param object
 	 */
-	protected void afterElementModified(Object element){
+	protected void afterElementModified(Object element) {
 		// empty...
 	}
 }

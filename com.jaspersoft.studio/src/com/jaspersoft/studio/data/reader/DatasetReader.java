@@ -183,6 +183,8 @@ public class DatasetReader {
 
 			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
 
+			JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
+
 			// 9. Fill the report
 			JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
 

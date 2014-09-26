@@ -21,8 +21,9 @@ import java.util.Properties;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FilePrefUtil;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -164,9 +165,9 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			String value = item.getText(1);
 			props.setProperty(key, value);
 			if (key.equals("net.sf.jasperreports.default.font.name")) //$NON-NLS-1$
-				JRProperties.setProperty(key, value);
+				JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, value);
 			else if (key.equals("net.sf.jasperreports.default.font.size")) //$NON-NLS-1$
-				JRProperties.setProperty(key, value);
+				JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, value);
 		}
 		getPreferenceStore().setValue(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
 	}

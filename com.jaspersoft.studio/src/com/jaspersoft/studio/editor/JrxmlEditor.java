@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -722,6 +723,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (jrContext == null) {
 			jrContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 			jrContext.put(AMultiEditor.THEEDITOR, this);
+			jrContext.setJRParameters(new HashMap<String, Object>());
 		}
 		return jrContext;
 	}
