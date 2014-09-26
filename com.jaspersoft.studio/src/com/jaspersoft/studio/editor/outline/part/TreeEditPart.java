@@ -15,8 +15,7 @@ package com.jaspersoft.studio.editor.outline.part;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -26,7 +25,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Tree;
@@ -41,6 +39,7 @@ import com.jaspersoft.studio.editor.outline.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MLockableRefresh;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
@@ -177,38 +176,62 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	}
 	
 	/**
-	 * Map of all the treeitem, they can be queued it the refresh is disabled and then repainted all
-	 * the the same time at the end
+	 * Map of EditPart that need a refresh, they can be queued when the refresh is disabled refreshed
+	 * at the end. Using an hashset avoid to refresh the same part more than one time
 	 */
-	private static HashMap<TreeItem, ANode> refreshMap = new LinkedHashMap<TreeItem, ANode>();
+	private static HashSet<EditPart> nodeToRefresh = new HashSet<EditPart>();
 
+	/**
+	 * Cache the node to check the refresh event
+	 */
+	private MLockableRefresh refreshReferenceNode = null;
+	
+	/**
+	 * Return the node to check the refresh event and cache it
+	 * 
+	 * @return the node to check if the refresh events are enabled or not
+	 */
+	private MLockableRefresh getLockReferenceNode(){
+		if (refreshReferenceNode == null){
+			EditPart root = (EditPart)getRoot().getChildren().get(0);
+			ANode modelNode = (ANode)root.getModel();
+			refreshReferenceNode = (MLockableRefresh)JSSCompoundCommand.getMainNode(modelNode);
+		}
+		return refreshReferenceNode;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		ANode modelNode = null;
-		RootEditPart root = getRoot();
-		if (root != null && root.getModel() instanceof ANode){
-			modelNode = (ANode)root.getModel();
-		} else {
-			modelNode = (ANode)getModel();
+		if (evt.getPropertyName().equals(JSSCompoundCommand.REFRESH_UI_EVENT)){
+			refreshCached();
+			return;
 		}
-		if (!JSSCompoundCommand.isRefreshEventsIgnored(modelNode)){
-			//Refresh the cached node
-			for(TreeItem item : refreshMap.keySet()){
-				refreshItem(item, refreshMap.get(item));
-			}
-			refreshMap.clear();
-			//Refresh the current node
+		//FIXME: maybe copare the source of the event with the model of the current part to avoid
+		//to refresh this part for an event not generated from the contained jr element
+		MLockableRefresh refrenceNode = getLockReferenceNode();
+		if (refrenceNode != null && refrenceNode.isRefreshEventIgnored()){
+			nodeToRefresh.add(this);
+		} else {
 			refresh();
-		} else {
-			refreshChildren();
-			TreeItem item = (TreeItem) getWidget();
-			ANode node = (ANode) getModel();
-			refreshMap.put(item, node);
 		}
+	}
+	
+	/**
+	 * Refresh all the cached node, avoid to refresh the node that will be delete (parent null)
+	 */
+	private void refreshCached(){
+		for(EditPart part : nodeToRefresh){
+			//Check if the part model has a parent, if not the part
+			//will be probably removed so avoid to refresh it
+			if (((ANode)part.getModel()).getParent() != null) {
+				part.refresh();
+			}
+		}
+		nodeToRefresh.clear();
 	}
 
 	@Override
