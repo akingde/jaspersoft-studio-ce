@@ -23,7 +23,6 @@ import com.jaspersoft.studio.server.plugin.ExtensionManager;
  */
 public class Activator extends AbstractJRUIPlugin {
 
-
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.jaspersoft.studio.server"; //$NON-NLS-1$
 
@@ -46,6 +45,7 @@ public class Activator extends AbstractJRUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		JRSBuiltInParameterProvider.init();
 	}
 
 	/*

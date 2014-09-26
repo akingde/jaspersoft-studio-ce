@@ -3,6 +3,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/js-common.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js-extra-classes.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/fluent-hc-4.3.1.jar"/>
@@ -45,6 +46,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey/validation-api-1.1.0.Final.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js_axis-1.4patched.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jasig/cas-client-core-3.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -14,10 +14,13 @@ package com.jaspersoft.studio.server.editor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.eclipse.MScopedPreferenceStore;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.repo.FileRepositoryService;
@@ -63,25 +66,6 @@ public class JRSEditorContributor implements IEditorContributor {
 			}
 		rservices.removeAll(toDel);
 		rservices.add(new JRSRepositoryService(repService, jConfig));
-
-		// FileResolver fr = jConfig.getFileResolver();
-		// if (fr instanceof ProxyFileResolver) {
-		// ProxyFileResolver pfr = (ProxyFileResolver) fr;
-		// for (FileResolver r : pfr.getResolvers())
-		// if (r instanceof JSFileResolver)
-		// pfr.removeResolver(r);
-		// jEditor.addFileResolver(new JSFileResolver(jd));
-		// }
-		// prop = jd.getProperty("com.jaspersoft.ji.adhoc");
-		// if (prop != null && prop.equals("1")) {
-		// UIUtils.showWarning("You have selected to edit an Ad Hoc report.\n"
-		// + "If you continue, the report will lose its sorting and grouping.\n"
-		// +
-		// "Furthermore, any changes you make in Jaspersoft Studio will be lost\n"
-		// + "next Time you edit it via the Ad Hoc report editor.\n"
-		// + "Continue anyway?");
-		// }
-
 	}
 
 	public static final String KEY_PUBLISH2JSS = "PUBLISH2JSS";
@@ -138,9 +122,12 @@ public class JRSEditorContributor implements IEditorContributor {
 		return publishAction;
 	}
 
-	public void onRun() {
-		// TODO Auto-generated method stub
-
+	public void onRun(JasperReportsConfiguration jrConfig, JasperReport jr, Map<String, Object> params) {
+		for (JRParameter p : jr.getParameters()) {
+			// look if there are JRS built-in parameters, set server value, for this
+			// connection
+			// cache all of this, preference to do this ?
+		}
 	}
 
 	public AContributorAction[] getActions() {

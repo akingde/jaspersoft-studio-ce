@@ -15,6 +15,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/js_axis-1.4patched.jar,
+ lib/js-common.jar,
  lib/js-extra-classes.jar,
  lib/commons-codec-1.6.jar,
  lib/fluent-hc-4.3.1.jar,
@@ -56,11 +57,12 @@ Bundle-ClassPath: lib/js_axis-1.4patched.jar,
  lib/jersey/jsr250-api-1.0.jar,
  lib/jersey/net.java.html.json-0.6.jar,
  lib/jersey/validation-api-1.1.0.Final.jar,
- lib/jasig/cas-client-core-3.2.1.jar,
  .
 Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
 Export-Package: com.jaspersoft.ireport.jasperserver.ws,
+ com.jaspersoft.jasperserver.api,
+ com.jaspersoft.jasperserver.api.metadata.user.domain,
  com.jaspersoft.jasperserver.api.metadata.xml.domain.impl,
  com.jaspersoft.jasperserver.dto.authority,
  com.jaspersoft.jasperserver.dto.permissions,

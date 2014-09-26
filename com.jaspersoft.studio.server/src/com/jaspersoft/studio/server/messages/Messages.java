@@ -91,6 +91,9 @@ public class Messages extends NLS {
 	public static String Common_ErrSecurePrefStorage;
 	public static String InputControlPageContent_boolean;
 	public static String InputControlPageContent_singleValue;
+	public static String JRSClasspathContainerPage_0;
+	public static String JRSClasspathContainerPage_1;
+	public static String JRSClasspathContainerPage_2;
 	public static String JrxmlPageContent_uploadFromRepo;
 	public static String JrxmlPublishAction_defaultresourcelabel;
 	public static String JrxmlPublishAction_defaultresourcename;

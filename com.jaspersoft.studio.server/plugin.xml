@@ -355,5 +355,28 @@
            name="Single Sign On Servers">
      </page>
   </extension>
+  <extension
+        point="org.eclipse.jdt.ui.classpathContainerPage">
+     <classpathContainerPage
+           class="com.jaspersoft.studio.server.container.JRSClasspathContainerPage"
+           id="com.jaspersoft.server.JRS_CONTAINER"
+           name="Jaspersoft Server Library">
+     </classpathContainerPage>
+  </extension>
+  <extension
+        id="com.jaspersoft.server.JRS_CONTAINER"
+        name="com.jaspersoft.server.JRS_CONTAINER"
+        point="org.eclipse.jdt.core.classpathContainerInitializer">
+     <classpathContainerInitializer
+           class="com.jaspersoft.studio.server.container.JRSClasspathContainerInitializer"
+           id="com.jaspersoft.server.JRS_CONTAINER">
+     </classpathContainerInitializer>
+  </extension>
+  <extension
+        point="net.sf.jasperreports.classpathcontainer">
+     <classpathcontainer
+           ClassFactory="com.jaspersoft.studio.server.container.JRSClasspathContainerFactory">
+     </classpathcontainer>
+  </extension>
 
 </plugin>
