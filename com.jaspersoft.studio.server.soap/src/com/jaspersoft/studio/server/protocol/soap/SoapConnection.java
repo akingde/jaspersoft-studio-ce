@@ -345,7 +345,7 @@ public class SoapConnection implements IConnection {
 				toDel.add(r);
 			}
 		}
-		runit.getChildren().retainAll(toDel);
+		runit.getChildren().removeAll(toDel);
 		for (ResourceDescriptor r : rds) {
 			r.setIsNew(true);
 			if (!r.getParentFolder().endsWith("_files")) {

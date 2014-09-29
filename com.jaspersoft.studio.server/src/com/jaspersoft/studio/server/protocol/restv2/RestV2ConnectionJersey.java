@@ -706,13 +706,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (crl != null) {
 			List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
 			for (ResourceDescriptor r : rds) {
+				String ruri = "repo:" + r.getUriString();
 				for (ReportInputControl ric : crl.getInputParameters()) {
-					if (r.getName().equals(ric.getId()))
+					if (ruri.equals(ric.getUri()))
 						ics.add(ric);
 				}
 			}
 			ReportInputControlsListWrapper wrapper = new ReportInputControlsListWrapper(ics);
-
 			req = target.path("reports" + uri + "/inputControls").request();
 			Response r = connector.put(req, Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE), monitor);
 			toObj(r, ReportInputControlsListWrapper.class, monitor);
