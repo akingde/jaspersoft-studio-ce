@@ -144,7 +144,8 @@ public class CreateParameterSetAction extends ACachedSelectionAction {
 							cmd.add(new CreateParameterCommand(ds, p, -1));
 					}
 					command = cmd;
-				}
+				} else
+					return;
 				fresh = true;
 				super.run();
 				break;
