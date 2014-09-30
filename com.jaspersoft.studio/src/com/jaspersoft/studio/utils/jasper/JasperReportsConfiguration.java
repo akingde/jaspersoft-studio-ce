@@ -65,13 +65,14 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jasper.MapDesignConverter;
 import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.fonts.utils.FontUtils;
-import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.prm.ParameterSet;
+import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
+	
 	// public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
@@ -92,7 +93,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private List<ComponentsBundle> bundles;
 	private List<FunctionsBundle> functionsBundles;
 	private MessageProviderFactory messageProviderFactory;
-
+	
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -565,79 +566,120 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			return def;
 		return p;
 	}
+	
+	/**
+	 * Return the font extension both by resolving the property of the current
+	 * project and from the commons extension. If it is available instead of 
+	 * request the extension from the superclass it search it in the common
+	 * cache
+	 * 
+	 * @return a not null font extension
+	 */
+	@SuppressWarnings("unchecked")
+	private List<FontFamily> getExtensionFonts(){
+		if (lst == null){
+			lst = new ArrayList<FontFamily>();
+		}
+		if (refreshFonts) {
+			String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
+			if (strprop != null) {
+				lst.clear();
+				try {
+					List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this, new ByteArrayInputStream(strprop.getBytes()));
+					if (fonts != null && !fonts.isEmpty()) {
+						for (FontFamily f : fonts)
+							if (f != null)
+								lst.add(f);
+					}
+				} catch (Exception e) {
+					// e.printStackTrace();
+				}
+			}
+
+			List<FontFamily> superlist = (List<FontFamily>) ExtensionLoader.getSharedExtension(FontFamily.class);
+			//fallback if something in the cache goes wrong
+			if (superlist == null) superlist = super.getExtensions(FontFamily.class);
+			if (superlist != null) {
+				for (FontFamily f : superlist)
+					if (f != null)
+						lst.add(f);
+			}
+
+			refreshFonts = false;
+		}
+		return lst;
+	}
+
+	/**
+	 * Return the components extension both by resolving the property of the current
+	 * project and from the commons extension. If it is available instead of 
+	 * request the extension from the superclass it search it in the common
+	 * cache
+	 * 
+	 * @return a not null components extension
+	 */
+	@SuppressWarnings("unchecked")
+	private List<ComponentsBundle> getExtensionComponents(){
+		if (bundles == null || refreshBundles) {
+			bundles = (List<ComponentsBundle>)ExtensionLoader.getSharedExtension(ComponentsBundle.class);
+			//fallback if something in the cache goes wrong
+			if (bundles == null) bundles = super.getExtensions(ComponentsBundle.class);
+			// remove all duplicates
+			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
+			bundles = new ArrayList<ComponentsBundle>(components);
+			for (ComponentsBundle cb : bundles) {
+				try {
+					ComponentManager cm = cb.getComponentManager(ComponentsExtensionsRegistryFactory.MAP_COMPONENT_NAME);
+					if (cm != null && cm instanceof ComponentsManager)
+						((ComponentsManager) cm).setDesignConverter(MapDesignConverter.getInstance());
+				} catch (Exception e) {
+				}
+			}
+			refreshBundles = false;
+		}
+		return bundles;
+	}
+	
+	/**
+	 * Return the functions extension both by resolving the property of the current
+	 * project and from the commons extension. If it is available instead of 
+	 * request the extension from the superclass it search it in the common
+	 * cache
+	 * 
+	 * @return a not null functions extension
+	 */
+	@SuppressWarnings("unchecked")
+	private List<FunctionsBundle> getExtensionFunctions(){
+		if (functionsBundles == null || refreshFunctionsBundles) {
+			// We need to be sure that the resource bundles are fresh new
+			// NOTE: Let's use this for now as quick solution, in case of
+			// bad performances we'll have to fix this approach
+			ResourceBundle.clearCache(getClassLoader());
+			functionsBundles = (List<FunctionsBundle>) ExtensionLoader.getSharedExtension(FunctionsBundle.class);
+			//fallback if something in the cache goes wrong
+			if (functionsBundles == null) functionsBundles = super.getExtensions(FunctionsBundle.class);
+			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
+			functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
+		}
+		return functionsBundles;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getExtensions(Class<T> extensionType) {
-
-		// This call avoid to double twice an extension because maybe the ExtensionLoader has a thread started for it,
-		// but that still has not completed and in the meantime another request for the same extensions arrive.
-		// With this code the loading of the extension is paused until the thread complete if there is one
-		ExtensionLoader.waitIfLoading(extensionType);
-
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		List<T> result = null;
 		try {
-			if (classLoader != null)
+			if (classLoader != null){
 				Thread.currentThread().setContextClassLoader(classLoader);
+			}
+			
 			if (extensionType == FontFamily.class) {
-				if (lst == null)
-					lst = new ArrayList<FontFamily>();
-				if (refreshFonts) {
-					String strprop = getProperty(FontsPreferencePage.FPP_FONT_LIST);
-					if (strprop != null) {
-						lst.clear();
-						try {
-							List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
-									new ByteArrayInputStream(strprop.getBytes()));
-							if (fonts != null && !fonts.isEmpty()) {
-								for (FontFamily f : fonts)
-									if (f != null)
-										lst.add(f);
-							}
-						} catch (Exception e) {
-							// e.printStackTrace();
-						}
-					}
-
-					List<FontFamily> superlist = (List<FontFamily>) super.getExtensions(extensionType);
-					if (superlist != null) {
-						for (FontFamily f : superlist)
-							if (f != null)
-								lst.add(f);
-					}
-
-					refreshFonts = false;
-				}
-				result = (List<T>) lst;
+				result = (List<T>)getExtensionFonts();
 			} else if (extensionType == ComponentsBundle.class) {
-				if (bundles == null || refreshBundles) {
-					bundles = super.getExtensions(ComponentsBundle.class);
-					// remove all duplicates
-					Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
-					bundles = new ArrayList<ComponentsBundle>(components);
-					for (ComponentsBundle cb : bundles) {
-						try {
-							ComponentManager cm = cb.getComponentManager(ComponentsExtensionsRegistryFactory.MAP_COMPONENT_NAME);
-							if (cm != null && cm instanceof ComponentsManager)
-								((ComponentsManager) cm).setDesignConverter(MapDesignConverter.getInstance());
-						} catch (Exception e) {
-						}
-					}
-					refreshBundles = false;
-				}
-				result = (List<T>) bundles;
+				result = (List<T>)getExtensionComponents();
 			} else if (extensionType == FunctionsBundle.class) {
-				if (functionsBundles == null || refreshFunctionsBundles) {
-					// We need to be sure that the resource bundles are fresh new
-					// NOTE: Let's use this for now as quick solution, in case of
-					// bad performances we'll have to fix this approach
-					ResourceBundle.clearCache(getClassLoader());
-					functionsBundles = super.getExtensions(FunctionsBundle.class);
-					Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
-					functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
-				}
-				result = (List<T>) functionsBundles;
+				result = (List<T>)getExtensionFunctions();
 			} else if (extensionType == MessageProviderFactory.class) {
 				if (messageProviderFactory == null || refreshMessageProviderFactory) {
 					messageProviderFactory = new ResourceBundleMessageProviderFactory(getClassLoader());
@@ -658,7 +700,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) repositoryServices;
 			} else {
 				try {
-					result = super.getExtensions(extensionType);
+					//The repository service is already cached by the superclass
+					if (extensionType != RepositoryService.class) result = (List<T>)ExtensionLoader.getSharedExtension(extensionType);
+					//fallback if was not able to get the extension from the cache
+					if (result == null) result = super.getExtensions(extensionType);
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -668,6 +713,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return result;
 	}
+	
+	/*private <T> List<T> getCachedExtension(Class<T> extensionType){
+		if (parent == DefaultJasperReportsContext.getInstance()){
+			Object cache = extensionCache.get(extensionType);
+			if (cache != null ) return (List<T>)parent;
+	}*/
 
 	private List<JRQueryExecuterFactoryBundle> qExecutors;
 	private Map<Object, Object> map;

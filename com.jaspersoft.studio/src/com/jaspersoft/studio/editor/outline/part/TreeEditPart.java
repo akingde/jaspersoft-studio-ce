@@ -210,7 +210,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			refreshCached();
 			return;
 		}
-		//FIXME: maybe copare the source of the event with the model of the current part to avoid
+		//FIXME: maybe compare the source of the event with the model of the current part to avoid
 		//to refresh this part for an event not generated from the contained jr element
 		MLockableRefresh refrenceNode = getLockReferenceNode();
 		if (refrenceNode != null && refrenceNode.isRefreshEventIgnored()){

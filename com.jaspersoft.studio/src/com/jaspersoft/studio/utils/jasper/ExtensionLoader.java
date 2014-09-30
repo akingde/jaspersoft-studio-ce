@@ -12,12 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils.jasper;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import net.sf.jasperreports.data.DataAdapterServiceFactory;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.ParameterContributorFactory;
+import net.sf.jasperreports.engine.component.ComponentsBundle;
+import net.sf.jasperreports.engine.export.GenericElementHandlerBundle;
 import net.sf.jasperreports.engine.export.MatcherExportFilterMapping;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
@@ -33,23 +36,31 @@ import net.sf.jasperreports.util.SecretsProviderFactory;
  * This class allow to preload the jr extensions to have 
  * them cached as soon as possible. Some extension are stored inside
  * the default context, so shared between reports, other are loaded for the a 
- * specified report since they are report dependent
+ * specified report since they are report dependent. 
  * 
  * @author Orlandin Marco
  *
  */
 public class ExtensionLoader {
-
+	
+	/**
+	 * Map with the common extension cached. Essentially these are the extensions from the
+	 * DefaultJasperReportsContext.getInstance()
+	 * 
+	 */
+	private static HashMap<Class<?>, Object> sharedExtensionCache = new HashMap<Class<?>, Object>();
+	
 	/**
 	 * The extensions loaded for each report
 	 */
 	private static Class<?>[] reportDependentExtensionsKey = {
 			FontFamily.class,
-			RepositoryService.class
+			RepositoryService.class,
+			ComponentsBundle.class
 	};
 	
 	/**
-	 * The extensions loaded for the general context
+	 * The extensions loaded for the general context and cached in the sharedExtension Map
 	 */
 	private static Class<?>[] commonExensionKeys = {
 		PersistenceServiceFactory.class,
@@ -61,7 +72,11 @@ public class ExtensionLoader {
 		ScriptletFactory.class,
 		ParameterContributorFactory.class,
 		SecretsProviderFactory.class,
-		FunctionsBundle.class
+		FunctionsBundle.class,
+		FontFamily.class,
+		RepositoryService.class,
+		ComponentsBundle.class,
+		GenericElementHandlerBundle.class
 	};
 	
 	/**
@@ -82,12 +97,15 @@ public class ExtensionLoader {
 	}
 	
 	/**
-	 * Thread safe method to mark an extension key as not currently loading
+	 * Thread safe method to mark an extension key as not currently loading. The
+	 * value of the extension is also stored inside the extension cache
 	 * 
 	 * @param extensionKey key of the extension
+	 * @param the value of the loaded extension
 	 */
-	private static void setLoadingEnd(Class<?> extensionKey) {
+	private static void setLoadingEnd(Class<?> extensionKey, Object loadedObject) {
 		synchronized (loadingExtensions) {
+			sharedExtensionCache.put(extensionKey, loadedObject);
 			loadingExtensions.remove(extensionKey);
 		}
 	}
@@ -103,31 +121,6 @@ public class ExtensionLoader {
 			return loadingExtensions.contains(extensionKey);
 		}
 	}
-	
-	//CODE USED TO TRACK THE PERFORMANCE OF THE EXTENSIONS PRECACHE
-	
- /*private HashMap<Class<?>, Boolean> extensionLoaded = new HashMap<Class<?>, Boolean>();
- 
- private long timeStartLoading = -1;
- 
- private void checkAllLoaded(){
-	 boolean allFound = true;
-	 for(Class<?> extensionKey : reportDependentExtensionsKey){
-		 if (!extensionLoaded.containsKey(extensionKey)){
-			 allFound = false;
-			 break;
-		 }
-	 }
-	 if (allFound){
-		 long loadingTime = System.currentTimeMillis() - timeStartLoading;
-		 System.out.println("time required multi thread "+ loadingTime);
-	 }
- }
- 
- private synchronized void setLoadedExtenson(Class<?> extensionKey){
-	 extensionLoaded.put(extensionKey, true);
-	 checkAllLoaded();
- }*/
  
 	/**
 	 * Load the report dependent extensions on the specified context.
@@ -164,8 +157,8 @@ public class ExtensionLoader {
 			@Override
 			public void run() {
 				setLoadingStart(key);
-				context.getExtensions(key);
-				setLoadingEnd(key);
+				Object obj = context.getExtensions(key);
+				setLoadingEnd(key, obj);
 			}
 		}).start();
 	 }
@@ -176,19 +169,64 @@ public class ExtensionLoader {
   * currently in a loading state the caller is blocked untie
   * the load is not complete. The check to see if the loading
   * is finished is done every amount of a fixed time (by default
-  * 500 ms)
+  * 200 ms)
   * 
   * @param extensionKey the key of the extension
   */
  public static void waitIfLoading(Class<?> extensionKey){
-	 int checkTime = 500;
+	 int checkTime = 200;
 	 while(isCurrentlyLoading(extensionKey)){
 		 try {
-			 //the extension is loading, wait 500ms and recheck if it was loaded
+			 //the extension is loading, wait 200ms and recheck if it was loaded
 			Thread.sleep(checkTime);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	 }
  }
+ 
+ /**
+  * Return a value of the extension from the cache. This cached
+  * value is the same returned by calling the getExtension method
+  * on the DefaultJasperReportsContext.
+  * The method check if the extension with the specific key is still loading, 
+  * in this case wait until the loads end and then it return the result
+  * 
+  * @param extensionKey the key of the extension
+  * @return the value of the extension or null if it isn't inside
+  * the shared cache.
+  */
+ public static Object getSharedExtension(Class<?> extensionKey){
+	 // This call avoid to load more than one time an extension because maybe the ExtensionLoader has a 
+	 // thread already started for it, but still not completed and in the meantime another request for the
+	 // same extensions arrive. With this code the loading of the extension is paused until the thread complete 
+	 waitIfLoading(extensionKey);
+	 return sharedExtensionCache.get(extensionKey);
+ }
+ 
+	//CODE USED TO TRACK THE PERFORMANCE OF THE EXTENSIONS PRECACHE
+	
+/*private HashMap<Class<?>, Boolean> extensionLoaded = new HashMap<Class<?>, Boolean>();
+
+private long timeStartLoading = -1;
+
+private void checkAllLoaded(){
+	 boolean allFound = true;
+	 for(Class<?> extensionKey : reportDependentExtensionsKey){
+		 if (!extensionLoaded.containsKey(extensionKey)){
+			 allFound = false;
+			 break;
+		 }
+	 }
+	 if (allFound){
+		 long loadingTime = System.currentTimeMillis() - timeStartLoading;
+		 System.out.println("time required multi thread "+ loadingTime);
+	 }
+}
+
+private synchronized void setLoadedExtenson(Class<?> extensionKey){
+	 extensionLoaded.put(extensionKey, true);
+	 checkAllLoaded();
+}*/
+
 }
