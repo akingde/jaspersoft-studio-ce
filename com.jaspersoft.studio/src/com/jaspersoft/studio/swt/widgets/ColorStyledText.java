@@ -22,16 +22,13 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -53,6 +50,9 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  */
 public class ColorStyledText {
 
+	private static final int LINECOLOR_PREVIEW_WIDTH = 16;
+	private static final int LINECOLOR_PREVIEW_HEIGHT = 16;
+
 	/**
 	 * The color represented
 	 */
@@ -71,7 +71,7 @@ public class ColorStyledText {
 	/**
 	 * The buttons
 	 */
-	private Button lineColor;
+	private Label lineColor;
 
 	/**
 	 * Listener called when the color is edited with the button or by editing it's textual value
@@ -82,11 +82,6 @@ public class ColorStyledText {
 	 * Flag used to disable the call of the events into listener
 	 */
 	private boolean raiseEvents = true;
-
-	/**
-	 * Label where the color is printed
-	 */
-	private Label colorButton;
 
 	/**
 	 * Provider to convert a RGB color into an image
@@ -157,10 +152,9 @@ public class ColorStyledText {
 					if (color != null) color = new AlfaRGB(newColor, color.getAlfa());
 					else color = AlfaRGB.getFullyOpaque(newColor);
 					textArea.setText(getHexFromRGB(color.getRgb()));
-					if (colorButton != null)
-						colorButton.setImage(provider.getImage(color, 18, 14));
-					if (lineColor != null)
-						lineColor.setImage(provider.getImage(color, 18, 14));
+					if (lineColor != null) {
+						lineColor.setImage(provider.getImage(color, LINECOLOR_PREVIEW_WIDTH, LINECOLOR_PREVIEW_HEIGHT));
+					}
 					if (raiseEvents)
 						for (ModifyListener element : listener) {
 							element.modifyText(e);
@@ -279,64 +273,23 @@ public class ColorStyledText {
 	}
 
 	/**
-	 * Create the label to open the dialog of selection color. The label has painted inside a preview of the color. Now it
-	 * is unused because we show only the button
-	 */
-	@SuppressWarnings("unused")
-	private void createPreview() {
-		// Paint the preview box
-		GridData previewData = new GridData();
-		previewData.heightHint = 20;
-		previewData.widthHint = 20;
-		previewData.verticalAlignment = SWT.CENTER;
-		previewData.horizontalAlignment = SWT.RIGHT;
-		colorButton = new Label(paintArea, SWT.FILL);
-		colorButton.setLayoutData(previewData);
-		colorButton.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
-		colorButton.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				ColorDialog cd = new ColorDialog(centeredShell(colorButton.getShell()));
-				cd.setText(Messages.common_line_color);
-				if (getColor() != null) cd.setRGB(getColor());
-				AlfaRGB newColor = null;
-				if (disableAlphaSelection) {
-					RGB rgbColor = cd.openRGB();
-					if (rgbColor != null) newColor = AlfaRGB.getFullyOpaque(rgbColor);
-				} else newColor = cd.openAlfaRGB();
-				if (newColor != null) {
-					setColor(newColor, true);
-				}
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-		});
-	}
-
-	/**
 	 * Create the button to open the dialog of selection color. The button has painted inside a preview of the color
 	 */
 	private void createButton() {
 		// Paint the button
 		GridData lineColorData = new GridData();
-		lineColorData.heightHint = 20;
-		lineColorData.widthHint = 24;
-		lineColorData.verticalAlignment = SWT.CENTER;
-		lineColorData.horizontalAlignment = SWT.RIGHT;
-		lineColor = new Button(paintArea, SWT.PUSH | SWT.FILL);
+		lineColorData.heightHint = LINECOLOR_PREVIEW_HEIGHT;
+		lineColorData.widthHint = LINECOLOR_PREVIEW_WIDTH;
+		lineColorData.verticalAlignment = SWT.FILL;
+		lineColorData.horizontalAlignment = SWT.CENTER;
+		lineColor = new Label(paintArea, SWT.NONE);
 		lineColor.setLayoutData(lineColorData);
-		// lineColor.setText("...");
 		lineColor.setToolTipText(Messages.ColorStyledText_LineColor_ToolTip);
 
 		// Open the color selection window when the button is pushed
-		lineColor.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+		lineColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
 				if (enabled){
 					ColorDialog cd = new ColorDialog(centeredShell(paintArea.getShell()));
 					cd.setText(Messages.common_line_color);
@@ -347,7 +300,6 @@ public class ColorStyledText {
 						if (rgbColor != null) newColor = AlfaRGB.getFullyOpaque(rgbColor);
 					} else newColor = cd.openAlfaRGB();
 					if (newColor != null) {
-						lineColor.setSelection(false);
 						setColor(newColor, true);
 					}
 				}
