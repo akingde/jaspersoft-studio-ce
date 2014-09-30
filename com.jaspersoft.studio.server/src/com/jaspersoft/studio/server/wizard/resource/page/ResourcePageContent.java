@@ -223,7 +223,7 @@ public class ResourcePageContent extends APageContent {
 				new UpdateValueStrategy().setAfterConvertValidator(new EmptyStringValidator()), null);
 		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
 		bindingContext.updateTargets();
-		bindingContext.updateModels();
+//		bindingContext.updateModels();
 	}
 
 	@Override

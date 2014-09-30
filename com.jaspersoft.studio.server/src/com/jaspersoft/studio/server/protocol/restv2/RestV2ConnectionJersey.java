@@ -238,9 +238,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (rd.getUriString() == null || rd.getUriString().contains("<"))
 			throw new Exception("wrong url");
 		String uri = rd.getUriString();
+		if (uri.startsWith("repo://"))
+			uri = uri.substring(5);
 		if (!uri.startsWith("/"))
 			uri = "/" + uri;
-		WebTarget tgt = target.path("resources" + uri.replaceAll("repo:", "").replaceAll("//", "/"));
+
+		WebTarget tgt = target.path("resources" + uri);
 		tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());

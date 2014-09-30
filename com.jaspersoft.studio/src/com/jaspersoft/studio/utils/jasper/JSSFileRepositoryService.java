@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.util.FileExtension;
@@ -66,7 +67,7 @@ public class JSSFileRepositoryService implements RepositoryService {
 
 	@Override
 	public <K extends Resource> K getResource(String uri, Class<K> resourceType) {
-		for (RepositoryService rs : list) {
+		for (RepositoryService rs : new ArrayList<RepositoryService>(list)) {
 			K r = doGetResource(uri, resourceType, rs);
 			if (r != null)
 				return r;

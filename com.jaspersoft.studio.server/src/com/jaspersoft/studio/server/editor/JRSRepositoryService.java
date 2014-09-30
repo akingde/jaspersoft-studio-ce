@@ -36,6 +36,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.export.AExporter;
+import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
@@ -122,67 +123,79 @@ public class JRSRepositoryService implements RepositoryService {
 	private CacheMap<String, String> negCache = new CacheMap<String, String>(1000);
 
 	@Override
-	public <K extends Resource> K getResource(String uri, Class<K> resourceType) {
+	public synchronized <K extends Resource> K getResource(String uri, Class<K> resourceType) {
 		if (hasServerUrl() && c != null) {
-			if (negCache.containsKey(uri))
-				return null;
-			negCache.put(uri, null);
-
-			String objectUri = uri;
 			if (uri.startsWith("repo:")) {
-				objectUri = uri.substring(5);
-				K r = getFromParent(objectUri, resourceType);
+				// it's possible to have a resource with id=repo:something (from
+				// practice)
+				K r = doGetResource("repo:" + uri, resourceType);
 				if (r != null)
 					return r;
 			}
-			try {
-				IProgressMonitor monitor = new NullProgressMonitor();
-				if (objectUri.contains("/")) {
-					// Locate the resource inside the repository...
-					ResourceDescriptor r = new ResourceDescriptor();
-					r.setUriString(objectUri);
-					r = c.get(monitor, r, null);
-					if (r.getIsReference())
-						r = ReferenceResolver.resolveReference(c, r, null);
-					String fpath = rpath;
-					if (!objectUri.startsWith("/"))
-						fpath += "/";
-					fpath += objectUri;
-					File f = new File(fpath);
-					if (f.createNewFile())
-						c.get(monitor, r, f);
-				} else if (runitUri != null) {
-					// Locate the resource inside the report unit, if any...
-					if (reportUnitResources == null) {
-						ResourceDescriptor rd = new ResourceDescriptor();
-						rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
-						rd.setUriString(runitUri);
-						rd = c.get(monitor, rd, null);
-						reportUnitResources = c.list(monitor, rd);
-						if (reportUnitResources == null)
-							reportUnitResources = new ArrayList<ResourceDescriptor>();
-					}
+			return doGetResource(uri, resourceType);
+		}
+		return null;
+	}
 
-					// find the resource...
-					for (ResourceDescriptor r : reportUnitResources) {
-						if (r.getName() == null || !r.getName().equals(objectUri))
-							continue;
-						if (r.getIsReference())
-							r = ReferenceResolver.resolveReference(c, r, monitor);
-						if (ResourceFactory.isFileResourceType(r)) {
-							IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
-							File f = new File(file.getParent().getRawLocation().toFile(), objectUri);
-							if (f.createNewFile())
-								c.get(monitor, r, f);
-							break;
-						}
+	protected <K extends Resource> K doGetResource(String uri, Class<K> resourceType) {
+		if (negCache.containsKey(uri))
+			return null;
+		negCache.put(uri, null);
+
+		String objectUri = uri;
+		if (uri.startsWith("repo:")) { //$NON-NLS-1$ 
+			objectUri = uri.substring(5);
+			K r = getFromParent(objectUri, resourceType);
+			if (r != null)
+				return r;
+		}
+		try {
+			IProgressMonitor monitor = new NullProgressMonitor();
+			if (objectUri.contains("/")) { //$NON-NLS-1$
+				// Locate the resource inside the repository...
+				ResourceDescriptor r = new ResourceDescriptor();
+				r.setUriString(objectUri);
+				r = c.get(monitor, r, null);
+				if (r.getIsReference())
+					r = ReferenceResolver.resolveReference(c, r, null);
+				String fpath = rpath;
+				if (!objectUri.startsWith("/")) //$NON-NLS-1$
+					fpath += "/"; //$NON-NLS-1$
+				fpath += objectUri;
+				File f = new File(fpath);
+				if (f.createNewFile())
+					c.get(monitor, r, f);
+			} else if (runitUri != null) {
+				// Locate the resource inside the report unit, if any...
+				if (reportUnitResources == null) {
+					ResourceDescriptor rd = new ResourceDescriptor();
+					rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
+					rd.setUriString(runitUri);
+					rd = c.get(monitor, rd, null);
+					reportUnitResources = c.list(monitor, rd);
+					if (reportUnitResources == null)
+						reportUnitResources = new ArrayList<ResourceDescriptor>();
+				}
+
+				// find the resource...
+				for (ResourceDescriptor r : reportUnitResources) {
+					if (r.getName() == null || !r.getName().equals(objectUri))
+						continue;
+					if (r.getIsReference())
+						r = ReferenceResolver.resolveReference(c, r, monitor);
+					if (ResourceFactory.isFileResourceType(r)) {
+						IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
+						File f = new File(file.getParent().getRawLocation().toFile(), objectUri);
+						if (f.createNewFile())
+							c.get(monitor, r, f);
+						break;
 					}
 				}
-				refresh();
-				return getFromParent(uri, resourceType);
-			} catch (Exception ex) {
-				ex.printStackTrace();
 			}
+			refresh();
+			return getFromParent(uri, resourceType);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		return null;
 	}
@@ -209,7 +222,7 @@ public class JRSRepositoryService implements RepositoryService {
 		if (isRefreshing)
 			return;
 		isRefreshing = true;
-		Job job = new Job("Refresh Folder") {
+		Job job = new Job(Messages.JRSRepositoryService_4) {
 			protected IStatus run(IProgressMonitor monitor) {
 				needNewRefresh = false;
 				try {
