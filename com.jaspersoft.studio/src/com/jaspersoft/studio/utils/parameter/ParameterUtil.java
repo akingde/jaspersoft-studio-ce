@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.utils.parameter;
 
@@ -23,6 +19,7 @@ import java.util.Set;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRValueParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -61,7 +58,8 @@ public class ParameterUtil {
 
 	private static Object getDefaultInstance(JRParameter p, JasperReportsConfiguration jConfig, JRDataset dataset) {
 		if (p.getDefaultValueExpression() != null) {
-			return ExpressionUtil.eval(p.getDefaultValueExpression(), dataset, jConfig);
+			return ExpressionUtil.cachedExpressionEvaluation(p.getDefaultValueExpression(), jConfig,
+					(JRDesignDataset) dataset);
 		} else {
 			try {
 				return p.getValueClass().newInstance();

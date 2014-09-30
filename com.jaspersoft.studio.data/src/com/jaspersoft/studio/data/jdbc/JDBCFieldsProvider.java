@@ -54,9 +54,10 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		ParameterUtil.setParameters(jConfig, jDataset, parameters);
 		parameters.put(JRJdbcQueryExecuterFactory.PROPERTY_JDBC_FETCH_SIZE, 0);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
-
+		List<JRDesignField> columns = null;
+		Connection c = null;
 		try {
-			Connection c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
+			c = (Connection) parameters.get(JRParameter.REPORT_CONNECTION);
 
 			// JasperReports query executer instances require
 			// REPORT_PARAMETERS_MAP parameter to be defined and not null
@@ -70,7 +71,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 				ResultSetMetaData metaData = rs.getMetaData();
 				int cc = metaData.getColumnCount();
 				Set<String> colset = new HashSet<String>();
-				List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
+				columns = new ArrayList<JRDesignField>(cc);
 				for (int i = 1; i <= cc; i++) {
 					String name = metaData.getColumnLabel(i);
 					// System.out.println("name: " + metaData.getColumnName(i) +
@@ -98,12 +99,19 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 					}
 					columns.add(field);
 				}
-				return columns;
+
 			}
 		} catch (SQLException e) {
 			throw new JRException(e);
+		} finally {
+			if (c != null)
+				try {
+					c.close();
+				} catch (SQLException e) {
+					throw new JRException(e);
+				}
 		}
-		return null;
+		return columns;
 	}
 
 	public static String getJdbcTypeClass(java.sql.ResultSetMetaData rsmd, int t) {

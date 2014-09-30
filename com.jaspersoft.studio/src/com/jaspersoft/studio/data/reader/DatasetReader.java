@@ -178,16 +178,22 @@ public class DatasetReader {
 			// 8. Contribute parameters from the data adapter
 			if (dataAdapterDesc != null)
 				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
-			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
-			das.contributeParameters(hm);
+			DataAdapterService das = null;
+			try {
+				das = DataAdapterServiceUtil.getInstance(jConfig).getService(dataAdapterDesc.getDataAdapter());
 
-			ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
+				das.contributeParameters(hm);
 
-			JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
+				ModelUtils.replacePropertiesMap(designDataset.getPropertiesMap(), jrobj.getMainDataset().getPropertiesMap());
 
-			// 9. Fill the report
-			JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
+				JaspersoftStudioPlugin.getExtensionManager().onRun(jConfig, jrobj, hm);
 
+				// 9. Fill the report
+				JasperFillManager.getInstance(jConfig).fill(jrobj, hm);
+			} finally {
+				if (das != null)
+					das.dispose();
+			}
 		} catch (DataPreviewInterruptedException e) {
 			e.printStackTrace();
 			// DO NOTHING

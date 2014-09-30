@@ -27,7 +27,7 @@ public class JRSBuiltInParameterProvider {
 			JRDesignParameter p = new JRDesignParameter();
 			p.setName("LoggedInUser");
 			p.setDescription("Not usable in query input control, but is used as parameter to report");
-			p.setValueClassName("com.jaspersoft.jasperserver.api.metadata.user.domain.User");
+			p.setValueClassName("com.jaspersoft.jasperserver.api.metadata.user.domain.client.UserImpl");
 			p.setDefaultValueExpression(new JRDesignExpression("new com.jaspersoft.jasperserver.api.metadata.user.domain.client.UserImpl()"));
 			p.setForPrompting(false);
 
@@ -92,7 +92,7 @@ public class JRSBuiltInParameterProvider {
 			p.setDescription("Current set of roles of logged in user. Useful for $X parameter");
 			p.setValueClassName("java.util.Collection");
 			p.setNestedTypeName("java.util.String");
-			p.setDefaultValueExpression(new JRDesignExpression("new ArrayList<String>()"));
+			p.setDefaultValueExpression(new JRDesignExpression("new ArrayList()"));
 			p.setForPrompting(false);
 
 			pset.getParameters().add(p);
@@ -102,7 +102,7 @@ public class JRSBuiltInParameterProvider {
 			p.setDescription("Not usable in query input control, but is used as parameter to report. Empty map if no attributes");
 			p.setValueClassName("java.util.Map");
 			p.setNestedTypeName("java.util.String");
-			p.setDefaultValueExpression(new JRDesignExpression("new HashMap<String, String>()"));
+			p.setDefaultValueExpression(new JRDesignExpression("new HashMap()"));
 			p.setForPrompting(false);
 
 			pset.getParameters().add(p);
@@ -112,7 +112,7 @@ public class JRSBuiltInParameterProvider {
 			p.setDescription("User profile attribute names. Useful for $X parameters. Empty collection if no attributes");
 			p.setValueClassName("java.util.Collection");
 			p.setNestedTypeName("java.util.String");
-			p.setDefaultValueExpression(new JRDesignExpression("new ArrayList<String>()"));
+			p.setDefaultValueExpression(new JRDesignExpression("new ArrayList()"));
 			p.setForPrompting(false);
 
 			pset.getParameters().add(p);
