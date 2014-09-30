@@ -1542,6 +1542,7 @@ public class Messages extends NLS {
 	public static String SelectWorkspacePage_description;
 	public static String SelectWorkspacePage_openTitle;
 	public static String SelectWorkspacePage_title;
+	public static String SetDefaultsAction_exportStyleCheckbox;
 	public static String SetDefaultsAction_message1;
 	public static String SetDefaultsAction_message2;
 	public static String SetDefaultsAction_messageTitle;

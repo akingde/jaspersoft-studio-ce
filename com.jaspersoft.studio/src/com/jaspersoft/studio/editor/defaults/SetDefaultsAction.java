@@ -16,11 +16,21 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.util.JRStyleResolver;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.action.ACachedSelectionAction;
@@ -38,6 +48,56 @@ import com.jaspersoft.studio.model.MGraphicElement;
  */
 public class SetDefaultsAction extends ACachedSelectionAction {
 
+	/**
+	 * Custom MessageDialog to show a checkbox when the exported
+	 * element uses styles (by his own or because there is a default style).
+	 * The checkbox allow to choose if the attributes should be read also
+	 * from the styles hierarchy or only on the element 
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class CheckboxMessageDialog extends MessageDialog {
+
+		/**
+		 * True if the attributes should be read also from the styles, false otherwise
+		 */
+		private boolean getFromStyles = false;
+		
+		public CheckboxMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, int dialogImageType, String[] dialogButtonLabels, int defaultIndex) {
+			super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,defaultIndex);
+		}
+		
+		/**
+		 * Create the checkbox area but only if the element is using a style
+		 */
+		protected Control createCustomArea(Composite parent) {
+			if (element != null && JRStyleResolver.getBaseStyle(element.getValue()) != null){
+				Composite container = new Composite(parent, SWT.NONE);
+				container.setLayout(new GridLayout(1,false));
+				final Button checkButton = new Button(container, SWT.CHECK);
+				checkButton.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						getFromStyles = checkButton.getSelection();
+					}
+				});
+				checkButton.setText(Messages.SetDefaultsAction_exportStyleCheckbox);
+				return container;
+			} else return null;
+		}
+		
+		/**
+		 * Return if the style attribute should be preserved
+		 * 
+		 * @return True if the attributes should be read also from the styles, false otherwise
+		 */
+		public boolean isGetFromStyles(){
+			return getFromStyles;
+		}
+		
+	}
+	
 	/**
 	 * Id of the action
 	 */
@@ -66,12 +126,12 @@ public class SetDefaultsAction extends ACachedSelectionAction {
 	public void run() {
 		if (DefaultManager.INSTANCE.hasDefault()){
 			String message = MessageFormat.format(Messages.SetDefaultsAction_message1, new Object[]{DefaultManager.INSTANCE.getDefaultName()});
-			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SetDefaultsAction_messageTitle, null, message, MessageDialog.QUESTION, new String[]{Messages.common_yes, Messages.common_no}, 1); 
+			CheckboxMessageDialog dialog = new CheckboxMessageDialog(UIUtils.getShell(), Messages.SetDefaultsAction_messageTitle, null, message, MessageDialog.QUESTION, new String[]{Messages.common_yes, Messages.common_no}, 1); 
 			if (dialog.open() == 0){
-				DefaultManager.INSTANCE.addElementToCurrentDefault(element);
+				DefaultManager.INSTANCE.addElementToCurrentDefault(element, dialog.isGetFromStyles());
 			}
 		} else {
-			MessageDialog dialog = new MessageDialog(UIUtils.getShell(), Messages.SetDefaultsAction_messageTitle, null, Messages.SetDefaultsAction_message2, MessageDialog.QUESTION, new String[]{Messages.common_yes,  Messages.common_no}, 1);  //$NON-NLS-1$
+			CheckboxMessageDialog dialog = new CheckboxMessageDialog(UIUtils.getShell(), Messages.SetDefaultsAction_messageTitle, null, Messages.SetDefaultsAction_message2, MessageDialog.QUESTION, new String[]{Messages.common_yes,  Messages.common_no}, 1);  //$NON-NLS-1$
 			if (dialog.open() == 0){
 				DefaultNewWizard newWizard = new DefaultNewWizard();
 				WizardDialog newDialog = new WizardDialog(Display.getDefault().getActiveShell(), newWizard);
@@ -79,7 +139,7 @@ public class SetDefaultsAction extends ACachedSelectionAction {
 					IFile templateFile = newWizard.getReportFile();
 					String templatePath = templateFile.getRawLocation().makeAbsolute().toOSString();
 					DefaultManager.INSTANCE.addDefaultFile(templatePath, true);
-					DefaultManager.INSTANCE.addElementToCurrentDefault(element);
+					DefaultManager.INSTANCE.addElementToCurrentDefault(element, dialog.isGetFromStyles());
 				}
 			}
 		}

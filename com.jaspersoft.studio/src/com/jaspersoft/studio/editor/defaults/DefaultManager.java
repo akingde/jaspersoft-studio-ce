@@ -505,10 +505,10 @@ public class DefaultManager {
 	 * 
 	 * @param element element to add
 	 */
-	public void addElementToCurrentDefault(MGraphicElement element){
+	public void addElementToCurrentDefault(MGraphicElement element, boolean copyAttributesFromStyles){
 		if (hasDefault()){
 			JRDesignElement newElement = (JRDesignElement)element.getValue().clone();
-			CustomStyleResolver.copyInheritedAttributes(element, newElement);
+			if (copyAttributesFromStyles) CustomStyleResolver.copyInheritedAttributes(element, newElement);
 			newElement.setX(0);
 			newElement.setY(0);
 			selectedDefaultsMap.put(element.getClass(), (MGraphicElement)ReportFactory.createNode(null, newElement, 0));
