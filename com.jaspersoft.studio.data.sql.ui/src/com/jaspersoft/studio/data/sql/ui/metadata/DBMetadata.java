@@ -230,7 +230,7 @@ public class DBMetadata {
 		this.das = das;
 		monitors.add(monitor);
 		running = true;
-		Display.getDefault().syncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -252,8 +252,8 @@ public class DBMetadata {
 				tableTypes = DBMetadata.readTableTypes(meta);
 				List<MSqlSchema> mcurrent = MetaDataUtil.readSchemas(monitor, root, meta, schema);
 				updateUI(root);
-				for (MSqlSchema mcs : mcurrent){
-					if(meta.getConnection().isClosed()){
+				for (MSqlSchema mcs : mcurrent) {
+					if (meta.getConnection().isClosed()) {
 						connection = getConnection(das, true);
 						meta = connection.getMetaData();
 					}
@@ -272,7 +272,7 @@ public class DBMetadata {
 				updateItermediateUI();
 			}
 		});
-
+		closeConnection();
 		monitors.remove(monitor);
 		running = false;
 	}
@@ -296,6 +296,7 @@ public class DBMetadata {
 						} catch (Throwable e) {
 							designer.showError(e);
 						} finally {
+							closeConnection();
 							monitors.remove(monitor);
 							monitor.done();
 						}
@@ -322,6 +323,7 @@ public class DBMetadata {
 						} catch (Throwable e) {
 							designer.showError(e);
 						} finally {
+							closeConnection();
 							monitors.remove(monitor);
 							monitor.done();
 						}

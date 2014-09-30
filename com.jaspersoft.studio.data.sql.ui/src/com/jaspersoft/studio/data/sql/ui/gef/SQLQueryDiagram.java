@@ -255,6 +255,7 @@ public class SQLQueryDiagram {
 			if (!parts.isEmpty())
 				viewer.reveal(parts.get(0));
 		}
+		designer.refreshQueryText();
 	}
 
 	private void doAddParts(Object obj, List<TableEditPart> parts, List<MFromTable> tables) {
