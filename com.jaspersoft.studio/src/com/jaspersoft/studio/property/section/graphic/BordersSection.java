@@ -12,8 +12,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.graphic;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.base.JRBoxPen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.LightweightSystem;
@@ -58,6 +65,8 @@ import com.jaspersoft.studio.property.section.widgets.BorderHightLight;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
 import com.jaspersoft.studio.swt.widgets.ColorStyledText;
 import com.jaspersoft.studio.utils.AlfaRGB;
+import com.jaspersoft.studio.utils.Colors;
+import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.UIUtil;
 
 /**
@@ -651,11 +660,60 @@ public class BordersSection extends AbstractSection {
 			}
 			else {
 				//No border is selected, set the control to the default value
-				lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
-				lineWidth.setValues(0, 0, 5000, 1, 1, 1);
-				lineStyle.setData(1);
+				JRBoxPen pen = getIntesectionValues(lb);
+				if (pen != null){
+					refreshLinePen(pen);
+				} else {	
+					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
+					lineWidth.setValues(0, 0, 5000, 1, 1, 1);
+					lineStyle.setData(1);
+				}
 			}
 		}
+	}
+	
+	/**
+	 * Used when no border is selected to fined an intersection of the value of the borders
+	 * 
+	 * @param lb the linebox
+	 * @return a pen with the intersection values
+	 */
+	private JRBoxPen getIntesectionValues(MLineBox lb){
+		if (lb != null && lb.getValue() != null){
+			JRLineBox jrLineBox = (JRLineBox)lb.getValue();
+			List<JRBoxPen> edgePen = new ArrayList<JRBoxPen>();
+			edgePen.add(jrLineBox.getLeftPen());
+			edgePen.add(jrLineBox.getRightPen());
+			edgePen.add(jrLineBox.getTopPen());
+			edgePen.add(jrLineBox.getBottomPen());
+			Color intersectionLineColor = null;
+			LineStyleEnum intersectionLineStyle = null;
+			Float intersectionLineWidth = null;
+			JRBoxPen resultPen = null;
+			for(JRBoxPen pen : edgePen){
+				if (pen != null){
+					resultPen = pen;
+					if (intersectionLineColor != null && !intersectionLineColor.equals(pen.getLineColor())){
+						resultPen = null;
+						break;
+					}
+					if (intersectionLineStyle != null && !intersectionLineStyle.equals(pen.getLineStyleValue())){
+						resultPen = null;
+						break;
+					}
+					if (intersectionLineWidth != null && !intersectionLineWidth.equals(pen.getLineWidth())){
+						resultPen = null;
+						break;
+					}
+					intersectionLineColor = pen.getLineColor();
+					intersectionLineStyle = pen.getLineStyleValue();
+					intersectionLineWidth = pen.getLineWidth();
+				}
+			}
+			if (resultPen == null && jrLineBox.getPen() != null) return jrLineBox.getPen();
+			return resultPen;
+		} 
+		return null;
 	}
 	
 	/**
@@ -742,8 +800,7 @@ public class BordersSection extends AbstractSection {
 			if (propertyValue>0){
 				//Set the border data only if it is visible
 				if (lineWidth != null && !lineWidth.isDisposed()) {
-					UIUtil.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
-							* Math.pow(10, 1)));
+					UIUtil.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()* Math.pow(10, 1)));
 				}
 	
 				if (lineStyle != null && !isDisposed()) {
@@ -753,6 +810,38 @@ public class BordersSection extends AbstractSection {
 	
 				AlfaRGB backcolor = (AlfaRGB) lp.getPropertyActualValue(JRBasePen.PROPERTY_LINE_COLOR);
 				if (lineColor != null){
+					lineColor.setColor(backcolor);
+				}
+			}
+		}
+	}
+	
+	public void refreshLinePen(JRBoxPen pen) {
+		if (pen != null) {
+			Float width = pen.getLineWidth();
+			// Set the border data only if it is visible
+			if (lineWidth != null && !lineWidth.isDisposed()) {
+				if (width == null) {
+					lineWidth.setValues(0, 0, 5000, 1, 1, 1);
+				} else {
+					UIUtil.setSpinnerSelection(lineWidth, null, (int) (width.doubleValue() * Math.pow(10, 1)));
+				}
+			}
+
+			if (lineStyle != null && !isDisposed()) {
+				if (pen.getLineStyleValue() == null) {
+					lineStyle.setData(1);
+				} else {
+					int ls = EnumHelper.getValue(pen.getLineStyleValue(), LineStyleEnum.SOLID.getValue(), true).intValue();
+					lineStyle.setData(ls);
+				}
+			}
+			
+			if (lineColor != null && !lineColor.getPaintArea().isDisposed()) {
+				if (pen.getLineColor() == null) {
+					lineColor.setColor(AlfaRGB.getFullyOpaque(new RGB(0, 0, 0)));
+				} else {
+					AlfaRGB backcolor = Colors.getSWTRGB4AWTGBColor(pen.getLineColor());
 					lineColor.setColor(backcolor);
 				}
 			}
