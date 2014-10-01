@@ -22,8 +22,10 @@ import com.jaspersoft.studio.data.sql.action.ActionFactory;
 import com.jaspersoft.studio.data.sql.action.table.DeleteTableJoin;
 import com.jaspersoft.studio.data.sql.action.table.JoinTable;
 import com.jaspersoft.studio.data.sql.model.metadata.MSQLColumn;
+import com.jaspersoft.studio.data.sql.model.query.expression.MExpression;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
+import com.jaspersoft.studio.data.sql.model.query.operand.FieldOperand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
@@ -76,15 +78,26 @@ public class JoinCommand extends Command {
 			fromTbl = getParentFromTable((MFromTableJoin) destTbl);
 		if (srcTbl == destTbl)
 			return;
+		for (INode n : fromTbl.getChildren()) {
+			if (n == destTbl) {
+				MExpression mexpr = new MExpression(srcTbl, src, -1);
+				mexpr.getOperands().add(new FieldOperand(src, srcTbl, mexpr));
+				mexpr.getOperands().add(new FieldOperand(dest, destTbl, mexpr));
+				return;
+			}
+		}
 
 		JoinTable jt = afactory.getAction(JoinTable.class);
 		jt.doRun(src, srcTbl, dest, destTbl, fromTbl);
 
 		if (srcTbl instanceof MFromTable && !srcTbl.getChildren().isEmpty()) {
 			List<MFromTableJoin> lst = new ArrayList<MFromTableJoin>();
-			for (INode n : srcTbl.getChildren())
+			for (INode n : srcTbl.getChildren()) {
+				if (n == destTbl)
+					return;
 				if (n instanceof MFromTableJoin)
 					lst.add((MFromTableJoin) n);
+			}
 			for (MFromTable mft : lst)
 				mft.setParent(destTbl, -1);
 		}

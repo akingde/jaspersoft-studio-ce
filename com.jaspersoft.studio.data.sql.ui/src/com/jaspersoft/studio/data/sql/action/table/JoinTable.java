@@ -95,18 +95,29 @@ public class JoinTable extends AAction {
 			dest = getColumn(destTbl.getValue());
 		srcTbl.setParent(null, -1);
 
-		MFromTableJoin mtbljoin = new MFromTableJoin(fromTbl, srcTbl.getValue());
-		mtbljoin.setNoEvents(true);
-		mtbljoin.setPropertyValue(MFromTable.PROP_X, srcTbl.getPropertyActualValue(MFromTable.PROP_X));
-		mtbljoin.setPropertyValue(MFromTable.PROP_Y, srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
-		mtbljoin.setNoEvents(false);
-		mtbljoin.setAlias(srcTbl.getAlias());
-		mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
+		boolean onlyExpression = false;
+		for (INode n : fromTbl.getChildren()) {
+			if (n == destTbl) {
+				onlyExpression = true;
+				break;
+			}
+		}
+		MFromTableJoin mtbljoin = null;
+		if (!onlyExpression) {
+			mtbljoin = new MFromTableJoin(fromTbl, srcTbl.getValue());
+			mtbljoin.setNoEvents(true);
+			mtbljoin.setPropertyValue(MFromTable.PROP_X, srcTbl.getPropertyActualValue(MFromTable.PROP_X));
+			mtbljoin.setPropertyValue(MFromTable.PROP_Y, srcTbl.getPropertyActualValue(MFromTable.PROP_Y));
+			mtbljoin.setNoEvents(false);
+			mtbljoin.setAlias(srcTbl.getAlias());
+			mtbljoin.setAliasKeyword(srcTbl.getAliasKeyword());
 
-		fromTbl.removeTableJoin(mtbljoin.getTableJoin());
-		mtbljoin.setTableJoin(new TableJoin(mtbljoin, (MFromTable) destTbl));
+			fromTbl.removeTableJoin(mtbljoin.getTableJoin());
 
-		Util.copySubQuery(srcTbl, mtbljoin);
+			mtbljoin.setTableJoin(new TableJoin(mtbljoin, (MFromTable) destTbl));
+			Util.copySubQuery(srcTbl, mtbljoin);
+		} else
+			mtbljoin = (MFromTableJoin) destTbl;
 
 		MExpression mexpr = new MExpression(mtbljoin, src, -1);
 		mexpr.getOperands().add(new FieldOperand(src, mtbljoin, mexpr));
