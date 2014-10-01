@@ -173,17 +173,19 @@ public class UpdateStyleCommand extends Command{
 		element.setUnderline(font.isOwnUnderline());
 		element.setStrikeThrough(font.isOwnStrikeThrough());
 		JRLineBox sourceLineBox = style.getBorders();
-		JRLineBox destLineBox = element.getLineBox();
-		destLineBox.setPadding(sourceLineBox.getOwnPadding());
-		destLineBox.setLeftPadding(sourceLineBox.getOwnLeftPadding());
-		destLineBox.setRightPadding(sourceLineBox.getOwnRightPadding());
-		destLineBox.setTopPadding(sourceLineBox.getOwnTopPadding());
-		destLineBox.setBottomPadding(sourceLineBox.getOwnBottomPadding());
-		setPenValues(sourceLineBox.getPen(), destLineBox.getPen());
-		setPenValues(sourceLineBox.getLeftPen(), destLineBox.getLeftPen());
-		setPenValues(sourceLineBox.getRightPen(), destLineBox.getRightPen());
-		setPenValues(sourceLineBox.getBottomPen(), destLineBox.getBottomPen());
-		setPenValues(sourceLineBox.getTopPen(), destLineBox.getTopPen());
+		if (sourceLineBox != null){
+			JRLineBox destLineBox = element.getLineBox();
+			destLineBox.setPadding(sourceLineBox.getOwnPadding());
+			destLineBox.setLeftPadding(sourceLineBox.getOwnLeftPadding());
+			destLineBox.setRightPadding(sourceLineBox.getOwnRightPadding());
+			destLineBox.setTopPadding(sourceLineBox.getOwnTopPadding());
+			destLineBox.setBottomPadding(sourceLineBox.getOwnBottomPadding());
+			setPenValues(sourceLineBox.getPen(), destLineBox.getPen());
+			setPenValues(sourceLineBox.getLeftPen(), destLineBox.getLeftPen());
+			setPenValues(sourceLineBox.getRightPen(), destLineBox.getRightPen());
+			setPenValues(sourceLineBox.getBottomPen(), destLineBox.getBottomPen());
+			setPenValues(sourceLineBox.getTopPen(), destLineBox.getTopPen());
+		}
 	}
 	
 	@Override

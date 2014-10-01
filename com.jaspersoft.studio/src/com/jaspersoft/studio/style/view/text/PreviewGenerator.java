@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
+import net.sf.jasperreports.engine.type.StretchTypeEnum;
 
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
@@ -73,15 +74,17 @@ public class PreviewGenerator {
 	 * @param containerBackground the background used then the style has a transparent background
 	 * @return and swt image data
 	 */
-	public static ImageData generatePreview(TextStyle style, int width, int height, RGB containerBackground){
-		if (jasperDesign == null) createDesign();
-		((JRDesignBand)jasperDesign.getTitle()).setHeight(height*2);
+	public static ImageData generatePreview(TextStyle style, int width, int height, RGB containerBackground) {
+		if (jasperDesign == null)
+			createDesign();
+		((JRDesignBand) jasperDesign.getTitle()).setHeight(height);
+		jasperDesign.setPageWidth(width);
 		setDesignElement(style, width, height, containerBackground);
-		//If we have not a buffered image or the old one has a different size from what we need, the we create a new buffered image and the cache it
-		//if (bi == null || bi.getWidth() != width || bi.getHeight() != height) 
-			createBufferedImage();
-    visitor.visitStaticText(textElement);
-    return convertToSWT(bi);
+		// If we have not a buffered image or the old one has a different size from what we need, the we create a new
+		// buffered image and the cache it
+		createBufferedImage();
+		visitor.visitStaticText(textElement);
+		return convertToSWT(bi);
 	}
 	
 	/**
@@ -100,6 +103,9 @@ public class PreviewGenerator {
        jasperDesign.setBottomMargin(0);
        jrBand.addElement(textElement);
        jrBand.setSplitType(SplitTypeEnum.STRETCH);
+       textElement.setStretchType(StretchTypeEnum.NO_STRETCH);
+       textElement.setPrintRepeatedValues(false);
+       textElement.setPrintWhenDetailOverflows(true);
    }
 	 
 	 /**

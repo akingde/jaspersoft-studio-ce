@@ -144,7 +144,7 @@ public class TextStyleWizardPage extends JSSHelpWizardPage {
 	
 	private void refreshEvent(){
 		synchronized (this) {
-			if (!settingData){
+			if (!settingData && !fontSize.getText().isEmpty()){
 				updateStyle();
 				refreshPreview();
 			}

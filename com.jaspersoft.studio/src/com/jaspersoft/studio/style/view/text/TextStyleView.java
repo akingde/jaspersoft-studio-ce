@@ -18,8 +18,8 @@ import java.util.Collection;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.base.JRBoxPen;
-import net.sf.jasperreports.engine.type.RotationEnum;
+import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
@@ -43,7 +43,9 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -284,18 +286,6 @@ public class TextStyleView implements TemplateViewProvider {
 				public void dragOver(DropTargetEvent event) {	}
 	    });
 	  }
-
-	
-	/**
-	 * If the line pen width is bigger than a maximum value the is is shown as 
-	 * if it has the maximum value
-	 * 
-	 * @param value linepen to normalize
-	 * @param max maximum value
-	 */
-	private void normalizeLinePen(JRBoxPen value, float max){
-		if (value != null && value.getLineWidth()>max) value.setLineWidth(max);
-	}
 	
 	/**
 	 * Edit operation for a TextStyle, open the dialog to edit the style
@@ -472,15 +462,15 @@ public class TextStyleView implements TemplateViewProvider {
 						TextStyle normalized = originalStyle.clone();
 						String text = originalStyle.getDescription();
 						if (text == null || text.isEmpty()) text = Messages.TextStyleView_sampleText; 
+						//Remove the border and use a standard alignment to improve visibility
 						normalized.setDescription(text);
-						if (normalized.getFont().getOwnFontsize() >12f) normalized.getFont().setFontSize(12f);
-						if (RotationEnum.LEFT.equals(normalized.getRotation()) || RotationEnum.RIGHT.equals(normalized.getRotation())) normalized.setRotation(RotationEnum.NONE);
-						normalizeLinePen(normalized.getBorders().getPen(), 3.0f);
-						normalizeLinePen(normalized.getBorders().getLeftPen(), 3.0f);
-						normalizeLinePen(normalized.getBorders().getRightPen(), 3.0f);
-						normalizeLinePen(normalized.getBorders().getTopPen(), 3.0f);
-						normalizeLinePen(normalized.getBorders().getBottomPen(), 3.0f);
-						sampleArea.setBackgroundImage(resourceCache.getImage(PreviewGenerator.generatePreview(normalized, width, height, sampleComposite.getBackground().getRGB())));
+						normalized.setBorders(null);
+						normalized.setHorizontalAlignmen(HorizontalAlignEnum.LEFT);
+						normalized.setVerticalAlignmen(VerticalAlignEnum.TOP);
+						int fontSize = normalized.getFont().getOwnFontsize().intValue();
+						ImageData previewData = PreviewGenerator.generatePreview(normalized, fontSize*text.length()+width, fontSize + height, sampleComposite.getBackground().getRGB());
+						if (normalized.getFont().getOwnFontsize()>height) previewData = cropImage(previewData, 0, 0, height, width);
+						sampleArea.setBackgroundImage(resourceCache.getImage(previewData));
 					}
 				});
 				
@@ -495,6 +485,18 @@ public class TextStyleView implements TemplateViewProvider {
 		}
 		sampleComposite.setRedraw(true);
 		sampleComposite.layout(true,true);
+	}
+	
+	private static ImageData cropImage(ImageData sourceImageData, int x, int y, int height, int width){
+		Image sourceImage = new Image(Display.getCurrent(), sourceImageData);
+    Image croppedImage = new Image(Display.getCurrent(), width, height);
+    GC gc = new GC(sourceImage);
+    gc.copyArea(croppedImage, x, y);
+    gc.dispose();
+    ImageData croppedImageData = croppedImage.getImageData();
+    croppedImage.dispose();
+    sourceImage.dispose();
+    return croppedImageData;
 	}
 	
 	@Override
