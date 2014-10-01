@@ -3,12 +3,12 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.properties;
-
-import java.util.List;
+package com.jaspersoft.studio.components.customvisualization.properties;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -26,56 +26,49 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.swt.widgets.Shell;
 
-import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
-import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
-import com.jaspersoft.studio.components.bridge.messages.Messages;
+import com.jaspersoft.jasperreports.customvisualization.CVItem;
+import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignItem;
+import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 
 /**
- * Widget to modify the {@link BridgeDesignComponent#PROPERTY_ITEM_PROPERTIES}
- * property in the dedicated Property section.
+ * Edit dialog for a {@link CVItem} element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- * 
+ *
  */
-public class SPBridgeItemPropertiesList extends ASPropertyWidget {
+public class CVItemDialog extends Dialog implements
+		IExpressionContextSetter {
 
+	private CVDesignItem item;
+	private ExpressionContext expContext;
 	private TableViewer propertiesTV;
 	private Button btnAddProperty;
 	private Button btnModifyProperty;
 	private Button btnRemoveProperty;
-	private Group propertiesGrp;
-	private List<BridgeItemProperty> itemProps;
-
-	public SPBridgeItemPropertiesList(Composite parent,
-			AbstractSection section,
-			IPropertyDescriptor pdescriptor) {
-		super(parent,section,pdescriptor);
+	
+	public CVItemDialog(Shell parentShell, CVItem item) {
+		super(parentShell);
+		this.item = (CVDesignItem) item;
+		if(this.item == null) {
+			this.item = new CVDesignItem();
+		}
 	}
-
+	
 	@Override
-	protected void createComponent(Composite parent) {
-		propertiesGrp = new Group(parent, SWT.NONE);
-		propertiesGrp.setLayout(new GridLayout(2,false));
-		propertiesGrp.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+	protected Control createDialogArea(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		container.setLayout(new GridLayout(2,false));
 		
-		propertiesTV = createPropertiesTable(propertiesGrp);
-		propertiesTV.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				modifyPropertyBtnPressed();
-			}
-		});
-		
-		btnAddProperty = new Button(propertiesGrp, SWT.PUSH);
-		btnAddProperty.setText(Messages.SPBridgeItemPropertiesList_Add);
+		propertiesTV = createPropertiesTable(container);
+
+		btnAddProperty = new Button(container, SWT.PUSH);
+		btnAddProperty.setText(Messages.CVItemDialog_Add);
 		btnAddProperty.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 		btnAddProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -84,8 +77,8 @@ public class SPBridgeItemPropertiesList extends ASPropertyWidget {
 			}
 		});
 
-		btnModifyProperty = new Button(propertiesGrp, SWT.PUSH);
-		btnModifyProperty.setText(Messages.SPBridgeItemPropertiesList_Edit);
+		btnModifyProperty = new Button(container, SWT.PUSH);
+		btnModifyProperty.setText(Messages.CVItemDialog_Edit);
 		btnModifyProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnModifyProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -94,8 +87,8 @@ public class SPBridgeItemPropertiesList extends ASPropertyWidget {
 			}
 		});
 		
-		btnRemoveProperty = new Button(propertiesGrp, SWT.PUSH);
-		btnRemoveProperty.setText(Messages.SPBridgeItemPropertiesList_Remove);
+		btnRemoveProperty = new Button(container, SWT.PUSH);
+		btnRemoveProperty.setText(Messages.CVItemDialog_Remove);
 		btnRemoveProperty.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnRemoveProperty.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -103,44 +96,48 @@ public class SPBridgeItemPropertiesList extends ASPropertyWidget {
 				removePropertyBtnPressed();
 			}
 		});
+		applyDialogFont(container);
+		propertiesTV.setInput(this.item.getItemProperties());
+		
+		return container;
 	}
 	
 	private void addNewPropertyBtnPressed() {
-		BridgeItemPropertyDialog d = new BridgeItemPropertyDialog(UIUtils.getShell(), null, null);
-		d.setExpressionContext(getExpressionContext());
+		CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(), null, null);
+		d.setExpressionContext(expContext);
 		if(d.open()==Window.OK) {
-			itemProps.add(d.getItemProperty());
-			section.changeProperty(BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
+			this.item.getItemProperties().add(d.getItemProperty());
+			propertiesTV.setInput(this.item.getItemProperties());
 		}
 	}
 	
 	private void modifyPropertyBtnPressed() {
-		BridgeItemProperty p = getCurrentSelectedProperty();
+		CVItemProperty p = getCurrentSelectedProperty();
 		if(p!=null) {
-			BridgeItemProperty clonedP = (BridgeItemProperty) p.clone();
-			BridgeItemPropertyDialog d = new BridgeItemPropertyDialog(UIUtils.getShell(), clonedP, null);
-			d.setExpressionContext(getExpressionContext());
+			CVItemProperty clonedP = (CVItemProperty) p.clone();
+			CVItemPropertyDialog d = new CVItemPropertyDialog(UIUtils.getShell(), clonedP, null);
+			d.setExpressionContext(expContext);
 			if(d.open()==Window.OK) {
-				int idx = itemProps.indexOf(p);
-				itemProps.remove(p);
-				itemProps.add(idx,clonedP);
-				section.changeProperty(BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
+				int idx = this.item.getItemProperties().indexOf(p);
+				this.item.getItemProperties().remove(p);
+				this.item.getItemProperties().add(idx,clonedP);
+				propertiesTV.setInput(this.item.getItemProperties());
 			}
 		}
 	}
 	
 	private void removePropertyBtnPressed() {
-		BridgeItemProperty p = getCurrentSelectedProperty();
+		CVItemProperty p = getCurrentSelectedProperty();
 		if (p!=null) {
-			itemProps.remove(p);
-			section.changeProperty(BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES, itemProps);
+			this.item.getItemProperties().remove(p);
+			propertiesTV.setInput(this.item.getItemProperties());
 		}
 	}
-
-	private BridgeItemProperty getCurrentSelectedProperty() {
+	
+	private CVItemProperty getCurrentSelectedProperty() {
 		Object selEl = ((IStructuredSelection) propertiesTV.getSelection()).getFirstElement();
-		if(selEl instanceof BridgeItemProperty) {
-			return (BridgeItemProperty) selEl;
+		if(selEl instanceof CVItemProperty) {
+			return (CVItemProperty) selEl;
 		}
 		return null;
 	}
@@ -156,34 +153,59 @@ public class SPBridgeItemPropertiesList extends ASPropertyWidget {
 		tv.getTable().setLinesVisible(true);
 		
 		TableViewerColumn tvcName = new TableViewerColumn(tv, SWT.NONE);
-		tvcName.getColumn().setText(Messages.SPBridgeItemPropertiesList_ColName);
+		tvcName.getColumn().setText(Messages.CVItemDialog_ColName);
 		tvcName.setLabelProvider(new ItemPropertyNameLabelProvider());
 		tl_itemPropertiesTableViewer.setColumnData(tvcName.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 
 		TableViewerColumn tvcValue = new TableViewerColumn(tv, SWT.NONE);
-		tvcValue.getColumn().setText(Messages.SPBridgeItemPropertiesList_ColValue);
+		tvcValue.getColumn().setText(Messages.CVItemDialog_ColValue);
 		tvcValue.setLabelProvider(new ItemPropertyValueLabelProvider());
 		tl_itemPropertiesTableViewer.setColumnData(tvcValue.getColumn(), new ColumnWeightData(1, ColumnWeightData.MINIMUM_WIDTH, true));
 		
 		tv.setContentProvider(new ArrayContentProvider());
+		
+		tv.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				modifyPropertyBtnPressed();
+			}
+		});
 
 		return tv;
 	}
 
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
 	@Override
-	@SuppressWarnings("unchecked")
-	public void setData(APropertyNode pnode, Object value) {
-		itemProps = (List<BridgeItemProperty>) value;
-		propertiesTV.setInput(itemProps);
-	}
-
-	@Override
-	public Control getControl() {
-		return propertiesGrp;
+	protected void createButtonsForButtonBar(Composite parent) {
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
 	}
 	
-	private ExpressionContext getExpressionContext() {
-		return ModelUtils.getElementExpressionContext(null, section.getElement());
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.CVItemDialog_EditItem);
+		UIUtils.resizeAndCenterShell(newShell, 450, 300);
+	}
+	
+	@Override
+	protected void setShellStyle(int newShellStyle) {
+		super.setShellStyle(newShellStyle | SWT.RESIZE);
+	}
+	
+
+	@Override
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext = expContext;
+	}
+	
+	public CVItem getCVItem() {
+		return this.item;
 	}
 
 }

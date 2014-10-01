@@ -3,23 +3,24 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge;
+package com.jaspersoft.studio.components.customvisualization;
 
-import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
+import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+
 
 /**
- * Utility class for model-like operations involving the Bridge component.
+ * Utility class for model-like operations involving the Custom Visualization component.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class BridgeComponentUtil {
+public class CVComponentUtil {
 	
-	public static String getBridgeItemPropertyValueAsString(BridgeItemProperty property) {
-		return getBridgeItemPropertyValueAsString(property, false);
+	public static String getCVItemPropertyValueAsString(CVItemProperty property) {
+		return getCVItemPropertyValueAsString(property, false);
 	}
 	
-	public static String getBridgeItemPropertyValueAsString(BridgeItemProperty property, boolean addDoubleQuotes) {
+	public static String getCVItemPropertyValueAsString(CVItemProperty property, boolean addDoubleQuotes) {
 		if(property!=null) {
 			String propertyValue=property.getValue();
 			if(propertyValue == null && property.getValueExpression()!=null) {

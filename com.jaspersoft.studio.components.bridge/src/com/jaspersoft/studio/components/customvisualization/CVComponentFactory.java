@@ -3,7 +3,7 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge;
+package com.jaspersoft.studio.components.customvisualization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.jasperreports.bridge.BridgeComponent;
-import com.jaspersoft.studio.components.bridge.figure.BridgeFigure;
-import com.jaspersoft.studio.components.bridge.model.MBridge;
-import com.jaspersoft.studio.components.bridge.model.command.CreateBridgeCommand;
+import com.jaspersoft.jasperreports.customvisualization.CVComponent;
+import com.jaspersoft.studio.components.customvisualization.figure.CVFigure;
+import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
+import com.jaspersoft.studio.components.customvisualization.model.command.CreateCustomVisualizationCommand;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -36,25 +36,25 @@ import com.jaspersoft.studio.plugin.PaletteContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Factory for the Bridge component element.
+ * Factory for the Custom Visualization component element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class BridgeComponentFactory implements IComponentFactory {
+public class CVComponentFactory implements IComponentFactory {
 	
 	private static List<Class<?>> knownClasses;
 	
 	static {
 		knownClasses = new ArrayList<Class<?>>(1);
-		knownClasses.add(MBridge.class);
+		knownClasses.add(MCustomVisualization.class);
 	}
 
 	@Override
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement
-				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof BridgeComponent) {
-			return new MBridge(parent, (JRDesignComponentElement) jrObject,
+				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof CVComponent) {
+			return new MCustomVisualization(parent, (JRDesignComponentElement) jrObject,
 					newIndex);
 		}
 		return null;
@@ -69,14 +69,14 @@ public class BridgeComponentFactory implements IComponentFactory {
 	@Override
 	public IPaletteContributor getPaletteEntries() {
 		PaletteContributor pc = new PaletteContributor();
-		pc.add(MBridge.class);
+		pc.add(MCustomVisualization.class);
 		return pc;
 	}
 
 	@Override
 	public IFigure createFigure(ANode node) {
-		if (node instanceof MBridge) {
-			return new BridgeFigure();
+		if (node instanceof MCustomVisualization) {
+			return new CVFigure();
 		}
 		return null;
 	}
@@ -94,21 +94,21 @@ public class BridgeComponentFactory implements IComponentFactory {
 	@Override
 	public Command getCreateCommand(ANode parent, ANode child,
 			Rectangle location, int newIndex) {
-		if (child instanceof MBridge) {
+		if (child instanceof MCustomVisualization) {
 			if (parent instanceof MElementGroup)
-				return new CreateBridgeCommand((MElementGroup) parent,
+				return new CreateCustomVisualizationCommand((MElementGroup) parent,
 						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MBand)
-				return new CreateBridgeCommand((MBand) parent,
+				return new CreateCustomVisualizationCommand((MBand) parent,
 						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateBridgeCommand((MFrame) parent,
+				return new CreateCustomVisualizationCommand((MFrame) parent,
 						(MGraphicElement) child, location, newIndex);
 			if (parent instanceof MReport)
-				return new CreateBridgeCommand(parent, (MGraphicElement) child,
+				return new CreateCustomVisualizationCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 			if (parent instanceof IGroupElement) {
-				return new CreateBridgeCommand(parent, (MGraphicElement) child,
+				return new CreateCustomVisualizationCommand(parent, (MGraphicElement) child,
 						location, newIndex);
 			}
 		}

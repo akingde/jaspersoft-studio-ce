@@ -3,16 +3,16 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.figure;
+package com.jaspersoft.studio.components.customvisualization.figure;
 
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 
 /**
- * Figure representing the Bridge component element.
+ * Figure representing the Custom Visualization component element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class BridgeFigure extends JRComponentFigure {
+public class CVFigure extends JRComponentFigure {
 
 }

@@ -3,11 +3,11 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.model.command;
+package com.jaspersoft.studio.components.customvisualization.model.command;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.components.bridge.model.MBridge;
+import com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -16,34 +16,34 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.frame.MFrame;
 
 /**
- * Create command for the Bridge component element.
+ * Create command for the Custom Visualization component element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class CreateBridgeCommand extends CreateElementCommand {
+public class CreateCustomVisualizationCommand extends CreateElementCommand {
 
-	public CreateBridgeCommand(ANode destNode, MGraphicElement srcNode,
+	public CreateCustomVisualizationCommand(ANode destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
-	public CreateBridgeCommand(MBand destNode, MGraphicElement srcNode,
+	public CreateCustomVisualizationCommand(MBand destNode, MGraphicElement srcNode,
 			int index) {
 		super(destNode, srcNode, index);
 	}
 
-	public CreateBridgeCommand(MElementGroup destNode, MGraphicElement srcNode,
+	public CreateCustomVisualizationCommand(MElementGroup destNode, MGraphicElement srcNode,
 			int index) {
 		super(destNode, srcNode, index);
 	}
 
-	public CreateBridgeCommand(MFrame destNode, MGraphicElement srcNode,
+	public CreateCustomVisualizationCommand(MFrame destNode, MGraphicElement srcNode,
 			int index) {
 		super(destNode, srcNode, index);
 	}
 
-	public CreateBridgeCommand(MFrame destNode, MGraphicElement srcNode,
+	public CreateCustomVisualizationCommand(MFrame destNode, MGraphicElement srcNode,
 			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
@@ -51,7 +51,7 @@ public class CreateBridgeCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		if (jrElement == null) {
-			srcNode = new MBridge();
+			srcNode = new MCustomVisualization();
 			jrElement = srcNode.createJRElement(jasperDesign);
 		}
 		if (jrElement != null) {

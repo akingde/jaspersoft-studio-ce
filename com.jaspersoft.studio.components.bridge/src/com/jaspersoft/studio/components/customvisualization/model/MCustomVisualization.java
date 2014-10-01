@@ -3,7 +3,7 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.model;
+package com.jaspersoft.studio.components.customvisualization.model;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +20,11 @@ import net.sf.jasperreports.engine.util.JRCloneUtils;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.jasperreports.bridge.BridgeItemData;
-import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
-import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
-import com.jaspersoft.studio.components.bridge.BridgeNodeIconDescriptor;
-import com.jaspersoft.studio.components.bridge.messages.Messages;
+import com.jaspersoft.jasperreports.customvisualization.CVItemData;
+import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
+import com.jaspersoft.studio.components.customvisualization.CVNodeIconDescriptor;
+import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IDatasetContainer;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -36,12 +36,12 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 /**
- * Model object representing the Bridge component element.
+ * Model object representing the Custom Visualization component element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class MBridge extends MGraphicElement implements IDatasetContainer {
+public class MCustomVisualization extends MGraphicElement implements IDatasetContainer {
 
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static IIconDescriptor iconDescriptor;
@@ -51,11 +51,11 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
 	private static JSSEnumPropertyDescriptor onErrorTypeD;
 
-	public MBridge() {
+	public MCustomVisualization() {
 		super();
 	}
 
-	public MBridge(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
+	public MCustomVisualization(ANode parent, JRDesignComponentElement jrObject, int newIndex) {
 		super(parent, jrObject, newIndex);
 	}
 
@@ -84,7 +84,7 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new BridgeNodeIconDescriptor("bridge"); //$NON-NLS-1$
+			iconDescriptor = new CVNodeIconDescriptor("customvisualization"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -106,10 +106,10 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
-		BridgeDesignComponent bridgeComp = new BridgeDesignComponent();
-		el.setComponent(bridgeComp);
+		CVDesignComponent cvComp = new CVDesignComponent();
+		el.setComponent(cvComp);
 		el.setComponentKey(new ComponentKey(
-				"http://www.jaspersoft.com/bridgecomponent", "bc", "bridge")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"http://www.jaspersoft.com/cvcomponent", "cvc", "customvisualization")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return el;
 	}
 	
@@ -148,48 +148,48 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		evaluationTimeD = new JSSEnumPropertyDescriptor(
-				BridgeDesignComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MBridge_EvalTime, EvaluationTimeEnum.class,
+				CVDesignComponent.PROPERTY_EVALUATION_TIME,
+				Messages.MCustomVisualization_EvalTime, EvaluationTimeEnum.class,
 				NullEnum.NOTNULL);
 		evaluationTimeD
-				.setDescription(Messages.MBridge_EvalTimeDesc);
+				.setDescription(Messages.MCustomVisualization_EvalTimeDesc);
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
-				BridgeDesignComponent.PROPERTY_EVALUATION_GROUP,
+				CVDesignComponent.PROPERTY_EVALUATION_GROUP,
 				"Evaluation Group", new String[] { "" }); //$NON-NLS-1$ //$NON-NLS-2$
 		evaluationGroupNameD
-				.setDescription(Messages.MBridge_EvalGroupDesc);
+				.setDescription(Messages.MCustomVisualization_EvalGroupDesc);
 		desc.add(evaluationGroupNameD);
 
 		NClassTypePropertyDescriptor processingClassD = new NClassTypePropertyDescriptor(
-				BridgeDesignComponent.PROPERTY_PROCESSING_CLASS, Messages.MBridge_ProcessingClass);
-		processingClassD.setDescription(Messages.MBridge_ProcessingClassDesc);
+				CVDesignComponent.PROPERTY_PROCESSING_CLASS, Messages.MCustomVisualization_ProcessingClass);
+		processingClassD.setDescription(Messages.MCustomVisualization_ProcessingClassDesc);
 		desc.add(processingClassD);
 		
-		BridgeItemPropertiesDescriptor bItemPropsD = new BridgeItemPropertiesDescriptor(BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES, Messages.MBridge_ItemProperties);
-		bItemPropsD.setDescription(Messages.MBridge_ItemPropertiesDesc);
+		CVItemPropertiesDescriptor bItemPropsD = new CVItemPropertiesDescriptor(CVDesignComponent.PROPERTY_ITEM_PROPERTIES, Messages.MCustomVisualization_ItemProperties);
+		bItemPropsD.setDescription(Messages.MCustomVisualization_ItemPropertiesDesc);
 		desc.add(bItemPropsD);
 
-		BridgeItemDataDescriptor bItemDataD = new BridgeItemDataDescriptor(BridgeDesignComponent.PROPERTY_ITEM_DATA, Messages.MBridge_ItemData);
-		bItemDataD.setDescription(Messages.MBridge_ItemDataDesc);
+		CVItemDataDescriptor bItemDataD = new CVItemDataDescriptor(CVDesignComponent.PROPERTY_ITEM_DATA, Messages.MCustomVisualization_ItemData);
+		bItemDataD.setDescription(Messages.MCustomVisualization_ItemDataDesc);
 		desc.add(bItemDataD);
 		
-		evaluationTimeD.setCategory(Messages.MBridge_BridgePropertiesCategory);
-		evaluationGroupNameD.setCategory(Messages.MBridge_BridgePropertiesCategory);
-		processingClassD.setCategory(Messages.MBridge_BridgePropertiesCategory);
-		bItemPropsD.setCategory(Messages.MBridge_BridgePropertiesCategory);
-		bItemDataD.setCategory(Messages.MBridge_BridgePropertiesCategory);
+		evaluationTimeD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		evaluationGroupNameD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		processingClassD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		bItemPropsD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
+		bItemDataD.setCategory(Messages.MCustomVisualization_CVPropertiesCategory);
 		
-		defaultsMap.put(BridgeDesignComponent.PROPERTY_EVALUATION_TIME,
+		defaultsMap.put(CVDesignComponent.PROPERTY_EVALUATION_TIME,
 				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
 		
-		onErrorTypeD = new JSSEnumPropertyDescriptor(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE, Messages.MBridge_OnErrorType,
+		onErrorTypeD = new JSSEnumPropertyDescriptor(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, Messages.MCustomVisualization_OnErrorType,
 				OnErrorTypeEnum.class, NullEnum.NULL);
-		onErrorTypeD.setDescription(Messages.MBridge_OnErrorTypeDesc);
+		onErrorTypeD.setDescription(Messages.MCustomVisualization_OnErrorTypeDesc);
 		desc.add(onErrorTypeD);
 		
-		defaultsMap.put(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
+		defaultsMap.put(CVDesignComponent.PROPERTY_ON_ERROR_TYPE, onErrorTypeD.getEnumValue(OnErrorTypeEnum.ERROR));
 	}
 
 	@Override
@@ -202,24 +202,24 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		BridgeDesignComponent bridgeComp = (BridgeDesignComponent) jrElement.getComponent();
-		if (BridgeDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			return evaluationTimeD.getEnumValue(bridgeComp.getEvaluationTime());
+		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
+		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
+			return evaluationTimeD.getEnumValue(cvComp.getEvaluationTime());
 		}
-		else if (BridgeDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
-			return bridgeComp.getEvaluationGroup();			
+		else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
+			return cvComp.getEvaluationGroup();			
 		}
-		else if (BridgeDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
-			return bridgeComp.getProcessingClass();
+		else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
+			return cvComp.getProcessingClass();
 		}
-		else if (BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)){
-			return JRCloneUtils.cloneList(bridgeComp.getItemProperties());
+		else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)){
+			return JRCloneUtils.cloneList(cvComp.getItemProperties());
 		}
-		else if (BridgeDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
-			return JRCloneUtils.cloneList(bridgeComp.getItemData());
+		else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
+			return JRCloneUtils.cloneList(cvComp.getItemData());
 		}
-		if (id.equals(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE)) {
-			return onErrorTypeD.getEnumValue(bridgeComp.getOnErrorType());
+		if (id.equals(CVDesignComponent.PROPERTY_ON_ERROR_TYPE)) {
+			return onErrorTypeD.getEnumValue(cvComp.getOnErrorType());
 		}
 		else {
 			return super.getPropertyValue(id);
@@ -230,39 +230,39 @@ public class MBridge extends MGraphicElement implements IDatasetContainer {
 	@SuppressWarnings("unchecked")
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		BridgeDesignComponent bridgeComp = (BridgeDesignComponent) jrElement.getComponent();
-		if (BridgeDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
-			bridgeComp.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD
+		CVDesignComponent cvComp = (CVDesignComponent) jrElement.getComponent();
+		if (CVDesignComponent.PROPERTY_EVALUATION_TIME.equals(id)) {
+			cvComp.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD
 					.getEnumValue(value));
 		}
-		else if (BridgeDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
-			bridgeComp.setEvaluationGroup((String) value);
+		else if (CVDesignComponent.PROPERTY_EVALUATION_GROUP.equals(id)) {
+			cvComp.setEvaluationGroup((String) value);
 		}
-		else if (BridgeDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
+		else if (CVDesignComponent.PROPERTY_PROCESSING_CLASS.equals(id)) {
 			if (value instanceof String && ((String) value).trim().isEmpty())
 				value = null;
-			bridgeComp.setProcessingClass((String) value);
+			cvComp.setProcessingClass((String) value);
 		}
-		else if (BridgeDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
-			BridgeItemProperty[] toRemove = bridgeComp.getItemProperties().toArray(new BridgeItemProperty[]{});
-			for (BridgeItemProperty i : toRemove) {
-				bridgeComp.removeItemProperty(i);
+		else if (CVDesignComponent.PROPERTY_ITEM_PROPERTIES.equals(id)) {
+			CVItemProperty[] toRemove = cvComp.getItemProperties().toArray(new CVItemProperty[]{});
+			for (CVItemProperty i : toRemove) {
+				cvComp.removeItemProperty(i);
 			}
-			for (BridgeItemProperty i : (List<BridgeItemProperty>) value) {
-				bridgeComp.addItemProperty(i);
-			}
-		}
-		else if (BridgeDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
-			BridgeItemData[] toRemove = bridgeComp.getItemData().toArray(new BridgeItemData[]{});
-			for (BridgeItemData i : toRemove) {
-				bridgeComp.removeItemData(i);
-			}
-			for (BridgeItemData i : (List<BridgeItemData>)value){
-				bridgeComp.addItemData(i);
+			for (CVItemProperty i : (List<CVItemProperty>) value) {
+				cvComp.addItemProperty(i);
 			}
 		}
-		else if(BridgeDesignComponent.PROPERTY_ON_ERROR_TYPE.equals(id)) {
-			bridgeComp.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
+		else if (CVDesignComponent.PROPERTY_ITEM_DATA.equals(id)) {
+			CVItemData[] toRemove = cvComp.getItemData().toArray(new CVItemData[]{});
+			for (CVItemData i : toRemove) {
+				cvComp.removeItemData(i);
+			}
+			for (CVItemData i : (List<CVItemData>)value){
+				cvComp.addItemData(i);
+			}
+		}
+		else if(CVDesignComponent.PROPERTY_ON_ERROR_TYPE.equals(id)) {
+			cvComp.setOnErrorType((OnErrorTypeEnum) onErrorTypeD.getEnumValue(value));
 		}
 		else {
 			super.setPropertyValue(id, value);

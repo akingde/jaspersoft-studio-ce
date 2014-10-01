@@ -3,7 +3,7 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.properties;
+package com.jaspersoft.studio.components.customvisualization.properties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.jasperreports.bridge.BridgeItemProperty;
-import com.jaspersoft.jasperreports.bridge.design.BridgeDesignItemProperty;
-import com.jaspersoft.studio.components.bridge.Activator;
-import com.jaspersoft.studio.components.bridge.messages.Messages;
+import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignItemProperty;
+import com.jaspersoft.studio.components.customvisualization.CustomVisualizationActivator;
+import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.infoList.ElementDescription;
@@ -40,12 +40,12 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.Misc;
 
 /**
- * Dialog that allows editing the information associated to a {@link BridgeItemProperty} element.
+ * Dialog that allows editing the information associated to a {@link CVItemProperty} element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class BridgeItemPropertyDialog extends Dialog implements IExpressionContextSetter{
+public class CVItemPropertyDialog extends Dialog implements IExpressionContextSetter{
 
 	private Composite dialogArea;
 	private Text propertyName;
@@ -53,13 +53,13 @@ public class BridgeItemPropertyDialog extends Dialog implements IExpressionConte
 	private Text propertyValue;
 	private WTextExpression propertyValueExpression;
 	private ExpressionContext expContext;
-	private BridgeDesignItemProperty itemProperty;
+	private CVDesignItemProperty itemProperty;
 	private SelectableComposite infoPanel;
 	private String propertiesFileLocation;
 
-	public BridgeItemPropertyDialog(Shell parentShell, BridgeItemProperty itemProperty, String propertiesFileLocation) {
+	public CVItemPropertyDialog(Shell parentShell, CVItemProperty itemProperty, String propertiesFileLocation) {
 		super(parentShell);
-		this.itemProperty = (BridgeDesignItemProperty) itemProperty;
+		this.itemProperty = (CVDesignItemProperty) itemProperty;
 		this.propertiesFileLocation = propertiesFileLocation;
 	}
 	
@@ -73,16 +73,16 @@ public class BridgeItemPropertyDialog extends Dialog implements IExpressionConte
 		
 		Label lblPropertyName = new Label(dialogArea, SWT.NONE);
 		lblPropertyName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		lblPropertyName.setText(Messages.BridgeItemPropertyDialog_PropertyName);
+		lblPropertyName.setText(Messages.CVItemPropertyDialog_PropertyName);
 		propertyName = new Text(dialogArea, SWT.BORDER);
 		propertyName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		useExpressionCheckbox = new Button(dialogArea, SWT.CHECK);
-		useExpressionCheckbox.setText(Messages.BridgeItemPropertyDialog_UseExpr);
+		useExpressionCheckbox.setText(Messages.CVItemPropertyDialog_UseExpr);
 		useExpressionCheckbox.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 			
 		Label lblPropertyValue=new Label(dialogArea,SWT.NONE);
-		lblPropertyValue.setText(Messages.BridgeItemPropertyDialog_PropertyValue);
+		lblPropertyValue.setText(Messages.CVItemPropertyDialog_PropertyValue);
 		lblPropertyValue.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 		
 		propertyValue = new Text(dialogArea,SWT.BORDER);
@@ -121,7 +121,7 @@ public class BridgeItemPropertyDialog extends Dialog implements IExpressionConte
 		try {
 			descriptions.addAll(
 					ElementDescription.getPropertiesInformation(
-							Activator.getDefault().getFileLocation(propertiesFileLocation)));
+							CustomVisualizationActivator.getDefault().getFileLocation(propertiesFileLocation)));
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}  
@@ -130,7 +130,7 @@ public class BridgeItemPropertyDialog extends Dialog implements IExpressionConte
 
 	private void initWidgets() {
 		if(this.itemProperty==null){
-			this.itemProperty = new BridgeDesignItemProperty("","",null); //$NON-NLS-1$ //$NON-NLS-2$
+			this.itemProperty = new CVDesignItemProperty("","",null); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if(this.itemProperty.getValue()!=null){
 			useExpressionCheckbox.setSelection(false);
@@ -205,7 +205,7 @@ public class BridgeItemPropertyDialog extends Dialog implements IExpressionConte
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(Messages.BridgeItemPropertyDialog_Title);
+		newShell.setText(Messages.CVItemPropertyDialog_Title);
 		UIUtils.resizeAndCenterShell(newShell, 450, 250);
 	}
 	
@@ -219,7 +219,7 @@ public class BridgeItemPropertyDialog extends Dialog implements IExpressionConte
 		this.expContext = expContext;
 	}
 
-	public BridgeItemProperty getItemProperty() {
+	public CVItemProperty getItemProperty() {
 		return this.itemProperty;
 	}
 

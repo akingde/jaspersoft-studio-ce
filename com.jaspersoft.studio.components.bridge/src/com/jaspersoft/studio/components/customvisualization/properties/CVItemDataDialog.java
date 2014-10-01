@@ -3,7 +3,7 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.properties;
+package com.jaspersoft.studio.components.customvisualization.properties;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -29,10 +29,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
-import com.jaspersoft.jasperreports.bridge.BridgeItem;
-import com.jaspersoft.jasperreports.bridge.BridgeItemData;
-import com.jaspersoft.jasperreports.bridge.design.BridgeDesignItemData;
-import com.jaspersoft.studio.components.bridge.messages.Messages;
+import com.jaspersoft.jasperreports.customvisualization.CVItem;
+import com.jaspersoft.jasperreports.customvisualization.CVItemData;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignItemData;
+import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.jface.dialogs.EditableDatasetBaseComposite;
 import com.jaspersoft.studio.model.dataset.ComponentElementDatasetAdapter;
@@ -44,18 +44,18 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Edit dialog to modify a {@link BridgeItemData} instance.
+ * Edit dialog to modify a {@link CVItemData} instance.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class BridgeItemDataDialog extends Dialog {
+public class CVItemDataDialog extends Dialog {
 
 	private TabFolder tabfolder;
 	private JRDesignElementDataset dataset;
 	private JasperReportsConfiguration jconfig;
 	private ExpressionContext defaultExpressionContext;
-	private BridgeDesignItemData itemData;
+	private CVDesignItemData itemData;
 	private EditableDatasetBaseComposite compositeDatasetInfo;
 	private Button useDatasetBtn;
 	private TableViewer itemsTV;
@@ -68,11 +68,11 @@ public class BridgeItemDataDialog extends Dialog {
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public BridgeItemDataDialog(Shell parentShell, BridgeItemData itemData, JasperReportsConfiguration jconfig) {
+	public CVItemDataDialog(Shell parentShell, CVItemData itemData, JasperReportsConfiguration jconfig) {
 		super(parentShell);
-		this.itemData = (BridgeDesignItemData) itemData;
+		this.itemData = (CVDesignItemData) itemData;
 		if(this.itemData == null){
-			this.itemData = new BridgeDesignItemData();
+			this.itemData = new CVDesignItemData();
 		}
 		this.dataset = (JRDesignElementDataset) this.itemData.getDataset();
 		if(this.dataset==null){
@@ -105,10 +105,10 @@ public class BridgeItemDataDialog extends Dialog {
 		Composite container = new Composite(parentTFolder,SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		datasetTab.setControl(container);
-		datasetTab.setText(Messages.BridgeItemDataDialog_DatasetTab);
+		datasetTab.setText(Messages.CVItemDataDialog_DatasetTab);
 		
 		useDatasetBtn = new Button(container,SWT.CHECK);
-		useDatasetBtn.setText(Messages.BridgeItemDataDialog_UseDatasetBtn);
+		useDatasetBtn.setText(Messages.CVItemDataDialog_UseDatasetBtn);
 		useDatasetBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		useDatasetBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -143,11 +143,11 @@ public class BridgeItemDataDialog extends Dialog {
 		Composite container = new Composite(parentTFolder,SWT.NONE);
 		container.setLayout(new GridLayout(2, false));
 		elementsTab.setControl(container);
-		elementsTab.setText(Messages.BridgeItemDataDialog_ItemsTab);
+		elementsTab.setText(Messages.CVItemDataDialog_ItemsTab);
 		
 		itemsTV = new TableViewer(container, SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE);
 		itemsTV.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
-		lblProv = new NumberedLabelProvider(Messages.BridgeItemDataDialog_LblProviderPrefix);
+		lblProv = new NumberedLabelProvider(Messages.CVItemDataDialog_LblProviderPrefix);
 		itemsTV.setLabelProvider(lblProv);
 		itemsTV.setContentProvider(new ArrayContentProvider());
 		itemsTV.addDoubleClickListener(new IDoubleClickListener() {
@@ -158,7 +158,7 @@ public class BridgeItemDataDialog extends Dialog {
 		});
 		
 		btnAddItem = new Button(container, SWT.PUSH);
-		btnAddItem.setText(Messages.BridgeItemDataDialog_Add);
+		btnAddItem.setText(Messages.CVItemDataDialog_Add);
 		btnAddItem.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 		btnAddItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -168,7 +168,7 @@ public class BridgeItemDataDialog extends Dialog {
 		});
 
 		btnModifyItem = new Button(container, SWT.PUSH);
-		btnModifyItem.setText(Messages.BridgeItemDataDialog_Edit);
+		btnModifyItem.setText(Messages.CVItemDataDialog_Edit);
 		btnModifyItem.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnModifyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -178,7 +178,7 @@ public class BridgeItemDataDialog extends Dialog {
 		});
 		
 		btnRemoveItem = new Button(container, SWT.PUSH);
-		btnRemoveItem.setText(Messages.BridgeItemDataDialog_Remove);
+		btnRemoveItem.setText(Messages.CVItemDataDialog_Remove);
 		btnRemoveItem.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnRemoveItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -191,49 +191,49 @@ public class BridgeItemDataDialog extends Dialog {
 	}
 	
 	private void addNewItemBtnPressed() {
-		BridgeItemDialog d = new BridgeItemDialog(UIUtils.getShell(), null);
+		CVItemDialog d = new CVItemDialog(UIUtils.getShell(), null);
 		d.setExpressionContext(getExpressionContextFromDSRun());
 		if(d.open() == Window.OK) {
-			BridgeItem bridgeItem = d.getBridgeItem();
-			this.itemData.addItem(bridgeItem);
+			CVItem CVItem = d.getCVItem();
+			this.itemData.addItem(CVItem);
 			refreshItemsViewer();
 		}
 	}
 	
 	private void modifyItemBtnPressed() {
-		BridgeItem i = getCurrentSelectedItem();
+		CVItem i = getCurrentSelectedItem();
 		if(i!=null) {
-			BridgeItemDialog d = new BridgeItemDialog(UIUtils.getShell(), (BridgeItem) i.clone());
+			CVItemDialog d = new CVItemDialog(UIUtils.getShell(), (CVItem) i.clone());
 			d.setExpressionContext(getExpressionContextFromDSRun());
 			if(d.open() == Window.OK) {
-				BridgeItem bridgeItem = d.getBridgeItem();
-				int indexOf = this.itemData.getBridgeItems().indexOf(i);
-				this.itemData.getBridgeItems().remove(indexOf);
-				this.itemData.getBridgeItems().add(indexOf,bridgeItem);
+				CVItem CVItem = d.getCVItem();
+				int indexOf = this.itemData.getCVItems().indexOf(i);
+				this.itemData.getCVItems().remove(indexOf);
+				this.itemData.getCVItems().add(indexOf,CVItem);
 				refreshItemsViewer();
 			}
 		}
 	}
 	
 	private void removeItemBtnPressed() {
-		BridgeItem i = getCurrentSelectedItem();
+		CVItem i = getCurrentSelectedItem();
 		if (i!=null) {
-			this.itemData.getBridgeItems().remove(i);
+			this.itemData.getCVItems().remove(i);
 			refreshItemsViewer();
 		}		
 	}
 
-	private BridgeItem getCurrentSelectedItem() {
+	private CVItem getCurrentSelectedItem() {
 		Object selEl = ((IStructuredSelection) itemsTV.getSelection()).getFirstElement();
-		if(selEl instanceof BridgeItem) {
-			return (BridgeItem) selEl;
+		if(selEl instanceof CVItem) {
+			return (CVItem) selEl;
 		}
 		return null;
 	}
 	
 	private void refreshItemsViewer() {
 		lblProv.resetIndex();
-		itemsTV.setInput(this.itemData.getBridgeItems());
+		itemsTV.setInput(this.itemData.getCVItems());
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class BridgeItemDataDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(Messages.BridgeItemDataDialog_Title);
+		newShell.setText(Messages.CVItemDataDialog_Title);
 		UIUtils.resizeAndCenterShell(newShell, 600, 600);
 	}
 	
@@ -273,7 +273,7 @@ public class BridgeItemDataDialog extends Dialog {
 		return null;
 	}
 	
-	public BridgeItemData getBridgeItemData() {
+	public CVItemData getCVItemData() {
 		// fix the dataset reference
 		this.itemData.setDataset(this.dataset);
 		return this.itemData;

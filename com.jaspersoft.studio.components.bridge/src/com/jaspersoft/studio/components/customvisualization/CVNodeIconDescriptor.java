@@ -3,24 +3,24 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge;
+package com.jaspersoft.studio.components.customvisualization;
 
 import java.util.ResourceBundle;
 
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
 /**
- * Icon descriptor for the Bridge component element.
+ * Icon descriptor for the Custom Visualization component element.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class BridgeNodeIconDescriptor extends NodeIconDescriptor {
+public class CVNodeIconDescriptor extends NodeIconDescriptor {
 
 	private static ResourceBundle resourceBundleIcons;
 	
-	public BridgeNodeIconDescriptor(String name) {
-		super(name,Activator.getDefault());
+	public CVNodeIconDescriptor(String name) {
+		super(name,CustomVisualizationActivator.getDefault());
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class BridgeNodeIconDescriptor extends NodeIconDescriptor {
 
 	@Override
 	public void setResourceBundleIcons(ResourceBundle resourceBundleIcons) {
-		BridgeNodeIconDescriptor.resourceBundleIcons = resourceBundleIcons;
+		CVNodeIconDescriptor.resourceBundleIcons = resourceBundleIcons;
 	}
 	
 }

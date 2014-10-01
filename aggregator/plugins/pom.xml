@@ -54,7 +54,7 @@
 		<module>../../com.jaspersoft.studio</module>
 		<module>../../com.jaspersoft.studio.community</module>
 		<module>../../com.jaspersoft.studio.components</module>
-		<module>../../com.jaspersoft.studio.components.bridge</module>		
+		<module>../../com.jaspersoft.studio.components.customvisualization</module>		
 		<module>../../com.jaspersoft.studio.data</module>
 		<module>../../com.jaspersoft.studio.data.cassandra</module>
 		<module>../../com.jaspersoft.studio.data.drivers</module>

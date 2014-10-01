@@ -3,7 +3,7 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge;
+package com.jaspersoft.studio.components.customvisualization;
 
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 
@@ -12,18 +12,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractJRUIPlugin {
+public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.jaspersoft.studio.components.bridge"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.jaspersoft.studio.components.customvisualization"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
+	private static CustomVisualizationActivator plugin;
 	
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public CustomVisualizationActivator() {
 	}
 
 	/*
@@ -49,7 +49,7 @@ public class Activator extends AbstractJRUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static CustomVisualizationActivator getDefault() {
 		return plugin;
 	}
 

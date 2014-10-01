@@ -4,7 +4,7 @@
    <extension
          point="com.jaspersoft.studio.components">
       <component
-            ClassFactory="com.jaspersoft.studio.components.bridge.BridgeComponentFactory">
+            ClassFactory="com.jaspersoft.studio.components.customvisualization.CVComponentFactory">
       </component>
    </extension>
    <extension
@@ -12,10 +12,10 @@
       <propertyTabs
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertyTab
-               afterTab="com.jaspersoft.studio.components.bridge.tab"
+               afterTab="com.jaspersoft.studio.components.customvisualization.tab"
                category="element"
-               id="com.jaspersoft.studio.components.bridge.tab"
-               image="icons/bridgecomponent-16.png"
+               id="com.jaspersoft.studio.components.customvisualization.tab"
+               image="icons/cvcomponent-16.png"
                label="%propertyTab.label">
          </propertyTab>
       </propertyTabs>
@@ -25,11 +25,11 @@
       <propertySections
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertySection
-               class="com.jaspersoft.studio.components.bridge.properties.BridgeSection"
-               id="com.jaspersoft.studio.components.bridge.properties.BridgeSection"
-               tab="com.jaspersoft.studio.components.bridge.tab">
+               class="com.jaspersoft.studio.components.customvisualization.properties.CVSection"
+               id="com.jaspersoft.studio.components.customvisualization.properties.CVSection"
+               tab="com.jaspersoft.studio.components.customvisualization.tab">
             <input
-                  type="com.jaspersoft.studio.components.bridge.model.MBridge">
+                  type="com.jaspersoft.studio.components.customvisualization.model.MCustomVisualization">
             </input>
          </propertySection>
       </propertySections>

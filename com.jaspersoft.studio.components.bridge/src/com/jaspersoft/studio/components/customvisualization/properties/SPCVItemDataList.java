@@ -3,7 +3,7 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.properties;
+package com.jaspersoft.studio.components.customvisualization.properties;
 
 import java.util.List;
 
@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.jasperreports.bridge.BridgeItemData;
-import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
-import com.jaspersoft.studio.components.bridge.messages.Messages;
+import com.jaspersoft.jasperreports.customvisualization.CVItemData;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
+import com.jaspersoft.studio.components.customvisualization.messages.Messages;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -37,23 +37,23 @@ import com.jaspersoft.studio.swt.widgets.NumberedLabelProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
- * Widget to modify the {@link BridgeDesignComponent#PROPERTY_ITEM_DATA}
+ * Widget to modify the {@link CVDesignComponent#PROPERTY_ITEM_DATA}
  * property in the dedicated Property section.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class SPBridgeItemDataList extends ASPropertyWidget {
+public class SPCVItemDataList extends ASPropertyWidget {
 
 	private TableViewer itemDataTV;
 	private Button btnAddItemData;
 	private Button btnModifyItemData;
 	private Button btnRemoveItemData;
 	private Group itemDataGrp;
-	private List<BridgeItemData> itemDataElements;
+	private List<CVItemData> itemDataElements;
 	private NumberedLabelProvider lblProv;
 	
-	public SPBridgeItemDataList(Composite parent, AbstractSection section,
+	public SPCVItemDataList(Composite parent, AbstractSection section,
 			IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -73,7 +73,7 @@ public class SPBridgeItemDataList extends ASPropertyWidget {
 		});
 		
 		btnAddItemData = new Button(itemDataGrp, SWT.PUSH);
-		btnAddItemData.setText(Messages.SPBridgeItemDataList_Add);
+		btnAddItemData.setText(Messages.SPCVItemDataList_Add);
 		btnAddItemData.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false));
 		btnAddItemData.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -83,7 +83,7 @@ public class SPBridgeItemDataList extends ASPropertyWidget {
 		});
 
 		btnModifyItemData = new Button(itemDataGrp, SWT.PUSH);
-		btnModifyItemData.setText(Messages.SPBridgeItemDataList_Edit);
+		btnModifyItemData.setText(Messages.SPCVItemDataList_Edit);
 		btnModifyItemData.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnModifyItemData.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -93,7 +93,7 @@ public class SPBridgeItemDataList extends ASPropertyWidget {
 		});
 		
 		btnRemoveItemData = new Button(itemDataGrp, SWT.PUSH);
-		btnRemoveItemData.setText(Messages.SPBridgeItemDataList_Remove);
+		btnRemoveItemData.setText(Messages.SPCVItemDataList_Remove);
 		btnRemoveItemData.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		btnRemoveItemData.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -107,50 +107,50 @@ public class SPBridgeItemDataList extends ASPropertyWidget {
 	private TableViewer createItemDataTable(Group parent) {
 		TableViewer itemDataTV = new TableViewer(parent, SWT.BORDER | SWT.V_SCROLL | SWT.SINGLE);
 		itemDataTV.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
-		lblProv = new NumberedLabelProvider(Messages.SPBridgeItemDataList_LblProviderPrefix);
+		lblProv = new NumberedLabelProvider(Messages.SPCVItemDataList_LblProviderPrefix);
 		itemDataTV.setLabelProvider(lblProv);
 		itemDataTV.setContentProvider(new ArrayContentProvider());
 		return itemDataTV;
 	}
 	
 	private void addNewItemDataBtnPressed() {
-		BridgeItemDataDialog dialog = new BridgeItemDataDialog(UIUtils.getShell(), null, section.getElement().getJasperConfiguration());
+		CVItemDataDialog dialog = new CVItemDataDialog(UIUtils.getShell(), null, section.getElement().getJasperConfiguration());
 		dialog.setDefaultExpressionContext(getExpressionContext());
 		if(dialog.open()==Window.OK) {
-			BridgeItemData bridgeItemData = dialog.getBridgeItemData();
-			itemDataElements.add(bridgeItemData);
-			section.changeProperty(BridgeDesignComponent.PROPERTY_ITEM_DATA, itemDataElements);
+			CVItemData CVItemData = dialog.getCVItemData();
+			itemDataElements.add(CVItemData);
+			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_DATA, itemDataElements);
 		}
 	}
 	
 	private void modifyItemDataBtnPressed() {
-		BridgeItemData i = getCurrentSelectedItemData();
+		CVItemData i = getCurrentSelectedItemData();
 		if(i != null) {
-			BridgeItemData clonedItemData = (BridgeItemData) i.clone();
-			BridgeItemDataDialog dialog = new BridgeItemDataDialog(UIUtils.getShell(), clonedItemData, section.getElement().getJasperConfiguration());
+			CVItemData clonedItemData = (CVItemData) i.clone();
+			CVItemDataDialog dialog = new CVItemDataDialog(UIUtils.getShell(), clonedItemData, section.getElement().getJasperConfiguration());
 			dialog.setDefaultExpressionContext(getExpressionContext());
 			if(dialog.open()==Window.OK) {
-				BridgeItemData bridgeItemData = dialog.getBridgeItemData();
+				CVItemData CVItemData = dialog.getCVItemData();
 				int indexOf = itemDataElements.indexOf(i);
 				itemDataElements.remove(indexOf);
-				itemDataElements.add(indexOf,bridgeItemData);
-				section.changeProperty(BridgeDesignComponent.PROPERTY_ITEM_DATA, itemDataElements);
+				itemDataElements.add(indexOf,CVItemData);
+				section.changeProperty(CVDesignComponent.PROPERTY_ITEM_DATA, itemDataElements);
 			}
 		}
 	}
 	
 	private void removeItemDataBtnPressed() {
-		BridgeItemData i = getCurrentSelectedItemData();
+		CVItemData i = getCurrentSelectedItemData();
 		if (i!=null) {
 			itemDataElements.remove(i);
-			section.changeProperty(BridgeDesignComponent.PROPERTY_ITEM_DATA, itemDataElements);
+			section.changeProperty(CVDesignComponent.PROPERTY_ITEM_DATA, itemDataElements);
 		}		
 	}
 	
-	private BridgeItemData getCurrentSelectedItemData() {
+	private CVItemData getCurrentSelectedItemData() {
 		Object selEl = ((IStructuredSelection) itemDataTV.getSelection()).getFirstElement();
-		if(selEl instanceof BridgeItemData) {
-			return (BridgeItemData) selEl;
+		if(selEl instanceof CVItemData) {
+			return (CVItemData) selEl;
 		}
 		return null;
 	}
@@ -158,7 +158,7 @@ public class SPBridgeItemDataList extends ASPropertyWidget {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setData(APropertyNode pnode, Object value) {
-		itemDataElements = (List<BridgeItemData>) value;
+		itemDataElements = (List<CVItemData>) value;
 		itemDataTV.setInput(itemDataElements);
 		lblProv.resetIndex();
 	}

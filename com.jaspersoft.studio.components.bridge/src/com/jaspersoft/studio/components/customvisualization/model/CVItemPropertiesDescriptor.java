@@ -3,28 +3,28 @@
  * http://www.jaspersoft.com.
  * Licensed under commercial Jaspersoft Subscription License Agreement
  ******************************************************************************/
-package com.jaspersoft.studio.components.bridge.model;
+package com.jaspersoft.studio.components.customvisualization.model;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.jasperreports.bridge.design.BridgeDesignComponent;
-import com.jaspersoft.studio.components.bridge.properties.SPBridgeItemPropertiesList;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignComponent;
+import com.jaspersoft.studio.components.customvisualization.properties.SPCVItemPropertiesList;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 /**
  * Property descriptor for the
- * {@link BridgeDesignComponent#PROPERTY_ITEM_PROPERTIES} property.
+ * {@link CVDesignComponent#PROPERTY_ITEM_PROPERTIES} property.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class BridgeItemPropertiesDescriptor extends NTextPropertyDescriptor {
+public class CVItemPropertiesDescriptor extends NTextPropertyDescriptor {
 
-	public BridgeItemPropertiesDescriptor(Object id, String displayName) {
+	public CVItemPropertiesDescriptor(Object id, String displayName) {
 		super(id, displayName);
 	}
 	
@@ -35,13 +35,13 @@ public class BridgeItemPropertiesDescriptor extends NTextPropertyDescriptor {
 	
 	@Override
 	public ILabelProvider getLabelProvider() {
-		return new BridgeItemPropertiesLabelProvider();
+		return new CVItemPropertiesLabelProvider();
 	}
 	
 	@Override
 	public ASPropertyWidget createWidget(Composite parent,
 			AbstractSection section) {
-		return new SPBridgeItemPropertiesList(parent,section,this);
+		return new SPCVItemPropertiesList(parent,section,this);
 	}
 
 }
