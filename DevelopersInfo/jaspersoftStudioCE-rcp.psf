@@ -6,6 +6,7 @@
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio,com.jaspersoft.studio"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.community,com.jaspersoft.studio.community"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.components,com.jaspersoft.studio.components"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.components.customvisualization,com.jaspersoft.studio.components.customvisualization"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.data,com.jaspersoft.studio.data"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.data.cassandra,com.jaspersoft.studio.data.cassandra"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.data.drivers,com.jaspersoft.studio.data.drivers"/>
