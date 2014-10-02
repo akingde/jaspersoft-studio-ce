@@ -1,0 +1,206 @@
+--- Q7 testcase ---
+Format-Version: 1.0
+Q7-vendor: www.xored.com/q7
+Element-Name: BandCreationDeleteResize
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _Sdzn8XUlEeKAX9ky9hFc5g
+Save-Time: 2/12/13 5:28 PM
+Testcase-Type: ecl
+
+------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
+Content-Type: text/plain
+Entry-Name: .description
+
+Performs some basic operations on the bands of a report.
+1. Create a new empty report
+2. Delete all the bands except for Title band. When deleting use both DEL button and context menu item "Delete"
+3. Resize the Title band up to 500px and verify that is ok (assert)
+4. From the Outline view recreate all the missing bands
+5. Verifies that some of them have the default height of 50px (assert)
+
+------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa--
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+with [get-view "Project Explorer"] {
+    click
+    get-tree | select MyReports | get-menu "New/Jasper Report" | click
+}
+with [get-window "New Report Wizard"] {
+    get-button "Next >" | click
+    get-editbox -after [get-label "File name:"] | set-text "BandManagement.jrxml"
+    get-button "Next >" | click
+    get-combo -after [get-label "Data Adapter"] | select "One Empty Record - Empty rows"
+    get-button "Next >" | click
+    get-button Finish | click
+}
+with [get-editor "BandManagement.jrxml" | get-diagram] {
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        mouse-move 419 21 button1 -height 36 -width 596
+        mouse-press 419 21 button1 -height 36 -width 596
+        mouse-release 419 21 button1 524288 -height 36 -width 596
+        mouse-hover 419 21 -height 36 -width 596
+    }
+    key-type Del
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        mouse-hover 419 22 -height 62 -width 596
+        mouse-move 419 22 button1 -height 62 -width 596
+        mouse-press 419 22 button1 -height 62 -width 596
+        mouse-release 419 22 button1 524288 -height 62 -width 596
+        mouse-hover 419 22 -height 62 -width 596
+    }
+    key-type Del
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        mouse-hover 381 49 -height 126 -width 596
+        mouse-move 381 49 button1 -height 126 -width 596
+        mouse-press 381 49 button1 -height 126 -width 596
+        mouse-release 381 49 button1 524288 -height 126 -width 596
+        mouse-hover 381 49 -height 126 -width 596
+        mouse-press 381 49 button3 -height 126 -width 596
+        mouse-release 381 49 button3 2097152 -height 126 -width 596
+    }
+    get-menu Delete | click
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        mouse-move 381 27 button1 -height 46 -width 596
+        mouse-press 381 27 button1 -height 46 -width 596
+        mouse-release 381 27 button1 524288 -height 46 -width 596
+        mouse-hover 381 27 -height 46 -width 596
+    }
+    key-type Del
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        mouse-press 381 27 button1 -height 55 -width 596
+        mouse-release 381 27 button1 524288 -height 55 -width 596
+        mouse-hover 381 27 -height 55 -width 596
+        mouse-press 381 27 button3 -height 55 -width 596
+        mouse-release 381 27 button3 2097152 -height 55 -width 596
+    }
+    get-menu Delete | click
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        mouse-move 359 34 button1 -height 43 -width 596
+        mouse-press 359 34 button1 -height 43 -width 596
+        mouse-release 359 34 button1 524288 -height 43 -width 596
+        mouse-hover 359 34 -height 43 -width 596
+    }
+    key-type Del
+}
+get-button "Save (M1+S)" | click
+with [get-editor "BandManagement.jrxml" | get-diagram] {
+    mouse-hover 224 112 -height 620 -width 1169
+    with [get-edit-part -className ReportPageEditPart | get-edit-part -className BandEditPart -index 1] {
+        with [get-handle BandResizeHandle] {
+            mouse-hover 214 2 -height 3 -width 596
+            mouse-move 214 2 button1 -height 3 -width 596
+            mouse-press 214 2 button1 -height 3 -width 596
+        }
+        mouse-drag 214 0 -mask 524288 -height 1 -width 596
+    }
+    mouse-drag 230 115 -mask 524288 -height 620 -width 1169
+    mouse-drag 242 529 button1 524288 -height 620 -width 1169
+    mouse-release 242 529 button1 524288 -height 620 -width 1169
+    with [get-edit-part -className ReportPageEditPart] {
+        get-edit-part -className BandEditPart -index 1 | get-handle BandResizeHandle | mouse-hover 230 2 -height 3 
+            -width 596
+        get-edit-part -className BandEditPart | mouse-hover 157 368 -height 501 -width 596
+    }
+}
+get-button "Save (M1+S)" | click
+get-editor "BandManagement.jrxml" | get-diagram | get-edit-part -className ReportPageEditPart | get-edit-part 
+    -className BandEditPart | click
+get-view Properties | get-button Appearance | click
+with [get-editor "BandManagement.jrxml" | get-diagram | get-edit-part -className ReportPageEditPart | get-edit-part 
+    -className BandEditPart] {
+    mouse-hover 396 223 -height 501 -width 596
+    mouse-move 396 223 button1 -height 501 -width 596
+    mouse-press 396 223 button1 -height 501 -width 596
+    mouse-release 396 223 button1 524288 -height 501 -width 596
+    mouse-hover 396 223 -height 501 -width 596
+}
+get-view Properties | get-section "Band Properties" | get-editbox -after [get-label Height] | click-text 7
+get-view Properties | get-section "Band Properties" | get-editbox -after [get-label Height] | get-property text 
+    | equals "500 px" | verify-true
+with [get-editor "BandManagement.jrxml" | get-diagram | get-edit-part -className ReportPageEditPart | get-edit-part 
+    -className BandEditPart] {
+    mouse-move 231 282 button1 -height 501 -width 596
+    mouse-press 231 282 button1 -height 501 -width 596
+    mouse-release 231 282 button1 524288 -height 501 -width 596
+    mouse-hover 231 282 -height 501 -width 596
+}
+with [get-view Outline | get-tree] {
+    get-item "Blank A4" | expand
+    select "Blank A4/Page Header"
+    get-item "Blank A4/Page Header" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Page Header" | click
+    select "Blank A4/Page Header" | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/Column Header"
+    get-item "Blank A4/Column Header" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Column Header" | click
+    select "Blank A4/Column Header" | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/Detail "
+    get-item "Blank A4/Detail " | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Detail " | click
+    select "Blank A4/Detail " | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/Column Footer"
+    get-item "Blank A4/Column Footer" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Column Footer" | click
+    select "Blank A4/Column Footer" | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/Page Footer"
+    get-item "Blank A4/Page Footer" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Page Footer" | click
+    select "Blank A4/Page Footer" | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/Last Page Footer"
+    get-item "Blank A4/Last Page Footer" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Last Page Footer" | click
+    select "Blank A4/Last Page Footer" | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/Summary"
+    get-item "Blank A4/Summary" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/Summary" | click
+    select "Blank A4/Summary" | get-menu "Create Band" | click
+    get-item "Blank A4" | expand
+    select "Blank A4/No Data"
+    get-item "Blank A4/No Data" | click
+    get-item "Blank A4" | expand
+    get-item "Blank A4/No Data" | click
+    select "Blank A4/No Data" | get-menu "Create Band" | click
+}
+get-button "Save All (M1+M2+S)" | click
+with [get-editor "BandManagement.jrxml" | get-diagram | get-edit-part -className ReportPageEditPart | get-edit-part 
+    -className BandEditPart -index 1] {
+    mouse-hover 425 29 -height 51 -width 596
+    mouse-move 425 29 button1 -height 51 -width 596
+    mouse-press 425 29 button1 -height 51 -width 596
+    mouse-release 425 29 button1 524288 -height 51 -width 596
+    mouse-hover 425 29 -height 51 -width 596
+}
+get-view Properties | get-section "Band Properties" | get-editbox -after [get-label Height] | get-property text 
+    | equals "50 px" | verify-true
+with [get-editor "BandManagement.jrxml" | get-diagram | get-edit-part -className ReportPageEditPart | get-edit-part 
+    -className BandEditPart -index 2] {
+    mouse-move 329 20 button1 -height 51 -width 596
+    mouse-press 329 20 button1 -height 51 -width 596
+    mouse-release 329 20 button1 524288 -height 51 -width 596
+    mouse-hover 329 19 -height 51 -width 596
+}
+get-view Properties | get-section "Band Properties" | get-editbox -after [get-label Height] | get-property text 
+    | equals "50 px" | verify-true
+with [get-editor "BandManagement.jrxml" | get-diagram] {
+    mouse-move 713 939 button1 -height 1031 -width 847
+    mouse-press 713 939 button1 -height 1031 -width 847
+    mouse-release 713 939 button1 524288 -height 1031 -width 847
+}
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--
