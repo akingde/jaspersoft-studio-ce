@@ -12,15 +12,20 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.json;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -32,6 +37,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -180,7 +187,7 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				textSelectExpression.setEnabled(false);
 				useConnection = true;
-				pchangesuport.firePropertyChange("createdataadapter", false, true);
+				pchangesuport.firePropertyChange("createdataadapter", false, true); //$NON-NLS-1$
 			}
 		});
 
@@ -189,7 +196,7 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 			public void widgetSelected(SelectionEvent e) {
 				textSelectExpression.setEnabled(true);
 				useConnection = false;
-				pchangesuport.firePropertyChange("createdataadapter", false, true);
+				pchangesuport.firePropertyChange("createdataadapter", false, true); //$NON-NLS-1$
 			}
 		});
 
@@ -249,6 +256,44 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 					if (timeZone != null) {
 						textTimeZone.setText(timeZone.getID());
 					}
+				}
+			}
+		});
+	}
+	
+	@Override
+	protected void createFileNameWidgets(Composite parent) {
+		Label lblNewLabel = new Label(parent, SWT.NONE);
+		lblNewLabel.setText(Messages.JsonDataAdapterComposite_FileOrURL);
+
+		textFileName = new Text(parent, SWT.BORDER);
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd.horizontalIndent = 8;
+		textFileName.setLayoutData(gd);
+
+		Button btnBrowse = new Button(parent, SWT.NONE);
+		GridData gd_btnBrowse = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_btnBrowse.widthHint = 100;
+		btnBrowse.setLayoutData(gd_btnBrowse);
+		btnBrowse.setText(Messages.JsonDataAdapterComposite_Browse);
+
+		btnBrowse.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				fd.setFileName(textFileName.getText());
+				fd.setFilterPath(root.getLocation().toOSString());
+				fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$
+				String selection = fd.open();
+				if (selection != null) {
+					IFile contextfile = (IFile) getJrContext().getValue(FileUtils.KEY_FILE);
+
+					IFile[] resource = root.findFilesForLocationURI(new File(selection).toURI());
+					if (contextfile != null && resource != null && resource.length > 0 && contextfile.getProject().equals(resource[0].getProject()))
+						selection = resource[0].getProjectRelativePath().toOSString();
+					textFileName.setText(selection);
 				}
 			}
 		});
@@ -320,11 +365,11 @@ public class JsonDataAdapterComposite extends AFileDataAdapterComposite {
 
 	@Override
 	public String getHelpContextId() {
-		return PREFIX.concat("adapter_json");
+		return PREFIX.concat("adapter_json"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "*.json", "*.*" };
+		return new String[] { "*.json", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

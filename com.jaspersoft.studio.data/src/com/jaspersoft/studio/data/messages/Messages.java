@@ -121,6 +121,8 @@ public class Messages extends NLS {
 	public static String JsonDataAdapterComposite_7;
 	public static String JsonDataAdapterComposite_8;
 	public static String JsonDataAdapterComposite_9;
+	public static String JsonDataAdapterComposite_Browse;
+	public static String JsonDataAdapterComposite_FileOrURL;
 	public static String JsonDataAdapterFactory_description;
 	public static String JsonDataAdapterFactory_label;
 	public static String JsonQueryDesigner_ItemAddNode;
