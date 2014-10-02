@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReports Server Integration
 Bundle-SymbolicName: com.jaspersoft.studio.server;singleton:=true
-Bundle-Version: 5.6.2.final
+Bundle-Version: 6.0.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.server.Activator
 Bundle-Localization: plugin
 Bundle-Vendor: Jaspersoft Corporation
-Require-Bundle: com.jaspersoft.studio;bundle-version="5.6.2";visibility:=reexport,
+Require-Bundle: com.jaspersoft.studio;bundle-version="6.0.0";visibility:=reexport,
  org.eclipse.core.net;bundle-version="1.2.100";visibility:=reexport,
- com.jaspersoft.studio.data;bundle-version="5.6.2",
+ com.jaspersoft.studio.data;bundle-version="6.0.0",
  com.ibm.icu;bundle-version="4.2.1",
  org.apache.commons.httpclient;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
