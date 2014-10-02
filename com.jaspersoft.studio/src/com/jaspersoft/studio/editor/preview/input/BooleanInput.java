@@ -48,10 +48,8 @@ public class BooleanInput extends ADataInput {
 				}
 			};
 			bbuton.addSelectionListener(listener);
-			updateInput();
-			listener.widgetSelected(null);
-
 			setNullable(prm, bbuton);
+			updateInput();
 		}
 	}
 
