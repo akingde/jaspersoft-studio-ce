@@ -19,4 +19,4 @@
 					e.doit = false;
 			}
 		});
-		generatedControls.add(control);
+		generatedControls.add($controlName);

@@ -3,4 +3,4 @@
 		${controlName}.setData(BIND_KEY, "$bindName");
 		${controlName}.setData(TYPE_KEY, "int");
 		${controlName}.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		generatedControls.add(control);
+		generatedControls.add($controlName);
