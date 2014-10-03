@@ -132,6 +132,7 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 	}
 	
 	public List<String> getValues(){
+		if (jarPaths == null) jarPaths = new ArrayList<String>();
 		return jarPaths;
 	}
 
