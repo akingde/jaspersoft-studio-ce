@@ -252,6 +252,13 @@ public class PermissionPage extends WizardPage {
 			public void mouseDoubleClick(MouseEvent e) {
 			}
 		});
+		cperm.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				updatePermission(perm, cperm);
+			}
+		});
 	}
 
 	protected String getUserName(RepositoryPermission perm) {
@@ -269,11 +276,10 @@ public class PermissionPage extends WizardPage {
 					monitor.beginTask(Messages.PermissionPage_15, IProgressMonitor.UNKNOWN);
 					try {
 						perms = res.getWsClient().setPermissions(res.getValue(), perms, options, monitor);
-
-						showPermissions(perms);
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					}
+					showPermissions(perms);
 				}
 
 			});
