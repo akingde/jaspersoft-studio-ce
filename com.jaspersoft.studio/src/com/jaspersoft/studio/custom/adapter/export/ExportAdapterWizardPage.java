@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.wizards.dataadapter.export;
+package com.jaspersoft.studio.custom.adapter.export;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;

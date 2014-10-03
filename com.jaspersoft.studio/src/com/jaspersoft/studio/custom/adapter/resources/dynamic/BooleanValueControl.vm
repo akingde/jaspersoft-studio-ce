@@ -1,0 +1,5 @@
+		new Label(this, SWT.NONE).setText("$controlLabel");
+		Button $controlName = new Button(this, SWT.CHECK);
+		${controlName}.setData(BIND_KEY, "$bindName");
+		${controlName}.setData(TYPE_KEY, "boolean");
+		generatedControls.add($controlName);

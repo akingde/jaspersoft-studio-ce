@@ -61,6 +61,8 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    net.sf.jasperreports.engine.util,
    net.sf.jasperreports.engine",
  com.jaspersoft.studio.compatibility.dialog;uses:="org.eclipse.core.resources,org.eclipse.swt.widgets,org.eclipse.jface.dialogs",
+ com.jaspersoft.studio.custom.adapter,
+ com.jaspersoft.studio.custom.adapter.controls,
  com.jaspersoft.studio.data;
   uses:="net.sf.jasperreports.data,
    org.eclipse.jface.wizard,

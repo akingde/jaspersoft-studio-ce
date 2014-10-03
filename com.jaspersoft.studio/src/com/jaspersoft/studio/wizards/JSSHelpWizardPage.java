@@ -30,10 +30,10 @@ import org.eclipse.ui.PlatformUI;
 public abstract class JSSHelpWizardPage extends WizardPage implements ContextData {
 
 	private String contextName;
-	
+
 	protected JSSHelpWizardPage(String pageName) {
 		super(pageName);
-		 contextName = getContextName();
+		contextName = getContextName();
 	}
 	
 

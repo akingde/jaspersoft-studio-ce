@@ -1401,7 +1401,7 @@
       </wizard>
    <wizard
          category="com.jaspersoft.studio"
-         class="com.jaspersoft.studio.wizards.dataadapter.NewDataAdapterWizard"
+         class="com.jaspersoft.studio.custom.adapter.wizard.NewDataAdapterWizard"
          finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
          icon="icons/resources/newPluginAdapter.png"
          id="com.jaspersoft.studio.wizards.NewDataAdapterWizard"
@@ -1674,7 +1674,7 @@
         commandId="com.jaspersoft.studio.translation.CreateTranslationFragmentCommand">
   </handler>
   <handler
-        class="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand"
+        class="com.jaspersoft.studio.custom.adapter.CreateAdapterJarCommand"
         commandId="com.jaspersoft.studio.wizards.dataadapter.CreateAdapterJarCommand">
   </handler>
   <handler
@@ -1947,7 +1947,7 @@
              type="java.lang.Object">
        </propertyTester>
        <propertyTester
-             class="com.jaspersoft.studio.wizards.dataadapter.NaturePluginTester"
+             class="com.jaspersoft.studio.custom.adapter.NaturePluginTester"
              id="testNaturePlugin"
              namespace="com.jaspersoft.studio.wizards.dataadapter"
              properties="checkNature"
