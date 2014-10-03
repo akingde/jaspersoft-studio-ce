@@ -296,41 +296,39 @@ public class PluginHelper {
 			if (c instanceof IFolder) {
 				try {
 					((IFolder) c).create(false, true, new NullProgressMonitor());
-				}
-				catch (final CoreException e) {
+				} catch (final CoreException e) {
 					JaspersoftStudioPlugin.getInstance().logError(e);
 				}
 			}
-
 		}
-
 	}
-	
+
+	/**
+	 * Search inside a jar all the classes and interfaces that can compose the definition of a data adapter
+	 * and return everything found inside a container
+	 * 
+	 * @param jarFile the jar file of a data adapter
+	 * @return a not null container with inside all the information on the classes of the data adapter found inside the jar
+	 * @throws ClassNotFoundException
+	 * @throws ZipException
+	 * @throws IOException
+	 */
 	public static LoadedClassesContainer loadAndScanJar(File jarFile) throws ClassNotFoundException, ZipException, IOException {
 		URLClassLoader loader = URLClassLoader.newInstance(new URL[] { jarFile.toURI().toURL()}, PluginHelper.class.getClassLoader());
-
 		LoadedClassesContainer classes = new LoadedClassesContainer();
-		
-		// Your jar file
 		JarFile jar = new JarFile(jarFile);
-		// Getting the files into the jar
 		Enumeration<? extends JarEntry> enumeration = jar.entries();
-
 		// Iterates into the files in the jar file
 		while (enumeration.hasMoreElements()) {
 			ZipEntry zipEntry = enumeration.nextElement();
-
 			// Is this a class?
 			if (zipEntry.getName().endsWith(".class")) {
-
 				// Relative path of file into the jar.
 				String className = zipEntry.getName();
-
 				// Complete class name
 				className = className.replace(".class", "").replace("/", ".");
 				// Load class definition from JVM
 				Class<?> clazz = loader.loadClass(className);
-
 				try {
 					classes.addClass(clazz);
 				} catch (ClassCastException e) {
