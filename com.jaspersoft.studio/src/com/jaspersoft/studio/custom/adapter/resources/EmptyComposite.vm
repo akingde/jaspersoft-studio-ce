@@ -18,12 +18,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 /**
- * Inside this class are defined the controls shown when the 
- * adapter is created on edited from Jaspersoft Studio. 
- * This controls can be used the configure the data adapter.
- * With the example data adapter it provide the controls to define
- * the number of record, the number of value for each record, and
- * the range between every value is generated
+ * An empty composite that can be personalized to edit the data adapter configuration
  * 
  * @author Orlandin Marco
  *
