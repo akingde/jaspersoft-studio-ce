@@ -274,7 +274,7 @@ public class DynamicCompositeHelper {
 					dbf.setIgnoringComments(true);
 					dbf.setNamespaceAware(false);
 					DocumentBuilder builder = dbf.newDocumentBuilder();
-					//Set the builder to pare the file without using a schema
+					// Set the builder to pare the file without using a schema
 					builder.setEntityResolver(new EntityResolver() {
 						@Override
 						public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {

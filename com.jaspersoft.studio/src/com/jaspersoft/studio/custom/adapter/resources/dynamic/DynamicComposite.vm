@@ -136,6 +136,8 @@ $controlCreationCode
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		final DataAdapter adapter = (DataAdapter)dataAdapter;
+		
+		//Listeners used to detect the change of the value of a control
 		ModifyListener modifyListener = new ModifyListener() {	
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -148,6 +150,9 @@ $controlCreationCode
 				updateAdapterSettings(adapter);
 			}
 		};
+		
+		//Set the initial value on every control reading it from the data adapter
+		//and add the listener to detect the changes done by the user
 		for(Control control : generatedControls){
 			String methodName = (String)control.getData(BIND_KEY);
 			String type = (String)control.getData(TYPE_KEY);

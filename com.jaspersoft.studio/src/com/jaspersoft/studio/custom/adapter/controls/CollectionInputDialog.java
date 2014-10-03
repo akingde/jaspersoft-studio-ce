@@ -32,17 +32,41 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 
+/**
+ * Dialog to edit, add or remove values from a list control
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class CollectionInputDialog extends Dialog{
 	
+	/**
+	 * The viewer of a table with one column where the content of the list
+	 * is shown
+	 */
 	private TableViewer tableViewer;
 	
+	/**
+	 * Represent the type of the value inside the list, valid value are int,float,string,boolean
+	 */
 	private String type;
 	
+	/**
+	 * The current values inside the list
+	 */
 	private List<Object> values;
 	
+	/**
+	 * Create the dialog
+	 * 
+	 * @param parentShell the parent shell
+	 * @param values the values inside the list, it can be null if the list is empty
+	 * @param elementType the type of the value inside the list, valid value are int,float,string,boolean
+	 */
 	public CollectionInputDialog(Shell parentShell, List<Object> values, String elementType) {
 		super(parentShell);
 		this.type = elementType;
@@ -59,9 +83,14 @@ public class CollectionInputDialog extends Dialog{
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		shell.setText("Edit Collection Values");
+		shell.setText(Messages.CollectionInputDialog_dialogTitle);
 	}
 
+	/**
+	 * Create the table and the button to add, edit, or delete
+	 * the content of the list values.
+	 * 
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -73,7 +102,8 @@ public class CollectionInputDialog extends Dialog{
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(parent.getBackground());
-
+		
+		//Create the add button
 		final Button bnew = new Button(bGroup, SWT.PUSH);
 		bnew.addSelectionListener(new SelectionAdapter() {
 			
@@ -85,9 +115,10 @@ public class CollectionInputDialog extends Dialog{
 				}
 			}
 		});
-		bnew.setText("Add");
+		bnew.setText(Messages.common_add);
 		bnew.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		
+		//Create the edit button
 		final Button editButton = new Button(bGroup, SWT.PUSH);
 		editButton.addSelectionListener(new SelectionAdapter() {
 			
@@ -102,10 +133,11 @@ public class CollectionInputDialog extends Dialog{
 				}
 			}
 		});
-		editButton.setText("Edit");
+		editButton.setText(Messages.common_edit);
 		editButton.setEnabled(false);
 		editButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		
+		//Create the delete button
 		final Button deleteButton = new Button(bGroup, SWT.PUSH);
 		deleteButton.addSelectionListener(new SelectionAdapter() {
 			
@@ -117,10 +149,10 @@ public class CollectionInputDialog extends Dialog{
 				}
 			}
 		});
-		deleteButton.setText("Delete");
+		deleteButton.setText(Messages.common_delete);
 		deleteButton.setEnabled(false);
 		deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		
+		//Add a listener to the list to enable edit and delete only when an element is selected
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -133,6 +165,11 @@ public class CollectionInputDialog extends Dialog{
 		return composite;
 	}
 
+	/**
+	 * Create the table control
+	 * 
+	 * @param composite composite where the table is placed
+	 */
 	private void buildTable(Composite composite) {
 		Table table = new Table(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -166,6 +203,11 @@ public class CollectionInputDialog extends Dialog{
 		viewer.setContentProvider(new ListContentProvider());
 	}
 	
+	/**
+	 * Return the values actually defined
+	 * 
+	 * @return a not null list of the value actually defined
+	 */
 	public List<Object> getValues(){
 		return values;
 	}

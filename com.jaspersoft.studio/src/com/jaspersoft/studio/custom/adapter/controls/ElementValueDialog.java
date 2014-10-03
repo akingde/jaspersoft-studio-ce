@@ -25,14 +25,35 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
+
+/**
+ * Dialog used to edit or add a value to a list of value
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class ElementValueDialog extends Dialog {
 
+	/**
+	 * Type of the value, the controls created inside the dialog depends on the type.
+	 * Valid types are int, float, string and boolean
+	 */
 	private String type;
 	
+	/**
+	 * The old value if the dialog is used to edit
+	 */
 	private String previousValue;
 	
+	/**
+	 * The new value
+	 */
 	private String newValue;
 	
+	/**
+	 * The control created to add or edit the value
+	 */
 	private Control createdControl;
 	
 	public ElementValueDialog(Shell parentShell, String previousValue, String type) {
@@ -47,35 +68,34 @@ public class ElementValueDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		if (previousValue != null) shell.setText("Edit the old value");
-		else shell.setText("Insert the new value");
+		if (previousValue != null) shell.setText(Messages.ElementValueDialog_editText);
+		else shell.setText(Messages.ElementValueDialog_newText);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-
-		if (type.equals("int")){
+		//Check the type and create the appropriate control
+		if (type.equals("int")){ //$NON-NLS-1$
 			Spinner control = new Spinner(composite, SWT.BORDER);
 			control.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			createdControl = control;
 			if (previousValue != null) control.setSelection(Integer.parseInt(previousValue));
-		} else if (type.equals("boolean")){
+		} else if (type.equals("boolean")){ //$NON-NLS-1$
 			Combo control = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
-			control.setItems(new String[]{"true","false"});
+			control.setItems(new String[]{"true","false"}); //$NON-NLS-1$ //$NON-NLS-2$
 			createdControl = control;
 			if (previousValue != null) control.select(Boolean.parseBoolean(previousValue) ? 0 : 1);
-		} else if (type.equals("float")){
+		} else if (type.equals("float")){ //$NON-NLS-1$
 			Text control = new Text(composite, SWT.BORDER);
 			control.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			createdControl = control;
+			//Listener to validate the value as float
 			control.addVerifyListener(new VerifyListener() {
 				@Override
 				public void verifyText(VerifyEvent e) {
 					Text text = (Text) e.getSource();
-					// get old text and create new text by using the
-					// VerifyEvent.text
 					final String oldS = text.getText();
 					String newS = oldS.substring(0, e.start) + e.text + oldS.substring(e.end);
 					boolean isFloat = true;
@@ -89,7 +109,7 @@ public class ElementValueDialog extends Dialog {
 				}
 			});
 			if (previousValue != null) control.setText(previousValue);
-		} else if (type.equals("string")){
+		} else if (type.equals("string")){ //$NON-NLS-1$
 			Text control = new Text(composite, SWT.BORDER);
 			control.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			createdControl = control;
@@ -97,20 +117,29 @@ public class ElementValueDialog extends Dialog {
 		}
 		return composite;
 	}
-
+	
+	/**
+	 * When the ok button is pressed the value inserted by the user is 
+	 * converted into a string and stored
+	 */
 	@Override
 	protected void okPressed() {
-		if (type.equals("float") || type.equals("string")){
+		if (type.equals("float") || type.equals("string")){ //$NON-NLS-1$ //$NON-NLS-2$
 			newValue = ((Text)createdControl).getText();
-		} else if (type.equals("int")){
+		} else if (type.equals("int")){ //$NON-NLS-1$
 			newValue = String.valueOf(((Spinner)createdControl).getSelection());
-		} else if (type.equals("boolean")){
+		} else if (type.equals("boolean")){ //$NON-NLS-1$
 			Combo combo = (Combo)createdControl;
 			newValue = Boolean.toString(combo.getSelectionIndex() == 0);
 		}
 		super.okPressed();
 	}
 	
+	/**
+	 * Return the stored value
+	 * 
+	 * @return the stored value, could be null
+	 */
 	public String getReturnValue(){
 		return newValue;
 	}

@@ -52,20 +52,22 @@ import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 /**
- * Inside this class are defined the controls shown when the 
- * adapter is created on edited from Jaspersoft Studio. 
- * This controls can be used the configure the data adapter.
- * With the example data adapter it provide the controls to define
- * the number of record, the number of value for each record, and
- * the range between every value is generated
+ * A dynamic configuration composite that create the control to edit a data adapter
+ * from the castor mapping file of the data adapter itself
  * 
  * @author Orlandin Marco
  *
  */
 public abstract class DynamicControlComposite extends ADataAdapterComposite {
 
+	/**
+	 * Key value for the type of a field
+	 */
 	protected static final String TYPE_KEY = "type";
 	
+	/**
+	 * Key value for the name of a field
+	 */
 	protected static final String BIND_KEY = "bind";
 	
 	/**
@@ -73,6 +75,9 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 	 */
 	protected DataAdapterDescriptor dataAdapterDescriptor;
 	
+	/**
+	 * The list of controls generated to edit the data adapter
+	 */
 	protected List<Control> generatedControls = new ArrayList<Control>();
 
 	/**
@@ -87,6 +92,11 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 		setLayout(new GridLayout(2, false));
 	}
 	
+	/**
+	 * Return the castor mapping file definition of the data adapter 
+	 * 
+	 * @return the castor mapping path in the workspace of the data adapter or null if it can't be found
+	 */
 	protected String getXmlDefinitionLocation(){
 		 Properties props = new Properties();
 		 try {
@@ -102,6 +112,14 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 		return null;
 	}
 	
+	/**
+	 * Create a control inside the composite. The type of control change to reflect the type
+	 * 
+	 * @param type the type of control to create. Supported control are int, boolean, float and string
+	 * @param bindName the name of the field binded to the control
+	 * @param label the label of the control
+	 * @return the text to place in the template to generate the control
+	 */
 	protected void createDynamicControl(String type, String bindName, String label){
 		if (type.equals("int")){
 			Label lbl = new Label(this, SWT.NONE);
@@ -154,6 +172,29 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 		}
 	}
 	
+	/**
+	 * Generate the control to handle a list of vales
+	 * 
+	 * @param type the type of the values
+	 * @param bindName the name of the collection field binded to this list
+	 * @param label label of the list control
+	 */
+	protected void createDynamicArray(String type, String bindName, String label){
+		new Label(this, SWT.NONE).setText(label);
+		PropertyListControl listControl = new PropertyListControl(this, type);
+		listControl.setData(BIND_KEY, bindName);
+		listControl.setData(TYPE_KEY, "collection");
+		listControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		generatedControls.add(listControl);
+	}
+	
+	/**
+	 * Given a field node of the castor mapping file it return
+	 * the first bind-xml node
+	 * 
+	 * @param parent the field node of the castor mapping 
+	 * @return the first children bind-xml node
+	 */
 	private Node getBindNode(Node parent){
 		NodeList children = parent.getChildNodes();
 		for (int i = 0; i < children.getLength(); ++i) {
@@ -163,6 +204,12 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 		return null;
 	}
 	
+	/**
+	 * Read the content of a castor mapping file and create an appropriate
+	 * control for every field inside the node list
+	 * 
+	 * @param fieldNodes list of the children of the root node of the castor mapping file
+	 */
 	protected void createDynamicControls(NodeList fieldNodes){
 		for (int i = 0; i < fieldNodes.getLength(); ++i) {
 			Node fieldNode = fieldNodes.item(i);
@@ -171,41 +218,52 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 				//name and class are handled by default
 				if (!nameAttribute.equals("class") && !nameAttribute.equals("name")){
 					String type = fieldNode.getAttributes().getNamedItem("type").getNodeValue();
+					Node collectionNode = fieldNode.getAttributes().getNamedItem("collection");
+					boolean isArray = collectionNode != null && collectionNode.getNodeValue().toLowerCase().equals("arraylist");
 					Node bindNode = getBindNode(fieldNode);
 					if (bindNode != null){
 						String name = fieldNode.getAttributes().getNamedItem("name").getNodeValue();
 						String bindName = bindNode.getAttributes().getNamedItem("name").getNodeValue();
-						createDynamicControl(type, bindName, name);
+						if (isArray){
+							createDynamicArray(type,bindName,name);
+						} else {
+							createDynamicControl(type, bindName,name);
+						}
 					}
 				}
 			}
 		}
 	}
 	
-	protected void createDynamicControls(){
+	/**
+	 * Search a castor mapping file inside the data adapter jar and if it is found create the controls
+	 * to edit it
+
+	 */
+	protected void createDynamicControls() {
 		String xmlDefinition = getXmlDefinitionLocation();
-		if (xmlDefinition != null){
+		if (xmlDefinition != null) {
 			DataAdapter adapter = dataAdapterDescriptor.getDataAdapter();
-			InputStream is = dataAdapterDescriptor.getClass().getResourceAsStream("/"+xmlDefinition);
+			InputStream is = dataAdapterDescriptor.getClass().getResourceAsStream("/" + xmlDefinition);
 			if (null != is) {
-				try{
-				    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				try {
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 					dbf.setValidating(false);
 					dbf.setIgnoringComments(true);
 					dbf.setNamespaceAware(false);
 					DocumentBuilder builder = dbf.newDocumentBuilder();
 					builder.setEntityResolver(new EntityResolver() {
-						 @Override
-						 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-						  if (systemId.contains("http://castor.org/mapping.dtd")) {
-						   return new InputSource(new StringReader(""));
-						  } else {
-						   return null;
-						  }
-						 }
-						});
-					
-				  Document document = builder.parse(is);
+						@Override
+						public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+							if (systemId.contains("http://castor.org/mapping.dtd")) {
+								return new InputSource(new StringReader(""));
+							} else {
+								return null;
+							}
+						}
+					});
+
+					Document document = builder.parse(is);
 					Node mapNode = document.getDocumentElement();
 					if (mapNode.getNodeName().equals("mapping")) {
 						NodeList adapterNodes = mapNode.getChildNodes();
@@ -221,7 +279,7 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 							}
 						}
 					}
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					try {
 						is.close();
 					} catch (IOException e) {
@@ -230,10 +288,10 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 					ex.printStackTrace();
 				}
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * Create the controls
 	 */
@@ -243,11 +301,9 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 			control.dispose();
 		}
 		generatedControls.clear();
-		
 		createDynamicControls();
 	}
 	
-
 	/**
 	 * Set the data adapter descriptor from outside and bind the created controls to it
 	 */
@@ -260,7 +316,7 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 	}
 	
 	/**
-	 * Given the data adapter uses it to initialize the values of the spinner to
+	 * Given the data adapter uses it to initialize the values of the controls to
 	 * reflect the current configuration
 	 *  
 	 * @param dataAdapter the not null data adapter
@@ -291,13 +347,15 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 
 	/**
 	 * Bind the data adapter to the widgets to have that every change on the
-	 * spinner widgets is reflected on the data adapter
+	 * controls widgets reflected on the data adapter
 	 * 
 	 * @param dataAdapter the data adapter
 	 */
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
 		final DataAdapter adapter = (DataAdapter)dataAdapter;
+		
+		//Listeners used to detect the change of the value of a control
 		ModifyListener valueChangedListener = new ModifyListener() {	
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -311,6 +369,8 @@ public abstract class DynamicControlComposite extends ADataAdapterComposite {
 			}
 		};
 		
+		//Set the initial value on every control reading it from the data adapter
+		//and add the listener to detect the changes done by the user
 		for(Control control : generatedControls){
 			String methodName = (String)control.getData(BIND_KEY);
 			String type = (String)control.getData(TYPE_KEY);

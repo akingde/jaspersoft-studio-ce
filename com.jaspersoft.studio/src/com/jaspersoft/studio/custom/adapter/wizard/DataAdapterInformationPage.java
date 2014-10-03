@@ -74,10 +74,19 @@ public class DataAdapterInformationPage extends WizardPage {
 	 */
 	private Button openImage;
 	
+	/**
+	 * Radio button to use the DummyDataAdapter
+	 */
 	private Button dummyAdapterButton;
 	
+	/**
+	 * Radio button to use a custom data adapter jar specified by the user
+	 */
 	private Button customJarAdapterButton;
 	
+	/**
+	 * Flag to store if the user want to use a custom data adapter jar or the dummy data adapter
+	 */
 	private boolean usingCustomJar = false;
 	
 	/**
@@ -198,31 +207,25 @@ public class DataAdapterInformationPage extends WizardPage {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent,ContextHelpIDs.WIZARD_NEW_FUNCTIONS_LIBRARY);
 	}
 	
+	/**
+	 * Return if the user want to use the dummy data adapter 
+	 * or a custom one
+	 * 
+	 * @return true if the user want to use a custom jar, false otherwise
+	 */
 	public boolean isUsingCustomJar(){
 		return usingCustomJar;
 	}
 
-	
-	private void createSampleControls(Composite parent, int cols){
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols,1));
-		container.setLayout(new GridLayout(1,false));
-		SelectionAdapter selectionChanged = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				getWizard().getContainer().updateButtons();
-				usingCustomJar = customJarAdapterButton.getSelection();
-			}
-		};
-		dummyAdapterButton = new Button(container, SWT.RADIO);
-		dummyAdapterButton.setText("Use a dummy data adapter as sample");
-		dummyAdapterButton.addSelectionListener(selectionChanged);
-		customJarAdapterButton = new Button(container, SWT.RADIO);
-		customJarAdapterButton.setText("Provide a custom JAR as data adapter");
-		customJarAdapterButton.addSelectionListener(selectionChanged);
-		dummyAdapterButton.setSelection(true);
+	/**
+	 * Can filp to the next page only if the user has selected to use the 
+	 * custom data adapter. Otherwise no additional informations are required
+	 * and the wizard can finish
+	 */
+	@Override
+	public boolean canFlipToNextPage() {
+		return isPageComplete() && customJarAdapterButton.getSelection();
 	}
-	
 	
 	// UI related methods
 	
@@ -240,6 +243,33 @@ public class DataAdapterInformationPage extends WizardPage {
 		dataAdapterName = new Text(parent, SWT.BORDER);
 		dataAdapterName.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols-1,1));
 		dataAdapterName.addModifyListener(fieldModified);
+	}
+	
+	/**
+	 * Create the radio controls to allow the user to specify if he want to use as 
+	 * data adapter the DummyDataAdapter or a custom one 
+	 * 
+	 * @param parent the parent, must have a grid layout
+	 * @param cols the number of columns that the radio button should take
+	 */
+	private void createSampleControls(Composite parent, int cols){
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,cols,1));
+		container.setLayout(new GridLayout(1,false));
+		SelectionAdapter selectionChanged = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getWizard().getContainer().updateButtons();
+				usingCustomJar = customJarAdapterButton.getSelection();
+			}
+		};
+		dummyAdapterButton = new Button(container, SWT.RADIO);
+		dummyAdapterButton.setText(Messages.DataAdapterInformationPage_dummyDataAdapterOption);
+		dummyAdapterButton.addSelectionListener(selectionChanged);
+		customJarAdapterButton = new Button(container, SWT.RADIO);
+		customJarAdapterButton.setText(Messages.DataAdapterInformationPage_customDataAdapterOption);
+		customJarAdapterButton.addSelectionListener(selectionChanged);
+		dummyAdapterButton.setSelection(true);
 	}
 	
 	/**
@@ -288,11 +318,6 @@ public class DataAdapterInformationPage extends WizardPage {
 		packageText = new Text(parent, SWT.BORDER);
 		packageText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,nColumns-1,1));
 		packageText.addModifyListener(fieldModified);
-	}
-	
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete() && customJarAdapterButton.getSelection();
 	}
 	
 	/**

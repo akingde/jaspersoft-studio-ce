@@ -35,31 +35,47 @@ import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 
+/**
+ * Wizard step to provide additional jars to the plugin project
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class AdditionalJarsPage extends JSSHelpWizardPage {
 
+	/**
+	 * Viewer of the table where the added jars are shown
+	 */
 	private TableViewer tableViewer;
 	
+	/**
+	 * List of the paths to the added jar
+	 */
 	private List<String> jarPaths;
 	
 	public AdditionalJarsPage() {
-		super("additionaljarpage");
-		setTitle("Provide Additiona JARs");
-		setDescription("Optionaly you can select any number of additional JARs that will be included in your new project");
+		super("additionaljarpage"); //$NON-NLS-1$
+		setTitle(Messages.AdditionalJarsPage_wizardTitle);
+		setDescription(Messages.AdditionalJarsPage_wizardDescription);
 		jarPaths = new ArrayList<String>();
 	}
 
+	/**
+	 * Create a table with one column where the path of all the added jars are
+	 * shown. Create also two buttons to add or delete existing jars from the list
+	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
 		buildTable(composite);
-
+		
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(parent.getBackground());
-
+		//create the button to add a new jar
 		final Button bnew = new Button(bGroup, SWT.PUSH);
 		bnew.addSelectionListener(new SelectionAdapter() {
 
@@ -75,10 +91,9 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 				}
 			}
 		});
-		bnew.setText("Add");
+		bnew.setText(Messages.common_add);
 		bnew.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-
-		
+		//create the button to delete a jar
 		final Button deleteButton = new Button(bGroup, SWT.PUSH);
 		deleteButton.addSelectionListener(new SelectionAdapter() {
 			
@@ -90,10 +105,10 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 				}
 			}
 		});
-		deleteButton.setText("Delete");
+		deleteButton.setText(Messages.common_delete);
 		deleteButton.setEnabled(false);
 		deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-		
+		//listener to enable the delete button only where there is something selected inside the table
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -109,7 +124,12 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 	protected String getContextName() {
 		return null;
 	}
-	
+
+	/**
+	 * Create the table control
+	 * 
+	 * @param composite composite where the table is placed
+	 */
 	private void buildTable(Composite composite) {
 		Table table = new Table(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -143,6 +163,11 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 		viewer.setContentProvider(new ListContentProvider());
 	}
 	
+	/**
+	 * Return a not null list  of the path of the jars to add to the project
+ 	 * 
+	 * @return a not null list of jars absolute path in the filesystem
+	 */
 	public List<String> getValues(){
 		if (jarPaths == null) jarPaths = new ArrayList<String>();
 		return jarPaths;

@@ -132,6 +132,11 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 	private static final String DATA_ADAPTER_SERVICE_TYPE = "DummyDataAdapterService";
 	
 	/**
+	 * Type of the dummy data adapter service factory
+	 */
+	private static final String DATA_ADAPTER_SERVICE_FACTORY_TYPE = "DummyDataAdapterServiceFactory";
+	
+	/**
 	 * Package to add to the templates to use the dummy data adapter
 	 */
 	private static final String DATA_ADAPTER_PACKAGE = "com.jaspersoft.adapter.*";
@@ -141,8 +146,14 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 	 */
 	private DataAdapterInformationPage page1;
 	
+	/**
+	 * Page to specify a custom data adapter jar
+	 */
 	private CustomJarInformationPage page2;
 	
+	/**
+	 * Page to specify any number of jars to add to the project
+	 */
 	private AdditionalJarsPage page3;
 
 	/**
@@ -172,7 +183,13 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 		addPage(page3);
 	}
 	
-	
+	/**
+	 * Given a list package names generate an equal number of
+	 * import strings to import everything inside that packages
+	 * 
+	 * @param packagesName a not null list of package
+	 * @return the code to import the content of the packages
+	 */
 	private String getImportStrings(List<String> packagesName){
 		HashSet<String> generatedPackages = new HashSet<String>();
 		String result = "";
@@ -187,7 +204,6 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 			}
 		}
 		return result;
-
 	}
 	
 	/**
@@ -488,11 +504,16 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 		return src;
 	}
 	
+	/**
+	 * Set inside the adapter info the information of the dummy data adapter
+	 * 
+	 * @param info an adapter info
+	 */
 	private void setDummyAdapterData(AdapterInfo info){
 		info.setDataAdapterInterface(new Pair(DATA_ADAPTER_PACKAGE, DATA_ADAPTER_TYPE));
 		info.setDataAdapterImplementation(new Pair(DATA_ADAPTER_PACKAGE, DATA_ADAPTER_IMPL_TYPE));
 		info.setDataAdapterService(new Pair(DATA_ADAPTER_PACKAGE, DATA_ADAPTER_SERVICE_TYPE));
-		info.setDataAdapterServiceFactory(new Pair(DATA_ADAPTER_PACKAGE, "DummyDataAdapterServiceFactory"));
+		info.setDataAdapterServiceFactory(new Pair(DATA_ADAPTER_PACKAGE, DATA_ADAPTER_SERVICE_FACTORY_TYPE));
 	}
 	
 	@Override
@@ -542,7 +563,12 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 		monitor.done();
 		return true;
 	}
-
+	
+	/**
+	 * Can finish only if page1 is complete and, if the 
+	 * user is using a custom jar as data adapter, when 
+	 * all the informations about the data adapter are provided
+	 */
 	@Override
 	public boolean canFinish() {
 		if (page1.isUsingCustomJar()){

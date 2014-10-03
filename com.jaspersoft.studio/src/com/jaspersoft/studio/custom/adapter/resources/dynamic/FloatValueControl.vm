@@ -3,6 +3,7 @@
 		${controlName}.setData(BIND_KEY, "$bindName");
 		${controlName}.setData(TYPE_KEY, "float");
 		${controlName}.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//The verify listener avoid to insert in the text are invalid characters for a float number
 		${controlName}.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {

@@ -168,6 +168,8 @@ public class Messages extends NLS {
 	public static String ADataInput_settonull_explain;
 	public static String ADatasetObjectDeleteCommand_confirmationquestion;
 	public static String ADatasetObjectDeleteCommand_confirmationtitle;
+	public static String AdditionalJarsPage_wizardDescription;
+	public static String AdditionalJarsPage_wizardTitle;
 	public static String AExportAction_exportreport;
 	public static String Align2BorderAction_align_to_bottom;
 	public static String Align2BorderAction_align_to_bottom_tool_tip;
@@ -246,6 +248,7 @@ public class Messages extends NLS {
 	public static String ClasspathComponent_1;
 	public static String ClassTypeCellEditor_dialog_message;
 	public static String ClassTypeCellEditor_open_type;
+	public static String CollectionInputDialog_dialogTitle;
 	public static String ColorDialog_advancedColorsLabel;
 	public static String ColorDialog_lastUserdColorLabel;
 	public static String ColorDialog_newColorLabel;
@@ -354,6 +357,14 @@ public class Messages extends NLS {
 	public static String CurrencyPattern_description;
 	public static String CustomDeleteAction_messageListEnd;
 	public static String CustomDeleteAction_messageListStart;
+	public static String CustomJarInformationPage_automaticComposite;
+	public static String CustomJarInformationPage_description;
+	public static String CustomJarInformationPage_implementationLabel;
+	public static String CustomJarInformationPage_interfaceLabel;
+	public static String CustomJarInformationPage_pathLabel;
+	public static String CustomJarInformationPage_serviceFactoryLabel;
+	public static String CustomJarInformationPage_serviceLabel;
+	public static String CustomJarInformationPage_title;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;
 	public static String DataAdapterAction_0;
@@ -372,7 +383,9 @@ public class Messages extends NLS {
 	public static String DataAdapterInformationPage_adapterDescriptionTooltip;
 	public static String DataAdapterInformationPage_adapterNameLabel;
 	public static String DataAdapterInformationPage_adapterNameTooltip;
+	public static String DataAdapterInformationPage_customDataAdapterOption;
 	public static String DataAdapterInformationPage_description;
+	public static String DataAdapterInformationPage_dummyDataAdapterOption;
 	public static String DataAdapterInformationPage_errorEmpty;
 	public static String DataAdapterInformationPage_errorEmpty2;
 	public static String DataAdapterInformationPage_errorInvalidChar;
@@ -507,6 +520,8 @@ public class Messages extends NLS {
 	public static String EditDataAdapterAction_editTooltip;
 	public static String ElementLabelProvider_items_selected;
 	public static String ElementLabelProvider_no_items_selected;
+	public static String ElementValueDialog_editText;
+	public static String ElementValueDialog_newText;
 	public static String ElementWithValueExpressionDialog_AssertCustomNameLblNotNull;
 	public static String ElementWithValueExpressionDialog_AssertCustomTitleNotNull;
 	public static String ElementWithValueExpressionDialog_AssertCustomValueExprLblNotNull;
