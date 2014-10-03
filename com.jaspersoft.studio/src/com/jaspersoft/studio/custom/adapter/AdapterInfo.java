@@ -113,12 +113,24 @@ public class AdapterInfo {
 	 */
 	private String pluginId;
 	
+	/**
+	 * The namespace and class name of the data adapter interface that will be included inside the plugin
+	 */
 	private Pair dataAdapterInterface;
 	
+	/**
+	 * The namespace and class name of the data adapter implementation that will be included inside the plugin
+	 */
 	private Pair dataAdapterImplementation;
 	
+	/**
+	 * The namespace and class name of the data adapter service that will be included inside the plugin
+	 */
 	private Pair dataAdapterService;
 	
+	/**
+	 * The namespace and class name of the data adapter service factory that will be included inside the plugin
+	 */
 	private Pair dataAdapterServiceFactory;
 	
 	/**

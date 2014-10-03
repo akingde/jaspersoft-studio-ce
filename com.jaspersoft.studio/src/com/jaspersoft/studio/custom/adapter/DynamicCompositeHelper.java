@@ -36,6 +36,13 @@ import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.utils.VelocityUtils;
 
+/**
+ * Utility class with the method to create a panel for the configuration of a data adapter
+ * using the castor serialization file of the data adapter itself
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class DynamicCompositeHelper {
 
 	/**
@@ -43,20 +50,44 @@ public class DynamicCompositeHelper {
 	 */
 	private static final String TEMPLATES_LOCATION_PREFIX = "com/jaspersoft/studio/custom/adapter/resources/dynamic/";
 	
+	/**
+	 * Template for a text value control
+	 */
 	private static final String TEXT_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "TextValueControl.vm";
 	
+	/**
+	 * Template for a boolean value control
+	 */
 	private static final String BOOLEAN_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "BooleanValueControl.vm";
 	
+	/**
+	 * Template for a float value control
+	 */
 	private static final String FLOAT_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "FloatValueControl.vm";
 	
+	/**
+	 * Template for a integer value control
+	 */
 	private static final String INTEGER_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "IntegerValueControl.vm";
 	
+	/**
+	 * Template for a list value control
+	 */
 	private static final String LIST_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "ListValueControl.vm";
 	
+	/**
+	 * Template the structure of the composite
+	 */
 	private static final String COMPOSITE_TEMPLATE_LOCATION = TEMPLATES_LOCATION_PREFIX + "DynamicComposite.vm";
 	
+	/**
+	 * Jar file of the data adapter
+	 */
 	private JarFile jarFile;
 	
+	/**
+	 * Information container of the data adapter
+	 */
 	private AdapterInfo adapterInfo;
 	
 	/**
@@ -64,6 +95,12 @@ public class DynamicCompositeHelper {
 	 */
 	private VelocityEngine ve = VelocityUtils.getConfiguredVelocityEngine();
 	
+	/**
+	 * Create the helper for a data adapter
+	 * 
+	 * @param jarFile jar file of the data adapter
+	 * @param adapterInfo information provided during the wizard by the user
+	 */
 	public DynamicCompositeHelper(File jarFile, AdapterInfo adapterInfo){
 		try {
 			this.jarFile = new JarFile(jarFile);
@@ -75,10 +112,7 @@ public class DynamicCompositeHelper {
 	
 	/**
 	 * Uses the velocity engine and the template to generate the content
-	 * of the Activator class
-	 * 
-	 * @param adapterInfo information to put the parameter inside the template
-	 * @return a textual representation of a .java file
+	 * of the Composite class. 
 	 */
 	public String getCompositeClass(){
 		VelocityContext functionContext = new VelocityContext();
@@ -94,7 +128,15 @@ public class DynamicCompositeHelper {
 		return fsw.toString();
 	}
 	
-
+	/**
+	 * Search inside the the jar of the data adapter for a jasper report extension
+	 * properties file. Then load this file and search the property for the path
+	 * of the castor mapping file of the data adapter. When the property is found
+	 * it return the path of the castor file inside the jar
+	 * 
+	 * @return path of the castor mapping file inside the jar or null if it 
+	 * can't be found
+	 */
 	protected String getXmlDefinitionLocation(){		
 		 Properties props = new Properties();
 		 try {
@@ -111,6 +153,15 @@ public class DynamicCompositeHelper {
 		return null;
 	}
 	
+	/**
+	 * Create the text to generate a control inside the composite template.
+	 * The type of control change to reflect the type
+	 * 
+	 * @param type the type of control to create. Supported control are int, boolean, float and string
+	 * @param bindName the name of the field binded to the control
+	 * @param label the label of the control
+	 * @return the text to place in the template to generate the control
+	 */
 	protected String createDynamicControl(String type, String bindName, String label){
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("controlLabel", label);
@@ -134,6 +185,14 @@ public class DynamicCompositeHelper {
 		return fsw.toString();
 	}
 	
+	/**
+	 * Generate the control to handle a list of vales
+	 * 
+	 * @param type the type of the values
+	 * @param bindName the name of the collection field binded to this list
+	 * @param label label of the list control
+	 * @return the text to place in the template to generate the list
+	 */
 	protected String createDynamicArray(String type, String bindName, String label){
 		VelocityContext functionContext = new VelocityContext();
 		functionContext.put("controlLabel", label);
@@ -146,6 +205,13 @@ public class DynamicCompositeHelper {
 		return fsw.toString();
 	}
 	
+	/**
+	 * Given a field node of the castor mapping file it return
+	 * the first bind-xml node
+	 * 
+	 * @param parent the field node of the castor mapping 
+	 * @return the first children bind-xml node
+	 */
 	private Node getBindNode(Node parent){
 		NodeList children = parent.getChildNodes();
 		for (int i = 0; i < children.getLength(); ++i) {
@@ -155,6 +221,13 @@ public class DynamicCompositeHelper {
 		return null;
 	}
 	
+	/**
+	 * Read the content of a castor mapping file and create an appropriate
+	 * control for every field inside the node list
+	 * 
+	 * @param fieldNodes list of the children of the root node of the castor mapping file
+	 * @return string to place inside the composite to generate all the controls to edit the data adapter
+	 */
 	protected String createDynamicControls(NodeList fieldNodes){
 		String result = "";
 		for (int i = 0; i < fieldNodes.getLength(); ++i) {
@@ -182,6 +255,12 @@ public class DynamicCompositeHelper {
 		return result;
 	}
 	
+	/**
+	 * Search a castor mapping file inside the data adapter jar and if it is found create the controls
+	 * to edit it
+	 * 
+	 * @return string to place inside the composite to generate all the controls to edit the data adapter
+	 */
 	protected String createDynamicControls() {
 		String xmlDefinition = getXmlDefinitionLocation();
 		if (xmlDefinition != null) {
@@ -195,6 +274,7 @@ public class DynamicCompositeHelper {
 					dbf.setIgnoringComments(true);
 					dbf.setNamespaceAware(false);
 					DocumentBuilder builder = dbf.newDocumentBuilder();
+					//Set the builder to pare the file without using a schema
 					builder.setEntityResolver(new EntityResolver() {
 						@Override
 						public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
