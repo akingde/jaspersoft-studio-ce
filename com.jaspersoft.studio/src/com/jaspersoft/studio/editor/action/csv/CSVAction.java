@@ -26,6 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.property.SetValueCommand;
 
@@ -116,16 +117,29 @@ public class CSVAction extends CustomSelectionAction {
 			freshChecked = true;
 			ischecked = true;
 			APropertyNode model = getRoot();
-			if (model == null || !(model instanceof MGraphicElement)) {
-				ischecked = false;
-			} else {
-				JRPropertiesMap v = (JRPropertiesMap) ((MGraphicElement) model).getPropertiesMap();
+			if (model == null)
+				return false;
+			if (model instanceof MReport) {
+				JRPropertiesMap v = ((MReport) model).getValue().getPropertiesMap();
 				if (v == null)
 					ischecked = false;
 				else {
 					Object oldValue = v.getProperty(getId());
-					if (oldValue == null || oldValue.equals("false"))
+					if (oldValue == null || oldValue.equals("false")) //$NON-NLS-1$
 						ischecked = false;
+				}
+			} else {
+				if (!(model instanceof MGraphicElement)) {
+					ischecked = false;
+				} else {
+					JRPropertiesMap v = (JRPropertiesMap) ((MGraphicElement) model).getPropertiesMap();
+					if (v == null)
+						ischecked = false;
+					else {
+						Object oldValue = v.getProperty(getId());
+						if (oldValue == null || oldValue.equals("false")) //$NON-NLS-1$
+							ischecked = false;
+					}
 				}
 			}
 		}
@@ -163,7 +177,7 @@ public class CSVAction extends CustomSelectionAction {
 		if (v.containsProperty(getId()))
 			v.removeProperty(getId());
 		else {
-			v.setProperty(getId(), "true");
+			v.setProperty(getId(), "true"); //$NON-NLS-1$
 			removeAttributes(v);
 		}
 		cmd.setPropertyValue(v);

@@ -46,7 +46,7 @@ public class CSVDecorator implements TextDecoratorInterface {
 	/**
 	 * Font of the text
 	 */
-	private static Font JSS_TEXT_FONT = new Font("SansSerif", 0, 10);
+	private static Font JSS_TEXT_FONT = new Font("SansSerif", 0, 10); //$NON-NLS-1$
 
 	/**
 	 * Color of the text
@@ -64,10 +64,10 @@ public class CSVDecorator implements TextDecoratorInterface {
 	 */
 	public CSVDecorator() {
 		if (startImageAwt == null || endImageAwt == null) {
-			startImageAwt = new javax.swing.ImageIcon(CSVDecorator.class.getResource("/icons/resources/corner1.png"));
-			endImageAwt = new javax.swing.ImageIcon(CSVDecorator.class.getResource("/icons/resources/corner2.png"));
+			startImageAwt = new javax.swing.ImageIcon(CSVDecorator.class.getResource("/icons/resources/corner1.png")); //$NON-NLS-1$
+			endImageAwt = new javax.swing.ImageIcon(CSVDecorator.class.getResource("/icons/resources/corner2.png")); //$NON-NLS-1$
 		}
-		tags = new String[] {CSVAction.COL_NAME, "isCol ", CSVAction.COL_DATA, "isCol ", CSVAction.FIELD_DELIMITER, "isFieldDelimiter", CSVAction.RECORD_DELIMITER, "isRecordDelimiter"};
+		tags = new String[] {CSVAction.COL_NAME, "isCol ", CSVAction.COL_DATA, "isCol ", CSVAction.FIELD_DELIMITER, "isFieldDelimiter", CSVAction.RECORD_DELIMITER, "isRecordDelimiter"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 
@@ -98,15 +98,15 @@ public class CSVDecorator implements TextDecoratorInterface {
 	public ArrayList<TextLocation> getText(JRPropertiesMap mapProperties) {
 		ArrayList<TextLocation> result = new ArrayList<TextLocation>();
 		boolean hasValue = false;
-		String endString = "";
+		String endString = ""; //$NON-NLS-1$
 		for (int i = 0; i < tags.length; i += 2) {
 			String prop = tags[i];
 			String label = tags[i + 1];
 			hasValue = mapProperties.containsProperty(prop);
 			if (prop.equals(CSVAction.COL_DATA) && hasValue)
-				endString += label.concat(mapProperties.getProperty(CSVAction.COL_NAME)).concat(" ");
+				endString += label.concat(mapProperties.getProperty(CSVAction.COL_NAME)).concat(" "); //$NON-NLS-1$
 			if (prop.equals(CSVAction.COL_NAME) && hasValue && !mapProperties.containsProperty(CSVAction.COL_DATA))
-				endString += label.concat(mapProperties.getProperty(CSVAction.COL_NAME)).concat(" ");
+				endString += label.concat(mapProperties.getProperty(CSVAction.COL_NAME)).concat(" "); //$NON-NLS-1$
 		}
 		endString = endString.trim();
 
