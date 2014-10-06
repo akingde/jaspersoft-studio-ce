@@ -6,14 +6,11 @@
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.editor.action.csv;
+package com.jaspersoft.studio.editor.action.json;
 
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.export.JRCsvMetadataExporter;
-import net.sf.jasperreports.export.CsvExporterConfiguration;
-import net.sf.jasperreports.export.CsvMetadataReportConfiguration;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
@@ -30,29 +27,16 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
- * Base action to set the CSV attributes that can be represented with a true or false value
+ * Base action to set the JSON attributes that can be represented with a true or false value
  * 
- * @author Orlandin Marco
+ * @author Veaceslav Chicu
  * 
  */
-public class CSVAction extends CustomSelectionAction {
-
-	/** Embedded attributes ids */
-	public static String COL_NAME = JRCsvMetadataExporter.PROPERTY_COLUMN_NAME;
-
-	public static String COL_DATA = JRCsvMetadataExporter.PROPERTY_DATA;
-
-	public static String FIELD_DELIMITER = CsvExporterConfiguration.PROPERTY_FIELD_DELIMITER;
-
-	public static String RECORD_DELIMITER = CsvExporterConfiguration.PROPERTY_RECORD_DELIMITER;
-
-	public static String COL_NAMES = CsvMetadataReportConfiguration.PROPERTY_COLUMN_NAMES_PREFIX;
-
-	public static String WRITE_HEADER = CsvMetadataReportConfiguration.PROPERTY_WRITE_HEADER;
+public class JSONAction extends CustomSelectionAction {
 
 	private String[] attributeToRemove;
 
-	public CSVAction(IWorkbenchPart part, String actionId, String actionName) {
+	public JSONAction(IWorkbenchPart part, String actionId, String actionName) {
 		super(part, IAction.AS_CHECK_BOX);
 		setId(actionId);
 		// the property need to be registered
@@ -65,7 +49,7 @@ public class CSVAction extends CustomSelectionAction {
 	 * Uses the attribute to remove parameter to define the attribute that should be removed when the attributeId is set.
 	 * This is done to define attribute mutually exclusive with the others
 	 */
-	public CSVAction(IWorkbenchPart part, String actionId, String actionName, String[] attributeToRemove) {
+	public JSONAction(IWorkbenchPart part, String actionId, String actionName, String[] attributeToRemove) {
 		this(part, actionId, actionName);
 		this.attributeToRemove = attributeToRemove;
 	}
@@ -124,7 +108,7 @@ public class CSVAction extends CustomSelectionAction {
 					ischecked = false;
 				else {
 					Object oldValue = v.getProperty(getId());
-					if (oldValue == null || oldValue.equals("false"))
+					if (oldValue == null || oldValue.equals("false")) //$NON-NLS-1$
 						ischecked = false;
 				}
 			}
@@ -163,7 +147,7 @@ public class CSVAction extends CustomSelectionAction {
 		if (v.containsProperty(getId()))
 			v.removeProperty(getId());
 		else {
-			v.setProperty(getId(), "true");
+			v.setProperty(getId(), "true"); //$NON-NLS-1$
 			removeAttributes(v);
 		}
 		cmd.setPropertyValue(v);

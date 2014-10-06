@@ -274,6 +274,12 @@
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.JSONMetadataExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.JSONMetadataExporterPreferencePage"
+            name="%JSONMetaExporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
             name="%TextExporter">
@@ -1442,6 +1448,9 @@
        </decorator>
        <decorator
              ClassFactory="com.jaspersoft.studio.editor.gef.decorator.csv.CSVElementDecorator">
+       </decorator>
+       <decorator
+             ClassFactory="com.jaspersoft.studio.editor.gef.decorator.json.JSONElementDecorator">
        </decorator>
     </extension>
     <extension

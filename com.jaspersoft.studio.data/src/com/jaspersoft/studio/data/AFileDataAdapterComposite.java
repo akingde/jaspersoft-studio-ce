@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data;
 import java.io.File;
 
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.ui.validator.NotEmptyFileValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -34,7 +35,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -72,7 +72,7 @@ public abstract class AFileDataAdapterComposite extends ADataAdapterComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				FileDialog fd = new FileDialog(UIUtils.getShell());
 				fd.setFileName(textFileName.getText());
 				fd.setFilterPath(root.getLocation().toOSString());
 				fd.setFilterExtensions(getFileExtensions()); //$NON-NLS-1$ //$NON-NLS-2$

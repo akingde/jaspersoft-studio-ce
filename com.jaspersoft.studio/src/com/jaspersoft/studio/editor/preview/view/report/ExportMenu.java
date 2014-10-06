@@ -21,6 +21,7 @@ import com.jaspersoft.studio.editor.preview.actions.export.ExportAsCsvAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsCsvMetadataAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsDocxAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsJasperReportsAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportAsJsonMetadataAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsOdtAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsPdfAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsPptxAction;
@@ -71,6 +72,7 @@ public class ExportMenu {
 
 		mm.add(new ExportAsCsvAction(rptviewer, jContext, exportMenu));
 		mm.add(new ExportAsCsvMetadataAction(rptviewer, jContext, exportMenu));
+		mm.add(new ExportAsJsonMetadataAction(rptviewer, jContext, exportMenu));
 
 		mm.add(new Separator());
 		mm.add(new ExportAsXmlAction(rptviewer, jContext, exportMenu));

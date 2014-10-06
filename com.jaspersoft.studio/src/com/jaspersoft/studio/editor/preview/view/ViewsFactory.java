@@ -17,6 +17,7 @@ import java.util.Set;
 
 import com.jaspersoft.studio.editor.preview.view.report.file.CSVMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.CSVViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.JSONMetadataViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.TXTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLImagesViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
@@ -67,6 +68,7 @@ public class ViewsFactory extends AViewsFactory {
 		pcmap.put("ExcelAPI", ExcelAPIViewer.class);
 		pcmap.put("CSV", CSVViewer.class);
 		pcmap.put("CSV Metadata", CSVMetadataViewer.class);
+		pcmap.put("JSON Metadata", JSONMetadataViewer.class);
 
 		pcmap.put("SEPARATOR4", null);
 
