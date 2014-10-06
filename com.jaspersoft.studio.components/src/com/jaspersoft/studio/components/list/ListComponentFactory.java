@@ -48,6 +48,7 @@ import com.jaspersoft.studio.components.list.part.ListPageEditPart;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
@@ -208,7 +209,7 @@ public class ListComponentFactory implements IComponentFactory {
 				MDatasetRun dsRun = (MDatasetRun) list.getPropertyValue(MList.PREFIX + StandardListComponent.PROPERTY_DATASET_RUN);
 				if(dsRun!=null){
 					String datasetName = (String) dsRun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-					if(ModelUtils.belongsToDataset((MField)child, datasetName)){
+					if(ModelUtils.belongsToDataset((APropertyNode)child, datasetName)){
 						return new CreateListElement4ObjectCommand(child, list, location, newIndex);						
 					}
 				}
