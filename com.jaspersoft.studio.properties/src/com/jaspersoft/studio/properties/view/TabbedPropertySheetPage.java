@@ -159,7 +159,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 						if (state != TabState.TAB_ALREADY_VISIBLE) {
 							//The layout is done only if the tab was not visible
 							tabbedPropertyComposite.layout();
-							tabbedPropertyComposite.updatePageMinimumSize();
+							tabbedPropertyComposite.updatePageMinimumSize(tab.getWiderSection());
 						}
 					}
 				}
@@ -218,6 +218,17 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 	public void setSelection(TabContents tab) {
 		tabbedPropertyViewer.setSelectionToWidget(getTabDescriptor(tab).getId(),0);
 	}
+	
+	/**
+	 * Update width and height of the current tab inside the scroll area, this is
+	 * usually called when the size changes and the scrollbar need to be refreshed
+	 * 
+	 */
+	public void updatePageMinimumSize(){
+		if (currentTab != null){
+			tabbedPropertyComposite.updatePageMinimumSize(currentTab.getWiderSection());
+		}
+	}
 
 	/**
 	 * Create the page control
@@ -236,7 +247,7 @@ public class TabbedPropertySheetPage extends Page implements IPropertySheetPage 
 				 * Check the page height when the composite area is resized because the
 				 * column layout could be changed
 				 */
-				tabbedPropertyComposite.updatePageMinimumSize();
+				updatePageMinimumSize();
 			}
 		});
 

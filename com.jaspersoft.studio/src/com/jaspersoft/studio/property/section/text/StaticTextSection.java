@@ -14,6 +14,8 @@ package com.jaspersoft.studio.property.section.text;
 
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -35,9 +37,11 @@ public class StaticTextSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		
-		parent.setLayout(new GridLayout(2, false));
-
-		createWidget4Property(parent, JRBaseStaticText.PROPERTY_TEXT);
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridLayout containerLayout = new GridLayout(2, false);
+		container.setLayout(containerLayout);
+		createWidget4Property(container, JRBaseStaticText.PROPERTY_TEXT);
 		
 	
 	}

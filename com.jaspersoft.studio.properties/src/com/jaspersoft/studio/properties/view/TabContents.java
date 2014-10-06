@@ -32,7 +32,7 @@ import org.eclipse.ui.forms.widgets.ColumnLayout;
 public final class TabContents {
 
 	private ISection[] sections;
-
+	
 	private boolean controlsCreated;
 
 	/**
@@ -80,6 +80,12 @@ public final class TabContents {
 	public ISection[] getSections() {
 		return sections;
 	}
+	
+	/**
+	 * Store the minimum width of the bigger section inside the tab
+	 */
+	private int widerSection = 0;
+	
 
 	/**
 	 * Creates page's sections controls.
@@ -89,6 +95,7 @@ public final class TabContents {
 	 */
 	public void createControls(final Composite parent, final TabbedPropertySheetPage page) {
 		//If there is only a section then a standard composite is used as container
+		
 		if (sections.length > 1){
 			Composite pageComposite = page.getWidgetFactory().createComposite(parent, SWT.NO_FOCUS);
 			ColumnLayout layout = new ColumnLayout();
@@ -106,8 +113,13 @@ public final class TabContents {
 				ISafeRunnable runnable = new SafeRunnable() {
 	
 					public void run() throws Exception {
-						if (section.getElement() != null)
+						if (section.getElement() != null){
 							section.createControls(sectionComposite, page);
+							//Store the width of the bigger section. This is useful to know when to paint the bottom scrollbar
+							//without do many calculations
+							int width = sectionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+							if (width > widerSection) widerSection = width;
+						}
 					}
 				};
 				SafeRunnable.run(runnable);
@@ -118,13 +130,24 @@ public final class TabContents {
 			ISafeRunnable runnable = new SafeRunnable() {
 
 				public void run() throws Exception {
-					if (section.getElement() != null)
+					if (section.getElement() != null){
 						section.createControls(sectionComposite, page);
+						widerSection = sectionComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+					}
 				}
 			};
 			SafeRunnable.run(runnable);
 		}
 		controlsCreated = true;
+	}
+	
+	/**
+	 * Return the minimum width of the bigger section inside the tab
+	 * 
+	 * @param the width of the bigger section
+	 */
+	public int getWiderSection(){
+		return widerSection;
 	}
 
 	/**

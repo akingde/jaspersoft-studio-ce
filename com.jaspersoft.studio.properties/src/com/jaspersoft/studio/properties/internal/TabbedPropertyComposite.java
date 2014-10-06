@@ -17,6 +17,7 @@ import java.util.HashMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
@@ -221,8 +222,10 @@ public class TabbedPropertyComposite extends Composite {
 	 * Then Update the minimum height of the scrolled composite, to make the scrollbars
 	 * appear only when they are needed. The update is done only if it is necessary
 	 *
+	 * @param minimumWidth the minimum width of the page, if the width of the properties
+	 * view is lower of this value then the bottom scrollbar is shown
 	 */
-	public void updatePageMinimumSize(){
+	public void updatePageMinimumSize(int minimumWidth){
 		Control topControl = cachedLayout.topControl;
 		if (topControl != null && topControl instanceof ScrolledComposite){
 			int height = 0;
@@ -230,12 +233,15 @@ public class TabbedPropertyComposite extends Composite {
 			ScrolledComposite scrolledComposite = (ScrolledComposite)topControl;
 			// When i calculate the height it is really important to give the real width
 			// of the composite, since it is used to calculate the number of columns
-			height = scrolledComposite.getContent().computeSize(width, SWT.DEFAULT).y;
+			Point compositeSize = scrolledComposite.getContent().computeSize(width, SWT.DEFAULT);
+			height = compositeSize.y;
 			int actualMinheight = scrolledComposite.getMinHeight();
 			boolean barVisible = scrolledComposite.getVerticalBar().isVisible();
 			if (barVisible || height > actualMinheight) {
 				scrolledComposite.setMinHeight(height);
 			}
+			
+			scrolledComposite.setMinWidth(minimumWidth);
 		}
 	}
 	

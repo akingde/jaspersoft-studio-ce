@@ -45,7 +45,6 @@ public class MFont extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public static final String FONT_INCREMENT = "FONT_INCREMENT";
-	public static final String FONT_DECREMENT = "FONT_DECREMENT";
 
 	public MFont(JRFont value) {
 		super();

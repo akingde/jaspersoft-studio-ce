@@ -43,26 +43,34 @@ public class FontSection extends AbstractRealValueSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		Composite group = createFontSection(parent);
-
-		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_NAME, false);
-
-		Composite testLayout = new Composite(group, SWT.NONE);
+		
+		//A composite with a static width is necessary because the toolbar used to implement the font_increment dosen't
+		//return the real size when the size is computed, so it causes problem with the bottom scrollbar
+		Composite firstLineContainer = new Composite(group, SWT.NONE);
+		GridLayout firstLineContainerLayout = new GridLayout(3, false);
+		firstLineContainerLayout.marginHeight = 0;
+		firstLineContainerLayout.marginWidth = 0;
+		firstLineContainer.setLayout(firstLineContainerLayout);
+		GridData firtstLineContainerData = new GridData(GridData.FILL_HORIZONTAL);
+		firtstLineContainerData.minimumWidth = 320;
+		firstLineContainer.setLayoutData(firtstLineContainerData);
+		
+		createWidget4Property(firstLineContainer, JRBaseStyle.PROPERTY_FONT_NAME, false);
+		
+		Composite fontSizeComposite = new Composite(firstLineContainer, SWT.NONE);
 		GridData fontSizeData = new GridData();
 		fontSizeData.widthHint = 65;
 		fontSizeData.minimumWidth = 65;
-		testLayout.setLayout(new GridLayout(1, false));
-		testLayout.setLayoutData(fontSizeData);
-		createWidget4Property(testLayout, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(
-				new GridData(GridData.FILL_HORIZONTAL));
+		fontSizeComposite.setLayout(new GridLayout(1, false));
+		fontSizeComposite.setLayoutData(fontSizeData);
+		createWidget4Property(fontSizeComposite, JRBaseStyle.PROPERTY_FONT_SIZE, false).getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		createWidget4Property(group, MFont.FONT_INCREMENT, false);
+		createWidget4Property(firstLineContainer, MFont.FONT_INCREMENT, false);
 
-		createWidget4Property(group, MFont.FONT_DECREMENT, false);
-
+		//END OF THE FIRS LINE
 		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
 		GridData gd = new GridData();
 		gd.horizontalAlignment = SWT.LEFT;
-		gd.horizontalSpan = 4;
 		toolBar.setLayoutData(gd);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD, false);
 		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC, false);
@@ -71,7 +79,7 @@ public class FontSection extends AbstractRealValueSection {
 	}
 
 	protected Composite createFontSection(Composite parent) {
-		Composite cmp = getWidgetFactory().createSection(parent, Messages.common_font, true, 4);
+		Composite cmp = getWidgetFactory().createSection(parent, Messages.common_font, true, 1);
 		section = (ExpandableComposite)cmp.getParent();
 		return cmp;
 	}
