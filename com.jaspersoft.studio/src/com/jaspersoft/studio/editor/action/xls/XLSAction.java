@@ -1,20 +1,18 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.action.xls;
 
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
+import net.sf.jasperreports.export.XlsReportConfiguration;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
@@ -35,23 +33,23 @@ import com.jaspersoft.studio.property.SetValueCommand;
 public class XLSAction extends CustomSelectionAction {
 
 	/** Embedded attributes ids */
-	public static String FIT_COL_ID = "net.sf.jasperreports.export.xls.auto.fit.column";
+	public static String FIT_COL_ID = JRXlsAbstractExporter.PROPERTY_AUTO_FIT_COLUMN;
 
-	public static String FIT_ROW_ID = "net.sf.jasperreports.export.xls.auto.fit.row";
+	public static String FIT_ROW_ID = JRXlsAbstractExporter.PROPERTY_AUTO_FIT_ROW;
 
-	public static String BREAK_AFTER_ROW_ID = "net.sf.jasperreports.export.xls.break.after.row";
+	public static String BREAK_AFTER_ROW_ID = JRXlsAbstractExporter.PROPERTY_BREAK_AFTER_ROW;
 
-	public static String BREAK_BEFORE_ROW_ID = "net.sf.jasperreports.export.xls.break.before.row";
+	public static String BREAK_BEFORE_ROW_ID = JRXlsAbstractExporter.PROPERTY_BREAK_BEFORE_ROW;
 
-	public static String CELL_HIDDEN_ID = "net.sf.jasperreports.export.xls.cell.hidden";
+	public static String CELL_HIDDEN_ID = XlsReportConfiguration.PROPERTY_CELL_HIDDEN;
 
-	public static String CELL_LOCKED_ID = "net.sf.jasperreports.export.xls.cell.locked";
+	public static String CELL_LOCKED_ID = XlsReportConfiguration.PROPERTY_CELL_LOCKED;
 
-	public static String AUTOFILTER_ID = "net.sf.jasperreports.export.xls.auto.filter";
+	public static String AUTOFILTER_ID = JRXlsAbstractExporter.PROPERTY_AUTO_FILTER;
 
-	public static String FREEZE_ROW_ID = "net.sf.jasperreports.export.xls.freeze.row.edge";
+	public static String FREEZE_ROW_ID = JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE;
 
-	public static String FREEZE_COL_ID = "net.sf.jasperreports.export.xls.freeze.column.edge";
+	public static String FREEZE_COL_ID = JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE;
 
 	private String value;
 

@@ -1358,6 +1358,8 @@ public class Messages extends NLS {
 	public static String PathAndDataDialog_13;
 	public static String PathAndDataDialog_14;
 	public static String PathAndDataDialog_15;
+	public static String PathAndDataDialog_2;
+	public static String PathAndDataDialog_3;
 	public static String PathAndDataDialog_7;
 	public static String PathAndDataDialog_8;
 	public static String PathAndDataDialog_9;
