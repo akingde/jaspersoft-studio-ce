@@ -156,7 +156,7 @@ public class ReportPageFigure extends APageFigure {
 					child.setVisible(modelVisible);
 				}
 			}
-			if (child.isVisible() && modelVisible && isFigurevisible(child)) {
+			if (child.isVisible() && modelVisible && isFigureVisible(child)) {
 				// determine clipping areas for child
 				Rectangle[] clipping = null;
 				if (getClippingStrategy() != null) {

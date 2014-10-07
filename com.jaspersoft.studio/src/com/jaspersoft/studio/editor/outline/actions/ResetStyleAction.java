@@ -64,7 +64,7 @@ public class ResetStyleAction extends ACachedSelectionAction {
 		for (Object rawStyle : styles){
 			MStyle style = (MStyle)rawStyle;
 			Command resetCommand = null;
-			if (style.getValue() instanceof JRDesignStyle) resetCommand = new ResetStyleCommand(style.getJasperDesign(), style);
+			if (style.getValue() instanceof JRDesignStyle) resetCommand = new ResetStyleCommand(style);
 			else resetCommand = new ResetConditionalStyleCommand(style.getJasperDesign(), style);
 			commands.add(resetCommand);
 		}

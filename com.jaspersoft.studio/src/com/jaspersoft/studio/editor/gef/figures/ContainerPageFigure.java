@@ -66,7 +66,7 @@ public class ContainerPageFigure extends APageFigure {
 	protected void paintChildren(Graphics graphics) {
 		for (int i = 0; i < getChildren().size(); i++) {
 			IFigure child = (IFigure) getChildren().get(i);
-			if (child.isVisible() && isFigurevisible(child)) {
+			if (child.isVisible() && isFigureVisible(child)) {
 				// determine clipping areas for child
 				Rectangle[] clipping = null;
 				if (getClippingStrategy() != null) {

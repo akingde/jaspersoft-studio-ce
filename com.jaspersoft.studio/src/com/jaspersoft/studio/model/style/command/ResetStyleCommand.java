@@ -12,8 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
@@ -30,29 +30,22 @@ public class ResetStyleCommand extends Command {
 	/**
 	 * Style to reset
 	 */
-	private MStyle oldStyle;
-
-	/** 
-	 * The jr design. 
-	 */
-	private JasperDesign jrDesign;
-
-	/**
-	 * JR element of a style with the new default value
-	 */
-	private JRDesignStyle newStyle;
+	private MStyle resettedStyle;
 	
 	/**
-	 * JR element of a style with the old value
+	 * JR element of a style to store the values of the reseted style,
+	 * used to undo the command
 	 */
-	private JRDesignStyle oldDesignStyle;
+	private JRDesignStyle backupValues;
 	
-
-	public ResetStyleCommand(JasperDesign jd, MStyle oldStyle) {
+	/**
+	 * Create the command
+	 * 
+	 * @param resettedStyle the style to reset
+	 */
+	public ResetStyleCommand(MStyle resettedStyle) {
 		super();
-		this.jrDesign = jd;
-		this.oldStyle = oldStyle;
-		oldDesignStyle = (JRDesignStyle)oldStyle.getValue();
+		this.resettedStyle = resettedStyle;
 	}
 
 	/**
@@ -61,20 +54,19 @@ public class ResetStyleCommand extends Command {
 	 * @param source source style
 	 * @param dest destination style
 	 */
-	private void copyStyleAttributes(JRDesignStyle source, JRDesignStyle dest){
+	private void copyStyleAttributes(JRStyle source, JRDesignStyle dest){
 		dest.setBackcolor(source.getOwnBackcolor());
 		dest.setBlankWhenNull(source.isOwnBlankWhenNull());
 		dest.setBold(source.isOwnBold());
 		dest.setDefault(source.isDefault());
 		dest.setFill(source.getOwnFillValue());
 		dest.setFontName(source.getOwnFontName());
-		dest.setFontSize(source.getOwnFontSize());
+		dest.setFontSize(source.getOwnFontsize());
 		dest.setForecolor(source.getOwnForecolor());
 		dest.setHorizontalAlignment(source.getOwnHorizontalAlignmentValue());
 		dest.setItalic(source.isOwnItalic());
 		dest.setMarkup(source.getOwnMarkup());
 		dest.setMode(source.getOwnModeValue());
-		dest.setName(source.getName());
 		dest.setParentStyle(source.getStyle());
 		dest.setParentStyleNameReference(source.getStyleNameReference());
 		dest.setPattern(source.getOwnPattern());
@@ -91,26 +83,24 @@ public class ResetStyleCommand extends Command {
 	
 	@Override
 	public void execute() {
-		newStyle = null;
-		if (oldStyle == null) return;
-		JRDesignStyle defaultValueStyle = MStyle.createJRStyle(jrDesign);
-		defaultValueStyle.setName(oldDesignStyle.getName());
-		JRDesignStyle dummyStyle = MStyle.createJRStyle(jrDesign);
-		copyStyleAttributes(oldDesignStyle, dummyStyle);
-		newStyle = oldDesignStyle;
-		oldDesignStyle = dummyStyle;
-		copyStyleAttributes(defaultValueStyle, newStyle);
+		backupValues = new JRDesignStyle();
+		copyStyleAttributes(resettedStyle.getValue(), backupValues);
+		copyStyleAttributes(new JRDesignStyle(), (JRDesignStyle)resettedStyle.getValue());
 	}
 
 	@Override
 	public boolean canUndo() {
-		return (oldStyle != null && newStyle != null);
+		return (backupValues != null && canExecute());
+	}
+	
+	@Override
+	public boolean canExecute() {
+		return (resettedStyle != null && resettedStyle.getValue() != null);
 	}
 
 	@Override
 	public void undo() {
-		copyStyleAttributes(oldDesignStyle, newStyle);
-		newStyle = null;
-		oldDesignStyle = null;
+		copyStyleAttributes(backupValues, (JRDesignStyle)resettedStyle.getValue());
+		backupValues = null;
 	}
 }

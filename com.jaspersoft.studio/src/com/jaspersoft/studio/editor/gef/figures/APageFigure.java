@@ -211,7 +211,8 @@ public abstract class APageFigure extends FreeformLayeredPane implements HandleB
 	 * @param figure a figure
 	 * @return true if the figure intersect the visible area, false otherwise
 	 */
-	protected boolean isFigurevisible(IFigure figure){
+	public boolean isFigureVisible(IFigure figure){
+		if (figure == null) return false;
 		double zoom = getZoom();
 		Rectangle visibleArea = getViewPort().getClientArea();
 		Rectangle bounds = figure.getBounds();

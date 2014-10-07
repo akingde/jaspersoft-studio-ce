@@ -202,8 +202,10 @@ public class JSSCompoundCommand extends CompoundCommand {
 	 * the disable refresh flag, so calling this the editor area is always updated
 	 */
 	public static void forceRefreshVisuals(ANode node){
-			PropertyChangeEvent event = new PropertyChangeEvent(node.getValue(), REFRESH_UI_EVENT, null, null);
-			node.getPropertyChangeSupport().firePropertyChange(event);
+			if (node != null && node.getValue() != null){
+				PropertyChangeEvent event = new PropertyChangeEvent(node.getValue(), REFRESH_UI_EVENT, null, null);
+				node.getPropertyChangeSupport().firePropertyChange(event);
+			}
 	}
 	
 	/**

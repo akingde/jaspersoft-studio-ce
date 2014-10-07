@@ -369,6 +369,20 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		}
 		super.addChildVisual(childEditPart, index);
 	}
+	
+	/**
+	 * Repaint all the figure on the report (since all the figure are children of the page)
+	 * 
+	 * @param figure the figure of the page
+	 */
+	private void repaintPartFigure(APageFigure figure){
+		setupPageFigure(figure);
+		for (Object i : getChildren()) {
+			if (i instanceof EditPart)
+				((EditPart) i).refresh();
+		}
+		figure.repaint();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -376,18 +390,21 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#refreshVisuals()
 	 */
 	public void refreshVisuals() {
-		APageFigure figure2 = (APageFigure) getFigure();
-		if (Display.getCurrent() != null) {
-			setupPageFigure(figure2);
-			for (Object i : getChildren()) {
-				if (i instanceof EditPart)
-					((EditPart) i).refresh();
+		final APageFigure figure = (APageFigure) getFigure();
+		if (Display.getCurrent() != null) repaintPartFigure(figure);
+		else {
+			//Fallback, if the display is not available get a workbench display if 
+			//possible and execute the repaint inside the graphic thread
+			Display globalDisplay = UIUtils.getDisplay();
+			if (globalDisplay != null){
+				globalDisplay.asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						repaintPartFigure(figure);
+					}
+				});
 			}
-			/*
-			 * ((GridLayout) figure2.getLayoutManager()).marginHeight = jasperDesign.getTopMargin();
-			 * figure2.getLayoutManager().layout(figure2);
-			 */
-			figure2.repaint();
 		}
 	}
 

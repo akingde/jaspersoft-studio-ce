@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.ExternalStylesManager;
+import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.help.HelpReferenceBuilder;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
@@ -806,13 +807,14 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	/**
 	 * Search in background the elements that are using this styles and mark them for the refresh
 	 */
-	private void fireUpdateForElements(){
+	public void fireUpdateForElements(){
 		Runnable notifier = new Runnable() {
 	    public void run() {
 	  		//Avoid the refresh if the style is not in the hierarchy
-	    	INode root = getRoot();
+	    	final INode root = getRoot();
 	    	if (root != null) {
 		  		setStyleRefresh(new ArrayList<INode>(root.getChildren()));
+				JSSCompoundCommand.forceRefreshVisuals(JSSCompoundCommand.getMainNode((ANode)root));
 	  		}
 	    }
 		};
