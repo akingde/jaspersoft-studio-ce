@@ -138,6 +138,9 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private MStyle defaultStyle = null;
 	
+	/**
+	 * Composite where the controls are placed
+	 */
 	private Composite mainComposite = null; 
 
 	/**
@@ -151,7 +154,7 @@ public class StylesListSection extends AbstractSection {
 	private IconMouseTracker trackerListener = new IconMouseTracker();
 
 	/**
-	 * When a property of the element change an update job is runned. This update job is delayed and cancelled
+	 * When a property of the element change an update job is run. This update job is delayed and cancelled
 	 * if another update job is requested before it start
 	 */
 	private UpdatePanelJob updatePanelJob = new UpdatePanelJob();
@@ -205,24 +208,51 @@ public class StylesListSection extends AbstractSection {
 	private ResourceCache colorCache = new ResourceCache();
 
 	/**
-	 * Return the key of the parent style of an element, check also if the style is an 
-	 * internal of an external one. In the first case the key is the jrstyle, in the second 
-	 * one it is the name of the style
+	 * Return the parent style of the current element, it can be a jr style
+	 * if the style is an internal one or a stylename if it is an external one
 	 * 
-	 * @param child a JRElement or a JRStyle
-	 * @return the key of the style for the passed parameter, independently if it is
-	 * external or internal. Null if it has not a parent style of it has a not valid internal
-	 * parent style (a style that was removed)
+	 * @param element an element
+	 * @return the parent style of the parameter or null if it has not a parent style.
+	 * It will be a String if the parent style is external or a JRStyle if it is internal.
 	 */
-	private Object getStyleKey(APropertyNode element){
+	private Object getElementStyle(APropertyNode element){
 		if (element.getValue() instanceof JRElement){
 			JRElement jrElement = (JRElement)element.getValue();
 			if (jrElement.getStyle() != null) return jrElement.getStyle();
 			else return jrElement.getStyleNameReference();
 		} else if (element.getValue() instanceof JRStyle){
 			JRStyle jrStyle = (JRStyle)element.getValue();
-			if (jrStyle.getStyle() != null) return jrStyle.getStyle();
-			else return jrStyle.getStyleNameReference();
+			String jrStyleName = jrStyle.getStyleNameReference();
+			//The styles when they inherit from external styles must have both the
+			//jr style and the style external name, to have it resolved correctly.
+			//For this reason the check is done before in the style name. Look at how
+			//an external style is set inside an MStyle element
+			if (jrStyleName != null) return jrStyleName;
+			else return jrStyle.getStyle();
+		}
+		return null;
+	}
+	
+	/**
+	 * Return the key of the style of an element, check also if the style is an 
+	 * internal of an external one. In the first case the key is the jrstyle, in the second 
+	 * one it is the name of the style
+	 * 
+	 * @param child a JRElement or a JRStyle
+	 * @return the key of the style for the passed parameter, independently if it is
+	 * external or internal. Null if the parameter is not a style of it has a not valid internal
+	 * parent style (a style that was removed)
+	 */
+	private Object getStyleKey(ANode element){
+		if (element == null) return null;
+		if (element instanceof MConditionalStyle) return getStyleKey(element.getParent());
+		else if (element instanceof MStyle){
+			MStyle nodeStyle = (MStyle)element;
+			if (nodeStyle.getParent() instanceof MStyleTemplate){
+				return nodeStyle.getValue().getName();
+			} else {
+				return element.getValue();
+			}
 		}
 		return null;
 	}
@@ -237,31 +267,26 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private LinkedList<MStyle> buildStylesGerarchy(APropertyNode element) {
 		LinkedList<MStyle> result = new LinkedList<MStyle>();
-		Object styleKey;
-		if (element instanceof MConditionalStyle){
-			//The external style dosen't allow a conditional style, so the parent must be a jrstyle
-			styleKey = ((MStyle) element.getParent()).getValue();
-		} else {
-			styleKey = getStyleKey(element);
-		}
-		StyleContainer styleContainer = styleMaps.get(styleKey);
-		if (styleContainer != null) {
+		Object style = getElementStyle(element);
+		StyleContainer styleContainer = styleMaps.get(style);
+		while(styleContainer != null){
 			MStyle styleModel = styleContainer.getStyle();
-			result.addLast(styleModel);
-			Object nextStylKey = getStyleKey(styleModel);
-			while (nextStylKey != null) {
-				styleModel = styleMaps.get(nextStylKey).getStyle();
-				result.addLast(styleModel);
-				nextStylKey = getStyleKey(styleModel);
+			if (!result.contains(styleModel)) result.addLast(styleModel);
+			else {
+				//The style has itself set as parent style, break the cycle
+				//this shouldn't happen, but maybe the jrxml was modifed manually on
+				//it's better to put this check to avoid a java heap exception
+				break;
 			}
-
+			style = getElementStyle(styleModel);
+			styleContainer = styleMaps.get(style);
 		}
 		return result;
 	}
 	
 
 	/**
-	 * Add to a styledtext a new style to made the text with a middle black line (strike trought)
+	 * Add to a styledtext a new style to made the text with a middle black line (strikethrough)
 	 * 
 	 * @param valueText
 	 *          StyledText widget where the new style will be applied
@@ -544,15 +569,15 @@ public class StylesListSection extends AbstractSection {
 	 * 
 	 * @param parent composite of the main widget
 	 * @param value text to put into the label
+	 * @param the menu to open when the button is pressed
 	 */
-	private Button printTitleWithButton(Composite parent, String value){
+	private Button printTitleWithButton(Composite parent, String value, final AbstractContextualMenu contextualOpener){
 		Composite buttonContainer = printTitle(parent, value).getParent();
 		Button btn = new Button(buttonContainer, SWT.ARROW | SWT.DOWN);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.LEFT;
 		gridData.heightHint = ITEM_HEIGHT-2;
 		btn.setLayoutData(gridData);
-		final ElementContextualMenu contextualOpener = new ElementContextualMenu(this);
 		btn.addSelectionListener(contextualOpener);
 		//Add dispose listener on the button to dispose when necessary the contextual menu
 		btn.addDisposeListener(new DisposeListener() {
@@ -576,7 +601,7 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private void printElementAttribute(Composite parent, APropertyNode element, String titleValue) {
 		if (titleValue != null) {
-			printTitleWithButton(parent, titleValue);
+			printTitleWithButton(parent, titleValue, new ElementContextualMenu(this));
 		}
 		GridData sameSizeGridData = new GridData();
 		sameSizeGridData.verticalAlignment = SWT.CENTER;
@@ -609,9 +634,10 @@ public class StylesListSection extends AbstractSection {
 	 */
 	private void printStyleAttribute(Composite parent, APropertyNode element, String titleValue, String keyPrefix, HashMap<String, Object> localElementAttributes, AttributeParent parentType) {
 		if (titleValue != null) {
-			Label titleLabel = printTitle(parent, titleValue);
 			final StyleContainer styleReference = styleMaps.get(getStyleKey(element));
+			//Print a different label if the style is external or internal
 			if (styleReference != null && styleReference.isExternal()) {
+				Label titleLabel = printTitle(parent, titleValue);
 				// If the style is external i made its editor open by double clicking on the style title
 				titleLabel.setText(titleLabel.getText().concat(Messages.StylesListSection_NotEditable_Visual_Marker));
 				titleLabel.addMouseListener(new MouseAdapter() {
@@ -620,6 +646,9 @@ public class StylesListSection extends AbstractSection {
 						EditableFigureEditPart.openEditor(styleReference.getTemplateValue(), ((DefaultEditDomain) getEditDomain()).getEditorPart(), styleReference.getTemplate());
 					}
 				});
+			} else {
+				//Print the label with the possibility to remove reset the style
+				printTitleWithButton(parent, titleValue, new StyleContextualMenu(this, styleReference.getStyle()));
 			}
 		}
 		GridData sameSizeGridData = new GridData();
@@ -649,18 +678,11 @@ public class StylesListSection extends AbstractSection {
 		boolean hasDefaultStyleInGerarchy = false;
 		while (itr.hasNext()) {
 			MStyle style = itr.next();
-			printStyleAttribute(parent, style,
-					Messages.StylesSectionList_Inherited_From_Style + style.getPropertyValue(JRDesignStyle.PROPERTY_NAME),
-					"", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$
-			if (style == defaultStyle)
-				hasDefaultStyleInGerarchy = true;
+			printStyleAttribute(parent, style, Messages.StylesSectionList_Inherited_From_Style + style.getPropertyValue(JRDesignStyle.PROPERTY_NAME), "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$
+			if (style == defaultStyle) hasDefaultStyleInGerarchy = true;
 		}
 		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement())
-			printStyleAttribute(
-					parent,
-					defaultStyle,
-					Messages.StylesListSection_Inherited_From_Default_Style.concat(defaultStyle.getPropertyValue(
-							JRDesignStyle.PROPERTY_NAME).toString()), "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$ //$NON-NLS-2$
+			printStyleAttribute(parent, defaultStyle,	Messages.StylesListSection_Inherited_From_Default_Style.concat(defaultStyle.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString()), "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -675,9 +697,8 @@ public class StylesListSection extends AbstractSection {
 		for (INode style : stylesList) {
 			if (style instanceof MStyle) {
 				MStyle element = (MStyle) style;
-				String name = element.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString();
 				if (element.getValue() == defaultValue) defaultStyle = element;
-				styleMaps.put(name, new StyleContainer(element, parentReference));
+				styleMaps.put(getStyleKey(element), new StyleContainer(element, parentReference));
 			} else if (style instanceof MStyleTemplate) {
 				recursiveReadStyles(style.getChildren(), (MStyleTemplate) style, defaultValue);
 			}
@@ -699,7 +720,7 @@ public class StylesListSection extends AbstractSection {
 		for (INode style : list) {
 			if (style instanceof MStyle) {
 				MStyle element = (MStyle) style;
-				styleMaps.put(element.getValue(), new StyleContainer(element));
+				styleMaps.put(getStyleKey(element), new StyleContainer(element));
 				if (element.getValue() == defaultValue) defaultStyle = element;
 			} else if (style instanceof MStyleTemplate) {
 				externalList.add(style);
