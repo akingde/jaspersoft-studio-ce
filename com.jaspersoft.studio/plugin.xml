@@ -1155,7 +1155,7 @@
             </input>
          </propertySection>
           <propertySection
-               class="com.jaspersoft.studio.property.section.style.StylesListSection"
+               class="com.jaspersoft.studio.property.section.style.inerithance.StylesListSection"
                id="com.jaspersoft.studio.property.section.obj.StylesListSection"
                tab="com.jaspersoft.studio.editor.propertyTab.style">
             <input
