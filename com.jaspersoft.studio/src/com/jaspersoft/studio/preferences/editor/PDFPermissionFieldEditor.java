@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jaspersoft.studio.messages.Messages;
-import com.lowagie.text.pdf.PdfWriter;
 
 public class PDFPermissionFieldEditor extends FieldEditor {
 	private Composite container;
