@@ -12,9 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.messages;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
