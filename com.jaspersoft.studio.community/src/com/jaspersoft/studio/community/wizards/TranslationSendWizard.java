@@ -19,8 +19,12 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -54,6 +58,7 @@ import com.jaspersoft.studio.community.utils.CommunityUser;
  * @author Orlandin Marco & Massimo Rabbi
  *
  */
+@SuppressWarnings("restriction")
 public final class TranslationSendWizard extends Wizard {
 	private NewTranslationDetailsPage page1;
 	private NewIssueAuthenticationPage page2;
@@ -111,24 +116,29 @@ public final class TranslationSendWizard extends Wizard {
 	}
 
 	private boolean publishNewIssue(IssueRequest issueRequest, CommunityUser authInfo) {
-		HttpClient client = new HttpClient();
+		CloseableHttpClient httpclient = null;
 		try {
+			CookieStore cookieStore = new BasicCookieStore();
+			httpclient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
+			
 			// Gets the authentication cookie
 			Cookie authCookie = 
-					RESTCommunityHelper.getAuthenticationCookie(client, authInfo.getUsername(), authInfo.getPassword());
+					RESTCommunityHelper.getAuthenticationCookie(httpclient, cookieStore, authInfo.getUsername(), authInfo.getPassword());
 			
 			// Create the attachment file if any
 			List<String> attachmentsIDs = new ArrayList<String>();
-			String fileID = RESTCommunityHelper.uploadFile(client, zipAttachment, authCookie);
+			String fileID = RESTCommunityHelper.uploadFile(httpclient, zipAttachment, authCookie);
 			attachmentsIDs.add(fileID);
 			
 			// Publish the issue to the community tracker
 			issuePath = 
-					RESTCommunityHelper.createNewIssue(client, issueRequest, attachmentsIDs, authCookie);
+					RESTCommunityHelper.createNewIssue(httpclient, issueRequest, attachmentsIDs, authCookie);
 						
 		} catch (CommunityAPIException e) {
 			UIUtils.showError(e);
 			return false;
+		} finally {
+			HttpClientUtils.closeQuietly(httpclient);
 		}
 		return true;
 	}
