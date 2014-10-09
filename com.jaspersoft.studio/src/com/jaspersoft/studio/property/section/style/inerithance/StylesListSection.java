@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.property.section.style.inerithance;
 
 import java.beans.PropertyChangeEvent;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -678,11 +679,14 @@ public class StylesListSection extends AbstractSection {
 		boolean hasDefaultStyleInGerarchy = false;
 		while (itr.hasNext()) {
 			MStyle style = itr.next();
-			printStyleAttribute(parent, style, Messages.StylesSectionList_Inherited_From_Style + style.getPropertyValue(JRDesignStyle.PROPERTY_NAME), "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$
+			String titleLabelText = MessageFormat.format(Messages.StylesSectionList_Inherited_From_Style, new Object[]{style.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
+			printStyleAttribute(parent, style, titleLabelText , "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$
 			if (style == defaultStyle) hasDefaultStyleInGerarchy = true;
 		}
-		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement())
-			printStyleAttribute(parent, defaultStyle,	Messages.StylesListSection_Inherited_From_Default_Style.concat(defaultStyle.getPropertyValue(JRDesignStyle.PROPERTY_NAME).toString()), "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$ //$NON-NLS-2$
+		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement()){
+			String titleLabelText = MessageFormat.format(Messages.StylesListSection_Inherited_From_Default_Style, new Object[]{defaultStyle.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
+			printStyleAttribute(parent, defaultStyle, titleLabelText, "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$ 
+		}
 	}
 
 	/**
@@ -921,15 +925,20 @@ public class StylesListSection extends AbstractSection {
 		parent.setFocus();
 	}
 	
-	/**
-	 * Initialize the styles widget, create the control and set them
-	 */
 	@Override
-	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		createContent();
+	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		super.createControls(parent, aTabbedPropertySheetPage);
+		//Create the main composite anyway to provide the the properties page the real width of this
+		//section. However this will be disposed on the first control creation so it's only valid for
+		//the first time
+		mainComposite = new Composite(parent, SWT.NONE);			
+		mainComposite.setLayout( new GridLayout(2, false));
+		GridData data = new GridData(GridData.FILL_BOTH);
+		data.widthHint = ITEM_WIDTH*2;
+		mainComposite.setLayoutData(data);
 	}
 	
+
 	@Override
 	public void dispose() {
 		super.dispose();
