@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='28'>
+  <ius size='36'>
     <iu id='com.buzzcoders.yasw.widgets.map.feature.feature.group' name='YASW Map widget' version='1.0.0.v20140304-0957'>
       <repositories size='1'>
         <repository location='http://yasw-library.sf.net/updates/'/>
@@ -72,6 +72,26 @@
         <repository location='http://subclipse.tigris.org/update_1.10.x'/>
       </repositories>
     </iu>
+    <iu id='org.eclipse.jgit.source.feature.group' name='Java implementation of Git - Source Code' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.jgit.java7.feature.group' name='Java implementation of Git - optional Java 7 libraries' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.jgit.http.apache.feature.group' name='Java implementation of Git - optional Http support using Apache httpclient' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.jgit.feature.group' name='Java implementation of Git' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
     <iu id='org.apache.commons.discovery' name='Jakarta-Commons Discovery' version='0.2.0.v201004190315'>
       <repositories size='4'>
         <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
@@ -96,6 +116,26 @@
       <repositories size='2'>
         <repository location='http://download.eclipse.org/releases/juno'/>
         <repository location='http://download.eclipse.org/eclipse/updates/3.8'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.egit.source.feature.group' name='Eclipse Git Team Provider - Source Code' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.egit.feature.group' name='Eclipse Git Team Provider' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.jgit.pgm.source.feature.group' name='Command Line Interface for Java implementation of Git - Source Code' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.jgit.pgm.feature.group' name='Command Line Interface for Java implementation of Git' version='3.5.0.201409260305-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/egit/updates'/>
       </repositories>
     </iu>
     <iu id='org.apache.xerces' name='Apache Xerces-J' version='2.9.0.v201101211617'>
