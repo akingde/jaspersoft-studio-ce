@@ -53,7 +53,7 @@ public class PropertyListControl extends Composite {
 	/**
 	 * The values inside the list
 	 */
-	private List<Object> values;
+	private List<Object> values = new ArrayList<Object>();
 	
 	/**
 	 * The list of the modify listener added to the control
