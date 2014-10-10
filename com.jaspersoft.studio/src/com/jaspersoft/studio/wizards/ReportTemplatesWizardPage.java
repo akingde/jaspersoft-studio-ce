@@ -316,9 +316,9 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 											GalleryItem item = new GalleryItem(itemGroup, SWT.NONE);
 											item.setData("template", b); //$NON-NLS-1$
 
-											if (b instanceof JrxmlTemplateBundle) {
+											if (b instanceof WizardTemplateBundle) {
 												//itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
-												JrxmlTemplateBundle jrxmlBundle = (JrxmlTemplateBundle)b;
+												WizardTemplateBundle jrxmlBundle = (WizardTemplateBundle)b;
 												Image itemImage = jrxmlBundle.getIcon();
 
 												if (itemImage != null) {
