@@ -14,7 +14,6 @@ package com.jaspersoft.studio.style.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -29,7 +28,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.storage.PreferencesTemplateStylesStorage;
-import com.jaspersoft.studio.editor.style.TemplateStyle;
 
 /**
  * View to show the template styles of specific types. It can be contributed, and allow
@@ -81,10 +79,9 @@ public class TemplateStyleView extends ViewPart implements IContributedContentsV
 		
 		
 		viewProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
-		Collection<TemplateStyle> savedStyles = savedStylesStorage.getStylesDescriptors();
 		for(TemplateViewProvider viewProvider : viewProviders){
 			createTab(viewProvider);
-			viewProvider.fillStyles(savedStyles);
+			viewProvider.fillStyles();
 		}
 		
 		savedStylesStorage.addPropertyChangeListener(PreferencesTemplateStylesStorage.PROPERTY_CHANGE_NAME, new PropertyChangeListener() {

@@ -13,7 +13,6 @@
 package com.jaspersoft.studio.style.view;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Collection;
 
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
@@ -52,7 +51,7 @@ public interface TemplateViewProvider {
 	 * 
 	 * @param styles a list of all the TemplateStyles read from the properties file
 	 */
-	public void fillStyles(Collection<TemplateStyle> styles);
+	public void fillStyles();
 	
 	/**
 	 * Return the drop listener to handle the drag and drop of an element from the tab to the editor, it can be null

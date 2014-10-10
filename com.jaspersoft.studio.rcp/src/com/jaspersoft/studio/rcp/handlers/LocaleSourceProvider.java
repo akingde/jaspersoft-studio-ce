@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.eclipse.ui.AbstractSourceProvider;
 
-import com.jaspersoft.studio.ConfigurationPathProvider;
+import com.jaspersoft.studio.ConfigurationManager;
 
 /**
  * This class provide and environment variable with the locale language
@@ -60,7 +60,7 @@ public class LocaleSourceProvider extends AbstractSourceProvider {
 	 */
 	private static String getActualLocale() {
 		URL location = null;
-		String path = ConfigurationPathProvider.getPath();
+		String path = ConfigurationManager.getPath();
 		String locale = null;
 		try {
 			location = new URL(path);

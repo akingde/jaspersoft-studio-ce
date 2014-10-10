@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.ResourceCache;
 
-import com.jaspersoft.studio.ConfigurationPathProvider;
+import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.translation.ExtendedTranslationInformation;
@@ -130,7 +130,7 @@ public class LocalesTranslationWizardPage extends JSSHelpWizardPage {
 	private String getPluginsFolder() {
 		String separator =  System.getProperty("file.separator");//$NON-NLS-1$
 		try {
-			String path = new URL(ConfigurationPathProvider.getPath()).getFile();
+			String path = new URL(ConfigurationManager.getPath()).getFile();
 			File destination = new File(path).getParentFile();
 			destination = new File(destination.toString() + separator + "dropins" + separator + "eclipse" + separator + "plugins"); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 			if (destination.exists()) return destination.getAbsolutePath();

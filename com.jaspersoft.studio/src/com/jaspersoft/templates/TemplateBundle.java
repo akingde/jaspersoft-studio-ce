@@ -35,16 +35,6 @@ public interface TemplateBundle {
 	 */
 	public String getLabel();
 	
-	
-	/**
-	 * Templates may be organized in categories.
-	 * This method return a string with the category name.
-	 * 
-	 * @return
-	 */
-	public String getCategory();
-	
-	
 	/**
 	 * Return an instance of the template engine to be used with this template bundle.
 	 * The template engine can be specific of each template.
@@ -101,5 +91,4 @@ public interface TemplateBundle {
 	 * false
 	 */
 	public boolean isExternal();
-	
 }

@@ -59,6 +59,7 @@ import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
 import com.jaspersoft.templates.TemplateBundle;
+import com.jaspersoft.templates.WizardTemplateBundle;
 
 /**
  * This page is used to allow the user to select a template bundle. The selected template bundle (TemplateBundle) is
@@ -127,8 +128,13 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		}
 	};
 
-	public TemplateBundle getTemplateBundle() {
-		return selectedTemplate;
+	/**
+	 * Return the wizard template bundle selected by the user
+	 * 
+	 * @return a wizard template bundle
+	 */
+	public WizardTemplateBundle getTemplateBundle() {
+		return (WizardTemplateBundle)selectedTemplate;
 	}
 
 	/**
@@ -245,20 +251,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 			private RGB getGrayColor(){
 				//Grey color for the shadow effect
 				final RGB greyColor =  new RGB(192, 192, 192);
-				//Try to get the correct grey system color
-				/*	try{
-					UIUtils.getDisplay().syncExec(new Runnable() {
-						@Override
-						public void run() {
-							RGB systemGray = UIUtils.getDisplay().getSystemColor(SWT.COLOR_GRAY).getRGB();
-							greyColor.red = systemGray.red;
-							greyColor.green = systemGray.green;
-							greyColor.blue = systemGray.blue;
-						}
-					});
-				} catch(Exception ex){
-					ex.printStackTrace();
-				}*/
 				return greyColor;
 			}
 
@@ -293,8 +285,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 			}
 		};
 	}
-	
-	
 
 	/**
 	 * For a gallery create all the preview of a precise category
@@ -390,10 +380,11 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	 * @param parent
 	 */
 	public void createControl(Composite parent) {
+		
 		Composite container = new Composite(parent, SWT.NULL);
-		setControl(container);
 		container.setLayout(new GridLayout(2, false));
 
+		
 		Label lbl = new Label(container, SWT.NONE);
 		lbl.setText(Messages.ReportTemplatesWizardPage_zoom);
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.FILL_HORIZONTAL);
@@ -406,11 +397,12 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		scale.setPageIncrement(5);
 
 		SashForm sashForm = new SashForm(container, SWT.NONE);
-		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		GridData sashData = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+		sashData.widthHint = 700;
+		sashForm.setLayoutData(sashData);
 
 		// list = new org.eclipse.swt.widgets.List(sashForm, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
 		Table table = new Table(sashForm, SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
-
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
 
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
@@ -418,6 +410,8 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		scale.setLayoutData(gd);
 
 		galleryComposite = new Composite(sashForm, SWT.NONE);
+		GridData galleryData = new GridData(GridData.FILL_BOTH);
+		galleryComposite.setLayoutData(galleryData);
 		layout = new StackLayout();
 		galleryComposite.setLayout(layout);
 
@@ -430,9 +424,6 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		// initializeBackgroundData();
 
 		sashForm.setWeights(new int[] { 20, 80 });
-		
-		
-		
 		scale.addListener(SWT.Selection, new Listener() {
 
 			public void handleEvent(Event event) {
@@ -450,6 +441,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 
 		createTableColumn(table);
 		showGallery(categoryList.get(0));
+		setControl(container);
 	}
 
 	private void createTableColumn(Table table) {

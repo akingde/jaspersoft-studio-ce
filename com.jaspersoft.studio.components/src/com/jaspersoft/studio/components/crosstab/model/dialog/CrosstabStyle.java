@@ -32,6 +32,8 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  */
 public class CrosstabStyle extends TemplateStyle {
 
+	public static final String TEMPLATE_TYPE = "crosstabStyle";
+	
 	/**
 	 * id for serialization
 	 */
@@ -230,6 +232,6 @@ public class CrosstabStyle extends TemplateStyle {
 	 */
 	@Override
 	public String getTemplateName() {
-		return "crosstabStyle";
+		return TEMPLATE_TYPE;
 	}
 }

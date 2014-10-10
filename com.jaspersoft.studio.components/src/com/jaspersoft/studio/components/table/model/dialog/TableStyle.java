@@ -33,6 +33,8 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  */
 public class TableStyle extends TemplateStyle {
 
+	public static final String TEMPLATE_TYPE = "tableStyle";
+	
 	/**
 	 * id for serialization
 	 */
@@ -318,7 +320,7 @@ public class TableStyle extends TemplateStyle {
 	 */
 	@Override
 	public String getTemplateName() {
-		return "tableStyle";
+		return TEMPLATE_TYPE;
 	}
 
 }

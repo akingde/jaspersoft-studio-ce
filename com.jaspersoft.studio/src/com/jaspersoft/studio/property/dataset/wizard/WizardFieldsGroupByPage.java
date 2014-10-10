@@ -26,7 +26,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
-public class WizardFieldsGroupByPage extends WizardFieldsPage {
+public class WizardFieldsGroupByPage extends WizardFieldsDynamicPage {
 	
 	private Map<String, Object> settings = null;
 

@@ -41,7 +41,7 @@ import org.eclipse.ui.internal.handlers.RestartWorkbenchHandler;
 import org.eclipse.ui.menus.UIElement;
 import org.eclipse.ui.services.ISourceProviderService;
 
-import com.jaspersoft.studio.ConfigurationPathProvider;
+import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
@@ -193,7 +193,7 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	 */
 	private static boolean changeLocale(String locale) {
 		URL location = null;
-		String path = ConfigurationPathProvider.getPath();
+		String path = ConfigurationManager.getPath();
 		try {
 			location = new URL(path);
 		} catch (MalformedURLException e) {

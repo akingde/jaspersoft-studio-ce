@@ -41,6 +41,13 @@ public interface TemplateEngine {
 	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings,
 			JasperReportsContext jContext) throws TemplateEngineException;
 	
+	/**
+	 * Set the custom properties and the chosen data adapter on the jasperdesign of the new report 
+	 * 
+	 * @param bundle
+	 * @param dataadapter
+	 * @param properties
+	 */
 	public void setReportDataAdapter(ReportBundle bundle, DataAdapterDescriptor dataadapter, JRPropertiesMap properties);
 	
 }

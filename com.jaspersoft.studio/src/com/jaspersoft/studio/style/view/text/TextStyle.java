@@ -43,6 +43,7 @@ import com.jaspersoft.translation.resources.AbstractResourceDefinition;
  */
 public class TextStyle extends TemplateStyle {
 
+	public static final String TEMPLATE_TYPE = "textStyle";
 
 	private static final long serialVersionUID = 1539973461820002113L;
 
@@ -487,6 +488,6 @@ public class TextStyle extends TemplateStyle {
 	 */
 	@Override
 	public String getTemplateName() {
-		return "textStyle";
+		return TEMPLATE_TYPE;
 	}
 }

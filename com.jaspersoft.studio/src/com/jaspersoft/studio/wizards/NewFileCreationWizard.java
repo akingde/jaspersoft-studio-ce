@@ -29,6 +29,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -257,4 +259,20 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 		}
 	}
 
+	@Override
+	public IWizardPage getNextPage() {
+		// get from the first step the TemplateBundle and read from it the dynamic steps and return the first one
+		ReportTemplatesWizardPage firstStaticStep = ((ReportNewWizard)getWizard()).getTemplateChooserStep();
+		WizardPage firstDynamicStep = firstStaticStep.getTemplateBundle().getCustomWizardPages()[0];
+		firstDynamicStep.setWizard(getWizard());
+		return firstDynamicStep;
+	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		ReportNewWizard container = (ReportNewWizard)getWizard();
+		ReportTemplatesWizardPage firstStaticStep = container.getTemplateChooserStep();
+		WizardPage[] pages = firstStaticStep.getTemplateBundle().getCustomWizardPages();
+		return  isPageComplete() && (pages.length>0 || container.hasCongratulationStep());
+	}
 }

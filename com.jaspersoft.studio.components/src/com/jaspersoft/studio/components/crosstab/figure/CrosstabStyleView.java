@@ -119,10 +119,12 @@ public class CrosstabStyleView extends CommonViewProvider {
 
 	public List<TemplateStyle> getStylesList() {
 		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
-		Collection<TemplateStyle> savedStyles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors();
-		for (TemplateStyle style : savedStyles)
-			if (style instanceof CrosstabStyle)
+		Collection<TemplateStyle> savedStyles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
+		if (savedStyles != null){
+			for (TemplateStyle style : savedStyles){
 				result.add(style);
+			}
+		}
 		return result;
 	}
 
@@ -135,12 +137,15 @@ public class CrosstabStyleView extends CommonViewProvider {
 	 *          a list of all the TemplateStyles read from the properties file
 	 */
 	@Override
-	public void fillStyles(Collection<TemplateStyle> styles) {
+	public void fillStyles() {
 		tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
 		checkedGallery.setRedraw(false);
-		for (TemplateStyle style : styles)
-			if (style instanceof CrosstabStyle)
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(CrosstabStyle.TEMPLATE_TYPE);
+		if (styles != null){
+			for (TemplateStyle style : styles){
 				getItem(style, tableGroup);
+			}
+		}
 		checkedGallery.setRedraw(true);
 	}
 

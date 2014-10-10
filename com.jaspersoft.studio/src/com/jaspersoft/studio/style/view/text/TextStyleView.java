@@ -420,7 +420,7 @@ public class TextStyleView implements TemplateViewProvider {
 	
 	private void clearAndFillContent(){
 		clearContent();
-		fillStyles(TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors());
+		fillStyles();
 	}
 
 	@Override
@@ -431,10 +431,11 @@ public class TextStyleView implements TemplateViewProvider {
 	}
 	
 	@Override
-	public void fillStyles(Collection<TemplateStyle> styles) {
+	public void fillStyles() {
 		sampleComposite.setRedraw(false);
-		for(TemplateStyle style : styles){
-			if (style instanceof TextStyle){
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(TextStyle.TEMPLATE_TYPE);
+		if (styles != null){
+			for(TemplateStyle style : styles){
 				final Composite sampleArea = new Composite(sampleComposite, SWT.BORDER);
 				sampleArea.setData(style);
 				addDragSupport(sampleArea);
@@ -451,7 +452,7 @@ public class TextStyleView implements TemplateViewProvider {
 				sampleArea.addControlListener(new ControlAdapter() {
 					@Override
 					public void controlResized(ControlEvent e) {
- 						Rectangle bounds = sampleArea.getBounds();
+						Rectangle bounds = sampleArea.getBounds();
 						int width = bounds.width-4;
 						int height = 40;
 						if (width < 1) {

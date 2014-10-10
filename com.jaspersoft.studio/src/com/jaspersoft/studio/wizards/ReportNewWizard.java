@@ -8,33 +8,20 @@
  ******************************************************************************/
 package com.jaspersoft.studio.wizards;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.eclipse.wizard.project.ProjectUtil;
-import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
@@ -46,7 +33,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -57,39 +44,69 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
-import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.templates.ReportBundle;
-import com.jaspersoft.templates.TemplateBundle;
-import com.jaspersoft.templates.TemplateEngine;
 
 /**
- * Basic wizard to create a new report.
+ * Wizard to create a new report. It has three static step. The 
+ * first one allow to the user to choose a template for the report.
+ * The second one allow to choose the destination of the report on
+ * the hard disk. And the last one is simply a "congratulation" step.
  * 
- * @author gtoffoli
+ * All the steps between the second one and the last one are contributed
+ * Dynamically by the template bundle selected inside the first step
+ * 
+ * 
+ * @author Orlandin Marco
  * 
  */
 public class ReportNewWizard extends JSSWizard implements INewWizard {
 
+	/**
+	 * Key to extract from the settings of the wizard the container name of the report. The container name
+	 * is created when the finish button is pressed
+	 */
+	public static final String CONTAINER_NAME_KEY = "containerNameKey";
+	
+	/**
+	 * Key to extract from the settings of the wizard the file name of the report. The file name
+	 * is created when the finish button is pressed
+	 */
+	public static final String FILE_NAME_KEY = "fileNameKey";
+	
+	/**
+	 * Unique id of the wizard
+	 */
 	public static final String WIZARD_ID = "com.jaspersoft.studio.wizards.ReportNewWizard";
+	
 	public static final String NEW_REPORT_JRXML = "report.jrxml";
+	
+	/**
+	 * Page where the user can choose which template bundle will be used to generate the report
+	 */
+	private ReportTemplatesWizardPage templateChooserStep;
 
-	private ReportTemplatesWizardPage step0;
-	private NewFileCreationWizard step1;
-	private WizardDataSourcePage step2;
-	private WizardFieldsPage step3;
-	private WizardFieldsGroupByPage step4;
+	/**
+	 * Step where the user can choose the location on the workspace of the report file and its name
+	 */
+	private NewFileCreationWizard fileLocationStep;
 
+	/**
+	 * Congratulation page placed at the end of the wizard. This page is optional and the flag showCongratulationStep
+	 * can be used to have or not it. If the flag is false the page is not created so this reference will be null
+	 */
 	private CongratulationsWizardPage congratulationsStep;
-
+	
+	/**
+	 * Flag to enable or disable the final configuration page
+	 */
 	private boolean showCongratulationsStep = true;
 
+	/**
+	 * The current selection when the wizard is opened, used to get a destination folder is 
+	 * is opened by a contextual menu
+	 */
 	private ISelection selection;
 
 	/**
@@ -99,12 +116,10 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		super();
 		setWindowTitle(Messages.ReportNewWizard_title);
 		setNeedsProgressMonitor(true);
-
 		// Attention! This operation should always be performed by
 		// the wizard caller, since we are forcing here a new config.
 		JasperReportsConfiguration jrConfig = JasperReportsConfiguration.getDefaultJRConfig();
 		jrConfig.setJasperDesign(new JasperDesign());
-
 		setConfig(jrConfig);
 	}
 
@@ -116,25 +131,15 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 	}
 
 	/**
-	 * Adding the page to the wizard.
+	 * Adding the static pages to the wizard.
 	 */
-
 	@Override
 	public void addPages() {
-		step0 = new ReportTemplatesWizardPage();
-		addPage(step0);
+		templateChooserStep = new ReportTemplatesWizardPage();
+		addPage(templateChooserStep);
 
-		step1 = new NewFileCreationWizard("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
-		addPage(step1);
-
-		step2 = new WizardDataSourcePage();
-		addPage(step2);
-
-		step3 = new WizardFieldsPage();
-		addPage(step3);
-
-		step4 = new WizardFieldsGroupByPage();
-		addPage(step4);
+		fileLocationStep = new NewFileCreationWizard("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+		addPage(fileLocationStep);
 
 		if (showCongratulationsStep) {
 			congratulationsStep = new CongratulationsWizardPage(Messages.CongratulationsWizardPage_title,
@@ -143,53 +148,51 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 			addPage(congratulationsStep);
 		}
 	}
-
+	
 	/**
-	 * This method drive the logic to just skip steps.
-	 * 
-	 * The getNextPage method is generally used to get stuff from a page and configure the next one creating more logic
-	 * between pages. This logic has been moved elsewhere: the glue used in JSSWizard is acutally the settings map, which
-	 * is passed along the way, since stored inside the wizard. A mechanism to load and store settings allow the pages to
-	 * act in a consistent way without having to put any logic here, even if logic can still be added in case of special
-	 * behaviours (just like it would be possible to extend the relevant pages).
-	 * 
-	 * An interesting example is the JSSWizardPage and JSSWizardRunnablePage which provide the base pages to JSS based
-	 * wizard. In particular the JSSWizardRunnablePage allows to execute a process on next, which can be used for time
-	 * consuming tasks (like read fields).
-	 * 
+	 * This method is called when 'Cancel' button is pressed in the wizard. It notifiy 
+	 * to the current template bundle that the wizard was aborted in case it need to
+	 * unload some data
 	 */
 	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-
-		if (page == step2) {
-			if (!getSettings().containsKey(WizardDataSourcePage.DISCOVERED_FIELDS)
-					|| ((List<?>) getSettings().get(WizardDataSourcePage.DISCOVERED_FIELDS)).isEmpty()) {
-				if (!showCongratulationsStep) {
-					// ask for the next page by giving the last page available...
-					return super.getNextPage(getPageList().get(getPageList().size() - 1));
-				}
-				return congratulationsStep;
-			}
-		}
-		return super.getNextPage(page);
+	public boolean performCancel() {
+		templateChooserStep.getTemplateBundle().doCancel();
+		return super.performCancel();
 	}
-
+	
 	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
-	 * wizard as execution context.
+	 * This method is called when 'Finish' button is pressed in the wizard. It store data from the 
+	 * static step inside the shared settings then it call the finish code from the current template
+	 * bundle. If the code return an IFile it is also opened in the editor
 	 */
 	@Override
 	public boolean performFinish() {
-
-		final String containerName = step1.getContainerFullPath().toPortableString();
-		final String fileName = step1.getFileName();
-
 		try {
+			Map<String, Object> settings = getSettings();
+			//Store in the settings some information from the location step
+			settings.put(CONTAINER_NAME_KEY, fileLocationStep.getContainerFullPath().toPortableString()); 
+			settings.put(FILE_NAME_KEY, fileLocationStep.getFileName()); 
+			//Create and open the report
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(Messages.ReportNewWizard_2, IProgressMonitor.UNKNOWN);
 					try {
-						doFinish(containerName, fileName, monitor);
+						//calls the finish method of the current template bundle
+						final IFile	reportFile = templateChooserStep.getTemplateBundle().doFinish(ReportNewWizard.this, monitor);
+						//If the report file is create correctly then open it
+						if (reportFile != null){
+							monitor.setTaskName(Messages.ReportNewWizard_5);
+							UIUtils.getDisplay().asyncExec(new Runnable() {
+								public void run() {
+									IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+									try {
+										IDE.openEditor(page, reportFile, true);
+									} catch (PartInitException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+						}
 					} catch (Exception e) {
 						UIUtils.showError(e);
 					} finally {
@@ -204,154 +207,7 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		}
 		return super.performFinish();
 	}
-
-	/**
-	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
-	 * the editor on the newly created file.
-	 */
-	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
-		monitor.beginTask(Messages.ReportNewWizard_3 + fileName, 2);
-
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		IResource resource = root.findMember(new Path(containerName));
-		if (!resource.exists() || !(resource instanceof IContainer)) {
-			throwCoreException(String.format(Messages.ReportNewWizard_4, containerName));
-		}
-
-		Map<String, Object> templateSettings = new HashMap<String, Object>();
-
-		TemplateBundle templateBundle = step0.getTemplateBundle();
-
-		JRDesignDataset dataset = WizardUtils.createDataset(getConfig(), true, getSettings());
-
-		templateSettings.put(DefaultTemplateEngine.DATASET, dataset);
-
-		if (getSettings().containsKey(WizardDataSourcePage.DATASET_FIELDS)) {
-			templateSettings.put(DefaultTemplateEngine.FIELDS, getSettings().get(WizardDataSourcePage.DATASET_FIELDS));
-		}
-
-		if (getSettings().containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
-			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, getSettings().get(WizardDataSourcePage.GROUP_FIELDS));
-		}
-
-		if (getSettings().containsKey(WizardDataSourcePage.ORDER_GROUP)) {
-			templateSettings.put(DefaultTemplateEngine.ORDER_GROUP, getSettings().get(WizardDataSourcePage.ORDER_GROUP));
-		}
-
-		// If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the
-		// sub report
-		if (getSettings().containsKey(WizardDataSourcePage.EXTRA_PARAMETERS)) {
-			templateSettings.put(DefaultTemplateEngine.OTHER_PARAMETERS,
-					getSettings().get(WizardDataSourcePage.EXTRA_PARAMETERS));
-		}
-
-		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
-		ByteArrayInputStream stream = null;
-		try {
-			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings, getConfig());
-
-			// Save the data adapter used...
-			if (step2.getDataAdapter() != null) {
-				Object props = getSettings().get(WizardDataSourcePage.DATASET_PROPERTIES);
-				JRPropertiesMap pmap = new JRPropertiesMap();
-				if (props != null && props instanceof JRPropertiesMap) {
-					pmap = (JRPropertiesMap) props;
-				}
-				templateEngine.setReportDataAdapter(reportBundle, step2.getDataAdapter(), pmap);
-
-			}
-
-			// Store the report bundle on file system
-			IContainer container = (IContainer) resource;
-			UIUtils.getDisplay().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					reportFile = step1.createNewFile();// container.getFile(new Path(fileName));
-				}
-			});
-
-			String repname = reportFile.getName();
-			int lindx = repname.lastIndexOf(".");
-			if (lindx > 0 && lindx < repname.length() - 1)
-				repname = repname.substring(0, lindx);
-
-			reportBundle.getJasperDesign().setName(repname);
-
-			// Save the all the files...
-			String contents = JRXmlWriterHelper.writeReport(getConfig(), reportBundle.getJasperDesign(), reportFile, false);
-			stream = new ByteArrayInputStream(contents.getBytes());
-			try {
-				if (reportFile.exists()) {
-					reportFile.setContents(stream, true, true, monitor);
-				} else {
-					reportFile.create(stream, true, monitor);
-				}
-			} finally {
-				FileUtils.closeStream(stream);
-			}
-			saveReportBundleResources(monitor, reportBundle, container);
-
-			monitor.setTaskName(Messages.ReportNewWizard_5);
-			UIUtils.getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					try {
-						IDE.openEditor(page, reportFile, true);
-					} catch (PartInitException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		} catch (Exception e) {
-			UIUtils.showError(e);
-		} finally {
-			FileUtils.closeStream(stream);
-		}
-	}
-
-	private IFile reportFile;
-
-	public IFile getReportFile() {
-		return reportFile;
-	}
-
-	/**
-	 * Store all the resources provided by the report bundle in the same folder as the new report.
-	 * 
-	 * @param monitor
-	 * @param reportBundle
-	 * @param container
-	 */
-	private void saveReportBundleResources(final IProgressMonitor monitor, ReportBundle reportBundle, IContainer container) {
-		monitor.subTask(Messages.ReportNewWizard_6);
-
-		List<String> resourceNames = reportBundle.getResourceNames();
-
-		for (String resourceName : resourceNames) {
-			IFile resourceFile = container.getFile(new Path(resourceName));
-			InputStream is = null;
-			try {
-				if (!resourceFile.exists()) {
-					is = reportBundle.getResource(resourceName);
-					if (is != null) {
-						resourceFile.create(is, true, monitor);
-					}
-				}
-			} catch (Exception e) {
-				UIUtils.showError(e);
-			} finally {
-				FileUtils.closeStream(is);
-			}
-		}
-		monitor.done();
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null); //$NON-NLS-1$
-		throw new CoreException(status);
-	}
-
+	
 	/**
 	 * We will accept the selection in the workbench to see if we can initialize from it.
 	 * 
@@ -400,18 +256,118 @@ public class ReportNewWizard extends JSSWizard implements INewWizard {
 		}
 		this.selection = selection;
 	}
-
+	
 	/**
-	 * We don't want to finish the wizard at "any" time. This methods allows to decide when we can and when we cannot
-	 * finish...
-	 * 
+	 * To check if the report can finish we check if both the static steps and
+	 * the dynamic ones are completed
 	 */
-	@Override
 	public boolean canFinish() {
-		// if (getContainer().getCurrentPage() != congratulationsStep)
-		// return false;
-
-		return super.canFinish();
+		//Check the static steps
+		boolean result = templateChooserStep.isPageComplete() && fileLocationStep.isPageComplete() && (!hasCongratulationStep() || congratulationsStep.isPageComplete());
+		if (!result) return result;
+		//The static steps are completed, check the dynamic one
+		for(WizardPage page : templateChooserStep.getTemplateBundle().getCustomWizardPages()){
+			if (!page.isPageComplete()) return false;
+		}
+		return true;
 	}
 
+	/**
+	 * Return the congratulation step
+	 * 
+	 * @return The congratulation step, can be null if hasCongratulationStep() is false 
+	 */
+	public CongratulationsWizardPage getCongratulationsStep() {
+		return congratulationsStep;
+	}
+	
+	/**
+	 * Return the current report template wizard page
+	 * 
+	 * @return a not null wizard page where the user choose a report template
+	 */
+	public ReportTemplatesWizardPage getTemplateChooserStep() {
+		return templateChooserStep;
+	}
+
+	/**
+	 * Return the current report template wizard page
+	 * 
+	 * @return a not null wizard page where the user choose a report template
+	 */
+	public NewFileCreationWizard getFileLocationStep() {
+		return fileLocationStep;
+	}
+
+	/**
+	 * Check if the last congratulation page should be shown or not
+	 * 
+	 * @return true if the page should be shown, false otherwise
+	 */
+	public boolean hasCongratulationStep() {
+		return showCongratulationsStep;
+	}
+	
+	/**
+	 * Utility class to create a file using the methods from 
+	 * the File Location step. Since this methods relay to 
+	 * the widgets in the dialog they must be executed inside
+	 * a graphic thread.
+	 * 
+	 * @author Orlandin Marco
+	 *
+	 */
+	private class FileCreator{
+		
+		/**
+		 * The created file
+		 */
+		private IFile result;
+		
+		/**
+		 * The File Location, that contains the information and the 
+		 * methods to create the file
+		 */
+		private NewFileCreationWizard creationWizard;
+		
+		/**
+		 * Create a FileCreator for a specific wizard
+		 * 
+		 * @param creationWizard wizard from where the File Location
+		 * step is read
+		 */
+		public FileCreator(NewFileCreationWizard creationWizard){
+			this.creationWizard = creationWizard;
+		}
+		
+		/**
+		 * Create the file defined in the File Loaction step and
+		 * return it
+		 * 
+		 * @return an IFile
+		 */
+		public IFile createFile(){
+			result = null;
+			UIUtils.getDisplay().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					result = creationWizard.createNewFile();
+				}
+			});
+			return result;
+		}
+		
+	}
+	
+	/**
+	 * Return a file using the information provided in the File Location
+	 * step to know where it must be created and it's name
+	 * 
+	 * @return the file defined in the file location step
+	 */
+	public IFile createTargetFile(){
+		return (new FileCreator(getFileLocationStep())).createFile();
+	}
+	
 }

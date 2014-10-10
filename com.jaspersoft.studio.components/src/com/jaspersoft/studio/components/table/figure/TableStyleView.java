@@ -81,10 +81,12 @@ public class TableStyleView extends CommonViewProvider {
 
 	public List<TemplateStyle> getStylesList() {
 		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
-		Collection<TemplateStyle> savedStyles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors();
-		for (TemplateStyle style : savedStyles)
-			if (style instanceof TableStyle)
+		Collection<TemplateStyle> savedStyles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(TableStyle.TEMPLATE_TYPE);
+		if (savedStyles != null){
+			for (TemplateStyle style : savedStyles){
 				result.add(style);
+			}
+		}
 		return result;
 	}
 
@@ -138,12 +140,15 @@ public class TableStyleView extends CommonViewProvider {
 	 *          a list of all the TemplateStyles read from the properties file
 	 */
 	@Override
-	public void fillStyles(Collection<TemplateStyle> styles) {
+	public void fillStyles() {
 		tableGroup = new GalleryItem(checkedGallery, SWT.NONE);
 		checkedGallery.setRedraw(false);
-		for (TemplateStyle style : styles)
-			if (style instanceof TableStyle)
+		Collection<TemplateStyle> styles = TemplateStyleView.getTemplateStylesStorage().getStylesDescriptors(TableStyle.TEMPLATE_TYPE);
+		if (styles != null){
+			for (TemplateStyle style : styles){
 				getItem(style, tableGroup);
+			}
+		}
 		checkedGallery.setRedraw(true);
 	}
 

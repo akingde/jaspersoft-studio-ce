@@ -12,427 +12,157 @@
  ******************************************************************************/
 package com.jaspersoft.studio.templates;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.io.ByteArrayInputStream;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import net.sf.jasperreports.eclipse.util.FileExtension;
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRImage;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.JRSubreport;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.wizard.WizardPage;
 
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourceDynamicPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsDynamicPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByDynamicPage;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.BuiltInCategories;
+import com.jaspersoft.studio.wizards.ReportNewWizard;
+import com.jaspersoft.studio.wizards.WizardUtils;
+import com.jaspersoft.templates.ReportBundle;
+import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateEngine;
+import com.jaspersoft.templates.WizardTemplateBundle;
 
-/**
- * This is a generic template bundle able to laod info from a JRXML file. The Jrxml location is provided via URL, so the
- * location of the jrxml is filesystem independent (it could be a jar, a bundleentry or a regural file inside a
- * directory). When the JRXML is loaded also a properties file is searched in the same location with the name of
- * nameOfTheJRXML_descriptor.properties. This properties file contains some basic information on the template, like
- * categories, name and so on. If the properties file is not found then these properties are read from the JRXML
- * 
- * @author gtoffoli & Orlandin Marco
- * 
- */
-public class JrxmlTemplateBundle implements IconedTemplateBundle {
 
-	public static final String MAIN_REPORT = "MAIN_REPORT";
-	public static final String DEFAULT_ICON = "blank_a4.png";
+public class JrxmlTemplateBundle extends WizardTemplateBundle {
 
-	private String label;
-	private String category = null;
-	private JasperDesign jasperDesign = null;
-	private boolean isExternal;
-
-	protected TemplateEngine templateEngine = null;
-
-	/**
-	 * This is the url of the jrxml used to define this type of bundle.
-	 * 
-	 */
-	private URL templateURL = null;
-
-	/**
-	 * The list of files (available in the same directory as the jrxml), discovered by looking at the main jasperdesign...
-	 * 
-	 */
-	protected List<String> resourceNames;
-
-	/**
-	 * The properties file associated with the report
-	 */
-	protected Properties propertyFile = null;
-
-	/**
-	 * A map to map resource names (file names) with their full location.
-	 */
-	protected Map<String, URL> resourceUrls;
-
-	private Image icon = null;;
-
-	@Override
-	public TemplateEngine getTemplateEngine() {
-		return templateEngine;
-	}
-
-	/**
-	 * Get a named resource from the bundle
-	 * 
-	 * This template implementation assumes that all the resources are located in the same directory as the main report.
-	 * 
-	 * @param name
-	 *          The name of the resource to open
-	 * 
-	 * @return an InputStream or null if the resource has not been found or an error has occurred
-	 */
-	@Override
-	public InputStream getResource(String name) {
-
-		if (!getResourceNames().contains(name))
-			return null;
-
-		// We need to replace the last name from the current templateURL..
-		String url = templateURL.toString();
-
-		String mainFileName = new File(templateURL.getFile()).getName();
-
-		url = url.substring(0, url.length() - mainFileName.length()) + name;
-		try {
-			URL resourceURL = new URL(url);
-
-			return resourceURL.openStream();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	/**
-	 * @return the category (not used for now, always returns null)
-	 */
-	public String getCategory() {
-		return category;
-	}
-
-	/**
-	 * @param category
-	 *          the category to set
-	 */
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	/**
-	 * 
-	 * @return the label
-	 */
-	public String getLabel() {
-		return label;
-	}
-
-	/**
-	 * @param label
-	 *          the label to set
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	/**
-	 * Return the name of all the resources referenced by this template. This can be an expensive operation, since the
-	 * jrxml representing the template may be loaded in order locate all the referenced resources.
-	 * 
-	 */
-	@Override
-	public List<String> getResourceNames() {
-
-		if (resourceNames == null) {
-
-			resourceNames = new ArrayList<String>();
-
-			List<JRDesignElement> list = ModelUtils.getAllGElements(getJasperDesign());
-
-			System.out.println("Elements found: " + list);
-
-			for (JRDesignElement el : list) {
-
-				// Check for images...
-				if (el instanceof JRImage) {
-					JRImage im = (JRImage) el;
-
-					String res = evalResourceName(im.getExpression());
-					System.out.println("Evaluation " + im.getExpression().getText() + " " + res);
-
-					if (res != null) {
-						resourceNames.add(res);
-					}
-				}
-
-				// Check for subreports (filename.jasper becomes filename.jrxml)
-				if (el instanceof JRSubreport) {
-					JRSubreport sr = (JRSubreport) el;
-
-					String res = evalResourceName(sr.getExpression());
-
-					if (res.endsWith(".jasper")) {
-						res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml";
-						resourceNames.add(res);
-					}
-				}
-
-			}
-
-			// Check for external style references
-			List<JRReportTemplate> templates = getJasperDesign().getTemplatesList();
-			for (JRReportTemplate t : templates) {
-				String res = evalResourceName(t.getSourceExpression());
-				if (res != null) {
-					resourceNames.add(res);
-				}
-			}
-
-		}
-
-		// Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries(Messages.ReportNewWizard_7, str,
-		// true);
-		// while (en.hasMoreElements()) {
-		// URL uimage = (URL) en.nextElement();
-		// IFile f = repFile.getParent().getFile(new Path(str));
-		// try {
-		// if (!f.exists())
-		// f.create(uimage.openStream(), true, monitor);
-		// } catch (CoreException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		// }
-
-		return resourceNames;
-	}
-
-	/**
-	 * Return a property for the TemplateBundle. First the property is read from the properties file of the report. If
-	 * this file is not available then the property is read from the JasperDesign
-	 */
-	public Object getProperty(String properyName) {
-		if (propertyFile != null)
-			return propertyFile.getProperty(properyName);
-		return getJasperDesign().getProperty(properyName);
-	}
-
-	/**
-	 * This method check that an expression has a text of type:
-	 * 
-	 * "filename"
-	 * 
-	 * if the format is different, or if filename does not exist in the current report directory, it returns null.
-	 * 
-	 * @param exp
-	 * @return the correct filename
-	 */
-	private String evalResourceName(JRExpression exp) {
-		if (exp == null)
-			return null;
-		if (exp.getText() == null || exp.getText().length() == 0)
-			return null;
-
-		String text = exp.getText().trim();
-
-		if (text.charAt(0) != '"')
-			return null;
-
-		text = text.substring(1);
-
-		if (text.lastIndexOf('"') != text.length() - 1)
-			return null;
-
-		text = text.substring(0, text.length() - 1);
-
-		if (text.indexOf('"') >= 0)
-			return null;
-
-		java.io.File f = new java.io.File(text);
-
-		// We don't accept images inside a subdirectory, all must be in the same directory as the main jrxml
-		if (f.getParent() != null)
-			return null;
-
-		return text;
-
-	}
-
-	/**
-	 * Load the jasperdesign from the JRXML file and save it
-	 */
-	protected void loadJasperDesign() {
-		InputStream is = null;
-		try {
-			is = templateURL.openStream();
-			this.jasperDesign = JRXmlLoader.load(jrContext, is);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			FileUtils.closeStream(is);
-		}
-	}
-
-	private JasperReportsContext jrContext;
-	/**
-	 * Creates a template bundle from a file.
-	 * 
-	 * @param file
-	 * @throws Exception
-	 */
-	public JrxmlTemplateBundle(URL url, JasperReportsContext jrContext) throws Exception {
-		this(url, false, jrContext);
-	}
-
-	/**
-	 * Creates a template bundle from a file.
-	 * 
-	 * @param file
-	 * @throws Exception
-	 */
+	private WizardDataSourceDynamicPage step1 = null;
+	private WizardFieldsDynamicPage step2 = null;
+	private WizardFieldsGroupByDynamicPage step3 = null;
+	
 	public JrxmlTemplateBundle(URL url, boolean isExternal, JasperReportsContext jrContext) throws Exception {
-		if (jrContext == null)
-			jrContext = JasperReportsConfiguration.getDefaultJRConfig();
-		this.jrContext = jrContext;
-		this.templateURL = url;
-		this.isExternal = isExternal;
-		String urlPath = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");
-		if (urlPath.endsWith(FileExtension.PointJRXML)) {
-			String propertiesPath = urlPath.substring(0, urlPath.length() - 6).concat("_descriptor.properties");
+		super(url, isExternal, jrContext);
+	}
+	
+	public JrxmlTemplateBundle(URL url, JasperReportsContext jrContext) throws Exception {
+		super(url, jrContext);
+	}
+	
+	@Override
+	public IFile doFinish(ReportNewWizard mainWizard, IProgressMonitor monitor) throws CoreException {
+		
+		
+		IFile reportFile = null;
+		
+		Map<String, Object> settings = mainWizard.getSettings();
+		
+		String containerName = (String)settings.get(ReportNewWizard.CONTAINER_NAME_KEY);
+		String fileName = (String)settings.get(ReportNewWizard.FILE_NAME_KEY);
+		
+		monitor.beginTask(Messages.ReportNewWizard_3 + fileName, 2);
 
-			URL propertiesFile = new URL(propertiesPath);
-			if (!isExternal() || (new File(propertiesFile.getFile())).exists()) {
-				this.propertyFile = new Properties();
-				this.propertyFile.load(propertiesFile.openStream());
-			}
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IResource resource = root.findMember(new Path(containerName));
+		if (!resource.exists() || !(resource instanceof IContainer)) {
+			throwCoreException(String.format(Messages.ReportNewWizard_4, containerName));
+		}
+		
+		JasperReportsConfiguration jConfig = mainWizard.getConfig();
+		
+		Map<String, Object> templateSettings = new HashMap<String, Object>();
 
-			// read information from the jasper design object...
-			readProperties();
-			// locate the template thumbnail by replacing the .jrxml with png....
-			String[] imageExtensions = new String[] { ".png", ".gif", ".jpg" };
+		TemplateBundle templateBundle = mainWizard.getTemplateChooserStep().getTemplateBundle();
 
-			String baseImageUrl = URLDecoder.decode(templateURL.toExternalForm(), "utf-8");
-			// remove the .jrxml...
-			baseImageUrl = baseImageUrl.substring(0, baseImageUrl.length() - FileExtension.PointJRXML.length());
-			for (String extension : imageExtensions) {
-				try {
-					URL iconURL = new URL(baseImageUrl + extension);
-					setIcon(getIconFromUrl(iconURL));
-					if (getIcon() != null)
-						break;
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
+		JRDesignDataset dataset = WizardUtils.createDataset(jConfig, true, settings);
+
+		templateSettings.put(DefaultTemplateEngine.DATASET, dataset);
+
+		if (settings.containsKey(WizardDataSourceDynamicPage.DATASET_FIELDS)) {
+			templateSettings.put(DefaultTemplateEngine.FIELDS, settings.get(WizardDataSourceDynamicPage.DATASET_FIELDS));
+		}
+
+		if (settings.containsKey(WizardDataSourceDynamicPage.GROUP_FIELDS)) {
+			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, settings.get(WizardDataSourceDynamicPage.GROUP_FIELDS));
+		}
+
+		if (settings.containsKey(WizardDataSourceDynamicPage.ORDER_GROUP)) {
+			templateSettings.put(DefaultTemplateEngine.ORDER_GROUP, settings.get(WizardDataSourceDynamicPage.ORDER_GROUP));
+		}
+
+		// If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the
+		// sub report
+		if (settings.containsKey(WizardDataSourceDynamicPage.EXTRA_PARAMETERS)) {
+			templateSettings.put(DefaultTemplateEngine.OTHER_PARAMETERS,
+			settings.get(WizardDataSourceDynamicPage.EXTRA_PARAMETERS));
+		}
+
+		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
+		ByteArrayInputStream stream = null;
+		try {
+			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings, jConfig);
+
+			// Save the data adapter used...
+			if (step1.getDataAdapter() != null) {
+				Object props = settings.get(WizardDataSourceDynamicPage.DATASET_PROPERTIES);
+				JRPropertiesMap pmap = new JRPropertiesMap();
+				if (props != null && props instanceof JRPropertiesMap) {
+					pmap = (JRPropertiesMap) props;
 				}
+				templateEngine.setReportDataAdapter(reportBundle, step1.getDataAdapter(), pmap);
+
 			}
-		}
-
-	}
-
-	/**
-	 * Check for an icon provided by the template. If an icon is not available, it defaults to an internal report png.
-	 * 
-	 * @param iconURL
-	 * @return
-	 */
-	private Image getIconFromUrl(URL iconURL) {
-		ImageDescriptor descriptor = ImageDescriptor.createFromURL(iconURL);
-		if (descriptor == null) {
-			// fall back to the icons/report.png...
-			descriptor = ResourceManager.getImageDescriptor("icons/report.png"); //$NON-NLS-1$
-		}
-		return ResourceManager.getImage(descriptor);
-	}
-
-	/**
-	 * @return the templateIcon
-	 */
-	public Image getIcon() {
-
-		return icon;
-	}
-
-	/**
-	 * @param templateIcon
-	 *          the templateIcon to set
-	 */
-	public void setIcon(Image templateIcon) {
-		this.icon = templateIcon;
-	}
-
-	/**
-	 * The jasperdesign provided by the template ready to be customized. If the jasperdesign was not previously loaded
-	 * then it is read from the JRXML file
-	 * 
-	 */
-	public JasperDesign getJasperDesign() {
-		if (jasperDesign == null)
-			loadJasperDesign();
-		return jasperDesign;
-	}
-
-	/**
-	 * @return the templateURL
-	 */
-	public URL getTemplateURL() {
-		return templateURL;
-	}
-
-	/**
-	 * @param templateURL
-	 *          the templateURL to set
-	 */
-	protected void setTemplateURL(URL templateURL) {
-		this.templateURL = templateURL;
-	}
-
-	/**
-	 * Introspect the properties file or jasperdesign to set template label and engine informations
-	 * 
-	 */
-	protected void readProperties() {
-		String name = null;
-		String engine = null;
-		if (this.propertyFile != null) {
-			name = propertyFile.getProperty(BuiltInCategories.NAME_KEY);
-			engine = propertyFile.getProperty(BuiltInCategories.ENGINE_KEY);
-		}
-
-		if (engine == null || engine.toLowerCase().equals(DefaultTemplateProvider.defaultEngineKey))
-			templateEngine = new DefaultTemplateEngine();
-		if (name == null) {
-			name = getJasperDesign().getName();
-		}
-		setLabel(name);
+			reportFile = saveBundleIntoFile(reportBundle, mainWizard, jConfig, monitor);
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		} 
+		FileUtils.closeStream(stream);
+		step1 = null;
+		step2 = null;
+		step3 = null;
+		return reportFile;
 	}
 
 	@Override
-	public boolean isExternal() {
-		return isExternal;
+	public void doCancel() {
+		step1 = null;
+		step2 = null;
+		step3 = null;
+	}
+	
+	@Override
+	public WizardPage[] getCustomWizardPages() {
+		if (step1 == null || step2 == null || step3 == null){
+			step1 = new WizardDataSourceDynamicPage(this);
+			step2 = new WizardFieldsDynamicPage(this);
+			step3 = new WizardFieldsGroupByDynamicPage(this);
+		}
+		WizardPage[] result = new WizardPage[]{step1, step2, step3};
+		return result;
+	}
+
+	public WizardDataSourceDynamicPage getStep1() {
+		return step1;
+	}
+
+	public WizardFieldsDynamicPage getStep2() {
+		return step2;
+	}
+
+	public WizardFieldsGroupByDynamicPage getStep3() {
+		return step3;
 	}
 
 }
