@@ -75,7 +75,8 @@ public class ProxyConnection implements IConnection {
 	private IConnection soap;
 
 	@Override
-	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
+	public boolean connect(IProgressMonitor monitor, ServerProfile sp)
+			throws Exception {
 		Exception exc = null;
 		for (IConnection co : cons) {
 			String connName = co.getClass().getName().toUpperCase();
@@ -121,15 +122,18 @@ public class ProxyConnection implements IConnection {
 		return c != null ? c.getServerInfo(monitor) : null;
 	}
 
-	private boolean useSoap(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+	private boolean useSoap(IProgressMonitor monitor, ResourceDescriptor rd)
+			throws Exception {
 		String v = c.getServerInfo(monitor).getVersion();
-		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0 && rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
+		if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("5.6") < 0
+				&& rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 			return true;
 		return false;
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
+	public ResourceDescriptor get(IProgressMonitor monitor,
+			ResourceDescriptor rd, File f) throws Exception {
 		if (useSoap(monitor, rd))
 			rd = soap.get(monitor, rd, f);
 		else
@@ -138,7 +142,8 @@ public class ProxyConnection implements IConnection {
 			} catch (Exception e) {
 				if (e instanceof HttpResponseException) {
 					HttpResponseException he = (HttpResponseException) e;
-					if (he.getStatusCode() == 500 && he.getMessage().contains("Unexpected error")) {
+					if (he.getStatusCode() == 500
+							&& he.getMessage().contains("Unexpected error")) {
 						rd = soap.get(monitor, rd, f);
 						rd.setChildrenDirty(false);
 						return rd;
@@ -146,12 +151,10 @@ public class ProxyConnection implements IConnection {
 						rd = soap.get(monitor, rd, f);
 						rd.setChildrenDirty(false);
 						return rd;
-					} else if (he.getStatusCode() == 401) {
-						if (!error401) {
-							c.connect(monitor, getServerProfile());
-							error401 = true;
-							return get(monitor, rd, f);
-						}
+					} else if (he.getStatusCode() == 401 && !error401) {
+						c.connect(monitor, getServerProfile());
+						error401 = true;
+						return get(monitor, rd, f);
 					}
 				}
 				error401 = false;
@@ -166,7 +169,8 @@ public class ProxyConnection implements IConnection {
 	private boolean error401 = false;
 
 	@Override
-	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+	public List<ResourceDescriptor> list(IProgressMonitor monitor,
+			ResourceDescriptor rd) throws Exception {
 		List<ResourceDescriptor> list = null;
 		// String v = c.getServerInfo(monitor).getVersion();
 		// if (c != soap && v.compareTo("5.5") > 0 && v.compareTo("6") < 0)
@@ -178,18 +182,16 @@ public class ProxyConnection implements IConnection {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 500) {// &&
-																				// he.getMessage().contains("Unexpected error"))
-																				// {
+												// he.getMessage().contains("Unexpected error"))
+												// {
 					list = soap.list(monitor, rd);
 					for (ResourceDescriptor r : list)
 						r.setChildrenDirty(false);
 					return list;
-				} else if (he.getStatusCode() == 401) {
-					if (!error401) {
-						c.connect(monitor, getServerProfile());
-						error401 = true;
-						return list(monitor, rd);
-					}
+				} else if (he.getStatusCode() == 401 && !error401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return list(monitor, rd);
 				}
 			}
 			error401 = false;
@@ -202,7 +204,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor,
+			IDatasourceFilter f) throws Exception {
 		List<ResourceDescriptor> list = null;
 		try {
 			list = c.listDatasources(monitor, f);
@@ -210,18 +213,16 @@ public class ProxyConnection implements IConnection {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
 				if (he.getStatusCode() == 500) {// &&
-																				// he.getMessage().contains("Unexpected error"))
-																				// {
+												// he.getMessage().contains("Unexpected error"))
+												// {
 					list = soap.listDatasources(monitor, f);
 					for (ResourceDescriptor r : list)
 						r.setChildrenDirty(false);
 					return list;
-				} else if (he.getStatusCode() == 401) {
-					if (!error401) {
-						c.connect(monitor, getServerProfile());
-						error401 = true;
-						return listDatasources(monitor, f);
-					}
+				} else if (he.getStatusCode() == 401 && !error401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return listDatasources(monitor, f);
 				}
 			}
 			error401 = false;
@@ -234,18 +235,17 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor move(IProgressMonitor monitor,
+			ResourceDescriptor rd, String destFolderURI) throws Exception {
 		try {
 			rd = c.move(monitor, rd, destFolderURI);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
-					if (!error401) {
-						c.connect(monitor, getServerProfile());
-						error401 = true;
-						return move(monitor, rd, destFolderURI);
-					}
+				if (he.getStatusCode() == 401 && !error401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return move(monitor, rd, destFolderURI);
 				}
 			}
 			error401 = false;
@@ -256,18 +256,17 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor copy(IProgressMonitor monitor,
+			ResourceDescriptor rd, String destFolderURI) throws Exception {
 		try {
 			rd = c.copy(monitor, rd, destFolderURI);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
-					if (!error401) {
-						c.connect(monitor, getServerProfile());
-						error401 = true;
-						return c.copy(monitor, rd, destFolderURI);
-					}
+				if (he.getStatusCode() == 401 && !error401) {
+					c.connect(monitor, getServerProfile());
+					error401 = true;
+					return c.copy(monitor, rd, destFolderURI);
 				}
 			}
 			error401 = false;
@@ -278,13 +277,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inputFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor,
+			ResourceDescriptor rd, File inputFile) throws Exception {
 		try {
 			rd = c.addOrModifyResource(monitor, rd, inputFile);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.addOrModifyResource(monitor, rd, inputFile);
@@ -298,16 +298,19 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
+	public ResourceDescriptor modifyReportUnitResource(
+			IProgressMonitor monitor, ResourceDescriptor runit,
+			ResourceDescriptor rd, File inFile) throws Exception {
 		try {
 			rd = c.modifyReportUnitResource(monitor, runit, rd, inFile);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
-					return c.modifyReportUnitResource(monitor, runit, rd, inFile);
+					return c.modifyReportUnitResource(monitor, runit, rd,
+							inFile);
 				}
 			}
 			error401 = false;
@@ -318,13 +321,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd)
+			throws Exception {
 		try {
 			c.delete(monitor, rd);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					c.delete(monitor, rd);
@@ -337,13 +341,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
+			ResourceDescriptor runit) throws Exception {
 		try {
 			c.delete(monitor, rd, runit);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					c.delete(monitor, rd, runit);
@@ -356,13 +361,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+	public ReportExecution runReport(IProgressMonitor monitor,
+			ReportExecution repExec) throws Exception {
 		try {
 			return c.runReport(monitor, repExec);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.runReport(monitor, repExec);
@@ -376,13 +382,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec)
+			throws Exception {
 		try {
 			c.cancelReport(monitor, repExec);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					c.cancelReport(monitor, repExec);
@@ -410,13 +417,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
+	public void findResources(IProgressMonitor monitor, AFinderUI callback)
+			throws Exception {
 		try {
 			c.findResources(monitor, callback);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					c.findResources(monitor, callback);
@@ -429,7 +437,8 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest) throws Exception {
+	public ResourceDescriptor toResourceDescriptor(ClientResource<?> rest)
+			throws Exception {
 		return c.toResourceDescriptor(rest);
 	}
 
@@ -439,13 +448,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public void reorderInputControls(String uri, List<ResourceDescriptor> rd, IProgressMonitor monitor) throws Exception {
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rd,
+			IProgressMonitor monitor) throws Exception {
 		try {
 			c.reorderInputControls(uri, rd, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					c.reorderInputControls(uri, rd, monitor);
@@ -463,16 +473,17 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public ResourceDescriptor initInputControls(String uri, IProgressMonitor monitor) throws Exception {
+	public ResourceDescriptor initInputControls(String uri, String type,
+			IProgressMonitor monitor) throws Exception {
 		try {
-			return c.initInputControls(uri, monitor);
+			return c.initInputControls(uri, type, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
-					return c.initInputControls(uri, monitor);
+					return c.initInputControls(uri, type, monitor);
 				}
 			}
 			error401 = false;
@@ -485,13 +496,15 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> cascadeInputControls(
+			ResourceDescriptor runit, List<ResourceDescriptor> ics,
+			IProgressMonitor monitor) throws Exception {
 		try {
 			return c.cascadeInputControls(runit, ics, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.cascadeInputControls(runit, ics, monitor);
@@ -507,13 +520,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
+	public StateDto importMetaData(ImportOptions options,
+			IProgressMonitor monitor) throws Exception {
 		try {
 			return c.importMetaData(options, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.importMetaData(options, monitor);
@@ -525,13 +539,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
+	public StateDto exportMetaData(ExportOptions options,
+			IProgressMonitor monitor) throws Exception {
 		try {
 			return c.exportMetaData(options, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.exportMetaData(options, monitor);
@@ -543,13 +558,14 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public Integer getPermissionMask(ResourceDescriptor rd, IProgressMonitor monitor) throws Exception {
+	public Integer getPermissionMask(ResourceDescriptor rd,
+			IProgressMonitor monitor) throws Exception {
 		try {
 			return c.getPermissionMask(rd, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.getPermissionMask(rd, monitor);
@@ -561,13 +577,15 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception {
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd,
+			IProgressMonitor monitor, PermissionOptions options)
+			throws Exception {
 		try {
 			return c.getPermissions(rd, monitor, options);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.getPermissions(rd, monitor, options);
@@ -585,7 +603,7 @@ public class ProxyConnection implements IConnection {
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.getUser(monitor);
@@ -597,13 +615,15 @@ public class ProxyConnection implements IConnection {
 	}
 
 	@Override
-	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception {
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd,
+			List<RepositoryPermission> perms, PermissionOptions options,
+			IProgressMonitor monitor) throws Exception {
 		try {
 			return c.setPermissions(rd, perms, options, monitor);
 		} catch (Exception e) {
 			if (e instanceof HttpResponseException) {
 				HttpResponseException he = (HttpResponseException) e;
-				if (he.getStatusCode() == 401) {
+				if (he.getStatusCode() == 401 && !error401) {
 					c.connect(monitor, getServerProfile());
 					error401 = true;
 					return c.setPermissions(rd, perms, options, monitor);
