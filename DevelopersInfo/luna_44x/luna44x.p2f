@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?p2f version='1.0.0'?>
+<p2f version='1.0.0'>
+  <ius size='17'>
+    <iu id='org.apache.commons.codec.source' name='Apache Commons Codec Source' version='1.6.0.v201305230611'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/eclipse/updates/4.4'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.dbcp' name='Apache Commons DBCP' version='1.4.0.v201204271417'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.dbcp.source' name='Apache Commons DBCP Source' version='1.4.0.v201204271417'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.httpcomponents.httpclient' name='Apache HttpComponents HttpClient' version='4.3.4.v201410062000'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.httpcomponents.httpclient.source' name='Apache HttpComponents HttpClient Source' version='4.3.4.v201410062000'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.httpcomponents.httpcore' name='Apache HttpComponents Httpcore' version='4.3.2.v201409180530'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.log4j' name='Apache Jakarta log4j Plug-in' version='1.2.15.v201012070815'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.log4j.source' name='Apache Jakarta log4j Source Bundle' version='1.2.15.v201012070815'>
+      <repositories size='3'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='epp.package.rcp' name='Eclipse for RCP and RAP Developers' version='4.4.1.20140925-1820'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.platform.sdk' name='Eclipse Platform SDK' version='4.4.1.M20140925-0400'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/eclipse/updates/4.4'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.sdk.ide' name='Eclipse SDK' version='4.4.1.M20140925-0400'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/eclipse/updates/4.4'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.gef.sdk.feature.group' name='Graphical Editing Framework GEF SDK' version='3.9.101.201408150207'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.commons.discovery' name='Jakarta-Commons Discovery' version='0.2.0.v201004190315'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.nebula.feature.feature.group' name='Nebula Widgets' version='1.0.0.201410030023'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/technology/nebula/snapshot'/>
+      </repositories>
+    </iu>
+    <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.xtext.sdk.feature.group' name='Xtext SDK' version='2.4.3.v201309030823'>
+      <repositories size='2'>
+        <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='com.buzzcoders.yasw.widgets.map.feature.feature.group' name='YASW Map widget' version='1.0.0.v20140304-0957'>
+      <repositories size='1'>
+        <repository location='http://yasw-library.sf.net/updates/'/>
+      </repositories>
+    </iu>
+  </ius>
+</p2f>
