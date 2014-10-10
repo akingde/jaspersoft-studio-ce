@@ -62,7 +62,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="com.jaspersoft.studio.editor.style.TemplateStyle:"/>
+                  <meta.attribute kind="java" basedOn=":com.jaspersoft.studio.templates.TemplateProvider"/>
                </appInfo>
             </annotation>
          </attribute>
