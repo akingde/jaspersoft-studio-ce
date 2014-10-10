@@ -436,9 +436,13 @@ public class WSClientHelper {
 	}
 
 	public static String getReportUnitUri(String uri) {
-		StringTokenizer st = new StringTokenizer(uri, ":");
-		String name = st.nextToken();
-		return st.nextToken();
+		String[] tokens =  uri.split(":");
+		if(tokens.length >1)
+			return tokens[1];
+		return uri;
+		// StringTokenizer st = new StringTokenizer(uri, ":");
+		// String name = st.nextToken();
+		// return st.nextToken();
 
 		// return uri.substring(uri.indexOf(":") + 1);
 	}
