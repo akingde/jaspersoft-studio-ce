@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.studio.editor.preview.input.ADataInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
@@ -119,7 +120,8 @@ public class InputControlsManager {
 				Job job = new Job("Update Cascading Input Controls") {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Update Controls", IProgressMonitor.UNKNOWN);
+						monitor.beginTask("Update Controls",
+								IProgressMonitor.UNKNOWN);
 
 						Map<IDataInput, Map<String, Object>> toUpd = new HashMap<IDataInput, Map<String, Object>>();
 						actionPerformed(control, toUpd);
@@ -150,13 +152,16 @@ public class InputControlsManager {
 		return propChangeListener;
 	}
 
-	public void actionPerformed(IDataInput ic, Map<IDataInput, Map<String, Object>> controls) {
-		String icName = ((PResourceDescriptor) ic.getParameter()).getResourceDescriptor().getName();
+	public void actionPerformed(IDataInput ic,
+			Map<IDataInput, Map<String, Object>> controls) {
+		String icName = ((PResourceDescriptor) ic.getParameter())
+				.getResourceDescriptor().getName();
 		// get the first input control having this param in the list...
 		for (IDataInput icToUpdate : icontrols) {
 			if (icToUpdate == ic || controls.containsKey(icToUpdate))
 				continue;
-			ResourceDescriptor rd = ((PResourceDescriptor) icToUpdate.getParameter()).getResourceDescriptor();
+			ResourceDescriptor rd = ((PResourceDescriptor) icToUpdate
+					.getParameter()).getResourceDescriptor();
 			List<String> parametersICs = rd.getMasterInputControls();
 			if (parametersICs == null || !parametersICs.contains(icName))
 				continue;
@@ -171,16 +176,21 @@ public class InputControlsManager {
 		}
 	}
 
-	private void updateControls(final Map<IDataInput, Map<String, Object>> controls, IProgressMonitor monitor) throws Exception {
+	private void updateControls(
+			final Map<IDataInput, Map<String, Object>> controls,
+			IProgressMonitor monitor) throws Exception {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
 		for (IDataInput ic : controls.keySet()) {
-			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter()).getResourceDescriptor();
+			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter())
+					.getResourceDescriptor();
 			rd.setIcValues(controls.get(ic));
 			rds.add(rd);
 		}
-		List<ResourceDescriptor> newRds = wsclient.cascadeInputControls(rdrepunit, rds, monitor);
+		List<ResourceDescriptor> newRds = wsclient.cascadeInputControls(
+				rdrepunit, rds, monitor);
 		for (IDataInput ic : controls.keySet()) {
-			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter()).getResourceDescriptor();
+			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter())
+					.getResourceDescriptor();
 			for (ResourceDescriptor r : newRds) {
 				if (r != rd && r.getName().equals(rd.getName())) {
 					// ok, replacing values
@@ -204,6 +214,17 @@ public class InputControlsManager {
 		});
 	}
 
+	public List<ResourceDescriptor> getICValues() {
+		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
+		for (IDataInput ic : icontrols) {
+			ResourceDescriptor rd = ((PResourceDescriptor) ic.getParameter())
+					.getResourceDescriptor();
+			rd.setIcValues(((ADataInput) ic).getParams());
+			rds.add(rd);
+		}
+		return rds;
+	}
+
 	public boolean isAnyVisible() {
 		for (ResourceDescriptor ic : inputcontrols) {
 			if (isICVisible(ic))
@@ -213,11 +234,16 @@ public class InputControlsManager {
 	}
 
 	public static boolean isICSingle(ResourceDescriptor ic) {
-		return ic.getControlType() == ResourceDescriptor.IC_TYPE_BOOLEAN || ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_VALUE;
+		return ic.getControlType() == ResourceDescriptor.IC_TYPE_BOOLEAN
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_VALUE;
 	}
 
 	protected static boolean isICVisible(ResourceDescriptor ic) {
-		return ic.getResourcePropertyValue(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE) == null || ic.getResourcePropertyValue(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE).equals("true");
+		return ic
+				.getResourcePropertyValue(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE) == null
+				|| ic.getResourcePropertyValue(
+						ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE)
+						.equals("true");
 	}
 
 	public static boolean isRDQuery(ResourceDescriptor sub_ic) {
@@ -225,12 +251,17 @@ public class InputControlsManager {
 	}
 
 	public static boolean isICQuery(ResourceDescriptor ic) {
-		return ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY || ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO
-				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY || ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX;
+		return ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX;
 	}
 
 	public static boolean isICListOfValues(ResourceDescriptor ic) {
-		return ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES || ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO
-				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES || ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX;
+		return ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
+				|| ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX;
 	}
+
 }
