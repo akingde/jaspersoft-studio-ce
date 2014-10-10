@@ -46,9 +46,11 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorLov;
 import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorQuery;
 import com.jaspersoft.studio.utils.UIUtil;
 
-public class InputControlPageContent extends APageContent implements IPageCompleteListener {
+public class InputControlPageContent extends APageContent implements
+		IPageCompleteListener {
 
-	public InputControlPageContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
+	public InputControlPageContent(ANode parent, MResource resource,
+			DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
@@ -89,9 +91,16 @@ public class InputControlPageContent extends APageContent implements IPageComple
 		UIUtil.createLabel(composite, Messages.RDInputControlPage_type);
 
 		ctype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
-		ctype.setItems(new String[] { Messages.InputControlPageContent_boolean, Messages.InputControlPageContent_singleValue, Messages.RDInputControlPage_singlselectlistofvalues,
-				Messages.RDInputControlPage_singleselectlovradio, Messages.RDInputControlPage_multiselectlov, Messages.RDInputControlPage_multiselectlovradio, Messages.RDInputControlPage_singlselectquery,
-				Messages.RDInputControlPage_singleselectqueryradio, Messages.RDInputControlPage_multiselectquery, Messages.RDInputControlPage_multiselectquerycheckbox });
+		ctype.setItems(new String[] { Messages.InputControlPageContent_boolean,
+				Messages.InputControlPageContent_singleValue,
+				Messages.RDInputControlPage_singlselectlistofvalues,
+				Messages.RDInputControlPage_singleselectlovradio,
+				Messages.RDInputControlPage_multiselectlov,
+				Messages.RDInputControlPage_multiselectlovradio,
+				Messages.RDInputControlPage_singlselectquery,
+				Messages.RDInputControlPage_singleselectqueryradio,
+				Messages.RDInputControlPage_multiselectquery,
+				Messages.RDInputControlPage_multiselectquerycheckbox });
 
 		stackComposite = new Composite(composite, SWT.NONE);
 		stackLayout = new StackLayout();
@@ -123,13 +132,20 @@ public class InputControlPageContent extends APageContent implements IPageComple
 
 	@Override
 	protected void rebind() {
-		bindingContext.bindValue(SWTObservables.observeSingleSelectionIndex(ctype), PojoObservables.observeValue(getProxy(res.getValue()), "controlType")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables
+				.observeSingleSelectionIndex(ctype), PojoObservables
+				.observeValue(getProxy(res.getValue()), "controlType")); //$NON-NLS-1$
 
-		bindingContext.bindValue(SWTObservables.observeSelection(bmand), PojoObservables.observeValue(res.getValue(), "mandatory")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(bread), PojoObservables.observeValue(res.getValue(), "readOnly")); //$NON-NLS-1$
-		bindingContext.bindValue(SWTObservables.observeSelection(bvisible), PojoObservables.observeValue(res.getValue(), "visible")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bmand),
+				PojoObservables.observeValue(res.getValue(), "mandatory")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bread),
+				PojoObservables.observeValue(res.getValue(), "readOnly")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
+				PojoObservables.observeValue(res.getValue(), "visible")); //$NON-NLS-1$
 		if (tvalue != null)
-			bindingContext.bindValue(SWTObservables.observeText(tvalue, SWT.Modify), PojoObservables.observeValue(res.getValue(), "queryValueColumn")); //$NON-NLS-1$
+			bindingContext.bindValue(SWTObservables.observeText(tvalue,
+					SWT.Modify), PojoObservables.observeValue(res.getValue(),
+					"queryValueColumn")); //$NON-NLS-1$
 
 		handleTypeChanged(ctype, stackLayout);
 	}
@@ -174,7 +190,8 @@ public class InputControlPageContent extends APageContent implements IPageComple
 
 	@Override
 	public void pageCompleted(boolean completed) {
-		setPageComplete(cSelector.isPageComplete());
+		if (cSelector != null)
+			setPageComplete(cSelector.isPageComplete());
 	}
 
 	private ASelector cSelector;
@@ -278,9 +295,16 @@ public class InputControlPageContent extends APageContent implements IPageComple
 
 	class ShiftMapProxy {
 		private ResourceDescriptor rd;
-		private final int[] shift = new int[] { ResourceDescriptor.IC_TYPE_BOOLEAN, ResourceDescriptor.IC_TYPE_SINGLE_VALUE, ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES,
-				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO, ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES, ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX,
-				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY, ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO, ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY,
+		private final int[] shift = new int[] {
+				ResourceDescriptor.IC_TYPE_BOOLEAN,
+				ResourceDescriptor.IC_TYPE_SINGLE_VALUE,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY,
 				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX };
 
 		public void setResourceDescriptor(ResourceDescriptor rd) {
