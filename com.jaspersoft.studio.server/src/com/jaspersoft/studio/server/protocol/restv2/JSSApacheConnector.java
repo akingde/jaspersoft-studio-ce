@@ -64,7 +64,7 @@ public class JSSApacheConnector extends ApacheConnector {
 		}
 	}
 
-	public Response get(Builder builder, IProgressMonitor monitor) throws Exception {
+	public synchronized Response get(Builder builder, IProgressMonitor monitor) throws Exception {
 		return doWait(builder.async().get(), monitor);
 	}
 

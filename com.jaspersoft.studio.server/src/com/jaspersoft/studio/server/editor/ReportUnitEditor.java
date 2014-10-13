@@ -15,6 +15,10 @@ package com.jaspersoft.studio.server.editor;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -168,7 +172,21 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				reportControler.resetParametersToDefault();
+				Job job = new Job("Update Report Options") {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						monitor.beginTask(Messages.PreviewContainer_resetactiontooltip, IProgressMonitor.UNKNOWN);
+						try {
+							reportControler.resetParametersToDefault(monitor);
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setPriority(Job.LONG);
+				job.schedule();
 			}
 
 			@Override

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.editor.input;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -21,6 +22,5 @@ public interface IInputControls {
 
 	public String getICContainerUri(String uri);
 
-	public void initICOptions(InputControlsManager icm,
-			ResourceDescriptor rdrepunit);
+	public void initICOptions(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor);
 }
