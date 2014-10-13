@@ -1543,6 +1543,10 @@ public class Messages extends NLS {
 	public static String ReportNewWizard_6;
 	public static String ReportNewWizard_title;
 	public static String ReportNewWizardPage_description;
+	public static String ReportRunControler_1;
+	public static String ReportRunControler_22;
+	public static String ReportRunControler_3;
+	public static String ReportRunControler_statsstart;
 	public static String ReportSection_Dataset_Label;
 	public static String ReportTemplatesWizardPage_categories;
 	public static String ReportTemplatesWizardPage_description;
