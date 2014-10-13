@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--
-  Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
-  http://www.jaspersoft.com.
-  
-  Unless you have purchased  a commercial license agreement from Jaspersoft,
-  the following license terms  apply:
-  
-  This program and the accompanying materials
-  are made available under the terms of the Eclipse Public License v1.0
-  which accompanies this distribution, and is available at
-  http://www.eclipse.org/legal/epl-v10.html
--->
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xtext="http://www.eclipse.org/2008/Xtext">
   <xtext:Grammar name="com.jaspersoft.studio.data.Sql" usedGrammars="/1" definesHiddenTokens="true" hiddenTokens="/1/@rules.5 /1/@rules.3 /0/@rules.66">
     <metamodelDeclarations xsi:type="xtext:ReferencedMetamodel" alias="ecore">
@@ -1463,6 +1451,7 @@
           <left value="&#x3400;"/>
           <right value="&#x4dbf;"/>
         </elements>
+        <elements xsi:type="xtext:Keyword" value="&#xff3f;"/>
         <elements xsi:type="xtext:CharacterRange">
           <left value="0"/>
           <right value="9"/>

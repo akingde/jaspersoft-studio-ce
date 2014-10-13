@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
- * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
- * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- ******************************************************************************/
 package com.jaspersoft.studio.data.parser.antlr.lexer;
 
 // Hack: Use our own Lexer superclass by means of import. 
@@ -5168,16 +5156,16 @@ public class InternalSqlLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:197:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '\\u00C0' .. '\\u00FF' | '\\u0100' .. '\\u017F' | '\\u0180' .. '\\u024F' | '\\u0410' .. '\\u044F' | '_' | '-' | '\\u3041' .. '\\u309F' | '\\u30A0' .. '\\u30FF' | '\\u31F0' .. '\\u31FF' | '\\u4E00' .. '\\u9FFF' | '\\u6B74' .. '\\u3059' | '\\u30A2' .. '\\u30F3' | '\\uF900' .. '\\uFAFF' | '\\u3400' .. '\\u4DBF' | '0' .. '9' )* )
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:197:11: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u00C0' .. '\\u00FF' | '\\u0100' .. '\\u017F' | '\\u0180' .. '\\u024F' | '\\u0410' .. '\\u044F' | '_' | '-' | '\\u3041' .. '\\u309F' | '\\u30A0' .. '\\u30FF' | '\\u31F0' .. '\\u31FF' | '\\u4E00' .. '\\u9FFF' | '\\u6B74' .. '\\u3059' | '\\u30A2' .. '\\u30F3' | '\\uF900' .. '\\uFAFF' | '\\u3400' .. '\\u4DBF' | '0' .. '9' )*
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:197:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '\\u00C0' .. '\\u00FF' | '\\u0100' .. '\\u017F' | '\\u0180' .. '\\u024F' | '\\u0410' .. '\\u044F' | '_' | '-' | '\\u3041' .. '\\u309F' | '\\u30A0' .. '\\u30FF' | '\\u31F0' .. '\\u31FF' | '\\u4E00' .. '\\u9FFF' | '\\u6B74' .. '\\u3059' | '\\u30A2' .. '\\u30F3' | '\\uF900' .. '\\uFAFF' | '\\u3400' .. '\\u4DBF' | '\\uFF3F' | '0' .. '9' )* )
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:197:11: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u00C0' .. '\\u00FF' | '\\u0100' .. '\\u017F' | '\\u0180' .. '\\u024F' | '\\u0410' .. '\\u044F' | '_' | '-' | '\\u3041' .. '\\u309F' | '\\u30A0' .. '\\u30FF' | '\\u31F0' .. '\\u31FF' | '\\u4E00' .. '\\u9FFF' | '\\u6B74' .. '\\u3059' | '\\u30A2' .. '\\u30F3' | '\\uF900' .. '\\uFAFF' | '\\u3400' .. '\\u4DBF' | '\\uFF3F' | '0' .. '9' )*
             {
-            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:197:11: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u00C0' .. '\\u00FF' | '\\u0100' .. '\\u017F' | '\\u0180' .. '\\u024F' | '\\u0410' .. '\\u044F' | '_' | '-' | '\\u3041' .. '\\u309F' | '\\u30A0' .. '\\u30FF' | '\\u31F0' .. '\\u31FF' | '\\u4E00' .. '\\u9FFF' | '\\u6B74' .. '\\u3059' | '\\u30A2' .. '\\u30F3' | '\\uF900' .. '\\uFAFF' | '\\u3400' .. '\\u4DBF' | '0' .. '9' )*
+            // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:197:11: ( 'a' .. 'z' | 'A' .. 'Z' | '\\u00C0' .. '\\u00FF' | '\\u0100' .. '\\u017F' | '\\u0180' .. '\\u024F' | '\\u0410' .. '\\u044F' | '_' | '-' | '\\u3041' .. '\\u309F' | '\\u30A0' .. '\\u30FF' | '\\u31F0' .. '\\u31FF' | '\\u4E00' .. '\\u9FFF' | '\\u6B74' .. '\\u3059' | '\\u30A2' .. '\\u30F3' | '\\uF900' .. '\\uFAFF' | '\\u3400' .. '\\u4DBF' | '\\uFF3F' | '0' .. '9' )*
             loop14:
             do {
                 int alt14=2;
                 int LA14_0 = input.LA(1);
 
-                if ( (LA14_0=='-'||(LA14_0>='0' && LA14_0<='9')||(LA14_0>='A' && LA14_0<='Z')||LA14_0=='_'||(LA14_0>='a' && LA14_0<='z')||(LA14_0>='\u00C0' && LA14_0<='\u024F')||(LA14_0>='\u0410' && LA14_0<='\u044F')||(LA14_0>='\u3041' && LA14_0<='\u30FF')||(LA14_0>='\u31F0' && LA14_0<='\u31FF')||(LA14_0>='\u3400' && LA14_0<='\u4DBF')||(LA14_0>='\u4E00' && LA14_0<='\u9FFF')||(LA14_0>='\uF900' && LA14_0<='\uFAFF')) ) {
+                if ( (LA14_0=='-'||(LA14_0>='0' && LA14_0<='9')||(LA14_0>='A' && LA14_0<='Z')||LA14_0=='_'||(LA14_0>='a' && LA14_0<='z')||(LA14_0>='\u00C0' && LA14_0<='\u024F')||(LA14_0>='\u0410' && LA14_0<='\u044F')||(LA14_0>='\u3041' && LA14_0<='\u30FF')||(LA14_0>='\u31F0' && LA14_0<='\u31FF')||(LA14_0>='\u3400' && LA14_0<='\u4DBF')||(LA14_0>='\u4E00' && LA14_0<='\u9FFF')||(LA14_0>='\uF900' && LA14_0<='\uFAFF')||LA14_0=='\uFF3F') ) {
                     alt14=1;
                 }
 
@@ -5186,7 +5174,7 @@ public class InternalSqlLexer extends Lexer {
             	case 1 :
             	    // ../com.jaspersoft.studio.data.sql/src-gen/com/jaspersoft/studio/data/parser/antlr/lexer/InternalSqlLexer.g:
             	    {
-            	    if ( input.LA(1)=='-'||(input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z')||(input.LA(1)>='\u00C0' && input.LA(1)<='\u024F')||(input.LA(1)>='\u0410' && input.LA(1)<='\u044F')||(input.LA(1)>='\u3041' && input.LA(1)<='\u30FF')||(input.LA(1)>='\u31F0' && input.LA(1)<='\u31FF')||(input.LA(1)>='\u3400' && input.LA(1)<='\u4DBF')||(input.LA(1)>='\u4E00' && input.LA(1)<='\u9FFF')||(input.LA(1)>='\uF900' && input.LA(1)<='\uFAFF') ) {
+            	    if ( input.LA(1)=='-'||(input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z')||(input.LA(1)>='\u00C0' && input.LA(1)<='\u024F')||(input.LA(1)>='\u0410' && input.LA(1)<='\u044F')||(input.LA(1)>='\u3041' && input.LA(1)<='\u30FF')||(input.LA(1)>='\u31F0' && input.LA(1)<='\u31FF')||(input.LA(1)>='\u3400' && input.LA(1)<='\u4DBF')||(input.LA(1)>='\u4E00' && input.LA(1)<='\u9FFF')||(input.LA(1)>='\uF900' && input.LA(1)<='\uFAFF')||input.LA(1)=='\uFF3F' ) {
             	        input.consume();
 
             	    }
@@ -6201,29 +6189,29 @@ public class InternalSqlLexer extends Lexer {
     static final String DFA21_maxS =
         "\1\uffff\1\165\1\163\2\157\1\151\1\uffff\1\145\1\151\1\162\1\165"+
         "\1\145\1\170\1\141\1\157\1\162\2\151\1\156\2\157\1\163\1\170\1\76"+
-        "\1\75\1\174\4\uffff\1\ufaff\1\uffff\1\57\4\uffff\1\ufaff\3\uffff"+
-        "\5\uffff\1\164\1\157\1\154\1\40\1\ufaff\2\164\1\167\1\147\1\164"+
-        "\1\145\2\uffff\1\uffff\1\164\2\163\1\157\1\ufaff\1\146\1\164\1\ufaff"+
+        "\1\75\1\174\4\uffff\1\uff3f\1\uffff\1\57\4\uffff\1\uff3f\3\uffff"+
+        "\5\uffff\1\164\1\157\1\154\1\40\1\uff3f\2\164\1\167\1\147\1\164"+
+        "\1\145\2\uffff\1\uffff\1\164\2\163\1\157\1\uff3f\1\146\1\164\1\uff3f"+
         "\1\162\1\143\1\165\1\163\1\144\1\166\1\154\1\155\1\163\1\157\1\163"+
-        "\1\155\1\156\2\151\1\145\1\160\1\154\1\171\1\ufaff\1\uffff\1\173"+
-        "\13\uffff\1\uffff\1\ufaff\13\uffff\1\uffff\3\uffff\1\143\1\155\1"+
+        "\1\155\1\156\2\151\1\145\1\160\1\154\1\171\1\uff3f\1\uffff\1\173"+
+        "\13\uffff\1\uffff\1\uff3f\13\uffff\1\uffff\3\uffff\1\143\1\155\1"+
         "\154\1\156\2\145\1\uffff\1\151\1\165\1\163\2\150\1\162\2\uffff\1"+
         "\167\1\164\1\143\1\165\1\141\1\145\1\uffff\1\163\1\145\1\uffff\1"+
-        "\143\1\145\1\141\1\145\1\ufaff\1\151\2\145\1\164\2\163\1\164\1\151"+
-        "\1\145\1\165\1\157\2\156\5\ufaff\3\uffff\2\uffff\1\150\2\ufaff\1"+
-        "\165\2\162\1\154\1\161\1\156\1\162\1\40\1\164\1\40\1\145\1\ufaff"+
-        "\2\uffff\1\145\1\151\1\ufaff\1\160\1\164\1\162\1\145\1\162\1\145"+
-        "\1\160\1\154\1\ufaff\1\uffff\1\156\1\143\1\ufaff\1\50\1\ufaff\1"+
-        "\163\2\ufaff\1\164\1\ufaff\1\163\1\156\2\ufaff\5\uffff\2\uffff\1"+
-        "\40\4\uffff\1\163\1\ufaff\3\uffff\1\165\1\ufaff\1\141\1\uffff\1"+
-        "\ufaff\1\uffff\1\ufaff\1\uffff\2\uffff\1\145\1\156\1\uffff\1\40"+
-        "\1\145\1\40\1\164\1\ufaff\1\156\1\164\1\ufaff\1\uffff\1\147\1\164"+
-        "\3\uffff\1\ufaff\3\uffff\1\ufaff\1\uffff\2\ufaff\2\uffff\2\uffff"+
+        "\143\1\145\1\141\1\145\1\uff3f\1\151\2\145\1\164\2\163\1\164\1\151"+
+        "\1\145\1\165\1\157\2\156\5\uff3f\3\uffff\2\uffff\1\150\2\uff3f\1"+
+        "\165\2\162\1\154\1\161\1\156\1\162\1\40\1\164\1\40\1\145\1\uff3f"+
+        "\2\uffff\1\145\1\151\1\uff3f\1\160\1\164\1\162\1\145\1\162\1\145"+
+        "\1\160\1\154\1\uff3f\1\uffff\1\156\1\143\1\uff3f\1\50\1\uff3f\1"+
+        "\163\2\uff3f\1\164\1\uff3f\1\163\1\156\2\uff3f\5\uffff\2\uffff\1"+
+        "\40\4\uffff\1\163\1\uff3f\3\uffff\1\165\1\uff3f\1\141\1\uffff\1"+
+        "\uff3f\1\uffff\1\uff3f\1\uffff\2\uffff\1\145\1\156\1\uffff\1\40"+
+        "\1\145\1\40\1\164\1\uff3f\1\156\1\164\1\uff3f\1\uffff\1\147\1\164"+
+        "\3\uffff\1\uff3f\3\uffff\1\uff3f\1\uffff\2\uff3f\2\uffff\2\uffff"+
         "\1\uffff\1\145\1\uffff\1\141\1\uffff\1\154\2\uffff\2\uffff\1\156"+
-        "\1\143\1\uffff\1\162\1\uffff\1\ufaff\1\uffff\1\164\1\ufaff\1\uffff"+
-        "\2\ufaff\4\uffff\2\uffff\1\143\1\154\1\ufaff\2\uffff\1\ufaff\1\164"+
-        "\1\ufaff\1\uffff\1\ufaff\3\uffff\2\uffff\1\164\1\ufaff\1\uffff\2"+
-        "\uffff\2\uffff\1\ufaff\2\uffff\2\uffff\1\ufaff\5\uffff\2\uffff\2"+
+        "\1\143\1\uffff\1\162\1\uffff\1\uff3f\1\uffff\1\164\1\uff3f\1\uffff"+
+        "\2\uff3f\4\uffff\2\uffff\1\143\1\154\1\uff3f\2\uffff\1\uff3f\1\164"+
+        "\1\uff3f\1\uffff\1\uff3f\3\uffff\2\uffff\1\164\1\uff3f\1\uffff\2"+
+        "\uffff\2\uffff\1\uff3f\2\uffff\2\uffff\1\uff3f\5\uffff\2\uffff\2"+
         "\uffff\4\uffff\1\40\1\uffff\2\uffff\1\uffff\2\uffff";
     static final String DFA21_acceptS =
         "\32\uffff\1\101\1\102\1\103\1\104\1\uffff\1\106\1\uffff\1\111\1"+
@@ -6257,7 +6245,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\15\1\2\1\23\1\51\1\20\1\21\1\3\1\12\1\13\1\51\1\4\1\16\1"+
             "\24\1\22\1\51\1\5\3\51\1\42\1\31\1\43\102\55\u0190\51\u01c0"+
             "\55\100\51\u2bf1\55\u00bf\51\u00f0\55\20\51\u0200\55\u19c0\51"+
-            "\100\55\u5200\51\u5900\55\u0200\51\u0500\55",
+            "\100\55\u5200\51\u5900\55\u0200\51\u043f\55\1\51\u00c0\55",
             "\1\56\14\uffff\1\57\2\uffff\1\60\17\uffff\1\56\14\uffff\1\57"+
             "\2\uffff\1\60",
             "\1\62\4\uffff\1\61\32\uffff\1\62\4\uffff\1\61",
@@ -6294,7 +6282,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\145\2\uffff\12\146\7\uffff\32\52\4\uffff\1\52\1\uffff\32"+
             "\52\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf"+
             "\52\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52"+
-            "\u5900\uffff\u0200\52",
+            "\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\152\4\uffff\1\151",
             "",
@@ -6304,7 +6292,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\1\160\1\uffff\12\146\7\uffff\32\52\4\uffff\1\52\1\uffff"+
             "\32\52\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf"+
             "\52\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52"+
-            "\u5900\uffff\u0200\52",
+            "\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "\60\163\12\162\uffc6\163",
             "\0\164",
             "\0\73",
@@ -6320,7 +6308,8 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\15\52\1\173\5\52\1\172\6\52\4\uffff"+
             "\1\52\1\uffff\15\52\1\173\5\52\1\172\6\52\105\uffff\u0190\52"+
             "\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52\u00f0\uffff\20\52\u0200"+
-            "\uffff\u19c0\52\100\uffff\u5200\52\u5900\uffff\u0200\52",
+            "\uffff\u19c0\52\100\uffff\u5200\52\u5900\uffff\u0200\52\u043f"+
+            "\uffff\1\52",
             "\1\175\37\uffff\1\175",
             "\1\176\37\uffff\1\176",
             "\1\177\37\uffff\1\177",
@@ -6337,13 +6326,13 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\3\52\1\u008a\26\52\4\uffff\1\52"+
             "\1\uffff\3\52\1\u008a\26\52\105\uffff\u0190\52\u01c0\uffff\100"+
             "\52\u2bf1\uffff\u00bf\52\u00f0\uffff\20\52\u0200\uffff\u19c0"+
-            "\52\100\uffff\u5200\52\u5900\uffff\u0200\52",
+            "\52\100\uffff\u5200\52\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u008c\37\uffff\1\u008c",
             "\1\u008d\37\uffff\1\u008d",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u008f\37\uffff\1\u008f",
             "\1\u0090\37\uffff\1\u0090",
             "\1\u0091\37\uffff\1\u0091",
@@ -6366,7 +6355,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\2\52\1\u00a5\27\52\4\uffff\1\52"+
             "\1\uffff\2\52\1\u00a5\27\52\105\uffff\u0190\52\u01c0\uffff\100"+
             "\52\u2bf1\uffff\u00bf\52\u00f0\uffff\20\52\u0200\uffff\u19c0"+
-            "\52\100\uffff\u5200\52\u5900\uffff\u0200\52",
+            "\52\100\uffff\u5200\52\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\u00a8\131\uffff\1\u00a7",
             "",
@@ -6383,11 +6372,12 @@ public class InternalSqlLexer extends Lexer {
             "\55\151\1\u00a9\2\151\12\u00a9\7\151\32\u00a9\4\151\1\u00a9"+
             "\1\151\32\u00a9\105\151\u0190\u00a9\u01c0\151\100\u00a9\u2bf1"+
             "\151\u00bf\u00a9\u00f0\151\20\u00a9\u0200\151\u19c0\u00a9\100"+
-            "\151\u5200\u00a9\u5900\151\u0200\u00a9\u0500\151",
+            "\151\u5200\u00a9\u5900\151\u0200\u00a9\u043f\151\1\u00a9\u00c0"+
+            "\151",
             "\1\52\1\160\1\uffff\12\146\7\uffff\32\52\4\uffff\1\52\1\uffff"+
             "\32\52\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf"+
             "\52\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52"+
-            "\u5900\uffff\u0200\52",
+            "\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
@@ -6436,7 +6426,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u00c9\37\uffff\1\u00c9",
             "\1\u00ca\37\uffff\1\u00ca",
             "\1\u00cb\37\uffff\1\u00cb",
@@ -6453,40 +6443,41 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
             "\55\151\1\u00a9\2\151\12\u00a9\7\151\32\u00a9\4\151\1\u00a9"+
             "\1\151\32\u00a9\105\151\u0190\u00a9\u01c0\151\100\u00a9\u2bf1"+
             "\151\u00bf\u00a9\u00f0\151\20\u00a9\u0200\151\u19c0\u00a9\100"+
-            "\151\u5200\u00a9\u5900\151\u0200\u00a9\u0500\151",
+            "\151\u5200\u00a9\u5900\151\u0200\u00a9\u043f\151\1\u00a9\u00c0"+
+            "\151",
             "\60\163\12\u00dc\1\u00dd\uffc5\163",
             "\1\u00de\37\uffff\1\u00de",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u00e1\5\uffff\1\u00e2\31\uffff\1\u00e1\5\uffff\1\u00e2",
             "\1\u00e3\37\uffff\1\u00e3",
             "\1\u00e4\37\uffff\1\u00e4",
@@ -6502,7 +6493,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\127\73\1\u00f0\37\73\1\u00f0\uff88\73",
             "\101\73\1\u00f1\37\73\1\u00f1\uff9e\73",
             "\1\u00f2\37\uffff\1\u00f2",
@@ -6510,7 +6501,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u00f5\37\uffff\1\u00f5",
             "\1\u00f6\37\uffff\1\u00f6",
             "\1\u00f7\37\uffff\1\u00f7",
@@ -6522,43 +6513,43 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\u00fe\37\uffff\1\u00fe",
             "\1\u00ff\37\uffff\1\u00ff",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0101",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0103\37\uffff\1\u0103",
             "\1\52\2\uffff\12\52\7\uffff\32\52\2\uffff\1\u0104\1\uffff\1"+
             "\52\1\uffff\32\52\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1"+
             "\uffff\u00bf\52\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff"+
-            "\u5200\52\u5900\uffff\u0200\52",
+            "\u5200\52\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0107\37\uffff\1\u0107",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0109\37\uffff\1\u0109",
             "\1\u010a\37\uffff\1\u010a",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
@@ -6575,7 +6566,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
@@ -6583,18 +6574,18 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0114\37\uffff\1\u0114",
             "",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\105\73\1\u0117\37\73\1\u0117\uff9a\73",
             "\124\73\1\u0118\37\73\1\u0118\uff8b\73",
@@ -6608,13 +6599,13 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0120\37\uffff\1\u0120",
             "\1\u0121\37\uffff\1\u0121",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\u0123\37\uffff\1\u0123",
             "\1\u0124\37\uffff\1\u0124",
@@ -6624,23 +6615,23 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "\55\163\1\u0129\uffd2\163",
@@ -6663,22 +6654,22 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\u0134\37\uffff\1\u0134",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
@@ -6690,23 +6681,23 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "\116\73\1\u013d\37\73\1\u013d\uff91\73",
             "\122\73\1\u013e\37\73\1\u013e\uff8d\73",
             "\1\52\2\uffff\12\52\7\uffff\32\52\2\uffff\1\u013f\1\uffff\1"+
             "\52\1\uffff\32\52\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1"+
             "\uffff\u00bf\52\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff"+
-            "\u5200\52\u5900\uffff\u0200\52",
+            "\u5200\52\u5900\uffff\u0200\52\u043f\uffff\1\52",
             "\1\u0141\37\uffff\1\u0141",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
@@ -6716,7 +6707,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "\135\73\1\u0148\uffa2\73",
             "\0\73",
@@ -6725,7 +6716,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "\55\163\1\u014c\uffd2\163",
@@ -6733,7 +6724,7 @@ public class InternalSqlLexer extends Lexer {
             "\1\52\2\uffff\12\52\7\uffff\32\52\4\uffff\1\52\1\uffff\32\52"+
             "\105\uffff\u0190\52\u01c0\uffff\100\52\u2bf1\uffff\u00bf\52"+
             "\u00f0\uffff\20\52\u0200\uffff\u19c0\52\100\uffff\u5200\52\u5900"+
-            "\uffff\u0200\52",
+            "\uffff\u0200\52\u043f\uffff\1\52",
             "",
             "",
             "",
@@ -6882,9 +6873,9 @@ public class InternalSqlLexer extends Lexer {
                         int LA21_101 = input.LA(1);
 
                         s = -1;
-                        if ( (LA21_101=='-'||(LA21_101>='0' && LA21_101<='9')||(LA21_101>='A' && LA21_101<='Z')||LA21_101=='_'||(LA21_101>='a' && LA21_101<='z')||(LA21_101>='\u00C0' && LA21_101<='\u024F')||(LA21_101>='\u0410' && LA21_101<='\u044F')||(LA21_101>='\u3041' && LA21_101<='\u30FF')||(LA21_101>='\u31F0' && LA21_101<='\u31FF')||(LA21_101>='\u3400' && LA21_101<='\u4DBF')||(LA21_101>='\u4E00' && LA21_101<='\u9FFF')||(LA21_101>='\uF900' && LA21_101<='\uFAFF')) ) {s = 169;}
+                        if ( (LA21_101=='-'||(LA21_101>='0' && LA21_101<='9')||(LA21_101>='A' && LA21_101<='Z')||LA21_101=='_'||(LA21_101>='a' && LA21_101<='z')||(LA21_101>='\u00C0' && LA21_101<='\u024F')||(LA21_101>='\u0410' && LA21_101<='\u044F')||(LA21_101>='\u3041' && LA21_101<='\u30FF')||(LA21_101>='\u31F0' && LA21_101<='\u31FF')||(LA21_101>='\u3400' && LA21_101<='\u4DBF')||(LA21_101>='\u4E00' && LA21_101<='\u9FFF')||(LA21_101>='\uF900' && LA21_101<='\uFAFF')||LA21_101=='\uFF3F') ) {s = 169;}
 
-                        else if ( ((LA21_101>='\u0000' && LA21_101<=',')||(LA21_101>='.' && LA21_101<='/')||(LA21_101>=':' && LA21_101<='@')||(LA21_101>='[' && LA21_101<='^')||LA21_101=='`'||(LA21_101>='{' && LA21_101<='\u00BF')||(LA21_101>='\u0250' && LA21_101<='\u040F')||(LA21_101>='\u0450' && LA21_101<='\u3040')||(LA21_101>='\u3100' && LA21_101<='\u31EF')||(LA21_101>='\u3200' && LA21_101<='\u33FF')||(LA21_101>='\u4DC0' && LA21_101<='\u4DFF')||(LA21_101>='\uA000' && LA21_101<='\uF8FF')||(LA21_101>='\uFB00' && LA21_101<='\uFFFF')) ) {s = 105;}
+                        else if ( ((LA21_101>='\u0000' && LA21_101<=',')||(LA21_101>='.' && LA21_101<='/')||(LA21_101>=':' && LA21_101<='@')||(LA21_101>='[' && LA21_101<='^')||LA21_101=='`'||(LA21_101>='{' && LA21_101<='\u00BF')||(LA21_101>='\u0250' && LA21_101<='\u040F')||(LA21_101>='\u0450' && LA21_101<='\u3040')||(LA21_101>='\u3100' && LA21_101<='\u31EF')||(LA21_101>='\u3200' && LA21_101<='\u33FF')||(LA21_101>='\u4DC0' && LA21_101<='\u4DFF')||(LA21_101>='\uA000' && LA21_101<='\uF8FF')||(LA21_101>='\uFB00' && LA21_101<='\uFF3E')||(LA21_101>='\uFF40' && LA21_101<='\uFFFF')) ) {s = 105;}
 
                         else s = 42;
 
@@ -7014,9 +7005,9 @@ public class InternalSqlLexer extends Lexer {
                         int LA21_169 = input.LA(1);
 
                         s = -1;
-                        if ( (LA21_169=='-'||(LA21_169>='0' && LA21_169<='9')||(LA21_169>='A' && LA21_169<='Z')||LA21_169=='_'||(LA21_169>='a' && LA21_169<='z')||(LA21_169>='\u00C0' && LA21_169<='\u024F')||(LA21_169>='\u0410' && LA21_169<='\u044F')||(LA21_169>='\u3041' && LA21_169<='\u30FF')||(LA21_169>='\u31F0' && LA21_169<='\u31FF')||(LA21_169>='\u3400' && LA21_169<='\u4DBF')||(LA21_169>='\u4E00' && LA21_169<='\u9FFF')||(LA21_169>='\uF900' && LA21_169<='\uFAFF')) ) {s = 169;}
+                        if ( (LA21_169=='-'||(LA21_169>='0' && LA21_169<='9')||(LA21_169>='A' && LA21_169<='Z')||LA21_169=='_'||(LA21_169>='a' && LA21_169<='z')||(LA21_169>='\u00C0' && LA21_169<='\u024F')||(LA21_169>='\u0410' && LA21_169<='\u044F')||(LA21_169>='\u3041' && LA21_169<='\u30FF')||(LA21_169>='\u31F0' && LA21_169<='\u31FF')||(LA21_169>='\u3400' && LA21_169<='\u4DBF')||(LA21_169>='\u4E00' && LA21_169<='\u9FFF')||(LA21_169>='\uF900' && LA21_169<='\uFAFF')||LA21_169=='\uFF3F') ) {s = 169;}
 
-                        else if ( ((LA21_169>='\u0000' && LA21_169<=',')||(LA21_169>='.' && LA21_169<='/')||(LA21_169>=':' && LA21_169<='@')||(LA21_169>='[' && LA21_169<='^')||LA21_169=='`'||(LA21_169>='{' && LA21_169<='\u00BF')||(LA21_169>='\u0250' && LA21_169<='\u040F')||(LA21_169>='\u0450' && LA21_169<='\u3040')||(LA21_169>='\u3100' && LA21_169<='\u31EF')||(LA21_169>='\u3200' && LA21_169<='\u33FF')||(LA21_169>='\u4DC0' && LA21_169<='\u4DFF')||(LA21_169>='\uA000' && LA21_169<='\uF8FF')||(LA21_169>='\uFB00' && LA21_169<='\uFFFF')) ) {s = 105;}
+                        else if ( ((LA21_169>='\u0000' && LA21_169<=',')||(LA21_169>='.' && LA21_169<='/')||(LA21_169>=':' && LA21_169<='@')||(LA21_169>='[' && LA21_169<='^')||LA21_169=='`'||(LA21_169>='{' && LA21_169<='\u00BF')||(LA21_169>='\u0250' && LA21_169<='\u040F')||(LA21_169>='\u0450' && LA21_169<='\u3040')||(LA21_169>='\u3100' && LA21_169<='\u31EF')||(LA21_169>='\u3200' && LA21_169<='\u33FF')||(LA21_169>='\u4DC0' && LA21_169<='\u4DFF')||(LA21_169>='\uA000' && LA21_169<='\uF8FF')||(LA21_169>='\uFB00' && LA21_169<='\uFF3E')||(LA21_169>='\uFF40' && LA21_169<='\uFFFF')) ) {s = 105;}
 
                         else s = 42;
 
@@ -7170,13 +7161,13 @@ public class InternalSqlLexer extends Lexer {
 
                         else if ( (LA21_0=='`') ) {s = 40;}
 
-                        else if ( (LA21_0=='K'||LA21_0=='Q'||LA21_0=='V'||(LA21_0>='X' && LA21_0<='Z')||LA21_0=='_'||LA21_0=='k'||LA21_0=='q'||LA21_0=='v'||(LA21_0>='x' && LA21_0<='z')||(LA21_0>='\u00C0' && LA21_0<='\u024F')||(LA21_0>='\u0410' && LA21_0<='\u044F')||(LA21_0>='\u3041' && LA21_0<='\u30FF')||(LA21_0>='\u31F0' && LA21_0<='\u31FF')||(LA21_0>='\u3400' && LA21_0<='\u4DBF')||(LA21_0>='\u4E00' && LA21_0<='\u9FFF')||(LA21_0>='\uF900' && LA21_0<='\uFAFF')) ) {s = 41;}
+                        else if ( (LA21_0=='K'||LA21_0=='Q'||LA21_0=='V'||(LA21_0>='X' && LA21_0<='Z')||LA21_0=='_'||LA21_0=='k'||LA21_0=='q'||LA21_0=='v'||(LA21_0>='x' && LA21_0<='z')||(LA21_0>='\u00C0' && LA21_0<='\u024F')||(LA21_0>='\u0410' && LA21_0<='\u044F')||(LA21_0>='\u3041' && LA21_0<='\u30FF')||(LA21_0>='\u31F0' && LA21_0<='\u31FF')||(LA21_0>='\u3400' && LA21_0<='\u4DBF')||(LA21_0>='\u4E00' && LA21_0<='\u9FFF')||(LA21_0>='\uF900' && LA21_0<='\uFAFF')||LA21_0=='\uFF3F') ) {s = 41;}
 
                         else if ( (LA21_0=='#') ) {s = 43;}
 
                         else if ( ((LA21_0>='\t' && LA21_0<='\n')||LA21_0=='\r'||LA21_0==' ') ) {s = 44;}
 
-                        else if ( ((LA21_0>='\u0000' && LA21_0<='\b')||(LA21_0>='\u000B' && LA21_0<='\f')||(LA21_0>='\u000E' && LA21_0<='\u001F')||LA21_0=='!'||(LA21_0>='%' && LA21_0<='&')||(LA21_0>=':' && LA21_0<=';')||(LA21_0>='?' && LA21_0<='@')||(LA21_0>='\\' && LA21_0<='^')||(LA21_0>='~' && LA21_0<='\u00BF')||(LA21_0>='\u0250' && LA21_0<='\u040F')||(LA21_0>='\u0450' && LA21_0<='\u3040')||(LA21_0>='\u3100' && LA21_0<='\u31EF')||(LA21_0>='\u3200' && LA21_0<='\u33FF')||(LA21_0>='\u4DC0' && LA21_0<='\u4DFF')||(LA21_0>='\uA000' && LA21_0<='\uF8FF')||(LA21_0>='\uFB00' && LA21_0<='\uFFFF')) ) {s = 45;}
+                        else if ( ((LA21_0>='\u0000' && LA21_0<='\b')||(LA21_0>='\u000B' && LA21_0<='\f')||(LA21_0>='\u000E' && LA21_0<='\u001F')||LA21_0=='!'||(LA21_0>='%' && LA21_0<='&')||(LA21_0>=':' && LA21_0<=';')||(LA21_0>='?' && LA21_0<='@')||(LA21_0>='\\' && LA21_0<='^')||(LA21_0>='~' && LA21_0<='\u00BF')||(LA21_0>='\u0250' && LA21_0<='\u040F')||(LA21_0>='\u0450' && LA21_0<='\u3040')||(LA21_0>='\u3100' && LA21_0<='\u31EF')||(LA21_0>='\u3200' && LA21_0<='\u33FF')||(LA21_0>='\u4DC0' && LA21_0<='\u4DFF')||(LA21_0>='\uA000' && LA21_0<='\uF8FF')||(LA21_0>='\uFB00' && LA21_0<='\uFF3E')||(LA21_0>='\uFF40' && LA21_0<='\uFFFF')) ) {s = 45;}
 
                         else s = 42;
 
