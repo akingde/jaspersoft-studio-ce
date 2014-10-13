@@ -89,8 +89,13 @@ public class StyleClickListener extends MouseAdapter {
 			messageBox.setMessage(Messages.StylesListSection_Warning_Box_Message);
 			int buttonID = messageBox.open();
 			if (buttonID == SWT.YES){
-				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, targetElement); //$NON-NLS-1$
-				Command c = parentSection.generateSetAttributeCommand(targetElement, property);
+				JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, targetElement);
+				String propertyName = property;
+				int lastSegment = propertyName.lastIndexOf(".");
+				if (lastSegment != -1) {
+					propertyName = propertyName.substring(lastSegment + 1);
+				}
+				Command c = parentSection.generateSetAttributeCommand(ElementClickListener.getRealElement(targetElement, property), propertyName);
 				if (c != null) cc.add(c);
 				if (!cc.getCommands().isEmpty()) {
 					parentSection.executeAndRefresh(cc);

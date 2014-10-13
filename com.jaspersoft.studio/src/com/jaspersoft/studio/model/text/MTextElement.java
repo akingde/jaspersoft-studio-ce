@@ -47,6 +47,9 @@ import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public abstract class MTextElement extends MGraphicElementLineBox implements IRotatable {
+	
+	public static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
 	public MTextElement() {
@@ -70,9 +73,6 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		result.putAll(tFont.getStylesDescriptors());
 		return result;
 	}
-
-	private static final String PARAGRAPH = "paragraph"; //$NON-NLS-1$
-
 	
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {

@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.style.command;
 
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
@@ -79,6 +81,45 @@ public class ResetStyleCommand extends Command {
 		dest.setStrikeThrough(source.isOwnStrikeThrough());
 		dest.setUnderline(source.isOwnUnderline());
 		dest.setVerticalAlignment(source.getOwnVerticalAlignmentValue());
+		
+		//COPY THE BOX
+		
+		JRLineBox destLineBox = dest.getLineBox();
+		JRLineBox sourceLineBox = source.getLineBox();
+		
+		if (destLineBox == null || sourceLineBox == null) return;
+		
+		destLineBox.setRightPadding(sourceLineBox.getOwnRightPadding());
+		destLineBox.setLeftPadding(sourceLineBox.getOwnLeftPadding());
+		destLineBox.setTopPadding(sourceLineBox.getOwnTopPadding());
+		destLineBox.setBottomPadding(sourceLineBox.getOwnBottomPadding());
+		destLineBox.setPadding(sourceLineBox.getOwnPadding());
+		
+		copyPenAttributrs(sourceLineBox.getPen(), destLineBox.getPen());
+		copyPenAttributrs(sourceLineBox.getLeftPen(), destLineBox.getLeftPen());
+		copyPenAttributrs(sourceLineBox.getRightPen(), destLineBox.getRightPen());
+		copyPenAttributrs(sourceLineBox.getTopPen(), destLineBox.getTopPen());
+		copyPenAttributrs(sourceLineBox.getBottomPen(), destLineBox.getBottomPen());
+		
+		//COPY THE PEN
+		
+		JRPen destLinePen = dest.getLinePen();
+		JRPen sourceLinePen = source.getLinePen();
+		copyPenAttributrs(sourceLinePen, destLinePen);
+	}
+	
+	/**
+	 * Copy the attribute of a source JRPen to a destination JRPen, only
+	 * if both are not null
+	 * 
+	 * @param source the source pen
+	 * @param dest the destination pen
+	 */
+	private void copyPenAttributrs(JRPen source, JRPen dest){
+		if (source == null || dest == null) return;
+		dest.setLineColor(source.getOwnLineColor());
+		dest.setLineStyle(source.getOwnLineStyleValue());
+		dest.setLineWidth(source.getOwnLineWidth());
 	}
 	
 	@Override

@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRStyle;
@@ -56,6 +57,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.progress.WorkbenchJob;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.wb.swt.ResourceCache;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -69,6 +71,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.DefaultValuesMap;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.MPage;
@@ -81,7 +84,6 @@ import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.GridDataUtil;
 
 /**
  * Class that paint the widget where are shown the attributes of element, those inherited by the it's styles, and the
@@ -95,12 +97,12 @@ public class StylesListSection extends AbstractSection {
 	/**
 	 * Enumeration to describe the container of an attribute, it 
 	 * can be an attribute of the selected element, of one 
-	 * of the styles inherited by the element or a default value
+	 * of the styles inherited by the element.
 	 * 
 	 * @author Orlandin Marco
 	 *
 	 */
-	private enum AttributeParent{ELEMENT, STYLE, DEFAULT};
+	private enum AttributeParent{ELEMENT, STYLE};
 	
 	/**
 	 * Color for the text that represent the attribute name
@@ -143,11 +145,6 @@ public class StylesListSection extends AbstractSection {
 	 * Composite where the controls are placed
 	 */
 	private Composite mainComposite = null; 
-
-	/**
-	 * The map of the element own attributes
-	 */
-	private HashMap<String, Object> elementAttributes = null;
 
 	/**
 	 * Manager for the events binded to the mouse
@@ -325,21 +322,18 @@ public class StylesListSection extends AbstractSection {
 	 *          Value of the color
 	 * @param colorName
 	 *          Name of the attribute
-	 * @param gData
-	 *          Grid data for the layout
 	 * @param addLine
 	 *          true if a stroke line is needed
 	 * @param toolTip
 	 *          tooltip text of the element name label
 	 * @return The button where the click handle will be added
 	 */
-	private Control paintColor(Composite parent, final RGB colorValue, String colorName, GridData gData,
-			boolean addLine, String toolTip) {
+	private Control paintColor(Composite parent, final RGB colorValue, String colorName, boolean addLine, String toolTip) {
 		String stringValue = getHexFromRGB(colorValue);
 		Composite nameComp = new Composite(parent, SWT.NONE);
 		RowLayout layout = new RowLayout();
 		nameComp.setLayout(layout);
-		nameComp.setLayoutData(GridDataUtil.clone(gData));
+		nameComp.setLayoutData(generateElementGridData());
 
 		Label imageLabel = new Label(nameComp, SWT.NONE);
 		imageLabel.setImage(image);
@@ -355,7 +349,7 @@ public class StylesListSection extends AbstractSection {
 		Composite valueComp = new Composite(parent, SWT.NONE);
 		RowLayout inLineLayout = new RowLayout();
 		valueComp.setLayout(inLineLayout);
-		valueComp.setLayoutData(GridDataUtil.clone(gData));
+		valueComp.setLayoutData(generateElementGridData());
 
 		StyledText valueText = new StyledText(valueComp, SWT.NONE);
 		valueText.addPaintListener(new PaintListener() {
@@ -390,18 +384,16 @@ public class StylesListSection extends AbstractSection {
 	 *          The name of the attribute
 	 * @param value
 	 *          The value of the attribute
-	 * @param gData
-	 *          Grid data for the layout
 	 * @param addLine
 	 *          true if a stroke line is needed
 	 * @param toolTip
 	 *          tooltip text of the element name label
 	 * @return The button where the click handle will be added
 	 */
-	private Control printLabels(Composite parent, String name, String value, GridData gData, boolean addLine,	String toolTip) {
+	private Control printLabels(Composite parent, String name, String value, boolean addLine,	String toolTip) {
 		Composite valueComp = new Composite(parent, SWT.NONE);
 		valueComp.setLayout(new RowLayout());
-		valueComp.setLayoutData(gData);
+		valueComp.setLayoutData(generateElementGridData());
 
 		Label imageLabel = new Label(valueComp, SWT.NONE);
 		imageLabel.setImage(image);
@@ -434,68 +426,104 @@ public class StylesListSection extends AbstractSection {
 	 *          The name of the attribute
 	 * @param checked
 	 *          true if the attribute has value true, false otherwise
-	 * @param gData
-	 *          Grid data for the layout
 	 * @param addLine
 	 *          true if a stoke line is needed
 	 * @param toolTip
 	 *          tooltip text of the element name label
 	 * @return The button where the click handle will be added
 	 */
-	private Control paintCheckBox(Composite parent, String name, boolean checked, GridData gData, boolean addLine, String toolTip) {
+	private Control paintCheckBox(Composite parent, String name, boolean checked, boolean addLine, String toolTip) {
 		String stringValue = MessagesByKeys.getString("common_boolean_" + checked); //$NON-NLS-1$
-		return printLabels(parent, name, stringValue, gData, addLine, toolTip);
+		return printLabels(parent, name, stringValue, addLine, toolTip);
 	}
 
-
+	/**
+	 * Extract the value of an attribute form the passed element
+	 * 
+	 * @param fullProperty the complete name of the attribute
+	 * @param actualElement the element
+	 * @return the value of the attribute
+	 */
+	private IPropertyDescriptor getNestedDescriptor(String fullProperty, APropertyNode actualElement){
+		String lastSegment = fullProperty;
+		int lastSeparator = fullProperty.lastIndexOf(".");
+		if (lastSeparator != -1){
+			lastSegment = fullProperty.substring(lastSeparator+1);
+		}
+		IPropertyDescriptor result = actualElement.getPropertyDescriptor(lastSegment);
+		return result;
+	}
+	
+	/**
+	 * Get a more readable name for some nested attributes
+	 * 
+	 * @param fullPropertyName the full name with the path for the attribute
+	 * @return An prefix to add to the name 
+	 */
+	private String propertyNamePrefixProvider(String fullPropertyName){
+		String prefix = "";
+		if (fullPropertyName.startsWith(MGraphicElementLineBox.LINE_BOX)){
+			prefix = "Box ";
+			if (fullPropertyName.contains(MLineBox.LINE_PEN_LEFT)) prefix += "Left ";
+			else if (fullPropertyName.contains(MLineBox.LINE_PEN_RIGHT)) prefix += "Right ";
+			else if (fullPropertyName.contains(MLineBox.LINE_PEN_BOTTOM)) prefix += "Bottom ";
+			else if (fullPropertyName.contains(MLineBox.LINE_PEN_TOP)) prefix += "Top ";
+		} else {
+			if (fullPropertyName.startsWith(MLineBox.LINE_PEN)){
+				prefix = "Pen ";
+			}
+		}
+		return prefix;
+	}
+	
 	/**
 	 * Print a generic object attribute with the appropriate widgets on the main composite
 	 * 
-	 * @param keyPrefix optional prefix to the key represented by the name
-	 * @param name Name and key of the attribute
+	 * @param fullPropertyNameName the key of the attribute, if necessary the path to get that attribute from and upper level
 	 * @param value value of the attribute
 	 * @param parent main widget container
-	 * @param gData grid layout data for the generated controls
-	 * @param printLine True if the printed attribute need a strike thought line
 	 * @param actualElement element that contain the attribute
 	 * @param parentType the type of the container of the printed attribute, essentially say to who this attribute belong. It
-	 * can be the selected element or a style of the element or also a default attribute
+	 * can be the selected element or a style of the element 
 	 */
-	private void printObject(String namePrefix, String name, Object value, Composite parent, GridData gData, boolean printLine, APropertyNode actualElement, AttributeParent parentType, HashMap<String, Object> localContext) {
-		if (value instanceof Color) {
-			RGB valImage = ((Color) value).getRGB();
-			Control label = paintColor(parent, valImage, MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
-			addListeners(label, actualElement, name, parentType);
-		} else if (value instanceof java.awt.Color) {
-			java.awt.Color valImage = (java.awt.Color) value;
-			Control label = paintColor(parent, getSWTColorFromAWT(valImage), MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
-			addListeners(label, actualElement, name, parentType);
-		} else if (value instanceof JREnum) {
-			JREnum enumValue = (JREnum) value;
-			Control label = printLabels(parent, MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), enumValue.getName(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
-			addListeners(label, actualElement, name, parentType);
-		} else if (value instanceof Boolean) {
-			Control label = paintCheckBox(parent, MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), (Boolean) value, gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
-			addListeners(label, actualElement, name, parentType);
-		} else if (value instanceof MLinePen) {
+	private void printObject(String fullPropertyNameName, Object value, Composite parent, APropertyNode actualElement, AttributeParent parentType) {
+		if (value instanceof MLinePen) {
 			MLinePen lineValue = (MLinePen) value;
-			// I need to pass a new context for the linepen because it's a composite value, so in the main hashmap i have only
-			// the complex value, not all it's fields
-			printStyleAttribute(parent, lineValue, null, namePrefix.concat("_").concat(name), ((MLinePen) localContext.get(name)).getStylesDescriptors(), parentType); //$NON-NLS-1$
+			printStyleAttribute(parent, lineValue, fullPropertyNameName, parentType); 
 		} else if (value instanceof MParagraph) {
-			MParagraph lineValue = (MParagraph) value;
-			MParagraph ctxMParagraph = (MParagraph) localContext.get(name);
-			HashMap<String, Object> stylesDescriptors = null;
-			if(ctxMParagraph!=null){
-				stylesDescriptors = ctxMParagraph.getStylesDescriptors();
-			}
-			printStyleAttribute(parent,	lineValue, null, namePrefix.concat("_").concat(name), stylesDescriptors, parentType); //$NON-NLS-1$
+			MParagraph paragraphValue = (MParagraph) value;
+			printStyleAttribute(parent,	paragraphValue, fullPropertyNameName, parentType); 
 		} else if (value instanceof MLineBox) {
-			MLineBox lineValue = (MLineBox) value;
-			printStyleAttribute(parent, lineValue, null, namePrefix.concat("_").concat(name), ((MLineBox) localContext.get(name)).getStylesDescriptors(), parentType); //$NON-NLS-1$
+			MLineBox boxValue = (MLineBox) value;
+			printStyleAttribute(parent, boxValue, fullPropertyNameName, parentType); 
 		} else {
-			Control label = printLabels(parent, MessagesByKeys.getString("common".concat(namePrefix).concat("_").concat(name)), value.toString(), gData, printLine, actualElement.getPropertyDescriptor(name).getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
-			addListeners(label, actualElement, name, parentType);
+			boolean printLine = ovverridenAttributes.contains(fullPropertyNameName);
+			IPropertyDescriptor descriptor = getNestedDescriptor(fullPropertyNameName, actualElement);
+			String name = propertyNamePrefixProvider(fullPropertyNameName) + descriptor.getDisplayName();
+			if (value instanceof Color) {
+				RGB valImage = ((Color) value).getRGB();
+				Control label = paintColor(parent, valImage, name, printLine, descriptor.getDescription()); 
+				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				ovverridenAttributes.add(fullPropertyNameName);
+			} else if (value instanceof java.awt.Color) {
+				java.awt.Color valImage = (java.awt.Color) value;
+				Control label = paintColor(parent, getSWTColorFromAWT(valImage), name, printLine, descriptor.getDescription()); 
+				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				ovverridenAttributes.add(fullPropertyNameName);
+			} else if (value instanceof JREnum) {
+				JREnum enumValue = (JREnum) value;
+				Control label = printLabels(parent, name, enumValue.getName(), printLine, descriptor.getDescription());
+				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				ovverridenAttributes.add(fullPropertyNameName);
+			} else if (value instanceof Boolean) {
+				Control label = paintCheckBox(parent, name, (Boolean) value, printLine, descriptor.getDescription()); 
+				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				ovverridenAttributes.add(fullPropertyNameName);
+			} else {
+				Control label = printLabels(parent, name, value.toString(), printLine, descriptor.getDescription()); 
+				addListeners(label, actualElement, fullPropertyNameName, parentType);
+				ovverridenAttributes.add(fullPropertyNameName);
+			}
 		}
 	}
 	
@@ -514,18 +542,16 @@ public class StylesListSection extends AbstractSection {
 	 * can be the selected element or a style of the element or also a default attribute
 	 */
 	private void addListeners(Control control, APropertyNode actualElement, String attributeId, AttributeParent parentType) {
-		if (parentType != AttributeParent.DEFAULT){
-			Composite parent = control.getParent();
-			parent.addMouseTrackListener(trackerListener);
-			for (Control son : parent.getChildren()) {
-				son.addMouseTrackListener(trackerListener);
-			}
-			control.setToolTipText(Messages.StylesListSection_removeAttribure_tooltip);
-			if (parentType == AttributeParent.ELEMENT){ 
-				control.addMouseListener(new ElementClickListener(attributeId, this));
-			} else {
-				control.addMouseListener(new StyleClickListener(actualElement, attributeId, this));
-			}
+		Composite parent = control.getParent();
+		parent.addMouseTrackListener(trackerListener);
+		for (Control son : parent.getChildren()) {
+			son.addMouseTrackListener(trackerListener);
+		}
+		control.setToolTipText(Messages.StylesListSection_removeAttribure_tooltip);
+		if (parentType == AttributeParent.ELEMENT){ 
+			control.addMouseListener(new ElementClickListener(attributeId, this));
+		} else {
+			control.addMouseListener(new StyleClickListener(actualElement, attributeId, this));
 		}
 	}
 
@@ -604,21 +630,15 @@ public class StylesListSection extends AbstractSection {
 		if (titleValue != null) {
 			printTitleWithButton(parent, titleValue, new ElementContextualMenu(this));
 		}
-		GridData sameSizeGridData = new GridData();
-		sameSizeGridData.verticalAlignment = SWT.CENTER;
-		sameSizeGridData.heightHint = ITEM_HEIGHT;
-		sameSizeGridData.widthHint = ITEM_WIDTH;
-		Iterator<String> it = elementAttributes.keySet().iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			Object elementAttribute = elementAttributes.get(key);
-			if (elementAttribute != null) {
-				printObject("", key, elementAttribute, parent, sameSizeGridData, ovverridenAttributes.contains(key), element, AttributeParent.ELEMENT, elementAttributes); //$NON-NLS-1$
-				ovverridenAttributes.add(key);
+		for(Entry<String, Object> entry : element.getStylesDescriptors().entrySet()){
+			String attributeKey = entry.getKey();
+			Object attributeValue = entry.getValue();
+			if (attributeValue != null) {
+				printObject(attributeKey, attributeValue, parent, element, AttributeParent.ELEMENT); //$NON-NLS-1$
 			}
 		}
 	}
-
+	
 	/**
 	 * Print the attributes that belong to a styles
 	 * 
@@ -626,14 +646,46 @@ public class StylesListSection extends AbstractSection {
 	 *          composite of the main widget
 	 * @param element
 	 *          The selected element
-	 * @param titleValue
-	 *          The title to print for this element
 	 * @param keyPrefix
-	 *          optional prefix of the attribute key
-	 * @param localElementAttributes
-	 *          Map that contains the attribute of the element associated with this style
+	 *          the full path of the attribute 
+	 * @param parentType
+	 *          identify if the attribute belong to a style or to an element
 	 */
-	private void printStyleAttribute(Composite parent, APropertyNode element, String titleValue, String keyPrefix, HashMap<String, Object> localElementAttributes, AttributeParent parentType) {
+	private void printStyleAttribute(Composite parent, APropertyNode element, String keyPrefix, AttributeParent parentType) {
+		HashMap<String, Object> properties = element.getStylesDescriptors();		
+		for(Entry<String, Object> entry : properties.entrySet()){
+			String attributeKey = entry.getKey();
+			Object attributeValue = entry.getValue();
+			if (attributeValue != null) {
+				if (keyPrefix != null) {
+					attributeKey = keyPrefix.concat(".").concat(attributeKey);
+				}
+				printObject(attributeKey, attributeValue, parent, element, parentType);
+			}
+		}
+	}
+	
+	/**
+	 * Generate a generic grid data for a printed element and it's label
+	 * 
+	 * @return a new grid data
+	 */
+	private GridData generateElementGridData(){
+		GridData sameSizeGridData = new GridData();
+		sameSizeGridData.verticalAlignment = SWT.CENTER;
+		sameSizeGridData.heightHint = ITEM_HEIGHT;
+		sameSizeGridData.widthHint = ITEM_WIDTH;
+		return sameSizeGridData;
+	}
+	
+	/**
+	 * Print the title for a style element
+	 * 
+	 * @param titleValue the text of the title
+	 * @param element the style element
+	 * @param parent the container
+	 */
+	private void printStyleTitle(String titleValue, APropertyNode element, Composite parent){
 		if (titleValue != null) {
 			final StyleContainer styleReference = styleMaps.get(getStyleKey(element));
 			//Print a different label if the style is external or internal
@@ -652,20 +704,6 @@ public class StylesListSection extends AbstractSection {
 				printTitleWithButton(parent, titleValue, new StyleContextualMenu(this, styleReference.getStyle()));
 			}
 		}
-		GridData sameSizeGridData = new GridData();
-		sameSizeGridData.verticalAlignment = SWT.CENTER;
-		sameSizeGridData.heightHint = ITEM_HEIGHT;
-		sameSizeGridData.widthHint = ITEM_WIDTH;
-		HashMap<String, Object> properties = element.getStylesDescriptors();
-		Iterator<String> it = properties.keySet().iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			Object elementAttribute = properties.get(key);
-			if (elementAttribute != null && localElementAttributes.containsKey(key)) {
-				printObject(keyPrefix, key, elementAttribute, parent, sameSizeGridData, ovverridenAttributes.contains(keyPrefix + key), element, parentType, localElementAttributes);
-				ovverridenAttributes.add(keyPrefix + key);
-			}
-		}
 	}
 
 	/**
@@ -680,12 +718,14 @@ public class StylesListSection extends AbstractSection {
 		while (itr.hasNext()) {
 			MStyle style = itr.next();
 			String titleLabelText = MessageFormat.format(Messages.StylesSectionList_Inherited_From_Style, new Object[]{style.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
-			printStyleAttribute(parent, style, titleLabelText , "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$
+			printStyleTitle(titleLabelText, style, parent);
+			printStyleAttribute(parent, style, null, AttributeParent.STYLE); //$NON-NLS-1$
 			if (style == defaultStyle) hasDefaultStyleInGerarchy = true;
 		}
 		if (!hasDefaultStyleInGerarchy && defaultStyle != null && defaultStyle != getElement()){
 			String titleLabelText = MessageFormat.format(Messages.StylesListSection_Inherited_From_Default_Style, new Object[]{defaultStyle.getPropertyValue(JRDesignStyle.PROPERTY_NAME)});
-			printStyleAttribute(parent, defaultStyle, titleLabelText, "", elementAttributes, AttributeParent.STYLE); //$NON-NLS-1$ 
+			printStyleTitle(titleLabelText, defaultStyle, parent);
+			printStyleAttribute(parent, defaultStyle, null, AttributeParent.STYLE); //$NON-NLS-1$ 
 		}
 	}
 
@@ -708,6 +748,68 @@ public class StylesListSection extends AbstractSection {
 			}
 		}
 	}
+	
+	//-- AREA THAT HANLDE THE PRINT OF THE DEFAULT VALUES
+	
+	private IPropertyDescriptor getDefaultDescriptor(String fullProperty){
+		String[] properties = fullProperty.split("\\.");
+		APropertyNode element = getElement();
+		for(int i=0; i<properties.length-1; i++){
+			element = (APropertyNode)element.getPropertyValue(properties[i]);
+		}
+		IPropertyDescriptor result = element.getPropertyDescriptor(properties[properties.length-1]);
+		return result;
+	}
+	
+	/**
+	 * Print one of the object inside the default  values. Since the default values map has
+	 * a plain structure then the values can be printed directly. Also since there aren't
+	 * other levels 
+	 * 
+	 * @param fullPropertyNameName the full name of the property to print
+	 * @param value the value of the property
+	 * @param parent the parent composite
+	 */
+	private void printDefaultObject(String fullPropertyNameName, Object value, Composite parent) {
+		boolean printLine = ovverridenAttributes.contains(fullPropertyNameName);
+		IPropertyDescriptor descriptor = getDefaultDescriptor(fullPropertyNameName);
+		String name = propertyNamePrefixProvider(fullPropertyNameName) + descriptor.getDisplayName();
+		if (value instanceof Color) {
+			RGB valImage = ((Color) value).getRGB();
+			paintColor(parent, valImage, name, printLine, descriptor.getDescription()); 
+		} else if (value instanceof java.awt.Color) {
+			java.awt.Color valImage = (java.awt.Color) value;
+			paintColor(parent, getSWTColorFromAWT(valImage), name, printLine, descriptor.getDescription()); 
+		} else if (value instanceof JREnum) {
+			JREnum enumValue = (JREnum) value;
+			printLabels(parent, name, enumValue.getName(), printLine, descriptor.getDescription());
+		} else if (value instanceof Boolean) {
+			paintCheckBox(parent, name, (Boolean) value, printLine, descriptor.getDescription()); 
+		} else {
+			printLabels(parent, name, value.toString(), printLine, descriptor.getDescription()); 
+		}
+	}
+	
+	/**
+	 * Print the default values of an element, they aren't editable
+	 * 
+	 * @param parent composite of the main widget
+	 * @param defaultValues map of the default values
+	 */
+	private void printDefaultValues(Composite parent, Map<String, Object> defaultValues) {
+		printTitle(parent, Messages.StylesListSection_defaultAttributesTitle);
+		for (Entry<String, Object> entry : defaultValues.entrySet()) {
+			String attributeKey = entry.getKey();
+			Object attributeValue = entry.getValue();
+			if (attributeValue != null) {
+				printDefaultObject(attributeKey, attributeValue, parent); 
+			}
+		}
+	}
+	
+	
+	//-- END OF THE AREA THAT HANLDE THE PRINT OF THE DEFAULT VALUES
+
 
 	/**
 	 * Initialize the map of the styles
@@ -731,28 +833,6 @@ public class StylesListSection extends AbstractSection {
 			}
 		}
 		recursiveReadStyles(externalList, null,defaultValue);
-	}
-
-	/**
-	 * Print the default values of an element, the aren't editable
-	 * 
-	 * @param parent composite of the main widget
-	 * @param defaultValues map of the default values
-	 */
-	private void printDefaultValues(Composite parent, Map<String, Object> defaultValues) {
-		printTitle(parent, Messages.StylesListSection_defaultAttributesTitle);
-		GridData sameSizeGridData = new GridData();
-		sameSizeGridData.verticalAlignment = SWT.CENTER;
-		sameSizeGridData.heightHint = ITEM_HEIGHT;
-		sameSizeGridData.widthHint = ITEM_WIDTH;
-		Iterator<String> it = defaultValues.keySet().iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			Object elementAttribute = defaultValues.get(key);
-			if (elementAttribute != null && elementAttributes.containsKey(key)) {
-				printObject("", key, elementAttribute, parent, sameSizeGridData, ovverridenAttributes.contains(key), getElement(), AttributeParent.DEFAULT, elementAttributes); //$NON-NLS-1$
-			}
-		}
 	}
 	
 	/**
@@ -861,7 +941,6 @@ public class StylesListSection extends AbstractSection {
 		if (!isRefreshing()){
 			setRefreshing(true);
 			trackerListener.refresh();
-			elementAttributes = getElement().getStylesDescriptors();
 			
 			// Dispose the old widgets
 			clearOldContent();

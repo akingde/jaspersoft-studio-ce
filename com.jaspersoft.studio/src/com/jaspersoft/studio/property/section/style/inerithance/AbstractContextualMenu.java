@@ -26,6 +26,9 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.JSSCompoundCommand;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MGraphicElementLineBox;
+import com.jaspersoft.studio.model.MLineBox;
+import com.jaspersoft.studio.model.text.MTextElement;
 
 /**
  * Open a contextual menu when a button is pressed. This listener can
@@ -100,7 +103,7 @@ public abstract class AbstractContextualMenu extends SelectionAdapter {
 	
 	/**
 	 * Create the commands to set to null all the styles dependent attribute of an element
-	 * and put them inside a container
+	 * and put them inside a container. It go down also to the nested elements
 	 * 
 	 * @param cCommand the container of the commands
 	 * @param element element to reset to default
@@ -108,9 +111,26 @@ public abstract class AbstractContextualMenu extends SelectionAdapter {
 	protected void createElementNullCommand(JSSCompoundCommand cCommand, APropertyNode element){
 		HashMap<String, Object> descriptors = element.getStylesDescriptors();
 		for(String property : descriptors.keySet()){
-			Command c = parentSection.generateSetAttributeCommand(element, property);
-			if (c != null){
-				cCommand.add(c);
+			
+			if (property.equals(MGraphicElementLineBox.LINE_BOX)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MGraphicElementLineBox.LINE_BOX));
+			} else if (property.equals(MLineBox.LINE_PEN)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MLineBox.LINE_PEN));
+			} else if (property.equals(MLineBox.LINE_PEN_BOTTOM)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MLineBox.LINE_PEN_BOTTOM));
+			} else if (property.equals(MLineBox.LINE_PEN_LEFT)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MLineBox.LINE_PEN_LEFT));
+			} else if (property.equals(MLineBox.LINE_PEN_RIGHT)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MLineBox.LINE_PEN_RIGHT));
+			} else if (property.equals(MLineBox.LINE_PEN_TOP)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MLineBox.LINE_PEN_TOP));
+			} else if (property.equals(MTextElement.PARAGRAPH)){
+				createElementNullCommand(cCommand, (APropertyNode)element.getPropertyValue(MTextElement.PARAGRAPH));
+			} else {
+				Command c = parentSection.generateSetAttributeCommand(element, property);
+				if (c != null){
+					cCommand.add(c);
+				}
 			}
 		}
 	}

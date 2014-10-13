@@ -52,21 +52,42 @@ public class ElementClickListener extends MouseAdapter{
 		this.property = property;
 		this.parentSection = parentSection;
 	}
+	
+	/**
+	 * Resolve a full path of an attribute to set its values also if it is a nested element
+	 * 
+	 * @param baseElement the upper level element
+	 * @param fullProperty the attribute to set with it's path
+	 * @return the element where the last segment of the attribute must be set
+	 */
+	public static APropertyNode getRealElement(APropertyNode baseElement,String fullProperty){
+		String[] properties = fullProperty.split("\\.");
+		APropertyNode element = baseElement;
+		for(int i=0; i<properties.length-1; i++){
+			element = (APropertyNode)element.getPropertyValue(properties[i]);
+		}
+		return element;
+	}
 
 	/**
 	 * Set the property of the element binded to this event to null, using the manipulation commands (so the operation
 	 * can be undone)
 	 */
 	public void mouseUp(MouseEvent e) {
-			List<APropertyNode> selectedElements = parentSection.getElements();
-			JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, selectedElements.get(0)); //$NON-NLS-1$
-			for(APropertyNode targetElement : selectedElements){
-				Command c = parentSection.generateSetAttributeCommand(targetElement, property);
-				if (c != null)
-					cc.add(c);
+		List<APropertyNode> selectedElements = parentSection.getElements();
+		JSSCompoundCommand cc = new JSSCompoundCommand("Set " + property, selectedElements.get(0)); //$NON-NLS-1$
+		for (APropertyNode targetElement : selectedElements) {
+			String propertyName = property;
+			int lastSegment = propertyName.lastIndexOf(".");
+			if (lastSegment != -1) {
+				propertyName = propertyName.substring(lastSegment + 1);
 			}
-			if (!cc.getCommands().isEmpty()) {
-				parentSection.executeAndRefresh(cc);
-			}
+			Command c = parentSection.generateSetAttributeCommand(getRealElement(targetElement, property), propertyName);
+			if (c != null)
+				cc.add(c);
+		}
+		if (!cc.getCommands().isEmpty()) {
+			parentSection.executeAndRefresh(cc);
+		}
 	}
 }
