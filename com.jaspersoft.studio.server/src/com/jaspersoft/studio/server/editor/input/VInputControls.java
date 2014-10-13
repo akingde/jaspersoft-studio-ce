@@ -31,7 +31,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
-import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -74,7 +73,7 @@ public class VInputControls extends AVParameters {
 		this.icm = icm;
 		uri = rdrepunit.getUriString();
 		type = rdrepunit.getWsType();
-		em.initICOptions(icm, rdrepunit, monitor);
+		initICOptions(icm, rdrepunit, monitor);
 	}
 
 	private boolean hasOptions = false;
@@ -91,7 +90,7 @@ public class VInputControls extends AVParameters {
 			c.dispose();
 		}
 		if (!hasOptions) {
-			getExtensionManager().createControl(composite, this);
+			createControl(composite, this);
 			hasOptions = true;
 		}
 		boolean first = true;
@@ -172,7 +171,7 @@ public class VInputControls extends AVParameters {
 	}
 
 	public void updateInputControls(final IProgressMonitor monitor) throws Exception {
-		final String icuri = getExtensionManager().getICContainerUri(uri);
+		final String icuri = getICContainerUri(uri);
 
 		monitor.subTask(Messages.VInputControls_0);
 
@@ -188,12 +187,28 @@ public class VInputControls extends AVParameters {
 
 	}
 
-	private ExtensionManager em;
+	public void createControl(Composite composite, VInputControls icForm) {
+		for (IInputControls r : getExtensionManager())
+			r.createControl(composite, icForm);
+	}
 
-	private ExtensionManager getExtensionManager() {
-		if (em == null)
-			em = Activator.getExtManager();
-		return em;
+	public String getICContainerUri(String uri) {
+		for (IInputControls r : getExtensionManager())
+			uri = r.getICContainerUri(uri);
+		return uri;
+	}
+
+	public void initICOptions(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor) {
+		for (IInputControls r : getExtensionManager())
+			r.initICOptions(icm, rdrepunit, monitor);
+	}
+
+	private List<IInputControls> controls;
+
+	private List<IInputControls> getExtensionManager() {
+		if (controls == null)
+			controls = Activator.getExtManager().getInstance();
+		return controls;
 	}
 
 }

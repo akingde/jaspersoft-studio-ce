@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.toolbar;
 
@@ -53,7 +49,7 @@ public abstract class ATopToolBarManager {
 	protected abstract void fillToolbar(IToolBarManager tbManager);
 
 	public void removeAll() {
-		for (IContributionItem it : tbManager.getItems()) {	
+		for (IContributionItem it : tbManager.getItems()) {
 			if (it instanceof ActionContributionItem && ((ActionContributionItem) it).getAction() instanceof IDisposable)
 				((IDisposable) ((ActionContributionItem) it).getAction()).dispose();
 			else if (it instanceof ContributionItem)
@@ -64,9 +60,10 @@ public abstract class ATopToolBarManager {
 
 	public void refreshToolbar() {
 		tbManager.update(true);
-		if (!topToolBar.isDisposed())
+		if (!topToolBar.isDisposed()) {
 			topToolBar.pack();
-		topToolBar.getParent().layout(true);
+			topToolBar.getParent().layout(true);
+		}
 	}
 
 	public void contributeItems(APreview contributor) {

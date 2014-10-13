@@ -18,6 +18,9 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 
 public interface IInputControls {
+
+	public IInputControls getInstance();
+
 	public void createControl(Composite composite, VInputControls icForm);
 
 	public String getICContainerUri(String uri);

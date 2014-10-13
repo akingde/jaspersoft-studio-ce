@@ -25,14 +25,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.editor.input.IInputControls;
-import com.jaspersoft.studio.server.editor.input.InputControlsManager;
-import com.jaspersoft.studio.server.editor.input.VInputControls;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -173,19 +170,11 @@ public class ExtensionManager {
 		return null;
 	}
 
-	public void createControl(Composite composite, VInputControls icForm) {
+	public List<IInputControls> getInstance() {
+		List<IInputControls> controls = new ArrayList<IInputControls>();
 		for (IInputControls r : inputcontrol)
-			r.createControl(composite, icForm);
+			controls.add(r.getInstance());
+		return controls;
 	}
 
-	public String getICContainerUri(String uri) {
-		for (IInputControls r : inputcontrol)
-			uri = r.getICContainerUri(uri);
-		return uri;
-	}
-
-	public void initICOptions(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor) {
-		for (IInputControls r : inputcontrol)
-			r.initICOptions(icm, rdrepunit, monitor);
-	}
 }
