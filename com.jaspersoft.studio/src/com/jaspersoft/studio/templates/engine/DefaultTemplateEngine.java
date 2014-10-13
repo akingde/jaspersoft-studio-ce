@@ -87,7 +87,9 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		List<Object> groupFields = (List<Object>) settings.get(GROUP_FIELDS);
 
 		JRDesignDataset dataset = (JRDesignDataset) settings.get(DATASET);
-		createSortFields = (Boolean) settings.get(ORDER_GROUP);
+		
+		Object sortFieldsValue = settings.get(ORDER_GROUP);
+		createSortFields = sortFieldsValue != null ? (Boolean)sortFieldsValue : false; 
 		if (dataset != null) {
 			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
 
