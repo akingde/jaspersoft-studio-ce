@@ -24,7 +24,6 @@ import com.jaspersoft.jasperserver.dto.permissions.RepositoryPermission;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.jasperserver.dto.serverinfo.ServerInfo;
 import com.jaspersoft.jasperserver.jaxrs.client.dto.importexport.StateDto;
-import com.jaspersoft.ji.jaxrs.reports.ReportOptionsSummaryList;
 import com.jaspersoft.studio.server.AFinderUI;
 import com.jaspersoft.studio.server.model.datasource.filter.IDatasourceFilter;
 import com.jaspersoft.studio.server.model.server.ServerProfile;

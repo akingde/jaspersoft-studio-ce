@@ -13,7 +13,9 @@
 package com.jaspersoft.studio.server.editor.input;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 
@@ -29,8 +31,11 @@ import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.view.control.AVParameters;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
 import com.jaspersoft.studio.server.editor.input.query.QueryInput;
+import com.jaspersoft.studio.server.plugin.ExtensionManager;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class VInputControls extends AVParameters {
@@ -39,6 +44,9 @@ public class VInputControls extends AVParameters {
 
 	private InputControlsManager icm;
 	private ResourceDescriptor rdrepunit;
+	private String type = ResourceDescriptor.TYPE_REPORTUNIT;
+	private String uri;
+	private Set<Control> toIgnore = new HashSet<Control>();
 
 	public VInputControls(Composite parent, JasperReportsConfiguration jContext) {
 		super(parent, jContext);
@@ -48,17 +56,48 @@ public class VInputControls extends AVParameters {
 		inputs.addAll(ReportControler.inputs);
 	}
 
-	public void setReportUnit(ResourceDescriptor rdrepunit) {
-		this.rdrepunit = rdrepunit;
+	public InputControlsManager getIcm() {
+		return icm;
 	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public Set<Control> getToIgnore() {
+		return toIgnore;
+	}
+
+	public void setReportUnit(InputControlsManager icm,
+			ResourceDescriptor rdrepunit) {
+		this.rdrepunit = rdrepunit;
+		this.icm = icm;
+		uri = rdrepunit.getUriString();
+		type = rdrepunit.getWsType();
+		em.initICOptions(icm, rdrepunit);
+	}
+
+	private boolean hasOptions = false;
 
 	public void createInputControls(InputControlsManager icm) {
 		this.icm = icm;
 		for (IDataInput di : icm.getControls())
 			di.dispose();
 		icm.getControls().clear();
-		for (Control c : composite.getChildren())
+
+		for (Control c : composite.getChildren()) {
+			if (toIgnore.contains(c))
+				continue;
 			c.dispose();
+		}
+		if (!hasOptions) {
+			getExtensionManager().createControl(composite, this);
+			hasOptions = true;
+		}
 		boolean first = true;
 		for (ResourceDescriptor p : icm.getInputControls())
 			if (p.isVisible()) {
@@ -85,9 +124,12 @@ public class VInputControls extends AVParameters {
 		Job job = new Job(Messages.VParameters_calculate_default_values) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask(Messages.VParameters_resetparameters, IProgressMonitor.UNKNOWN);
+				monitor.beginTask(Messages.VParameters_resetparameters,
+						IProgressMonitor.UNKNOWN);
 				try {
-					rdrepunit = icm.getWsClient().initInputControls(rdrepunit.getUriString(), monitor);
+					rdrepunit = icm.getWsClient().initInputControls(uri, type,
+							monitor);
+					setReportUnit(icm, rdrepunit);
 					icm.initInputControls(rdrepunit);
 					UIUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -110,15 +152,21 @@ public class VInputControls extends AVParameters {
 
 	public boolean checkFieldsFilled() {
 		if (icm.isAnyVisible()) {
-			boolean rAlwaysPrompt = rdrepunit.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
+			Boolean rAlwaysPrompt = Misc
+					.nvl(rdrepunit
+							.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS),
+							false);
 
 			boolean hasDirty = false;
 			for (ResourceDescriptor p : icm.getInputControls()) {
 				String pname = p.getName();
-				if (p.isVisible() && !p.isReadOnly() && incontrols.containsKey(pname)) {
+				if (p.isVisible() && !p.isReadOnly()
+						&& incontrols.containsKey(pname)) {
 					if (incontrols.get(pname).isDirty())
 						hasDirty = true;
-					if (p.isMandatory() && icm.getParameters().containsKey(pname) && !hasDirty)
+					if (p.isMandatory()
+							&& icm.getParameters().containsKey(pname)
+							&& !hasDirty)
 						return false;
 				}
 			}
@@ -128,7 +176,8 @@ public class VInputControls extends AVParameters {
 		return true;
 	}
 
-	protected boolean createInput(Composite sectionClient, ResourceDescriptor p, InputControlsManager icm, boolean first) {
+	protected boolean createInput(Composite sectionClient,
+			ResourceDescriptor p, InputControlsManager icm, boolean first) {
 		PResourceDescriptor pres = new PResourceDescriptor(p, icm);
 		Class<?> vclass = pres.getValueClass();
 		if (vclass != null)
@@ -139,7 +188,8 @@ public class VInputControls extends AVParameters {
 					createVerticalSeprator(first);
 					createLabel(sectionClient, pres, in);
 					in.createInput(sectionClient, pres, icm.getParameters());
-					if (InputControlsManager.isICSingle(p) && p.getValue() != null)
+					if (InputControlsManager.isICSingle(p)
+							&& p.getValue() != null)
 						in.updateModel(p.getValue());
 					in.addChangeListener(icm.getPropertyChangeListener());
 					icm.getControls().add(in);
@@ -148,4 +198,46 @@ public class VInputControls extends AVParameters {
 			}
 		return false;
 	}
+
+	public void updateInputControls() {
+		final String icuri = getExtensionManager().getICContainerUri(uri);
+		Job job = new Job(Messages.VInputControls_0) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask(Messages.VInputControls_0,
+						IProgressMonitor.UNKNOWN);
+				try {
+
+					icm.initInputControls(icm.getWsClient().initInputControls(
+							icuri, ResourceDescriptor.TYPE_REPORT_OPTIONS,
+							monitor));
+					type = ResourceDescriptor.TYPE_REPORT_OPTIONS;
+					icm.getDefaults();
+					UIUtils.getDisplay().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							createInputControls(icm);
+						}
+					});
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.LONG);
+		job.schedule();
+	}
+
+	private ExtensionManager em;
+
+	private ExtensionManager getExtensionManager() {
+		if (em == null)
+			em = Activator.getExtManager();
+		return em;
+	}
+
 }

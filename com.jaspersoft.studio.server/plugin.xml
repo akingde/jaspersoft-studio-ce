@@ -4,6 +4,7 @@
 <extension-point id="resources" name="Resources" schema="schema/resources.exsd"/>
 <extension-point id="publisher" name="Publisher" schema="schema/publisher.exsd"/>
 <extension-point id="protocols" name="Protocols" schema="schema/protocols.exsd"/>
+<extension-point id="inputcontrol" name="Input Controls" schema="schema/inputcontrol.exsd"/>
    <extension
          point="com.jaspersoft.studio.repositoryview">
       <repositoryview

@@ -25,10 +25,14 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.dto.resources.ClientResource;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.editor.input.IInputControls;
+import com.jaspersoft.studio.server.editor.input.InputControlsManager;
+import com.jaspersoft.studio.server.editor.input.VInputControls;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
@@ -40,9 +44,12 @@ public class ExtensionManager {
 	private List<IResourceFactory> resources = new ArrayList<IResourceFactory>();
 	private List<IConnection> protocols = new ArrayList<IConnection>();
 	private List<IPublishContributor> publisher = new ArrayList<IPublishContributor>();
+	private List<IInputControls> inputcontrol = new ArrayList<IInputControls>();
 
 	public void init() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "resources"); //$NON-NLS-1$ //$NON-NLS-2$
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(
+						"com.jaspersoft.studio.server", "resources"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -53,7 +60,8 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -64,7 +72,8 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "protocols"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "protocols"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -74,19 +83,34 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "inputcontrol"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof IInputControls)
+					inputcontrol.add((IInputControls) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
 	}
 
-	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, String version) throws Exception {
+	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, Set<String> fileset, IFile file, String version)
+			throws Exception {
 		for (IPublishContributor r : publisher)
 			r.publishJrxml(mrunit, monitor, jasper, fileset, file, version);
 	}
 
-	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper) throws Exception {
+	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper) throws Exception {
 		for (IPublishContributor r : publisher)
 			r.publishParameters(mrunit, monitor, jasper);
 	}
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
+	public MResource getResource(ANode parent, ResourceDescriptor resource,
+			int index) {
 		for (IResourceFactory r : resources) {
 			MResource mr = r.getResource(parent, resource, index);
 			if (mr != null)
@@ -135,12 +159,14 @@ public class ExtensionManager {
 			r.initWsTypes(wsType);
 	}
 
-	public void initContainers(Set<Class<? extends ClientResource<?>>> containers) {
+	public void initContainers(
+			Set<Class<? extends ClientResource<?>>> containers) {
 		for (IResourceFactory r : resources)
 			r.initContainers(containers);
 	}
 
-	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr,
+			ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ResourceDescriptor nrd = r.getRD(rc, cr, rd);
 			if (nrd != null)
@@ -149,12 +175,30 @@ public class ExtensionManager {
 		return null;
 	}
 
-	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ClientResource<?> getResource(ARestV2Connection rc,
+			ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ClientResource<?> nrd = r.getResource(rc, cr, rd);
 			if (nrd != null)
 				return nrd;
 		}
 		return null;
+	}
+
+	public void createControl(Composite composite, VInputControls icForm) {
+		for (IInputControls r : inputcontrol)
+			r.createControl(composite, icForm);
+	}
+
+	public String getICContainerUri(String uri) {
+		for (IInputControls r : inputcontrol)
+			uri = r.getICContainerUri(uri);
+		return uri;
+	}
+
+	public void initICOptions(InputControlsManager icm,
+			ResourceDescriptor rdrepunit) {
+		for (IInputControls r : inputcontrol)
+			r.initICOptions(icm, rdrepunit);
 	}
 }
