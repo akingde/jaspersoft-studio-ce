@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.DialogPage;
@@ -112,6 +113,19 @@ public class NewFileCreationWizard extends WizardNewFileCreationPage implements 
 			if (r == null || !r.exists() || (r.getType() & IResource.FILE) != 0) {
 				setMessage("The directory specified does not exist or is not a valid folder", DialogPage.ERROR);
 				valid = false;
+			}
+			
+			IContainer folder = (IContainer)r;
+			try {
+				String fileName = getFileName().toLowerCase().trim();
+				for (IResource child : folder.members()){
+					if (child.getName().toLowerCase().trim().equals(fileName)){
+						setMessage("Filename in different case already used inside the folder", DialogPage.ERROR);
+						valid = false;
+					}
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
 		return valid;
