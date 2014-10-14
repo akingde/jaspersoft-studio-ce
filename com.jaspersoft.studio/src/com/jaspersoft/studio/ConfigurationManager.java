@@ -37,8 +37,10 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 /**
- * Provide the methods to retrieve the path to the configuration file, the 
- * path is cached after the first request
+ * Provide the methods to retrieve the installation path of the application, the 
+ * path is cached after the first request.
+ * It Offers also the method to interact with the files storage that can be 
+ * used to save the configuration of the application
  * 
  * @author Orlandin Marco
  *
@@ -74,11 +76,18 @@ public class ConfigurationManager {
 	 * 
 	 * @return String represented a Path in URL format to the configuration file
 	 */
-	public static String getPath(){
+	public static String getInstallationPath(){
 		if (cachedPath == null) intializePath();
 		return cachedPath;
 	}
 	
+	/**
+	 * Return a storage with a specific name, if the storage doesn't exist then
+	 * it is created. A storage is a specific folder in the filesystem.
+	 * 
+	 * @param storageName the name of the storage\folder
+	 * @return a file to the requested storage
+	 */
 	public static File getStorage(String storageName){
 	  IPath configurationPath = JaspersoftStudioPlugin.getInstance().getStateLocation();
 	  File configurationFolder = configurationPath.toFile();
@@ -87,11 +96,26 @@ public class ConfigurationManager {
 	  return storage;
 	}
 	
+	/**
+	 * Return a list to all the content of a storage. If the storage
+	 * dosen't exist then it is created
+	 * 
+	 * @param storageName the name of the storage
+	 * @return a not null array of file that map the content of the storage folder
+	 */
 	public static File[] getStorageContent(String storageName){
 		File storage = getStorage(storageName);
 		return storage.listFiles();
 	}
 	
+	/**
+	 * Remove a resource contained into a specified storage. If
+	 * the storage doesnt' exist it is created. 
+	 * 
+	 * @param storageName the name of the storage 
+	 * @param resourceName the name of the resource to delete
+	 * @return the result of the delete operation
+	 */
 	public static boolean removeStoregeResource(String storageName, String resourceName){
 		File storage = getStorage(storageName);
 		File resource = new File(storage, resourceName);
@@ -99,16 +123,41 @@ public class ConfigurationManager {
 		else return false;
 	}
 	
+	/**
+	 * Return a resource from the storage. If the storage dosen't exist then
+	 * it is created
+	 * 
+	 * @param storageName the name of the storage 
+	 * @param resourceName the name of the resource
+	 * @return the requested resource or null if it can't be found
+	 */
 	public static File getStorageResource(String storageName, String resourceName){
 		return getStorageResource(getStorage(storageName), resourceName);
 	}
 	
+	/**
+	 * Return a resource from the storage. Since the storage is accessed with 
+	 * a direct file handle to it then it must be already existing
+	 * 
+	 * @param storageName and handle to the storage
+	 * @param resourceName the name of the resource
+	 * @return the requested resource or null if it can't be found
+	 */
 	public static File getStorageResource(File resourceStorage, String resourceName){
 		File resource = new File(resourceStorage, resourceName);
 		if (resource.exists()) return resource;
 		return null;
 	}
 	
+	/**
+	 * Utility method used to convert the old setting storage based on the preferences
+	 * on the setting storage based on file, this is done silently to migrate the old
+	 * settings to the new storage system
+	 * 
+	 * @param preferenceKey the key of properties that contains the configuration that must be converted
+	 * @param storageName the storage where the new configuration is placed
+	 * @param nameProvider the provider for the name of the new storage files.
+	 */
 	public static void convertPropertyToStorage(String preferenceKey, String storageName, IConversionFilenameProvider nameProvider){
 		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 		String xml = prefs.get(preferenceKey, null);

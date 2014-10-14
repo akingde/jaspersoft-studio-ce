@@ -75,9 +75,6 @@ public class TemplateStyleView extends ViewPart implements IContributedContentsV
 		folder.setMinimizeVisible(false);
 		folder.setMaximizeVisible(false);
 		folder.setBorderVisible(true);
-		
-		
-		
 		viewProviders = JaspersoftStudioPlugin.getExtensionManager().getStylesViewProvider();
 		for(TemplateViewProvider viewProvider : viewProviders){
 			createTab(viewProvider);

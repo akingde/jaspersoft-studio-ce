@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
 import java.io.File;
@@ -8,17 +20,41 @@ import org.w3c.dom.Node;
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.IConversionFilenameProvider;
 
+/**
+ * Class to provide a name provider for a template style definition that will
+ * be saved into the storage. The name depends also on the template style type.
+ * Use the method getConverter to get the converter of a specific type, since the
+ * converter are cached and this method handle the caching
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class TemplateNameConverter implements IConversionFilenameProvider {
 
+	/**
+	 * A shared map where the converter are cached with their type as key
+	 */
 	private static HashMap<String, TemplateNameConverter> convertersMap = new HashMap<String, TemplateNameConverter>();
 	
+	/**
+	 * The type of the current converter
+	 */
 	private String templateType;
 	
+	/**
+	 * The bigger index of the files in the storage of the current type
+	 */
 	private int actualIndex = 0;
 	
+	/**
+	 * Create an instance of the class for a specific type of the template style
+	 * 
+	 * @param templateType the type of the template style
+	 */
 	private TemplateNameConverter(String templateType){
 		this.templateType = templateType;
 		File[] otherStyles = ConfigurationManager.getStorageContent(templateType);
+		//Search in the storage of this type the bigger index on the filenames
 		for(File otherStyle : otherStyles){
 			String name = otherStyle.getName();
 			int counterStartPosition = name.lastIndexOf("_");
@@ -35,6 +71,10 @@ public class TemplateNameConverter implements IConversionFilenameProvider {
 		}
 	}
 	
+	/**
+	 * Provide a valid name for a template style configuration
+	 * on the file storage
+	 */
 	@Override
 	public String getFileName(Node configurationElementNode) {
 		String name = templateType + "_" +actualIndex + ".xml";
@@ -42,6 +82,14 @@ public class TemplateNameConverter implements IConversionFilenameProvider {
 		return name;
 	}
 	
+	/**
+	 * Return a template name converter for a specific type. If the 
+	 * converter was never requested then it is created, cached and return.
+	 * Otherwise the converter for the type is return from cache
+	 * 
+	 * @param templateType the type for the converter
+	 * @return a not null template name converter for that type
+	 */
 	public static TemplateNameConverter getConverter(String templateType){
 		TemplateNameConverter converter = convertersMap.get(templateType);
 		if (converter == null){

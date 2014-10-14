@@ -49,15 +49,21 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	
+	/**
+	 * Key of the data adapter storage
+	 */
 	public static final String PREF_KEYS_DATA_ADAPTERS = "dataAdapters";//$NON-NLS-1$
 
+	/**
+	 * Converter used to get a valid filename for each data adapter
+	 */
 	private static DataAdapterNameConverter convertDataAdapterName = new DataAdapterNameConverter();
 
 	@Override
 	public void findAll() {
 		//Do the silent conversion to the new storage system
 		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS, convertDataAdapterName);
-			
+		//Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
 			try {
@@ -108,6 +114,10 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
+	/**
+	 * Save an element on the data adapter file storage. The url is the name 
+	 * of the resource that will be created inside the storage
+	 */
 	@Override
 	public void save(String url, DataAdapterDescriptor adapter) {
 		try {
@@ -127,12 +137,20 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
+	/**
+	 * Remove a data adapter from the storage, the url is the name of
+	 * the resource to remove
+	 */
 	@Override
 	public void delete(String url) {
 		daDescriptors.remove(url);
 		ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, url);
 	}
 	
+	/**
+	 * Add a data adapter from the file storage. As data adapter file name
+	 * is used the url, manipulated if necessary to get a valid an unique file name
+	 */
 	@Override
 	public void addDataAdapter(String url, DataAdapterDescriptor adapter) {
 		if (daDescriptors.containsKey(url)){

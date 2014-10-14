@@ -193,7 +193,7 @@ public class SwitchLanguageHandler extends AbstractHandler implements IElementUp
 	 */
 	private static boolean changeLocale(String locale) {
 		URL location = null;
-		String path = ConfigurationManager.getPath();
+		String path = ConfigurationManager.getInstallationPath();
 		try {
 			location = new URL(path);
 		} catch (MalformedURLException e) {

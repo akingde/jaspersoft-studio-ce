@@ -50,24 +50,28 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.style.view.TemplateViewProvider;
 
 /**
- * Class to read, load and save the template styles from the proeprties file
+ * Class to read, load and save the template styles from the file storage.
+ * For each type of template it uses a different storage
  * 
  * @author Orlandin Marco
  *
  */
 public class PreferencesTemplateStylesStorage {
 	
+	/**
+	 * Key of the property of the template styles stored in the properties file,
+	 * used before the file storage. This is keep only for back compatibility and
+	 * for convert the old storage configuration to the new one
+	 */
 	private static final String PREF_KEYS_STYLES = "templateStyles";
 	
-	public static final String PROPERTY_CHANGE_NAME = "TEMPLATESTYLES";
-	
 	/**
-	 * The properties file
+	 * Property raised when something in the storage changes
 	 */
-	private Preferences prefs;
+	public static final String PROPERTY_CHANGE_NAME = "TEMPLATESTYLES";
 
 	/**
-	 * Here are saved all the TemplateStyle read from the properties file
+	 * Here are saved all the TemplateStyle read from the properties file, splitted by their type
 	 */
 	protected Map<String, List<TemplateStyle>> styleDescriptors;
 	
@@ -82,18 +86,11 @@ public class PreferencesTemplateStylesStorage {
 	private PropertyChangeSupport propChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 	
 	/**
-	 * Name of the id property of the style. It include a random number to be easly an unique
+	 * Name of the id property of the style. It include a random number to be easily an unique
 	 * property name
 	 */
 	private final static String STYLE_ID = "STYLE_ID6358649593550007203L";
 
-	/**
-	 * Build the class and initialize the properties file
-	 */
-	public PreferencesTemplateStylesStorage() {
-		prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
-	}
-	
 	/**
 	 * Return and empty TemplateStyle that can be used to build a real instance from the XML of the style. The association 
 	 * of an XML style with a TemplateStyle instance is done using the method getTemplateName() on the instance and the attribute
@@ -104,6 +101,10 @@ public class PreferencesTemplateStylesStorage {
 		return availableStyles.get(className);
 	}
 	
+	/**
+	 * Search the extension point to cache the available styles builder, if necessary. 
+	 * However after they are read then they are also cached
+	 */
 	private void initAvailableStyles(){
 		if (availableStyles == null){
 			availableStyles = new HashMap<String, TemplateStyle>();
@@ -114,6 +115,12 @@ public class PreferencesTemplateStylesStorage {
 		}
 	}
 	
+	/**
+	 * Return a list of strings where each string is type
+	 * of template style that is supported, because there is builder for it. 
+	 * 
+	 * @return a not null list of supported type of template styles
+	 */
 	private String[] getAvailableStylesType(){
 		initAvailableStyles();
 		Set<String> types = availableStyles.keySet();
@@ -143,7 +150,7 @@ public class PreferencesTemplateStylesStorage {
 
 
 	/**
-	 * Add a template style to the properties file
+	 * Add a template style to the storage
 	 * 
 	 * @param style the Template style to add
 	 */
@@ -165,6 +172,14 @@ public class PreferencesTemplateStylesStorage {
 		propChangeSupport.firePropertyChange(PROPERTY_CHANGE_NAME, "ADD", style);
 	}
 	
+	/**
+	 * Search an template style inside a list of template styles. Two templates match
+	 * when they have the same id
+	 * 
+	 * @param searchSet the list of template styles
+	 * @param searchedStyle the searched template style
+	 * @return the index of the searched template style in the list or -1 if it was not found
+	 */
 	private int getStyleIndex(List<TemplateStyle> searchSet, TemplateStyle searchedStyle){
 		String id = (String)searchedStyle.getProperty(STYLE_ID);
 		if (id != null){
@@ -227,36 +242,6 @@ public class PreferencesTemplateStylesStorage {
 		}
 	}
 	
-	private void doSilentConversion(){
-		try {
-			String xml = prefs.get(PREF_KEYS_STYLES, null);
-			if (xml != null) {
-				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
-				NodeList adapterNodes = document.getDocumentElement().getChildNodes();
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				for (int i = 0; i < adapterNodes.getLength(); ++i) {
-					Node adapterNode = adapterNodes.item(i);
-					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
-						String type = adapterNode.getAttributes().getNamedItem("type").getNodeValue(); //$NON-NLS-1$
-						File nodeStorage = ConfigurationManager.getStorage(type);
-						DOMSource source = new DOMSource(adapterNode);
-						TemplateNameConverter converter = TemplateNameConverter.getConverter(type);
-						File xmlTargetFile = new File(nodeStorage, converter.getFileName(adapterNode));
-						while(xmlTargetFile.exists()){
-							xmlTargetFile = new File(nodeStorage, converter.getFileName(adapterNode));
-						}
-						StreamResult result = new StreamResult(xmlTargetFile);
-						transformer.transform(source, result);
-					}
-				}
-				prefs.remove(PREF_KEYS_STYLES);
-			} 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Read all the styles from the properties file
 	 */
@@ -289,6 +274,48 @@ public class PreferencesTemplateStylesStorage {
 		}
 	}
 	
+	/**
+	 * If necessary it convert the template styles in the old properties storage to be used
+	 * inside the new file storage, then removes the old ones
+	 */
+	private void doSilentConversion(){
+		try {
+			Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+			String xml = prefs.get(PREF_KEYS_STYLES, null);
+			if (xml != null) {
+				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
+				NodeList adapterNodes = document.getDocumentElement().getChildNodes();
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				for (int i = 0; i < adapterNodes.getLength(); ++i) {
+					Node adapterNode = adapterNodes.item(i);
+					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
+						String type = adapterNode.getAttributes().getNamedItem("type").getNodeValue(); //$NON-NLS-1$
+						File nodeStorage = ConfigurationManager.getStorage(type);
+						DOMSource source = new DOMSource(adapterNode);
+						//Create the converter to get the name
+						TemplateNameConverter converter = TemplateNameConverter.getConverter(type);
+						File xmlTargetFile = new File(nodeStorage, converter.getFileName(adapterNode));
+						while(xmlTargetFile.exists()){
+							xmlTargetFile = new File(nodeStorage, converter.getFileName(adapterNode));
+						}
+						StreamResult result = new StreamResult(xmlTargetFile);
+						transformer.transform(source, result);
+					}
+				}
+				prefs.remove(PREF_KEYS_STYLES);
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Return an unique file name for a template type
+	 * 
+	 * @param style the style template for which a name is searched
+	 * @return a valid name for a file
+	 */
 	private String getUniqueId(TemplateStyle style){
 		String type = style.getTemplateName();
 		File nodeStorage = ConfigurationManager.getStorage(type);
@@ -300,6 +327,12 @@ public class PreferencesTemplateStylesStorage {
 		return xmlTargetFile.getName();
 	}
 	
+	/**
+	 * Read a list of templates from an xml file
+	 * 
+	 * @param xml the content of the xml
+	 * @return a not null list of the styles read from the template.
+	 */
 	public List<TemplateStyle> readTemplateFromFile(String xml) {
 		List<TemplateStyle> result = new ArrayList<TemplateStyle>();
 		try {
@@ -330,7 +363,8 @@ public class PreferencesTemplateStylesStorage {
 	/**
 	 * Return a list of all the template style read from the properties file
 	 * 
-	 * @return
+	 * @param templateType the requested type
+	 * @return a list of all the template styles for a specific type, can be null.
 	 */
 	public Collection<TemplateStyle> getStylesDescriptors(String templateType) {
 		if (styleDescriptors == null) {
@@ -341,7 +375,10 @@ public class PreferencesTemplateStylesStorage {
 	}
 	
 	/**
-	 * Save all the styles in the map into the properties file
+	 * Save a template style inside the storage inside a specific file
+	 * 
+	 * @param template the template to save
+	 * @param destination the file where the template must be saved
 	 */
 	private void save(TemplateStyle template, File destination) {
 		try {

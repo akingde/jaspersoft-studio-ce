@@ -32,7 +32,10 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  *
  */
 public class TableStyle extends TemplateStyle {
-
+	
+	/**
+	 * The type of this template
+	 */
 	public static final String TEMPLATE_TYPE = "tableStyle";
 	
 	/**
@@ -137,7 +140,9 @@ public class TableStyle extends TemplateStyle {
 		storeColor(STANDARD_COLOR_DETAIL, colorDetail);
 	}
 	
-	
+	/**
+	 * Create an empty table style
+	 */
 	public TableStyle(){
 		super(null,null);
 	}

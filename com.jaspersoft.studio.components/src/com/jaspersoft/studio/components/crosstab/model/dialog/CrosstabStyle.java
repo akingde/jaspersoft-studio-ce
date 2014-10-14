@@ -32,6 +32,9 @@ import com.jaspersoft.studio.utils.AlfaRGB;
  */
 public class CrosstabStyle extends TemplateStyle {
 
+	/**
+	 * The type of this template
+	 */
 	public static final String TEMPLATE_TYPE = "crosstabStyle";
 	
 	/**
