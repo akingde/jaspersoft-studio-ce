@@ -224,14 +224,23 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	 * Refresh all the cached node, avoid to refresh the node that will be delete (parent null)
 	 */
 	private void refreshCached(){
-		for(EditPart part : nodeToRefresh){
-			//Check if the part model has a parent, if not the part
-			//will be probably removed so avoid to refresh it
-			if (((ANode)part.getModel()).getParent() != null) {
-				part.refresh();
+		//The refresh should be executed inside the graphic thread to avoid
+		//invalid thread access exception, since it involve the painting of 
+		//editparts and so swt stuff
+		UIUtils.getDisplay().syncExec(new Runnable() {			
+			@Override
+			public void run() {
+				for(EditPart part : nodeToRefresh){
+					//Check if the part model has a parent, if not the part
+					//will be probably removed so avoid to refresh it
+					if (((ANode)part.getModel()).getParent() != null) {
+						part.refresh();
+					}
+				}
+				nodeToRefresh.clear();
 			}
-		}
-		nodeToRefresh.clear();
+		});
+
 	}
 
 	@Override
