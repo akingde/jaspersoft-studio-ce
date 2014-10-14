@@ -24,7 +24,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.band.MBandGroupFooter;
+import com.jaspersoft.studio.model.band.MBandGroup;
 import com.jaspersoft.studio.model.band.command.ReorderBandCommandByRelativeIndex;
 
 /**
@@ -58,7 +58,7 @@ public class MoveDetailDownAction extends ACachedSelectionAction implements IGlo
 		for(Object obj : bands){
 			MBand bandNode = (MBand)obj;
 			if ( bandNode.getBandType() == BandTypeEnum.GROUP_FOOTER || bandNode.getBandType() == BandTypeEnum.GROUP_HEADER){
-					cmd.add(new ReorderBandCommandByRelativeIndex((MBandGroupFooter) bandNode, 1));
+					cmd.add(new ReorderBandCommandByRelativeIndex((MBandGroup) bandNode, 1));
 			} else if (bandNode.getBandType() == BandTypeEnum.DETAIL) {
 				cmd.add(new ReorderBandCommandByRelativeIndex(bandNode, (MReport) bandNode.getParent(), 1));
 			}
