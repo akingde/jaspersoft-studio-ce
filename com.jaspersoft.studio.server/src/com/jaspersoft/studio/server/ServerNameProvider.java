@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.data.storage;
+package com.jaspersoft.studio.server;
 
 import java.io.File;
 
@@ -21,15 +21,15 @@ import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.IConversionFilenameProvider;
 
 /**
- * Name provider for the data adapters configuration files inside a storage
+ * Name provider for the dserver configuration files inside a storage
  * 
  * @author Orlandin Marco
  *
  */
-public class DataAdapterNameConverter implements IConversionFilenameProvider {
+public class ServerNameProvider implements IConversionFilenameProvider {
 
 	/**
-	 * Search a valid file name for a file to place in the data adapter storage.
+	 * Search a valid file name for a file to place in the server storage.
 	 * It starts from a base name and then iterate by appending to it a counter until
 	 * a valid name is found. Also all the spaces are substituted with _
 	 * 
@@ -38,7 +38,7 @@ public class DataAdapterNameConverter implements IConversionFilenameProvider {
 	 */
 	public String iterateForUniqueName(String baseName){
 		String fileName = baseName.replaceAll(" ", "_") + ".xml";
-		File storage = ConfigurationManager.getStorage(PreferencesDataAdapterStorage.PREF_KEYS_DATA_ADAPTERS);
+		File storage = ConfigurationManager.getStorage(ServerManager.PREF_TAG);
 		File testName = new File(storage, fileName);
 		int counter = 0;
 		while(testName.exists()){
@@ -50,10 +50,10 @@ public class DataAdapterNameConverter implements IConversionFilenameProvider {
 	}
 	
 	/**
-	 * Get the name for a data adapter configuration element. It uses
-	 * the content of the tag name as base name for the data adapter.
-	 * If the tag name can't be found it fallback and uses the data 
-	 * adapter type
+	 * Get the name for a server configuration element. It uses
+	 * the content of the tag name as base name for the server configuration.
+	 * If the tag name can't be found it fallback and uses a static string plus 
+	 * a counter to avoid duplicates
 	 */
 	@Override
 	public String getFileName(Node configurationElementNode) {

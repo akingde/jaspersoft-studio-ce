@@ -50,7 +50,7 @@ public class ShowServersPage extends JSSHelpWizardPage {
 	/**
 	 * Configuration of iReport where the servers are searched
 	 */
-	private IReportDescriptor selectedInstallation;
+	protected IReportDescriptor selectedInstallation;
 	
 	/**
 	 * List of all the checkboxes

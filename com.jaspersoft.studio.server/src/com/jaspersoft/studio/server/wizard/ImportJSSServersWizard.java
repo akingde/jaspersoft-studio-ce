@@ -12,13 +12,20 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -30,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.studio.data.adapter.JSSDescriptor;
 import com.jaspersoft.studio.data.wizard.ListInstallationPage;
 import com.jaspersoft.studio.data.wizard.SelectWorkspacePage;
 import com.jaspersoft.studio.model.INode;
@@ -69,10 +77,16 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 	 * 
 	 */
 	private class ListJSSServer extends ShowServersPage {
-
-		protected List<ServerProfile> createCheckBoxData(Properties prop) {
+		
+		/**
+		 * Read the servers from the old properties storage
+		 * 
+		 * @param prop the properties storage of the installation
+		 * @return not null list of the found server
+		 */
+		private List<ServerProfile> getPropertyProfiles(Properties prop){
 			List<ServerProfile> result = new ArrayList<ServerProfile>();
-			String xmlString = prop.getProperty("serverprofiles");
+			String xmlString = prop.getProperty(ServerManager.PREF_TAG);
 			if (xmlString == null)
 				return result;
 
@@ -87,32 +101,11 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 				while (actualNode != null) {
 					if (actualNode.getNodeName().equals("serverProfile")) {
 						Node child = actualNode.getFirstChild();
-						ServerProfile srv = new ServerProfile();
 						while (child != null) {
-							if (child.getNodeName().equals("name"))
-								srv.setName(child.getTextContent());
-							if (child.getNodeName().equals("jrVersion"))
-								srv.setJrVersion(child.getTextContent());
-							if (child.getNodeName().equals("url")) {
-								String connectionString = child.getTextContent();
-								if (connectionString.endsWith("/services/repository")) { //$NON-NLS-1$
-									connectionString = connectionString.substring(0, connectionString.lastIndexOf("services/repository")); //$NON-NLS-1$
-								}
-								srv.setUrl(connectionString);
-							}
-							if (child.getNodeName().equals("user"))
-								srv.setUser(child.getTextContent());
-							if (child.getNodeName().equals("pass"))
-								srv.setPass(child.getTextContent());
-							if (child.getNodeName().equals("supportsDateRanges"))
-								srv.setSupportsDateRanges(child.getTextContent().equals("true"));
-							if (child.getNodeName().equals("chunked"))
-								srv.setChunked(child.getTextContent().equals("true"));
-							if (child.getNodeName().equals("timeout"))
-								srv.setTimeout(Integer.parseInt(child.getTextContent()));
+							ServerProfile sprof = (ServerProfile) CastorUtil.read(child, MServerProfile.MAPPINGFILE);
+							result.add(sprof);
 							child = child.getNextSibling();
 						}
-						result.add(srv);
 					}
 					actualNode = actualNode.getNextSibling();
 				}
@@ -121,7 +114,58 @@ public class ImportJSSServersWizard extends Wizard implements IImportWizard {
 			}
 			return result;
 		}
+
+		/**
+		 * Read the servers from the actual file storage
+		 * 
+		 * @param configurationFiles a list of the server configuration found inside the storage
+		 * @return not null list of the found server
+		 */
+		private List<ServerProfile> getPropertyProfiles(File[] configurationFiles){
+			List<ServerProfile> result = new ArrayList<ServerProfile>();
+			for (File storageElement : configurationFiles) {
+				try {
+					InputStream inputStream = new FileInputStream(storageElement);
+					Reader reader = new InputStreamReader(inputStream, "UTF-8");
+					InputSource is = new InputSource(reader);
+					is.setEncoding("UTF-8");
+					Document document = JRXmlUtils.parse(is);
+					Node serverNode = document.getDocumentElement();
+					if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
+						try {
+							ServerProfile sprof = (ServerProfile) CastorUtil.read(serverNode, MServerProfile.MAPPINGFILE);
+							result.add(sprof);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
+			}
+			return result;
+		}
+		
+		/**
+		 * Return a list of server reading them from both the old 
+		 * properties storage and the new file storage
+		 */
+		@Override
+		protected List<ServerProfile> createCheckBoxData(Properties prop) {
+			List<ServerProfile> result = new ArrayList<ServerProfile>();
+			result.addAll(getPropertyProfiles(prop));
+			
+			if (selectedInstallation instanceof JSSDescriptor){
+				JSSDescriptor jssInstallation = (JSSDescriptor)selectedInstallation;
+				File[] serverConfigurations = jssInstallation.getStorageResources(ServerManager.PREF_TAG);
+				result.addAll(getPropertyProfiles(serverConfigurations));
+ 			}
+			
+			return result;
+		}
+		
 	}
+	
 
 	@Override
 	public void addPages() {

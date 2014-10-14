@@ -25,6 +25,11 @@ import java.util.Properties;
  */
 public class JSSDescriptor extends IReportDescriptor{
 	
+	/**
+	 * File storage root of the selected JSS installation
+	 */
+	private File installationStorages;
+	
 	public JSSDescriptor(File destination){
 		super(destination, "", false);
 	}
@@ -38,7 +43,13 @@ public class JSSDescriptor extends IReportDescriptor{
 		if (version != null) return "JasperSoft Studio  ".concat(version);
 		else return "JasperSoft Studio";
 	}
-
+	
+	/**
+	 * Load the file handle to the installation file storage
+	 */
+	private void loadStorage(){
+		installationStorages = new File(destination.getAbsolutePath().concat(ImportUtility.FILE_SEPARATOR).concat(".plugins").concat(ImportUtility.FILE_SEPARATOR).concat("com.jaspersoft.studio"));
+	}
 	
 	@Override
 	protected Properties loadConfiguration() {
@@ -58,6 +69,22 @@ public class JSSDescriptor extends IReportDescriptor{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * Read and return all the content of a specific storage inside the 
+	 * selected JSS installation
+	 * 
+	 * @param storageName the name of the storage
+	 * @return a not null array of the storage content
+	 */
+	public File[] getStorageResources(String storageName){
+		if (installationStorages == null) loadStorage();
+		if (installationStorages.exists() && installationStorages.isDirectory()){
+			File storage = new File(installationStorages, storageName);
+			if (storage.exists()) return storage.listFiles();
+		}
+		return new File[0];
 	}
 	
 	/**

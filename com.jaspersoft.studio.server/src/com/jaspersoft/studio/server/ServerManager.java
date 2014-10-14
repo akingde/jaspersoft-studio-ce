@@ -14,14 +14,25 @@ package com.jaspersoft.studio.server;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.util.CastorUtil;
@@ -29,12 +40,11 @@ import net.sf.jasperreports.util.CastorUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.ANode;
@@ -43,7 +53,6 @@ import com.jaspersoft.studio.model.MDummy;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ModelVisitor;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.editor.JRSEditorContributor;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -53,11 +62,39 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ServerManager {
-	private static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
+	
+	public static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
+	
 	private static final String SERVERPROFILE = "SERVERPROFILE"; //$NON-NLS-1$
+	
 	private static List<MServerProfile> serverProfiles = new ArrayList<MServerProfile>();
+	
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 
+	/**
+	 * Save an element on the server file storage. 
+	 * 
+	 * @param serverProfile the element to save
+	 */
+	private static void saveIntoStrage(MServerProfile serverProfile) {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new StringReader(serverProfile.toXML())));
+			// Write the parsed document to an xml file
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			File storage = ConfigurationManager.getStorage(PREF_TAG);
+			String url = serverProfile.getConfigurationResourceURL();
+			File destination = new File(storage, url);
+			StreamResult result = new StreamResult(destination);
+			transformer.transform(source, result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static List<ServerProfile> getServerList() {
 		if (serverProfiles.isEmpty())
 			loadServerProfiles(new MServers(null));
@@ -93,46 +130,30 @@ public class ServerManager {
 	public static void addServerProfile(MServerProfile adapter) {
 		if (!serverProfiles.contains(adapter)) {
 			serverProfiles.add(adapter);
-
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
-			saveServerProfiles();
+			ServerNameProvider nameProvider = new ServerNameProvider();
+			ServerProfile v = adapter.getValue();
+			String serverName = nameProvider.iterateForUniqueName(v.getName());
+			adapter.setConfigurationResourceURL(serverName);
+			saveIntoStrage(adapter);
 		}
 	}
 
 	public static void removeServerProfile(MServerProfile adapter) {
 		if (serverProfiles.contains(adapter)) {
 			serverProfiles.remove(adapter);
+			ConfigurationManager.removeStoregeResource(PREF_TAG, adapter.getConfigurationResourceURL());
 			((ANode) adapter.getParent()).removeChild(adapter);
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
-			saveServerProfiles();
 		}
 	}
 
 	public static void saveServerProfile(MServerProfile adapter) {
 		if (serverProfiles.contains(adapter)) {
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
-			saveServerProfiles();
-		}
-	}
-
-	public static void saveServerProfiles() {
-		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
-
-		try {
-			StringBuffer xml = new StringBuffer();
-			xml.append("<serverprofiles>\n"); //$NON-NLS-1$
-
-			for (MServerProfile desc : serverProfiles) {
-				xml.append(desc.toXML());
-			}
-
-			xml.append("</serverprofiles>"); //$NON-NLS-1$
-
-			prefs.put(PREF_TAG, xml.toString()); //$NON-NLS-1$ 
-			prefs.flush();
-
-		} catch (Exception e) {
-			UIUtils.showError(e);
+			//It's an edit, remove the old configuration file and save the new one
+			ConfigurationManager.removeStoregeResource(PREF_TAG, adapter.getConfigurationResourceURL());
+			saveIntoStrage(adapter);
 		}
 	}
 
@@ -149,34 +170,32 @@ public class ServerManager {
 	public static void loadServerProfiles(MServers root) {
 		root.removeChildren();
 		serverProfiles.clear();
-
-		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
-
-		String xml = prefs.get(PREF_TAG, null); //$NON-NLS-1$
-
-		if (xml != null) {
+	
+		//Convert the old configuration
+		ConfigurationManager.convertPropertyToStorage(PREF_TAG, PREF_TAG, new ServerNameProvider());
+		
+		//Read the configuration from the file storage
+		File[] storageContent = ConfigurationManager.getStorageContent(PREF_TAG);
+		for (File storageElement : storageContent) {
 			try {
-				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
-
-				NodeList adapterNodes = document.getDocumentElement().getChildNodes();// .getElementsByTagName("dataAdapter");
-
-				for (int i = 0; i < adapterNodes.getLength(); ++i) {
-					Node adapterNode = adapterNodes.item(i);
-
-					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
-						try {
-							ServerProfile sprof = (ServerProfile) CastorUtil.read(adapterNode, MServerProfile.MAPPINGFILE);
-
-							MServerProfile sp = new MServerProfile(root, sprof);
-							new MDummy(sp);
-							serverProfiles.add(sp);
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
+				InputStream inputStream = new FileInputStream(storageElement);
+				Reader reader = new InputStreamReader(inputStream, "UTF-8");
+				InputSource is = new InputSource(reader);
+				is.setEncoding("UTF-8");
+				Document document = JRXmlUtils.parse(is);
+				Node serverNode = document.getDocumentElement();
+				if (serverNode.getNodeType() == Node.ELEMENT_NODE) {
+					try {
+						ServerProfile sprof = (ServerProfile) CastorUtil.read(serverNode, MServerProfile.MAPPINGFILE);
+						MServerProfile sp = new MServerProfile(root, sprof);
+						sp.setConfigurationResourceURL(storageElement.getName());
+						new MDummy(sp);
+						serverProfiles.add(sp);
+					} catch (Exception ex) {
+						ex.printStackTrace();
 					}
 				}
-
-			} catch (JRException e) {
+			} catch (Exception e) {
 				UIUtils.showError(e);
 			}
 		}

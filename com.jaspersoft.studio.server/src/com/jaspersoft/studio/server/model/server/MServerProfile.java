@@ -49,8 +49,15 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  *
  */
 public class MServerProfile extends ANode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	public static final String MAPPINGFILE = "com/jaspersoft/studio/server/model/server/ServerProfileImpl.xml"; //$NON-NLS-1$
+	
+	/**
+	 * Bind the server configuration resource file to the object created by it
+	 */
+	private String configurationResourceURL = null;
 
 	public MServerProfile(ANode parent, ServerProfile server) {
 		super(parent, -1);
@@ -245,5 +252,21 @@ public class MServerProfile extends ANode {
 		if (c != null)
 			return c.isSupported(f);
 		return false;
+	}
+	
+	/**
+	 * Return the name of the resource file from where
+	 * this model was created
+	 */
+	public String getConfigurationResourceURL(){
+		return configurationResourceURL;
+	}
+	
+	/**
+	 * Set the name of the resource file from where
+	 * this model is created
+	 */
+	public void setConfigurationResourceURL(String url){
+		this.configurationResourceURL = url;
 	}
 }
