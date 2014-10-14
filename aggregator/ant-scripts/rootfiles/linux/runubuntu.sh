@@ -1,3 +1,4 @@
 #!/bin/bash
+DIR=$(dirname "$0")
 export UBUNTU_MENUPROXY=0;
-./Jaspersoft\ Studio
+"$DIR"/Jaspersoft\ Studio
