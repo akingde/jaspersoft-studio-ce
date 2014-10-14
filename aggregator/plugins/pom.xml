@@ -69,6 +69,7 @@
 		<module>
 			../../com.jaspersoft.studio.editor.jrexpressions.ui
 		</module>
+		<module>../../com.jaspersoft.studio.hibernate3</module>
 		<module>../../com.jaspersoft.studio.html</module>
 		<module>../../com.jaspersoft.studio.properties</module>
 		<module>../../com.jaspersoft.studio.rcp</module>
