@@ -62,7 +62,7 @@ public class InputControlsManager {
 
 	public void getDefaults() {
 		defaults = new HashMap<String, Object>();
-		if (rdrepunit.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS + "gaga")) {
+		if (rdrepunit.getWsType().equals("ReportOptionsResource")) {
 			ResourceProperty rp = rdrepunit.getResourceProperty("PROP_VALUES");
 
 			List<ResourceProperty> list = rp.getProperties();

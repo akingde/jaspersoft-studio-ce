@@ -44,7 +44,6 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
@@ -98,7 +97,6 @@ import com.jaspersoft.studio.server.wizard.resource.page.olap.OlapConnectionCont
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitDatasourceContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitInputControlContent;
-import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitOptionsContent;
 import com.jaspersoft.studio.server.wizard.resource.page.runit.ReportUnitQueryContent;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -161,8 +159,7 @@ public class ResourceFactory {
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new QueryPageContent(parent, resource), new ReportUnitDatasourceContent(parent, resource));
 				else if (resource instanceof MListOfValues)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new LovPageContent(parent, resource));
-				else if (resource instanceof MReportUnitOptions)
-					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new ReportUnitOptionsContent(parent, resource));
+
 				else if (resource instanceof MXmlFile)
 					page = APageContent.getPages(resource, new ResourcePageContent(parent, resource), new XmlPageContent(parent, resource));
 				else if (resource instanceof MUnknown)
@@ -281,13 +278,6 @@ public class ResourceFactory {
 			return new MRDatasourceJNDI(parent, resource, index);
 		if (wstype.equals(MRDatasourceAWS.TYPE_AWS))
 			return new MRDatasourceAWS(parent, resource, index);
-
-		if (wstype.equals(ResourceDescriptor.TYPE_REPORT_OPTIONS) || wstype.equals("ReportOptionsResource")) {
-			MReportUnitOptions mro = new MReportUnitOptions(parent, resource, index);
-			if (mro.isSupported(Feature.INPUTCONTROLS_ORDERING))
-				new MDummy(mro);
-			return mro;
-		}
 
 		if (wstype.equals(ResourceDescriptor.TYPE_XML_FILE))
 			return new MXmlFile(parent, resource, index);

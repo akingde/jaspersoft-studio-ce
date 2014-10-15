@@ -55,7 +55,6 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MXmlFile;
@@ -235,9 +234,6 @@ public class AddResourcePage extends WizardPage {
 
 			if (parent instanceof MReportUnit) {
 				new MReference(root, MReference.createDescriptor(parent), -1);
-				ServerInfo si = getServerInfo(root);
-				if (si != null && Version.isPro(si))
-					new MReportUnitOptions(root, MReportUnitOptions.createDescriptor((MReportUnit) parent), -1);
 				boolean dsexists = false;
 				for (INode n : parent.getChildren()) {
 					if (n instanceof MResource && SelectorDatasource.isDatasource(((MResource) n).getValue())) {
@@ -288,7 +284,7 @@ public class AddResourcePage extends WizardPage {
 			new MROlapMondrianConnection(root, MROlapMondrianConnection.createDescriptor(parent), -1);
 	}
 
-	private ServerInfo getServerInfo(ANode n) {
+	public static ServerInfo getServerInfo(ANode n) {
 		try {
 			if (n instanceof MServerProfile)
 				return ((MServerProfile) n).getWsClient().getServerInfo(new NullProgressMonitor());
