@@ -40,6 +40,8 @@ import com.jaspersoft.studio.editor.outline.editpolicy.ElementTreeEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MLockableRefresh;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
@@ -138,7 +140,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 			String displayText = node.getDisplayText();
 			if (displayText != null) {
 				displayText = displayText.replaceAll("(\\r|\\n)+", " ");
-				if (displayText.length() > 30)
+				if (displayText.length() > 30 && !(node instanceof MField) && !(node instanceof MSortField))
 					displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
 				setWidgetText(item, displayText);
 			} else

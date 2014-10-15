@@ -102,9 +102,10 @@ public class DefaultTemplateEngine implements TemplateEngine {
 					e.printStackTrace();
 				}
 			}
+			JRDesignDataset mainDataset = jdCopy.getMainDesignDataset();
 			for (JRParameter p : dataset.getParameters()) {
 				try {
-					jdCopy.getMainDesignDataset().addParameter(p);
+					if (!mainDataset.getParametersMap().containsKey(p.getName())) mainDataset.addParameter(p);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
