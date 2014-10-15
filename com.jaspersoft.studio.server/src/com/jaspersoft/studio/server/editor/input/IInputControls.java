@@ -23,7 +23,7 @@ public interface IInputControls {
 
 	public void createControl(Composite composite, VInputControls icForm);
 
-	public String getICContainerUri(String uri);
+	public ResourceDescriptor getICContainerUri(String uri);
 
 	public void initICOptions(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor);
 }

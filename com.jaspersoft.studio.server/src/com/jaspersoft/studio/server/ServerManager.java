@@ -22,7 +22,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -59,22 +58,20 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.protocol.IConnection;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ServerManager {
-	
 	public static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
-	
 	private static final String SERVERPROFILE = "SERVERPROFILE"; //$NON-NLS-1$
-	
 	private static List<MServerProfile> serverProfiles = new ArrayList<MServerProfile>();
-	
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 
 	/**
-	 * Save an element on the server file storage. 
+	 * Save an element on the server file storage.
 	 * 
-	 * @param serverProfile the element to save
+	 * @param serverProfile
+	 *          the element to save
 	 */
 	private static void saveIntoStrage(MServerProfile serverProfile) {
 		try {
@@ -94,7 +91,7 @@ public class ServerManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static List<ServerProfile> getServerList() {
 		if (serverProfiles.isEmpty())
 			loadServerProfiles(new MServers(null));
@@ -151,7 +148,7 @@ public class ServerManager {
 	public static void saveServerProfile(MServerProfile adapter) {
 		if (serverProfiles.contains(adapter)) {
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
-			//It's an edit, remove the old configuration file and save the new one
+			// It's an edit, remove the old configuration file and save the new one
 			ConfigurationManager.removeStoregeResource(PREF_TAG, adapter.getConfigurationResourceURL());
 			saveIntoStrage(adapter);
 		}
@@ -170,11 +167,11 @@ public class ServerManager {
 	public static void loadServerProfiles(MServers root) {
 		root.removeChildren();
 		serverProfiles.clear();
-	
-		//Convert the old configuration
+
+		// Convert the old configuration
 		ConfigurationManager.convertPropertyToStorage(PREF_TAG, PREF_TAG, new ServerNameProvider());
-		
-		//Read the configuration from the file storage
+
+		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_TAG);
 		for (File storageElement : storageContent) {
 			try {
@@ -204,14 +201,25 @@ public class ServerManager {
 	public static MServerProfile getServerProfile(String key) {
 		int ind = key.indexOf(":"); //$NON-NLS-1$
 		if (ind > 0) {
-			StringTokenizer st = new StringTokenizer(key, ":");
-			String name = st.nextToken();
-			String path = st.nextToken();
-			String url = new String(Base64.decodeBase64(st.nextToken()));
-			for (MServerProfile sp : serverProfiles) {
-				ServerProfile serv = sp.getValue();
-				if (serv.getName().equals(name) && url != null && serv.getUrl().equals(url))
-					return sp;
+			String[] tokens = key.split(":");
+
+			// StringTokenizer st = new StringTokenizer(key, ":");
+			String name = tokens[0];
+			String path = tokens[1];
+			if (tokens.length > 2) {
+				String urls = new String(Base64.decodeBase64(tokens[2]));
+				String[] urlt = urls.split("\n");
+				String url = urlt[0];
+				String user = urlt[1];
+				String organization = null;
+				if (urlt.length > 2)
+					organization = urlt[2];
+				for (MServerProfile sp : serverProfiles) {
+					ServerProfile serv = sp.getValue();
+					if (serv.getName().equals(name) && url != null && serv.getUrl().equals(url) && serv.getUser().equals(user)
+							&& (organization == null || (serv.getOrganisation() != null && serv.getOrganisation().equals(organization))))
+						return sp;
+				}
 			}
 		}
 		return null;
@@ -287,11 +295,23 @@ public class ServerManager {
 	}
 
 	public static String getKey(MResource res) {
+		return getKey(res, res.getValue().getUriString(), null);
+	}
+
+	public static String getKey(MResource res, String uri, String option) {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) n;
 			ServerProfile serv = sp.getValue();
-			return serv.getName() + ":" + res.getValue().getUriString() + ":" + Base64.encodeBase64String(serv.getUrl().getBytes());//$NON-NLS-1$ //$NON-NLS-2$  
+			String srvurl = serv.getUrl();
+			srvurl += "\n" + serv.getUser();
+			if (!Misc.isNullOrEmpty(serv.getOrganisation()))
+				srvurl += "\n" + serv.getOrganisation();
+			else
+				srvurl += "\n";
+			if (!Misc.isNullOrEmpty(option))
+				srvurl += "\n" + option;
+			return serv.getName() + ":" + uri + ":" + Base64.encodeBase64String(srvurl.getBytes());//$NON-NLS-1$ //$NON-NLS-2$  
 		}
 		return null;
 	}

@@ -68,9 +68,18 @@ public class VInputControls extends AVParameters {
 		return toIgnore;
 	}
 
-	public void setReportUnit(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor) {
+	private String key;
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setReportUnit(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor, String key) {
+		if (this.rdrepunit == rdrepunit)
+			return;
 		this.rdrepunit = rdrepunit;
 		this.icm = icm;
+		this.key = key;
 		uri = rdrepunit.getUriString();
 		type = rdrepunit.getWsType();
 		initICOptions(icm, rdrepunit, monitor);
@@ -118,7 +127,7 @@ public class VInputControls extends AVParameters {
 	public void setupDefaultValues(final IProgressMonitor monitor) throws Exception {
 		monitor.subTask(Messages.VParameters_resetparameters);
 		rdrepunit = icm.getWsClient().initInputControls(uri, type, monitor);
-		setReportUnit(icm, rdrepunit, monitor);
+		setReportUnit(icm, rdrepunit, monitor, key);
 		icm.initInputControls(rdrepunit);
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
@@ -171,11 +180,12 @@ public class VInputControls extends AVParameters {
 	}
 
 	public void updateInputControls(final IProgressMonitor monitor) throws Exception {
-		final String icuri = getICContainerUri(uri);
+		ResourceDescriptor rd = getICContainerUri(uri);
 
 		monitor.subTask(Messages.VInputControls_0);
 
-		icm.initInputControls(icm.getWsClient().initInputControls(icuri, type, monitor));
+		rd = icm.getWsClient().initInputControls(rd.getUriString(), rd.getWsType(), monitor);
+		icm.initInputControls(rd);
 		icm.getDefaults();
 		UIUtils.getDisplay().syncExec(new Runnable() {
 
@@ -192,10 +202,11 @@ public class VInputControls extends AVParameters {
 			r.createControl(composite, icForm);
 	}
 
-	public String getICContainerUri(String uri) {
+	public ResourceDescriptor getICContainerUri(String uri) {
+		ResourceDescriptor rd = null;
 		for (IInputControls r : getExtensionManager())
-			uri = r.getICContainerUri(uri);
-		return uri;
+			rd = r.getICContainerUri(uri);
+		return rd;
 	}
 
 	public void initICOptions(InputControlsManager icm, ResourceDescriptor rdrepunit, IProgressMonitor monitor) {

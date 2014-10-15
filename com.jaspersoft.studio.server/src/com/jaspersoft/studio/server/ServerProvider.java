@@ -276,8 +276,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 					refreshAction.run();
 				treeViewer.expandToLevel(el, 1);
 			}
-		}
-		if (el instanceof MInputControl && editAction.isEnabled()) {
+		} else if (el instanceof MInputControl && editAction.isEnabled()) {
 			editAction.run();
 			return;
 		}

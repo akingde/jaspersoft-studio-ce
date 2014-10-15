@@ -436,8 +436,8 @@ public class WSClientHelper {
 	}
 
 	public static String getReportUnitUri(String uri) {
-		String[] tokens =  uri.split(":");
-		if(tokens.length >1)
+		String[] tokens = uri.split(":");
+		if (tokens.length > 1)
 			return tokens[1];
 		return uri;
 		// StringTokenizer st = new StringTokenizer(uri, ":");
@@ -449,7 +449,9 @@ public class WSClientHelper {
 
 	public static IConnection getClient(IProgressMonitor monitor, String uri) throws Exception {
 		MServerProfile sp = ServerManager.getServerProfile(uri);
-		return sp.getWsClient(monitor);
+		if (sp != null)
+			return sp.getWsClient(monitor);
+		return null;
 	}
 
 	public static MResource findSelected(IProgressMonitor monitor, ResourceDescriptor rd, MServerProfile msp) throws Exception {

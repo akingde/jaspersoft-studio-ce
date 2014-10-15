@@ -137,7 +137,7 @@ public class ReportRunControler {
 	private void fillForms(IProgressMonitor monitor) {
 		prmInput = (VInputControls) viewmap.get(FORM_PARAMETERS);
 		prmInput.createInputControls(icm, monitor);
-		prmInput.setReportUnit(icm, icm.getReportUnit(), monitor);
+		prmInput.setReportUnit(icm, icm.getReportUnit(), monitor, reportUnit);
 	}
 
 	private Console c;
@@ -170,7 +170,7 @@ public class ReportRunControler {
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask(com.jaspersoft.studio.messages.Messages.ReportRunControler_3, IProgressMonitor.UNKNOWN);
 				try {
-					prmInput.setReportUnit(icm, icm.getReportUnit(), monitor);
+					prmInput.setReportUnit(icm, icm.getReportUnit(), monitor, reportUnit);
 					if (!prmInput.checkFieldsFilled())
 						return Status.CANCEL_STATUS;
 					Map<String, Object> prmcopy = new HashMap<String, Object>();
