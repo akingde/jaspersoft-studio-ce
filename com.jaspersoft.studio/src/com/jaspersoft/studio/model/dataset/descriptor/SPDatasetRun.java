@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset.descriptor;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -132,6 +134,7 @@ public class SPDatasetRun extends ASPropertyWidget {
 				DatasetRunRVPropertyEditor wizard = new DatasetRunRVPropertyEditor(mDataSet);
 				WizardDialog dialog = new WizardDialog(returns.getShell(), wizard);
 				dialog.create();
+				UIUtils.resizeAndCenterShell(dialog.getShell(), RVPropertyPage.WIDTH_HINT, -1);
 				if (dialog.open() == Dialog.OK){
 					section.changePropertyOn(JRDesignDatasetRun.PROPERTY_RETURN_VALUES, wizard.getValue(), mDataSet);
 				}

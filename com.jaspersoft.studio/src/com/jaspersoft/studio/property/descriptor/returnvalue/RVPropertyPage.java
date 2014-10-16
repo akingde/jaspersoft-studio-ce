@@ -71,6 +71,11 @@ import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
 public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	
 	/**
+	 * Suggested width int for the page
+	 */
+	public final static int WIDTH_HINT = 600; 
+	
+	/**
 	 * The actual values shown inside the dialog
 	 */
 	protected List<ReturnValueContainer> values;
@@ -85,10 +90,19 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 */
 	protected TableViewer tableViewer;
 	
+	/**
+	 * The button to add a return value
+	 */
 	private Button addButton;
 	
+	/**
+	 * The button to edit the return value selected in the table
+	 */
 	private Button editButton;
 	
+	/**
+	 * The button to delete the return value selected in the table
+	 */
 	private Button deleteButton;
 	
 	/**
@@ -96,6 +110,9 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 */
 	protected String[] toVariables;
 	
+	/**
+	 * A list of modify listener that are called when the values in the table changes
+	 */
 	private List<ModifyListener> returnValuesModified = new ArrayList<ModifyListener>();
 	
 	/**
@@ -160,7 +177,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				}
 			}
 		});
-
+		
 		//CREATE THE EDIT BUTTON
 		
 		editButton = new Button(bGroup, SWT.PUSH);
@@ -237,6 +254,8 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				deleteButton.setEnabled(enabledStatus);
 			}
 		});
+		
+		updateButtonsStatus();
 	}
 	
 	private void updateButtonsStatus(){
@@ -433,6 +452,9 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		return result;
 	}
 	
+	/**
+	 * Call all the modify listeners defined
+	 */
 	private void callModifyListeners(){
 		Event e = new Event();
 		e.data = values;
@@ -536,6 +558,12 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		return values;
 	}
 	
+	/**
+	 * Add a modify listener that will be colled when a return value is added,
+	 * edited or deleted
+	 * 
+	 * @param listener the listener to call
+	 */
 	public void addModifyListener(ModifyListener listener){
 		returnValuesModified.add(listener);
 	}

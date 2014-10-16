@@ -13,8 +13,10 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.widget;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
@@ -33,6 +35,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -49,11 +52,13 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunRVPropertyEditor;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class ElementDatasetWidget implements IExpressionContextSetter {
@@ -66,9 +71,19 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 	private Button btnIncrement;
 	private ToolItem prmItem;
 	private ToolItem prmMapItem;
+	private ToolItem returnValue;
 	private DatasetRunWidget dsRun;
 	private ExpressionContext expContext;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
+	
+	/**
+	 * Map to store the dataset run created when switching the combo. This
+	 * allow to avoid to reset the values of a dataset run when switching to another
+	 * one and then go back
+	 */
+	private HashMap<String, JRDesignDatasetRun> datasetRunMap = new HashMap<String, JRDesignDatasetRun>();
+	
+	
 	public CTabFolder ctFolder;
 
 	public ElementDatasetWidget(Composite parent) {
@@ -185,8 +200,14 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 				if (dsCombo.getSelectionIndex() == 0) {
 					eDataset.setDatasetRun(null);
 				} else {
-					JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
-					datasetRun.setDatasetName(dsCombo.getText());
+					
+					JRDesignDatasetRun datasetRun = datasetRunMap.get(dsCombo.getText());
+					if (datasetRun == null){
+						datasetRun = new JRDesignDatasetRun();
+						datasetRun.setDatasetName(dsCombo.getText());
+						datasetRunMap.put(dsCombo.getText(), datasetRun);
+					}
+				
 					eDataset.setDatasetRun(datasetRun);
 				}
 				dsRun.setData((JRDesignDatasetRun) eDataset.getDatasetRun());
@@ -200,13 +221,26 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		});
 		bindIncrementGroup();
 		bindResetGroup();
+		
+		returnValue.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MDatasetRun datasetModel = new MDatasetRun(eDataset.getDatasetRun(), jrDesign);
+				DatasetRunRVPropertyEditor wizard = new DatasetRunRVPropertyEditor(datasetModel);
+				WizardDialog dialog = new WizardDialog(returnValue.getParent().getShell(), wizard);
+				dialog.create();
+				UIUtils.resizeAndCenterShell(dialog.getShell(), RVPropertyPage.WIDTH_HINT, -1);
+				if (dialog.open() == Dialog.OK){
+					datasetModel.setPropertyValue(JRDesignDatasetRun.PROPERTY_RETURN_VALUES, wizard.getValue());
+				}
+			}
+		});
 
-		prmItem.addSelectionListener(new SelectionListener() {
+		prmItem.addSelectionListener(new SelectionAdapter() {
 			private ParameterDTO prmDTO;
 
 			public void widgetSelected(SelectionEvent e) {
-				JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) eDataset
-						.getDatasetRun();
+				JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) eDataset.getDatasetRun();
 				if (prmDTO == null) {
 					prmDTO = new ParameterDTO();
 					prmDTO.setJasperDesign(jrDesign);
@@ -233,13 +267,9 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 						}
 				}
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
 
-		prmMapItem.addSelectionListener(new SelectionListener() {
+		prmMapItem.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				if(!ExpressionEditorSupportUtil.isExpressionEditorDialogOpen()) {
@@ -255,10 +285,6 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 					}
 				}
 			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
 	}
 
@@ -266,6 +292,7 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		boolean en = dsCombo.getSelectionIndex() != 0;
 		prmItem.setEnabled(en);
 		prmMapItem.setEnabled(en);
+		returnValue.setEnabled(en);
 		dsRun.setEnabled(en);
 	}
 
@@ -373,8 +400,6 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		ctFolder = new CTabFolder(grDataset, SWT.TOP);
 		ctFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		// createFields(ctFolder);
-		// createData(ctFolder);
 		createParametersMap(ctFolder);
 		createConnection(ctFolder);
 		GridData folderData = new GridData(SWT.FILL, SWT.TOP, true, false);
@@ -417,31 +442,6 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		bptab.setControl(composite);
 	}
 
-	// private void createFields(CTabFolder tabFolder) {
-	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-	// bptab.setText("Fields");
-	//
-	// Composite composite = new Composite(tabFolder, SWT.NONE);
-	// composite.setLayout(new GridLayout());
-	//
-	// Label lbl = new Label(composite, SWT.NONE);
-	// lbl.setText("[dataset fields table here]");
-	// lbl.setLayoutData(new GridData(GridData.FILL_BOTH
-	// | GridData.HORIZONTAL_ALIGN_CENTER
-	// | GridData.VERTICAL_ALIGN_CENTER));
-	//
-	// bptab.setControl(composite);
-	// }
-
-	// private void createData(CTabFolder tabFolder) {
-	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-	// bptab.setText("Data");
-	//
-	// Composite composite = new Composite(tabFolder, SWT.NONE);
-	//
-	// bptab.setControl(composite);
-	// }
-
 	private void createParametersMap(CTabFolder ctfolder) {
 		Composite composite = new Composite(ctfolder, SWT.NONE);
 		GridLayout layout = new GridLayout(10, false);
@@ -457,11 +457,11 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
 		dsCombo.setItems(new String[] { "main dataset" }); //$NON-NLS-1$
 
-		// Button newDataset = new Button(composite, SWT.PUSH);
-		// newDataset.setText("new");
-
-		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL
-				| SWT.WRAP | SWT.RIGHT);
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
+		
+		returnValue = new ToolItem(toolBar, SWT.PUSH);
+		returnValue.setText(com.jaspersoft.studio.messages.Messages.common_return_values);
+		
 		prmItem = new ToolItem(toolBar, SWT.PUSH);
 		prmItem.setText(Messages.ElementDatasetWidget_parametersLabel);
 

@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.returnvalue;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -38,6 +40,7 @@ public class RVPropertiesCellEditor extends DialogCellEditor {
 		wizard.setValue((JReportsDTO) getValue());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
+		UIUtils.resizeAndCenterShell(dialog.getShell(), RVPropertyPage.WIDTH_HINT, -1);
 		if (dialog.open() == Dialog.OK)
 			return wizard.getValue();
 		return null;

@@ -26,6 +26,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.JReportsDTO;
+import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog.SubreportRVPropertyEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -87,6 +88,7 @@ public class SPSubreportReturnValuesButton extends ASPropertyWidget {
 				wizard.setValue(value);
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
+				UIUtils.resizeAndCenterShell(dialog.getShell(), RVPropertyPage.WIDTH_HINT, -1);
 				if (dialog.open() == Dialog.OK)
 					section.changeProperty(pDescriptor.getId(), wizard.getValue());
 			}
