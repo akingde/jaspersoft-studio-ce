@@ -710,7 +710,6 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
  com.jaspersoft.studio.property.descriptor.sortfield.dialog;uses:="org.eclipse.jface.wizard,org.eclipse.jface.viewers,org.eclipse.swt.widgets",
  com.jaspersoft.studio.property.descriptor.subreport.parameter;uses:="org.eclipse.jface.viewers,org.eclipse.swt.widgets,com.jaspersoft.studio.property.descriptor.text",
  com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;uses:="org.eclipse.jface.wizard,org.eclipse.swt.widgets",
- com.jaspersoft.studio.property.descriptor.subreport.returnvalue;uses:="org.eclipse.jface.viewers,org.eclipse.swt.widgets,com.jaspersoft.studio.property.descriptor.text",
  com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;uses:="org.eclipse.jface.wizard,com.jaspersoft.studio.model,org.eclipse.swt.widgets",
  com.jaspersoft.studio.property.descriptor.text;
   uses:="com.jaspersoft.studio.property.descriptors,
