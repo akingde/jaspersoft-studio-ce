@@ -33,6 +33,7 @@ public class Activator extends AbstractJRUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+		plugin = this;
 	}
 
 	/*
@@ -44,8 +45,6 @@ public class Activator extends AbstractJRUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
-		JRSBuiltInParameterProvider.init();
 	}
 
 	/*
@@ -60,6 +59,12 @@ public class Activator extends AbstractJRUIPlugin {
 		super.stop(context);
 	}
 
+	@Override
+	protected void postStartOperations() {
+		super.postStartOperations();
+		JRSBuiltInParameterProvider.init();
+	}
+	
 	/**
 	 * Returns the shared instance
 	 * 
@@ -83,4 +88,5 @@ public class Activator extends AbstractJRUIPlugin {
 	public String getPluginID() {
 		return PLUGIN_ID;
 	}
+
 }

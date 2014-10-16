@@ -18,6 +18,10 @@ import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
@@ -71,41 +75,21 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		getExtensionManager();
+		
 		// Sets the branding information
 		BrandingInfo info = new BrandingInfo();
 		info.setProductName(Messages.JaspersoftStudioPlugin_BrandingInfoJSSPlugin);
 		info.setProductVersion(getBundle().getVersion().toString());
 		info.setProductMainBundleID(PLUGIN_ID);
 		setBrandingInformation(info);
-
+		logInfo(NLS.bind(Messages.JaspersoftStudioPlugin_StartingJSSBundleMsg, info.getProductVersion()));
+		
+		// Some property checks
 		JasperReportsConfiguration c = JasperReportsConfiguration.getDefaultInstance();
 		String key = "net.sf.jasperreports.default.font.name"; //$NON-NLS-1$
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
 		key = "net.sf.jasperreports.default.font.size"; //$NON-NLS-1$
 		JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance()).setProperty(key, c.getProperty(key));
-		
-		if(getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)){
-			installJSSConsole();
-		}
-		
-		logInfo(NLS.bind(Messages.JaspersoftStudioPlugin_StartingJSSBundleMsg, info.getProductVersion()));
-		
-		//Precache report images
-		Thread thread = new Thread(ReportTemplatesWizardPage.getImagePrecacheThread());
-	  thread.start();
-	  //Precache the common extensions and the digester
-	  thread = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				//Force the properties to cache
-			  ExtensionLoader.loadDefaultProperties();
-				//Force the digester cache
-				JasperReportsConfiguration.getJRXMLDigester();
-			}
-		});
-	  thread.start();
 	}
 
 	/**
@@ -125,8 +109,55 @@ public class JaspersoftStudioPlugin extends AbstractJRUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		super.stop(context);
 		plugin = null;
+		super.stop(context);
+	}
+	
+	@Override
+	protected void postStartOperations() {
+		super.postStartOperations();
+
+		// Initialize the extension manager
+		getExtensionManager();
+
+		// JSS console activation (if requested)
+		if (getInstance().getPreferenceStore().getBoolean(GlobalPreferencePage.JSS_ENABLE_INTERNAL_CONSOLE)) {
+			installJSSConsole();
+		}
+		
+		// Pre-cache template images
+		Job precacheImagesJob = new Job("Pre-caching template images"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				ReportTemplatesWizardPage.templateImagesPreCache();
+				return Status.OK_STATUS;
+			}
+		};
+		precacheImagesJob.setPriority(Job.LONG);
+		precacheImagesJob.schedule();
+
+		// Force the initialization of some JR extensions
+		Job extensionsPreloadingJob = new Job("Pre-caching JR extensions"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				ExtensionLoader.initializeJRExtensions(monitor);
+				return Status.OK_STATUS;
+			}
+		};
+		extensionsPreloadingJob.setPriority(Job.LONG);
+		extensionsPreloadingJob.schedule();
+
+		// Force the creation of the digester
+		Job digesterJob = new Job("Shared Digester creation") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				// Force the digester cache
+				JasperReportsConfiguration.getJRXMLDigester();
+				return Status.OK_STATUS;
+			}
+		};
+		digesterJob.setPriority(Job.LONG);
+		digesterJob.schedule();
 	}
 
 	private static ExtensionManager extensionManager;

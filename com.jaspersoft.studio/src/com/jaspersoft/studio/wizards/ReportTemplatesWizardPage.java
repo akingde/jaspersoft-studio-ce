@@ -229,62 +229,45 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	}
 	
 	/**
-	 * Return a runnable thread that pre-cache the images used by the new report wizard.
-	 * This thread iterate the report bundles and check if their preview image is cached, if
-	 * it isn't then it create and cache it, otherwise it dosen't do nothing.
-	 * This runnable can be executed as a thread at the start of the application to speedup the 
-	 * first opening of the new Report wizard dialog
+	 * Pre-caches the images used by the new report wizard.
+	 * It iterates the report bundles and checks if their preview image is cached.
+	 * <p>
 	 * 
-	 * @return a Runnable thread
+	 * If not, then it creates and caches it, otherwise it doesn't do nothing.
+	 * This operation can be executed during the application startup to speedup the 
+	 * first opening of the new Report wizard dialog.
+	 * <p>
+	 * 
+	 * The images are cached into the ResourceManager and disposed only when the application is closed.
 	 */
-	public static Runnable getImagePrecacheThread() {
-		return new Runnable() {
-			
-			/**
-			 * Return the color that in the current os is the SWT.COLOR_GRAY if it is
-			 * available, otherwise it return a standard gray
-			 * 
-			 * FIXME: dynamic resolution commented for now for performance problem
-			 * 
-			 * @return rgb of a grey color
-			 */
-			private RGB getGrayColor(){
-				//Grey color for the shadow effect
-				final RGB greyColor =  new RGB(192, 192, 192);
-				return greyColor;
-			}
+	public static void templateImagesPreCache() {
+		final RGB greyColor =  new RGB(192, 192, 192);
+		List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
+		for (TemplateBundle b : bundles) {
+			if (b instanceof JrxmlTemplateBundle) {
+				// itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
+				JrxmlTemplateBundle jrxmlBundle = (JrxmlTemplateBundle) b;
+				Image itemImage = jrxmlBundle.getIcon();
 
-			@Override
-			public void run() {
-				RGB greyColor =  getGrayColor();
-				List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
-				for (TemplateBundle b : bundles) {
-					if (b instanceof JrxmlTemplateBundle) {
-						// itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
-						JrxmlTemplateBundle jrxmlBundle = (JrxmlTemplateBundle) b;
-						Image itemImage = jrxmlBundle.getIcon();
-
-						if (itemImage != null) {
-							// Add viewer required effects to the images shown...
-							String selectedImageKey = jrxmlBundle.getTemplateURL().toExternalForm() + "selectedImage"; //$NON-NLS-1$
-							Image selectedImg = ResourceManager.getImage(selectedImageKey);
-							if (selectedImg == null) {
-								selectedImg = new Image(UIUtils.getDisplay(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
-								ResourceManager.addImage(selectedImageKey, selectedImg);
-							}
-							String standardShadowedImgeKey = jrxmlBundle.getTemplateURL().toExternalForm() + "standardShadowedImg"; //$NON-NLS-1$
-							Image standardShadowedImg = ResourceManager.getImage(standardShadowedImgeKey);
-							if (standardShadowedImg == null) {
-								standardShadowedImg = new Image(UIUtils.getDisplay(), Glow.glow(itemImage.getImageData(),	ResourceManager.getColor(greyColor), 40, 0, 255));
-								ResourceManager.addImage(standardShadowedImgeKey, standardShadowedImg);
-							}
-							// The images are cached into the ResourceManager and disposed only when the application is closed
-						}
+				if (itemImage != null) {
+					// Add viewer required effects to the images shown...
+					String selectedImageKey = jrxmlBundle.getTemplateURL().toExternalForm() + "selectedImage"; //$NON-NLS-1$
+					Image selectedImg = ResourceManager.getImage(selectedImageKey);
+					if (selectedImg == null) {
+						selectedImg = new Image(UIUtils.getDisplay(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
+						ResourceManager.addImage(selectedImageKey, selectedImg);
+					}
+					String standardShadowedImgeKey = jrxmlBundle.getTemplateURL().toExternalForm() + "standardShadowedImg"; //$NON-NLS-1$
+					Image standardShadowedImg = ResourceManager.getImage(standardShadowedImgeKey);
+					if (standardShadowedImg == null) {
+						standardShadowedImg = new Image(UIUtils.getDisplay(), Glow.glow(itemImage.getImageData(),	ResourceManager.getColor(greyColor), 40, 0, 255));
+						ResourceManager.addImage(standardShadowedImgeKey, standardShadowedImg);
 					}
 				}
 			}
-		};
+		}
 	}
+	
 
 	/**
 	 * For a gallery create all the preview of a precise category

@@ -10,8 +10,8 @@ import org.w3c.tools.codec.Base64Decoder;
 import org.w3c.tools.codec.Base64Encoder;
 import org.w3c.tools.codec.Base64FormatException;
 
-import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.prm.ParameterSet;
+import com.jaspersoft.studio.prm.ParameterSetProvider;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRSBuiltInParameterProvider {
@@ -148,9 +148,8 @@ public class JRSBuiltInParameterProvider {
 			try {
 				pstore.save();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Activator.getDefault().logError(e);
 			}
 		}
-
 	}
 }

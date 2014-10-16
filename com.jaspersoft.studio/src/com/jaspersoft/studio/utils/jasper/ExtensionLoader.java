@@ -31,6 +31,9 @@ import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
 import net.sf.jasperreports.util.SecretsProviderFactory;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
+
 /**
  * 
  * This class allow to preload the jr extensions to have 
@@ -145,22 +148,17 @@ public class ExtensionLoader {
 
  /**
   * Load the shared extensions inside the common context that can be 
-  * Retrieved with DefaultJasperReportsContext.getInstance(). Each extension
-  * is loaded inside an independent thread
+  * Retrieved with DefaultJasperReportsContext.getInstance().
   */
- public static void loadDefaultProperties(){
-	 final DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
-	 for(Class<?> extensionKey : commonExensionKeys){
-		 final Class<?> key = extensionKey;
-		 new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				setLoadingStart(key);
-				Object obj = context.getExtensions(key);
-				setLoadingEnd(key, obj);
-			}
-		}).start();
+ public static void initializeJRExtensions(IProgressMonitor monitor){
+		final DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
+		monitor.beginTask("Loading JR extensions",commonExensionKeys.length);
+		for (Class<?> extensionKey : commonExensionKeys) {
+			monitor.subTask(NLS.bind("Loading JR extension: {0}", extensionKey.getCanonicalName()));
+			setLoadingStart(extensionKey);
+			Object obj = context.getExtensions(extensionKey);
+			setLoadingEnd(extensionKey, obj);
+			monitor.worked(1);
 	 }
  }
  
