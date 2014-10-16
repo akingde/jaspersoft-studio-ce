@@ -420,7 +420,7 @@ public class Rest2Soap {
 			r.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);
 			r.setDataType(ResourceDescriptor.DT_TYPE_TEXT);
 			rd.getChildren().add(r);
-		} else if (rtype.equals("singleValueDateTime")) {
+		} else if (rtype.equals("singleValueDatetime")) {
 			rd.setControlType((byte) 2);
 			ResourceDescriptor r = new ResourceDescriptor();
 			r.setWsType(ResourceDescriptor.TYPE_DATA_TYPE);

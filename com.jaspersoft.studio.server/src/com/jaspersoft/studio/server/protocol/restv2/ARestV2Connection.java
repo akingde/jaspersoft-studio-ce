@@ -96,6 +96,8 @@ public abstract class ARestV2Connection implements IConnection {
 	}
 
 	public String toRestString(Object obj) {
+		if (obj == null)
+			return null;
 		if (obj instanceof java.sql.Date)
 			return dateFormat.format(obj);
 		if (obj instanceof Date)
