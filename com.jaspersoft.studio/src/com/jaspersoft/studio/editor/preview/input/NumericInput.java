@@ -1,17 +1,15 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.input;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -103,8 +101,31 @@ public class NumericInput extends ADataInput {
 		}
 	}
 
+	protected Number getNumber(String number) throws NumberFormatException {
+		if (param.getValueClass().equals(Long.class)) {
+			return new Long(number);
+		} else if (param.getValueClass().equals(BigInteger.class)) {
+			return new BigInteger(number);
+		} else if (param.getValueClass().equals(Float.class)) {
+			return new Float(number);
+		} else if (param.getValueClass().equals(Double.class)) {
+			return new Double(number);
+		} else if (param.getValueClass().equals(Integer.class)) {
+			return new Integer(number);
+		} else if (param.getValueClass().equals(Short.class)) {
+			return new Short(number);
+		} else if (param.getValueClass().equals(Byte.class)) {
+			return new Byte(number);
+		} else if (param.getValueClass().equals(BigDecimal.class)) {
+			return new BigDecimal(number);
+		}
+		return null;
+	}
+
 	public void updateInput() {
 		Object value = params.get(param.getName());
+		if (value != null && value instanceof String)
+			value = getNumber((String) value);
 		if (value != null && value instanceof Number) {
 			int val = 0;
 			if (value != null)

@@ -15,6 +15,7 @@ package com.jaspersoft.studio.editor.preview.input;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -59,6 +60,8 @@ public class LocaleInput extends ADataInput {
 
 	public void updateInput() {
 		Object value = params.get(param.getName());
+		if(value !=null && value instanceof String)
+			value = LocaleUtils.toLocale((String) value);
 		if (value != null && value instanceof Locale) {
 			Locale locale = (Locale) value;
 			wlocal.setSelection(locale);

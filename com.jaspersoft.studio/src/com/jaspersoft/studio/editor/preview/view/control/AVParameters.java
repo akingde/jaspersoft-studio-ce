@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -63,19 +59,12 @@ public abstract class AVParameters extends APreview {
 
 	@Override
 	public void setEnabled(boolean enabled) {
-		scompo.setEnabled(enabled);
+		if (!scompo.isDisposed())
+			scompo.setEnabled(enabled);
 	}
 
 	protected void setScrollbarMinHeight() {
 		scompo.setMinHeight(composite.getSize().y + 10);
-	}
-
-	public static String createToolTip(IParameter param) {
-		String desc = Misc.nvl(param.getDescription());
-		Class<?> cl = param.getValueClass();
-		if (cl != null)
-			desc += "\nThe class type is: " + cl.getCanonicalName();
-		return desc;
 	}
 
 	protected void createVerticalSeprator(boolean first) {
@@ -98,7 +87,19 @@ public abstract class AVParameters extends APreview {
 
 	protected void setupLabel(Label lbl, IParameter pres) {
 		lbl.setText(pres.getLabel());
-		lbl.setToolTipText(createToolTip(pres));
+		lbl.setToolTipText(getToolTip(pres));
+	}
+
+	public String getToolTip(IParameter param) {
+		return createToolTip(param);
+	}
+
+	public static String createToolTip(IParameter param) {
+		String desc = Misc.nvl(param.getDescription());
+		Class<?> cl = param.getValueClass();
+		if (cl != null)
+			desc += "\nThe class type is: " + cl.getCanonicalName();
+		return desc;
 	}
 
 	@Override

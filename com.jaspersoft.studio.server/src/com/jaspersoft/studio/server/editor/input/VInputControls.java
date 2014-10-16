@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
+import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.editor.preview.view.control.AVParameters;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.messages.Messages;
@@ -169,14 +170,24 @@ public class VInputControls extends AVParameters {
 					createVerticalSeprator(first);
 					createLabel(sectionClient, pres, in);
 					in.createInput(sectionClient, pres, icm.getParameters());
-					if (InputControlsManager.isICSingle(p) && p.getValue() != null)
+					if (InputControlsManager.isICSingle(p) && p.getValue() != null) {
 						in.updateModel(p.getValue());
+						in.updateInput();
+					}
 					in.addChangeListener(icm.getPropertyChangeListener());
 					icm.getControls().add(in);
 					return true;
 				}
 			}
 		return false;
+	}
+
+	@Override
+	public String getToolTip(IParameter param) {
+		String tt = super.getToolTip(param);
+		if (param instanceof PResourceDescriptor)
+			tt += "\n" + ((PResourceDescriptor) param).getResourceDescriptor().getUriString();
+		return tt;
 	}
 
 	public void updateInputControls(final IProgressMonitor monitor) throws Exception {
