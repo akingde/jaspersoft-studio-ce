@@ -223,7 +223,7 @@ public class JSSCompoundCommand extends CompoundCommand {
 	/**
 	 * Get if the events are ignored or not
 	 * 
-	 * @param value true if the refresh should be disabled, false otherwise
+	 * @return true if the refresh should be disabled, false otherwise
 	 */
 	protected boolean isIgnoreEvents(){
 		ANode rootNode = getNode();

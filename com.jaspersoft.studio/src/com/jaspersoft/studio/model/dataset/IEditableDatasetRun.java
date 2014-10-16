@@ -111,4 +111,12 @@ public interface IEditableDatasetRun {
 	 * @see {@link #useReportMainDataset()}
 	 */
 	void resetDatasetRun(boolean nullableFlag);
+	
+	/**
+	 * Change the dataset run contained from this class with another one passed
+	 * as parameter
+	 * 
+	 * @param datasetRun the new dataset to handle
+	 */
+	public void setDatasetRun(JRDesignDatasetRun datasetRun);
 }

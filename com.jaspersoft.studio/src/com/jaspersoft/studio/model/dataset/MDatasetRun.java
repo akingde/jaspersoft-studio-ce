@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.dataset;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.ReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -156,6 +158,9 @@ public class MDatasetRun extends APropertyNode {
 		if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
 			return jrElement.getDatasetName() != null ? jrElement.getDatasetName() : ""; //$NON-NLS-1$
 		}
+		if (id.equals(JRDesignDatasetRun.PROPERTY_RETURN_VALUES)){
+			return jrElement.getReturnValuesList();
+		}
 		return null;
 	}
 
@@ -219,6 +224,17 @@ public class MDatasetRun extends APropertyNode {
 				SyncDatasetRunParameters.syncDatasetRun(this, oldValue, (String) value);
 			} catch (JRException e) {
 				e.printStackTrace();
+			}
+		} else if (id.equals(JRDesignDatasetRun.PROPERTY_RETURN_VALUES)){
+			List<ReturnValue> returnList = (List<ReturnValue>)value;
+			List<ReturnValue> oldValues = new ArrayList<ReturnValue>(jrElement.getReturnValuesList());
+			//The element dosen't allow to swap the list, must remove the old element 
+			for(ReturnValue oldValue : oldValues){
+				jrElement.removeReturnValue(oldValue);
+			}
+			//and add the new one
+			for(ReturnValue newValue : returnList){
+				jrElement.addReturnValue(newValue);
 			}
 		}
 	}

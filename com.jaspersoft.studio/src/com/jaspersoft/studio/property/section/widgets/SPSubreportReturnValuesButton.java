@@ -26,12 +26,11 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.JReportsDTO;
-import com.jaspersoft.studio.model.subreport.MSubreport;
-import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog.RVPropertyEditor;
+import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog.SubreportRVPropertyEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 /**
- * A button that when clicked open the edit query dialog
+ * A button that when clicked open the subreport return values dialog
  * 
  * @author Orlandin Marco
  * 
@@ -47,11 +46,6 @@ public class SPSubreportReturnValuesButton extends ASPropertyWidget {
 	 * The query of the report
 	 */
 	private JReportsDTO dto;
-
-	/**
-	 * The main dataset of the report
-	 */
-	private MSubreport msubreport;
 
 	/**
 	 * 
@@ -85,10 +79,10 @@ public class SPSubreportReturnValuesButton extends ASPropertyWidget {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RVPropertyEditor wizard = new RVPropertyEditor();
+				SubreportRVPropertyEditor wizard = new SubreportRVPropertyEditor();
 				JReportsDTO value = new JReportsDTO();
 				value.setjConfig(dto.getjConfig());
-				value.setProp1(dto.getProp1());
+				value.setSubreport(dto.getSubreport());
 				value.setValue(dto.getValue());
 				wizard.setValue(value);
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
@@ -101,8 +95,6 @@ public class SPSubreportReturnValuesButton extends ASPropertyWidget {
 
 	@Override
 	public void setData(APropertyNode pnode, Object value) {
-		if (pnode instanceof MSubreport)
-			msubreport = (MSubreport) pnode;
 		if (value instanceof JReportsDTO)
 			dto = (JReportsDTO) value;
 	}

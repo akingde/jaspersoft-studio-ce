@@ -14,6 +14,7 @@ package com.jaspersoft.studio.jface.dialogs;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
@@ -23,6 +24,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -37,6 +39,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -54,6 +58,7 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.IEditableDatasetRun;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunRVPropertyPage;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -75,9 +80,16 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 	private Combo comboConnDS;
 	private WTextExpression connDSExpression;
 	private WTextExpression paramsMapExpression;
+	private DatasetRunRVPropertyPage returnValueEditor;
 	private TableViewer tableViewerDatasetRunParams;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
 	private ExpressionContext expContext;
+	
+	/**
+	 * Map of the dataset run created from this composite, to allow to switch between differents 
+	 * dataset run without loose the previous settings
+	 */
+	private HashMap<String, JRDesignDatasetRun> datasetRunMap = new HashMap<String, JRDesignDatasetRun>();
 
 	public DatasetRunBaseComposite(IEditableDatasetRun datasetRun, Composite parent, int style) {
 		super(parent, style);
@@ -311,8 +323,33 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		};
 		paramsMapExpression.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 				
+		//CREATE THE DATASET RUN RETURN VALUES PAGE
+		createDatasetRunReturnTab();
+	
 		initWidgets();
-		
+	}
+	
+	/**
+	 * Create the controls to define the dataset run return values
+	 */
+	private void createDatasetRunReturnTab(){
+		TabItem tbtmParametersMapExp = new TabItem(tabFolderDataSetRun, SWT.NONE);
+		tbtmParametersMapExp.setText(Messages.common_return_values);
+		Composite container = new Composite(tabFolderDataSetRun, SWT.NONE);
+		container.setLayout(new GridLayout(1,false));
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		returnValueEditor = new DatasetRunRVPropertyPage(null);
+		returnValueEditor.setValue(null);
+		returnValueEditor.createControl(container);
+		//Add a listener to update the dataset run when the return values list changes
+		returnValueEditor.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				returnValueEditor.saveValuesIntoDataset();
+			}
+		});
+		tbtmParametersMapExp.setControl(container);
 	}
 
 	/*
@@ -330,6 +367,8 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		else {
 			// Select the correct dataset name
 			String datasetName = this.datasetRunInstance.getJRDatasetRun().getDatasetName();
+			//save the dataset inside the map
+			datasetRunMap.put(datasetName, (JRDesignDatasetRun)datasetRunInstance.getJRDatasetRun());
 			for (int i=0;i<comboSubDataset.getItemCount();i++){
 				if (comboSubDataset.getItem(i).equals(datasetName)){
 					comboSubDataset.select(i);
@@ -394,6 +433,8 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 		}
 		paramsMapExpression.setExpression(exp2);
 		
+		//set the dataset run in the return values control
+		returnValueEditor.setDatasetRun((JRDesignDatasetRun)datasetRunInstance.getJRDatasetRun(), datasetRunInstance.getEditableDataset().getJasperDesign());
 	}
 	
 	/*
@@ -426,15 +467,18 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 			tabFolderDataSetRun.setVisible(false);
 		}
 		else {
-			this.datasetRunInstance.resetDatasetRun(false);
 			String selectDatasetName=comboSubDataset.getItem(selIndex);
-			List<JRDataset> datasetsList = this.datasetRunInstance.getEditableDataset().getJasperDesign().getDatasetsList();
-			for (JRDataset ds : datasetsList){
-				if (ds.getName().equals(selectDatasetName)){
-					this.datasetRunInstance.setDatasetName(selectDatasetName);
-					break;
-				}
+			//If the dataset run was already created recover it from the map
+			if (datasetRunMap.containsKey(selectDatasetName)){
+				this.datasetRunInstance.setDatasetRun(datasetRunMap.get(selectDatasetName));
+			} else {
+				//Otherwise create a new one and put it on the map
+				JRDesignDatasetRun newDataset = new JRDesignDatasetRun();
+				newDataset.setDatasetName(selectDatasetName);
+				datasetRunMap.put(selectDatasetName, newDataset);
+				this.datasetRunInstance.setDatasetRun(newDataset);
 			}
+			
 			tabFolderDataSetRun.setEnabled(true);
 			tabFolderDataSetRun.setVisible(true);
 		}
@@ -483,6 +527,9 @@ public class DatasetRunBaseComposite extends Composite implements IExpressionCon
 			l.selectionChanged();
 		}
 		fixDSParametersList();
+		
+		//Return values 
+		returnValueEditor.setDatasetRun((JRDesignDatasetRun)datasetRunInstance.getJRDatasetRun(), datasetRunInstance.getEditableDataset().getJasperDesign());
 	}
 
 	/* 

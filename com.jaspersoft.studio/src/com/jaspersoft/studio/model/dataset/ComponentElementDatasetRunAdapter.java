@@ -126,5 +126,10 @@ public class ComponentElementDatasetRunAdapter implements IEditableDatasetRun {
 			this.editableDataset.setDatasetRun(datasetRun);
 		}
 	}
+	
+	public void setDatasetRun(JRDesignDatasetRun datasetRun){
+		this.datasetRun = datasetRun;
+		this.editableDataset.setDatasetRun(datasetRun);
+	}
 
 }

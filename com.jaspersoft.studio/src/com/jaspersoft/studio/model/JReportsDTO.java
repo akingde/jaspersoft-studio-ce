@@ -22,7 +22,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class JReportsDTO {
 	private JasperReportsConfiguration jConfig;
 	private List<JRSubreportReturnValue> value;
-	private JRDesignSubreport prop1;
+	private JRDesignSubreport subreport;
 
 	public void setjConfig(JasperReportsConfiguration jConfig) {
 		this.jConfig = jConfig;
@@ -32,12 +32,12 @@ public class JReportsDTO {
 		return jConfig;
 	}
 
-	public JRDesignSubreport getProp1() {
-		return prop1;
+	public JRDesignSubreport getSubreport() {
+		return subreport;
 	}
 
-	public void setProp1(JRDesignSubreport prop1) {
-		this.prop1 = prop1;
+	public void setSubreport(JRDesignSubreport subreport) {
+		this.subreport = subreport;
 	}
 
 	public List<JRSubreportReturnValue> getValue() {

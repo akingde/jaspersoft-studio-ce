@@ -49,6 +49,8 @@ public class SPDatasetRun extends ASPropertyWidget {
 	
 	private Combo dsetCombo;
 
+	private Button returns;
+	
 	private Button params;
 	
 	private Button paramMap;
@@ -114,13 +116,29 @@ public class SPDatasetRun extends ASPropertyWidget {
 		dsRunWidget.getControl().setLayoutData(gd);
 
 		Composite c = section.getWidgetFactory().createComposite(parent);
-		GridLayout layout = new GridLayout(2, false);
+		GridLayout layout = new GridLayout(3, false);
 		layout.marginHeight = 0;
 		c.setLayout(layout);
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.horizontalSpan = 2;
 		c.setLayoutData(gd);
+		
+		//Create the button to edit the return parameters
+		returns = section.getWidgetFactory().createButton(c, Messages.common_return_values, SWT.PUSH | SWT.FLAT);
+		returns.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DatasetRunRVPropertyEditor wizard = new DatasetRunRVPropertyEditor(mDataSet);
+				WizardDialog dialog = new WizardDialog(returns.getShell(), wizard);
+				dialog.create();
+				if (dialog.open() == Dialog.OK){
+					section.changePropertyOn(JRDesignDatasetRun.PROPERTY_RETURN_VALUES, wizard.getValue(), mDataSet);
+				}
+			}
 
+		});
+		
 		params = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_2, SWT.PUSH | SWT.FLAT);
 		params.addSelectionListener(new SelectionAdapter() {
 

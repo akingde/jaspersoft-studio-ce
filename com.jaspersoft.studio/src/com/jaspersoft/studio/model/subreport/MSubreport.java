@@ -41,8 +41,8 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.RVPropertyDescriptor;
 
 /*
  * The Class MSubreport.
@@ -205,7 +205,7 @@ public class MSubreport extends MGraphicElement {
 			if (returnValuesDTO == null) {
 				returnValuesDTO = new JReportsDTO();
 				returnValuesDTO.setjConfig(getJasperConfiguration());
-				returnValuesDTO.setProp1(jrElement);
+				returnValuesDTO.setSubreport(jrElement);
 			}
 			returnValuesDTO.setValue(JRCloneUtils.cloneList(jrElement.getReturnValuesList()));
 			return returnValuesDTO;

@@ -62,7 +62,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 
 /**
- * Page used to add a parameter to a dataset run. The parameter can only be choosed between
+ * Page used to add a parameter to a dataset run. The parameter can only be choose between
  * the parameters already defined for dataset referenced by the dataset run. This avoid to have
  * a dataset run parameter valorization of a not existing parameter 
  * 

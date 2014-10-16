@@ -17,9 +17,9 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.JReportsDTO;
 
-public class RVPropertyEditor extends Wizard {
+public class SubreportRVPropertyEditor extends Wizard {
 	private JReportsDTO value;
-	private RVPropertyPage page0;
+	private SubreportRVPropertyPage page0;
 
 	public JReportsDTO getValue() {
 		JReportsDTO v = null;
@@ -30,7 +30,7 @@ public class RVPropertyEditor extends Wizard {
 		if (v != null) {
 			JReportsDTO vclone = new JReportsDTO();
 			vclone.setjConfig(v.getjConfig());
-			vclone.setProp1(v.getProp1());
+			vclone.setSubreport(v.getSubreport());
 			vclone.setValue(v.getValue());
 			return vclone;
 		}
@@ -43,7 +43,7 @@ public class RVPropertyEditor extends Wizard {
 		this.value = value;
 	}
 
-	public RVPropertyEditor() {
+	public SubreportRVPropertyEditor() {
 		super();
 		setWindowTitle(Messages.common_properties);
 		setNeedsProgressMonitor(false);
@@ -51,7 +51,7 @@ public class RVPropertyEditor extends Wizard {
 
 	@Override
 	public void addPages() {
-		page0 = new RVPropertyPage("subreportproperties"); //$NON-NLS-1$
+		page0 = new SubreportRVPropertyPage();
 		page0.setDto(value);
 		addPage(page0);
 	}

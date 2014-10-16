@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.descriptor.subreport.returnvalue;
+package com.jaspersoft.studio.property.descriptor.returnvalue;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.JReportsDTO;
-import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog.RVPropertyEditor;
+import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog.SubreportRVPropertyEditor;
 
 public class RVPropertiesCellEditor extends DialogCellEditor {
 
@@ -34,7 +34,7 @@ public class RVPropertiesCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		RVPropertyEditor wizard = new RVPropertyEditor();
+		SubreportRVPropertyEditor wizard = new SubreportRVPropertyEditor();
 		wizard.setValue((JReportsDTO) getValue());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();

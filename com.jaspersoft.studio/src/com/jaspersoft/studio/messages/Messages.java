@@ -456,6 +456,8 @@ public class Messages extends NLS {
 	public static String DatasetRunPameterDialog_ParamNotFoundErrTitle;
 	public static String DatasetRunPameterDialog_Title;
 	public static String DatasetRunPameterDialog_ValueExprLbl;
+	public static String DatasetRunRVPropertyPage_pageDescription;
+	public static String DatasetRunRVPropertyPage_pageTitle;
 	public static String DatasetSection_nameNotValidTitle;
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
@@ -807,6 +809,7 @@ public class Messages extends NLS {
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
 	public static String IncreaseVSpaceAction_actionName;
+	public static String InputReturnValueDialog_dialogTitle;
 	public static String JaspersoftStudioPlugin_BrandingInfoJSSPlugin;
 	public static String JaspersoftStudioPlugin_JSSConsoleTitle;
 	public static String JaspersoftStudioPlugin_StartingJSSBundleMsg;
