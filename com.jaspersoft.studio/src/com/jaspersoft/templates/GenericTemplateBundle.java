@@ -130,7 +130,9 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 			URL propertiesFile = new URL(propertiesPath);
 			if (!isExternal() || (new File(propertiesFile.getFile())).exists()) {
 				this.propertyFile = new Properties();
-				this.propertyFile.load(propertiesFile.openStream());
+				InputStream ioStream = propertiesFile.openStream();
+				this.propertyFile.load(ioStream);
+				ioStream.close();
 			}
 
 			// read information from the jasper design object...

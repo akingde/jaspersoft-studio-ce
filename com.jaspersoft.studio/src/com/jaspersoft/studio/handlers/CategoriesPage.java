@@ -53,6 +53,7 @@ import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
+import com.jaspersoft.studio.wizards.ReportTemplatesWizardPage;
 
 /**
  * Page of the wizard used to assign the categories to an exported report as template, 
@@ -63,6 +64,7 @@ import com.jaspersoft.studio.wizards.JSSWizardPage;
  */
 public class CategoriesPage extends JSSWizardPage {
 
+	
 	/**
 	 * List of available categories
 	 */
@@ -223,6 +225,7 @@ public class CategoriesPage extends JSSWizardPage {
 				List<String> input = (List<String>)rightTView.getInput();
 				input.add(customCategory.getText());
 				rightTView.refresh();
+				storeSettings();
 			}
 		});
 		
@@ -253,7 +256,7 @@ public class CategoriesPage extends JSSWizardPage {
 		 
 		 String categories = ""; //$NON-NLS-1$
 		 for(String cat : categoriesSelected){
-			 categories = categories.concat(cat).concat(";"); //$NON-NLS-1$
+			 categories = categories.concat(cat).concat(ReportTemplatesWizardPage.TEMPLATE_CATEGORY_SEPARATOR);
 		 }
 		 if (!categories.isEmpty()) {
 			 categories = categories.substring(0, categories.length()-1);
@@ -269,9 +272,9 @@ public class CategoriesPage extends JSSWizardPage {
      OutputStream out;
 		try {
 			out = new FileOutputStream( f );
-	     props.store(out,""); //$NON-NLS-1$
+	    props.store(out,""); //$NON-NLS-1$
+	    out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

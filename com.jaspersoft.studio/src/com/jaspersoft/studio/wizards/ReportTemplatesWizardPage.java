@@ -74,7 +74,15 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private static final int GALLERY_HEIGHT = 100;
 
 	private static final int GALLERY_WIDTH = 100;
+	
+	/**
+	 * Symbol to separate the categories names
+	 */
+	public static final String TEMPLATE_CATEGORY_SEPARATOR = "\n"; //$NON-NLS-1$
 
+	/**
+	 * Widget to select the scale factor of the template preview
+	 */
 	private Scale scale;
 
 	/**
@@ -486,7 +494,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		for (TemplateBundle b : bundles) {
 			Object templateCategory = b.getProperty(BuiltInCategories.CATEGORY_KEY);
 			if (templateCategory != null) {
-				String[] strCategoryList = templateCategory.toString().split(";"); //$NON-NLS-1$
+				String[] strCategoryList = templateCategory.toString().split(TEMPLATE_CATEGORY_SEPARATOR); 
 				HashSet<String> categorySet = new HashSet<String>();
 
 				for (String cat : strCategoryList) {
