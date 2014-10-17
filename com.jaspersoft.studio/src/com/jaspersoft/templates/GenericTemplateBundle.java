@@ -25,6 +25,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.templates.DefaultTemplateProvider;
 import com.jaspersoft.studio.templates.IconedTemplateBundle;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
@@ -152,6 +153,10 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				}
+			}
+			if (getIcon() == null){
+				//Use a default icon
+				setIcon(ResourceManager.getImage(JaspersoftStudioPlugin.getInstance().getImageDescriptor("templates/blank_a4.png")));
 			}
 		}
 
@@ -318,18 +323,16 @@ public class GenericTemplateBundle implements IconedTemplateBundle {
 	}
 
 	/**
-	 * Check for an icon provided by the template. If an icon is not available, it defaults to an internal report png.
+	 * Check for an icon provided by the template. If it is available it is returned, otherwise
+	 * it return null
 	 * 
-	 * @param iconURL
-	 * @return
+	 * @param iconURL the url of the icon
+	 * @return the icon or null if it can't be found
 	 */
 	private Image getIconFromUrl(URL iconURL) {
 		ImageDescriptor descriptor = ImageDescriptor.createFromURL(iconURL);
-		if (descriptor == null) {
-			// fall back to the icons/report.png...
-			descriptor = ResourceManager.getImageDescriptor("icons/report.png"); //$NON-NLS-1$
-		}
-		return ResourceManager.getImage(descriptor);
+		if (descriptor != null && descriptor.getImageData() != null) return ResourceManager.getImage(descriptor);
+		return null;
 	}
 
 	/**
