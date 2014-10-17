@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.custom.adapter.wizard;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,13 +81,21 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 		bnew.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
+				FileDialog fd = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
 				fd.setText(Messages.common_open);
 				String[] filterExt = { "*.jar" }; //$NON-NLS-1$ 
 				fd.setFilterExtensions(filterExt);
 				String selected = fd.open();
-				if (selected != null && !jarPaths.contains(selected)) {
-					jarPaths.add(selected);
+				if (selected != null) {
+					String[] fileNames = fd.getFileNames();
+					File parentFolder = new File(selected).getParentFile();
+					for(String fileName : fileNames){
+						File actualFile = new File(parentFolder, fileName);
+						selected = actualFile.getAbsolutePath();
+						if (actualFile.exists() && actualFile.isFile() && !jarPaths.contains(selected)){
+							jarPaths.add(selected);
+						}
+					}
 					tableViewer.refresh();
 				}
 			}
@@ -136,20 +145,21 @@ public class AdditionalJarsPage extends JSSHelpWizardPage {
 		gd.minimumHeight = 300;
 		gd.minimumWidth = 400;
 		table.setLayoutData(gd);
-		table.setHeaderVisible(false);
+		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
 		tableViewer = new TableViewer(table);
 		attachContentProvider(tableViewer);
 		attachLabelProvider(tableViewer);
 
+		TableColumn[] column = new TableColumn[1];
+		column[0] = new TableColumn(table, SWT.NONE);
+		column[0].setText(Messages.AdditionalJarsPage_columnTitle);
+
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(100));
 		table.setLayout(tlayout);
-
-		TableColumn[] column = new TableColumn[1];
-		column[0] = new TableColumn(table, SWT.NONE);
-
+		
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
 

@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.engine;
 
 import java.awt.Color;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -941,8 +942,8 @@ public class TableTemplateEngine extends DefaultTemplateEngine {
 			if (table.getColumns().size()>1 || table.getColumns().size() < 1) {
 				errorsList.add(Messages.TableTemplateEngine_oneColumnError); 
 			} else {
-				if (findStaticTextElement(table, TEXT_MARKER) == null) errorsList.add(Messages.TableTemplateEngine_missingStaticText); //$NON-NLS-1$
-				if (findTextFieldElement(table, FIELD_MARKER) == null) errorsList.add(Messages.TableTemplateEngine_missingTextField); //$NON-NLS-1$
+				if (findStaticTextElement(table, TEXT_MARKER) == null) errorsList.add(MessageFormat.format(Messages.TableTemplateEngine_missingStaticText, new Object[]{TEXT_MARKER})); 
+				if (findTextFieldElement(table, FIELD_MARKER) == null) errorsList.add(MessageFormat.format(Messages.TableTemplateEngine_missingTextField, new Object[]{FIELD_MARKER}));
 			}
 		}
 		

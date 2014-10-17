@@ -16,12 +16,9 @@ import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -68,11 +65,6 @@ public class FinalPage extends JSSWizardPage {
 	 * Styled text where the error messages returned from the validation are returned
 	 */
 	private StyledText errorsArea;
-	 
-	/**
-	 * Scrolled composite where the errors text area is placed (so it can be scrolled for long messages)
-	 */
-	private ScrolledComposite scrolledComposite;
 	
 	public FinalPage(){
 		super("export_template_final_page"); //$NON-NLS-1$
@@ -83,6 +75,7 @@ public class FinalPage extends JSSWizardPage {
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		layout = new StackLayout();
 		container.setLayout(layout);
 		congratsComposite = createCongratsSection(container);
@@ -106,7 +99,8 @@ public class FinalPage extends JSSWizardPage {
 	 * @return the parent composite where the controls are contained
 	 */
 	private Composite createErrorsSection(Composite parent){
-		Composite container = new Composite(parent, SWT.NULL);
+		final Composite container = new Composite(parent, SWT.NULL);
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridLayout layout = new GridLayout(1,false);
 		layout.marginTop = 20;
 		layout.verticalSpacing = 10;
@@ -118,16 +112,14 @@ public class FinalPage extends JSSWizardPage {
 		lblCongratulations.setForeground(ColorConstants.red);
 		lblCongratulations.setText(Messages.FinalPage_errorTitle);
 		lblCongratulations.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false));
-		
-		scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL);
-    scrolledComposite.setLayout(new FillLayout(SWT.VERTICAL));
-    Composite areaComp = new Composite(scrolledComposite, SWT.NONE);
-    areaComp.setLayout(new FillLayout(SWT.VERTICAL));
-		errorsArea = new StyledText(areaComp, SWT.NONE);
+    
+	    Composite areaComp = new Composite(container, SWT.NONE);
+	    areaComp.setLayoutData(new GridData(GridData.FILL_BOTH));
+	    areaComp.setLayout(new GridLayout(1,false));
+		errorsArea = new StyledText(areaComp, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
 		errorsArea.setEditable(false);
+		errorsArea.setLayoutData(new GridData(GridData.FILL_BOTH));
 		errorsArea.setBackground(areaComp.getBackground());
-    scrolledComposite.setContent(areaComp);
-    scrolledComposite.getVerticalBar().setIncrement(10);
 		
 		Label lblPressFinishTo = new Label(container, SWT.WRAP);
 		lblPressFinishTo.setText(Messages.FinalPage_errorConclusiveMessage);
@@ -135,6 +127,7 @@ public class FinalPage extends JSSWizardPage {
 		finishData.widthHint = 170;
 		finishData.heightHint = 130;
 		lblPressFinishTo.setLayoutData(finishData);
+	
 		return container;
 	}
 	
@@ -197,14 +190,6 @@ public class FinalPage extends JSSWizardPage {
 				for(String error : validationErrors){
 					errorsArea.append(error+System.getProperty("line.separator")); //$NON-NLS-1$
 				}
-				Composite errorParent = errorsArea.getParent();
-				errorParent.setSize(errorParent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        Point innerSize = errorParent.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				GridData data = new GridData();
-				data.heightHint = getWizard().getContainer().getShell().getSize().y-350;
-				data.widthHint = innerSize.x;
-				scrolledComposite.setLayoutData(data);
-				scrolledComposite.layout(true,true);
 				layout.topControl = errorsComposite;
 			}
 			parentArea.layout(true, true);

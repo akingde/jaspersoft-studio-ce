@@ -165,6 +165,7 @@ public class Messages extends NLS {
 	public static String ADataInput_settonull_explain;
 	public static String ADatasetObjectDeleteCommand_confirmationquestion;
 	public static String ADatasetObjectDeleteCommand_confirmationtitle;
+	public static String AdditionalJarsPage_columnTitle;
 	public static String AdditionalJarsPage_wizardDescription;
 	public static String AdditionalJarsPage_wizardTitle;
 	public static String AExportAction_exportreport;
