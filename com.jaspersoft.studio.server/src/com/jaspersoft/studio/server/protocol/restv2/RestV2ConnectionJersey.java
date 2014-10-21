@@ -35,11 +35,14 @@ import javax.ws.rs.core.Response;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -96,6 +99,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		this.eh = new RESTv2ExceptionHandler(this);
 
 		ClientConfig clientConfig = new ClientConfig();
+
 		// values are in milliseconds
 		// clientConfig.property(ClientProperties.READ_TIMEOUT,
 		// sp.getTimeout());
@@ -108,11 +112,17 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		SslConfigurator sslConfig = SslConfigurator.newInstance(true);
 		clientConfig.property(ApacheClientProperties.SSL_CONFIG, sslConfig);
 
+		PoolingClientConnectionManager cxMgr = new PoolingClientConnectionManager();
+		cxMgr.setMaxTotal(100);
+		cxMgr.setDefaultMaxPerRoute(20);
+		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, cxMgr);
+
 		connector = new JSSApacheConnector(clientConfig);
 		clientConfig.connector(connector);
 		HttpUtils.setupProxy(clientConfig, sp.getURL().toURI());
 
 		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
+		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
 		// user += "|" + sp.getOrganisation();

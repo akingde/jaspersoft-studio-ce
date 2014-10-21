@@ -21,8 +21,8 @@ import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
-final class FindWizardDialog extends WizardDialog {
-	FindWizardDialog(Shell parentShell, IWizard newWizard) {
+public final class FindWizardDialog extends WizardDialog {
+	public FindWizardDialog(Shell parentShell, IWizard newWizard) {
 		super(parentShell, newWizard);
 	}
 
@@ -32,15 +32,12 @@ final class FindWizardDialog extends WizardDialog {
 	}
 
 	@Override
-	public void run(boolean fork, boolean cancelable,
-			final IRunnableWithProgress runnable)
-			throws InvocationTargetException, InterruptedException {
+	public void run(boolean fork, boolean cancelable, final IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
 		ProgressMonitorPart mpart = (ProgressMonitorPart) getProgressMonitor();
 		mpart.setVisible(true);
 		try {
 
-			ModalContext.run(runnable, fork, getProgressMonitor(), getShell()
-					.getDisplay());
+			ModalContext.run(runnable, fork, getProgressMonitor(), getShell().getDisplay());
 		} finally {
 			mpart.done();
 			mpart.setVisible(false);

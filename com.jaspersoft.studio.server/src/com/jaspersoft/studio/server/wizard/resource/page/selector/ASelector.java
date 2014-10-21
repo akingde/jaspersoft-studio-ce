@@ -53,9 +53,11 @@ public abstract class ASelector {
 	protected Button bLoc;
 	protected Button bRef;
 	protected MResource res;
+	protected ResourceDescriptor resRD;
 
 	public Control createControls(Composite cmp, final ANode parent, final MResource res) {
 		this.res = res;
+		this.resRD = res.getValue();
 
 		Composite composite = new Composite(cmp, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -95,7 +97,7 @@ public abstract class ASelector {
 				if (msp.isSupported(Feature.SEARCHREPOSITORY)) {
 					ResourceDescriptor rd = FindResourceJob.doFindResource(msp, getIncludeTypes(), getExcludeTypes());
 					if (rd != null)
-						setRemoteResource(res, rd, pnode);
+						setRemoteResource(rd, pnode);
 				} else {
 					RepositoryDialog rd = new RepositoryDialog(bRef.getShell(), msp) {
 
@@ -107,15 +109,15 @@ public abstract class ASelector {
 					if (rd.open() == Dialog.OK) {
 						MResource rs = rd.getResource();
 						if (rs != null)
-							setRemoteResource(res, rs.getValue(), pnode);
+							setRemoteResource(rs.getValue(), pnode);
 					}
 				}
 			}
 		});
 	}
 
-	private void setRemoteResource(MResource res, ResourceDescriptor rd, ANode pnode) {
-		ResourceDescriptor runit = res.getValue();
+	private void setRemoteResource(ResourceDescriptor rd, ANode pnode) {
+		ResourceDescriptor runit = resRD;
 		try {
 			rd = WSClientHelper.getResource(new NullProgressMonitor(), pnode, rd);
 			rd.setIsReference(true);
@@ -123,7 +125,7 @@ public abstract class ASelector {
 			rd.setParentFolder(runit.getParentFolder() + "/" + runit.getName() + "_files"); //$NON-NLS-1$ //$NON-NLS-2$
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());//$NON-NLS-1$
 			setupResource(rd);
-			replaceChildren(res, rd);
+			replaceChildren(rd);
 
 			jsRefDS.setText(rd.getReferenceUri());
 		} catch (Exception e1) {
@@ -133,13 +135,13 @@ public abstract class ASelector {
 	}
 
 	public void resetResource() {
-		replaceChildren(res, null);
-		setEnabled(isReference(res.getValue()) ? 0 : 1);
+		replaceChildren(null);
+		setEnabled(isReference(resRD) ? 0 : 1);
 	}
 
-	protected void replaceChildren(final MResource res, ResourceDescriptor rd) {
-		ResourceDescriptor rdel = getResourceDescriptor(res.getValue());
-		List<ResourceDescriptor> children = res.getValue().getChildren();
+	protected void replaceChildren(ResourceDescriptor rd) {
+		ResourceDescriptor rdel = getResourceDescriptor(resRD);
+		List<ResourceDescriptor> children = resRD.getChildren();
 		if (rdel != null) {
 			int index = children.indexOf(rdel);
 			if (index >= 0)
@@ -176,7 +178,7 @@ public abstract class ASelector {
 		bLoc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ResourceDescriptor runit = res.getValue();
+				ResourceDescriptor runit = resRD;
 				ResourceDescriptor ref = getResourceDescriptor(runit);
 				if (isReference(ref))
 					ref = null;
@@ -197,7 +199,7 @@ public abstract class ASelector {
 					return;
 				ref.setUriString(ref.getParentFolder() + "/" + ref.getName()); //$NON-NLS-1$ 
 				// if (newref)
-				replaceChildren(res, ref);
+				replaceChildren(ref);
 				// else
 				// ASelector.copyFields(getResourceDescriptor(runit), r.getValue());
 				// ASelector.copyFields(res.getValue(), ref);
@@ -239,11 +241,11 @@ public abstract class ASelector {
 	protected abstract ResourceDescriptor createLocal(MResource res);
 
 	protected void init() {
-		setEnabled(isReference(getResourceDescriptor(res.getValue())) ? 0 : 1);
+		setEnabled(isReference(getResourceDescriptor(resRD)) ? 0 : 1);
 	}
 
 	public boolean isPageComplete() {
-		return getResourceDescriptor(res.getValue()) != null;
+		return getResourceDescriptor(resRD) != null;
 	}
 
 	private List<IPageCompleteListener> listeners = new ArrayList<IPageCompleteListener>();
@@ -277,9 +279,9 @@ public abstract class ASelector {
 		jsRefDS.setText(""); //$NON-NLS-1$
 		jsLocDS.setText(""); //$NON-NLS-1$
 
-		ResourceDescriptor r = getResourceDescriptor(res.getValue());
+		ResourceDescriptor r = getResourceDescriptor(resRD);
 		if (r == null) {
-			for (ResourceDescriptor rd : res.getValue().getChildren()) {
+			for (ResourceDescriptor rd : resRD.getChildren()) {
 				if (rd.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
 					r = rd;
 					pos = 0;

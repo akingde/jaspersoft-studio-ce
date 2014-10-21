@@ -24,17 +24,21 @@ import com.jaspersoft.studio.server.wizard.resource.page.selector.SelectorAccess
 
 public class AccessGrantSchemaContent extends APageContent {
 	private SelectorAccessGrantSchema scompo;
+	private String title;
 
 	public AccessGrantSchemaContent(ANode parent, MResource resource, DataBindingContext bindingContext) {
 		super(parent, resource, bindingContext);
 	}
 
-	public AccessGrantSchemaContent(ANode parent, MResource resource) {
+	public AccessGrantSchemaContent(ANode parent, MResource resource, String title) {
 		super(parent, resource);
+		this.title = title;
 	}
 
 	@Override
 	public String getName() {
+		if (title != null)
+			return title;
 		return MRAccessGrantSchema.getIconDescriptor().getTitle();
 	}
 

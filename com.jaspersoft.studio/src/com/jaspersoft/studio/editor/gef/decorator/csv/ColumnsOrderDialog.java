@@ -109,13 +109,6 @@ public class ColumnsOrderDialog extends Dialog {
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		viewer.setInput(columnNames);
 
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				// eBtn.push();
-			}
-		});
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 5;
 		gd.grabExcessHorizontalSpace = true;
@@ -161,7 +154,7 @@ public class ColumnsOrderDialog extends Dialog {
 					NameComboDialog dialog = new NameComboDialog(UIUtils.getShell(), newNames);
 					if (dialog.open() == Dialog.OK)
 						return dialog.getName();
-				}else
+				} else
 					UIUtils.showWarning(Messages.ColumnsOrderDialog_1);
 				return null;
 			}

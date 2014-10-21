@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
@@ -24,8 +20,6 @@ import org.eclipse.swt.widgets.List;
 
 public class WLocaleList extends Composite {
 
-	private Locale[] locales;
-	private String[] strLocales;
 	private ListViewer listViewer;
 	private List list;
 
@@ -42,7 +36,6 @@ public class WLocaleList extends Composite {
 
 		listViewer = new ListViewer(this, SWT.BORDER | SWT.V_SCROLL);
 		list = listViewer.getList();
-		locales = Locale.getAvailableLocales();
 		initList();
 	}
 
@@ -53,10 +46,8 @@ public class WLocaleList extends Composite {
 
 	private void initList() {
 		// extract all locales names into a String[]...
-		strLocales = new String[locales.length];
-		for (int i = 0; i < locales.length; i++) {
-			strLocales[i] = locales[i].getDisplayName();
-		}
+		String[] strLocales = WLocale.getLocales();
+
 		// ...and sort the array...
 		Arrays.sort(strLocales);
 
@@ -77,8 +68,8 @@ public class WLocaleList extends Composite {
 		int returnedIndex = -1;
 
 		if (locale != null) {
-			for (int i = 0; i < strLocales.length; i++) {
-				if (strLocales[i].equals(locale.getDisplayName())) {
+			for (int i = 0; i < WLocale.strLocales.length; i++) {
+				if (WLocale.strLocales[i].equals(locale.getDisplayName())) {
 					returnedIndex = i;
 				}
 			}
@@ -116,10 +107,10 @@ public class WLocaleList extends Composite {
 		if (selectionIndex < 0) {
 			return Locale.getDefault();
 		} else {
-			String strLocale = strLocales[list.getSelectionIndex()];
-			for (int i = 0; i < locales.length; i++) {
-				if (locales[i].getDisplayName().equals(strLocale)) {
-					return locales[i];
+			String strLocale = WLocale.strLocales[list.getSelectionIndex()];
+			for (int i = 0; i < WLocale.locales.length; i++) {
+				if (WLocale.locales[i].getDisplayName().equals(strLocale)) {
+					return WLocale.locales[i];
 				}
 			}
 			return null;
@@ -135,7 +126,7 @@ public class WLocaleList extends Composite {
 	public boolean contains(Locale locale) {
 		String displayName = locale.getDisplayName();
 		if (displayName != null && displayName.length() > 0) {
-			for (String strLocale : strLocales) {
+			for (String strLocale : WLocale.strLocales) {
 				if (strLocale.equals(displayName))
 					return true;
 			}

@@ -31,6 +31,7 @@ public class FindResourceWizard extends Wizard {
 
 	private String[] itypes;
 	private String[] etypes;
+	private String name;
 
 	public void setFilterTypes(String[] in, String[] excl) {
 		this.itypes = in;
@@ -38,9 +39,16 @@ public class FindResourceWizard extends Wizard {
 		setFilters();
 	}
 
+	public void setDefaultName(String name) {
+		this.name = name;
+		setFilters();
+	}
+
 	private void setFilters() {
-		if (page0 != null)
+		if (page0 != null) {
 			page0.setFilterTypes(itypes, etypes);
+			page0.setDefaultName(name);
+		}
 	}
 
 	@Override

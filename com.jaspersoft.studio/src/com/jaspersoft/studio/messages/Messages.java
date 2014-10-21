@@ -1560,6 +1560,8 @@ public class Messages extends NLS {
 	public static String ResetStyleAction_actionTitle;
 	public static String ResetStyleAction_actionTooltip;
 	public static String ResetValueCommand_restore_default_value;
+	public static String ResourceBundlesContent_0;
+	public static String ResourceBundlesContent_1;
 	public static String ResourceCellEditor_open_resource;
 	public static String ResourcePage_browseButton;
 	public static String ResourcePage_conflictMessage;

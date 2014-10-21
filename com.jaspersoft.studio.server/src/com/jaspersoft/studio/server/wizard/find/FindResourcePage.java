@@ -72,6 +72,11 @@ public class FindResourcePage extends WizardPage {
 	private FinderUI finderUI;
 	private String[] itypes;
 	private String[] etypes;
+	private String name;
+
+	public void setDefaultName(String name) {
+		this.name = name;
+	}
 
 	public void setFilterTypes(String[] in, String[] excl) {
 		this.itypes = in;
@@ -283,6 +288,11 @@ public class FindResourcePage extends WizardPage {
 					}
 			}
 		});
+
+		if (!Misc.isNullOrEmpty(name)) {
+			txt.setText(name);
+			doSearch();
+		}
 
 		txt.setFocus();
 		setPageComplete(false);

@@ -64,7 +64,6 @@ import com.jaspersoft.studio.server.dnd.RepositoryImageDragSourceListener;
 import com.jaspersoft.studio.server.dnd.UnitDragSourceListener;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -276,11 +275,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 					refreshAction.run();
 				treeViewer.expandToLevel(el, 1);
 			}
-		} else if (el instanceof MInputControl && editAction.isEnabled()) {
-			editAction.run();
-			return;
-		}
-		if (editServerAction.isEnabled())
+		} else if (editServerAction.isEnabled())
 			editServerAction.run();
 		// if (runReportUnitAction.isEnabled())
 		// runReportUnitAction.run();
@@ -288,6 +283,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 			openInEditorAction.run();
 		else if (runReportUnitAction.isEnabled())
 			runReportUnitAction.run();
+		else if (el instanceof MResource && editAction.isEnabled())
+			editAction.run();
 	}
 
 	public ANode getNode(ANode root) {

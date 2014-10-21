@@ -34,10 +34,14 @@ public class SelectorXml extends ASelector {
 	protected ResourceDescriptor getResourceDescriptor(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE))
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE) && isGoodResourceDescriptor(ru))
 				return r;
 		}
 		return null;
+	}
+
+	protected boolean isGoodResourceDescriptor(ResourceDescriptor ru) {
+		return true;
 	}
 
 	@Override

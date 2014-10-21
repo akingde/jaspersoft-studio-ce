@@ -53,7 +53,7 @@ public class SelectorQuery extends ASelector {
 	public boolean isPageComplete() {
 		boolean b = super.isPageComplete();
 		if (b) {
-			ResourceDescriptor rd = res.getValue();
+			ResourceDescriptor rd = resRD;
 			String[] qvc = rd.getQueryVisibleColumns();
 			b = qvc != null && qvc.length > 0 && !Misc.isNullOrEmpty(rd.getQueryValueColumn());
 		}

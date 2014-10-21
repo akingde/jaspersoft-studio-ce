@@ -52,7 +52,7 @@ public class EditButton<T> {
 			else
 				return;
 			editElement.editElement(inlist, index);
-			afterElementModified(s.getFirstElement());
+			afterElementModified(s.getFirstElement(), inlist, index);
 			tableViewer.refresh();
 			tableViewer.setSelection(s);
 			tableViewer.reveal(s.getFirstElement());
@@ -84,8 +84,12 @@ public class EditButton<T> {
 	 * Additional operations to be performed once the element has been modified.
 	 * 
 	 * @param object
+	 * @param inlist
+	 *          list of elements from the table
+	 * @param ind
+	 *          index of the changed element in the table
 	 */
-	protected void afterElementModified(Object element) {
+	protected void afterElementModified(Object element, List<T> inlist, int ind) {
 		// empty...
 	}
 }

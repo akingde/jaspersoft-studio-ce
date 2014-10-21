@@ -1,31 +1,31 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
 import java.util.Arrays;
 import java.util.Locale;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.utils.Misc;
+
 public class WLocale extends Composite {
 	private Combo combo;
-	private static Locale[] locales;
-	private static String[] strLocales;
+	public static Locale[] locales;
+	public static String[] strLocales;
 
 	public WLocale(Composite parent, int style) {
 		super(parent, SWT.NONE);
@@ -44,6 +44,14 @@ public class WLocale extends Composite {
 		combo.setToolTipText(string);
 	}
 
+	public void addModifyListener(ModifyListener m) {
+		combo.addModifyListener(m);
+	}
+
+	public void removeModifyListener(ModifyListener m) {
+		combo.removeModifyListener(m);
+	}
+
 	public void addSelectionListener(SelectionListener m) {
 		combo.addSelectionListener(m);
 	}
@@ -56,7 +64,7 @@ public class WLocale extends Composite {
 		return combo;
 	}
 
-	private String[] getLocales() {
+	public static String[] getLocales() {
 		if (locales == null) {
 			locales = Locale.getAvailableLocales();
 			strLocales = new String[locales.length];
@@ -74,13 +82,17 @@ public class WLocale extends Composite {
 		else
 			index = getIndexFromLocale(locale);
 		combo.select(index);
+		if (index < 0 && locale != null)
+			combo.setText(locale.toString());
 	}
 
 	public Locale getLocale() {
 		int selectionIndex = combo.getSelectionIndex();
-		if (selectionIndex < 0)
-			return Locale.getDefault();
-		else {
+		if (selectionIndex < 0) {
+			if (Misc.isNullOrEmpty(combo.getText()))
+				return Locale.getDefault();
+			return LocaleUtils.toLocale(combo.getText());
+		} else {
 			String strLocale = strLocales[combo.getSelectionIndex()];
 			for (int i = 0; i < locales.length; i++) {
 				if (locales[i].getDisplayName().equals(strLocale))

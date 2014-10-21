@@ -16,6 +16,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MXmlFile;
@@ -55,10 +56,18 @@ public class XmlFileContent extends APageContent {
 
 	@Override
 	public Control createContent(Composite parent) {
-		scompo = new SelectorXml();
+		scompo = new SelectorXml() {
+			protected boolean isGoodResourceDescriptor(com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor ru) {
+				return XmlFileContent.this.isGoodResourceDescriptor(ru);
+			};
+		};
 		scompo.addPageCompleteListener(this);
 		rebind();
 		return scompo.createControls(parent, pnode, res);
+	}
+
+	protected boolean isGoodResourceDescriptor(ResourceDescriptor ru) {
+		return true;
 	}
 
 	@Override
