@@ -190,10 +190,7 @@ public class SoapConnection implements IConnection {
 				if (r.isMainReport() || (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML) && r.getName().equals("main_jrxml"))) {
 					r.setMainReport(true);
 					if (r.getHasData() && r.getData() != null) {
-						System.out.println(new String(r.getData()));
 						inputFile = writeToTemp(r.getData());
-						System.out.println("-------------------------------------------------------------");
-						System.out.println(FileUtils.readFileAsAString(inputFile));
 						r.setData(null);
 					}
 					break;
