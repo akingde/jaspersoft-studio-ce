@@ -64,8 +64,16 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ServerManager {
 	public static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
 	private static final String SERVERPROFILE = "SERVERPROFILE"; //$NON-NLS-1$
-	private static List<MServerProfile> serverProfiles = new ArrayList<MServerProfile>();
+	private static List<MServerProfile> serverProfiles;
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
+
+	private static List<MServerProfile> getServerProfiles() {
+		if (serverProfiles == null) {
+			serverProfiles = new ArrayList<MServerProfile>();
+			loadServerProfiles(new MServers(null));
+		}
+		return serverProfiles;
+	}
 
 	/**
 	 * Save an element on the server file storage.
@@ -117,7 +125,7 @@ public class ServerManager {
 	public static boolean isUniqueName(MServerProfile sprofile, String name) {
 		if (sprofile.getParent() != null && sprofile.getValue().getName().equals(name))
 			return true;
-		for (MServerProfile sp : serverProfiles) {
+		for (MServerProfile sp : getServerProfiles()) {
 			if (sp.getValue().getName().equals(name))
 				return false;
 		}
@@ -166,6 +174,8 @@ public class ServerManager {
 
 	public static void loadServerProfiles(MServers root) {
 		root.removeChildren();
+		if (serverProfiles == null)
+			serverProfiles = new ArrayList<MServerProfile>();
 		serverProfiles.clear();
 
 		// Convert the old configuration
@@ -205,7 +215,7 @@ public class ServerManager {
 
 			// StringTokenizer st = new StringTokenizer(key, ":");
 			String name = tokens[0];
-			String path = tokens[1];
+			// String path = tokens[1];
 			if (tokens.length > 2) {
 				String urls = new String(Base64.decodeBase64(tokens[2]));
 				String[] urlt = urls.split("\n");
@@ -226,7 +236,7 @@ public class ServerManager {
 	}
 
 	public static IConnection getServer(String url, IProgressMonitor monitor) throws Exception {
-		for (MServerProfile sp : serverProfiles) {
+		for (MServerProfile sp : getServerProfiles()) {
 			if (sp.getValue().getUrl().equals(url))
 				return sp.getWsClient(monitor);
 		}
@@ -241,7 +251,7 @@ public class ServerManager {
 	}
 
 	public static MServerProfile getServerByUrl(String url) {
-		for (MServerProfile sp : serverProfiles) {
+		for (MServerProfile sp : getServerProfiles()) {
 			if (sp.getValue().getUrl().equals(url))
 				return sp;
 		}
@@ -250,12 +260,12 @@ public class ServerManager {
 
 	public static MServerProfile getServerByUrl(String url, String user) {
 		MServerProfile res = null;
-		for (MServerProfile sp : serverProfiles) {
+		for (MServerProfile sp : getServerProfiles()) {
 			ServerProfile v = sp.getValue();
 			if (v.getUrl().equals(url)) {
 				res = sp;
 				if (user != null) {
-					String u = v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : "");
+					String u = v.getUser() + (!Misc.isNullOrEmpty(v.getOrganisation()) ? "|" + v.getOrganisation() : "");
 					if (u.equals(user))
 						return sp;
 				} else
@@ -267,7 +277,7 @@ public class ServerManager {
 
 	public static int getServerIndexByUrl(String url) {
 		int i = 0;
-		for (MServerProfile sp : serverProfiles) {
+		for (MServerProfile sp : getServerProfiles()) {
 			if (sp.getValue().getUrl().equals(url))
 				return i;
 			i++;
@@ -278,12 +288,12 @@ public class ServerManager {
 	public static int getServerIndexByUrl(String url, String user) {
 		int i = 0;
 		int j = -1;
-		for (MServerProfile sp : serverProfiles) {
+		for (MServerProfile sp : getServerProfiles()) {
 			ServerProfile v = sp.getValue();
 			if (v.getUrl().equals(url)) {
 				j = i;
 				if (user != null) {
-					String u = v.getUser() + (v.getOrganisation() != null ? "|" + v.getOrganisation() : "");
+					String u = v.getUser() + (!Misc.isNullOrEmpty(v.getOrganisation()) ? "|" + v.getOrganisation() : "");
 					if (u.equals(user))
 						return j;
 				} else
