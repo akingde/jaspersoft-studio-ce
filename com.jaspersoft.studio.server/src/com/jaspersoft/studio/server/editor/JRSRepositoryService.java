@@ -42,6 +42,7 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.utils.ReferenceResolver;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.Callback;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JSSFileRepositoryService;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -66,27 +67,41 @@ public class JRSRepositoryService implements RepositoryService {
 	}
 
 	private boolean hasServerUrl() {
+		String uri = null;
+		String serverUser = null;
 		if (jDesign == null)
-			this.jDesign = jConfig.getJasperDesign();
-		String uri = jDesign.getProperty(AExporter.PROP_SERVERURL);
-		if (uri == null)
-			return false;
-		String serverUser = jDesign.getProperty(AExporter.PROP_USER);
-		runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
-		if (!uri.equals(serverUri)) {
+			jDesign = jConfig.getJasperDesign();
+		if (jDesign != null) {
+			uri = jDesign.getProperty(AExporter.PROP_SERVERURL);
+			if (uri == null)
+				return false;
+			serverUser = jDesign.getProperty(AExporter.PROP_USER);
+			runitUri = jDesign.getProperty(AExporter.PROP_REPORTUNIT);
+		} else {
+			uri = jConfig.getProperty(AExporter.PROP_SERVERURL);
+			serverUser = jConfig.getProperty(AExporter.PROP_USER);
+			String[] usrs = serverUser.split("\\|");
+			if (usrs.length == 1)
+				serverUser = usrs[0];
+			else if (usrs.length > 1 && Misc.isNullOrEmpty(usrs[1]))
+				serverUser = usrs[0];
+		}
+		if (uri != null && !uri.equals(serverUri)) {
 			serverUri = uri;
 			c = null;
 		}
 		if (c == null && !isConnecting) {
 			isConnecting = true;
 			msp = ServerManager.getServerByUrl(serverUri, serverUser);
-			setupConnection(msp.getWsClient(new Callback<IConnection>() {
+			if (msp != null) {
+				setupConnection(msp.getWsClient(new Callback<IConnection>() {
 
-				@Override
-				public void completed(IConnection value) {
-					setupConnection(value);
-				}
-			}));
+					@Override
+					public void completed(IConnection value) {
+						setupConnection(value);
+					}
+				}));
+			}
 		}
 		return true;
 	}
@@ -134,7 +149,7 @@ public class JRSRepositoryService implements RepositoryService {
 			}
 			return doGetResource(uri, resourceType);
 		}
-		return null;
+		return repService != null ? repService.getResource(uri, resourceType) : null;
 	}
 
 	protected <K extends Resource> K doGetResource(String uri, Class<K> resourceType) {
@@ -163,8 +178,14 @@ public class JRSRepositoryService implements RepositoryService {
 					fpath += "/"; //$NON-NLS-1$
 				fpath += objectUri;
 				File f = new File(fpath);
-				if (f.createNewFile())
-					c.get(monitor, r, f);
+				if (f.getParentFile() != null)
+					f.getParentFile().mkdirs();
+				if (f.createNewFile()) {
+					if (!r.getIsReference() && r.getHasData() && r.getData() != null) {
+						org.apache.commons.io.FileUtils.writeByteArrayToFile(f, r.getData());
+					} else
+						c.get(monitor, r, f);
+				}
 			} else if (runitUri != null) {
 				// Locate the resource inside the report unit, if any...
 				if (reportUnitResources == null) {
@@ -186,7 +207,7 @@ public class JRSRepositoryService implements RepositoryService {
 					if (ResourceFactory.isFileResourceType(r)) {
 						IFile file = (IFile) jConfig.get(FileUtils.KEY_FILE);
 						File f = new File(file.getParent().getRawLocation().toFile(), objectUri);
-						if (f.createNewFile())
+						if (f.getParentFile() != null && !f.getParentFile().mkdirs() && f.createNewFile())
 							c.get(monitor, r, f);
 						break;
 					}
