@@ -44,6 +44,7 @@ public class Messages extends NLS {
 	public static String DatasourceSelectionPage_Description;
 	public static String DatasourceSelectionPage_Title;
 	public static String DataTypePageContent_0;
+	public static String DataTypePageContent_2;
 	public static String DataTypePageContent_3;
 	public static String DataTypePageContent_4;
 	public static String DataTypePageContent_7;
@@ -116,6 +117,7 @@ public class Messages extends NLS {
 	public static String OLAPXmlaPageContent_pass;
 	public static String OLAPXmlaPageContent_username;
 	public static String OLAPXmlaPageContent_uti;
+	public static String OpenInEditorAction_0;
 	public static String OpenInEditorAction_desc;
 	public static String OpenInEditorAction_title;
 	public static String PasteDialog_0;

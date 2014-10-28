@@ -80,7 +80,7 @@ public class DataTypePageContent extends APageContent {
 		container.setLayout(new GridLayout(3, false));
 		UIUtil.createLabel(container, Messages.RDDataTypePage_datatype);
 
-		Combo ttype = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
+		ttype = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
 		ttype.setItems(new String[] { Messages.RDDataTypePage_text, Messages.RDDataTypePage_number, Messages.RDDataTypePage_date, Messages.RDDataTypePage_datetime, Messages.RDDataTypePage_time });
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
@@ -206,7 +206,7 @@ public class DataTypePageContent extends APageContent {
 
 						return Status.OK_STATUS;
 					} catch (ParseException e) {
-						return ValidationStatus.error(Messages.DataTypePageContent_4 + format.replace("'", "")); //$NON-NLS-2$ //$NON-NLS-3$
+						return ValidationStatus.error(Messages.DataTypePageContent_4 + format.replace("'", ""));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 					}
 				}
 
@@ -217,6 +217,29 @@ public class DataTypePageContent extends APageContent {
 
 			maxUVSaGet = new UpdateValueStrategy().setAfterGetValidator(minMaxValidator);
 			maxUV = new UpdateValueStrategy();
+
+			if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY)) {
+				ttype.setEnabled(false);
+				if (tlenght != null)
+					tlenght.setEnabled(false);
+				if (tpattern != null)
+					tpattern.setEnabled(false);
+				if (tmin != null)
+					tmin.setEnabled(false);
+				if (tmax != null)
+					tmax.setEnabled(false);
+				if (bmin != null)
+					bmin.setEnabled(false);
+				if (bmax != null)
+					bmax.setEnabled(false);
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						page.setDescription(Messages.DataTypePageContent_2);
+					}
+				});
+			}
 		}
 
 		Binding b = bindingContext.bindValue(SWTObservables.observeText(tmin, SWT.Modify), PojoObservables.observeValue(rd, "minValue"), minUVSaGet, minUV); //$NON-NLS-1$ 
@@ -266,6 +289,7 @@ public class DataTypePageContent extends APageContent {
 	private Text tmax;
 	private Text tmin;
 	private Button bmin;
+	private Combo ttype;
 
 	class ShiftProxy {
 		private ResourceDescriptor rd;
