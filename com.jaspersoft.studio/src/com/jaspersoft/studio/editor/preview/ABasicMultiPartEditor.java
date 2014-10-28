@@ -1,11 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
- ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -16,26 +8,29 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
-import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 
 import com.jaspersoft.studio.editor.DeltaVisitor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class ABasicEditor extends EditorPart {
+public abstract class ABasicMultiPartEditor extends MultiPageEditorPart {
 	protected boolean listenResource;
 
-	public ABasicEditor(boolean listenResource) {
+	public ABasicMultiPartEditor(boolean listenResource) {
 		this.listenResource = listenResource;
 		if (listenResource) {
 			partListener = new ResourcePartListener();
@@ -46,11 +41,25 @@ public abstract class ABasicEditor extends EditorPart {
 	class ResourceTracker implements IResourceChangeListener {
 		public void resourceChanged(final IResourceChangeEvent event) {
 			switch (event.getType()) {
+			case IResourceChangeEvent.PRE_CLOSE:
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
+						for (int i = 0; i < pages.length; i++) {
+							// if (((FileEditorInput) xmlEditor.getEditorInput()).getFile().getProject().equals(event.getResource()))
+							// {
+							// IEditorPart editorPart = pages[i].findEditor(xmlEditor.getEditorInput());
+							// pages[i].closeEditor(editorPart, true);
+							// }
+						}
+					}
+				});
+				break;
 			case IResourceChangeEvent.PRE_DELETE:
 				break;
 			case IResourceChangeEvent.POST_CHANGE:
 				try {
-					DeltaVisitor visitor = new DeltaVisitor(ABasicEditor.this);
+					DeltaVisitor visitor = new DeltaVisitor(ABasicMultiPartEditor.this);
 					event.getDelta().accept(visitor);
 				} catch (CoreException e) {
 					UIUtils.showError(e);
@@ -67,10 +76,10 @@ public abstract class ABasicEditor extends EditorPart {
 		// If an open, unsaved file was deleted, query the user to either do a "Save As"
 		// or close the editor.
 		public void partActivated(IWorkbenchPart part) {
-			if (part != ABasicEditor.this)
+			if (part != ABasicMultiPartEditor.this)
 				return;
 			if (!((IFileEditorInput) getEditorInput()).getFile().exists())
-				getSite().getPage().closeEditor(ABasicEditor.this, false);
+				getSite().getPage().closeEditor(ABasicMultiPartEditor.this, false);
 		}
 
 		public void partBroughtToTop(IWorkbenchPart part) {
@@ -168,10 +177,6 @@ public abstract class ABasicEditor extends EditorPart {
 			jrContext = JasperReportsConfiguration.getDefaultJRConfig(file);
 	}
 
-	public void setJrContext(JasperReportsConfiguration jrContext) {
-		this.jrContext = jrContext;
-	}
-
 	@Override
 	public Object getAdapter(Class adapter) {
 		if (adapter == JasperReportsContext.class)
@@ -179,25 +184,21 @@ public abstract class ABasicEditor extends EditorPart {
 		return super.getAdapter(adapter);
 	}
 
-	protected boolean isDirty = false;
+	boolean closing = false;
 
-	@Override
-	public boolean isDirty() {
-		return isDirty;
-	}
+	protected void closeEditor() {
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			final IWorkbenchPage apage = activeWorkbenchWindow.getActivePage();
+			if (apage != null)
+				Display.getDefault().asyncExec(new Runnable() {
 
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
-	public void doSaveAs() {
-		isDirty = false;
-	}
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		isDirty = false;
+					@Override
+					public void run() {
+						closing = true;
+						apage.closeEditor(ABasicMultiPartEditor.this, false);
+					}
+				});
+		}
 	}
 }
