@@ -99,10 +99,10 @@ public class OpenInEditorAction extends Action {
 			final Object obj = p[i].getLastSegment();
 			if (isFileResource(obj)) {
 				if (preDownload((AFileResource) obj)) {
-					WorkspaceJob job = new WorkspaceJob("Open File In Editor") {
+					WorkspaceJob job = new WorkspaceJob(Messages.OpenInEditorAction_0) {
 						public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 							try {
-								monitor.beginTask("Open File In Editor", IProgressMonitor.UNKNOWN);
+								monitor.beginTask(Messages.OpenInEditorAction_0, IProgressMonitor.UNKNOWN);
 								dorun(obj, monitor);
 							} catch (Throwable e) {
 								UIUtils.showError(e);
