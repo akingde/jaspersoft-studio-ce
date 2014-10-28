@@ -404,18 +404,34 @@ public class RFileLocationPage extends JSSHelpWizardPage {
 					monitor.beginTask("Looking for resource", IProgressMonitor.UNKNOWN);
 					try {
 						List<String[]> paths = PublishUtil.loadPath(monitor, file);
+						String suri = null;
+						String spath = null;
+						String suser = null;
 						for (String[] p : paths) {
+							if (p[0].startsWith("JRSUSER."))
+								suser = p[1];
+							else {
+								suri = p[0];
+								spath = p[1];
+							}
+						}
+						if (suri != null) {
 							MServerProfile msp = null;
 							for (INode n : servers.getChildren()) {
-								if (n instanceof MServerProfile && ((MServerProfile) n).getValue().getUrl().equals(p[0])) {
+								if (n instanceof MServerProfile && ((MServerProfile) n).getValue().getUrl().equals(suri)) {
+									if (suser != null) {
+										String[] usr = suser.split("\\|");
+										if (!((MServerProfile) n).getValue().getUser().equals(usr[0]))
+											continue;
+										if (usr.length > 1 && !((MServerProfile) n).getValue().getOrganisation().equals(usr[1]))
+											continue;
+									}
 									msp = (MServerProfile) n;
 									break;
 								}
 							}
-							if (msp != null) {
-								if (selectResource(msp, p[1], monitor))
-									break;
-							}
+							if (msp != null)
+								selectResource(msp, spath, monitor);
 						}
 					} catch (Exception ce) {
 						ce.printStackTrace();

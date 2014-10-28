@@ -36,6 +36,7 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.utils.RDUtil;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -193,15 +194,23 @@ public class PublishUtil {
 		Map<QualifiedName, String> pmap = ifile.getPersistentProperties();
 		int substr = "JRSPATH.".length();
 		for (QualifiedName key : pmap.keySet()) {
-			if (key.getQualifier().equals(Activator.PLUGIN_ID) && key.getLocalName().startsWith("JRSPATH."))
-				paths.add(new String[] { key.getLocalName().substring(substr), pmap.get(key) });
+			String lname = key.getLocalName();
+			if (key.getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSPATH."))
+				paths.add(new String[] { lname.substring(substr), pmap.get(key) });
+			if (key.getQualifier().equals(Activator.PLUGIN_ID) && lname.startsWith("JRSUSER."))
+				paths.add(new String[] { lname, pmap.get(key) });
 		}
 		return paths;
 	}
 
 	public static void savePath(IFile ifile, MResource mres) throws CoreException {
-		String jrs = mres.getWsClient().getServerProfile().getUrl();
+		ServerProfile sp = mres.getWsClient().getServerProfile();
+		String jrs = sp.getUrl();
+		String user = sp.getUser();
+		if (!Misc.isNullOrEmpty(sp.getOrganisation()))
+			user += "|" + sp.getOrganisation();
 		String uri = mres.getValue().getUriString();
 		ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSPATH." + jrs), uri);
+		ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, "JRSUSER." + user), user);
 	}
 }
