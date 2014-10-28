@@ -44,7 +44,7 @@ public class JrxmlExporter extends AExporter {
 	}
 
 	@Override
-	public IFile exportToIFile(AFileResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (f != null) {
 			JasperReportsConfiguration jrConfig = res.getJasperConfiguration();
@@ -55,7 +55,7 @@ public class JrxmlExporter extends AExporter {
 				jrConfig.init(f);
 			try {
 				JasperDesign jd = JRXmlLoader.load(jrConfig, f.getContents());
-				setPropServerURL(res, jd);
+				setPropServerURL((AFileResource) res, jd);
 				setPropReportUnit(res, jd);
 				getResources(res, jd);
 

@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MResource;
 
 public class ImageExporter extends AExporter {
 
@@ -30,7 +30,7 @@ public class ImageExporter extends AExporter {
 	}
 
 	@Override
-	public IFile exportToIFile(AFileResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
+	public IFile exportToIFile(MResource res, ResourceDescriptor rd, String fkeyname, IProgressMonitor monitor) throws Exception {
 		IFile f = super.exportToIFile(res, rd, fkeyname, monitor);
 		if (path == null && f != null) {
 			String filename = f.getFullPath().toOSString();
@@ -55,7 +55,7 @@ public class ImageExporter extends AExporter {
 	}
 
 	@Override
-	public String getExtension(AFileResource res) {
+	public String getExtension(MResource res) {
 		return "";
 	}
 
