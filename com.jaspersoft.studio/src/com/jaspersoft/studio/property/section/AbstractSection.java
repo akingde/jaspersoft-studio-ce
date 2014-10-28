@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.section;
 
@@ -129,9 +125,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	/**
-	 * Return always the selected element, in many case this is equals
-	 * to getElement, but some section can override it to return something 
-	 * else. This method instead is thought to return always the selected element
+	 * Return always the selected element, in many case this is equals to getElement, but some section can override it to
+	 * return something else. This method instead is thought to return always the selected element
 	 */
 	@Override
 	public APropertyNode getSelectedElement() {
@@ -220,6 +215,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
 		this.parent = parent;
+		getWidgetFactory().paintBordersFor(parent);
 	}
 
 	public boolean isDisposed() {
@@ -267,24 +263,22 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 * Flag used to know if the section is refreshing or not
 	 */
 	private boolean isRefreshing = false;
-	
+
 	/**
-	 * Return if the section is refreshing or not, it is synchronized
-	 * to avoid concurrent modifications, due for example to a change property
-	 * call
+	 * Return if the section is refreshing or not, it is synchronized to avoid concurrent modifications, due for example
+	 * to a change property call
 	 */
-	public boolean isRefreshing(){
+	public boolean isRefreshing() {
 		synchronized (this) {
 			return isRefreshing;
 		}
 	}
-	
+
 	/**
-	 * set if the section is refreshing or not, it is synchronized
-	 * to avoid concurrent modifications, due for example to a change property
-	 * call
+	 * set if the section is refreshing or not, it is synchronized to avoid concurrent modifications, due for example to a
+	 * change property call
 	 */
-	public void setRefreshing(boolean value){
+	public void setRefreshing(boolean value) {
 		synchronized (this) {
 			isRefreshing = value;
 		}
