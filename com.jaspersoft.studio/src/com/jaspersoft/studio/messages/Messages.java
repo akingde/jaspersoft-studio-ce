@@ -767,6 +767,8 @@ public class Messages extends NLS {
 	public static String ImageSelectionDialog_Browse;
 	public static String ImageSelectionDialog_bytes;
 	public static String ImageContributionItem_actionName;
+	public static String ImageConverter_0;
+	public static String ImageConverter_1;
 	public static String ImageCreationDialog_CreationModeGroupTitle;
 	public static String ImageSelectionDialog_Dimension;
 	public static String ImageSelectionDialog_EnterExpression;

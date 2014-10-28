@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.jasper;
 
@@ -16,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
@@ -39,9 +36,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.editor.AMultiEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.KeyValue;
 import com.jaspersoft.studio.utils.CacheMap;
 import com.jaspersoft.studio.utils.ExpressionUtil;
@@ -150,17 +147,17 @@ public final class ImageConverter extends ElementConverter {
 
 		final KeyValue<String, Long> kv = new KeyValue<String, Long>(expr, null);
 		running.put(element, kv);
-		Job job = new Job("load image") {
+		Job job = new Job(Messages.ImageConverter_0) {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					final Renderable r = getRenderable(jrContext, image, printImage, key);
-					Display.getDefault().asyncExec(new Runnable() {
+					UIUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
 							cache.put(element, r);
 							kv.value = System.currentTimeMillis();
-							PropertyChangeEvent event = new PropertyChangeEvent(image, JRDesignImage.PROPERTY_EXPRESSION, null,  expr);
+							PropertyChangeEvent event = new PropertyChangeEvent(image, JRDesignImage.PROPERTY_EXPRESSION, null, expr);
 							AMultiEditor.refreshElement(jrContext, event);
 						}
 
@@ -197,7 +194,7 @@ public final class ImageConverter extends ElementConverter {
 				imgCache.put(key, r);
 			} catch (JRException e) {
 				if (log.isDebugEnabled())
-					log.debug("Creating location renderer for converted image failed.", e);
+					log.debug(Messages.ImageConverter_1, e);
 			}
 		}
 		if (r == null)
@@ -218,7 +215,7 @@ public final class ImageConverter extends ElementConverter {
 						imageElement.getOnErrorTypeValue(), false);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
-				log.debug("Creating icon renderer for converted image failed.", e);
+				log.debug(Messages.ImageConverter_1, e);
 		}
 		return noImage;
 	}
