@@ -36,13 +36,11 @@ import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -258,21 +256,29 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		Builder req = tgt.request("application/repository." + rtype + "+" + FORMAT);
-		ClientResource<?> crl = toObj(connector.get(req, monitor), WsTypes.INST().getType(rtype), monitor);
-		if (crl != null) {
-			if (f != null && crl instanceof ClientFile) {
-				ClientFile cf = (ClientFile) crl;
-				tgt = target.path("resources" + uri);
-				try {
-					req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
-					readFile(connector.get(req, monitor), f, monitor);
-				} catch (HttpResponseException e) {
-					if (e.getStatusCode() == 500)
-						;// jrs 5.5 returns 500 if file is not existing, a bug
-					// for newer versions, we should show the error
+		Object obj = toObj(connector.get(req, monitor), WsTypes.INST().getType(rtype), monitor);
+		if (obj instanceof ClientResource<?>) {
+			ClientResource<?> crl = (ClientResource<?>) obj;
+			if (crl != null) {
+				if (f != null && crl instanceof ClientFile) {
+					ClientFile cf = (ClientFile) crl;
+					tgt = target.path("resources" + uri);
+					try {
+						req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
+						readFile(connector.get(req, monitor), f, monitor);
+					} catch (HttpResponseException e) {
+						if (e.getStatusCode() == 500)
+							;// jrs 5.5 returns 500 if file is not existing, a bug
+						// for newer versions, we should show the error
+					}
 				}
+				return Rest2Soap.getRD(this, crl);
 			}
-			return Rest2Soap.getRD(this, crl);
+		} else if (obj instanceof String) {
+			rd.setData(((String) obj).getBytes());
+			rd.setIsReference(false);
+			rd.setHasData(true);
+			return rd;
 		}
 		return null;
 	}

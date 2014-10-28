@@ -63,6 +63,10 @@ public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 	protected <T> Class<T> checkClazz(Response res, Class<T> clazz) {
 		if (clazz == null) {
 			String type = res.getHeaderString("Content-Type");
+			if (type.equals("application/xml"))
+				return (Class<T>) String.class;
+			if (type.equals("text/plain"))
+				return (Class<T>) String.class;
 			int sind = type.indexOf(".");
 			int eind = type.indexOf("+");
 			if (sind >= 0 && eind >= 0) {
