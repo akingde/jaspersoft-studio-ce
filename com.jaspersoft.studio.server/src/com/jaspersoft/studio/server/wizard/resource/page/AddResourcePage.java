@@ -188,8 +188,8 @@ public class AddResourcePage extends WizardPage {
 
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
-				if (!isSoap(root))
-					new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
+				// if (!isSoap(root))
+				// new MRDashboard(root, MRDashboard.createDescriptor(parent), -1);
 
 				MRoot oroot = new MRoot(root, null) {
 					public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

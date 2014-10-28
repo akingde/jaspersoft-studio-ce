@@ -58,6 +58,7 @@ Eclipse-RegisterBuddy: com.jaspersoft.studio
 Eclipse-BuddyPolicy: registered
 Export-Package: com.jaspersoft.ireport.jasperserver.ws,
  com.jaspersoft.jasperserver.api,
+ com.jaspersoft.jasperserver.api.metadata.common.domain,
  com.jaspersoft.jasperserver.api.metadata.user.domain,
  com.jaspersoft.jasperserver.api.metadata.xml.domain.impl,
  com.jaspersoft.jasperserver.dto.authority,
