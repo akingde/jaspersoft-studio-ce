@@ -235,10 +235,12 @@ public class ParametersTable {
 				JRDesignParameter field = (JRDesignParameter) tableItem.getData();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					String old = field.getName();
-					if (dataset.getParametersMap().get(old) != null) {
-						dataset.getParametersMap().remove(old);
+					JRDesignParameter oldParam = (JRDesignParameter) dataset.getParametersMap().get(old);
+					if (oldParam != null) {
 						field.setName((String) value);
-						dataset.getParametersMap().put(field.getName(), field);
+						oldParam.setName((String) value);
+						dataset.getParametersMap().remove(old);
+						dataset.getParametersMap().put(field.getName(), oldParam);
 						propertyChangeSupport.firePropertyChange(new java.beans.PropertyChangeEvent(field,
 								JRDesignParameter.PROPERTY_NAME, old, field.getName()));
 					}

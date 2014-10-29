@@ -101,8 +101,7 @@ public class ServerManager {
 	}
 
 	public static List<ServerProfile> getServerList() {
-		if (serverProfiles.isEmpty())
-			loadServerProfiles(new MServers(null));
+		getServerProfiles();
 		List<ServerProfile> servers = new ArrayList<ServerProfile>();
 		for (MServerProfile ms : serverProfiles)
 			servers.add(ms.getValue());
