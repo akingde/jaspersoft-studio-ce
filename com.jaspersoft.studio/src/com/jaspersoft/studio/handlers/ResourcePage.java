@@ -370,7 +370,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 */
 	private String evalResourceName(JRExpression exp)
 	{
-		return ExpressionUtil.cachedExpressionEvaluation(exp, jrContext);
+		return ExpressionUtil.cachedExpressionEvaluationString(exp, jrContext);
 	}
 	
 	

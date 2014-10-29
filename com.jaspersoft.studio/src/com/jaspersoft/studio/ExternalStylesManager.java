@@ -294,7 +294,7 @@ public class ExternalStylesManager {
 		try{
 			//Check first if there are previous failed attempt to evaluate the expression
 			if (!isNotValuable(projectPath, expString)){
-				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluation(styleExpression, jConfig); 
+				evaluatedExpression =  ExpressionUtil.cachedExpressionEvaluationString(styleExpression, jConfig); 
 				if (evaluatedExpression == null){
 					//The expression is not valuable, add it to the map
 					addNotValuableExpression(projectPath, expString);

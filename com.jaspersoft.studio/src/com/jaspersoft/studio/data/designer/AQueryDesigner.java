@@ -16,6 +16,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -99,6 +100,14 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 	}
 
 	public void setParameters(List<JRDesignParameter> params) {
+		for (JRDesignParameter dp : params) {
+			if (!jDataset.getParametersMap().containsKey(dp.getName()))
+				try {
+					jDataset.addParameter(dp);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+		}
 		container.setParameters(params);
 	}
 
