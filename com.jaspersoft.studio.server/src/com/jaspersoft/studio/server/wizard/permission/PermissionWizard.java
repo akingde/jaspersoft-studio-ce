@@ -39,6 +39,7 @@ public class PermissionWizard extends Wizard implements SelectionListener {
 
 	@Override
 	public boolean performFinish() {
+		page0.setPermissions();
 		return true;
 	}
 
