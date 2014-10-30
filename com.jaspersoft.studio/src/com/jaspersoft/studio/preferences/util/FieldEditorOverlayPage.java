@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.preferences.util;
 
@@ -363,7 +359,15 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 	 * @see org.eclipse.jface.preference.IPreferencePage#performOk()
 	 */
 	public boolean performOk() {
-		boolean result = super.performOk();
+		boolean result = true;
+		if (useResourceSettingsButton != null) {
+			if (useResourceSettingsButton.getSelection())
+				result = super.performOk();
+		} else if (useProjectSettingsButton != null) {
+			if (useProjectSettingsButton.getSelection())
+				result = super.performOk();
+		} else
+			result = super.performOk();
 		if (result && isPropertyPage()) {
 			IResource resource = JDTUtils.getAdaptedObject(getElement(), IResource.class);
 			if (resource != null) {
@@ -378,12 +382,10 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 					for (IEclipsePreferences ep : overlayStore.getPreferenceNodes(true)) {
 						try {
 							if (useResourceSettingsButton != null && !useResourceSettingsButton.getSelection()
-									&& ep instanceof ResourcePreferences) {
+									&& ep instanceof ResourcePreferences)
 								ep.clear();
-							}
-							if (!useProjectSettingsButton.getSelection() && ep instanceof ProjectPreferences) {
+							if (!useProjectSettingsButton.getSelection() && ep instanceof ProjectPreferences)
 								ep.clear();
-							}
 							ep.flush();
 						} catch (BackingStoreException e) {
 							JaspersoftStudioPlugin.getInstance().logError("An error occurred while try to store back preferences", e);
