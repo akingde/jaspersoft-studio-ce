@@ -98,8 +98,13 @@ public class ParameterUtil {
 			outmap.put(key, new SimpleValueParameter(inmap.get(key)));
 		for (JRParameter p : dataset.getParameters()) {
 			SimpleValueParameter svp = new SimpleValueParameter(inmap.get(p.getName()));
-			if (inmap.get(p.getName()) == null)
-				svp.setValueClass(p.getValueClass());
+			svp.setValueClassName(p.getValueClassName());
+			svp.setNestedTypeName(p.getNestedTypeName());
+			svp.setDefaultValueExpression(p.getDefaultValueExpression());
+			svp.setForPrompting(p.isForPrompting());
+			svp.setSystemDefined(p.isSystemDefined());
+			// if (inmap.get(p.getName()) == null)
+			// svp.setValueClass(p.getValueClass());
 			outmap.put(p.getName(), svp);
 		}
 		outmap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(inmap));
