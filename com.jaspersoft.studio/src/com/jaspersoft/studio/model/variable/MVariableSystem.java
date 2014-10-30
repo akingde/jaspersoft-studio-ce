@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.variable;
 
@@ -17,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -133,11 +130,11 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		//Set into the validator the actual reference
+		// Set into the validator the actual reference
 		validator.setTargetNode(this);
 	}
 
@@ -151,7 +148,8 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		validator = new VariableNameValidator();
 		validator.setTargetNode(this);
-		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name, validator);
+		JSSTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,
+				Messages.common_name, validator);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
@@ -164,7 +162,6 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 
 		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -182,7 +179,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (JRDesignVariable.PROPERTY_NAME.equals(evt.getPropertyName())){
+		if (JRDesignVariable.PROPERTY_NAME.equals(evt.getPropertyName())) {
 			JRDesignDataset d = ModelUtils.getDataset(this);
 			JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 			if (d != null) {
@@ -192,7 +189,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		}
 		super.propertyChange(evt);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -202,12 +199,21 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		if (!isEditable())
 			return;
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
-		if (id.equals(JRDesignVariable.PROPERTY_NAME)){
+		if (id.equals(JRDesignVariable.PROPERTY_NAME)) {
 			if (!value.equals("")) {
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				for (JRVariable p : d.getVariablesList()) {
+					if (p == jrVariable)
+						continue;
+					if (p.getName().equals(value)) {
+						// warn?
+						return;
+					}
+				}
 				jrVariable.setName((String) value);
 			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME))
-				jrVariable.setValueClassName((String) value);
+			jrVariable.setValueClassName((String) value);
 	}
 
 	/**
@@ -223,7 +229,7 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDesign.getVariablesMap(), "Variable_")); //$NON-NLS-1$
 		return jrDesignVariable;
 	}
-	
+
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);

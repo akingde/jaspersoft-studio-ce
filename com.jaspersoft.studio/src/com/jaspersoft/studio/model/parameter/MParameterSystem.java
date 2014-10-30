@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.parameter;
 
@@ -17,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -136,11 +133,11 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
-	
+
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		//Set into the validator the actual reference
+		// Set into the validator the actual reference
 		validator.setTargetNode(this);
 	}
 
@@ -154,7 +151,8 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		validator = new ParameterNameValidator();
 		validator.setTargetNode(this);
-		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.common_name, validator);
+		JSSValidatedTextPropertyDescriptor nameD = new JSSValidatedTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME,
+				Messages.common_name, validator);
 		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
 
@@ -181,10 +179,10 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 			return jrParameter.getValueClassName();
 		return null;
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (JRDesignParameter.PROPERTY_NAME.equals(evt.getPropertyName())){
+		if (JRDesignParameter.PROPERTY_NAME.equals(evt.getPropertyName())) {
 			JRDesignDataset d = ModelUtils.getDataset(this);
 			JRDesignParameter jrParameter = (JRDesignParameter) getValue();
 			if (d != null) {
@@ -204,15 +202,24 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		if (!isEditable())
 			return;
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
-		if (id.equals(JRDesignParameter.PROPERTY_NAME)){
+		if (id.equals(JRDesignParameter.PROPERTY_NAME)) {
 			if (!value.equals("")) {
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				for (JRParameter p : d.getParametersList()) {
+					if (p == jrParameter)
+						continue;
+					if (p.getName().equals(value)) {
+						// warn?
+						return;
+					}
+				}
 				jrParameter.setName((String) value);
-			} 
-		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
-				jrParameter.setValueClassName((String) value);
+			}
+		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)) {
+			jrParameter.setValueClassName((String) value);
 		}
 	}
-	
+
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);

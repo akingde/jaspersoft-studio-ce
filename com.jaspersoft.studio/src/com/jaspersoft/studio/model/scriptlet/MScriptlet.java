@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.scriptlet;
 
@@ -186,8 +182,16 @@ public class MScriptlet extends APropertyNode implements ICopyable, IDragable {
 		JRDesignScriptlet jrField = (JRDesignScriptlet) getValue();
 		if (id.equals(JRDesignScriptlet.PROPERTY_NAME)) {
 			if (!value.equals("")) {
-				jrField.setName((String) value);
 				JRDesignDataset d = ModelUtils.getDataset(this);
+				for (JRScriptlet p : d.getScriptlets()) {
+					if (p == jrField)
+						continue;
+					if (p.getName().equals(value)) {
+						// warn?
+						return;
+					}
+				}
+				jrField.setName((String) value);
 				if (d != null) {
 					d.getScriptletsMap().remove(jrField);
 					d.getScriptletsMap().put(jrField.getName(), jrField);

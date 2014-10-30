@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -207,7 +208,7 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (JRDesignParameter.PROPERTY_NAME.equals(evt.getPropertyName())) {
-			JRDesignField jrField = (JRDesignField) getValue();
+			JRDesignField jrField = (JRDesignField) getValue(); 
 			JRDesignDataset d = ModelUtils.getDataset(this);
 			if (d != null) {
 				d.getFieldsMap().remove(evt.getOldValue());
@@ -226,6 +227,15 @@ public class MField extends APropertyNode implements ICopyable, IDragable {
 		JRDesignField jrField = (JRDesignField) getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_NAME)) {
 			if (!value.equals("")) {
+				JRDesignDataset d = ModelUtils.getDataset(this);
+				for (JRField p : d.getFieldsList()) {
+					if (p == jrField)
+						continue;
+					if (p.getName().equals(value)) {
+						// warn?
+						return;
+					}
+				}
 				jrField.setName((String) value);
 			}
 		} else if (id.equals(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME)){
