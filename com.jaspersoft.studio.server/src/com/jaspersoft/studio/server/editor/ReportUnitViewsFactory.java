@@ -18,20 +18,12 @@ import java.util.Set;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
-import com.jaspersoft.studio.editor.preview.view.report.file.CSVViewer;
 import com.jaspersoft.studio.editor.preview.view.report.file.TextFileViewer;
-import com.jaspersoft.studio.editor.preview.view.report.file.XMLViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.ABrowserViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.DocxViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.OdsViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.PdfViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
-import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 
 public class ReportUnitViewsFactory extends AViewsFactory {
-	public static final String DEFAULT = Argument.RUN_OUTPUT_FORMAT_HTML;
+	public static final String DEFAULT = Argument.RUN_OUTPUT_FORMAT_JRPRINT;
 
 	private static LinkedHashMap<String, Class<? extends APreview>> pcmap = new LinkedHashMap<String, Class<? extends APreview>>();
 	static {

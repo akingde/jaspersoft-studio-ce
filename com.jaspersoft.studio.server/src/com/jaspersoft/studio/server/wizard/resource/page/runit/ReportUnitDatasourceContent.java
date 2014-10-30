@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.wizard.resource.page.runit;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,7 +21,10 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MAdHocDataView;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.protocol.Feature;
+import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionComposite;
 import com.jaspersoft.studio.server.publish.wizard.page.DatasourceSelectionListener;
@@ -76,7 +81,19 @@ public class ReportUnitDatasourceContent extends APageContent implements Datasou
 
 	@Override
 	protected void rebind() {
+		final ResourceDescriptor rd = res.getValue();
+		final IConnection con = getWsClient();
+		if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY) && res instanceof MAdHocDataView) {
+			datasourceSelectionCmp.setEnabled(false);
+			UIUtils.getDisplay().asyncExec(new Runnable() {
 
+				@Override
+				public void run() {
+					setPageComplete(false);
+					page.setDescription("AdHoc Views are not editable with SOAP connections.");
+				}
+			});
+		}
 	}
 
 	@Override

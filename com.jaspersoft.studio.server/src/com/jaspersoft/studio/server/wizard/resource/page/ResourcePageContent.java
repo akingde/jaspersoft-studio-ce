@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.messages.Messages;
+import com.jaspersoft.studio.server.model.MAdHocDataView;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.protocol.Feature;
 import com.jaspersoft.studio.server.protocol.IConnection;
@@ -224,6 +225,23 @@ public class ResourcePageContent extends APageContent {
 		bindingContext.bindValue(SWTObservables.observeText(tdesc, SWT.Modify), PojoObservables.observeValue(rd, "description")); //$NON-NLS-1$
 		bindingContext.updateTargets();
 //		bindingContext.updateModels();
+		 
+		final IConnection con = getWsClient();
+		if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY) && res instanceof MAdHocDataView) {
+			ttype.setEnabled(false);
+			if (tname != null)
+				tname.setEnabled(false);
+			if (tdesc != null)
+				tdesc.setEnabled(false); 
+			UIUtils.getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					setPageComplete(false);
+					page.setDescription("AdHoc Views are not editable with SOAP connections.");
+				}
+			});
+		}
 	}
 
 	@Override
