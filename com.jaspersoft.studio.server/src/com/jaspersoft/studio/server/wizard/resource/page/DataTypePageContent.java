@@ -157,6 +157,7 @@ public class DataTypePageContent extends APageContent {
 							bindingContext.updateModels();
 						}
 					});
+					setProtocolSpecific();
 				}
 			}
 		});
@@ -206,7 +207,7 @@ public class DataTypePageContent extends APageContent {
 
 						return Status.OK_STATUS;
 					} catch (ParseException e) {
-						return ValidationStatus.error(Messages.DataTypePageContent_4 + format.replace("'", ""));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+						return ValidationStatus.error(Messages.DataTypePageContent_4 + format.replace("'", "")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 					}
 				}
 
@@ -218,28 +219,7 @@ public class DataTypePageContent extends APageContent {
 			maxUVSaGet = new UpdateValueStrategy().setAfterGetValidator(minMaxValidator);
 			maxUV = new UpdateValueStrategy();
 
-			if (!rd.getIsNew() && !con.isSupported(Feature.SEARCHREPOSITORY)) {
-				ttype.setEnabled(false);
-				if (tlenght != null)
-					tlenght.setEnabled(false);
-				if (tpattern != null)
-					tpattern.setEnabled(false);
-				if (tmin != null)
-					tmin.setEnabled(false);
-				if (tmax != null)
-					tmax.setEnabled(false);
-				if (bmin != null)
-					bmin.setEnabled(false);
-				if (bmax != null)
-					bmax.setEnabled(false);
-				UIUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						page.setDescription(Messages.DataTypePageContent_2);
-					}
-				});
-			}
+			setProtocolSpecific();
 		}
 
 		Binding b = bindingContext.bindValue(SWTObservables.observeText(tmin, SWT.Modify), PojoObservables.observeValue(rd, "minValue"), minUVSaGet, minUV); //$NON-NLS-1$ 
@@ -250,6 +230,35 @@ public class DataTypePageContent extends APageContent {
 		bindingContext.bindValue(SWTObservables.observeSelection(bmax), PojoObservables.observeValue(rd, "strictMax")); //$NON-NLS-1$
 
 		bindingContext.bindValue(observeDataTypeComboSelection, PojoObservables.observeValue(getProxy(rd), "dataType")); //$NON-NLS-1$ 
+	}
+
+	private void setProtocolSpecific() {
+		final ResourceDescriptor rd = res.getValue();
+		final IConnection con = getWsClient();
+		if (!con.isSupported(Feature.SEARCHREPOSITORY)) {
+			if (tlenght != null)
+				tlenght.setEnabled(false);
+			if (tpattern != null)
+				tpattern.setEnabled(false);
+			if (tmin != null)
+				tmin.setEnabled(false);
+			if (tmax != null)
+				tmax.setEnabled(false);
+			if (bmin != null)
+				bmin.setEnabled(false);
+			if (bmax != null)
+				bmax.setEnabled(false);
+			if (!rd.getIsNew()) {
+				ttype.setEnabled(false);
+				UIUtils.getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						page.setDescription(Messages.DataTypePageContent_2);
+					}
+				});
+			}
+		}
 	}
 
 	private IValidator tLengValidator = new IValidator() {
