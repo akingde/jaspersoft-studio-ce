@@ -164,8 +164,14 @@ public class ParametersTable {
 		final DeleteButton delb = new DeleteButton() {
 			@Override
 			protected void afterElementDeleted(Object element) {
-				super.afterElementDeleted(element);
-				dataset.removeParameter((JRDesignParameter) element);
+				JRParameter todel = null;
+				for (JRParameter p : dataset.getParametersList())
+					if (p.getName().equals(((JRDesignParameter) element).getName())) {
+						todel = p;
+						break;
+					}
+				if (todel != null)
+					dataset.removeParameter(todel);
 			}
 		};
 		delb.createDeleteButton(bGroup, tviewer);

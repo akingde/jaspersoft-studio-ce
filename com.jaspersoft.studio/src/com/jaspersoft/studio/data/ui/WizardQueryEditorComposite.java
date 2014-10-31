@@ -16,8 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -64,7 +64,7 @@ public class WizardQueryEditorComposite extends SimpleQueryWizardDataEditorCompo
 			}
 
 			@Override
-			public void setParameters(List<JRDesignParameter> params) {
+			public void setParameters(List<JRParameter> params) {
 
 			}
 

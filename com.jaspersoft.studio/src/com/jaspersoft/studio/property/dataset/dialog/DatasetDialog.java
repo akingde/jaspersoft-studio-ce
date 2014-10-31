@@ -187,7 +187,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 			}
 
 			@Override
-			public void setParameters(List<JRDesignParameter> params) {
+			public void setParameters(List<JRParameter> params) {
 				DatasetDialog.this.setParameters(params);
 			}
 
@@ -246,7 +246,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 		ftable.setFields(new ArrayList<JRDesignField>(0));
 	}
 
-	public void setParameters(List<JRDesignParameter> fields) {
+	public void setParameters(List<JRParameter> fields) {
 		ptable.setFields(fields);
 	}
 

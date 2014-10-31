@@ -17,9 +17,9 @@ import java.util.Set;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.operation.IRunnableContext;
@@ -99,8 +99,8 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 		container.setFields(toadd);
 	}
 
-	public void setParameters(List<JRDesignParameter> params) {
-		for (JRDesignParameter dp : params) {
+	public void setParameters(List<JRParameter> params) {
+		for (JRParameter dp : params) {
 			if (!jDataset.getParametersMap().containsKey(dp.getName()))
 				try {
 					jDataset.addParameter(dp);
