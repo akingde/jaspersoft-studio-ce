@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
@@ -48,7 +44,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
 
 public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
-	
+
 	/**
 	 * Key of the data adapter storage
 	 */
@@ -61,9 +57,10 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
 	@Override
 	public void findAll() {
-		//Do the silent conversion to the new storage system
-		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS, convertDataAdapterName);
-		//Read the configuration from the file storage
+		// Do the silent conversion to the new storage system
+		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS,
+				convertDataAdapterName);
+		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
 			try {
@@ -77,8 +74,12 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
 				if (factory == null) {
 					// we should at least log a warning here....
-					JaspersoftStudioPlugin.getInstance().getLog().log(new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
-																															Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
+					JaspersoftStudioPlugin
+							.getInstance()
+							.getLog()
+							.log(
+									new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
+											Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
 					continue;
 				}
 
@@ -101,7 +102,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				try {
 					in = urls.nextElement().openStream();
 					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in, null);
-					addDataAdapter(null, dad);
+					addDataAdapter(dad.getTitle().replaceAll(" ", "_") + ".xml", dad);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
@@ -110,13 +111,13 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			}
 		}
 		for (DataAdapterDescriptor dad : JaspersoftStudioPlugin.getDefaultDAManager().getDefaultDAs()) {
-			addDataAdapter(null, dad);
+			addDataAdapter(dad.getTitle().replaceAll(" ", "_") + ".xml", dad);
 		}
 	}
 
 	/**
-	 * Save an element on the data adapter file storage. The url is the name 
-	 * of the resource that will be created inside the storage
+	 * Save an element on the data adapter file storage. The url is the name of the resource that will be created inside
+	 * the storage
 	 */
 	@Override
 	public void save(String url, DataAdapterDescriptor adapter) {
@@ -138,28 +139,28 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	}
 
 	/**
-	 * Remove a data adapter from the storage, the url is the name of
-	 * the resource to remove
+	 * Remove a data adapter from the storage, the url is the name of the resource to remove
 	 */
 	@Override
 	public void delete(String url) {
 		daDescriptors.remove(url);
 		ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, url);
 	}
-	
+
 	/**
-	 * Add a data adapter from the file storage. As data adapter file name
-	 * is used the url, manipulated if necessary to get a valid an unique file name
+	 * Add a data adapter from the file storage. As data adapter file name is used the url, manipulated if necessary to
+	 * get a valid an unique file name
 	 */
 	@Override
 	public void addDataAdapter(String url, DataAdapterDescriptor adapter) {
-		if (daDescriptors.containsKey(url)){
-			//it is an edit operation, replace its file
+		if (daDescriptors.containsKey(url)) {
+			// it is an edit operation, replace its file
 			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, url);
 			save(url, adapter);
 			daDescriptors.put(url, adapter);
-		} else {		
-			if (url == null || url.isEmpty()) url = adapter.getTitle();
+		} else {
+			if (url == null || url.isEmpty())
+				url = adapter.getTitle();
 			url = convertDataAdapterName.iterateForUniqueName(url);
 			super.addDataAdapter(url, adapter);
 			save(url, adapter);
