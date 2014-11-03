@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.property.dataset.wizard;
 
@@ -49,20 +45,20 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 	protected TableViewer rightTView;
 	protected TableViewer leftTView;
 	protected Composite mainComposite;
-	
+
 	/**
 	 * Set of buttons to manage the list...
 	 */
 	private MoveT2TButtons mt2t = null;
 	private ListOrderButtons lob = null;
-	
+
 	private JrxmlTemplateBundle containerBundle;
 
 	public WizardFieldsDynamicPage(String key) {
 		super(key); //$NON-NLS-1$
 		setTitle(Messages.common_fields);
 		setDescription(Messages.WizardFieldsPage_description);
-	
+
 		inFields = new ArrayList<Object>();
 		outFields = new ArrayList<Object>();
 	}
@@ -125,29 +121,28 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 		rightTView.setContentProvider(new ListContentProvider());
 		setLabelProvider(rightTView);
 		attachCellEditors(rightTView, rightTable);
-		
 
 		createOrderButtons(mainComposite);
-		
+
 		leftTView.setInput(inFields);
 		rightTView.setInput(outFields);
-		
+
 		mt2t = new MoveT2TButtons();
 		mt2t.createButtons(bGroup, leftTView, rightTView);
-		
+
 		// Add listener to check for changes in the list...
 		mt2t.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void changed(ChangeEvent event) {
-					// When the set of selected fields changes, we need to
-				  // reflect the selection in the settings
-				  // stored by this page...
-					storeSettings();
-					fireChangeEvent();
+				// When the set of selected fields changes, we need to
+				// reflect the selection in the settings
+				// stored by this page...
+				storeSettings();
+				fireChangeEvent();
 			}
 		});
-		
+
 	}
 
 	protected void attachCellEditors(TableViewer viewer, Composite parent) {
@@ -181,20 +176,20 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		lob = new ListOrderButtons();
-		
+
 		lob.createOrderButtons(bGroup, rightTView);
-		
+
 		lob.addChangeListener(new ChangeListener() {
-			
-				@Override
-				public void changed(ChangeEvent event) {
-						// When the set of selected fields changes, we need to
-					  // reflect the selection in the settings
-					  // stored by this page...
-						storeSettings();
-						fireChangeEvent();
-				}
-			});
+
+			@Override
+			public void changed(ChangeEvent event) {
+				// When the set of selected fields changes, we need to
+				// reflect the selection in the settings
+				// stored by this page...
+				storeSettings();
+				fireChangeEvent();
+			}
+		});
 	}
 
 	/**
@@ -203,8 +198,7 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if (visible == true)
-		{
+		if (visible == true) {
 			loadSettings();
 			// We also need to store the settings now
 			// in case somethig has changed during loading
@@ -212,108 +206,89 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 			fireChangeEvent();
 		}
 	}
-	
 
 	/**
-	 * This procedure initialize the dialog page with the list of available objects.
-	 * This implementation looks for object set in the map as DISCOVERED_FIELDS.
+	 * This procedure initialize the dialog page with the list of available objects. This implementation looks for object
+	 * set in the map as DISCOVERED_FIELDS.
 	 * 
 	 */
 	public void loadSettings() {
-		
-		if (getSettings() == null) return;
-		
-		if (getSettings().containsKey( WizardDataSourceDynamicPage.DISCOVERED_FIELDS))
-		{
-			setAvailableFields( (List<?>)(getSettings().get( WizardDataSourceDynamicPage.DISCOVERED_FIELDS )) );
-		}
-		else
-		{
+
+		if (getSettings() == null)
+			return;
+
+		if (getSettings().containsKey(WizardDataSourceDynamicPage.DISCOVERED_FIELDS)) {
+			setAvailableFields((List<?>) (getSettings().get(WizardDataSourceDynamicPage.DISCOVERED_FIELDS)));
+		} else {
 			setAvailableFields(null);
 		}
 	}
-	
-	
+
 	/**
-	 * Every time a new selection occurs, the selected fields are stored in the settings map
-	 * with the key WizardDataSourcePage.DATASET_FIELDS
+	 * Every time a new selection occurs, the selected fields are stored in the settings map with the key
+	 * WizardDataSourcePage.DATASET_FIELDS
 	 */
-	public void storeSettings()
-	{
-		if (getWizard() instanceof JSSWizard &&
-				getWizard() != null)
-			{
-				Map<String, Object> settings = ((JSSWizard)getWizard()).getSettings();
-			
-				if (settings == null) return;
-				
-				settings.put(WizardDataSourceDynamicPage.DATASET_FIELDS,  getSelectedFields() ); 
-			}
-		
+	public void storeSettings() {
+		if (getWizard() instanceof JSSWizard && getWizard() != null) {
+			Map<String, Object> settings = ((JSSWizard) getWizard()).getSettings();
+
+			if (settings == null)
+				return;
+
+			settings.put(WizardDataSourceDynamicPage.DATASET_FIELDS, getSelectedFields());
+		}
+
 	}
-	
-	
+
 	/**
-	 * Set the list of available fields.
-	 * Right column fields with the current selection is preserved where possible...
+	 * Set the list of available fields. Right column fields with the current selection is preserved where possible...
 	 * 
 	 * @param inFields
 	 */
 	public void setAvailableFields(List<?> fields) {
-		
-		if (fields == null)
-		{
+
+		if (fields == null) {
 			inFields.clear();
 			outFields.clear();
-		}
-		else
-		{
+		} else {
 			// Check the selection and remove the object which are not in the inFields list...
 			inFields.clear();
 			inFields.addAll(fields);
 
 			// check is performed by a special overrideable function..
 			// We assume that objects with the same name are ok.
-			for (int i=0; i<outFields.size(); ++i)
-			{
+			for (int i = 0; i < outFields.size(); ++i) {
 				Object obj = findElement(outFields.get(i), inFields);
-				
-				if (obj != null)
-				{
+
+				if (obj != null) {
 					inFields.remove(obj);
-				}
-				else
-				{
+				} else {
 					outFields.remove(i);
 					i--;
 				}
 			}
 		}
-		
+
 		rightTView.refresh();
 		leftTView.refresh();
-		
+
 	}
 
-	
 	/**
-	 * This function checks if a particular right element is in the provided list, 
-	 * and which is the matching element in that list.
+	 * This function checks if a particular right element is in the provided list, and which is the matching element in
+	 * that list.
 	 * 
-	 * This implementation is based on the string value returned by
-	 * left and right getText label providers
+	 * This implementation is based on the string value returned by left and right getText label providers
 	 * 
 	 * @param object
 	 * @param fields
 	 * @return
 	 */
 	protected Object findElement(Object object, List<?> fields) {
-		
-		String objName = ((LabelProvider)rightTView.getLabelProvider()).getText(object);
-		for (Object obj : fields)
-		{
-			if (((LabelProvider)leftTView.getLabelProvider()).getText(obj).equals(objName))
-			{
+
+		String objName = ((LabelProvider) rightTView.getLabelProvider()).getText(object);
+		for (Object obj : fields) {
+			if (((LabelProvider) leftTView.getLabelProvider()).getText(obj).equals(objName)) {
 				return obj;
 			}
 		}
@@ -324,7 +299,7 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 	 * @return the inFields
 	 */
 	public List<Object> getAvailableFields() {
-		return new ArrayList<Object>( inFields );
+		return new ArrayList<Object>(inFields);
 	}
 
 	/**
@@ -333,9 +308,9 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 	 * @return the outFields
 	 */
 	public List<Object> getSelectedFields() {
-		return new ArrayList<Object>( outFields );
+		return new ArrayList<Object>(outFields);
 	}
-	
+
 	/**
 	 * Return the next dynamic page
 	 * 
@@ -343,10 +318,13 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 	 */
 	@Override
 	public IWizardPage getNextPage() {
-		containerBundle.getStep3().setWizard(getWizard());
-		return containerBundle.getStep3();
+		if (containerBundle != null) {
+			containerBundle.getStep3().setWizard(getWizard());
+			return containerBundle.getStep3();
+		}
+		return super.getNextPage();
 	}
-	
+
 	/**
 	 * Return the previous dynamic page
 	 * 
@@ -354,10 +332,13 @@ public class WizardFieldsDynamicPage extends JSSWizardPage {
 	 */
 	@Override
 	public IWizardPage getPreviousPage() {
-		containerBundle.getStep1().setWizard(getWizard());
-		return containerBundle.getStep1();
+		if (containerBundle != null) {
+			containerBundle.getStep1().setWizard(getWizard());
+			return containerBundle.getStep1();
+		}
+		return super.getPreviousPage();
 	}
-	
+
 	/**
 	 * To flip to the next page is required only that the page is completed
 	 */
