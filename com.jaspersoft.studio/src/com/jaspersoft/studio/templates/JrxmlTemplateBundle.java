@@ -115,7 +115,7 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 			ReportBundle reportBundle = templateEngine.generateReportBundle(templateBundle, templateSettings, jConfig);
 
 			// Save the data adapter used...
-			if (step1.getDataAdapter() != null) {
+			if (step1 !=null && step1.getDataAdapter() != null) {
 				Object props = settings.get(WizardDataSourceDynamicPage.DATASET_PROPERTIES);
 				JRPropertiesMap pmap = new JRPropertiesMap();
 				if (props != null && props instanceof JRPropertiesMap) {
