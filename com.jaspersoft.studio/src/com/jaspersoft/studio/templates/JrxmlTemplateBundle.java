@@ -34,13 +34,14 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.wizard.WizardPage;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourceDynamicPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsDynamicPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByDynamicPage;
 import com.jaspersoft.studio.templates.engine.DefaultTemplateEngine;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
 import com.jaspersoft.studio.wizards.WizardUtils;
+import com.jaspersoft.studio.wizards.datasource.ReportWizardDataSourceDynamicPage;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
+import com.jaspersoft.studio.wizards.fields.ReportWizardFieldsDynamicPage;
+import com.jaspersoft.studio.wizards.group.ReportWizardFieldsGroupByDynamicPage;
 import com.jaspersoft.templates.ReportBundle;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.TemplateEngine;
@@ -49,9 +50,9 @@ import com.jaspersoft.templates.WizardTemplateBundle;
 
 public class JrxmlTemplateBundle extends WizardTemplateBundle {
 
-	private WizardDataSourceDynamicPage step1 = null;
-	private WizardFieldsDynamicPage step2 = null;
-	private WizardFieldsGroupByDynamicPage step3 = null;
+	private ReportWizardDataSourceDynamicPage step1 = null;
+	private ReportWizardFieldsDynamicPage step2 = null;
+	private ReportWizardFieldsGroupByDynamicPage step3 = null;
 	
 	public JrxmlTemplateBundle(URL url, boolean isExternal, JasperReportsContext jrContext) throws Exception {
 		super(url, isExternal, jrContext);
@@ -63,8 +64,6 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 	
 	@Override
 	public IFile doFinish(ReportNewWizard mainWizard, IProgressMonitor monitor) throws CoreException {
-		
-		
 		IFile reportFile = null;
 		
 		Map<String, Object> settings = mainWizard.getSettings();
@@ -90,23 +89,23 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 
 		templateSettings.put(DefaultTemplateEngine.DATASET, dataset);
 
-		if (settings.containsKey(WizardDataSourceDynamicPage.DATASET_FIELDS)) {
-			templateSettings.put(DefaultTemplateEngine.FIELDS, settings.get(WizardDataSourceDynamicPage.DATASET_FIELDS));
+		if (settings.containsKey(ReportWizardDataSourceDynamicPage.DATASET_FIELDS)) {
+			templateSettings.put(DefaultTemplateEngine.FIELDS, settings.get(ReportWizardDataSourceDynamicPage.DATASET_FIELDS));
 		}
 
-		if (settings.containsKey(WizardDataSourceDynamicPage.GROUP_FIELDS)) {
-			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, settings.get(WizardDataSourceDynamicPage.GROUP_FIELDS));
+		if (settings.containsKey(ReportWizardDataSourceDynamicPage.GROUP_FIELDS)) {
+			templateSettings.put(DefaultTemplateEngine.GROUP_FIELDS, settings.get(ReportWizardDataSourceDynamicPage.GROUP_FIELDS));
 		}
 
-		if (settings.containsKey(WizardDataSourceDynamicPage.ORDER_GROUP)) {
-			templateSettings.put(DefaultTemplateEngine.ORDER_GROUP, settings.get(WizardDataSourceDynamicPage.ORDER_GROUP));
+		if (settings.containsKey(ReportWizardDataSourceDynamicPage.ORDER_GROUP)) {
+			templateSettings.put(DefaultTemplateEngine.ORDER_GROUP, settings.get(ReportWizardDataSourceDynamicPage.ORDER_GROUP));
 		}
 
 		// If i'm generating a new report for a subreport i add also to the new report parameters the ones defined for the
 		// sub report
-		if (settings.containsKey(WizardDataSourceDynamicPage.EXTRA_PARAMETERS)) {
+		if (settings.containsKey(ReportWizardDataSourceDynamicPage.EXTRA_PARAMETERS)) {
 			templateSettings.put(DefaultTemplateEngine.OTHER_PARAMETERS,
-			settings.get(WizardDataSourceDynamicPage.EXTRA_PARAMETERS));
+			settings.get(ReportWizardDataSourceDynamicPage.EXTRA_PARAMETERS));
 		}
 
 		TemplateEngine templateEngine = templateBundle.getTemplateEngine();
@@ -116,7 +115,7 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 
 			// Save the data adapter used...
 			if (step1 !=null && step1.getDataAdapter() != null) {
-				Object props = settings.get(WizardDataSourceDynamicPage.DATASET_PROPERTIES);
+				Object props = settings.get(ReportWizardDataSourceDynamicPage.DATASET_PROPERTIES);
 				JRPropertiesMap pmap = new JRPropertiesMap();
 				if (props != null && props instanceof JRPropertiesMap) {
 					pmap = (JRPropertiesMap) props;
@@ -145,23 +144,23 @@ public class JrxmlTemplateBundle extends WizardTemplateBundle {
 	@Override
 	public WizardPage[] getCustomWizardPages() {
 		if (step1 == null || step2 == null || step3 == null){
-			step1 = new WizardDataSourceDynamicPage(this);
-			step2 = new WizardFieldsDynamicPage(this);
-			step3 = new WizardFieldsGroupByDynamicPage(this);
+			step1 = new ReportWizardDataSourceDynamicPage(this);
+			step2 = new ReportWizardFieldsDynamicPage(this);
+			step3 = new ReportWizardFieldsGroupByDynamicPage(this);
 		}
 		WizardPage[] result = new WizardPage[]{step1, step2, step3};
 		return result;
 	}
 
-	public WizardDataSourceDynamicPage getStep1() {
+	public ReportWizardDataSourceDynamicPage getStep1() {
 		return step1;
 	}
 
-	public WizardFieldsDynamicPage getStep2() {
+	public StaticWizardFieldsPage getStep2() {
 		return step2;
 	}
 
-	public WizardFieldsGroupByDynamicPage getStep3() {
+	public ReportWizardFieldsGroupByDynamicPage getStep3() {
 		return step3;
 	}
 

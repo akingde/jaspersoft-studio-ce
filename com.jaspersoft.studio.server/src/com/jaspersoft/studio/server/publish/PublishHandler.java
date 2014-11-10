@@ -38,7 +38,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.xml.sax.InputSource;
 
-import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.PublishFile2ServerWizard;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -73,9 +73,9 @@ public class PublishHandler extends AbstractHandler {
 				String ext = file.getFileExtension();
 				if (ext.equals(FileExtension.JRXML) || ext.equals(FileExtension.JASPER)) {
 					IEditorPart ep = HandlerUtil.getActiveEditor(event);
-					if (ep instanceof JrxmlEditor)
+					if (ep instanceof AbstractJRXMLEditor)
 						try {
-							jContext = ((JrxmlEditor) ep).getJrContext(file);
+							jContext = ((AbstractJRXMLEditor) ep).getJrContext(file);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

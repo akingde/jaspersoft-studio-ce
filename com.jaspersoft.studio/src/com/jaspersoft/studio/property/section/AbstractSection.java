@@ -82,6 +82,17 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public ASPropertyWidget createWidget4Property(Composite composite, Object property, boolean showLabel) {
 		return createWidget4Property(getElement(), composite, property, showLabel);
 	}
+	
+	public ASPropertyWidget createWidget(Composite composite, Object property, boolean showLabel, IPropertyDescriptor pd){
+		CLabel label = createLabel(composite, showLabel, pd);
+		ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
+		if (widget != null) {
+			widget.setLabel(label);
+			widgets.put(pd.getId(), widget);
+			return widget;
+		}
+		return null;
+	}
 
 	public ASPropertyWidget createWidget4Property(APropertyNode element, Composite composite, Object property,
 			boolean showLabel) {

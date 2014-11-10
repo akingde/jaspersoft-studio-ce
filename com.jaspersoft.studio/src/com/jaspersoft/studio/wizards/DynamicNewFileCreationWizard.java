@@ -16,6 +16,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 
+import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
+
 /**
  * 
  * Wizard page to select the destination of a report file. It dynamically 

@@ -1,16 +1,12 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.dataset.wizard;
+package com.jaspersoft.studio.wizards.datasource;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,7 +28,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
@@ -55,12 +50,12 @@ import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.ui.SimpleQueryWizardDataEditorComposite;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
-import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardRunnablePage;
-import com.jaspersoft.studio.wizards.ReportNewWizard;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
+import com.jaspersoft.studio.wizards.group.ReportWizardFieldsGroupByDynamicPage;
 
 /**
  * 
@@ -73,15 +68,15 @@ import com.jaspersoft.studio.wizards.ReportNewWizard;
  * interested step can use this List.</br> The WizardFieldsPage will use this key to populate the list of available
  * fields.</br>
  * 
- * @see WizardFieldsDynamicPage
- * @see WizardFieldsGroupByDynamicPage
+ * @see StaticWizardFieldsPage
+ * @see ReportWizardFieldsGroupByDynamicPage
  * 
  * 
  * 
  * @author gtoffoli
  * 
  */
-public class WizardDataSourceDynamicPage extends JSSWizardRunnablePage {
+public class StaticWizardDataSourcePage extends JSSWizardRunnablePage {
 
 	public static final String DISCOVERED_FIELDS = "discovered_fields"; //$NON-NLS-1$
 	public static final String DISCOVERED_PARAMETERS = "discovered_parameters"; //$NON-NLS-1$
@@ -111,15 +106,11 @@ public class WizardDataSourceDynamicPage extends JSSWizardRunnablePage {
 
 	private DataAdapterDescriptor selectedDataAdapterDescriptor = null;
 
-	
-	private JrxmlTemplateBundle containerBundle;
-	
-	public WizardDataSourceDynamicPage(JrxmlTemplateBundle containerBundle) {
+	public StaticWizardDataSourcePage() {
 		super("datasourcepage"); //$NON-NLS-1$
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
-		this.containerBundle = containerBundle;
 	}
 
 	/**
@@ -409,47 +400,5 @@ public class WizardDataSourceDynamicPage extends JSSWizardRunnablePage {
 	@Override
 	public boolean requireElaboration() {
 		return activeEditor != null;
-	}
-	
-	/**
-	 * Return the second of the dynamic pages, but only if this page
-	 * has discovered some fields, otherwise it return the congratulation page if available.
-	 * Otherwise it return the group page
-	 */
-	@Override
-	public IWizardPage getNextPage() {
-		//need to call this to run the thread to discover the fields
-		super.getNextPage();
-		ReportNewWizard containerWizard = (ReportNewWizard)getWizard();
-		if (!getSettings().containsKey(WizardDataSourceDynamicPage.DISCOVERED_FIELDS) || ((List<?>) getSettings().get(WizardDataSourceDynamicPage.DISCOVERED_FIELDS)).isEmpty()) {
-			//no fields discovered
-			if (!containerWizard.hasCongratulationStep()) {
-				containerBundle.getStep3().setWizard(getWizard());
-				return containerBundle.getStep3();
-			}
-			// jump to the congratulation page
-			return containerWizard.getCongratulationsStep();
-		}
-		//has discovered some fields, return the fields page
-		containerBundle.getStep2().setWizard(getWizard());
-		return containerBundle.getStep2();
-	}
-	
-	/**
-	 * Return the last of the static pages
-	 * 
-	 * @return the page to define the file location
-	 */
-	@Override
-	public IWizardPage getPreviousPage() {
-		return ((ReportNewWizard)getWizard()).getFileLocationStep();
-	}
-
-	/**
-	 * Check only the complete to advance to the next page
-	 */
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete();
 	}
 }

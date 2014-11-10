@@ -33,12 +33,12 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
+import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
 
 public class SubreportWizard extends JSSWizard {
 	private NewSubreportPage step0;
@@ -106,7 +106,7 @@ public class SubreportWizard extends JSSWizard {
 		for (IWizard w : getChildWizards())
 		{
 			if (w instanceof ReportNewWizard){
-				((ReportNewWizard) w).getSettings().put(WizardDataSourcePage.EXTRA_PARAMETERS, step3.getValue());
+				((ReportNewWizard) w).getSettings().put(StaticWizardDataSourcePage.EXTRA_PARAMETERS, step3.getValue());
 			}
 			w.performFinish();
 		}

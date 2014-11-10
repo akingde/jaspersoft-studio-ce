@@ -19,7 +19,7 @@ import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageBookView;
 
-import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 
 public class ReportStateView extends PageBookView {
 	public static final String ID = "com.jaspersoft.studio.editor.preview.reportstate";
@@ -38,13 +38,13 @@ public class ReportStateView extends PageBookView {
 		PreviewJRPrint preview = null;
 		if (part instanceof PreviewJRPrint)
 			preview = (PreviewJRPrint) part;
-		else if (part instanceof JrxmlEditor) {
+		else if (part instanceof AbstractJRXMLEditor) {
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					PreviewJRPrint preview = (PreviewJRPrint) ((JrxmlEditor) part).getEditor(JrxmlEditor.PAGE_PREVIEW);
+					PreviewJRPrint preview = (PreviewJRPrint) ((AbstractJRXMLEditor) part).getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
 					if (preview != null)
 						page.setupConsole(preview.getConsole());
 				}
@@ -76,7 +76,7 @@ public class ReportStateView extends PageBookView {
 
 	@Override
 	protected boolean isImportant(IWorkbenchPart part) {
-		if (part instanceof JrxmlEditor || part instanceof PreviewJRPrint)
+		if (part instanceof AbstractJRXMLEditor || part instanceof PreviewJRPrint)
 			return true;
 		return false;
 	}

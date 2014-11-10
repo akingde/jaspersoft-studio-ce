@@ -68,29 +68,29 @@ public class DefaultGalleryItemRenderer extends AbstractGalleryItemRenderer {
 	protected ArrayList<Color> dropShadowsColors = new ArrayList<Color>();
 
 	// Renderer parameters
-	boolean dropShadows = false;
+	protected boolean dropShadows = false;
 
-	int dropShadowsSize = 0;
+	protected int dropShadowsSize = 0;
 
-	int dropShadowsAlphaStep = 20;
+	protected int dropShadowsAlphaStep = 20;
 
-	Color selectionForegroundColor;
+	protected Color selectionForegroundColor;
 
-	Color selectionBackgroundColor;
+	protected Color selectionBackgroundColor;
 
-	Color foregroundColor, backgroundColor;
+	protected Color foregroundColor, backgroundColor;
 
-	boolean showLabels = true;
+	protected boolean showLabels = true;
 
-	boolean showRoundedSelectionCorners = true;
+	protected boolean showRoundedSelectionCorners = true;
 
-	int selectionRadius = 15;
+	protected int selectionRadius = 15;
 
 	// Vars used during drawing (optimization)
-	boolean _drawBackground = false;
-	Color _drawBackgroundColor = null;
-	Image _drawImage = null;
-	Color _drawForegroundColor = null;
+	protected boolean _drawBackground = false;
+	protected Color _drawBackgroundColor = null;
+	protected Image _drawImage = null;
+	protected Color _drawForegroundColor = null;
 
 	/**
 	 * Returns current label state : enabled or disabled

@@ -10,9 +10,10 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.wizards;
+package com.jaspersoft.studio.wizards.category;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -54,10 +55,12 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
-import com.jaspersoft.studio.templates.JrxmlTemplateBundle;
 import com.jaspersoft.studio.templates.StudioTemplateManager;
 import com.jaspersoft.studio.utils.SWTImageEffects;
 import com.jaspersoft.studio.utils.SWTImageEffects.Glow;
+import com.jaspersoft.studio.wizards.BuiltInCategories;
+import com.jaspersoft.studio.wizards.ContextHelpIDs;
+import com.jaspersoft.studio.wizards.JSSWizardPage;
 import com.jaspersoft.templates.TemplateBundle;
 import com.jaspersoft.templates.WizardTemplateBundle;
 
@@ -98,7 +101,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	/**
 	 * List of all the categories key shown, in the order they was loaded
 	 */
-	private List<String> categoryList;
+	private List<TemplateCategory> categoryList;
 
 	/**
 	 * Stack layout used to stack the gallery and show only the one connected to the selected Category
@@ -172,12 +175,13 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	private class CategoryChooser extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String selectedCategory = categoryList.get(((Table) e.widget).getSelectionIndex());
+			int selectionIndex = ((Table) e.widget).getSelectionIndex();
+			String selectedCategory = categoryList.get(selectionIndex).getCategoryKey();
 			showGallery(selectedCategory);
 		}
 
 		public void widgetDefaultSelected(SelectionEvent event) {
-			String selectedCategory = categoryList.get(0);
+			String selectedCategory = categoryList.get(0).getCategoryKey();
 			showGallery(selectedCategory);
 		}
 	}
@@ -252,20 +256,20 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		final RGB greyColor =  new RGB(192, 192, 192);
 		List<TemplateBundle> bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 		for (TemplateBundle b : bundles) {
-			if (b instanceof JrxmlTemplateBundle) {
+			if (b instanceof WizardTemplateBundle) {
 				// itemImage is already cached in the ResourceManager by the class JrxmlTemplateBundle
-				JrxmlTemplateBundle jrxmlBundle = (JrxmlTemplateBundle) b;
-				Image itemImage = jrxmlBundle.getIcon();
+				WizardTemplateBundle wizardBundle = (WizardTemplateBundle) b;
+				Image itemImage = wizardBundle.getIcon();
 
 				if (itemImage != null) {
 					// Add viewer required effects to the images shown...
-					String selectedImageKey = jrxmlBundle.getTemplateURL().toExternalForm() + "selectedImage"; //$NON-NLS-1$
+					String selectedImageKey = wizardBundle.getTemplateURL().toExternalForm() + "selectedImage"; //$NON-NLS-1$
 					Image selectedImg = ResourceManager.getImage(selectedImageKey);
 					if (selectedImg == null) {
 						selectedImg = new Image(UIUtils.getDisplay(), SWTImageEffects.extendArea(itemImage.getImageData(), 40, null));
 						ResourceManager.addImage(selectedImageKey, selectedImg);
 					}
-					String standardShadowedImgeKey = jrxmlBundle.getTemplateURL().toExternalForm() + "standardShadowedImg"; //$NON-NLS-1$
+					String standardShadowedImgeKey = wizardBundle.getTemplateURL().toExternalForm() + "standardShadowedImg"; //$NON-NLS-1$
 					Image standardShadowedImg = ResourceManager.getImage(standardShadowedImgeKey);
 					if (standardShadowedImg == null) {
 						standardShadowedImg = new Image(UIUtils.getDisplay(), Glow.glow(itemImage.getImageData(),	ResourceManager.getColor(greyColor), 40, 0, 255));
@@ -287,7 +291,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 	 */
 	private void craeteItems(final Gallery gal, final String categoryName) {
 		final GalleryItem itemGroup = new GalleryItem(gal, SWT.NONE);
-		final String universalCategory = categoryList.get(0);
+		final String universalCategory = categoryList.get(0).getCategoryKey();
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -406,9 +410,13 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		layout = new StackLayout();
 		galleryComposite.setLayout(layout);
 
-		categoryList = BuiltInCategories.getCategoriesList();
-		for (String cat : categoryList) {
-			cachedGalleries.put(cat, null);
+		categoryList = new ArrayList<TemplateCategory>();
+		for(String builtInCategory : BuiltInCategories.getCategoriesList()){
+			String localizedName = MessagesByKeys.getString(builtInCategory);
+			categoryList.add(new TemplateCategory(builtInCategory, localizedName));
+		}
+		for (TemplateCategory cat : categoryList) {
+			cachedGalleries.put(cat.getCategoryKey(), null);
 		}
 		bundles = StudioTemplateManager.getInstance().getTemplateBundles();
 		findTemplates();
@@ -431,7 +439,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		zoomModified();
 
 		createTableColumn(table);
-		showGallery(categoryList.get(0));
+		showGallery(categoryList.get(0).getCategoryKey());
 		setControl(container);
 	}
 
@@ -453,7 +461,8 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		tableViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return MessagesByKeys.getString(element.toString());
+				TemplateCategory category = (TemplateCategory)element;
+				return category.getCategoryName();
 			}
 		});
 		tableViewer.setInput(categoryList);
@@ -466,7 +475,7 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				for (int i = 1; i < categoryList.size(); i++) {
-					String category = categoryList.get(i);
+					String category = categoryList.get(i).getCategoryKey();
 					if (cachedGalleries.get(category) == null)
 						createGalleryForCategory(category);
 				}
@@ -500,7 +509,11 @@ public class ReportTemplatesWizardPage extends JSSWizardPage {
 				for (String cat : strCategoryList) {
 					if (!cat.trim().isEmpty()) {
 						if (!cachedGalleries.containsKey(cat.toLowerCase())) {
-							categoryList.add(cat);
+							String categoryLocalizedName = cat;
+							if (b instanceof WizardTemplateBundle){
+								categoryLocalizedName = ((WizardTemplateBundle)b).getLocalizedString(cat);
+							}
+							categoryList.add(new TemplateCategory(cat, categoryLocalizedName));
 							cachedGalleries.put(cat.toLowerCase(), null);
 						}
 						categorySet.add(cat);

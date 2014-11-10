@@ -25,7 +25,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -137,8 +137,8 @@ public class DatasetAction extends SelectionAction {
 		// Try a fallback solution in order to be sure to have a valid dataset
 		// Get it from the currently opened active editor
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
+		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof AbstractJRXMLEditor) {
+			final ANode mroot = (ANode) ((AbstractJRXMLEditor) activeJRXMLEditor).getModel();
 			if (mroot != null) {
 				final ANode mreport = (ANode) mroot.getChildren().get(0);
 				return (MDataset) ((MReport) mreport).getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);

@@ -14,10 +14,10 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
-import net.sf.jasperreports.engine.export.JsonMetadataExporter;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
@@ -46,6 +46,12 @@ public class JSONPathDataAction extends JSONAction {
 	private String path;
 	private JRExpression data;
 	private boolean repeat = false;
+	
+	public static final String JSON_EXPORTER_PROPERTIES_PREFIX = JRPropertiesUtil.PROPERTY_PREFIX + "export.json.";
+	public static final String JSON_EXPORTER_PATH_PROPERTY = JSON_EXPORTER_PROPERTIES_PREFIX + "path";
+	public static final String JSON_EXPORTER_REPEAT_VALUE_PROPERTY = JSON_EXPORTER_PROPERTIES_PREFIX + "repeat.value";
+	public static final String JSON_EXPORTER_DATA_PROPERTY = JSON_EXPORTER_PROPERTIES_PREFIX + "data";
+
 
 	/**
 	 * Create the action with id @JSONAction.PROP_DATA
@@ -55,7 +61,7 @@ public class JSONPathDataAction extends JSONAction {
 	 *          the textual description of the action
 	 */
 	public JSONPathDataAction(IWorkbenchPart part) {
-		super(part, JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY, Messages.JSONPathDataAction_0);
+		super(part, JSON_EXPORTER_PATH_PROPERTY, Messages.JSONPathDataAction_0);
 	}
 
 	/**
@@ -100,7 +106,7 @@ public class JSONPathDataAction extends JSONAction {
 		for (Object element : textElements) {
 			MTextElement model = (MTextElement) element;
 			JRPropertiesMap colDataMap = (JRPropertiesMap) model.getPropertiesMap();
-			return colDataMap.containsProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY);
+			return colDataMap.containsProperty(JSON_EXPORTER_PATH_PROPERTY);
 		}
 		return true;
 	}
@@ -138,16 +144,16 @@ public class JSONPathDataAction extends JSONAction {
 			map = new JRPropertiesMap();
 
 		if (path == null) {
-			map.removeProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY);
-			map.removeProperty(JsonMetadataExporter.JSON_EXPORTER_REPEAT_VALUE_PROPERTY);
+			map.removeProperty(JSON_EXPORTER_PATH_PROPERTY);
+			map.removeProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY);
 
 			removeDataPropertyExpression(peDTO);
 		} else {
-			map.setProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY, path);
+			map.setProperty(JSON_EXPORTER_PATH_PROPERTY, path);
 			if (repeat)
-				map.setProperty(JsonMetadataExporter.JSON_EXPORTER_REPEAT_VALUE_PROPERTY, "true"); //$NON-NLS-1$
+				map.setProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY, "true"); //$NON-NLS-1$
 			else
-				map.removeProperty(JsonMetadataExporter.JSON_EXPORTER_REPEAT_VALUE_PROPERTY);
+				map.removeProperty(JSON_EXPORTER_REPEAT_VALUE_PROPERTY);
 		}
 
 		if (data == null)
@@ -159,12 +165,12 @@ public class JSONPathDataAction extends JSONAction {
 			JRDesignPropertyExpression dpe = null;
 			for (JRPropertyExpression pe : peDTO.getPropExpressions()) {
 				newPE.add(pe);
-				if (pe.getName().equals(JsonMetadataExporter.JSON_EXPORTER_DATA_PROPERTY))
+				if (pe.getName().equals(JSON_EXPORTER_DATA_PROPERTY))
 					dpe = (JRDesignPropertyExpression) pe;
 			}
 			if (dpe == null)
 				dpe = new JRDesignPropertyExpression();
-			dpe.setName(JsonMetadataExporter.JSON_EXPORTER_DATA_PROPERTY);
+			dpe.setName(JSON_EXPORTER_DATA_PROPERTY);
 			dpe.setValueExpression(data);
 			newPE.add(dpe);
 			peDTO.setPropExpressions(newPE.toArray(new JRPropertyExpression[newPE.size()]));
@@ -195,7 +201,7 @@ public class JSONPathDataAction extends JSONAction {
 			return;
 		List<JRPropertyExpression> newPE = new ArrayList<JRPropertyExpression>();
 		for (JRPropertyExpression pe : peDTO.getPropExpressions()) {
-			if (!pe.getName().equals(JsonMetadataExporter.JSON_EXPORTER_DATA_PROPERTY))
+			if (!pe.getName().equals(JSON_EXPORTER_DATA_PROPERTY))
 				newPE.add(pe);
 		}
 		peDTO.setPropExpressions(newPE.toArray(new JRPropertyExpression[newPE.size()]));

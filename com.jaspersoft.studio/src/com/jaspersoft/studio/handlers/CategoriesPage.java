@@ -53,7 +53,7 @@ import com.jaspersoft.studio.templates.TemplateProvider;
 import com.jaspersoft.studio.wizards.BuiltInCategories;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
-import com.jaspersoft.studio.wizards.ReportTemplatesWizardPage;
+import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 
 /**
  * Page of the wizard used to assign the categories to an exported report as template, 

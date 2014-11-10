@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.editor.AMultiEditor;
-import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.view.AViewsFactory;
 import com.jaspersoft.studio.messages.Messages;
@@ -75,8 +75,8 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 	 * 
 	 * @return a JRXMLeditor
 	 */
-	private JrxmlEditor getEditor() {
-		return (JrxmlEditor) jConfig.get(AMultiEditor.THEEDITOR);
+	private AbstractJRXMLEditor getEditor() {
+		return (AbstractJRXMLEditor) jConfig.get(AMultiEditor.THEEDITOR);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 	 * @param editor
 	 *          The jrxml editor
 	 */
-	private void creteItem(final String key, final JrxmlEditor editor) {
+	private void creteItem(final String key, final AbstractJRXMLEditor editor) {
 		final MenuItem item = new MenuItem(menu, SWT.CHECK);
 		item.setText(viewFactory.getLabel(key));
 		item.setData("KEY", key);
@@ -144,8 +144,8 @@ public class PreviewFormatDropDownAction extends Action implements IMenuCreator 
 		menu = new Menu(parent);
 		root.setMenu(menu);
 		root.setText(Messages.ViewSettingsDropDownAction_previewFormatMenu);
-		JrxmlEditor editor = getEditor();
-		PreviewContainer preview = (PreviewContainer) editor.getEditor(JrxmlEditor.PAGE_PREVIEW);
+		AbstractJRXMLEditor editor = getEditor();
+		PreviewContainer preview = (PreviewContainer) editor.getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
 		viewFactory = preview.getViewFactory();
 		for (String key : viewFactory.getKeys()) {
 			if (viewFactory.isSeparator(key)) {

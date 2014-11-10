@@ -32,6 +32,10 @@ import com.jaspersoft.studio.property.SetValueCommand;
  */
 public class StaticTextFigureEditPart extends FigureEditPart {
 
+	public StaticTextFigureEditPart() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

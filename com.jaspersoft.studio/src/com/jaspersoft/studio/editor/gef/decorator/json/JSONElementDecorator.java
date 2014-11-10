@@ -11,7 +11,6 @@ package com.jaspersoft.studio.editor.gef.decorator.json;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.export.JsonMetadataExporter;
 import net.sf.jasperreports.export.JsonMetadataReportConfiguration;
 
 import org.eclipse.gef.EditPart;
@@ -100,7 +99,7 @@ public class JSONElementDecorator extends TextElementDecorator {
 			if (ep.getModel() instanceof MTextElement) {
 				MenuManager submenu = new MenuManager(Messages.JSONElementDecorator_0);
 				IAction action;
-				action = registry.getAction(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY);
+				action = registry.getAction(JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY);
 				submenu.add(action);
 				menu.add(submenu);
 			}

@@ -75,7 +75,7 @@ public abstract class AbstractGalleryItemRenderer {
 
 	protected Gallery gallery;
 
-	Color galleryBackgroundColor, galleryForegroundColor;
+	protected Color galleryBackgroundColor, galleryForegroundColor;
 
 	protected boolean selected;
 

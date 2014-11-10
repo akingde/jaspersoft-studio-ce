@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,6 +28,8 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public class SPReadCombo extends ASPropertyWidget {
 	protected Combo combo;
 
+	private boolean refreshing = false;
+	
 	public SPReadCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -52,15 +55,44 @@ public class SPReadCombo extends ASPropertyWidget {
 	}
 
 	public void setData(APropertyNode pnode, Object b) {
+		setRefreshing(true);
 		int index = 0;
 		if (b != null)
 			index = ((Number) b).intValue();
 		combo.select(index);
+		setRefreshing(false);
+	}
+	
+	public void setItems(String[] items){
+		setRefreshing(true);
+		String currentSelection = combo.getText();
+		if (ArrayUtils.contains(items, currentSelection)){
+			combo.setItems(items);
+			combo.select(ArrayUtils.indexOf(items, currentSelection));
+			setRefreshing(false);
+		} else {
+			setRefreshing(false);
+			combo.setItems(items);
+			combo.select(0);
+		}
 	}
 
 	protected void handlePropertyChange() {
-		int index = combo.getSelectionIndex();
-		section.changeProperty(pDescriptor.getId(), index);
+		if (!isRefreshing()){
+			int index = combo.getSelectionIndex();
+			section.changeProperty(pDescriptor.getId(), index);
+		}
+	}
+	
+	public String[] getItems(){
+		return combo.getItems();
+	}
+	
+	protected synchronized void setRefreshing(boolean value){
+		this.refreshing = value;
 	}
 
+	protected synchronized boolean isRefreshing(){
+		return refreshing;
+	}
 }

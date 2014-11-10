@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.export.JsonMetadataExporter;
 
+import com.jaspersoft.studio.editor.action.json.JSONPathDataAction;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextDecoratorInterface;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation;
 import com.jaspersoft.studio.editor.gef.decorator.text.TextLocation.Location;
@@ -62,7 +62,7 @@ public class JSONDecorator implements TextDecoratorInterface {
 			startImageAwt = new javax.swing.ImageIcon(JSONDecorator.class.getResource("/icons/resources/corner1.png")); //$NON-NLS-1$
 			endImageAwt = new javax.swing.ImageIcon(JSONDecorator.class.getResource("/icons/resources/corner2.png")); //$NON-NLS-1$
 		}
-		tags = new String[] { JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY, "isPath " }; //$NON-NLS-1$
+		tags = new String[] { JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY, "isPath " }; //$NON-NLS-1$
 	}
 
 	/**
@@ -97,8 +97,8 @@ public class JSONDecorator implements TextDecoratorInterface {
 			String prop = tags[i];
 			String label = tags[i + 1];
 			hasValue = mapProperties.containsProperty(prop);
-			if (prop.equals(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY) && hasValue)
-				endString += label.concat(mapProperties.getProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY)).concat(
+			if (prop.equals(JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY) && hasValue)
+				endString += label.concat(mapProperties.getProperty(JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY)).concat(
 						" "); //$NON-NLS-1$
 		}
 		endString = endString.trim();

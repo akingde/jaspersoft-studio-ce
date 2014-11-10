@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
@@ -728,6 +729,15 @@ public class ModelUtils {
 		return res;
 	}
 
+	public static List<JRPart> getAllPartElements(JasperDesign jd) {
+		List<JRPart> res = new ArrayList<JRPart>();
+		List<JRBand> bands = getAllBands(jd);
+		for (JRBand b : bands) {
+			res.addAll(getPartElements(b));
+		}
+		return res;
+	}
+	
 	public static List<JRDesignElement> getAllElements(JasperDesign jd) {
 		List<JRDesignElement> list = getAllGElements(jd);
 
@@ -751,6 +761,18 @@ public class ModelUtils {
 				res.add((JRDesignElement) el);
 				if (el instanceof JRDesignCrosstab)
 					res.addAll(getCrosstabElements((JRDesignCrosstab) el));
+			}
+		}
+		return res;
+	}
+	
+	public static List<JRPart> getPartElements(JRElementGroup gr) {
+		List<JRPart> res = new ArrayList<JRPart>();
+		for (Object el : gr.getChildren()) {
+			if (el instanceof JRElementGroup) {
+				res.addAll(getPartElements((JRElementGroup) el));
+			} else if (el instanceof JRPart) {
+				res.add((JRPart) el);
 			}
 		}
 		return res;
@@ -1585,4 +1607,9 @@ public class ModelUtils {
 		return false;
 	}
 
+
+	public static String getReportPropertyValue(JasperDesign jd, String key, String defaultValue){
+		String value = jd.getProperty(key);
+		return value != null ? value : defaultValue;
+	}
 }

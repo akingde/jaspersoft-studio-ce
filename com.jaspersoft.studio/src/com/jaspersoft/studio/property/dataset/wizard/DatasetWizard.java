@@ -24,6 +24,9 @@ import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
 import com.jaspersoft.studio.wizards.WizardUtils;
+import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
+import com.jaspersoft.studio.wizards.group.StaticWizardFieldsGroupByPage;
 
 /**
  * A Wizard to create an Dataset. The dataset can be get from the wizard using {@link #getDataset() getDataset} which
@@ -42,9 +45,9 @@ public class DatasetWizard extends JSSWizard {
 
 	// Steps involved in the creation of a simple dataset
 	private WizardDatasetNewPage step1;
-	private WizardDataSourcePage step2;
-	private WizardFieldsPage step3;
-	private WizardFieldsGroupByPage step4;
+	private StaticWizardDataSourcePage step2;
+	private StaticWizardFieldsPage step3;
+	private StaticWizardFieldsGroupByPage step4;
 
 	public DatasetWizard() {
 		super();
@@ -65,13 +68,13 @@ public class DatasetWizard extends JSSWizard {
 		addPage(step1);
 
 		// FIXME: wizard dataset broken after wizard changes
-		step2 = new WizardDataSourcePage(); // getConfig());
+		step2 = new StaticWizardDataSourcePage(); // getConfig());
 		addPage(step2);
 
-		step3 = new WizardFieldsPage();
+		step3 = new StaticWizardFieldsPage();
 		addPage(step3);
 
-		step4 = new WizardFieldsGroupByPage();
+		step4 = new StaticWizardFieldsGroupByPage();
 		addPage(step4);
 	}
 

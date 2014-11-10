@@ -47,6 +47,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 
 /**
  * Wizard to create a new report. It has three static step. The 

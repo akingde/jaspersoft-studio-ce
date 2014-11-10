@@ -23,6 +23,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ide.FileStoreEditorInput;
+
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -33,12 +38,16 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  */
 public class JRXMLUtils {
+	
+	public static final String UTF8_ENCODING = "UTF-8";
 
 	/**
 	 * Gets a JRXML input stream from an existing one, that can be either a .jasper file or .jrxml.
 	 * <p>
 	 * Others file extension are not meant to return a valid JRXML input stream.
 	 * 
+	 * @param jrContext 
+	 * 					the JasperReports context 
 	 * @param in
 	 *          the original input stream
 	 * @param fileExtension
@@ -69,6 +78,19 @@ public class JRXMLUtils {
 		return null;
 	}
 
+	/**
+	 * Gets the {@link JasperDesign} out of the specified input stream, using the JasperReports context
+	 * as possible additional information.
+	 * 
+	 * @param jrContext
+	 * 					the JasperReports context
+	 * @param in
+	 * 					the report input stream
+	 * @param fileExtension
+	 * 					the original file extension
+	 * @return the {@link JasperDesign} of the report
+	 * @throws JRException
+	 */
 	public static JasperDesign getJasperDesign(JasperReportsConfiguration jrContext, InputStream in,
 			String fileExtension) throws JRException {
 		if (fileExtension.equals(FileExtension.JASPER))
@@ -77,5 +99,50 @@ public class JRXMLUtils {
 			return JRXmlLoader.load(jrContext, in);
 		return null;
 	}
-
+	
+	/**
+	 * Gets a JRXML input stream from an existing one, that can be either a .jasper file or .jrxml.
+	 * <p>
+	 * Others file extension are not meant to return a valid JRXML input stream.
+	 * 
+	 * @param jrContext
+	 * 					the JasperReports context
+	 * @param editorInput
+	 * 					the editor input used to retrieve the file extension
+	 * @param encoding
+	 * 					the file encoding
+	 * @param in
+	 * 					the original input stream
+	 * @param version
+	 * 					the JR version
+	 * @return a valid JRXML input stream, <code>null</code> if not possible
+	 * @throws JRException
+	 */
+	public static InputStream getXML(JasperReportsConfiguration jrContext, IEditorInput editorInput, String encoding,
+			InputStream in, String version) throws JRException {
+		String fileExtension = getFileExtension(editorInput);
+		InputStream jrxmlInputStream = getJRXMLInputStream(jrContext, in, fileExtension, encoding, version);
+		return jrxmlInputStream != null ? jrxmlInputStream : in;
+	}
+	
+	/**
+	 * Tries to guess the file extension based upon on the specified editor input.
+	 * 
+	 * @param editorInput
+	 * 					the editor input used to retrieve the file extension
+	 * @return the extension of file currently handled by the  specified editor input
+	 */
+	public static String getFileExtension(IEditorInput editorInput) {
+		String fileExtention = ""; //$NON-NLS-1$
+		if (editorInput instanceof FileStoreEditorInput) {
+			String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
+			fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length()); //$NON-NLS-1$
+		} else if (editorInput instanceof IFileEditorInput) {
+			fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
+		} else if (editorInput instanceof JarEntryEditorInput) {
+			fileExtention = ((JarEntryEditorInput) editorInput).getStorage().getFullPath().getFileExtension();
+		}
+		return fileExtention;
+	}
+	
 }

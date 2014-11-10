@@ -36,6 +36,7 @@ import org.eclipse.jface.wizard.WizardPage;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
 
@@ -178,5 +179,17 @@ public abstract class WizardTemplateBundle extends GenericTemplateBundle {
 	protected void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null); //$NON-NLS-1$
 		throw new CoreException(status);
+	}
+	
+	/**
+	 * Provide a localization support for this template bundle. Get a key of a string
+	 * and return the localized version of it. If the localized version can't be found
+	 * then return the key
+	 * 
+	 * @param key key of the string
+	 * @return localized version of the string or the key
+	 */
+	public String getLocalizedString(String key){
+		return MessagesByKeys.getString(key);
 	}
 }

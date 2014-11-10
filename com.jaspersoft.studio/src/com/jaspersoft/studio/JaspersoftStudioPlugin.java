@@ -42,7 +42,7 @@ import com.jaspersoft.studio.utils.BrandingInfo;
 import com.jaspersoft.studio.utils.jasper.DriversManager;
 import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-import com.jaspersoft.studio.wizards.ReportTemplatesWizardPage;
+import com.jaspersoft.studio.wizards.category.ReportTemplatesWizardPage;
 
 /*
  * The main plugin class to be used in the desktop.

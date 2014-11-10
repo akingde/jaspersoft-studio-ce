@@ -10,7 +10,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.dataset.wizard;
+package com.jaspersoft.studio.wizards.group;
 
 import java.util.List;
 import java.util.Map;
@@ -25,12 +25,14 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
-public class WizardFieldsGroupByPage extends WizardFieldsDynamicPage {
+public class StaticWizardFieldsGroupByPage extends StaticWizardFieldsPage {
 	
 	private Map<String, Object> settings = null;
 
-	public WizardFieldsGroupByPage() {
+	public StaticWizardFieldsGroupByPage() {
 		super("groupfields"); //$NON-NLS-1$
 		setTitle(Messages.WizardFieldsGroupByPage_group_by);
 		setDescription(Messages.WizardFieldsGroupByPage_description);
@@ -54,9 +56,9 @@ public class WizardFieldsGroupByPage extends WizardFieldsDynamicPage {
 		
 		if (getSettings() == null) return;
 		
-		if (getSettings().containsKey( WizardDataSourcePage.DATASET_FIELDS))
+		if (getSettings().containsKey( StaticWizardDataSourcePage.DATASET_FIELDS))
 		{
-			setAvailableFields( (List<?>)(getSettings().get( WizardDataSourcePage.DATASET_FIELDS )) );
+			setAvailableFields( (List<?>)(getSettings().get( StaticWizardDataSourcePage.DATASET_FIELDS )) );
 		}
 		else
 		{
@@ -75,10 +77,10 @@ public class WizardFieldsGroupByPage extends WizardFieldsDynamicPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				boolean createSortFields = ((Button)e.getSource()).getSelection();
-				getLocalSettings().put(WizardDataSourcePage.ORDER_GROUP, createSortFields);
+				getLocalSettings().put(StaticWizardDataSourcePage.ORDER_GROUP, createSortFields);
 			}
 		});
-		getLocalSettings().put(WizardDataSourcePage.ORDER_GROUP, false);
+		getLocalSettings().put(StaticWizardDataSourcePage.ORDER_GROUP, false);
 	}
 	
 	private Map<String, Object> getLocalSettings(){
@@ -98,6 +100,6 @@ public class WizardFieldsGroupByPage extends WizardFieldsDynamicPage {
 	{
 			Map<String, Object> settings = getLocalSettings();
 			if (settings == null) return;
-			settings.put(WizardDataSourcePage.GROUP_FIELDS,  getSelectedFields() ); // the type is IPath
+			settings.put(StaticWizardDataSourcePage.GROUP_FIELDS,  getSelectedFields() ); // the type is IPath
 	}
 }

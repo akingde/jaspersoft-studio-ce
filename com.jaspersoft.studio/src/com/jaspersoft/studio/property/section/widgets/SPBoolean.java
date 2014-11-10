@@ -24,8 +24,10 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPBoolean extends ASPropertyWidget {
-	private Button cmb3Bool;
+	
+	protected Button cmb3Bool;
 
+	
 	public SPBoolean(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
@@ -36,7 +38,8 @@ public class SPBoolean extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		cmb3Bool = section.getWidgetFactory().createButton(parent, pDescriptor.getDisplayName(), SWT.CHECK);
+		String buttonText = pDescriptor.getDisplayName();
+		cmb3Bool = section.getWidgetFactory().createButton(parent, buttonText, SWT.CHECK);
 		cmb3Bool.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

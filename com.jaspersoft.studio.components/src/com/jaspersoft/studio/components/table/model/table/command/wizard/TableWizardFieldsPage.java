@@ -15,10 +15,10 @@ package com.jaspersoft.studio.components.table.model.table.command.wizard;
 import java.util.Map;
 
 import com.jaspersoft.studio.components.table.messages.Messages;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
-public class TableWizardFieldsPage extends WizardFieldsPage {
+public class TableWizardFieldsPage extends StaticWizardFieldsPage {
 
 	/**
 	 * Key used to store the selected columns

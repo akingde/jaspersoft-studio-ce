@@ -68,7 +68,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
@@ -334,8 +334,8 @@ public class VErrorPreview extends APreview {
 					if (dialog.open() == Dialog.OK) {
 						JRExpression e = wizard.getValue();
 						IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-						if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-							JrxmlEditor editor = (JrxmlEditor) activeJRXMLEditor;
+						if (activeJRXMLEditor != null && activeJRXMLEditor instanceof AbstractJRXMLEditor) {
+							AbstractJRXMLEditor editor = (AbstractJRXMLEditor) activeJRXMLEditor;
 							CommandStack cs = (CommandStack) editor.getAdapter(CommandStack.class);
 							if (cs != null) {
 								cs.execute(new SetExpressionValueCommand((JRDesignExpression) expr, e.getText(), e.getValueClassName()));

@@ -51,12 +51,12 @@ import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMea
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.CreateRowCommand;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.JSSWizardPageChangeEvent;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
 public class CrosstabWizard extends JSSWizard {
 
@@ -65,8 +65,8 @@ public class CrosstabWizard extends JSSWizard {
 	public static final String CROSSTAB_MEASURES = "CROSSTAB_MEASURES";
 
 	private WizardDatasetPage step1;
-	private WizardFieldsPage step2;
-	private WizardFieldsPage step3;
+	private StaticWizardFieldsPage step2;
+	private StaticWizardFieldsPage step3;
 	private CrosstabWizardMeasurePage step4;
 	private CrosstabWizardLayoutPage step5;
 

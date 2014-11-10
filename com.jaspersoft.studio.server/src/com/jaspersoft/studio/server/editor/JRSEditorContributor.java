@@ -33,8 +33,8 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.part.EditorPart;
 
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.IEditorContributor;
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
@@ -47,12 +47,12 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class JRSEditorContributor implements IEditorContributor {
 
 	public void onLoad(final JasperDesign jd, final EditorPart editor) {
-		if (!(editor instanceof JrxmlEditor))
+		if (!(editor instanceof AbstractJRXMLEditor))
 			return;
 		String prop = jd.getProperty(AExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
-		JrxmlEditor jEditor = (JrxmlEditor) editor;
+		AbstractJRXMLEditor jEditor = (AbstractJRXMLEditor) editor;
 		JasperReportsConfiguration jConfig = jEditor.getJrContext(null);
 		JSSFileRepositoryService repService = jConfig.getFileRepositoryService();
 		List<RepositoryService> rservices = repService.getRepositoryServices();

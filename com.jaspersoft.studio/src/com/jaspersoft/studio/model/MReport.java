@@ -83,9 +83,31 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout,
-		IPastable {
+public class MReport extends MLockableRefresh implements IGraphicElement, IContainerEditPart, IContainerLayout, IPastable {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	private Map<Object, Integer> bandIndexMap = new HashMap<Object, Integer>();
+
+	private static JSSEnumPropertyDescriptor orientationD;
+	
+	private static JSSEnumPropertyDescriptor printOrderD;
+	
+	private static JSSEnumPropertyDescriptor whenNoDataD;
+	
+	/** 
+	 * The icon descriptor. 
+	 */
+	private static IIconDescriptor iconDescriptor;
+
+	private static IPropertyDescriptor[] descriptors;
+	
+	private static Map<String, Object> defaultsMap;
+
+	private Map<String, Object> parameters;
+	
+	private MDataset mDataset;
+
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
 	/**
@@ -116,9 +138,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public ANode getNode(Object obj) {
 		return obj2Node.get(obj);
 	}
-
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor;
 
 	/**
 	 * Gets the icon descriptor.
@@ -160,9 +179,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		return this;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
-	private static Map<String, Object> defaultsMap;
-
 	@Override
 	public Map<String, Object> getDefaultsMap() {
 		return defaultsMap;
@@ -187,9 +203,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		}
 		return null;
 	}
-
-	private MDataset mDataset;
-
+	
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -627,7 +641,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * @param evt
 	 *          the evt
 	 */
-	private void handleDatasourceChanged(PropertyChangeEvent evt) {
+	protected void handleDatasourceChanged(PropertyChangeEvent evt) {
 		if (evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
@@ -667,7 +681,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * @param evt
 	 *          the evt
 	 */
-	private void handleBandChanged(PropertyChangeEvent evt) {
+	protected void handleBandChanged(PropertyChangeEvent evt) {
 		for (Iterator<?> it = getChildren().iterator(); it.hasNext();) {
 			ANode node = (ANode) it.next();
 			if (node instanceof MBand) {
@@ -690,7 +704,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * 
 	 * @param evt the event that changed the band position
 	 */
-	private void handleChangeOrder(PropertyChangeEvent evt) {
+	protected void handleChangeOrder(PropertyChangeEvent evt) {
 		if (evt instanceof IndexedPropertyChangeEvent && evt.getNewValue() instanceof Integer) {
 			JRDesignSection source = (JRDesignSection) evt.getSource();
 			int newInd = ((IndexedPropertyChangeEvent) evt).getIndex();
@@ -716,7 +730,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * @param evt
 	 *          the evt
 	 */
-	private void handleDetailBandChanged(PropertyChangeEvent evt) {
+	protected void handleDetailBandChanged(PropertyChangeEvent evt) {
 		MBand firstBand = null;
 		MBand lastBand = null;
 		int lastIndex = 0;
@@ -801,7 +815,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * @param evt
 	 *          the evt
 	 */
-	private void handleGroupChanged(PropertyChangeEvent evt) {
+	protected void handleGroupChanged(PropertyChangeEvent evt) {
 		if (evt.getOldValue() != null && evt.getNewValue() == null) { // delete
 			JRDesignGroup group = (JRDesignGroup) evt.getOldValue();
 			removeGroupListener(group);
@@ -913,7 +927,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				}
 			}
 		}
-
 	}
 
 	/*
@@ -928,17 +941,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			JRDesignDataset jrDesignDataset = (JRDesignDataset) jasperDesign.getMainDataset();
 			jrDesignDataset.getEventSupport().removePropertyChangeListener(this);
 			((JRDesignSection) jasperDesign.getDetailSection()).getEventSupport().removePropertyChangeListener(this);
-			for (JRGroup obj : jrDesignDataset.getGroupsList())
+			for (JRGroup obj : jrDesignDataset.getGroupsList()) {
 				removeGroupListener((JRDesignGroup) obj);
-			// for (JRField obj : jrDesignDataset.getFieldsList())
-			// ((JRDesignField) obj).getEventSupport().removePropertyChangeListener(this);
-			// for (JRSortField obj : jrDesignDataset.getSortFieldsList())
-			// ((JRDesignSortField) obj).getEventSupport().removePropertyChangeListener(this);
-			// for (JRParameter obj : jrDesignDataset.getParametersList())
-			// ((JRDesignParameter) obj).getEventSupport().removePropertyChangeListener(this);
-			// for (JRVariable obj : jrDesignDataset.getVariablesList())
-			// ((JRDesignVariable) obj).getEventSupport().removePropertyChangeListener(this);
-
+			}
+			
 			JRPropertiesMap pmap = jrDesignDataset.getPropertiesMap();
 			pmap.getEventSupport().removePropertyChangeListener(this);
 			if (mDataset != null)
@@ -948,16 +954,9 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			JasperDesign jasperDesign = (JasperDesign) value;
 			JRDesignDataset jrDesignDataset = (JRDesignDataset) jasperDesign.getMainDataset();
 			jrDesignDataset.getEventSupport().addPropertyChangeListener(this);
-			for (JRGroup obj : jrDesignDataset.getGroupsList())
+			for (JRGroup obj : jrDesignDataset.getGroupsList()){
 				addGroupListener((JRDesignGroup) obj);
-			// for (JRField obj : jrDesignDataset.getFieldsList())
-			// ((JRDesignField) obj).getEventSupport().addPropertyChangeListener(this);
-			// for (JRSortField obj : jrDesignDataset.getSortFieldsList())
-			// ((JRDesignSortField) obj).getEventSupport().addPropertyChangeListener(this);
-			// for (JRParameter obj : jrDesignDataset.getParametersList())
-			// ((JRDesignParameter) obj).getEventSupport().addPropertyChangeListener(this);
-			// for (JRVariable obj : jrDesignDataset.getVariablesList())
-			// ((JRDesignVariable) obj).getEventSupport().addPropertyChangeListener(this);
+			}
 
 			JRPropertiesMap pmap = jrDesignDataset.getPropertiesMap();
 			pmap.getEventSupport().addPropertyChangeListener(this);
@@ -976,7 +975,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * @param gr
 	 *          the gr
 	 */
-	private void addGroupListener(JRDesignGroup gr) {
+	protected void addGroupListener(JRDesignGroup gr) {
 		((JRDesignSection) gr.getGroupFooterSection()).getEventSupport().addPropertyChangeListener(this);
 		((JRDesignSection) gr.getGroupHeaderSection()).getEventSupport().addPropertyChangeListener(this);
 	}
@@ -987,7 +986,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * @param gr
 	 *          the gr
 	 */
-	private void removeGroupListener(JRDesignGroup gr) {
+	protected void removeGroupListener(JRDesignGroup gr) {
 		((JRDesignSection) gr.getGroupFooterSection()).getEventSupport().removePropertyChangeListener(this);
 		((JRDesignSection) gr.getGroupHeaderSection()).getEventSupport().removePropertyChangeListener(this);
 	}
@@ -1003,17 +1002,12 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				- jd.getRightMargin(), jd.getPageHeight() - jd.getTopMargin() - jd.getBottomMargin());
 	}
 
-	private Map<String, Object> parameters;
 
 	public Object getParameter(String key) {
 		if (parameters == null)
 			parameters = new HashMap<String, Object>();
 		return parameters.get(key);
 	}
-
-	private static JSSEnumPropertyDescriptor orientationD;
-	private static JSSEnumPropertyDescriptor printOrderD;
-	private static JSSEnumPropertyDescriptor whenNoDataD;
 
 	public void putParameter(String key, Object value) {
 		if (parameters == null)
@@ -1031,8 +1025,6 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
-
-	private Map<Object, Integer> bandIndexMap = new HashMap<Object, Integer>();
 
 	public Integer getBandIndex(Object band) {
 		return bandIndexMap.get(band);

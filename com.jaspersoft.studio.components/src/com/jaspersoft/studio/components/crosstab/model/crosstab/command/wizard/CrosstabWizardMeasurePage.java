@@ -40,12 +40,12 @@ import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
-public class CrosstabWizardMeasurePage extends WizardFieldsPage {
+public class CrosstabWizardMeasurePage extends StaticWizardFieldsPage {
 	private static final String F_CALCULATION = "CALCULATION";
 	private static final String F_NAME = "NAME";
 

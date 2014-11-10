@@ -31,10 +31,10 @@ import com.jaspersoft.studio.components.list.messages.Messages;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
+import com.jaspersoft.studio.wizards.fields.StaticWizardFieldsPage;
 
 /**
  * Wizard to create an MList. 
@@ -46,7 +46,7 @@ public class ListWizard extends JSSWizard {
 	
 	private WizardDatasetPage step1;
 	private WizardConnectionPage step2;
-	private WizardFieldsPage step3;
+	private StaticWizardFieldsPage step3;
 	
 	
 	public ListWizard() {
@@ -64,7 +64,7 @@ public class ListWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 
-		step3 = new WizardFieldsPage();
+		step3 = new StaticWizardFieldsPage();
 		addPage(step3);
 		step3.setTitle(Messages.ListWizard_1);
 		step3.setDescription(Messages.ListWizard_2);
@@ -83,8 +83,8 @@ public class ListWizard extends JSSWizard {
 			JRDesignDataset listDataset = step1.getSelectedDataset();
 			if (listDataset != null && listDataset.getFieldsList().size() > 0)
 			{
-				getSettings().put( WizardDataSourcePage.DISCOVERED_FIELDS, new ArrayList<Object>( listDataset.getFieldsList() ));
-				getSettings().put( WizardDataSourcePage.DISCOVERED_PARAMETERS, new ArrayList<Object>( listDataset.getParametersList() ));
+				getSettings().put( StaticWizardDataSourcePage.DISCOVERED_FIELDS, new ArrayList<Object>( listDataset.getFieldsList() ));
+				getSettings().put( StaticWizardDataSourcePage.DISCOVERED_PARAMETERS, new ArrayList<Object>( listDataset.getParametersList() ));
 			}
 			else
 			{

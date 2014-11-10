@@ -46,8 +46,8 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.xml.scanners.XMLPartitionScanner;
+import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -99,12 +99,12 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 		InputStream stream = null;
 		try {
 			if (editorInput instanceof IFileEditorInput) {
-				String fileExtention = JrxmlEditor.getFileExtension(editorInput);
+				String fileExtention = JRXMLUtils.getFileExtension(editorInput);
 				if (fileExtention.equals(FileExtension.JASPER)) {
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
 					setDocumentContent(document,
-							JrxmlEditor.getXML(jrContext, editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION), encoding);
+							JRXMLUtils.getXML(jrContext, editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION), encoding);
 				} else
 					return super.setDocumentContent(document, editorInput, encoding);
 			}
@@ -125,7 +125,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite)
 			throws CoreException {
-		if (JrxmlEditor.getFileExtension((IEditorInput) element).equals(FileExtension.JASPER)) {
+		if (JRXMLUtils.getFileExtension((IEditorInput) element).equals(FileExtension.JASPER)) {
 			return; // do not save .jasper files, they are binary
 		}
 		if (element instanceof FileStoreEditorInput) {

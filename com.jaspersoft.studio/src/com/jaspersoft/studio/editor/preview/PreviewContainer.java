@@ -53,7 +53,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
-import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
@@ -68,6 +67,7 @@ import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.swt.toolbar.ToolItemContribution;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
+import com.jaspersoft.studio.utils.JRXMLUtils;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -147,7 +147,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				} else {
 					throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 				}
-				in = JrxmlEditor.getXML(jrContext, input, file.getCharset(true), in, null);
+				in = JRXMLUtils.getXML(jrContext, input, file.getCharset(true), in, null);
 				getJrContext(file);
 				jrContext.setJasperDesign(JRXmlLoader.load(jrContext, in));
 				setJasperDesign(jrContext);

@@ -21,7 +21,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
-import net.sf.jasperreports.engine.export.JsonMetadataExporter;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -38,6 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.editor.action.json.JSONPathDataAction;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.text.MStaticText;
@@ -85,7 +85,7 @@ public class PathAndDataDialog extends ATitledDialog {
 		setTitle(Messages.PathAndDataDialog_0);
 		setDescription(Messages.PathAndDataDialog_1);
 		JRDesignElement v = mtext.getValue();
-		path = v.getPropertiesMap().getProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY);
+		path = v.getPropertiesMap().getProperty(JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY);
 		if (path == null) {
 			if (mtext instanceof MTextField) {
 				JRDesignTextField tf = (JRDesignTextField) v;
@@ -103,12 +103,12 @@ public class PathAndDataDialog extends ATitledDialog {
 			}
 		}
 		repeat = Misc.nvl(
-				Boolean.valueOf(v.getPropertiesMap().getProperty(JsonMetadataExporter.JSON_EXPORTER_REPEAT_VALUE_PROPERTY)),
+				Boolean.valueOf(v.getPropertiesMap().getProperty(JSONPathDataAction.JSON_EXPORTER_REPEAT_VALUE_PROPERTY)),
 				false);
 		JRPropertyExpression[] pExpr = v.getPropertyExpressions();
 		if (pExpr != null)
 			for (JRPropertyExpression pe : pExpr) {
-				if (pe.getName().equals(JsonMetadataExporter.JSON_EXPORTER_DATA_PROPERTY)) {
+				if (pe.getName().equals(JSONPathDataAction.JSON_EXPORTER_DATA_PROPERTY)) {
 					if (pe.getValueExpression() != null)
 						data = pe.getValueExpression();
 					break;
@@ -240,7 +240,7 @@ public class PathAndDataDialog extends ATitledDialog {
 		setError(""); //$NON-NLS-1$
 		if (Misc.isNullOrEmpty(path)) {
 			JRPropertiesMap map = mtext.getValue().getPropertiesMap();
-			if (map != null && map.getProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY) != null)
+			if (map != null && map.getProperty(JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY) != null)
 				setError(Messages.PathAndDataDialog_13);
 			else {
 				setError(Messages.PathAndDataDialog_14);
@@ -258,7 +258,7 @@ public class PathAndDataDialog extends ATitledDialog {
 		for (JRDesignElement te : tels) {
 			JRPropertiesMap map = te.getPropertiesMap();
 			if (map != null) {
-				String name = map.getProperty(JsonMetadataExporter.JSON_EXPORTER_PATH_PROPERTY);
+				String name = map.getProperty(JSONPathDataAction.JSON_EXPORTER_PATH_PROPERTY);
 				if (name != null && name.equals(path)) {
 					getButton(IDialogConstants.OK_ID).setEnabled(false);
 					setError(Messages.PathAndDataDialog_15);

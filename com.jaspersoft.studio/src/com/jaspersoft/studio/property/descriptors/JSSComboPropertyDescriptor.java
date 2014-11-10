@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptors;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -25,7 +27,10 @@ import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
 import com.jaspersoft.studio.property.section.widgets.SPReadCombo;
 
 public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor implements IPropertyDescriptorWidget, IHelp {
-	private String[] labels;
+	
+	protected String[] labels;
+	
+	protected SPReadCombo combo;
 
 	public JSSComboPropertyDescriptor(Object id, String displayName, String[] labels) {
 		super(id, displayName, labels);
@@ -44,7 +49,8 @@ public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPReadCombo(parent, section, this);
+		combo =  new SPReadCombo(parent, section, this);
+		return combo;
 	}
 
 	private IHelpRefBuilder refBuilder;
@@ -59,5 +65,12 @@ public class JSSComboPropertyDescriptor extends ComboBoxPropertyDescriptor imple
 		if (refBuilder != null)
 			return refBuilder.getHelpReference();
 		return null;
+	}
+	
+	public void setItems(String[] items) {
+		labels = items;
+		if (combo != null && !combo.getControl().isDisposed() && !Arrays.equals(labels, combo.getItems())){
+			combo.setItems(labels);
+		}
 	}
 }

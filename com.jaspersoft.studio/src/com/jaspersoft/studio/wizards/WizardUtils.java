@@ -22,8 +22,8 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
-import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetNewPage;
+import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
 
 /**
  * Utilities to create objects from wizard settings
@@ -73,22 +73,22 @@ public class WizardUtils {
 				}
 			}
 
-			if (settings.containsKey(WizardDataSourcePage.DATASET_QUERY_LANGUAGE)) {
-				query.setLanguage((String) settings.get(WizardDataSourcePage.DATASET_QUERY_LANGUAGE));
+			if (settings.containsKey(StaticWizardDataSourcePage.DATASET_QUERY_LANGUAGE)) {
+				query.setLanguage((String) settings.get(StaticWizardDataSourcePage.DATASET_QUERY_LANGUAGE));
 			}
 
-			if (settings.containsKey(WizardDataSourcePage.DATASET_QUERY_TEXT)) {
-				query.setText((String) settings.get(WizardDataSourcePage.DATASET_QUERY_TEXT));
+			if (settings.containsKey(StaticWizardDataSourcePage.DATASET_QUERY_TEXT)) {
+				query.setText((String) settings.get(StaticWizardDataSourcePage.DATASET_QUERY_TEXT));
 			}
 
-			if (settings.containsKey(WizardDataSourcePage.DATASET_PROPERTIES)) {
-				JRPropertiesMap map = (JRPropertiesMap) settings.get(WizardDataSourcePage.DATASET_PROPERTIES);
+			if (settings.containsKey(StaticWizardDataSourcePage.DATASET_PROPERTIES)) {
+				JRPropertiesMap map = (JRPropertiesMap) settings.get(StaticWizardDataSourcePage.DATASET_PROPERTIES);
 				for (String prop : map.getPropertyNames())
 					dataset.setProperty(prop, map.getProperty(prop));
 			}
-			if (settings.containsKey(WizardDataSourcePage.DISCOVERED_PARAMETERS)) {
+			if (settings.containsKey(StaticWizardDataSourcePage.DISCOVERED_PARAMETERS)) {
 				List<JRDesignParameter> prms = (List<JRDesignParameter>) settings
-						.get(WizardDataSourcePage.DISCOVERED_PARAMETERS);
+						.get(StaticWizardDataSourcePage.DISCOVERED_PARAMETERS);
 				for (JRDesignParameter p : prms)
 					try {
 						dataset.addParameter(p);
@@ -100,8 +100,8 @@ public class WizardUtils {
 			}
 
 			// Check for fields...
-			if (settings.containsKey(WizardDataSourcePage.DATASET_FIELDS)) {
-				List<JRDesignField> fields = (List<JRDesignField>) (settings.get(WizardDataSourcePage.DATASET_FIELDS));
+			if (settings.containsKey(StaticWizardDataSourcePage.DATASET_FIELDS)) {
+				List<JRDesignField> fields = (List<JRDesignField>) (settings.get(StaticWizardDataSourcePage.DATASET_FIELDS));
 				for (JRDesignField f : fields) {
 					try {
 						dataset.addField(f);
@@ -113,8 +113,8 @@ public class WizardUtils {
 				}
 
 				// If there are fields, there may be groups also...
-				if (settings.containsKey(WizardDataSourcePage.GROUP_FIELDS)) {
-					List<JRDesignField> groupFields = (List<JRDesignField>) (settings.get(WizardDataSourcePage.GROUP_FIELDS));
+				if (settings.containsKey(StaticWizardDataSourcePage.GROUP_FIELDS)) {
+					List<JRDesignField> groupFields = (List<JRDesignField>) (settings.get(StaticWizardDataSourcePage.GROUP_FIELDS));
 					for (JRDesignField f : groupFields) {
 						try {
 							String name = ((JRField) f).getName();

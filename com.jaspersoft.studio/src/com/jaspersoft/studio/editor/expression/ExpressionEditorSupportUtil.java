@@ -38,7 +38,7 @@ import org.eclipse.ui.IEditorPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.VersionConstants;
-import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -148,8 +148,8 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static ExpressionEditorSupport getEditorSupportForReportLanguage() {
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-			return getEditorSupportForLanguage(((JrxmlEditor) activeJRXMLEditor).getModel().getJasperDesign().getLanguage());
+		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof AbstractJRXMLEditor) {
+			return getEditorSupportForLanguage(((AbstractJRXMLEditor) activeJRXMLEditor).getModel().getJasperDesign().getLanguage());
 		} else {
 			return null;
 		}
@@ -163,8 +163,8 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static ExpressionContext getReportExpressionContext() {
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
+		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof AbstractJRXMLEditor) {
+			final ANode mroot = (ANode) ((AbstractJRXMLEditor) activeJRXMLEditor).getModel();
 			if (mroot != null) {
 				final ANode mreport = (ANode) mroot.getChildren().get(0);
 				JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
@@ -185,8 +185,8 @@ public class ExpressionEditorSupportUtil {
 	 */
 	public static ExpressionContext getReportExtendedExpressionContext(){
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof JrxmlEditor) {
-			final ANode mroot = (ANode) ((JrxmlEditor) activeJRXMLEditor).getModel();
+		if (activeJRXMLEditor != null && activeJRXMLEditor instanceof AbstractJRXMLEditor) {
+			final ANode mroot = (ANode) ((AbstractJRXMLEditor) activeJRXMLEditor).getModel();
 			if (mroot != null) {
 				ANode mreport = (ANode) mroot.getChildren().get(0);
 				JasperDesign jd = mreport.getJasperDesign();
