@@ -1314,6 +1314,15 @@
                   type="com.jaspersoft.studio.callout.MCallout">
             </input>
          </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.BordersSection"
+               class="com.jaspersoft.studio.property.section.graphic.FrameSection"
+               id="com.jaspersoft.studio.property.section.graphic.FrameSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.frame.MFrame">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

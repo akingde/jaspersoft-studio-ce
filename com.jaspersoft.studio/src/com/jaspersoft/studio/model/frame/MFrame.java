@@ -1,30 +1,31 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.model.frame;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BorderSplitType;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.messages.MessagesByKeys;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -38,6 +39,8 @@ import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The Class MFrame.
@@ -81,16 +84,79 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 		setValue(jrFrame);
 	}
 
+	private static IPropertyDescriptor[] descriptors;
+	private static Map<String, Object> defaultsMap;
+
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
+	}
+
+	@Override
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		super.createPropertyDescriptors(desc, defaultsMap);
+
+		RComboBoxPropertyDescriptor positionTypeD = new RComboBoxPropertyDescriptor(
+				JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE, "Border Split Type", new String[] { "",
+						MessagesByKeys.getString(BorderSplitType.NO_BORDERS.getName()),
+						MessagesByKeys.getString(BorderSplitType.DRAW_BORDERS.getName()) });
+		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
+		desc.add(positionTypeD);
+		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
+
+	}
+
+	@Override
+	public Object getPropertyValue(Object id) {
+		JRDesignFrame jrElement = getValue();
+		if (id.equals(JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE)) {
+			if (jrElement.getBorderSplitType() == null)
+				return "";
+			return MessagesByKeys.getString(jrElement.getBorderSplitType().getName());
+		}
+		return super.getPropertyValue(id);
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+		JRDesignFrame jrElement = getValue();
+		if (id.equals(JRDesignFrame.PROPERTY_BORDER_SPLIT_TYPE)) {
+			if (Misc.isNullOrEmpty((String) value))
+				jrElement.setBorderSplitType(null);
+			else {
+				if (value.equals(MessagesByKeys.getString(BorderSplitType.NO_BORDERS.getName())))
+					jrElement.setBorderSplitType(BorderSplitType.NO_BORDERS);
+				else
+					jrElement.setBorderSplitType(BorderSplitType.DRAW_BORDERS);
+			}
+
+		}
+		super.setPropertyValue(id, value);
+	}
+
 	@Override
 	public int getDefaultHeight() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_HEIGHT);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_HEIGHT);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	@Override
 	public int getDefaultWidth() {
-		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(), JRDesignElement.PROPERTY_WIDTH);
-		return defaultValue != null ? (Integer)defaultValue : 200;
+		Object defaultValue = DefaultManager.INSTANCE.getDefaultPropertiesValue(this.getClass(),
+				JRDesignElement.PROPERTY_WIDTH);
+		return defaultValue != null ? (Integer) defaultValue : 200;
 	}
 
 	/*
@@ -170,35 +236,34 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	public JRPropertiesHolder[] getPropertyHolder() {
 		return new JRPropertiesHolder[] { getValue() };
 	}
-	
+
 	/**
-	 * If the model has the children not in sync with the JRElement the build
-	 * the correct list
+	 * If the model has the children not in sync with the JRElement the build the correct list
 	 */
 	@Override
 	public List<INode> initModel() {
-		if (getValue().getChildren().size()>0 && (getChildren() == null || getChildren().size() == 0)){
+		if (getValue().getChildren().size() > 0 && (getChildren() == null || getChildren().size() == 0)) {
 			MFrame copy = new MFrame();
 			copy.setValue(getValue());
-			ReportFactory.createElementsForBand(copy,getValue().getChildren() );
+			ReportFactory.createElementsForBand(copy, getValue().getChildren());
 			return copy.getChildren();
-		} else return getChildren();
+		} else
+			return getChildren();
 	}
 
-	
 	@Override
 	public HashSet<String> getUsedStyles() {
 		HashSet<String> usedStyles = super.getUsedStyles();
-		for(INode node : getChildren()){
-			if (node instanceof IGraphicalPropertiesHandler){
-				HashSet<String> childStyles = ((IGraphicalPropertiesHandler)node).getUsedStyles();
+		for (INode node : getChildren()) {
+			if (node instanceof IGraphicalPropertiesHandler) {
+				HashSet<String> childStyles = ((IGraphicalPropertiesHandler) node).getUsedStyles();
 				usedStyles.addAll(childStyles);
 			}
 		}
 		return usedStyles;
 	}
-	
-	public HashSet<String> generateGraphicalProperties(){
+
+	public HashSet<String> generateGraphicalProperties() {
 		HashSet<String> result = super.generateGraphicalProperties();
 		result.add(JRDesignFrame.PROPERTY_CHILDREN);
 		result.add(JRDesignElement.PROPERTY_ELEMENT_GROUP);
