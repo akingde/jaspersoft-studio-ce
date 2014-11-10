@@ -3,6 +3,7 @@
 <provider id="org.tigris.subversion.subclipse.core.svnnature">
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.babel.editor,com.jaspersoft.studio.babel.editor"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio,com.jaspersoft.studio"/>
+<project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.book,com.jaspersoft.studio.book"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.community,com.jaspersoft.studio.community"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.components,com.jaspersoft.studio.components"/>
 <project reference="0.9.3,http://code.jaspersoft.com/svn/repos/jaspersoftstudio/trunk/com.jaspersoft.studio.components.customvisualization,com.jaspersoft.studio.components.customvisualization"/>
