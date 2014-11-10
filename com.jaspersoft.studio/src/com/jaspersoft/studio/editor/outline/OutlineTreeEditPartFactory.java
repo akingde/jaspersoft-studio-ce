@@ -138,6 +138,7 @@ import com.jaspersoft.studio.model.variable.command.ReorderVariableCommand;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * A factory for creating OutlineTreeEditPart objects.
@@ -208,18 +209,26 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new DeleteStyleCommand((MStyles) parent, (MStyle) child);
 		} else if (child instanceof MParameter) {
 			JRDesignParameter p = (JRDesignParameter) child.getValue();
-			if (!p.isSystemDefined())
-				return new DeleteParameterCommand((MParameters) parent, (MParameter) child);
+			if (!p.isSystemDefined()){
+				MParameter srcNode = (MParameter) child; 
+				JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
+				return new DeleteParameterCommand(jConfig, (JRDesignDataset)parent.getValue(), srcNode.getValue(), false);
+			}
 		} else if (child instanceof MField) {
-			return new DeleteFieldCommand((MFields) parent, (MField) child);
+			MField srcNode = (MField) child; 
+			JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
+			return new DeleteFieldCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getValue(), false);
 		} else if (child instanceof MSortField) {
 			return new DeleteSortFieldCommand((MSortFields) parent, (MSortField) child);
 		} else if (child instanceof MGroup) {
 			return new DeleteGroupCommand((MGroups) parent, (MGroup) child);
 		} else if (child instanceof MVariable) {
 			JRDesignVariable p = (JRDesignVariable) child.getValue();
-			if (!p.isSystemDefined())
-				return new DeleteVariableCommand((MVariables) parent, (MVariable) child);
+			if (!p.isSystemDefined()){
+				MVariable srcNode = (MVariable) child; 
+				JasperReportsConfiguration jConfig = srcNode.getJasperConfiguration();
+				return new DeleteVariableCommand(jConfig, (JRDesignDataset) parent.getValue(), srcNode.getValue(), false);
+			}
 		} else if (child instanceof MScriptlet) {
 			return new DeleteScriptletCommand((MScriptlets) parent, (MScriptlet) child);
 		} else if (child instanceof MDataset && parent instanceof MReport) {

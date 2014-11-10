@@ -112,7 +112,7 @@ public class StylesListSection extends AbstractSection {
 	/**
 	 * Width of a line where the value of an attribute is shown
 	 */
-	private static final int ITEM_WIDTH = 150;
+	private static final int ITEM_WIDTH = 200;
 	
 	/**
 	 * Height of a line where the value of an attribute is shown
@@ -748,7 +748,7 @@ public class StylesListSection extends AbstractSection {
 			}
 		}
 	}
-	
+
 	//-- AREA THAT HANLDE THE PRINT OF THE DEFAULT VALUES
 	
 	private IPropertyDescriptor getDefaultDescriptor(String fullProperty){
@@ -773,20 +773,23 @@ public class StylesListSection extends AbstractSection {
 	private void printDefaultObject(String fullPropertyNameName, Object value, Composite parent) {
 		boolean printLine = ovverridenAttributes.contains(fullPropertyNameName);
 		IPropertyDescriptor descriptor = getDefaultDescriptor(fullPropertyNameName);
-		String name = propertyNamePrefixProvider(fullPropertyNameName) + descriptor.getDisplayName();
-		if (value instanceof Color) {
-			RGB valImage = ((Color) value).getRGB();
-			paintColor(parent, valImage, name, printLine, descriptor.getDescription()); 
-		} else if (value instanceof java.awt.Color) {
-			java.awt.Color valImage = (java.awt.Color) value;
-			paintColor(parent, getSWTColorFromAWT(valImage), name, printLine, descriptor.getDescription()); 
-		} else if (value instanceof JREnum) {
-			JREnum enumValue = (JREnum) value;
-			printLabels(parent, name, enumValue.getName(), printLine, descriptor.getDescription());
-		} else if (value instanceof Boolean) {
-			paintCheckBox(parent, name, (Boolean) value, printLine, descriptor.getDescription()); 
-		} else {
-			printLabels(parent, name, value.toString(), printLine, descriptor.getDescription()); 
+		//The current element has not the attributed
+		if (descriptor != null){
+			String name = propertyNamePrefixProvider(fullPropertyNameName) + descriptor.getDisplayName();
+			if (value instanceof Color) {
+				RGB valImage = ((Color) value).getRGB();
+				paintColor(parent, valImage, name, printLine, descriptor.getDescription()); 
+			} else if (value instanceof java.awt.Color) {
+				java.awt.Color valImage = (java.awt.Color) value;
+				paintColor(parent, getSWTColorFromAWT(valImage), name, printLine, descriptor.getDescription()); 
+			} else if (value instanceof JREnum) {
+				JREnum enumValue = (JREnum) value;
+				printLabels(parent, name, enumValue.getName(), printLine, descriptor.getDescription());
+			} else if (value instanceof Boolean) {
+				paintCheckBox(parent, name, (Boolean) value, printLine, descriptor.getDescription()); 
+			} else {
+				printLabels(parent, name, value.toString(), printLine, descriptor.getDescription()); 
+			}
 		}
 	}
 	
@@ -843,17 +846,20 @@ public class StylesListSection extends AbstractSection {
 	 * @return reference to the father of all the styles
 	 */
 	private ANode getStylesRoot(APropertyNode element) {
-		List<INode> children = element.getRoot().getChildren();
-		Iterator<INode> it = children.iterator();
+		INode root = element.getRoot();
 		ANode stylesClass = null;
-		while (it.hasNext() && stylesClass == null) {
-			INode childElement = it.next();
-			if (childElement instanceof MStyles || childElement instanceof MStylesTemplate)
-				stylesClass = (ANode) childElement;
-			// The root is a subreport or a table, i need to move into an upper level
-			if (childElement instanceof MPage) {
-				children = childElement.getChildren();
-				it = children.iterator();
+		if (root != null){
+			List<INode> children = element.getRoot().getChildren();
+			Iterator<INode> it = children.iterator();
+			while (it.hasNext() && stylesClass == null) {
+				INode childElement = it.next();
+				if (childElement instanceof MStyles || childElement instanceof MStylesTemplate)
+					stylesClass = (ANode) childElement;
+				// The root is a subreport or a table, i need to move into an upper level
+				if (childElement instanceof MPage) {
+					children = childElement.getChildren();
+					it = children.iterator();
+				}
 			}
 		}
 		return stylesClass;

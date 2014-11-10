@@ -43,11 +43,11 @@ public class DeleteVariableCommand extends ADatasetObjectDeleteCommand{
 	 *          the src node
 	 */
 	public DeleteVariableCommand(MVariables destNode, MVariable srcNode) {
-		this(srcNode.getJasperConfiguration(), destNode.getValue(), srcNode.getValue());
+		this(srcNode.getJasperConfiguration(), destNode.getValue(), srcNode.getValue(), null);
 	}
 
-	public DeleteVariableCommand(JasperReportsConfiguration jContext, JRDesignDataset destNode, JRDesignVariable srcNode) {
-		super();
+	public DeleteVariableCommand(JasperReportsConfiguration jContext, JRDesignDataset destNode, JRDesignVariable srcNode, Boolean canceled) {
+		super(canceled);
 		this.jContext = jContext;
 		jd = jContext.getJasperDesign();
 		this.jrDataset = destNode;
