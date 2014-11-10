@@ -156,7 +156,7 @@ public class TableComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignComponentElement) {
 			JRDesignComponentElement tbl = (JRDesignComponentElement) jrObject;
 			if (tbl.getComponent() instanceof StandardTable) {
-				JasperDesign jasperDesign = parent.getJasperDesign();
+				JasperDesign jasperDesign = parent.getJasperConfiguration().getJasperDesign();
 				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
 				if (parent instanceof MPage) {

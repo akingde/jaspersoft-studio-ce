@@ -217,6 +217,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	public static ANode createCrosstab(MCrosstab mc) {
 		JRDesignCrosstab ct = (JRDesignCrosstab) mc.getValue();
 		MCrosstab mCrosstab = new MCrosstab();
+		mCrosstab.setJasperConfiguration(mc.getJasperConfiguration());
 		MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
 		if (ct.getParameters() != null)
 			for (JRCrosstabParameter p : ct.getParameters())
