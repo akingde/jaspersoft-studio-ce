@@ -252,4 +252,11 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.jaspersoft.studio.book"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
