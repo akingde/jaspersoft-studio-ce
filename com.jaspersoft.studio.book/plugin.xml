@@ -83,4 +83,10 @@
           </propertyTab>
        </propertyTabs>
     </extension>
+    <extension
+          point="com.jaspersoft.studio.babel.editor.resourceInput">
+       <input
+             class="com.jaspersoft.studio.book.messages.ResourcePublisher">
+       </input>
+    </extension>
 </plugin>

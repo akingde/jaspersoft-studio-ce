@@ -36,6 +36,7 @@ public class Messages extends NLS {
 	public static String PartPropertyEditor_pageDescription;
 	public static String PartPropertyEditor_pageTitle;
 	public static String PartPropertyEditor_wizardTitle;
+	public static String ReportPartSection_advancedLabel;
 	public static String SPPartParametersButton_parametersButton;
 	public static String SPPartReturnValuesButton_returnValuesButton;
 	static {

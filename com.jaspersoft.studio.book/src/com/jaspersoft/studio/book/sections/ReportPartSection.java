@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.book.model.MReportPart;
@@ -32,7 +33,9 @@ public class ReportPartSection extends AbstractSection {
 	
 		//CREATE THE PARAMETERS AND RETURN VALUES BUTTONS
 		
-		Composite buttonsComposite = new Composite(parent, SWT.NONE);
+		Composite buttonsComposite = getWidgetFactory().createSection(parent, Messages.ReportPartSection_advancedLabel, false, 2, 2 , Section.EXPANDED);
+		
+		//Composite buttonsComposite = new Composite(parent, SWT.NONE);
 		buttonsComposite.setLayout(new GridLayout(2, false));
 		GridData buttonsData = new GridData(GridData.FILL_HORIZONTAL);
 		buttonsData.horizontalSpan = 2;
