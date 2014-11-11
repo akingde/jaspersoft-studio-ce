@@ -161,9 +161,17 @@ public class ExpressionUtil {
 		}
 	}
 
+	/**
+	 * This method evaluate the expression and convert the result into a string, can return null
+	 *  
+	 * @param exp the expression to evaluate
+	 * @param jConfig the current jasper configuration
+	 * @param dataset the dataset to where the expression belong
+	 * @return the evaluated expression as string if it can be interpreted or null otherwise
+	 */
 	public static String cachedExpressionEvaluationString(JRExpression exp, JasperReportsConfiguration jConfig,
 			JRDesignDataset dataset) {
-		Object obj = cachedExpressionEvaluationString(exp, jConfig, dataset);
+		Object obj = cachedExpressionEvaluation(exp, jConfig, dataset);
 		if (obj != null)
 			return obj.toString();
 		return null;
@@ -188,6 +196,15 @@ public class ExpressionUtil {
 		return cachedExpressionEvaluation(exp, jConfig, dataset);
 	}
 
+	/**
+	 * Resolve an expression and convert it to a string. The resolution is done
+	 * using {@link #cachedExpressionEvaluation(JRExpression, JasperReportsConfiguration)}
+	 * and if the result is not null then it is returned
+	 * 
+	 * @param exp the expression to resolve
+	 * @param jConfig the current configuration
+	 * @return the resolved expression as string or null if it can't be resolved
+	 */
 	public static String cachedExpressionEvaluationString(JRExpression exp, JasperReportsConfiguration jConfig) {
 		Object obj = cachedExpressionEvaluation(exp, jConfig);
 		if (obj != null)
