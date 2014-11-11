@@ -2,14 +2,19 @@ package com.jaspersoft.studio.book.editparts;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Iterator;
+import java.io.File;
 
+import net.sf.jasperreports.engine.JRExpression;
+
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -19,6 +24,10 @@ import org.eclipse.gef.editpolicies.OrderedLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.dnd.PageEditPartTracker;
@@ -28,6 +37,8 @@ import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartAfterCommand;
 import com.jaspersoft.studio.book.model.commands.RemoveChildrenCommand;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class BookPagesEditPart extends AbstractGraphicalEditPart {
 	
@@ -192,6 +203,56 @@ public class BookPagesEditPart extends AbstractGraphicalEditPart {
 	public void eraseTargetFeedback(Request request) {
 		//it the part was removed during the drag it's parent will be null
 		if (getParent() != null) getParent().eraseTargetFeedback(request);
+	}
+	
+	/**
+	 * Called on double click on the edit part. It try to resolve the expression
+	 * of the page part and if the resource reference is found it is opened inside
+	 * the editor
+	 */
+	@Override
+	public void performRequest(Request req) {
+	    if(req.getType() == RequestConstants.REQ_OPEN) {
+	    	MReportPart part = (MReportPart)getModel();
+	    	JRExpression expression = (JRExpression)part.getPropertyValue(MReportPart.COMPONENT_EXPRESSION);
+	    	JasperReportsConfiguration jConfig = part.getJasperConfiguration();
+	    	String path = ExpressionUtil.cachedExpressionEvaluationString(expression, jConfig);
+			if (path == null) return;
+	    	File file = getResource(path,jConfig);
+			if (file != null && file.exists() && file.isFile()) {
+				IFileStore fileStore = EFS.getLocalFileSystem().getStore(file.toURI());
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				try {
+					IDE.openEditorOnFileStore(page, fileStore);
+				} catch (PartInitException e) {
+					e.printStackTrace();
+				}
+			} else {
+				
+			}
+	    }
+	}
+	
+	/**
+	 * Given a report (jasper or jrxml), the file is loaded if exists.
+	 * 
+	 * @param lovation - A file location.
+	 * @param context - Can be null, but in this case don't expect images to be resolved...or properly previewed.
+	 * @return the file element of the resource
+	 *
+	 */
+	private File getResource(String location, JasperReportsConfiguration context) {
+		
+		File f = ReportThumbnailsManager.findFile(location, context);
+		
+		if (( f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper"))
+		{
+			// check for a jrxml...
+			 location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml";
+			 f = ReportThumbnailsManager.findFile(location, context);
+		}
+		
+		return f;
 	}
 	
 	@Override
