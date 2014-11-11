@@ -10,17 +10,21 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.book.editparts.BookPagesEditPart;
 import com.jaspersoft.studio.book.editparts.BookSectionEditPart;
-import com.jaspersoft.studio.book.gallery.controls.GalleryComposite;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 
 public class BookSectionFigure extends RectangleFigure {
 
+	private static final int TITLE_FONT_HEIGHT = 14;
+	
+	private static final int HORIZONTAL_LINE_WIDTH = 1;
+
+	public static int HORIZONTAL_LINE_OFFSET = TITLE_FONT_HEIGHT + 2;
+	
 	private BookSectionEditPart parentPart;
 	
 	private boolean drawFeedback = false;
@@ -41,9 +45,9 @@ public class BookSectionFigure extends RectangleFigure {
 			int numberOfLines = (parentPart.getChildren().size() / numberForLine);
 			if (parentPart.getChildren().size() % numberForLine >0) numberOfLines++;
 			if (numberOfLines == 0 ) numberOfLines++;
-			preferredHeight = preferredHeight * numberOfLines;
+			preferredHeight = (preferredHeight+4) * numberOfLines;
 		}
-		return new Dimension(-1, preferredHeight+50);
+		return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
 	}
 	
 	@Override
@@ -65,17 +69,13 @@ public class BookSectionFigure extends RectangleFigure {
 		graphics.setForegroundColor(ResourceManager.getColor(189, 189, 189));
 		Rectangle figureBounds = getBounds();
 
-		// Ready to write the section title.
-		graphics.getFont().getFontData()[0].setHeight(20);
 		
 		// Set the proper font size.
 		// The proper font size may actually behave differently system by
 		// system. We want here a font with a real height of more or less
 		// 14 pixels.
-		Font titleFont = new Font(Display.getDefault(),oldFont.getFontData()[0].getName(),14,SWT.None);
+		Font titleFont = ResourceManager.getFont(oldFont.getFontData()[0].getName(), TITLE_FONT_HEIGHT, SWT.None);
 		graphics.setFont(titleFont);
-		int fontHeight = graphics.getFontMetrics().getHeight();
-		
 		
 		// The name of the section is taken by the model. We may decide to write
 		// very custom section titles, based on properties and other information
@@ -93,18 +93,15 @@ public class BookSectionFigure extends RectangleFigure {
 		// We hardcode here the vertical space we use for the y coordinate, but this number should be
 		// caculated dynamically in case the font changes system by system.
 		
-		graphics.setLineWidth(1);
-		graphics.drawLine(figureBounds.x+10, figureBounds.y+ fontHeight + 2, figureBounds.x+figureBounds.width, figureBounds.y+ fontHeight + 2);
+		HORIZONTAL_LINE_OFFSET = graphics.getFontMetrics().getHeight() + 2;
+		graphics.setLineWidth(HORIZONTAL_LINE_WIDTH);
+		graphics.drawLine(figureBounds.x+10, figureBounds.y + HORIZONTAL_LINE_OFFSET, figureBounds.x+figureBounds.width, figureBounds.y + HORIZONTAL_LINE_OFFSET);
 		
 		// Restore graphics properties
 		graphics.setLineWidth(oldLineWidth);
 		graphics.setForegroundColor(oldForeColor);
 		graphics.setBackgroundColor(oldBackColor);
 		graphics.setFont(oldFont);
-		
-		// Dispose the font...
-		// Probably create and dispose the font all the times is not a brilliant idea for performance...
-		titleFont.dispose();
 	}
 	
 	@Override

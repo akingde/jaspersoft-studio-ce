@@ -1,7 +1,6 @@
 package com.jaspersoft.studio.book.editors.figures;
 
 import java.io.File;
-import java.util.Timer;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
@@ -9,7 +8,6 @@ import net.sf.jasperreports.engine.design.JRDesignPart;
 import net.sf.jasperreports.engine.part.PartComponent;
 import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
 
-import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
@@ -22,7 +20,6 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.utils.ExpressionUtil;
-
 
 
 
@@ -241,7 +238,8 @@ public class BookPagesFigure extends RectangleFigure {
 	
 	@Override
 	public void setBounds(Rectangle rect) {
-		super.setBounds(new Rectangle(rect.x+15, rect.y+25, rect.width, rect.height));
+		int offsetY = BookSectionFigure.HORIZONTAL_LINE_OFFSET + 4;
+		super.setBounds(new Rectangle(rect.x+15, rect.y+offsetY, rect.width, rect.height));
 	}
 	
 //	private void scaleImage(Image sourceImage, int width, int height) {

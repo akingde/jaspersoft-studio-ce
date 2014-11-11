@@ -46,6 +46,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.book.editors.JRBookEditor;
+import com.jaspersoft.studio.book.messages.MessagesByKeys;
 import com.jaspersoft.studio.book.wizards.BookWizardDataSourceDynamicPage;
 import com.jaspersoft.studio.book.wizards.BookWizardFieldsDynamicPage;
 import com.jaspersoft.studio.book.wizards.BookWizardSectionsDynamicPage;
@@ -526,5 +527,12 @@ public class BookTemplateBundle extends WizardTemplateBundle {
 		backcoverPart = getPartFromName(templateDocument.getHost(), folder + backCoverName);
 		tocPart = getPartFromName(templateDocument.getHost(), folder + tocName);
 		mainPart = getPartFromName(templateDocument.getHost(), folder + mainName);
+	}
+	
+	@Override
+	public String getLocalizedString(String key) {
+		if (MessagesByKeys.hasTranslation(key)){
+			return MessagesByKeys.getString(key);
+		} else return super.getLocalizedString(key);
 	}
 }
