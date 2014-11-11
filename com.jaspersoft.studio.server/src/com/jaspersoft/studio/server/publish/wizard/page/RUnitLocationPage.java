@@ -193,7 +193,8 @@ public class RUnitLocationPage extends JSSHelpWizardPage {
 							List<INode> children = new ArrayList<INode>();
 							if (mres.getChildren().get(0) instanceof MDummy)
 								try {
-									WSClientHelper.refreshContainer(mres, new NullProgressMonitor());
+									//WSClientHelper.refreshContainer(mres, new NullProgressMonitor());
+									return mres.getChildren().toArray();
 								} catch (Exception e) {
 									UIUtils.showError(e);
 								}
