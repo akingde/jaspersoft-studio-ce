@@ -79,7 +79,7 @@ public class GlobalPreferencePage extends FieldEditorPreferencePage implements I
 	
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JSS_JETTY_PORT, 0);
-		store.setDefault(JSS_USE_SECURE_STORAGE, true);
+		store.setDefault(JSS_USE_SECURE_STORAGE, false);
 		store.setDefault(JSS_ENABLE_INTERNAL_CONSOLE, false);
 	}
 
