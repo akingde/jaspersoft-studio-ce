@@ -812,6 +812,9 @@ public class Messages extends NLS {
 	public static String IncreaseHSpaceAction_actionName;
 	public static String IncreaseVSpaceAction_actionDescription;
 	public static String IncreaseVSpaceAction_actionName;
+	public static String InputParameterDialog_dialogText;
+	public static String InputParameterDialog_expressionLabel;
+	public static String InputParameterDialog_nameLabel;
 	public static String InputReturnValueDialog_dialogTitle;
 	public static String JaspersoftStudioPlugin_BrandingInfoJSSPlugin;
 	public static String JaspersoftStudioPlugin_JSSConsoleTitle;

@@ -18,14 +18,11 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.type.CalculationEnum;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -33,7 +30,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -47,16 +43,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.swt.events.ChangeEvent;
 import com.jaspersoft.studio.swt.events.ChangeListener;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
-import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.wizards.ContextHelpIDs;
 import com.jaspersoft.studio.wizards.JSSHelpWizardPage;
@@ -190,16 +182,7 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
 				if (selection.size() > 0){
 					ReturnValueContainer selectedValue = (ReturnValueContainer)selection.getFirstElement();
-					ReturnValueContainer result = selectedValue.clone();
-					InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), result, addToVariablesPlusElement(selectedValue.getToVariable()));
-					if (inputDialog.open() == Dialog.OK){
-						int index = values.indexOf(selectedValue);
-						values.set(index, result);
-						tableViewer.refresh();
-						toVariables = null;
-						updateButtonsStatus();
-						callModifyListeners();
-					}
+					editElement(selectedValue);
 				}
 			}
 		});
@@ -258,6 +241,29 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 		updateButtonsStatus();
 	}
 	
+	/**
+	 * Open the dialog to edit an existing element and replace it when
+	 * the dialog is closed with the ok button
+	 * 
+	 * @param edited the element to edit
+	 */
+	private void editElement(ReturnValueContainer edited){
+		ReturnValueContainer result = edited.clone();
+		InputReturnValueDialog inputDialog = new InputReturnValueDialog(getShell(), result, addToVariablesPlusElement(edited.getToVariable()));
+		if (inputDialog.open() == Dialog.OK){
+			int index = values.indexOf(edited);
+			values.set(index, result);
+			tableViewer.refresh();
+			toVariables = null;
+			updateButtonsStatus();
+			callModifyListeners();
+		}
+	}
+	
+	/**
+	 * Update the status of the buttons enabling or disabling 
+	 * them if there are input errors
+	 */
 	private void updateButtonsStatus(){
 		if (addButton != null){
 			if (getToVariablesNames().length == 0){
@@ -319,81 +325,22 @@ public abstract class RVPropertyPage extends JSSHelpWizardPage {
 	 */
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		
-		final String[] allVariablesNames = getAllVariablesNames();
-		
-		viewer.setCellModifier(new ICellModifier() {
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			
-			public boolean canModify(Object element, String property) {
-				if (property.equals("FROMVARIABLE")) //$NON-NLS-1$
-					return true;
-				if (property.equals("TOVARIABLE")) //$NON-NLS-1$
-					return true;
-				if (property.equals("CALCULATIONTYPE")) //$NON-NLS-1$
-					return true;
-				if (property.equals("INCREMENTERFACTORYCLASS")) //$NON-NLS-1$
-					return true;
-				return false;
-			}
-
-			public Object getValue(Object element, String property) {
-				ReturnValueContainer prop = (ReturnValueContainer) element;
-				if ("FROMVARIABLE".equals(property)) //$NON-NLS-1$
-					return prop.getFromVariable();
-				if ("TOVARIABLE".equals(property)) { //$NON-NLS-1$
-					return ArrayUtils.indexOf(allVariablesNames, prop.getToVariable());
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				int selectedIndex = table.getSelectionIndex();
+				if (selectedIndex != -1){
+					ReturnValueContainer selectedElement = values.get(selectedIndex);
+					editElement(selectedElement);
 				}
-				if ("CALCULATIONTYPE".equals(property)) //$NON-NLS-1$
-					return EnumHelper.getValue(prop.getCalculation(), 0, false);
-				if ("INCREMENTERFACTORYCLASS".equals(property)) //$NON-NLS-1$
-					return Misc.nvl(prop.getIncrementerFactoryClassName());
-				return ""; //$NON-NLS-1$
-			}
-
-			public void modify(Object element, String property, Object value) {
-				TableItem tableItem = (TableItem) element;
-				setErrorMessage(null);
-				setMessage(getDescription());
-				ReturnValueContainer data = (ReturnValueContainer) tableItem.getData();
-				if ("FROMVARIABLE".equals(property)) { //$NON-NLS-1$
-					data.setFromVariable((String) value);
-				} else if ("TOVARIABLE".equals(property)) { //$NON-NLS-1$
-					String[] tv = getAllVariablesNames();
-					int val = (Integer) value;
-					data.setToVariable(tv[val]);
-				} else if ("CALCULATIONTYPE".equals(property)) { //$NON-NLS-1$
-					data.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
-				} else if ("INCREMENTERFACTORYCLASS".equals(property)) { //$NON-NLS-1$
-					data.setIncrementerFactoryClassName((String) value);
-				}
-				if (validate()) callModifyListeners();
-				tableViewer.update(element, new String[] { property });
-				tableViewer.refresh();
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-																						 new ComboBoxCellEditor(parent, allVariablesNames),
-																						 new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL)),
-																						 new ClassTypeCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "FROMVARIABLE", "TOVARIABLE", "CALCULATIONTYPE", "INCREMENTERFACTORYCLASS" }); 
 	}
 	
-	/**
-	 * Get a list of all the variables of the current element
-	 * 
-	 * @return a not null array of variable names
-	 */
-	private String[] getAllVariablesNames(){
-		List<String> res = new ArrayList<String>();
-		JRVariable[] vlist = getVariables();
-		for (JRVariable o : vlist) {
-			JRDesignVariable jdVar = (JRDesignVariable) o;
-			if (!jdVar.isSystemDefined())
-				res.add(jdVar.getName());
-		}
-		return res.toArray(new String[res.size()]);
-	}
-	
+
 	/**
 	 * Return an hashset of the variable names that
 	 * are already used as to variables
