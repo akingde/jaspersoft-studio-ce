@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jaspersoft Studio
+Bundle-Name: TIBCO Jaspersoft Studio
 Bundle-SymbolicName: com.jaspersoft.studio.rcp; singleton:=true
 Bundle-Version: 6.0.0.qualifier
 Bundle-Localization: plugin
