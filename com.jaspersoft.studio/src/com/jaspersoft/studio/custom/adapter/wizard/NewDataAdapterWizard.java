@@ -18,6 +18,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,10 +40,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
@@ -516,12 +520,58 @@ public class NewDataAdapterWizard extends Wizard implements INewWizard {
 		info.setDataAdapterServiceFactory(new Pair(DATA_ADAPTER_PACKAGE, DATA_ADAPTER_SERVICE_FACTORY_TYPE));
 	}
 	
+	/**
+	 * Extract a button field from the dialog with a precise name.
+	 * The field is extracted trough reflection, because the method
+	 * was created to extract the buttons from the dialog and there are
+	 * no way to get them. Other than this, since this dialog is build
+	 * from the eclipse platform, there is no easy way to override it
+	 * 
+	 * @param fieldName the name of the field to get, must be have type swt button
+	 * @param container the dialog from where the field must be extracted
+	 * @return the button if it can be extracted or null if something goes wrong
+	 */
+	private Button getButton(String fieldName, WizardDialog container){
+		try {
+			Field field = WizardDialog.class.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			Button button = (Button)field.get(container);
+			return button;
+		} catch (Throwable e) {
+			String errorMessage = "Error getting button {0} on the custom adapter dialog";
+			JaspersoftStudioPlugin.getInstance().logError(MessageFormat.format(errorMessage, new Object[]{fieldName}), e);
+		} 
+		return null;
+	}
+	
+	/**
+	 * Disable all the dialog button if they are found
+	 */
+	private void disableButtons(){
+		if (getContainer() instanceof WizardDialog){
+			WizardDialog container =  (WizardDialog)getContainer();
+			Button currentButton = getButton("finishButton",container);
+			if (currentButton != null) currentButton.setEnabled(false);
+			
+			currentButton = getButton("backButton",container);
+			if (currentButton != null) currentButton.setEnabled(false);
+			
+			currentButton = getButton("nextButton",container);
+			if (currentButton != null) currentButton.setEnabled(false);
+			
+			currentButton = getButton("cancelButton",container);
+			if (currentButton != null) currentButton.setEnabled(false);
+		}
+	}
+	
 	@Override
 	public boolean performFinish() {
+		//Some operation are executed in some ui thread and we don't wont
+		//that the user can press the dialog buttons another time after the first one
+		disableButtons();
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		monitor.setTaskName("Crating project");
 		try {
-			System.out.println("start");
 			ArrayList<String> src = new ArrayList<String>();
 			src.add("src");
 			ArrayList<String> requiredBundles = new ArrayList<String>();

@@ -45,7 +45,7 @@ public class $dataAdapterFieldsProvider implements IFieldsProvider {
 	 * @param dataAdapterService the service of the data adapter, can used to get the result dataset from the data adapter
 	 * @param jasperReportsConfiguration the configuration of the current report
 	 * @param dataset the current dataset, in some cases it can be null
-	 * @return a not null list of the field provided by the datasource with the current configuration
+	 * @return a not null list of the field provided by the data adapter with the current configuration
 	 * @throws UnsupportedOperationException  is the method is not supported
 	 * @throws JRException if an error occurs.
 	 */
@@ -55,18 +55,20 @@ public class $dataAdapterFieldsProvider implements IFieldsProvider {
         List<JRDesignField> designFields = new ArrayList<JRDesignField>();
        	Map<String, Object> runParameters = new HashMap<String, Object>();
        	dataAdapterService.contributeParameters(runParameters);
-       	JRMapCollectionDataSource result = (JRMapCollectionDataSource)runParameters.get(JRParameter.REPORT_DATA_SOURCE);
-        
-		if (result.getRecordCount() > 0){
-			Map<String, ?> record = result.getData().iterator().next();
-			for(String colName : record.keySet()){
-				JRDesignField field = new JRDesignField();
-	        	field.setName(colName);
-	        	field.setValueClass(Integer.class);
-	        	designFields.add(field);
+       	Object resultRaw = runParameters.get(JRParameter.REPORT_DATA_SOURCE);
+       	
+       	if (resultRaw != null && resultRaw instanceof JRMapCollectionDataSource){
+	       	JRMapCollectionDataSource result = (JRMapCollectionDataSource) resultRaw;  
+			if (result.getRecordCount() > 0){
+				Map<String, ?> record = result.getData().iterator().next();
+				for(String colName : record.keySet()){
+					JRDesignField field = new JRDesignField();
+		        	field.setName(colName);
+		        	field.setValueClass(Object.class);
+		        	designFields.add(field);
+				}
 			}
-		}
-        		
+        }		
         return designFields;
     }
 
