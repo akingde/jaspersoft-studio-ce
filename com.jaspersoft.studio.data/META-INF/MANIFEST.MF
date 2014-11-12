@@ -4,7 +4,7 @@ Bundle-Name: Data Adapters
 Bundle-SymbolicName: com.jaspersoft.studio.data;singleton:=true
 Bundle-Version: 6.0.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.data.Activator
-Bundle-Vendor: Jaspersoft Corporation
+Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: com.jaspersoft.studio;bundle-version="6.0.0";visibility:=reexport,
  org.apache.commons.pool;bundle-version="1.6.0";visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.6.0";visibility:=reexport,

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SQL Query Editor
-Bundle-Vendor: Jaspersoft Corporation
+Bundle-Vendor: TIBCO Software Inc.
 Bundle-Version: 6.0.0.qualifier
 Bundle-SymbolicName: com.jaspersoft.studio.data.sql.ui;singleton:=true
 Bundle-Localization: plugin

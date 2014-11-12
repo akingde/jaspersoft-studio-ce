@@ -3,7 +3,7 @@
       id="jre.linux.gtk.x86_64.feature"
       label="JRE for Linux 64-bit systems"
       version="1.7.0.u67"
-      provider-name="Jaspersoft Corporation"
+      provider-name="TIBCO Software Inc."
       os="linux"
       ws="gtk"
       arch="x86_64">

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio Samples
 Bundle-SymbolicName: com.jaspersoft.studio.doc.samples;singleton:=true
 Bundle-Version: 6.0.0.qualifier
-Bundle-Vendor: Jaspersoft Corporation
+Bundle-Vendor: TIBCO Software Inc.
 Fragment-Host: com.jaspersoft.studio.doc;bundle-version="2.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7

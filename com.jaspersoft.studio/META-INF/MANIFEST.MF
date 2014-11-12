@@ -4,7 +4,7 @@ Bundle-Name: Jaspersoft Studio Designer
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
 Bundle-Version: 6.0.0.qualifier
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
-Bundle-Vendor: Jaspersoft Corporation
+Bundle-Vendor: TIBCO Software Inc.
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,

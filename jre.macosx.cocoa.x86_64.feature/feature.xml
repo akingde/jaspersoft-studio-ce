@@ -3,7 +3,7 @@
       id="jre.macosx.cocoa.x86_64.feature"
       label="JRE for Mac OS X 64-bit systems"
       version="1.7.0.u67"
-      provider-name="Jaspersoft Corporation"
+      provider-name="TIBCO Software Inc."
       os="macosx"
       ws="cocoa"
       arch="x86_64">

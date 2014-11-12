@@ -3,7 +3,7 @@
       id="com.jaspersoft.studio.rcp.feature"
       label="Jaspersoft Studio Community RCP Feature"
       version="6.0.0.qualifier"
-      provider-name="Jaspersoft Corporation"
+      provider-name="TIBCO Software Inc."
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
       ws="cocoa,gtk,win32">

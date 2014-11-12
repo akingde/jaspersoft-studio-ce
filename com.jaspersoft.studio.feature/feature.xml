@@ -3,7 +3,7 @@
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio feature"
       version="6.0.0.qualifier"
-      provider-name="Jaspersoft Corporation"
+      provider-name="TIBCO Software Inc."
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
       ws="cocoa,gtk,win32">
