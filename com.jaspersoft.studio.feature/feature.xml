@@ -30,10 +30,6 @@
          version="0.0.0"
          search-location="both"/>
 
-   <includes
-         id="com.jaspersoft.studio.phantomjs.feature"
-         version="0.0.0"/>
-
    <requires>
       <import plugin="org.eclipse.ui.cheatsheets" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.filesystem" version="1.3.0" match="greaterOrEqual"/>

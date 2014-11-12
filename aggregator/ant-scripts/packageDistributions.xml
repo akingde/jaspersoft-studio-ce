@@ -8,7 +8,6 @@
 	<property name="productVersionFile" value="buildversion.properties" />
 	<property name="jre.location.linux32" value="features/jre.linux.gtk.x86.feature_1.7.0.u67/jre/bin" />
 	<property name="jre.location.linux64" value="features/jre.linux.gtk.x86_64.feature_1.7.0.u67/jre/bin" />
-	<property name="phantomjs.executable.location" value="phantomjs-1.9.8/bin/phantomjs" />
 	<!-- import properties for mac machine producing the DMG -->
 	<property file="authenticationInfo.properties"/>
 
@@ -105,8 +104,6 @@
 		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
-		<!-- set executable flag to PhantomJS exec -->
-		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/${phantomjs.executable.location}" perm="ugo+x" />
 		<!-- rename the folder -->
 		<move file="${dirlocation.linux.x86}/${productRootFolder}" tofile="${dirlocation.linux.x86}/${jss.distro.folder}" />
 		<!-- create tar.gz file -->
@@ -116,14 +113,12 @@
 				<include name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*" />
 				<include name="**/Jaspersoft Studio" />
 				<include name="**/runubuntu.sh"/>
-				<include name="**/bin/phantomjs"/>
 			</tarfileset>
 			<tarfileset dir="${dirlocation.linux.x86}/">
 				<include name="**/*" />
 				<exclude name="**/features/jre.linux.gtk.x86.feature_*/jre/bin/*"/>
 				<exclude name="**/Jaspersoft Studio" />
 				<exclude name="**/runubuntu.sh"/>
-				<exclude name="**/bin/phantomjs"/>
 			</tarfileset>
 		</tar>
 		<!-- create debian package -->
@@ -151,8 +146,6 @@
 		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
-		<!-- set executable flag to PhantomJS exec -->
-		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/${phantomjs.executable.location}" perm="ugo+x" />		
 		<!-- rename the folder -->
 		<move file="${dirlocation.linux.x86_64}/${productRootFolder}" tofile="${dirlocation.linux.x86_64}/${jss.distro.folder}" />
 		<!-- create tar.gz file -->
@@ -162,14 +155,12 @@
 				<include name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*" />
 				<include name="**/Jaspersoft Studio" />
 				<include name="**/runubuntu.sh"/>
-				<include name="**/bin/phantomjs"/> 
 			</tarfileset>
 			<tarfileset dir="${dirlocation.linux.x86_64}/">
 				<include name="**/*" />
 				<exclude name="**/features/jre.linux.gtk.x86_64.feature_*/jre/bin/*"/>
 				<exclude name="**/Jaspersoft Studio" />
 				<exclude name="**/runubuntu.sh"/>
-				<exclude name="**/bin/phantomjs"/> 
 			</tarfileset>
 		</tar>
 		<!-- create debian package -->
@@ -190,8 +181,6 @@
 
 		<!-- copy additional licensing files -->
 		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
-		<!-- set executable flag on PhantomJS exec -->
-		<chmod file="${dirlocation.mac.x86_64}/${productRootFolder}/${phantomjs.executable.location}" perm="ugo+x" />
 		
 		<zip destfile="${mac.x86_64.zipfile}">
 			<fileset dir="${dirlocation.mac.x86_64}"/>
@@ -270,7 +259,6 @@
 chmod +x "/opt/jaspersoft/${jss.distro.folder}/Jaspersoft Studio"
 chmod +x "/opt/jaspersoft/${jss.distro.folder}/runubuntu.sh"
 chmod -R +x "/opt/jaspersoft/${jss.distro.folder}/${jre.feature.location}/"
-chmod +x "/opt/jaspersoft/${jss.distro.folder}/${phantomjs.executable.location}"
 exit 0;</echo>
 		<desktopEntry 
 				toFile="${dist}/debian/usr/share/applications/jasperstudio.desktop" 
