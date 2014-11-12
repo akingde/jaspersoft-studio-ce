@@ -65,6 +65,6 @@ public class DataAdapterNameConverter implements IConversionFilenameProvider {
 			}
 		}
 		//The data adapter has not a name tag (use the type as base name)
-		return iterateForUniqueName(configurationElementNode.getNodeName());
+		return null;//iterateForUniqueName(configurationElementNode.getNodeName());
 	}
 }

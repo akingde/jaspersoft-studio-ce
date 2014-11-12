@@ -58,16 +58,14 @@ public class EditDataAdapterAction extends Action {
 			ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
 
 			DataAdapterDescriptor dataAdapter = mDataAdapter.getValue();
-			String key = storage.getUrl(dataAdapter);
+			String oldName = dataAdapter.getName();
 			DataAdapterWizard wizard = new DataAdapterWizard(dataAdapter, storage);
 			DataAdapterWizardDialog dialog = new DataAdapterWizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			wizard.setWizardDialog(dialog);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
-
 				DataAdapterDescriptor modifiedDataAdapter = wizard.getDataAdapter();
-
-				storage.addDataAdapter(key, modifiedDataAdapter);
+				storage.editDataAdapter(oldName, modifiedDataAdapter);
 				treeViewer.refresh(true);
 			}
 		}

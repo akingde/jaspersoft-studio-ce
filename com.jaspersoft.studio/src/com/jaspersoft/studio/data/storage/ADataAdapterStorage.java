@@ -45,31 +45,34 @@ public abstract class ADataAdapterStorage {
 		return daDescriptors.values();
 	}
 
-	public void addDataAdapter(String url, DataAdapterDescriptor adapter) {
-		if (daDescriptors.containsKey(url)) {
-			daDescriptors.remove(url);
-			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, daDescriptors.get(url), null);
+	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
+		if (!daDescriptors.containsKey(adapter.getName())) {
+			daDescriptors.put(adapter.getName(), adapter);
+			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
+			return true;
 		}
-		daDescriptors.put(url, adapter);
-		propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
+		return false;
 	}
 
-	public void removeDataAdapter(DataAdapterDescriptor da) {
-		String key = getUrl(da);
-		if (key != null) {
-			daDescriptors.remove(key);
-			delete(key);
-			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
-		}
+	public boolean removeDataAdapter(DataAdapterDescriptor da) {
+			if (daDescriptors.containsKey(da.getName())){
+				daDescriptors.remove(da.getName());
+				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
+				return true;
+			}
+			return false;
 	}
-
-	public void removeDataAdapter(String key) {
-		if (key != null) {
-			DataAdapterDescriptor da = daDescriptors.get(key);
-			daDescriptors.remove(key);
-			delete(key);
-			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
+	
+	public boolean editDataAdapter(String oldName, DataAdapterDescriptor adapter){
+		if (daDescriptors.containsKey(oldName)) {
+			if (adapter.getName().equals(oldName) || !daDescriptors.containsKey(adapter.getName())){
+				daDescriptors.remove(oldName);
+				daDescriptors.put(adapter.getName(), adapter);
+				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public String getUrl(DataAdapterDescriptor da) {
@@ -81,10 +84,6 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public abstract void findAll();
-
-	public abstract void save(String url, DataAdapterDescriptor adapter);
-
-	public abstract void delete(String url);
 
 	/**
 	 * Check the validity of the data adapter name. It is valid only if it is not null, not empty and not already existed.

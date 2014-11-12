@@ -106,7 +106,7 @@ public class ImportDataAdapterAction extends Action {
 										if (oldDas != null)
 											; // DataAdapterManager.removeDataAdapter(oldDas); replace?
 										else
-											storage.addDataAdapter("", das); //$NON-NLS-1$
+											storage.addDataAdapter(das); //$NON-NLS-1$
 									}
 								});
 

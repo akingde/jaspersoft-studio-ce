@@ -173,13 +173,16 @@ public class ConfigurationManager {
 					Node configurationNode = configurationNodes.item(i);
 					if (configurationNode.getNodeType() == Node.ELEMENT_NODE) {
 						DOMSource source = new DOMSource(configurationNode);
-						File xmlTargetFile = new File(storage, nameProvider.getFileName(configurationNode));
-						if (!xmlTargetFile.exists()){
-							createtElements.add(xmlTargetFile);
-							StreamResult result = new StreamResult(xmlTargetFile);
-							transformer.transform(source, result);
-						} else {
-							throw new Exception("File "+xmlTargetFile.getAbsolutePath()+" already exist");
+						String name = nameProvider.getFileName(configurationNode);
+						if (name != null){
+							File xmlTargetFile = new File(storage,name);
+							if (!xmlTargetFile.exists()){
+								createtElements.add(xmlTargetFile);
+								StreamResult result = new StreamResult(xmlTargetFile);
+								transformer.transform(source, result);
+							} else {
+								throw new Exception("File "+xmlTargetFile.getAbsolutePath()+" already exist");
+							}
 						}
 					}
 				}

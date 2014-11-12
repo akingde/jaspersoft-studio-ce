@@ -58,8 +58,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public void findAll() {
 		// Do the silent conversion to the new storage system
-		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS,
-				convertDataAdapterName);
+		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS,convertDataAdapterName);
 		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
@@ -87,7 +86,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 				dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
-				super.addDataAdapter(storageElement.getName(), dataAdapterDescriptor);
+				super.addDataAdapter(dataAdapterDescriptor);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -102,7 +101,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				try {
 					in = urls.nextElement().openStream();
 					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in, null);
-					addDataAdapter(dad.getTitle().replaceAll(" ", "_") + ".xml", dad);
+					addDataAdapter(dad);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
@@ -111,7 +110,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			}
 		}
 		for (DataAdapterDescriptor dad : JaspersoftStudioPlugin.getDefaultDAManager().getDefaultDAs()) {
-			addDataAdapter(dad.getTitle().replaceAll(" ", "_") + ".xml", dad);
+			addDataAdapter(dad);
 		}
 	}
 
@@ -119,8 +118,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	 * Save an element on the data adapter file storage. The url is the name of the resource that will be created inside
 	 * the storage
 	 */
-	@Override
-	public void save(String url, DataAdapterDescriptor adapter) {
+	public void save(DataAdapterDescriptor adapter) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -130,8 +128,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_KEYS_DATA_ADAPTERS);
-			File destination = new File(storage, url);
-			StreamResult result = new StreamResult(destination);
+			File destination = new File(storage, adapter.getName());
+			StreamResult result = new StreamResult(destination.getAbsolutePath());
 			transformer.transform(source, result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,9 +140,13 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	 * Remove a data adapter from the storage, the url is the name of the resource to remove
 	 */
 	@Override
-	public void delete(String url) {
-		daDescriptors.remove(url);
-		ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, url);
+	public boolean removeDataAdapter(DataAdapterDescriptor da) {
+		boolean result = super.removeDataAdapter(da);
+		if (result){
+			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, getEncodedName(da.getName()));
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -152,19 +154,28 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	 * get a valid an unique file name
 	 */
 	@Override
-	public void addDataAdapter(String url, DataAdapterDescriptor adapter) {
-		if (daDescriptors.containsKey(url)) {
-			// it is an edit operation, replace its file
-			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, url);
-			save(url, adapter);
-			daDescriptors.put(url, adapter);
-		} else {
-			if (url == null || url.isEmpty())
-				url = adapter.getTitle();
-			url = convertDataAdapterName.iterateForUniqueName(url);
-			super.addDataAdapter(url, adapter);
-			save(url, adapter);
+	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
+		boolean result = super.addDataAdapter(adapter);
+		if (result){
+			save(adapter);
+			return true;
 		}
+		return false;
+	}
+	
+	public boolean editDataAdapter(String oldName, DataAdapterDescriptor adapter) {
+			// it is an edit operation, replace its file
+			boolean result = super.editDataAdapter(oldName, adapter);
+			if (result){
+				ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, getEncodedName(oldName));
+				save(adapter);
+				return true;
+			}
+			return false;
+	}
+	
+	private String getEncodedName(String adapterName){
+		return adapterName;
 	}
 
 }

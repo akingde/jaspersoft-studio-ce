@@ -100,7 +100,7 @@ public class ImportJSSAdapterWizard extends Wizard implements IImportWizard {
 						DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 						dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
 						dataAdapterDescriptor.setDataAdapter(dataAdapter);
-						DataAdapterManager.getPreferencesStorage().addDataAdapter("",dataAdapterDescriptor);
+						DataAdapterManager.getPreferencesStorage().addDataAdapter(dataAdapterDescriptor);
 					}
 				}
 			} catch (Exception e) {

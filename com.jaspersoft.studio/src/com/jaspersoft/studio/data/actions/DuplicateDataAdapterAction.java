@@ -74,7 +74,7 @@ public class DuplicateDataAdapterAction extends Action {
 					name = COPY_OF + copyDataAdapter.getName() + j;
 				}
 				copyDataAdapter.getDataAdapter().setName(name);
-				storage.addDataAdapter("", copyDataAdapter); //$NON-NLS-1$
+				storage.addDataAdapter(copyDataAdapter); //$NON-NLS-1$
 				copies.add(copyDataAdapter);
 			}
 		}

@@ -35,6 +35,7 @@ import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
@@ -115,7 +116,13 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 														Display.getDefault().asyncExec(new Runnable() {
 
 															public void run() {
-																removeDataAdapter(((IFile) res).getProjectRelativePath().toPortableString());
+																IFile file = (IFile) res;
+																try{
+																	DataAdapterDescriptor das = readDataADapter(file.getContents(), file.getProject());
+																	removeDataAdapter(das);
+																} catch(Exception ex){
+																	ex.printStackTrace();
+																}
 															}
 														});
 														break;
@@ -142,35 +149,43 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
+
 	@Override
-	public void save(final String url, final DataAdapterDescriptor adapter) {
-		Job job = new WorkspaceJob("Creating DataAdapter") {
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				String xml = DataAdapterManager.toDataAdapterFile(adapter);
-				IFile file = project.getFile(url);
+	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
+		boolean result = super.addDataAdapter(adapter);
+		if (result){
+			String xml = DataAdapterManager.toDataAdapterFile(adapter);
+			IFile file = project.getFile(adapter.getName());
+			try{
 				if (file.exists())
-					file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, monitor);
+					file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, new NullProgressMonitor());
 				else
-					file.create(new ByteArrayInputStream(xml.getBytes()), true, monitor);
-				return Status.OK_STATUS;
+					file.create(new ByteArrayInputStream(xml.getBytes()), true, new NullProgressMonitor());
+				return true;
+			}catch(Exception ex){
+				ex.printStackTrace();
 			}
-		};
-		job.schedule();
+		}
+		return false;
 	}
-
+	
 	@Override
-	public void delete(final String url) {
-		Job job = new WorkspaceJob("Deleting DataAdapter") {
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				IFile file = project.getFile(url);
-				if (file.exists())
-					file.delete(true, monitor);
-				return Status.OK_STATUS;
+	public boolean removeDataAdapter(DataAdapterDescriptor da) {
+		boolean result = super.removeDataAdapter(da);
+		if (result){
+			IFile file = project.getFile(da.getName());
+			if (file.exists()){
+				try{
+					file.delete(true, new NullProgressMonitor());
+					return true;
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
 			}
-		};
-		job.schedule();
+		}
+		return false;
 	}
-
+	
 	protected void checkFile(final IFile file) throws CoreException {
 		if (!file.isAccessible() || file.isDerived() || file.isPhantom() || file.isHidden())
 			return;
@@ -180,7 +195,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 				Display.getDefault().asyncExec(new Runnable() {
 
 					public void run() {
-						addDataAdapter(file.getProjectRelativePath().toPortableString(), das);
+						addDataAdapter(das);
 					}
 				});
 

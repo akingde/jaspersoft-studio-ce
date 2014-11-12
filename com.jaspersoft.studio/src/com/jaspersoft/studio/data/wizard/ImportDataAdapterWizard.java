@@ -83,7 +83,7 @@ public class ImportDataAdapterWizard extends Wizard implements IImportWizard {
 			NamedNodeMap rootAttributes = doc.getChildNodes().item(0).getAttributes();
 			String connectionClass = rootAttributes.getNamedItem("connectionClass").getTextContent();
 			DataAdapterDescriptor newAdapter = ImportUtility.getAdapter(doc, connectionClass);
-			DataAdapterManager.getPreferencesStorage().addDataAdapter("",newAdapter);
+			DataAdapterManager.getPreferencesStorage().addDataAdapter(newAdapter);
 		}
 		List<String> proeprties = page2.getProperties();
 		Properties prop = getSelectedConfiguration().getConfiguration();

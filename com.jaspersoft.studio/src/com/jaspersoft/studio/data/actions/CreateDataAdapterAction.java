@@ -78,7 +78,7 @@ public class CreateDataAdapterAction extends Action implements ICheatSheetAction
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
 			newDataAdapter = wizard.getDataAdapter();
-			DataAdapterManager.getPreferencesStorage().addDataAdapter("", newDataAdapter); //$NON-NLS-1$
+			DataAdapterManager.getPreferencesStorage().addDataAdapter(newDataAdapter); //$NON-NLS-1$
 		}
 	}
 
