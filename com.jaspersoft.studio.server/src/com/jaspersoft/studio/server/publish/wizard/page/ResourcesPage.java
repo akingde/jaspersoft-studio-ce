@@ -224,7 +224,7 @@ public class ResourcesPage extends JSSHelpWizardPage {
 		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
 		tableViewer.getControl().setMenu(menu);
 
-		fillData(false);
+		//fillData(false);
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {

@@ -138,7 +138,7 @@ public class PublishUtil {
 		for (MResource f : files) {
 			PublishOptions popt = f.getPublishOptions();
 			String prefix = f.getValue().getName();
-			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), Boolean.toString(popt.isOverwrite()));
+			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".overwrite"), Boolean.toString(!popt.isOverwrite()));
 
 			ifile.setPersistentProperty(new QualifiedName(Activator.PLUGIN_ID, prefix + ".reference"), popt.getPublishMethod().toString());
 			if (popt.getReferencedResource() != null)

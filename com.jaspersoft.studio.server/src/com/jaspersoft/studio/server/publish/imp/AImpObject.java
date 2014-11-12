@@ -49,7 +49,10 @@ public abstract class AImpObject {
 	protected AFileResource findFile(MReportUnit mrunit,
 			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
-		String str = ExpressionUtil.cachedExpressionEvaluationString(exp, jrConfig);
+		String str = ExpressionUtil.cachedExpressionEvaluationString(exp,
+				jrConfig);
+		if (str.startsWith("repo:"))
+			str = str.replaceFirst("repo:", "");
 		if (str == null || fileset.contains(str))
 			return null;
 
@@ -70,6 +73,8 @@ public abstract class AImpObject {
 			MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
+		if (rname.startsWith("repo:"))
+			rname = rname.replaceFirst("repo:", "");
 		ResourceDescriptor rd = null;
 		List<ResourceDescriptor> list = runit.getChildren();
 		for (ResourceDescriptor r : list) {

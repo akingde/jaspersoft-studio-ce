@@ -148,8 +148,15 @@ public class ProxyConnection implements IConnection {
 						rd.setChildrenDirty(false);
 						return rd;
 					} else if (he.getStatusCode() == 403) {
-						rd = soap.get(monitor, rd, f);
-						rd.setChildrenDirty(false);
+						try {
+							rd = soap.get(monitor, rd, f);
+							rd.setChildrenDirty(false);
+						} catch (Exception e1) {
+							// let's keep original exception , we tried, but it
+							// not works on soap
+							e1.printStackTrace();
+							throw he;
+						}
 						return rd;
 					} else if (he.getStatusCode() == 401 && !error401) {
 						c.connect(monitor, getServerProfile());
