@@ -246,7 +246,9 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			confPrjButton.setText("Configure Project Settings");
 			confPrjButton.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					configureWorkspaceSettings(((IFile) element).getProject());
+					IResource res = getResource();
+					if (res != null)
+						configureWorkspaceSettings(res.getProject());
 				}
 			});
 
@@ -255,6 +257,12 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
 		// Set workspace/project radio buttons
 		setupWPREnabled();
+	}
+
+	private boolean canSwitchScope = true;
+
+	public void setCanSwitchScope(boolean canSwitchScope) {
+		this.canSwitchScope = canSwitchScope;
 	}
 
 	protected void setupWPREnabled() {
@@ -269,17 +277,38 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				confPrjButton.setEnabled(false);
 
 			IResource r = getResource();
-			String use = r != null ? r.getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS)) : "";
-			if (PROJECT.equals(use)) {
-				useProjectSettingsButton.setSelection(true);
-				if (confPrjButton != null)
-					confPrjButton.setEnabled(false);
-			} else if (RESOURCE.equals(use)) {
-				if (useResourceSettingsButton != null)
-					useResourceSettingsButton.setSelection(true);
+			if (canSwitchScope) {
+				String use = r != null ? r.getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS)) : "";
+				if (PROJECT.equals(use)) {
+					useProjectSettingsButton.setSelection(true);
+					if (confPrjButton != null)
+						confPrjButton.setEnabled(false);
+				} else if (RESOURCE.equals(use)) {
+					if (useResourceSettingsButton != null)
+						useResourceSettingsButton.setSelection(true);
+				} else {
+					useWorkspaceSettingsButton.setSelection(true);
+					confWkspButton.setEnabled(true);
+				}
 			} else {
-				useWorkspaceSettingsButton.setSelection(true);
-				confWkspButton.setEnabled(true);
+				if (useWorkspaceSettingsButton != null)
+					useWorkspaceSettingsButton.setEnabled(false);
+				if (useResourceSettingsButton != null)
+					useResourceSettingsButton.setEnabled(false);
+				if (useProjectSettingsButton != null)
+					useProjectSettingsButton.setEnabled(false);
+				if (r instanceof IProject) {
+					useProjectSettingsButton.setSelection(true);
+					if (confPrjButton != null)
+						confPrjButton.setEnabled(false);
+				} else if (r instanceof IFile) {
+					if (useResourceSettingsButton != null)
+						useResourceSettingsButton.setSelection(true);
+				} else {
+					useWorkspaceSettingsButton.setSelection(true);
+					confWkspButton.setEnabled(true);
+				}
+
 			}
 		} catch (CoreException e) {
 			useWorkspaceSettingsButton.setSelection(true);
@@ -431,6 +460,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 			page.setTitle(getTitle());
 			page.setImageDescriptor(image);
 			page.setElement(project);
+			if (project != null)
+				page.setCanSwitchScope(false);
 			// and show it
 			showPreferencePage(pageId, page, project);
 		} catch (InstantiationException e) {
