@@ -80,7 +80,7 @@
             name="TIBCO Jaspersoft&#xAE; Studio">
          <property
                name="windowImages"
-               value="icons/jss_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
+               value="icons/jss_icon_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
          </property>
          <property
                name="aboutText"
