@@ -43,11 +43,10 @@
 		     improved with Jaspersoft Studio icons -->
 		<copy file="${jssRcpProductFolderPath}/resources/Jaspersoft Studio.exe" tofile="${dirlocation.win32.x86}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
 		<copy file="${jssRcpProductFolderPath}/resources/jaspersoftstudio.ico" tofile="${dirlocation.win32.x86}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
-		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
-		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.win32.x86}/jaspersoftstudio" />
-		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86}/jaspersoftstudio" />
+		<!-- copy EPLv1-LICENSE.txt in the eclipse folder -->
+		<copy file="${jssRcpProductFolderPath}/resources/EPLv1-LICENSE.txt" todir="${dirlocation.win32.x86}/jaspersoftstudio" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.win32.x86}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/license/TIBCO-LICENSE.txt" todir="${dirlocation.win32.x86}/${productRootFolder}" />
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller.nsi">
@@ -70,11 +69,10 @@
 		     improved with Jaspersoft Studio icons -->
 		<copy file="${jssRcpProductFolderPath}/resources/Jaspersoft Studio64.exe" tofile="${dirlocation.win32.x86_64}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
 		<copy file="${jssRcpProductFolderPath}/resources/jaspersoftstudio.ico" tofile="${dirlocation.win32.x86_64}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
-		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
-		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
-		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
+		<!-- copy EPLv1-LICENSE.txt in the eclipse folder -->
+		<copy file="${jssRcpProductFolderPath}/resources/EPLv1-LICENSE.txt" todir="${dirlocation.win32.x86_64}/jaspersoftstudio" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.win32.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/license/TIBCO-LICENSE.txt" todir="${dirlocation.win32.x86_64}/${productRootFolder}" />
 
 		<taskdef name="nsisant" classname="net.sf.nsisant.Task" classpath="${jssRcpProductFolderPath}/lib/nsisant-1.1.jar" />
 		<nsisant script="${jssRcpProductFolderPath}/resources/JaspersoftStudioInstaller64.nsi">
@@ -94,14 +92,13 @@
 		<echo message="Executing 'linux-x86-installer' task"/>
 		<property name="dirlocation.linux.x86" value="${jssRcpProductFolderPath}/target/products/${jssRcpProductFolderName}/linux/gtk/x86" />
 
-		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
-		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
-		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
+		<!-- copy EPLv1-EPLv1-LICENSE.txt in the eclipse folder -->
+		<copy file="${jssRcpProductFolderPath}/resources/EPLv1-LICENSE.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- copy fix files for Ubuntu -->
 		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/license/TIBCO-LICENSE.txt" todir="${dirlocation.linux.x86}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />
 		<!-- rename the folder -->
@@ -136,14 +133,13 @@
 		<echo message="Executing 'linux-x86_64-installer' task"/>
 		<property name="dirlocation.linux.x86_64" value="${jssRcpProductFolderPath}/target/products/${jssRcpProductFolderName}/linux/gtk/x86_64" />
 
-		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
-		<copy file="${jssRcpProductFolderPath}/resources/notice.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
-		<copy file="${jssRcpProductFolderPath}/resources/LICENSE.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
+		<!-- copy EPLv1-LICENSE.txt in the eclipse folder -->
+		<copy file="${jssRcpProductFolderPath}/resources/EPLv1-LICENSE.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- copy fix files for Ubuntu -->
 		<copy file="${basedir}/rootfiles/linux/ubuntu.readme" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<copy file="${basedir}/rootfiles/linux/runubuntu.sh" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/license/TIBCO-LICENSE.txt" todir="${dirlocation.linux.x86_64}/${productRootFolder}" />
 		<!-- set executable flag to launcher -->
 		<chmod file="${dirlocation.linux.x86_64}/${productRootFolder}/Jaspersoft Studio" perm="ugo+x" />	
 		<!-- rename the folder -->
@@ -180,7 +176,7 @@
 		<property name="mac.x86_64.zipfile" value="${dist}/JaspersoftStudio-macosx.cocoa.x86_64.zip" />
 
 		<!-- copy additional licensing files -->
-		<copy file="${basedir}/rootfiles/license/TIBCO-Jaspersoft-Studio-6.0.0-license.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
+		<copy file="${basedir}/rootfiles/license/TIBCO-LICENSE.txt" todir="${dirlocation.mac.x86_64}/${productRootFolder}" />
 		
 		<zip destfile="${mac.x86_64.zipfile}">
 			<fileset dir="${dirlocation.mac.x86_64}"/>
