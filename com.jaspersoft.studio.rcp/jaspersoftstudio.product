@@ -35,9 +35,9 @@ Special thanks to all people who support this software.
 
    <splash
       location="com.jaspersoft.studio.rcp"
-      startupProgressRect="0,260,362,5"
-      startupMessageRect="4,240,358,18"
-      startupForegroundColor="0061A2" />
+      startupProgressRect="0,215,575,10"
+      startupMessageRect="0,195,575,20"
+      startupForegroundColor="FFFFFF" />
    <launcher name="Jaspersoft Studio">
       <linux icon="/com.jaspersoft.studio.rcp/icons/jss_icon_128.xpm"/>
       <macosx icon="/com.jaspersoft.studio.rcp/icons/jaspersoftstudio.icns"/>
