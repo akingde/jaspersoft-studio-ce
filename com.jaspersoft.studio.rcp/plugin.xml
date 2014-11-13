@@ -38,46 +38,6 @@
          </presentation>
       </config>
    </extension>
- <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.jaspersoft.studio.rcp.application"
-            name="Jaspersoft Studio">
-         <property
-               name="windowImages"
-               value="icons/jss_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
-         </property>
-         <property
-               name="aboutText"
-               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2014 TIBCO Software Inc. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
-         </property>
-         <property
-               name="aboutImage"
-               value="icons/studio_logo_about.png">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="0061A2">
-         </property>
-         <property
-               name="startupProgressRect"
-               value="0,260,362,5">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="4,240,358,18">
-         </property>
-         <property
-               name="appName"
-               value="Jaspersoft Studio">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
-         </property>
-      </product>
-   </extension> 
    <extension
          point="org.eclipse.ui.intro.configExtension">
       <action
@@ -145,14 +105,14 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.jaspersoft.studio.rcp.application"
-            name="Jaspersoft Studio">
+            name="TIBCO Jaspersoft&#xAE; Studio">
          <property
                name="windowImages"
                value="icons/jss_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
          </property>
          <property
                name="aboutText"
-               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2014 TIBCO Software Inc. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+               value="TIBCO Jaspersoft&#xAE; Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
          </property>
          <property
                name="aboutImage"
@@ -176,7 +136,7 @@
          </property>
          <property
                name="appName"
-               value="Jaspersoft Studio">
+               value="TIBCO Jaspersoft Studio">
          </property>
       </product>
    </extension>
@@ -186,12 +146,12 @@
          <menu
                id="com.jaspersoft.studio.switchlanguage.menus"
                label="%language"
-               mnemonic="L">
+               mnemonic="%menu.switchlanguage.mnemonic">
             <command
                   commandId="com.jaspersoft.studio.switchlanguage.command"
                   icon="icons/language/us.png"
                   id="com.jaspersoft.studio.switchlanguage.menus.english"
-                  label="English"
+                  label="%command.switchlanguage.english.label"
                   style="toggle">
                <parameter
                      name="com.jaspersoft.studio.switchlanguage.locale"
@@ -202,7 +162,7 @@
                   commandId="com.jaspersoft.studio.switchlanguage.command"
                   icon="icons/language/it.png"
                   id="com.jaspersoft.studio.switchlanguage.menus.italian"
-                  label="Italiano"
+                  label="%command.switchlanguage.italian.label"
                   style="toggle">
                <parameter
                      name="com.jaspersoft.studio.switchlanguage.locale"
@@ -216,11 +176,11 @@
         locationURI="toolbar:org.eclipse.ui.main.toolbar">
 		<toolbar
         	id="com.jaspersoft.studio.rcp.jssToolbar"
-            label="Jaspersoft Studio Toolbar">
+            label="%toolbar.jss.label">
 		    <command
 	            commandId="com.jaspersoft.studio.commands.ReportNewWizard"
 	            id="com.jaspersoft.studio.rcp.newreport"
-	            label="New JasperReport"
+	            label="%command.wizard.newreport.label"
 	            style="push"
 	            icon="icons/toolbar/jrxml_icon.png"
 	            tooltip="%newJasperReport">
@@ -246,7 +206,7 @@
 		   	<command
 	            commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
 	            id="com.jaspersoft.studio.rcp.newstyletemplate"
-	            label="New Style Template"
+	            label="%command.wizard.newstyletemplate.label"
 	            style="push"
 	            icon="icons/toolbar/jasperreports_jrtx.png"
 	            tooltip="%styleTemplateTooltip">
@@ -265,7 +225,7 @@
       category="org.eclipse.ui.preferencePages.Workbench"
       class="org.eclipse.ui.activities.ActivitiesPreferencePage"
       id="org.eclipse.sdk.capabilities"
-      name="Capabilities">
+      name="%page.capabilities.name">
    <keywordReference
          id="com.jaspersoft.studio.rcp.javadevelopment">
    </keywordReference>
@@ -274,14 +234,14 @@
    <extension
          point="org.eclipse.ui.activities">
       <category
-            description="Programming Languages Developement"
+            description="%category.programming.description"
             id="com.jaspersoft.studio.rcp.development"
-            name="Development">
+            name="%category.programming.name">
       </category>
       <activity
-            description="Java programming language environement"
+            description="%activity.javadevel.description"
             id="com.jaspersoft.studio.rcp.javadevelopment"
-            name="Java Development">
+            name="%activity.javadevel.name">
       </activity>
       <categoryActivityBinding
             activityId="com.jaspersoft.studio.rcp.javadevelopment"
@@ -383,15 +343,15 @@
    </extension>
    -->
    <extension point="org.eclipse.ui.commands">
-   	  <category name="Languages" id="com.jaspersoft.studio.switchlanguage.category">
+   	  <category name="%category.languages.name" id="com.jaspersoft.studio.switchlanguage.category">
       </category>
       <command
             categoryId="com.jaspersoft.studio.switchlanguage.category"
             id="com.jaspersoft.studio.switchlanguage.command"
-            name="Language">
+            name="%command.languages.name">
          <commandParameter
                id="com.jaspersoft.studio.switchlanguage.locale"
-               name="locale"
+               name="%commandParameter.languages.name"
                optional="true">
          </commandParameter>
       </command>
