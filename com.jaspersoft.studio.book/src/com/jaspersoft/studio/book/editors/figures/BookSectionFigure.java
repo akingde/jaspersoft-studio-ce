@@ -51,14 +51,7 @@ public class BookSectionFigure extends RectangleFigure {
 	}
 	
 	@Override
-	public void paint(Graphics graphics) {
-		super.paint(graphics);
-
-	}
-	
-	@Override
 	protected void fillShape(Graphics graphics) {
-		
 		// Backup the graphic properties.
 		int oldLineWidth = graphics.getLineWidth();
 		Color oldForeColor = graphics.getForegroundColor();

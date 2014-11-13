@@ -24,9 +24,13 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 
 public abstract class ADataAdapterStorage {
+	
 	public static final String PROP_DATAADAPTERS = "DATAADAPTERS";
+	
 	private PropertyChangeSupport propChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 
+	protected Map<String, DataAdapterDescriptor> daDescriptors;
+	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propChangeSupport.addPropertyChangeListener(listener);
 	}
@@ -34,8 +38,6 @@ public abstract class ADataAdapterStorage {
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		propChangeSupport.removePropertyChangeListener(listener);
 	}
-
-	protected Map<String, DataAdapterDescriptor> daDescriptors;
 
 	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
 		if (daDescriptors == null) {
@@ -83,8 +85,6 @@ public abstract class ADataAdapterStorage {
 		return null;
 	}
 
-	public abstract void findAll();
-
 	/**
 	 * Check the validity of the data adapter name. It is valid only if it is not null, not empty and not already existed.
 	 * 
@@ -121,4 +121,6 @@ public abstract class ADataAdapterStorage {
 			label += " - " + factory.getLabel();
 		return label;
 	}
+	
+	public abstract void findAll();
 }
