@@ -107,7 +107,6 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
@@ -358,7 +357,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 
 	private MHyperLink mHyperLink;
 
-	private ParameterDTO propertyDTO;
 	private static EdgePropertyDescriptor titlePositionD;
 	private static EdgePropertyDescriptor legendPositionD;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
@@ -383,12 +381,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getHyperlinkParameters());
-			}
-			return propertyDTO;
+			return jrElement.getHyperlinkParameters();
 		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnTitleColor());
@@ -556,16 +549,15 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			jrElement.setHyperlinkWhenExpression(ExprUtil.setValues(jrElement.getHyperlinkWhenExpression(), value));
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
-
-				for (JRHyperlinkParameter prm : propertyDTO.getValue())
+			JRHyperlinkParameter[] oldParameters = jrElement.getHyperlinkParameters();
+			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[]) value;
+			if (oldParameters != null){
+				for (JRHyperlinkParameter prm : oldParameters){
 					jrElement.removeHyperlinkParameter(prm);
-
-				for (JRHyperlinkParameter param : v.getValue())
-					jrElement.addHyperlinkParameter(param);
-
-				propertyDTO = v;
+				}
+			}
+			for (JRHyperlinkParameter param : newParameters){
+				jrElement.addHyperlinkParameter(param);
 			}
 		} else
 			super.setPropertyValue(id, value);

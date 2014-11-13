@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.genericElement;
 
+import net.sf.jasperreports.engine.JRGenericElementParameter;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -21,8 +23,9 @@ import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
-import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterDTO;
-import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterEditor;
+import com.jaspersoft.studio.property.descriptor.parameter.GenericParameterLabelProvider;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 
 public class ParameterCellEditor extends DialogCellEditor implements IExpressionContextSetter {
 	
@@ -39,12 +42,12 @@ public class ParameterCellEditor extends DialogCellEditor implements IExpression
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		ParameterEditor wizard = new ParameterEditor();
-		wizard.setValue((ParameterDTO) getValue());
+		wizard.setValue(GenericJSSParameter.convertFrom((JRGenericElementParameter[])getValue()));
 		wizard.setExpressionContext(expContext);
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
-			return wizard.getValue();
+			return GenericJSSParameter.convertToGeneric(wizard.getValue());
 		}
 		return null;
 	}
@@ -57,7 +60,7 @@ public class ParameterCellEditor extends DialogCellEditor implements IExpression
 			return;
 		}
 		if (labelProvider == null)
-			labelProvider = new ParameterLabelProvider();
+			labelProvider = new GenericParameterLabelProvider();
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}

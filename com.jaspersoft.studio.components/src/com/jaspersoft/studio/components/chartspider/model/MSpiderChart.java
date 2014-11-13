@@ -57,7 +57,6 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
@@ -334,8 +333,6 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 
 	private MHyperLink mHyperLink;
 
-	private ParameterDTO propertyDTO;
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
@@ -351,12 +348,7 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 			return cs.getRenderType();
 
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(cs.getHyperlinkParameters());
-			}
-			return propertyDTO;
+			return cs.getHyperlinkParameters();
 		}
 		if (id.equals(StandardChartSettings.PROPERTY_TITLE_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(cs.getTitleColor());
@@ -550,16 +542,15 @@ public class MSpiderChart extends MGraphicElement implements IDatasetContainer {
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_WHEN_EXPRESSION)) {
 			cs.setHyperlinkWhenExpression(ExprUtil.setValues(cs.getHyperlinkWhenExpression(), value));
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
-
-				for (JRHyperlinkParameter prm : propertyDTO.getValue())
+			JRHyperlinkParameter[] oldParameters = cs.getHyperlinkParameters();
+			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[]) value;
+			if (oldParameters != null){
+				for (JRHyperlinkParameter prm : oldParameters){
 					cs.removeHyperlinkParameter(prm);
-
-				for (JRHyperlinkParameter param : v.getValue())
-					cs.addHyperlinkParameter(param);
-
-				propertyDTO = v;
+				}
+			}
+			for (JRHyperlinkParameter param : newParameters){
+				cs.addHyperlinkParameter(param);
 			}
 		} else if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1, false));

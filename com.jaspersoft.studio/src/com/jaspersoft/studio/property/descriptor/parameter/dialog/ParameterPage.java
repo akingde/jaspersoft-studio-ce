@@ -13,11 +13,7 @@
 package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -48,6 +44,12 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 
+/**
+ * Page to sort, add, edit or delete parameters from a generic list of parameters
+ * 
+ * @author Orlandin Marco Marco
+ *
+ */
 public class ParameterPage extends WizardPage implements IExpressionContextSetter {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -58,9 +60,9 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 		public String getColumnText(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return ((JRDatasetParameter) element).getName();
+				return ((GenericJSSParameter) element).getName();
 			case 1:
-				JRDatasetParameter value2 = (JRDatasetParameter) element;
+				GenericJSSParameter value2 = (GenericJSSParameter) element;
 				if (value2 != null && value2.getExpression() != null)
 					return value2.getExpression().getText();
 			}
@@ -69,19 +71,19 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 	}
 
 	/**
-	 * Parameters of the current dataset run
+	 * List of the parameters currently defined, used to avoid duplicated names
 	 */
-	private List<JRDatasetParameter> value = new ArrayList<JRDatasetParameter>();
+	protected List<GenericJSSParameter> values = new ArrayList<GenericJSSParameter>();
 	
 	/**
-	 * Table where the user can select the parameter of the dataset run and their expression
+	 * Table where the user can interact with the parameters
 	 */
 	private Table table;
 	
 	/**
 	 * Viewer of the table
 	 */
-	private TableViewer tableViewer;
+	protected TableViewer tableViewer;
 	
 	/**
 	 * Actual expression context
@@ -89,48 +91,46 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 	private ExpressionContext expContext;
 	
 	/**
-	 * Button used to edit a parameter inside the dataset run
+	 * Button used to edit a parameter 
 	 */
 	private Button editButton;
 	
 	/**
-	 * Button used to delete a parameter inside the dataset run
+	 * Button used to delete a parameter 
 	 */
 	private Button deleteButton;
 	
 	/**
-	 * Button used to create a new parameter inside the dataset run
+	 * Button used to create a new parameter
 	 */
 	private Button addButton;
 	
 	/**
 	 * Create an instance of the pace
-	 * @param pageName
 	 */
-	protected ParameterPage(String pageName) {
-		super(pageName);
-		setTitle(Messages.ParameterPage_dataset_parameters);
-		setDescription(Messages.ParameterPage_description);
+	public ParameterPage() {
+		super("parameterseditorpage");
+		setTitle(getPageTitle());
+		setDescription(getPageDescription());
 	}
 	
 	/**
-	 * Return all the parameters that should be inside the dataset run
+	 * Return a list of all the actually defined parameters
 	 * 
-	 * @return a parametersDTO containing ALL the parameters that should be inside 
-	 * the dataset run
+	 * @return a not null list of generic parameters
 	 */
-	public ParameterDTO getValue() {
-		ParameterDTO result = new ParameterDTO();
-		result.setValue(value.toArray(new JRDatasetParameter[value.size()]));
-		return result;
+	public List<GenericJSSParameter> getValue() {
+		return values;
 	}
 	
-	public void setValue(ParameterDTO value) {
-		if (value != null && value.getValue() != null){
-			this.value = new ArrayList<JRDatasetParameter>();
-			if (value.getValue() != null)
-				this.value.addAll(Arrays.asList(value.getValue()));
-		} 
+	/**
+	 * Set the list of currently defined parameters
+	 * 
+	 * @param values a not null list of generic parameters
+	 */
+	public void setValue(List<GenericJSSParameter> values) {
+		this.values.clear();
+		this.values.addAll(values);
 		if (table != null)
 			fillTable();
 	}
@@ -150,9 +150,18 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		generateButtons(bGroup);
+	}
 
-		//CREATE THE ADD BUTTON
+	/**
+	 * Create the buttons to add,edit,remove or sort the parameters
+	 * 
+	 * @param bGroup parent control of the buttons
+	 */
+	protected void generateButtons(Composite bGroup){
 		
+		//CREATE THE ADD BUTTON
+	
 		addButton = new Button(bGroup, SWT.PUSH);
 		addButton.setText(Messages.common_add);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -160,10 +169,10 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				InputParameterDialog inputDialog = new InputParameterDialog(getShell(), value);
+				InputParameterDialog inputDialog = getEditDialog(new GenericJSSParameter());
 				inputDialog.setExpressionContext(expContext);
 				if (inputDialog.open() == Dialog.OK){
-					value.add(inputDialog.getValue());
+					values.add(inputDialog.getValue());
 					tableViewer.refresh();
 				}
 			}
@@ -180,7 +189,7 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 			public void widgetSelected(SelectionEvent e) {
 				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
 				if (selection.size() > 0){
-					JRDatasetParameter selectedValue = (JRDatasetParameter)selection.getFirstElement();
+					GenericJSSParameter selectedValue = (GenericJSSParameter)selection.getFirstElement();
 					editElement(selectedValue);
 				}
 			}
@@ -199,9 +208,9 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 			public void widgetSelected(SelectionEvent e) {
 				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
 				if (selection.size() > 0){
-					JRDatasetParameter selectedValue = (JRDatasetParameter)selection.getFirstElement();
-					int index = value.indexOf(selectedValue);
-					value.remove(index);
+					GenericJSSParameter selectedValue = (GenericJSSParameter)selection.getFirstElement();
+					int index = values.indexOf(selectedValue);
+					values.remove(index);
 					tableViewer.refresh();
 				}
 			}
@@ -216,13 +225,13 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 	 * 
 	 * @param edited the element to edit, must be not null
 	 */
-	private void editElement(JRDatasetParameter edited){
-		JRDesignDatasetParameter result = (JRDesignDatasetParameter)edited.clone();
-		InputParameterDialog inputDialog = new InputParameterDialog(getShell(), result, value);
+	private void editElement(GenericJSSParameter edited){
+		GenericJSSParameter result = edited.clone();
+		InputParameterDialog inputDialog = getEditDialog(result);
 		inputDialog.setExpressionContext(expContext);
 		if (inputDialog.open() == Dialog.OK){
-			int index = value.indexOf(edited);
-			value.set(index, result);
+			int index = values.indexOf(edited);
+			values.set(index, result);
 			tableViewer.refresh();
 		}
 	}
@@ -271,7 +280,7 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 			public void doubleClick(DoubleClickEvent event) {
 				int selectedIndex = table.getSelectionIndex();
 				if (selectedIndex != -1){
-					JRDatasetParameter selectedElement = value.get(selectedIndex);
+					GenericJSSParameter selectedElement = values.get(selectedIndex);
 					editElement(selectedElement);
 				}
 			}
@@ -296,16 +305,50 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 	 * Set the input of the table to the stored value list
 	 */
 	private void fillTable() {
-		if (value != null) {
-			tableViewer.setInput(value);
+		if (values != null) {
+			tableViewer.setInput(values);
 		}
 	}
 	
 	/**
-	 * Set the expression context
+	 * Set the expression context, used when opening the expression
+	 * editor to provide a parameter expression
 	 */
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
 	}
-}
+	
+	/**
+	 * Return the title for the current page, can be overridden to provide
+	 * a custom title since this is a generic page
+	 * 
+	 * @return a not null page title
+	 */
+	public String getPageTitle(){
+		return Messages.ParameterPage_dataset_parameters;
+	}
+	
+	/**
+	 * Return the description for the current page, can be overridden to provide
+	 * a custom title since this is a generic page
+	 * 
+	 * @return a not null page description
+	 */
+	public String getPageDescription(){
+		return Messages.ParameterPage_description;
+	}
 
+	/**
+	 * Return the dialog to edit a parameter. Can be overridden to provide custom 
+	 * dialog. The parameter passed to the dialog is edited directly so it's better
+	 * to provide a copy of the parameter
+	 * 
+	 * @param editedParameter a not null parameter to edit. Should be a copy of the edited
+	 * one to avoid side effect
+	 * 
+	 * @return A dialog to edit the passed parameter
+	 */
+	protected InputParameterDialog getEditDialog(GenericJSSParameter editedParameter){
+		return new InputParameterDialog(getShell(), editedParameter, values);
+	}
+}

@@ -34,7 +34,6 @@ import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.command.DeleteDatasetCommand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.property.IPostSetValue;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 
 /**
  * Class used when a property is changed. Check if the changed property is a name of a dataset parameter and in this
@@ -90,8 +89,8 @@ public class PostSetParameterName implements IPostSetValue {
 
 		@Override
 		public void execute() {
-			ParameterDTO parameters = (ParameterDTO) element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
-			List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(parameters.getValue()));
+			JRDatasetParameter[] parameters = (JRDatasetParameter[] ) element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+			List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(parameters));
 			for (JRDatasetParameter param : lst) {
 				if (param.getName() != null && param.getName().equals(oldName)) {
 					try {
@@ -114,8 +113,8 @@ public class PostSetParameterName implements IPostSetValue {
 		@Override
 		public void undo() {
 			if (parameterFound) {
-				ParameterDTO parameters = (ParameterDTO) element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
-				List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(parameters.getValue()));
+				JRDatasetParameter[] parameters = (JRDatasetParameter[] ) element.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
+				List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(parameters));
 				for (JRDatasetParameter param : lst) {
 					if (param.getName() != null && param.getName().equals(newName)) {
 						try {

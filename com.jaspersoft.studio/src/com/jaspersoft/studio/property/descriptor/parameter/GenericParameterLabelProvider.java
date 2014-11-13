@@ -10,19 +10,21 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.descriptor.genericElement;
+package com.jaspersoft.studio.property.descriptor.parameter;
+
+import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterDTO;
 /*
  * @author Chicu Veaceslav
  * 
  */
-public class ParameterLabelProvider extends LabelProvider {
+public class GenericParameterLabelProvider extends LabelProvider {
 
-	public ParameterLabelProvider() {
+	public GenericParameterLabelProvider() {
 		super();
 	}
 
@@ -30,10 +32,14 @@ public class ParameterLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element == null)
 			return ""; //$NON-NLS-1$
-		if (element.getClass().isArray())
-			return "[" + Messages.common_parameters + ": " + ((Object[]) element).length + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		if (element instanceof ParameterDTO)
-			return "[" + Messages.common_parameters + ": " + ((ParameterDTO) element).getValue().length + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if (element.getClass().isArray()){
+			int lenght = ((Object[]) element).length;
+			return MessageFormat.format(Messages.GenericParameterLabelProvider_parametersCountLabel, new Object[]{lenght});
+		}
+		if (element instanceof List<?>){
+			int lenght = ((List<?>)element).size();
+			return MessageFormat.format(Messages.GenericParameterLabelProvider_parametersCountLabel, new Object[]{lenght});
+		}
 		return element.toString();
 	}
 

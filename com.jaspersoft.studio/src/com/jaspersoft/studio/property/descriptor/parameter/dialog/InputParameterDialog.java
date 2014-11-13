@@ -15,9 +15,7 @@ package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -40,7 +38,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 /**
- * Dialog to provide the configuration of a subreport parameters
+ * Dialog to provide the configuration of a generic parameter
  * 
  * @author Orlandin Marco
  *
@@ -48,9 +46,9 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
 public class InputParameterDialog extends TitleAreaDialog {
 
 	/**
-	 * Text where the user can insert a valid parameter name
+	 * Control where the user can insert a valid parameter name
 	 */
-	private Text parameterName;
+	protected Control parameterName;
 	
 	/**
 	 * Widget where the user can provide the parameter expression
@@ -60,7 +58,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * The handled parameter inside the dialog
 	 */
-	private JRDesignDatasetParameter resultParameter;
+	protected GenericJSSParameter resultParameter;
 	
 	/**
 	 * Actual expression context
@@ -70,7 +68,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * List of the JRSubreportParameter already defined
 	 */
-	private List<JRDatasetParameter> previousParameters;
+	private List<GenericJSSParameter> previousParameters;
 	
 	/**
 	 * The original name of the parameter if this is used for an edit operation or null
@@ -82,7 +80,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * Widget called when a widget is modified to update
 	 * the container
 	 */
-	private ModifyListener widgetModified = new ModifyListener() {
+	protected ModifyListener widgetModified = new ModifyListener() {
 		
 		@Override
 		public void modifyText(ModifyEvent e) {
@@ -98,9 +96,9 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * @param jconfig the current jasper reports configuration
 	 * @param previousParameters the list of parameters already defined
 	 */
-	public InputParameterDialog(Shell parentShell, JRDesignDatasetParameter editedParameter, List<JRDatasetParameter> previousParameters) {
+	public InputParameterDialog(Shell parentShell, GenericJSSParameter editedParameter, List<GenericJSSParameter> previousParameters) {
 		super(parentShell);
-		this.resultParameter = (JRDesignDatasetParameter)editedParameter;
+		this.resultParameter = editedParameter;
 		this.previousParameters = previousParameters;
 		originalName = resultParameter.getName();
 	}
@@ -112,8 +110,8 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * @param jconfig the current jasper reports configuration
 	 * @param previousParameters the list of parameters already defined
 	 */
-	public InputParameterDialog(Shell parentShell, List<JRDatasetParameter> previousParameters) {
-		this(parentShell, new JRDesignDatasetParameter(), previousParameters);
+	public InputParameterDialog(Shell parentShell, List<GenericJSSParameter> previousParameters) {
+		this(parentShell, new GenericJSSParameter(), previousParameters);
 		originalName = null;
 	}
 	
@@ -135,7 +133,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 		Label parameterNameLabel = new Label(container, SWT.NONE);
 		parameterNameLabel.setText(Messages.InputParameterDialog_nameLabel);
 		
-		parameterName = new Text(container, SWT.BORDER);
+		parameterName = getParameterNameControl(container);
 		parameterName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Label parameterExpressionLabel = new Label(container, SWT.NONE);
@@ -152,7 +150,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 		parameterExpression.setLayoutData(expressionData);
 
 		String name = resultParameter.getName();
-		parameterName.setText(name != null ? name : ""); //$NON-NLS-1$
+		setNameOnControl(name);
 		
 		JRExpression expressionValue = resultParameter.getExpression();
 		String expression = expressionValue != null ? expressionValue.getText() : null;
@@ -161,7 +159,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 		
 		//ADD THE MODIFY LISTENER AT THE END TO AVOID THAT IT'S CALLED DURING THE INITIALIZATION
 		
-		parameterName.addModifyListener(widgetModified);
+		configureNameControl();
 		parameterExpression.getTextControl().addModifyListener(widgetModified);
 		return container;
 	}
@@ -170,7 +168,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * Save the value from the widget inside the container
 	 */
 	private void updateContainer(){
-		resultParameter.setName(parameterName.getText());
+		resultParameter.setName(getNameFromControl());
 		JRExpression newExpression = new JRDesignExpression(parameterExpression.getText());
 		resultParameter.setExpression(newExpression);
 		validate();
@@ -198,7 +196,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	private void validate(){
 		boolean isValid = !resultParameter.getName().trim().isEmpty();
 		if (isValid){
-			for(JRDatasetParameter parameter : previousParameters){
+			for(GenericJSSParameter parameter : previousParameters){
 				if (parameter.getName().equals(resultParameter.getName().trim())){
 					if (originalName != null && parameter.getName().equals(originalName)){
 						isValid = true;
@@ -233,7 +231,23 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * Return the parameter currently stored inside the class
 	 */
-	public JRDesignDatasetParameter getValue(){
+	public GenericJSSParameter getValue(){
 		return resultParameter;
+	}
+	
+	protected String getNameFromControl(){
+		return ((Text)parameterName).getText();
+	}
+	
+	protected void setNameOnControl(String name){
+		((Text)parameterName).setText(name != null ? name : "");
+	}
+	
+	protected Control getParameterNameControl(Composite parent){
+		return new Text(parent, SWT.BORDER);
+	}
+	
+	protected void configureNameControl(){
+		((Text)parameterName).addModifyListener(widgetModified);
 	}
 }

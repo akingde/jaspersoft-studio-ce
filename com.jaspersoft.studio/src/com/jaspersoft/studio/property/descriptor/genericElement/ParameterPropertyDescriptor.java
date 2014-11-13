@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.descriptor.parameter.GenericParameterLabelProvider;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public class ParameterPropertyDescriptor extends NTextPropertyDescriptor implements IExpressionContextSetter{
@@ -39,7 +40,7 @@ public class ParameterPropertyDescriptor extends NTextPropertyDescriptor impleme
 		if (isLabelProviderSet()) {
 			return super.getLabelProvider();
 		}
-		return new ParameterLabelProvider();
+		return new GenericParameterLabelProvider();
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {

@@ -56,7 +56,6 @@ import com.jaspersoft.studio.property.descriptor.checkbox.NullCheckBoxPropertyDe
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
@@ -288,10 +287,7 @@ public class MTextField extends MTextElement{
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return jrElement.getLinkType();
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			ParameterDTO propertyDTO = new ParameterDTO();
-			propertyDTO.setJasperDesign(getJasperDesign());
-			propertyDTO.setValue(jrElement.getHyperlinkParameters());
-			return propertyDTO;
+			return jrElement.getHyperlinkParameters();
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
@@ -366,19 +362,15 @@ public class MTextField extends MTextElement{
 		else if (id.equals(JRDesignTextField.PROPERTY_BOOKMARK_LEVEL))
 			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
-
-				JRHyperlinkParameter[] hyperlinkParameters = jrElement.getHyperlinkParameters();
-				if (hyperlinkParameters != null){
-					for (JRHyperlinkParameter prm : hyperlinkParameters){
-						jrElement.removeHyperlinkParameter(prm);
-					}
+			JRHyperlinkParameter[] oldParameters = jrElement.getHyperlinkParameters();
+			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[])value;
+			if (oldParameters != null){
+				for (JRHyperlinkParameter prm : oldParameters){
+					jrElement.removeHyperlinkParameter(prm);
 				}
-
-				for (JRHyperlinkParameter param : v.getValue()){
-					jrElement.addHyperlinkParameter(param);
-				}
+			}
+			for (JRHyperlinkParameter param :newParameters){
+				jrElement.addHyperlinkParameter(param);
 			}
 		} else
 			super.setPropertyValue(id, value);

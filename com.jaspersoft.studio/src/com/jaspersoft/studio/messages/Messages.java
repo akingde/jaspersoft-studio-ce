@@ -711,6 +711,7 @@ public class Messages extends NLS {
 	public static String GenerateFragmentWizard_congratsText3;
 	public static String GenerateFragmentWizard_congratsText4;
 	public static String GenerateFragmentWizard_congratsText5;
+	public static String GenericParameterLabelProvider_parametersCountLabel;
 	public static String GlobalPreferencePage_flagDescription;
 	public static String GlobalPreferencePage_jettyServerTitle;
 	public static String GlobalPreferencePage_JSSConsoleFieldLabel;

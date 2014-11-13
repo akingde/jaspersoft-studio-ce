@@ -31,8 +31,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.ParameterPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.HyperlinkParameterPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MHyperLink extends APropertyNode {
@@ -78,7 +77,7 @@ public class MHyperLink extends APropertyNode {
 		desc.add(toolTipExpressionD);
 		toolTipExpressionD.setHelpRefBuilder(new HelpReferenceBuilder(prefix + JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION));
 
-		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(
+		HyperlinkParameterPropertyDescriptor propertiesD = new HyperlinkParameterPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
 		propertiesD.setDescription(Messages.MHyperLink_parameters_description);
 		desc.add(propertiesD);
@@ -153,18 +152,11 @@ public class MHyperLink extends APropertyNode {
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 				return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-				if (propertyDTO == null) {
-					propertyDTO = new ParameterDTO();
-					propertyDTO.setJasperDesign(getJasperDesign());
-					propertyDTO.setValue(jrElement.getHyperlinkParameters());
-				}
-				return propertyDTO;
+				return jrElement.getHyperlinkParameters();
 			}
 		}
 		return null;
 	}
-
-	private ParameterDTO propertyDTO;
 
 	/*
 	 * (non-Javadoc)
@@ -190,18 +182,15 @@ public class MHyperLink extends APropertyNode {
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
 				jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-				if (value instanceof ParameterDTO) {
-					ParameterDTO v = (ParameterDTO) value;
-
-					JRHyperlinkParameter[] hyperlinkParameters = jrElement.getHyperlinkParameters();
-					if (hyperlinkParameters != null)
-						for (JRHyperlinkParameter prm : hyperlinkParameters)
-							jrElement.removeHyperlinkParameter(prm);
-
-					for (JRHyperlinkParameter param : v.getValue())
-						jrElement.addHyperlinkParameter(param);
-
-					propertyDTO = v;
+				JRHyperlinkParameter[] oldParameters = jrElement.getHyperlinkParameters();
+				JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[])value;
+				if (oldParameters != null){
+					for (JRHyperlinkParameter prm : oldParameters){
+						jrElement.removeHyperlinkParameter(prm);
+					}
+				}
+				for (JRHyperlinkParameter param : newParameters){
+					jrElement.addHyperlinkParameter(param);
 				}
 			}
 		}

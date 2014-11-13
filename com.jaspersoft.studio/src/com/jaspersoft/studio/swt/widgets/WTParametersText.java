@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.swt.widgets;
 
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -31,9 +32,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.ParameterLabelProvider;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterEditor;
+import com.jaspersoft.studio.property.descriptor.parameter.GenericParameterLabelProvider;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtil;
 
@@ -48,11 +49,8 @@ import com.jaspersoft.studio.utils.UIUtil;
  *
  */
 public class WTParametersText  extends Composite{
-
-	/**
-	 * Element that contains all the parameters
-	 */
-	private ParameterDTO parameterDTO;
+	
+	private JRHyperlinkParameter[] parameters;
 	
 	/**
 	 * Button that can be pressed to open the edit\add\remove dialog
@@ -131,12 +129,13 @@ public class WTParametersText  extends Composite{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ParameterEditor wizard = new ParameterEditor();
-				wizard.setValue(parameterDTO);
+				wizard.setValue(GenericJSSParameter.convertFrom(parameters));
 				wizard.setExpressionContext(getExpressionContext());
 				WizardDialog dialog = new WizardDialog(ftext.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK){
-					pNode.setPropertyValue(propertyId, wizard.getValue());
+					JRHyperlinkParameter[] value = GenericJSSParameter.convertToHyperlink(wizard.getValue());
+					pNode.setPropertyValue(propertyId, value);
 					if (adapter != null) adapter.widgetSelected(e);
 				}
 			}
@@ -150,8 +149,8 @@ public class WTParametersText  extends Composite{
 	 */
 	public void updateData() {
 		Object b = pNode.getPropertyActualValue(propertyId);
-		parameterDTO = (ParameterDTO) b;
-		setTextData((new ParameterLabelProvider()).getText(b));
+		parameters = (JRHyperlinkParameter[]) b;
+		setTextData((new GenericParameterLabelProvider()).getText(b));
 	}
 	
 	/**

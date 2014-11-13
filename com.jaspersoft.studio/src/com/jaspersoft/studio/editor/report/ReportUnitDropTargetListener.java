@@ -28,7 +28,6 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import com.jaspersoft.studio.editor.gef.parts.ImageFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 
 /**
  * Listener for the drop of a report unit into an element, put the unit informations
@@ -91,9 +90,9 @@ public class ReportUnitDropTargetListener extends AbstractTransferDropTargetList
 		if (getTargetEditPart() instanceof TextFieldFigureEditPart || getTargetEditPart() instanceof ImageFigureEditPart){
 		  APropertyNode textField = (APropertyNode)getTargetEditPart().getModel();
 		  if (textField != null){
-		  	ParameterDTO parameters = (ParameterDTO)textField.getPropertyValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS);
-		    if (parameters.getValue()== null){
-		    	parameters.setValue(new JRHyperlinkParameter[0]);
+		  	JRHyperlinkParameter[] parameters = (JRHyperlinkParameter[])textField.getPropertyValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS);
+		    if (parameters== null){
+		    	parameters = new JRHyperlinkParameter[0];
 		    }
 		    //JRHyperlinkParameter[] params = parameters.getValue();
 		    List<JRHyperlinkParameter> newParams = new ArrayList<JRHyperlinkParameter>();
@@ -104,7 +103,7 @@ public class ReportUnitDropTargetListener extends AbstractTransferDropTargetList
 		    for(int i=1; i<dropParameters.length;i++){
 		    	newParams.add(generateParameter(dropParameters[i], ""));
 		    }
-		    parameters.setValue(newParams.toArray(new JRHyperlinkParameter[newParams.size()]));
+		    parameters = newParams.toArray(new JRHyperlinkParameter[newParams.size()]);
 		    textField.setPropertyValue(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, parameters);
 		    textField.setPropertyValue(JRDesignHyperlink.PROPERTY_LINK_TYPE, "ReportExecution");
 		  }

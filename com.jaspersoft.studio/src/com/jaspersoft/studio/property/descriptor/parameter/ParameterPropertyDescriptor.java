@@ -38,7 +38,7 @@ public class ParameterPropertyDescriptor extends NTextPropertyDescriptor impleme
 		if (isLabelProviderSet()) {
 			return super.getLabelProvider();
 		}
-		return new ParameterLabelProvider();
+		return new GenericParameterLabelProvider();
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {

@@ -45,7 +45,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.graphic.ASHighlightControl;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.BackgroundHighlight;
-import com.jaspersoft.studio.property.section.widgets.SPParameter;
+import com.jaspersoft.studio.property.section.widgets.SPHyperlinkParameter;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -394,7 +394,7 @@ public class HyperlinkSection extends AbstractSection {
 		
 		Label parametersLabel = createLabel(mainComposite, Messages.MHyperLink_parameters_description, Messages.common_parameters);
 		parametersWidget = createWidget4Property(mainComposite,JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS,false); 
-		Control button = ((SPParameter)parametersWidget).getButton();
+		Control button = ((SPHyperlinkParameter)parametersWidget).getButton();
 		parameters = new ElementHider(new Control[]{parametersLabel, parametersWidget.getControl(), button});
 		
 		createMap();

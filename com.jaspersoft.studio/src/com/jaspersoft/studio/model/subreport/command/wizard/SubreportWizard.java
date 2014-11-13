@@ -33,7 +33,8 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
-import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
@@ -43,7 +44,7 @@ import com.jaspersoft.studio.wizards.datasource.StaticWizardDataSourcePage;
 public class SubreportWizard extends JSSWizard {
 	private NewSubreportPage step0;
 	private WizardConnectionPage step2;
-	private SubreportPropertyPage step3;
+	private ParameterPage step3;
 	private MSubreport subreport;
 	
 	public SubreportWizard() {
@@ -66,7 +67,7 @@ public class SubreportWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 		
-		step3 = new SubreportPropertyPage();
+		step3 = new ParameterPage();
 		addPage(step3);
 
 		// Setting up the expressions context. This is not really useful, since
@@ -117,7 +118,7 @@ public class SubreportWizard extends JSSWizard {
 	 */
 	public MSubreport getSubreport() {
 		
-		JRSubreportParameter[] map = step3.getValue();
+		JRSubreportParameter[] map = GenericJSSParameter.convertToSubreport(step3.getValue());
 		
 		if (map != null)
 			subreport.setPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS, map);
@@ -164,23 +165,6 @@ public class SubreportWizard extends JSSWizard {
 			JRDesignExpression exp = new JRDesignExpression();
 			exp.setText("\"" + filepath + "\""); //$NON-NLS-1$ $NON-NLS-1$
 			
-			/*if (map.length>0)
-			{
-				try {
-					JasperReportsConfiguration jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
-					JasperDesign jd = new JRXmlLoader(JasperReportsConfiguration.getJRXMLDigester()).loadXML(new InputSource(file.getContents()));
-					jrContext.setJasperDesign(jd);
-					for(JRSubreportParameter param : map){
-						if (!jd.getParametersMap().containsKey(param.getName())){
-							JRDesignParameter newParam = new JRDesignParameter();
-							newParam.setName(param.getName());
-							newParam.setDefaultValueExpression(param.getExpression());
-							jd.addParameter(newParam);
-						}
-					}
-					JRXmlWriter.writeReport(jd, file.getProjectRelativePath().toPortableString(), "UTF-8");
-				} catch (Exception e) {			}
-			}*/
 			subreport.setPropertyValue( JRDesignSubreport.PROPERTY_EXPRESSION , exp ); 
 		}
 		return subreport;
@@ -191,8 +175,6 @@ public class SubreportWizard extends JSSWizard {
 		setConfig(jd);
 		if (subreport != null)
 			subreport.setJasperConfiguration(jd);
-		//if (mdataset != null)
-		//	mdataset.setJasperConfiguration(jd);
 	}
 
 	@Override

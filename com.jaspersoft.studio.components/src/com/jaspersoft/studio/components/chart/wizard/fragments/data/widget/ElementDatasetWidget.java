@@ -57,7 +57,7 @@ import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -237,30 +237,23 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 		});
 
 		prmItem.addSelectionListener(new SelectionAdapter() {
-			private ParameterDTO prmDTO;
 
 			public void widgetSelected(SelectionEvent e) {
 				JRDesignDatasetRun datasetRun = (JRDesignDatasetRun) eDataset.getDatasetRun();
-				if (prmDTO == null) {
-					prmDTO = new ParameterDTO();
-					prmDTO.setJasperDesign(jrDesign);
-					prmDTO.setValue(datasetRun.getParameters());
-				}
-				
-				ComboParameterEditor wizard = new ComboParameterEditor();
-				wizard.setValue(prmDTO, new MDatasetRun(eDataset.getDatasetRun(), jrDesign));
+				ComboParameterEditor wizard = new ComboParameterEditor(new MDatasetRun(eDataset.getDatasetRun(), jrDesign));
+				wizard.setValue(GenericJSSParameter.convertFrom(datasetRun.getParameters()));
 				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
 						wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					prmDTO = wizard.getValue();
+					JRDatasetParameter[] params = GenericJSSParameter.convertToDataset(wizard.getValue());
 
-					for (JRDatasetParameter prm : prmDTO.getValue()){
+					for (JRDatasetParameter prm : datasetRun.getParameters()){
 						datasetRun.removeParameter(prm);
 					}
 
-					for (JRDatasetParameter param : prmDTO.getValue()){
+					for (JRDatasetParameter param : params){
 						try {
 							datasetRun.addParameter(param);
 						} catch (JRException er) {

@@ -18,16 +18,17 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.descriptor.parameter.GenericParameterLabelProvider;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.property.section.widgets.SPParameter;
+import com.jaspersoft.studio.property.section.widgets.SPHyperlinkParameter;
 
-public class ParameterPropertyDescriptor extends NTextPropertyDescriptor implements IExpressionContextSetter {
+public class HyperlinkParameterPropertyDescriptor extends NTextPropertyDescriptor implements IExpressionContextSetter {
 
 	private ExpressionContext expContext;
 
-	public ParameterPropertyDescriptor(Object id, String displayName) {
+	public HyperlinkParameterPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
 	}
 
@@ -36,7 +37,7 @@ public class ParameterPropertyDescriptor extends NTextPropertyDescriptor impleme
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		ParameterCellEditor editor = new ParameterCellEditor(parent);
+		HyperlinkParameterCellEditor editor = new HyperlinkParameterCellEditor(parent);
 		editor.setExpressionContext(expContext);
 		return editor;
 	}
@@ -46,7 +47,7 @@ public class ParameterPropertyDescriptor extends NTextPropertyDescriptor impleme
 		if (isLabelProviderSet()) {
 			return super.getLabelProvider();
 		}
-		return new ParameterLabelProvider();
+		return new GenericParameterLabelProvider();
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
@@ -54,6 +55,6 @@ public class ParameterPropertyDescriptor extends NTextPropertyDescriptor impleme
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPParameter(parent, section, this);
+		return new SPHyperlinkParameter(parent, section, this);
 	}
 }

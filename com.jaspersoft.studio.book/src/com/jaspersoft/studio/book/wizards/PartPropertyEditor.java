@@ -15,13 +15,17 @@ package com.jaspersoft.studio.book.wizards;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
 
 import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.book.model.MReportPart;
-import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportParameterPage;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
@@ -44,25 +48,32 @@ public class PartPropertyEditor extends JSSWizard {
 	private PartPropertyPage page0;
 
 	
-	private class PartPropertyPage extends SubreportPropertyPage{
+	private class PartPropertyPage extends SubreportParameterPage{
 		
-		public PartPropertyPage() {
-			super("partproperties"); //$NON-NLS-1$
-			setTitle(Messages.PartPropertyEditor_pageTitle);
-			setDescription(Messages.PartPropertyEditor_pageDescription);
+		@Override
+		public String getTitle() {
+			return Messages.PartPropertyEditor_pageTitle;
+		}
+		
+		@Override
+		public String getDescription() {
+			return Messages.PartPropertyEditor_pageDescription;
 		}
 	}
 	
 	public JRSubreportParameter[] getValue() {
 		if (page0 != null)
-			return page0.getValue();
+			return GenericJSSParameter.convertToSubreport(page0.getValue());
 		return part.getSubreportComponent().getParameters();
 	}
 
 	public void setValue() {
 		setConfig(part.getJasperConfiguration());
-		if (page0 != null)
-			page0.setValue(part.getSubreportComponent().getParameters());
+		if (page0 != null){
+			List<GenericJSSParameter> value = GenericJSSParameter.convertFrom(part.getSubreportComponent().getParameters());
+			page0.setExpressionContext(getContext());
+			page0.setValue(value);
+		}	
 	}
 	
 	public PartPropertyEditor(MReportPart part) {
@@ -74,7 +85,9 @@ public class PartPropertyEditor extends JSSWizard {
 	@Override
 	public void addPages() {
 		page0 = new PartPropertyPage(); //$NON-NLS-1$
-		page0.setValue(part.getSubreportComponent().getParameters());
+		List<GenericJSSParameter> value = GenericJSSParameter.convertFrom(part.getSubreportComponent().getParameters());
+		page0.setExpressionContext(getContext());
+		page0.setValue(value);
 		addPage(page0);
 	}
 
@@ -84,12 +97,23 @@ public class PartPropertyEditor extends JSSWizard {
 	}
 	
 	/**
+	 * Return an expression context for the current element
+	 * 
+	 * @return a not null expression context that can be used inside the expression editor
+	 */
+	private ExpressionContext getContext(){
+		JRDataset mainDS = part.getJasperDesign().getMainDataset();
+		ExpressionContext exprContext = new ExpressionContext((JRDesignDataset) mainDS, part.getJasperConfiguration());
+		return exprContext;
+	}
+	
+	/**
 	 * Save the parameters in the page inside the part
 	 */
 	public void saveData() {
 		if (part != null) {
 			StandardSubreportPartComponent component = part.getSubreportComponent();
-			JRSubreportParameter[] actaulValues = page0.getValue();
+			JRSubreportParameter[] actaulValues = GenericJSSParameter.convertToSubreport(page0.getValue());
 
 			List<JRSubreportParameter> oldValues = Arrays.asList(component.getParameters());
 			// The element dosen't allow to swap the list, must remove the old element

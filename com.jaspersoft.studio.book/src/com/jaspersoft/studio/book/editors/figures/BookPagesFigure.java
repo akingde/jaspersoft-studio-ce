@@ -241,22 +241,6 @@ public class BookPagesFigure extends RectangleFigure {
 		int offsetY = BookSectionFigure.HORIZONTAL_LINE_OFFSET + 4;
 		super.setBounds(new Rectangle(rect.x+15, rect.y+offsetY, rect.width, rect.height));
 	}
-	
-//	private void scaleImage(Image sourceImage, int width, int height) {
-//		int newWidth = 0;
-//		int newHeight = 0;
-//		int srcWidth = sourceImage.getImageData().width;
-//		int srcHeight = sourceImage.getImageData().height;
-//		//Keep proportion basing them on the longest edge
-//		if (srcWidth > srcHeight) {
-//			newWidth = width;
-//			newHeight = (newWidth * srcHeight) / srcWidth;
-//		} else {
-//			newHeight = height;
-//			newWidth = (newHeight * srcWidth) / srcHeight;
-//		}
-//		scaledImage = new Image(null, sourceImage.getImageData().scaledTo(newWidth, newHeight));
-//	}
 
 	/**
 	 * Scaled image is disposed when the part is deactivated

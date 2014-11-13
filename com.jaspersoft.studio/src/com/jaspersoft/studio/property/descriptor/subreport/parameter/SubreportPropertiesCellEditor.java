@@ -22,7 +22,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.model.subreport.MSubreport;
-import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyEditor;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportParameterEditor;
 
 public class SubreportPropertiesCellEditor extends DialogCellEditor {
 
@@ -42,8 +43,9 @@ public class SubreportPropertiesCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		SubreportPropertyEditor wizard = new SubreportPropertyEditor();
-		wizard.setValue((JRSubreportParameter[]) getValue(), msubreport);
+		SubreportParameterEditor wizard = new SubreportParameterEditor(msubreport.getJasperDesign());
+		JRSubreportParameter[] values = (JRSubreportParameter[]) getValue();
+		wizard.setValue(GenericJSSParameter.convertFrom(values));
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {

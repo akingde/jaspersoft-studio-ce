@@ -27,7 +27,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.subreport.MSubreport;
-import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyEditor;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportParameterEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 /**
@@ -85,12 +86,14 @@ public class SPSubreportParametersButton extends ASPropertyWidget {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SubreportPropertyEditor wizard = new SubreportPropertyEditor();
-				wizard.setValue(dto, msubreport);
+				SubreportParameterEditor wizard = new SubreportParameterEditor(msubreport.getJasperDesign());
+				wizard.setValue(GenericJSSParameter.convertFrom(dto));
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();
-				if (dialog.open() == Dialog.OK)
-					section.changeProperty(pDescriptor.getId(), wizard.getValue());
+				if (dialog.open() == Dialog.OK){
+					JRSubreportParameter[] values = GenericJSSParameter.convertToSubreport(wizard.getValue());
+					section.changeProperty(pDescriptor.getId(), values);
+				}
 			}
 		});
 	}

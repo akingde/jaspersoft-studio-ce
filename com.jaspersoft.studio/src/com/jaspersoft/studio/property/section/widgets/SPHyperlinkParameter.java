@@ -12,6 +12,8 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.section.widgets;
 
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -23,16 +25,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.ParameterPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterEditor;
+import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.HyperlinkParameterPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPParameter extends SPText {
+public class SPHyperlinkParameter extends SPText {
 
 	private Button btn;
 	
-	public SPParameter(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	private JRHyperlinkParameter[] parameters;
+	
+	public SPHyperlinkParameter(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -44,25 +48,24 @@ public class SPParameter extends SPText {
 		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ParameterPropertyDescriptor pd = (ParameterPropertyDescriptor) pDescriptor;
+				HyperlinkParameterPropertyDescriptor pd = (HyperlinkParameterPropertyDescriptor) pDescriptor;
 				ParameterEditor wizard = new ParameterEditor();
-				wizard.setValue(parameterDTO);
+				wizard.setValue(GenericJSSParameter.convertFrom(parameters));
 				wizard.setExpressionContext(pd.getExpContext());
 				WizardDialog dialog = new WizardDialog(ftext.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK){
-					section.changeProperty(pDescriptor.getId(), wizard.getValue());
+					JRHyperlinkParameter[] parameters = GenericJSSParameter.convertToHyperlink(wizard.getValue());
+					section.changeProperty(pDescriptor.getId(), parameters);
 				}
 			}
 		});
 	}
 
-	private ParameterDTO parameterDTO;
-
 	@Override
 	public void setData(APropertyNode pnode, Object b) {
-		parameterDTO = (ParameterDTO) b;
-		ParameterPropertyDescriptor pd = (ParameterPropertyDescriptor) pDescriptor;
+		parameters = (JRHyperlinkParameter[]) b;
+		HyperlinkParameterPropertyDescriptor pd = (HyperlinkParameterPropertyDescriptor) pDescriptor;
 		String text = pd.getLabelProvider().getText(b);
 		if (text != null) {
 			ftext.setText(text);

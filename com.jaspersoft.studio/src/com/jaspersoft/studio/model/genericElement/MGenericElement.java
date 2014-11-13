@@ -36,7 +36,6 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.genericElement.ParameterPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
@@ -180,7 +179,6 @@ public class MGenericElement extends MGraphicElement {
 
 	public static final String PROPERTY_NAME = "name"; //$NON-NLS-1$
 	public static final String PROPERTY_NAMESPACE = "namespace"; //$NON-NLS-1$
-	private ParameterDTO propertyDTO;
 	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
 	@Override
@@ -205,12 +203,7 @@ public class MGenericElement extends MGraphicElement {
 				return genericType.getNamespace();
 		}
 		if (id.equals(JRDesignGenericElement.PROPERTY_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getParameters());
-			}
-			return propertyDTO;
+			return jrElement.getParameters();
 		}
 		return super.getPropertyValue(id);
 	}
@@ -224,19 +217,16 @@ public class MGenericElement extends MGraphicElement {
 		else if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
 			jrElement.setEvaluationGroupName((String) value);
 		else if (id.equals(JRDesignGenericElement.PROPERTY_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
-
-				if (jrElement.getParameters() != null)
-					for (JRGenericElementParameter prm : jrElement.getParameters())
-						jrElement.removeParameter(prm);
-
-				for (JRGenericElementParameter param : v.getValue())
-					jrElement.addParameter(param);
-
-				propertyDTO = v;
+			JRGenericElementParameter[] oldParameters = jrElement.getParameters();
+			JRGenericElementParameter[] newParameters = (JRGenericElementParameter[])value;
+			if (oldParameters != null){
+				for (JRGenericElementParameter prm : oldParameters)
+					jrElement.removeParameter(prm);
 			}
-
+			if (newParameters != null){
+				for (JRGenericElementParameter prm : newParameters)
+					jrElement.addParameter(prm);
+			}
 			// FIXME: in JR rewrite hashCode to work with null values for namespace and name
 		} else if (id.equals(PROPERTY_NAME)) {
 			String namespace = genericType != null ? genericType.getNamespace() : "";

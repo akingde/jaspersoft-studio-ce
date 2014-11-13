@@ -14,6 +14,7 @@ package com.jaspersoft.studio.model.dataset.descriptor;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -40,7 +41,7 @@ import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParameterEditor;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
 import com.jaspersoft.studio.property.descriptor.returnvalue.RVPropertyPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -145,20 +146,11 @@ public class SPDatasetRun extends ASPropertyWidget {
 		params = section.getWidgetFactory().createButton(c, Messages.SPDatasetRun_2, SWT.PUSH | SWT.FLAT);
 		params.addSelectionListener(new SelectionAdapter() {
 
-			private ParameterDTO prmDTO;
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				JRDesignDatasetRun datasetRun = mDataSet.getValue();
-				if (prmDTO == null) {
-					prmDTO = new ParameterDTO();
-					prmDTO.setJasperDesign(mDataSet.getJasperDesign());
-
-				}
-				prmDTO.setValue(datasetRun.getParameters());
-
-				ComboParameterEditor wizard = new ComboParameterEditor();
-				wizard.setValue(prmDTO, mDataSet);
+				ComboParameterEditor wizard = new ComboParameterEditor(mDataSet);
+				wizard.setValue(GenericJSSParameter.convertFrom(datasetRun.getParameters()));
 				// get always the selected element, because the getElement of some sections (i.e. MCrosstab)
 				// return something else for their tricky dirty purposes. getSelectedElement return always
 				// the selected element for the section
@@ -168,9 +160,8 @@ public class SPDatasetRun extends ASPropertyWidget {
 				WizardDialog dialog = new WizardDialog(params.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					prmDTO = wizard.getValue();
-
-					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_PARAMETERS, prmDTO);
+					JRDatasetParameter[] newParams = GenericJSSParameter.convertToDataset(wizard.getValue());
+					changeProperty(section, pDescriptor.getId(), JRDesignDatasetRun.PROPERTY_PARAMETERS, newParams);
 				}
 			}
 

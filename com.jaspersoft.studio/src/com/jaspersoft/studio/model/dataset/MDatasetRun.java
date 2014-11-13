@@ -38,14 +38,18 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.ParameterPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 
 public class MDatasetRun extends APropertyNode {
+	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
+	private RComboBoxPropertyDescriptor subdatasetnameD;
+	
+	private JasperDesign jasperDesign;
+	
 	public MDatasetRun(JRDatasetRun value, JasperDesign jasperDesign) {
 		super();
 		setValue(value);
@@ -148,12 +152,7 @@ public class MDatasetRun extends APropertyNode {
 			return ExprUtil.getExpression(jrElement.getDataSourceExpression());
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getParameters());
-			}
-			return propertyDTO;
+			return jrElement.getParameters();
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
 			return jrElement.getDatasetName() != null ? jrElement.getDatasetName() : ""; //$NON-NLS-1$
@@ -163,9 +162,6 @@ public class MDatasetRun extends APropertyNode {
 		}
 		return null;
 	}
-
-	private ParameterDTO propertyDTO;
-	private RComboBoxPropertyDescriptor subdatasetnameD;
 
 	/*
 	 * (non-Javadoc)
@@ -187,33 +183,27 @@ public class MDatasetRun extends APropertyNode {
 			jrElement.getEventSupport().addPropertyChangeListener(this);
 			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
-
-				ParameterDTO internalDTO = (ParameterDTO) getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS);
-				// The parameter must be updated also into the referenced dataset since the
-				// JRDatasetRunParameterExpressionFactory check that every parameter in the dataset run
-				// is associated to a parameter with the same name in the referenced dataset
-				JRDesignDataset originalDataset = ModelUtils.getDesignDatasetByName(getJasperDesign(),
-						getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).toString());
-
-				for (JRDatasetParameter prm : internalDTO.getValue()) {
-					jrElement.removeParameter(prm);
-				}
-
-				for (JRDatasetParameter param : v.getValue()) {
-					try {
-						jrElement.addParameter(param);
-						if (!originalDataset.getParametersMap().containsKey(param.getName())) {
-							JRDesignParameter designParam = new JRDesignParameter();
-							designParam.setName(param.getName());
-							originalDataset.addParameter(designParam);
-						}
-					} catch (JRException e) {
-						e.printStackTrace();
+			// The parameter must be updated also into the referenced dataset since the
+			// JRDatasetRunParameterExpressionFactory check that every parameter in the dataset run
+			// is associated to a parameter with the same name in the referenced dataset
+			JRDesignDataset originalDataset = ModelUtils.getDesignDatasetByName(getJasperDesign(),
+					getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME).toString());
+			JRDatasetParameter[] oldParameters = jrElement.getParameters();
+			for (JRDatasetParameter prm : oldParameters) {
+				jrElement.removeParameter(prm);
+			}
+			JRDatasetParameter[] newParameters = (JRDatasetParameter[])value;
+			for (JRDatasetParameter param : newParameters) {
+				try {
+					jrElement.addParameter(param);
+					if (!originalDataset.getParametersMap().containsKey(param.getName())) {
+						JRDesignParameter designParam = new JRDesignParameter();
+						designParam.setName(param.getName());
+						originalDataset.addParameter(designParam);
 					}
+				} catch (JRException e) {
+					e.printStackTrace();
 				}
-				propertyDTO = v;
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
 			String oldValue = jrElement.getDatasetName();
@@ -238,17 +228,6 @@ public class MDatasetRun extends APropertyNode {
 			}
 		}
 	}
-
-	@Override
-	public void setValue(Object value) {
-		super.setValue(value);
-		// The propertyDTO is a cache for the property of the JRDatasetRun. when the
-		// JRDatasetRun change i need to clear the propertyDTO to avoid to have as
-		// value a JRDatasetRun and as propertyDTO the properties of another JRDatasetRun
-		propertyDTO = null;
-	}
-
-	private JasperDesign jasperDesign;
 
 	@Override
 	public JasperDesign getJasperDesign() {

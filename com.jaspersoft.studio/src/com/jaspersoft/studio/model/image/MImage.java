@@ -55,7 +55,6 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.SpinnerPropertyDescriptor;
@@ -271,7 +270,6 @@ public class MImage extends MGraphicElementLineBox {
 
 	private MHyperLink mHyperLink;
 
-	private ParameterDTO propertyDTO;
 	private static JSSEnumPropertyDescriptor scaleImageD;
 	private static JSSEnumPropertyDescriptor hAlignD;
 	private static JSSEnumPropertyDescriptor fillD;
@@ -304,12 +302,7 @@ public class MImage extends MGraphicElementLineBox {
 		}
 
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getHyperlinkParameters());
-			}
-			return propertyDTO;
+			return jrElement.getHyperlinkParameters();
 		}
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			return jrElement.getUsingCache();
@@ -362,15 +355,6 @@ public class MImage extends MGraphicElementLineBox {
 			if (jrElement.getEvaluationGroup() != null)
 				return jrElement.getEvaluationGroup().getName();
 			return ""; //$NON-NLS-1$
-		}
-
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getHyperlinkParameters());
-			}
-			return propertyDTO;
 		}
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			return jrElement.getUsingCache();
@@ -440,18 +424,15 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignImage.PROPERTY_BOOKMARK_LEVEL))
 			jrElement.setBookmarkLevel(value != null ? Integer.parseInt(value.toString()) : 0); 
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
-
-				JRHyperlinkParameter[] hyperlinkParameters = jrElement.getHyperlinkParameters();
-				if (hyperlinkParameters != null)
-					for (JRHyperlinkParameter prm : hyperlinkParameters)
-						jrElement.removeHyperlinkParameter(prm);
-
-				for (JRHyperlinkParameter param : v.getValue())
-					jrElement.addHyperlinkParameter(param);
-
-				propertyDTO = v;
+			JRHyperlinkParameter[] oldParameters = jrElement.getHyperlinkParameters();
+			JRHyperlinkParameter[] newParameters = (JRHyperlinkParameter[]) value;
+			if (oldParameters != null){
+				for (JRHyperlinkParameter prm : oldParameters){
+					jrElement.removeHyperlinkParameter(prm);
+				}
+			}
+			for (JRHyperlinkParameter param : newParameters){
+				jrElement.addHyperlinkParameter(param);
 			}
 		}
 		super.setPropertyValue(id, value);
