@@ -14,7 +14,7 @@
 	<property name="ireport.callouts" value="callouts.2.fg=0,0,0\ncallouts.1.text=You can dynamically specify a title\nby setting the default value of the\nBookTitle parameter, or transform\nthis text field in a static text.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncallouts.1.fg=0,0,0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncallouts.2.text=You can dynamically specify a subtitle\nby setting the default value of the\nBookTitle parameter, or transform\nthis text field in a static text.\ncallouts.2.bg=255,255,0\ncallouts.2.bounds=650,210,219,70\ncallouts.1.pins=587,113\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncallouts.1.bounds=650,70,220,80\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncallouts.1.bg=255,255,0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncallouts.2.pins=375,177\n"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="BookTitle" class="java.lang.String">
-		<defaultValueExpression><![CDATA["Jasper Book Template"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["Report Book Template"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="BookSubTitle" class="java.lang.String">
 		<defaultValueExpression><![CDATA["A sample template of a JasperBook"]]></defaultValueExpression>

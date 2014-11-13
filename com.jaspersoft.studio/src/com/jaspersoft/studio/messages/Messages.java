@@ -1689,6 +1689,7 @@ public class Messages extends NLS {
 	public static String StyleTemplateNewWizard_description;
 	public static String StyleTemplateNewWizard_title;
 	public static String StyleTemplateNewWizard_wizardtitle;
+	public static String SubreportParameterPage_copyFromMaster;
 	public static String SubreportPropertiesLabelProvider_numbers_of_parameters;
 	public static String SubreportPropertyPage_description;
 	public static String SubTitleSection_Color_Label;

@@ -42,7 +42,7 @@ public class SubreportParameterPage extends ParameterPage {
 	protected void generateButtons(Composite bGroup) {
 		super.generateButtons(bGroup);
 		Button bMaster = new Button(bGroup, SWT.PUSH);
-		bMaster.setText("Copy From Master");
+		bMaster.setText(Messages.SubreportParameterPage_copyFromMaster);
 		bMaster.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -63,7 +63,7 @@ public class SubreportParameterPage extends ParameterPage {
 
 					JRDesignSubreportParameter param = new JRDesignSubreportParameter();
 					param.setName(name);
-					param.setExpression(ExprUtil.createExpression("$P{" + name + "}"));
+					param.setExpression(ExprUtil.createExpression("$P{" + name + "}")); //$NON-NLS-1$ //$NON-NLS-2$
 					values.add(new GenericJSSParameter(param));
 				}
 				tableViewer.refresh(true);

@@ -32,7 +32,6 @@ import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartAfterCommand;
 import com.jaspersoft.studio.book.model.commands.CreatePartCommand;
-import com.jaspersoft.studio.book.model.commands.MovePartCommand;
 import com.jaspersoft.studio.book.model.commands.RemoveChildrenCommand;
 import com.jaspersoft.studio.book.model.commands.RemoveSectionCommand;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -94,7 +93,6 @@ public class BookSectionEditPart extends AbstractGraphicalEditPart {
 			
 			@Override
 			protected EditPart getInsertionReference(Request request) {
-				System.out.println(new java.util.Date() + " " + this);
 				return null;
 			}
 			
@@ -124,19 +122,11 @@ public class BookSectionEditPart extends AbstractGraphicalEditPart {
 						return cc;
 					} else {
 						
-						System.out.println("Moving: " + (MReportPart) child.getModel());
-						
 						MReportPartContainer sourceContainer = (MReportPartContainer)child.getParent().getModel();
 						MReportPartContainer targetContainer = dragTracker.getContainer().getBookModel();
 						
 						MReportPart movedPart = (MReportPart)child.getModel();
 						MReportPart afterElement = dragTracker.getAfterPart() != null ? (MReportPart)dragTracker.getAfterPart().getModel() : null;
-						
-						if (sourceContainer == targetContainer) 
-						{
-							System.out.println("UUID movedPart=" + movedPart.getValue().getUUID() + " " + this);
-						}
-						
 						
 						CompoundCommand cc = new CompoundCommand();
 						

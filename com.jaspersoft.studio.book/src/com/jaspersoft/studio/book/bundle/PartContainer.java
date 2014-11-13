@@ -26,7 +26,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * Define a part of a Jasper Book
+ * Define a part of a Report Book
  * 
  * @author Orlandin Marco
  *
