@@ -279,8 +279,8 @@ exit 0;</echo>
 			<version upstream="${jss.version}" debian="" />
 			<maintainer name="Jaspersoft Studio Team" email="giulio@jaspersoft.com"/>
 			<description synopsis="An open-source Eclipse-based report designer for JasperReports and JasperReports Server.">
-	Jaspersoft Studio is a new, free, open source report designer for JasperReports. 
-	Jaspersoft Studio is a port of iReport on top of the Eclipse platform and its core is JasperReports.
+	TIBCO Jaspersoft Studio is a new, free, open source report designer for JasperReports. 
+	TIBCO Jaspersoft Studio is a port of iReport on top of the Eclipse platform and its core is JasperReports.
 			    </description>
 			<tarfileset dir="${dist}/debian">
 				<include name="usr/**" />
