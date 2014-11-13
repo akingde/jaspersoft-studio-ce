@@ -23,7 +23,7 @@ public class BookSectionFigure extends RectangleFigure {
 	
 	private static final int HORIZONTAL_LINE_WIDTH = 1;
 
-	public static int HORIZONTAL_LINE_OFFSET = TITLE_FONT_HEIGHT + 2;
+	public static int HORIZONTAL_LINE_OFFSET = 27;
 	
 	private BookSectionEditPart parentPart;
 	
