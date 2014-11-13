@@ -479,6 +479,10 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 */
 	public void setContents(Object contents) {
 		if (getViewer().getEditPartFactory() != null){
+			//Really important to deselect all the element before set the content
+			//otherwise the treeviewer can try to select the old elements after the set
+			//content but it can may be disposed cause the change of content
+			getViewer().deselectAll();
 			getViewer().setContents(contents);
 		}
 		if (outline instanceof Tree) {
