@@ -147,7 +147,7 @@ public class ParametersTable {
 				boolean match = false;
 				String tmp = name;
 				for (int i = 1; i < 100000; i++) {
-					tmp = ModelUtils.getNameFormat(name, i);
+					tmp = name +i;// ModelUtils.getNameFormat(name, i);
 
 					for (JRDesignParameter f : list) {
 						match = f.getName().equals(tmp);
