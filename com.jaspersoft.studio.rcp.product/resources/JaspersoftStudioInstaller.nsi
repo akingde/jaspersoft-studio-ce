@@ -2,6 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "TIBCO Jaspersoft Studio"
+!define SHORT_PRODUCT_NAME "Jaspersoft Studio"
 ;!define PRODUCT_VERSION "0.0.0"
 ;!define INSTALLER_FILES_DIR ""
 !define PRODUCT_PUBLISHER "TIBCO Software Inc."
@@ -46,7 +47,7 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${PRODUCT_NAME}.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -63,7 +64,7 @@ OutFile "${OUTPUT_FILE_NAME}"
 
 
 
-InstallDir "$PROGRAMFILES\TIBCO\${PRODUCT_NAME}-${PRODUCT_VERSION}"
+InstallDir "$PROGRAMFILES\TIBCO\${SHORT_PRODUCT_NAME}-${PRODUCT_VERSION}"
 
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -78,8 +79,8 @@ Section "${PRODUCT_NAME}" SEC01
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"
-  CreateShortCut "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
+  CreateShortCut "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -109,14 +110,14 @@ SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\${PRODUCT_NAME}.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\${PRODUCT_NAME}.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-  !insertmacro APP_ASSOCIATE "jrxml" "JaspersoftStudio.Jrxml" "Jrxml source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jrxml" "JaspersoftStudio.Jrxml" "Jrxml source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${SHORT_PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
 SectionEnd
 
 ; Section descriptions
