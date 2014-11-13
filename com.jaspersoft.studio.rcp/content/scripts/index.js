@@ -14,4 +14,18 @@
 					$(".widget").addClass("postAnim");
 					$(".widget").css({ 'transition': '0.2s ease-in-out'});
 				});
+				
+				
+				$("#getstarted a").on('click', function(e) {
+						e.preventDefault();
+						
+						var self = $(this);
+						
+						$("#getstarted a").animate({ 'margin-left': '-400px','opacity': 0 },500, function() {
+							window.location=self.attr("href");
+						});
+						$("#learnmore a").animate({ 'margin-top': '400px','opacity': 0 },500);
+						$("#collaborate a").animate({ 'margin-right': '-400px','opacity': 0 },500);
+				
+				});
 			});

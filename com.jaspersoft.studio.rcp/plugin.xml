@@ -43,7 +43,7 @@
       
       <action
             name="getstarted"
-             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/resources">
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.CloseIntroPartAction">
       </action>
       
       <action
