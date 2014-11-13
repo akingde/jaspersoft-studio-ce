@@ -50,8 +50,9 @@ public class SPParameter extends SPText {
 				wizard.setExpressionContext(pd.getExpContext());
 				WizardDialog dialog = new WizardDialog(ftext.getShell(), wizard);
 				dialog.create();
-				if (dialog.open() == Dialog.OK)
+				if (dialog.open() == Dialog.OK){
 					section.changeProperty(pDescriptor.getId(), wizard.getValue());
+				}
 			}
 		});
 	}
@@ -62,7 +63,12 @@ public class SPParameter extends SPText {
 	public void setData(APropertyNode pnode, Object b) {
 		parameterDTO = (ParameterDTO) b;
 		ParameterPropertyDescriptor pd = (ParameterPropertyDescriptor) pDescriptor;
-		super.setData(pnode, pd.getLabelProvider().getText(b));
+		String text = pd.getLabelProvider().getText(b);
+		if (text != null) {
+			ftext.setText(text);
+		} else {
+			ftext.setText("");
+		}
 	}
 	
 	public Control getButton(){

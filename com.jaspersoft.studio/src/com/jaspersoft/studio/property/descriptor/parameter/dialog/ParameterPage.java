@@ -17,48 +17,36 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 
 public class ParameterPage extends WizardPage implements IExpressionContextSetter {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -80,41 +68,71 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 		}
 	}
 
-	private ParameterDTO value;
+	/**
+	 * Parameters of the current dataset run
+	 */
+	private List<JRDatasetParameter> value = new ArrayList<JRDatasetParameter>();
+	
+	/**
+	 * Table where the user can select the parameter of the dataset run and their expression
+	 */
 	private Table table;
+	
+	/**
+	 * Viewer of the table
+	 */
 	private TableViewer tableViewer;
+	
+	/**
+	 * Actual expression context
+	 */
 	private ExpressionContext expContext;
-
-	// private TableCursor cursor;
-
-	public ParameterDTO getValue() {
-		return value;
-	}
-
-	@Override
-	public void dispose() {
-		// clear all properties
-		List<JRDatasetParameter> props = (List<JRDatasetParameter>) tableViewer.getInput();
-		value = new ParameterDTO();
-		value.setValue(props.toArray(new JRDatasetParameter[props.size()]));
-
-		super.dispose();
-	}
-
-	public void setValue(ParameterDTO value) {
-		this.value = value;
-		if (value == null) {
-			value = new ParameterDTO();
-		}
-		if (table != null)
-			fillTable(table);
-	}
-
+	
+	/**
+	 * Button used to edit a parameter inside the dataset run
+	 */
+	private Button editButton;
+	
+	/**
+	 * Button used to delete a parameter inside the dataset run
+	 */
+	private Button deleteButton;
+	
+	/**
+	 * Button used to create a new parameter inside the dataset run
+	 */
+	private Button addButton;
+	
+	/**
+	 * Create an instance of the pace
+	 * @param pageName
+	 */
 	protected ParameterPage(String pageName) {
 		super(pageName);
 		setTitle(Messages.ParameterPage_dataset_parameters);
 		setDescription(Messages.ParameterPage_description);
-
+	}
+	
+	/**
+	 * Return all the parameters that should be inside the dataset run
+	 * 
+	 * @return a parametersDTO containing ALL the parameters that should be inside 
+	 * the dataset run
+	 */
+	public ParameterDTO getValue() {
+		ParameterDTO result = new ParameterDTO();
+		result.setValue(value.toArray(new JRDatasetParameter[value.size()]));
+		return result;
+	}
+	
+	public void setValue(ParameterDTO value) {
+		if (value != null && value.getValue() != null){
+			this.value = new ArrayList<JRDatasetParameter>();
+			if (value.getValue() != null)
+				this.value.addAll(Arrays.asList(value.getValue()));
+		} 
+		if (table != null)
+			fillTable();
 	}
 
 	public void createControl(Composite parent) {
@@ -126,298 +144,168 @@ public class ParameterPage extends WizardPage implements IExpressionContextSette
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalAlignment = GridData.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		gd.verticalAlignment = GridData.FILL;
-		gd.grabExcessVerticalSpace = true;
-		gd.verticalSpan = 2;
 		gd.heightHint = 400;
-		gd.widthHint = 600;
 		table.setLayoutData(gd);
 
-		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.common_add);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		addB.setLayoutData(gridData);
-		addB.addSelectionListener(new SelectionAdapter() {
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-			// Remove the selection and refresh the view
+		//CREATE THE ADD BUTTON
+		
+		addButton = new Button(bGroup, SWT.PUSH);
+		addButton.setText(Messages.common_add);
+		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		addButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
-				String newName = "NEW PARAMETER"; //$NON-NLS-1$
-				for (int i = 1; i < Integer.MAX_VALUE; i++) {
-					if (checkName(newName, list))
-						newName = "NEW PARAMETER " + i; //$NON-NLS-1$
-					else
-						break;
-				}
-				JRDesignDatasetParameter p = new JRDesignDatasetParameter();
-				JRDesignExpression expression = new JRDesignExpression();
-				p.setExpression(expression);
-				p.setName(newName); //$NON-NLS-1$
-				list.add(p);
-				tableViewer.add(p);
-				tableViewer.setSelection(new StructuredSelection(p));
-				// cursor.setSelection(table.getSelectionIndex(), 0);
-				tableViewer.refresh();
-				table.setFocus();
-			}
-
-			private boolean checkName(String newName, List<JRDatasetParameter> list) {
-				for (JRDatasetParameter dto : list) {
-					if (dto.getName() == null || dto.getName().trim().equals(newName)) //$NON-NLS-1$
-						return true;
-				}
-				return false;
-			}
-		});
-
-		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText(Messages.common_delete);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		delB.setLayoutData(gridData);
-		delB.addSelectionListener(new SelectionAdapter() {
-
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRDatasetParameter property = (JRDatasetParameter) iStructuredSelection.getFirstElement();
-				Object input = tableViewer.getInput();
-				if (input instanceof List<?>) {
-					List<?> list = (List<?>) input;
-					int index = list.indexOf(property);
-					list.remove(property);
-					tableViewer.remove(property);
+				InputParameterDialog inputDialog = new InputParameterDialog(getShell(), value);
+				inputDialog.setExpressionContext(expContext);
+				if (inputDialog.open() == Dialog.OK){
+					value.add(inputDialog.getValue());
 					tableViewer.refresh();
-					Object sp = null;
-					if (index >= list.size())
-						index = list.size() - 1;
-					if (index >= 0)
-						sp = list.get(index);
-
-					if (sp != null) {
-						tableViewer.setSelection(new StructuredSelection(sp));
-						// cursor.setSelection(table.getSelectionIndex(), 0);
-					} else
-						setMessage(Messages.common_table_is_empty);
 				}
 			}
 		});
+		
+		//CREATE THE EDIT BUTTON
+		
+		editButton = new Button(bGroup, SWT.PUSH);
+		editButton.setText(Messages.common_edit);
+		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		editButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+				if (selection.size() > 0){
+					JRDatasetParameter selectedValue = (JRDatasetParameter)selection.getFirstElement();
+					editElement(selectedValue);
+				}
+			}
+		});
+		
+		editButton.setEnabled(false);
+		
+		//CREATE THE DELETE BUTTON
+		
+		deleteButton = new Button(bGroup, SWT.PUSH);
+		deleteButton.setText(Messages.common_delete);
+		deleteButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		deleteButton.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+				if (selection.size() > 0){
+					JRDatasetParameter selectedValue = (JRDatasetParameter)selection.getFirstElement();
+					int index = value.indexOf(selectedValue);
+					value.remove(index);
+					tableViewer.refresh();
+				}
+			}
+		});
+		
+		deleteButton.setEnabled(false);
+		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
+	}
+	
+	/**
+	 * Edit an element opened a dialog to allow to modify it
+	 * 
+	 * @param edited the element to edit, must be not null
+	 */
+	private void editElement(JRDatasetParameter edited){
+		JRDesignDatasetParameter result = (JRDesignDatasetParameter)edited.clone();
+		InputParameterDialog inputDialog = new InputParameterDialog(getShell(), result, value);
+		inputDialog.setExpressionContext(expContext);
+		if (inputDialog.open() == Dialog.OK){
+			int index = value.indexOf(edited);
+			value.set(index, result);
+			tableViewer.refresh();
+		}
 	}
 
+	/**
+	 * Create the table control
+	 * 
+	 * @param composite parent of the table
+	 */
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText(""); //$NON-NLS-1$
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		// cursor = new TableCursor(table, SWT.NONE);
 
 		tableViewer = new TableViewer(table);
-		attachContentProvider(tableViewer);
-		attachLabelProvider(tableViewer);
-		attachCellEditors(tableViewer, table);
+		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setLabelProvider(new TLabelProvider());
+		attachCellEditors(tableViewer);
 
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		table.setLayout(tlayout);
 
-		setColumnToolTip();
-
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText(Messages.ParameterPage_parameter);
+		column[0].setText(Messages.common_name);
 
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.common_expression);
 
-		fillTable(table);
-		for (int i = 0, n = column.length; i < n; i++) {
+		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
-		}
-		table.addSelectionListener(new SelectionListener() {
 
-			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
-					setMessage(getDescription(((TableItem) e.item)));
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
+		fillTable();
 	}
 
 	/**
-	 * @param tableViewer
-	 * @param cursor
+	 * Attach the listeners and the labels to the table
+	 * 
+	 * @param viewer the viewer of the table
 	 */
-	static void editCell(final TableViewer tableViewer, final TableCursor cursor) {
-		tableViewer.editElement(cursor.getRow().getData(), cursor.getColumn());
-		// hide cursor only f there is an editor active on the cell
-		cursor.setVisible(!tableViewer.isCellEditorActive());
-	}
-
-	private void attachContentProvider(TableViewer viewer) {
-		viewer.setContentProvider(new IStructuredContentProvider() {
-			public Object[] getElements(Object inputElement) {
-				return ((List<?>) inputElement).toArray();
-			}
-
-			public void dispose() {
-			}
-
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
+	private void attachCellEditors(final TableViewer viewer) {
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				int selectedIndex = table.getSelectionIndex();
+				if (selectedIndex != -1){
+					JRDatasetParameter selectedElement = value.get(selectedIndex);
+					editElement(selectedElement);
+				}
 			}
 		});
-	}
-
-	private void attachLabelProvider(TableViewer viewer) {
+		
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				int selectedIndex = table.getSelectionIndex();
+				boolean buttonEnabled = selectedIndex != -1;
+				editButton.setEnabled(buttonEnabled);
+				deleteButton.setEnabled(buttonEnabled);
+			}
+		});
+		
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 		viewer.setLabelProvider(new TLabelProvider());
 	}
 
-	private void attachCellEditors(final TableViewer viewer, Composite parent) {
-		viewer.setCellModifier(new ICellModifier() {
-			public boolean canModify(Object element, String property) {
-				if (property.equals("VALUE")) //$NON-NLS-1$
-					return true;
-				if (property.equals("NAME")) //$NON-NLS-1$
-					return true;
-				return false;
-			}
-
-			public Object getValue(Object element, String property) {
-				JRDatasetParameter prop = (JRDatasetParameter) element;
-				if ("VALUE".equals(property)) //$NON-NLS-1$
-					if (prop.getExpression() != null)
-						return prop.getExpression();
-				if ("NAME".equals(property)) { //$NON-NLS-1$
-					return prop.getName();
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			public void modify(Object element, String property, Object value) {
-				TableItem tableItem = (TableItem) element;
-				setErrorMessage(null);
-				setMessage(getDescription(tableItem));
-				JRDesignDatasetParameter data = (JRDesignDatasetParameter) tableItem.getData();
-				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof JRExpression) {
-						data.setExpression((JRExpression) value);
-					}
-				}
-				if ("NAME".equals(property)) { //$NON-NLS-1$
-					List<JRDesignDatasetParameter> plist = (List<JRDesignDatasetParameter>) tableViewer.getInput();
-					for (JRDesignDatasetParameter p : plist) {
-						if (p != data && p.getName() != null && p.getName().equals(value)) {
-							setErrorMessage(Messages.common_error_message_unique_properties);
-							return;
-						}
-					}
-					data.setName((String) value);
-				}
-				tableViewer.update(element, new String[] { property });
-				tableViewer.refresh();
-			}
-		});
-
-		JRExpressionCellEditor exprCellEditor = new JRExpressionCellEditor(parent, expContext);
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), exprCellEditor });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
+	/**
+	 * Set the input of the table to the stored value list
+	 */
+	private void fillTable() {
+		if (value != null) {
+			tableViewer.setInput(value);
+		}
 	}
-
-	private void fillTable(Table table) {
-		List<JRDatasetParameter> lst = new ArrayList<JRDatasetParameter>(Arrays.asList(value.getValue()));
-		tableViewer.setInput(lst);
-	}
-
-	private void setColumnToolTip() {
-		final Listener labelListener = new Listener() {
-			public void handleEvent(Event event) {
-				Label label = (Label) event.widget;
-				Shell shell = label.getShell();
-				switch (event.type) {
-				case SWT.MouseDown:
-					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
-					// Assuming table is single select, set the selection as if
-					// the mouse down event went through to the table
-					table.setSelection(new TableItem[] { (TableItem) e.item });
-					table.notifyListeners(SWT.Selection, e);
-					// fall through
-				case SWT.MouseExit:
-					shell.dispose();
-					break;
-				}
-			}
-		};
-
-		Listener tableListener = new Listener() {
-			Shell tip = null;
-
-			Label label = null;
-
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Dispose:
-				case SWT.KeyDown:
-				case SWT.MouseMove: {
-					if (tip == null)
-						break;
-					tip.dispose();
-					tip = null;
-					label = null;
-					break;
-				}
-				case SWT.MouseHover: {
-					TableItem item = table.getItem(new Point(event.x, event.y));
-					String description = getDescription(item);
-					if (item != null && !description.equals("")) { //$NON-NLS-1$
-
-						if (tip != null && !tip.isDisposed())
-							tip.dispose();
-						tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
-						tip.setLayout(new FillLayout());
-						label = new Label(tip, SWT.NONE);
-						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item); //$NON-NLS-1$
-
-						label.setText(description);
-						label.addListener(SWT.MouseExit, labelListener);
-						label.addListener(SWT.MouseDown, labelListener);
-						Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-						Rectangle rect = item.getBounds(0);
-						Point pt = table.toDisplay(rect.x, rect.y);
-						tip.setBounds(pt.x, pt.y, size.x, size.y);
-						tip.setVisible(true);
-					}
-				}
-				}
-			}
-		};
-		table.addListener(SWT.Dispose, tableListener);
-		table.addListener(SWT.KeyDown, tableListener);
-		table.addListener(SWT.MouseMove, tableListener);
-		table.addListener(SWT.MouseHover, tableListener);
-	}
-
-	private String getDescription(TableItem item) {
-		// String key = ((SubreportPropertyDTO) item.getData()).getProperty();
-		// List<SubreportPropertyDTO> dp = getDefaultProperties();
-		// for (SubreportPropertyDTO p : dp) {
-		// if (p.getProperty().equals(key))
-		// return p.getDescription();
-		// }
-		return ""; //$NON-NLS-1$
-	}
-
+	
+	/**
+	 * Set the expression context
+	 */
 	public void setExpressionContext(ExpressionContext expContext) {
 		this.expContext = expContext;
 	}
 }
+

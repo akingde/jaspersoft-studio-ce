@@ -256,15 +256,17 @@ public class ElementDatasetWidget implements IExpressionContextSetter {
 				if (dialog.open() == Dialog.OK) {
 					prmDTO = wizard.getValue();
 
-					for (JRDatasetParameter prm : prmDTO.getValue())
+					for (JRDatasetParameter prm : prmDTO.getValue()){
 						datasetRun.removeParameter(prm);
+					}
 
-					for (JRDatasetParameter param : prmDTO.getValue())
+					for (JRDatasetParameter param : prmDTO.getValue()){
 						try {
 							datasetRun.addParameter(param);
 						} catch (JRException er) {
 							er.printStackTrace();
 						}
+					}
 				}
 			}
 		});

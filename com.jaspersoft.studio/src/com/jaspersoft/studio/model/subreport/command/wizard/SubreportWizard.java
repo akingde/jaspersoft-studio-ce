@@ -45,8 +45,7 @@ public class SubreportWizard extends JSSWizard {
 	private WizardConnectionPage step2;
 	private SubreportPropertyPage step3;
 	private MSubreport subreport;
-//	private MDatasetRun mdataset;
-
+	
 	public SubreportWizard() {
 		super();
 		setWindowTitle(Messages.common_subreport);
@@ -76,9 +75,7 @@ public class SubreportWizard extends JSSWizard {
 		ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignElement)subreport.getValue(), subreport);
 		step0.setExpressionContext(ec);
 		step2.setExpressionContext(ec);
-		// FIXME: add support to the step3 for setting the expression context
-		//step3.setExpressionContext(ec);
-		
+		step3.setExpressionContext(ec);		
 	}
 
 	/**

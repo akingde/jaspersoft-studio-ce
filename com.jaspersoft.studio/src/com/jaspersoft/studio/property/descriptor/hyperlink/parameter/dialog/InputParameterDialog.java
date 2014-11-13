@@ -10,15 +10,15 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
+package com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog;
 
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
+import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -40,7 +40,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 /**
- * Dialog to provide the configuration of a subreport parameters
+ * Dialog to provide the configuration of the hyperlinks parameters
  * 
  * @author Orlandin Marco
  *
@@ -60,7 +60,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * The handled parameter inside the dialog
 	 */
-	private JRDesignSubreportParameter resultParameter;
+	private JRDesignHyperlinkParameter resultParameter;
 	
 	/**
 	 * Actual expression context
@@ -68,9 +68,9 @@ public class InputParameterDialog extends TitleAreaDialog {
 	private ExpressionContext expContext;
 	
 	/**
-	 * List of the JRSubreportParameter already defined
+	 * List of the parameters already defined
 	 */
-	private List<JRSubreportParameter> previousParameters;
+	private List<JRHyperlinkParameter> previousParameters;
 	
 	/**
 	 * The original name of the parameter if this is used for an edit operation or null
@@ -98,9 +98,9 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * @param jconfig the current jasper reports configuration
 	 * @param previousParameters the list of parameters already defined
 	 */
-	public InputParameterDialog(Shell parentShell, JRSubreportParameter editedParameter, List<JRSubreportParameter> previousParameters) {
+	public InputParameterDialog(Shell parentShell, JRDesignHyperlinkParameter editedParameter, List<JRHyperlinkParameter> previousParameters) {
 		super(parentShell);
-		this.resultParameter = (JRDesignSubreportParameter)editedParameter;
+		this.resultParameter = (JRDesignHyperlinkParameter)editedParameter;
 		this.previousParameters = previousParameters;
 		originalName = resultParameter.getName();
 	}
@@ -112,8 +112,8 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * @param jconfig the current jasper reports configuration
 	 * @param previousParameters the list of parameters already defined
 	 */
-	public InputParameterDialog(Shell parentShell, List<JRSubreportParameter> previousParameters) {
-		this(parentShell, new JRDesignSubreportParameter(), previousParameters);
+	public InputParameterDialog(Shell parentShell, List<JRHyperlinkParameter> previousParameters) {
+		this(parentShell, new JRDesignHyperlinkParameter(), previousParameters);
 		originalName = null;
 	}
 	
@@ -154,7 +154,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 		String name = resultParameter.getName();
 		parameterName.setText(name != null ? name : ""); //$NON-NLS-1$
 		
-		JRExpression expressionValue = resultParameter.getExpression();
+		JRExpression expressionValue = resultParameter.getValueExpression();
 		String expression = expressionValue != null ? expressionValue.getText() : null;
 		parameterExpression.getTextControl().setText(expression != null ? expression : ""); //$NON-NLS-1$
 		updateContainer();
@@ -172,7 +172,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	private void updateContainer(){
 		resultParameter.setName(parameterName.getText());
 		JRExpression newExpression = new JRDesignExpression(parameterExpression.getText());
-		resultParameter.setExpression(newExpression);
+		resultParameter.setValueExpression(newExpression);
 		validate();
 	}
 	
@@ -198,7 +198,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	private void validate(){
 		boolean isValid = !resultParameter.getName().trim().isEmpty();
 		if (isValid){
-			for(JRSubreportParameter parameter : previousParameters){
+			for(JRHyperlinkParameter parameter : previousParameters){
 				if (parameter.getName().equals(resultParameter.getName().trim())){
 					if (originalName != null && parameter.getName().equals(originalName)){
 						isValid = true;
@@ -233,7 +233,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * Return the parameter currently stored inside the class
 	 */
-	public JRSubreportParameter getValue(){
+	public JRDesignHyperlinkParameter getValue(){
 		return resultParameter;
 	}
 }

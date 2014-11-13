@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.command.wizard.NewSubreportPage;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -86,6 +87,12 @@ public class SubreportPropertyPage extends JSSWizardPage {
 	 * Button to delete an entry on the table
 	 */
 	private Button deleteButton;
+	
+	/**
+	 * Actual expression context
+	 */
+	private ExpressionContext expContext;
+	
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -123,12 +130,6 @@ public class SubreportPropertyPage extends JSSWizardPage {
 	 */
 	public JRSubreportParameter[] getValue() {
 		return value.toArray(new JRSubreportParameter[value.size()]);
-	}
-
-	@Override
-	public void dispose() {
-		getValue();
-		super.dispose();
 	}
 
 	/**
@@ -179,8 +180,8 @@ public class SubreportPropertyPage extends JSSWizardPage {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION);
-				InputParameterDialog inputDialog = new InputParameterDialog(getShell(), jConfig, value);
+				InputParameterDialog inputDialog = new InputParameterDialog(getShell(), value);
+				inputDialog.setExpressionContext(expContext);
 				if (inputDialog.open() == Dialog.OK){
 					value.add(inputDialog.getValue());
 					tableViewer.refresh();
@@ -271,8 +272,8 @@ public class SubreportPropertyPage extends JSSWizardPage {
 	 */
 	private void editElement(JRSubreportParameter edited){
 		JRSubreportParameter result = (JRSubreportParameter)edited.clone();
-		JasperReportsConfiguration jConfig = (JasperReportsConfiguration) getSettings().get(JSSWizard.JASPERREPORTS_CONFIGURATION);
-		InputParameterDialog inputDialog = new InputParameterDialog(getShell(), result, jConfig, value);
+		InputParameterDialog inputDialog = new InputParameterDialog(getShell(), result, value);
+		inputDialog.setExpressionContext(expContext);
 		if (inputDialog.open() == Dialog.OK){
 			int index = value.indexOf(edited);
 			value.set(index, result);
@@ -384,5 +385,11 @@ public class SubreportPropertyPage extends JSSWizardPage {
 			setValue(sParameters.toArray(new JRDesignSubreportParameter[sParameters.size()]));
 		}
 	}
-
+	
+	/**
+	 * Set the expression context
+	 */
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext = expContext;
+	}
 }

@@ -69,6 +69,10 @@ public class MTextField extends MTextElement{
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
+	private MHyperLink mHyperLink;
+	
+	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	
 	/**
 	 * Gets the icon descriptor.
 	 * 
@@ -243,12 +247,7 @@ public class MTextField extends MTextElement{
 		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
-
 	}
-
-	private ParameterDTO propertyDTO;
-	private MHyperLink mHyperLink;
-	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
 	@Override
 	public Object getPropertyActualValue(Object id) {
@@ -289,11 +288,9 @@ public class MTextField extends MTextElement{
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return jrElement.getLinkType();
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrElement.getHyperlinkParameters());
-			}
+			ParameterDTO propertyDTO = new ParameterDTO();
+			propertyDTO.setJasperDesign(getJasperDesign());
+			propertyDTO.setValue(jrElement.getHyperlinkParameters());
 			return propertyDTO;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
@@ -373,14 +370,15 @@ public class MTextField extends MTextElement{
 				ParameterDTO v = (ParameterDTO) value;
 
 				JRHyperlinkParameter[] hyperlinkParameters = jrElement.getHyperlinkParameters();
-				if (hyperlinkParameters != null)
-					for (JRHyperlinkParameter prm : hyperlinkParameters)
+				if (hyperlinkParameters != null){
+					for (JRHyperlinkParameter prm : hyperlinkParameters){
 						jrElement.removeHyperlinkParameter(prm);
+					}
+				}
 
-				for (JRHyperlinkParameter param : v.getValue())
+				for (JRHyperlinkParameter param : v.getValue()){
 					jrElement.addHyperlinkParameter(param);
-
-				propertyDTO = v;
+				}
 			}
 		} else
 			super.setPropertyValue(id, value);

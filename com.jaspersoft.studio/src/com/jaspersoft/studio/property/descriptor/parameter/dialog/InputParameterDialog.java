@@ -10,15 +10,15 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
+package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRSubreportParameter;
+import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -60,7 +60,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * The handled parameter inside the dialog
 	 */
-	private JRDesignSubreportParameter resultParameter;
+	private JRDesignDatasetParameter resultParameter;
 	
 	/**
 	 * Actual expression context
@@ -70,7 +70,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * List of the JRSubreportParameter already defined
 	 */
-	private List<JRSubreportParameter> previousParameters;
+	private List<JRDatasetParameter> previousParameters;
 	
 	/**
 	 * The original name of the parameter if this is used for an edit operation or null
@@ -98,9 +98,9 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * @param jconfig the current jasper reports configuration
 	 * @param previousParameters the list of parameters already defined
 	 */
-	public InputParameterDialog(Shell parentShell, JRSubreportParameter editedParameter, List<JRSubreportParameter> previousParameters) {
+	public InputParameterDialog(Shell parentShell, JRDesignDatasetParameter editedParameter, List<JRDatasetParameter> previousParameters) {
 		super(parentShell);
-		this.resultParameter = (JRDesignSubreportParameter)editedParameter;
+		this.resultParameter = (JRDesignDatasetParameter)editedParameter;
 		this.previousParameters = previousParameters;
 		originalName = resultParameter.getName();
 	}
@@ -112,8 +112,8 @@ public class InputParameterDialog extends TitleAreaDialog {
 	 * @param jconfig the current jasper reports configuration
 	 * @param previousParameters the list of parameters already defined
 	 */
-	public InputParameterDialog(Shell parentShell, List<JRSubreportParameter> previousParameters) {
-		this(parentShell, new JRDesignSubreportParameter(), previousParameters);
+	public InputParameterDialog(Shell parentShell, List<JRDatasetParameter> previousParameters) {
+		this(parentShell, new JRDesignDatasetParameter(), previousParameters);
 		originalName = null;
 	}
 	
@@ -198,7 +198,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	private void validate(){
 		boolean isValid = !resultParameter.getName().trim().isEmpty();
 		if (isValid){
-			for(JRSubreportParameter parameter : previousParameters){
+			for(JRDatasetParameter parameter : previousParameters){
 				if (parameter.getName().equals(resultParameter.getName().trim())){
 					if (originalName != null && parameter.getName().equals(originalName)){
 						isValid = true;
@@ -233,7 +233,7 @@ public class InputParameterDialog extends TitleAreaDialog {
 	/**
 	 * Return the parameter currently stored inside the class
 	 */
-	public JRSubreportParameter getValue(){
+	public JRDesignDatasetParameter getValue(){
 		return resultParameter;
 	}
 }
