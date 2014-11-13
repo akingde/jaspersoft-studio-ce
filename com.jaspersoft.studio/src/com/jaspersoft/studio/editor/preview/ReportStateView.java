@@ -60,9 +60,9 @@ public class ReportStateView extends PageBookView {
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
-		if (key == IResource.class) {
+		if (key == IResource.class && getSite() != null) {
 			IWorkbenchPage page = getSite().getPage();
-			if (page != null) {
+			if (page != null && page.getActiveEditor() != null) {
 				IEditorInput editorInput = page.getActiveEditor().getEditorInput();
 				if (editorInput != null && editorInput instanceof IFileEditorInput)
 					return ((IFileEditorInput) editorInput).getFile();
