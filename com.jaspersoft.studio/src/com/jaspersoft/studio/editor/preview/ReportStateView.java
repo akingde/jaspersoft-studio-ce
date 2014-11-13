@@ -1,18 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor.preview;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IPage;
@@ -44,7 +43,8 @@ public class ReportStateView extends PageBookView {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					PreviewJRPrint preview = (PreviewJRPrint) ((AbstractJRXMLEditor) part).getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
+					PreviewJRPrint preview = (PreviewJRPrint) ((AbstractJRXMLEditor) part)
+							.getEditor(AbstractJRXMLEditor.PAGE_PREVIEW);
 					if (preview != null)
 						page.setupConsole(preview.getConsole());
 				}
@@ -56,6 +56,19 @@ public class ReportStateView extends PageBookView {
 		initPage(page);
 		page.createControl(getPageBook());
 		return new PageRec(part, page);
+	}
+
+	@Override
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
+		if (key == IResource.class) {
+			IWorkbenchPage page = getSite().getPage();
+			if (page != null) {
+				IEditorInput editorInput = page.getActiveEditor().getEditorInput();
+				if (editorInput != null && editorInput instanceof IFileEditorInput)
+					return ((IFileEditorInput) editorInput).getFile();
+			}
+		}
+		return super.getAdapter(key);
 	}
 
 	@Override
