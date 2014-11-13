@@ -1,0 +1,85 @@
+.glyphicons {
+  display: inline-block;
+  position: relative;
+  padding-left: 0px;
+  color: white;
+  text-decoration: none;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: middle;
+  transition: 0.2s ease-in-out;
+}
+.glyphicons:before {
+	position: relative;
+	display: block;
+	font: 130px/1em 'Glyphicons Regular';
+	color: white;
+	padding-bottom: 30px;
+	text-shadow: 2px 2px 3px #444;
+}
+
+html {
+	  background: url("../images/background.png") no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;	
+}
+
+.icons {
+	max-width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20%;	
+}
+
+.widget {
+	float: left;
+	width: 33%;
+	text-align: center;
+	color: white;
+	font: 20px/1em 'Century Gothic','Avant Garde','Helvetica';
+	text-shadow: 2px 2px 3px #444;
+	font-weight: 200;
+	color: #FFF;
+    cursor: pointer;
+}
+
+.postAnim {
+	transition: 0.2s ease-in-out;
+}
+
+.widget .glyphicons:hover {
+	transition: 0.2s ease-in-out;
+}
+
+.hidden {
+	display: none;
+}
+
+.postAnim:hover {
+	opacity: 1;
+	margin-top: -30px;
+	color: #FFF;
+	-webkit-transform: scale(1.5);
+        transform: scale(1.5);
+}
+
+
+
+
+#title {
+	padding-top: 20px;
+	text-align: center;
+}
+
+#wrapper {
+	text-align: center;
+}
+
+a {
+	color: white;
+	text-decoration: none;
+}
+
+

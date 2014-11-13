@@ -40,51 +40,23 @@
    </extension>
    <extension
          point="org.eclipse.ui.intro.configExtension">
+      
       <action
-            name="cheatshdatasource"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.datasource">
-      </action>
-      <action
-            name="cheatshnewrep"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.designreport">
-      </action>
-      <action
-            name="cheatshnewchar"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.createchart">
-      </action>
-      <action
-            name="cheatshpreview"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.runreport">
-      </action>
-      <action
-            name="jaspersoftsite"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com">
-      </action>
-      <action
-            name="jaspersoftsitestudio"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio">
-      </action>
-      <action
-            name="jaspersoftsitestudiobugtracker"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/tracker/">
-      </action>
-      <action
-            name="jaspersoftsitestudioforum"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/answers/">
-      </action>
-      <action
-            name="jaspersoftfacebook"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=www.facebook.com/pages/Jaspersoft-Corporation/78981369547">
-      </action>
-      <action
-            name="banner"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jasperserver">
-      </action>
-      <action
-            name="tutorials"
-            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org%2fwebsite%2fireportwebsite%2fJSS+Website%2ftutorials.html%3fheader%3dproject%26target%3djaspersoftstudio">
+            name="getstarted"
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/resources">
       </action>
       
+      <action
+            name="learnmore"
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/resources">
+      </action>
+      
+      <action
+            name="collaborate"
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/answers">
+      </action>
+		      
+		      
       <!-- twitter.com/#!/JaspersoftS -->
       <action
             name="jaspersofttwitter"

@@ -39,7 +39,7 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 	}
 
 	public void createContent(String id, PrintWriter out) {
-		out.println("HEllo world!");
+		
 	}
 
 	public void createContent(String id, Composite parent, FormToolkit toolkit) {
@@ -52,6 +52,8 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 	}
 
 	public void createContent(String id, Element parent) {
+		
+		/*
 		try {
 			Document doc = parent.getOwnerDocument();
 			PriorityQueue<IFile> queue = new PriorityQueue<IFile>(10,
@@ -108,9 +110,12 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 				}
 				parent.appendChild(ul);
 			}
+			
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+		
+		*/
 
 	}
 
