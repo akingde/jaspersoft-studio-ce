@@ -16,6 +16,12 @@ import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
  */
 public class CVComponentUtil {
 	
+	public static final String PHANTOMJS_INSTALLATION_PATH_PROPERTY = 
+			"com.jaspersoft.jasperreports.components.customvisualization.phantomjs.executable.path"; //$NON-NLS-1$
+	public static final String PHANTOJS_WARNING_PROPERTY = "phantomJS.installation.check"; //$NON-NLS-1$
+	public static final String PHANTOMJS_VERSIONCHECK_CMD = "phantomjs -v";
+	public static final String PHANTOMJS_URL_DOWNLOAD = "http://phantomjs.org/download.html";
+	
 	public static String getCVItemPropertyValueAsString(CVItemProperty property) {
 		return getCVItemPropertyValueAsString(property, false);
 	}

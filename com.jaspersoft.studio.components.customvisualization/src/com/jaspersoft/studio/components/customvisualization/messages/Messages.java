@@ -9,6 +9,9 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.components.customvisualization.messages.messages"; //$NON-NLS-1$
+	public static String CreateCustomVisualizationCommand_ShowOrNot;
+	public static String CreateCustomVisualizationCommand_WarningMessage;
+	public static String CreateCustomVisualizationCommand_WarningTitle;
 	public static String CVItemDataDialog_Add;
 	public static String CVItemDataDialog_DatasetTab;
 	public static String CVItemDataDialog_Edit;
