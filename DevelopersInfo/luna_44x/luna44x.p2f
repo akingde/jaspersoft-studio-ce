@@ -4,46 +4,46 @@
   <ius size='17'>
     <iu id='org.apache.commons.codec.source' name='Apache Commons Codec Source' version='1.6.0.v201305230611'>
       <repositories size='3'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
         <repository location='http://download.eclipse.org/eclipse/updates/4.4'/>
         <repository location='http://download.eclipse.org/releases/luna'/>
       </repositories>
     </iu>
     <iu id='org.apache.commons.dbcp' name='Apache Commons DBCP' version='1.4.0.v201204271417'>
       <repositories size='1'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
       </repositories>
     </iu>
     <iu id='org.apache.commons.dbcp.source' name='Apache Commons DBCP Source' version='1.4.0.v201204271417'>
       <repositories size='1'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
       </repositories>
     </iu>
     <iu id='org.apache.httpcomponents.httpclient' name='Apache HttpComponents HttpClient' version='4.3.4.v201410062000'>
       <repositories size='1'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
       </repositories>
     </iu>
     <iu id='org.apache.httpcomponents.httpclient.source' name='Apache HttpComponents HttpClient Source' version='4.3.4.v201410062000'>
       <repositories size='1'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
       </repositories>
     </iu>
     <iu id='org.apache.httpcomponents.httpcore' name='Apache HttpComponents Httpcore' version='4.3.2.v201409180530'>
       <repositories size='1'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
       </repositories>
     </iu>
     <iu id='org.apache.log4j' name='Apache Jakarta log4j Plug-in' version='1.2.15.v201012070815'>
       <repositories size='3'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
         <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
         <repository location='http://download.eclipse.org/releases/luna'/>
       </repositories>
     </iu>
     <iu id='org.apache.log4j.source' name='Apache Jakarta log4j Source Bundle' version='1.2.15.v201012070815'>
       <repositories size='3'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
         <repository location='http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/'/>
         <repository location='http://download.eclipse.org/releases/luna'/>
       </repositories>
@@ -72,7 +72,7 @@
     </iu>
     <iu id='org.apache.commons.discovery' name='Jakarta-Commons Discovery' version='0.2.0.v201004190315'>
       <repositories size='2'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
         <repository location='http://download.eclipse.org/releases/luna'/>
       </repositories>
     </iu>
@@ -83,7 +83,7 @@
     </iu>
     <iu id='org.apache.xalan' name='Xalan-Java' version='2.7.1.v201005080400'>
       <repositories size='2'>
-        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/I20141006202717/repository/'/>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
         <repository location='http://download.eclipse.org/releases/luna'/>
       </repositories>
     </iu>
