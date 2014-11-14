@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.editor;
 
@@ -93,13 +89,13 @@ import com.jaspersoft.studio.utils.SyncDatasetRunParameters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
- * This abstract class contains the basic that should be extended by clients
- * in order to create a JRXML-like editor.
- *
+ * This abstract class contains the basic that should be extended by clients in order to create a JRXML-like editor.
+ * 
  */
-public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements IResourceChangeListener, IMultiEditor, IGotoMarker {
-	
-	/** The constant for the page index of Design Editor  */
+public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements IResourceChangeListener, IMultiEditor,
+		IGotoMarker {
+
+	/** The constant for the page index of Design Editor */
 	public static final int PAGE_DESIGNER = 0;
 
 	/** The constant for the page index of Source Editor */
@@ -107,43 +103,44 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 	/** The constant for the page index of Preview Editor */
 	public static final int PAGE_PREVIEW = 2;
-	
+
 	/**
 	 * Listener to execute the zoom-in or zoom-out operation when requested. It is static becuase it is placed on the
 	 * display, so one get all the events
 	 */
 	private static Listener mouseWheelListener = new JRXMLEditorZoomListener();
-	
+
 	/** Model associated to the JRXML file */
 	protected INode model = null;
-	
+
 	/** The configuration for the JRXML file */
 	protected JasperReportsConfiguration jrContext;
-	
+
 	/** The outline associated to the editor */
 	protected MultiOutlineView outlinePage;
-	
+
 	/** Flag for the XML status */
 	protected boolean xmlFresh = true;
 
 	protected boolean toXML = false;
 
 	protected boolean isRefresh = false;
-	
+
 	protected boolean closing = false;
-	
-	/** The current active page index */ //FIXME - Is it really necessary?? we should use getActivePage()
+
+	/** The current active page index */
+	// FIXME - Is it really necessary?? we should use getActivePage()
 	protected int activePage = 0;
-	
+
 	/** Temporary reference to the current selection */
 	private ISelection tmpselection;
-	
-	/** The JasperReports version used to write this JRXML */ 
+
+	/** The JasperReports version used to write this JRXML */
 	protected String version = JRXmlWriterHelper.LAST_VERSION;
-	
+
 	/** Xml editor used in page 1. */
 	protected XMLEditor xmlEditor;
-	
+
 	/** Preview editor used in page 2. */
 	protected PreviewEditor previewEditor;
 
@@ -196,11 +193,12 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			handleJRException(editorInput, e, false);
 		}
 	}
-	
+
 	/**
 	 * Returns the {@link JasperReportsContext} associated to the specified report file.
 	 * 
-	 * @param file the JRXML file reference
+	 * @param file
+	 *          the JRXML file reference
 	 * @return the JasperReports context of the report file
 	 */
 	public JasperReportsConfiguration getJrContext(IFile file) {
@@ -211,9 +209,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 		return jrContext;
 	}
-	
+
 	protected abstract INode createEditorModel();
-	
+
 	/**
 	 * 
 	 * 
@@ -256,8 +254,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
 	 */
 	@Override
 	public void resourceChanged(final IResourceChangeEvent event) {
@@ -295,7 +296,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#createPages()
 	 */
 	@Override
@@ -304,7 +307,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		if (jrContext != null)
 			try {
 				createDesignEditorPage();
-				createSourceEditorPage();				
+				createSourceEditorPage();
 				Display.getDefault().asyncExec(new Runnable() {
 
 					@Override
@@ -324,7 +327,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				JaspersoftStudioPlugin.getInstance().logError(e);
 			}
 	}
-	
+
 	/**
 	 * Closes the editor if there are some errors.
 	 */
@@ -343,18 +346,16 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 				});
 		}
 	}
-	
+
 	/**
-	 * Handles the {@link JRException} when it happens.
-	 * Markers can be used in order to give a better user experience.
+	 * Handles the {@link JRException} when it happens. Markers can be used in order to give a better user experience.
 	 * 
 	 * @param editorInput
 	 *          the editor input
 	 * @param exception
 	 *          the exception to be handled
 	 * @param mute
-	 *          flag to determine if the exception should be presented
-	 *          in a dialog
+	 *          flag to determine if the exception should be presented in a dialog
 	 */
 	public void handleJRException(IEditorInput editorInput, final Exception exception, boolean mute) {
 		if (!mute)
@@ -377,7 +378,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 						gotoMarker(marker);
 						toXML = true;
 						setActivePage(PAGE_SOURCEEDITOR); // FIXME -> This could be removed???
-																							// we already force source editor in gotoMarker() 
+																							// we already force source editor in gotoMarker()
 						isRefresh = false;
 					}
 				});
@@ -386,7 +387,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			JaspersoftStudioPlugin.getInstance().logError(e1);
 		}
 	}
-	
+
 	@Override
 	public void gotoMarker(IMarker marker) {
 		setActivePage(PAGE_SOURCEEDITOR);
@@ -399,10 +400,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	 * @see #PAGE_DESIGNER
 	 */
 	protected abstract void createDesignEditorPage() throws PartInitException;
-	
+
 	/**
 	 * Creates the Source Editor page.
-	 * @throws PartInitException 
+	 * 
+	 * @throws PartInitException
 	 * 
 	 * @see #PAGE_SOURCEEDITOR
 	 */
@@ -416,18 +418,20 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 			public void documentChanged(DocumentEvent event) {
 				xmlFresh = false;
-				previewEditor.setDirty(true);
+				if (previewEditor != null)
+					previewEditor.setDirty(true);
 			}
 
 			public void documentAboutToBeChanged(DocumentEvent event) {
 
 			}
-		});		
+		});
 	}
-	
+
 	/**
 	 * Creates the Preview Editor page.
-	 * @throws PartInitException 
+	 * 
+	 * @throws PartInitException
 	 * 
 	 * @see #PAGE_PREVIEW
 	 */
@@ -439,11 +443,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 		xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 	}
-	
+
 	/**
 	 * Bind some key combination to specific, it remove eventually the old ones to assure to have only on filter
 	 * 
-	 * FIXME: Verify the usage of the removeFilter and addFilter! 
+	 * FIXME: Verify the usage of the removeFilter and addFilter!
 	 */
 	private void bindActionToKeys() {
 		getContainer().getDisplay().removeFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
@@ -451,13 +455,15 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		getContainer().getDisplay().addFilter(org.eclipse.swt.SWT.MouseWheel, mouseWheelListener);
 		getContainer().getDisplay().addFilter(org.eclipse.swt.SWT.KeyDown, mouseWheelListener);
 	}
-	
+
 	/**
 	 * @return the ID for the editor contextual help
 	 */
 	protected abstract String getEditorHelpID();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
@@ -537,7 +543,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			t.printStackTrace();
 		}
 	}
-	
+
 	protected void doSaveEditors(final IProgressMonitor monitor) {
 		xmlEditor.doSave(monitor);
 		getDesignEditor().doSave(monitor);
@@ -549,7 +555,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 		xmlFresh = true;
 	}
-	
+
 	protected void finishSave(IFile resource) {
 		String resourceAbsolutePath = resource.getRawLocation().toOSString();
 		if (DefaultManager.INSTANCE.isCurrentDefault(resourceAbsolutePath)) {
@@ -595,7 +601,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 	}
 
-
 	@Override
 	protected void handlePropertyChange(int propertyId) {
 		if (!isRefresh) {
@@ -604,34 +609,33 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			super.handlePropertyChange(propertyId);
 		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
 	 */
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-	
+
 	/**
-	 * @return 
-	 * 			<code>true</code> if the main report designer is dirty, 
-	 * 			<code>false</code> otherwise
+	 * @return <code>true</code> if the main report designer is dirty, <code>false</code> otherwise
 	 */
 	protected abstract boolean isDesignerDirty();
-	
+
 	protected abstract ISelection getDesignerPageSelection();
-	
+
 	protected abstract void setDesignerPageSelection(ISelection newSelection);
-	
+
 	@Override
 	protected void pageChange(final int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_SOURCEEDITOR || newPageIndex == PAGE_PREVIEW) {
 			if (activePage == PAGE_DESIGNER) {
 				if (outlinePage != null) {
 					tmpselection = outlinePage.getSite().getSelectionProvider().getSelection();
-				}
-				else {
+				} else {
 					tmpselection = getDesignerPageSelection();
 				}
 			}
@@ -658,8 +662,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 					public void run() {
 						if (outlinePage != null) {
 							outlinePage.getSite().getSelectionProvider().setSelection(tmpselection);
-						}
-						else {
+						} else {
 							setDesignerPageSelection(tmpselection);
 						}
 					}
@@ -720,7 +723,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		updateContentOutline(getActivePage());
 		activePage = newPageIndex;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -749,12 +752,12 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 		return super.getAdapter(type);
 	}
-	
+
 	/**
-	 * Updates the Outline view content depending on the
-	 * editor page currently opened.
+	 * Updates the Outline view content depending on the editor page currently opened.
 	 * 
-	 * @param page the page index
+	 * @param page
+	 *          the page index
 	 */
 	protected void updateContentOutline(int page) {
 		if (outlinePage == null)
@@ -764,7 +767,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			outline = new EmptyOutlinePage();
 		outlinePage.setPageActive(outline);
 	}
-	
+
 	/**
 	 * Converts the source XML to the corresponding model instance.
 	 * 
@@ -784,10 +787,9 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			FileUtils.closeStream(in);
 		}
 	}
-	
+
 	/**
-	 * Converts the current model to XML, specifying a version 
-	 * it should be compliant with.
+	 * Converts the current model to XML, specifying a version it should be compliant with.
 	 * 
 	 * @param the
 	 *          JasperReports version that should be used for compliance.
@@ -819,31 +821,30 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 		return xml;
 	}
-	
+
 	protected void model2xml() {
 		model2xml(JRXmlWriterHelper.LAST_VERSION);
 	}
-	
+
 	/**
-	 * Tells the preview editor that the model
-	 * should be updated.
+	 * Tells the preview editor that the model should be updated.
 	 */
 	protected void model2preview() {
 		previewEditor.setJasperDesign(jrContext);
 	}
-	
+
 	/**
 	 * Update the visual designer.
 	 */
 	public abstract void updateVisualView();
-	
+
 	/**
 	 * @return the model instance
 	 */
 	public INode getModel() {
 		return model;
 	}
-	
+
 	/**
 	 * Sets the model.
 	 * 
@@ -857,7 +858,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			jrContext.setJasperDesign(getJasperDesign());
 		}
 	}
-	
+
 	/**
 	 * @return the current report instance
 	 */
@@ -866,7 +867,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			return (MReport) model.getChildren().get(0);
 		return null;
 	}
-	
+
 	/**
 	 * @return the jasper design of the current report
 	 */
@@ -876,8 +877,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			return mreport.getValue();
 		return null;
 	}
-	
-	
+
 	/**
 	 * Return the console area if available, null otherwise
 	 */
@@ -887,12 +887,12 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		}
 		return null;
 	}
-	
+
 	@Override
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
 	}
-	
+
 	@Override
 	public IEditorPart getEditor(int pageIndex) {
 		// FIXME: Is it really necessary?????
@@ -902,18 +902,16 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			return null;
 		return super.getEditor(pageIndex);
 	}
-	
+
 	/**
-	 * @return 
-	 * 				the current {@link IFile} associated to the editor if possible, 
-	 * 				<code>null</code> otherwise
+	 * @return the current {@link IFile} associated to the editor if possible, <code>null</code> otherwise
 	 */
 	protected IFile getCurrentFile() {
 		if (getEditorInput() instanceof IFileEditorInput)
 			return ((IFileEditorInput) getEditorInput()).getFile();
 		return null;
 	}
-	
+
 	@Override
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
@@ -958,11 +956,11 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	public String getTitleToolTip() {
 		return JaspersoftStudioPlugin.getExtensionManager().getTitleToolTip(jrContext, super.getTitleToolTip());
 	}
-	
+
 	protected abstract EditorPart getDesignEditor();
-	
+
 	// Accessory classes
-	
+
 	protected final class PreviewEditor extends PreviewContainer {
 		public PreviewEditor(boolean listenResource, JasperReportsConfiguration jrContext) {
 			super(listenResource, jrContext);
@@ -994,7 +992,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 			}
 		}
 	}
-	
+
 	protected class StateListener implements IElementStateListener {
 
 		@Override
@@ -1008,7 +1006,7 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 		@Override
 		public void elementContentReplaced(Object element) {
 		}
-		
+
 		@Override
 		public void elementDeleted(Object element) {
 			IFile resource = getCurrentFile();
@@ -1027,5 +1025,5 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 
 		}
 	}
-	
+
 }
