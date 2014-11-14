@@ -15,7 +15,6 @@ package com.jaspersoft.studio.data.storage;
 import java.io.File;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.IConversionFilenameProvider;
@@ -27,7 +26,7 @@ import com.jaspersoft.studio.IConversionFilenameProvider;
  *
  */
 public class DataAdapterNameConverter implements IConversionFilenameProvider {
-
+	
 	/**
 	 * Search a valid file name for a file to place in the data adapter storage.
 	 * It starts from a base name and then iterate by appending to it a counter until
@@ -57,14 +56,14 @@ public class DataAdapterNameConverter implements IConversionFilenameProvider {
 	 */
 	@Override
 	public String getFileName(Node configurationElementNode) {
-		NodeList adapterNode = configurationElementNode.getChildNodes();
-		for (int i = 0; i < adapterNode.getLength(); i++){
-			Node adapterChild = adapterNode.item(i);
-			if (adapterChild.getNodeName().equals("name") && !adapterChild.getTextContent().isEmpty()){
-				return iterateForUniqueName(adapterChild.getTextContent());
-			}
+		String baseName = "dataAdapter_";
+		int index = 0;
+		File storage = ConfigurationManager.getStorage(PreferencesDataAdapterStorage.PREF_KEYS_DATA_ADAPTERS);
+		File testName = new File(storage, baseName+index);
+		while(testName.exists()){
+			index++;
+			testName = new File(storage, baseName+index);
 		}
-		//The data adapter has not a name tag (use the type as base name)
-		return null;//iterateForUniqueName(configurationElementNode.getNodeName());
+		return baseName+index;
 	}
 }

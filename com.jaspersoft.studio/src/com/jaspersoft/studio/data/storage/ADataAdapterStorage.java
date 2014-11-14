@@ -17,6 +17,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -38,13 +39,29 @@ public abstract class ADataAdapterStorage {
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		propChangeSupport.removePropertyChangeListener(listener);
 	}
-
+	
 	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
 		if (daDescriptors == null) {
 			daDescriptors = new LinkedHashMap<String, DataAdapterDescriptor>();
 			findAll();
 		}
 		return daDescriptors.values();
+	}
+	
+	private String generateDataAdapterName(DataAdapterDescriptor adapter){
+		String adapterName = adapter.getName();
+		int counter = 1;
+		while(daDescriptors.containsKey(adapterName)){
+			adapterName = adapter.getName() + "_" + counter;
+			counter++;
+		}
+		return adapterName;
+	}
+	
+	protected void forceAddDataAdapter(DataAdapterDescriptor adapter){
+		String adapterName = generateDataAdapterName(adapter);
+		daDescriptors.put(adapterName, adapter);
+		propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
 	}
 
 	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
@@ -61,6 +78,14 @@ public abstract class ADataAdapterStorage {
 				daDescriptors.remove(da.getName());
 				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
 				return true;
+			} 
+			//FIXME: This code is only to recover broken workspace in the future can be removed
+			//Maybe it was a duplicated data adapter, search it manually
+			String key = getUrl(da);
+			if (key != null){
+				daDescriptors.remove(key);
+				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
+				return true;
 			}
 			return false;
 	}
@@ -74,13 +99,22 @@ public abstract class ADataAdapterStorage {
 				return true;
 			}
 		}
+		//FIXME: This code is only to recover broken workspace in the future can be removed
+		//Maybe it was a duplicated data adapter, search it manually
+		String key = getUrl(adapter);
+		if (key != null){
+			//Since for the duplicated data adapter the key is not binded to the real name
+			//then we can overwrite it directly
+			daDescriptors.put(key, adapter);
+			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
+			return true;
+		}
 		return false;
 	}
 
 	public String getUrl(DataAdapterDescriptor da) {
-		for (String key : daDescriptors.keySet()) {
-			if (daDescriptors.get(key) == da)
-				return key;
+		for(Entry<String, DataAdapterDescriptor> desc : daDescriptors.entrySet()){
+			if (desc.getValue() == da) return desc.getKey();
 		}
 		return null;
 	}

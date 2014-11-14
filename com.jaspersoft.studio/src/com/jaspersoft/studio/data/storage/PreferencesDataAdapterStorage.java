@@ -17,6 +17,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +46,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
+	private HashMap<DataAdapterDescriptor, String > fileAdapterMap = new HashMap<DataAdapterDescriptor, String>();
+	
 	/**
 	 * Key of the data adapter storage
 	 */
@@ -86,12 +89,14 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 				dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
-				super.addDataAdapter(dataAdapterDescriptor);
+				//Always add the data adapter read from the file regardless of the name
+				super.forceAddDataAdapter(dataAdapterDescriptor);
+				fileAdapterMap.put(dataAdapterDescriptor, storageElement.getName());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-
+		//At this point I've loaded on the data adapter on the file system
 		// Add a list of default data adapters only if none is found.
 		if (getDataAdapterDescriptors().size() == 0) {
 			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
@@ -118,7 +123,12 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	 * Save an element on the data adapter file storage. The url is the name of the resource that will be created inside
 	 * the storage
 	 */
-	public void save(DataAdapterDescriptor adapter) {
+	protected void save(DataAdapterDescriptor adapter) {
+		String fileName = convertDataAdapterName.getFileName(null);
+		save(adapter, fileName);
+	}
+	
+	protected void save(DataAdapterDescriptor adapter, String fileName) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -128,9 +138,10 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_KEYS_DATA_ADAPTERS);
-			File destination = new File(storage, adapter.getName());
+			File destination = new File(storage, fileName);
 			StreamResult result = new StreamResult(destination.getAbsolutePath());
 			transformer.transform(source, result);
+			fileAdapterMap.put(adapter, fileName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,7 +154,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	public boolean removeDataAdapter(DataAdapterDescriptor da) {
 		boolean result = super.removeDataAdapter(da);
 		if (result){
-			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, getEncodedName(da.getName()));
+			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, fileAdapterMap.get(da));
 			return true;
 		}
 		return false;
@@ -157,6 +168,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
 		boolean result = super.addDataAdapter(adapter);
 		if (result){
+			//The data adapter is unique, save it with a new name
 			save(adapter);
 			return true;
 		}
@@ -167,15 +179,11 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			// it is an edit operation, replace its file
 			boolean result = super.editDataAdapter(oldName, adapter);
 			if (result){
-				ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, getEncodedName(oldName));
-				save(adapter);
+				String fileName = fileAdapterMap.get(adapter);
+				ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, fileName);
+				save(adapter, fileName);
 				return true;
 			}
 			return false;
 	}
-	
-	private String getEncodedName(String adapterName){
-		return adapterName;
-	}
-
 }
