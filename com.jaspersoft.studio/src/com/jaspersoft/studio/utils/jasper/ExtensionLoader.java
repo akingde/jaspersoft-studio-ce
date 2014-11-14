@@ -83,6 +83,9 @@ public class ExtensionLoader {
 		GenericElementHandlerBundle.class
 	};
 	
+	/**
+	 * A list of common extension that still need to be loaded
+	 */
 	private static HashSet<Class<?>> missingExtensions = new HashSet<Class<?>>(Arrays.asList(commonExensionKeys));
 	
 	/**
@@ -132,15 +135,13 @@ public class ExtensionLoader {
 	/**
 	 * Thread safe method to check if there are extensions still not loaded
 	 * 
-	 * @param extensionKey key of the extension
-	 * @return true if the extension is currently loading, false otherwise
+	 * @return true if all the extensions are currently loaded, false otherwise
 	 */
 	private static boolean isCurrentlyLoading(){
 		synchronized (loadingExtensions) {
 			return !missingExtensions.isEmpty();
 		}
 	}
- 
  
 	/**
 	 * Load the report dependent extensions on the specified context.
@@ -201,13 +202,13 @@ public class ExtensionLoader {
  }
  
  /**
-  * Should be called before someone load a common extension; if the extension is 
-  * currently in a loading state the caller is blocked untie
-  * the load is not complete. The check to see if the loading
+  * Should be called in the cases all the extension need to be loaded 
+  * before perform other operations; if some extensions are 
+  * currently in a loading state the caller is blocked until
+  * the load of them all is complete. The check to see if the loading
   * is finished is done every amount of a fixed time (by default
   * 200 ms)
   * 
-  * @param extensionKey the key of the extension
   */
  public static void waitIfLoading(){
 	 int checkTime = 200;
