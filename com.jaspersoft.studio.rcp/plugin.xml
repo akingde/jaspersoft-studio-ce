@@ -117,7 +117,7 @@
             locationURI="menu:window">
          <menu
                id="com.jaspersoft.studio.switchlanguage.menus"
-               label="%language"
+               label="%menu.switchlanguage.label"
                mnemonic="%menu.switchlanguage.mnemonic">
             <command
                   commandId="com.jaspersoft.studio.switchlanguage.command"
@@ -155,7 +155,7 @@
 	            label="%command.wizard.newreport.label"
 	            style="push"
 	            icon="icons/toolbar/jrxml_icon.png"
-	            tooltip="%newJasperReport">
+	            tooltip="%command.wizard.newreport.label">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
 		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
@@ -165,10 +165,10 @@
 		   	<command
 	            commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
 	            id="com.jaspersoft.studio.rcp.newdataadapter"
-	            label="%newDataAdapter"
+	            label="%command.wizard.newdataadapter.label"
 	            style="push"
 	            icon="icons/toolbar/data_source.png"
-	            tooltip="%newDataAdapter">
+	            tooltip="%command.wizard.newdataadapter.label">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
 		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
@@ -181,7 +181,7 @@
 	            label="%command.wizard.newstyletemplate.label"
 	            style="push"
 	            icon="icons/toolbar/jasperreports_jrtx.png"
-	            tooltip="%styleTemplateTooltip">
+	            tooltip="%command.wizard.newstyletemplate.label">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
 		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
