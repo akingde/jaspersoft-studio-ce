@@ -59,7 +59,7 @@ html {
 
 .postAnim:hover {
 	opacity: 1;
-	margin-top: -30px;
+	margin-top: -10px;
 	color: #FFF;
 	-webkit-transform: scale(1.5);
         transform: scale(1.5);
@@ -80,6 +80,11 @@ html {
 a {
 	color: white;
 	text-decoration: none;
+}
+
+.widget a {
+	display: block;
+	position: relative;
 }
 
 
