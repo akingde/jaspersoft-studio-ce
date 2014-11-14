@@ -91,7 +91,7 @@ public class SPPartParametersButton extends ASPropertyWidget {
 				dialog.create();
 				if (dialog.open() == Dialog.OK){
 					JRSubreportParameter[] values = GenericJSSParameter.convertToSubreport(wizard.getValue());
-					section.changeProperty(pDescriptor.getId(), values);
+					section.changeProperty(MReportPart.COMPONENT_PARAMETERS, values);
 				}
 			}
 		});
