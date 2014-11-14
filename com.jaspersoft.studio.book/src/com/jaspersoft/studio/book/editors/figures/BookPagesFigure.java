@@ -20,6 +20,7 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 
 
 
@@ -112,66 +113,59 @@ public class BookPagesFigure extends RectangleFigure {
 	protected void loadPreviewImage()
 	{
 		Thread t = new Thread(new Runnable() {
-		
-		@Override
-		public void run() {
-		
-			imageFigure.setBusy(true);
-			
-			try {
-			// Set loading preview image....
-			//			final Image previewImage = ResourceManager.getImage(model.getImageDescriptor());
-			//			if (previewImage != null)
-			//			{
-			//				updateFigure(previewImage);
-			//			}
-			
-			Object reportFileName =  null;
-				// Try to find the expression used to reference the jrxml or jasper file
-				// used to fill this part.
-				JRDesignPart jrDesignPart = model.getValue();
-				if(jrDesignPart!=null){
-					PartComponent partComponent = jrDesignPart.getComponent();
-					if(partComponent instanceof SubreportPartComponent) {
-						JRExpression subreportExp = ((SubreportPartComponent)partComponent).getExpression();
-						if(subreportExp!=null){
-							
-							// Try to evaluate the subreport expression for this part.
-							// The dataset to use is clearly the main dataset, since we don't have
-							// other options in Jasperbook...
-							reportFileName = ExpressionUtil.eval(subreportExp, model.getJasperDesign().getMainDataset(),  model.getJasperConfiguration());
-							
+
+			@Override
+			public void run() {
+				imageFigure.setBusy(true);
+				ExtensionLoader.waitIfLoading();
+				try {
+
+					Object reportFileName = null;
+					// Try to find the expression used to reference the jrxml or
+					// jasper file
+					// used to fill this part.
+					JRDesignPart jrDesignPart = model.getValue();
+					if (jrDesignPart != null) {
+						PartComponent partComponent = jrDesignPart.getComponent();
+						if (partComponent instanceof SubreportPartComponent) {
+							JRExpression subreportExp = ((SubreportPartComponent) partComponent).getExpression();
+							if (subreportExp != null) {
+
+								// Try to evaluate the subreport expression for
+								// this part.
+								// The dataset to use is clearly the main
+								// dataset, since we don't have
+								// other options in Jasperbook...
+								reportFileName = ExpressionUtil.eval(subreportExp, model.getJasperDesign().getMainDataset(), model.getJasperConfiguration());
+
+							}
 						}
 					}
-				}
-				
-				// No image to load...
-				if (reportFileName == null) return;
-				
-				if (reportFileName instanceof File)
-				{
-					reportFileName = ((File)reportFileName).toURI().toString();
-				}
-				else if (!(reportFileName instanceof String))
-				{
-					return; // We only understand string paths...
-				}
-				
-				final Image sourceImage = ReportThumbnailsManager.produceImage((String)reportFileName, model.getJasperConfiguration());
-				
-				if (sourceImage != null)
-				{
-					updateFigure(sourceImage);
-				}
-				
-				} finally 
-				{
+
+					// No image to load...
+					if (reportFileName == null)
+						return;
+
+					if (reportFileName instanceof File) {
+						reportFileName = ((File) reportFileName).toURI()
+								.toString();
+					} else if (!(reportFileName instanceof String)) {
+						return; // We only understand string paths...
+					}
+
+					final Image sourceImage = ReportThumbnailsManager
+							.produceImage((String) reportFileName,
+									model.getJasperConfiguration());
+
+					if (sourceImage != null) {
+						updateFigure(sourceImage);
+					}
+
+				} finally {
 					imageFigure.setBusy(false);
 				}
-				
 			}
 		});
-		
 		// Run the thread that will load the thumbnail in background!
 		t.start();
 

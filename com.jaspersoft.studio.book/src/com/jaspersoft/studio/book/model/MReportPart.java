@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -52,6 +54,7 @@ public class MReportPart extends APropertyNode {
 	public static final String PROPERTY_EVALTIME_TYPE = "part_evaluationtime_type"; //$NON-NLS-1$
 	public static final String PROPERTY_EVALTIME_GROUP = "part_evaluationtime_group"; //$NON-NLS-1$
 	public static final String COMPONENT_EXPRESSION = "component_expression"; //$NON-NLS-1$
+	public static final String COMPONENT_PARAMETERS = "component_parameters"; //$NON-NLS-1$
 	public static final String PROPERTY_MAP = "property_map"; //$NON-NLS-1$
 	
 	// The icon descriptor
@@ -128,6 +131,14 @@ public class MReportPart extends APropertyNode {
 			if(id.equals(PROPERTY_MAP)){
 				return jrpart.getPropertiesMap().cloneProperties();
 			}
+			if(id.equals(COMPONENT_PARAMETERS)){
+				PartComponent component = jrpart.getComponent();
+				if (component != null && component instanceof StandardSubreportPartComponent){
+					StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent)component;
+					return subComponent.getParameters();
+				}
+				return new JRSubreportParameter[0];
+			}
 		}
 		return null;
 	}
@@ -135,50 +146,65 @@ public class MReportPart extends APropertyNode {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignPart jrpart = (JRDesignPart) getValue();
-		if(jrpart!=null) {
-			if(id.equals(JRDesignPart.PROPERTY_COMPONENT)) {
+		if (jrpart != null) {
+			if (id.equals(JRDesignPart.PROPERTY_COMPONENT)) {
 				jrpart.setComponent((PartComponent) value);
-			}
-			else if(id.equals(JRDesignPart.PROPERTY_COMPONENT_KEY)) {
+			} else if (id.equals(JRDesignPart.PROPERTY_COMPONENT_KEY)) {
 				jrpart.setComponentKey((ComponentKey) value);
-			}
-			else if(id.equals(JRDesignPart.PROPERTY_EVALUATION_TIME)) {
+			} else if (id.equals(JRDesignPart.PROPERTY_EVALUATION_TIME)) {
 				jrpart.setEvaluationTime((PartEvaluationTime) value);
-			}
-			else if(id.equals(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION)){
+			} else if (id.equals(JRDesignPart.PROPERTY_PART_NAME_EXPRESSION)) {
 				jrpart.setPartNameExpression((JRExpression) value);
-			}
-			else if(id.equals(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION)){
+			} else if (id.equals(JRDesignPart.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				jrpart.setPrintWhenExpression((JRExpression) value);
-			}
-			else if(id.equals(PROPERTY_EVALTIME_TYPE)){
-				jrpart.setEvaluationTime((StandardPartEvaluationTime)value);
-			} 
-			else if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE)){
-				if (jrpart.getComponent() != null && jrpart.getComponent() instanceof StandardSubreportPartComponent){
+			} else if (id.equals(PROPERTY_EVALTIME_TYPE)) {
+				jrpart.setEvaluationTime((StandardPartEvaluationTime) value);
+			} else if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE)) {
+				if (jrpart.getComponent() != null && jrpart.getComponent() instanceof StandardSubreportPartComponent) {
 					StandardSubreportPartComponent component = getSubreportComponent();
-					component.setUsingCache((Boolean)value);
+					component.setUsingCache((Boolean) value);
 				}
-			}
-			else if (id.equals(COMPONENT_EXPRESSION)){
+			} else if (id.equals(COMPONENT_EXPRESSION)) {
 				PartComponent component = jrpart.getComponent();
-				if (component != null && component instanceof StandardSubreportPartComponent){
+				if (component != null && component instanceof StandardSubreportPartComponent) {
 					StandardSubreportPartComponent subComponent = getSubreportComponent();
 					subComponent.setExpression((JRExpression) value);
 					this.getPropertyChangeSupport().firePropertyChange(COMPONENT_EXPRESSION, false, true);
 				}
 			} else if (id.equals(PROPERTY_MAP)) {
-					JRPropertiesMap v = (JRPropertiesMap) value;
-					String[] names = jrpart.getPropertiesMap().getPropertyNames();
-					for (int i = 0; i < names.length; i++) {
-						jrpart.getPropertiesMap().removeProperty(names[i]);
-					}
-					names = v.getPropertyNames();
-					for (int i = 0; i < names.length; i++)
-						jrpart.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
-					this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+				JRPropertiesMap v = (JRPropertiesMap) value;
+				String[] names = jrpart.getPropertiesMap().getPropertyNames();
+				for (int i = 0; i < names.length; i++) {
+					jrpart.getPropertiesMap().removeProperty(names[i]);
 				}
-			} 
+				names = v.getPropertyNames();
+				for (int i = 0; i < names.length; i++){
+					jrpart.getPropertiesMap().setProperty(names[i],v.getProperty(names[i]));
+				}
+				this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+			} else if (id.equals(COMPONENT_PARAMETERS)) {
+				PartComponent component = jrpart.getComponent();
+				if (component != null && component instanceof StandardSubreportPartComponent) {
+					StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent) component;
+					JRSubreportParameter[] oldParamters = subComponent.getParameters();
+					JRSubreportParameter[] newParamters = (JRSubreportParameter[]) value;
+					if (oldParamters != null) {
+						for (JRSubreportParameter param : oldParamters) {
+							subComponent.removeParameter(param.getName());
+						}
+					}
+					if (newParamters != null) {
+						for (JRSubreportParameter param : newParamters) {
+							try {
+								subComponent.addParameter(param);
+							} catch (JRException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public StandardSubreportPartComponent getSubreportComponent(){

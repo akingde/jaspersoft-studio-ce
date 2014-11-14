@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.utils.jasper;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -82,6 +83,8 @@ public class ExtensionLoader {
 		GenericElementHandlerBundle.class
 	};
 	
+	private static HashSet<Class<?>> missingExtensions = new HashSet<Class<?>>(Arrays.asList(commonExensionKeys));
+	
 	/**
 	 * Keep track of the common extensions currently loading, if an extensions
 	 * key is in the map means that its loading is started but not finished yet
@@ -110,6 +113,7 @@ public class ExtensionLoader {
 		synchronized (loadingExtensions) {
 			sharedExtensionCache.put(extensionKey, loadedObject);
 			loadingExtensions.remove(extensionKey);
+			missingExtensions.remove(extensionKey);
 		}
 	}
 	
@@ -124,6 +128,19 @@ public class ExtensionLoader {
 			return loadingExtensions.contains(extensionKey);
 		}
 	}
+	
+	/**
+	 * Thread safe method to check if there are extensions still not loaded
+	 * 
+	 * @param extensionKey key of the extension
+	 * @return true if the extension is currently loading, false otherwise
+	 */
+	private static boolean isCurrentlyLoading(){
+		synchronized (loadingExtensions) {
+			return !missingExtensions.isEmpty();
+		}
+	}
+ 
  
 	/**
 	 * Load the report dependent extensions on the specified context.
@@ -174,6 +191,27 @@ public class ExtensionLoader {
  public static void waitIfLoading(Class<?> extensionKey){
 	 int checkTime = 200;
 	 while(isCurrentlyLoading(extensionKey)){
+		 try {
+			 //the extension is loading, wait 200ms and recheck if it was loaded
+			Thread.sleep(checkTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	 }
+ }
+ 
+ /**
+  * Should be called before someone load a common extension; if the extension is 
+  * currently in a loading state the caller is blocked untie
+  * the load is not complete. The check to see if the loading
+  * is finished is done every amount of a fixed time (by default
+  * 200 ms)
+  * 
+  * @param extensionKey the key of the extension
+  */
+ public static void waitIfLoading(){
+	 int checkTime = 200;
+	 while(isCurrentlyLoading()){
 		 try {
 			 //the extension is loading, wait 200ms and recheck if it was loaded
 			Thread.sleep(checkTime);

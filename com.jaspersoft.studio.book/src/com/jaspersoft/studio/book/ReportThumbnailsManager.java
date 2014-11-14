@@ -503,15 +503,12 @@ public class ReportThumbnailsManager {
 	 */
 	public static synchronized Image popElementImage(String uuid)
 	{
-		
 		if (temporarySwap.containsKey(uuid))
 		{
-			System.out.println("Poppoing " + uuid);
 			Image cachedImage = temporarySwap.get(uuid);
 			temporarySwap.remove(uuid);
 			return cachedImage;
 		}
-		System.out.println("Poppoing " + uuid + " not found!!");
 		return null;
 	}
 
