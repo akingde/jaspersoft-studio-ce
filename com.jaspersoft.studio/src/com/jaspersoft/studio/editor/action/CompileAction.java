@@ -21,6 +21,7 @@ import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -37,6 +38,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.preview.view.control.JRErrorHandler;
 import com.jaspersoft.studio.editor.preview.view.control.JRMarkerErrorHandler;
@@ -128,7 +130,7 @@ public class CompileAction extends SelectionAction {
 						}
 					}
 				}
-				Map<File, IFile> fmap = SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
+				Map<File, IFile> fmap = getSubreports(jConfig, mfile, jConfig.getJasperDesign(), monitor);
 				for (File f : fmap.keySet()) {
 					IFile file = fmap.get(f);
 					if (file != null) {
@@ -148,6 +150,10 @@ public class CompileAction extends SelectionAction {
 		return Status.OK_STATUS;
 	}
 	
+	protected Map<File, IFile> getSubreports(JasperReportsConfiguration jConfig, IFile mfile, JasperDesign jd,IProgressMonitor monitor){
+		return SubreportsUtil.getSubreportFiles(jConfig, mfile, jConfig.getJasperDesign(), monitor);
+	}
+	
 	/**
 	 * Return the output console for the current opened editor, the console is 
 	 * cleaned before the return. If the console can not be found the null is 
@@ -156,8 +162,8 @@ public class CompileAction extends SelectionAction {
 	 * @return reference to a clean console of the current editor or null if it 
 	 * is not available
 	 */
-	private Console getCleanConsole(){
-		JrxmlEditor editor = (JrxmlEditor)SelectionHelper.getActiveJRXMLEditor();
+	protected Console getCleanConsole(){
+		AbstractJRXMLEditor editor = (AbstractJRXMLEditor)SelectionHelper.getActiveJRXMLEditor();
 		if (editor != null) {
 			final Console console = editor.getConsole();
 			if (console != null){ 
@@ -172,8 +178,7 @@ public class CompileAction extends SelectionAction {
 		else return null;
 	}
 
-
-	private JasperReportsConfiguration getMDatasetToShow() {
+	protected JasperReportsConfiguration getMDatasetToShow() {
 		ISelection selection = getSelection();
 		if (selection instanceof IStructuredSelection) {
 			Object firstElement = ((IStructuredSelection) selection).getFirstElement();

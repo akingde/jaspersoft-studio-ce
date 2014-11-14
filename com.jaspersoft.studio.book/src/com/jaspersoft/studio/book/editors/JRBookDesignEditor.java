@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book.editors;
 
 import java.beans.PropertyChangeEvent;
@@ -13,11 +25,20 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISaveablePart;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.book.dnd.ResourceTransferDropTargetListener;
+import com.jaspersoft.studio.book.editors.actions.BookCompileAction;
+import com.jaspersoft.studio.book.editors.actions.BookDatasetAction;
 import com.jaspersoft.studio.book.editors.actions.CreateNewBookPartAction;
 import com.jaspersoft.studio.book.editors.actions.CreateNewGroupAction;
 import com.jaspersoft.studio.book.editors.actions.DeleteBookPartAction;
@@ -34,11 +55,28 @@ import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.utils.AContributorAction;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRBookDesignEditor extends AGraphicEditor {
 
 	private PropertyChangeListener modelChangesListener;
+	
+	/**
+	 * The extension manager for the plugin
+	 */
+	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+	
+	/**
+	 * The toolbar inside the book editor
+	 */
+	private ToolBar additionalToolbar;
+	
+	/**
+	 * The manager for the toolbar
+	 */
+	private ToolBarManager additionalToolbarManager;
 	
 	public JRBookDesignEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
@@ -53,16 +91,66 @@ public class JRBookDesignEditor extends AGraphicEditor {
 			}
 		};
 	}
+	
 
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
+		GridLayout containerLayout = new GridLayout(1, false);
+		containerLayout.verticalSpacing = 0;
+		containerLayout.horizontalSpacing = 0;
+		containerLayout.marginWidth = 0;
+		containerLayout.marginHeight = 0;
+		
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(containerLayout);
+		createToolBar(container);
 		ScrollingGraphicalViewer viewer = new ScrollingGraphicalViewer();
-		viewer.createControl(parent);
+		viewer.createControl(container).setLayoutData(new GridData(GridData.FILL_BOTH));
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 	}
+	
+	private void createToolBar(Composite container){
+		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT | SWT.WRAP | SWT.RIGHT |  SWT.RIGHT_TO_LEFT);
+		
+		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		additionalToolbar.setLayoutData(additionalToolbarGD);
+		additionalToolbarManager = new ToolBarManager(additionalToolbar);
+			
+		for(AContributorAction contAction : m.getActions()){
+			additionalToolbarManager.add(contAction);
+		}
+		additionalToolbarManager.add(new Separator());
+		ActionRegistry registry = getActionRegistry();
+		additionalToolbarManager.add(registry.getAction(BookDatasetAction.ID));
+		additionalToolbarManager.add(registry.getAction(BookCompileAction.ID));
+		additionalToolbarManager.update(true);
+	}
+	
+	/*private void createToolBarButton(final IAction action){
+		if (action instanceof Separator){
+			 new ToolItem(toolBar, SWT.SEPARATOR);
+		} else {
+			ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH | SWT.FLAT);
+			Image img = ResourceManager.getImage(action.getImageDescriptor());
+			if (img !=null){
+				toolItem.setImage(img);
+			} else {
+				toolItem.setText(action.getText());
+			}
+			RowData data = new RowData(SWT.DEFAULT, 30);
+			//toolItem.setLayoutData(data);
+			toolItem.setToolTipText(action.getToolTipText());
+			toolItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					action.run();
+				}
+			});
+		}
+	}*/
 
 	@Override
 	protected ContextMenuProvider createContextMenuProvider(
@@ -118,7 +206,15 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		List<String> selectionActions = getSelectionActions();
 		ActionRegistry registry = getActionRegistry();
 
-		IAction action = new CreateNewGroupAction(this);
+		IAction action = new BookCompileAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new BookDatasetAction(this);
+		registry.registerAction(action);
+		selectionActions.add(action.getId());
+		
+		action = new CreateNewGroupAction(this);
 		registry.registerAction(action);
 		selectionActions.add(action.getId());
 

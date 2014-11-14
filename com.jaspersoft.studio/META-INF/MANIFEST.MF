@@ -291,6 +291,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    org.eclipse.gef.requests,
    org.eclipse.gef.palette,
    com.jaspersoft.studio.plugin",
+ com.jaspersoft.studio.editor.part,
  com.jaspersoft.studio.editor.preview;
   uses:="net.sf.jasperreports.engine.design,
    org.eclipse.core.runtime,

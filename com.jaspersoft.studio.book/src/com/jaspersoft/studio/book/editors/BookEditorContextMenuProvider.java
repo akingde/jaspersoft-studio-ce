@@ -22,6 +22,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateParameterSetAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
+import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 
 public class BookEditorContextMenuProvider extends AContextMenuProvider {
 
@@ -44,7 +45,7 @@ public class BookEditorContextMenuProvider extends AContextMenuProvider {
 						CreateNewGroupAction.ID,CreateNewBookPartAction.ID,
 						CreateParameterAction.ID,CreateParameterSetAction.ID,
 						CreateFieldAction.ID,CreateSortFieldAction.ID,
-						CreateVariableAction.ID,CreateScriptletAction.ID,}), 
+						CreateVariableAction.ID,CreateScriptletAction.ID, DatasetAction.ID}), 
 				actionRegistry, GEFActionConstants.GROUP_ADD);
 		
 		menu.add(new Separator(GEFActionConstants.GROUP_COPY));

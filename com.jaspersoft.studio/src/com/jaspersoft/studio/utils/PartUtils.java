@@ -54,7 +54,7 @@ public class PartUtils {
 	 * @param jd the jasperdesign of the report
 	 * @param isRecursive boolean flag to search other subreports 
 	 * inside the the first level subreport recursively
-	 * @param monitor monitr of the execution
+	 * @param monitor monitor of the execution
 	 * @return
 	 */
 	public static Map<File, IFile> getSubreportsFromParts(JasperReportsConfiguration jConfig, JasperDesign jd, boolean isRecursive, IProgressMonitor monitor) {
@@ -70,6 +70,18 @@ public class PartUtils {
 		return result;
 	}
 
+	/**
+	 * Search the subreport inside the current part. It can be set to be recursive
+	 * and search the subreports inside the founded subreport
+	 * 
+	 * @param jConfig the current jasper report configuration
+	 * @param fmap map where the result can be saved
+	 * @param monitor monitor to execute the operation 
+	 * @param file the file of the report to which the part belong
+	 * @param parent the jasperdesign of the report
+	 * @param isRecursive flag to choose if the method must search subreports recursively
+	 * @param ele the part when the subreports are searched at first
+	 */
 	protected static void findSubreport(JasperReportsConfiguration jConfig, Map<File, IFile> fmap, IProgressMonitor monitor, IFile file, JasperDesign parent, boolean isRecursive, StandardSubreportPartComponent ele) {
 		jConfig.init(file);
 		String expr = ExpressionUtil.eval(ele.getExpression(), jConfig, parent);
