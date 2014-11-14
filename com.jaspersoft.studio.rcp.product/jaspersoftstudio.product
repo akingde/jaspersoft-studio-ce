@@ -28,6 +28,7 @@ Special thanks to all people who support this software.
 -XX:+CMSClassUnloadingEnabled
 -XX:+UseConcMarkSweepGC
 -Dfile.encoding=UTF-8</vmArgs>
+      <vmArgsLin>-Dorg.eclipse.swt.browser.DefaultType=mozilla</vmArgsLin>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
