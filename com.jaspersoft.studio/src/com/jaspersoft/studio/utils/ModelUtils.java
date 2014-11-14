@@ -731,9 +731,21 @@ public class ModelUtils {
 
 	public static List<JRPart> getAllPartElements(JasperDesign jd) {
 		List<JRPart> res = new ArrayList<JRPart>();
-		List<JRBand> bands = getAllBands(jd);
-		for (JRBand b : bands) {
-			res.addAll(getPartElements(b));
+		if (jd.getDetailSection() != null) {
+			JRPart[] partsList = jd.getDetailSection().getParts();
+			if (partsList != null)
+				res.addAll(Arrays.asList(partsList));
+		}
+		if (jd.getGroups() != null){
+			for (Object g : jd.getGroupsList()) {
+				JRDesignGroup gr = (JRDesignGroup) g;
+				if (gr.getGroupHeaderSection() != null) {
+					res.addAll(Arrays.asList(gr.getGroupHeaderSection().getParts()));
+				}
+				if(gr.getGroupFooterSection() != null){
+					res.addAll(Arrays.asList(gr.getGroupFooterSection().getParts()));
+				}
+			}
 		}
 		return res;
 	}
