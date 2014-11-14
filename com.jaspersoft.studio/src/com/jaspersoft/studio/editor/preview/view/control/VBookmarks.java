@@ -82,7 +82,7 @@ public class VBookmarks extends APreview {
 				PrintBookmark pb = (PrintBookmark) sel.getFirstElement();
 				APreview view = pcontainer.getDefaultViewer();
 				if (view instanceof SWTViewer)
-					((SWTViewer) view).setPageNumber(pb.getPageIndex() - 1);
+					((SWTViewer) view).setPageNumber(pb.getPageIndex() );
 			}
 		});
 		composite.addControlListener(new ControlListener() {
