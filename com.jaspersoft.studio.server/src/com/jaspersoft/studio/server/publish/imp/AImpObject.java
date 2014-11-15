@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -37,6 +38,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AImpObject {
@@ -77,15 +79,16 @@ public abstract class AImpObject {
 			rname = rname.replaceFirst("repo:", "");
 		ResourceDescriptor rd = null;
 		List<ResourceDescriptor> list = runit.getChildren();
+		String idname = IDStringValidator.safeChar(rname);
 		for (ResourceDescriptor r : list) {
-			if (r.getName() != null && r.getName().equals(rname)) {
+			if (r.getName() != null && r.getName().equals(idname)) {
 				rd = r;
 				break;
 			}
 		}
 		if (rd == null) {
 			rd = createResource(mrunit);
-			rd.setName(rname);
+			rd.setName(idname);
 			rd.setLabel(rname);
 
 			rd.setParentFolder(runit.getUriString() + "_files");

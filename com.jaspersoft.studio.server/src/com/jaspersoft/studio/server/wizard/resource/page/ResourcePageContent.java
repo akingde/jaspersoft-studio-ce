@@ -106,7 +106,7 @@ public class ResourcePageContent extends APageContent {
 
 		if (res.getWsClient().isSupported(Feature.PERMISSION)) {
 			bPerm = new Button(composite, SWT.PUSH);
-			bPerm.setText("Permissions");
+			bPerm.setText(Messages.ResourcePageContent_0);
 			if (res.getValue().getIsNew())
 				bPerm.setEnabled(false);
 			else
@@ -208,11 +208,11 @@ public class ResourcePageContent extends APageContent {
 
 			public Object convert(Object fromObject) {
 				if (fromObject == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				return f.format(fromObject);
 			}
 		};
-		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv),
+		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE), PojoObservables.observeValue(rd, "creationDate"), new UpdateValueStrategy().setConverter(t2mConv), //$NON-NLS-1$
 				new UpdateValueStrategy().setConverter(m2tConv));
 
 		bindingContext.bindValue(SWTObservables.observeText(ttype, SWT.NONE), PojoObservables.observeValue(rd, "wsType")); //$NON-NLS-1$ 
@@ -238,7 +238,7 @@ public class ResourcePageContent extends APageContent {
 				@Override
 				public void run() {
 					setPageComplete(false);
-					page.setDescription("AdHoc Views are not editable with SOAP connections.");
+					page.setDescription(Messages.ResourcePageContent_3);
 				}
 			});
 		}
@@ -278,7 +278,7 @@ public class ResourcePageContent extends APageContent {
 		public String getParentFolder() {
 			String p = rd.getParentFolder();
 			if (Misc.isNullOrEmpty(p))
-				p = "/";
+				p = "/"; //$NON-NLS-1$
 			return p;
 		}
 

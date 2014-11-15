@@ -29,6 +29,7 @@ import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -92,7 +93,7 @@ public class ImpDataAdapter extends AImpObject {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		ResourceDescriptor rd = createResource(mrunit);
-		rd.setName(rname);
+		rd.setName(IDStringValidator.safeChar(rname));
 		rd.setLabel(rname);
 
 		rd.setParentFolder(runit.getParentFolder());
@@ -129,7 +130,7 @@ public class ImpDataAdapter extends AImpObject {
 									fname = fname.substring(indx + 1);
 
 								rd = MXmlFile.createDescriptor(mrunit);
-								rd.setName(fname);
+								rd.setName(IDStringValidator.safeChar(fname));
 								rd.setLabel(fname);
 
 								rd.setParentFolder(runit.getParentFolder());

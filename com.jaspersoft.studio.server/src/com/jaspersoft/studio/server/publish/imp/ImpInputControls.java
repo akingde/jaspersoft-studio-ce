@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.types.date.DateRange;
@@ -33,6 +34,7 @@ import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpInputControls {
@@ -49,7 +51,7 @@ public class ImpInputControls {
 				continue;
 
 			ResourceDescriptor rd = MInputControl.createDescriptor(mrunit);
-			rd.setName(p.getName());
+			rd.setName(IDStringValidator.safeChar(Misc.nvl(p.getName())));
 			rd.setLabel(p.getName());
 			rd.setDescription(p.getDescription());
 			rd.setVisible(true);
