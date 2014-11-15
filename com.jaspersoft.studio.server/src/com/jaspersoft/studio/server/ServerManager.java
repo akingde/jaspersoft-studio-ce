@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -62,17 +63,21 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ServerManager {
+	
 	public static final String PREF_TAG = "serverprofiles"; //$NON-NLS-1$
-	private static final String SERVERPROFILE = "SERVERPROFILE"; //$NON-NLS-1$
-	private static List<MServerProfile> serverProfiles;
+	
+	public static final String SERVERPROFILE = "SERVERPROFILE"; //$NON-NLS-1$
+	
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
-
+	
+	private static HashMap<MServerProfile, String > serverProfiles;
+	
 	private static List<MServerProfile> getServerProfiles() {
 		if (serverProfiles == null) {
-			serverProfiles = new ArrayList<MServerProfile>();
+			serverProfiles = new HashMap<MServerProfile, String>();
 			loadServerProfiles(new MServers(null));
 		}
-		return serverProfiles;
+		return new ArrayList<MServerProfile>(serverProfiles.keySet());
 	}
 
 	/**
@@ -81,7 +86,7 @@ public class ServerManager {
 	 * @param serverProfile
 	 *          the element to save
 	 */
-	private static void saveIntoStrage(MServerProfile serverProfile) {
+	private static void saveIntoStrage(MServerProfile serverProfile, String fileName) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -91,8 +96,7 @@ public class ServerManager {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_TAG);
-			String url = serverProfile.getConfigurationResourceURL();
-			File destination = new File(storage, url);
+			File destination = new File(storage, fileName);
 			StreamResult result = new StreamResult(destination);
 			transformer.transform(source, result);
 		} catch (Exception e) {
@@ -103,7 +107,7 @@ public class ServerManager {
 	public static List<ServerProfile> getServerList() {
 		getServerProfiles();
 		List<ServerProfile> servers = new ArrayList<ServerProfile>();
-		for (MServerProfile ms : serverProfiles)
+		for (MServerProfile ms : serverProfiles.keySet())
 			servers.add(ms.getValue());
 		return servers;
 	}
@@ -132,39 +136,38 @@ public class ServerManager {
 	}
 
 	public static void addServerProfile(MServerProfile adapter) {
-		if (!serverProfiles.contains(adapter)) {
-			serverProfiles.add(adapter);
-			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
+		if (!serverProfiles.containsKey(adapter)) {
 			ServerNameProvider nameProvider = new ServerNameProvider();
-			ServerProfile v = adapter.getValue();
-			String serverName = nameProvider.iterateForUniqueName(v.getName());
-			adapter.setConfigurationResourceURL(serverName);
-			saveIntoStrage(adapter);
+			String resourceName = nameProvider.getFileName(null);
+			serverProfiles.put(adapter, resourceName);
+			saveIntoStrage(adapter, resourceName);
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
 		}
 	}
 
 	public static void removeServerProfile(MServerProfile adapter) {
-		if (serverProfiles.contains(adapter)) {
-			serverProfiles.remove(adapter);
-			ConfigurationManager.removeStoregeResource(PREF_TAG, adapter.getConfigurationResourceURL());
+		if (serverProfiles.containsKey(adapter)) {
+			String fileName = serverProfiles.remove(adapter);
+			ConfigurationManager.removeStoregeResource(PREF_TAG, fileName);
 			((ANode) adapter.getParent()).removeChild(adapter);
 			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
 		}
 	}
 
 	public static void saveServerProfile(MServerProfile adapter) {
-		if (serverProfiles.contains(adapter)) {
-			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
+		if (serverProfiles.containsKey(adapter)) {
 			// It's an edit, remove the old configuration file and save the new one
-			ConfigurationManager.removeStoregeResource(PREF_TAG, adapter.getConfigurationResourceURL());
-			saveIntoStrage(adapter);
+			String path = serverProfiles.get(adapter);
+			ConfigurationManager.removeStoregeResource(PREF_TAG, path);
+			saveIntoStrage(adapter, path);
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, SERVERPROFILE, null, adapter));
 		}
 	}
 
 	public static void loadServerProfilesCopy(MServers root) {
 		if (serverProfiles.isEmpty())
 			loadServerProfiles(root);
-		for (MServerProfile msp : serverProfiles) {
+		for (MServerProfile msp : serverProfiles.keySet()) {
 			MServerProfile newServerProfile = new MServerProfile(root, msp.getValue());
 			newServerProfile.setWsClient(msp.getWsClient());
 			new MDummy(newServerProfile);
@@ -174,7 +177,7 @@ public class ServerManager {
 	public static void loadServerProfiles(MServers root) {
 		root.removeChildren();
 		if (serverProfiles == null)
-			serverProfiles = new ArrayList<MServerProfile>();
+			serverProfiles = new HashMap<MServerProfile, String>();
 		serverProfiles.clear();
 
 		// Convert the old configuration
@@ -194,9 +197,8 @@ public class ServerManager {
 					try {
 						ServerProfile sprof = (ServerProfile) CastorUtil.read(serverNode, MServerProfile.MAPPINGFILE);
 						MServerProfile sp = new MServerProfile(root, sprof);
-						sp.setConfigurationResourceURL(storageElement.getName());
 						new MDummy(sp);
-						serverProfiles.add(sp);
+						serverProfiles.put(sp, storageElement.getName());
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -205,6 +207,7 @@ public class ServerManager {
 				UIUtils.showError(e);
 			}
 		}
+		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(root, SERVERPROFILE, null, root));
 	}
 
 	public static MServerProfile getServerProfile(String key) {
@@ -223,7 +226,7 @@ public class ServerManager {
 				String organization = null;
 				if (urlt.length > 2)
 					organization = urlt[2];
-				for (MServerProfile sp : serverProfiles) {
+				for (MServerProfile sp : serverProfiles.keySet()) {
 					ServerProfile serv = sp.getValue();
 					if (serv.getName().equals(name) && url != null && serv.getUrl().equals(url) && serv.getUser().equals(user)
 							&& (organization == null || (serv.getOrganisation() != null && serv.getOrganisation().equals(organization))))

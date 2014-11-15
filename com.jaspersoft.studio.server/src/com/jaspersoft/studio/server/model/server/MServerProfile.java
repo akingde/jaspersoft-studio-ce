@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.model.server;
 
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -34,6 +35,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.AExporter;
 import com.jaspersoft.studio.server.messages.Messages;
@@ -53,11 +55,6 @@ public class MServerProfile extends ANode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
 	public static final String MAPPINGFILE = "com/jaspersoft/studio/server/model/server/ServerProfileImpl.xml"; //$NON-NLS-1$
-	
-	/**
-	 * Bind the server configuration resource file to the object created by it
-	 */
-	private String configurationResourceURL = null;
 
 	public MServerProfile(ANode parent, ServerProfile server) {
 		super(parent, -1);
@@ -75,6 +72,13 @@ public class MServerProfile extends ANode {
 	@Override
 	public INode getRoot() {
 		return this;
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ServerManager.SERVERPROFILE)){
+			getParent().propertyChange(evt);
+		}
 	}
 
 	@Override
@@ -252,21 +256,5 @@ public class MServerProfile extends ANode {
 		if (c != null)
 			return c.isSupported(f);
 		return false;
-	}
-	
-	/**
-	 * Return the name of the resource file from where
-	 * this model was created
-	 */
-	public String getConfigurationResourceURL(){
-		return configurationResourceURL;
-	}
-	
-	/**
-	 * Set the name of the resource file from where
-	 * this model is created
-	 */
-	public void setConfigurationResourceURL(String url){
-		this.configurationResourceURL = url;
 	}
 }

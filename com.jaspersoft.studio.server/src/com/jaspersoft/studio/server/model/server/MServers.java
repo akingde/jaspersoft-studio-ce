@@ -13,22 +13,46 @@
 package com.jaspersoft.studio.server.model.server;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.ServerManager;
 
 public class MServers extends ANode {
+
+	private static final long serialVersionUID = 5651467748362082228L;
+	
+	/**
+	 * Comparator to sort the data adapter by name
+	 */
+	private static final Comparator<INode> serverComparator = new Comparator<INode>() {
+		
+		@Override
+		public int compare(INode o1, INode o2) {
+			ServerProfile d1 = (ServerProfile)o1.getValue();
+			ServerProfile d2 = (ServerProfile)o2.getValue();
+			return d1.getName().toLowerCase().compareTo(d2.getName().toLowerCase());
+		}
+	};
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("SERVERS".equals(evt.getPropertyName())) //$NON-NLS-1$
 			updateChildren();
+		if (evt.getPropertyName().equals(ServerManager.SERVERPROFILE)){
+			Collections.sort(getChildren(), serverComparator);
+		}
 		super.propertyChange(evt);
 	}
 
 	private void updateChildren() {
+
 	}
 
 	/** The icon descriptor. */

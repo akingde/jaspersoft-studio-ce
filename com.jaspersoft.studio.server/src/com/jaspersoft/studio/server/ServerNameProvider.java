@@ -15,7 +15,6 @@ package com.jaspersoft.studio.server;
 import java.io.File;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.jaspersoft.studio.ConfigurationManager;
 import com.jaspersoft.studio.IConversionFilenameProvider;
@@ -29,27 +28,6 @@ import com.jaspersoft.studio.IConversionFilenameProvider;
 public class ServerNameProvider implements IConversionFilenameProvider {
 
 	/**
-	 * Search a valid file name for a file to place in the server storage.
-	 * It starts from a base name and then iterate by appending to it a counter until
-	 * a valid name is found. Also all the spaces are substituted with _
-	 * 
-	 * @param baseName the base name to calculate the file name
-	 * @return an unique and valid filename
-	 */
-	public String iterateForUniqueName(String baseName){
-		String fileName = baseName.replaceAll(" ", "_") + ".xml";
-		File storage = ConfigurationManager.getStorage(ServerManager.PREF_TAG);
-		File testName = new File(storage, fileName);
-		int counter = 0;
-		while(testName.exists()){
-			fileName = baseName + "_" + String.valueOf(counter) + ".xml";
-			counter++;
-			testName = new File(storage, fileName);
-		}
-		return fileName;
-	}
-	
-	/**
 	 * Get the name for a server configuration element. It uses
 	 * the content of the tag name as base name for the server configuration.
 	 * If the tag name can't be found it fallback and uses a static string plus 
@@ -57,14 +35,14 @@ public class ServerNameProvider implements IConversionFilenameProvider {
 	 */
 	@Override
 	public String getFileName(Node configurationElementNode) {
-		NodeList adapterNode = configurationElementNode.getChildNodes();
-		for (int i = 0; i < adapterNode.getLength(); i++){
-			Node adapterChild = adapterNode.item(i);
-			if (adapterChild.getNodeName().equals("name") && !adapterChild.getTextContent().isEmpty()){
-				return iterateForUniqueName(adapterChild.getTextContent());
-			}
+		String baseName = "serverProfile_";
+		int index = 0;
+		File storage = ConfigurationManager.getStorage(ServerManager.PREF_TAG);
+		File testName = new File(storage, baseName+index);
+		while(testName.exists()){
+			index++;
+			testName = new File(storage, baseName+index);
 		}
-		//The data adapter has not a name tag (use the type as base name)
-		return iterateForUniqueName(configurationElementNode.getNodeName());
+		return baseName+index;
 	}
 }
