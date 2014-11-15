@@ -17,13 +17,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
+import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import net.sf.jasperreports.repo.Resource;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 
-public class ServerProfile implements Resource, Cloneable, Serializable {
+public class ServerProfile implements Resource, Cloneable, Serializable, JRChangeEventsSupport {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
+	public static final String PROPERTY_NAME = "profile_name";
+	
 	private boolean supportsDateRanges;
 	private String name;
 	private String url;
@@ -40,6 +45,8 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	private String timeZone;
 	private boolean useSSO = false;
 	private String ssoUuid;
+	private JRPropertyChangeSupport propertyChange = new JRPropertyChangeSupport(this);
+	
 
 	public String getSsoUuid() {
 		return ssoUuid;
@@ -128,7 +135,10 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	}
 
 	public void setName(String name) {
+		String oldName = this.name;
 		this.name = name;
+		//Notify the name changed
+		propertyChange.firePropertyChange(PROPERTY_NAME, oldName, name);
 	}
 
 	public String getUrl() {
@@ -193,5 +203,10 @@ public class ServerProfile implements Resource, Cloneable, Serializable {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}
+
+	@Override
+	public JRPropertyChangeSupport getEventSupport() {
+		return propertyChange;
 	}
 }

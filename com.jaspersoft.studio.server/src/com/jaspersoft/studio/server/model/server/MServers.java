@@ -45,7 +45,8 @@ public class MServers extends ANode {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("SERVERS".equals(evt.getPropertyName())) //$NON-NLS-1$
 			updateChildren();
-		if (evt.getPropertyName().equals(ServerManager.SERVERPROFILE)){
+		if (evt.getPropertyName().equals(ServerManager.SERVERPROFILE) || 
+				evt.getPropertyName().equals(ServerProfile.PROPERTY_NAME)){
 			Collections.sort(getChildren(), serverComparator);
 		}
 		super.propertyChange(evt);

@@ -12,7 +12,6 @@
  ******************************************************************************/
 package com.jaspersoft.studio.server.action.server;
 
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -78,15 +77,7 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 					MServers rootServers =  (MServers)n;
 					MServerProfile newprofile = new MServerProfile(rootServers, mservprof.getValue());
 					newprofile.setWsClient(mservprof.getWsClient());
-					// for (INode cn : mservprof.getChildren())
-					// newprofile.addChild((ANode) cn);
-					// try {
-					// newprofile.setWsClient(mservprof.getWsClient());
-					// } catch (Exception e) {
-					// e.printStackTrace();
-					// }
 					ServerManager.addServerProfile(newprofile);
-					rootServers.propertyChange(new PropertyChangeEvent(newprofile, ServerManager.SERVERPROFILE, null, newprofile));
 					EditServerAction.fillServerProfile(newprofile, treeViewer);
 				}
 				break;

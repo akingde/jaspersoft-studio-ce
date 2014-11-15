@@ -76,7 +76,8 @@ public class MServerProfile extends ANode {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(ServerManager.SERVERPROFILE)){
+		if (evt.getPropertyName().equals(ServerProfile.PROPERTY_NAME) && getParent() != null){
+			//The name is changed, ask the parent to reorder the node
 			getParent().propertyChange(evt);
 		}
 	}
@@ -214,8 +215,11 @@ public class MServerProfile extends ANode {
 
 	@Override
 	public void setValue(Object value) {
+		Object oldValue = getValue();
 		super.setValue(value);
 		resetTmpPaths();
+		//When the value changes maybe is changed the name so send the event to reorder the node
+		if (getParent() != null) getParent().propertyChange(new PropertyChangeEvent(this, ServerManager.SERVERPROFILE, oldValue, value));
 	}
 
 	protected void resetTmpPaths() {

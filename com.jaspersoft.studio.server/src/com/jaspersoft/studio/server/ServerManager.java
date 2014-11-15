@@ -207,7 +207,6 @@ public class ServerManager {
 				UIUtils.showError(e);
 			}
 		}
-		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(root, SERVERPROFILE, null, root));
 	}
 
 	public static MServerProfile getServerProfile(String key) {
