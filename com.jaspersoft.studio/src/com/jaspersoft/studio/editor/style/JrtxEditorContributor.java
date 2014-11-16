@@ -41,6 +41,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
 
 /*
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
@@ -170,6 +171,7 @@ public class JrtxEditorContributor extends MultiPageEditorActionBarContributor {
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
+		CommonToolbarHandler.clearToolbars(getActionBars());
 		IActionBars bars = getActionBars();
 		removeZoom(bars.getToolBarManager());
 		bars.clearGlobalActionHandlers();

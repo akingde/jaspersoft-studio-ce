@@ -5,7 +5,10 @@ import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
+
+import com.jaspersoft.studio.toolbars.CommonToolbarHandler;
 
 public class JRBookEditorActionBarContributor extends ActionBarContributor  {
 
@@ -32,4 +35,9 @@ public class JRBookEditorActionBarContributor extends ActionBarContributor  {
 		
 	}
 
+	@Override
+	public void setActiveEditor(IEditorPart editor) {
+		CommonToolbarHandler.clearToolbars(getActionBars());
+		super.setActiveEditor(editor);
+	}
 }
