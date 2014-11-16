@@ -223,6 +223,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
+		CommonToolbarHandler.clearToolbars(getActionBars());
 		if (lastEditor instanceof CachedSelectionProvider && selectionListener != null) {
 			((CachedSelectionProvider)lastEditor).getSelectionCache().removeSelectionChangeListener(selectionListener);
 		}
