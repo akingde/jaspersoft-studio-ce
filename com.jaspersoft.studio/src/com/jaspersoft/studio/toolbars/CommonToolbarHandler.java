@@ -76,7 +76,6 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 	 * The method is visible is used to know if a control should be visible or not
 	 * 
 	 * @param activeEditor the active editor where the selection is done
-	 * @param selection the new selection
 	 * @param bars the current action bars, where the new controls will be placed
 	 */
 	public static void updateSelection(final IEditorPart activeEditor, final IActionBars bars){
@@ -115,6 +114,22 @@ public abstract class CommonToolbarHandler extends ContributionItem {
 			}
 		});
 
+	}
+	
+	/**
+	 * Remove all the visible JSS toolbars
+	 *
+	 * @param bars the current action bars, where the toolbars were placed
+	 */
+	public static void clearToolbars(IActionBars bars){
+		if (bars instanceof IActionBars2 && ((IActionBars2) bars).getCoolBarManager() instanceof SubCoolBarManager) {
+			ICoolBarManager cbm = (ICoolBarManager) ((SubCoolBarManager) ((IActionBars2) bars).getCoolBarManager()).getParent();
+			for(ToolItemsSet toolbar : JaspersoftStudioPlugin.getToolItemsManager().getSets()){
+				removeToolbar(cbm, toolbar.getId());
+			}
+			cbm.update(true);
+			bars.updateActionBars();
+		}
 	}
 
 	
