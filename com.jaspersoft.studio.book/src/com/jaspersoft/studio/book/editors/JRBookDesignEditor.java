@@ -25,15 +25,21 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISaveablePart;
+import org.eclipse.wb.swt.ResourceCache;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.book.dnd.ResourceTransferDropTargetListener;
@@ -56,7 +62,9 @@ import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.repository.actions.Separator;
 import com.jaspersoft.studio.utils.AContributorAction;
+import com.jaspersoft.studio.utils.ImageUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRBookDesignEditor extends AGraphicEditor {
@@ -74,9 +82,9 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	private ToolBar additionalToolbar;
 	
 	/**
-	 * The manager for the toolbar
+	 * Local swt resources cache for the toolbar images
 	 */
-	private ToolBarManager additionalToolbarManager;
+	private ResourceCache imagesResource = new ResourceCache();
 	
 	public JRBookDesignEditor(JasperReportsConfiguration jrContext) {
 		super(jrContext);
@@ -93,6 +101,31 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	}
 	
 
+	/**
+	 * Get the image from the action and if it is tool small return a 
+	 * resized version of that image to a fixed height
+	 * 
+	 * @param action the action, it must have an image
+	 * @return an image if the one from the icon was too small or the image
+	 * of the action itself
+	 */
+	private Image getResizedImage(IAction action){
+		Image loadedImage = imagesResource.getImage(action.getImageDescriptor());
+		int suggestedHeight = 25;
+		//Resize the image if it is too big
+		int width = loadedImage.getImageData().width;
+		int height = loadedImage.getImageData().height;
+		if (height < suggestedHeight){
+			height = suggestedHeight;		
+		}
+		if (width != loadedImage.getImageData().width || height != loadedImage.getImageData().height){
+			Image resizedImage = loadedImage;
+			loadedImage = ImageUtils.padImage(loadedImage, width, height, additionalToolbar.getBackground().getRGB());
+			resizedImage.dispose();
+		}
+		return loadedImage;
+	}
+	
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
 		GridLayout containerLayout = new GridLayout(1, false);
@@ -112,36 +145,54 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		initializeGraphicalViewer();
 	}
 	
+	/**
+	 * Create the editor toolbar control
+	 * 
+	 * @param container container where the toolbar is placed
+	 */
 	private void createToolBar(Composite container){
 		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT | SWT.WRAP | SWT.RIGHT |  SWT.RIGHT_TO_LEFT);
+		//When the toolbar it's disposed discard also the images created for it
+		additionalToolbar.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				imagesResource.dispose();
+			}
+		});
 		
 		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		additionalToolbar.setLayoutData(additionalToolbarGD);
-		additionalToolbarManager = new ToolBarManager(additionalToolbar);
-			
+		ActionRegistry registry = getActionRegistry();		
 		for(AContributorAction contAction : m.getActions()){
-			additionalToolbarManager.add(contAction);
+			createToolBarButton(contAction);
 		}
-		additionalToolbarManager.add(new Separator());
-		ActionRegistry registry = getActionRegistry();
-		additionalToolbarManager.add(registry.getAction(BookDatasetAction.ID));
-		additionalToolbarManager.add(registry.getAction(BookCompileAction.ID));
-		additionalToolbarManager.update(true);
+		createToolBarButton(new Separator());
+		createToolBarButton(registry.getAction(BookDatasetAction.ID));
+		createToolBarButton(registry.getAction(BookCompileAction.ID));
 	}
 	
-	/*private void createToolBarButton(final IAction action){
+	/**
+	 * Create a toolbar button to execute an action
+	 * 
+	 * @param action the action to execute, must be not null
+	 */
+	private void createToolBarButton(final IAction action){
 		if (action instanceof Separator){
-			 new ToolItem(toolBar, SWT.SEPARATOR);
+			 new ToolItem(additionalToolbar, SWT.SEPARATOR);
 		} else {
-			ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH | SWT.FLAT);
+			ToolItem toolItem = new ToolItem(additionalToolbar, SWT.PUSH | SWT.FLAT);
 			Image img = ResourceManager.getImage(action.getImageDescriptor());
 			if (img !=null){
-				toolItem.setImage(img);
+				Image resizedImg = imagesResource.getImage(action.getId());
+				if (resizedImg == null){
+					resizedImg = getResizedImage(action);
+					imagesResource.storeImage(action.getId(), resizedImg);
+				}
+				toolItem.setImage(resizedImg);
 			} else {
 				toolItem.setText(action.getText());
 			}
-			RowData data = new RowData(SWT.DEFAULT, 30);
-			//toolItem.setLayoutData(data);
 			toolItem.setToolTipText(action.getToolTipText());
 			toolItem.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -150,7 +201,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 				}
 			});
 		}
-	}*/
+	}
 
 	@Override
 	protected ContextMenuProvider createContextMenuProvider(

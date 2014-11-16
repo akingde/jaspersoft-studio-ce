@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
 
 import org.eclipse.core.filesystem.EFS;
@@ -23,6 +24,7 @@ import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.editpolicies.OrderedLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -32,6 +34,7 @@ import org.eclipse.ui.ide.IDE;
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.dnd.PageEditPartTracker;
 import com.jaspersoft.studio.book.editors.figures.BookPagesFigure;
+import com.jaspersoft.studio.book.messages.Messages;
 import com.jaspersoft.studio.book.model.MReportPart;
 import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartAfterCommand;
@@ -228,8 +231,8 @@ public class BookPagesEditPart extends AbstractGraphicalEditPart {
 					e.printStackTrace();
 				}
 			} else {
-				
-			}
+				MessageDialog.openError(UIUtils.getShell(), Messages.BookPagesEditPart_errorTitle, Messages.BookPagesEditPart_errorDescription);			
+			}	
 	    }
 	}
 	
@@ -245,10 +248,10 @@ public class BookPagesEditPart extends AbstractGraphicalEditPart {
 		
 		File f = ReportThumbnailsManager.findFile(location, context);
 		
-		if (( f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper"))
+		if (( f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper")) //$NON-NLS-1$
 		{
 			// check for a jrxml...
-			 location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml";
+			 location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 			 f = ReportThumbnailsManager.findFile(location, context);
 		}
 		
