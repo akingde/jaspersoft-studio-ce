@@ -123,6 +123,7 @@ public class ReferencePageContent extends APageContent {
 						MResource rs = rd.getResource();
 						if (rs != null) {
 							resrd.setReferenceUri(rs.getValue().getUriString());
+							resrd.setUriString(rs.getValue().getUriString());
 							loadReference(resrd);
 							bindingContext.updateTargets();
 						}

@@ -185,7 +185,10 @@ public class AddResourceWizard extends Wizard {
 						MResource resource = getResource();
 						if (parent instanceof MReportUnit && (resource instanceof MReference || resource.getValue().getIsReference())) {
 							MReportUnit mrunit = (MReportUnit) parent;
+							WSClientHelper.refreshResource(mrunit, monitor);
+
 							ResourceDescriptor runit = mrunit.getValue();
+							mrunit.setValue(runit);
 							runit.getChildren().add(resource.getValue());
 							WSClientHelper.saveResource(mrunit, monitor);
 						} else {
