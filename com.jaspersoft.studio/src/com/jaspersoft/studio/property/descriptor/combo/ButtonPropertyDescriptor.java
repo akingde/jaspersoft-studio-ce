@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.property.descriptor.combo;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.jaspersoft.studio.help.IHelp;
@@ -47,6 +48,8 @@ public class ButtonPropertyDescriptor extends PropertyDescriptor implements IPro
 	public ButtonPropertyDescriptor(Object id, APropertyNode fontModel) {
 		super(id, "");
 		elementFont = fontModel;
+		//This filter avoid to show this element on the advanced properties views
+		setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 	}
 
 	/**

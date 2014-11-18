@@ -48,8 +48,11 @@ import com.jaspersoft.studio.property.JRPropertySheetEntry;
  *
  */
 public class JDAdvancedSection extends AdvancedPropertySection implements PropertyChangeListener, IWidgetsProviderSection {
+	
 	private EditDomain editDomain;
+	
 	private APropertyNode element;
+	
 	protected TabbedPropertySheetPage atabbedPropertySheetPage;
 	
 	/**
@@ -65,20 +68,13 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	@Override
 	public void createControls(Composite parent, final TabbedPropertySheetPage atabbedPropertySheetPage) {
 		super.createControls(parent, atabbedPropertySheetPage);
-
-		/*FormData data = new FormData();
-		data.left = new FormAttachment(0, 0);
-		data.right = new FormAttachment(100, -20);
-		data.top = new FormAttachment(0, 0);
-		data.bottom = new FormAttachment(100, 0);
-		page.getControl().setLayoutData(data);*/
-		UpdatePageContent();
+		UpdatePageContent(getSelectionList(getSelection()));
 	}
 	
 
-	private void UpdatePageContent(){
+	private void UpdatePageContent(IStructuredSelection selection){
 		if (page != null && element != null && getEditDomain() != null){
-			page.selectionChanged(getPart(), new StructuredSelection(element));
+			page.selectionChanged(getPart(), selection);
 			//Dispose the previous root entry (if one) before to create the new one
 			disposeRootEntry();
 			rootEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(), (ANode) element);
@@ -95,6 +91,27 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 			rootEntry = null;
 		}
 	}
+	
+	/**
+	 * Extract a selection of APropertyNode from the current selection
+	 * 
+	 * @param currentSelection a not null IStructuredSelection
+	 * @return a not null StructuredSelection composed only of AProperyNode
+	 */
+	private IStructuredSelection getSelectionList(ISelection currentSelection){
+		List<APropertyNode> result = new ArrayList<APropertyNode>();
+		Assert.isTrue(currentSelection instanceof IStructuredSelection);
+		IStructuredSelection selectionList = (IStructuredSelection)currentSelection;
+		for(Object obj : selectionList.toArray()){
+			if (obj instanceof EditPart){
+				EditPart part = (EditPart)obj;
+				if (part.getModel() instanceof APropertyNode){
+					result.add((APropertyNode)part.getModel());
+				}
+			}
+		}
+		return new StructuredSelection(result);
+	}
 
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
@@ -104,14 +121,13 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 			if (provider != null)
 				setEditDomain(provider.getEditDomain());
-
-			Assert.isTrue(selection instanceof IStructuredSelection);
-			Object input = ((IStructuredSelection) selection).getFirstElement();
-			Assert.isTrue(input instanceof EditPart);
-			Object model = ((EditPart) input).getModel();
-			Assert.isTrue(model instanceof APropertyNode);
-			this.element = (APropertyNode) model;
-			UpdatePageContent();
+			
+			this.element = null;
+			IStructuredSelection selectionList =  getSelectionList(selection);
+			if (!selectionList.isEmpty()){
+				this.element = (APropertyNode) selectionList.getFirstElement();
+				UpdatePageContent(selectionList);
+			}
 		}
 	}
 
