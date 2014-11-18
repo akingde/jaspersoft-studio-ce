@@ -82,8 +82,7 @@ public class SyncDatasetRunParameters {
 				return;
 			if (oldName != null && !mDsName.equals(newName))
 				for (JRDataset ds : jd.getDatasetsList()) {
-					if (ds.getPropertiesMap().containsProperty(
-							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+					if (isNeedParameters(ds))
 						continue;
 					if (ds.getName().equals(oldName)
 							&& (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
@@ -95,8 +94,7 @@ public class SyncDatasetRunParameters {
 				}
 			if (newName != null && !mDsName.equals(newName))
 				for (JRDataset ds : jd.getDatasetsList()) {
-					if (ds.getPropertiesMap().containsProperty(
-							DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+					if (isNeedParameters(ds))
 						continue;
 					if (ds.getName().equals(newName)
 							&& (mLang == null || (ds.getQuery() != null && mLang.equals(ds.getQuery().getLanguage())))) {
@@ -121,8 +119,7 @@ public class SyncDatasetRunParameters {
 			JasperReportsConfiguration jConf = mDsRun.getJasperConfiguration();
 			if (jConf == null)
 				return;
-			if (subDS.getPropertiesMap().containsProperty(
-					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+			if (isNeedParameters(subDS))
 				return;
 			if (subDS == jd.getMainDesignDataset() || mDsName.equals(subDS.getName())) {
 				Object[] bprms = getBuiltInParameters(jConf, oldLang);
@@ -158,12 +155,18 @@ public class SyncDatasetRunParameters {
 		}
 	}
 
+	private static boolean isNeedParameters(JRDataset subDS) {
+		if (subDS.getQuery() != null && subDS.getQuery().getLanguage().equalsIgnoreCase("plsql"))
+			return false;
+		return subDS.getPropertiesMap().containsProperty(
+				DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION);
+	}
+
 	private static void prepareDatasets(JasperDesign jd) {
 		for (IQueryLanguageChanged qlc : changed) {
 			prepareDataSet(jd, jd.getMainDesignDataset(), qlc);
 			for (JRDataset ds : jd.getDatasetsList()) {
-				if (ds.getPropertiesMap().containsProperty(
-						DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+				if (isNeedParameters(ds))
 					continue;
 				prepareDataSet(jd, (JRDesignDataset) ds, qlc);
 			}
@@ -194,8 +197,7 @@ public class SyncDatasetRunParameters {
 						mlang = null;
 					}
 					for (JRDataset subds : jd.getDatasetsList()) {
-						if (subds.getPropertiesMap().containsProperty(
-								DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION))
+						if (isNeedParameters(subds))
 							continue;
 						if (subds.getQuery() != null && (mlang == null || mlang.equals(subds.getQuery().getLanguage()))) {
 							try {
