@@ -132,4 +132,8 @@ public abstract class AQueryDesigner implements IQueryDesigner, IRunnableContext
 	public void setJasperConfiguration(JasperReportsConfiguration jConfig) {
 		this.jConfig = jConfig;
 	}
+
+	public JasperReportsConfiguration getjConfig() {
+		return jConfig;
+	}
 }
