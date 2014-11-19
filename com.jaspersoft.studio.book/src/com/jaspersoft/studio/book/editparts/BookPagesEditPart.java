@@ -248,11 +248,12 @@ public class BookPagesEditPart extends AbstractGraphicalEditPart {
 		
 		File f = ReportThumbnailsManager.findFile(location, context);
 		
-		if (( f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper")) //$NON-NLS-1$
+		if (location.toLowerCase().endsWith(".jasper")) //$NON-NLS-1$
 		{
 			// check for a jrxml...
 			 location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
-			 f = ReportThumbnailsManager.findFile(location, context);
+			 File jrxmFile = ReportThumbnailsManager.findFile(location, context);
+			 if (jrxmFile != null && jrxmFile.exists()) return f = jrxmFile;
 		}
 		
 		return f;
