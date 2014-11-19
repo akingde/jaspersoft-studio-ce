@@ -1437,6 +1437,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getLikeOperand_Fparam()
+  {
+    return (EReference)likeOperandEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getBetween()
   {
     return betweenEClass;
@@ -2318,6 +2328,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEAttribute(likeOperandEClass, LIKE_OPERAND__OP2);
     createEReference(likeOperandEClass, LIKE_OPERAND__FOP2);
     createEReference(likeOperandEClass, LIKE_OPERAND__FCAST);
+    createEReference(likeOperandEClass, LIKE_OPERAND__FPARAM);
 
     betweenEClass = createEClass(BETWEEN);
     createEAttribute(betweenEClass, BETWEEN__OP_BETWEEN);
@@ -2594,6 +2605,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEAttribute(getLikeOperand_Op2(), ecorePackage.getEString(), "op2", null, 0, 1, LikeOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLikeOperand_Fop2(), this.getOpFunction(), null, "fop2", null, 0, 1, LikeOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLikeOperand_Fcast(), this.getOpFunctionCast(), null, "fcast", null, 0, 1, LikeOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLikeOperand_Fparam(), this.getPOperand(), null, "fparam", null, 0, 1, LikeOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(betweenEClass, Between.class, "Between", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getBetween_OpBetween(), ecorePackage.getEString(), "opBetween", null, 0, 1, Between.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

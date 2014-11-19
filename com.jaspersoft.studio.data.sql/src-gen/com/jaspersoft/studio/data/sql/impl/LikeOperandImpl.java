@@ -5,6 +5,7 @@ package com.jaspersoft.studio.data.sql.impl;
 import com.jaspersoft.studio.data.sql.LikeOperand;
 import com.jaspersoft.studio.data.sql.OpFunction;
 import com.jaspersoft.studio.data.sql.OpFunctionCast;
+import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl#getOp2 <em>Op2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl#getFop2 <em>Fop2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl#getFcast <em>Fcast</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.LikeOperandImpl#getFparam <em>Fparam</em>}</li>
  * </ul>
  * </p>
  *
@@ -72,6 +74,16 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
    * @ordered
    */
   protected OpFunctionCast fcast;
+
+  /**
+   * The cached value of the '{@link #getFparam() <em>Fparam</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFparam()
+   * @generated
+   * @ordered
+   */
+  protected POperand fparam;
 
   /**
    * <!-- begin-user-doc -->
@@ -218,6 +230,54 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
    * <!-- end-user-doc -->
    * @generated
    */
+  public POperand getFparam()
+  {
+    return fparam;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFparam(POperand newFparam, NotificationChain msgs)
+  {
+    POperand oldFparam = fparam;
+    fparam = newFparam;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE_OPERAND__FPARAM, oldFparam, newFparam);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFparam(POperand newFparam)
+  {
+    if (newFparam != fparam)
+    {
+      NotificationChain msgs = null;
+      if (fparam != null)
+        msgs = ((InternalEObject)fparam).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.LIKE_OPERAND__FPARAM, null, msgs);
+      if (newFparam != null)
+        msgs = ((InternalEObject)newFparam).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.LIKE_OPERAND__FPARAM, null, msgs);
+      msgs = basicSetFparam(newFparam, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.LIKE_OPERAND__FPARAM, newFparam, newFparam));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -227,6 +287,8 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
         return basicSetFop2(null, msgs);
       case SqlPackage.LIKE_OPERAND__FCAST:
         return basicSetFcast(null, msgs);
+      case SqlPackage.LIKE_OPERAND__FPARAM:
+        return basicSetFparam(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -247,6 +309,8 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
         return getFop2();
       case SqlPackage.LIKE_OPERAND__FCAST:
         return getFcast();
+      case SqlPackage.LIKE_OPERAND__FPARAM:
+        return getFparam();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -269,6 +333,9 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
         return;
       case SqlPackage.LIKE_OPERAND__FCAST:
         setFcast((OpFunctionCast)newValue);
+        return;
+      case SqlPackage.LIKE_OPERAND__FPARAM:
+        setFparam((POperand)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -293,6 +360,9 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
       case SqlPackage.LIKE_OPERAND__FCAST:
         setFcast((OpFunctionCast)null);
         return;
+      case SqlPackage.LIKE_OPERAND__FPARAM:
+        setFparam((POperand)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -313,6 +383,8 @@ public class LikeOperandImpl extends MinimalEObjectImpl.Container implements Lik
         return fop2 != null;
       case SqlPackage.LIKE_OPERAND__FCAST:
         return fcast != null;
+      case SqlPackage.LIKE_OPERAND__FPARAM:
+        return fparam != null;
     }
     return super.eIsSet(featureID);
   }

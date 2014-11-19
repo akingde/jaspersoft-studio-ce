@@ -1183,13 +1183,22 @@ public interface SqlPackage extends EPackage
   int LIKE_OPERAND__FCAST = 2;
 
   /**
+   * The feature id for the '<em><b>Fparam</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LIKE_OPERAND__FPARAM = 3;
+
+  /**
    * The number of structural features of the '<em>Like Operand</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LIKE_OPERAND_FEATURE_COUNT = 3;
+  int LIKE_OPERAND_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl <em>Between</em>}' class.
@@ -3238,6 +3247,17 @@ public interface SqlPackage extends EPackage
   EReference getLikeOperand_Fcast();
 
   /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.LikeOperand#getFparam <em>Fparam</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Fparam</em>'.
+   * @see com.jaspersoft.studio.data.sql.LikeOperand#getFparam()
+   * @see #getLikeOperand()
+   * @generated
+   */
+  EReference getLikeOperand_Fparam();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.Between <em>Between</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4818,6 +4838,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference LIKE_OPERAND__FCAST = eINSTANCE.getLikeOperand_Fcast();
+
+    /**
+     * The meta object literal for the '<em><b>Fparam</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LIKE_OPERAND__FPARAM = eINSTANCE.getLikeOperand_Fparam();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.BetweenImpl <em>Between</em>}' class.

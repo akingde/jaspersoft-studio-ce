@@ -5948,11 +5948,11 @@ protected class Like_Op2Assignment_1 extends AssignmentToken  {
 /************ begin Rule LikeOperand ****************
  *
  * LikeOperand:
- * 	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
+ * 	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast | fparam=ParameterOperand;
  *
  **/
 
-// op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast
+// op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast | fparam=ParameterOperand
 protected class LikeOperand_Alternatives extends AlternativesToken {
 
 	public LikeOperand_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5970,6 +5970,7 @@ protected class LikeOperand_Alternatives extends AlternativesToken {
 			case 0: return new LikeOperand_Op2Assignment_0(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new LikeOperand_Fop2Assignment_1(lastRuleCallOrigin, this, 1, inst);
 			case 2: return new LikeOperand_FcastAssignment_2(lastRuleCallOrigin, this, 2, inst);
+			case 3: return new LikeOperand_FparamAssignment_3(lastRuleCallOrigin, this, 3, inst);
 			default: return null;
 		}	
 	}
@@ -6090,6 +6091,51 @@ protected class LikeOperand_FcastAssignment_2 extends AssignmentToken  {
 			if(param.isInstanceOf(grammarAccess.getOpFunctionCastRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
 				element = grammarAccess.getLikeOperandAccess().getFcastOpFunctionCastParserRuleCall_2_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(next, actIndex , index, consumed);
+		}	
+	}	
+}
+
+// fparam=ParameterOperand
+protected class LikeOperand_FparamAssignment_3 extends AssignmentToken  {
+	
+	public LikeOperand_FparamAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getLikeOperandAccess().getFparamAssignment_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new ParameterOperand_PrmAssignment(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("fparam",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("fparam");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getParameterOperandRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getLikeOperandAccess().getFparamParameterOperandParserRuleCall_3_0(); 
 				consumed = obj;
 				return param;
 			}

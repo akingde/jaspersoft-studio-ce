@@ -218,6 +218,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLikeOperandAccess().getOp2Assignment_0(), "rule__LikeOperand__Op2Assignment_0");
 					put(grammarAccess.getLikeOperandAccess().getFop2Assignment_1(), "rule__LikeOperand__Fop2Assignment_1");
 					put(grammarAccess.getLikeOperandAccess().getFcastAssignment_2(), "rule__LikeOperand__FcastAssignment_2");
+					put(grammarAccess.getLikeOperandAccess().getFparamAssignment_3(), "rule__LikeOperand__FparamAssignment_3");
 					put(grammarAccess.getBetweenAccess().getOpBetweenAssignment_0(), "rule__Between__OpBetweenAssignment_0");
 					put(grammarAccess.getBetweenAccess().getOp2Assignment_1(), "rule__Between__Op2Assignment_1");
 					put(grammarAccess.getBetweenAccess().getOp3Assignment_3(), "rule__Between__Op3Assignment_3");

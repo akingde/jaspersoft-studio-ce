@@ -98,7 +98,7 @@ Like:
 	opLike=('LIKE' | 'NOT LIKE') op2=LikeOperand;
 
 LikeOperand returns LikeOperand:
-	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
+	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast | fparam=ParameterOperand;
 
 Between:
 	opBetween=('BETWEEN' | 'NOT BETWEEN') op2=Operand 'AND' op3=Operand;

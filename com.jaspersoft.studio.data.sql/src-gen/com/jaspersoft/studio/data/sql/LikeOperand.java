@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getOp2 <em>Op2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getFop2 <em>Fop2</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getFcast <em>Fcast</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.LikeOperand#getFparam <em>Fparam</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,5 +102,31 @@ public interface LikeOperand extends EObject
    * @generated
    */
   void setFcast(OpFunctionCast value);
+
+  /**
+   * Returns the value of the '<em><b>Fparam</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Fparam</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Fparam</em>' containment reference.
+   * @see #setFparam(POperand)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getLikeOperand_Fparam()
+   * @model containment="true"
+   * @generated
+   */
+  POperand getFparam();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.LikeOperand#getFparam <em>Fparam</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Fparam</em>' containment reference.
+   * @see #getFparam()
+   * @generated
+   */
+  void setFparam(POperand value);
 
 } // LikeOperand

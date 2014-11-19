@@ -134,6 +134,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//LikeOperand/op2"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//LikeOperand/fop2"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//LikeOperand/fcast"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//LikeOperand/fparam"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//Between">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//Between/opBetween"/>

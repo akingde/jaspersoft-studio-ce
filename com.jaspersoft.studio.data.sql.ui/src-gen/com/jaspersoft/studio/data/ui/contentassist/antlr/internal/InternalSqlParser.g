@@ -2137,6 +2137,12 @@ rule__LikeOperand__Alternatives
 { after(grammarAccess.getLikeOperandAccess().getFcastAssignment_2()); }
 )
 
+    |(
+{ before(grammarAccess.getLikeOperandAccess().getFparamAssignment_3()); }
+(rule__LikeOperand__FparamAssignment_3)
+{ after(grammarAccess.getLikeOperandAccess().getFparamAssignment_3()); }
+)
+
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -10596,6 +10602,21 @@ rule__LikeOperand__FcastAssignment_2
 (
 { before(grammarAccess.getLikeOperandAccess().getFcastOpFunctionCastParserRuleCall_2_0()); }
 	ruleOpFunctionCast{ after(grammarAccess.getLikeOperandAccess().getFcastOpFunctionCastParserRuleCall_2_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__LikeOperand__FparamAssignment_3
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getLikeOperandAccess().getFparamParameterOperandParserRuleCall_3_0()); }
+	ruleParameterOperand{ after(grammarAccess.getLikeOperandAccess().getFparamParameterOperandParserRuleCall_3_0()); }
 )
 
 ;

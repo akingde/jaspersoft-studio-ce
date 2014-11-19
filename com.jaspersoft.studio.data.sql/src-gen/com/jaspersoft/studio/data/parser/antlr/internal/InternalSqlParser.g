@@ -2493,6 +2493,25 @@ ruleLikeOperand returns [EObject current=null]
 	    }
 
 )
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getLikeOperandAccess().getFparamParameterOperandParserRuleCall_3_0()); 
+	    }
+		lv_fparam_3_0=ruleParameterOperand		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getLikeOperandRule());
+	        }
+       		set(
+       			$current, 
+       			"fparam",
+        		lv_fparam_3_0, 
+        		"ParameterOperand");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
 ))
 ;
 

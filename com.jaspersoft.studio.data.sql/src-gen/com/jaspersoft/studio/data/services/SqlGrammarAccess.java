@@ -1378,12 +1378,14 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFop2OperandFunctionParserRuleCall_1_0 = (RuleCall)cFop2Assignment_1.eContents().get(0);
 		private final Assignment cFcastAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cFcastOpFunctionCastParserRuleCall_2_0 = (RuleCall)cFcastAssignment_2.eContents().get(0);
+		private final Assignment cFparamAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cFparamParameterOperandParserRuleCall_3_0 = (RuleCall)cFparamAssignment_3.eContents().get(0);
 		
 		//LikeOperand:
-		//	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
+		//	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast | fparam=ParameterOperand;
 		public ParserRule getRule() { return rule; }
 
-		//op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast
+		//op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast | fparam=ParameterOperand
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//op2=StringOperand
@@ -1403,6 +1405,12 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//OpFunctionCast
 		public RuleCall getFcastOpFunctionCastParserRuleCall_2_0() { return cFcastOpFunctionCastParserRuleCall_2_0; }
+
+		//fparam=ParameterOperand
+		public Assignment getFparamAssignment_3() { return cFparamAssignment_3; }
+
+		//ParameterOperand
+		public RuleCall getFparamParameterOperandParserRuleCall_3_0() { return cFparamParameterOperandParserRuleCall_3_0; }
 	}
 
 	public class BetweenElements extends AbstractParserRuleElementFinder {
@@ -2847,7 +2855,7 @@ public class SqlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LikeOperand:
-	//	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast;
+	//	op2=StringOperand | fop2=OperandFunction | fcast=OpFunctionCast | fparam=ParameterOperand;
 	public LikeOperandElements getLikeOperandAccess() {
 		return (pLikeOperand != null) ? pLikeOperand : (pLikeOperand = new LikeOperandElements());
 	}

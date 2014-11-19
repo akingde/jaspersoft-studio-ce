@@ -132,6 +132,12 @@ public class ConvertExpression {
 						opds.add(new UnknownOperand(me, ConvertSelectColumns.getFunctionString(designer, msel, parent, op2.getFop2(), msel)));
 					else if (op2.getFcast() != null)
 						opds.add(new UnknownOperand(me, ConvertSelectColumns.getFunctionString(designer, msel, parent, op2.getFcast(), msel)));
+					else if (op2.getFparam() != null) {
+						String p = op2.getFparam().getPrm();
+						p = p.substring(3, p.length() - 1);
+
+						addParam(me, p, designer.getjDataset());
+					}
 				} else if (tf.getIn() != null) {
 					me.setOperator(Operator.getOperator(tf.getIn().getOp().replace("(", "").trim()));
 					if (tf.getIn().getSubquery() != null) {
@@ -185,6 +191,13 @@ public class ConvertExpression {
 		ParameterPOperand pop = new ParameterPOperand(me);
 		pop.setJrDataset(jrDataset);
 		pop.setJrParameter(fcol.getJrprm());
+		me.getOperands().add(pop);
+	}
+
+	protected static void addParam(MExpression me, String prm, JRDesignDataset jrDataset) {
+		ParameterPOperand pop = new ParameterPOperand(me);
+		pop.setJrDataset(jrDataset);
+		pop.setJrParameter(prm);
 		me.getOperands().add(pop);
 	}
 
