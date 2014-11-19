@@ -24,6 +24,10 @@ public class Messages extends NLS {
 	public static String DBMetadata_4;
 	public static String DBMetadata_5;
 	public static String DBMetadata_6;
+	public static String DeleteAction_0;
+	public static String DeleteAction_1;
+	public static String DeleteAction_2;
+	public static String DeleteAction_3;
 	public static String EditExpression_0;
 	public static String EditExpressionDialog_0;
 	public static String EditExpressionDialog_1;

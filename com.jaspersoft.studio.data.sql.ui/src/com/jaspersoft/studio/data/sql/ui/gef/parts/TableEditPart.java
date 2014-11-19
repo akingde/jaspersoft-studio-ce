@@ -57,9 +57,20 @@ import com.jaspersoft.studio.model.INode;
 public class TableEditPart extends AbstractGraphicalEditPart {
 	private Map<String, MSelectColumn> set = new HashMap<String, MSelectColumn>();
 	private SQLQueryDesigner designer;
-	private boolean allstar;
 
 	public boolean isAllstar() {
+		return isAllstar(Util.getKeyword(getModel(), MSelect.class));
+	}
+
+	public boolean isAllstar(MSelect msel) {
+		boolean allstar = false;
+		if (msel != null) {
+			for (INode n : msel.getChildren())
+				if (n instanceof MSelectExpression && n.getValue().equals("*")) {
+					allstar = true;
+					break;
+				}
+		}
 		return allstar;
 	}
 
@@ -87,6 +98,22 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		SqlTableFigure f = getFigure();
 
 		MFromTable fromTable = getModel();
+		refreshModel();
+		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
+		Point location = f.getLocation();
+		if (fromTable.getPropertyActualValue(MFromTable.PROP_X) != null)
+			location.x = (Integer) fromTable.getPropertyValue(MFromTable.PROP_X);
+		if (fromTable.getPropertyActualValue(MFromTable.PROP_Y) != null)
+			location.y = (Integer) fromTable.getPropertyValue(MFromTable.PROP_Y);
+		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
+		f.setToolTip(new Label(fromTable.getToolTip()));
+		// System.out.println(tblName + ": " + location.x + "," + location.y);
+		// new Exception().printStackTrace();
+	}
+
+	public void refreshModel() {
+		SqlTableFigure f = getFigure();
+		MFromTable fromTable = getModel();
 		MSqlTable table = fromTable.getValue();
 		String tblName = ConvertUtil.cleanDbNameFull(table.getValue());
 		if (fromTable.getAlias() != null)
@@ -97,14 +124,7 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 		MSelect msel = Util.getKeyword(fromTable, MSelect.class);
 		if (msel != null) {
 			set.clear();
-			allstar = false;
-			for (INode n : msel.getChildren()) {
-				if (n instanceof MSelectExpression && n.getValue().equals("*")) {
-					allstar = true;
-					break;
-				}
-			}
-			if (!allstar)
+			if (!isAllstar(msel))
 				for (INode n : msel.getChildren()) {
 					if (n instanceof MSelectColumn) {
 						MSelectColumn msc = (MSelectColumn) n;
@@ -113,16 +133,6 @@ public class TableEditPart extends AbstractGraphicalEditPart {
 					}
 				}
 		}
-		AbstractGraphicalEditPart parent = (AbstractGraphicalEditPart) getParent();
-		Point location = f.getLocation();
-		if (fromTable.getPropertyActualValue(MFromTable.PROP_X) != null)
-			location.x = (Integer) fromTable.getPropertyValue(MFromTable.PROP_X);
-		if (fromTable.getPropertyActualValue(MFromTable.PROP_Y) != null)
-			location.y = (Integer) fromTable.getPropertyValue(MFromTable.PROP_Y);
-		parent.setLayoutConstraint(this, f, new Rectangle(location.x, location.y, -1, -1));
-		f.setToolTip(new Label(fromTable.getToolTip()));
-//		System.out.println(tblName + ": " + location.x + "," + location.y);
-//		new Exception().printStackTrace();
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class LayoutAction extends Action {
 			}
 
 		};
-		designer.getDiagram().scheduleRefresh();
+		designer.getDiagram().scheduleRefresh(false);
 	}
 
 }

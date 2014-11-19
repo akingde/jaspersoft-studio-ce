@@ -20,6 +20,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.studio.data.sql.SQLQueryDesigner;
+import com.jaspersoft.studio.data.sql.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 
 public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
@@ -28,7 +29,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 	private SQLQueryDesigner designer;
 
 	public DeleteAction(SQLQueryDesigner designer, TreeViewer treeViewer, String name, Class<T> type) {
-		super("&Delete " + name, treeViewer);
+		super(Messages.DeleteAction_0 + name, treeViewer);
 		this.name = name;
 		this.type = type;
 		this.designer = designer;
@@ -45,7 +46,7 @@ public class DeleteAction<T extends ANode> extends AMultiSelectionAction {
 			if (type.isAssignableFrom(obj.getClass()))
 				lst.add((T) obj);
 		}
-		if (UIUtils.showConfirmation("Delete " + name, "Are you sure you want to delete the " + name.toLowerCase() + "(s)?"))
+		if (UIUtils.showConfirmation(Messages.DeleteAction_1 + name, Messages.DeleteAction_2 + name.toLowerCase() + Messages.DeleteAction_3))
 			doDelete(lst);
 	}
 

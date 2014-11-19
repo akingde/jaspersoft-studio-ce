@@ -106,7 +106,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 					outline.scheduleRefresh();
 					break;
 				case 2:
-					diagram.scheduleRefresh();
+					diagram.scheduleRefresh(false);
 					break;
 				}
 				source.setDirty(false);
@@ -204,7 +204,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 		if (tabFolder.getSelectionIndex() == 1)
 			outline.scheduleRefresh();
 		if (tabFolder.getSelectionIndex() == 2)
-			diagram.scheduleRefresh();
+			diagram.scheduleRefresh(false);
 	}
 
 	public void refreshQueryText() {
@@ -225,7 +225,7 @@ public class SQLQueryDesigner extends SimpleSQLQueryDesigner {
 			if (!isQueryModelEmpty())
 				updateQueryText(QueryWriter.writeQuery(root));
 			if (tabFolder.getSelectionIndex() == 2)
-				diagram.scheduleRefresh();
+				diagram.scheduleRefresh(false);
 			isModelRefresh = false;
 		}
 	}

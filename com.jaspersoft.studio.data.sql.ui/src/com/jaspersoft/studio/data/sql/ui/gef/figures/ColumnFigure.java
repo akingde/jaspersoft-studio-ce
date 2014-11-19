@@ -42,6 +42,8 @@ public class ColumnFigure extends Figure {
 
 			@Override
 			public void handleStateChanged(ChangeEvent event) {
+				if (refreshing)
+					return;
 				if (event.getPropertyName().equals(ButtonModel.SELECTED_PROPERTY))
 					handleSelectionChanged();
 			}
@@ -70,7 +72,11 @@ public class ColumnFigure extends Figure {
 		return checkbox.isSelected();
 	}
 
+	private boolean refreshing = false;
+
 	public void setSelected(boolean sel) {
+		refreshing = true;
 		checkbox.setSelected(sel);
+		refreshing = false;
 	}
 }

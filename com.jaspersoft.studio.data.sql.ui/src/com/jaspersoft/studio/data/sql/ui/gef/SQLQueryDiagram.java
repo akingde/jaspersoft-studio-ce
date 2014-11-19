@@ -182,7 +182,7 @@ public class SQLQueryDiagram {
 		});
 		viewer.addDropTargetListener(new QueryDesignerDropTargetListener(viewer, NodeTransfer.getInstance()));
 
-		refreshViewer();
+		refreshViewer(false);
 
 		return viewer.getControl();
 	}
@@ -193,7 +193,7 @@ public class SQLQueryDiagram {
 
 	public static final String SQL_EDITOR_TABLES = "com.jaspersoft.studio.data.sql.tables"; //$NON-NLS-1$
 
-	protected void refreshViewer() {
+	protected void refreshViewer(boolean refreshSource) {
 		if (designer.getjDataset() != null) {
 			String tbls = designer.getjDataset().getPropertiesMap().getProperty(SQL_EDITOR_TABLES);
 			if (tbls != null) {
@@ -255,7 +255,8 @@ public class SQLQueryDiagram {
 			if (!parts.isEmpty())
 				viewer.reveal(parts.get(0));
 		}
-		designer.refreshQueryText();
+		if (refreshSource)
+			designer.refreshQueryText();
 	}
 
 	private void doAddParts(Object obj, List<TableEditPart> parts, List<MFromTable> tables) {
@@ -270,8 +271,8 @@ public class SQLQueryDiagram {
 		}
 	}
 
-	public void scheduleRefresh() {
-		refreshViewer();
+	public void scheduleRefresh(boolean refreshSource) {
+		refreshViewer(refreshSource);
 	}
 
 	public void dispose() {
@@ -309,7 +310,7 @@ public class SQLQueryDiagram {
 		}
 		viewer.getEditDomain().getCommandStack().execute(cc);
 		designer.refreshQueryText();
-		refreshViewer();
+		refreshViewer(true);
 	}
 
 	public class QueryDesignerDropTargetListener extends AbstractTransferDropTargetListener {
@@ -396,14 +397,14 @@ public class SQLQueryDiagram {
 						getViewer().getEditDomain().getCommandStack().execute(command);
 					else
 						getCurrentEvent().detail = DND.DROP_NONE;
-					refreshViewer();
+					refreshViewer(true);
 				}
 			}
 			if (!colsset.isEmpty()) {
 				CreateColumn ct = designer.getOutline().getAfactory().getAction(CreateColumn.class);
 				if (ct.calculateEnabled(new Object[] { mfrom })) {
 					ct.run(colsset);
-					refreshViewer();
+					refreshViewer(true);
 				}
 			}
 		}
