@@ -8,9 +8,11 @@ import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.book.model.BookFactory;
 import com.jaspersoft.studio.editor.AbstractJRXMLEditor;
+import com.jaspersoft.studio.editor.report.CachedSelectionProvider;
+import com.jaspersoft.studio.editor.report.CommonSelectionCacheProvider;
 import com.jaspersoft.studio.model.INode;
 
-public class JRBookEditor extends AbstractJRXMLEditor {
+public class JRBookEditor extends AbstractJRXMLEditor implements CachedSelectionProvider {
 	
 	public static final String BOOK_EDITOR_ID = "com.jaspersoft.studio.book.editors.JRBookEditor";
 	
@@ -64,6 +66,12 @@ public class JRBookEditor extends AbstractJRXMLEditor {
 	@Override
 	protected INode createEditorModel() {
 		return BookFactory.createReport(jrContext);
+	}
+
+	@Override
+	public CommonSelectionCacheProvider getSelectionCache() {
+		if (designEditor != null) return designEditor.getSelectionCache();
+		return null;
 	}
 
 }
