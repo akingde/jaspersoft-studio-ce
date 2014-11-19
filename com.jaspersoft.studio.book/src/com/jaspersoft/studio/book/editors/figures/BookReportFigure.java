@@ -30,7 +30,7 @@ public class BookReportFigure extends RectangleFigure {
 			preferredHeight += figure.getPreferredSize().height;
 		}
 		if (preferredHeight == 0) preferredHeight = 200;
-		bounds.setHeight(preferredHeight+10);
+		bounds.setHeight(preferredHeight+20);
 		setBounds(bounds);
 	}
 	
@@ -38,6 +38,7 @@ public class BookReportFigure extends RectangleFigure {
 	public void add(IFigure figure, Object constraint, int index) {
 		GridData dataConstraint = new GridData(GridData.FILL_HORIZONTAL);
 		super.add(figure, dataConstraint, index);
+		updateBounds();
 	}
 	
 	@Override

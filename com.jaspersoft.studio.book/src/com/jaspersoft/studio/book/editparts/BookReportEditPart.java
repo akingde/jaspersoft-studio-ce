@@ -49,7 +49,9 @@ public class BookReportEditPart extends AbstractGraphicalEditPart {
 	
 	@Override
 	protected IFigure createFigure() {
-		if (figure == null) figure =  new BookReportFigure();
+		if (figure == null) {
+			figure =  new BookReportFigure();
+		}
 		return figure;
 	}
 

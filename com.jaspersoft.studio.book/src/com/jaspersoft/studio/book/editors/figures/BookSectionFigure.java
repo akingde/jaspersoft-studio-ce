@@ -46,8 +46,9 @@ public class BookSectionFigure extends RectangleFigure {
 			if (parentPart.getChildren().size() % numberForLine >0) numberOfLines++;
 			if (numberOfLines == 0 ) numberOfLines++;
 			preferredHeight = (preferredHeight+4) * numberOfLines;
+			return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
 		}
-		return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
+		else return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+20);
 	}
 	
 	@Override

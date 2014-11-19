@@ -76,15 +76,11 @@ public class MBookReport extends MReport {
 				
 				int footerPosition = getChildren().size()-groupIndex+1;
 				
-				JROrigin headerOrigin = new JROrigin(null, group.getName(), BandTypeEnum.GROUP_HEADER);
-				JRDesignSection header = new JRDesignSection(headerOrigin);
-				MReportPartContainer mHeader = new MReportPartContainer(this, header, headerPosition);
+				MReportPartContainer mHeader = new MReportPartContainer(this, group.getGroupHeaderSection(), headerPosition);
 				mHeader.setJRGroup(group);
 				createParts(group.getGroupHeaderSection(), mHeader);
-				
-				JROrigin footerOrigin = new JROrigin(null, group.getName(), BandTypeEnum.GROUP_FOOTER);
-				JRDesignSection footer = new JRDesignSection(footerOrigin);
-				MReportPartContainer mFooter = new MReportPartContainer(this, footer, footerPosition);
+
+				MReportPartContainer mFooter = new MReportPartContainer(this, group.getGroupFooterSection(), footerPosition);
 				mFooter.setJRGroup(group);
 				createParts(group.getGroupFooterSection(), mFooter);
 			}

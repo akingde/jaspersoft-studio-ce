@@ -73,7 +73,9 @@ public class BookFactory {
 		
 		// Create Part(s) inside Group Footer section(s)
 		if (jd.getGroupsList() != null) {
-			for (JRGroup gr : jd.getGroupsList()) {
+			//The groups must be build in the reverse order
+			for (int i = jd.getGroupsList().size()-1; i>=0; i--) {
+				JRGroup gr = jd.getGroupsList().get(i);
 				MReportPartContainer grpFooter = null;
 				if (gr.getGroupFooterSection()!= null) {
 					List<JRPart> grphParts = ((JRDesignSection) gr.getGroupFooterSection()).getPartsList();
