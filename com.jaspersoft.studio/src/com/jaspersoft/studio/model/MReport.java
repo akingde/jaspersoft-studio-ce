@@ -87,6 +87,10 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	
+	public static final String PROPERY_CREATE_BOOKMARKS = "createBookmarks"; //$NON-NLS-1$
+	
+	private static final String JR_CREATE_BOOKMARKS = "net.sf.jasperreports.print.create.bookmarks"; //$NON-NLS-1$
+	
 	private Map<Object, Integer> bandIndexMap = new HashMap<Object, Integer>();
 
 	private static JSSEnumPropertyDescriptor orientationD;
@@ -115,7 +119,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 	 * for example JRDesignSection.PROPERTY_BANDS is that this key uses a more light method to
 	 * do the changes and since the hierarchy remains the same it will keep also all the listeners
 	 */
-	public static final String CHANGE_BAND_POSITION = "changeBandPosition";
+	public static final String CHANGE_BAND_POSITION = "changeBandPosition"; //$NON-NLS-1$
 	
 	
 	@Override
@@ -218,7 +222,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		importsD.setDescription(Messages.MReport_imports_description);
 		desc.add(importsD);
 		importsD.setHelpRefBuilder(new HelpReferenceBuilder(
-				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#import"));
+				"net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#import")); //$NON-NLS-1$
 
 		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JasperDesign.PROPERTY_NAME,
 				Messages.MReport_report_name);
@@ -302,8 +306,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 				OrientationEnum.class, NullEnum.NOTNULL) {
 			@Override
 			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-				Image[] images = new Image[] { JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"),
-						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") };
+				Image[] images = new Image[] { JaspersoftStudioPlugin.getInstance().getImage("icons/resources/portrait16.png"), //$NON-NLS-1$
+						JaspersoftStudioPlugin.getInstance().getImage("icons/resources/landscape16.png") }; //$NON-NLS-1$
 				return new SPToolBarEnum(parent, section, this, images);
 			}
 		};
@@ -349,10 +353,13 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		ignorePaginationD.setDescription(Messages.MReport_ignore_pagination_description);
 		desc.add(ignorePaginationD);
 
-		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,
-				Messages.common_properties);
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(MGraphicElement.PROPERTY_MAP,Messages.common_properties);
 		propertiesMapD.setDescription(Messages.common_properties);
 		desc.add(propertiesMapD);
+		
+		CheckBoxPropertyDescriptor createBookmarks = new CheckBoxPropertyDescriptor(PROPERY_CREATE_BOOKMARKS, Messages.MReport_createBookmarksTitle);
+		titleNewPageD.setDescription(Messages.MReport_createBookmarksDescription);
+		desc.add(createBookmarks);
 
 		titleNewPageD.setCategory(Messages.MReport_pagination);
 		ignorePaginationD.setCategory(Messages.MReport_pagination);
@@ -381,7 +388,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		defaultsMap.put(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_IGNORE_PAGINATION, Boolean.FALSE);
 
-		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#jasperReport");
+		setHelpPrefix(desc, "net.sf.jasperreports.doc/docs/schema.reference.html?cp=0_1#jasperReport"); //$NON-NLS-1$
 	}
 
 	private void createDataset(JasperDesign jrDesign) {
@@ -462,6 +469,11 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 		if (id.equals(MGraphicElement.PROPERTY_MAP)) {
 			// to avoid duplication I remove it first
 			return (JRPropertiesMap) jrDesign.getPropertiesMap().cloneProperties();
+		}
+		if(id.equals(PROPERY_CREATE_BOOKMARKS)){
+			String value =  jrDesign.getPropertiesMap().getProperty(JR_CREATE_BOOKMARKS);
+			if (value == null) return false;
+			else return Boolean.parseBoolean(value);
 		}
 		return null;
 	}
@@ -550,6 +562,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			for (String str : v.getPropertyNames())
 				jrDesign.setProperty(str, v.getProperty(str));
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
+		} else 	if(id.equals(PROPERY_CREATE_BOOKMARKS)){
+			 jrDesign.getPropertiesMap().setProperty(JR_CREATE_BOOKMARKS, Boolean.toString((Boolean)value));
 		}
 	}
 
@@ -1017,7 +1031,7 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 
 	public static String getMeasureUnit(JasperReportsConfiguration jConfig, JasperDesign jd) {
 		String defunit = jConfig.getProperty(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS);
-		defunit = PHolderUtil.getUnit(jd, "", defunit);
+		defunit = PHolderUtil.getUnit(jd, "", defunit); //$NON-NLS-1$
 		return defunit;
 	}
 

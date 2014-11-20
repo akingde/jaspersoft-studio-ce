@@ -1153,6 +1153,8 @@ public class Messages extends NLS {
 	public static String MReport_column_width;
 	public static String MReport_column_width_description;
 	public static String MReport_columns_category;
+	public static String MReport_createBookmarksDescription;
+	public static String MReport_createBookmarksTitle;
 	public static String MReport_float_column_footer;
 	public static String MReport_float_column_footer_description;
 	public static String MReport_format_factory_class;

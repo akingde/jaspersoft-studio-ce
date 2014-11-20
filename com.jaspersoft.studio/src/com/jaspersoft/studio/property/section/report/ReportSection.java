@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -80,6 +81,10 @@ public class ReportSection extends AbstractSection {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		createWidget4Property(firstSection, JasperDesign.PROPERTY_IGNORE_PAGINATION, false).getControl().setLayoutData(gd);
+		
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(firstSection, MReport.PROPERY_CREATE_BOOKMARKS, false).getControl().setLayoutData(gd);
 	}
 	
 	@Override
