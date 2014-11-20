@@ -62,7 +62,7 @@ public class MapComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MMap)
-			return new MapFigure();
+			return new MapFigure((MGraphicElement)node);
 		return null;
 	}
 

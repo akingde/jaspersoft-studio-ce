@@ -25,9 +25,6 @@ import com.jaspersoft.studio.jasper.JSSDrawVisitor;
  * The Class ChartFigure.
  */
 public class ChartFigure extends FrameFigure {
-
-
-	private MChart chartModel = null;
 	
 	private StackGraphics2D cachedGraphics = null;
 	
@@ -35,8 +32,7 @@ public class ChartFigure extends FrameFigure {
 	 * Instantiates a new static text figure.
 	 */
 	public ChartFigure(MChart model) {
-		super();
-		this.chartModel = model;
+		super(model);
 	}
 	
 	protected void fallbackDraw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
@@ -52,14 +48,14 @@ public class ChartFigure extends FrameFigure {
 	 */
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (chartModel != null){
-			if (cachedGraphics == null || chartModel.hasChangedProperty()){
+		if (model != null){
+			if (cachedGraphics == null || model.hasChangedProperty()){
 				Graphics2D oldGraphics = drawVisitor.getGraphics2d();
 				cachedGraphics = new StackGraphics2D(oldGraphics);
 				drawVisitor.setGraphics2D(cachedGraphics);
 				drawVisitor.visitChart((JRChart) jrElement);
 				drawVisitor.setGraphics2D(oldGraphics);
-				chartModel.setChangedProperty(false);
+				model.setChangedProperty(false);
 			}
 			cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 			cachedGraphics.paintStack();

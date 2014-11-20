@@ -77,7 +77,7 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MSpiderChart)
-			return new SpiderChartFigure();
+			return new SpiderChartFigure((MGraphicElement)node);
 		return null;
 	}
 

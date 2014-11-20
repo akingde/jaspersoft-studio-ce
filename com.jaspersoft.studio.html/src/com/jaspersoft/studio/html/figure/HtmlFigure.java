@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.html.figure;
 
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /*
  * @author Chicu Veaceslav
@@ -23,8 +24,8 @@ public class HtmlFigure extends JRComponentFigure {
 	/**
 	 * Instantiates a new text field figure.
 	 */
-	public HtmlFigure() {
-		super();
+	public HtmlFigure(MGraphicElement node) {
+		super(node);
 	}
 
 }

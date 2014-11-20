@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.map.figure;
 
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * 
@@ -24,8 +25,8 @@ public class MapFigure extends JRComponentFigure {
 	/**
 	 * Instantiates a new map figure.
 	 */
-	public MapFigure() {
-		super();
+	public MapFigure(MGraphicElement node) {
+		super(node);
 	}
 
 }

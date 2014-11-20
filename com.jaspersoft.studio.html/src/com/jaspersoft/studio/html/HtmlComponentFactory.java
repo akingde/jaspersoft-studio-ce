@@ -64,7 +64,7 @@ public class HtmlComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MHtml)
-			return new HtmlFigure();
+			return new HtmlFigure((MGraphicElement)node);
 		return null;
 	}
 

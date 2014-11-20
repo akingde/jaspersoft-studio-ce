@@ -162,7 +162,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MBarcodeBarbecue || node instanceof MBarcode4j)
-			return new BarcodeFigure();
+			return new BarcodeFigure((MGraphicElement)node);
 		return null;
 	}
 

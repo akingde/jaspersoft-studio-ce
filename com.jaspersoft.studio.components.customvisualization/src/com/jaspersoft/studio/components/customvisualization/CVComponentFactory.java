@@ -76,7 +76,7 @@ public class CVComponentFactory implements IComponentFactory {
 	@Override
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MCustomVisualization) {
-			return new CVFigure();
+			return new CVFigure((MGraphicElement)node);
 		}
 		return null;
 	}

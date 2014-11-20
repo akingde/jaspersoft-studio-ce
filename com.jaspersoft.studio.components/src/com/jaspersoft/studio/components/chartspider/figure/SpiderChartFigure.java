@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.components.chartspider.figure;
 
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * 
@@ -24,8 +25,8 @@ public class SpiderChartFigure extends JRComponentFigure {
 	/**
 	 * Instantiates a new map figure.
 	 */
-	public SpiderChartFigure() {
-		super();
+	public SpiderChartFigure(MGraphicElement node) {
+		super(node);
 	}
 
 }

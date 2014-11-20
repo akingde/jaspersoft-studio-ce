@@ -6,6 +6,7 @@
 package com.jaspersoft.studio.components.customvisualization.figure;
 
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * Figure representing the Custom Visualization component element.
@@ -15,4 +16,8 @@ import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
  */
 public class CVFigure extends JRComponentFigure {
 
+	public CVFigure(MGraphicElement node){
+		super(node);
+	}
+	
 }
