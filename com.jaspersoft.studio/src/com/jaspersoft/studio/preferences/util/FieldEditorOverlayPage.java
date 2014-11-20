@@ -52,6 +52,7 @@ import org.osgi.service.prefs.BackingStoreException;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.PreferenceInitializer;
+import com.jaspersoft.studio.utils.Misc;
 
 public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage,
 		IWorkbenchPreferencePage {
@@ -265,6 +266,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		this.canSwitchScope = canSwitchScope;
 	}
 
+	private QualifiedName reskey = new QualifiedName(JaspersoftStudioPlugin.getUniqueIdentifier(), USERESOURCESETTINGS);
+
 	protected void setupWPREnabled() {
 		try {
 			useWorkspaceSettingsButton.setSelection(false);
@@ -278,7 +281,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
 			IResource r = getResource();
 			if (canSwitchScope) {
-				String use = r != null ? r.getPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS)) : "";
+				String use = r != null ? Misc.nvl(r.getPersistentProperty(reskey)) : "";
 				if (PROJECT.equals(use)) {
 					useProjectSettingsButton.setSelection(true);
 					if (confPrjButton != null)
@@ -398,7 +401,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 		} else
 			result = super.performOk();
 		if (result && isPropertyPage()) {
-			IResource resource = JDTUtils.getAdaptedObject(getElement(), IResource.class);
+			IResource resource = getResource();
 			if (resource != null) {
 				try {
 					String value = "workspace";
@@ -406,7 +409,6 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 						value = PROJECT;
 					if (useResourceSettingsButton != null && useResourceSettingsButton.getSelection())
 						value = RESOURCE;
-					resource.setPersistentProperty(new QualifiedName(pageId, USERESOURCESETTINGS), value);
 
 					for (IEclipsePreferences ep : overlayStore.getPreferenceNodes(true)) {
 						try {
@@ -420,6 +422,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 							JaspersoftStudioPlugin.getInstance().logError("An error occurred while try to store back preferences", e);
 						}
 					}
+					resource.setPersistentProperty(reskey, value);
 				} catch (CoreException e) {
 					JaspersoftStudioPlugin.getInstance().logError("An error occurred while try to store back preferences", e);
 				}
