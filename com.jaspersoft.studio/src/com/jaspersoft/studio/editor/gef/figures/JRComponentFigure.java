@@ -31,10 +31,9 @@ public class JRComponentFigure extends FrameFigure {
 		super(null);
 	}
 
-	
 	@Override
 	protected void draw(JSSDrawVisitor drawVisitor, JRElement jrElement) {
-		if (model == null){
+		if (model == null || !allowsFigureDrawCache()){
 			//fallback, used the default draw method
 			drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 			return;
@@ -48,5 +47,14 @@ public class JRComponentFigure extends FrameFigure {
 		}
 		cachedGraphics.setRealDrawer(drawVisitor.getGraphics2d());
 		cachedGraphics.paintStack();
+	}
+	
+	/**
+	 * Used to make explicit if the figure allow the caching of the drawing
+	 * 
+	 * @return true if the figure allow the caching, false otherwise
+	 */
+	protected boolean allowsFigureDrawCache(){
+		return false;
 	}
 }
