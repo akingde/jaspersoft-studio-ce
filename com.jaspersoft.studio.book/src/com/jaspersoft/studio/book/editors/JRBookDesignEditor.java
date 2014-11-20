@@ -25,6 +25,7 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -170,16 +171,14 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	 * @param container container where the toolbar is placed
 	 */
 	private void createToolBar(Composite container){
-		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT | SWT.WRAP | SWT.RIGHT |  SWT.RIGHT_TO_LEFT);
+		additionalToolbar = new ToolBar(container, SWT.HORIZONTAL | SWT.FLAT);
 		//When the toolbar it's disposed discard also the images created for it
 		additionalToolbar.addDisposeListener(new DisposeListener() {
-			
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				imagesResource.dispose();
 			}
 		});
-		
 		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		additionalToolbar.setLayoutData(additionalToolbarGD);
 	}
@@ -197,6 +196,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		ActionRegistry registry = getActionRegistry();	
 		createToolBarButton(registry.getAction(BookDatasetAction.ID));
 		createToolBarButton(registry.getAction(BookCompileAction.ID));
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(additionalToolbar);
 	}
 	
 	/**
