@@ -95,7 +95,8 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 		for(IResource resource : input){
 			if (resource instanceof IFile){
 				IFile file = (IFile)resource;
-				if (file.getName().toLowerCase().endsWith(".jrxml")){
+				String fileName = file.getName().toLowerCase();
+				if (fileName.endsWith(".jrxml") || fileName.endsWith(".jasper")){
 					readElements.add("\""+file.getRawLocation().makeAbsolute().toPortableString()+"\"");
 				}
 			}
