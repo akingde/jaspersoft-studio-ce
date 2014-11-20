@@ -141,6 +141,7 @@ public class DynamicCompositeHelper {
 		 Properties props = new Properties();
 		 try {
 			ZipEntry propertiesFile = jarFile.getEntry("jasperreports_extension.properties");
+			if (propertiesFile == null) throw new RuntimeException("The file jasperreports_extension.properties can't be found inside the selected JAR");
 			props.load(jarFile.getInputStream(propertiesFile));
 			for(Object property : props.keySet()){
 				if (property.toString().startsWith("net.sf.jasperreports.extension.castor.mapping")){
