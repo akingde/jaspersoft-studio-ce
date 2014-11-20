@@ -239,13 +239,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.jaspersoft.studio.components.customvisualization"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.jaspersoft.studio.hibernate3"
          download-size="0"
          install-size="0"
