@@ -360,7 +360,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			for (String pKey : previewModeProperties.keySet()) {
 				String pValue = previewModeProperties.get(pKey);
 				PreferencesUtils.storeJasperReportsProperty(pKey, pValue);
-				DefaultJasperReportsContext.getInstance().getProperties().put(pKey, pValue);
+				DefaultJasperReportsContext.getInstance().setProperty(pKey, pValue);
 			}
 		}
 		APreview view = null;

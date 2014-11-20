@@ -1,20 +1,21 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.preferences;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
+import net.sf.jasperreports.eclipse.util.FilePrefUtil;
+import net.sf.jasperreports.eclipse.util.FileUtils;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -25,7 +26,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyComparator;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -53,10 +53,14 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties(""); //$NON-NLS-1$
+		List<PropertySuffix> lst = JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance())
+				.getProperties("");//$NON-NLS-1$
 		Collections.sort(lst, new PropertyComparator());
+
+		Properties props = new Properties();
 		for (PropertySuffix ps : lst)
-			store.setDefault(ps.getKey(), Misc.nvl(ps.getValue(), "")); //$NON-NLS-1$
+			props.setProperty(ps.getKey(), ps.getValue());
+		store.setDefault(FilePrefUtil.NET_SF_JASPERREPORTS_JRPROPERTIES, FileUtils.getPropertyAsString(props));
 	}
 
 	/*

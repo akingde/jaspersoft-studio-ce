@@ -72,7 +72,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext implements JasperReportsContext {
 
-	
 	// public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	public static final String KEY_JASPERDESIGN = "JasperDesign";
 	public static final String KEY_JRPARAMETERS = "KEY_PARAMETERS";
@@ -93,7 +92,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	private List<ComponentsBundle> bundles;
 	private List<FunctionsBundle> functionsBundles;
 	private MessageProviderFactory messageProviderFactory;
-	
+
 	/**
 	 * The key which identified the file being edited
 	 */
@@ -355,14 +354,19 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		return def;
 	}
 
+	private Map<String, String> propmap;
+
 	@Override
 	public Map<String, String> getProperties() {
-		Map<String, String> map = super.getProperties();
-		if (map != null && isPropsCached)
-			return map;
-		if (map == null) {
-			map = new HashMap<String, String>();
-			setPropertiesMap(map);
+		Map<String, String> smap = super.getProperties();
+		if (smap != null && isPropsCached)
+			return propmap;
+		propmap = super.getProperties();
+		if (propmap != null)
+			propmap = new HashMap<String, String>(smap);
+		if (propmap == null) {
+			propmap = new HashMap<String, String>();
+			setPropertiesMap(propmap);
 		}
 		getJRProperties();
 		if (!isPropsCached) {
@@ -371,18 +375,18 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 					continue;
 				String val = props.getProperty((String) key);
 				if (val != null)
-					map.put((String) key, val);
+					propmap.put((String) key, val);
 			}
 			isPropsCached = true;
 		}
 		pstore.setWithDefault(false);
-		for (String key : map.keySet()) {
+		for (String key : propmap.keySet()) {
 			String val = Misc.nullIfEmpty(pstore.getString(key));
 			if (val != null)
-				map.put(key, val);
+				propmap.put(key, val);
 		}
 		pstore.setWithDefault(true);
-		return map;
+		return propmap;
 	}
 
 	private boolean isPropsCached = false;
@@ -566,18 +570,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			return def;
 		return p;
 	}
-	
+
 	/**
-	 * Return the font extension both by resolving the property of the current
-	 * project and from the commons extension. If it is available instead of 
-	 * request the extension from the superclass it search it in the common
-	 * cache
+	 * Return the font extension both by resolving the property of the current project and from the commons extension. If
+	 * it is available instead of request the extension from the superclass it search it in the common cache
 	 * 
 	 * @return a not null font extension
 	 */
 	@SuppressWarnings("unchecked")
-	private List<FontFamily> getExtensionFonts(){
-		if (lst == null){
+	private List<FontFamily> getExtensionFonts() {
+		if (lst == null) {
 			lst = new ArrayList<FontFamily>();
 		}
 		if (refreshFonts) {
@@ -585,7 +587,8 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			if (strprop != null) {
 				lst.clear();
 				try {
-					List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this, new ByteArrayInputStream(strprop.getBytes()));
+					List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(this,
+							new ByteArrayInputStream(strprop.getBytes()));
 					if (fonts != null && !fonts.isEmpty()) {
 						for (FontFamily f : fonts)
 							if (f != null)
@@ -597,8 +600,9 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			}
 
 			List<FontFamily> superlist = (List<FontFamily>) ExtensionLoader.getSharedExtension(FontFamily.class);
-			//fallback if something in the cache goes wrong
-			if (superlist == null) superlist = super.getExtensions(FontFamily.class);
+			// fallback if something in the cache goes wrong
+			if (superlist == null)
+				superlist = super.getExtensions(FontFamily.class);
 			if (superlist != null) {
 				for (FontFamily f : superlist)
 					if (f != null)
@@ -611,19 +615,18 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	}
 
 	/**
-	 * Return the components extension both by resolving the property of the current
-	 * project and from the commons extension. If it is available instead of 
-	 * request the extension from the superclass it search it in the common
-	 * cache
+	 * Return the components extension both by resolving the property of the current project and from the commons
+	 * extension. If it is available instead of request the extension from the superclass it search it in the common cache
 	 * 
 	 * @return a not null components extension
 	 */
 	@SuppressWarnings("unchecked")
-	private List<ComponentsBundle> getExtensionComponents(){
+	private List<ComponentsBundle> getExtensionComponents() {
 		if (bundles == null || refreshBundles) {
-			bundles = (List<ComponentsBundle>)ExtensionLoader.getSharedExtension(ComponentsBundle.class);
-			//fallback if something in the cache goes wrong
-			if (bundles == null) bundles = super.getExtensions(ComponentsBundle.class);
+			bundles = (List<ComponentsBundle>) ExtensionLoader.getSharedExtension(ComponentsBundle.class);
+			// fallback if something in the cache goes wrong
+			if (bundles == null)
+				bundles = super.getExtensions(ComponentsBundle.class);
 			// remove all duplicates
 			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
 			bundles = new ArrayList<ComponentsBundle>(components);
@@ -639,25 +642,24 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return bundles;
 	}
-	
+
 	/**
-	 * Return the functions extension both by resolving the property of the current
-	 * project and from the commons extension. If it is available instead of 
-	 * request the extension from the superclass it search it in the common
-	 * cache
+	 * Return the functions extension both by resolving the property of the current project and from the commons
+	 * extension. If it is available instead of request the extension from the superclass it search it in the common cache
 	 * 
 	 * @return a not null functions extension
 	 */
 	@SuppressWarnings("unchecked")
-	private List<FunctionsBundle> getExtensionFunctions(){
+	private List<FunctionsBundle> getExtensionFunctions() {
 		if (functionsBundles == null || refreshFunctionsBundles) {
 			// We need to be sure that the resource bundles are fresh new
 			// NOTE: Let's use this for now as quick solution, in case of
 			// bad performances we'll have to fix this approach
 			ResourceBundle.clearCache(getClassLoader());
 			functionsBundles = (List<FunctionsBundle>) ExtensionLoader.getSharedExtension(FunctionsBundle.class);
-			//fallback if something in the cache goes wrong
-			if (functionsBundles == null) functionsBundles = super.getExtensions(FunctionsBundle.class);
+			// fallback if something in the cache goes wrong
+			if (functionsBundles == null)
+				functionsBundles = super.getExtensions(FunctionsBundle.class);
 			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
 			functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
 		}
@@ -670,16 +672,16 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 		List<T> result = null;
 		try {
-			if (classLoader != null){
+			if (classLoader != null) {
 				Thread.currentThread().setContextClassLoader(classLoader);
 			}
-			
+
 			if (extensionType == FontFamily.class) {
-				result = (List<T>)getExtensionFonts();
+				result = (List<T>) getExtensionFonts();
 			} else if (extensionType == ComponentsBundle.class) {
-				result = (List<T>)getExtensionComponents();
+				result = (List<T>) getExtensionComponents();
 			} else if (extensionType == FunctionsBundle.class) {
-				result = (List<T>)getExtensionFunctions();
+				result = (List<T>) getExtensionFunctions();
 			} else if (extensionType == MessageProviderFactory.class) {
 				if (messageProviderFactory == null || refreshMessageProviderFactory) {
 					messageProviderFactory = new ResourceBundleMessageProviderFactory(getClassLoader());
@@ -700,10 +702,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) repositoryServices;
 			} else {
 				try {
-					//The repository service is already cached by the superclass
-					if (extensionType != RepositoryService.class) result = (List<T>)ExtensionLoader.getSharedExtension(extensionType);
-					//fallback if was not able to get the extension from the cache
-					if (result == null) result = super.getExtensions(extensionType);
+					// The repository service is already cached by the superclass
+					if (extensionType != RepositoryService.class)
+						result = (List<T>) ExtensionLoader.getSharedExtension(extensionType);
+					// fallback if was not able to get the extension from the cache
+					if (result == null)
+						result = super.getExtensions(extensionType);
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -713,12 +717,12 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 		}
 		return result;
 	}
-	
-	/*private <T> List<T> getCachedExtension(Class<T> extensionType){
-		if (parent == DefaultJasperReportsContext.getInstance()){
-			Object cache = extensionCache.get(extensionType);
-			if (cache != null ) return (List<T>)parent;
-	}*/
+
+	/*
+	 * private <T> List<T> getCachedExtension(Class<T> extensionType){ if (parent ==
+	 * DefaultJasperReportsContext.getInstance()){ Object cache = extensionCache.get(extensionType); if (cache != null )
+	 * return (List<T>)parent; }
+	 */
 
 	private List<JRQueryExecuterFactoryBundle> qExecutors;
 	private Map<Object, Object> map;
