@@ -31,7 +31,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * 
  * @author Chicu Veaceslav
  */
-public class FrameFigure extends AHandleBoundsFigure {
+public class FrameFigure extends AHandleBoundsFigure implements IModelFigure {
 	
 	/**
 	 * The model associated with the figure

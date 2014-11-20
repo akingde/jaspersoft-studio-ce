@@ -28,7 +28,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 /*
  * The Class LineFigure.
  */
-public class LineFigure extends AHandleBoundsFigure {
+public class LineFigure extends AHandleBoundsFigure implements IModelFigure {
 
 	protected MGraphicElement model = null;
 	
@@ -117,5 +117,12 @@ public class LineFigure extends AHandleBoundsFigure {
 			return 0;
 		int offset = (int) Math.ceil(((double) jrPen.getLineWidth()) / 2)+1;
 		return offset;
+	}
+	
+	/**
+	 * Return the model associated to this figure, can be null
+	 */
+	public MGraphicElement getModel(){
+		return model;
 	}
 }

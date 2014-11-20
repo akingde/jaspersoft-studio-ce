@@ -149,8 +149,8 @@ public class ReportPageFigure extends APageFigure {
 		for (int i = 0; i < getChildren().size(); i++) {
 			IFigure child = (IFigure) getChildren().get(i);
 			boolean modelVisible = true;
-			if (child instanceof FrameFigure){
-				ANode model = ((FrameFigure)child).getModel();
+			if (child instanceof IModelFigure){
+				ANode model = ((IModelFigure)child).getModel();
 				if (model != null) {
 					modelVisible = model.isVisible();
 					child.setVisible(modelVisible);
