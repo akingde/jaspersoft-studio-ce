@@ -49,7 +49,7 @@ public class ImpSubreport extends AImpObject {
 					Object obj = JRLoader.loadObject(jrConfig, f);
 					if (obj != null && obj instanceof JasperReport) {
 						JasperReport jrReport = (JasperReport) obj;
-						f = getTmpFile(str);
+						f = FileUtils.getTmpFile(str);
 						FileOutputStream fos = null;
 						try {
 							fos = new FileOutputStream(f);

@@ -13,21 +13,15 @@
 package com.jaspersoft.studio.server.publish.imp;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.eclipse.ui.validator.IDStringValidator;
 import net.sf.jasperreports.eclipse.util.FileUtils;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.repo.RepositoryUtil;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -38,7 +32,6 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AImpObject {
@@ -48,11 +41,8 @@ public abstract class AImpObject {
 		this.jrConfig = jrConfig;
 	}
 
-	protected AFileResource findFile(MReportUnit mrunit,
-			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
-			JRDesignExpression exp, IFile file) {
-		String str = ExpressionUtil.cachedExpressionEvaluationString(exp,
-				jrConfig);
+	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset, JRDesignExpression exp, IFile file) {
+		String str = ExpressionUtil.cachedExpressionEvaluationString(exp, jrConfig);
 		if (str.startsWith("repo:"))
 			str = str.replaceFirst("repo:", "");
 		if (str == null || fileset.contains(str))
@@ -71,8 +61,7 @@ public abstract class AImpObject {
 		return null;
 	}
 
-	protected AFileResource addResource(IProgressMonitor monitor,
-			MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		if (rname.startsWith("repo:"))
@@ -95,8 +84,7 @@ public abstract class AImpObject {
 			rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 		}
 
-		AFileResource mres = (AFileResource) ResourceFactory.getResource(
-				mrunit, rd, -1);
+		AFileResource mres = (AFileResource) ResourceFactory.getResource(mrunit, rd, -1);
 		mres.setFile(f);
 		mres.setPublishOptions(popt);
 
@@ -104,55 +92,11 @@ public abstract class AImpObject {
 		return mres;
 	}
 
-	private static File tmpDir;
-
-	private static File getTempDir() {
-		if (tmpDir == null) {
-			try {
-				tmpDir = FileUtils.createTempDir();
-			} catch (IOException e) {
-				tmpDir = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
-			}
-		}
-		return tmpDir;
-	}
-
-	protected static File getTmpFile(String str) {
-		String fname = str;
-		int ind = str.lastIndexOf("/");
-		if (ind >= 0)
-			fname = fname.substring(ind + 1);
-		File f = new File(getTempDir(), fname);
-		f.deleteOnExit();
-		return f;
-	}
-
 	protected File findFile(IFile file, String str) {
-		try {
-			InputStream is = RepositoryUtil.getInstance(jrConfig)
-					.getInputStreamFromLocation(str);
-			if (is != null) {
-				File f = getTmpFile(str);
-				FileOutputStream fos = new FileOutputStream(f);
-				try {
-					IOUtils.copy(is, fos);
-					return f;
-				} finally {
-					FileUtils.closeStream(is);
-					FileUtils.closeStream(fos);
-				}
-			}
-		} catch (JRException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return FileUtils.findFile(file, str);
+		return FileUtils.findFile(file, str, jrConfig);
 	}
 
-	public AFileResource publish(JasperDesign jd, JRDesignElement img,
-			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
-			IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
 		return findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 	}
 
