@@ -1673,6 +1673,7 @@ public class Messages extends NLS {
 	public static String StudioPreferencePage_message1;
 	public static String StudioPreferencePage_message2;
 	public static String StudioPreferencePage_showCompDialog;
+	public static String StudioPreferencePage_TimestampOnSave;
 	public static String StudioPreferencePage_versionLabel;
 	public static String StyleEditPart_styleTemplatePrefix;
 	public static String StylesListSection_Inherited_From_Default_Style;

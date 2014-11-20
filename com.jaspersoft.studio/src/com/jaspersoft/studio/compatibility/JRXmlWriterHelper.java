@@ -108,7 +108,13 @@ public class JRXmlWriterHelper {
 			// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
 			String xml = new JRXmlWriter(jrContext).write(report, encoding);
 			// request Bug 37455 - [Case #48613] Simple jrxml timestamp on Save or Save As
-			String timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n";
+			// + community bug #3936 over-aggressive time stamp
+			String timestamp = "";
+			if(jrContext instanceof JasperReportsConfiguration) {
+				if(((JasperReportsConfiguration) jrContext).getPropertyBoolean(StudioPreferencePage.JSS_TIMESTAMP_ONSAVE, true)) {
+					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n";
+				}
+			}
 			// Replace with a more meaningful JR version
 			if(version.equals(LAST_VERSION)){
 				version = getInstalledJasperReportsVersion();
