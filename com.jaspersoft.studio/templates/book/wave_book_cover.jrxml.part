@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.qualifier using JasperReports Library version 6.0.0  -->
+<!-- 2014-11-20T10:25:08 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Wave Cover" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c50b24eb-eb33-413f-8e75-e7e20a5341fd">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="ireport.callouts" value="callouts.2.fg=0,0,0\ncallouts.1.text=You can dynamically specify a title\nby setting the default value of the\nBookTitle parameter, or transform\nthis text field in a static text.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncallouts.1.fg=0,0,0\n\n\n\n\ncallouts.2.text=You can dynamically specify a subtitle\nby setting the default value of the\nBookTitle parameter, or transform\nthis text field in a static text.\n\ncallouts.2.bg=255,255,0\ncallouts.2.bounds=650,330,219,70\ncallouts.1.pins=575,302\n\n\n\n\ncallouts.1.bounds=630,90,219,79\n\n\n\n\ncallouts.1.bg=255,255,0\n\n\n\n\ncallouts.2.pins=574,354\n"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="BookTitle" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Report Book Template"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BookSubTitle" class="java.lang.String">
+		<defaultValueExpression><![CDATA["A sample template of a ReportBook"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<title>
+		<band height="841" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="370" width="595" height="471" uuid="7d5f399a-cbec-48b3-979b-064c0b477ca2">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["wave.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement positionType="Float" x="43" y="270" width="534" height="54" forecolor="#8AA158" uuid="5bb49d37-ea51-4ca3-a18a-38cb0e66e0ee"/>
+				<box leftPadding="20" rightPadding="20"/>
+				<textElement textAlignment="Right">
+					<font size="34"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BookTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="43" y="330" width="534" height="30" uuid="7f58d454-cae0-4ebb-9ccd-c885124eb525"/>
+				<box leftPadding="20" rightPadding="20"/>
+				<textElement textAlignment="Right">
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BookSubTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="343" y="803" width="234" height="30" uuid="38fc9afd-edcb-42f3-b6bc-cd258f6507b3"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed on " + DATEFORMAT(TODAY( ),"E MMM d, yyyy")]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

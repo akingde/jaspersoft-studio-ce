@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.0.qualifier using JasperReports Library version 5.6.2  -->
-<!-- 2014-10-28T18:43:34 -->
+<!-- Created with Jaspersoft Studio version 6.0.0.qualifier using JasperReports Library version 6.0.0  -->
+<!-- 2014-11-20T09:48:08 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="typewriter_book_cover" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c50b24eb-eb33-413f-8e75-e7e20a5341fd">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -17,19 +17,19 @@
 		<defaultValueExpression><![CDATA["Report Book Template"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="BookSubTitle" class="java.lang.String">
-		<defaultValueExpression><![CDATA["A sample template of a JasperBook"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["A sample template of a ReportBook"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<title>
 		<band height="841" splitType="Stretch">
-			<image>
-				<reportElement x="0" y="0" width="595" height="841" uuid="7d5f399a-cbec-48b3-979b-064c0b477ca2">
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="230" width="595" height="540" uuid="7d5f399a-cbec-48b3-979b-064c0b477ca2">
 					<property name="local_mesure_unitx" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
-				<imageExpression><![CDATA["typewriter.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["abstract.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement positionType="Float" mode="Opaque" x="60" y="94" width="534" height="54" forecolor="#FFFFFF" backcolor="#000000" uuid="5bb49d37-ea51-4ca3-a18a-38cb0e66e0ee"/>
