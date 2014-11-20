@@ -69,6 +69,10 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRBookDesignEditor extends AGraphicEditor {
 
+	/**
+	 * Listener to model change, used to set the dirty flag on the reprot
+	 * when something changes
+	 */
 	private PropertyChangeListener modelChangesListener;
 	
 	/**
@@ -128,6 +132,19 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
+		ScrollingGraphicalViewer viewer = new ScrollingGraphicalViewer();
+		viewer.createControl(parent).setLayoutData(new GridData(GridData.FILL_BOTH));
+		setGraphicalViewer(viewer);
+		configureGraphicalViewer();
+		hookGraphicalViewer();
+		initializeGraphicalViewer();
+	}
+	
+	/**
+	 * Create the editor part, so the toolbar and graphical viewer
+	 */
+	@Override
+	public void createPartControl(Composite parent) {
 		GridLayout containerLayout = new GridLayout(1, false);
 		containerLayout.verticalSpacing = 0;
 		containerLayout.horizontalSpacing = 0;
@@ -136,13 +153,15 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(containerLayout);
+		
+		//Create the toolbar
 		createToolBar(container);
-		ScrollingGraphicalViewer viewer = new ScrollingGraphicalViewer();
-		viewer.createControl(container).setLayoutData(new GridData(GridData.FILL_BOTH));
-		setGraphicalViewer(viewer);
-		configureGraphicalViewer();
-		hookGraphicalViewer();
-		initializeGraphicalViewer();
+		
+		//Create the viewer
+		createGraphicalViewer(container);
+		
+		//Initialize the toolabar
+		initializedToolBar();
 	}
 	
 	/**
@@ -163,11 +182,19 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		
 		GridData additionalToolbarGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		additionalToolbar.setLayoutData(additionalToolbarGD);
-		ActionRegistry registry = getActionRegistry();		
+	}
+	
+	/**
+	 * Insert the content inside the toolbar, it must be created beofre trough
+	 * the createToolBar method
+	 */
+	private void initializedToolBar(){	
 		for(AContributorAction contAction : m.getActions()){
 			createToolBarButton(contAction);
+			contAction.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
 		}
 		createToolBarButton(new Separator());
+		ActionRegistry registry = getActionRegistry();	
 		createToolBarButton(registry.getAction(BookDatasetAction.ID));
 		createToolBarButton(registry.getAction(BookCompileAction.ID));
 	}
@@ -308,6 +335,7 @@ public class JRBookDesignEditor extends AGraphicEditor {
 		
 		getGraphicalViewer().addDropTargetListener(new ResourceTransferDropTargetListener(getGraphicalViewer()));
 		getGraphicalViewer().setContextMenu(createContextMenuProvider(getGraphicalViewer()));
+		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}
 	
 	@Override
