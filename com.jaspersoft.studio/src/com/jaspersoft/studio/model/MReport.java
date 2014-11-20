@@ -564,6 +564,8 @@ public class MReport extends MLockableRefresh implements IGraphicElement, IConta
 			this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
 		} else 	if(id.equals(PROPERY_CREATE_BOOKMARKS)){
 			 jrDesign.getPropertiesMap().setProperty(JR_CREATE_BOOKMARKS, Boolean.toString((Boolean)value));
+			 //Necessary event to made the properties view update correctly, removing the old map from the entry widget
+			 this.getPropertyChangeSupport().firePropertyChange(MGraphicElement.PROPERTY_MAP, false, true);
 		}
 	}
 
