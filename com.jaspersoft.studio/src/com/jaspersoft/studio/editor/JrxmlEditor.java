@@ -47,6 +47,9 @@ public class JrxmlEditor extends AbstractJRXMLEditor implements IJROBjectEditor,
 	
 	/** The text editor used in page 0. */
 	private ReportContainer reportContainer;
+	
+	/** The Editor ID */
+	public static final String JRXML_EDITOR_ID = "com.jaspersoft.studio.editor.JrxmlEditor"; //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)

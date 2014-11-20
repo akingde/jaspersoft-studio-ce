@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.book.BookUtils;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.ResourceFactory;
@@ -170,6 +171,8 @@ public class OpenInEditorAction extends Action {
 	}
 
 	private void openEditor(final IFile f) {
+		// FIXME - temporary fix to handle the case of opening a book from JRS
+		BookUtils.checkFileResourceForDefaultEditor(f);
 		if (!openInEditor)
 			return;
 		UIUtils.getDisplay().asyncExec(new Runnable() {

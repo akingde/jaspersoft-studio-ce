@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentDescription;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.ide.IDE;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -43,7 +44,7 @@ public class BookUtils {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for(IProject proj : projects) {
 			if(proj.isOpen() && proj.hasNature(JasperReportsNature.NATURE_ID)) {
-				checkContainerMembers(proj);
+				checkContainerMembersForDefaultEditor(proj);
 			}
 		}
 	}
@@ -52,26 +53,29 @@ public class BookUtils {
 	 * Verifies the children of a generic resource if they can be
 	 * book reports.
 	 */
-	private static void checkContainerMembers(IContainer resource)
+	private static void checkContainerMembersForDefaultEditor(IContainer resource)
 			throws CoreException {
 		IResource[] members = resource.members();
 		for(IResource r : members) {
 			if(r instanceof IFile) {
-				checkFileResource((IFile) r);
+				checkFileResourceForDefaultEditor((IFile) r);
 			}
 			else if (r instanceof IContainer) {
-				checkContainerMembers((IContainer) r);				
+				checkContainerMembersForDefaultEditor((IContainer) r);				
 			}
 		}
 	}
 
-	/*
+	/**
 	 * Checks the specified file and if necessary sets the default editor information.
+	 * 
+	 * @param fileResource the file to be checked
 	 */
-	private static void checkFileResource(IFile fileResource) {
+	public static void checkFileResourceForDefaultEditor(IFile fileResource) {
 		String fileExtension = fileResource.getFileExtension();
-		if("jrxml".equals(fileExtension) && 
-				!JRBookEditor.BOOK_EDITOR_ID.equals(IDE.getDefaultEditor(fileResource).getId())) {
+		IEditorDescriptor defaultEditor = IDE.getDefaultEditor(fileResource);
+		if("jrxml".equals(fileExtension) && defaultEditor!=null && 
+				!JRBookEditor.BOOK_EDITOR_ID.equals(defaultEditor.getId())) {
 			if(BookUtils.isValidJRBook(fileResource)) {
 				IDE.setDefaultEditor(fileResource, JRBookEditor.BOOK_EDITOR_ID);
 			}
