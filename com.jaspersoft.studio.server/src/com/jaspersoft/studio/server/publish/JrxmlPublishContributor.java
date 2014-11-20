@@ -24,16 +24,13 @@ import java.util.Set;
 import net.sf.jasperreports.data.DataAdapterParameterContributorFactory;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.part.PartComponent;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -120,33 +117,21 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				file, version);
 	}
 
-	protected void publishParts(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, Set<String> fileset, IFile file, String version)
-			throws Exception {
-		List<JRPart> parts = ModelUtils.getAllPartElements(jasper);
-		if (parts == null)
-			return;
-		for (JRPart rt : parts) {
-			PartComponent p = rt.getComponent();
-			if (p != null && p instanceof SubreportPartComponent) {
-				Map<File, IFile> files = PartUtils.getSubreportsFromParts(
-						jrConfig, jasper, false, monitor);
-				for (IFile f : files.values()) {
-					JasperDesign jd = readJR(f);
-					if (jd != null) {
-						MJrxml fres = impJRXML.publish(mrunit, monitor, jd,
-								jrConfig);
-						if (fres == null)
-							return;
-						fres.setJd(jd);
-						publishJrxml(fres, monitor, jd, fileset, f);
-						File ftmp = FileUtils
-								.createTempFile("jrsres", ".jrxml");
-						FileUtils.writeFile(ftmp, JRXmlWriterHelper
-								.writeReport(jrConfig, jd, version));
-						fres.setFile(ftmp);
-					}
-				}
+	protected void publishParts(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, String version) throws Exception {
+		Map<File, IFile> files = PartUtils.getSubreportsFromParts(jrConfig, jasper, false, monitor);
+		for (IFile f : files.values()) {
+			JasperDesign jd = readJR(f);
+			if (jd != null) {
+				MJrxml fres = impJRXML.publish(mrunit, monitor, jd,jrConfig);
+				if (fres == null)
+					return;
+				fres.setJd(jd);
+				publishJrxml(fres, monitor, jd, fileset, f);
+				File ftmp = FileUtils
+						.createTempFile("jrsres", ".jrxml");
+				FileUtils.writeFile(ftmp, JRXmlWriterHelper
+						.writeReport(jrConfig, jd, version));
+				fres.setFile(ftmp);
 			}
 		}
 	}
@@ -278,6 +263,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		impImg = new ImpImage(jrConfig);
 		impSRP = new ImpSubreport(jrConfig);
 		impIC = new ImpInputControls(jrConfig);
+		impJRXML = new ImpJRXML(jrConfig);
 	}
 
 	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
