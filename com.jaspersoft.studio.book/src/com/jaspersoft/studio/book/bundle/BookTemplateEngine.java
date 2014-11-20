@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.book.bundle;
 
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
@@ -8,6 +9,7 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.part.PartComponent;
@@ -32,6 +34,7 @@ import com.jaspersoft.templates.TemplateEngineException;
 public class BookTemplateEngine extends DefaultTemplateEngine {
 
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public ReportBundle generateReportBundle(TemplateBundle template,
 			Map<String, Object> settings, JasperReportsContext jContext)
@@ -93,6 +96,18 @@ public class BookTemplateEngine extends DefaultTemplateEngine {
 		else
 		{
 			setPartExpression(part, "\"" + templateBaseName + "_backcover.jasper\"");
+		}
+		
+		List<Object> fields = (List<Object>) settings.get(FIELDS);
+		if (fields != null){
+			for (Object obj : fields) {
+				JRDesignField f = (JRDesignField) obj;
+				try {
+					jdCopy.addField(f);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		

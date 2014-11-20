@@ -18,8 +18,17 @@ import com.jaspersoft.studio.model.ANode;
  * @author Chicu Veaceslav
  */
 public class PropertyDTO implements Cloneable {
+	
 	private ANode pnode;
-
+	
+	private String property;
+	
+	private String description;
+	
+	private Object defValue;
+	
+	private Object value;
+	
 	public ANode getPnode() {
 		return pnode;
 	}
@@ -44,11 +53,6 @@ public class PropertyDTO implements Cloneable {
 		this.property = property;
 		this.value = value;
 	}
-
-	private String property;
-	private String description;
-	private Object defValue;
-	private Object value;
 
 	public Object getValue() {
 		return value;
@@ -83,7 +87,10 @@ public class PropertyDTO implements Cloneable {
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public PropertyDTO clone() {
+		PropertyDTO clone = new PropertyDTO(property, description, defValue);
+		clone.setValue(value);
+		clone.setPnode(pnode);
+		return clone;
 	}
 }

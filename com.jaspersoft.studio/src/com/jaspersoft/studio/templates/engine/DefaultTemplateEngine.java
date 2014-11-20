@@ -71,8 +71,7 @@ public class DefaultTemplateEngine implements TemplateEngine {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings,
-			JasperReportsContext jContext) throws TemplateEngineException {
+	public ReportBundle generateReportBundle(TemplateBundle template, Map<String, Object> settings, JasperReportsContext jContext) throws TemplateEngineException {
 
 		JasperDesign jdCopy = null;
 		try {
@@ -92,9 +91,6 @@ public class DefaultTemplateEngine implements TemplateEngine {
 		createSortFields = sortFieldsValue != null ? (Boolean)sortFieldsValue : false; 
 		if (dataset != null) {
 			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
-
-			System.out.println("Query: " + dataset.getQuery().getText()); //$NON-NLS-1$
-
 			for (JRField f : dataset.getFields()) {
 				try {
 					jdCopy.getMainDesignDataset().addField(f);

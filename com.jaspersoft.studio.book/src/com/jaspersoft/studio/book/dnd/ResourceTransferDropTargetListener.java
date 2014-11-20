@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.book.dnd;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 				IFile file = (IFile)resource;
 				String fileName = file.getName().toLowerCase();
 				if (fileName.endsWith(".jrxml") || fileName.endsWith(".jasper")){
-					readElements.add("\""+file.getRawLocation().makeAbsolute().toPortableString()+"\"");
+					readElements.add(file.getRawLocation().makeAbsolute().toPortableString());
 				}
 			}
 		}
@@ -107,7 +108,9 @@ public class ResourceTransferDropTargetListener extends AbstractTransferDropTarg
 		CompoundCommand cc = new CompoundCommand();
 		for(int i = readElements.size()-1; i>-1; i--){
 			String readElement = readElements.get(i);
-			CreatePartAfterCommand createCommand = new CreatePartAfterCommand(modelContainer, MReportPart.createJRElement(new JRDesignExpression(readElement)), afterPart);
+			File fileElement = new File(readElement);
+			JRDesignExpression partExptession = new JRDesignExpression("\""+fileElement.getName()+"\"");
+			CreatePartAfterCommand createCommand = new CreatePartAfterCommand(modelContainer, MReportPart.createJRElement(partExptession), afterPart);
 			cc.add(createCommand);
 		}
 		return cc;

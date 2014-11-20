@@ -67,16 +67,11 @@ public class JRPropertyExpressionPage extends JSSHelpWizardPage {
 			PropertyDTO v = (PropertyDTO) input.get(pos);
 			if (v == null)
 				return;
-			try {
-				v = (PropertyDTO) v.clone();
+				v =  v.clone();
 				JRPropertyExpressionDialog dialog = new JRPropertyExpressionDialog(Display.getDefault().getActiveShell());
-
 				dialog.setValue(v);
 				if (dialog.open() == Window.OK)
 					input.set(pos, v);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
