@@ -306,16 +306,16 @@ public class Soap2Rest {
 		cr.setVisible(rd.isVisible());
 
 		cr.setType(rd.getControlType());
-		cr.setValueColumn(rd.getQueryValueColumn());
-		if (rd.getQueryVisibleColumns() != null)
-			cr.setVisibleColumns(Arrays.asList(rd.getQueryVisibleColumns()));
 		List<ResourceDescriptor> children = rd.getChildren();
 		for (ResourceDescriptor r : children) {
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_LOV))
 				cr.setListOfValues((ClientReferenceableListOfValues) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
+			else if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) {
 				cr.setQuery((ClientReferenceableQuery) getResourceContainer(rc, r));
-			else if (r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
+				cr.setValueColumn(rd.getQueryValueColumn());
+				if (rd.getQueryVisibleColumns() != null)
+					cr.setVisibleColumns(Arrays.asList(rd.getQueryVisibleColumns()));
+			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
 				cr.setDataType((ClientReferenceableDataType) getResourceContainer(rc, r));
 		}
 	}
