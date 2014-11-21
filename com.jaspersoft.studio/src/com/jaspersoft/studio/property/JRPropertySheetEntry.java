@@ -26,7 +26,6 @@ import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 
@@ -301,13 +300,8 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 				isRefresh = false;
 			} else {
 				// I am the root entry
-				Display.getCurrent().asyncExec(new Runnable() {
-
-					public void run() {
-						stack.execute(command);
-						isRefresh = false;
-					}
-				});
+				stack.execute(command);
+				isRefresh = false;
 			}
 		}
 	}
