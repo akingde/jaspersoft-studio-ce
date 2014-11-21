@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Data Adapters
 Bundle-SymbolicName: com.jaspersoft.studio.data;singleton:=true
-Bundle-Version: 6.0.0.qualifier
+Bundle-Version: 6.0.0.final
 Bundle-Activator: com.jaspersoft.studio.data.Activator
 Bundle-Vendor: TIBCO Software Inc.
 Require-Bundle: com.jaspersoft.studio;bundle-version="6.0.0";visibility:=reexport,

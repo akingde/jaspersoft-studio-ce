@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReport Components
 Bundle-SymbolicName: com.jaspersoft.studio.components; singleton:=true
-Bundle-Version: 6.0.0.qualifier
+Bundle-Version: 6.0.0.final
 Bundle-Localization: plugin
 Bundle-Activator: com.jaspersoft.studio.components.Activator
 Bundle-Vendor: TIBCO Software Inc.

@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio feature"
-      version="6.0.0.qualifier"
+      version="6.0.0.final"
       provider-name="TIBCO Software Inc."
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"

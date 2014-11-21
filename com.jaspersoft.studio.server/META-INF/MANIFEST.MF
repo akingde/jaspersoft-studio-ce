@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JasperReports Server Integration
 Bundle-SymbolicName: com.jaspersoft.studio.server;singleton:=true
-Bundle-Version: 6.0.0.qualifier
+Bundle-Version: 6.0.0.final
 Bundle-Activator: com.jaspersoft.studio.server.Activator
 Bundle-Localization: plugin
 Bundle-Vendor: TIBCO Software Inc.

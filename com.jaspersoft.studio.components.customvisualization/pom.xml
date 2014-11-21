@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.jaspersoft.studio.community-edition</groupId>
 		<artifactId>plugins</artifactId>
-		<version>6.0.0-SNAPSHOT</version>
+		<version>6.0.0.final</version>
 		<relativePath>../aggregator/plugins/</relativePath>
 	</parent>
 
 	<groupId>com.jaspersoft.studio.community-edition</groupId>
 	<artifactId>com.jaspersoft.studio.components.customvisualization</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>6.0.0-SNAPSHOT</version>
+	<version>6.0.0.final</version>
 </project> 
