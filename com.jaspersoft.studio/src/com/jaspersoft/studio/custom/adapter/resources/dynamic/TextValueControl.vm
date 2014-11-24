@@ -1,0 +1,6 @@
+		new Label(this, SWT.NONE).setText("$controlLabel");
+		Text $controlName = new Text(this, SWT.BORDER);
+		${controlName}.setData(BIND_KEY, "$bindName");
+		${controlName}.setData(TYPE_KEY, "string");
+		${controlName}.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		generatedControls.add($controlName);

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.jaspersoft.studio.rcp.intro.Application">
+         </run>
+      </application>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="com.jaspersoft.studio.rcp.intro">
+      </intro>
+      <introProductBinding
+            introId="com.jaspersoft.studio.rcp.intro"
+            productId="com.jaspersoft.studio.rcp.product">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            introId="com.jaspersoft.studio.rcp.intro"
+            content="introContent.xml"
+            id="com.jaspersoft.studio.rcp.configId">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.configExtension">
+      
+      <action
+            name="getstarted"
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.CloseIntroPartAction">
+      </action>
+      
+      <action
+            name="learnmore"
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/project/jaspersoft-studio/resources">
+      </action>
+      
+      <action
+            name="collaborate"
+             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=community.jaspersoft.com/answers">
+      </action>
+		      
+		      
+      <!-- twitter.com/#!/JaspersoftS -->
+      <action
+            name="jaspersofttwitter"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;enc=base64&amp;csid=dHdpdHRlci5jb20vIyEvSmFzcGVyc29mdFMK">
+      </action>
+      <action
+            name="jaspersoftserver"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jasperserver">
+      </action>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.jaspersoft.studio.rcp.Startup"></startup>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.jaspersoft.studio.rcp.application"
+            name="TIBCO Jaspersoft&#xAE; Studio">
+         <property
+               name="windowImages"
+               value="icons/jss_icon_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
+         </property>
+         <property
+               name="aboutText"
+               value="TIBCO Jaspersoft&#xAE; Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://community.jaspersoft.com/project/jaspersoft-studio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/studio_logo_about.png">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FFFFFF">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="0,215,575,10">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="0,195,575,20">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="appName"
+               value="TIBCO Jaspersoft Studio">
+         </property>
+      </product>
+   </extension>
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:window">
+         <menu
+               id="com.jaspersoft.studio.switchlanguage.menus"
+               label="%menu.switchlanguage.label"
+               mnemonic="%menu.switchlanguage.mnemonic">
+            <command
+                  commandId="com.jaspersoft.studio.switchlanguage.command"
+                  icon="icons/language/us.png"
+                  id="com.jaspersoft.studio.switchlanguage.menus.english"
+                  label="%command.switchlanguage.english.label"
+                  style="toggle">
+               <parameter
+                     name="com.jaspersoft.studio.switchlanguage.locale"
+                     value="en_EN">
+               </parameter>
+            </command>
+            <command
+                  commandId="com.jaspersoft.studio.switchlanguage.command"
+                  icon="icons/language/it.png"
+                  id="com.jaspersoft.studio.switchlanguage.menus.italian"
+                  label="%command.switchlanguage.italian.label"
+                  style="toggle">
+               <parameter
+                     name="com.jaspersoft.studio.switchlanguage.locale"
+                     value="it_IT">
+               </parameter>
+            </command>
+         </menu>
+      </menuContribution>
+   	<menuContribution
+    	allPopups="false"
+        locationURI="toolbar:org.eclipse.ui.main.toolbar">
+		<toolbar
+        	id="com.jaspersoft.studio.rcp.jssToolbar"
+            label="%toolbar.jss.label">
+		    <command
+	            commandId="com.jaspersoft.studio.commands.ReportNewWizard"
+	            id="com.jaspersoft.studio.rcp.newreport"
+	            label="%command.wizard.newreport.label"
+	            style="push"
+	            icon="icons/toolbar/jrxml_icon.png"
+	            tooltip="%command.wizard.newreport.label">
+		 	        <visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>
+		    </command>
+		   	<command
+	            commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
+	            id="com.jaspersoft.studio.rcp.newdataadapter"
+	            label="%command.wizard.newdataadapter.label"
+	            style="push"
+	            icon="icons/toolbar/data_source.png"
+	            tooltip="%command.wizard.newdataadapter.label">
+		 	        <visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>		       
+		    </command>
+		   	<command
+	            commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
+	            id="com.jaspersoft.studio.rcp.newstyletemplate"
+	            label="%command.wizard.newstyletemplate.label"
+	            style="push"
+	            icon="icons/toolbar/jasperreports_jrtx.png"
+	            tooltip="%command.wizard.newstyletemplate.label">
+		 	        <visibleWhen checkEnabled="false">
+		                <with variable="activeWorkbenchWindow.activePerspective">
+		                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+		            	</with>
+				    </visibleWhen>	
+		    </command>
+         </toolbar>
+	</menuContribution>
+	</extension>
+	<extension
+ point="org.eclipse.ui.preferencePages">
+<page
+      category="org.eclipse.ui.preferencePages.Workbench"
+      class="org.eclipse.ui.activities.ActivitiesPreferencePage"
+      id="org.eclipse.sdk.capabilities"
+      name="%page.capabilities.name">
+   <keywordReference
+         id="com.jaspersoft.studio.rcp.javadevelopment">
+   </keywordReference>
+</page>
+</extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <category
+            description="%category.programming.description"
+            id="com.jaspersoft.studio.rcp.development"
+            name="%category.programming.name">
+      </category>
+      <activity
+            description="%activity.javadevel.description"
+            id="com.jaspersoft.studio.rcp.javadevelopment"
+            name="%activity.javadevel.name">
+      </activity>
+      <categoryActivityBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            categoryId="com.jaspersoft.studio.rcp.development">
+      </categoryActivityBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaHierarchyPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaBrowsingPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.debug.ui/org.eclipse.debug.ui.DebugPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.debug.ui/org.eclipse.debug.ui.*View">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.jdt.debug.ui/*DisplayView">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.*View">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.callhierarchy.view*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.TypeHierarchy">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.debug.ui/org.eclipse.jdt.debug.ui.DisplayView">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org\.eclipse\.jdt\.debug\.ui/.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org\.eclipse\.debug\..*/.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org\.eclipse\.jdt\.ui/.*Wizard*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.ide/org.eclipse.ui.wizards.new.project">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaSearchResultPage">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaSearchPage">
+      </activityPatternBinding>
+   </extension>
+   
+   <!-- P2 Update/Install stuff -->
+   <extension 
+   		id="preferences" point="org.eclipse.core.runtime.preferences" name="%preferences">
+		<initializer class="com.jaspersoft.studio.rcp.p2.PreferenceInitializer"/>
+   </extension>
+   <!--
+   <extension
+     point="org.eclipse.ui.installationPages">
+      <page
+        name="%installedSoftwarePage"
+        class="org.eclipse.equinox.p2.ui.InstalledSoftwarePage"
+        id="com.jaspersoft.studio.rcp.pages.InstalledSoftwarePage">
+      </page>
+      <page
+        name="%installHistoryPage"
+        class="org.eclipse.equinox.p2.ui.RevertProfilePage"
+        id="com.jaspersoft.studio.rcp.pages.RevertProfilePage">
+      </page>
+   </extension>
+   -->
+   <extension point="org.eclipse.ui.commands">
+   	  <category name="%category.languages.name" id="com.jaspersoft.studio.switchlanguage.category">
+      </category>
+      <command
+            categoryId="com.jaspersoft.studio.switchlanguage.category"
+            id="com.jaspersoft.studio.switchlanguage.command"
+            name="%command.languages.name">
+         <commandParameter
+               id="com.jaspersoft.studio.switchlanguage.locale"
+               name="%commandParameter.languages.name"
+               optional="true">
+         </commandParameter>
+      </command>
+   <!--   
+
+      <command
+            name="%Update.command"
+            id="com.jaspersoft.studio.rcp.command.update">
+      </command>
+      <command
+            name="%Install.command"
+            id="com.jaspersoft.studio.rcp.command.install">
+      </command> -->
+   </extension>
+   
+
+   <extension point="org.eclipse.ui.handlers">
+   	    <handler
+            class="com.jaspersoft.studio.rcp.handlers.SwitchLanguageHandler"
+            commandId="com.jaspersoft.studio.switchlanguage.command">
+        </handler>
+         <!--  
+      <handler
+            commandId="com.jaspersoft.studio.rcp.command.update"
+            class="com.jaspersoft.studio.rcp.p2.UpdateHandler">
+      </handler>
+      <handler
+            commandId="com.jaspersoft.studio.rcp.command.install"
+            class="com.jaspersoft.studio.rcp.p2.InstallNewSoftwareHandler">
+      </handler>-->
+   </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <sourceProvider
+            provider="com.jaspersoft.studio.rcp.handlers.LocaleSourceProvider">
+         <variable
+               name="actual_locale"
+               priorityLevel="activeWorkbenchWindow">
+         </variable>
+      </sourceProvider>
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.babel.editor.resourceInput">
+      <input
+            class="com.jaspersoft.studio.rcp.messages.ResourcePublisher">
+      </input>
+   </extension>
+
+</plugin>

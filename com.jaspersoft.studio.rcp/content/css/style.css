@@ -1,0 +1,97 @@
+
+html {
+	  background: url("../images/background.png") no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;	
+}
+
+.icons {
+	max-width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10%;	
+}
+
+
+.widget span.collaborate {
+	display: block;
+	height: 256px;
+	background-image: url('../images/collaborate.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+
+.widget span.learn {
+	display: block;
+	height: 256px;
+	background-image: url('../images/learn.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+.widget span.getstarted {
+	display: block;
+	height: 256px;
+	background-image: url('../images/pen.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+.widget {
+	float: left;
+	width: 33%;
+	text-align: center;
+	color: white;
+	font: 20px/1em 'Century Gothic','Avant Garde','Helvetica';
+	text-shadow: 2px 2px 3px #444;
+	font-weight: 200;
+	color: #FFF;
+    cursor: pointer;
+}
+
+.postAnim {
+	transition: 0.2s ease-in-out;
+}
+
+.widget .glyphicons:hover {
+	transition: 0.2s ease-in-out;
+}
+
+.hidden {
+	display: none;
+}
+
+.postAnim:hover {
+	opacity: 1;
+	margin-top: -10px;
+	color: #FFF;
+	-webkit-transform: scale(1.5);
+        transform: scale(1.5);
+}
+
+
+
+
+#title {
+	padding-top: 20px;
+	text-align: center;
+}
+
+#wrapper {
+	text-align: center;
+}
+
+a {
+	color: white;
+	text-decoration: none;
+}
+
+.widget a {
+	display: block;
+	position: relative;
+}
+
+
