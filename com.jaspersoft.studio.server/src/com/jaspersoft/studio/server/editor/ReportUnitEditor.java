@@ -140,6 +140,17 @@ public class ReportUnitEditor extends PreviewJRPrint implements IRunReport, IPar
 
 		sashform.setWeights(new int[] { 100, 150 });
 	}
+	
+	@Override
+	public String getTitleToolTip() {
+		if(reportUnitURI!=null) {
+			int lastPartIndex = reportUnitURI.lastIndexOf(":"); //$NON-NLS-1$
+			if(lastPartIndex!=-1){
+				return reportUnitURI.substring(0, lastPartIndex);
+			}
+		}
+		return super.getTitleToolTip();
+	}
 
 	protected void createLeft(Composite parent, SashForm sf) {
 		Composite leftComposite = new Composite(sf, SWT.BORDER);
