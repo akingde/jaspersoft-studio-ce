@@ -33,6 +33,7 @@ import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -56,7 +57,7 @@ public class HttpUtils {
 		CredentialsProvider cp = (CredentialsProvider) clientConfig.getProperty(ApacheClientProperties.CREDENTIALS_PROVIDER);
 		for (IProxyData d : proxyService.select(uri)) {
 			cp.setCredentials(new AuthScope(new HttpHost(d.getHost(), d.getPort())), getCredentials(d));
-			clientConfig.property(ApacheClientProperties.PROXY_URI, d.getHost());
+			clientConfig.property(ClientProperties.PROXY_URI, d.getHost());
 			break;
 		}
 		clientConfigs.put(clientConfig, uri);
@@ -103,7 +104,7 @@ public class HttpUtils {
 
 	public static IProxyService getProxyService() {
 		BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
-		ServiceReference<?> serviceReference = bc.getServiceReference(IProxyService.class.getName());
+		ServiceReference  serviceReference = bc.getServiceReference(IProxyService.class.getName());
 		IProxyService service = (IProxyService) bc.getService(serviceReference);
 		service.addProxyChangeListener(new IProxyChangeListener() {
 

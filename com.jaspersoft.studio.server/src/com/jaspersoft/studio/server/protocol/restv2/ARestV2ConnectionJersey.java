@@ -33,9 +33,9 @@ import com.jaspersoft.studio.server.protocol.IConnection;
 
 public abstract class ARestV2ConnectionJersey extends ARestV2Connection {
 	protected WebTarget target;
-	protected JSSApacheConnector connector;
+	protected JSSApacheConnectorFactory connector;
 
-	public JSSApacheConnector getConnector() {
+	public JSSApacheConnectorFactory getConnector() {
 		return connector;
 	}
 

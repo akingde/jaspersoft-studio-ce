@@ -35,10 +35,13 @@ import javax.ws.rs.core.Response;
 import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
+import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
@@ -90,9 +93,10 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 
+	private BasicCookieStore cookieStore;
+
 	@Override
-	public boolean connect(IProgressMonitor monitor, ServerProfile sp)
-			throws Exception {
+	public boolean connect(IProgressMonitor monitor, ServerProfile sp) throws Exception {
 		monitor.subTask("Trying RESTv2");
 		super.connect(monitor, sp);
 		this.eh = new RESTv2ExceptionHandler(this);
@@ -102,12 +106,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		// values are in milliseconds
 		// clientConfig.property(ClientProperties.READ_TIMEOUT,
 		// sp.getTimeout());
-		clientConfig
-				.property(ClientProperties.CONNECT_TIMEOUT, sp.getTimeout());
+		clientConfig.property(ClientProperties.CONNECT_TIMEOUT, sp.getTimeout());
 		if (sp.isChunked())
 			clientConfig.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024);
-		clientConfig.property(
-				ApacheClientProperties.PREEMPTIVE_BASIC_AUTHENTICATION, true);
+		clientConfig.property(ApacheClientProperties.PREEMPTIVE_BASIC_AUTHENTICATION, true);
 
 		// config your ssl for apache connector
 		SslConfigurator sslConfig = SslConfigurator.newInstance(true);
@@ -118,12 +120,17 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		cxMgr.setDefaultMaxPerRoute(20);
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, cxMgr);
 
-		connector = new JSSApacheConnector(clientConfig);
-		clientConfig.connector(connector);
+		connector = new JSSApacheConnectorFactory();
+		clientConfig.connectorProvider(connector);
+	
+		cookieStore = new BasicCookieStore();
+		HttpClients.custom().setDefaultCookieStore(cookieStore);
+
+		// clientConfig.connector(connector);
 		HttpUtils.setupProxy(clientConfig, sp.getURL().toURI());
 
-		Client client = ClientBuilder.newBuilder().withConfig(clientConfig)
-				.build();
+		Client client = ClientBuilder.newBuilder().withConfig(clientConfig).build();
+//		client.register(new org.glassfish.jersey.filter.LoggingFilter());
 		// client.register(JacksonFeature.class);
 		// String user = sp.getUser();
 		// if (!Misc.isNullOrEmpty(sp.getOrganisation()))
@@ -145,8 +152,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				target = target.queryParam("ticket", token);
 			} else {
 				target = target.queryParam("j_username", sp.getUser());
-				target = target.queryParam("j_password",
-						Pass.getPass(sp.getPass()));
+				target = target.queryParam("j_password", Pass.getPass(sp.getPass()));
 			}
 			target = target.queryParam("orgId", sp.getOrganisation());
 			if (!Misc.isNullOrEmpty(sp.getLocale()))
@@ -161,8 +167,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			target = client.target(IDN.toASCII(url + SUFFIX));
 		}
 		getServerInfo(monitor);
-		return serverInfo != null
-				&& serverInfo.getVersion().compareTo("5.5") >= 0;
+		return serverInfo != null && serverInfo.getVersion().compareTo("5.5") >= 0;
 	}
 
 	@Override
@@ -170,23 +175,18 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		if (serverInfo != null)
 			return serverInfo;
 		Builder req = target.path("serverInfo").request();
-		serverInfo = toObj(connector.get(req, monitor), ServerInfo.class,
-				monitor);
+		serverInfo = toObj(connector.get(req, monitor), ServerInfo.class, monitor);
 		if (serverInfo != null) {
-			serverInfo
-					.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat())
-							.toPattern());
+			serverInfo.setTimeFormatPattern(((SimpleDateFormat) getTimeFormat()).toPattern());
 			dateFormat = new SimpleDateFormat(serverInfo.getDateFormatPattern());
-			timestampFormat = new SimpleDateFormat(
-					serverInfo.getDatetimeFormatPattern());
+			timestampFormat = new SimpleDateFormat(serverInfo.getDatetimeFormatPattern());
 			sp.setJrVersion(Version.setJRVersion(serverInfo));
 		}
 		return serverInfo;
 	}
 
 	@Override
-	public List<ResourceDescriptor> list(IProgressMonitor monitor,
-			ResourceDescriptor rd) throws Exception {
+	public List<ResourceDescriptor> list(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 			rd = parent.get(monitor, rd, null);
@@ -194,11 +194,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DOMAIN_TOPICS)) {
 			rd = parent.get(monitor, rd, null);
 			return rd.getChildren();
-		} else if (rd.getWsType().equals(
-				ResourceDescriptor.TYPE_ADHOC_DATA_VIEW)) {
+		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_ADHOC_DATA_VIEW)) {
 			try {
-				return getInputControls(
-						rd.getParentFolder() + "/" + rd.getName(), monitor);
+				return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
 			} catch (HttpResponseException e) {
 				if (e.getStatusCode() == 403)
 					return new ArrayList<ResourceDescriptor>();
@@ -206,18 +204,15 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			}
 		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_DASHBOARD)) {
 			try {
-				return getInputControls(
-						rd.getParentFolder() + "/" + rd.getName(), monitor);
+				return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
 			} catch (HttpResponseException e) {
 				if (e.getStatusCode() == 403)
 					return new ArrayList<ResourceDescriptor>();
 				throw e;
 			}
-		} else if (rd.getWsType()
-				.equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {
+		} else if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {
 			try {
-				return getInputControls(
-						rd.getParentFolder() + "/" + rd.getName(), monitor);
+				return getInputControls(rd.getParentFolder() + "/" + rd.getName(), monitor);
 			} catch (HttpResponseException e) {
 				if (e.getStatusCode() == 403)
 					return new ArrayList<ResourceDescriptor>();
@@ -231,9 +226,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			tgt = tgt.queryParam("limit", 0);
 
 			Builder req = tgt.request();
-			ClientResourceListWrapper resources = toObj(
-					connector.get(req, monitor),
-					ClientResourceListWrapper.class, monitor);
+			ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
 			if (resources != null) {
 				boolean isPublic = false;
 				for (ClientResourceLookup crl : resources.getResourceLookups()) {
@@ -241,8 +234,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						isPublic = crl.getUri().equals("/public");
 					ResourceDescriptor nrd = Rest2Soap.getRDLookup(this, crl);
 					rds.add(nrd);
-					if (nrd.getWsType().equals(
-							ResourceDescriptor.TYPE_CONTENT_RESOURCE)) {
+					if (nrd.getWsType().equals(ResourceDescriptor.TYPE_CONTENT_RESOURCE)) {
 						String name = nrd.getUriString().toLowerCase();
 						if (FileExtension.isImage(name))
 							nrd.setWsType(ResourceDescriptor.TYPE_IMAGE);
@@ -256,8 +248,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 							nrd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
 						else if (name.endsWith(FileExtension.PointJRTX))
 							nrd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
-						else if (name
-								.endsWith(ResourceDescriptor.TYPE_CSS_FILE))
+						else if (name.endsWith(ResourceDescriptor.TYPE_CSS_FILE))
 							nrd.setWsType(ResourceDescriptor.TYPE_CSS_FILE);
 						else if (name.endsWith(".properties"))
 							nrd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
@@ -280,8 +271,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor get(IProgressMonitor monitor,
-			ResourceDescriptor rd, File f) throws Exception {
+	public ResourceDescriptor get(IProgressMonitor monitor, ResourceDescriptor rd, File f) throws Exception {
 		if (rd.getUriString() == null || rd.getUriString().contains("<"))
 			throw new Exception("wrong url");
 		String uri = rd.getUriString();
@@ -294,10 +284,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("expanded", "true");
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
-		Builder req = tgt.request("application/repository." + rtype + "+"
-				+ FORMAT);
-		Object obj = toObj(connector.get(req, monitor),
-				WsTypes.INST().getType(rtype), monitor);
+		Builder req = tgt.request("application/repository." + rtype + "+" + FORMAT);
+		Object obj = toObj(connector.get(req, monitor), WsTypes.INST().getType(rtype), monitor);
 		if (obj instanceof ClientResource<?>) {
 			ClientResource<?> crl = (ClientResource<?>) obj;
 			if (crl != null) {
@@ -305,8 +293,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					ClientFile cf = (ClientFile) crl;
 					tgt = target.path("resources" + uri);
 					try {
-						req = tgt.request(cf.getType().getMimeType()).header(
-								"Accept", cf.getType().getMimeType());
+						req = tgt.request(cf.getType().getMimeType()).header("Accept", cf.getType().getMimeType());
 						readFile(connector.get(req, monitor), f, monitor);
 					} catch (HttpResponseException e) {
 						if (e.getStatusCode() == 500)
@@ -327,8 +314,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor move(IProgressMonitor monitor,
-			ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor move(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		String wsType = rd.getWsType();
 		String rtype = WsTypes.INST().toRestType(wsType);
 
@@ -336,11 +322,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Builder req = tgt.request().header("Content-Location",
-				rd.getUriString());// .header("Content-Length",
+		Builder req = tgt.request().header("Content-Location", rd.getUriString());// .header("Content-Length",
 		// "0");
-		Response r = connector.put(req,
-				Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
+		Response r = connector.put(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {
 			rd = new ResourceDescriptor();
@@ -352,8 +336,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor copy(IProgressMonitor monitor,
-			ResourceDescriptor rd, String destFolderURI) throws Exception {
+	public ResourceDescriptor copy(IProgressMonitor monitor, ResourceDescriptor rd, String destFolderURI) throws Exception {
 		String wsType = rd.getWsType();
 		String rtype = WsTypes.INST().toRestType(wsType);
 
@@ -361,10 +344,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("overwrite", "true");
 		tgt = tgt.queryParam("createFolders", "true");
 
-		Builder req = tgt.request().header("Content-Location",
-				rd.getUriString());
-		Response r = connector.post(req,
-				Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
+		Builder req = tgt.request().header("Content-Location", rd.getUriString());
+		Response r = connector.post(req, Entity.entity("", MediaType.APPLICATION_XML_TYPE), monitor);
 		ClientResource<?> crl = toObj(r, WsTypes.INST().getType(rtype), monitor);
 		if (crl != null) {
 			rd = new ResourceDescriptor();
@@ -376,29 +357,23 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor,
-			ResourceDescriptor rd, File inFile) throws Exception {
+	public ResourceDescriptor addOrModifyResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		prepareResource(monitor, rd, inFile);
 
 		String rtype = WsTypes.INST().toRestType(rd.getWsType());
 		ClientResource<?> cr = Soap2Rest.getResource(this, rd);
 		Response r = null;
 		if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORT_OPTIONS)) {
-			ResourceProperty resprop = ResourceDescriptorUtil.getProperty(
-					"PROP_RU_URI", rd.getProperties());
-			WebTarget tgt = target.path("reports" + resprop.getValue()
-					+ "/options");
+			ResourceProperty resprop = ResourceDescriptorUtil.getProperty("PROP_RU_URI", rd.getProperties());
+			WebTarget tgt = target.path("reports" + resprop.getValue() + "/options");
 			tgt = tgt.queryParam("label", rd.getLabel());
 			tgt = tgt.queryParam("overwrite", "true");
 
-			ReportParameters rprms = new ReportParameters(
-					new ArrayList<ReportParameter>());
+			ReportParameters rprms = new ReportParameters(new ArrayList<ReportParameter>());
 
 			Builder req = tgt.request();
 
-			r = connector.post(req,
-					Entity.entity(rprms, MediaType.APPLICATION_XML_TYPE),
-					monitor);
+			r = connector.post(req, Entity.entity(rprms, MediaType.APPLICATION_XML_TYPE), monitor);
 
 			try {
 				toObj(r, String.class, monitor);
@@ -416,10 +391,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("overwrite", "true");
 
 		Builder req = tgt.request();
-		r = connector.put(
-				req,
-				Entity.entity(cr, "application/repository." + rtype + "+"
-						+ FORMAT), monitor);
+		r = connector.put(req, Entity.entity(cr, "application/repository." + rtype + "+" + FORMAT), monitor);
 
 		ClientResource<?> crl = null;
 		try {
@@ -437,8 +409,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		return rd;
 	}
 
-	private void prepareResource(IProgressMonitor monitor,
-			ResourceDescriptor rd, File inFile) throws Exception {
+	private void prepareResource(IProgressMonitor monitor, ResourceDescriptor rd, File inFile) throws Exception {
 		if (!rd.getIsNew() && rd.getChildren() != null) {
 			for (ResourceDescriptor r : rd.getChildren()) {
 				if (!r.getIsNew() && r.isDirty1()) {
@@ -450,9 +421,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		}
 	}
 
-	private ResourceDescriptor doGet(IProgressMonitor monitor,
-			ResourceDescriptor rd, ClientResource<?> crl) throws Exception,
-			ParseException {
+	private ResourceDescriptor doGet(IProgressMonitor monitor, ResourceDescriptor rd, ClientResource<?> crl) throws Exception, ParseException {
 		boolean refresh = false;
 		if (WsTypes.INST().isContainerType(crl.getClass()))
 			refresh = true;
@@ -466,9 +435,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ResourceDescriptor modifyReportUnitResource(
-			IProgressMonitor monitor, ResourceDescriptor runit,
-			ResourceDescriptor rd, File inFile) throws Exception {
+	public ResourceDescriptor modifyReportUnitResource(IProgressMonitor monitor, ResourceDescriptor runit, ResourceDescriptor rd, File inFile) throws Exception {
 		if (rd.getIsReference() && (rd.hasDirtyChildren() || rd.getHasData())) {
 			// ResourceDescriptor r = new ResourceDescriptor();
 			// r.setUriString(Misc.nvl(rd.getReferenceUri(),
@@ -485,8 +452,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd)
-			throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd) throws Exception {
 		WebTarget tgt = target.path("resources" + rd.getUriString());
 		Response res = connector.delete(tgt.request(), monitor);
 		try {
@@ -503,8 +469,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void delete(IProgressMonitor monitor, ResourceDescriptor rd,
-			ResourceDescriptor runit) throws Exception {
+	public void delete(IProgressMonitor monitor, ResourceDescriptor rd, ResourceDescriptor runit) throws Exception {
 		ResourceDescriptor rdrem = null;
 		for (ResourceDescriptor r : runit.getChildren())
 			if (r.getUriString().equals(rd.getUriString())) {
@@ -518,14 +483,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public ReportExecution runReport(IProgressMonitor monitor,
-			ReportExecution repExec) throws Exception {
+	public ReportExecution runReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
 		Map<String, FileContent> map = new HashMap<String, FileContent>();
 		ReportExecutionDescriptor res = null;
 		WebTarget tgt = null;
 		Builder req = null;
-		if (repExec.getRequestId() != null
-				&& !repExec.getStatus().equals("refresh")) {
+		if (repExec.getRequestId() != null && !repExec.getStatus().equals("refresh")) {
 			// if (repExec.getStatus().equals("refresh")) {
 			// tgt = target.path("reportExecutions/" + repExec.getRequestId() +
 			// "/exports");
@@ -596,8 +559,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				String rourl = "reports" + repExec.getReportURI() + ".html";
 				if (rer.getParameters() != null) {
 					String del = "?";
-					for (ReportParameter rp : rer.getParameters()
-							.getReportParameters()) {
+					for (ReportParameter rp : rer.getParameters().getReportParameters()) {
 						rourl += del;
 						rourl += rp.getName() + "=";
 						for (String v : rp.getValues()) {
@@ -608,18 +570,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				}
 				repExec.setBaseUrl(target.getUri().toASCIIString());
 				repExec.setPathUrl(rourl);
-				repExec.setReportOutputCookie(connector.getCookieStore()
-						.getCookies());
+				repExec.setReportOutputCookie(cookieStore.getCookies());
 				repExec.setStatus("ready");
 				return repExec;
 			}
 
 			tgt = target.path("reportExecutions");
 			req = tgt.request();
-			Response r = connector
-					.post(req,
-							Entity.entity(rer, MediaType.APPLICATION_XML_TYPE),
-							monitor);
+			Response r = connector.post(req, Entity.entity(rer, MediaType.APPLICATION_XML_TYPE), monitor);
 			res = toObj(r, ReportExecutionDescriptor.class, monitor);
 		}
 		if (res != null && res.getErrorDescriptor() == null) {
@@ -630,11 +588,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					if (ee.getStatus().equals("queued"))
 						continue;
 
-					tgt = target.path("reportExecutions/" + res.getRequestId()
-							+ "/exports/" + ee.getId() + "/outputResource");
+					tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/outputResource");
 					if (ee.getOutputResource() != null)
-						req = tgt.request(ee.getOutputResource()
-								.getContentType());
+						req = tgt.request(ee.getOutputResource().getContentType());
 					else
 						req = tgt.request();
 					Response r = connector.get(req, monitor);
@@ -645,30 +601,22 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						ee.setOutputResource(or);
 					}
 					byte[] d = readFile(r, monitor);
-					addFileContent(d, map, ee.getOutputResource(),
-							"attachment-" + i++, "report");
+					addFileContent(d, map, ee.getOutputResource(), "attachment-" + i++, "report");
 					if (ee.getAttachments() != null)
 						for (AttachmentDescriptor ror : ee.getAttachments()) {
-							tgt = target.path("reportExecutions/"
-									+ res.getRequestId() + "/exports/"
-									+ ee.getId() + "/attachments/"
-									+ ror.getFileName());
+							tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + ee.getId() + "/attachments/" + ror.getFileName());
 							req = tgt.request(ror.getContentType());
 							d = readFile(connector.get(req, monitor), monitor);
-							addFileContent(d, map, ror, "attachment-" + i++,
-									ror.getFileName());
+							addFileContent(d, map, ror, "attachment-" + i++, ror.getFileName());
 						}
 				}
 			} else {
-				tgt = target.path("reportExecutions/" + res.getRequestId()
-						+ "/exports/" + Argument.RUN_OUTPUT_FORMAT_JRPRINT
-						+ "/outputResource");
+				tgt = target.path("reportExecutions/" + res.getRequestId() + "/exports/" + Argument.RUN_OUTPUT_FORMAT_JRPRINT + "/outputResource");
 				req = tgt.request(MediaType.APPLICATION_OCTET_STREAM_TYPE);
 				byte[] d = readFile(connector.get(req, monitor), monitor);
 				FileContent content = new FileContent();
 				content.setData(d);
-				content.setMimeType(MediaType.APPLICATION_OCTET_STREAM_TYPE
-						.toString());
+				content.setMimeType(MediaType.APPLICATION_OCTET_STREAM_TYPE.toString());
 				content.setName("attachment-0");
 
 				map.put("jasperPrint", content);
@@ -688,17 +636,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec)
-			throws Exception {
-		WebTarget tgt = target.path("reportExecutions/"
-				+ repExec.getRequestId() + "/status");
+	public void cancelReport(IProgressMonitor monitor, ReportExecution repExec) throws Exception {
+		WebTarget tgt = target.path("reportExecutions/" + repExec.getRequestId() + "/status");
 		Builder req = tgt.request();
-		connector.put(req, Entity.entity("<status>cancelled</status>",
-				MediaType.APPLICATION_XML_TYPE), monitor);
+		connector.put(req, Entity.entity("<status>cancelled</status>", MediaType.APPLICATION_XML_TYPE), monitor);
 	}
 
-	private void addFileContent(byte[] d, Map<String, FileContent> map,
-			AttachmentDescriptor r, String id, String key) {
+	private void addFileContent(byte[] d, Map<String, FileContent> map, AttachmentDescriptor r, String id, String key) {
 		if (d != null) {
 			FileContent content = new FileContent();
 			content.setData(d);
@@ -709,8 +653,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		}
 	}
 
-	private void addFileContent(byte[] d, Map<String, FileContent> map,
-			OutputResourceDescriptor r, String id, String key) {
+	private void addFileContent(byte[] d, Map<String, FileContent> map, OutputResourceDescriptor r, String id, String key) {
 		if (d != null) {
 			FileContent content = new FileContent();
 			content.setData(d);
@@ -722,8 +665,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor,
-			IDatasourceFilter f) throws Exception {
+	public List<ResourceDescriptor> listDatasources(IProgressMonitor monitor, IDatasourceFilter f) throws Exception {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
 		WebTarget tgt = target.path("resources");
 		if (f == null)
@@ -734,9 +676,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("limit", 0);
 
 		Builder req = tgt.request();
-		ClientResourceListWrapper resources = toObj(
-				connector.get(req, monitor), ClientResourceListWrapper.class,
-				monitor);
+		ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
 		if (resources != null)
 			for (ClientResourceLookup crl : resources.getResourceLookups())
 				rds.add(Rest2Soap.getRDLookup(this, crl));
@@ -744,8 +684,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void findResources(IProgressMonitor monitor, AFinderUI callback)
-			throws Exception {
+	public void findResources(IProgressMonitor monitor, AFinderUI callback) throws Exception {
 		connector.closeLastRequest();
 		if (callback.getText() == null) {
 			callback.showResults(null);
@@ -759,11 +698,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		tgt = tgt.queryParam("limit", 0);
 
 		Builder req = tgt.request();
-		ClientResourceListWrapper resources = toObj(
-				connector.get(req, monitor), ClientResourceListWrapper.class,
-				monitor);
-		callback.showResults(resources != null ? resources.getResourceLookups()
-				: null);
+		ClientResourceListWrapper resources = toObj(connector.get(req, monitor), ClientResourceListWrapper.class, monitor);
+		callback.showResults(resources != null ? resources.getResourceLookups() : null);
 	}
 
 	@Override
@@ -784,15 +720,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void getBundle(Map<String, String> map, String name,
-			IProgressMonitor monitor) throws Exception {
-		Builder req = target.path("bundles/" + name).request(
-				MediaType.APPLICATION_JSON_TYPE);
+	public void getBundle(Map<String, String> map, String name, IProgressMonitor monitor) throws Exception {
+		Builder req = target.path("bundles/" + name).request(MediaType.APPLICATION_JSON_TYPE);
 		try {
 			GenericType<Map<String, String>> type = new GenericType<Map<String, String>>() {
 			};
-			Map<String, String> m = toObj(connector.get(req, monitor), type,
-					monitor);
+			Map<String, String> m = toObj(connector.get(req, monitor), type, monitor);
 			if (m != null)
 				map.putAll(m);
 		} catch (IOException e) {
@@ -801,20 +734,14 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public List<ResourceDescriptor> getInputControls(String uri,
-			IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> getInputControls(String uri, IProgressMonitor monitor) throws Exception {
 		List<ResourceDescriptor> rds = new ArrayList<ResourceDescriptor>();
-		Builder req = target.path(
-				"reports/" + uri.replaceFirst("/", "") + "/inputControls")
-				.request();
+		Builder req = target.path("reports/" + uri.replaceFirst("/", "") + "/inputControls").request();
 		try {
-			ReportInputControlsListWrapper m = toObj(
-					connector.get(req, monitor),
-					ReportInputControlsListWrapper.class, monitor);
+			ReportInputControlsListWrapper m = toObj(connector.get(req, monitor), ReportInputControlsListWrapper.class, monitor);
 			if (m != null) {
 				for (ReportInputControl ric : m.getInputParameters())
-					rds.add(Rest2Soap.getInputControl(this, ric,
-							new ResourceDescriptor()));
+					rds.add(Rest2Soap.getInputControl(this, ric, new ResourceDescriptor()));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -823,12 +750,10 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public void reorderInputControls(String uri, List<ResourceDescriptor> rds,
-			IProgressMonitor monitor) throws Exception {
+	public void reorderInputControls(String uri, List<ResourceDescriptor> rds, IProgressMonitor monitor) throws Exception {
 		Builder req = target.path("reports" + uri + "/inputControls").request();
 		Response res = connector.get(req, monitor);
-		ReportInputControlsListWrapper crl = toObj(res,
-				ReportInputControlsListWrapper.class, monitor);
+		ReportInputControlsListWrapper crl = toObj(res, ReportInputControlsListWrapper.class, monitor);
 		if (crl != null) {
 			List<ReportInputControl> ics = new ArrayList<ReportInputControl>();
 			for (ResourceDescriptor r : rds) {
@@ -838,19 +763,15 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						ics.add(ric);
 				}
 			}
-			ReportInputControlsListWrapper wrapper = new ReportInputControlsListWrapper(
-					ics);
+			ReportInputControlsListWrapper wrapper = new ReportInputControlsListWrapper(ics);
 			req = target.path("reports" + uri + "/inputControls").request();
-			Response r = connector.put(req,
-					Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE),
-					monitor);
+			Response r = connector.put(req, Entity.entity(wrapper, MediaType.APPLICATION_XML_TYPE), monitor);
 			toObj(r, ReportInputControlsListWrapper.class, monitor);
 		}
 	}
 
 	@Override
-	public ResourceDescriptor initInputControls(String uri, String type,
-			IProgressMonitor monitor) throws Exception {
+	public ResourceDescriptor initInputControls(String uri, String type, IProgressMonitor monitor) throws Exception {
 		uri = WSClientHelper.getReportUnitUri(uri);
 		ResourceDescriptor rdunit = new ResourceDescriptor();
 		rdunit.setUriString(uri);
@@ -860,16 +781,12 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		// return rdunit;
 		Builder req = target.path("reports" + uri + "/inputControls").request();
 		Response r = connector.get(req, monitor);
-		ReportInputControlsListWrapper crl = toObj(r,
-				ReportInputControlsListWrapper.class, monitor);
+		ReportInputControlsListWrapper crl = toObj(r, ReportInputControlsListWrapper.class, monitor);
 		if (crl != null) {
 			for (ReportInputControl ric : crl.getInputParameters())
-				rdunit.getChildren().add(
-						Rest2Soap.getInputControl(this, ric,
-								new ResourceDescriptor()));
+				rdunit.getChildren().add(Rest2Soap.getInputControl(this, ric, new ResourceDescriptor()));
 			for (ResourceDescriptor rd : rdunit.getChildren()) {
-				if (rd.getWsType()
-						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+				if (rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 					for (ReportInputControl ric : crl.getInputParameters()) {
 						InputControlState ics = ric.getState();
 						if (ics.getId().equals(rd.getName())) {
@@ -883,8 +800,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		return rdunit;
 	}
 
-	public void setInputControlState(ResourceDescriptor rd,
-			InputControlState ics) {
+	public void setInputControlState(ResourceDescriptor rd, InputControlState ics) {
 		if (ics.getValue() != null)
 			rd.setValue(ics.getValue());
 		else if (ics.getOptions() != null) {
@@ -933,9 +849,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public List<ResourceDescriptor> cascadeInputControls(
-			ResourceDescriptor runit, List<ResourceDescriptor> ics,
-			IProgressMonitor monitor) throws Exception {
+	public List<ResourceDescriptor> cascadeInputControls(ResourceDescriptor runit, List<ResourceDescriptor> ics, IProgressMonitor monitor) throws Exception {
 		if (ics.isEmpty())
 			return ics;
 		String ctrls = "";
@@ -945,20 +859,13 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			del = ";";
 		}
 
-		Builder req = target.path(
-				"reports" + runit.getUriString() + "/inputControls/" + ctrls
-						+ "/values").request();
-		Response r = connector.post(req, Entity.entity(
-				convertInputControls(ics), MediaType.APPLICATION_XML_TYPE),
-				monitor);
-		InputControlStateListWrapper crl = toObj(r,
-				InputControlStateListWrapper.class, monitor);
+		Builder req = target.path("reports" + runit.getUriString() + "/inputControls/" + ctrls + "/values").request();
+		Response r = connector.post(req, Entity.entity(convertInputControls(ics), MediaType.APPLICATION_XML_TYPE), monitor);
+		InputControlStateListWrapper crl = toObj(r, InputControlStateListWrapper.class, monitor);
 		if (crl != null) {
 			for (ResourceDescriptor rd : ics) {
-				if (rd.getWsType()
-						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-					for (InputControlState state : crl
-							.getInputControlStateList()) {
+				if (rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
+					for (InputControlState state : crl.getInputControlStateList()) {
 						if (state.getId().equals(rd.getName())) {
 							setInputControlState(rd, state);
 							break;
@@ -999,11 +906,9 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public StateDto importMetaData(ImportOptions options,
-			IProgressMonitor monitor) throws Exception {
+	public StateDto importMetaData(ImportOptions options, IProgressMonitor monitor) throws Exception {
 		if (options.getState() != null) {
-			WebTarget tgt = target.path("import/" + options.getState().getId()
-					+ "/state");
+			WebTarget tgt = target.path("import/" + options.getState().getId() + "/state");
 
 			Builder req = tgt.request();
 			Response r = connector.get(req, monitor);
@@ -1013,22 +918,16 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 			WebTarget tgt = target.path("import");
 			tgt = tgt.queryParam("update", options.isUpdate());
 			if (options.isUpdate())
-				tgt = tgt.queryParam("skipUserUpdate",
-						options.isSkipUserUpdates());
-			tgt = tgt.queryParam("includeAccessEvents",
-					options.isInclAccessEvents());
-			tgt = tgt.queryParam("includeAuditEvents",
-					options.isInclAuditEvents());
-			tgt = tgt.queryParam("includeMonitoringEvents",
-					options.isInclMonitorEvents());
-			tgt = tgt.queryParam("includeServerSettings",
-					options.isInclSrvSettings());
+				tgt = tgt.queryParam("skipUserUpdate", options.isSkipUserUpdates());
+			tgt = tgt.queryParam("includeAccessEvents", options.isInclAccessEvents());
+			tgt = tgt.queryParam("includeAuditEvents", options.isInclAuditEvents());
+			tgt = tgt.queryParam("includeMonitoringEvents", options.isInclMonitorEvents());
+			tgt = tgt.queryParam("includeServerSettings", options.isInclSrvSettings());
 
 			File file = new File(options.getFile());
 
 			Builder req = tgt.request();
-			Response r = connector.post(req,
-					Entity.entity(file, "application/zip"), monitor);
+			Response r = connector.post(req, Entity.entity(file, "application/zip"), monitor);
 			StateDto state = toObj(r, StateDto.class, monitor);
 			options.setState(state);
 		}
@@ -1036,19 +935,16 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public StateDto exportMetaData(ExportOptions options,
-			IProgressMonitor monitor) throws Exception {
+	public StateDto exportMetaData(ExportOptions options, IProgressMonitor monitor) throws Exception {
 		if (options.getState() != null) {
-			WebTarget tgt = target.path("export/" + options.getState().getId()
-					+ "/state");
+			WebTarget tgt = target.path("export/" + options.getState().getId() + "/state");
 
 			Builder req = tgt.request();
 			Response r = connector.get(req, monitor);
 			StateDto state = toObj(r, StateDto.class, monitor);
 			options.setState(state);
 			if (state.getPhase().equals("finished")) {
-				tgt = target.path("export/" + options.getState().getId()
-						+ "/export.zip");
+				tgt = target.path("export/" + options.getState().getId() + "/export.zip");
 
 				req = tgt.request();
 				r = connector.get(req, monitor);
@@ -1073,9 +969,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 				taskDTO.setUris(options.getPaths());
 
 			Builder req = tgt.request();
-			Response r = connector.post(req,
-					Entity.entity(taskDTO, MediaType.APPLICATION_JSON_TYPE),
-					monitor);
+			Response r = connector.post(req, Entity.entity(taskDTO, MediaType.APPLICATION_JSON_TYPE), monitor);
 			StateDto state = toObj(r, StateDto.class, monitor);
 			options.setState(state);
 		}
@@ -1083,22 +977,17 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd,
-			IProgressMonitor monitor, PermissionOptions options)
-			throws Exception {
+	public List<RepositoryPermission> getPermissions(ResourceDescriptor rd, IProgressMonitor monitor, PermissionOptions options) throws Exception {
 		WebTarget tgt = target.path("permissions" + rd.getUriString());
-		tgt = tgt.queryParam("effectivePermissions",
-				options.isEffectivePermissions());
-		tgt = tgt.queryParam("recipientType",
-				options.isRecipientTypeUser() ? "user" : "role");
+		tgt = tgt.queryParam("effectivePermissions", options.isEffectivePermissions());
+		tgt = tgt.queryParam("recipientType", options.isRecipientTypeUser() ? "user" : "role");
 		if (options.getRecipientId() != null)
 			tgt = tgt.queryParam("recipientId", options.getRecipientId());
 		tgt = tgt.queryParam("resolveAll", options.isResolveAll());
 
 		Builder req = tgt.request();
 		Response r = connector.get(req, monitor);
-		RepositoryPermissionListWrapper state = toObj(r,
-				RepositoryPermissionListWrapper.class, monitor);
+		RepositoryPermissionListWrapper state = toObj(r, RepositoryPermissionListWrapper.class, monitor);
 
 		return state.getPermissions();
 	}
@@ -1117,9 +1006,7 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	}
 
 	@Override
-	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd,
-			List<RepositoryPermission> perms, PermissionOptions options,
-			IProgressMonitor monitor) throws Exception {
+	public List<RepositoryPermission> setPermissions(ResourceDescriptor rd, List<RepositoryPermission> perms, PermissionOptions options, IProgressMonitor monitor) throws Exception {
 		for (RepositoryPermission rp : perms) {
 			WebTarget tgt = target.path("permissions" + rd.getUriString());
 			tgt = tgt.matrixParam("recipient", rp.getRecipient());
@@ -1133,11 +1020,8 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 					if (e.getStatusCode() != 404 && e.getStatusCode() != 204)
 						throw e;
 				}
-			} else if (rp.getUri() != null
-					&& rd.getUriString().equals(rp.getUri())) {
-				Response r = connector.put(req,
-						Entity.entity(rp, MediaType.APPLICATION_XML_TYPE),
-						monitor);
+			} else if (rp.getUri() != null && rd.getUriString().equals(rp.getUri())) {
+				Response r = connector.put(req, Entity.entity(rp, MediaType.APPLICATION_XML_TYPE), monitor);
 				toObj(r, RepositoryPermission.class, monitor);
 			}
 		}
