@@ -50,7 +50,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jersey/net.java.html.json-0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js_axis-1.4patched.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/html-json-2.13.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-apache-connector-2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-apache-connector-2.13.jar" sourcepath="/Users/veaceslavchicu/.m2/repository/org/glassfish/jersey/connectors/jersey-apache-connector/2.13/jersey-apache-connector-2.13-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-client-2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-common-2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jersey213/jersey-media-json-2.0-m05-1.jar"/>
