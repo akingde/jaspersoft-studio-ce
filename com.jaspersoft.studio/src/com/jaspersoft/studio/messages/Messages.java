@@ -586,6 +586,13 @@ public class Messages extends NLS {
 	public static String ExcelExporterPreferencePage_freezeRatio;
 	public static String ExcelExporterPreferencePage_title;
 	public static String ExcelExporterPreferencePage_useReportTimeZone;
+	public static String ExportAdapterWizard_allError;
+	public static String ExportAdapterWizard_allSuccess;
+	public static String ExportAdapterWizard_projectError;
+	public static String ExportAdapterWizard_projectErrors;
+	public static String ExportAdapterWizard_projectSucceses;
+	public static String ExportAdapterWizard_projectSuccess;
+	public static String ExportAdapterWizard_someErrors;
 	public static String ExportAdapterWizardPage_description;
 	public static String ExportAdapterWizardPage_destinationTab;
 	public static String ExportAdapterWizardPage_noElementError;

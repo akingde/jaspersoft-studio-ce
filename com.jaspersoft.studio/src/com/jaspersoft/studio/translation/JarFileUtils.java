@@ -17,8 +17,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
@@ -118,15 +122,6 @@ public class JarFileUtils {
       String name = source.getPath().substring(basePath.length()+1).replace("\\", "/");
 	    if (source.isDirectory())
 	    {
-	      if (!name.isEmpty())
-	      {
-	        if (!name.endsWith("/"))
-	          name += "/";
-	        JarEntry entry = new JarEntry(name);
-	        entry.setTime(source.lastModified());
-	        target.putNextEntry(entry);
-	        target.closeEntry();
-	      }
 	      for (File nestedFile: source.listFiles())
 	        add(nestedFile, target, basePath);
 	      return;
@@ -168,7 +163,85 @@ public class JarFileUtils {
 			Manifest manifest = new Manifest(new ByteArrayInputStream(manifestContent.getBytes("UTF-8")));
 			JarOutputStream target = new JarOutputStream(new FileOutputStream(destination + File.separatorChar + fileName), manifest);
 			for(File children : pluginDir.listFiles()){
-				add(children, target, pluginDir.getAbsolutePath());
+				try {
+					add(children, target, pluginDir.getAbsolutePath());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			target.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+  /**
+   * Load a text file contents as a <code>String<code>.
+   * This method does not perform encoding conversions
+   *
+   * @param file The input file
+   * @return The file contents as a <code>String</code>
+   * @exception IOException IO Error
+   */
+  public static String deserializeString(File file) {
+      int len;
+      char[] chr = new char[4096];
+      final StringBuffer buffer = new StringBuffer();
+      try{
+	      final FileReader reader = new FileReader(file);
+	      try {
+	          while ((len = reader.read(chr)) > 0) {
+	              buffer.append(chr, 0, len);
+	          }
+	      } finally {
+	          reader.close();
+	      }
+      }catch(Exception ex){
+      	ex.printStackTrace();
+      }
+      return buffer.toString();
+  }
+	
+	
+	/**
+	 * Create a jar with the content of a folder inside, and a manifest. It require also a build.properties file. 
+	 * It should be used to  create a jar of a plugin project.
+	 * 
+	 * @param destination folder where the jar will be placed
+	 * @param pluginDir directory from where the content will be read to be placed inside the jar. The folder itself it is not
+	 * included in the jar
+	 * @param fileName name of the jar file (must have the extension)
+	 * @param manifestContent manifest of the jar
+	 */
+	public static void createPluginJar(String destination, File pluginDir, String fileName, String manifestContent){
+		try {
+			Manifest manifest = new Manifest(new ByteArrayInputStream(manifestContent.getBytes("UTF-8")));
+			JarOutputStream target = new JarOutputStream(new FileOutputStream(destination + File.separatorChar + fileName), manifest);
+			Properties prop = new Properties();
+			InputStream in = new FileInputStream(new File(pluginDir, "build.properties"));
+			prop.load(in);
+			String files[] = prop.getProperty("bin.includes").split(",");
+			List<String> filesToAdd = Arrays.asList(files);
+			for(File children : pluginDir.listFiles()){
+				try {
+					String currentFileName = children.getName();
+					if (children.isFile()){
+						if (filesToAdd.contains(currentFileName)) add(children, target, pluginDir.getAbsolutePath());
+					} else {
+						if (!currentFileName.equals("META-INF") && filesToAdd.contains(currentFileName+"/")) add(children, target, pluginDir.getAbsolutePath()); 
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			File binFolder = new File(pluginDir, "bin");
+			for(File children : binFolder.listFiles()){
+				try {
+					add(children, target, binFolder.getAbsolutePath()); 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			target.close();
 		} catch (Exception e) {

@@ -12,10 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.custom.adapter.export;
 
+import java.util.HashMap;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.pde.internal.ui.wizards.exports.AbstractExportWizardPage;
-import org.eclipse.pde.internal.ui.wizards.exports.ExportDestinationTab;
+import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.internal.ui.wizards.exports.PluginExportWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -36,39 +39,9 @@ import com.jaspersoft.studio.messages.Messages;
 public class ExportAdapterWizardPage extends PluginExportWizardPage {
 	
 	/**
-	 * Area where the destination path are shown, it relax the access
-	 * to some methods and redefine the method to enable\disable the text
-	 * areas when the radio selection changes
-	 * 
-	 * @author Orlandin Marco
-	 *
+	 * Map to retrieve a project from its model
 	 */
-	private class InnerExportDestinationTab extends ExportDestinationTab{
-		
-		public InnerExportDestinationTab(AbstractExportWizardPage page) {
-			super(page);
-		}
-		
-		@Override
-		protected void updateExportType() {
-			fArchiveCombo.setEnabled(fArchiveFileButton.getSelection());
-			fBrowseFile.setEnabled(fArchiveFileButton.getSelection());
-			fDirectoryCombo.setEnabled(fDirectoryButton.getSelection());
-			fBrowseDirectory.setEnabled(fDirectoryButton.getSelection());
-			fInstallCombo.setEnabled(fInstallButton.getSelection());
-			fBrowseInstall.setEnabled(fInstallButton.getSelection());
-		}
-		
-		@Override
-		protected String validate() {
-			return super.validate();
-		} 
-		
-		@Override
-		protected void saveSettings(IDialogSettings settings) {
-			super.saveSettings(settings);
-		}
-	}
+	private HashMap<IModel, IProject> modelProjectsMap = new HashMap<IModel, IProject>();
 	
 	/**
 	 * Save the qualifier id for the manifest that is automatically generated
@@ -102,7 +75,7 @@ public class ExportAdapterWizardPage extends PluginExportWizardPage {
 	 * Create the destination tab with an extended one
 	 */
 	protected void createDestinationTab(TabFolder folder) {
-		fDestinationTab = new InnerExportDestinationTab(this);
+		fDestinationTab = new SimpleDestinationTab(this);
 		TabItem item = new TabItem(folder, SWT.NONE);
 		item.setControl(fDestinationTab.createControl(folder));
 		item.setText(Messages.ExportAdapterWizardPage_destinationTab);
@@ -114,7 +87,7 @@ public class ExportAdapterWizardPage extends PluginExportWizardPage {
 	 */
 	@Override
 	protected void saveSettings(IDialogSettings settings) {
-		((InnerExportDestinationTab)fDestinationTab).saveSettings(settings);
+		((SimpleDestinationTab)fDestinationTab).saveSettings(settings);
 	}
 	
 	/**
@@ -122,6 +95,22 @@ public class ExportAdapterWizardPage extends PluginExportWizardPage {
 	 */
 	protected String getQualifier() {
 		return storedQualifier;
+	}
+	
+	/**
+	 * Return the destination path of the jar file
+	 */
+	@Override
+	public String getDestination() {
+		return super.getDestination();
+	}
+	
+	/**
+	 * Return the file name of the jar file
+	 */
+	@Override
+	public String getFileName() {
+		return super.getFileName();
 	}
 	
 	/**
@@ -133,9 +122,46 @@ public class ExportAdapterWizardPage extends PluginExportWizardPage {
 			setMessage(null);
 		String error = getSelectedItems().length > 0 ? null : Messages.ExportAdapterWizardPage_noElementError;
 		if (error == null)
-			error = ((InnerExportDestinationTab)fDestinationTab).validate();
+			error = ((SimpleDestinationTab)fDestinationTab).validate();
 		setErrorMessage(error);
 		setPageComplete(error == null);
+	}
+	
+	/**
+	 * When the viewer is initialized then 
+	 * the model-project map is cleaned and recreated
+	 */
+	@Override
+	protected void initializeViewer() {
+		modelProjectsMap.clear();
+		super.initializeViewer();
+	}
+	
+	/**
+	 * When searching a model for an object, if the object
+	 * is an IProject then store the association between
+	 * the model and the project. Doing this will be possible
+	 * during the finish phase to recover the project from the model
+	 */
+	@Override
+	protected IModel findModelFor(IAdaptable object) {
+		if (object instanceof IProject){
+			IModel model = super.findModelFor(object);
+			modelProjectsMap.put(model, (IProject)object);
+			return model;
+		}
+		return super.findModelFor(object);
+	}
+	
+	/**
+	 * Return the project from the model of the project
+	 * itself
+	 * 
+	 * @param model a not null model of a project
+	 * @return the project
+	 */
+	public IProject getProjectForModel(IModel model){
+		return modelProjectsMap.get(model);
 	}
 
 
