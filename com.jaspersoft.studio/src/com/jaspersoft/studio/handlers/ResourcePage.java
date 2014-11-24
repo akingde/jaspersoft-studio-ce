@@ -452,7 +452,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 				JRDesignImage im = (JRDesignImage) el;
 				String res = evalResourceName(im.getExpression());
 				File resFile = findFile(reportFile, res);
-				if (resFile != null) im.setExpression(new JRDesignExpression(resFile.getName()));
+				if (resFile != null) im.setExpression(new JRDesignExpression("\""+resFile.getName()+"\""));
 			}
 
 			if (el instanceof JRDesignSubreport) {
@@ -461,7 +461,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 				if (res.endsWith(".jasper")) { //$NON-NLS-1$
 					res = res.substring(0, res.length() - ".jasper".length()) + ".jrxml"; //$NON-NLS-1$ //$NON-NLS-2$
 					File resFile = findFile(reportFile, res);
-					sr.setExpression(new JRDesignExpression(resFile.getName()));
+					sr.setExpression(new JRDesignExpression("\""+resFile.getName()+"\""));
 				}
 			}
 
@@ -472,7 +472,7 @@ public class ResourcePage extends JSSHelpWizardPage {
 			String res = evalResourceName(t.getSourceExpression());
 			if (res != null && t instanceof JRDesignReportTemplate) {
 				File resFile = findFile(reportFile, res);
-				((JRDesignReportTemplate)t).setSourceExpression(new JRDesignExpression(resFile.getName()));
+				((JRDesignReportTemplate)t).setSourceExpression(new JRDesignExpression("\""+resFile.getName()+"\""));
 			}
 		}
 	}
