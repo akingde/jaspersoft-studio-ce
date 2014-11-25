@@ -86,7 +86,7 @@ public class SPSubreportParametersButton extends ASPropertyWidget {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SubreportParameterEditor wizard = new SubreportParameterEditor(msubreport.getJasperDesign());
+				SubreportParameterEditor wizard = new SubreportParameterEditor(msubreport);
 				wizard.setValue(GenericJSSParameter.convertFrom(dto));
 				WizardDialog dialog = new WizardDialog(UIUtils.getShell(), wizard);
 				dialog.create();

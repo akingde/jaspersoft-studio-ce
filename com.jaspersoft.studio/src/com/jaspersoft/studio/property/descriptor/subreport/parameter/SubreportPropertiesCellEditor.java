@@ -43,7 +43,7 @@ public class SubreportPropertiesCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		SubreportParameterEditor wizard = new SubreportParameterEditor(msubreport.getJasperDesign());
+		SubreportParameterEditor wizard = new SubreportParameterEditor(msubreport);
 		JRSubreportParameter[] values = (JRSubreportParameter[]) getValue();
 		wizard.setValue(GenericJSSParameter.convertFrom(values));
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);

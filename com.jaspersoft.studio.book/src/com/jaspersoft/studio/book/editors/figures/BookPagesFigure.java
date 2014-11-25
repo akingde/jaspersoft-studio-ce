@@ -1,13 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book.editors.figures;
 
-import java.io.File;
-
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignPart;
-import net.sf.jasperreports.engine.part.PartComponent;
-import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
 
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.OrderedLayout;
@@ -20,8 +25,6 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.model.MReportPart;
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 
 
 
@@ -118,51 +121,14 @@ public class BookPagesFigure extends RectangleFigure {
 			@Override
 			public void run() {
 				imageFigure.setBusy(true);
-				ExtensionLoader.waitIfLoading();
 				try {
-
-					Object reportFileName = null;
-					// Try to find the expression used to reference the jrxml or
-					// jasper file
-					// used to fill this part.
-					JRDesignPart jrDesignPart = model.getValue();
-					if (jrDesignPart != null) {
-						PartComponent partComponent = jrDesignPart.getComponent();
-						if (partComponent instanceof SubreportPartComponent) {
-							JRExpression subreportExp = ((SubreportPartComponent) partComponent).getExpression();
-							if (subreportExp != null) {
-
-								// Try to evaluate the subreport expression for
-								// this part.
-								// The dataset to use is clearly the main
-								// dataset, since we don't have
-								// other options in Jasperbook...
-								JRDesignDataset dataset = (JRDesignDataset)model.getJasperDesign().getMainDataset();
-								reportFileName =  ExpressionUtil.cachedExpressionEvaluation(subreportExp, model.getJasperConfiguration(), dataset);
-
-							}
+					String reportFileName = ReportThumbnailsManager.getLocation(model);
+					if (reportFileName != null){
+						final Image sourceImage = ReportThumbnailsManager.produceImage((String) reportFileName,model.getJasperConfiguration());
+						if (sourceImage != null) {
+							updateFigure(sourceImage);
 						}
 					}
-
-					// No image to load...
-					if (reportFileName == null)
-						return;
-
-					if (reportFileName instanceof File) {
-						reportFileName = ((File) reportFileName).toURI()
-								.toString();
-					} else if (!(reportFileName instanceof String)) {
-						return; // We only understand string paths...
-					}
-
-					final Image sourceImage = ReportThumbnailsManager
-							.produceImage((String) reportFileName,
-									model.getJasperConfiguration());
-
-					if (sourceImage != null) {
-						updateFigure(sourceImage);
-					}
-
 				} finally {
 					imageFigure.setBusy(false);
 				}
@@ -204,9 +170,6 @@ public class BookPagesFigure extends RectangleFigure {
             	Image oldImage = previewImage;
 				
             	previewImage = newImage;
-            	//scaleImage(sourceImage, getPreferredSize().width, getPreferredSize().height-20);
-				// change the source Image...
-
             	if (previewImage != oldImage)
             	{
             		imageFigure.setImage(newImage);

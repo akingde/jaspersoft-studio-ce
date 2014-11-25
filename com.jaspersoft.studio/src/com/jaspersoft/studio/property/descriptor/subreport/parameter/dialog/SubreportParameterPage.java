@@ -12,6 +12,11 @@
  ******************************************************************************/
 package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -24,19 +29,30 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboInputParameterDialog;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.ComboParametersPage;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSParameter;
-import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterPage;
+import com.jaspersoft.studio.property.descriptor.parameter.dialog.InputParameterDialog;
 
 /**
  * Page to edit the parameters of a subreport. In addition to the 
- * default page it offers a button to get all the parameters from the current report
+ * default page it offers a button to get all the parameters from the current report.
+ * The parameter name can be chosen from a combo between the names of the parameters
+ * inside the subreport or inserted manually 
  * 
  * @author Orlandin Marco
  *
  */
-public class SubreportParameterPage extends ParameterPage {
+public class SubreportParameterPage extends ComboParametersPage {
 
 	private JasperDesign jd;
+	
+	private SubreportParameterEditor parentEditor;
+	
+	public SubreportParameterPage(SubreportParameterEditor parentEditor) {
+		super(null);
+		this.parentEditor = parentEditor;
+	}
 
 	@Override
 	protected void generateButtons(Composite bGroup) {
@@ -71,6 +87,29 @@ public class SubreportParameterPage extends ParameterPage {
 		});
 	}
 	
+	/**
+	 * Return the input of the combo, a list of the parameter names of the original subreport file
+	 * 
+	 * @return the list of string displayed in the combo
+	 */
+	@Override
+	protected List<String> createNameComboInput(){
+		List<String> result = new ArrayList<String>();
+		HashSet<String> usedParams = new HashSet<String>();
+		for(GenericJSSParameter param : values){
+				usedParams.add(param.getName());
+		}
+		if (parentEditor.getJasperDesign() != null){
+			for (JRParameter param : parentEditor.getJasperDesign().getParameters()){
+				if (!usedParams.contains(param.getName())){
+						if (param.getName() != null) result.add(param.getName());
+				}
+			}
+			Collections.sort(result);
+		}
+		return result;
+	}
+	
 	public void setJasperDesign(JasperDesign jd){
 		this.jd = jd;
 	}
@@ -83,5 +122,10 @@ public class SubreportParameterPage extends ParameterPage {
 	@Override
 	public String getPageTitle() {
 		return Messages.common_subreport_parameters;
+	}
+	
+	@Override
+	protected InputParameterDialog getEditDialog(GenericJSSParameter editedParameter) {
+		return new ComboInputParameterDialog(getShell(), createNameComboInput(), editedParameter, SWT.DROP_DOWN);
 	}
 }

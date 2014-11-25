@@ -324,4 +324,9 @@ public class MSubreport extends MGraphicElement {
 			jrTarget.setRunToBottom(jrSource.isRunToBottom());
 		}
 	}
+	
+	@Override
+	public JRDesignSubreport getValue() {
+		return (JRDesignSubreport)super.getValue();
+	}
 }

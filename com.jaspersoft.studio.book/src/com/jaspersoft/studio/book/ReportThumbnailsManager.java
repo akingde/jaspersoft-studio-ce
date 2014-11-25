@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book;
 
 import java.awt.Color;
@@ -12,6 +24,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -20,21 +33,29 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.convert.ReportConverter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignPart;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
+import net.sf.jasperreports.engine.part.PartComponent;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleGraphics2DExporterOutput;
 import net.sf.jasperreports.export.SimpleGraphics2DReportConfiguration;
+import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.studio.book.model.MReportPart;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 
@@ -59,17 +80,25 @@ public class ReportThumbnailsManager {
 	 * The size of the thumbnail image (which is a square).
 	 */
 	public static final int THUMBNAIL_SIZE = 120;
+	
 	public static final int SHADOW_SIZE = 4;
 	
 	/**
 	 * The cache for the preview (AWT) images...
 	 */
 	private static Map<String, ThumbnailCacheItem> cachedItems = new HashMap<String, ThumbnailCacheItem>();
+	
+	/**
+	 * Map where are listed the currently loading cache items, the key is the same of the map cachedItems
+	 * and if an element is inside this set it means that it is currently loading and will be saved 
+	 * inside cachedItems
+	 */
+	private static HashSet<String> loadingItems = new HashSet<String>();
+	
 	private static java.awt.Image ERROR_IMAGE = null;
+	
 	private static String ERROR_IMAGE_LOCATION = "/icons/report_no_preview.png";
 			
-	
-	
 	/**
 	 * This is a temporary map to help transition of figure images to new figures referencing the same
 	 * jasperReport object (JRDesignPart).
@@ -149,8 +178,6 @@ public class ReportThumbnailsManager {
 		return null;
 	}
 	
-	
-	
 	/**
 	 * Given a report (jasper or jrxml), the file is loaded (if exists, and an SWT image is provided).
 	 * This image is not cached or managed in any way! You are responsible to dispose it! 
@@ -160,53 +187,21 @@ public class ReportThumbnailsManager {
 	 * 
 	 * This method is a shortcut of produceImage(file, context, ReportThumbnailsManager.THUMBNAIL_SIZE, true, false)
 	 * 
-	 * @param lovation - A file location.
+	 * @param location - A file location.
 	 * @param context - Can be null, but in this case don't expect images to be resolved...or properly previewed.
 	 * @return Image
 	 * 
 	 * @see ReportThumbnailsManager.produceImage(File file, JasperReportsContext context)
 	 */
 	public static Image produceImage(String location, JasperReportsConfiguration context) {
-		
-		File f = findFile(location, context);
-		
-		if (( f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper"))
-		{
-			// check for a jrxml...
-			 location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml";
-			 f = findFile(location, context);
-		}
-		
-		return produceImage(f, context);
-	}
-	
-	
-	
-	/**
-	 * Given a report (jasper or jrxml), the file is loaded (if exists, and an SWT image is provided).
-	 * This image is not cached or managed in any way! You are responsible to dispose it! 
-	 * 
-	 * The size of the image is ReportThumbnailsManager.THUMBNAIL_SIZE (120x120)
-	 * The image includes a 3 pixel border to simulate a shadow.
-	 * 
-	 * This method is a shortcut of produceImage(file, context, ReportThumbnailsManager.THUMBNAIL_SIZE, true, false)
-	 * 
-	 * @param file - A file. If null...the No Preview image is return.
-	 * @param context - Can be null, but in this case don't expect images to be resolved...
-	 * @return
-	 * @see produceImage()
-	 */
-	public static Image produceImage(File file, JasperReportsContext context)
-	{
-		return produceImage(file, context, ReportThumbnailsManager.THUMBNAIL_SIZE, true, false);
+		return  produceImage(location, context, ReportThumbnailsManager.THUMBNAIL_SIZE, true, false);
 	}
 	
 	/**
 	 * In case of error, a simple error image is provided.
 	 * 
 	 * 
-	 * @param file - The file to be loaded (it can reference either a .jasper or a .jrxml).
-	 *               If the file does not have a proper extension, jrxml is assumed.
+	 * @param file - A file location. 
 	 * @param context - A context to be used when rendering the preview and to locate the file
 	 * @param thumbnailSize - If 0 it defaults to ReportThumbnailsManager.THUMBNAIL_SIZE, but the maximum precision used is still THUMBNAIL_SIZE
 	 * 		               which means that this preview will cached at THUMBNAIL_SIZE, even if the final image could be at any size.
@@ -217,13 +212,14 @@ public class ReportThumbnailsManager {
 	 *                    cropped to the document is preferred, so this is what crop does. If true, the shadow will ignored.
 	 * @return
 	 */
-	public static Image produceImage(File file, JasperReportsContext context, int thumbnailSize, boolean drawShadow, boolean cropDocument)
+	public static Image produceImage(String location, JasperReportsConfiguration context, int thumbnailSize, boolean drawShadow, boolean cropDocument)
 	{
 	
 		if (thumbnailSize == 0) thumbnailSize = THUMBNAIL_SIZE;
 		
 		java.awt.Image previewImage = null;
 		
+		File file = findFile(location, context);
     	if (file == null || !file.exists()) { 
     		previewImage = getErrorImage();
 		}
@@ -232,9 +228,9 @@ public class ReportThumbnailsManager {
 	    	ThumbnailCacheItem cachedItem = null;
 	    	
 	    	// Check if we have a cached image, in that case we can get it ...
-	    	if (cachedItems.containsKey(file.toString()))
+	    	if (cachedItems.containsKey(location))
 	    	{
-	    		cachedItem = cachedItems.get(file.toString());
+	    		cachedItem = cachedItems.get(cachedItems);
 	    		if (file.lastModified() > cachedItem.getTimestamp().getTime())
 	    		{
 	    			// This cache item is old, we can delete it...
@@ -243,14 +239,14 @@ public class ReportThumbnailsManager {
 	    		}
 	    	}
 	    	
-			if (context == null) context = DefaultJasperReportsContext.getInstance();
-			
-			
+	    	JasperReportsContext previewContext = context;
+			if (previewContext == null) previewContext =  DefaultJasperReportsContext.getInstance();
 			
 			// Generate a simple preview of our report, and add it to the cache...
 			if (cachedItem == null)
 			{
-			
+					setLoadingItem(location);
+					ExtensionLoader.waitIfLoading();
 					JRReport report = null;
 					// by default we assume we are loading a jrxml until the file name ends with .jasper
 					if (!file.getName().toLowerCase().endsWith(".jasper"))
@@ -272,7 +268,6 @@ public class ReportThumbnailsManager {
 							previewImage = getErrorImage(); 
 						}
 					}
-					
 					// If there was an error, previewImage is now pointing to a default error image...
 					if (previewImage == null)
 					{
@@ -297,9 +292,9 @@ public class ReportThumbnailsManager {
 							// Here is where the magic happens... JasperReports will fill our image...
 							try {
 								
-								JasperPrint jasperPrint = new ReportConverter(context, report, false).getJasperPrint();
+								JasperPrint jasperPrint = new ReportConverter(previewContext, report, false).getJasperPrint();
 								
-								JRGraphics2DExporter exporter = new JRGraphics2DExporter(context);
+								JRGraphics2DExporter exporter = new JRGraphics2DExporter(previewContext);
 								exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 								
 								SimpleGraphics2DExporterOutput output = new SimpleGraphics2DExporterOutput();
@@ -314,7 +309,7 @@ public class ReportThumbnailsManager {
 								
 								// Let's cache this result!
 								cachedItem = new ThumbnailCacheItem(file.toString(), previewImage, report);
-								cachedItems.put(cachedItem.getLocation(), cachedItem);
+								cachedItems.put(location, cachedItem);
 								
 							} catch (Exception ex)
 							{
@@ -324,7 +319,7 @@ public class ReportThumbnailsManager {
 								previewImage = getErrorImage();
 							}
 					}
-					
+					removeLoadingItem(location);
 			}
 			else
 			{
@@ -342,11 +337,7 @@ public class ReportThumbnailsManager {
 		// of the document (i.e. portrait or landscape) until is not requested differently...
 		
     	return generateImage(previewImage, thumbnailSize, drawShadow, cropDocument);
-
 	}
-	
-	
-	
 	
 	/**
 	 * Provides a no preview image with the requested properties.
@@ -364,11 +355,8 @@ public class ReportThumbnailsManager {
 	public static final Image getNoPreviewImage(int thumbnailSize, boolean drawShadow, boolean cropDocument)
 	{
 			if (thumbnailSize == 0) thumbnailSize = THUMBNAIL_SIZE;
-			
 			return generateImage(getErrorImage(), thumbnailSize, drawShadow, cropDocument);
 	}
-
-
 
 	/**
 	 * Take the provided image and creates a thumbail with the requested properties.
@@ -462,8 +450,6 @@ public class ReportThumbnailsManager {
 		
 	}
 	
-	
-	
 	/**
 	 * This method allows to cache an image to be used in a Figure.
 	 * The image is copied and stored.
@@ -512,8 +498,112 @@ public class ReportThumbnailsManager {
 		return null;
 	}
 
+	/**
+	 * Return the location path of a report referenced by a report part.
+	 * If the report is not found and the referenced one is a .jasper it's 
+	 * jrxml is searched. 
+	 * 
+	 * @param model the model used to reference the report
+	 * @return the path of the report or null if it can't be located
+	 */
+	public static String getLocation(MReportPart model){
+		Object reportFileName = null;
+		// Try to find the expression used to reference the jrxml or
+		// jasper file
+		// used to fill this part.
+		JRDesignPart jrDesignPart = model.getValue();
+		JasperReportsConfiguration context = model.getJasperConfiguration();
+		if (jrDesignPart != null) {
+			PartComponent partComponent = jrDesignPart.getComponent();
+			if (partComponent instanceof SubreportPartComponent) {
+				JRExpression subreportExp = ((SubreportPartComponent) partComponent).getExpression();
+				if (subreportExp != null) {
+
+					// Try to evaluate the subreport expression for
+					// this part.
+					// The dataset to use is clearly the main
+					// dataset, since we don't have
+					// other options in Jasperbook...
+					JRDesignDataset dataset = (JRDesignDataset)model.getJasperDesign().getMainDataset();
+					reportFileName =  ExpressionUtil.cachedExpressionEvaluation(subreportExp, context, dataset);
+
+				}
+			}
+		}
+
+		if (reportFileName == null) return null;
+		if (reportFileName instanceof File) {
+			reportFileName = ((File) reportFileName).toURI().toString();
+		} else if (!(reportFileName instanceof String)) {
+			return null;
+		}
+		//The file to be loaded  can reference either a .jasper or a .jrxml.
+		//If the file does not have a proper extension, jrxml is assumed.
+		String location = (String)reportFileName;
+		File f = findFile(location, context);
+		if (( f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper"))
+		{
+			// check for a jrxml...
+			 location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml";
+		}
+		return location;
+	}
 	
+	/**
+	 * Set a key as currently loading item
+	 * 
+	 * @param key key to set
+	 */
+	private static void setLoadingItem(String key){
+		synchronized (loadingItems) {
+			loadingItems.add(key);
+		}
+	}
 	
+	/**
+	 * Set a key as currently loaded item
+	 * 
+	 * @param key key to set
+	 */
+	private static void removeLoadingItem(String key){
+		synchronized (loadingItems) {
+			loadingItems.remove(key);
+		}
+	}
+	
+	/**
+	 * Check if a key belong to a currently loading item
+	 * 
+	 * @param key key to check
+	 * @return true if the key is of an item currently loading,
+	 * false otherwise
+	 */
+	private static boolean isLoadingItem(String key){
+		synchronized (loadingItems) {
+			return loadingItems.contains(key);
+		}
+	}
+	
+	/**
+	 * Return a loaded jasperdesign. If it is currently
+	 * loading then it wait until the load is complete
+	 * 
+	 * @param the location of the jasper or a jrxml file of a report part
+	 * @return The jasperdesign or null if the jasper design
+	 * can not be found
+	 */
+	public static JRReport getJasperDesign(String location){
+		while(isLoadingItem(location)){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		ThumbnailCacheItem item = cachedItems.get(location);
+		if (item != null) return item.getReport();
+		return null;
+	}
 }
 
 

@@ -12,21 +12,13 @@
  ******************************************************************************/
 package com.jaspersoft.studio.book.wizards;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRReport;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignPart;
-import net.sf.jasperreports.engine.part.PartComponent;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
 
 import org.eclipse.swt.SWT;
 
@@ -39,9 +31,6 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.GenericJSSPara
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.InputParameterDialog;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterPage;
-import com.jaspersoft.studio.utils.ExpressionUtil;
-import com.jaspersoft.studio.utils.jasper.ExtensionLoader;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Wizard to add, remove or edit the parameters from an
@@ -56,15 +45,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  */
 public class PartPropertyEditor extends ParameterEditor {
 	
-	/**
-	 * The loaded report for the inspect of the parameters
-	 */
-	private JRReport partReport;
-	
-	/**
-	 * True if the report is currently under loading, false otherwise
-	 */
-	private boolean isLoading = false;
+	private MReportPart part;
 	
 	/**
 	 * Page where the user can add parameters
@@ -127,7 +108,7 @@ public class PartPropertyEditor extends ParameterEditor {
 	 */
 	public PartPropertyEditor(MReportPart part) {
 		super();
-		preloadReport(part);
+		this.part = part;
 	}
 	
 	@Override
@@ -141,27 +122,6 @@ public class PartPropertyEditor extends ParameterEditor {
 	}
 	
 	/**
-	 * Set the value of the loading flag. This method is
-	 * thread safe
-	 * 
-	 * @param value the new loading status
-	 */
-	private synchronized void setLoading(boolean value){
-		isLoading = value;
-	}
-	
-	/**
-	 * Check if the report is currently under loading. This
-	 * method is thread safe
-	 * 
-	 * @return true if the design is currently under loading,
-	 * false otherwise
-	 */
-	private synchronized boolean isLoading(){
-		return isLoading;
-	}
-	
-	/**
 	 * Return the loaded jasperdesign. If it is currently
 	 * loading then it wait until the load is complete
 	 * 
@@ -169,74 +129,7 @@ public class PartPropertyEditor extends ParameterEditor {
 	 * can not be found
 	 */
 	public JRReport getJasperDesign(){
-		while(isLoading()){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		return partReport;
-	}
-	
-	/**
-	 * Run the thread that pre-load the target report
-	 * 
-	 * @param part part containing the expression of the target report
-	 * to preload
-	 */
-	private void preloadReport(final MReportPart part) {
-		Thread t = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				setLoading(true);
-				ExtensionLoader.waitIfLoading();
-				try {
-					Object reportFileName = null;
-					JRDesignPart jrDesignPart = part.getValue();
-					JasperReportsConfiguration context = part.getJasperConfiguration();
-					if (jrDesignPart != null) {
-						PartComponent partComponent = jrDesignPart
-								.getComponent();
-						if (partComponent instanceof SubreportPartComponent) {
-							JRExpression subreportExp = ((SubreportPartComponent) partComponent)
-									.getExpression();
-							if (subreportExp != null) {
-								JRDesignDataset dataset = (JRDesignDataset)part.getJasperDesign().getMainDataset();
-								reportFileName = ExpressionUtil.cachedExpressionEvaluation(subreportExp, context, dataset);
-							}
-						}
-					}
-
-					// Report not found
-					if (reportFileName == null) return;
-
-					if (reportFileName instanceof File) {
-						reportFileName = ((File) reportFileName).toURI().toString();
-					} else if (!(reportFileName instanceof String)) {
-						return; // We only understand string paths...
-					}
-					String location = (String) reportFileName;
-					File f = ReportThumbnailsManager.findFile(location, context);
-					if ((f == null || !f.exists()) && location.toLowerCase().endsWith(".jasper")) {
-						// check for a jrxml...
-						location = location.substring(0, location.length() - ".jasper".length()) + ".jrxml";
-						f = ReportThumbnailsManager.findFile(location, context);
-					}
-					if (f.getName().toLowerCase().endsWith(".jasper")){
-						partReport = (JRReport) JRLoader.loadObject(f);
-					} else {
-						partReport = (JRReport) JRXmlLoader.load(f);
-					}
-					
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					partReport = null;
-				}
-				setLoading(false);
-			}
-		});
-		t.start();
+		String location = ReportThumbnailsManager.getLocation(part);
+		return ReportThumbnailsManager.getJasperDesign(location);
 	}
 }
