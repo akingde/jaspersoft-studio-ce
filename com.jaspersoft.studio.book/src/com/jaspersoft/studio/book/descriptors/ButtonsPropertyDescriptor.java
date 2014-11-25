@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.jaspersoft.studio.help.IHelp;
@@ -51,6 +52,8 @@ public class ButtonsPropertyDescriptor extends PropertyDescriptor implements IPr
 	public ButtonsPropertyDescriptor(Object id, Class<? extends ASPropertyWidget> button) {
 		super(id, "");
 		this.button = button;
+		//This filter avoid to show this element on the advanced properties views
+		setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 	}
 
 	/**

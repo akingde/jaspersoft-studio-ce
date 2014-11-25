@@ -32,7 +32,7 @@ public class ComboParametersPage extends ParameterPage {
 	/**
 	 * List of the parameter defined on the dataset
 	 */
-	private JRParameter[] availableParameters;
+	protected JRParameter[] availableParameters;
 
 	/**
 	 * Build the page to edit the parameters
@@ -52,7 +52,7 @@ public class ComboParametersPage extends ParameterPage {
 	 * 
 	 * @return the list of string displayed in the combo
 	 */
-	private List<String> createNameComboInput(){
+	protected List<String> createNameComboInput(){
 		List<String> result = new ArrayList<String>();
 		HashSet<String> usedParams = new HashSet<String>();
 		for(GenericJSSParameter param : values){

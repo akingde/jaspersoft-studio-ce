@@ -26,6 +26,10 @@ public class Messages extends NLS {
 	public static String MReportPart_cacheLabel;
 	public static String MReportPart_componentExpression;
 	public static String MReportPart_componentExpressionTooltip;
+	public static String MReportPart_connectionExp;
+	public static String MReportPart_connectionExpDesc;
+	public static String MReportPart_dataSourceExp;
+	public static String MReportPart_dataSourceExpDesc;
 	public static String MReportPart_evaluationTimeTooltip;
 	public static String MReportPart_parametersDescription;
 	public static String MReportPart_partName;
@@ -35,6 +39,7 @@ public class Messages extends NLS {
 	public static String MReportPart_returnDescription;
 	public static String PageOpener_actionName;
 	public static String PageOpener_dialogTitle;
+	public static String PageWizard_newPageWizardTitle;
 	public static String PartPropertyEditor_pageDescription;
 	public static String PartPropertyEditor_pageTitle;
 	public static String PartPropertyEditor_wizardTitle;

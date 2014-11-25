@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book.dnd;
 
 import java.util.List;
@@ -16,8 +28,18 @@ import org.eclipse.swt.graphics.Cursor;
 import com.jaspersoft.studio.book.editparts.BookPagesEditPart;
 import com.jaspersoft.studio.book.editparts.BookSectionEditPart;
 
+/**
+ * Drag tracker for the editparts inside the editor, allow to calculate the drop location
+ * during the drag and drop operations
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class PageEditPartTracker extends DragEditPartsTracker {
 
+	/**
+	 * The current drop location, shared between all the elements
+	 */
 	private static DropLocation dropLocation = new DropLocation(null, null);
 	
 	public PageEditPartTracker(EditPart sourceEditPart) {
@@ -81,6 +103,13 @@ public class PageEditPartTracker extends DragEditPartsTracker {
 		}
 	}
 	
+	/**
+	 * Calculate after which element the dragged element was moved inside the container
+	 * edit part
+	 * 
+	 * @param targetPart the target container
+	 * @param location the point where the element is begin dragged at the moment
+	 */
 	public static DropLocation getDropLocation(EditPart targetPart, Point location){
 		EditPart afterPart = null;
 		EditPart container = null;

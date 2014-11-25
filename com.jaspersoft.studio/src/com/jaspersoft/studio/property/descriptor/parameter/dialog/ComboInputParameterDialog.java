@@ -42,15 +42,33 @@ public class ComboInputParameterDialog  extends InputParameterDialog {
 	private List<String> availableNames;
 	
 	/**
-	 * Create the dialog for an edit operation
+	 * Style for the combo
+	 */
+	private int style_bit;
+	
+	/**
+	 * Create the dialog for an edit operation the combo to select the parameter name will be read only
 	 * 
 	 * @param parentShell the shell
 	 * @param editedParameter the parameter to edit
 	 * @param availableNames a not null list of the available names for the parameter
 	 */
 	public ComboInputParameterDialog(Shell parentShell, List<String> availableNames, GenericJSSParameter editedParameter) {
+		this(parentShell, availableNames, editedParameter, SWT.READ_ONLY);
+	}
+	
+	/**
+	 * Create the dialog for an edit operation, the combo to select the parameter name will have a user defined style bit
+	 * 
+	 * @param parentShell the shell
+	 * @param editedParameter the parameter to edit
+	 * @param availableNames a not null list of the available names for the parameter
+	 * @param style_bit the style bit for the combo
+	 */
+	public ComboInputParameterDialog(Shell parentShell, List<String> availableNames, GenericJSSParameter editedParameter, int style_bit) {
 		super(parentShell, editedParameter , new ArrayList<GenericJSSParameter>());
 		this.availableNames = availableNames;
+		this.style_bit = style_bit;
 	}
 	
 	/**
@@ -86,7 +104,7 @@ public class ComboInputParameterDialog  extends InputParameterDialog {
 	
 	@Override
 	protected Control getParameterNameControl(Composite parent) {
-		final Combo comboParamterName = new Combo(parent, SWT.READ_ONLY);
+		final Combo comboParamterName = new Combo(parent, style_bit);
 		comboParamterName.setItems(availableNames.toArray(new String[availableNames.size()]));
 		comboParamterName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboParamterName.addSelectionListener(new SelectionAdapter() {

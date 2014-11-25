@@ -1,9 +1,21 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book;
 
 import java.awt.Image;
 import java.util.Date;
 
-
+import net.sf.jasperreports.engine.JRReport;
 
 /**
  * This cache item just stores an AWT Image preview of a report
@@ -26,12 +38,14 @@ public class ThumbnailCacheItem {
 	private String location = null;
 	private Date cacheDate = null;
 	private Image preview = null;
+	private JRReport design;
 	
-	public ThumbnailCacheItem(String location, Image previewImage)
+	public ThumbnailCacheItem(String location, Image previewImage, JRReport report)
 	{
 		this.preview = previewImage;
 		this.cacheDate = new java.util.Date();
 		this.location = location;
+		this.design = report;
 	}
 	
     /**
@@ -50,7 +64,7 @@ public class ThumbnailCacheItem {
 		return cacheDate;
 	}
 
-	
-    
-	
+	public JRReport getReport(){
+		return design;
+	}
 }

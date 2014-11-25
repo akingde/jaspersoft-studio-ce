@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignPart;
 import net.sf.jasperreports.engine.part.PartComponent;
 import net.sf.jasperreports.parts.subreport.SubreportPartComponent;
@@ -136,7 +137,8 @@ public class BookPagesFigure extends RectangleFigure {
 								// The dataset to use is clearly the main
 								// dataset, since we don't have
 								// other options in Jasperbook...
-								reportFileName = ExpressionUtil.eval(subreportExp, model.getJasperDesign().getMainDataset(), model.getJasperConfiguration());
+								JRDesignDataset dataset = (JRDesignDataset)model.getJasperDesign().getMainDataset();
+								reportFileName =  ExpressionUtil.cachedExpressionEvaluation(subreportExp, model.getJasperConfiguration(), dataset);
 
 							}
 						}

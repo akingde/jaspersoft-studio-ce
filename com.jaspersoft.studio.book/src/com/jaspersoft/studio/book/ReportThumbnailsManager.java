@@ -313,7 +313,7 @@ public class ReportThumbnailsManager {
 								exporter.exportReport(); // Here is where the magic happens...
 								
 								// Let's cache this result!
-								cachedItem = new ThumbnailCacheItem(file.toString(), previewImage);
+								cachedItem = new ThumbnailCacheItem(file.toString(), previewImage, report);
 								cachedItems.put(cachedItem.getLocation(), cachedItem);
 								
 							} catch (Exception ex)

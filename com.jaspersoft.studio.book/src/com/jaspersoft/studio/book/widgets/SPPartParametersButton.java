@@ -52,12 +52,12 @@ public class SPPartParametersButton extends ASPropertyWidget {
 	private Button button;
 
 	/**
+	 * Create the button widget
 	 * 
-	 * @param parent
-	 * @param section
-	 * @param pDescriptor
-	 * @param buttonText
-	 *          text on the button
+	 * @param parent the parent of the button
+	 * @param section the section where the button is placed
+	 * @param pDescriptor the descriptor handle by the button
+	 * @param buttonText text on the button
 	 */
 	public SPPartParametersButton(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -83,7 +83,7 @@ public class SPPartParametersButton extends ASPropertyWidget {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MReportPart part = (MReportPart)section.getElement();
-				PartPropertyEditor wizard = new PartPropertyEditor();
+				PartPropertyEditor wizard = new PartPropertyEditor(part);
 				wizard.setExpressionContext(getContext(part));
 				List<GenericJSSParameter> genericValues = GenericJSSParameter.convertFrom(part.getSubreportComponent().getParameters());
 				wizard.setValue(genericValues);

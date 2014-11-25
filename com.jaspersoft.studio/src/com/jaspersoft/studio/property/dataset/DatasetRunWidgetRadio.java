@@ -38,6 +38,38 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 
 	protected boolean ignoreUpdates = false;
 
+	private boolean isReportConnection = false;
+	
+	private boolean isEmptyDatasource = false;
+
+	private boolean isUseParentConnection = false;
+	
+	private boolean isUseConnectionExpression = false;
+	
+	private boolean isUseDatasourceExpression = false;
+	
+	private boolean isUseEmptyDatasource = false;
+	
+	private boolean isNoConnection = false;
+	
+	private Composite composite;
+	
+	private WTextExpression datasourceExpressionBox;
+	
+	private WTextExpression connectionExpressionBox;
+	
+	private Button radioUseParentConnection;
+	
+	private Button radioUseConnectionExpression;
+	
+	private Button radioUseDatasourceExpression;
+	
+	private Button radioUseEmptyDatasource;
+	
+	private Button radioNoConnection;
+	
+	private Listener listener;
+	
 	public DatasetRunWidgetRadio(Composite parent) {
 		createControl(parent);
 	}
@@ -56,42 +88,22 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		isUseEmptyDatasource = false;
 		isNoConnection = false;
 
-		// connectionExpressionBox.setExpression(null);
-		// datasourceExpressionBox.setExpression(null);
-
 		if (datasetrun != null) {
 			if (datasetrun.getConnectionExpression() != null) {
-				// connectionExpressionBox.setExpression((JRDesignExpression) datasetrun.getConnectionExpression());
 				isReportConnection = datasetrun.getConnectionExpression().getText().equals("$P{REPORT_CONNECTION}");
-
 				isUseParentConnection = isReportConnection;
 				isUseConnectionExpression = !isReportConnection;
 			} else if (datasetrun.getDataSourceExpression() != null) {
-				// datasourceExpressionBox.setExpression((JRDesignExpression) datasetrun.getDataSourceExpression());
-				isEmptyDatasource = datasetrun.getDataSourceExpression().getText()
-						.equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
-
+				isEmptyDatasource = datasetrun.getDataSourceExpression().getText().equals("new net.sf.jasperreports.engine.JREmptyDataSource()");
 				isUseEmptyDatasource = isEmptyDatasource;
 				isUseDatasourceExpression = !isEmptyDatasource;
 			} else {
 				isNoConnection = true;
 			}
-		} else {
-			// connectionExpressionBox.setExpression(null);
-			// datasourceExpressionBox.setExpression(null);
 		}
 		setEnabledWidgets();
 		addListeners();
 	}
-
-	private boolean isReportConnection = false;
-	private boolean isEmptyDatasource = false;
-
-	private boolean isUseParentConnection = false;
-	private boolean isUseConnectionExpression = false;
-	private boolean isUseDatasourceExpression = false;
-	private boolean isUseEmptyDatasource = false;
-	private boolean isNoConnection = false;
 
 	private void setEnabledWidgets() {
 		setSelection4Widget(radioUseParentConnection, isUseParentConnection);
@@ -131,16 +143,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 	public void setEnabled(boolean en) {
 		composite.setEnabled(en);
 	}
-
-	private Composite composite;
-	private WTextExpression datasourceExpressionBox;
-	private WTextExpression connectionExpressionBox;
-	private Button radioUseParentConnection;
-	private Button radioUseConnectionExpression;
-	private Button radioUseDatasourceExpression;
-	private Button radioUseEmptyDatasource;
-	private Button radioNoConnection;
-	private Listener listener;
 
 	public void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
@@ -202,10 +204,6 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter {
 		listener = new Listener() {
 
 			public void handleEvent(Event event) {
-				// if (time > 0 && event.time - time < 20)
-				// return;
-				// time = event.time;
-
 				if (radioNoConnection.getSelection())
 					setNoConnection();
 				else if (radioUseConnectionExpression.getSelection())

@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book.model;
 
 import java.util.List;
@@ -14,6 +26,7 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignPart;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
 import net.sf.jasperreports.engine.part.PartComponent;
 import net.sf.jasperreports.engine.part.PartEvaluationTime;
 import net.sf.jasperreports.engine.part.StandardPartEvaluationTime;
@@ -42,20 +55,41 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 
+/**
+ * Model element for the JRDesignPart objects
+ *
+ */
 public class MReportPart extends APropertyNode {
 	
 	private static final ImageDescriptor standardReportImgDesc = JRBookActivator.getDefault().getImageDescriptor("/icons/report_loading_preview.png");; //$NON-NLS-1$
 	
 	public static final String COMPONENT_NAMESPACE = "http://jasperreports.sourceforge.net/jasperreports/parts"; //$NON-NLS-1$
+	
 	public static final String COMPONENT_NAMESPACE_PREFIX = "p"; //$NON-NLS-1$
+	
 	public static final String COMPONENT_NAME = "subreportPart"; //$NON-NLS-1$
+	
+	public static final String REPORT_CONNECTION = "reportConnection"; //$NON-NLS-1$
+	
+	public static final String REPORT_DATASOURCE = "reportDatasource"; //$NON-NLS-1$
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	
 	public static final String PROPERTY_EVALTIME_TYPE = "part_evaluationtime_type"; //$NON-NLS-1$
+	
 	public static final String PROPERTY_EVALTIME_GROUP = "part_evaluationtime_group"; //$NON-NLS-1$
+	
 	public static final String COMPONENT_EXPRESSION = "component_expression"; //$NON-NLS-1$
+	
 	public static final String COMPONENT_PARAMETERS = "component_parameters"; //$NON-NLS-1$
+	
 	public static final String PROPERTY_MAP = "property_map"; //$NON-NLS-1$
+	
+	//PROPERTIES
+	
+	public static final String REPORT_CONNECTION_PROPERTY = "REPORT_CONNECTION"; //$NON-NLS-1$
+	
+	public static final String REPORT_DATASOURCE_PROPERTY = "REPORT_DATA_SOURCE"; //$NON-NLS-1$
 	
 	// The icon descriptor
 	private static IIconDescriptor iconDescriptor;
@@ -139,6 +173,16 @@ public class MReportPart extends APropertyNode {
 				}
 				return new JRSubreportParameter[0];
 			}
+			if (id.equals(REPORT_CONNECTION)){
+				JRSubreportParameter value = getParameterValue(REPORT_CONNECTION_PROPERTY);
+				if ( value != null) return value.getExpression();
+				else return null;
+			} 
+			if (id.equals(REPORT_DATASOURCE)){
+				JRSubreportParameter value = getParameterValue(REPORT_DATASOURCE_PROPERTY);
+				if ( value != null) return value.getExpression() ;
+				else return null;
+			}
 		}
 		return null;
 	}
@@ -203,8 +247,61 @@ public class MReportPart extends APropertyNode {
 						}
 					}
 				}
+			} else if (id.equals(REPORT_CONNECTION)){
+				setParameterValue(REPORT_CONNECTION_PROPERTY, value != null ? ((JRExpression)value).getText() : null);
+			} else if (id.equals(REPORT_DATASOURCE)){
+				setParameterValue(REPORT_DATASOURCE_PROPERTY, value != null ? ((JRExpression)value).getText() : null);
 			}
 		}
+	}
+	
+	/**
+	 * Set the value of a parameter for the component of the element. This is done only if 
+	 * the component is of type StandardSubreportPartComponent. If the value of the parameter is
+	 * null then the parameter is removed
+	 * 
+	 * @param name of the parameter
+	 * @param value of the parameter
+	 */
+	private void setParameterValue(String parameterName, String value){
+		JRDesignPart jrpart = (JRDesignPart) getValue();
+		if (jrpart != null) {
+			PartComponent component = jrpart.getComponent();
+			if (component != null && component instanceof StandardSubreportPartComponent) {
+				StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent) component;
+				subComponent.removeParameter(parameterName);
+				if (value != null && !value.isEmpty()){
+					JRDesignSubreportParameter parameter = new JRDesignSubreportParameter();
+					parameter.setName(parameterName);
+					parameter.setExpression(new JRDesignExpression(value));
+					try {
+						subComponent.addParameter(parameter);
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Return a value of a parameter for the component of the element. This is done only if 
+	 * the component is of type StandardSubreportPartComponent.
+	 * 
+	 * @param parameterName the name of the parameter
+	 * @return the value of the parameter or null if the component is not of a type StandardSubreportPartComponent
+	 * or the parameter is not defined
+	 */
+	private JRSubreportParameter getParameterValue(String parameterName){
+		JRDesignPart jrpart = (JRDesignPart) getValue();
+		if (jrpart != null) {
+			PartComponent component = jrpart.getComponent();
+			if (component != null && component instanceof StandardSubreportPartComponent) {
+				StandardSubreportPartComponent subComponent = (StandardSubreportPartComponent) component;
+				return subComponent.getParametersMap().get(parameterName);
+			}
+		}
+		return null;
 	}
 	
 	public StandardSubreportPartComponent getSubreportComponent(){
@@ -289,6 +386,14 @@ public class MReportPart extends APropertyNode {
 		usingCache.setShowTextOnButton(false);
 		usingCache.setDescription(Messages.MReportPart_cacheDescription);
 		desc.add(usingCache);
+		
+		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(REPORT_CONNECTION, Messages.MReportPart_connectionExp);
+		connExprD.setDescription(Messages.MReportPart_connectionExpDesc);
+		desc.add(connExprD);
+
+		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(REPORT_DATASOURCE, Messages.MReportPart_dataSourceExp);
+		dsExprD.setDescription(Messages.MReportPart_dataSourceExpDesc);
+		desc.add(dsExprD);
 		
 		defaultsMap.put(PROPERTY_EVALTIME_TYPE, PartEvaluationTimeType.NOW);
 		defaultsMap.put(PROPERTY_EVALTIME_GROUP, null);
