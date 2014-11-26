@@ -38,8 +38,6 @@ import net.sf.jasperreports.eclipse.util.FileExtension;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.glassfish.jersey.SslConfigurator;
@@ -122,9 +120,16 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 		clientConfig.property(ApacheClientProperties.SSL_CONFIG, sslConfig);
 
 		PoolingClientConnectionManager cxMgr = new PoolingClientConnectionManager();
-		cxMgr.setMaxTotal(100);
+		cxMgr.setMaxTotal(50);
 		cxMgr.setDefaultMaxPerRoute(20);
 		clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, cxMgr);
+
+		// MultiThreadedHttpConnectionManager connectionManager = new
+		// MultiThreadedHttpConnectionManager();
+		// connectionManager.getParams().setDefaultMaxConnectionsPerHost(20);
+		// connectionManager.getParams().setMaxTotalConnections(20);
+		// clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER,
+		// connectionManager);
 
 		connector = new JSSApacheConnectorFactory();
 		clientConfig.connectorProvider(connector);
@@ -781,7 +786,6 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 	@Override
 	public void findResources(IProgressMonitor monitor, AFinderUI callback)
 			throws Exception {
-		connector.closeLastRequest();
 		if (callback.getText() == null) {
 			callback.showResults(null);
 			return;

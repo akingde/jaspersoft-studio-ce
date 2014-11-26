@@ -22,7 +22,8 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 		return conn;
 	}
 
-	private Response doWait(Future<Response> rf, IProgressMonitor monitor) throws Exception {
+	private Response doWait(Future<Response> rf, IProgressMonitor monitor)
+			throws Exception {
 		try {
 			if (monitor != null)
 				while (!rf.isDone() && !rf.isCancelled()) {
@@ -38,24 +39,23 @@ public class JSSApacheConnectorFactory extends ApacheConnectorProvider {
 		}
 	}
 
-	public void closeLastRequest() {
-		if (conn != null)
-			conn.close();
-	}
-
-	public synchronized Response get(Builder builder, IProgressMonitor monitor) throws Exception {
+	public synchronized Response get(Builder builder, IProgressMonitor monitor)
+			throws Exception {
 		return doWait(builder.async().get(), monitor);
 	}
 
-	public Response delete(Builder builder, IProgressMonitor monitor) throws Exception {
+	public Response delete(Builder builder, IProgressMonitor monitor)
+			throws Exception {
 		return doWait(builder.async().delete(), monitor);
 	}
 
-	public Response post(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
+	public Response post(Builder builder, Entity<?> entity,
+			IProgressMonitor monitor) throws Exception {
 		return doWait(builder.async().post(entity), monitor);
 	}
 
-	public Response put(Builder builder, Entity<?> entity, IProgressMonitor monitor) throws Exception {
+	public Response put(Builder builder, Entity<?> entity,
+			IProgressMonitor monitor) throws Exception {
 		// builder.header("Content-Lenght", 0);
 		return doWait(builder.async().put(entity), monitor);
 	}
