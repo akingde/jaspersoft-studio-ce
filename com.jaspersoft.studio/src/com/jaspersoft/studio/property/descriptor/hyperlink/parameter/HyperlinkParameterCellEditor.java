@@ -47,7 +47,7 @@ public class HyperlinkParameterCellEditor extends DialogCellEditor implements IE
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
-			return GenericJSSParameter.convertToHyperlink(wizard.getValue())
+			return GenericJSSParameter.convertToHyperlink(wizard.getValue());
 		}
 		return null;
 	}
