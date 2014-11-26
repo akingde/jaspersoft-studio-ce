@@ -11,6 +11,7 @@ package com.jaspersoft.studio.editor.action.json;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.export.JsonMetadataReportConfiguration;
 
 import org.eclipse.gef.commands.Command;
@@ -20,6 +21,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.Misc;
 
 /**
  * 
@@ -50,8 +52,13 @@ public class JSONEscapeMembersAction extends JSONAction {
 		MReport model = getSelectedElement();
 		if (model == null)
 			return false;
+		boolean escape = JRPropertiesUtil.getInstance(model.getJasperConfiguration()).getBooleanProperty(
+				JsonMetadataReportConfiguration.JSON_EXPORTER_ESCAPE_MEMBERS, true);
 		JRPropertiesMap colDataMap = (JRPropertiesMap) model.getValue().getPropertiesMap();
-		return colDataMap.containsProperty(JsonMetadataReportConfiguration.JSON_EXPORTER_ESCAPE_MEMBERS);
+		String esc = colDataMap.getProperty(JsonMetadataReportConfiguration.JSON_EXPORTER_ESCAPE_MEMBERS);
+		if (esc != null)
+			escape = Misc.nvl(Boolean.valueOf(esc), escape);
+		return escape;
 	}
 
 	@Override
