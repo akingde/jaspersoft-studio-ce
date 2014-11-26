@@ -1,7 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='36'>
+  <ius size='38'>
+    <iu id='com.google.guava' name='Guava: Google Core Libraries for Java' version='15.0.0.v201403281430'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
+      </repositories>
+    </iu>
+    <iu id='com.google.guava.source' name='Guava: Google Core Libraries for Java Source' version='15.0.0.v201403281430'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/'/>
+      </repositories>
+    </iu>
     <iu id='com.buzzcoders.yasw.widgets.map.feature.feature.group' name='YASW Map widget' version='1.0.0.v20140304-0957'>
       <repositories size='1'>
         <repository location='http://yasw-library.sf.net/updates/'/>
