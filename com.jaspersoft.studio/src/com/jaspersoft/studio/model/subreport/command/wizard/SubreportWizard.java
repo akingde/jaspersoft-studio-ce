@@ -104,7 +104,8 @@ public class SubreportWizard extends JSSWizard {
 		for (IWizard w : getChildWizards())
 		{
 			if (w instanceof ReportNewWizard){
-				((ReportNewWizard) w).getSettings().put(StaticWizardDataSourcePage.EXTRA_PARAMETERS, step3.getValue());
+				JRSubreportParameter[] parameters = GenericJSSParameter.convertToSubreport(step3.getValue());
+ 				((ReportNewWizard) w).getSettings().put(StaticWizardDataSourcePage.EXTRA_PARAMETERS, parameters);
 			}
 			w.performFinish();
 		}
