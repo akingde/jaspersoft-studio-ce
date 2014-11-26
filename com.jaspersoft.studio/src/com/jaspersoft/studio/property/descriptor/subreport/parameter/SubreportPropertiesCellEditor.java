@@ -49,7 +49,7 @@ public class SubreportPropertiesCellEditor extends DialogCellEditor {
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
-			return wizard.getValue();
+			return GenericJSSParameter.convertToSubreport(wizard.getValue());
 		}
 		return null;
 	}
