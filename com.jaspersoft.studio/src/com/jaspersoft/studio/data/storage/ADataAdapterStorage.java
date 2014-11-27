@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
@@ -25,13 +21,15 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 
 public abstract class ADataAdapterStorage {
-	
+
 	public static final String PROP_DATAADAPTERS = "DATAADAPTERS";
-	
+
 	private PropertyChangeSupport propChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 
+	public abstract String getStorageName();
+
 	protected Map<String, DataAdapterDescriptor> daDescriptors;
-	
+
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propChangeSupport.addPropertyChangeListener(listener);
 	}
@@ -39,7 +37,7 @@ public abstract class ADataAdapterStorage {
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		propChangeSupport.removePropertyChangeListener(listener);
 	}
-	
+
 	public Collection<DataAdapterDescriptor> getDataAdapterDescriptors() {
 		if (daDescriptors == null) {
 			daDescriptors = new LinkedHashMap<String, DataAdapterDescriptor>();
@@ -47,18 +45,18 @@ public abstract class ADataAdapterStorage {
 		}
 		return daDescriptors.values();
 	}
-	
-	private String generateDataAdapterName(DataAdapterDescriptor adapter){
+
+	protected String generateDataAdapterName(DataAdapterDescriptor adapter) {
 		String adapterName = adapter.getName();
 		int counter = 1;
-		while(daDescriptors.containsKey(adapterName)){
+		while (daDescriptors.containsKey(adapterName)) {
 			adapterName = adapter.getName() + "_" + counter;
 			counter++;
 		}
 		return adapterName;
 	}
-	
-	protected void forceAddDataAdapter(DataAdapterDescriptor adapter){
+
+	protected void forceAddDataAdapter(DataAdapterDescriptor adapter) {
 		String adapterName = generateDataAdapterName(adapter);
 		daDescriptors.put(adapterName, adapter);
 		propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
@@ -74,37 +72,37 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public boolean removeDataAdapter(DataAdapterDescriptor da) {
-			if (daDescriptors.containsKey(da.getName())){
-				daDescriptors.remove(da.getName());
-				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
-				return true;
-			} 
-			//FIXME: This code is only to recover broken workspace in the future can be removed
-			//Maybe it was a duplicated data adapter, search it manually
-			String key = getUrl(da);
-			if (key != null){
-				daDescriptors.remove(key);
-				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
-				return true;
-			}
-			return false;
+		if (daDescriptors.containsKey(da.getName())) {
+			daDescriptors.remove(da.getName());
+			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
+			return true;
+		}
+		// FIXME: This code is only to recover broken workspace in the future can be removed
+		// Maybe it was a duplicated data adapter, search it manually
+		String key = getUrl(da);
+		if (key != null) {
+			daDescriptors.remove(key);
+			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, da, null);
+			return true;
+		}
+		return false;
 	}
-	
-	public boolean editDataAdapter(String oldName, DataAdapterDescriptor adapter){
+
+	public boolean editDataAdapter(String oldName, DataAdapterDescriptor adapter) {
 		if (daDescriptors.containsKey(oldName)) {
-			if (adapter.getName().equals(oldName) || !daDescriptors.containsKey(adapter.getName())){
+			if (adapter.getName().equals(oldName) || !daDescriptors.containsKey(adapter.getName())) {
 				daDescriptors.remove(oldName);
 				daDescriptors.put(adapter.getName(), adapter);
 				propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
 				return true;
 			}
 		}
-		//FIXME: This code is only to recover broken workspace in the future can be removed
-		//Maybe it was a duplicated data adapter, search it manually
+		// FIXME: This code is only to recover broken workspace in the future can be removed
+		// Maybe it was a duplicated data adapter, search it manually
 		String key = getUrl(adapter);
-		if (key != null){
-			//Since for the duplicated data adapter the key is not binded to the real name
-			//then we can overwrite it directly
+		if (key != null) {
+			// Since for the duplicated data adapter the key is not binded to the real name
+			// then we can overwrite it directly
 			daDescriptors.put(key, adapter);
 			propChangeSupport.firePropertyChange(PROP_DATAADAPTERS, null, adapter);
 			return true;
@@ -113,8 +111,9 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public String getUrl(DataAdapterDescriptor da) {
-		for(Entry<String, DataAdapterDescriptor> desc : daDescriptors.entrySet()){
-			if (desc.getValue() == da) return desc.getKey();
+		for (Entry<String, DataAdapterDescriptor> desc : daDescriptors.entrySet()) {
+			if (desc.getValue() == da)
+				return desc.getKey();
 		}
 		return null;
 	}
@@ -146,7 +145,7 @@ public abstract class ADataAdapterStorage {
 	}
 
 	public String getLabel(DataAdapterDescriptor d) {
-		String label = d.getName();
+		String label = d.getTitle();
 		DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(d.getDataAdapter().getClass()
 				.getCanonicalName());
 		if (this instanceof FileDataAdapterStorage)
@@ -155,6 +154,6 @@ public abstract class ADataAdapterStorage {
 			label += " - " + factory.getLabel();
 		return label;
 	}
-	
+
 	public abstract void findAll();
 }

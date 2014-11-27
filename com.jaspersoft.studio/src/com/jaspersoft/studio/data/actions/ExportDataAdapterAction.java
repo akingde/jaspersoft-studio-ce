@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.actions;
 
@@ -27,7 +23,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -70,7 +65,7 @@ public class ExportDataAdapterAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
-				SaveAsDialog saveAsDialog = new SaveAsDialog(Display.getDefault().getActiveShell());
+				SaveAsDialog saveAsDialog = new SaveAsDialog(UIUtils.getShell());
 				saveAsDialog.setOriginalName(((MDataAdapter) obj).getValue().getName().replace(" ", "") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				saveAsDialog.open();
 				IPath path = saveAsDialog.getResult();
@@ -83,7 +78,7 @@ public class ExportDataAdapterAction extends Action {
 	private void saveFile(final Object obj, IPath path) {
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		if (file != null) {
-			ProgressMonitorDialog pm = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+			ProgressMonitorDialog pm = new ProgressMonitorDialog(UIUtils.getShell());
 			try {
 				pm.run(true, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {

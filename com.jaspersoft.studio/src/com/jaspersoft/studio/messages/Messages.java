@@ -682,6 +682,8 @@ public class Messages extends NLS {
 	public static String FieldEditorOverlayPage_3;
 	public static String FieldEditorOverlayPage_4;
 	public static String FieldNameValidator_fieldDuplicatedName;
+	public static String FileDataAdapterStorage_1;
+	public static String FileDataAdapterStorage_2;
 	public static String FileInput_selectfile;
 	public static String FinalPage_errorConclusiveMessage;
 	public static String FinalPage_errorTitle;
@@ -799,6 +801,11 @@ public class Messages extends NLS {
 	public static String ImageCreationDialog_Title;
 	public static String ImageInput_nullimage;
 	public static String ImageInput_selectimage;
+	public static String ImportDAPage_1;
+	public static String ImportDAPage_2;
+	public static String ImportDAPage_3;
+	public static String ImportDAWizard_0;
+	public static String ImportDAWizard_1;
 	public static String ImportDataAdapterAction_description;
 	public static String ImportDataAdapterAction_name;
 	public static String ImportDataAdapterAction_tooltip;

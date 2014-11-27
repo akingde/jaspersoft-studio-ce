@@ -46,8 +46,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 
-	private HashMap<DataAdapterDescriptor, String > fileAdapterMap = new HashMap<DataAdapterDescriptor, String>();
-	
+	private HashMap<DataAdapterDescriptor, String> fileAdapterMap = new HashMap<DataAdapterDescriptor, String>();
+
 	/**
 	 * Key of the data adapter storage
 	 */
@@ -61,7 +61,8 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public void findAll() {
 		// Do the silent conversion to the new storage system
-		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS,convertDataAdapterName);
+		ConfigurationManager.convertPropertyToStorage(PREF_KEYS_DATA_ADAPTERS, PREF_KEYS_DATA_ADAPTERS,
+				convertDataAdapterName);
 		// Read the configuration from the file storage
 		File[] storageContent = ConfigurationManager.getStorageContent(PREF_KEYS_DATA_ADAPTERS);
 		for (File storageElement : storageContent) {
@@ -89,14 +90,14 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 				dataAdapter = (DataAdapter) CastorUtil.read(adapterNode, dataAdapter.getClass());
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
-				//Always add the data adapter read from the file regardless of the name
+				// Always add the data adapter read from the file regardless of the name
 				super.forceAddDataAdapter(dataAdapterDescriptor);
 				fileAdapterMap.put(dataAdapterDescriptor, storageElement.getName());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		//At this point I've loaded on the data adapter on the file system
+		// At this point I've loaded on the data adapter on the file system
 		// Add a list of default data adapters only if none is found.
 		if (getDataAdapterDescriptors().size() == 0) {
 			Bundle bundle = JaspersoftStudioPlugin.getInstance().getBundle();
@@ -105,7 +106,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 				InputStream in = null;
 				try {
 					in = urls.nextElement().openStream();
-					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(in, null);
+					DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter((FileInputStream) in, null);
 					addDataAdapter(dad);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -127,7 +128,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 		String fileName = convertDataAdapterName.getFileName(null);
 		save(adapter, fileName);
 	}
-	
+
 	protected void save(DataAdapterDescriptor adapter, String fileName) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -153,7 +154,7 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public boolean removeDataAdapter(DataAdapterDescriptor da) {
 		boolean result = super.removeDataAdapter(da);
-		if (result){
+		if (result) {
 			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, fileAdapterMap.get(da));
 			return true;
 		}
@@ -167,23 +168,28 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
 		boolean result = super.addDataAdapter(adapter);
-		if (result){
-			//The data adapter is unique, save it with a new name
+		if (result) {
+			// The data adapter is unique, save it with a new name
 			save(adapter);
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean editDataAdapter(String oldName, DataAdapterDescriptor adapter) {
-			// it is an edit operation, replace its file
-			boolean result = super.editDataAdapter(oldName, adapter);
-			if (result){
-				String fileName = fileAdapterMap.get(adapter);
-				ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, fileName);
-				save(adapter, fileName);
-				return true;
-			}
-			return false;
+		// it is an edit operation, replace its file
+		boolean result = super.editDataAdapter(oldName, adapter);
+		if (result) {
+			String fileName = fileAdapterMap.get(adapter);
+			ConfigurationManager.removeStoregeResource(PREF_KEYS_DATA_ADAPTERS, fileName);
+			save(adapter, fileName);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String getStorageName() {
+		return "Global Preferences";
 	}
 }

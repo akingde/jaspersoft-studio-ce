@@ -1,23 +1,24 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data.storage;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.eclipse.classpath.JavaProjectClassLoader;
 import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -39,9 +40,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.swt.widgets.Display;
 import org.exolab.castor.mapping.Mapping;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -50,13 +49,20 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.DefaultDataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.XMLUtils;
 
 public class FileDataAdapterStorage extends ADataAdapterStorage {
 	private final class ResourceVisitor implements IResourceProxyVisitor {
 		public boolean visit(IResourceProxy proxy) throws CoreException {
-			if (proxy.getType() == IResource.FILE)
-				checkFile((IFile) proxy.requestResource());
+			if (proxy.isTeamPrivateMember())
+				return false;
+			if (proxy.getType() == IResource.FOLDER)
+				return true;
+			if (proxy.getType() == IResource.FILE) {
+				if (proxy.requestFullPath().getFileExtension().equals("xml")) //$NON-NLS-1$
+					checkFile((IFile) proxy.requestResource());
+			}
 			return true;
 		}
 	}
@@ -73,11 +79,10 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			if (project.isOpen()) {
 				IResource[] members = project.members();
 				if (members != null && members.length > 0) {
-					Job job = new WorkspaceJob("Searching DataAdapters") {
+					Job job = new WorkspaceJob(Messages.FileDataAdapterStorage_1) {
 						public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 							listenWorkspace();
-							monitor.beginTask("Search DataAdapters in project " + project.getName(), 10);
-							monitor.subTask("Searching project " + project.getName());
+							monitor.beginTask(Messages.FileDataAdapterStorage_2 + project.getName(), 10);
 							project.accept(new ResourceVisitor(), IResource.NONE);
 
 							if (monitor.isCanceled())
@@ -107,27 +112,36 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 
 											public boolean visit(IResourceDelta delta) throws CoreException {
 												final IResource res = delta.getResource();
-												if (res.getType() == IResource.FILE && "xml".equalsIgnoreCase(res.getFileExtension()))
+												if (res.getType() == IResource.FILE && "xml".equalsIgnoreCase(res.getFileExtension())) //$NON-NLS-1$
 													switch (delta.getKind()) {
 													case IResourceDelta.ADDED:
 														checkFile((IFile) res);
 														break;
 													case IResourceDelta.REMOVED:
-														Display.getDefault().asyncExec(new Runnable() {
+														UIUtils.getDisplay().asyncExec(new Runnable() {
 
 															public void run() {
-																IFile file = (IFile) res;
-																try{
-																	DataAdapterDescriptor das = readDataADapter(file.getContents(), file.getProject());
-																	removeDataAdapter(das);
-																} catch(Exception ex){
-																	ex.printStackTrace();
-																}
+																DataAdapterDescriptor das = findDataAdapter(res.getProjectRelativePath().toOSString());
+																removeDataAdapter(das);
 															}
 														});
 														break;
 													case IResourceDelta.CHANGED:
-														checkFile((IFile) res);
+														UIUtils.getDisplay().asyncExec(new Runnable() {
+
+															public void run() {
+																DataAdapterDescriptor das = findDataAdapter(res.getProjectRelativePath().toOSString());
+																FileDataAdapterStorage.super.removeDataAdapter(das);
+																try {
+																	IFile file = (IFile) res;
+																	das = readDataADapter(file.getContents(), file.getProject());
+																	das.setName(file.getProjectRelativePath().toOSString());
+																	FileDataAdapterStorage.super.addDataAdapter(das);
+																} catch (CoreException e) {
+																	UIUtils.showError(e);
+																}
+															}
+														});
 														break;
 													}
 												return true;
@@ -149,53 +163,54 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
-
 	@Override
 	public boolean addDataAdapter(DataAdapterDescriptor adapter) {
 		boolean result = super.addDataAdapter(adapter);
-		if (result){
+		if (result) {
 			String xml = DataAdapterManager.toDataAdapterFile(adapter);
 			IFile file = project.getFile(adapter.getName());
-			try{
+			try {
 				if (file.exists())
 					file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, new NullProgressMonitor());
 				else
 					file.create(new ByteArrayInputStream(xml.getBytes()), true, new NullProgressMonitor());
 				return true;
-			}catch(Exception ex){
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean removeDataAdapter(DataAdapterDescriptor da) {
 		boolean result = super.removeDataAdapter(da);
-		if (result){
+		if (result) {
 			IFile file = project.getFile(da.getName());
-			if (file.exists()){
-				try{
+			if (file.exists()) {
+				try {
 					file.delete(true, new NullProgressMonitor());
 					return true;
-				}catch(Exception ex){
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
 		return false;
 	}
-	
-	protected void checkFile(final IFile file) throws CoreException {
-		if (!file.isAccessible() || file.isDerived() || file.isPhantom() || file.isHidden())
+
+	private void checkFile(final IFile file) throws CoreException {
+		if (!file.isAccessible() || file.isDerived() || file.isPhantom() || file.isHidden() || file.isVirtual())
 			return;
-		if (file.getName().endsWith(".xml")) {
+		String ext = file.getFileExtension();
+		if (ext.equals("xml")) { //$NON-NLS-1$
 			final DataAdapterDescriptor das = readDataADapter(file.getContents(), file.getProject());
 			if (das != null) {
-				Display.getDefault().asyncExec(new Runnable() {
+				das.setName(file.getProjectRelativePath().toOSString());
+				UIUtils.getDisplay().asyncExec(new Runnable() {
 
 					public void run() {
-						addDataAdapter(das);
+						FileDataAdapterStorage.super.addDataAdapter(das);
 					}
 				});
 
@@ -203,50 +218,82 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		}
 	}
 
-	public static DataAdapterDescriptor readDataADapter(InputStream in, IProject project) {
-		try {
-			Document document = XMLUtils.parseNoValidation(in);
-			String adapterClassName = document.getDocumentElement().getAttribute("class");
-			if (adapterClassName == null || adapterClassName.isEmpty())
-				return null;
-			DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(adapterClassName);
-			if (factory == null) {
-				if (project != null) {
-					DefaultDataAdapterDescriptor ddad = new DefaultDataAdapterDescriptor();
-					ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), project.getClass()
-							.getClassLoader());
-					Class<?> clazz = cl.loadClass(adapterClassName);
-					if (clazz != null) {
-						InputStream mis = cl.getResourceAsStream(clazz.getName().replace(".", "/") + ".xml");
-						if (mis != null) {
-							Mapping mapping = new Mapping(cl);
-							mapping.loadMapping(new InputSource(mis));
+	private static XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 
-							DataAdapter dataAdapter = (DataAdapter) CastorUtil.read(document.getDocumentElement(), mapping);
-							if (dataAdapter != null) {
-								ddad.setDataAdapter(dataAdapter);
-								return ddad;
-							}
-						}
-					}
-				}// we should at least log a warning here....
-				JaspersoftStudioPlugin
-						.getInstance()
-						.getLog()
-						.log(
-								new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
-										Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
-			} else {
-				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
-				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-				dataAdapter = (DataAdapter) CastorUtil.read(document.getDocumentElement(), dataAdapter.getClass());
-				dataAdapterDescriptor.setDataAdapter(dataAdapter);
-				return dataAdapterDescriptor;
-			}
+	private static String readXML(InputStream in) {
+		try {
+			XMLStreamReader streamReader = inputFactory.createXMLStreamReader(in);
+			streamReader.nextTag();
+			for (int i = 0; i < streamReader.getAttributeCount(); i++)
+				if (streamReader.getAttributeName(i).getLocalPart().equals("class")) //$NON-NLS-1$
+					return streamReader.getAttributeValue(i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static DataAdapterDescriptor readDataADapter(InputStream in, IProject project) {
+		DataAdapterDescriptor dad = null;
+		try {
+			in = new BufferedInputStream(in);
+			in.mark(Integer.MAX_VALUE);
+			String className = readXML(in);
+			if (!Misc.isNullOrEmpty(className)) {
+				in.reset();
+				DataAdapterFactory factory = DataAdapterManager.findFactoryByDataAdapterClass(className);
+				if (factory == null) {
+					if (project != null) {
+						DefaultDataAdapterDescriptor ddad = new DefaultDataAdapterDescriptor();
+						ClassLoader cl = JavaProjectClassLoader.instance(JavaCore.create(project), project.getClass()
+								.getClassLoader());
+						Class<?> clazz = cl.loadClass(className);
+						if (clazz != null) {
+							InputStream mis = cl.getResourceAsStream(clazz.getName().replace(".", "/") + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							if (mis != null) {
+								Mapping mapping = new Mapping(cl);
+								mapping.loadMapping(new InputSource(mis));
+
+								DataAdapter dataAdapter = (DataAdapter) CastorUtil.read(XMLUtils.parseNoValidation(in)
+										.getDocumentElement(), mapping);
+								if (dataAdapter != null) {
+									ddad.setDataAdapter(dataAdapter);
+									dad = ddad;
+								}
+							}
+						}
+					} else
+						// we should at least log a warning here....
+						JaspersoftStudioPlugin
+								.getInstance()
+								.getLog()
+								.log(
+										new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
+												Messages.DataAdapterManager_nodataadapterfound + className, null));
+				} else {
+					DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
+					DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+					dataAdapter = (DataAdapter) CastorUtil.read(XMLUtils.parseNoValidation(in).getDocumentElement(),
+							dataAdapter.getClass());
+					dataAdapterDescriptor.setDataAdapter(dataAdapter);
+					dad = dataAdapterDescriptor;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			FileUtils.closeStream(in);
+		}
+		return dad;
+	}
+
+	public IProject getProject() {
+		return project;
+	}
+
+	@Override
+	public String getStorageName() {
+		return project.getName();
 	}
 
 }

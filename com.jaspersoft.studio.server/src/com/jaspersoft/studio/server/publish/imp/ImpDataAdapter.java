@@ -106,7 +106,7 @@ public class ImpDataAdapter extends AImpObject {
 		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		if (true) {
 			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject();
-			InputStream is = null;
+			FileInputStream is = null;
 			try {
 				is = new FileInputStream(f);
 				DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is, prj);

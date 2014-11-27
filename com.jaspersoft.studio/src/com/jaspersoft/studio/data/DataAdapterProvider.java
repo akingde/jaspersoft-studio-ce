@@ -73,6 +73,7 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 			// data adapters actions
 			if (createDataAdapterItemAction.isEnabled())
 				lst.add(createDataAdapterItemAction);
+			lst.add(new Separator());
 		} else if (node instanceof MDataAdapter) {
 			if (editDataAdapterItemAction.isEnabled())
 				lst.add(editDataAdapterItemAction);

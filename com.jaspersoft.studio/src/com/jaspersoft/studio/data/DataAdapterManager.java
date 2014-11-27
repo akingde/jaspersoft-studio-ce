@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.data;
 
@@ -31,6 +27,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.data.storage.PreferencesDataAdapterStorage;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -39,7 +36,7 @@ import com.jaspersoft.studio.data.storage.PreferencesDataAdapterStorage;
  */
 public class DataAdapterManager {
 
-	private static List<DataAdapterFactory> dataAdapterFactories = new ArrayList<DataAdapterFactory>();
+	private static Map<String, DataAdapterFactory> dataAdapterFactories = new HashMap<String, DataAdapterFactory>();
 
 	/*******************************
 	 ** Data Adapter Factories Part **
@@ -52,10 +49,8 @@ public class DataAdapterManager {
 	 * @param factory
 	 */
 	public static void addDataAdapterFactory(DataAdapterFactory factory) {
-		if (!dataAdapterFactories.contains(factory)
-				&& findFactoryByDataAdapterClass(factory.getDataAdapterClassName()) == null) {
-			dataAdapterFactories.add(factory);
-		}
+		if (!dataAdapterFactories.containsKey(factory.getDataAdapterClassName()))
+			dataAdapterFactories.put(factory.getDataAdapterClassName(), factory);
 	}
 
 	/**
@@ -64,9 +59,10 @@ public class DataAdapterManager {
 	 * @param factory
 	 */
 	public static void removeDataAdapterFactory(DataAdapterFactory factory) {
-		if (dataAdapterFactories.contains(factory)) {
-			dataAdapterFactories.remove(factory);
-		}
+		String cl = factory.getDataAdapterClassName();
+		DataAdapterFactory f = dataAdapterFactories.get(cl);
+		if (f != null && factory == f)
+			dataAdapterFactories.remove(cl);
 	}
 
 	/**
@@ -77,7 +73,8 @@ public class DataAdapterManager {
 		// Let's sort the list based on the description. Please note that the description may be localized,
 		// so not all the languages have the same order if assumptions are done.
 
-		DataAdapterFactory[] factories = dataAdapterFactories.toArray(new DataAdapterFactory[dataAdapterFactories.size()]);
+		DataAdapterFactory[] factories = dataAdapterFactories.values().toArray(
+				new DataAdapterFactory[dataAdapterFactories.size()]);
 
 		Arrays.sort(factories, new Comparator<DataAdapterFactory>() {
 
@@ -102,15 +99,9 @@ public class DataAdapterManager {
 	 * @return
 	 */
 	public static DataAdapterFactory findFactoryByDataAdapterClass(String adapterClassName) {
-		if (adapterClassName == null || adapterClassName.isEmpty())
+		if (Misc.isNullOrEmpty(adapterClassName))
 			return null;
-
-		for (DataAdapterFactory factory : dataAdapterFactories) {
-			if (adapterClassName.equals(factory.getDataAdapterClassName())) {
-				return factory;
-			}
-		}
-		return null; // No factory found for this dataAdpater..
+		return dataAdapterFactories.get(adapterClassName);
 	}
 
 	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
@@ -184,6 +175,7 @@ public class DataAdapterManager {
 		DataAdapter srcDataAdapter = src.getDataAdapter();
 		DataAdapterFactory factory = findFactoryByDataAdapterClass(srcDataAdapter.getClass().getName());
 		DataAdapterDescriptor copy = factory.createDataAdapter();
+		copy.setName(src.name);
 		srcDataAdapter = (DataAdapter) CastorUtil.read(new ByteArrayInputStream(src.toXml().getBytes()),
 				srcDataAdapter.getClass());
 		copy.setDataAdapter(srcDataAdapter);
