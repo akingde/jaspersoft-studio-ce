@@ -152,7 +152,7 @@ public class ImportDAPage extends JSSHelpWizardPage {
 			if (element instanceof ADataAdapterStorage) {
 				text.append(((ADataAdapterStorage) element).getStorageName());
 
-				cell.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/resources/eclipse/obj16/fldr_obj.gif"));
+				cell.setImage(JaspersoftStudioPlugin.getInstance().getImage("icons/prj_obj.gif"));
 			} else if (element instanceof DataAdapterDescriptor) {
 				DataAdapterDescriptor dad = (DataAdapterDescriptor) element;
 				for (ADataAdapterStorage das : DataAdapterManager.getProjectStorages()) {

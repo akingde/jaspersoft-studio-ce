@@ -154,7 +154,7 @@
 	            id="com.jaspersoft.studio.rcp.newreport"
 	            label="%command.wizard.newreport.label"
 	            style="push"
-	            icon="icons/toolbar/jrxml_icon.png"
+	            icon="icons/toolbar/jrxml_icon_add.png"
 	            tooltip="%command.wizard.newreport.label">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
@@ -167,7 +167,7 @@
 	            id="com.jaspersoft.studio.rcp.newdataadapter"
 	            label="%command.wizard.newdataadapter.label"
 	            style="push"
-	            icon="icons/toolbar/data_source.png"
+	            icon="icons/toolbar/data_source_add.png"
 	            tooltip="%command.wizard.newdataadapter.label">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">
@@ -180,7 +180,7 @@
 	            id="com.jaspersoft.studio.rcp.newstyletemplate"
 	            label="%command.wizard.newstyletemplate.label"
 	            style="push"
-	            icon="icons/toolbar/jasperreports_jrtx.png"
+	            icon="icons/toolbar/jasperreports_jrtx_add.png"
 	            tooltip="%command.wizard.newstyletemplate.label">
 		 	        <visibleWhen checkEnabled="false">
 		                <with variable="activeWorkbenchWindow.activePerspective">

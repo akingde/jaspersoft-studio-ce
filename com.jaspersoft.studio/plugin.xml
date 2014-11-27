@@ -1350,7 +1350,7 @@
             category="com.jaspersoft.studio"
             class="com.jaspersoft.studio.wizards.ReportNewWizard"
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
-            icon="icons/jrxml_icon.png"
+            icon="icons/jrxml_icon_add.png"
             id="com.jaspersoft.studio.wizards.ReportNewWizard"
             name="%JasperReport">
          <description>
@@ -1361,7 +1361,7 @@
             category="com.jaspersoft.studio"
             class="com.jaspersoft.studio.editor.style.wizard.StyleTemplateNewWizard"
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
-            icon="icons/resources/jasperreports_jrtx.png"
+            icon="icons/jasperreports_jrtx_add.png"
             id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard"
             name="%StyleTemplateFile">
          <description>
@@ -1372,7 +1372,7 @@
             category="com.jaspersoft.studio"
             class="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"
             finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
-            icon="icons/data_source.png"
+            icon="icons/data_source_add.png"
             id="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"
             name="%DataAdapter">
          <description>
@@ -1396,7 +1396,7 @@
          finalPerspective="com.jaspersoft.studio.ReportDesignPerspective"
          icon="icons/resources/newPluginAdapter.png"
          id="com.jaspersoft.studio.wizards.NewDataAdapterWizard"
-         name="Plugin Data Adapter">
+         name="Plug-in Data Adapter">
       <description>
          Create a new data adapter skeleton
       </description>
@@ -1516,19 +1516,19 @@
              locationURI="menu:new?after=new">
 		  <command
                 commandId="com.jaspersoft.studio.commands.ReportNewWizard"
-                icon="icons/jrxml_icon.png"
+                icon="icons/jrxml_icon_add.png"
                 label="Jasper Report"
                 style="push">
           </command>
 		  <command
                 commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
-                icon="icons/resources/jasperreports_jrtx.png"
+                icon="icons/jasperreports_jrtx_add.png"
                 label="Style Template File"
                 style="push">
           </command>
           <command
                 commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
-                icon="icons/data_source.png"
+                icon="icons/data_source_add.png"
                 label="Data Adapter"
                 style="push">
           </command>
@@ -1541,7 +1541,7 @@
              	locationURI="popup:common.new.menu?before=new">
           <command
                 commandId="com.jaspersoft.studio.commands.ReportNewWizard"
-                icon="icons/jrxml_icon.png"
+                icon="icons/jrxml_icon_add.png"
                 label="Jasper Report"
                 style="push">
                 <visibleWhen>
@@ -1570,7 +1570,7 @@
           </command>
          <command
                 commandId="com.jaspersoft.studio.commands.StyleTemplateNewWizard"
-                icon="icons/resources/jasperreports_jrtx.png"
+                icon="icons/jasperreports_jrtx_add.png"
                 label="Style Template File"
                 style="push">
                 <visibleWhen>
@@ -1599,7 +1599,7 @@
           </command>          
          <command
                 commandId="com.jaspersoft.studio.data.commands.NewFileDataAdapterWizard"
-                icon="icons/data_source.png"
+                icon="icons/data_source_add.png"
                 label="Data Adapter"
                 style="push">
                 <visibleWhen>
