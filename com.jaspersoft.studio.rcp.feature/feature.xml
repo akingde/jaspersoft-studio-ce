@@ -37,18 +37,6 @@
          search-location="both"/>
 
    <includes
-         id="org.tigris.subversion.clientadapter.feature"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
-
-   <includes
-         id="org.tigris.subversion.subclipse"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
-
-   <includes
          id="org.eclipse.egit"
          version="0.0.0"
          optional="true"
@@ -86,10 +74,6 @@
          id="com.jaspersoft.studio.i18n.feature"
          version="0.0.0"
          search-location="both"/>
-
-   <includes
-         id="org.tigris.subversion.clientadapter.javahl.feature"
-         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui.intro"/>
