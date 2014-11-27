@@ -12,15 +12,9 @@
  ******************************************************************************/
 package com.jaspersoft.studio.model.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-
-import net.sf.jasperreports.eclipse.util.FileUtils;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -89,17 +83,9 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 */
 	public ResourceBundle getResourceBundle(AbstractUIPlugin plugin) {
 		if (getResourceBundleIcons() == null) {
-			InputStream inputStream = null;
-			try {
-				inputStream = plugin.getBundle().getResource("resources/icons" + getLocale() + ".properties").openStream(); //$NON-NLS-1$ //$NON-NLS-2$
-				setResourceBundleIcons(new PropertyResourceBundle(inputStream));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				FileUtils.closeStream(inputStream);
-			}
+			ResourceBundle inputStream = null;
+			inputStream = ResourceBundle.getBundle("resources/icons",  Locale.getDefault(), plugin.getClass().getClassLoader()); //$NON-NLS-1$
+			setResourceBundleIcons(inputStream);
 		}
 		return getResourceBundleIcons();
 	}
@@ -211,6 +197,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 
 	// This method returns the correct locale suffix. It will test from the most specific to
 	// the most general: fr_FR > fr > no suffix.
+	//FIXME: consider remove
 	private String getLocale() {
 		String dLocale = Locale.getDefault().toString();
 		String fullLocaleSuffix="_"+dLocale;
