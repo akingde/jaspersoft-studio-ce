@@ -44,7 +44,9 @@ public class ScalarOperand<T> extends AOperand {
 			if (Number.class.isAssignableFrom(value.getClass()))
 				return NumberFormat.getInstance().format((Number) value);
 			if (Date.class.isAssignableFrom(value.getClass()))
-				return SimpleDateFormat.getInstance().format((Date) value);
+				return "'"
+						+ SimpleDateFormat.getInstance().format((Date) value)
+						+ "'";
 			return "'" + value + "'";
 		}
 		return Misc.nvl(value, "");
