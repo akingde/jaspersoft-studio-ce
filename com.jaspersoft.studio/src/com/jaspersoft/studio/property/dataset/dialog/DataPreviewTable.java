@@ -16,7 +16,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
@@ -240,7 +242,8 @@ public class DataPreviewTable implements DatasetReaderListener{
 						// Do not care, duplication should never happen.
 						e.printStackTrace();
 					}
-				}
+				} 
+				
 				dataReader.setDesignDataset(clonedDS);
 				dataReader.setMaxRecords(recordsCountSelected);
 				dataReader.addDatasetReaderListener(DataPreviewTable.this);
@@ -369,7 +372,7 @@ public class DataPreviewTable implements DatasetReaderListener{
 	 * @see com.jaspersoft.studio.data.reader.DatasetReaderListener#finished()
 	 */
 	public void finished() {
-		Display.getDefault().syncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 			public void run() {
 				if(tableFiller!=null){
 					tableFiller.done();
@@ -454,7 +457,7 @@ public class DataPreviewTable implements DatasetReaderListener{
 			previewItems.clear();
 		}
 		final Object[] items = tmpItems;
-		Display.getDefault().syncExec(new Runnable() {
+		UIUtils.getDisplay().syncExec(new Runnable() {
 			public void run() {
 				if (!wtable.isDisposed() && statusOK) {
 					tviewer.add(items);
