@@ -45,9 +45,9 @@
 			<url>http://download.eclipse.org/technology/nebula/snapshot/</url>
 		</repository>
 		<repository>
-			<id>orbitR20130118183705</id>
+			<id>orbitS20141023165154</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20130118183705/repository/</url>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/</url>
 		</repository>
 		<repository>
 			<id>xtext</id>
