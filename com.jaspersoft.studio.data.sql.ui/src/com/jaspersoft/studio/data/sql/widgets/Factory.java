@@ -193,7 +193,7 @@ public class Factory {
 			opMap.put(Messages.Factory_8, getOperand(w, new FieldOperand(null, null, mexpr)));
 			opMap.put(Messages.Factory_9, getOperand(w, getDefaultOperand(mexpr)));
 			opMap.put(Messages.Factory_10, getOperand(w, new ScalarOperand<BigDecimal>(mexpr, BigDecimal.ZERO)));
-			opMap.put(Messages.Factory_11, getOperand(w, new ScalarOperand<Date>(mexpr, new Date())));
+			opMap.put(Messages.Factory_11, getOperand(w, new ScalarOperand<java.sql.Date>(mexpr, new java.sql.Date(new Date().getTime()))));
 			opMap.put(Messages.Factory_12, getOperand(w, new ScalarOperand<Time>(mexpr, new Time(new Date().getTime()))));
 			opMap.put(Messages.Factory_13, getOperand(w, new ScalarOperand<Timestamp>(mexpr, new Timestamp(new Date().getTime()))));
 			opMap.put(Messages.Factory_14, getOperand(w, new UnknownOperand(mexpr, ""))); //$NON-NLS-2$

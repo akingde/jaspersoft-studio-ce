@@ -12,6 +12,7 @@
  ******************************************************************************/
 package com.jaspersoft.studio.data.sql.model.query.operand;
 
+import java.sql.Time;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,10 +44,18 @@ public class ScalarOperand<T> extends AOperand {
 		if (value != null) {
 			if (Number.class.isAssignableFrom(value.getClass()))
 				return NumberFormat.getInstance().format((Number) value);
+			if (Time.class.isAssignableFrom(value.getClass()))
+				return "'"
+						+ new SimpleDateFormat("HH:mm:ss.ssss")
+								.format((Date) value) + "'";
+			if (java.sql.Date.class.isAssignableFrom(value.getClass()))
+				return "'"
+						+ new SimpleDateFormat("yyyy-MM-dd")
+								.format((Date) value) + "'";
 			if (Date.class.isAssignableFrom(value.getClass()))
 				return "'"
-						+ SimpleDateFormat.getInstance().format((Date) value)
-						+ "'";
+						+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.ssss")
+								.format((Date) value) + "'";
 			return "'" + value + "'";
 		}
 		return Misc.nvl(value, "");
