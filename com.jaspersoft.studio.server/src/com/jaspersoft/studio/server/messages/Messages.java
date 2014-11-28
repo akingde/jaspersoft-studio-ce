@@ -145,6 +145,7 @@ public class Messages extends NLS {
 	public static String PermissionPage_8;
 	public static String PermissionPage_9;
 	public static String PermissionWizard_0;
+	public static String Publish2ServerWizard_0;
 	public static String Publish2ServerWizard_MonitorName;
 	public static String Publish2ServerWizard_Title;
 	public static String QueryVisibleColumnsTable_0;

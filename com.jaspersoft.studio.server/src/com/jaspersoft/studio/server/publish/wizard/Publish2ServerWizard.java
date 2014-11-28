@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -130,8 +131,13 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	}
 
 	public ANode getNode() {
+		return getNode(new NullProgressMonitor());
+	}
+
+	public ANode getNode(IProgressMonitor monitor) {
 		if (node == null) {
-			ANode mserv = ServerManager.getServerProfile(jDesign, jrConfig);
+			ANode mserv = ServerManager.getServerProfile(jDesign, jrConfig,
+					monitor);
 			if (mserv == null)
 				mserv = new MRoot(null, jDesign);
 			mserv.setJasperConfiguration(jrConfig);
@@ -288,9 +294,10 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 				@Override
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Publishing", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.Publish2ServerWizard_0,
+							IProgressMonitor.UNKNOWN);
 					try {
-						ANode node = getNode();
+						ANode node = getNode(monitor);
 						if (node instanceof AMJrxmlContainer)
 							new Publish(jrConfig).publish(
 									(AMJrxmlContainer) node, jDesign, monitor);
@@ -354,7 +361,7 @@ public class Publish2ServerWizard extends Wizard implements IExportWizard {
 	private void doFinish() {
 		try {
 			Method m = getContainer().getClass().getDeclaredMethod(
-					"finishPressed", null);
+					"finishPressed", null); //$NON-NLS-1$
 			if (m != null) {
 				m.setAccessible(true);
 				m.invoke(getContainer());
