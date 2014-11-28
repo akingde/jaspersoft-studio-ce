@@ -23,6 +23,7 @@ import net.sf.jasperreports.eclipse.ui.util.UIUtils;
 import net.sf.jasperreports.eclipse.util.FileUtils;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperReport;
@@ -146,6 +147,11 @@ public class DatasetReader {
 					dataJD.addField(f);
 				}
 			}
+			// 6. add sort fields
+			dataJD.getSortFieldsList().clear();
+			dataJD.getMainDesignDataset().getSortFieldsMap().clear();
+			for (JRSortField sf : designDataset.getSortFieldsList())
+				dataJD.addSortField(sf);
 
 			// 6. Compile report
 			JasperReport jrobj = null;
@@ -173,8 +179,7 @@ public class DatasetReader {
 				hm.put(JRDesignParameter.REPORT_MAX_COUNT, maxRecords);
 			} else {
 				hm.remove(JRDesignParameter.REPORT_MAX_COUNT);
-			}
-
+			} 
 			// 8. Contribute parameters from the data adapter
 			if (dataAdapterDesc != null)
 				jConfig.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapterDesc.getDataAdapter());
