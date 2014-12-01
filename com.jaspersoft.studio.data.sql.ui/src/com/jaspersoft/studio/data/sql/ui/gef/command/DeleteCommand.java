@@ -56,11 +56,13 @@ public class DeleteCommand extends Command {
 			mapDel.put(node, parent);
 			int indx = node.getParent().getChildren().indexOf(node);
 			mapDelIndex.put(node, indx);
-			if (!(node instanceof MFromTableJoin) && !node.getChildren().isEmpty()) {
+			if (!(node instanceof MFromTableJoin)
+					&& !node.getChildren().isEmpty()) {
 				int i = 0;
 				for (INode n : node.getChildren()) {
 					if (n instanceof MFromTable) {
-						MFromTable mft = new MFromTable(null, ((MFromTable) n).getValue());
+						MFromTable mft = new MFromTable(null,
+								((MFromTable) n).getValue());
 						mft.setAlias(((MFromTable) n).getAlias());
 						mft.setAliasKeyword(((MFromTable) n).getAliasKeyword());
 						mapAdd.put(mft, node.getParent());
@@ -90,15 +92,19 @@ public class DeleteCommand extends Command {
 				List<ANode> toRemove = new ArrayList<ANode>();
 				if (n instanceof MSelect) {
 					for (INode gb : n.getChildren()) {
-						MSelectColumn gbc = (MSelectColumn) gb;
-						if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
-							toRemove.add(gbc);
+						if (gb instanceof MSelectColumn) {
+							MSelectColumn gbc = (MSelectColumn) gb;
+							if (gbc.getMFromTable() != null
+									&& gbc.getMFromTable().equals(todel))
+								toRemove.add(gbc);
+						}
 					}
 					((MSelect) n).removeChildren(toRemove);
 				} else if (n instanceof MGroupBy) {
 					for (INode gb : n.getChildren()) {
 						MGroupByColumn gbc = (MGroupByColumn) gb;
-						if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+						if (gbc.getMFromTable() != null
+								&& gbc.getMFromTable().equals(todel))
 							toRemove.add(gbc);
 					}
 
@@ -107,7 +113,8 @@ public class DeleteCommand extends Command {
 					for (INode gb : n.getChildren()) {
 						if (gb instanceof MOrderByColumn) {
 							MOrderByColumn gbc = (MOrderByColumn) gb;
-							if (gbc.getMFromTable() != null && gbc.getMFromTable().equals(todel))
+							if (gbc.getMFromTable() != null
+									&& gbc.getMFromTable().equals(todel))
 								toRemove.add(gbc);
 						}
 					}
