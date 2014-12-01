@@ -1401,6 +1401,15 @@
          Create a new data adapter skeleton
       </description>
    </wizard>
+   <wizard
+         category="com.jaspersoft.studio"
+         class="com.jaspersoft.studio.javascript.wizard.CustomVisualizationComponentWizard"
+         id="om.jaspersoft.studio.wizards.custom_component_wizard"
+         name="Custom Component Wizard">
+      <description>
+         Create a skeleton for a custom visualization component
+      </description>
+   </wizard>
    </extension>
     <extension
           point="com.jaspersoft.studio.repositoryview">
@@ -1497,6 +1506,10 @@
    <command
          id="com.jaspersoft.studio.compileJrxmlFile"
          name="CompileReportCommand">
+   </command>
+   <command
+         id="com.jaspersoft.studio.javascript.buildComponent"
+         name="BuildComponentCommand">
    </command>
 	</extension>
     <extension
@@ -1675,6 +1688,10 @@
         class="com.jaspersoft.studio.outline.action.compile.CompileHandler"
         commandId="com.jaspersoft.studio.compileJrxmlFile">
   </handler>
+  <handler
+        class="com.jaspersoft.studio.javascript.BuildComponentHandler"
+        commandId="com.jaspersoft.studio.javascript.buildComponent">
+  </handler>
 	</extension>
 	<extension id="com.jaspersoft.studio.menus.saveReportTo" point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:file?after=export">
@@ -1733,6 +1750,21 @@
               <test
                     forcePluginActivation="true"
                     property="com.jaspersoft.studio.outline.action.compile.checkNature">
+              </test>
+           </and>
+        </visibleWhen>
+     </command>
+     <command
+           commandId="com.jaspersoft.studio.javascript.buildComponent"
+           id="com.jaspersoft.studio.javascript.build"
+           label="Build Component"
+           style="push">
+        <visibleWhen
+              checkEnabled="false">
+           <and>
+              <test
+                    forcePluginActivation="true"
+                    property="com.jaspersoft.studio.javascript.checkNature">
               </test>
            </and>
         </visibleWhen>
@@ -1954,5 +1986,30 @@
              properties="checkNature"
              type="java.lang.Object">
        </propertyTester>
+       <propertyTester
+             class="com.jaspersoft.studio.javascript.NatureComponentTester"
+             id="testCustomComponentNature"
+             namespace="com.jaspersoft.studio.javascript"
+             properties="checkNature"
+             type="java.lang.Object">
+       </propertyTester>
+    </extension>
+    <extension
+          id="customcomponentnature"
+          name="Custom Component Nature"
+          point="org.eclipse.core.resources.natures">
+       <runtime>
+          <run
+                class="com.jaspersoft.studio.javascript.CustomComponentNature">
+          </run>
+       </runtime>
+    </extension>
+    <extension
+          point="org.eclipse.ui.ide.projectNatureImages">
+       <image
+             icon="icons/callout-16.png"
+             id="com.jaspersoft.studio.javascript.image.CustomComponentNature"
+             natureId="com.jaspersoft.studio.javascript.customcomponentnature">
+       </image>
     </extension>
 </plugin>
