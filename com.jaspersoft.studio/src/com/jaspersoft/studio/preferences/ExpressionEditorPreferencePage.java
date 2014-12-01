@@ -35,6 +35,7 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String P_USER_DEFINED_EXPRESSIONS = "userDefinedExpressions";//$NON-NLS-1$
+	@Deprecated
 	public static final String P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS = "includeFunctionsLibraryImports";//$NON-NLS-1$
 
 	public ExpressionEditorPreferencePage() {
@@ -47,8 +48,6 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	protected void createFieldEditors() {
 		addField(new ExpressionListFieldEditor(P_USER_DEFINED_EXPRESSIONS, Messages.ExpressionEditorPreferencePage_userDefinedExpressions,
 				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS,
-				Messages.ExpressionEditorPreferencePage_includeStatic, getFieldEditorParent()));
 	}
 
 	/*
@@ -77,7 +76,7 @@ public class ExpressionEditorPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, new Boolean(false)); //$//$NON-NLS-1$
+		// Init default properties if needed
 	}
 
 	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage.property"; //$NON-NLS-1$

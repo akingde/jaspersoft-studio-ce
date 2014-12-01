@@ -220,6 +220,7 @@ public class ExpressionEditorSupportUtil {
 	 * @param jrContext
 	 *          the JasperReports context associated
 	 */
+	@Deprecated
 	public static void addFunctionsLibraryImports(JasperDesign jd, JasperReportsConfiguration jrContext) {
 		Assert.isNotNull(jd);
 		Collection<JRExpression> collectedExpressions = JRExpressionCollector.collector(jrContext, jd).getExpressions();
@@ -260,6 +261,7 @@ public class ExpressionEditorSupportUtil {
 	 * 
 	 * @see ExpressionEditorPreferencePage#P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS
 	 */
+	@Deprecated
 	public static void updateFunctionsLibraryImports(JasperDesign jasperDesign, JasperReportsConfiguration jrContext) {
 		Assert.isNotNull(jasperDesign);
 		// Always remove previously set functions library imports
@@ -280,6 +282,7 @@ public class ExpressionEditorSupportUtil {
 	 *          a collection of expressions from which to extract the needed static imports
 	 * @return a list of static imports that should be added to the main report
 	 */
+	@Deprecated
 	public static List<String> getStaticImportsForExpressions(Collection<JRExpression> expressions) {
 		Set<String> importsSet = new HashSet<String>();
 		for (JRExpression jre : expressions) {

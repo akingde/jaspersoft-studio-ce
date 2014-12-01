@@ -73,7 +73,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.editor.defaults.DefaultManager;
-import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
@@ -470,14 +469,6 @@ public abstract class AbstractJRXMLEditor extends MultiPageEditorPart implements
 	public void doSave(final IProgressMonitor monitor) {
 		try {
 			isRefresh = true;
-
-			// Check for function library static imports (see issue #0005771)
-			// It's better to put the check here instead on the JRExpressionEditor dialog close.
-			// This allow for example to "fix" the report, depending on the preference setting,
-			// also when simply saving the JRXML file without having edited an expression.
-			JasperDesign jd = getJasperDesign();
-			if (jd != null)
-				ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
 
 			final IFile resource = getCurrentFile();
 			if (resource == null)

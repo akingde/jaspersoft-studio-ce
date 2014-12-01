@@ -62,7 +62,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
@@ -407,14 +406,8 @@ public class ResourcePage extends JSSHelpWizardPage {
 	 * Save the xml of the report on the disk
 	 */
 	private void saveReport() {
-		// Check for function library static imports (see issue #0005771)
-		// It's better to put the check here instead on the JRExpressionEditor dialog close.
-		// This allow for example to "fix" the report, depending on the preference setting,
-		// also when simply saving the JRXML file without having edited an expression.
 		JasperDesign jd = bundle.getJasperDesign();
-
 		if (jd != null){
-			ExpressionEditorSupportUtil.updateFunctionsLibraryImports(jd, jrContext);
 			rebindResources();
 			try {
 				File destination = new File(pathText.getText());

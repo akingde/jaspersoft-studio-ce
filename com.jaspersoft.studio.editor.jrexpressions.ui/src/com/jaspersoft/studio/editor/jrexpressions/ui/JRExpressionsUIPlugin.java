@@ -42,7 +42,7 @@ public class JRExpressionsUIPlugin extends JRExpressionsActivator {
 	private void initDefaultPreferences() {
 		// Override already defined default in ExpressionEditorPreferencePage class
 		IPreferenceStore store=JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		store.setDefault(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, true); //$//$NON-NLS-1$
+		store.setDefault(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, false); //$//$NON-NLS-1$
 	}
 	
 	
