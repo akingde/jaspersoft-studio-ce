@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -60,8 +61,12 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			if (proxy.getType() == IResource.FOLDER)
 				return true;
 			if (proxy.getType() == IResource.FILE) {
-				if (proxy.requestFullPath().getFileExtension().equals("xml")) //$NON-NLS-1$
-					checkFile((IFile) proxy.requestResource());
+				IPath fpath = proxy.requestFullPath();
+				if (fpath != null) {
+					String fext = fpath.getFileExtension();
+					if (fext != null && fext.equals("xml")) //$NON-NLS-1$
+						checkFile((IFile) proxy.requestResource());
+				}
 			}
 			return true;
 		}
