@@ -31,8 +31,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.view.control.VParameters;
+import com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage;
 import com.jaspersoft.studio.swt.widgets.DRDateTime;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DateInput extends ADataInput {
 	protected boolean supportDateRange;
@@ -69,6 +71,12 @@ public class DateInput extends ADataInput {
 		date.addFocusListener(focusListener);
 	}
 
+	private void setFormat(CDateTime cDateTime, String key) {
+		String f = JasperReportsConfiguration.getDefaultInstance().getProperty(key, "");
+		if (!Misc.isNullOrEmpty(f))
+			cDateTime.setPattern(f);
+	}
+
 	protected void createTimestampRange(Composite parent, final IParameter param, final Map<String, Object> params) {
 		date = new DRDateTime(parent, CDT.BORDER | CDT.DATE_SHORT | CDT.TIME_MEDIUM | CDT.DROP_DOWN);
 		((DRDateTime) date).setSupportDateRange(supportDateRange);
@@ -77,6 +85,7 @@ public class DateInput extends ADataInput {
 		gd.horizontalIndent = 8;
 		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
+		setFormat(date, InputControlsPreferencePage.JSS_TIMESTAMP_FORMAT);
 
 		setMandatory(param, date);
 		ModifyListener listener = new ModifyListener() {
@@ -115,6 +124,7 @@ public class DateInput extends ADataInput {
 		gd.horizontalIndent = 8;
 		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
+		setFormat(date, InputControlsPreferencePage.JSS_DATE_FORMAT);
 
 		setMandatory(param, date);
 
@@ -137,6 +147,7 @@ public class DateInput extends ADataInput {
 		gd.horizontalIndent = 8;
 		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
+		setFormat(date, InputControlsPreferencePage.JSS_TIMESTAMP_FORMAT);
 
 		setMandatory(param, date);
 		SelectionAdapter listener = new SelectionAdapter() {
@@ -157,6 +168,7 @@ public class DateInput extends ADataInput {
 		gd.horizontalIndent = 8;
 		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
+		setFormat(date, InputControlsPreferencePage.JSS_TIME_FORMAT);
 
 		setMandatory(param, date);
 
@@ -178,6 +190,7 @@ public class DateInput extends ADataInput {
 		gd.horizontalIndent = 8;
 		gd.widthHint = 25 * getCharWidth(date);
 		date.setLayoutData(gd);
+		setFormat(date, InputControlsPreferencePage.JSS_DATE_FORMAT);
 
 		setMandatory(param, date);
 

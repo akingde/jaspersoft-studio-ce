@@ -292,6 +292,12 @@
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage"
+            id="com.jaspersoft.studio.preferences.execution.InputControlsPreferencePage.property"
+            name="%InputControls">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
             class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
             id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
             name="%FontsFamilies">

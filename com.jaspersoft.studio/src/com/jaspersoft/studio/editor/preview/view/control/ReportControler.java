@@ -326,7 +326,7 @@ public class ReportControler {
 
 							setupRecordCounters();
 							JaspersoftStudioPlugin.getExtensionManager().onRun(jrContext, jasperReport, jasperParameters);
-							
+
 							// We create the fillHandle to run the report based on the type of data adapter....
 							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jrContext, jasperReport,
 									new HashMap<String, Object>(jasperParameters));
