@@ -230,11 +230,11 @@ public class ReportThumbnailsManager {
 	    	// Check if we have a cached image, in that case we can get it ...
 	    	if (cachedItems.containsKey(location))
 	    	{
-	    		cachedItem = cachedItems.get(cachedItems);
-	    		if (file.lastModified() > cachedItem.getTimestamp().getTime())
+	    		cachedItem = cachedItems.get(location);
+	    		if (cachedItem!=null && file.lastModified() > cachedItem.getTimestamp().getTime())
 	    		{
 	    			// This cache item is old, we can delete it...
-	    			cachedItems.remove(cachedItem);
+	    			cachedItems.remove(location);
 	    			cachedItem = null;
 	    		}
 	    	}
