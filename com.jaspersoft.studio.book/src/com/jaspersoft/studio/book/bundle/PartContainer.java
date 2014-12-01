@@ -13,6 +13,7 @@
 package com.jaspersoft.studio.book.bundle;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -88,6 +89,8 @@ public class PartContainer {
 				is = partPath.openStream();
 				loadedPart = JRXmlLoader.load(JasperReportsConfiguration.getDefaultJRConfig(), is);
 				return loadedPart;
+			} catch (FileNotFoundException ex) {
+				// the URL is pointing to a non-existing file
 			} catch (Exception ex) {
 				closeInputStream(is);
 				ex.printStackTrace();
