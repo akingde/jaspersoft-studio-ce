@@ -21,7 +21,8 @@ import com.jaspersoft.studio.data.sql.model.ISubQuery;
 import com.jaspersoft.studio.data.sql.model.query.AMQueryAliased;
 import com.jaspersoft.studio.model.ANode;
 
-public class MSelectSubQuery extends AMQueryAliased<String> implements ISubQuery {
+public class MSelectSubQuery extends AMQueryAliased<String> implements
+		ISubQuery {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MSelectSubQuery(ANode parent) {
@@ -43,4 +44,5 @@ public class MSelectSubQuery extends AMQueryAliased<String> implements ISubQuery
 	public String getToolTip() {
 		return "(" + QueryWriter.writeSubQuery(this) + ")" + addAlias();
 	}
+
 }

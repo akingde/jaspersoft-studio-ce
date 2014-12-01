@@ -19,6 +19,7 @@ import com.jaspersoft.studio.data.sql.model.query.MUnion;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTable;
 import com.jaspersoft.studio.data.sql.model.query.from.MFromTableJoin;
 import com.jaspersoft.studio.data.sql.model.query.orderby.MOrderBy;
+import com.jaspersoft.studio.data.sql.model.query.select.MSelectSubQuery;
 import com.jaspersoft.studio.data.sql.model.query.subquery.MQueryTable;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -31,10 +32,15 @@ public class QueryWriter {
 
 			@Override
 			public boolean visit(INode n) {
-				if (n instanceof ISubQuery)
+				if (n instanceof ISubQuery) {
+					if (n instanceof MSelectSubQuery
+							&& !((MSelectSubQuery) n).isFirst())
+						sb.append(",\n\t");
 					sb.append("(");
-				else if (n instanceof IQueryString) {
-					if (n instanceof MFromTable && n.getValue() instanceof MQueryTable && !((MFromTable) n).isFirst())
+				} else if (n instanceof IQueryString) {
+					if (n instanceof MFromTable
+							&& n.getValue() instanceof MQueryTable
+							&& !((MFromTable) n).isFirst())
 						sb.append(",\n\t");
 					sb.append(((IQueryString) n).toSQLString());
 				}
@@ -43,7 +49,8 @@ public class QueryWriter {
 
 			@Override
 			protected void postChildIteration(INode n) {
-				boolean b = n instanceof MFromTable && n.getValue() instanceof MQueryTable;
+				boolean b = n instanceof MFromTable
+						&& n.getValue() instanceof MQueryTable;
 				if (n instanceof ISubQuery || b) {
 					if (b && n instanceof MFromTableJoin)
 						return;
@@ -73,7 +80,8 @@ public class QueryWriter {
 
 			@Override
 			protected void postChildIteration(INode n) {
-				boolean b = n instanceof MFromTable && n.getValue() instanceof MQueryTable;
+				boolean b = n instanceof MFromTable
+						&& n.getValue() instanceof MQueryTable;
 				if (n instanceof ISubQuery || b) {
 					sb.append(")");
 					if (b && n instanceof MFromTableJoin)
