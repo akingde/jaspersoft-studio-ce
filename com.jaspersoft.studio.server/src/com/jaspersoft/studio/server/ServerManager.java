@@ -102,7 +102,7 @@ public class ServerManager {
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_TAG);
 			File destination = new File(storage, fileName);
-			StreamResult result = new StreamResult(destination);
+			StreamResult result = new StreamResult(destination.getAbsolutePath());
 			transformer.transform(source, result);
 		} catch (Exception e) {
 			e.printStackTrace();

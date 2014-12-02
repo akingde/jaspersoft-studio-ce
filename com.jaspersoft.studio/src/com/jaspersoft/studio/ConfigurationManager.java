@@ -178,7 +178,7 @@ public class ConfigurationManager {
 							File xmlTargetFile = new File(storage,name);
 							if (!xmlTargetFile.exists()){
 								createtElements.add(xmlTargetFile);
-								StreamResult result = new StreamResult(xmlTargetFile);
+								StreamResult result = new StreamResult(xmlTargetFile.getAbsolutePath());
 								transformer.transform(source, result);
 							} else {
 								throw new Exception("File "+xmlTargetFile.getAbsolutePath()+" already exist");
