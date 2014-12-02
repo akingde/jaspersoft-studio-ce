@@ -136,8 +136,8 @@ public class BuildComponentHandler implements IHandler {
 	 * @return a command to executed inside the runtime
 	 */
 	private String generateCommand(File compiler, File rhino, File rJs, File buildFile){
-		String command = "java -classpath "+rhino.getAbsolutePath() +  getOsDependendSeprator(); //$NON-NLS-1$
-		command += compiler.getAbsolutePath()+" org.mozilla.javascript.tools.shell.Main "+ rJs.getAbsolutePath()+" -o "+buildFile.getAbsolutePath(); //$NON-NLS-1$ //$NON-NLS-2$
+		String command = "java -classpath \""+rhino.getAbsolutePath() + "\"" +  getOsDependendSeprator(); //$NON-NLS-1$
+		command += "\""+compiler.getAbsolutePath() + "\" org.mozilla.javascript.tools.shell.Main \""+ rJs.getAbsolutePath()+"\" -o \""+buildFile.getAbsolutePath()+"\""; //$NON-NLS-1$ //$NON-NLS-2$
 		return command;
 	}
 	
@@ -159,6 +159,7 @@ public class BuildComponentHandler implements IHandler {
 			File rhino = fetchResource("com/jaspersoft/studio/javascript/resources/js.jar", "js.jar"); //$NON-NLS-1$ //$NON-NLS-2$
 			File rJs = fetchResource("com/jaspersoft/studio/javascript/resources/r.js", "r.js"); //$NON-NLS-1$ //$NON-NLS-2$
 			String command = generateCommand(compiler, rhino, rJs, buildFile);
+			//System.out.println(command);
 			try {
 				//Run the compilation process and print the output inside a dialog
 				Process proc = Runtime.getRuntime().exec(command, null, projectFolder);
