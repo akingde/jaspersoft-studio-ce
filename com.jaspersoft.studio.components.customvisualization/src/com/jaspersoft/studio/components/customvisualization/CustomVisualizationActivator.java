@@ -5,9 +5,15 @@
  ******************************************************************************/
 package com.jaspersoft.studio.components.customvisualization;
 
+import java.io.IOException;
+
 import net.sf.jasperreports.eclipse.AbstractJRUIPlugin;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.osgi.framework.BundleContext;
+
+import com.jaspersoft.jasperreports.customvisualization.CVConstants;
+import com.jaspersoft.studio.preferences.util.PreferencesUtils;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -32,6 +38,7 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		initCustomVisualizationComponentProperties();
 		plugin = this;
 	}
 
@@ -58,4 +65,22 @@ public class CustomVisualizationActivator extends AbstractJRUIPlugin {
 		return PLUGIN_ID;
 	}
 
+	
+	/*
+	 * Initializes the mandatory properties related to RequireJS.
+	 */
+	private void initCustomVisualizationComponentProperties() throws IOException {
+		
+			
+			String pathToRequireJs = "file:"+ getFileLocation("resources/scripts/require-2.1.6.src.js"); //$NON-NLS-1$
+		
+			PreferencesUtils.getJaspersoftStudioPrefStore().setValue(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			DefaultJasperReportsContext.getInstance().setProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			
+			
+			PreferencesUtils.getJaspersoftStudioPrefStore().setValue("net.sf.jasperreports.web.resource.pattern.customvisualization.scripts", "com/jaspersoft/jasperreports/customvisualization/resources/require");
+			PreferencesUtils.storeJasperReportsProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+			DefaultJasperReportsContext.getInstance().setProperty(CVConstants.CV_REQUIREJS_PROPERTY, pathToRequireJs);
+	}
 }
