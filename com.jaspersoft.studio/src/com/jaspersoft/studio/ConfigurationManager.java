@@ -13,6 +13,7 @@
 package com.jaspersoft.studio;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -178,8 +179,10 @@ public class ConfigurationManager {
 							File xmlTargetFile = new File(storage,name);
 							if (!xmlTargetFile.exists()){
 								createtElements.add(xmlTargetFile);
-								StreamResult result = new StreamResult(xmlTargetFile.getAbsolutePath());
+								FileOutputStream stream = new FileOutputStream(xmlTargetFile);
+								StreamResult result = new StreamResult(stream);
 								transformer.transform(source, result);
+								stream.close();
 							} else {
 								throw new Exception("File "+xmlTargetFile.getAbsolutePath()+" already exist");
 							}

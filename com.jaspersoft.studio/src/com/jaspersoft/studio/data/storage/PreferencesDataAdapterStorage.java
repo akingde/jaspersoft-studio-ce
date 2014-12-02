@@ -10,6 +10,7 @@ package com.jaspersoft.studio.data.storage;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -140,8 +141,10 @@ public class PreferencesDataAdapterStorage extends ADataAdapterStorage {
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_KEYS_DATA_ADAPTERS);
 			File destination = new File(storage, fileName);
-			StreamResult result = new StreamResult(destination.getAbsolutePath());
+			FileOutputStream stream = new FileOutputStream(destination);
+			StreamResult result = new StreamResult(stream);
 			transformer.transform(source, result);
+			stream.close();
 			fileAdapterMap.put(adapter, fileName);
 		} catch (Exception e) {
 			e.printStackTrace();

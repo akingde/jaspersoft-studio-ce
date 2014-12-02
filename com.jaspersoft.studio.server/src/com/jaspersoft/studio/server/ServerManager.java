@@ -16,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -102,8 +103,10 @@ public class ServerManager {
 			DOMSource source = new DOMSource(doc);
 			File storage = ConfigurationManager.getStorage(PREF_TAG);
 			File destination = new File(storage, fileName);
-			StreamResult result = new StreamResult(destination.getAbsolutePath());
+			FileOutputStream stream = new FileOutputStream(destination);
+			StreamResult result = new StreamResult(stream);
 			transformer.transform(source, result);
+			stream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

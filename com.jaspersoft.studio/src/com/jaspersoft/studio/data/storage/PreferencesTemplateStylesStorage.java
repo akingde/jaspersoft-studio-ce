@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -389,8 +390,10 @@ public class PreferencesTemplateStylesStorage {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(destination);
+			FileOutputStream stream = new FileOutputStream(destination);
+			StreamResult result = new StreamResult(stream);
 			transformer.transform(source, result);
+			stream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
