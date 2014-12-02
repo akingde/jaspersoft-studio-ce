@@ -112,56 +112,44 @@ public class SWTViewer extends APreview implements IJRPrintable, IPreferencePage
 	}
 
 	public void setJRPRint(Statistics stats, JasperPrint jrprint, boolean refresh) {
-		int ind = Math.max(0, rptviewer.getPageIndex());
-		if (jrprint != null)
-			ind = Math.max(ind, jrprint.getPages().size());
-		// if (tmanager != null) {
-		// contribute2ToolBar(tmanager);
-		// tmanager.update(true);
-		// ((ToolBarManager) tmanager).getControl().pack();
-		// }
-		if (rptviewer.getControl().isDisposed())
-			return;
-		rptviewer.setReport(jrprint);
-		rptviewer.setPageIndex(ind);
-		rptviewer.gotoFirstPage();
-
-		this.jrprint = jrprint;
+		doUpdatePage(jrprint, Math.max(0, rptviewer.getPageIndex()));
 	}
 
 	private boolean refresh = false;
+	private JasperPrint lastJR;
+	private int lastPage;
 
 	@Override
 	public void pageGenerated(final JasperPrint arg0, int page) {
-		if (refresh)
-			return;
-		refresh = true;
-		UIUtils.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				int ind = rptviewer.getPageIndex();
-				rptviewer.setReport(arg0);
-				rptviewer.setPageIndex(ind);
-				jrprint = arg0;
-				refresh = false;
-			}
-		});
+		doUpdatePage(arg0, rptviewer.getPageIndex());
 	}
 
 	@Override
 	public void pageUpdated(final JasperPrint arg0, final int page) {
-		if (rptviewer.getPageIndex() == page) {
-			UIUtils.getDisplay().asyncExec(new Runnable() {
+		if (rptviewer.getPageIndex() == page)
+			doUpdatePage(arg0, page);
+	}
 
-				@Override
-				public void run() {
-					rptviewer.setReport(arg0);
-					rptviewer.setPageIndex(page);
-					jrprint = arg0;
-				}
-			});
+	private void doUpdatePage(final JasperPrint arg0, final int page) {
+		if (refresh) {
+			lastJR = arg0;
+			lastPage = page;
+			return;
 		}
+		lastJR = null;
+		refresh = true;
+		UIUtils.getDisplay().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				rptviewer.setReport(arg0);
+				rptviewer.setPageIndex(page);
+				jrprint = arg0;
+				refresh = false;
+				if (lastJR != null)
+					doUpdatePage(lastJR, lastPage);
+			}
+		});
 	}
 
 	public void setPageNumber(final int page) {
