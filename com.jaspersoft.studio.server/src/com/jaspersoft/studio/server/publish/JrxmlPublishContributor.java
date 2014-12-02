@@ -102,10 +102,9 @@ public class JrxmlPublishContributor implements IPublishContributor {
 				else if (ele instanceof JRDesignSubreport) {
 					publishSubreport(mrunit, monitor, jasper, fileset, file,
 							ele, version);
-				} else {
-					publishElement(mrunit, monitor, jasper, fileset, file, ele,
-							version);
-				}
+				} else
+					publishComponent(mrunit, monitor, jasper, fileset, file,
+							ele, version);
 			}
 			publishDataAdapters(mrunit, monitor, jasper, fileset, file, version);
 			publishBundles(mrunit, monitor, jasper, fileset, file, version);
@@ -178,9 +177,12 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		return jd;
 	}
 
-	protected void publishElement(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, Set<String> fileset, IFile file,
-			JRDesignElement ele, String version) throws Exception {
+	@Override
+	public void publishComponent(AMJrxmlContainer mrunit,
+			IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
+			IFile file, JRDesignElement ele, String version) throws Exception {
+		Activator.getExtManager().publishComponent(mrunit, monitor, jasper,
+				fileset, file, ele, version);
 	}
 
 	protected void publishImage(MReportUnit mrunit, IProgressMonitor monitor,

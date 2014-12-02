@@ -269,12 +269,15 @@ public class RestV2ConnectionJersey extends ARestV2ConnectionJersey {
 						else if (name.endsWith(FileExtension.PointJRXML))
 							nrd.setWsType(ResourceDescriptor.TYPE_JRXML);
 						else if (name.endsWith(".jar"))
-							nrd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
+							nrd.setWsType("."
+									+ ResourceDescriptor.TYPE_CLASS_JAR);
 						else if (name.endsWith(FileExtension.PointJRTX))
 							nrd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
-						else if (name
-								.endsWith(ResourceDescriptor.TYPE_CSS_FILE))
+						else if (name.endsWith("."
+								+ ResourceDescriptor.TYPE_CSS_FILE))
 							nrd.setWsType(ResourceDescriptor.TYPE_CSS_FILE);
+						else if (name.endsWith(".js"))
+							nrd.setWsType(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 						else if (name.endsWith(".properties"))
 							nrd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
 					}

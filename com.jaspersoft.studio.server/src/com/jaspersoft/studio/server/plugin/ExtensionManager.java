@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
@@ -44,7 +45,9 @@ public class ExtensionManager {
 	private List<IInputControls> inputcontrol = new ArrayList<IInputControls>();
 
 	public void init() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "resources"); //$NON-NLS-1$ //$NON-NLS-2$
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(
+						"com.jaspersoft.studio.server", "resources"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -55,7 +58,8 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -66,7 +70,8 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "protocols"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "protocols"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -76,7 +81,8 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio.server", "inputcontrol"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "inputcontrol"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -88,17 +94,29 @@ public class ExtensionManager {
 		}
 	}
 
-	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset, IFile file, String version) throws Exception {
+	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, Set<String> fileset, IFile file, String version)
+			throws Exception {
 		for (IPublishContributor r : publisher)
 			r.publishJrxml(mrunit, monitor, jasper, fileset, file, version);
 	}
 
-	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper) throws Exception {
+	public void publishComponent(AMJrxmlContainer mrunit,
+			IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
+			IFile file, JRDesignElement ele, String version) throws Exception {
+		for (IPublishContributor r : publisher)
+			r.publishComponent(mrunit, monitor, jasper, fileset, file, ele,
+					version);
+	}
+
+	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper) throws Exception {
 		for (IPublishContributor r : publisher)
 			r.publishParameters(mrunit, monitor, jasper);
 	}
 
-	public MResource getResource(ANode parent, ResourceDescriptor resource, int index) {
+	public MResource getResource(ANode parent, ResourceDescriptor resource,
+			int index) {
 		for (IResourceFactory r : resources) {
 			MResource mr = r.getResource(parent, resource, index);
 			if (mr != null)
@@ -147,12 +165,14 @@ public class ExtensionManager {
 			r.initWsTypes(wsType);
 	}
 
-	public void initContainers(Set<Class<? extends ClientResource<?>>> containers) {
+	public void initContainers(
+			Set<Class<? extends ClientResource<?>>> containers) {
 		for (IResourceFactory r : resources)
 			r.initContainers(containers);
 	}
 
-	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ResourceDescriptor getRD(ARestV2Connection rc, ClientResource<?> cr,
+			ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ResourceDescriptor nrd = r.getRD(rc, cr, rd);
 			if (nrd != null)
@@ -161,7 +181,8 @@ public class ExtensionManager {
 		return null;
 	}
 
-	public ClientResource<?> getResource(ARestV2Connection rc, ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
+	public ClientResource<?> getResource(ARestV2Connection rc,
+			ClientResource<?> cr, ResourceDescriptor rd) throws ParseException {
 		for (IResourceFactory r : resources) {
 			ClientResource<?> nrd = r.getResource(rc, cr, rd);
 			if (nrd != null)
