@@ -19,7 +19,6 @@
     <extension
           point="org.eclipse.core.contenttype.contentTypes">
        <content-type
-             describer="com.jaspersoft.studio.book.editors.JRBookDescriber"
              file-extensions="jrxml"
              id="com.jaspersoft.studio.content-types.jrbook"
              name="JasperReports Book File"
