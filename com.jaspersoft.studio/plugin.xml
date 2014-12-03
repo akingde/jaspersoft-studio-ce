@@ -1410,8 +1410,9 @@
    <wizard
          category="com.jaspersoft.studio"
          class="com.jaspersoft.studio.javascript.wizard.CustomVisualizationComponentWizard"
+         icon="icons/cvcomponent-16.png"
          id="om.jaspersoft.studio.wizards.custom_component_wizard"
-         name="Custom Component Wizard">
+         name="Custom Visualization Component">
       <description>
          Create a skeleton for a custom visualization component
       </description>
@@ -1762,8 +1763,9 @@
      </command>
      <command
            commandId="com.jaspersoft.studio.javascript.buildComponent"
+           icon="icons/cvcomponent-16.png"
            id="com.jaspersoft.studio.javascript.build"
-           label="Build Component"
+           label="%buildComponent"
            style="push">
         <visibleWhen
               checkEnabled="false">

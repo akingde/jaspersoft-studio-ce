@@ -42,7 +42,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
@@ -54,6 +53,7 @@ import com.jaspersoft.studio.javascript.VelocityLibrary;
 import com.jaspersoft.studio.javascript.VelocityShimLibrary;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.VelocityUtils;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
 /**
  * Wizard to create a custom visualization component project
@@ -61,7 +61,12 @@ import com.jaspersoft.studio.utils.VelocityUtils;
  * @author Orlandin Marco
  *
  */
-public class CustomVisualizationComponentWizard extends Wizard implements INewWizard {
+public class CustomVisualizationComponentWizard extends JSSWizard implements INewWizard {
+	
+	/**
+	 * Key to write or read the selected module in the first step from the wizard settings
+	 */
+	protected static final String SELECTED_MODULE_KEY = "selectedModule";
 	
 	/**
 	 * Engine to fill the build.js template
@@ -78,6 +83,17 @@ public class CustomVisualizationComponentWizard extends Wizard implements INewWi
 	 */
 	private CustomVisualizationComponentTablePage page0;
 	
+	/**
+	 * Page to get a summary of all the libraries used by the project
+	 */
+	private CustomVisualizationComponentSummaryPage page1;
+	
+	/**
+	 * Page to review the licenses of all the libraries used by the project
+	 */
+	private CustomVisualizationComponentLicensePage page2;
+	
+	
 	public CustomVisualizationComponentWizard(){
 		super();
 		setWindowTitle(Messages.CustomVisualizationComponentWizard_title);
@@ -87,6 +103,10 @@ public class CustomVisualizationComponentWizard extends Wizard implements INewWi
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		page0 = new CustomVisualizationComponentTablePage();
 		addPage(page0);
+		page1 = new CustomVisualizationComponentSummaryPage();
+		addPage(page1);
+		page2 = new CustomVisualizationComponentLicensePage();
+		addPage(page2);
 	}
 
 	/**

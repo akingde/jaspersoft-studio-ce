@@ -374,11 +374,15 @@ public class Messages extends NLS {
 	public static String CustomJarInformationPage_title;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;
+	public static String CustomVisualizationComponentLicensePage_downloadLabel;
+	public static String CustomVisualizationComponentLicensePage_pageDescription;
+	public static String CustomVisualizationComponentLicensePage_pageTitle;
+	public static String CustomVisualizationComponentSummaryPage_description;
+	public static String CustomVisualizationComponentSummaryPage_footerLabel;
+	public static String CustomVisualizationComponentSummaryPage_headerLabel;
+	public static String CustomVisualizationComponentSummaryPage_title;
 	public static String CustomVisualizationComponentTablePage_licenseGroup;
-	public static String CustomVisualizationComponentTablePage_localLabel;
-	public static String CustomVisualizationComponentTablePage_locationCol;
 	public static String CustomVisualizationComponentTablePage_nameCol;
-	public static String CustomVisualizationComponentTablePage_needDownloadLabel;
 	public static String CustomVisualizationComponentTablePage_noLibraryError;
 	public static String CustomVisualizationComponentTablePage_noSpacesError;
 	public static String CustomVisualizationComponentTablePage_pageDescription;

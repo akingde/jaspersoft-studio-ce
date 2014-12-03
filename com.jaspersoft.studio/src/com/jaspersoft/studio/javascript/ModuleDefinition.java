@@ -316,6 +316,14 @@ public class ModuleDefinition {
 	}
 	
 	/**
+	 * Return the module name followed by it's version
+	 */
+	@Override
+	public String toString() {
+		return getModuleName() + " " + getVersionNumber();
+	}
+	
+	/**
 	 * Return a file name used to store the library and it's license
 	 * on the disk as local copy. The name is read as the last segment
 	 * of the library url
@@ -339,7 +347,11 @@ public class ModuleDefinition {
 			InputStream is = resource.openStream();   
 			String tempDir = System.getProperty("java.io.tmpdir");
 			File tempFile = new File(tempDir, "license");
-			if (tempFile.exists()) tempFile.delete();
+			int counter = 0;
+			while(tempFile.exists()){
+				tempFile = new File(tempDir, "license_"+counter);
+				counter++;
+			}
 			FileOutputStream outputStream = new FileOutputStream(tempFile);
 			int read = 0;
 			byte[] bytes = new byte[1024];

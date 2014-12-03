@@ -20,21 +20,17 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -78,11 +74,7 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 			} else if (columnIndex == 1){
 				ModuleDefinition module = (ModuleDefinition)element;
 				return module.getVersionNumber();
-			}	else if (columnIndex == 2){
-				ModuleDefinition module = (ModuleDefinition)element;
-				if (ModuleManager.isLocal(module)) return Messages.CustomVisualizationComponentTablePage_localLabel;
-				else return Messages.CustomVisualizationComponentTablePage_needDownloadLabel;
-			}
+			}	
 			return null;
 		}
 		
@@ -97,13 +89,7 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	 * the table when the user can select a module that will be used as skeleton
 	 */
 	private Table table;
-	
-	/**
-	 * Styled text where the label of currently selected module will be displayed.
-	 * This is the license of the library used by the module
-	 */
-	private StyledText licenseLabel;
-	
+
 	/**
 	 * Text area where the project name can be provided
 	 */
@@ -115,7 +101,7 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	private ModuleLableProvider labelProvider = new ModuleLableProvider();
 	
 	/**
-	 * Modifiy listener for the projectName, made to revalidate the 
+	 * Modify listener for the projectName, made to re-validate the 
 	 * page when something changes
 	 */
 	private ModifyListener nameModified = new ModifyListener() {
@@ -138,13 +124,12 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(2,false));
+		container.setLayout(new GridLayout(1,false));
 	
 		// CREATE THE PROJECT NAME AREA
 		
 		Composite nameSection = new Composite(container, SWT.NONE);
 		GridData nameData = new GridData(GridData.FILL_HORIZONTAL);
-		nameData.horizontalSpan = 2;
 		nameSection.setLayout(new GridLayout(2,false));
 		nameSection.setLayoutData(nameData);
 		
@@ -160,25 +145,22 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 		viewer.setLabelProvider(labelProvider);
 		viewer.setContentProvider(new ListContentProvider());
 		table = viewer.getTable();
-		GridData tableData = new GridData(GridData.FILL_VERTICAL);
+		GridData tableData = new GridData(GridData.FILL_BOTH);
 		tableData.widthHint = 250;
 		table.setLayoutData(tableData);
 		
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(50, 100, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
+		tlayout.addColumnData(new ColumnWeightData(75, 200, true));
+		tlayout.addColumnData(new ColumnWeightData(25, 50, true));
+		//tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		table.setLayout(tlayout);
 		table.setHeaderVisible(true);
-		TableColumn[] column = new TableColumn[3];
+		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText(Messages.CustomVisualizationComponentTablePage_nameCol);
 		
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.CustomVisualizationComponentTablePage_versionCol);
-
-		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText(Messages.CustomVisualizationComponentTablePage_locationCol);
 
 		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
@@ -187,19 +169,6 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 		attachCellEditors();
 		viewer.setInput(ModuleManager.getModules());
 		
-		//CREATE THE LICENSE AREA
-		
-		Group licenseGroup = new Group(container, SWT.NONE);
-		licenseGroup.setText(Messages.CustomVisualizationComponentTablePage_licenseGroup);
-		licenseGroup.setLayout(new GridLayout(1, false));
-		licenseGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		licenseLabel = new StyledText(licenseGroup, SWT.WRAP | SWT.V_SCROLL);
-		licenseLabel.setBackground(container.getBackground());
-		licenseLabel.setEditable(false);
-		GridData licenseData = new GridData(GridData.FILL_BOTH);
-		licenseData.widthHint = 50;
-		licenseLabel.setLayoutData(licenseData);
-	
 		setControl(container);
 	}
 
@@ -212,21 +181,6 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 	 * Attach the listeners to the table viewer
 	 */
 	private void attachCellEditors() {
-		
-		//Selection listener, show the license of the current module
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				int selectedIndex = table.getSelectionIndex();
-				if  (selectedIndex != -1){
-					ModuleDefinition module = ModuleManager.getModules().get(selectedIndex);
-					licenseLabel.setText(ModuleManager.getLicenseFile(module));
-				} else {
-					licenseLabel.setText(""); //$NON-NLS-1$
-				}
-			}
-		});
 		
 		//Check listener, allow only to have one module selected. It show
 		//also the license of the checked module
@@ -242,11 +196,12 @@ public class CustomVisualizationComponentTablePage extends JSSWizardPage {
 						}
 					}
 				}
+				//Store the selected module to share it with the other pages
+				if (viewer.getCheckedElements().length>0) getSettings().put(CustomVisualizationComponentWizard.SELECTED_MODULE_KEY, viewer.getCheckedElements()[0]);
+				else getSettings().remove(CustomVisualizationComponentWizard.SELECTED_MODULE_KEY);
 				getContainer().updateButtons();
 			}
 		});
-		
-		viewer.setColumnProperties(new String[] { "Name", "State" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**

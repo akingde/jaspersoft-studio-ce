@@ -16,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +118,7 @@ public class ModuleManager {
 	 * Check if the library of the passed module is saved locally
 	 * 
 	 * @param module module to check
-	 * @return true if the module is available locally, false if it need
+	 * @return true if the library is available locally, false if it need
 	 * to be downloaded
 	 */
 	public static boolean isLocal(ModuleDefinition module){
@@ -248,13 +247,25 @@ public class ModuleManager {
 			license = downloadLicense(module, fileName);
 		}
 		String result = readTextfile(license);
-		String newLine = System.getProperty("line.separator"); //$NON-NLS-1$
+		/*String newLine = System.getProperty("line.separator"); //$NON-NLS-1$
 		if (!module.getRequiredLibraries().isEmpty()){
 			for(ModuleDefinition required : module.getRequiredLibraries()){
 				String newLicenseHeder = newLine + "License for dependency {0}: " + newLine + newLine;
 				result+= MessageFormat.format(newLicenseHeder, new Object[]{required.getModuleName()}) + getLicenseFile(required);
 			}
-		}
+		}*/
 		return result;
+	}
+	
+	/**
+	 * Check if the license of the library of the passed module is saved locally
+	 * 
+	 * @param module module to check
+	 * @return true if the license is available locally, false if it need
+	 * to be downloaded
+	 */
+	public static boolean isLicenseLocal(ModuleDefinition module){
+		String fileName = getLicenseFileName(module);
+		return ConfigurationManager.getStorageResource(PREF_KEYS_JS_MODULES, fileName) != null;
 	}
 }
