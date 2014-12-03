@@ -188,14 +188,14 @@ public class JRBookDesignEditor extends AGraphicEditor {
 	 * the createToolBar method
 	 */
 	private void initializedToolBar(){	
+		ActionRegistry registry = getActionRegistry();	
+		createToolBarButton(registry.getAction(BookCompileAction.ID));
+		createToolBarButton(registry.getAction(BookDatasetAction.ID));
+		createToolBarButton(new Separator());
 		for(AContributorAction contAction : m.getActions()){
 			createToolBarButton(contAction);
 			contAction.setJrConfig((JasperReportsConfiguration) getGraphicalViewer().getProperty("JRCONTEXT"));
 		}
-		createToolBarButton(new Separator());
-		ActionRegistry registry = getActionRegistry();	
-		createToolBarButton(registry.getAction(BookDatasetAction.ID));
-		createToolBarButton(registry.getAction(BookCompileAction.ID));
 		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(additionalToolbar);
 	}
 	

@@ -8,8 +8,10 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPart;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.part.PartComponent;
@@ -108,6 +110,11 @@ public class BookTemplateEngine extends DefaultTemplateEngine {
 					e.printStackTrace();
 				}
 			}
+		}
+		
+		JRDesignDataset dataset = (JRDesignDataset) settings.get(DATASET);
+		if (dataset != null) {
+			jdCopy.getMainDesignDataset().setQuery((JRDesignQuery) dataset.getQuery());
 		}
 		
 		
