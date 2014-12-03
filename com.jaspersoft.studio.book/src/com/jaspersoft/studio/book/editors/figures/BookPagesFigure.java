@@ -26,8 +26,6 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.jaspersoft.studio.book.ReportThumbnailsManager;
 import com.jaspersoft.studio.book.model.MReportPart;
 
-
-
 /**
  * This is the figure that shows a single document icon in a book section.
  * The label is the expression used to reference the jrxml in the subreportPart.
@@ -35,19 +33,46 @@ import com.jaspersoft.studio.book.model.MReportPart;
  */
 public class BookPagesFigure extends RectangleFigure {
 
-	private MReportPart model;
-	
-	private Image previewImage = null;
-	private BusyImageFigure imageFigure = null;
-	
-	private TooltipFigure toolTipFigure;
-	
-	private Label textFigure;
-	
+	/**
+	 * Height of the figure
+	 */
 	public static final int PREFERRED_HEIGHT = 150;
 	
+	/**
+	 * Width of the figure
+	 */
 	public static final int PREFERRED_WIDTH = 150;
+	
+	/**
+	 * Model of the report
+	 */
+	private MReportPart model;
+	
+	/**
+	 * The preview image for this figure
+	 */
+	private Image previewImage = null;
+	
+	/**
+	 * The circle busy image for the figure
+	 */
+	private BusyImageFigure imageFigure = null;
+	
+	/**
+	 * The tooltip for the figure
+	 */
+	private TooltipFigure toolTipFigure;
+	
+	/**
+	 * The textual image of the figure
+	 */
+	private Label textFigure;
 
+	/**
+	 * Create the figure
+	 * 
+	 * @param model model for which the figure is created
+	 */
 	public BookPagesFigure(MReportPart model){
 		this(model, null);
 	}
@@ -129,6 +154,8 @@ public class BookPagesFigure extends RectangleFigure {
 							updateFigure(sourceImage);
 						}
 					}
+				} catch(Exception ex){
+					ex.printStackTrace();
 				} finally {
 					imageFigure.setBusy(false);
 				}

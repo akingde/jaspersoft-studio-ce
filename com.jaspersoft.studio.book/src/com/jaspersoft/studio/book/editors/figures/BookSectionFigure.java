@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book.editors.figures;
 
 import org.eclipse.draw2d.FlowLayout;
@@ -17,18 +29,44 @@ import com.jaspersoft.studio.book.editparts.BookSectionEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 
+/**
+ * Figure where that will contains all the pages of a section
+ * 
+ * 
+ * @author Orlandin Marco
+ *
+ */
 public class BookSectionFigure extends RectangleFigure {
 
+	/**
+	 * Font size of the title text
+	 */
 	private static final int TITLE_FONT_HEIGHT = 14;
 	
+	/**
+	 * Width of the horizontal line separator
+	 */
 	private static final int HORIZONTAL_LINE_WIDTH = 1;
 
+	/**
+	 * The height offset of the horizontal line separator
+	 */
 	public static int HORIZONTAL_LINE_OFFSET = 27;
 	
+	/**
+	 * The parent part
+	 */
 	private BookSectionEditPart parentPart;
 	
+	/**
+	 * Flag to know if the figure should drawn the drag and drop feedback
+	 */
 	private boolean drawFeedback = false;
 	
+	/**
+	 * Part after which the feedback must be drawn, null if it is before
+	 * the first element. This is used only when drawFeedback is true
+	 */
 	private EditPart afterPart = null;
 	
 	public BookSectionFigure(BookSectionEditPart parentPart){
@@ -36,19 +74,23 @@ public class BookSectionFigure extends RectangleFigure {
 		setLayoutManager(new FlowLayout());
 	}
 	
+	/**
+	 * Calculate the height of the figure depending on its content
+	 */
 	@Override
 	public Dimension getPreferredSize(int wHint, int hHint) {
 		Rectangle currentBounds = getBounds();
 		int preferredHeight = BookPagesFigure.PREFERRED_HEIGHT;
-		if (currentBounds.width > 0){
-			int numberForLine = currentBounds.width / (BookPagesFigure.PREFERRED_WIDTH + 5);
-			int numberOfLines = (parentPart.getChildren().size() / numberForLine);
-			if (parentPart.getChildren().size() % numberForLine >0) numberOfLines++;
-			if (numberOfLines == 0 ) numberOfLines++;
-			preferredHeight = (preferredHeight+4) * numberOfLines;
-			return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
-		}
-		else return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+20);
+		//FALLBACK: if the parent figure has width 0 because it was still not
+		//calculated use it's default width
+		int pageWidth = BookReportFigure.FIGURE_WIDTH;
+		if (currentBounds.width > 0) pageWidth = currentBounds.width;
+		int numberForLine = pageWidth / (BookPagesFigure.PREFERRED_WIDTH + 5);
+		int numberOfLines = (parentPart.getChildren().size() / numberForLine);
+		if (parentPart.getChildren().size() % numberForLine >0) numberOfLines++;
+		if (numberOfLines == 0 ) numberOfLines++;
+		preferredHeight = (preferredHeight+4) * numberOfLines;
+		return new Dimension(-1, preferredHeight+HORIZONTAL_LINE_OFFSET+16);
 	}
 	
 	@Override
@@ -128,19 +170,42 @@ public class BookSectionFigure extends RectangleFigure {
 	protected void outlineShape(Graphics graphics) {
 	}
 	
+	/**
+	 * Remove an eventual draw drop feedback
+	 */
 	public void clearFeedback(){
 		drawFeedback = false;
 	}
 	
+	/**
+	 * Set to draw the drop feedback
+	 * 
+	 * @param afterPart after which of the children part the 
+	 * feedback should be drawn or null if it should be drawn
+	 * before the first part
+	 */
 	public void drawFeedback(EditPart afterPart){
 		this.afterPart = afterPart;
 		drawFeedback = true;
 	}
 	
+	/**
+	 * Check if this figure has a drop feedback drawn
+	 * 
+	 * @return true if it has a drop feedback, false otherwise
+	 */
 	public boolean hasFeedback(){
 		return drawFeedback;
 	}
 	
+	/**
+	 * Return after which of the children part the drop feedback will 
+	 * be paint if the drawFeedback is true
+	 * 
+	 * @return after which of the children part the 
+	 * feedback should be drawn or null if it should be drawn
+	 * before the first part
+	 */
 	public EditPart afterPart(){
 		return afterPart;
 	}
