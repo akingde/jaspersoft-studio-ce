@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ * 
+ * Unless you have purchased  a commercial license agreement from Jaspersoft,
+ * the following license terms  apply:
+ * 
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package com.jaspersoft.studio.book.editors.actions;
 
 import java.io.File;
@@ -22,6 +34,12 @@ import com.jaspersoft.studio.book.model.MReportPartContainer;
 import com.jaspersoft.studio.book.model.commands.CreatePartCommand;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAndSelectAction;
 
+/**
+ * Add to the section a book part from a file in the filesystem
+ * 
+ * @author Marco
+ *
+ */
 public class CreateNewBookPartAction extends ACreateAndSelectAction {
 
 	public static final String ID = "create_book_part"; //$NON-NLS-1$
@@ -64,7 +82,7 @@ public class CreateNewBookPartAction extends ACreateAndSelectAction {
 					List<String> reportFiles = selectReportFiles();
 					if(!reportFiles.isEmpty()){
 						for(String f : reportFiles){
-							JRDesignPart newBookPart = MReportPart.createJRElement(new JRDesignExpression(f));
+							JRDesignPart newBookPart = MReportPart.createJRElement(new JRDesignExpression("\""+f+"\""));
 							getCommandStack().execute(new CreatePartCommand(container, newBookPart, -1));
 						}
 					}
@@ -73,6 +91,12 @@ public class CreateNewBookPartAction extends ACreateAndSelectAction {
 		}
 	}
 	
+	/**
+	 * Open the file dialog for jrxml files and return 
+	 * the absolute path of each selected file
+	 * 
+	 * @return not null list of the selected files absolute path
+	 */
 	private List<String> selectReportFiles(){
 		FileDialog fd = new FileDialog(UIUtils.getShell(), SWT.OPEN | SWT.MULTI);
 		fd.setText(Messages.common_open);
