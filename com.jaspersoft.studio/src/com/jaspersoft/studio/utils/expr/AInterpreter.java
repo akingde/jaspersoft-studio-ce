@@ -124,6 +124,11 @@ public abstract class AInterpreter {
 				recursiveInterpreter(recursion, vr);
 		}
 		
+		//Remove the field since it can't be evaluated and change it with null
+		while (expression.indexOf("$F{") >= 0) {
+			String fname = Misc.extract(expression, "$F{", "}");
+			expression = Misc.strReplace("(null)", "$F{" + fname + "}", expression);
+		}
 		
 		while (expression.indexOf("$R{") >= 0) {
 			String pname = Misc.extract(expression, "$R{", "}");
