@@ -16,6 +16,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.ui.util.UIUtils;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.AccessibleEditPart;
 import org.eclipse.gef.DragTracker;
@@ -199,12 +201,21 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	public void handleUnitsChanged(int newUnit) {
-		getRulerFigure().setUnit(newUnit);
-		if (newUnit == RulerProvider.UNIT_PIXELS)
-			getRulerFigure().setInterval(100 , 10);
-		else
-			getRulerFigure().setInterval(1, 10);
+	public void handleUnitsChanged(final int newUnit) {
+		//Could repaint the figure, must be executed inside
+		//the graphic thread to avoid an Invalid Thread Access
+		UIUtils.getDisplay().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				getRulerFigure().setUnit(newUnit);
+				if (newUnit == RulerProvider.UNIT_PIXELS)
+					getRulerFigure().setInterval(100 , 10);
+				else
+					getRulerFigure().setInterval(1, 10);
+			}
+		});
+
 	}
 
 	public boolean isHorizontal() {
