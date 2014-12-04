@@ -43,11 +43,13 @@ public abstract class AImpObject {
 
 	protected AFileResource findFile(MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jd, Set<String> fileset, JRDesignExpression exp, IFile file) {
 		String str = ExpressionUtil.cachedExpressionEvaluationString(exp, jrConfig);
+		
+		if (str == null)
+			return null;
 		if (str.startsWith("repo:"))
 			str = str.replaceFirst("repo:", "");
-		if (str == null || fileset.contains(str))
+		if (fileset.contains(str))
 			return null;
-
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
 			PublishOptions popt = new PublishOptions();
