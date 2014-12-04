@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * Interface used to contribute resources during publishing of jrxml to jasper
@@ -31,6 +32,16 @@ import com.jaspersoft.studio.server.model.MReportUnit;
  * 
  */
 public interface IPublishContributor {
+	/**
+	 * Initialization the publisher
+	 * 
+	 * @param jrConfig
+	 *            context
+	 * @param version
+	 *            jrxml version
+	 */
+	public void init(JasperReportsConfiguration jrConfig);
+
 	/**
 	 * this is the place to setup more properties or contribute some resources
 	 * to the publishing of jrxml to jasperreports server

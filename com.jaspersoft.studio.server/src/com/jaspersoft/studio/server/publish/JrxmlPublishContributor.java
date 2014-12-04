@@ -34,8 +34,6 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.parts.subreport.StandardSubreportPartComponent;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.InputSource;
 
@@ -48,6 +46,7 @@ import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.AMJrxmlContainer;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.plugin.IPublishContributor;
 import com.jaspersoft.studio.server.publish.imp.ImpDataAdapter;
 import com.jaspersoft.studio.server.publish.imp.ImpImage;
@@ -63,8 +62,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlPublishContributor implements IPublishContributor {
-	private JasperReportsConfiguration jrConfig;
-	private String version;
 
 	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor,
 			JasperDesign jasper, Set<String> fileset, IFile file, String version)
@@ -79,7 +76,7 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
 			JasperDesign jasper) throws Exception {
 		impIC.publish(mrunit, monitor, jasper, jrConfig);
-		Activator.getExtManager().publishParameters(mrunit, monitor, jasper);
+		extManager.publishParameters(jrConfig, mrunit, monitor, jasper);
 	}
 
 	private void publishJrxml(AMJrxmlContainer mres, IProgressMonitor monitor,
@@ -112,8 +109,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 			publishParts(mrunit, monitor, jasper, fileset, file, version);
 		}
 		// here extend and give possibility to contribute to plugins
-		Activator.getExtManager().publishJrxml(mres, monitor, jasper, fileset,
-				file, version);
+		extManager.publishJrxml(jrConfig, mres, monitor, jasper, fileset, file,
+				version);
 	}
 
 	protected void publishParts(MReportUnit mrunit, IProgressMonitor monitor,
@@ -181,8 +178,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	public void publishComponent(AMJrxmlContainer mrunit,
 			IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
 			IFile file, JRDesignElement ele, String version) throws Exception {
-		Activator.getExtManager().publishComponent(mrunit, monitor, jasper,
-				fileset, file, ele, version);
+		extManager.publishComponent(jrConfig, mrunit, monitor, jasper, fileset,
+				file, ele, version);
 	}
 
 	protected void publishImage(MReportUnit mrunit, IProgressMonitor monitor,
@@ -194,9 +191,8 @@ public class JrxmlPublishContributor implements IPublishContributor {
 	protected void publishTemplates(MReportUnit mrunit,
 			IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
 			IFile file, String version) throws Exception {
-		for (JRReportTemplate rt : jasper.getTemplatesList()) {
+		for (JRReportTemplate rt : jasper.getTemplatesList())
 			impStyle.publish(jasper, rt, mrunit, monitor, fileset, file);
-		}
 	}
 
 	protected void publishDataAdapters(MReportUnit mrunit,
@@ -258,9 +254,26 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		}
 	}
 
-	private void init(JasperReportsConfiguration jrConfig, String version) {
-		this.jrConfig = jrConfig;
+	public void init(JasperReportsConfiguration jrConfig, String version) {
 		this.version = version;
+		init(jrConfig);
+	}
+
+	private JasperReportsConfiguration jrConfig;
+	private String version;
+	private ExtensionManager extManager;
+	private ImpResourceBundle impBundle;
+	private ImpDataAdapter impDa;
+	private ImpStyleTemplate impStyle;
+	private ImpImage impImg;
+	private ImpSubreport impSRP;
+	private ImpInputControls impIC;
+	private ImpJRXML impJRXML;
+
+	@Override
+	public void init(JasperReportsConfiguration jrConfig) {
+		this.jrConfig = jrConfig;
+		extManager = Activator.getExtManager();
 		impDa = new ImpDataAdapter(jrConfig);
 		impBundle = new ImpResourceBundle(jrConfig);
 		impStyle = new ImpStyleTemplate(jrConfig);
@@ -269,14 +282,5 @@ public class JrxmlPublishContributor implements IPublishContributor {
 		impIC = new ImpInputControls(jrConfig);
 		impJRXML = new ImpJRXML(jrConfig);
 	}
-
-	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-	private ImpResourceBundle impBundle;
-	private ImpDataAdapter impDa;
-	private ImpStyleTemplate impStyle;
-	private ImpImage impImg;
-	private ImpSubreport impSRP;
-	private ImpInputControls impIC;
-	private ImpJRXML impJRXML;
 
 }

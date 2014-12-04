@@ -14,7 +14,9 @@ package com.jaspersoft.studio.server.plugin;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -37,11 +39,12 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.protocol.IConnection;
 import com.jaspersoft.studio.server.protocol.restv2.ARestV2Connection;
 import com.jaspersoft.studio.server.protocol.restv2.WsTypes;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
 	private List<IResourceFactory> resources = new ArrayList<IResourceFactory>();
 	private List<IConnection> protocols = new ArrayList<IConnection>();
-	private List<IPublishContributor> publisher = new ArrayList<IPublishContributor>();
+
 	private List<IInputControls> inputcontrol = new ArrayList<IInputControls>();
 
 	public void init() {
@@ -57,19 +60,6 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
-
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
-		for (IConfigurationElement e : config) {
-			try {
-				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
-				if (o instanceof IPublishContributor)
-					publisher.add((IPublishContributor) o);
-			} catch (CoreException ex) {
-				System.out.println(ex.getMessage());
-			}
-		}
-
 		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				"com.jaspersoft.studio.server", "protocols"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
@@ -94,24 +84,54 @@ public class ExtensionManager {
 		}
 	}
 
-	public void publishJrxml(AMJrxmlContainer mrunit, IProgressMonitor monitor,
+	private Map<JasperReportsConfiguration, List<IPublishContributor>> publisher = new HashMap<JasperReportsConfiguration, List<IPublishContributor>>();
+
+	public List<IPublishContributor> getPublisher(
+			JasperReportsConfiguration jrConfig) {
+		List<IPublishContributor> p = publisher.get(jrConfig);
+		if (p == null) {
+			IConfigurationElement[] config = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(
+							"com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
+			p = new ArrayList<IPublishContributor>();
+			for (IConfigurationElement e : config) {
+				try {
+					Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+					if (o instanceof IPublishContributor) {
+						((IPublishContributor) o).init(jrConfig);
+						p.add((IPublishContributor) o);
+					}
+
+				} catch (CoreException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
+			publisher.put(jrConfig, p);
+		}
+		return p;
+	}
+
+	public void publishJrxml(JasperReportsConfiguration jrConfig,
+			AMJrxmlContainer mrunit, IProgressMonitor monitor,
 			JasperDesign jasper, Set<String> fileset, IFile file, String version)
 			throws Exception {
-		for (IPublishContributor r : publisher)
+		for (IPublishContributor r : getPublisher(jrConfig))
 			r.publishJrxml(mrunit, monitor, jasper, fileset, file, version);
 	}
 
-	public void publishComponent(AMJrxmlContainer mrunit,
-			IProgressMonitor monitor, JasperDesign jasper, Set<String> fileset,
-			IFile file, JRDesignElement ele, String version) throws Exception {
-		for (IPublishContributor r : publisher)
+	public void publishComponent(JasperReportsConfiguration jrConfig,
+			AMJrxmlContainer mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, Set<String> fileset, IFile file,
+			JRDesignElement ele, String version) throws Exception {
+		for (IPublishContributor r : getPublisher(jrConfig))
 			r.publishComponent(mrunit, monitor, jasper, fileset, file, ele,
 					version);
 	}
 
-	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper) throws Exception {
-		for (IPublishContributor r : publisher)
+	public void publishParameters(JasperReportsConfiguration jrConfig,
+			MReportUnit mrunit, IProgressMonitor monitor, JasperDesign jasper)
+			throws Exception {
+		for (IPublishContributor r : getPublisher(jrConfig))
 			r.publishParameters(mrunit, monitor, jasper);
 	}
 

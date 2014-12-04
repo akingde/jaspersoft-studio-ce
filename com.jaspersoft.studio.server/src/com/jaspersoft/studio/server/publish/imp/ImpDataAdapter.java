@@ -50,8 +50,10 @@ import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRDataAdapterFile;
+import com.jaspersoft.studio.server.model.MRJson;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.protocol.Version;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.PublishUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -61,14 +63,18 @@ public class ImpDataAdapter extends AImpObject {
 		super(jrConfig);
 	}
 
-	public File publish(JRDesignDataset jd, String dpath, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
+	public File publish(JRDesignDataset jd, String dpath, MReportUnit mrunit,
+			IProgressMonitor monitor, Set<String> fileset, IFile file)
+			throws Exception {
 		File f = findFile(file, dpath);
 		if (f != null && f.exists()) {
 			fileset.add(f.getAbsolutePath());
 			PublishOptions popt = new PublishOptions();
 			popt.setDataset(jd);
 			AFileResource fr = addResource(monitor, mrunit, fileset, f, popt);
-			jd.setProperty(DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION, "repo:" + fr.getValue().getUriString());
+			jd.setProperty(
+					DataAdapterParameterContributorFactory.PROPERTY_DATA_ADAPTER_LOCATION,
+					"repo:" + fr.getValue().getUriString());
 		}
 		return f;
 	}
@@ -79,7 +85,9 @@ public class ImpDataAdapter extends AImpObject {
 	}
 
 	@Override
-	public AFileResource publish(JasperDesign jd, JRDesignElement img, MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset, IFile file) throws Exception {
+	public AFileResource publish(JasperDesign jd, JRDesignElement img,
+			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
+			IFile file) throws Exception {
 		return null;
 	}
 
@@ -89,7 +97,8 @@ public class ImpDataAdapter extends AImpObject {
 	}
 
 	@Override
-	protected AFileResource addResource(IProgressMonitor monitor, MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
+	protected AFileResource addResource(IProgressMonitor monitor,
+			MReportUnit mrunit, Set<String> fileset, File f, PublishOptions popt) {
 		ResourceDescriptor runit = mrunit.getValue();
 		String rname = f.getName();
 		ResourceDescriptor rd = createResource(mrunit);
@@ -105,11 +114,13 @@ public class ImpDataAdapter extends AImpObject {
 
 		PublishUtil.getResources(mrunit, monitor, jrConfig).add(mres);
 		if (true) {
-			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE)).getProject();
+			IProject prj = ((IFile) jrConfig.get(FileUtils.KEY_FILE))
+					.getProject();
 			FileInputStream is = null;
 			try {
 				is = new FileInputStream(f);
-				DataAdapterDescriptor dad = FileDataAdapterStorage.readDataADapter(is, prj);
+				DataAdapterDescriptor dad = FileDataAdapterStorage
+						.readDataADapter(is, prj);
 				if (dad != null) {
 					DataAdapter da = dad.getDataAdapter();
 					String fname = getFileName(da);
@@ -117,7 +128,8 @@ public class ImpDataAdapter extends AImpObject {
 						InputStream fis = null;
 						OutputStream fos = null;
 						try {
-							fis = RepositoryUtil.getInstance(jrConfig).getInputStreamFromLocation(fname);
+							fis = RepositoryUtil.getInstance(jrConfig)
+									.getInputStreamFromLocation(fname);
 							File file = FileUtils.createTempFile("tmp", "");
 							fos = new FileOutputStream(file);
 							if (fis != null) {
@@ -129,22 +141,28 @@ public class ImpDataAdapter extends AImpObject {
 								if (indx >= 0 && indx + 1 < fname.length())
 									fname = fname.substring(indx + 1);
 
-								rd = MXmlFile.createDescriptor(mrunit);
+								rd = getResource(da, mrunit);
 								rd.setName(IDStringValidator.safeChar(fname));
 								rd.setLabel(fname);
 
 								rd.setParentFolder(runit.getParentFolder());
-								rd.setUriString(runit.getParentFolder() + "/" + rd.getName());
+								rd.setUriString(runit.getParentFolder() + "/"
+										+ rd.getName());
 
-								MRDataAdapterFile mdaf = new MRDataAdapterFile(mrunit, rd, -1);
+								MRDataAdapterFile mdaf = new MRDataAdapterFile(
+										mrunit, rd, -1);
 								mdaf.setFile(file);
 								mdaf.setPublishOptions(new PublishOptions());
 
-								PublishUtil.getResources(mrunit, monitor, jrConfig).add(mdaf);
+								PublishUtil.getResources(mrunit, monitor,
+										jrConfig).add(mdaf);
 
 								setFileName(da, "repo:" + rd.getUriString());
 								f = FileUtils.createTempFile("tmp", "");
-								org.apache.commons.io.FileUtils.writeStringToFile(f, DataAdapterManager.toDataAdapterFile(dad));
+								org.apache.commons.io.FileUtils
+										.writeStringToFile(f,
+												DataAdapterManager
+														.toDataAdapterFile(dad));
 								mres.setFile(f);
 							}
 						} catch (JRException e) {
@@ -165,6 +183,13 @@ public class ImpDataAdapter extends AImpObject {
 			}
 		}
 		return mres;
+	}
+
+	protected ResourceDescriptor getResource(DataAdapter da, MReportUnit parent) {
+		if (Version.isGreaterThan(parent.getWsClient().getServerInfo(), "6")
+				&& da instanceof JsonDataAdapter)
+			return MRJson.createDescriptor(parent);
+		return MXmlFile.createDescriptor(parent);
 	}
 
 	protected void setFileName(DataAdapter da, String fname) {
@@ -189,7 +214,10 @@ public class ImpDataAdapter extends AImpObject {
 		else if (da instanceof XmlDataAdapter) {
 			if (da instanceof RemoteXmlDataAdapter) {
 				String f = ((XmlDataAdapter) da).getFileName();
-				if (f.toLowerCase().startsWith("https://") || f.toLowerCase().startsWith("http://") || f.toLowerCase().startsWith("file:") || f.toLowerCase().startsWith("ftp://")
+				if (f.toLowerCase().startsWith("https://")
+						|| f.toLowerCase().startsWith("http://")
+						|| f.toLowerCase().startsWith("file:")
+						|| f.toLowerCase().startsWith("ftp://")
 						|| f.toLowerCase().startsWith("sftp://"))
 					return null;
 			}

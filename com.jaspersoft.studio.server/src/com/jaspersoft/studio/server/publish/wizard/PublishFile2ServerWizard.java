@@ -125,6 +125,8 @@ public class PublishFile2ServerWizard extends Wizard implements IExportWizard {
 								rd.setWsType(ResourceDescriptor.TYPE_STYLE_TEMPLATE);
 							else if (ext.equalsIgnoreCase("css"))
 								rd.setWsType(ResourceDescriptor.TYPE_CSS_FILE);
+							else if (ext.equalsIgnoreCase("json"))
+								rd.setWsType(ResourceDescriptor.TYPE_JSON_FILE);
 							else if (ext.equalsIgnoreCase("properties"))
 								rd.setWsType(ResourceDescriptor.TYPE_RESOURCE_BUNDLE);
 							else if (ext.equalsIgnoreCase("ttf") || ext.equalsIgnoreCase("eot") || ext.equalsIgnoreCase("woff"))

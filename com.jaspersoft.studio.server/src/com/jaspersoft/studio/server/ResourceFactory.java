@@ -40,6 +40,7 @@ import com.jaspersoft.studio.server.model.MRDashboard;
 import com.jaspersoft.studio.server.model.MRDataAdapter;
 import com.jaspersoft.studio.server.model.MRFont;
 import com.jaspersoft.studio.server.model.MRImage;
+import com.jaspersoft.studio.server.model.MRJson;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
@@ -310,6 +311,8 @@ public class ResourceFactory {
 			return new MRAccessGrantSchema(parent, resource, index);
 		if (wstype.equals(ResourceDescriptor.TYPE_CSS_FILE))
 			return new MRCSS(parent, resource, index);
+		if (wstype.equals(ResourceDescriptor.TYPE_JSON_FILE))
+			return new MRJson(parent, resource, index);
 
 		return new MUnknown(parent, resource, index);
 	}
@@ -325,6 +328,7 @@ public class ResourceFactory {
 		fileTypes.add(ResourceDescriptor.TYPE_CONTENT_RESOURCE);
 		fileTypes.add(ResourceDescriptor.TYPE_XML_FILE);
 		fileTypes.add(ResourceDescriptor.TYPE_CSS_FILE);
+		fileTypes.add(ResourceDescriptor.TYPE_JSON_FILE);
 	}
 
 	public static boolean isFileResourceType(ResourceDescriptor r) {

@@ -64,7 +64,7 @@ public class Activator extends AbstractJRUIPlugin {
 		super.postStartOperations();
 		JRSBuiltInParameterProvider.init();
 	}
-	
+
 	/**
 	 * Returns the shared instance
 	 * 
