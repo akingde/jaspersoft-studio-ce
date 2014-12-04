@@ -285,7 +285,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				if (PROJECT.equals(use)) {
 					useProjectSettingsButton.setSelection(true);
 					if (confPrjButton != null)
-						confPrjButton.setEnabled(false);
+						confPrjButton.setEnabled(true);
 				} else if (RESOURCE.equals(use)) {
 					if (useResourceSettingsButton != null)
 						useResourceSettingsButton.setSelection(true);
@@ -303,7 +303,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 				if (r instanceof IProject) {
 					useProjectSettingsButton.setSelection(true);
 					if (confPrjButton != null)
-						confPrjButton.setEnabled(false);
+						confPrjButton.setEnabled(true);
 				} else if (r instanceof IFile) {
 					if (useResourceSettingsButton != null)
 						useResourceSettingsButton.setSelection(true);
