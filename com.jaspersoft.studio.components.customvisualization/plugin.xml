@@ -34,4 +34,10 @@
          </propertySection>
       </propertySections>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.server.publisher">
+      <publisher
+            ClassFactory="com.jaspersoft.studio.components.customvisualization.server.CVCContributor">
+      </publisher>
+   </extension>
 </plugin>
