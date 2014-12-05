@@ -149,15 +149,17 @@ public class TableMatrix {
 				TableUtil.COLUMN_FOOTER, "");
 
 		if (groupsList != null)
-			for (ListIterator<?> it = groupsList
-					.listIterator(groupsList.size()); it.hasPrevious();) {
-				JRGroup jrGroup = (JRGroup) it.previous();
+			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+				// for (ListIterator<?> it = groupsList
+				// .listIterator(groupsList.size()); it.hasPrevious();) {
+				JRGroup jrGroup = (JRGroup) it.next();
+				// JRGroup jrGroup = (JRGroup) it.previous();
 				south = fillRowTop(south, addNextRow(south),
 						table.getColumns(), TableUtil.COLUMN_GROUP_FOOTER,
 						jrGroup.getName());
 			}
 		mirrorBottom(offset);
-
+//		print();
 		fillVertical(table);
 		fixCells();
 	}
@@ -277,6 +279,8 @@ public class TableMatrix {
 	public void setVGuides(Guide west, Guide east, BaseColumn bc, int type,
 			String grName) {
 		ColumnCell cc = getColumnCell(new ColumnCell(type, grName, bc));
+		if (cc == null)
+			return;
 		west.addEast(cc);
 		east.addWest(cc);
 	}
