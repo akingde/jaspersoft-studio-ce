@@ -23,10 +23,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperreports.customvisualization.CVItemProperty;
+import com.jaspersoft.jasperreports.customvisualization.design.CVDesignItemProperty;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.imp.AImpObject;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AImpResource extends AImpObject {
@@ -47,10 +49,25 @@ public abstract class AImpResource extends AImpObject {
 			return null;
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
-			PublishOptions popt = new PublishOptions();
-			popt.setjExpression(exp);
-			if (!f.getName().contains(":"))
-				popt.setExpression("\"repo:" + f.getName() + "\"");
+			final PublishOptions popt = new PublishOptions();
+
+			if (exp != null) {
+				popt.setjExpression(exp);
+				if (!f.getName().contains(":"))
+					popt.setExpression("repo:" + f.getName());
+			} else if (Misc.isNullOrEmpty(img.getValue())) {
+				popt.setValueSetter(popt.new ValueSetter<CVDesignItemProperty>(
+						(CVDesignItemProperty) img) {
+
+					@Override
+					public void setup() {
+						object.setValue(getValue());
+					}
+				});
+				if (!f.getName().contains(":"))
+					popt.getValueSetter().setValue(
+							"\"repo:" + f.getName() + "\"");
+			}
 			fileset.add(str);
 
 			return addResource(monitor, mrunit, fileset, f, popt);

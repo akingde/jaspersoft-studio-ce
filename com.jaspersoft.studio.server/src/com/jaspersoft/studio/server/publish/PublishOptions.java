@@ -23,7 +23,7 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class PublishOptions {
-	private Boolean isOverwrite ;
+	private Boolean isOverwrite;
 	private JRDesignExpression jExpression;
 	private String expression;
 	private JRDesignDataset dataset;
@@ -93,4 +93,35 @@ public class PublishOptions {
 		return "\"repo:" + getReferencedResource().getUriString() + "\"";
 	}
 
+	private ValueSetter<?> valueSetter;
+
+	public void setValueSetter(ValueSetter<?> valueSetter) {
+		this.valueSetter = valueSetter;
+	}
+
+	public ValueSetter<?> getValueSetter() {
+		return valueSetter;
+	}
+
+	public abstract class ValueSetter<T> {
+
+		public ValueSetter(T object) {
+			this.object = object;
+		}
+
+		protected T object;
+
+		public abstract void setup();
+
+		private String value;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+	}
 }
