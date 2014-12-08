@@ -121,6 +121,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExprGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isnot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
         containment="true"/>
   </eClassifiers>
@@ -227,6 +228,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ColumnOperand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cfull" eType="#//ColumnFull"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ora" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubQueryOperand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//SelectQuery"

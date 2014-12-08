@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOperand#getCfull <em>Cfull</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.ColumnOperand#getOra <em>Ora</em>}</li>
  * </ul>
  * </p>
  *
@@ -47,5 +48,31 @@ public interface ColumnOperand extends EObject
    * @generated
    */
   void setCfull(ColumnFull value);
+
+  /**
+   * Returns the value of the '<em><b>Ora</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Ora</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Ora</em>' attribute.
+   * @see #setOra(String)
+   * @see com.jaspersoft.studio.data.sql.SqlPackage#getColumnOperand_Ora()
+   * @model
+   * @generated
+   */
+  String getOra();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.data.sql.ColumnOperand#getOra <em>Ora</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Ora</em>' attribute.
+   * @see #getOra()
+   * @generated
+   */
+  void setOra(String value);
 
 } // ColumnOperand

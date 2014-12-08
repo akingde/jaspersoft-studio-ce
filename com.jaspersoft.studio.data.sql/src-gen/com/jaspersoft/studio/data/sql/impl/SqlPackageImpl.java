@@ -1237,9 +1237,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getExprGroup_Isnot()
+  {
+    return (EAttribute)exprGroupEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getExprGroup_Expr()
   {
-    return (EReference)exprGroupEClass.getEStructuralFeatures().get(0);
+    return (EReference)exprGroupEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1857,6 +1867,16 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getColumnOperand_Ora()
+  {
+    return (EAttribute)columnOperandEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getSubQueryOperand()
   {
     return subQueryOperandEClass;
@@ -2302,6 +2322,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(fullExpressionEClass, FULL_EXPRESSION__COMP);
 
     exprGroupEClass = createEClass(EXPR_GROUP);
+    createEAttribute(exprGroupEClass, EXPR_GROUP__ISNOT);
     createEReference(exprGroupEClass, EXPR_GROUP__EXPR);
 
     xExprEClass = createEClass(XEXPR);
@@ -2383,6 +2404,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     columnOperandEClass = createEClass(COLUMN_OPERAND);
     createEReference(columnOperandEClass, COLUMN_OPERAND__CFULL);
+    createEAttribute(columnOperandEClass, COLUMN_OPERAND__ORA);
 
     subQueryOperandEClass = createEClass(SUB_QUERY_OPERAND);
     createEReference(subQueryOperandEClass, SUB_QUERY_OPERAND__SEL);
@@ -2579,6 +2601,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getFullExpression_Comp(), this.getComparison(), null, "comp", null, 0, 1, FullExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(exprGroupEClass, ExprGroup.class, "ExprGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getExprGroup_Isnot(), ecorePackage.getEString(), "isnot", null, 0, 1, ExprGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExprGroup_Expr(), this.getOrExpr(), null, "expr", null, 0, 1, ExprGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(xExprEClass, XExpr.class, "XExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2660,6 +2683,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
 
     initEClass(columnOperandEClass, ColumnOperand.class, "ColumnOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getColumnOperand_Cfull(), this.getColumnFull(), null, "cfull", null, 0, 1, ColumnOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getColumnOperand_Ora(), ecorePackage.getEString(), "ora", null, 0, 1, ColumnOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(subQueryOperandEClass, SubQueryOperand.class, "SubQueryOperand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getSubQueryOperand_Sel(), this.getSelectQuery(), null, "sel", null, 0, 1, SubQueryOperand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

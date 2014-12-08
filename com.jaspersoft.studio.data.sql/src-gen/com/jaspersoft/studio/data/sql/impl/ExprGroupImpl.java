@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExprGroupImpl#getIsnot <em>Isnot</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ExprGroupImpl#getExpr <em>Expr</em>}</li>
  * </ul>
  * </p>
@@ -30,6 +31,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class ExprGroupImpl extends MinimalEObjectImpl.Container implements ExprGroup
 {
+  /**
+   * The default value of the '{@link #getIsnot() <em>Isnot</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getIsnot()
+   * @generated
+   * @ordered
+   */
+  protected static final String ISNOT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getIsnot() <em>Isnot</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getIsnot()
+   * @generated
+   * @ordered
+   */
+  protected String isnot = ISNOT_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getExpr() <em>Expr</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -59,6 +80,29 @@ public class ExprGroupImpl extends MinimalEObjectImpl.Container implements ExprG
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.EXPR_GROUP;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getIsnot()
+  {
+    return isnot;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIsnot(String newIsnot)
+  {
+    String oldIsnot = isnot;
+    isnot = newIsnot;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.EXPR_GROUP__ISNOT, oldIsnot, isnot));
   }
 
   /**
@@ -135,6 +179,8 @@ public class ExprGroupImpl extends MinimalEObjectImpl.Container implements ExprG
   {
     switch (featureID)
     {
+      case SqlPackage.EXPR_GROUP__ISNOT:
+        return getIsnot();
       case SqlPackage.EXPR_GROUP__EXPR:
         return getExpr();
     }
@@ -151,6 +197,9 @@ public class ExprGroupImpl extends MinimalEObjectImpl.Container implements ExprG
   {
     switch (featureID)
     {
+      case SqlPackage.EXPR_GROUP__ISNOT:
+        setIsnot((String)newValue);
+        return;
       case SqlPackage.EXPR_GROUP__EXPR:
         setExpr((OrExpr)newValue);
         return;
@@ -168,6 +217,9 @@ public class ExprGroupImpl extends MinimalEObjectImpl.Container implements ExprG
   {
     switch (featureID)
     {
+      case SqlPackage.EXPR_GROUP__ISNOT:
+        setIsnot(ISNOT_EDEFAULT);
+        return;
       case SqlPackage.EXPR_GROUP__EXPR:
         setExpr((OrExpr)null);
         return;
@@ -185,10 +237,29 @@ public class ExprGroupImpl extends MinimalEObjectImpl.Container implements ExprG
   {
     switch (featureID)
     {
+      case SqlPackage.EXPR_GROUP__ISNOT:
+        return ISNOT_EDEFAULT == null ? isnot != null : !ISNOT_EDEFAULT.equals(isnot);
       case SqlPackage.EXPR_GROUP__EXPR:
         return expr != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (isnot: ");
+    result.append(isnot);
+    result.append(')');
+    return result.toString();
   }
 
 } //ExprGroupImpl

@@ -74,7 +74,7 @@ ExpressionFragment returns FullExpression:
 	expgroup=ExpressionGroup | exp=Expression | xexp=(XExpression | XExpression_) | notPrm=JRNPARAM;
 
 ExpressionGroup returns ExprGroup:
-	{ExprGroup} '(' expr=FullExpression ')';
+	{ExprGroup} isnot=('NOT ' | 'NOT\n')? '(' expr=FullExpression ')';
 
 XExpression returns XExpr:
 	'$X' {XExpr} '{' xf=XFunction "," col=Operand ("," prm=XExpressionParams)? '}';
@@ -92,7 +92,7 @@ Expression returns FullExpression:
 	op1=Operand (isnull=('IS NULL' | 'IS NOT NULL') | in=InOperator | between=Between | like=Like | comp=Comparison);
 
 Comparison:
-	operator=('>' | '>=' | '<' | '<=' | '=' | '<>') subOperator=('ANY' | 'ALL' | 'SOME')? op2=Operand;
+	operator=('>' | '>=' | '<' | '<=' | '=' | '<>' | '!=' | '^=') subOperator=('ANY' | 'ALL' | 'SOME')? op2=Operand;
 
 Like:
 	opLike=('LIKE' | 'NOT LIKE') op2=LikeOperand;
@@ -144,7 +144,7 @@ ExclamationParameterOperand returns ExpOperand:
 	prm=JRNPARAM;
 
 ColumnOperand returns ColumnOperand:
-	cfull=ColumnFull;
+	cfull=ColumnFull ora='(+)'?;
 
 SubQueryOperand returns SubQueryOperand:
 	{SubQueryOperand} '(' sel=SelectQuery ')';
@@ -167,7 +167,7 @@ enum XFunction:
 	| xbwnr='BETWEEN]';
 
 JoinType:
-	('NATURAL')? ('INNER' | ('LEFT' | 'RIGHT' | 'FULL') ('OUTER')? | 'CROSS')? 'JOIN';
+	('NATURAL')? ('INNER' | ('LEFT' | 'RIGHT' | 'FULL') ('OUTER')? | 'CROSS' | 'STRAIGHT_JOIN')? 'JOIN';
 
 DBID:
 	ID | DBNAME | STRING;
@@ -215,7 +215,7 @@ terminal DBNAME:
 terminal ID:
 	('a'..'z' | 'A'..'Z' | 'À'..'ÿ' | 'Ā'..'ſ' | 'ƀ'..'ɏ' | 'А'..'я' | '_' | '-' | 'ぁ'..'ゟ' | '゠'..'ヿ' | 'ㇰ'..'ㇿ' |
 	'一'..'鿿' |
-	'歴'..'す' | 'ア'..'ン' | '豈'..'﫿' | '㐀'..'䶿' |  '＿' |
+	'歴'..'す' | 'ア'..'ン' | '豈'..'﫿' | '㐀'..'䶿' | '＿' |
 	'0'..'9')*;
 
 terminal SL_COMMENT:

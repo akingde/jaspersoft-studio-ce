@@ -176,6 +176,8 @@ public class ConvertExpression {
 			setPrevOperator(me, prevCond);
 		} else if (tf.getExpgroup() != null) {
 			MExpressionGroup meg = new MExpressionGroup(parent);
+			if (tf.getExpgroup().getIsnot() != null)
+				meg.setNot(true);
 			convertExpression(designer, msel.getParent(), meg, tf.getExpgroup()
 					.getExpr());
 			// setPrevOperator(meg, prevCond);

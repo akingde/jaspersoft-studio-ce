@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOperandImpl#getCfull <em>Cfull</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.ColumnOperandImpl#getOra <em>Ora</em>}</li>
  * </ul>
  * </p>
  *
@@ -39,6 +40,26 @@ public class ColumnOperandImpl extends MinimalEObjectImpl.Container implements C
    * @ordered
    */
   protected ColumnFull cfull;
+
+  /**
+   * The default value of the '{@link #getOra() <em>Ora</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOra()
+   * @generated
+   * @ordered
+   */
+  protected static final String ORA_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getOra() <em>Ora</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOra()
+   * @generated
+   * @ordered
+   */
+  protected String ora = ORA_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -114,6 +135,29 @@ public class ColumnOperandImpl extends MinimalEObjectImpl.Container implements C
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getOra()
+  {
+    return ora;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOra(String newOra)
+  {
+    String oldOra = ora;
+    ora = newOra;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.COLUMN_OPERAND__ORA, oldOra, ora));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -137,6 +181,8 @@ public class ColumnOperandImpl extends MinimalEObjectImpl.Container implements C
     {
       case SqlPackage.COLUMN_OPERAND__CFULL:
         return getCfull();
+      case SqlPackage.COLUMN_OPERAND__ORA:
+        return getOra();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,6 +199,9 @@ public class ColumnOperandImpl extends MinimalEObjectImpl.Container implements C
     {
       case SqlPackage.COLUMN_OPERAND__CFULL:
         setCfull((ColumnFull)newValue);
+        return;
+      case SqlPackage.COLUMN_OPERAND__ORA:
+        setOra((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -171,6 +220,9 @@ public class ColumnOperandImpl extends MinimalEObjectImpl.Container implements C
       case SqlPackage.COLUMN_OPERAND__CFULL:
         setCfull((ColumnFull)null);
         return;
+      case SqlPackage.COLUMN_OPERAND__ORA:
+        setOra(ORA_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -187,8 +239,27 @@ public class ColumnOperandImpl extends MinimalEObjectImpl.Container implements C
     {
       case SqlPackage.COLUMN_OPERAND__CFULL:
         return cfull != null;
+      case SqlPackage.COLUMN_OPERAND__ORA:
+        return ORA_EDEFAULT == null ? ora != null : !ORA_EDEFAULT.equals(ora);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (ora: ");
+    result.append(ora);
+    result.append(')');
+    return result.toString();
   }
 
 } //ColumnOperandImpl

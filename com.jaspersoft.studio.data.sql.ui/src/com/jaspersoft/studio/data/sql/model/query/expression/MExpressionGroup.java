@@ -29,16 +29,29 @@ public class MExpressionGroup extends AMKeyword {
 		super(parent, AMKeyword.AND_OPERATOR, null);
 	}
 
+	private boolean isNot = false;
+
+	public boolean isNot() {
+		return isNot;
+	}
+
+	public void setNot(boolean isNot) {
+		this.isNot = isNot;
+	}
+
 	@Override
 	public String getDisplayText() {
 		String str = "";
 		if (!isFirst()) {
-			if (getParent() instanceof MFromTableJoin && getParent().getValue() instanceof MQueryTable) {
+			if (getParent() instanceof MFromTableJoin
+					&& getParent().getValue() instanceof MQueryTable) {
 				MFromTableJoin mftj = (MFromTableJoin) getParent();
 				str += ") " + mftj.addAlias() + " ON ";
 			} else
 				str += super.getDisplayText();
 		}
+		if (isNot)
+			str += " NOT ";
 		str += " (";
 		if (getChildren().isEmpty())
 			str += ")";

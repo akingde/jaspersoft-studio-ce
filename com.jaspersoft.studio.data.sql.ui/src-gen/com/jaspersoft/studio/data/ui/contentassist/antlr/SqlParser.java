@@ -48,6 +48,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionFragmentSecondAccess().getCAlternatives_0_0_0(), "rule__ExpressionFragmentSecond__CAlternatives_0_0_0");
 					put(grammarAccess.getExpressionFragmentAccess().getAlternatives(), "rule__ExpressionFragment__Alternatives");
 					put(grammarAccess.getExpressionFragmentAccess().getXexpAlternatives_2_0(), "rule__ExpressionFragment__XexpAlternatives_2_0");
+					put(grammarAccess.getExpressionGroupAccess().getIsnotAlternatives_1_0(), "rule__ExpressionGroup__IsnotAlternatives_1_0");
 					put(grammarAccess.getExpressionAccess().getAlternatives_1(), "rule__Expression__Alternatives_1");
 					put(grammarAccess.getExpressionAccess().getIsnullAlternatives_1_0_0(), "rule__Expression__IsnullAlternatives_1_0_0");
 					put(grammarAccess.getComparisonAccess().getOperatorAlternatives_0_0(), "rule__Comparison__OperatorAlternatives_0_0");
@@ -140,6 +141,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOpFunctionCastAccess().getGroup_4(), "rule__OpFunctionCast__Group_4__0");
 					put(grammarAccess.getOpFunctionCastAccess().getGroup_4_2(), "rule__OpFunctionCast__Group_4_2__0");
 					put(grammarAccess.getOpFunctionArgAgregateAccess().getGroup(), "rule__OpFunctionArgAgregate__Group__0");
+					put(grammarAccess.getColumnOperandAccess().getGroup(), "rule__ColumnOperand__Group__0");
 					put(grammarAccess.getSubQueryOperandAccess().getGroup(), "rule__SubQueryOperand__Group__0");
 					put(grammarAccess.getSQLCASEAccess().getGroup(), "rule__SQLCASE__Group__0");
 					put(grammarAccess.getSQLCaseWhensAccess().getGroup(), "rule__SQLCaseWhens__Group__0");
@@ -195,7 +197,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionFragmentAccess().getExpAssignment_1(), "rule__ExpressionFragment__ExpAssignment_1");
 					put(grammarAccess.getExpressionFragmentAccess().getXexpAssignment_2(), "rule__ExpressionFragment__XexpAssignment_2");
 					put(grammarAccess.getExpressionFragmentAccess().getNotPrmAssignment_3(), "rule__ExpressionFragment__NotPrmAssignment_3");
-					put(grammarAccess.getExpressionGroupAccess().getExprAssignment_2(), "rule__ExpressionGroup__ExprAssignment_2");
+					put(grammarAccess.getExpressionGroupAccess().getIsnotAssignment_1(), "rule__ExpressionGroup__IsnotAssignment_1");
+					put(grammarAccess.getExpressionGroupAccess().getExprAssignment_3(), "rule__ExpressionGroup__ExprAssignment_3");
 					put(grammarAccess.getXExpressionAccess().getXfAssignment_3(), "rule__XExpression__XfAssignment_3");
 					put(grammarAccess.getXExpressionAccess().getColAssignment_5(), "rule__XExpression__ColAssignment_5");
 					put(grammarAccess.getXExpressionAccess().getPrmAssignment_6_1(), "rule__XExpression__PrmAssignment_6_1");
@@ -247,7 +250,8 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getXOperandFragmentAccess().getScalarAssignment_2(), "rule__XOperandFragment__ScalarAssignment_2");
 					put(grammarAccess.getParameterOperandAccess().getPrmAssignment(), "rule__ParameterOperand__PrmAssignment");
 					put(grammarAccess.getExclamationParameterOperandAccess().getPrmAssignment(), "rule__ExclamationParameterOperand__PrmAssignment");
-					put(grammarAccess.getColumnOperandAccess().getCfullAssignment(), "rule__ColumnOperand__CfullAssignment");
+					put(grammarAccess.getColumnOperandAccess().getCfullAssignment_0(), "rule__ColumnOperand__CfullAssignment_0");
+					put(grammarAccess.getColumnOperandAccess().getOraAssignment_1(), "rule__ColumnOperand__OraAssignment_1");
 					put(grammarAccess.getSubQueryOperandAccess().getSelAssignment_2(), "rule__SubQueryOperand__SelAssignment_2");
 					put(grammarAccess.getScalarOperandAccess().getSointAssignment_0(), "rule__ScalarOperand__SointAssignment_0");
 					put(grammarAccess.getScalarOperandAccess().getSostrAssignment_1(), "rule__ScalarOperand__SostrAssignment_1");

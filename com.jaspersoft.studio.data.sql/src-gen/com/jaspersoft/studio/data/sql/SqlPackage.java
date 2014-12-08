@@ -934,13 +934,22 @@ public interface SqlPackage extends EPackage
   int EXPR_GROUP = 20;
 
   /**
+   * The feature id for the '<em><b>Isnot</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPR_GROUP__ISNOT = 0;
+
+  /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPR_GROUP__EXPR = 0;
+  int EXPR_GROUP__EXPR = 1;
 
   /**
    * The number of structural features of the '<em>Expr Group</em>' class.
@@ -949,7 +958,7 @@ public interface SqlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EXPR_GROUP_FEATURE_COUNT = 1;
+  int EXPR_GROUP_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.XExprImpl <em>XExpr</em>}' class.
@@ -1691,13 +1700,22 @@ public interface SqlPackage extends EPackage
   int COLUMN_OPERAND__CFULL = 0;
 
   /**
+   * The feature id for the '<em><b>Ora</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COLUMN_OPERAND__ORA = 1;
+
+  /**
    * The number of structural features of the '<em>Column Operand</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COLUMN_OPERAND_FEATURE_COUNT = 1;
+  int COLUMN_OPERAND_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.data.sql.impl.SubQueryOperandImpl <em>Sub Query Operand</em>}' class.
@@ -3033,6 +3051,17 @@ public interface SqlPackage extends EPackage
   EClass getExprGroup();
 
   /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ExprGroup#getIsnot <em>Isnot</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Isnot</em>'.
+   * @see com.jaspersoft.studio.data.sql.ExprGroup#getIsnot()
+   * @see #getExprGroup()
+   * @generated
+   */
+  EAttribute getExprGroup_Isnot();
+
+  /**
    * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.data.sql.ExprGroup#getExpr <em>Expr</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3694,6 +3723,17 @@ public interface SqlPackage extends EPackage
    * @generated
    */
   EReference getColumnOperand_Cfull();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.jaspersoft.studio.data.sql.ColumnOperand#getOra <em>Ora</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Ora</em>'.
+   * @see com.jaspersoft.studio.data.sql.ColumnOperand#getOra()
+   * @see #getColumnOperand()
+   * @generated
+   */
+  EAttribute getColumnOperand_Ora();
 
   /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.data.sql.SubQueryOperand <em>Sub Query Operand</em>}'.
@@ -4668,6 +4708,14 @@ public interface SqlPackage extends EPackage
     EClass EXPR_GROUP = eINSTANCE.getExprGroup();
 
     /**
+     * The meta object literal for the '<em><b>Isnot</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EXPR_GROUP__ISNOT = eINSTANCE.getExprGroup_Isnot();
+
+    /**
      * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5200,6 +5248,14 @@ public interface SqlPackage extends EPackage
      * @generated
      */
     EReference COLUMN_OPERAND__CFULL = eINSTANCE.getColumnOperand_Cfull();
+
+    /**
+     * The meta object literal for the '<em><b>Ora</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COLUMN_OPERAND__ORA = eINSTANCE.getColumnOperand_Ora();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.data.sql.impl.SubQueryOperandImpl <em>Sub Query Operand</em>}' class.

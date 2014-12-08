@@ -31,7 +31,7 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     try
     {
-      SqlFactory theSqlFactory = (SqlFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.com.jaspersoft.studio.data.Sql"); 
+      SqlFactory theSqlFactory = (SqlFactory)EPackage.Registry.INSTANCE.getEFactory(SqlPackage.eNS_URI);
       if (theSqlFactory != null)
       {
         return theSqlFactory;

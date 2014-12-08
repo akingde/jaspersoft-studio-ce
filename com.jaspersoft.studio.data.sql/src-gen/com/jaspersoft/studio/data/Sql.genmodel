@@ -4,7 +4,7 @@
     editorDirectory="/com.jaspersoft.studio.data.sql.editor/src" modelPluginID="com.jaspersoft.studio.data.sql"
     forceOverwrite="true" modelName="Sql" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="com.jaspersoft.studio.data.sql.edit"
-    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.8">
+    editorPluginID="com.jaspersoft.studio.data.sql.editor" runtimeVersion="2.10">
   <genPackages prefix="Sql" basePackage="com.jaspersoft.studio.data" disposableProviderFactory="true"
       ecorePackage="Sql.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Sql.ecore#//XFunction">
@@ -108,6 +108,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//FullExpression/comp"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ExprGroup">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ExprGroup/isnot"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ExprGroup/expr"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//XExpr">
@@ -186,6 +187,7 @@
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//ColumnOperand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//ColumnOperand/cfull"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//ColumnOperand/ora"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//SubQueryOperand">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//SubQueryOperand/sel"/>
