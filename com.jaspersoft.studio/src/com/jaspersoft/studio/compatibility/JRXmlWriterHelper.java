@@ -1,14 +1,10 @@
 /*******************************************************************************
- * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
- * http://www.jaspersoft.com.
+ * Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved. http://www.jaspersoft.com.
  * 
- * Unless you have purchased  a commercial license agreement from Jaspersoft,
- * the following license terms  apply:
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 package com.jaspersoft.studio.compatibility;
 
@@ -96,27 +92,34 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JasperReportsContext jrContext, JRReport report, String encoding, String version)
 			throws Exception {
+		if (report == null)
+			return null;
 		encoding = fixencoding(encoding);
 		if (!writers.contains(version))
 			version = LAST_VERSION;
-		if (jrContext == null)
+		boolean disposeContext = false;
+		if (jrContext == null) {
 			jrContext = JasperReportsConfiguration.getDefaultJRConfig();
+			disposeContext = true;
+		}
 		jrContext.removeProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION);
 		if (writers.contains(version))
 			jrContext.setProperty(JRXmlBaseWriter.PROPERTY_REPORT_VERSION, version);
-		if (report != null) {
+		String xml = null;
+		try {
 			// jrContext.setProperty("net.sf.jasperreports.components.table.version", version);
-			String xml = new JRXmlWriter(jrContext).write(report, encoding);
+			xml = new JRXmlWriter(jrContext).write(report, encoding);
 			// request Bug 37455 - [Case #48613] Simple jrxml timestamp on Save or Save As
 			// + community bug #3936 over-aggressive time stamp
 			String timestamp = "";
-			if(jrContext instanceof JasperReportsConfiguration) {
-				if(((JasperReportsConfiguration) jrContext).getPropertyBoolean(StudioPreferencePage.JSS_TIMESTAMP_ONSAVE, true)) {
+			if (jrContext instanceof JasperReportsConfiguration) {
+				if (((JasperReportsConfiguration) jrContext)
+						.getPropertyBoolean(StudioPreferencePage.JSS_TIMESTAMP_ONSAVE, true)) {
 					timestamp = "<!-- " + DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()) + " -->\r\n";
 				}
 			}
 			// Replace with a more meaningful JR version
-			if(version.equals(LAST_VERSION)){
+			if (version.equals(LAST_VERSION)) {
 				version = getInstalledJasperReportsVersion();
 			}
 			// Get JSS bundle version
@@ -125,9 +128,11 @@ public class JRXmlWriterHelper {
 			xml = xml
 					.replaceFirst(
 							"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + jssPluginVersion + jrVersionTxt + " -->\r\n" + timestamp + "<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
-			return xml;
+		} finally {
+			if (disposeContext)
+				((JasperReportsConfiguration) jrContext).dispose();
 		}
-		return null;
+		return xml;
 	}
 
 	public static String fixencoding(String encoding) {
