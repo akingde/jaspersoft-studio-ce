@@ -158,13 +158,13 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			functionsBundles = null;
 			messageProviderFactory = null;
 			fontList = null;
-			try {
-				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
-				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
-			} catch (Throwable e) {
-				JaspersoftStudioPlugin.getInstance().logError(
-						"Cannot complete operations successfully after a classpath change occurred.", e);
-			}
+//			try {
+//				DefaultExtensionsRegistry extensionsRegistry = new DefaultExtensionsRegistry();
+//				ExtensionsEnvironment.setSystemExtensionsRegistry(extensionsRegistry);
+//			} catch (Throwable e) {
+//				JaspersoftStudioPlugin.getInstance().logError(
+//						"Cannot complete operations successfully after a classpath change occurred.", e);
+//			}
 		}
 	}
 
@@ -175,10 +175,6 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	public JasperReportsConfiguration(JasperReportsContext parent, IFile file) {
 		super(parent);
 		init(file);
-		// Run a thread to precache on this context the context dependents jr extensions
-		if (file != null) {
-			ExtensionLoader.loadExtension(this);
-		}
 	}
 
 	private MScopedPreferenceStore pstore;
@@ -599,10 +595,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				}
 			}
 
-			List<FontFamily> superlist = (List<FontFamily>) ExtensionLoader.getSharedExtension(FontFamily.class);
-			// fallback if something in the cache goes wrong
-			if (superlist == null)
-				superlist = super.getExtensions(FontFamily.class);
+			List<FontFamily> superlist = super.getExtensions(FontFamily.class);
 			if (superlist != null) {
 				for (FontFamily f : superlist)
 					if (f != null)
@@ -623,10 +616,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 	@SuppressWarnings("unchecked")
 	private List<ComponentsBundle> getExtensionComponents() {
 		if (bundles == null || refreshBundles) {
-			bundles = (List<ComponentsBundle>) ExtensionLoader.getSharedExtension(ComponentsBundle.class);
-			// fallback if something in the cache goes wrong
-			if (bundles == null)
-				bundles = super.getExtensions(ComponentsBundle.class);
+			bundles = super.getExtensions(ComponentsBundle.class);
 			// remove all duplicates
 			Set<ComponentsBundle> components = new LinkedHashSet<ComponentsBundle>(bundles);
 			bundles = new ArrayList<ComponentsBundle>(components);
@@ -656,12 +646,10 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 			// NOTE: Let's use this for now as quick solution, in case of
 			// bad performances we'll have to fix this approach
 			ResourceBundle.clearCache(getClassLoader());
-			functionsBundles = (List<FunctionsBundle>) ExtensionLoader.getSharedExtension(FunctionsBundle.class);
-			// fallback if something in the cache goes wrong
-			if (functionsBundles == null)
-				functionsBundles = super.getExtensions(FunctionsBundle.class);
+			functionsBundles = super.getExtensions(FunctionsBundle.class);
 			Set<FunctionsBundle> fBundlesSet = new LinkedHashSet<FunctionsBundle>(functionsBundles);
 			functionsBundles = new ArrayList<FunctionsBundle>(fBundlesSet);
+			refreshFunctionsBundles = false;
 		}
 		return functionsBundles;
 	}
@@ -702,12 +690,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext implem
 				result = (List<T>) repositoryServices;
 			} else {
 				try {
-					// The repository service is already cached by the superclass
-					if (extensionType != RepositoryService.class)
-						result = (List<T>) ExtensionLoader.getSharedExtension(extensionType);
-					// fallback if was not able to get the extension from the cache
-					if (result == null)
-						result = super.getExtensions(extensionType);
+					result = super.getExtensions(extensionType);
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}

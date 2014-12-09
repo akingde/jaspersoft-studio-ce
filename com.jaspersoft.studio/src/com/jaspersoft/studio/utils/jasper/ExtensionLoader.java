@@ -18,7 +18,6 @@ import java.util.HashSet;
 
 import net.sf.jasperreports.data.DataAdapterServiceFactory;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.ParameterContributorFactory;
 import net.sf.jasperreports.engine.component.ComponentsBundle;
 import net.sf.jasperreports.engine.export.GenericElementHandlerBundle;
@@ -27,6 +26,7 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 import net.sf.jasperreports.engine.style.StyleProviderFactory;
+import net.sf.jasperreports.engine.util.MessageProviderFactory;
 import net.sf.jasperreports.functions.FunctionsBundle;
 import net.sf.jasperreports.repo.PersistenceServiceFactory;
 import net.sf.jasperreports.repo.RepositoryService;
@@ -54,14 +54,14 @@ public class ExtensionLoader {
 	 */
 	private static HashMap<Class<?>, Object> sharedExtensionCache = new HashMap<Class<?>, Object>();
 	
-	/**
-	 * The extensions loaded for each report
-	 */
-	private static Class<?>[] reportDependentExtensionsKey = {
-			FontFamily.class,
-			RepositoryService.class,
-			ComponentsBundle.class
-	};
+//	/**
+//	 * The extensions loaded for each report
+//	 */
+//	private static Class<?>[] reportDependentExtensionsKey = {
+//			FontFamily.class,
+//			RepositoryService.class,
+//			ComponentsBundle.class
+//	};
 	
 	/**
 	 * The extensions loaded for the general context and cached in the sharedExtension Map
@@ -80,7 +80,8 @@ public class ExtensionLoader {
 		FontFamily.class,
 		RepositoryService.class,
 		ComponentsBundle.class,
-		GenericElementHandlerBundle.class
+		GenericElementHandlerBundle.class,
+		MessageProviderFactory.class
 	};
 	
 	/**
@@ -92,7 +93,9 @@ public class ExtensionLoader {
 	 * Keep track of the common extensions currently loading, if an extensions
 	 * key is in the map means that its loading is started but not finished yet
 	 */
-	private static HashSet<Class<?>> loadingExtensions = new HashSet<Class<?>>();  
+	private static HashSet<Class<?>> loadingExtensions = new HashSet<Class<?>>();
+
+	private static int EXTENSION_LOADING_WAITING_MS = 200;  
 
 	/**
 	 * Thread safe method to mark an extension key as currently loading
@@ -143,26 +146,26 @@ public class ExtensionLoader {
 		}
 	}
  
-	/**
-	 * Load the report dependent extensions on the specified context.
-	 * Each extension is loaded inside an independent thread
-	 * 
-	 * @param context where the properties are loaded
-	 */
- public static void loadExtension(final JasperReportsContext context){
-	// timeStartLoading = System.currentTimeMillis();
-	 for(Class<?> extensionKey : reportDependentExtensionsKey){
-		 final Class<?> key = extensionKey;
-		 new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				context.getExtensions(key);
-				//setLoadedExtenson(key);
-			}
-		}).start();
-	 }
- }
+// /**
+//	 * Load the report dependent extensions on the specified context.
+//	 * Each extension is loaded inside an independent thread
+//	 * 
+//	 * @param context where the properties are loaded
+//	 */
+// public static void loadExtension(final JasperReportsContext context){
+//	// timeStartLoading = System.currentTimeMillis();
+//	 for(Class<?> extensionKey : reportDependentExtensionsKey){
+//		 final Class<?> key = extensionKey;
+//		 new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				context.getExtensions(key);
+//				//setLoadedExtenson(key);
+//			}
+//		}).start();
+//	 }
+// }
 
  /**
   * Load the shared extensions inside the common context that can be 
@@ -190,11 +193,10 @@ public class ExtensionLoader {
   * @param extensionKey the key of the extension
   */
  public static void waitIfLoading(Class<?> extensionKey){
-	 int checkTime = 200;
 	 while(isCurrentlyLoading(extensionKey)){
 		 try {
 			 //the extension is loading, wait 200ms and recheck if it was loaded
-			Thread.sleep(checkTime);
+			Thread.sleep(EXTENSION_LOADING_WAITING_MS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -211,35 +213,34 @@ public class ExtensionLoader {
   * 
   */
  public static void waitIfLoading(){
-	 int checkTime = 200;
 	 while(isCurrentlyLoading()){
 		 try {
 			 //the extension is loading, wait 200ms and recheck if it was loaded
-			Thread.sleep(checkTime);
+			Thread.sleep(EXTENSION_LOADING_WAITING_MS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	 }
  }
  
- /**
-  * Return a value of the extension from the cache. This cached
-  * value is the same returned by calling the getExtension method
-  * on the DefaultJasperReportsContext.
-  * The method check if the extension with the specific key is still loading, 
-  * in this case wait until the loads end and then it return the result
-  * 
-  * @param extensionKey the key of the extension
-  * @return the value of the extension or null if it isn't inside
-  * the shared cache.
-  */
- public static Object getSharedExtension(Class<?> extensionKey){
-	 // This call avoid to load more than one time an extension because maybe the ExtensionLoader has a 
-	 // thread already started for it, but still not completed and in the meantime another request for the
-	 // same extensions arrive. With this code the loading of the extension is paused until the thread complete 
-	 waitIfLoading(extensionKey);
-	 return sharedExtensionCache.get(extensionKey);
- }
+// /**
+//  * Return a value of the extension from the cache. This cached
+//  * value is the same returned by calling the getExtension method
+//  * on the DefaultJasperReportsContext.
+//  * The method check if the extension with the specific key is still loading, 
+//  * in this case wait until the loads end and then it return the result
+//  * 
+//  * @param extensionKey the key of the extension
+//  * @return the value of the extension or null if it isn't inside
+//  * the shared cache.
+//  */
+// public static Object getSharedExtension(Class<?> extensionKey){
+//	 // This call avoid to load more than one time an extension because maybe the ExtensionLoader has a 
+//	 // thread already started for it, but still not completed and in the meantime another request for the
+//	 // same extensions arrive. With this code the loading of the extension is paused until the thread complete 
+//	 waitIfLoading(extensionKey);
+//	 return sharedExtensionCache.get(extensionKey);
+// }
  
 	//CODE USED TO TRACK THE PERFORMANCE OF THE EXTENSIONS PRECACHE
 	
@@ -259,7 +260,7 @@ private void checkAllLoaded(){
 		 long loadingTime = System.currentTimeMillis() - timeStartLoading;
 		 System.out.println("time required multi thread "+ loadingTime);
 	 }
-}
+ }
 
 private synchronized void setLoadedExtenson(Class<?> extensionKey){
 	 extensionLoaded.put(extensionKey, true);
