@@ -100,7 +100,7 @@ public class FontListFieldEditor extends TableFieldEditor {
 		if (string != null && !string.isEmpty()) {
 			try {
 				fontFamily = SimpleFontExtensionHelper.getInstance().loadFontFamilies(
-						JasperReportsConfiguration.getDefaultJRConfig(), new ByteArrayInputStream(string.getBytes()));
+						JasperReportsConfiguration.getDefaultInstance(), new ByteArrayInputStream(string.getBytes()));
 
 				res = new String[fontFamily.size()][1];
 				for (int i = 0; i < fontFamily.size(); i++)

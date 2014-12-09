@@ -172,7 +172,7 @@ public class FontFamilyPage extends WizardPage {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(name);
 
-		SimpleFontFace fontFace = new SimpleFontFace(JasperReportsConfiguration.getDefaultJRConfig());
+		SimpleFontFace fontFace = new SimpleFontFace(JasperReportsConfiguration.getDefaultInstance());
 		if (type.equals(NORMAL)) {
 			fontFace = Misc.nvl((SimpleFontFace) fontFamily.getNormalFace(), fontFace);
 			fontFamily.setNormalFace(fontFace);

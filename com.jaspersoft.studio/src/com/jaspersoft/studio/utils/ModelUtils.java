@@ -986,7 +986,7 @@ public class ModelUtils {
 
 	public static String[] getQueryLanguages(JasperReportsConfiguration context) {
 		if (context == null)
-			context = JasperReportsConfiguration.getDefaultJRConfig();
+			context = JasperReportsConfiguration.getDefaultInstance();
 		String[] langs = getQueryLanguagesOnly(context);
 		String[] res = new String[langs.length + 1];
 		res[0] = ""; //$NON-NLS-1$
