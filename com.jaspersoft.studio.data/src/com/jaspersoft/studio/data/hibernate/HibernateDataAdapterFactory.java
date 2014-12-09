@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.hibernate;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapterImpl;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -59,7 +60,7 @@ public class HibernateDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		return null;
 	}
 

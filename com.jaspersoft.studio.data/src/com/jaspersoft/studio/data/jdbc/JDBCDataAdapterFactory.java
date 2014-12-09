@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.jdbc;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -79,7 +80,7 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		return null;
 	}
 

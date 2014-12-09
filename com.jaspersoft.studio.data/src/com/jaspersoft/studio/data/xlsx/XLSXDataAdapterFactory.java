@@ -15,6 +15,7 @@ package com.jaspersoft.studio.data.xlsx;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapterImpl;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -60,7 +61,7 @@ public class XLSXDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		return null;
 	}
 

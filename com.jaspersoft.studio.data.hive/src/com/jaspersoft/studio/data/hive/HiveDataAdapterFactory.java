@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.hive;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -24,7 +25,6 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.hive.messages.Messages;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author gtoffoli
@@ -82,9 +82,9 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		if (dataAdapter instanceof HiveDataAdapter)
-			return new HiveDataAdapterService(JasperReportsConfiguration.getDefaultJRConfig(), (HiveDataAdapter) dataAdapter);
+			return new HiveDataAdapterService(jasperReportsContext, (HiveDataAdapter) dataAdapter);
 		return null;
 	}
 

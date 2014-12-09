@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data.mongodb;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -24,7 +25,6 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.adapter.IDataAdapterCreator;
 import com.jaspersoft.studio.data.mongodb.messages.Messages;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /**
  * @author gtoffoli
@@ -85,9 +85,9 @@ public class MongoDbDataAdapterFactory implements DataAdapterFactory {
         return null;
     }
 
-    public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+    public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
         if (dataAdapter instanceof MongoDbDataAdapter)
-            return new MongoDbDataAdapterService(JasperReportsConfiguration.getDefaultJRConfig(), (MongoDbDataAdapter) dataAdapter);
+            return new MongoDbDataAdapterService(jasperReportsContext, (MongoDbDataAdapter) dataAdapter);
         return null;
     }
 

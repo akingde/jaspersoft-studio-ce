@@ -14,6 +14,7 @@ package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -42,7 +43,7 @@ public interface DataAdapterFactory {
 	 */
 	public String getDataAdapterClassName();
 
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter);
+	public DataAdapterService createDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter);
 
 	/**
 	 * This method provides the label of the data adapter type. I.e.: JDBC connection

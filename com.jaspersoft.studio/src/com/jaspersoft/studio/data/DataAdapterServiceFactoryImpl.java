@@ -43,7 +43,7 @@ public class DataAdapterServiceFactoryImpl extends DefaultDataAdapterServiceFact
 
 		DataAdapterFactory daf = DataAdapterManager.findFactoryByDataAdapterClass(dataAdapter.getClass().getName());
 		if (daf != null)
-			dataAdapterService = daf.createDataAdapterService(dataAdapter);
+			dataAdapterService = daf.createDataAdapterService(jasperReportsContext, dataAdapter);
 		if (daf == null)
 			return super.getDataAdapterService(jasperReportsContext, dataAdapter);
 		return dataAdapterService;
