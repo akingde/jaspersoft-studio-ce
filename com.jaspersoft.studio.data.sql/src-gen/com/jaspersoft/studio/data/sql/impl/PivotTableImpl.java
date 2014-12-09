@@ -3,6 +3,7 @@
 package com.jaspersoft.studio.data.sql.impl;
 
 import com.jaspersoft.studio.data.sql.PivotForClause;
+import com.jaspersoft.studio.data.sql.PivotFunctions;
 import com.jaspersoft.studio.data.sql.PivotInClause;
 import com.jaspersoft.studio.data.sql.PivotTable;
 import com.jaspersoft.studio.data.sql.SqlPackage;
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.PivotTableImpl#getPfun <em>Pfun</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.PivotTableImpl#getPfor <em>Pfor</em>}</li>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.PivotTableImpl#getPin <em>Pin</em>}</li>
  * </ul>
@@ -32,6 +34,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class PivotTableImpl extends MinimalEObjectImpl.Container implements PivotTable
 {
+  /**
+   * The cached value of the '{@link #getPfun() <em>Pfun</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPfun()
+   * @generated
+   * @ordered
+   */
+  protected PivotFunctions pfun;
+
   /**
    * The cached value of the '{@link #getPfor() <em>Pfor</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -71,6 +83,54 @@ public class PivotTableImpl extends MinimalEObjectImpl.Container implements Pivo
   protected EClass eStaticClass()
   {
     return SqlPackage.Literals.PIVOT_TABLE;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotFunctions getPfun()
+  {
+    return pfun;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetPfun(PivotFunctions newPfun, NotificationChain msgs)
+  {
+    PivotFunctions oldPfun = pfun;
+    pfun = newPfun;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.PIVOT_TABLE__PFUN, oldPfun, newPfun);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setPfun(PivotFunctions newPfun)
+  {
+    if (newPfun != pfun)
+    {
+      NotificationChain msgs = null;
+      if (pfun != null)
+        msgs = ((InternalEObject)pfun).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.PIVOT_TABLE__PFUN, null, msgs);
+      if (newPfun != null)
+        msgs = ((InternalEObject)newPfun).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.PIVOT_TABLE__PFUN, null, msgs);
+      msgs = basicSetPfun(newPfun, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.PIVOT_TABLE__PFUN, newPfun, newPfun));
   }
 
   /**
@@ -179,6 +239,8 @@ public class PivotTableImpl extends MinimalEObjectImpl.Container implements Pivo
   {
     switch (featureID)
     {
+      case SqlPackage.PIVOT_TABLE__PFUN:
+        return basicSetPfun(null, msgs);
       case SqlPackage.PIVOT_TABLE__PFOR:
         return basicSetPfor(null, msgs);
       case SqlPackage.PIVOT_TABLE__PIN:
@@ -197,6 +259,8 @@ public class PivotTableImpl extends MinimalEObjectImpl.Container implements Pivo
   {
     switch (featureID)
     {
+      case SqlPackage.PIVOT_TABLE__PFUN:
+        return getPfun();
       case SqlPackage.PIVOT_TABLE__PFOR:
         return getPfor();
       case SqlPackage.PIVOT_TABLE__PIN:
@@ -215,6 +279,9 @@ public class PivotTableImpl extends MinimalEObjectImpl.Container implements Pivo
   {
     switch (featureID)
     {
+      case SqlPackage.PIVOT_TABLE__PFUN:
+        setPfun((PivotFunctions)newValue);
+        return;
       case SqlPackage.PIVOT_TABLE__PFOR:
         setPfor((PivotForClause)newValue);
         return;
@@ -235,6 +302,9 @@ public class PivotTableImpl extends MinimalEObjectImpl.Container implements Pivo
   {
     switch (featureID)
     {
+      case SqlPackage.PIVOT_TABLE__PFUN:
+        setPfun((PivotFunctions)null);
+        return;
       case SqlPackage.PIVOT_TABLE__PFOR:
         setPfor((PivotForClause)null);
         return;
@@ -255,6 +325,8 @@ public class PivotTableImpl extends MinimalEObjectImpl.Container implements Pivo
   {
     switch (featureID)
     {
+      case SqlPackage.PIVOT_TABLE__PFUN:
+        return pfun != null;
       case SqlPackage.PIVOT_TABLE__PFOR:
         return pfor != null;
       case SqlPackage.PIVOT_TABLE__PIN:

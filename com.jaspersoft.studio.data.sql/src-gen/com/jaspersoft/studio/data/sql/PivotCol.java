@@ -13,6 +13,6 @@ package com.jaspersoft.studio.data.sql;
  * @model
  * @generated
  */
-public interface PivotCol extends PivotColumns, Pivots
+public interface PivotCol extends PivotFunction, PivotColumns, Pivots
 {
 } // PivotCol

@@ -5,6 +5,7 @@ package com.jaspersoft.studio.data.sql.impl;
 import com.jaspersoft.studio.data.sql.PivotInClause;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 import com.jaspersoft.studio.data.sql.SubQueryOperand;
+import com.jaspersoft.studio.data.sql.UnpivotInClauseArgs;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -23,6 +24,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.jaspersoft.studio.data.sql.impl.PivotInClauseImpl#getSq <em>Sq</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.PivotInClauseImpl#getArgs <em>Args</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.data.sql.impl.PivotInClauseImpl#getPinany <em>Pinany</em>}</li>
  * </ul>
  * </p>
  *
@@ -39,6 +42,36 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
    * @ordered
    */
   protected SubQueryOperand sq;
+
+  /**
+   * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getArgs()
+   * @generated
+   * @ordered
+   */
+  protected UnpivotInClauseArgs args;
+
+  /**
+   * The default value of the '{@link #getPinany() <em>Pinany</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPinany()
+   * @generated
+   * @ordered
+   */
+  protected static final String PINANY_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getPinany() <em>Pinany</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPinany()
+   * @generated
+   * @ordered
+   */
+  protected String pinany = PINANY_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -114,6 +147,77 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
    * <!-- end-user-doc -->
    * @generated
    */
+  public UnpivotInClauseArgs getArgs()
+  {
+    return args;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetArgs(UnpivotInClauseArgs newArgs, NotificationChain msgs)
+  {
+    UnpivotInClauseArgs oldArgs = args;
+    args = newArgs;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SqlPackage.PIVOT_IN_CLAUSE__ARGS, oldArgs, newArgs);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setArgs(UnpivotInClauseArgs newArgs)
+  {
+    if (newArgs != args)
+    {
+      NotificationChain msgs = null;
+      if (args != null)
+        msgs = ((InternalEObject)args).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SqlPackage.PIVOT_IN_CLAUSE__ARGS, null, msgs);
+      if (newArgs != null)
+        msgs = ((InternalEObject)newArgs).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SqlPackage.PIVOT_IN_CLAUSE__ARGS, null, msgs);
+      msgs = basicSetArgs(newArgs, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.PIVOT_IN_CLAUSE__ARGS, newArgs, newArgs));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getPinany()
+  {
+    return pinany;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setPinany(String newPinany)
+  {
+    String oldPinany = pinany;
+    pinany = newPinany;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, SqlPackage.PIVOT_IN_CLAUSE__PINANY, oldPinany, pinany));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -121,6 +225,8 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
     {
       case SqlPackage.PIVOT_IN_CLAUSE__SQ:
         return basicSetSq(null, msgs);
+      case SqlPackage.PIVOT_IN_CLAUSE__ARGS:
+        return basicSetArgs(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -137,6 +243,10 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
     {
       case SqlPackage.PIVOT_IN_CLAUSE__SQ:
         return getSq();
+      case SqlPackage.PIVOT_IN_CLAUSE__ARGS:
+        return getArgs();
+      case SqlPackage.PIVOT_IN_CLAUSE__PINANY:
+        return getPinany();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -153,6 +263,12 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
     {
       case SqlPackage.PIVOT_IN_CLAUSE__SQ:
         setSq((SubQueryOperand)newValue);
+        return;
+      case SqlPackage.PIVOT_IN_CLAUSE__ARGS:
+        setArgs((UnpivotInClauseArgs)newValue);
+        return;
+      case SqlPackage.PIVOT_IN_CLAUSE__PINANY:
+        setPinany((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -171,6 +287,12 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
       case SqlPackage.PIVOT_IN_CLAUSE__SQ:
         setSq((SubQueryOperand)null);
         return;
+      case SqlPackage.PIVOT_IN_CLAUSE__ARGS:
+        setArgs((UnpivotInClauseArgs)null);
+        return;
+      case SqlPackage.PIVOT_IN_CLAUSE__PINANY:
+        setPinany(PINANY_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -187,8 +309,29 @@ public class PivotInClauseImpl extends MinimalEObjectImpl.Container implements P
     {
       case SqlPackage.PIVOT_IN_CLAUSE__SQ:
         return sq != null;
+      case SqlPackage.PIVOT_IN_CLAUSE__ARGS:
+        return args != null;
+      case SqlPackage.PIVOT_IN_CLAUSE__PINANY:
+        return PINANY_EDEFAULT == null ? pinany != null : !PINANY_EDEFAULT.equals(pinany);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (pinany: ");
+    result.append(pinany);
+    result.append(')');
+    return result.toString();
   }
 
 } //PivotInClauseImpl

@@ -75,14 +75,23 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PivotTable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pfun" eType="#//PivotFunctions"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pfor" eType="#//PivotForClause"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PivotInClause"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PivotFunctions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abc" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PivotFunction"/>
   <eClassifiers xsi:type="ecore:EClass" name="PivotInClause">
     <eStructuralFeatures xsi:type="ecore:EReference" name="sq" eType="#//SubQueryOperand"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="args" eType="#//UnpivotInClauseArgs"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pinany" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnpivotTable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pcols" eType="#//PivotColumns"
@@ -103,7 +112,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="PivotForClause"/>
   <eClassifiers xsi:type="ecore:EClass" name="PivotColumns"/>
   <eClassifiers xsi:type="ecore:EClass" name="Pivots" eSuperTypes="#//PivotColumns"/>
-  <eClassifiers xsi:type="ecore:EClass" name="PivotCol" eSuperTypes="#//PivotColumns #//Pivots"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PivotCol" eSuperTypes="#//PivotFunction #//PivotColumns #//Pivots"/>
   <eClassifiers xsi:type="ecore:EClass" name="TableFull"/>
   <eClassifiers xsi:type="ecore:EClass" name="DbObjectNameAll">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

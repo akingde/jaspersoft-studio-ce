@@ -77,6 +77,8 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
       case SqlPackage.FROM_TABLE_JOIN: return createFromTableJoin();
       case SqlPackage.TABLE_OR_ALIAS: return createTableOrAlias();
       case SqlPackage.PIVOT_TABLE: return createPivotTable();
+      case SqlPackage.PIVOT_FUNCTIONS: return createPivotFunctions();
+      case SqlPackage.PIVOT_FUNCTION: return createPivotFunction();
       case SqlPackage.PIVOT_IN_CLAUSE: return createPivotInClause();
       case SqlPackage.UNPIVOT_TABLE: return createUnpivotTable();
       case SqlPackage.UNPIVOT_IN_CLAUSE: return createUnpivotInClause();
@@ -317,6 +319,28 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory
   {
     PivotTableImpl pivotTable = new PivotTableImpl();
     return pivotTable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotFunctions createPivotFunctions()
+  {
+    PivotFunctionsImpl pivotFunctions = new PivotFunctionsImpl();
+    return pivotFunctions;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PivotFunction createPivotFunction()
+  {
+    PivotFunctionImpl pivotFunction = new PivotFunctionImpl();
+    return pivotFunction;
   }
 
   /**

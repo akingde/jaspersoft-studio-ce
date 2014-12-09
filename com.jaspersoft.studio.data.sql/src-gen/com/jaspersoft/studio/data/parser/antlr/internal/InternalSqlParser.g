@@ -1090,16 +1090,34 @@ rulePivotTable returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getPivotTableAccess().getPfunPivotFunctionsParserRuleCall_3_0()); 
 	    }
-		lv_pfor_3_0=rulePivotForClause		{
+		lv_pfun_3_0=rulePivotFunctions		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPivotTableRule());
+	        }
+       		set(
+       			$current, 
+       			"pfun",
+        		lv_pfun_3_0, 
+        		"PivotFunctions");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_4_0()); 
+	    }
+		lv_pfor_4_0=rulePivotForClause		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getPivotTableRule());
 	        }
        		set(
        			$current, 
        			"pfor",
-        		lv_pfor_3_0, 
+        		lv_pfor_4_0, 
         		"PivotForClause");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1108,28 +1126,69 @@ rulePivotTable returns [EObject current=null]
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_4_0()); 
+	        newCompositeNode(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_5_0()); 
 	    }
-		lv_pin_4_0=rulePivotInClause		{
+		lv_pin_5_0=rulePivotInClause		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getPivotTableRule());
 	        }
        		set(
        			$current, 
        			"pin",
-        		lv_pin_4_0, 
+        		lv_pin_5_0, 
         		"PivotInClause");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 )
-	otherlv_5=KEYWORD_2
+	otherlv_6=KEYWORD_2
     {
-    	newLeafNode(otherlv_5, grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_5());
+    	newLeafNode(otherlv_6, grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_6());
     }
 )
 ;
+
+
+
+
+
+// Entry rule entryRulePivotFunctions
+entryRulePivotFunctions returns [EObject current=null]
+	:
+	{ newCompositeNode(grammarAccess.getPivotFunctionsRule()); }
+	 iv_rulePivotFunctions=rulePivotFunctions 
+	 { $current=$iv_rulePivotFunctions.current; } 
+	 EOF 
+;
+
+// Rule PivotFunctions
+rulePivotFunctions returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+(
+		lv_abc_0_0=RULE_ID
+		{
+			newLeafNode(lv_abc_0_0, grammarAccess.getPivotFunctionsAccess().getAbcIDTerminalRuleCall_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getPivotFunctionsRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"abc",
+        		lv_abc_0_0, 
+        		"ID");
+	    }
+
+)
+)
+;
+
+
 
 
 
@@ -1159,10 +1218,10 @@ rulePivotInClause returns [EObject current=null]
     {
     	newLeafNode(otherlv_1, grammarAccess.getPivotInClauseAccess().getLeftParenthesisKeyword_1());
     }
-(
+((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0_0()); 
 	    }
 		lv_sq_2_0=ruleSubQueryOperand		{
 	        if ($current==null) {
@@ -1178,12 +1237,90 @@ rulePivotInClause returns [EObject current=null]
 
 )
 )
-	otherlv_3=KEYWORD_2
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getArgsUnpivotInClauseArgsParserRuleCall_2_1_0()); 
+	    }
+		lv_args_3_0=ruleUnpivotInClauseArgs		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPivotInClauseRule());
+	        }
+       		set(
+       			$current, 
+       			"args",
+        		lv_args_3_0, 
+        		"UnpivotInClauseArgs");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPivotInClauseAccess().getPinanyPivotInClauseAnyParserRuleCall_2_2_0()); 
+	    }
+		lv_pinany_4_0=rulePivotInClauseAny		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPivotInClauseRule());
+	        }
+       		set(
+       			$current, 
+       			"pinany",
+        		lv_pinany_4_0, 
+        		"PivotInClauseAny");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+	otherlv_5=KEYWORD_2
     {
-    	newLeafNode(otherlv_3, grammarAccess.getPivotInClauseAccess().getRightParenthesisKeyword_3());
+    	newLeafNode(otherlv_5, grammarAccess.getPivotInClauseAccess().getRightParenthesisKeyword_3());
     }
 )
 ;
+
+
+
+
+
+// Entry rule entryRulePivotInClauseAny
+entryRulePivotInClauseAny returns [String current=null] 
+:
+	{ newCompositeNode(grammarAccess.getPivotInClauseAnyRule()); } 
+	 iv_rulePivotInClauseAny=rulePivotInClauseAny 
+	 { $current=$iv_rulePivotInClauseAny.current.getText(); }  
+	 EOF 
+;
+
+// Rule PivotInClauseAny
+rulePivotInClauseAny returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule();
+    }:
+(
+	kw=KEYWORD_28 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_0()); 
+    }
+(
+	kw=KEYWORD_4 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getPivotInClauseAnyAccess().getCommaKeyword_1_0()); 
+    }
+
+	kw=KEYWORD_28 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_1_1()); 
+    }
+)?)
+    ;
 
 
 

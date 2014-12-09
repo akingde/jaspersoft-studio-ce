@@ -162,6 +162,20 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case SqlPackage.PIVOT_FUNCTIONS:
+      {
+        PivotFunctions pivotFunctions = (PivotFunctions)theEObject;
+        T result = casePivotFunctions(pivotFunctions);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case SqlPackage.PIVOT_FUNCTION:
+      {
+        PivotFunction pivotFunction = (PivotFunction)theEObject;
+        T result = casePivotFunction(pivotFunction);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case SqlPackage.PIVOT_IN_CLAUSE:
       {
         PivotInClause pivotInClause = (PivotInClause)theEObject;
@@ -224,6 +238,7 @@ public class SqlSwitch<T> extends Switch<T>
       {
         PivotCol pivotCol = (PivotCol)theEObject;
         T result = casePivotCol(pivotCol);
+        if (result == null) result = casePivotFunction(pivotCol);
         if (result == null) result = casePivots(pivotCol);
         if (result == null) result = casePivotColumns(pivotCol);
         if (result == null) result = defaultCase(theEObject);
@@ -251,6 +266,7 @@ public class SqlSwitch<T> extends Switch<T>
         if (result == null) result = casePivotCol(dbObjectName);
         if (result == null) result = caseTableFull(dbObjectName);
         if (result == null) result = casePivotForClause(dbObjectName);
+        if (result == null) result = casePivotFunction(dbObjectName);
         if (result == null) result = casePivots(dbObjectName);
         if (result == null) result = casePivotColumns(dbObjectName);
         if (result == null) result = defaultCase(theEObject);
@@ -613,6 +629,7 @@ public class SqlSwitch<T> extends Switch<T>
         pcols pcols = (pcols)theEObject;
         T result = casepcols(pcols);
         if (result == null) result = casePivotCol(pcols);
+        if (result == null) result = casePivotFunction(pcols);
         if (result == null) result = casePivots(pcols);
         if (result == null) result = casePivotColumns(pcols);
         if (result == null) result = defaultCase(theEObject);
@@ -905,6 +922,38 @@ public class SqlSwitch<T> extends Switch<T>
    * @generated
    */
   public T casePivotTable(PivotTable object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot Functions</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot Functions</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotFunctions(PivotFunctions object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Pivot Function</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Pivot Function</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T casePivotFunction(PivotFunction object)
   {
     return null;
   }

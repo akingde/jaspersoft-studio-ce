@@ -45,10 +45,20 @@ TableOrAlias:
 	(tblAlias=DbObjectName)?;
 
 PivotTable:
-	'PIVOT' 'XML'? '(' pfor=PivotForClause pin=PivotInClause ')';
+	'PIVOT' 'XML'? '(' pfun=PivotFunctions pfor=PivotForClause pin=PivotInClause ')';
+
+PivotFunctions returns PivotFunctions:
+	abc=ID // PivotFunction ({pfnct.entries+=current} ("," entries+=PivotFunction)+)?;
+;
+
+PivotFunction:
+	ID '(' PivotCol ')' 'AS'? ID;
 
 PivotInClause:
-	'IN' '(' (sq=SubQueryOperand) ')';
+	'IN' '(' (sq=SubQueryOperand | args=UnpivotInClauseArgs | pinany=PivotInClauseAny) ')';
+
+PivotInClauseAny:
+	'ANY' ((',' 'ANY')+)?;
 
 UnpivotTable:
 	'UNPIVOT' (('INCLUDE' | 'EXCLUDE') 'NULLS')? '(' pcols=PivotColumns pfor=PivotForClause inop=UnpivotInClause ')';
@@ -145,8 +155,8 @@ Operand returns Operands:
 	{Div.left=current} '/' | {Concat.left=current} '||') right=OperandFragment)*;
 
 OperandFragment returns Operand:
-	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast |
-	func=OperandFunction | sqlcase=SQLCASE /*|opGroup=OperandGroup */;
+	column=ColumnOperand | xop=XOperandFragment | subq=SubQueryOperand | fcast=OpFunctionCast | func=OperandFunction |
+	sqlcase=SQLCASE /*|opGroup=OperandGroup */;
 
 	//OperandGroup returns OpGroup:
 //	{OpGroup} '(' op=Operand ')';
@@ -163,8 +173,7 @@ WindowingClause:
 	('ROWS' | 'RANGE') (WindowingClauseBetween | WindowingClauseOperandPreceding);
 
 WindowingClauseBetween:
-	'BETWEEN' wcoP=WindowingClauseOperandPreceding
-	'AND' wcoF=WindowingClauseOperandFollowing;
+	'BETWEEN' wcoP=WindowingClauseOperandPreceding 'AND' wcoF=WindowingClauseOperandFollowing;
 
 WindowingClauseOperandFollowing:
 	{WindowingClauseOperandFollowing} ('UNBOUNDED FOLLOWING' | 'CURRENT ROW' | (exp=AnalyticExprArg ('PRECEDING' |

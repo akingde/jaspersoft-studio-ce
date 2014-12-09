@@ -53,6 +53,8 @@ import com.jaspersoft.studio.data.sql.POperand;
 import com.jaspersoft.studio.data.sql.PivotCol;
 import com.jaspersoft.studio.data.sql.PivotColumns;
 import com.jaspersoft.studio.data.sql.PivotForClause;
+import com.jaspersoft.studio.data.sql.PivotFunction;
+import com.jaspersoft.studio.data.sql.PivotFunctions;
 import com.jaspersoft.studio.data.sql.PivotInClause;
 import com.jaspersoft.studio.data.sql.PivotTable;
 import com.jaspersoft.studio.data.sql.Pivots;
@@ -188,6 +190,20 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * @generated
    */
   private EClass pivotTableEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass pivotFunctionsEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass pivotFunctionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1181,7 +1197,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getPivotTable_Pfor()
+  public EReference getPivotTable_Pfun()
   {
     return (EReference)pivotTableEClass.getEStructuralFeatures().get(0);
   }
@@ -1191,9 +1207,49 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getPivotTable_Pin()
+  public EReference getPivotTable_Pfor()
   {
     return (EReference)pivotTableEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getPivotTable_Pin()
+  {
+    return (EReference)pivotTableEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPivotFunctions()
+  {
+    return pivotFunctionsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPivotFunctions_Abc()
+  {
+    return (EAttribute)pivotFunctionsEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPivotFunction()
+  {
+    return pivotFunctionEClass;
   }
 
   /**
@@ -1214,6 +1270,26 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
   public EReference getPivotInClause_Sq()
   {
     return (EReference)pivotInClauseEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getPivotInClause_Args()
+  {
+    return (EReference)pivotInClauseEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPivotInClause_Pinany()
+  {
+    return (EAttribute)pivotInClauseEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -3089,11 +3165,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     createEReference(tableOrAliasEClass, TABLE_OR_ALIAS__TBL_ALIAS);
 
     pivotTableEClass = createEClass(PIVOT_TABLE);
+    createEReference(pivotTableEClass, PIVOT_TABLE__PFUN);
     createEReference(pivotTableEClass, PIVOT_TABLE__PFOR);
     createEReference(pivotTableEClass, PIVOT_TABLE__PIN);
 
+    pivotFunctionsEClass = createEClass(PIVOT_FUNCTIONS);
+    createEAttribute(pivotFunctionsEClass, PIVOT_FUNCTIONS__ABC);
+
+    pivotFunctionEClass = createEClass(PIVOT_FUNCTION);
+
     pivotInClauseEClass = createEClass(PIVOT_IN_CLAUSE);
     createEReference(pivotInClauseEClass, PIVOT_IN_CLAUSE__SQ);
+    createEReference(pivotInClauseEClass, PIVOT_IN_CLAUSE__ARGS);
+    createEAttribute(pivotInClauseEClass, PIVOT_IN_CLAUSE__PINANY);
 
     unpivotTableEClass = createEClass(UNPIVOT_TABLE);
     createEReference(unpivotTableEClass, UNPIVOT_TABLE__PCOLS);
@@ -3383,6 +3467,7 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     fromTableEClass.getESuperTypes().add(this.getOrTable());
     unpivotInClauseArgEClass.getESuperTypes().add(this.getUnpivotInClauseArgs());
     pivotsEClass.getESuperTypes().add(this.getPivotColumns());
+    pivotColEClass.getESuperTypes().add(this.getPivotFunction());
     pivotColEClass.getESuperTypes().add(this.getPivotColumns());
     pivotColEClass.getESuperTypes().add(this.getPivots());
     dbObjectNameEClass.getESuperTypes().add(this.getColumnFull());
@@ -3473,11 +3558,19 @@ public class SqlPackageImpl extends EPackageImpl implements SqlPackage
     initEReference(getTableOrAlias_TblAlias(), this.getDbObjectName(), null, "tblAlias", null, 0, 1, TableOrAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(pivotTableEClass, PivotTable.class, "PivotTable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getPivotTable_Pfun(), this.getPivotFunctions(), null, "pfun", null, 0, 1, PivotTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPivotTable_Pfor(), this.getPivotForClause(), null, "pfor", null, 0, 1, PivotTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPivotTable_Pin(), this.getPivotInClause(), null, "pin", null, 0, 1, PivotTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(pivotFunctionsEClass, PivotFunctions.class, "PivotFunctions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPivotFunctions_Abc(), ecorePackage.getEString(), "abc", null, 0, 1, PivotFunctions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(pivotFunctionEClass, PivotFunction.class, "PivotFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
     initEClass(pivotInClauseEClass, PivotInClause.class, "PivotInClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getPivotInClause_Sq(), this.getSubQueryOperand(), null, "sq", null, 0, 1, PivotInClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getPivotInClause_Args(), this.getUnpivotInClauseArgs(), null, "args", null, 0, 1, PivotInClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPivotInClause_Pinany(), ecorePackage.getEString(), "pinany", null, 0, 1, PivotInClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(unpivotTableEClass, UnpivotTable.class, "UnpivotTable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getUnpivotTable_Pcols(), this.getPivotColumns(), null, "pcols", null, 0, 1, UnpivotTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

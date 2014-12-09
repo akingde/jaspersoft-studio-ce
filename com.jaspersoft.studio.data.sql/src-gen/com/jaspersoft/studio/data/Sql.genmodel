@@ -72,11 +72,18 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//TableOrAlias/tblAlias"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//PivotTable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotTable/pfun"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotTable/pfor"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotTable/pin"/>
     </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//PivotFunctions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//PivotFunctions/abc"/>
+    </genClasses>
+    <genClasses ecoreClass="Sql.ecore#//PivotFunction"/>
     <genClasses ecoreClass="Sql.ecore#//PivotInClause">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotInClause/sq"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//PivotInClause/args"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sql.ecore#//PivotInClause/pinany"/>
     </genClasses>
     <genClasses ecoreClass="Sql.ecore#//UnpivotTable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sql.ecore#//UnpivotTable/pcols"/>

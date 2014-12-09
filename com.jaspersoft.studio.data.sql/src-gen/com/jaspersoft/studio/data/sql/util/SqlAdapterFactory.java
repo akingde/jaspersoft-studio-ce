@@ -135,6 +135,16 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
         return createPivotTableAdapter();
       }
       @Override
+      public Adapter casePivotFunctions(PivotFunctions object)
+      {
+        return createPivotFunctionsAdapter();
+      }
+      @Override
+      public Adapter casePivotFunction(PivotFunction object)
+      {
+        return createPivotFunctionAdapter();
+      }
+      @Override
       public Adapter casePivotInClause(PivotInClause object)
       {
         return createPivotInClauseAdapter();
@@ -687,6 +697,36 @@ public class SqlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createPivotTableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotFunctions <em>Pivot Functions</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotFunctions
+   * @generated
+   */
+  public Adapter createPivotFunctionsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.jaspersoft.studio.data.sql.PivotFunction <em>Pivot Function</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.jaspersoft.studio.data.sql.PivotFunction
+   * @generated
+   */
+  public Adapter createPivotFunctionAdapter()
   {
     return null;
   }

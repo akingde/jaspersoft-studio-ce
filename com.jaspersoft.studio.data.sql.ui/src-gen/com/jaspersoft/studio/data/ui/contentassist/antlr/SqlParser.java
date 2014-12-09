@@ -43,6 +43,7 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getColumnOrAliasAccess().getAlternatives(), "rule__ColumnOrAlias__Alternatives");
 					put(grammarAccess.getTableOrAliasAccess().getAlternatives_0(), "rule__TableOrAlias__Alternatives_0");
 					put(grammarAccess.getTableOrAliasAccess().getAlternatives_1(), "rule__TableOrAlias__Alternatives_1");
+					put(grammarAccess.getPivotInClauseAccess().getAlternatives_2(), "rule__PivotInClause__Alternatives_2");
 					put(grammarAccess.getUnpivotTableAccess().getAlternatives_1_0(), "rule__UnpivotTable__Alternatives_1_0");
 					put(grammarAccess.getPivotForClauseAccess().getAlternatives_1(), "rule__PivotForClause__Alternatives_1");
 					put(grammarAccess.getPivotColumnsAccess().getAlternatives(), "rule__PivotColumns__Alternatives");
@@ -111,7 +112,10 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFromTableJoinAccess().getGroup(), "rule__FromTableJoin__Group__0");
 					put(grammarAccess.getTableOrAliasAccess().getGroup(), "rule__TableOrAlias__Group__0");
 					put(grammarAccess.getPivotTableAccess().getGroup(), "rule__PivotTable__Group__0");
+					put(grammarAccess.getPivotFunctionAccess().getGroup(), "rule__PivotFunction__Group__0");
 					put(grammarAccess.getPivotInClauseAccess().getGroup(), "rule__PivotInClause__Group__0");
+					put(grammarAccess.getPivotInClauseAnyAccess().getGroup(), "rule__PivotInClauseAny__Group__0");
+					put(grammarAccess.getPivotInClauseAnyAccess().getGroup_1(), "rule__PivotInClauseAny__Group_1__0");
 					put(grammarAccess.getUnpivotTableAccess().getGroup(), "rule__UnpivotTable__Group__0");
 					put(grammarAccess.getUnpivotTableAccess().getGroup_1(), "rule__UnpivotTable__Group_1__0");
 					put(grammarAccess.getUnpivotInClauseAccess().getGroup(), "rule__UnpivotInClause__Group__0");
@@ -236,9 +240,13 @@ public class SqlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTableOrAliasAccess().getUnpivotAssignment_1_1(), "rule__TableOrAlias__UnpivotAssignment_1_1");
 					put(grammarAccess.getTableOrAliasAccess().getAliasAssignment_2(), "rule__TableOrAlias__AliasAssignment_2");
 					put(grammarAccess.getTableOrAliasAccess().getTblAliasAssignment_3(), "rule__TableOrAlias__TblAliasAssignment_3");
-					put(grammarAccess.getPivotTableAccess().getPforAssignment_3(), "rule__PivotTable__PforAssignment_3");
-					put(grammarAccess.getPivotTableAccess().getPinAssignment_4(), "rule__PivotTable__PinAssignment_4");
-					put(grammarAccess.getPivotInClauseAccess().getSqAssignment_2(), "rule__PivotInClause__SqAssignment_2");
+					put(grammarAccess.getPivotTableAccess().getPfunAssignment_3(), "rule__PivotTable__PfunAssignment_3");
+					put(grammarAccess.getPivotTableAccess().getPforAssignment_4(), "rule__PivotTable__PforAssignment_4");
+					put(grammarAccess.getPivotTableAccess().getPinAssignment_5(), "rule__PivotTable__PinAssignment_5");
+					put(grammarAccess.getPivotFunctionsAccess().getAbcAssignment(), "rule__PivotFunctions__AbcAssignment");
+					put(grammarAccess.getPivotInClauseAccess().getSqAssignment_2_0(), "rule__PivotInClause__SqAssignment_2_0");
+					put(grammarAccess.getPivotInClauseAccess().getArgsAssignment_2_1(), "rule__PivotInClause__ArgsAssignment_2_1");
+					put(grammarAccess.getPivotInClauseAccess().getPinanyAssignment_2_2(), "rule__PivotInClause__PinanyAssignment_2_2");
 					put(grammarAccess.getUnpivotTableAccess().getPcolsAssignment_3(), "rule__UnpivotTable__PcolsAssignment_3");
 					put(grammarAccess.getUnpivotTableAccess().getPforAssignment_4(), "rule__UnpivotTable__PforAssignment_4");
 					put(grammarAccess.getUnpivotTableAccess().getInopAssignment_5(), "rule__UnpivotTable__InopAssignment_5");

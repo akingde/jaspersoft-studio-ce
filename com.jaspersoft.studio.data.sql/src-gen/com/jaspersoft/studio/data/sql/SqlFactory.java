@@ -131,6 +131,24 @@ public interface SqlFactory extends EFactory
   PivotTable createPivotTable();
 
   /**
+   * Returns a new object of class '<em>Pivot Functions</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot Functions</em>'.
+   * @generated
+   */
+  PivotFunctions createPivotFunctions();
+
+  /**
+   * Returns a new object of class '<em>Pivot Function</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Pivot Function</em>'.
+   * @generated
+   */
+  PivotFunction createPivotFunction();
+
+  /**
    * Returns a new object of class '<em>Pivot In Clause</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

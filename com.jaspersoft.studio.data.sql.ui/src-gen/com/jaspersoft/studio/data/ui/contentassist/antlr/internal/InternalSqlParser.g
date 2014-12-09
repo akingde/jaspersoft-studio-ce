@@ -497,6 +497,36 @@ finally {
 
 
 
+// Entry rule entryRulePivotFunctions
+entryRulePivotFunctions 
+:
+{ before(grammarAccess.getPivotFunctionsRule()); }
+	 rulePivotFunctions
+{ after(grammarAccess.getPivotFunctionsRule()); } 
+	 EOF 
+;
+
+// Rule PivotFunctions
+rulePivotFunctions 
+    @init {
+		int stackSize = keepStackSize();
+    }
+    :
+(
+{ before(grammarAccess.getPivotFunctionsAccess().getAbcAssignment()); }
+(rule__PivotFunctions__AbcAssignment)
+{ after(grammarAccess.getPivotFunctionsAccess().getAbcAssignment()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
 // Entry rule entryRulePivotInClause
 entryRulePivotInClause 
 :
@@ -516,6 +546,34 @@ rulePivotInClause
 { before(grammarAccess.getPivotInClauseAccess().getGroup()); }
 (rule__PivotInClause__Group__0)
 { after(grammarAccess.getPivotInClauseAccess().getGroup()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+// Entry rule entryRulePivotInClauseAny
+entryRulePivotInClauseAny 
+:
+{ before(grammarAccess.getPivotInClauseAnyRule()); }
+	 rulePivotInClauseAny
+{ after(grammarAccess.getPivotInClauseAnyRule()); } 
+	 EOF 
+;
+
+// Rule PivotInClauseAny
+rulePivotInClauseAny 
+    @init {
+		int stackSize = keepStackSize();
+    }
+    :
+(
+{ before(grammarAccess.getPivotInClauseAnyAccess().getGroup()); }
+(rule__PivotInClauseAny__Group__0)
+{ after(grammarAccess.getPivotInClauseAnyAccess().getGroup()); }
 )
 
 ;
@@ -2434,6 +2492,34 @@ rule__TableOrAlias__Alternatives_1
 { before(grammarAccess.getTableOrAliasAccess().getUnpivotAssignment_1_1()); }
 (rule__TableOrAlias__UnpivotAssignment_1_1)
 { after(grammarAccess.getTableOrAliasAccess().getUnpivotAssignment_1_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClause__Alternatives_2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAccess().getSqAssignment_2_0()); }
+(rule__PivotInClause__SqAssignment_2_0)
+{ after(grammarAccess.getPivotInClauseAccess().getSqAssignment_2_0()); }
+)
+
+    |(
+{ before(grammarAccess.getPivotInClauseAccess().getArgsAssignment_2_1()); }
+(rule__PivotInClause__ArgsAssignment_2_1)
+{ after(grammarAccess.getPivotInClauseAccess().getArgsAssignment_2_1()); }
+)
+
+    |(
+{ before(grammarAccess.getPivotInClauseAccess().getPinanyAssignment_2_2()); }
+(rule__PivotInClause__PinanyAssignment_2_2)
+{ after(grammarAccess.getPivotInClauseAccess().getPinanyAssignment_2_2()); }
 )
 
 ;
@@ -6099,9 +6185,9 @@ rule__PivotTable__Group__3__Impl
     }
 :
 (
-{ before(grammarAccess.getPivotTableAccess().getPforAssignment_3()); }
-(rule__PivotTable__PforAssignment_3)
-{ after(grammarAccess.getPivotTableAccess().getPforAssignment_3()); }
+{ before(grammarAccess.getPivotTableAccess().getPfunAssignment_3()); }
+(rule__PivotTable__PfunAssignment_3)
+{ after(grammarAccess.getPivotTableAccess().getPfunAssignment_3()); }
 )
 
 ;
@@ -6128,9 +6214,9 @@ rule__PivotTable__Group__4__Impl
     }
 :
 (
-{ before(grammarAccess.getPivotTableAccess().getPinAssignment_4()); }
-(rule__PivotTable__PinAssignment_4)
-{ after(grammarAccess.getPivotTableAccess().getPinAssignment_4()); }
+{ before(grammarAccess.getPivotTableAccess().getPforAssignment_4()); }
+(rule__PivotTable__PforAssignment_4)
+{ after(grammarAccess.getPivotTableAccess().getPforAssignment_4()); }
 )
 
 ;
@@ -6145,6 +6231,7 @@ rule__PivotTable__Group__5
     }
 :
 	rule__PivotTable__Group__5__Impl
+	rule__PivotTable__Group__6
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -6156,17 +6243,48 @@ rule__PivotTable__Group__5__Impl
     }
 :
 (
-{ before(grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_5()); }
-
-	KEYWORD_2 
-
-{ after(grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_5()); }
+{ before(grammarAccess.getPivotTableAccess().getPinAssignment_5()); }
+(rule__PivotTable__PinAssignment_5)
+{ after(grammarAccess.getPivotTableAccess().getPinAssignment_5()); }
 )
 
 ;
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+rule__PivotTable__Group__6
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__PivotTable__Group__6__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotTable__Group__6__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_6()); }
+
+	KEYWORD_2 
+
+{ after(grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_6()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
 
 
 
@@ -6261,9 +6379,9 @@ rule__PivotInClause__Group__2__Impl
     }
 :
 (
-{ before(grammarAccess.getPivotInClauseAccess().getSqAssignment_2()); }
-(rule__PivotInClause__SqAssignment_2)
-{ after(grammarAccess.getPivotInClauseAccess().getSqAssignment_2()); }
+{ before(grammarAccess.getPivotInClauseAccess().getAlternatives_2()); }
+(rule__PivotInClause__Alternatives_2)
+{ after(grammarAccess.getPivotInClauseAccess().getAlternatives_2()); }
 )
 
 ;
@@ -6304,6 +6422,134 @@ finally {
 
 
 
+
+
+
+
+
+
+rule__PivotInClauseAny__Group__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__PivotInClauseAny__Group__0__Impl
+	rule__PivotInClauseAny__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClauseAny__Group__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_0()); }
+
+	KEYWORD_28 
+
+{ after(grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__PivotInClauseAny__Group__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__PivotInClauseAny__Group__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClauseAny__Group__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAnyAccess().getGroup_1()); }
+(rule__PivotInClauseAny__Group_1__0)?
+{ after(grammarAccess.getPivotInClauseAnyAccess().getGroup_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
+rule__PivotInClauseAny__Group_1__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__PivotInClauseAny__Group_1__0__Impl
+	rule__PivotInClauseAny__Group_1__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClauseAny__Group_1__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAnyAccess().getCommaKeyword_1_0()); }
+
+	KEYWORD_4 
+
+{ after(grammarAccess.getPivotInClauseAnyAccess().getCommaKeyword_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__PivotInClauseAny__Group_1__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__PivotInClauseAny__Group_1__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClauseAny__Group_1__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_1_1()); }
+
+	KEYWORD_28 
+
+{ after(grammarAccess.getPivotInClauseAnyAccess().getANYKeyword_1_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
 
 
 
@@ -14472,14 +14718,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__PivotTable__PforAssignment_3
+rule__PivotTable__PfunAssignment_3
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_3_0()); }
-	rulePivotForClause{ after(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_3_0()); }
+{ before(grammarAccess.getPivotTableAccess().getPfunPivotFunctionsParserRuleCall_3_0()); }
+	rulePivotFunctions{ after(grammarAccess.getPivotTableAccess().getPfunPivotFunctionsParserRuleCall_3_0()); }
 )
 
 ;
@@ -14487,14 +14733,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__PivotTable__PinAssignment_4
+rule__PivotTable__PforAssignment_4
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_4_0()); }
-	rulePivotInClause{ after(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_4_0()); }
+{ before(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_4_0()); }
+	rulePivotForClause{ after(grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_4_0()); }
 )
 
 ;
@@ -14502,14 +14748,74 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__PivotInClause__SqAssignment_2
+rule__PivotTable__PinAssignment_5
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0()); }
-	ruleSubQueryOperand{ after(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0()); }
+{ before(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_5_0()); }
+	rulePivotInClause{ after(grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_5_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotFunctions__AbcAssignment
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotFunctionsAccess().getAbcIDTerminalRuleCall_0()); }
+	RULE_ID{ after(grammarAccess.getPivotFunctionsAccess().getAbcIDTerminalRuleCall_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClause__SqAssignment_2_0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0_0()); }
+	ruleSubQueryOperand{ after(grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClause__ArgsAssignment_2_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAccess().getArgsUnpivotInClauseArgsParserRuleCall_2_1_0()); }
+	ruleUnpivotInClauseArgs{ after(grammarAccess.getPivotInClauseAccess().getArgsUnpivotInClauseArgsParserRuleCall_2_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__PivotInClause__PinanyAssignment_2_2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getPivotInClauseAccess().getPinanyPivotInClauseAnyParserRuleCall_2_2_0()); }
+	rulePivotInClauseAny{ after(grammarAccess.getPivotInClauseAccess().getPinanyPivotInClauseAnyParserRuleCall_2_2_0()); }
 )
 
 ;

@@ -2,28 +2,30 @@
  */
 package com.jaspersoft.studio.data.sql.impl;
 
-import com.jaspersoft.studio.data.sql.PivotCol;
+import com.jaspersoft.studio.data.sql.PivotFunction;
 import com.jaspersoft.studio.data.sql.SqlPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Pivot Col</b></em>'.
+ * An implementation of the model object '<em><b>Pivot Function</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
-public class PivotColImpl extends PivotFunctionImpl implements PivotCol
+public class PivotFunctionImpl extends MinimalEObjectImpl.Container implements PivotFunction
 {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected PivotColImpl()
+  protected PivotFunctionImpl()
   {
     super();
   }
@@ -36,7 +38,7 @@ public class PivotColImpl extends PivotFunctionImpl implements PivotCol
   @Override
   protected EClass eStaticClass()
   {
-    return SqlPackage.Literals.PIVOT_COL;
+    return SqlPackage.Literals.PIVOT_FUNCTION;
   }
 
-} //PivotColImpl
+} //PivotFunctionImpl

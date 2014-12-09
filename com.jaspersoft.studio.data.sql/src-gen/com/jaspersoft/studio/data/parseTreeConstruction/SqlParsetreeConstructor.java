@@ -6,13 +6,14 @@ package com.jaspersoft.studio.data.parseTreeConstruction;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.xtext.*;
 import org.eclipse.xtext.parsetree.reconstr.IEObjectConsumer;
+import org.eclipse.xtext.parsetree.reconstr.impl.AbstractParseTreeConstructor;
 
 import com.jaspersoft.studio.data.services.SqlGrammarAccess;
 
 import com.google.inject.Inject;
 
 @SuppressWarnings("all")
-public class SqlParsetreeConstructor extends org.eclipse.xtext.parsetree.reconstr.impl.AbstractParseTreeConstructor {
+public class SqlParsetreeConstructor extends AbstractParseTreeConstructor {
 		
 	@Inject
 	private SqlGrammarAccess grammarAccess;
@@ -42,65 +43,67 @@ protected class ThisRootNode extends RootToken {
 			case 9: return new FromTableJoin_Group(this, this, 9, inst);
 			case 10: return new TableOrAlias_Group(this, this, 10, inst);
 			case 11: return new PivotTable_Group(this, this, 11, inst);
-			case 12: return new PivotInClause_Group(this, this, 12, inst);
-			case 13: return new UnpivotTable_Group(this, this, 13, inst);
-			case 14: return new UnpivotInClause_Group(this, this, 14, inst);
-			case 15: return new UnpivotInClauseArgs_Group(this, this, 15, inst);
-			case 16: return new UnpivotInClauseArg_Group(this, this, 16, inst);
-			case 17: return new PivotForClause_Group(this, this, 17, inst);
-			case 18: return new PivotColumns_Alternatives(this, this, 18, inst);
-			case 19: return new PivotCols_Group(this, this, 19, inst);
-			case 20: return new PivotCol_Group(this, this, 20, inst);
-			case 21: return new TableFull_Group(this, this, 21, inst);
-			case 22: return new DbObjectNameAll_Group(this, this, 22, inst);
-			case 23: return new DbObjectName_DbnameAssignment(this, this, 23, inst);
-			case 24: return new OrderByColumns_Group(this, this, 24, inst);
-			case 25: return new OrderByColumnFull_Group(this, this, 25, inst);
-			case 26: return new GroupByColumns_Group(this, this, 26, inst);
-			case 27: return new GroupByColumnFull_ColGrByAssignment(this, this, 27, inst);
-			case 28: return new FullExpression_Group(this, this, 28, inst);
-			case 29: return new ExpressionFragmentSecond_Alternatives(this, this, 29, inst);
-			case 30: return new ExpressionFragment_Alternatives(this, this, 30, inst);
-			case 31: return new ExpressionGroup_Group(this, this, 31, inst);
-			case 32: return new XExpression_Group(this, this, 32, inst);
-			case 33: return new XExpression__Group(this, this, 33, inst);
-			case 34: return new XExpressionParams_Group(this, this, 34, inst);
-			case 35: return new JRParameter_JrprmAssignment(this, this, 35, inst);
-			case 36: return new Expression_Group(this, this, 36, inst);
-			case 37: return new Comparison_Group(this, this, 37, inst);
-			case 38: return new Like_Group(this, this, 38, inst);
-			case 39: return new LikeOperand_Alternatives(this, this, 39, inst);
-			case 40: return new Between_Group(this, this, 40, inst);
-			case 41: return new InOperator_Group(this, this, 41, inst);
-			case 42: return new OperandList_Group(this, this, 42, inst);
-			case 43: return new Operand_Group(this, this, 43, inst);
-			case 44: return new OperandFragment_Alternatives(this, this, 44, inst);
-			case 45: return new OperandFunction_Group(this, this, 45, inst);
-			case 46: return new FunctionAnalytical_Group(this, this, 46, inst);
-			case 47: return new AnalyticClause_Group(this, this, 47, inst);
-			case 48: return new WindowingClause_Group(this, this, 48, inst);
-			case 49: return new WindowingClauseBetween_Group(this, this, 49, inst);
-			case 50: return new WindowingClauseOperandFollowing_Group(this, this, 50, inst);
-			case 51: return new WindowingClauseOperandPreceding_Group(this, this, 51, inst);
-			case 52: return new OrderByClause_Group(this, this, 52, inst);
-			case 53: return new OrderByClauseArgs_Group(this, this, 53, inst);
-			case 54: return new OrderByClauseArg_Group(this, this, 54, inst);
-			case 55: return new QueryPartitionClause_Group(this, this, 55, inst);
-			case 56: return new AnalyticExprArgs_Group(this, this, 56, inst);
-			case 57: return new AnalyticExprArg_Group(this, this, 57, inst);
-			case 58: return new OpFunctionArg_Group(this, this, 58, inst);
-			case 59: return new OpFunctionArgOperand_OpAssignment(this, this, 59, inst);
-			case 60: return new OpFunctionCast_Group(this, this, 60, inst);
-			case 61: return new OpFunctionArgAgregate_Group(this, this, 61, inst);
-			case 62: return new XOperandFragment_Alternatives(this, this, 62, inst);
-			case 63: return new ParameterOperand_PrmAssignment(this, this, 63, inst);
-			case 64: return new ExclamationParameterOperand_PrmAssignment(this, this, 64, inst);
-			case 65: return new ColumnOperand_Group(this, this, 65, inst);
-			case 66: return new SubQueryOperand_Group(this, this, 66, inst);
-			case 67: return new ScalarOperand_Alternatives(this, this, 67, inst);
-			case 68: return new SQLCASE_Group(this, this, 68, inst);
-			case 69: return new SQLCaseWhens_Group(this, this, 69, inst);
-			case 70: return new SqlCaseWhen_Group(this, this, 70, inst);
+			case 12: return new PivotFunctions_AbcAssignment(this, this, 12, inst);
+			case 13: return new PivotFunction_Group(this, this, 13, inst);
+			case 14: return new PivotInClause_Group(this, this, 14, inst);
+			case 15: return new UnpivotTable_Group(this, this, 15, inst);
+			case 16: return new UnpivotInClause_Group(this, this, 16, inst);
+			case 17: return new UnpivotInClauseArgs_Group(this, this, 17, inst);
+			case 18: return new UnpivotInClauseArg_Group(this, this, 18, inst);
+			case 19: return new PivotForClause_Group(this, this, 19, inst);
+			case 20: return new PivotColumns_Alternatives(this, this, 20, inst);
+			case 21: return new PivotCols_Group(this, this, 21, inst);
+			case 22: return new PivotCol_Group(this, this, 22, inst);
+			case 23: return new TableFull_Group(this, this, 23, inst);
+			case 24: return new DbObjectNameAll_Group(this, this, 24, inst);
+			case 25: return new DbObjectName_DbnameAssignment(this, this, 25, inst);
+			case 26: return new OrderByColumns_Group(this, this, 26, inst);
+			case 27: return new OrderByColumnFull_Group(this, this, 27, inst);
+			case 28: return new GroupByColumns_Group(this, this, 28, inst);
+			case 29: return new GroupByColumnFull_ColGrByAssignment(this, this, 29, inst);
+			case 30: return new FullExpression_Group(this, this, 30, inst);
+			case 31: return new ExpressionFragmentSecond_Alternatives(this, this, 31, inst);
+			case 32: return new ExpressionFragment_Alternatives(this, this, 32, inst);
+			case 33: return new ExpressionGroup_Group(this, this, 33, inst);
+			case 34: return new XExpression_Group(this, this, 34, inst);
+			case 35: return new XExpression__Group(this, this, 35, inst);
+			case 36: return new XExpressionParams_Group(this, this, 36, inst);
+			case 37: return new JRParameter_JrprmAssignment(this, this, 37, inst);
+			case 38: return new Expression_Group(this, this, 38, inst);
+			case 39: return new Comparison_Group(this, this, 39, inst);
+			case 40: return new Like_Group(this, this, 40, inst);
+			case 41: return new LikeOperand_Alternatives(this, this, 41, inst);
+			case 42: return new Between_Group(this, this, 42, inst);
+			case 43: return new InOperator_Group(this, this, 43, inst);
+			case 44: return new OperandList_Group(this, this, 44, inst);
+			case 45: return new Operand_Group(this, this, 45, inst);
+			case 46: return new OperandFragment_Alternatives(this, this, 46, inst);
+			case 47: return new OperandFunction_Group(this, this, 47, inst);
+			case 48: return new FunctionAnalytical_Group(this, this, 48, inst);
+			case 49: return new AnalyticClause_Group(this, this, 49, inst);
+			case 50: return new WindowingClause_Group(this, this, 50, inst);
+			case 51: return new WindowingClauseBetween_Group(this, this, 51, inst);
+			case 52: return new WindowingClauseOperandFollowing_Group(this, this, 52, inst);
+			case 53: return new WindowingClauseOperandPreceding_Group(this, this, 53, inst);
+			case 54: return new OrderByClause_Group(this, this, 54, inst);
+			case 55: return new OrderByClauseArgs_Group(this, this, 55, inst);
+			case 56: return new OrderByClauseArg_Group(this, this, 56, inst);
+			case 57: return new QueryPartitionClause_Group(this, this, 57, inst);
+			case 58: return new AnalyticExprArgs_Group(this, this, 58, inst);
+			case 59: return new AnalyticExprArg_Group(this, this, 59, inst);
+			case 60: return new OpFunctionArg_Group(this, this, 60, inst);
+			case 61: return new OpFunctionArgOperand_OpAssignment(this, this, 61, inst);
+			case 62: return new OpFunctionCast_Group(this, this, 62, inst);
+			case 63: return new OpFunctionArgAgregate_Group(this, this, 63, inst);
+			case 64: return new XOperandFragment_Alternatives(this, this, 64, inst);
+			case 65: return new ParameterOperand_PrmAssignment(this, this, 65, inst);
+			case 66: return new ExclamationParameterOperand_PrmAssignment(this, this, 66, inst);
+			case 67: return new ColumnOperand_Group(this, this, 67, inst);
+			case 68: return new SubQueryOperand_Group(this, this, 68, inst);
+			case 69: return new ScalarOperand_Alternatives(this, this, 69, inst);
+			case 70: return new SQLCASE_Group(this, this, 70, inst);
+			case 71: return new SQLCaseWhens_Group(this, this, 71, inst);
+			case 72: return new SqlCaseWhen_Group(this, this, 72, inst);
 			default: return null;
 		}	
 	}	
@@ -2684,11 +2687,11 @@ protected class TableOrAlias_TblAliasAssignment_3 extends AssignmentToken  {
 /************ begin Rule PivotTable ****************
  *
  * PivotTable:
- * 	"PIVOT" "XML"? "(" pfor=PivotForClause pin=PivotInClause ")";
+ * 	"PIVOT" "XML"? "(" pfun=PivotFunctions pfor=PivotForClause pin=PivotInClause ")";
  *
  **/
 
-// "PIVOT" "XML"? "(" pfor=PivotForClause pin=PivotInClause ")"
+// "PIVOT" "XML"? "(" pfun=PivotFunctions pfor=PivotForClause pin=PivotInClause ")"
 protected class PivotTable_Group extends GroupToken {
 	
 	public PivotTable_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -2703,7 +2706,7 @@ protected class PivotTable_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new PivotTable_RightParenthesisKeyword_5(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new PivotTable_RightParenthesisKeyword_6(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -2760,16 +2763,62 @@ protected class PivotTable_LeftParenthesisKeyword_2 extends KeywordToken  {
 
 }
 
-// pfor=PivotForClause
-protected class PivotTable_PforAssignment_3 extends AssignmentToken  {
+// pfun=PivotFunctions
+protected class PivotTable_PfunAssignment_3 extends AssignmentToken  {
 	
-	public PivotTable_PforAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public PivotTable_PfunAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getPivotTableAccess().getPforAssignment_3();
+		return grammarAccess.getPivotTableAccess().getPfunAssignment_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotFunctions_AbcAssignment(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("pfun",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("pfun");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getPivotFunctionsRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getPivotTableAccess().getPfunPivotFunctionsParserRuleCall_3_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new PivotTable_LeftParenthesisKeyword_2(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// pfor=PivotForClause
+protected class PivotTable_PforAssignment_4 extends AssignmentToken  {
+	
+	public PivotTable_PforAssignment_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getPivotTableAccess().getPforAssignment_4();
 	}
 
     @Override
@@ -2788,7 +2837,7 @@ protected class PivotTable_PforAssignment_3 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getPivotForClauseRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_3_0(); 
+				element = grammarAccess.getPivotTableAccess().getPforPivotForClauseParserRuleCall_4_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -2800,22 +2849,22 @@ protected class PivotTable_PforAssignment_3 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new PivotTable_LeftParenthesisKeyword_2(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new PivotTable_PfunAssignment_3(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 // pin=PivotInClause
-protected class PivotTable_PinAssignment_4 extends AssignmentToken  {
+protected class PivotTable_PinAssignment_5 extends AssignmentToken  {
 	
-	public PivotTable_PinAssignment_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public PivotTable_PinAssignment_5(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getPivotTableAccess().getPinAssignment_4();
+		return grammarAccess.getPivotTableAccess().getPinAssignment_5();
 	}
 
     @Override
@@ -2834,7 +2883,7 @@ protected class PivotTable_PinAssignment_4 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getPivotInClauseRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_4_0(); 
+				element = grammarAccess.getPivotTableAccess().getPinPivotInClauseParserRuleCall_5_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -2846,28 +2895,28 @@ protected class PivotTable_PinAssignment_4 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new PivotTable_PforAssignment_3(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new PivotTable_PforAssignment_4(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 // ")"
-protected class PivotTable_RightParenthesisKeyword_5 extends KeywordToken  {
+protected class PivotTable_RightParenthesisKeyword_6 extends KeywordToken  {
 	
-	public PivotTable_RightParenthesisKeyword_5(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public PivotTable_RightParenthesisKeyword_6(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_5();
+		return grammarAccess.getPivotTableAccess().getRightParenthesisKeyword_6();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new PivotTable_PinAssignment_4(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new PivotTable_PinAssignment_5(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -2878,14 +2927,224 @@ protected class PivotTable_RightParenthesisKeyword_5 extends KeywordToken  {
 /************ end Rule PivotTable ****************/
 
 
-/************ begin Rule PivotInClause ****************
+/************ begin Rule PivotFunctions ****************
  *
- * PivotInClause:
- * 	"IN" "(" sq=SubQueryOperand ")";
+ * PivotFunctions:
+ * 	abc= // PivotFunction ({pfnct.entries+=current} ("," entries+=PivotFunction)+)?;
+ * 	ID;
  *
  **/
 
-// "IN" "(" sq=SubQueryOperand ")"
+// abc= // PivotFunction ({pfnct.entries+=current} ("," entries+=PivotFunction)+)?;
+// ID
+protected class PivotFunctions_AbcAssignment extends AssignmentToken  {
+	
+	public PivotFunctions_AbcAssignment(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getPivotFunctionsAccess().getAbcAssignment();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getPivotFunctionsRule().getType().getClassifier())
+			return null;
+		if((value = eObjectConsumer.getConsumable("abc",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("abc");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getPivotFunctionsAccess().getAbcIDTerminalRuleCall_0(), value, null)) {
+			type = AssignmentType.TERMINAL_RULE_CALL;
+			element = grammarAccess.getPivotFunctionsAccess().getAbcIDTerminalRuleCall_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+/************ end Rule PivotFunctions ****************/
+
+
+/************ begin Rule PivotFunction ****************
+ *
+ * PivotFunction:
+ * 	ID "(" PivotCol ")" "AS"? ID;
+ *
+ **/
+
+// ID "(" PivotCol ")" "AS"? ID
+protected class PivotFunction_Group extends GroupToken {
+	
+	public PivotFunction_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getPivotFunctionAccess().getGroup();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotFunction_IDTerminalRuleCall_5(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(getEObject().eClass() != grammarAccess.getDbObjectNameRule().getType().getClassifier() && 
+		   getEObject().eClass() != grammarAccess.getPivotColAccess().getPcolsEntriesAction_1_0().getType().getClassifier())
+			return null;
+		return eObjectConsumer;
+	}
+
+}
+
+// ID
+protected class PivotFunction_IDTerminalRuleCall_0 extends UnassignedTextToken {
+
+	public PivotFunction_IDTerminalRuleCall_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getPivotFunctionAccess().getIDTerminalRuleCall_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+}
+
+// "("
+protected class PivotFunction_LeftParenthesisKeyword_1 extends KeywordToken  {
+	
+	public PivotFunction_LeftParenthesisKeyword_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getPivotFunctionAccess().getLeftParenthesisKeyword_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotFunction_IDTerminalRuleCall_0(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// PivotCol
+protected class PivotFunction_PivotColParserRuleCall_2 extends RuleCallToken {
+	
+	public PivotFunction_PivotColParserRuleCall_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getPivotFunctionAccess().getPivotColParserRuleCall_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotCol_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override
+	public IEObjectConsumer tryConsume() {
+		if(checkForRecursion(PivotCol_Group.class, eObjectConsumer)) return null;
+		return eObjectConsumer;
+	}
+	
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotFunction_LeftParenthesisKeyword_1(lastRuleCallOrigin, next, actIndex, inst);
+			default: return null;
+		}	
+	}	
+}
+
+// ")"
+protected class PivotFunction_RightParenthesisKeyword_3 extends KeywordToken  {
+	
+	public PivotFunction_RightParenthesisKeyword_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getPivotFunctionAccess().getRightParenthesisKeyword_3();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotFunction_PivotColParserRuleCall_2(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// ID
+protected class PivotFunction_IDTerminalRuleCall_5 extends UnassignedTextToken {
+
+	public PivotFunction_IDTerminalRuleCall_5(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public RuleCall getGrammarElement() {
+		return grammarAccess.getPivotFunctionAccess().getIDTerminalRuleCall_5();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotFunction_RightParenthesisKeyword_3(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+
+/************ end Rule PivotFunction ****************/
+
+
+/************ begin Rule PivotInClause ****************
+ *
+ * PivotInClause:
+ * 	"IN" "(" (sq=SubQueryOperand | args=UnpivotInClauseArgs | pinany=PivotInClauseAny) ")";
+ *
+ **/
+
+// "IN" "(" (sq=SubQueryOperand | args=UnpivotInClauseArgs | pinany=PivotInClauseAny) ")"
 protected class PivotInClause_Group extends GroupToken {
 	
 	public PivotInClause_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -2957,16 +3216,40 @@ protected class PivotInClause_LeftParenthesisKeyword_1 extends KeywordToken  {
 
 }
 
-// sq=SubQueryOperand
-protected class PivotInClause_SqAssignment_2 extends AssignmentToken  {
+// sq=SubQueryOperand | args=UnpivotInClauseArgs | pinany=PivotInClauseAny
+protected class PivotInClause_Alternatives_2 extends AlternativesToken {
+
+	public PivotInClause_Alternatives_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
 	
-	public PivotInClause_SqAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	@Override
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getPivotInClauseAccess().getAlternatives_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotInClause_SqAssignment_2_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new PivotInClause_ArgsAssignment_2_1(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new PivotInClause_PinanyAssignment_2_2(lastRuleCallOrigin, this, 2, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// sq=SubQueryOperand
+protected class PivotInClause_SqAssignment_2_0 extends AssignmentToken  {
+	
+	public PivotInClause_SqAssignment_2_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getPivotInClauseAccess().getSqAssignment_2();
+		return grammarAccess.getPivotInClauseAccess().getSqAssignment_2_0();
 	}
 
     @Override
@@ -2985,7 +3268,7 @@ protected class PivotInClause_SqAssignment_2 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getSubQueryOperandRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0(); 
+				element = grammarAccess.getPivotInClauseAccess().getSqSubQueryOperandParserRuleCall_2_0_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -3003,6 +3286,87 @@ protected class PivotInClause_SqAssignment_2 extends AssignmentToken  {
 	}	
 }
 
+// args=UnpivotInClauseArgs
+protected class PivotInClause_ArgsAssignment_2_1 extends AssignmentToken  {
+	
+	public PivotInClause_ArgsAssignment_2_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getPivotInClauseAccess().getArgsAssignment_2_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new UnpivotInClauseArgs_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("args",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("args");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getUnpivotInClauseArgsRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getPivotInClauseAccess().getArgsUnpivotInClauseArgsParserRuleCall_2_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new PivotInClause_LeftParenthesisKeyword_1(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// pinany=PivotInClauseAny
+protected class PivotInClause_PinanyAssignment_2_2 extends AssignmentToken  {
+	
+	public PivotInClause_PinanyAssignment_2_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getPivotInClauseAccess().getPinanyAssignment_2_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new PivotInClause_LeftParenthesisKeyword_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("pinany",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("pinany");
+		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getPivotInClauseAccess().getPinanyPivotInClauseAnyParserRuleCall_2_2_0(), value, null)) {
+			type = AssignmentType.DATATYPE_RULE_CALL;
+			element = grammarAccess.getPivotInClauseAccess().getPinanyPivotInClauseAnyParserRuleCall_2_2_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+
 // ")"
 protected class PivotInClause_RightParenthesisKeyword_3 extends KeywordToken  {
 	
@@ -3018,7 +3382,7 @@ protected class PivotInClause_RightParenthesisKeyword_3 extends KeywordToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new PivotInClause_SqAssignment_2(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new PivotInClause_Alternatives_2(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -3027,6 +3391,7 @@ protected class PivotInClause_RightParenthesisKeyword_3 extends KeywordToken  {
 
 
 /************ end Rule PivotInClause ****************/
+
 
 
 /************ begin Rule UnpivotTable ****************
